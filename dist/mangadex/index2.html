@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./resources/css/bootstrap.css">
+        <link rel="stylesheet" href="../commons-res/fontawesome-free-6.1.2-web/css/all.css"/>
+        <link rel="stylesheet" href="./resources/css/basic-styles.css">
+        <link rel="stylesheet" href="./resources/css/manga/thumbail-mg.css"/>
+    </head>
+    <body>
+        <script src="./resources/js/bootstrap.bundle.js"></script>
+        <div class="container-fluid">
+            <div class="row">
+                <script src="./resources/js/Top_menu.js"></script>
+                <div id="sidebar-menu" class="col-lg-3 col-md-3">
+                    <div class="sidebar-header">
+                        <div class="container row sb-header-ctt">
+                            <div class="mangadex_logo_text col-md-10 col-lg-10">
+                                <img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" alt="mangadex-logo"/>
+                                <img src="./resources/ico/769e72145221d2a433c8eb798b42c363.svg" alt="mangadex"/>
+                            </div>
+                            <div class="col-md-2 col-lg-2">
+                                <img id="x_exit" onclick="close_menu()" src="../commons-res/fontawesome-free-6.1.2-desktop/svgs/solid/xmark.svg" alt=""/>
+                            </div>
+                            <hr class="sidebar-header-hr"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a class="menu-bouton container" href="/dist/mangadex/index.html">
+                            <i class="far fa-home-alt col-md-2 col-lg-2"></i>
+                            <span class="col-lg-10 col-md-10">Home</span>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <span class="container">
+                            <i class="fas fa-bookmark col-md-2 col-lg-2" ></i>
+                            <span class="col-lg-10 col-md-10">Follow</span>
+                        </span>
+                        <ul class="simple-list">
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Updates</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Library</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">MDLists</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Followed groups</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <a class="menu-bouton container" href="/dist/mangadex/index.html">
+                            <i class="far fa-archive col-md-2"></i>
+                            <span class="col-lg-10 col-md-10">Downloads</span>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <span class="container">
+                            <i class="fas fa-book col-md-2" ></i>
+                            <span class="col-lg-10 col-md-10">Titles</span>
+                        </span>
+                        <ul class="simple-list">
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Advanced Research</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Latest updates</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Recently added</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Random</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Suggestive</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <span class="container">
+                            <i class="fas fa-desktop col-md-2" ></i>
+                            <span class="col-lg-10 col-md-10">Mangadex Desktop</span>
+                        </span>
+                        <ul class="simple-list">
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">About</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Mangadex Official Website</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <a class="col-md-6 col-lg-6" href="">Desktop Announcement</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="row">
+                        <span class="container">
+                            <span class="col-lg-2 col-md-2"> <i class="fas fa-cog fa-spin"> </i> ___</span>
+                            <span class="col-lg-10 col-md-10">Powered by ____</span>
+                        </span>
+                        <ul class="simple-list">
+                            <li class="menu-bouton container">
+                                <img id="tauri_icon" src="../commons-res/common-icon/Square30x30Logo.png"/>
+                                <a id="tauri-href" target="_blank" class="col-md-6" href="https://tauri.app">Tauri Apps</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <img id="tauri_icon" src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg"/>
+                                <a class="col-md-6 col-lg-6" target="_blank" href="https://api.mangadex.org">Mangadex API</a>
+                            </li>
+                            <li class="menu-bouton container">
+                                <img id="tauri_icon" src="../commons-res/common-icon/favicon.svg" width="28px"/>
+                                <a class="col-md-6 col-lg-6" target="_blank" href="https://vitejs.dev">Vite</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="content" class="col-lg-9 col-md-9">
+                    <div id="content-header" class="container">
+                        <div class="row">
+                            <div id="mangadex-sb-opened" class="container-fluid col-md-3 col-md-offset-5 col-lg-3 col-lg-offset-5 invisible">
+                                <div class="row">
+                                    <div class="mangadex_logo_text col-md-9 col-lg-9">
+                                        <img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" alt="mangadex-logo"/>
+                                        <img src="./resources/ico/769e72145221d2a433c8eb798b42c363.svg" alt="mangadex"/>
+                                    </div>
+                                    <div class="col-md-2 col-lg-2">
+                                        <img id="x_exit" onclick="show_menu()" src="../commons-res/fontawesome-free-6.1.2-desktop/svgs/solid/bars.svg" alt=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="search-bar" class=" col-md-4 col-lg-4">
+                                <div class="input-group">
+                                    <div class="form-outline">
+                                        <input type="search" placeholder="Search" id="form1" class="form-control" />
+                                    </div>
+                                    <button type="button" class="btn btn-mgd">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="header-hr"/>
+                    </div>
+                    <div id="top-content" class="container">
+                        <div class="row">
+                            <div id="error-box"></div>
+                            <p class="alert alert-info">
+                                Welcome to Mangadex Desktop. working
+                            </p>
+                            <p id="data"></p>
+                            <script type="module" src="./resources/ts/index/index.tsx"></script>
+                            <div class="container">
+                                <div class="row">
+                                    <h3>Some Manga List</h3>
+                                </div>
+                                <div id="manga_container">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<script type="module" src="./index.ts"
+        </scrip>-->
+
+    </body>
+</html>

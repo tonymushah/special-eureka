@@ -1,0 +1,60 @@
+var tokens = (await Api_Request.Spost_methods("auth/login", Body.json({
+        username: "",
+        password: ""
+    }))).data.token;
+    test_area.render(
+        <Card>
+            <Card.Body>
+                {tokens.session}
+            </Card.Body>
+        </Card>
+    )   
+    /*var getted = await Api_Request.get_methods("manga/7bee0d50-f466-4fa1-8338-7c804be45187/aggregate");
+    test_area.render(
+        <Card>
+            <Card.Header>
+                <h2>Results</h2>
+            </Card.Header>
+            <Card.Body>
+                <Accordion defaultActiveKey="0">
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>Status</Accordion.Header>
+                        <Accordion.Body>
+                            <p>{getted.status}</p>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1">
+                        <Accordion.Header>Url</Accordion.Header>
+                        <Accordion.Body>
+                            <p>{getted.url}</p>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="2">
+                        <Accordion.Header>Headers</Accordion.Header>
+                        <Accordion.Body>
+                            <p>{JSON.stringify(getted.headers)}</p>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="3">
+                        <Accordion.Header>Raw Headers</Accordion.Header>
+                        <Accordion.Body>
+                            <p>{JSON.stringify(getted.rawHeaders)}</p>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="4">
+                        <Accordion.Header>Data</Accordion.Header>
+                        <Accordion.Body>
+                            <p>{JSON.stringify(getted.data)}</p>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            </Card.Body>
+        </Card>
+    )*/
+    var getted = await Api_Request.request_methods({
+        method: "GET",
+        url: (Api_Request.get_url() + "user/follows/manga/feed"),
+        headers: {
+            Authorization: "Bearer " + tokens.session
+        }
+    });

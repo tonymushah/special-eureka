@@ -1,0 +1,103 @@
+getted.then(async getdd => {
+        if (getdd instanceof Response) {
+            test_area.render(
+                <Card>
+                    <Card.Header>
+                        <h2>Results</h2>
+                    </Card.Header>
+                    <Card.Body>
+                        <Accordion defaultActiveKey="0">
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header>Status</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>{getdd.status}</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="1">
+                                <Accordion.Header>Url</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>{getdd.url}</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="2">
+                                <Accordion.Header>Headers</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>{JSON.stringify(getdd.headers)}</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="3">
+                                <Accordion.Header>Raw Headers</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>{JSON.stringify(getdd.rawHeaders)}</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                            <Accordion.Item eventKey="4">
+                                <Accordion.Header>Data</Accordion.Header>
+                                <Accordion.Body>
+                                    <p>{JSON.stringify(getdd.data)}</p>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Card.Body>
+                </Card>
+            );
+        }/*else{
+            let azo: Array<Manga> = getdd;
+            test_area.render(
+                <Card>
+                    <Card.Header>
+                        <h2>we get some manga </h2>
+                    </Card.Header>
+                    <Card.Body>
+                        <Accordion defaultActiveKey="0">
+                            <Accordion.Item eventKey="1">
+                            <Accordion.Header></Accordion.Header>
+                                <Accordion.Body>
+                                    {JSON.stringify(azo)}
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Card.Body>
+                </Card>
+            )
+            //var managaList: MangaList = new MangaList(azo, test_area);
+            //managaList.put_Mode2();
+            //var manga1_manga: React.ReactNode = (await (new El_Manga_simple2(azo[0])).render());
+            test_area.render(
+                <Card>
+                    <Card.Header>
+                        <h2>we get some manga </h2>
+                    </Card.Header>
+                    <Card.Body>
+                        <Accordion defaultActiveKey="0">
+                            <Accordion.Item eventKey="1">
+                            <Accordion.Header></Accordion.Header>
+                                <Accordion.Body>
+                                    {manga1_manga}
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </Card.Body>
+                </Card>
+            )
+        }*/
+    }).catch(gettd => {
+        test_area.render(
+            <Card>
+                <Card.Header>
+                    <h2>we have some error</h2>
+                </Card.Header>
+                <Card.Body>
+                    <Accordion defaultActiveKey="0">
+                        <Accordion.Item eventKey="1">
+                            <Accordion.Header></Accordion.Header>
+                            <Accordion.Body>
+                                {JSON.stringify(gettd)}
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                </Card.Body>
+            </Card>
+        )
+    }
+    );

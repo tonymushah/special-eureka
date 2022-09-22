@@ -1,0 +1,14 @@
+.my-component {
+            background-color: #fff;
+        }
+
+        .fullscreen-enabled {
+            background-color: #000;
+            color: #fff;
+            opacity: 0;
+        }
+        .fullscreen-enabled div{
+            background-color: inherit;
+            color: #fff;
+            
+        }

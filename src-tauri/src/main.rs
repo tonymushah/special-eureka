@@ -1,0 +1,12 @@
+#![cfg_attr(
+  all(not(debug_assertions), target_os = "windows"),
+  windows_subsystem = "windows"
+)]
+#[path ="./mangadex_session/main.rs"] mod mangadex_session;
+
+fn main() {
+  tauri::Builder::default()
+    .plugin(mangadex_session::init())
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
+}

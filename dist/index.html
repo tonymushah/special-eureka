@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mangadex Desktop Dashboard</title>
+    <link rel="stylesheet" href="/commons-res/bootstrap.css">
+    <link rel="stylesheet" href="/commons-res/fontawesome-free-6.1.2-web/css/all.css"/>
+  </head>
+  <script type="module" src="/commons-res/Tauri-app-verifier.tsx"></script>
+  <script>
+    try{
+      const app = window.__TAURI__.app;
+    }catch{
+      stop();
+    }
+  </script>
+  <body>
+    <div id="verifier">
+
+    </div>
+    <div id="locations"></div>
+        <div id="navigator"></div>
+        <script type="module" src="/commons-res/Navigator.tsx"></script>
+    <!--<script type="module" src="./index.js"></script>-->
+    
+    <!--<script type="module" src="/src/main.ts"></script>-->
+    <ol>
+      <li><a href="/mangadex/">To Mangadex</a></li>
+      <li><a href="./test/testArea1/index.html">test area1</a></li>
+      <li><a href="./test/testArea2/index.html">test area2</a></li>
+      <li><a href="./test/testArea3/index.html">test area3</a></li>
+      <li><a href="./test/testArea4/index.html">test area4</a></li>
+    </ol>
+  </body>
+</html>
