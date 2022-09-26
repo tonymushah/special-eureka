@@ -253,4 +253,7 @@ export class Chapters{
         await instance.initialize_chapters();
         return instance;
     }
+    public get_key_word():string{
+        return RelationshipsTypes.chapter();
+    }
 }

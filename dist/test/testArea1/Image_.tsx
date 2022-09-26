@@ -7,7 +7,7 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 export function Cover_Image_(props){
     const [ visible, setVisible ] = React.useState(false);
     return (
-        <Card>
+        <Card id={props.id}>
             <Viewer
                 visible={visible}
                 onClose={() => { setVisible(false); } }

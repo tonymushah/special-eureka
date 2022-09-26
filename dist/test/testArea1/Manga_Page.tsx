@@ -6,7 +6,7 @@ import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../mangadex/api/structures/Manga";
 import MangaList from "../../mangadex/api/tsx/MangaList";
-import { Accordion, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse } from "react-bootstrap";
+import { Accordion, Overlay, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse } from "react-bootstrap";
 import * as FontAwesome from "@fortawesome/react-fontawesome";
 import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import { Alt_title, Author_Artists, Offset_limits } from "../../mangadex/api/internal/Utils";
@@ -36,36 +36,48 @@ export class Manga_Page{
         }
         return (
             <Container>
-            <Row>
-                <Col xs="4" sm="3" md="2" lg="2" xl="2">
-                    <Cover_Image_ state={false} src={manga_cover}/>
-                </Col>
-                <Col xs="8" sm="9" md="10" lg="10" xl="10">
-                    <Container>
-                        <Row>
-                            <h2>{"Manga Title"}</h2>
+                <Row className=" overflow-hidden h-50 " id="mg-pHeader"  >
+                    <div id="mg-container-cover">
+                        <img src={manga_cover} id="cover-big"/>
+                    </div>
+                    <div id="mg-container-content">
+                        <Row className="top-100">
+                            <Col xs="5" sm="4" md="3" lg="3" xl="3">
+                                <Cover_Image_ id="top-cover" state={false} src={manga_cover}/>
+                            </Col>
+                            <Col xs="7" sm="8" md="9" lg="9" xl="9">
+                                <Container>
+                                    <Row className="mb-xs-1 mb-lg-5 mb-sm-1">
+                                        <h1 >{"Manga Title dfhdsfouhdfsuodfhuidsfgidsfsgdf"}</h1>
+                                    </Row>
+                                    <Row className="mb-lg-5 mb-sm-1">
+                                        <h5>{"Manga Alternative Title"}</h5>
+                                    </Row>
+                                    <Row>
+                                        <div className=" d-block h-100" >
+                                            <p> </p>
+                                        </div>
+                                    </Row>
+                                    <Row>
+                                        <div id="cover-cutter">
+                                            <p> </p>
+                                        </div>
+                                    </Row>
+                                    <Row>
+                                        <span>{para} difhuisfuhfiushidfhsdhfuisdfhuih</span>
+                                    </Row>
+                                    <Row>
+                                        <p>some themes</p>
+                                    </Row>
+                                    <Row>
+                                        <span> State </span>
+                                    </Row>
+                                </Container>
+                            </Col>
                         </Row>
-                        <Row>
-                            <p>{"Manga Alternative Title"}</p>
-                        </Row>
-                        <Row>
-                            <div className=" d-block h-100" >
-                                <p> </p>
-                            </div>
-                        </Row>
-                        <Row>
-                            <span>{para}</span>
-                        </Row>
-                        <Row>
-                            <p>some themes</p>
-                        </Row>
-                        <Row>
-                            <span> State </span>
-                        </Row>
-                    </Container>
-                </Col>
+                </div>
             </Row>
-            <Row>
+            <Row className="mg-top-content">
                 <Col>
                     <Accordion>
                         <Accordion.Item eventKey="0">
@@ -74,12 +86,10 @@ export class Manga_Page{
                                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, quaerat dolorum, rem minus aliquam, esse eligendi aut porro earum voluptates assumenda ut eos voluptate laboriosam. Aliquam quis earum expedita esse.</p>
                             </Accordion.Body>
                         </Accordion.Item>
-                        
                     </Accordion>
-                    
                 </Col>
             </Row>
-            <Row>
+            <Row className="mg-top-content">
                 <Col md="4" lg="4" className="d-sm-block">
                     <Row>
                         <Col>
@@ -170,10 +180,11 @@ export class Manga_Page{
                     <Container>
                         {volumes_}
                     </Container>
-                    
                 </Col>
             </Row>
         </Container>
         );
     }
 }
+/*
+*/

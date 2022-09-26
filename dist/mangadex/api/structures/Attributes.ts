@@ -119,4 +119,7 @@ export class Attribute{
         }
         return returns;
     }
+    public get_key_word():string{
+        return "";
+    }
 }

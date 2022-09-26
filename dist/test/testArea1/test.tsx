@@ -12,6 +12,7 @@ import { Alt_title, Author_Artists, Offset_limits } from "../../mangadex/api/int
 import { Cover } from "../../mangadex/api/structures/Cover";
 import CardHeader from "react-bootstrap/esm/CardHeader";
 import { Author } from "../../mangadex/api/structures/Author";
+
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
 test_area.render(
     <Card>

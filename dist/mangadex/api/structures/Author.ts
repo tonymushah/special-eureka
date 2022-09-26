@@ -4,7 +4,7 @@ import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 import { Response } from "@tauri-apps/api/http";
 import { NumberLiteralType } from "typescript";
-import { Offset_limits, Order } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
 
 export class Author extends Attribute{
     private name:string;
@@ -214,6 +214,14 @@ export class Author extends Attribute{
             return authorArray;
         }else{
             return getted;
+        }
+    }
+    public get_key_word():string;
+    public get_key_word(isArtist?: boolean):string{
+        if(isArtist == undefined || !isArtist){
+            return RelationshipsTypes.author();
+        }else{
+            return RelationshipsTypes.artist();
         }
     }
 }

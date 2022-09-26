@@ -1,0 +1,140 @@
+@import "../../mangadex/resources/Poppins/Poppins.css";
+html{
+    font-family: "Poppins";
+    background-color: #f8f9fa;
+}
+body{
+    font-family: inherit;
+    background-color: inherit;
+    position: relative;
+    opacity: 1;
+    z-index: -6;
+}
+#cover-big{
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    position: relative;
+    opacity: 1;
+} 
+.mg-top-content{
+    background-color: #f8f9fa;
+    z-index: 2;
+    position: relative;
+}
+#mg-container-cover{
+    position: absolute;
+    width: fit-content;
+    z-index: -1;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+#cover-cutter{
+    position: absolute;
+    z-index: -2;
+    background-color: #f8f9fa;
+}
+#top-cover{
+    transition: all 0.5s;
+    filter: brightness(100%);
+    -webkit-filter: brightness(100%);
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+}
+#top-cover:hover{
+    transition: all 0.5s;
+    filter: brightness(92%);
+    -webkit-filter: brightness(92%);
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+}
+@media (max-width: 576px) { 
+    #cover-big{
+        width: 535px;
+        top: -4em;
+    }
+    #mg-container-content{
+        z-index: 2;
+    }
+    #cover-cutter{
+        height: 200px;
+        width: 1140px;
+        left: 0em;
+    }
+}
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) { 
+    #cover-big{
+        width: 512px;
+        top: -5em;
+    }
+    #mg-container-content{
+        z-index: 2;
+    }
+    #cover-cutter{
+        height: 200px;
+        width: 1140px;
+        left: 0em;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    #cover-big{
+        width: 692px;
+        top: -8em;
+    }
+    #mg-container-content{
+        z-index: 2;
+    }
+    #mg-cover-cover{
+        height: 100%;
+    }
+    #cover-cutter{
+        height: 200px;
+        width: 710px;
+        left: 10em;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+    #cover-big{
+        width: 946px;
+        top: -15em;
+        align-items: center;
+    }
+    #mg-container-content{
+        z-index: 2;
+    }
+    #cover-cutter{
+        height: 200px;
+        width: 1140px;
+        left: 4em;
+    }
+}
+
+/* X-Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { 
+    #cover-big{
+        width: 1115px;
+        top: -15em;
+    }
+    #mg-container-content{
+        z-index: 2;
+    }
+    #cover-cutter{
+        height: 200px;
+        width: 1140px;
+        left: 7em;
+    }
+}
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+@media (min-width: 1400px) { 
+
+}
+

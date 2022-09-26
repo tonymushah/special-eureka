@@ -11,25 +11,26 @@ import { Offset_limits } from "../../mangadex/api/internal/Utils";
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import ru from 'javascript-time-ago/locale/ru.json'
-import ReactTimeAgo from 'react-time-ago'
+import ReactTimeAgo from 'react-time-ago';
+
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
-ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ReactTimeAgo date={new Date("2020-10-29T08:23:37+00:00")}/>
-);
-/*function Errore(props): React.ReactNode{
+function Errore(props): React.ReactNode{
   let errors = JSON.stringify(useAsyncError());
   return (<p>{errors}</p>);
 }
-
+const querry_object: any = {
+    publicationDemographic: ['seinen'],
+    status: ['completed'],
+    contentRating: ['suggestive']
+}
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <Suspense fallback={<p>Loading</p>}>
       <Await 
-        resolve={Chapter.search_chapter(
-          new Offset_limits(),
-          'e78b9dcf-8863-4381-8b8f-b05db41cbdde'
-        )}
+        resolve={Api_Request.get_methods("manga", {
+          query : querry_object
+        })}
         errorElement={<Errore/>}
         children={getted =>{
             return (<RJson.default src={getted}/>);
@@ -37,4 +38,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         }
       />
     </Suspense>
-);*/
+);
