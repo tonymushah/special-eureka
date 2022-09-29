@@ -1,6 +1,6 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
-import { Offset_limits, Order } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 
 export class User extends Attribute{
@@ -100,5 +100,8 @@ export class User extends Attribute{
         }else{
             return getted;
         }
+    }
+    public get_key_word():string{
+        return RelationshipsTypes.user();
     }
 }

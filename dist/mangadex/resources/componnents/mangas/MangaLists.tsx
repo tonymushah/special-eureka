@@ -2,8 +2,8 @@ import React, { ReactEventHandler, ReactNode, Suspense, useState } from 'react';
 import { Carousel, Container, Row, Spinner } from 'react-bootstrap';
 import ReactDOM from 'react-dom/client';
 import { Await, useAsyncError, useAsyncValue, useRouteError } from 'react-router-dom';
-import { Cover } from '../../api/structures/Cover';
-import { Manga } from '../../api/structures/Manga';
+import { Cover } from '../../../api/structures/Cover';
+import { Manga } from '../../../api/structures/Manga';
 import { Error_cmp } from './Error_cmp';
 import { Manga1, Manga2, Manga_CarouselItems } from './Manga1';
 

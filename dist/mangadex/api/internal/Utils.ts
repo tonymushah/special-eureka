@@ -1,3 +1,4 @@
+import { getClient, Response } from "@tauri-apps/api/http";
 import { Author } from "../structures/Author";
 
 export class And_Or{
@@ -236,45 +237,6 @@ export class Author_Artists{
         this.authors = authors;
         this.artists = artists;
         this.initialise_filtred();
-    }
-}
-
-export class Alt_title{
-    public to_use: Array<any>;
-    public set_to_use(to_use: Array<any>){
-        this.to_use = to_use;
-    }
-    public get_to_use(): Array<any>{
-        return this.to_use;
-    }
-    public constructor(to_use: Array<any>){
-        this.set_to_use(to_use);
-    }
-    public get_lang(name: string): Array<string> | null{
-        let alt_title: Array<string> = [];
-        for (let index = 0; index < this.to_use.length; index++) {
-            const element = this.to_use[index];
-            for (const key in element) {
-                if (Object.prototype.hasOwnProperty.call(element, key) ) {
-                    const elements = element[key];
-                    if(key == name){
-                        alt_title.push(elements);
-                    }
-                }
-            }
-        }
-        return alt_title;
-    }
-    public get_quicklang(): string | undefined{
-        let alt_title: Array<string> = [];
-        for (let index = 0; index < this.to_use.length; index++) {
-            const element = this.to_use[index];
-            for (const key in element) {
-                if (Object.prototype.hasOwnProperty.call(element, key) ) {
-                    return element[key];
-                }
-            }
-        }
     }
 }
 
@@ -694,3 +656,169 @@ export class Reading_status{
     }
 }
 
+export class Lang{
+    private name: string;
+    private two_letter: string;
+    private three_letter: string;
+    public set_name(name: string){
+        this.name = name;
+    }
+    public set_two_letter(two_letter: string){
+        this.two_letter = two_letter;
+    }
+    public set_three_letter(three_letter: string){
+        this.three_letter = three_letter;
+    }
+
+    public get_name(): string{
+        return this.name;
+    }
+    public get_two_letter(): string{
+        return this.two_letter ;
+    }
+    public get_three_letter(): string{
+        return this.three_letter;
+    }
+    public constructor(name: string, two_letter: string, three_letter: string){
+        this.set_name(name);
+        this.set_two_letter(two_letter);
+        this.set_three_letter(three_letter);
+    }
+}
+export class Languages{
+    private langs : Array<Lang>;
+    private set_langs(langs: Array<Lang>){
+        this.langs = langs;
+    }
+
+    public get_langs(): Array<Lang>{
+        return this.langs;
+    }
+    private constructor(langs: Array<Lang>){
+        this.set_langs(langs);
+    }
+    public static async initialize(): Promise<Languages>{
+        let array: Array<Lang> = [];
+        var res : Response<any> = await (await getClient()).get("http://localhost:9305/mangadex/resources/json/lang.json");
+        let index: number = 0;
+        res.data.forEach(element => {
+            array[index] = new Lang(element.name, element.two_letter, element.three_letter);
+            index = index + 1;
+        });
+        return new Languages(array);
+    }
+    public getLang_byName(name: string): Lang{
+        for (let index = 0; index < this.langs.length; index++) {
+            const selected_lang = this.langs[index];
+            if(selected_lang.get_name() == name){
+                return selected_lang
+            }
+        }
+        throw new Error("can't find lang by : " + name);
+    }
+    public getLang_byTwo_letter(two_letter: string): Lang{
+        for (let index = 0; index < this.langs.length; index++) {
+            const selected_lang = this.langs[index];
+            if(selected_lang.get_two_letter() == two_letter){
+                return selected_lang;
+            }
+        }
+        throw new Error("can't find lang by : " + two_letter);
+    }
+    public getLang_byThree_letter(three_letter: string): Array<Lang>{
+            var array : Array<Lang>= [];
+            let array_i : number = 0;
+            for (let index = 0; index < this.langs.length; index++) {
+                const selected_lang = this.langs[index];
+                if(selected_lang.get_two_letter() == three_letter){
+                    array[array_i] = selected_lang;
+                    array_i = array_i + 1;
+                }
+            }
+        return array;
+    }
+}
+
+export class Alt_title{
+    public to_use: Array<any>;
+    public set_to_use(to_use: Array<any>){
+        this.to_use = to_use;
+    }
+    public get_to_use(): Array<any>{
+        return this.to_use;
+    }
+    public constructor(to_use: Array<any>){
+        this.set_to_use(to_use);
+    }
+    public get_lang(name: string): Array<string> | null{
+        let alt_title: Array<string> = [];
+        for (let index = 0; index < this.to_use.length; index++) {
+            const element = this.to_use[index];
+            for (const key in element) {
+                if (Object.prototype.hasOwnProperty.call(element, key) ) {
+                    const elements = element[key];
+                    if(key == name){
+                        alt_title.push(elements);
+                    }
+                }
+            }
+        }
+        return alt_title;
+    }
+    public get_quicklang(): string | undefined{
+        let alt_title: Array<string> = [];
+        for (let index = 0; index < this.to_use.length; index++) {
+            const element = this.to_use[index];
+            for (const key in element) {
+                if (Object.prototype.hasOwnProperty.call(element, key) ) {
+                    return element[key];
+                }
+            }
+        }
+    }
+}
+
+export class Lang_and_Data{
+    private language: Lang;
+    private data: string;
+    public set_language(language: Lang){
+        this.language = language;
+    }
+    public set_data(data: string){
+        this.data = data;
+    }
+    public get_language(): Lang{
+        return this.language;
+    }
+    public get_data(): string{
+        return this.data;
+    }
+    public constructor(data: string, language: Lang){
+        this.set_data(data);
+        this.set_language(language);
+    }
+    public static async initializeByTwo_letter(data: string, two_letter: string): Promise<Lang_and_Data>{
+        return new Lang_and_Data(data, ((await Languages.initialize()).getLang_byTwo_letter(two_letter)));
+    }
+    public static async initializeByAltTitle_obj(alt_title: any): Promise<Lang_and_Data>{
+        for (const key in alt_title) {
+            if (Object.prototype.hasOwnProperty.call(alt_title, key)) {
+                const data = alt_title[key];
+                return new Lang_and_Data(data, ((await Languages.initialize()).getLang_byTwo_letter(key)));
+            }
+        }
+        throw new Error("Type mismatch...");
+    }
+    public static async initializeByDesc(desc: any): Promise<Array<Lang_and_Data>>{
+        let array: Array<Lang_and_Data> = []
+        let index : number= 0;
+        for (const key in desc) {
+            if (Object.prototype.hasOwnProperty.call(desc, key)) {
+                const data = desc[key];
+                array[index] = new Lang_and_Data(data, ((await Languages.initialize()).getLang_byTwo_letter(key)));
+                index = index + 1;
+            }
+        }
+        return array;
+    }
+}

@@ -1,3 +1,4 @@
+import { RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 
 export class Tag extends Attribute{
@@ -44,4 +45,7 @@ export class Tag extends Attribute{
         return instance;
     }
     // [ ] constructor but with any object
+    public get_key_word():string{
+        return RelationshipsTypes.tag();
+    }
 }

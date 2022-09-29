@@ -6,7 +6,7 @@ import { Cover } from "./Cover";
 import { Tag } from "./Tag";
 import React from 'react';
 import { Author } from "./Author";
-import { Offset_limits, Order } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
@@ -197,7 +197,7 @@ export class Manga extends Attribute{
             for (let index = 0; index < this.get_relationships()!.length; index++) {
                 const to_use = this.get_relationships()![index];
                 if(to_use.get_type() == "cover_art"){
-                    return Cover.getById(to_use.get_id());
+                    return await Cover.getById(to_use.get_id());
                 }
             }
             throw new Error("No cover art for this manga " + this.get_title().en);
@@ -290,5 +290,8 @@ export class Manga extends Attribute{
     public async aggregate_2(): Promise<void>{
         var getted: Response<any> = await Api_Request.get_methods(Manga.get_request_a() + this.get_id() + "/aggregate");
         this.set_aggregate(await Aggregate.build_wANY2(getted.data.volumes));
+    }
+    public get_key_word():string{
+        return RelationshipsTypes.manga();
     }
 }

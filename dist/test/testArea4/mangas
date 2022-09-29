@@ -1,0 +1,172 @@
+<Swiper
+            spaceBetween={10}
+            slidesPerView={3}
+            pagination={{
+                dynamicBullets: true,
+            }}
+            autoplay={{
+                delay: 2500,
+            disableOnInteraction: false,
+            }}
+            loop={true}
+            modules={[Pagination, Autoplay]}
+        >
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+        </Swiper>
+
+
+
+
+
+
+
+
+
+
+
+
+<Swiper
+            spaceBetween={10}
+            slidesPerView={3}
+            pagination={{
+                dynamicBullets: true,
+            }}
+            autoplay={{
+                delay: 2500,
+            disableOnInteraction: false,
+            }}
+            loop={true}
+            modules={[Pagination, Autoplay]}
+        >
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+            <SwiperSlide>
+                <React.Suspense>
+                    <Await
+                        resolve={Manga.getRandom()}
+                        errorElement={<span>Error</span>}
+                        children={(getted) => {
+                            return (<Manga3 toUse={getted}/>)
+                        }}
+                    />
+                </React.Suspense>
+            </SwiperSlide>
+        </Swiper>

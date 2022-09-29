@@ -1,5 +1,6 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
+import { RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 
@@ -151,11 +152,13 @@ export class Cover extends Attribute{
     // [ ] get the cover path 
         // [ ] {256, 512}
         public get_CoverImage_thumbnail(size: number): string{
-            return Upload.make_upload_url("covers/" + this.get_some_relationship("cover_art")[0].get_id() + "/" + this.get_file_name() + "." + size +".jpg");
+            return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")[0].get_id() + "/" + this.get_file_name() + "." + size +".jpg");
         }
         // [ ] original
         public get_CoverImage(): string{
-            return Upload.make_upload_url("covers/" + this.get_some_relationship("cover_art")![0].get_id() + "/" + this.get_file_name());
+            return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")![0].get_id() + "/" + this.get_file_name());
         }
-    
+    public get_key_word():string{
+        return RelationshipsTypes.cover_art();
+    }
 }

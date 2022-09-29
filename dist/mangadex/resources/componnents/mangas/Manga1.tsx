@@ -2,13 +2,13 @@ import React, { Suspense, useState } from 'react';
 import { Card, Placeholder, Carousel, OverlayTrigger } from 'react-bootstrap';
 import ReactDOM from 'react-dom/client';
 import { Await, useAsyncError, useAsyncValue, useRouteError } from 'react-router-dom';
-import { Alt_title } from '../../api/internal/Utils';
-import { Cover } from '../../api/structures/Cover';
-import { Manga } from '../../api/structures/Manga';
-import { Statistics } from '../../api/structures/Statistics';
-import { Error_cmp } from './Error_cmp';
-import { CardPlaceHolders } from './Placeholders';
-import { Popover1, State_box } from './popovers/Stats_manga';
+import { Alt_title } from '../../../api/internal/Utils';
+import { Cover } from '../../../api/structures/Cover';
+import { Manga } from '../../../api/structures/Manga';
+import { Statistics } from '../../../api/structures/Statistics';
+import { Error_cmp } from '../Error_cmp';
+import { CardPlaceHolders } from '../Placeholders';
+import { Popover1, State_box } from '../popovers/Stats_manga';
 
 
 export class Manga1 extends React.Component{
