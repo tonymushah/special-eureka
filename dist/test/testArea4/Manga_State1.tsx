@@ -3,7 +3,7 @@ import { Card, CardImg, Carousel, Row, Spinner } from "react-bootstrap";
 import ReactDOM from 'react-dom/client';
 import { Await } from "react-router-dom";
 import { Cover } from "../../mangadex/api/structures/Cover";
-import { Alt_title } from '../../mangadex/api/internal/Utils';
+import { Alt_title, Lang_and_Data } from '../../mangadex/api/internal/Utils';
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Mousewheel } from "swiper";
@@ -43,7 +43,21 @@ export class Manga3 extends React.Component{
                     </React.Suspense>
                     <div className="manga-item3-content overflow-hidden">
                         <Card.Title className="text-center text-lg-start">{title}</Card.Title>
-                        <Card.Subtitle className=" d-none d-lg-flex"> Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda eaque, distinctio quaerat laudantium, rem suscipit error perferendis similique deleniti natus ut. Illo veniam nobis recusandae, sed perferendis in incidunt voluptatum. </Card.Subtitle>
+                        <Card.Subtitle className=" d-none d-lg-flex">
+                            <React.Suspense 
+                                fallback={
+                                    <Spinner animation="grow"></Spinner>
+                                }
+                            >
+                                <Await 
+                                    resolve={Lang_and_Data.initializeByDesc(this.to_use.get_description())}
+                                    error={<p>Error while loading desc :\</p>}
+                                    children={(getted: Array<Lang_and_Data>) => {
+                                        return (<p>{getted[0].get_data()}</p>);
+                                    }}
+                                />
+                            </React.Suspense>
+                        </Card.Subtitle>
                     </div>
                 </Card.Body>
             </Card>
@@ -71,43 +85,63 @@ export class Manga_swipper extends React.Component{
         super(props);
         this.manga_array = this.props.src;
     }
-    public async init_manga_elements(): Array<React.ReactNode>{
-        
+    public async init_manga_elements(): Promise<Array<React.ReactNode>>{
+        let array: Array<React.ReactNode> = [];
+        for (let index = 0; index < this.manga_array.length; index++) {
+            const element = this.manga_array[index];
+            array[index] = (
+                <SwiperSlide>
+                    <Manga3 toUse={element}/>
+                </SwiperSlide>
+            );
+        }
+        return array;
     }
     render(): React.ReactNode {
         return (
-            <Swiper
-                spaceBetween={0}
-                slidesPerView={3}
-                pagination={{
-                    dynamicBullets: true,
-                }}
-                autoplay={{
-                    delay: 2500,
-                    disableOnInteraction: false,
-                }}
-                mousewheel={true}
-                loop={true}
-                modules={[Pagination, Autoplay, Mousewheel]}
-                breakpoints={
-                    {
-                        576:{
-                            slidesPerView : 4,
-                            spaceBetween : 10
-                        },
-                        768:{
-                            slidesPerView : 5,
-                            spaceBetween : 10
-                        },
-                        992:{
-                            slidesPerView : 3,
-                            spaceBetween : 10
+            <React.Suspense fallback={<Spinner animation="border"></Spinner>}>
+                <Await
+                    resolve={this.init_manga_elements()}
+                    errorElement={<p>Error on loading</p>}
+                    children={(getted: Array<React.ReactNode>) => {
+                            return (
+                                <Swiper
+                                    spaceBetween={0}
+                                    slidesPerView={3}
+                                        pagination={{
+                                        dynamicBullets: true,
+                                    }}
+                                    autoplay={{
+                                        delay: 2500,
+                                        disableOnInteraction: false,
+                                    }}
+                                    mousewheel={true}
+                                    loop={true}
+                                    modules={[Pagination, Autoplay, Mousewheel]}
+                                    breakpoints={
+                                        {
+                                            576:{
+                                                slidesPerView : 4,
+                                                spaceBetween : 10
+                                            },
+                                            768:{
+                                                slidesPerView : 5,
+                                                spaceBetween : 10
+                                            },
+                                            992:{
+                                                slidesPerView : 3,
+                                                spaceBetween : 10
+                                            }
+                                        }
+                                    }
+                                >
+                                    {getted}
+                                </Swiper>
+                            );
                         }
                     }
-                }
-            >
-            
-        </Swiper>
+                />
+            </React.Suspense>
         );
     }
 }

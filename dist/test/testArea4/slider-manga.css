@@ -3,9 +3,9 @@ No media query for `xs` since this is the default in Bootstrap*/
 .manga-item3{
     display: inline-flex;
     border: none;
+    background-color: inherit;
 }
 .manga-item3-content{
-    height: fit-content;
     overflow: hidden;
 }
 @media (max-width: 576px) {  
@@ -15,6 +15,11 @@ No media query for `xs` since this is the default in Bootstrap*/
     .manga-item3-img{
         width: 125px;
         margin-right: 15px;
+    }
+    .manga-item3-content{
+        text-overflow: ellipsis;
+        height: 50px;
+        overflow: hidden;
     }
 }
 
@@ -27,6 +32,11 @@ No media query for `xs` since this is the default in Bootstrap*/
         width: 125px;
         margin-right: 15px;
     }
+    .manga-item3-content{
+        text-overflow: ellipsis;
+        height: 50px;
+        overflow: hidden;
+    }
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -37,6 +47,11 @@ No media query for `xs` since this is the default in Bootstrap*/
     .manga-item3-img{
         width: 125px;
         margin-right: 15px;
+    }
+    .manga-item3-content{
+        text-overflow: ellipsis;
+        height: 50px;
+        overflow: hidden;
     }
 }
 
@@ -50,12 +65,22 @@ No media query for `xs` since this is the default in Bootstrap*/
         float: left;
         margin-right: 15px;
     }
+    .manga-item3-content{
+        text-overflow: ellipsis;
+        height: 180px;
+        overflow: hidden;
+    }
 }
 
 /* X-Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {  
     .manga-item3{
         width: 425px;
+        height: 300px;
+    }
+    .manga-item3-content{
+        height: 240px;
+        overflow: hidden;
     }
     .manga-item3-img{
         width: 175px;
