@@ -15,7 +15,7 @@ export class Chapter_ extends React.Component{
     }
     public render(): React.ReactNode{
         return (
-            <Container>
+            <Container {...this.props}>
                 <Alert variant="secondary" className="bg-local p-1">
                     <Row>
                         <Col xs={7} sm={8} md={9} lg={10} xl={10}>

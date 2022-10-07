@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import { Await } from "react-router-dom";
 import { Cover } from "../../mangadex/api/structures/Cover";
 import { Alt_title, Lang_and_Data } from '../../mangadex/api/internal/Utils';
-import { Manga } from "../../mangadex/api/structures/Manga";
+import { Manga, Manga_2 } from "../../mangadex/api/structures/Manga";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Mousewheel } from "swiper";
 

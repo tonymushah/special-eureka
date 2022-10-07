@@ -6,8 +6,9 @@ import { Cover } from "./Cover";
 import { Tag } from "./Tag";
 import React from 'react';
 import { Author } from "./Author";
-import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
+import { Asc_Desc, Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
+import { Chapter } from "./Chapter";
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
     private title: any;
@@ -25,6 +26,20 @@ export class Manga extends Attribute{
     private content_rating: string;
     private avaible_language: Array<string>;
     private aggregate: Aggregate;
+    private state : string | null;
+    private originalLanguage: string;
+    public set_state(state: string | null){
+        this.state = state;
+    }
+    public set_originalLanguage(originalLanguage: string){
+        this.originalLanguage = originalLanguage;
+    }
+    public get_originalLanguage(): string{
+        return this.originalLanguage
+    }
+    public get_state(): string | null{
+        return this.state;
+    }
     public set_links(links: any){
         this.links = links
     }
@@ -121,7 +136,7 @@ export class Manga extends Attribute{
         return this.year;
     }
     // Constructor by default
-    private constructor(
+    constructor(
             id: string,
             title:any,
             description:any,
@@ -166,6 +181,36 @@ export class Manga extends Attribute{
             tags
         );
         instance.set_relationships_Wany(relationships);
+        instance.set_avaible_language(attributes.availableLanguage);
+        instance.set_links(attributes.links);
+        instance.set_ranting(attributes.contentRating);
+        instance.set_demographic(attributes.publicationDemographic);
+        instance.set_state(attributes.state);
+        instance.set_originalLanguage(attributes.originalLanguage);
+        return instance;
+    }
+    public static build_any2(object: any /*
+    please only input the real data please
+    */): Manga{
+        var attributes :any = object.attributes;
+        //var relationships: any = object.relationships;
+        var tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
+        for (let index = 0; index < attributes.tags.length; index++) {
+            tags[index] = Tag.build_withAny(attributes.tags[index]);
+        }
+        var instance = new Manga(
+            object.id,
+            attributes.title,
+            attributes.description,
+            attributes.altTitles,
+            attributes.status,
+            attributes.lastChapter,
+            attributes.lastVolume,
+            attributes.updatedAt,
+            attributes.createdAt,
+            tags
+        );
+        //instance.set_relationships_Wany(relationships);
         instance.set_avaible_language(attributes.avaible_language);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.content_rating);
@@ -293,5 +338,273 @@ export class Manga extends Attribute{
     }
     public get_key_word():string{
         return RelationshipsTypes.manga();
+    }
+    public async getFeed(
+        offset_Limits : Offset_limits = new Offset_limits(),
+        translatedLanguage?: string,
+        originalLanguage?: string,
+        excludedOriginalLanguage?: string,
+        contentRating?: string,
+        excludedGroups?: string,
+        excludedUploaders?: string,
+        includedFutureUpdate?: number,
+        createdAtSince?: string,
+        updatedAtSince?: string,
+        order?: Order, 
+        includes? : string): Promise<Array<Chapter> | Response<any>>{
+        let querys: any = {
+            limit: JSON.stringify(offset_Limits.get_limits()),
+            offset: JSON.stringify(offset_Limits.get_offset()),
+            "originalLanguage[]": (originalLanguage),
+            "excludedOriginalLanguage[]": (excludedOriginalLanguage),
+            "translatedLanguage[]": (translatedLanguage),
+            "contentRating[]": (contentRating),
+            "excludedGroups[]": (excludedGroups),
+            "excludedUploaders[]": (excludedUploaders),
+            "includedFutureUpdate": (includedFutureUpdate),
+            createdAtSince: (createdAtSince),
+            updatedAtSince: (updatedAtSince),
+            "includes[]": (includes),
+            ...order?.render()
+        };
+        var getted: Response<any> = await Api_Request.Sget_methods("manga/" + this.get_id() + "/feed", {
+            query: querys
+        });
+        if(getted.status == 200){
+            var data: Array<any> = getted.data.data;
+            var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+            for (let index = 0; index < data.length; index++) {
+                mangaArray[index] = Chapter.build_W_Any(data[index]);
+            }
+            return mangaArray;
+        }else{
+            return getted;
+        }
+    }
+    public static async getFeed(
+        id: string,
+        offset_Limits : Offset_limits = new Offset_limits(),
+        translatedLanguage?: string,
+        originalLanguage?: string,
+        excludedOriginalLanguage?: string,
+        contentRating?: string,
+        excludedGroups?: string,
+        excludedUploaders?: string,
+        includedFutureUpdate?: number,
+        createdAtSince?: string,
+        updatedAtSince?: string,
+        order?: Order, 
+        includes? : string): Promise<Array<Chapter> | Response<any>>{
+        let querys: any = {
+            limit: JSON.stringify(offset_Limits.get_limits()),
+            offset: JSON.stringify(offset_Limits.get_offset()),
+            "originalLanguage[]": (originalLanguage),
+            "excludedOriginalLanguage[]": (excludedOriginalLanguage),
+            "translatedLanguage[]": (translatedLanguage),
+            "contentRating[]": (contentRating),
+            "excludedGroups[]": (excludedGroups),
+            "excludedUploaders[]": (excludedUploaders),
+            "includedFutureUpdate": (includedFutureUpdate),
+            createdAtSince: (createdAtSince),
+            updatedAtSince: (updatedAtSince),
+            "includes[]": (includes),
+            ...order?.render()
+        };
+        var getted: Response<any> = await Api_Request.Sget_methods("manga/" + id + "/feed", {
+            query: querys
+        });
+        if(getted.status == 200){
+            var data: Array<any> = getted.data.data;
+            var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+            for (let index = 0; index < data.length; index++) {
+                mangaArray[index] = Chapter.build_W_Any(data[index]);
+            }
+            return mangaArray;
+        }else{
+            return getted;
+        }
+    }
+    public get_genre(): Array<Tag>{
+        var returns : Array<Tag> = [];
+        let index0 = 0;
+        for (let index = 0; index < this.get_tags().length; index++) {
+            const current_tag= this.get_tags()[index];
+            if(current_tag.get_group() == "genre"){
+                returns[index0] = current_tag
+                index0 = index0 + 1;
+            }
+        }
+        return returns;
+    }
+    public async get_async_genre(): Promise<Array<Tag>>{
+        var to_use = this.get_genre();
+        return new Promise<Array<Tag>>((resolve, reject) => {
+            if(to_use.length == 0){
+                reject();
+            }else{
+                resolve(to_use);
+            }
+        });
+    }
+    public get_theme(): Array<Tag>{
+        var returns : Array<Tag> = [];
+        let index0 = 0;
+        for (let index = 0; index < this.get_tags().length; index++) {
+            const current_tag= this.get_tags()[index];
+            if(current_tag.get_group() == "theme"){
+                returns[index0] = current_tag
+                index0 = index0 + 1;
+            }
+        }
+        return returns;
+    }
+    public async get_async_theme(): Promise<Array<Tag>>{
+        var to_use = this.get_theme();
+        return new Promise<Array<Tag>>((resolve, reject) => {
+            if(to_use.length == 0){
+                reject();
+            }else{
+                resolve(to_use);
+            }
+        });
+    }
+    public get_format(): Array<Tag>{
+        var returns : Array<Tag> = [];
+        let index0 = 0;
+        for (let index = 0; index < this.get_tags().length; index++) {
+            const current_tag= this.get_tags()[index];
+            if(current_tag.get_group() == "format"){
+                returns[index0] = current_tag
+                index0 = index0 + 1;
+            }
+        }
+        return returns;
+    }
+    public async get_async_format(): Promise<Array<Tag>>{
+        var to_use = this.get_format();
+        return new Promise<Array<Tag>>((resolve, reject) => {
+            if(to_use.length == 0){
+                reject();
+            }else{
+                resolve(to_use);
+            }
+        });
+    }
+    public get_content(): Array<Tag>{
+        var returns : Array<Tag> = [];
+        let index0 = 0;
+        for (let index = 0; index < this.get_tags().length; index++) {
+            const current_tag= this.get_tags()[index];
+            if(current_tag.get_group() == "content"){
+                returns[index0] = current_tag
+                index0 = index0 + 1;
+            }
+        }
+        return returns;
+    }
+    public async get_async_content(): Promise<Array<Tag>>{
+        var to_use = this.get_format();
+        return new Promise<Array<Tag>>((resolve, reject) => {
+            if(to_use.length == 0){
+                reject();
+            }else{
+                resolve(to_use);
+            }
+        });
+    }
+    public async get_allCover(): Promise<Array<Cover>>{
+        let orders : Order = new Order();
+        orders.set_volume(Asc_Desc.asc());
+        let Offset_Limits: Offset_limits = new Offset_limits();
+        Offset_Limits.set_limits(100);
+        let res : Array<Cover> | Response<any> = await Cover.search(
+            Offset_Limits,
+            this.get_id(),
+            undefined,
+            undefined,
+            undefined,
+            orders
+        );
+        if(res instanceof Array<Cover>){
+            return res;
+        }else{
+            throw new Error("Cover list has no been loaded");
+        }
+    }
+}
+
+export class Manga_2 extends Manga{
+    private constructor(
+            id: string,
+            title:any,
+            description:any,
+            alt_title: any,
+            status:string,
+            last_chapter:string | null,
+            last_volume:string | null,
+            update_at:string,
+            created_at:string,
+            tags: Array<Tag>,
+        ){
+        super(
+            id,
+            title,
+            description,
+            alt_title,
+            status,
+            last_chapter,
+            last_volume,
+            update_at,
+            created_at,
+            tags
+        )
+    }
+    public static build_any(object: any /*
+    please only input the real data please
+    */): Manga_2{
+        var attributes :any = object.attributes;
+        //var relationships: any = object.relationships;
+        var tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
+        for (let index = 0; index < attributes.tags.length; index++) {
+            tags[index] = Tag.build_withAny(attributes.tags[index]);
+        }
+        var instance = new Manga_2(
+            object.id,
+            attributes.title,
+            attributes.description,
+            attributes.altTitles,
+            attributes.status,
+            attributes.lastChapter,
+            attributes.lastVolume,
+            attributes.updatedAt,
+            attributes.createdAt,
+            tags
+        );
+        //instance.set_relationships_Wany(relationships);
+        instance.set_avaible_language(attributes.avaible_language);
+        instance.set_links(attributes.links);
+        instance.set_ranting(attributes.content_rating);
+        return instance;
+    }
+    public async get_cover_art(): Promise<Cover>{
+        let orders : Order = new Order();
+        orders.set_volume(Asc_Desc.desc());
+        try {
+            let cover = (await Cover.search(
+                new Offset_limits(), 
+                this.get_id(),
+                undefined,
+                undefined,
+                undefined,
+                orders
+            ))
+            if (cover instanceof Array<Cover>) {
+                return cover[0];
+            }else{
+                throw new Error("No cover art for this manga " + this.get_title().en);
+            }
+        } catch (error) {
+            throw new Error("No cover art for this manga " + this.get_title().en);
+        }
     }
 }

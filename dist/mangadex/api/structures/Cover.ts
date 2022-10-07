@@ -1,6 +1,7 @@
+import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { RelationshipsTypes } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 
@@ -160,5 +161,38 @@ export class Cover extends Attribute{
         }
     public get_key_word():string{
         return RelationshipsTypes.cover_art();
+    }
+    public static async search(
+        offset_Limits : Offset_limits = new Offset_limits(),
+        mangaIDs?: string,
+        ids?: string,
+        uploaders?: string,
+        locales?: string,
+        order?: Order, 
+        includes? : string
+    ): Promise<Array<Cover> | Response<any>>{
+        let querys: any = {
+            limit: JSON.stringify(offset_Limits.get_limits()),
+            offset: JSON.stringify(offset_Limits.get_offset()),
+            "ids[]": (ids),
+            "uploaders[]": (uploaders),
+            "manga[]": (mangaIDs),
+            "locales[]": (locales),
+            "includes[]": (includes),
+            ...order?.render()
+        };
+        var getted: Response<any> = await Api_Request.Sget_methods("cover", {
+            query: querys
+        });
+        if(getted.status == 200){
+            var data: Array<any> = getted.data.data;
+            var mangaArray: Array<Cover> = new Array<Cover>(data.length);
+            for (let index = 0; index < data.length; index++) {
+                mangaArray[index] = Cover.build_withAny(data[index]);
+            }
+            return mangaArray;
+        }else{
+            return getted;
+        }
     }
 }

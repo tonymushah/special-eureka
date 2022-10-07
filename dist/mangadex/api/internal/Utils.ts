@@ -572,6 +572,22 @@ export class MangaLinksData{
             "MyAnimeList" : this.url_myanimelist()!
         });
     }
+    public static build_wAny(object: any): MangaLinksData{
+        return new MangaLinksData(
+            object.al,
+            object.ap,
+            object.bw,
+            object.mu,
+            object.nu,
+            object.kt,
+            object.amz,
+            object.ebj,
+            object.mal,
+            object.cdj,
+            object.raw,
+            object.engtl
+        );
+    }
 }
 
 export class Manga_related{
@@ -809,6 +825,22 @@ export class Lang_and_Data{
         }
         throw new Error("Type mismatch...");
     }
+    public static async initializeArrayByAltTitle_obj(alt_titles: Array<any>): Promise<Array<Lang_and_Data>>{
+        let returns : Array<Lang_and_Data> = [];
+        let index0 = 0;
+        for (let index = 0; index < alt_titles.length; index++) {
+            const alt_title = alt_titles[index];
+            for (const key in alt_title) {
+                if (Object.prototype.hasOwnProperty.call(alt_title, key)) {
+                    const data = alt_title[key];
+                    returns[index0] = new Lang_and_Data(data, ((await Languages.initialize()).getLang_byTwo_letter(key)));
+                    index0 = index0 + 1;
+                }
+            }
+        }
+        return returns;
+        //throw new Error("Type mismatch...");
+    }
     public static async initializeByDesc(desc: any): Promise<Array<Lang_and_Data>>{
         let array: Array<Lang_and_Data> = []
         let index : number= 0;
@@ -821,4 +853,33 @@ export class Lang_and_Data{
         }
         return array;
     }
+    public static find_data_by_lang2l(two_letter: string, to_use: Array<Lang_and_Data>):Lang_and_Data | undefined{
+        for (const key in to_use) {
+            if (Object.prototype.hasOwnProperty.call(to_use, key)) {
+                const element = to_use[key];
+                if (element.get_language().get_two_letter() == two_letter) {
+                    return element;
+                }
+            }
+        }
+    }
+}
+
+export class MGDate{
+    private to_use: Date;
+    public set_To_use(MGDat: Date){
+        this.to_use = MGDat;
+    }
+    public get_To_use(): Date{
+        return this.to_use;
+    }
+    public get_isoFormat_string(): string{
+        return this.to_use.toISOString().split(".")[0];
+    }
+    public constructor(to_use: Date){
+        this.set_To_use(to_use);
+    }
+}
+export function make_first_UpperCare(input: string): string{
+    return input.charAt(0).toUpperCase() + input.slice(1);
 }

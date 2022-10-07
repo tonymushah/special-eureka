@@ -40,6 +40,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
+    "react-dyn-tabs": "^5.0.1",
     "react-full-screen": "^1.1.1",
     "react-hot-keys": "^2.7.2",
     "react-icons": "^4.4.0",
@@ -55,6 +56,8 @@
     "react-zoom-pan-pinch": "^2.1.3",
     "sass": "^1.54.5",
     "swiper": "^8.4.2",
-    "tailwindcss": "^3.1.6"
+    "tailwindcss": "^3.1.6",
+    "tauri-settings": "^0.1.2",
+    "vite-plugin-ssr": "^0.4.39"
   }
 }

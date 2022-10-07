@@ -2,7 +2,7 @@ import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
-import { Manga } from "./Manga";
+import { Manga, Manga_2 } from "./Manga";
 import { User } from "./User";
 export class List extends Attribute{
     private name: string;
@@ -34,7 +34,6 @@ export class List extends Attribute{
     public get_version(): number{
         return this.version;
     }
-
     public constructor(
         id: string, 
         name: string, 
@@ -46,8 +45,30 @@ export class List extends Attribute{
         this.set_version(version);
         this.set_visibility(visibility);
     }
+    public static build_w_any_includes_manga(object: any): List{
+        var attributes : any = object.attributes;
+        var relationships: any = object.relationships;
+        var array: Array<Manga> = [];
+        var instance : List = new List(
+            object.id,
+            attributes.name,
+            attributes.visibility,
+            attributes.version
+        )
+        instance.set_relationships_Wany(relationships);
+        let index: number = 0;
+        for (let index1 = 0; index1 < instance.get_relationships()!.length; index1++) {
+            const element = relationships[index1];
+            if(element.type == "manga"){
+                array[index] = Manga_2.build_any(element);
+                index = index + 1;
+            }
+        }
+        instance.set_manga_array(array);
+        return instance;
+    }
     public static build_w_any(object: any): List{
-        var attributes :any = object.attributes;
+        var attributes : any = object.attributes;
         var relationships: any = object.relationships;
         var instance : List = new List(
             object.id,
@@ -89,5 +110,20 @@ export class List extends Attribute{
     public static async getListByID(id: string): Promise<List>{
         var response: Response<any> = await Api_Request.get_methods("list/" + id);
         return List.build_w_any(response.data.data);
+    }
+    public static async getListByID_includes_manga(id: string): Promise<List>{
+        var response: Response<any> = await Api_Request.Sget_methods("list/" + id, {
+            query : {
+                "includes[]" : "manga"
+            }
+        });
+        return List.build_w_any_includes_manga(response.data.data);
+    }
+    public static async RgetListByID_includes_manga(id: string): Promise<Response<any>>{
+        return await Api_Request.Sget_methods("list/" + id, {
+            query : {
+                "includes[]" : "manga"
+            }
+        });
     }
 }

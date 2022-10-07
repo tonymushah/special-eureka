@@ -12,9 +12,21 @@ import { Alt_title } from '../../mangadex/api/internal/Utils';
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { Await } from "react-router-dom";
 import { Api_Request } from "../../mangadex/api/internal/Api_Request";
-
-let list : List = await List.getListByID("ff210dec-862b-4c17-8608-0e7f97c70488");
-ReactDOM.createRoot(document.getElementById("root")!).render(<p>{"generated list"}</p>);
-let array : Array<Manga> = await (list).build_and_get_mangaArray();
-
-ReactDOM.createRoot(document.getElementById("root")!).render(<Manga_swipper src={array}></Manga_swipper>);
+import { Response, getClient } from "@tauri-apps/api/http";
+const root = ReactDOM.createRoot(document.getElementById("root")!)
+root.render(<p>{"generating list"}</p>);
+let list: List = await List.getListByID("4be9338a-3402-4f98-b467-43fb56663927");
+//var cover = await list.get_manga_array()[0].get_cover_art();
+//root.render(<p>{JSON.stringify(cover)}</p>)
+root.render(
+    <React.Suspense fallback={<Spinner animation="border"></Spinner>}>
+        <Await
+            resolve={list.build_and_get_mangaArray()}
+            errorElement={<p>Error ON build Array</p>}
+            children={(getted : Array<Manga>) => {
+                return (<Manga_swipper src={getted}></Manga_swipper>);
+            }}
+        />
+            
+    </React.Suspense>
+);
