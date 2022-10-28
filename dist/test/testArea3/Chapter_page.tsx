@@ -6,15 +6,118 @@ import { Chapter } from "../../mangadex/api/structures/Chapter";
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { Group } from "../../mangadex/api/structures/Group";
 import { User } from "../../mangadex/api/structures/User"
-import { Container, Placeholder, Row, Stack, Card, Spinner } from "react-bootstrap";
-export class Chapter_page{
+import { Container, Placeholder, Row, Stack, Card, Spinner, Col } from "react-bootstrap";
+import * as Chakra from "@chakra-ui/react";
+import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
+import * as NSwiper from "swiper";
+import { Await, useAsyncError } from "react-router-dom";
+import { At_Home } from "../../mangadex/api/structures/At_home";
+import "swiper/css";
+import "swiper/css/scrollbar";
+import "swiper/css/pagination";
+import { LazyLoadImage, LazyLoadComponent } from 'react-lazy-load-image-component';
+import { Reorder } from "framer-motion";
+import { Alt_title } from "../../mangadex/api/internal/Utils";
+import * as ChakraIcons from "@chakra-ui/icons";
+import * as FaReactIcons from "react-icons/fa"
+function ErrorEL(props){
+    let error : any = useAsyncError();
+    return(
+        <Chakra.Alert status="error">
+            <Chakra.AlertIcon></Chakra.AlertIcon>
+            <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
+            <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+        </Chakra.Alert>
+    )
+}
+
+type Chapter_pageProps = {
+    src : Chapter
+    page?: number;
+}
+
+
+function Chap_page_menu(props: React.PropsWithChildren){
+    const { isOpen, onOpen, onClose } = Chakra.useDisclosure()
+    return(
+        <>
+        <Chakra.Center 
+            onClick={onOpen}
+        >
+            <ChakraIcons.ArrowLeftIcon></ChakraIcons.ArrowLeftIcon>
+            &nbsp;
+            Menu
+            </Chakra.Center>
+            <Chakra.Drawer
+                isOpen={isOpen}
+                placement='right'
+                onClose={onClose}
+            >
+                <Chakra.DrawerContent>
+                    {props.children}
+                </Chakra.DrawerContent>
+            </Chakra.Drawer>
+        </>
+    )
+}
+
+function Page_list(props: React.ComponentPropsWithRef<any>){
+    return (
+        <Chakra.Menu>
+            <></>
+        </Chakra.Menu>
+    )
+}
+export class Chapter_page extends React.Component<Chapter_pageProps>{
     private Chapter_toUse: Chapter;
     private Manga_rel: Manga;
     private Group_uploader: Group;
     private uploader: User;
     private imgs: Array<string>;
-    private root: ReactDOM.Root;
     private current_page: number;
+    private nb_page : number;
+    private menu_open: boolean;
+    private current_page_ref: React.RefObject<HTMLSpanElement>;
+    private current_page_ref2: React.RefObject<HTMLSpanElement>;
+    private swiper_ref: React.RefObject<NSwiper.Swiper>;
+    /**
+     * Getter $is_menu_open
+     * @return {boolean}
+     */
+
+    /**
+     * Getter $current_page_ref2
+     * @return {React.RefObject<HTMLSpanElement>}
+     */
+	public get $current_page_ref2(): React.RefObject<HTMLSpanElement> {
+		return this.current_page_ref2;
+	}
+
+    /**
+     * Setter $current_page_ref2
+     * @param {React.RefObject<HTMLSpanElement>} value
+     */
+	public set $current_page_ref2(value: React.RefObject<HTMLSpanElement>) {
+		this.current_page_ref2 = value;
+	}
+	public get $is_menu_open(): boolean {
+		return this.menu_open;
+	}
+
+    /**
+     * Setter $is_menu_open
+     * @param {boolean} value
+     */
+	public set $is_menu_open(value: boolean) {
+		this.menu_open = value;
+	}
+    public toggleOpen(){
+        if(this.$is_menu_open == false || this.$is_menu_open == undefined){
+            this.$is_menu_open = true
+        }else{
+            this.$is_menu_open = false
+        }
+    }
     public set_Chapter_toUse(Chapter_toUse: Chapter){
         this.Chapter_toUse = Chapter_toUse
     }
@@ -30,9 +133,22 @@ export class Chapter_page{
     public set_imgs(imgs: Array<string>){
         this.imgs = imgs
     }
-    public set_root(root: ReactDOM.Root){
-        this.root = root
-    }
+
+    /**
+     * Getter $current_page
+     * @return {number}
+     */
+	public get $current_page(): number {
+		return this.current_page;
+	}
+
+    /**
+     * Setter $current_page
+     * @param {number} value
+     */
+	public set $current_page(value: number) {
+		this.current_page = value;
+	}
 
     public get_Chapter_toUse(): Chapter{
         return this.Chapter_toUse;
@@ -49,46 +165,304 @@ export class Chapter_page{
     public get_imgs(): Array<string>{
         return this.imgs;
     }
-    public get_root(): ReactDOM.Root{
-        return this.root;
-    }
+    public constructor(props: Chapter_pageProps){
+        super(props);
+        this.$is_menu_open = false;
+        this.Chapter_toUse = this.props.src;
+        this.$current_page = 0;
+        this.current_page_ref = React.createRef();
+        this.current_page_ref2 = React.createRef();
+        this.swiper_ref = React.createRef();
+        this.$nb_page = this.Chapter_toUse.get_pages();
+        try{
+            this.current_page_ref.current!.innerText = "" + (this.$current_page + 1);
+            this.current_page_ref2.current!.innerText = "" + (this.$current_page + 1);
+        }catch(e){
 
-    public constructor(Chapter_toUse: Chapter, root: ReactDOM.Root){
-        this.set_Chapter_toUse(Chapter_toUse);
-    }
-    public static initializeByID(id: string, root: ReactDOM.Root):Chapter_page | null{
-        root.render(
-            <>
-                <Container>
-                    <Row>
-                        <p><Placeholder xs={2}/></p>
-                        <p><Placeholder xs={3}/></p>
-                    </Row>
-                    <Row>
-                        <Stack direction="horizontal" gap={3}>
-                            <p><Placeholder xs={3}/></p>
-                            <p><Placeholder xs={3}/></p>
-                            <p><Placeholder xs={3}/></p>
-                        </Stack>
-                    </Row>
-                    <Row>
-                        <p> <i className=" fa fa-group"></i> <Placeholder xs={3}/></p>
-                    </Row>
-                    <Row>
-                        <Card>
-                            <Card.Body>
-                                <Spinner animation="border"></Spinner>
-                            </Card.Body>
-                        </Card>
-                    </Row>
-                </Container>
-            </>
-        )
-        try {
-            
-        } catch (error) {
-            
         }
     }
-    public render
+    public current_page_Ref1(): React.ReactNode{
+        try{
+            return (
+                <>{this.current_page_ref.current!.innerText}</>
+            )
+        }catch(e){
+            console.log(e)
+            return(
+                <>{this.$current_page}</>
+            )
+        }
+    }
+    public makelist_Page(): Array<React.ReactNode>{
+        var returns: Array<React.ReactNode> = [];
+        for(let index = 0; index < this.Chapter_toUse.get_pages(); index++){
+            returns[index] = (
+                <Chakra.MenuList
+                    onClick={() =>{
+                        this.$current_page = index;
+                        try{
+                            this.current_page_ref.current!.innerText = "" + (this.$current_page + 1);
+                            this.current_page_ref2.current!.innerText = "" + (this.$current_page + 1);
+                        }catch(e){
+
+                        }
+                        document.getElementById("atHome_pages")!.scrollIntoView()
+                    }}
+                >
+                    {index + 1}
+                </Chakra.MenuList>
+            )
+        }
+        return returns;
+    }
+    /**
+     * Getter $nb_page
+     * @return {number}
+     */
+	public get $nb_page(): number {
+		return this.nb_page;
+	}
+
+    /**
+     * Setter $nb_page
+     * @param {number} value
+     */
+	public set $nb_page(value: number) {
+		this.nb_page = value;
+	}
+
+    render(): React.ReactNode {
+        this.$current_page = 0
+        return (
+            <Chakra.Box>
+                <Container>
+                    <Chakra.Box>
+                        <Row>
+                            <Col>
+                                <Row>
+                                    <Chakra.Text>Chapter {this.Chapter_toUse.get_chapter()}  {this.Chapter_toUse.get_title()}</Chakra.Text>
+                                </Row>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <React.Suspense
+                                fallback={
+                                    <Chakra.Skeleton
+                                        height="20px"
+                                    ></Chakra.Skeleton>
+                                }
+                            >
+                                <Await
+                                    resolve={Manga.getMangaByID(this.Chapter_toUse.get_some_relationship("manga")[0].get_id())}
+                                    errorElement={
+                                        <ErrorEL/>
+                                    }
+                                    children={(getted: Manga) => {
+                                        let title: string = "";
+                                        if (getted.get_title().en == null) {
+                                            title = new Alt_title(getted.get_alt_title()).get_quicklang()!;
+                                        }else{
+                                            title = getted.get_title().en;
+                                        }
+                                        return (
+                                            <Chakra.Text>{title}</Chakra.Text>
+                                        );
+                                    }}
+                                />
+                            </React.Suspense>
+                        </Row>
+                        <Row>
+                            <Col>
+                            {/* 
+                                The volume and chapter
+                            */}
+                                <Chakra.Center>
+                                    <React.Suspense
+                                        fallback={
+                                            <Chakra.Skeleton
+                                                height="20px"
+                                            ></Chakra.Skeleton>
+                                        }
+                                    >
+                                        <Await
+                                            resolve={this.Chapter_toUse.get_current()}
+                                            errorElement={<ErrorEL></ErrorEL>}
+                                        >
+                                            {(getted : string) => {
+                                                return (
+                                                    <Chakra.Text>{getted}</Chakra.Text>
+                                                )
+                                            }}
+                                        </Await>
+                                    </React.Suspense>
+                                </Chakra.Center>
+                            </Col>
+                            <Col>
+                                <Chakra.Center>
+                                    <Chakra.Text> <span ref={this.current_page_ref}>1</span> / {this.Chapter_toUse.get_pages()}</Chakra.Text>
+                                </Chakra.Center>
+                            </Col>
+                            <Col>
+                                <Chap_page_menu>
+                                    <Chakra.DrawerCloseButton/>
+                                        <Chakra.DrawerHeader>
+                                            <Row>
+                                                <Chakra.Box display={"flex"}>
+                                                    <Chakra.Icon as={FaReactIcons.FaBookOpen}/>
+                                                    &nbsp; 
+                                                    &nbsp;
+                                                    <React.Suspense
+                                                        fallback={
+                                                            <Chakra.Skeleton
+                                                                height="20px"
+                                                            ></Chakra.Skeleton>
+                                                        }
+                                                    >
+                                                        <Await
+                                                            resolve={Manga.getMangaByID(this.Chapter_toUse.get_some_relationship("manga")[0].get_id())}
+                                                            errorElement={
+                                                                <ErrorEL/>
+                                                            }
+                                                            children={(getted: Manga) => {
+                                                                let title: string = "";
+                                                                if (getted.get_title().en == null) {
+                                                                    title = new Alt_title(getted.get_alt_title()).get_quicklang()!;
+                                                                }else{
+                                                                    title = getted.get_title().en;
+                                                                }
+                                                                return (
+                                                                    <Chakra.Text>{title}</Chakra.Text>
+                                                                );
+                                                            }}
+                                                        />
+                                                    </React.Suspense>
+                                                </Chakra.Box>
+                                            </Row>
+                                            <Row>
+                                                <Chakra.Box display={"flex"}>
+                                                    <Chakra.Icon as={FaReactIcons.FaFile}/>
+                                                    &nbsp; 
+                                                    &nbsp;
+                                                <Chakra.Text>Chapter {this.Chapter_toUse.get_chapter()}</Chakra.Text>
+                                                </Chakra.Box>
+                                            </Row>
+                                        </Chakra.DrawerHeader>
+                                        <Chakra.DrawerBody>
+                                            <Chakra.Box>
+                                                <Row>
+                                                    <Chakra.Menu>
+                                                        
+                                                    </Chakra.Menu>
+                                                </Row>
+                                            </Chakra.Box>
+                                        </Chakra.DrawerBody>
+                                </Chap_page_menu>
+                            </Col>
+                        </Row>
+                    </Chakra.Box>
+                    <Row id="atHome_pages">
+                        <React.Suspense fallback={
+                            <Chakra.Spinner
+                                thickness='4px'
+                                speed='0.65s'
+                                emptyColor='gray.200'
+                                color='orange.500'
+                                size='xl'
+                            />
+                        }>
+                            <Await
+                                resolve={At_Home.getAt_Home_wChID(this.Chapter_toUse.get_id())}
+                                errorElement={
+                                    <ErrorEL/>
+                                }
+                            >
+                                {(getted : At_Home) => {
+                                        let imgs : Array<string> = getted.get_data_ImgURL();
+                                        this.$nb_page = imgs.length;
+                                        return (
+                                            <Swiper
+                                                onLoad={() =>{
+                                                    this.current_page_ref2 = React.createRef();
+                                                }}
+                                                slidesPerView={1}
+                                                keyboard={{
+                                                    enabled: true
+                                                }}
+                                                tabIndex={this.current_page}
+                                                centeredSlides={true}
+                                                zoom={true}
+                                                modules={[
+                                                    NSwiper.Scrollbar,
+                                                    NSwiper.Keyboard,
+                                                    NSwiper.Navigation,
+                                                    NSwiper.Zoom
+                                                ]}
+                                                onReachEnd={async () => {
+                                                    this.set_Chapter_toUse(await Chapter.get_ChapterbyId(await this.Chapter_toUse.get_next()));
+                                                    
+                                                    this.forceUpdate();
+                                                    
+                                                }}
+                                                onSlideChange={(swiper) => {
+                                                    this.current_page = swiper.activeIndex;
+                                                    try{
+                                                        this.current_page_ref.current!.innerText = "" + (this.$current_page + 1);
+                                                        this.current_page_ref2.current!.innerText = "" + (this.$current_page + 1);
+                                                    }catch(e){
+                                                        console.log(e)
+                                                    }   
+                                                    document.getElementById("atHome_pages")!.scrollIntoView()
+                                                }}
+                                                navigation={true}
+                                            >
+                                                {
+                                                    imgs.map((getted) => (
+                                                        <SwiperSlide className=" align-content-center">
+                                                            <Container>
+                                                                <Row>
+                                                                    <LazyLoadComponent
+                                                                        placeholder={
+                                                                            <Chakra.Box display={"block"}>
+                                                                                <Chakra.Center height={"100vh"}>
+                                                                                    <Chakra.Spinner
+                                                                                        thickness="10px"
+                                                                                        size={"xl"}
+                                                                                    />
+                                                                                </Chakra.Center>
+                                                                            </Chakra.Box>
+                                                                        }
+                                                                    >
+                                                                        <LazyLoadImage
+                                                                            beforeLoad={() => {
+                                                                            }}
+                                                                            placeholder={
+                                                                                <Chakra.Box display={"block"}>
+                                                                                    <Chakra.Center height={"100vh"}>
+                                                                                        <Chakra.Spinner
+                                                                                            thickness="10px"
+                                                                                            size={"xl"}
+                                                                                        />
+                                                                                    </Chakra.Center>
+                                                                                </Chakra.Box>
+                                                                            }
+                                                                            key={getted}
+                                                                            src={getted}
+                                                                        />
+                                                                    </LazyLoadComponent>
+                                                                </Row>
+                                                            </Container>
+                                                        </SwiperSlide>
+                                                    ))
+                                                }
+                                            </Swiper>
+                                        );
+                                    }
+                                }
+                            </Await>
+                        </React.Suspense>
+                    </Row>
+                </Container>
+            </Chakra.Box>
+        );
+    }
 }

@@ -7,12 +7,12 @@ import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { Accordion, Tabs, Tab, Tooltip, Overlay, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse, Placeholder } from "react-bootstrap";
 import * as FontAwesome from "@fortawesome/react-fontawesome";
-import { Alt_title, Author_Artists, Offset_limits, Lang_and_Data, Languages, Lang, make_first_UpperCare, ContentRating } from "../../mangadex/api/internal/Utils";
+import { Alt_title, Author_Artists, Offset_limits, Lang_and_Data, Languages, Lang, make_first_UpperCare, ContentRating, Status } from "../../mangadex/api/internal/Utils";
 import { Cover } from "../../mangadex/api/structures/Cover";
 import CardHeader from "react-bootstrap/esm/CardHeader";
 import { Author } from "../../mangadex/api/structures/Author";
 import { Cover_Image_ }from "./Mainpage/Image_";
-import { Volume_ } from "./Volume";
+import { Volume_ } from "./Mainpage/aggregate/Volume";
 import "flag-icons/css/flag-icons.min.css";
 import { Await } from "react-router-dom";
 import { TagRow, TagButton } from "./Mainpage/boutons/tag_boutons";
@@ -20,7 +20,7 @@ import { Tag } from "../../mangadex/api/structures/Tag";
 import { AuthorCol } from "./Mainpage/boutons/author_boutons";
 import { Top_Chaps } from "./Mainpage/Top_chap";
 import { Covers_Manga } from "./Mainpage/Covers_";
-
+import * as Chakra from '@chakra-ui/react'
 
 type MangaPageProps = {
     src: Manga
@@ -70,6 +70,25 @@ export class Manga_Page extends React.Component<MangaPageProps>{
             returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
         }
         return returns;
+    }
+    public get_status_color(): React.ReactNode{
+        switch (this.to_use.get_status()) {
+            case Status.ongoing():
+                return (<Button size="sm" variant="success" disabled> </Button>)
+                break;
+            case Status.completed():
+                return (<Button size="sm" variant="info" disabled> </Button>)
+                break;
+            case Status.hiatus():
+                return (<Button size="sm" variant="warning" disabled> </Button>)
+                break;
+            case Status.cancelled():
+                return (<Button size="sm" variant="danger" disabled> </Button>)
+                break;
+            default:
+                return (<></>);
+                break;
+        }
     }
     public render(): React.ReactNode{
         
@@ -131,7 +150,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                             <Col xs="7" sm="8" md="9" lg="9" xl="9">
                                 <Container>
                                     <Row className="mb-xs-1 mb-md-3 mb-lg-5 mb-sm-1">
-                                        <h1 style={{"fontWeight": "bolder"}} className="title-bended">{title}</h1>
+                                        <Chakra.Heading fontFamily="Poppins" size="2xl" fontWeight="bolder" className="title-bended">{title}</Chakra.Heading>
                                     </Row>
                                     <Row className="mb-lg-5 mb-sm-1">
                                         <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
@@ -141,11 +160,11 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                                 children={(getted: Array<Lang_and_Data>) => {
                                                     if(Lang_and_Data.find_data_by_lang2l("en", getted) instanceof Lang_and_Data){
                                                         return (
-                                                            <h5 className="title-bended">{Lang_and_Data.find_data_by_lang2l("en", getted)!.get_data()}</h5>
+                                                            <Chakra.Heading fontFamily="Poppins" size="lg" className="title-bended">{Lang_and_Data.find_data_by_lang2l("en", getted)!.get_data()}</Chakra.Heading>
                                                         );
                                                     }else{
                                                         return (
-                                                            <h2 className="title-bended">{getted[Math.floor(Math.random() * getted.length)].get_data()}</h2>
+                                                            <Chakra.Heading fontFamily="Poppins" size="lg" className="title-bended">{getted[Math.floor(Math.random() * getted.length)].get_data()}</Chakra.Heading>
                                                         );
                                                     }
                                                 }}
@@ -182,7 +201,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                             </React.Suspense>
                                         </h5>
                                     </Row>
-                                    <Row className=" overflow-x-scroll mb-1">
+                                    <Row className=" mdP-top-themes mb-1">
                                         <React.Suspense fallback={<Placeholder xs={4}></Placeholder>}>
                                             <Await
                                                 resolve={this.build_themes_manga()}
@@ -194,13 +213,42 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                         </React.Suspense>
                                     </Row>
                                     <Row>
-                                        <span> State </span>
+                                        <h6>Publication : {this.get_status_color()} {make_first_UpperCare(this.to_use.get_status())}</h6>
                                     </Row>
                                 </Container>
                             </Col>
                         </Row>
                 </div>
             </Row>
+            <Chakra.Tabs bg="inherit" variant='soft-rounded' colorScheme='orange' mt={1}>
+                <Chakra.TabList bg="inherit" zIndex={2} position="relative">
+                    <Chakra.Tab>
+                        Chapters
+                    </Chakra.Tab>
+                    <Chakra.Tab>
+                        Covers
+                    </Chakra.Tab>
+                    <Chakra.Tab>
+                        Related
+                    </Chakra.Tab>
+                </Chakra.TabList>
+                <Chakra.TabPanels>
+                    <Chakra.TabPanel>
+                        <Top_Chaps src={this.to_use}/>
+                    </Chakra.TabPanel>
+                    <Chakra.TabPanel>
+                        <Covers_Manga src={this.to_use}/>
+                    </Chakra.TabPanel>
+                    <Chakra.TabPanel>
+                        
+                    </Chakra.TabPanel>
+                </Chakra.TabPanels>
+            </Chakra.Tabs>
+        </Container>
+        );
+    }
+}
+/*
             <Tabs
                 key={this.key}
                 onSelect={(k) => this.set_key(k!)}
@@ -210,13 +258,13 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                     title="Chapters"
                     eventKey={"chapters"}
                 >
-                    <Top_Chaps src={this.to_use}/>
+                    
                 </Tab>
                 <Tab
                     title="Covers"
                     eventKey={"covers"}
                 >
-                    <Covers_Manga src={this.to_use}/>
+                    
                 </Tab>
                 <Tab
                     title="Related"
@@ -225,9 +273,4 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                     
                 </Tab>
             </Tabs>
-        </Container>
-        );
-    }
-}
-/*
 */

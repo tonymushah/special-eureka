@@ -122,4 +122,16 @@ export class Attribute{
     public get_key_word():string{
         return "";
     }
+    public static get_some_relationship(relationships : Array<any>, name: string): Array<any>{
+        var array: Array<any> = [];
+        let index: number = 0;
+        for (let index1 = 0; index1 < relationships!.length; index1++) {
+            const element = relationships[index1];
+            if(element.type == name){
+                array[index] = element;
+                index = index + 1;
+            }
+        }
+        return array
+    }
 }

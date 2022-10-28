@@ -12,7 +12,8 @@ import { Cover } from "../../../mangadex/api/structures/Cover";
 import CardHeader from "react-bootstrap/esm/CardHeader";
 import { Author } from "../../../mangadex/api/structures/Author";
 import { Cover_Image_, Cover_Image_2 }from "../Mainpage/Image_";
-import { Volume_ } from "../Volume";
+import * as Chakra from "@chakra-ui/react";
+import { Volume_ } from "./aggregate/Volume";
 import "flag-icons/css/flag-icons.min.css";
 import { Await } from "react-router-dom";
 import { TagRow, TagButton } from "../Mainpage/boutons/tag_boutons";
@@ -33,34 +34,42 @@ export class Covers_Manga extends React.Component<MangaPageProps>{
         let returns: Array<React.ReactNode> = new Array<React.ReactNode>(covers.length);
         for (let index = 0; index < covers.length; index++) {
             const element = covers[index];
-            returns[index] = (<Cover_Image_2 className="m-1 m-lg-3 d-inline-flex mgP-covers" src={element}/>);
+            returns[index] = (
+                <Chakra.WrapItem>
+                    <Cover_Image_2 className="mgP-covers" src={element}/>
+                </Chakra.WrapItem>
+            );
         }
         return returns;
     }
     render(): React.ReactNode {
         return (
-        <Row className="mg-top-content">
-            <React.Suspense
-                fallback={
-                    <p className=" align-content-center">
-                        <Spinner animation="border"></Spinner>
-                        <br/>
-                        <span>Loading covers...</span>
-                    </p>
-                }
-            >
-                <Await
-                    resolve={this.build_covers()}
-                    errorElement={<span>seems like this manga has no covers</span>}
-                    children={(getted: Array<React.ReactNode>) => {
-                        return (
-                            <>
-                                {getted}
-                            </>
-                        );
-                    }}
-                />
-            </React.Suspense>
-        </Row>);
+        <Chakra.Center>
+            <Row className="mg-top-content">
+                <React.Suspense
+                    fallback={
+                        <p className=" align-content-center">
+                            <Spinner animation="border"></Spinner>
+                            <br/>
+                            <span>Loading covers...</span>
+                        </p>
+                    }
+                >
+                    <Await
+                        resolve={this.build_covers()}
+                        errorElement={<span>seems like this manga has no covers</span>}
+                        children={(getted: Array<React.ReactNode>) => {
+                            return (
+                            
+                                <Chakra.Wrap spacing="30px">
+                                    {getted}
+                                </Chakra.Wrap>
+
+                            );
+                        }}
+                    />
+                </React.Suspense>
+            </Row>
+        </Chakra.Center>);
     }
 }

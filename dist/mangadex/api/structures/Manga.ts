@@ -6,7 +6,7 @@ import { Cover } from "./Cover";
 import { Tag } from "./Tag";
 import React from 'react';
 import { Author } from "./Author";
-import { Asc_Desc, Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
+import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
 import { Chapter } from "./Chapter";
 export class Manga extends Attribute{
@@ -253,19 +253,19 @@ export class Manga extends Attribute{
     public static async search(
         offset_Limits : Offset_limits = new Offset_limits(),
         title?: string,
-        authors?: string,
-        artists?: string,
+        authors?: Array<string>,
+        artists?: Array<string>,
         year?: number,
-        includedTags?: string,
+        includedTags?: Array<string>,
         includedTagsMode?: string,
-        excludedTags?: string,
+        excludedTags?: Array<string>,
         excludedTagsMode?: string,
-        status?: string,
-        originalLanguage?: string,
-        excludedOriginalLanguage?: string,
-        availableTranslatedLanguage?: string,
-        publicationDemographic?: string,
-        mangaIDs?: string,
+        status?: Array<string>,
+        originalLanguage?: Array<string>,
+        excludedOriginalLanguage?: Array<string>,
+        availableTranslatedLanguage?: Array<string>,
+        publicationDemographic?: Array<string>,
+        mangaIDs?: Array<string>,
         createdAtSince?: string,
         updatedAtSince?: string,
         order?: Order, 
@@ -276,19 +276,19 @@ export class Manga extends Attribute{
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             title: (title),
-            "authors[]": (authors),
-            "artists[]": (artists),
+            ...(new Querry_list_builder("authors", authors!)).build(),
+            ...(new Querry_list_builder("artists", artists!)).build(),
             year: JSON.stringify(year),
-            "includedTags[]": includedTags,
+            ...(new Querry_list_builder("includedTags", includedTags!)).build(),
             includedTagsMode: (includedTagsMode),
-            "excludedTags[]": (excludedTags),
+            ...(new Querry_list_builder("excludedTags", excludedTags!)).build(),
             excludedTagsMode: (excludedTagsMode),
-            "status[]": (status),
-            "originalLanguage[]": (originalLanguage),
-            "excludedOriginalLanguage[]": (excludedOriginalLanguage),
-            "availableTranslatedLanguage[]": (availableTranslatedLanguage),
-            "publicationDemographic[]": (publicationDemographic),
-            "mangaIDs[]": (mangaIDs),
+            ...(new Querry_list_builder("status", status!)).build(),
+            ...(new Querry_list_builder("originalLanguage", originalLanguage!)).build(),
+            ...(new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
+            ...(new Querry_list_builder("availableTranslatedLanguage", availableTranslatedLanguage!)).build(),
+            ...(new Querry_list_builder("publicationDemographic", publicationDemographic!)).build(),
+            ...(new Querry_list_builder("ids", mangaIDs!)).build(),
             createdAtSince: (createdAtSince),
             updatedAtSince: (updatedAtSince),
             "includes[]": (includes),
@@ -328,12 +328,50 @@ export class Manga extends Attribute{
         }
         return authors_;
     }
-    public async aggregate_1(): Promise<void>{
-        var getted: Response<any> = await Api_Request.get_methods(Manga.get_request_a() + this.get_id() + "/aggregate");
+    public async aggregate_1(
+        translatedLanguage?: Array<string>, 
+        groups?: Array<string>
+        ): Promise<void>{
+        var getted: Response<any> = await Api_Request.get_methods(
+            Manga.get_request_a() + this.get_id() + "/aggregate",
+            {
+                query: {
+                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
+                    ...(new Querry_list_builder("groups", groups!)).build()
+                }
+            }
+            );
         this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
     }
-    public async aggregate_2(): Promise<void>{
-        var getted: Response<any> = await Api_Request.get_methods(Manga.get_request_a() + this.get_id() + "/aggregate");
+    public async aggregate_1_get(
+        translatedLanguage?: Array<string>, 
+        groups?: Array<string>
+        ): Promise<Aggregate>{
+        var getted: Response<any> = await Api_Request.get_methods(
+            Manga.get_request_a() + this.get_id() + "/aggregate",
+            {
+                query: {
+                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
+                    ...(new Querry_list_builder("groups", groups!)).build()
+                }
+            }
+            );
+        this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
+        return this.get_aggregate();
+    }
+    public async aggregate_2(
+        translatedLanguage?: Array<string>, 
+        groups?: Array<string>
+        ): Promise<void>{
+        var getted: Response<any> = await Api_Request.get_methods(
+            Manga.get_request_a() + this.get_id() + "/aggregate",
+            {
+                query: {
+                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
+                    ...(new Querry_list_builder("groups", groups!)).build()
+                }
+            }
+        );
         this.set_aggregate(await Aggregate.build_wANY2(getted.data.volumes));
     }
     public get_key_word():string{
@@ -341,12 +379,12 @@ export class Manga extends Attribute{
     }
     public async getFeed(
         offset_Limits : Offset_limits = new Offset_limits(),
-        translatedLanguage?: string,
-        originalLanguage?: string,
-        excludedOriginalLanguage?: string,
-        contentRating?: string,
-        excludedGroups?: string,
-        excludedUploaders?: string,
+        translatedLanguage?: Array<string>,
+        originalLanguage?: Array<string>,
+        excludedOriginalLanguage?: Array<string>,
+        contentRating?: Array<string>,
+        excludedGroups?: Array<string>,
+        excludedUploaders?: Array<string>,
         includedFutureUpdate?: number,
         createdAtSince?: string,
         updatedAtSince?: string,
@@ -355,12 +393,12 @@ export class Manga extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            "originalLanguage[]": (originalLanguage),
-            "excludedOriginalLanguage[]": (excludedOriginalLanguage),
-            "translatedLanguage[]": (translatedLanguage),
-            "contentRating[]": (contentRating),
-            "excludedGroups[]": (excludedGroups),
-            "excludedUploaders[]": (excludedUploaders),
+            ...(new Querry_list_builder("originalLanguage", originalLanguage!)).build(),
+            ...(new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
+            ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
+            ...(new Querry_list_builder("contentRating", contentRating!)).build(),
+            ...(new Querry_list_builder("excludedGroups", excludedGroups!)).build(),
+            ...(new Querry_list_builder("excludedUploaders", excludedUploaders!)).build(),
             "includedFutureUpdate": (includedFutureUpdate),
             createdAtSince: (createdAtSince),
             updatedAtSince: (updatedAtSince),
@@ -384,12 +422,12 @@ export class Manga extends Attribute{
     public static async getFeed(
         id: string,
         offset_Limits : Offset_limits = new Offset_limits(),
-        translatedLanguage?: string,
-        originalLanguage?: string,
-        excludedOriginalLanguage?: string,
-        contentRating?: string,
-        excludedGroups?: string,
-        excludedUploaders?: string,
+        translatedLanguage?: Array<string>,
+        originalLanguage?: Array<string>,
+        excludedOriginalLanguage?: Array<string>,
+        contentRating?: Array<string>,
+        excludedGroups?: Array<string>,
+        excludedUploaders?: Array<string>,
         includedFutureUpdate?: number,
         createdAtSince?: string,
         updatedAtSince?: string,
@@ -398,12 +436,12 @@ export class Manga extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            "originalLanguage[]": (originalLanguage),
-            "excludedOriginalLanguage[]": (excludedOriginalLanguage),
-            "translatedLanguage[]": (translatedLanguage),
-            "contentRating[]": (contentRating),
-            "excludedGroups[]": (excludedGroups),
-            "excludedUploaders[]": (excludedUploaders),
+            ...(new Querry_list_builder("originalLanguage", originalLanguage!)).build(),
+            ...(new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
+            ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
+            ...(new Querry_list_builder("contentRating", contentRating!)).build(),
+            ...(new Querry_list_builder("excludedGroups", excludedGroups!)).build(),
+            ...(new Querry_list_builder("excludedUploaders", excludedUploaders!)).build(),
             "includedFutureUpdate": (includedFutureUpdate),
             createdAtSince: (createdAtSince),
             updatedAtSince: (updatedAtSince),
@@ -519,7 +557,7 @@ export class Manga extends Attribute{
         Offset_Limits.set_limits(100);
         let res : Array<Cover> | Response<any> = await Cover.search(
             Offset_Limits,
-            this.get_id(),
+            [this.get_id()],
             undefined,
             undefined,
             undefined,
@@ -592,7 +630,9 @@ export class Manga_2 extends Manga{
         try {
             let cover = (await Cover.search(
                 new Offset_limits(), 
-                this.get_id(),
+                [
+                    this.get_id()
+                ],
                 undefined,
                 undefined,
                 undefined,

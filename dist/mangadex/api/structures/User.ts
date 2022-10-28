@@ -1,6 +1,6 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
-import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 
 export class User extends Attribute{
@@ -35,7 +35,12 @@ export class User extends Attribute{
         var attributes :any = object.attributes;
         var relationships: any = object.relationships;
         var instance: User = new User(object.id, attributes.username, attributes.roles, attributes.version);
-        instance.set_relationships_Wany(relationships);
+        try{
+            instance.set_relationships_Wany(relationships);
+        }catch(e){
+            console.log(e);
+        }
+        
         return instance;
     }
     public static async getUserById(id: string): Promise<User>{
@@ -46,13 +51,13 @@ export class User extends Attribute{
     public static async search(
         offset_Limits: Offset_limits = new Offset_limits(), 
         username?: string, 
-        ids?: string, 
+        ids?: Array<string>, 
         order?: Order
     ): Promise<Array<User> | Response<any>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            "ids[]": (ids),
+            ...(new Querry_list_builder("ids", ids!)).build(),
             username: JSON.stringify(username),
             ...order?.render()
         }
@@ -80,7 +85,7 @@ export class User extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            ids: JSON.stringify(ids),
+            ...(new Querry_list_builder("ids", ids!)).build(),
             username: JSON.stringify(username),
             order: JSON.stringify(order)
         }

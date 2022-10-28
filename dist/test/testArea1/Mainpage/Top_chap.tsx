@@ -12,7 +12,7 @@ import { Cover } from "../../../mangadex/api/structures/Cover";
 import CardHeader from "react-bootstrap/esm/CardHeader";
 import { Author } from "../../../mangadex/api/structures/Author";
 import { Cover_Image_ }from "../Mainpage/Image_";
-import { Volume_ } from "../Volume";
+import { Volume_ } from "./aggregate/Volume";
 import "flag-icons/css/flag-icons.min.css";
 import { Await } from "react-router-dom";
 import { TagRow, TagButton } from "../Mainpage/boutons/tag_boutons";
@@ -20,6 +20,10 @@ import { Tag } from "../../../mangadex/api/structures/Tag";
 import { AuthorCol } from "./boutons/author_boutons";
 import { LinksRow } from "./boutons/links_boutons";
 import { ExtLink } from "../../../commons-res/components/ExtLink";
+import { LAD_Tabs } from "./tabs/Lang_data_tabs";
+import { Aggregate_box } from "./aggregate/Aggregate_box";
+import * as Chakra from '@chakra-ui/react'
+import { Aggregate } from "../../../mangadex/api/structures/Aggregate";
 
 type MangaPageProps = {
     src: Manga
@@ -31,15 +35,16 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
         super(props);
         this.to_use = this.props.src;
     }
+    public async build_altTitle(): Promise<Array<React.ReactNode>>{
+        let altTitle_inLang : Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title());
+        let returns : Array<React.ReactNode> = Array<React.ReactNode>(altTitle_inLang.length);
+        for (let index = 0; index < altTitle_inLang.length; index++) {
+            const element = altTitle_inLang[index];
+            returns[index] = (<span><span>{element.get_language().get_name()} :</span> {element.get_data()}</span>);
+        }
+        return returns;
+    }
     public render(): React.ReactNode{
-        var volumes: Array<Volume_> = new Array<Volume_>(Math.floor(Math.random() * 100) + 1);
-        for (let index = 0; index < volumes.length; index++) {
-            volumes[index] = new Volume_();
-        }
-        let volumes_: Array<React.ReactNode> = new Array<React.ReactNode>(volumes.length);
-        for (let index = 0; index < volumes.length; index++) {
-            volumes_[index] = volumes[index].render(index);
-        }
         let links : MangaLinksData = MangaLinksData.build_wAny(this.to_use.get_links());
         return (
             <div>
@@ -49,7 +54,15 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
                                 <Accordion.Body>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, quaerat dolorum, rem minus aliquam, esse eligendi aut porro earum voluptates assumenda ut eos voluptate laboriosam. Aliquam quis earum expedita esse.</p>
+                                    <React.Suspense fallback={<Placeholder lg={12}></Placeholder>}>
+                                        <Await
+                                            resolve={Lang_and_Data.initializeByDesc(this.to_use.get_description())}
+                                            errorElement={<p>Description not found</p>}
+                                            children={(getted: Array<Lang_and_Data>) => {
+                                                return (<LAD_Tabs src={getted}></LAD_Tabs>);
+                                            }}
+                                        />
+                                    </React.Suspense>
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
@@ -143,7 +156,6 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                     />
                                 </React.Suspense>
                             </>
-                                        
                             <>
                                 <React.Suspense fallback={
                                     <Row>
@@ -161,7 +173,7 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                             <Row>
                                 <h5>Demographics</h5>
                                 <div className="d-md-inline">
-                                    <Button className="m-1" variant="dark" size="sm">{make_first_UpperCare(this.to_use.get_demographic()!)}</Button>
+                                    <Button className="mdP-bout m-1" variant="dark" size="sm">{make_first_UpperCare(this.to_use.get_demographic()!)}</Button>
                                 </div>
                             </Row>
                             <>
@@ -172,14 +184,49 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                             </>
                             <Row>
                                 <h5>Atlernative Titles</h5>
-                                <p><span className={"fi " + "fi-jp"}> </span> Japan title </p>
-                                <p><span className={"fi " + "fi-gb"}> </span> English title </p>
-                                <p><span className={"fi " + "fi-fr"}></span> French title </p>
+                                <React.Suspense fallback={
+                                    <Spinner animation="border">
+                                    </Spinner>
+                                }>
+                                    <Await
+                                        resolve={this.build_altTitle()}
+                                        errorElement={<> </>}
+                                        children={(getted: Array<React.ReactNode>) => {
+                                            return (
+                                                <>
+                                                    {getted}
+                                                </>
+                                            );
+                                        }}
+                                    />
+                                </React.Suspense>
                             </Row>
                             </Col>
                         <Col xs="12" sm="12" md="8" lg="8" className="d-sm-block">
                             <Container>
-                                {volumes_}
+                                <React.Suspense fallback={
+                                    <Chakra.Box m={2} bg="inherit">
+                                        <div className=" text-center">
+                                            <Spinner 
+                                                animation="border"
+                                            ></Spinner>
+                                            <br/>
+                                            <p>Loading chapters ...</p>
+                                        </div>
+                                    </Chakra.Box>
+                                }>
+                                    <Await
+                                        resolve={this.to_use.aggregate_1_get()}
+                                        errorElement={
+                                            <div className="text-center">
+                                                <span>Error on loading chapter</span>
+                                            </div>
+                                        }
+                                        children={(getted: Aggregate) => {
+                                            return (<Aggregate_box src={getted} separator={3}></Aggregate_box>);
+                                        }}
+                                    />
+                                </React.Suspense>
                             </Container>
                         </Col>
                     </Row>

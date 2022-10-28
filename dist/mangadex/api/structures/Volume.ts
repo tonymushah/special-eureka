@@ -1,6 +1,7 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
 import { Chapters } from "./Chapter";
+import { getCurrent } from "@tauri-apps/api/window";
 
 export class Volume{
     private name: string;
@@ -45,7 +46,7 @@ export class Volume{
                 index = index + 1;
             }
         }
-        var instance: Volume = new Volume(object.name, object.count, chapters);
+        var instance: Volume = new Volume(object.volume, object.count, chapters);
         return instance;
     }
     public static async build_wANY2(object: any): Promise<Volume>{
@@ -64,7 +65,44 @@ export class Volume{
                 index = index + 1;
             }
         }
-        var instance: Volume = new Volume(object.name, object.count, chapters);
+        var instance: Volume = new Volume(object.volume, object.count, chapters);
         return instance;
+    }
+    public getNext(id: string): string | boolean{
+        for (let index = 0; index < this.chapters.length; index++) {
+            const chapters_to_use : Chapters = this.chapters[index];
+            if(chapters_to_use.is_there(id) == true){
+                let index_to_use = index + 1;
+                if(index_to_use >= this.chapters.length){
+                    return true;
+                }else{
+                    return this.chapters[index_to_use].get_ids()[0];
+                }
+            }
+        }
+        throw Error("This chapter" + id + " is not in this volume");
+    }
+    public getPrevious(id: string): string | boolean{
+        for (let index = 0; index < this.chapters.length; index++) {
+            const chapters_to_use : Chapters = this.chapters[index];
+            if(chapters_to_use.is_there(id) == true){
+                let index_to_use = index - 1;
+                if(index_to_use >= this.chapters.length || index_to_use < 0){
+                    return true;
+                }else{
+                    return this.chapters[index_to_use].get_ids()[0];
+                }
+            }
+        }
+        throw Error("This chapter" + id + " is not in this volume");
+    }
+    public getCurrent(id: string): string{
+        for (let index = 0; index < this.chapters.length; index++) {
+            const chapters_to_use : Chapters = this.chapters[index];
+            if(chapters_to_use.is_there(id) == true){
+                return ("Volume " +  this.name + ", Ch. " + chapters_to_use.get_name());
+            }
+        }
+        throw Error("This chapter" + id + " is not in this volume");
     }
 }

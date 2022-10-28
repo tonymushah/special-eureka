@@ -4,7 +4,7 @@ import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 import { Response } from "@tauri-apps/api/http";
 import { NumberLiteralType } from "typescript";
-import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
+import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes } from "../internal/Utils";
 
 export class Author extends Attribute{
     private name:string;
@@ -190,17 +190,17 @@ export class Author extends Attribute{
     public static async searchAuthor(
         offset_Limits: Offset_limits = new Offset_limits(),
         name?: string,
-        ids?: string,
+        ids?: Array<string>,
         order?: Order,
-        includes?: string
+        includes?: Array<string>
     ): Promise<Array<Author> | Response<any>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            "ids[]": (ids),
+            ...(new Querry_list_builder<string>("ids", ids!)).build(),
             name: (name),
             ...order?.render(),
-            "includes[]": (includes)
+            ...(new Querry_list_builder<string>("includes", includes!)).build()
         };
         var getted: Response<any> = await Api_Request.Sget_methods(Author.get_request_a(), {
             query: querys

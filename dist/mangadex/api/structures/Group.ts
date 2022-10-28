@@ -1,7 +1,7 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
 import { Response } from "@tauri-apps/api/http";
-import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
 import { StringLiteral } from "typescript";
 
 export class Group extends Attribute{
@@ -201,7 +201,12 @@ export class Group extends Attribute{
             attributes.createdAt,
             attributes.updatedAt
         );
-        instance.set_relationships_Wany(relationships);
+        try{
+            instance.set_relationships_Wany(relationships);
+        }catch(e){
+            console.log(e)
+        }
+        
         return instance;
     }
     public static async get_groupById(id:string): Promise<Group>{
@@ -216,17 +221,17 @@ export class Group extends Attribute{
     public static async search(
         offset_Limits: Offset_limits = new Offset_limits(),
         name?: string,
-        ids?: string,
-        focusedLanguage?: string,
-        includes?: Array<string>,
+        ids?: Array<string>,
+        focusedLanguage?: Array<string>,
+        includes?: string,
         order?: Order
     ): Promise<Array<Group> | Response<any>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             name: (name),
-            "ids[]": JSON.stringify(ids),
-            "focusedLanguage[]": (focusedLanguage),
+            ...(new Querry_list_builder("ids", ids!)).build(),
+            ...(new Querry_list_builder("focusedLanguage", focusedLanguage!)).build(),
             "includes[]": (includes),
             ...order?.render()
         }

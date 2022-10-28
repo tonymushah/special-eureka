@@ -1,7 +1,7 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 
@@ -164,20 +164,20 @@ export class Cover extends Attribute{
     }
     public static async search(
         offset_Limits : Offset_limits = new Offset_limits(),
-        mangaIDs?: string,
-        ids?: string,
-        uploaders?: string,
-        locales?: string,
+        mangaIDs?: Array<string>,
+        ids?: Array<string>,
+        uploaders?: Array<string>,
+        locales?: Array<string>,
         order?: Order, 
         includes? : string
     ): Promise<Array<Cover> | Response<any>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            "ids[]": (ids),
-            "uploaders[]": (uploaders),
-            "manga[]": (mangaIDs),
-            "locales[]": (locales),
+            ...(new Querry_list_builder<string>("ids", ids!)).build(),
+            ...(new Querry_list_builder<string>("uploaders", uploaders!)).build(),
+            ...(new Querry_list_builder<string>("manga", mangaIDs!)).build(),
+            ...(new Querry_list_builder<string>("locales", locales!)).build(),
             "includes[]": (includes),
             ...order?.render()
         };

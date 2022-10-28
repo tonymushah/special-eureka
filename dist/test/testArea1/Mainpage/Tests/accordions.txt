@@ -1,0 +1,18 @@
+<Chakra.Accordion allowToggle>
+  <Chakra.AccordionItem>
+    <h2>
+      <Chakra.AccordionButton _expanded={{ bg: 'tomato', color: 'white' }}>
+        <Chakra.Box flex='1' textAlign='left'>
+          Click me to see a different style
+        </Chakra.Box>
+        <Chakra.AccordionIcon />
+      </Chakra.AccordionButton>
+    </h2>
+    <Chakra.AccordionPanel>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+      commodo consequat.
+    </Chakra.AccordionPanel>
+  </Chakra.AccordionItem>
+</Chakra.Accordion>
