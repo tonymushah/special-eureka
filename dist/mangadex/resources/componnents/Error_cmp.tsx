@@ -1,26 +1,25 @@
 import React from 'react';
-import { Container, Row } from 'react-bootstrap';
 import ReactDOM from 'react-dom/client';
+import * as Chakra from "@chakra-ui/react"
+import { useAsyncError, useRouteError } from 'react-router';
 
-export class Error_cmp extends React.Component{
-    constructor(props){
-        super(props);
-    }
-    render(): React.ReactNode {
-        let error = this.props.error;
-        return (
-            <Container>
-                <Row>
-                    <h2>We caught some error while loading the ressources</h2>
-                </Row>
-                <Row>
-                    <h3>Details</h3>
-                    <br/>
-                    <div>
-                        {error}
-                    </div>
-                </Row>
-            </Container>
-        )
-    }
+export function ErrorELAsync(props){
+    let error : any = useAsyncError();
+    return(
+        <Chakra.Alert status="error">
+            <Chakra.AlertIcon></Chakra.AlertIcon>
+            <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
+            <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+        </Chakra.Alert>
+    )
+}
+export function ErrorELRouter(props){
+    let error : any = useRouteError();
+    return(
+        <Chakra.Alert status="error">
+            <Chakra.AlertIcon></Chakra.AlertIcon>
+            <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
+            <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+        </Chakra.Alert>
+    )
 }

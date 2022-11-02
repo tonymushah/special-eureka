@@ -42,7 +42,7 @@
     "iso-3166": "^4.0.1",
     "iso-639-1": "^2.1.15",
     "javascript-time-ago": "^2.5.7",
-    "mdb-react-ui-kit": "^4.2.0",
+    "protobufjs": "^7.1.2",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",

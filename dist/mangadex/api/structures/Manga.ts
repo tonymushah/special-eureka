@@ -355,7 +355,7 @@ export class Manga extends Attribute{
                     ...(new Querry_list_builder("groups", groups!)).build()
                 }
             }
-            );
+        );
         this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
         return this.get_aggregate();
     }

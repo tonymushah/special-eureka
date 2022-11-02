@@ -927,10 +927,14 @@ export class Querry_list_builder<T>{
         this.$array = (array);
 	}
     public build(): any{
-        let returns = {}
-        for (let index = 0; index < this.array.length; index++) {
-            const element = this.array[index];
-            returns[this.$name + "[" + index + "]"] = element;
+        let returns : any = {}
+        try{
+            for (let index = 0; index < this.array.length; index++) {
+                const element = this.array[index];
+                returns[this.$name + "[" + index + "]"] = element;
+            }
+        }catch(e){
+            returns = null;
         }
         return returns;
     }

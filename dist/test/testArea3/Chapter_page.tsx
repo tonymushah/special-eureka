@@ -20,6 +20,7 @@ import { Reorder } from "framer-motion";
 import { Alt_title } from "../../mangadex/api/internal/Utils";
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as FaReactIcons from "react-icons/fa"
+import { Aggregate } from "../../mangadex/api/structures/Aggregate";
 function ErrorEL(props){
     let error : any = useAsyncError();
     return(
@@ -351,10 +352,151 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                             <Chakra.Box>
                                                 <Row>
                                                     <Chakra.Menu>
-                                                        
+                                                        <Chakra.MenuButton as={Chakra.Button} rightIcon={<ChakraIcons.ChevronDownIcon></ChakraIcons.ChevronDownIcon>}>
+                                                            <Chakra.Text>Chapter</Chakra.Text>
+                                                            <Chakra.Box >
+                                                                <Chakra.Center>
+                                                                    <React.Suspense
+                                                                        fallback={
+                                                                            <Chakra.Skeleton
+                                                                                height="20px"
+                                                                            ></Chakra.Skeleton>
+                                                                        }
+                                                                    >
+                                                                        <Await
+                                                                            resolve={this.Chapter_toUse.get_current()}
+                                                                            errorElement={<ErrorEL></ErrorEL>}
+                                                                        >
+                                                                            {(getted : string) => {
+                                                                                return (
+                                                                                    <Chakra.Text>{getted}</Chakra.Text>
+                                                                                )
+                                                                            }}
+                                                                        </Await>
+                                                                    </React.Suspense>
+                                                                </Chakra.Center>
+                                                            </Chakra.Box>
+                                                        </Chakra.MenuButton>
+                                                        <Chakra.MenuList>
+                                                            <React.Suspense>
+                                                                <Await
+                                                                    resolve={this.Chapter_toUse.getAggregateList()}
+                                                                    errorElement={<ErrorEL></ErrorEL>}
+                                                                >
+                                                                    {(getted : Aggregate) => {
+                                                                        let returns : Array<React.ReactNode> = [];
+                                                                        let topIndex = 0;
+                                                                        for (let index = 0; index < getted.get_volumes().length; index++) {
+                                                                            const volume = getted.get_volumes()[index];
+                                                                            for (let index2 = 0; index2 < volume.get_chapters().length; index2++) {
+                                                                                const chapter = volume.get_chapters().reverse()[index2];
+                                                                                returns[topIndex] = (
+                                                                                    <Chakra.MenuItem
+                                                                                        onClick={async () => {
+                                                                                            this.set_Chapter_toUse(await Chapter.get_ChapterbyId(chapter.get_chapters()[0].get_id()));
+                                                                                            this.forceUpdate();
+                                                                                        }}
+                                                                                    >
+                                                                                        Vol. {
+                                                                                            volume.get_name()
+                                                                                        } Ch. {
+                                                                                            chapter.get_name()
+                                                                                        }
+                                                                                    </Chakra.MenuItem>
+                                                                                );
+                                                                                topIndex = topIndex + 1 ;
+                                                                            }
+                                                                        }
+                                                                        return (
+                                                                            <>{
+                                                                                returns
+                                                                            }</>
+                                                                        )
+                                                                    }}
+                                                                </Await>
+                                                            </React.Suspense>
+                                                        </Chakra.MenuList>
                                                     </Chakra.Menu>
                                                 </Row>
                                             </Chakra.Box>
+                                            <Chakra.Divider />
+                                            <Row>
+                                                <Chakra.Heading size={"lg"}>
+                                                    Uploaded by
+                                                </Chakra.Heading>
+                                                <Chakra.Box>
+                                                    <React.Suspense
+                                                        fallback={
+                                                            <Chakra.Skeleton></Chakra.Skeleton>
+                                                        }
+                                                    >
+                                                        <Await 
+                                                            resolve={this.Chapter_toUse.get_userUploader()}
+                                                            errorElement={<ErrorEL></ErrorEL>}
+                                                        >
+                                                            {(getted : User) => {
+                                                                return (
+                                                                    <Chakra.Text>
+                                                                        <Chakra.Icon as={FaReactIcons.FaUser}></Chakra.Icon>
+                                                                        &nbsp; 
+                                                                        &nbsp;
+                                                                        {getted.get_username()}
+                                                                    </Chakra.Text>
+                                                                )
+                                                            }}
+                                                        </Await>
+                                                    </React.Suspense>
+                                                    <React.Suspense
+                                                        fallback={
+                                                            <Chakra.Skeleton></Chakra.Skeleton>
+                                                        }
+                                                    >
+                                                        <Await 
+                                                            resolve={this.Chapter_toUse.get_groupUploaders()}
+                                                            errorElement={
+                                                                <Chakra.Text>
+                                                                    <Chakra.Icon as={FaReactIcons.FaUsers}></Chakra.Icon>
+                                                                    &nbsp; 
+                                                                    &nbsp;
+                                                                    <Chakra.Text as='i'>No Group</Chakra.Text>
+                                                                </Chakra.Text>
+                                                            }
+                                                        >
+                                                            {(getted : Group[]) => {
+                                                                let to_show : Array<React.ReactNode> = [];
+                                                                for (let index = 0; index < getted.length; index++) {
+                                                                    const group = getted[index];
+                                                                    if(index == getted.length - 1){
+                                                                        to_show[index] = (
+                                                                            <>{
+                                                                                group.get_name()
+                                                                            }</>
+                                                                        )
+                                                                    }else{
+                                                                        to_show[index] = (
+                                                                            <>{
+                                                                                group.get_name()
+                                                                            } | </>
+                                                                        )
+                                                                    }
+                                                                }
+                                                                return (
+
+                                                                    <Chakra.Text>
+                                                                        <Chakra.Icon as={FaReactIcons.FaUsers}></Chakra.Icon>
+                                                                        &nbsp; 
+                                                                        &nbsp;
+                                                                        {
+                                                                            to_show
+                                                                        }
+                                                                    </Chakra.Text>
+                                                                )
+                                                            }}
+                                                        </Await>
+                                                    </React.Suspense>
+                                                </Chakra.Box>
+                                            </Row>
+                                            <Chakra.Divider/>
                                         </Chakra.DrawerBody>
                                 </Chap_page_menu>
                             </Col>
