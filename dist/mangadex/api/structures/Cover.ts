@@ -163,14 +163,24 @@ export class Cover extends Attribute{
         return RelationshipsTypes.cover_art();
     }
     public static async search(
-        offset_Limits : Offset_limits = new Offset_limits(),
-        mangaIDs?: Array<string>,
-        ids?: Array<string>,
-        uploaders?: Array<string>,
-        locales?: Array<string>,
-        order?: Order, 
-        includes? : string
-    ): Promise<Array<Cover> | Response<any>>{
+        {
+            offset_Limits = new Offset_limits(),
+            mangaIDs,
+            ids,
+            uploaders,
+            locales,
+            order,
+            includes
+        }:{
+            offset_Limits : Offset_limits,
+            mangaIDs?: Array<string>,
+            ids?: Array<string>,
+            uploaders?: Array<string>,
+            locales?: Array<string>,
+            order?: Order, 
+            includes? : string
+        }
+    ): Promise<Array<Cover>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -181,18 +191,14 @@ export class Cover extends Attribute{
             "includes[]": (includes),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.Sget_methods("cover", {
+        var getted: Response<any> = await Api_Request.get_methods("cover", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<Cover> = new Array<Cover>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = Cover.build_withAny(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Cover> = new Array<Cover>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Cover.build_withAny(data[index]);
         }
+        return mangaArray;
     }
 }

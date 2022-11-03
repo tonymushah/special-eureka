@@ -17,7 +17,7 @@ type Manga3Props = {
     toUse : Manga
 }
 
-export class Manga3 extends React.Component<Manga3Props>{
+export class Manga4 extends React.Component<Manga3Props>{
     private to_use : Manga;
     constructor(props: Manga3Props){
         super(props);
@@ -32,50 +32,41 @@ export class Manga3 extends React.Component<Manga3Props>{
             title = this.to_use.get_title().en;
         }
         return (
-            <Card className="manga-item3">
-                <Card.Body>
-                    <React.Suspense fallback={<Card.Img src="" className="manga-item3-img"/>}>
-                        <Await
-                            resolve={this.to_use.get_cover_art()}
-                            errorElement={<p>Error while loading cover</p>}
-                            children={(getted: Cover) => {
-                                let coverpath: string = getted.get_CoverImage_thumbnail(256);
-                                return (
-            
+            <Chakra.Box
+                width={"160px"}
+            >
+                <Card>
+                    <Card.Body>
+                        <React.Suspense fallback={<Card.Img src="" className="manga-item3-img"/>}>
+                            <Await
+                                resolve={this.to_use.get_cover_art()}
+                                errorElement={<p>Error while loading cover</p>}
+                                children={(getted: Cover) => {
+                                    let coverpath: string = getted.get_CoverImage_thumbnail(256);
+                                    return (
                                         <React.Suspense>
-                                            <Card.Img src={coverpath} className="manga-item3-img"/>
+                                            <Card.Img src={coverpath} width={"125px"}/>
                                         </React.Suspense>
+                                    )
+                                }}
+                            />
+                        </React.Suspense>
+                        <Chakra.Box 
+                            display={"block"}
+                            overflow={"hidden"}
+                        >
+                            <Card.Title className="text-center">
+                                {/* 
+                                <Link to={"/mangadex/manga/" + this.to_use.get_id()}>
                                     
-                                )
-                            }}
-                        />
-                    </React.Suspense>
-                    <div className="manga-item3-content overflow-hidden">
-                        <Card.Title className="text-center text-lg-start">
-                            <Link to={"/mangadex/manga/" + this.to_use.get_id()}>
+                                </Link>
+                                */}
                                 {title}
-                            </Link>
-                        </Card.Title>
-                        <Card.Subtitle className=" d-none d-lg-flex">
-                            <React.Suspense 
-                                fallback={
-                                    <Chakra.AbsoluteCenter>
-                                        <Spinner animation="grow"></Spinner>
-                                    </Chakra.AbsoluteCenter>
-                                }
-                            >
-                                <Await 
-                                    resolve={Lang_and_Data.initializeByDesc(this.to_use.get_description())}
-                                    errorElement={<ErrorELAsync/>}
-                                    children={(getted: Array<Lang_and_Data>) => {
-                                        return (<Chakra.Text textOverflow={"ellipsis"}>{getted[0].get_data()}</Chakra.Text>);
-                                    }}
-                                />
-                            </React.Suspense>
-                        </Card.Subtitle>
-                    </div>
-                </Card.Body>
-            </Card>
+                            </Card.Title>
+                        </Chakra.Box>
+                    </Card.Body>
+                </Card>
+            </Chakra.Box>
         );
     }
 }
@@ -97,7 +88,7 @@ export class Manga3TEST extends React.Component{
 type Manga_swipperProps = {
     src : Array<Manga>;
 }
-export class Manga_swipper extends React.Component<Manga_swipperProps>{
+export class Manga_swipper2 extends React.Component<Manga_swipperProps>{
     private manga_array : Array<Manga>;
     constructor(props: Manga_swipperProps){
         super(props);
@@ -109,7 +100,7 @@ export class Manga_swipper extends React.Component<Manga_swipperProps>{
             const element = this.manga_array[index];
             array[index] = (
                 <SwiperSlide>
-                    <Manga3 toUse={element}/>
+                    <Manga4 toUse={element}/>
                 </SwiperSlide>
             );
         }
@@ -120,12 +111,12 @@ export class Manga_swipper extends React.Component<Manga_swipperProps>{
             <React.Suspense fallback={<Spinner animation="border"></Spinner>}>
                 <Await
                     resolve={this.init_manga_elements()}
-                    errorElement={<p>Error on loading</p>}
+                    errorElement={<ErrorELAsync/>}
                     children={(getted: Array<React.ReactNode>) => {
                             return (
                                 <Swiper
-                                    spaceBetween={0}
-                                    slidesPerView={3}
+                                    spaceBetween={2}
+                                    slidesPerView={10}
                                         pagination={{
                                         dynamicBullets: true,
                                     }}
@@ -142,13 +133,13 @@ export class Manga_swipper extends React.Component<Manga_swipperProps>{
                                                 slidesPerView : 4,
                                                 spaceBetween : 10
                                             },
-                                            768:{
-                                                slidesPerView : 5,
-                                                spaceBetween : 10
+                                            786:{
+                                                slidesPerView: 6,
+                                                spaceBetween: 10,
                                             },
-                                            992:{
-                                                slidesPerView : 3,
-                                                spaceBetween : 10
+                                            1200:{
+                                                slidesPerView: 8,
+                                                spaceBetween: 10,
                                             }
                                         }
                                     }

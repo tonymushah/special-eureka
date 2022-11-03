@@ -1,7 +1,6 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
 import { Chapters } from "./Chapter";
-import { getCurrent } from "@tauri-apps/api/window";
 
 export class Volume{
     private name: string;

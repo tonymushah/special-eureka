@@ -48,12 +48,19 @@ export class User extends Attribute{
         var instance: User = User.build_wANY(getted.data.data);
         return instance;
     }
-    public static async search(
-        offset_Limits: Offset_limits = new Offset_limits(), 
-        username?: string, 
-        ids?: Array<string>, 
-        order?: Order
-    ): Promise<Array<User> | Response<any>>{
+    public static async search( 
+        {
+            offset_Limits = new Offset_limits(),
+            username,
+            ids,
+            order
+        } : {
+            offset_Limits: Offset_limits, 
+            username?: string, 
+            ids?: Array<string>, 
+            order?: Order
+        }
+    ): Promise<Array<User>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -61,50 +68,49 @@ export class User extends Attribute{
             username: JSON.stringify(username),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.Sget_methods("user", {
+        var getted: Response<any> = await Api_Request.get_methods("user", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<User> = new Array<User>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = User.build_wANY(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<User> = new Array<User>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = User.build_wANY(data[index]);
         }
+        return mangaArray;
     }
     public static async search_user_wtoken(
         token: string,
-        offset_Limits: Offset_limits = new Offset_limits(), 
-        username?: string, 
-        ids?: Array<string>, 
-        order?: any
-    ): Promise<Array<User> | Response<any>>{
+        {
+            offset_Limits = new Offset_limits(),
+            username,
+            ids,
+            order
+        } : {
+            offset_Limits: Offset_limits, 
+            username?: string, 
+            ids?: Array<string>, 
+            order?: Order
+        }
+    ): Promise<Array<User>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             ...(new Querry_list_builder("ids", ids!)).build(),
             username: JSON.stringify(username),
-            order: JSON.stringify(order)
+            ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.Sget_methods("user", {
+        var getted: Response<any> = await Api_Request.get_methods("user", {
             query: querys,
             headers: {
                 Authorization: "Bearer " + token
             }
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<User> = new Array<User>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = User.build_wANY(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<User> = new Array<User>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = User.build_wANY(data[index]);
         }
+        return mangaArray;
     }
     public get_key_word():string{
         return RelationshipsTypes.user();

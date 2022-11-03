@@ -28,6 +28,24 @@ export class Manga extends Attribute{
     private aggregate: Aggregate;
     private state : string | null;
     private originalLanguage: string;
+    private latestUploadedChapter : string;
+
+    /**
+     * Getter $latestUploadedChapter
+     * @return {string}
+     */
+	public get $latestUploadedChapter(): string {
+		return this.latestUploadedChapter;
+	}
+
+    /**
+     * Setter $latestUploadedChapter
+     * @param {string} value
+     */
+	public set $latestUploadedChapter(value: string) {
+		this.latestUploadedChapter = value;
+	}
+
     public set_state(state: string | null){
         this.state = state;
     }
@@ -187,6 +205,7 @@ export class Manga extends Attribute{
         instance.set_demographic(attributes.publicationDemographic);
         instance.set_state(attributes.state);
         instance.set_originalLanguage(attributes.originalLanguage);
+        instance.$latestUploadedChapter = attributes.latestUploadedChapter;
         return instance;
     }
     public static build_any2(object: any /*
@@ -250,28 +269,53 @@ export class Manga extends Attribute{
             throw new Error("No cover art for this manga " + this.get_title().en);
         }
     }
-    public static async search(
-        offset_Limits : Offset_limits = new Offset_limits(),
-        title?: string,
-        authors?: Array<string>,
-        artists?: Array<string>,
-        year?: number,
-        includedTags?: Array<string>,
-        includedTagsMode?: string,
-        excludedTags?: Array<string>,
-        excludedTagsMode?: string,
-        status?: Array<string>,
-        originalLanguage?: Array<string>,
-        excludedOriginalLanguage?: Array<string>,
-        availableTranslatedLanguage?: Array<string>,
-        publicationDemographic?: Array<string>,
-        mangaIDs?: Array<string>,
-        createdAtSince?: string,
-        updatedAtSince?: string,
-        order?: Order, 
-        includes? : string,
-        hasAvailableChapters? : boolean,
-        group?: string): Promise<Array<Manga> | Response<any>>{
+    public static async search({
+            offset_Limits = new Offset_limits(),
+            title,
+            authors,
+            artists,
+            year,
+            includedTags,
+            includedTagsMode,
+            excludedTags,
+            excludedTagsMode,
+            status,
+            originalLanguage,
+            excludedOriginalLanguage,
+            availableTranslatedLanguage,
+            publicationDemographic,
+            mangaIDs,
+            createdAtSince,
+            updatedAtSince,
+            order, 
+            includes,
+            hasAvailableChapters,
+            latestUploadedChapter,
+            group
+        } : {
+            offset_Limits : Offset_limits,
+            title?: string,
+            authors?: Array<string>,
+            artists?: Array<string>,
+            year?: number,
+            includedTags?: Array<string>,
+            includedTagsMode?: string,
+            excludedTags?: Array<string>,
+            excludedTagsMode?: string,
+            status?: Array<string>,
+            originalLanguage?: Array<string>,
+            excludedOriginalLanguage?: Array<string>,
+            availableTranslatedLanguage?: Array<string>,
+            publicationDemographic?: Array<string>,
+            mangaIDs?: Array<string>,
+            createdAtSince?: string,
+            updatedAtSince?: string,
+            order?: Order, 
+            includes? : string,
+            hasAvailableChapters? : boolean,
+            latestUploadedChapter? : boolean,
+            group?: string
+        }): Promise<Array<Manga>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -293,22 +337,19 @@ export class Manga extends Attribute{
             updatedAtSince: (updatedAtSince),
             "includes[]": (includes),
             hasAvailableChapters: (hasAvailableChapters),
+            latestUploadedChapter: latestUploadedChapter,
             group: (group),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.Sget_methods("manga", {
+        var getted: Response<any> = await Api_Request.get_methods("manga", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<Manga> = new Array<Manga>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = Manga.build_any(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Manga> = new Array<Manga>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Manga.build_any(data[index]);
         }
+        return mangaArray;
     }
     public async get_author(): Promise<Array<Author>>{
         var authors_length: number = this.get_some_relationshipLength("author");
@@ -389,7 +430,7 @@ export class Manga extends Attribute{
         createdAtSince?: string,
         updatedAtSince?: string,
         order?: Order, 
-        includes? : string): Promise<Array<Chapter> | Response<any>>{
+        includes? : string): Promise<Array<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -405,19 +446,15 @@ export class Manga extends Attribute{
             "includes[]": (includes),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.Sget_methods("manga/" + this.get_id() + "/feed", {
+        var getted: Response<any> = await Api_Request.get_methods("manga/" + this.get_id() + "/feed", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = Chapter.build_W_Any(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
+        return mangaArray;
     }
     public static async getFeed(
         id: string,
@@ -448,19 +485,15 @@ export class Manga extends Attribute{
             "includes[]": (includes),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.Sget_methods("manga/" + id + "/feed", {
+        var getted: Response<any> = await Api_Request.get_methods("manga/" + id + "/feed", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = Chapter.build_W_Any(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
+        return mangaArray;
     }
     public get_genre(): Array<Tag>{
         var returns : Array<Tag> = [];
@@ -551,23 +584,25 @@ export class Manga extends Attribute{
         });
     }
     public async get_allCover(): Promise<Array<Cover>>{
-        let orders : Order = new Order();
-        orders.set_volume(Asc_Desc.asc());
+        let orderss : Order = new Order();
+        orderss.set_volume(Asc_Desc.asc());
         let Offset_Limits: Offset_limits = new Offset_limits();
         Offset_Limits.set_limits(100);
         let res : Array<Cover> | Response<any> = await Cover.search(
-            Offset_Limits,
-            [this.get_id()],
-            undefined,
-            undefined,
-            undefined,
-            orders
+            {
+                offset_Limits : Offset_Limits,
+                mangaIDs : [this.get_id()],
+                order : orderss
+            }
         );
         if(res instanceof Array<Cover>){
             return res;
         }else{
             throw new Error("Cover list has no been loaded");
         }
+    }
+    public async get_latestUploadedChapter() : Promise<Chapter>{
+        return Chapter.get_ChapterbyId(this.$latestUploadedChapter);
     }
 }
 
@@ -629,14 +664,13 @@ export class Manga_2 extends Manga{
         orders.set_volume(Asc_Desc.desc());
         try {
             let cover = (await Cover.search(
-                new Offset_limits(), 
-                [
-                    this.get_id()
-                ],
-                undefined,
-                undefined,
-                undefined,
-                orders
+                {
+                    offset_Limits : new Offset_limits(),
+                    mangaIDs : [
+                        this.get_id()
+                    ],
+                    order : orders,
+                }
             ))
             if (cover instanceof Array<Cover>) {
                 return cover[0];

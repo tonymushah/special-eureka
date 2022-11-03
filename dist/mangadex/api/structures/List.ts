@@ -112,7 +112,7 @@ export class List extends Attribute{
         return List.build_w_any(response.data.data);
     }
     public static async getListByID_includes_manga(id: string): Promise<List>{
-        var response: Response<any> = await Api_Request.Sget_methods("list/" + id, {
+        var response: Response<any> = await Api_Request.get_methods("list/" + id, {
             query : {
                 "includes[]" : "manga"
             }
@@ -120,7 +120,7 @@ export class List extends Attribute{
         return List.build_w_any_includes_manga(response.data.data);
     }
     public static async RgetListByID_includes_manga(id: string): Promise<Response<any>>{
-        return await Api_Request.Sget_methods("list/" + id, {
+        return await Api_Request.get_methods("list/" + id, {
             query : {
                 "includes[]" : "manga"
             }

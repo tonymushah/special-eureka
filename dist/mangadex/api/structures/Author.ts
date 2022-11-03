@@ -188,12 +188,20 @@ export class Author extends Attribute{
         }
     }
     public static async searchAuthor(
-        offset_Limits: Offset_limits = new Offset_limits(),
-        name?: string,
-        ids?: Array<string>,
-        order?: Order,
-        includes?: Array<string>
-    ): Promise<Array<Author> | Response<any>>{
+        {
+            offset_Limits = new Offset_limits(),
+            name,
+            ids,
+            order,
+            includes
+        } : {
+            offset_Limits: Offset_limits,
+            name?: string,
+            ids?: Array<string>,
+            order?: Order,
+            includes?: Array<string>
+        }
+    ): Promise<Array<Author>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -202,19 +210,16 @@ export class Author extends Attribute{
             ...order?.render(),
             ...(new Querry_list_builder<string>("includes", includes!)).build()
         };
-        var getted: Response<any> = await Api_Request.Sget_methods(Author.get_request_a(), {
+        var getted: Response<any> = await Api_Request.get_methods(Author.get_request_a(), {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var authorArray: Array<Author> = new Array<Author>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                authorArray[index] = Author.build_wANY(data[index]);
-            }
-            return authorArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var authorArray: Array<Author> = new Array<Author>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            authorArray[index] = Author.build_wANY(data[index]);
         }
+        return authorArray;
+        
     }
     public get_key_word():string;
     public get_key_word(isArtist?: boolean):string{

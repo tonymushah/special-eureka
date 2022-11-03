@@ -219,13 +219,22 @@ export class Group extends Attribute{
         }
     }
     public static async search(
-        offset_Limits: Offset_limits = new Offset_limits(),
-        name?: string,
-        ids?: Array<string>,
-        focusedLanguage?: Array<string>,
-        includes?: string,
-        order?: Order
-    ): Promise<Array<Group> | Response<any>>{
+        {
+            offset_Limits = new Offset_limits(),
+            name,
+            ids,
+            focusedLanguage,
+            includes,
+            order
+        } : {
+            offset_Limits: Offset_limits,
+            name?: string,
+            ids?: Array<string>,
+            focusedLanguage?: Array<string>,
+            includes?: string,
+            order?: Order
+        }
+    ): Promise<Array<Group>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -235,19 +244,15 @@ export class Group extends Attribute{
             "includes[]": (includes),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.Sget_methods("group", {
+        var getted: Response<any> = await Api_Request.get_methods("group", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<Group> = new Array<Group>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = Group.build_wANY(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Group> = new Array<Group>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Group.build_wANY(data[index]);
         }
+        return mangaArray;
     }
     public get_key_word():string{
         return RelationshipsTypes.scanlation_group();

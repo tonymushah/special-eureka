@@ -149,7 +149,7 @@ export class Chapter extends Attribute{
         publishAtSince?: string,
         order? : Order,
         includes?: string
-    ): Promise<Array<Chapter>| Response<any>>{
+    ): Promise<Array<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(offset_limits.get_limits()),
             offset: JSON.stringify(offset_limits.get_offset()),
@@ -172,19 +172,15 @@ export class Chapter extends Attribute{
             ...order?.render(),
             "includes[]": (includes!)
         }
-        var getted: Response<any> = await Api_Request.Sget_methods("chapter", {
+        var getted: Response<any> = await Api_Request.get_methods("chapter", {
             query: querys
         });
-        if(getted.status == 200){
-            var data: Array<any> = getted.data.data;
-            var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
-            for (let index = 0; index < data.length; index++) {
-                mangaArray[index] = Chapter.build_W_Any(data[index]);
-            }
-            return mangaArray;
-        }else{
-            return getted;
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
+        return mangaArray;
     }
     public async get_groupUploaders(): Promise<Array<Group>>{
         let group_atribs: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
@@ -206,7 +202,11 @@ export class Chapter extends Attribute{
             const element = groupss[index];
             groups[index] = element.get_id();
         }
-        return Aggregate.get_aggregate(manga_id, [this.get_translatedLanguage()], groups);
+        return Aggregate.get_aggregate({
+            mangaID : manga_id, 
+            translatedLanguage : [this.get_translatedLanguage()], 
+            groups: groups
+        });
     }
     public async get_next(): Promise<string>{
         return (await this.getAggregateList()).getNext(this.get_id());

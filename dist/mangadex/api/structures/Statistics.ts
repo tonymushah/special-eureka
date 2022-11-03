@@ -1,5 +1,6 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
+import { Querry_list_builder } from "../internal/Utils";
 import { Manga } from "./Manga";
 
 export class Statistics{
@@ -65,20 +66,24 @@ export class Statistics{
             rating.distribution
         );
     }
-    public static async get_quick_statsBy_MangaID(id: string): Promise<Statistics>{
+    public static async get_quick_statsBy_MangaID(id: Array<string>): Promise<Array<Statistics>>{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/", {
             query : {
-                "manga[]" : id
+                ...(new Querry_list_builder<string>("manga", id)).build()
             }
         });
-        var stats_not_TS: any = (responses.data.statistics)[id];
-        var rating: any = stats_not_TS.rating;
-        return new Statistics(
-            id,
-            stats_not_TS.follows,
-            rating.average,
-            rating.baeysian,
-            rating.distribution
-        );
+        let to_return : Array<Statistics> = new Array<Statistics>(id.length);
+        for (let index = 0; index < to_return.length; index++) {
+            let stats_not_TS: any = (responses.data.statistics)[id[index]];
+            let rating: any = stats_not_TS.rating;
+            to_return[index] = new Statistics(
+                id[index],
+                stats_not_TS.follows,
+                rating.average,
+                rating.baeysian,
+                rating.distribution
+            );
+        }
+        return to_return;
     }
 }

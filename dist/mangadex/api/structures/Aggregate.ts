@@ -61,11 +61,15 @@ export class Aggregate{
         var instance: Aggregate = new Aggregate(volumes_length, volumes_);
         return instance;
     }
-    public static async get_aggregate(
+    public static async get_aggregate({
+        mangaID,
+        translatedLanguage,
+        groups
+    } : {
         mangaID: string, 
         translatedLanguage?: Array<string>,
         groups? : Array<string>
-    ): Promise<Aggregate>{
+    }): Promise<Aggregate>{
         var getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + mangaID + "/aggregate",
             {
