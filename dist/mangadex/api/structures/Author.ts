@@ -4,7 +4,7 @@ import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 import { Response } from "@tauri-apps/api/http";
 import { NumberLiteralType } from "typescript";
-import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes } from "../internal/Utils";
+import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
 
 export class Author extends Attribute{
     private name:string;
@@ -205,12 +205,13 @@ export class Author extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            ...(new Querry_list_builder<string>("ids", ids!)).build(),
             name: (name),
             ...order?.render(),
-            ...(new Querry_list_builder<string>("includes", includes!)).build()
         };
-        var getted: Response<any> = await Api_Request.get_methods(Author.get_request_a(), {
+        var getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + "?" + 
+            serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" + 
+            serialize((new Querry_list_builder<string>("includes", includes!)).build())
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;

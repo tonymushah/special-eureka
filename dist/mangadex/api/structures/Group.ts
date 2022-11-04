@@ -1,7 +1,7 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
 import { Response } from "@tauri-apps/api/http";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { StringLiteral } from "typescript";
 
 export class Group extends Attribute{
@@ -239,12 +239,13 @@ export class Group extends Attribute{
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             name: (name),
-            ...(new Querry_list_builder("ids", ids!)).build(),
-            ...(new Querry_list_builder("focusedLanguage", focusedLanguage!)).build(),
             "includes[]": (includes),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.get_methods("group", {
+        var getted: Response<any> = await Api_Request.get_methods("group" + "?" + 
+            serialize((new Querry_list_builder("ids", ids!)).build()) + "&" + 
+            serialize((new Querry_list_builder("focusedLanguage", focusedLanguage!)).build(),) + "&" 
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;

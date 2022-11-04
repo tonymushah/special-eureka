@@ -1,7 +1,7 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 
@@ -184,14 +184,15 @@ export class Cover extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            ...(new Querry_list_builder<string>("ids", ids!)).build(),
-            ...(new Querry_list_builder<string>("uploaders", uploaders!)).build(),
-            ...(new Querry_list_builder<string>("manga", mangaIDs!)).build(),
-            ...(new Querry_list_builder<string>("locales", locales!)).build(),
             "includes[]": (includes),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.get_methods("cover", {
+        var getted: Response<any> = await Api_Request.get_methods("cover" + "?" + 
+            serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" +
+            serialize((new Querry_list_builder<string>("uploaders", uploaders!)).build()) + "&" +
+            serialize((new Querry_list_builder<string>("manga", mangaIDs!)).build()) + "&" + 
+            serialize(((new Querry_list_builder<string>("locales", locales!)).build())) 
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;

@@ -9,7 +9,11 @@ export function ErrorELAsync(props){
         <Chakra.Alert status="error">
             <Chakra.AlertIcon></Chakra.AlertIcon>
             <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
-            <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+            <Chakra.AlertDescription>
+                <Chakra.Text>{error!}</Chakra.Text>
+                <Chakra.Text>{error.message!}</Chakra.Text>
+                <Chakra.Text>{error.detail!}</Chakra.Text>
+            </Chakra.AlertDescription>
         </Chakra.Alert>
     )
 }

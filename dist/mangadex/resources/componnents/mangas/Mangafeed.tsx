@@ -1,16 +1,16 @@
 import React from "react";
 import { Row, Col, Container, Spinner } from "react-bootstrap";
 import ReactDOM from "react-dom/client";
-import { Manga } from "../../mangadex/api/structures/Manga";
+import { Manga } from "../../../api/structures/Manga";
 import { Cover_Image_ } from "./Image_";
-import { Chapter_, Chapter_2, Chapter_includes2 } from "../../mangadex/resources/componnents/chapters/Chapter_";
-import { Await } from "react-router-dom";
-import { Cover } from "../../mangadex/api/structures/Cover";
-import { Alt_title, Asc_Desc, Offset_limits, Order } from "../../mangadex/api/internal/Utils";
+import { Chapter_, Chapter_2, Chapter_includes2 } from "../../../resources/componnents/chapters/Chapter_";
+import { Await, Link } from "react-router-dom";
+import { Cover } from "../../../api/structures/Cover";
+import { Alt_title, Asc_Desc, Offset_limits, Order } from "../../../api/internal/Utils";
 import { Response } from "@tauri-apps/api/http";
-import { Chapter, Chapter_withAllIncludes } from "../../mangadex/api/structures/Chapter";
+import { Chapter, Chapter_withAllIncludes } from "../../../api/structures/Chapter";
 import * as Chakra from "@chakra-ui/react"
-import { ErrorELAsync } from "../../mangadex/resources/componnents/Error_cmp";
+import { ErrorELAsync } from "../../../resources/componnents/Error_cmp";
 type MangafeedProps = {
     src : Manga
 }
@@ -254,13 +254,13 @@ export class Manga_WithLatest_Chap_01 extends React.Component<MangafeedProps>{
                     <Col xs="8">
                         <Container>
                             <Row className="mb-xs-1 mb-lg-1 mb-sm-1">
-                                <h3 >{title}</h3>
+                                <Chakra.Heading as={"h3"} size={"md"}><Link to={"/mangadex/manga/" + this.MangaToUse.get_id()}>{title}</Link></Chakra.Heading>
                             </Row>
                             <Row className="mb-lg-5 mb-sm-1">
                                 <React.Suspense fallback={
-                                    <Chakra.AbsoluteCenter>
-                                        <Spinner animation="grow" size="lg"/>
-                                    </Chakra.AbsoluteCenter>
+                                    <Chakra.Center>
+                                        <Chakra.Spinner/>
+                                    </Chakra.Center>
                                 }>
                                     <Await
                                         resolve={this.MangaToUse.get_latestUploadedChapter_all()}

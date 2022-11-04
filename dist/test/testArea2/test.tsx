@@ -3,17 +3,37 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Manga_swipper2 } from "../../mangadex/resources/componnents/mangas/Manga_State2"
-import { ChakraProvider, AbsoluteCenter, Spinner, Box } from '@chakra-ui/react';
+import { ChakraProvider, AbsoluteCenter, Spinner, Box, Text } from '@chakra-ui/react';
 import { Await } from 'react-router-dom';
 import { Manga } from '../../mangadex/api/structures/Manga';
 import { Asc_Desc, Offset_limits, Order } from '../../mangadex/api/internal/Utils';
-import { Response } from '@tauri-apps/api/http';
+import { Response, ResponseType } from '@tauri-apps/api/http';
 import { ErrorELAsync } from '../../mangadex/resources/componnents/Error_cmp';
-var orders = new Order();
-orders.set_createdAt(Asc_Desc.desc());
-var orffet_limits = new Offset_limits();
-orffet_limits.set_limits(25);
-ReactDOM.createRoot(document.getElementById("root")!).render(
+import { getClient } from "@tauri-apps/api/http"
+import { Message, Reader } from "protobufjs"
+const client = await getClient();
+var data : Response<Uint8Array> = await client.get<Uint8Array>("https://jumpg-webapi.tokyo-cdn.com/api/title_list/all", {
+  responseType : ResponseType.Binary
+})
+//console.log((data.data).toString())
+try {
+  var data_ = new Reader(data.data);
+  var datas : Message = (Message).decodeDelimited(data_!);
+  console.log("finished decoding")
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <>{datas.$type.fullName}</>
+  )
+} catch (error : any) {
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    <>
+      <p>{error.message}</p>
+      <p>{error.stack}</p>
+    </>
+  )
+}
+
+
+/*ReactDOM.createRoot(document.getElementById("root")!).render(
   <ChakraProvider>
     <Box>
       <React.Suspense
@@ -52,4 +72,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </React.Suspense>
     </Box>
   </ChakraProvider>
-);
+);*/

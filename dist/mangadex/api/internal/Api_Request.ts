@@ -37,7 +37,7 @@ export class Api_Request{
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errrors.id, result.status, result.data.errrors.title, result.data.errrors.detail);
+            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
         }
     }
     public static async put_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined): Promise<Response<any>>{
@@ -46,7 +46,7 @@ export class Api_Request{
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errrors.id, result.status, result.data.errrors.title, result.data.errrors.detail);
+            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
         }
     }
     public static async post_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined): Promise<Response<any>>{
@@ -55,7 +55,7 @@ export class Api_Request{
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errrors.id, result.status, result.data.errrors.title, result.data.errrors.detail);
+            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
         }
     }
     public static async patch_methods(to_use:string, options?: RequestOptions | undefined): Promise<Response<any>>{
@@ -64,7 +64,7 @@ export class Api_Request{
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errrors.id, result.status, result.data.errrors.title, result.data.errrors.detail);
+            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
         }
     }
     public static async delete_methods(to_use:string, options?: RequestOptions | undefined): Promise<Response<any>>{
@@ -73,7 +73,7 @@ export class Api_Request{
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errrors.id, result.status, result.data.errrors.title, result.data.errrors.detail);
+            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
         }
     }
     public static async request_methods(httpOptions: HttpOptions): Promise<Response<any>>{

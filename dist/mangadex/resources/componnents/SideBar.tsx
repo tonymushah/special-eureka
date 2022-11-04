@@ -7,6 +7,7 @@ import { ProSidebar, Menu, MenuItem, SubMenu , SidebarHeader, SidebarFooter, Sid
 import { Container, Row, Col, Stack, Button, Navbar, NavbarBrand, Nav, Modal, Spinner } from 'react-bootstrap';
 import * as ReactIcons from "react-icons";
 import { ExtLink } from '../../../commons-res/components/ExtLink';
+import * as Chakra from "@chakra-ui/react"
 
 const MangaDexPath: string = "/mangadex/";
 
@@ -51,7 +52,7 @@ export class Side_bar extends React.Component<Side_barProps>{
                 toggled={this.props.toggled} 
                 breakPoint="md" 
                 id="sidebar" 
-                className=' overflow-scroll' 
+                className='sidebar-mgdx overflow-scroll' 
                 rtl={this.isRTL} 
                 collapsed={this.isCollapsed} 
                 onToggle={this.props.onToggle}
@@ -125,29 +126,36 @@ export class Content extends React.Component<React.PropsWithChildren>{
         return (
             <div className='w-100 d-inline-flex'>
                 <Side_bar toggled={this.isToggled} onToggle={this.toggle}></Side_bar>
-                <Container id="top-content">
-                    <Container className="content-header">
-                        <Navbar expand={'sm'} >
-                            <Container>
-                                <Navbar.Brand>
-                                    <div onClick={this.toggle} className='d-md-none'>
-                                        <img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" /> <h4 className='d-inline'>MangaDex </h4>
-                                    </div>
-                                </Navbar.Brand>
-                                <Navbar.Toggle className=" float-end" aria-controls='searc_bar_'/>
-                                <Navbar.Collapse id="searc_bar_" className=" justify-content-end">
-                                    <Nav>
-                                        <Form1></Form1>
-                                    </Nav>
-                                </Navbar.Collapse>
+                <Chakra.Box
+                    width={"100%"}
+                    //display={"block"}
+                    height={"100vh"}
+                    overflowY={"scroll"}
+                >
+                    <Chakra.Box id="top-content">
+                        <Container className="content-header">
+                            <Navbar expand={'sm'} >
+                                <Container>
+                                    <Navbar.Brand>
+                                        <div onClick={this.toggle} className='d-md-none'>
+                                            <img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" /> <h4 className='d-inline'>MangaDex </h4>
+                                        </div>
+                                    </Navbar.Brand>
+                                    <Navbar.Toggle className=" float-end" aria-controls='searc_bar_'/>
+                                    <Navbar.Collapse id="searc_bar_" className=" justify-content-end">
+                                        <Nav>
+                                            <Form1></Form1>
+                                        </Nav>
+                                    </Navbar.Collapse>
                                 </Container>
                             </Navbar>
                             <hr className="header-hr"/>
-                    </Container>
-                    <Container id="content">
-                        {this.props.children}
-                    </Container>
-                </Container>
+                        </Container>
+                        <Chakra.Box id="content">
+                            {this.props.children}
+                        </Chakra.Box>
+                    </Chakra.Box> 
+                </Chakra.Box>
             </div>
         )
     }

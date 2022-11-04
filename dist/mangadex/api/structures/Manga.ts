@@ -6,9 +6,9 @@ import { Cover } from "./Cover";
 import { Tag } from "./Tag";
 import React from 'react';
 import { Author } from "./Author";
-import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
+import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
-import { Chapter } from "./Chapter";
+import { Chapter, Chapter_withAllIncludes } from "./Chapter";
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
     private title: any;
@@ -320,28 +320,29 @@ export class Manga extends Attribute{
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             title: (title),
-            ...(new Querry_list_builder("authors", authors!)).build(),
-            ...(new Querry_list_builder("artists", artists!)).build(),
             year: JSON.stringify(year),
-            ...(new Querry_list_builder("includedTags", includedTags!)).build(),
             includedTagsMode: (includedTagsMode),
-            ...(new Querry_list_builder("excludedTags", excludedTags!)).build(),
             excludedTagsMode: (excludedTagsMode),
-            ...(new Querry_list_builder("status", status!)).build(),
-            ...(new Querry_list_builder("originalLanguage", originalLanguage!)).build(),
-            ...(new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
-            ...(new Querry_list_builder("availableTranslatedLanguage", availableTranslatedLanguage!)).build(),
-            ...(new Querry_list_builder("publicationDemographic", publicationDemographic!)).build(),
-            ...(new Querry_list_builder("ids", mangaIDs!)).build(),
             createdAtSince: (createdAtSince),
             updatedAtSince: (updatedAtSince),
             "includes[]": (includes),
-            hasAvailableChapters: (hasAvailableChapters),
-            latestUploadedChapter: latestUploadedChapter,
+            hasAvailableChapters: JSON.stringify(hasAvailableChapters),
+            latestUploadedChapter: JSON.stringify(latestUploadedChapter),
             group: (group),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.get_methods("manga", {
+        var getted: Response<any> = await Api_Request.get_methods("manga" + "?" + 
+            serialize((new Querry_list_builder("authors", authors!)).build()) + "&" + 
+            serialize((new Querry_list_builder("artists", artists!)).build()) + "&" + 
+            serialize((new Querry_list_builder("includedTags", includedTags!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedTags", excludedTags!)).build()) + "&" + 
+            serialize((new Querry_list_builder("status", status!)).build()) + "&" + 
+            serialize((new Querry_list_builder("originalLanguage", originalLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("availableTranslatedLanguage", availableTranslatedLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("publicationDemographic", publicationDemographic!)).build()) + "&" + 
+            serialize((new Querry_list_builder("ids", mangaIDs!)).build()) + "&" 
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;
@@ -374,12 +375,12 @@ export class Manga extends Attribute{
         groups?: Array<string>
         ): Promise<void>{
         var getted: Response<any> = await Api_Request.get_methods(
-            Manga.get_request_a() + this.get_id() + "/aggregate",
+            Manga.get_request_a() + this.get_id() + "/aggregate?" + 
+                serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + "&" + 
+                serialize((new Querry_list_builder("groups", groups!)).build())
+            ,
             {
-                query: {
-                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
-                    ...(new Querry_list_builder("groups", groups!)).build()
-                }
+                
             }
             );
         this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
@@ -389,14 +390,14 @@ export class Manga extends Attribute{
         groups?: Array<string>
         ): Promise<Aggregate>{
         var getted: Response<any> = await Api_Request.get_methods(
-            Manga.get_request_a() + this.get_id() + "/aggregate",
+            Manga.get_request_a() + this.get_id() + "/aggregate?" + 
+                serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + "&" + 
+                serialize((new Querry_list_builder("groups", groups!)).build())
+            ,
             {
-                query: {
-                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
-                    ...(new Querry_list_builder("groups", groups!)).build()
-                }
+                
             }
-        );
+            );
         this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
         return this.get_aggregate();
     }
@@ -405,54 +406,148 @@ export class Manga extends Attribute{
         groups?: Array<string>
         ): Promise<void>{
         var getted: Response<any> = await Api_Request.get_methods(
-            Manga.get_request_a() + this.get_id() + "/aggregate",
+            Manga.get_request_a() + this.get_id() + "/aggregate?" + 
+                serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + "&" + 
+                serialize((new Querry_list_builder("groups", groups!)).build())
+            ,
             {
-                query: {
-                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
-                    ...(new Querry_list_builder("groups", groups!)).build()
-                }
+                
             }
-        );
+            );
         this.set_aggregate(await Aggregate.build_wANY2(getted.data.volumes));
     }
     public get_key_word():string{
         return RelationshipsTypes.manga();
     }
     public async getFeed(
-        offset_Limits : Offset_limits = new Offset_limits(),
-        translatedLanguage?: Array<string>,
-        originalLanguage?: Array<string>,
-        excludedOriginalLanguage?: Array<string>,
-        contentRating?: Array<string>,
-        excludedGroups?: Array<string>,
-        excludedUploaders?: Array<string>,
-        includedFutureUpdate?: number,
-        createdAtSince?: string,
-        updatedAtSince?: string,
-        order?: Order, 
-        includes? : string): Promise<Array<Chapter>>{
+        {
+            offset_Limits = new Offset_limits(),
+            translatedLanguage,
+            originalLanguage,
+            excludedOriginalLanguage,
+            contentRating,
+            excludedGroups,
+            excludedUploaders,
+            includedFutureUpdate,
+            createdAtSince,
+            updatedAtSince,
+            order,
+            includes,
+            includeEmptyPages,
+            includeFuturePublishAt,
+            includeExternalUrl
+        }
+        :
+        {
+            offset_Limits : Offset_limits,
+            translatedLanguage?: Array<string>,
+            originalLanguage?: Array<string>,
+            excludedOriginalLanguage?: Array<string>,
+            contentRating?: Array<string>,
+            excludedGroups?: Array<string>,
+            excludedUploaders?: Array<string>,
+            includedFutureUpdate?: number,
+            createdAtSince?: string,
+            updatedAtSince?: string,
+            order?: Order, 
+            includes? : string,
+            includeEmptyPages?: boolean,
+            includeFuturePublishAt?: boolean,
+            includeExternalUrl?: boolean
+        }): Promise<Array<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            ...(new Querry_list_builder("originalLanguage", originalLanguage!)).build(),
-            ...(new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
-            ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
-            ...(new Querry_list_builder("contentRating", contentRating!)).build(),
-            ...(new Querry_list_builder("excludedGroups", excludedGroups!)).build(),
-            ...(new Querry_list_builder("excludedUploaders", excludedUploaders!)).build(),
             "includedFutureUpdate": (includedFutureUpdate),
             createdAtSince: (createdAtSince),
             updatedAtSince: (updatedAtSince),
             "includes[]": (includes),
+            includeEmptyPages: JSON.stringify(includeEmptyPages!),
+            includeFuturePublishAt: JSON.stringify(includeFuturePublishAt!),
+            includeExternalUrl: JSON.stringify(includeExternalUrl!),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.get_methods("manga/" + this.get_id() + "/feed", {
+        var getted: Response<any> = await Api_Request.get_methods("manga/" + this.get_id() + "/feed? " + 
+            serialize((new Querry_list_builder("originalLanguage", originalLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("contentRating", contentRating!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedGroups", excludedGroups!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedUploaders", excludedUploaders!)).build())
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;
         var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter.build_W_Any(data[index]);
+        }
+        return mangaArray;
+    }
+    public async getFeed_All(
+        {
+            offset_Limits = new Offset_limits(),
+            translatedLanguage,
+            originalLanguage,
+            excludedOriginalLanguage,
+            contentRating,
+            excludedGroups,
+            excludedUploaders,
+            includedFutureUpdate,
+            createdAtSince,
+            updatedAtSince,
+            order,
+            includeEmptyPages,
+            includeFuturePublishAt,
+            includeExternalUrl
+        }
+        :
+        {
+            offset_Limits : Offset_limits,
+            translatedLanguage?: Array<string>,
+            originalLanguage?: Array<string>,
+            excludedOriginalLanguage?: Array<string>,
+            contentRating?: Array<string>,
+            excludedGroups?: Array<string>,
+            excludedUploaders?: Array<string>,
+            includedFutureUpdate?: boolean,
+            createdAtSince?: string,
+            updatedAtSince?: string,
+            order?: Order,
+            includeEmptyPages?: boolean,
+            includeFuturePublishAt?: boolean,
+            includeExternalUrl?: boolean
+        }): Promise<Array<Chapter>>{
+        let querys: any = {
+            limit: JSON.stringify(offset_Limits.get_limits()),
+            offset: JSON.stringify(offset_Limits.get_offset()),
+            "includedFutureUpdate": JSON.stringify(includedFutureUpdate!),
+            createdAtSince: (createdAtSince),
+            updatedAtSince: (updatedAtSince),
+            includeEmptyPages: JSON.stringify(includeEmptyPages!),
+            includeFuturePublishAt: JSON.stringify(includeFuturePublishAt!),
+            includeExternalUrl: JSON.stringify(includeExternalUrl!),
+            ...order?.render(),
+        };
+        var getted: Response<any> = await Api_Request.get_methods("manga/" + this.get_id() + "/feed?" + 
+            serialize(((new Querry_list_builder("includes", [
+            "user",
+            "scanlation_group",
+            "manga"
+            ])).build()))
+            + "&" + serialize((new Querry_list_builder("originalLanguage", originalLanguage!)).build())
+            + "&" + serialize((new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build())
+            + "&" + serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build())
+            + "&" + serialize((new Querry_list_builder("contentRating", contentRating!)).build())
+            + "&" + serialize((new Querry_list_builder("excludedGroups", excludedGroups!)).build())
+            + "&" + serialize((new Querry_list_builder("excludedUploaders", excludedUploaders!)).build())
+        , {
+            query: querys
+        });
+        var data: Array<any> = getted.data.data;
+        var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Chapter_withAllIncludes.build_W_Any(data[index]);
         }
         return mangaArray;
     }
@@ -473,19 +568,20 @@ export class Manga extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            ...(new Querry_list_builder("originalLanguage", originalLanguage!)).build(),
-            ...(new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
-            ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
-            ...(new Querry_list_builder("contentRating", contentRating!)).build(),
-            ...(new Querry_list_builder("excludedGroups", excludedGroups!)).build(),
-            ...(new Querry_list_builder("excludedUploaders", excludedUploaders!)).build(),
             "includedFutureUpdate": (includedFutureUpdate),
             createdAtSince: (createdAtSince),
             updatedAtSince: (updatedAtSince),
             "includes[]": (includes),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.get_methods("manga/" + id + "/feed", {
+        var getted: Response<any> = await Api_Request.get_methods("manga/" + id + "/feed?" + 
+            serialize((new Querry_list_builder("originalLanguage", originalLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + "&" + 
+            serialize((new Querry_list_builder("contentRating", contentRating!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedGroups", excludedGroups!)).build()) + "&" + 
+            serialize((new Querry_list_builder("excludedUploaders", excludedUploaders!)).build())
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;
@@ -603,6 +699,9 @@ export class Manga extends Attribute{
     }
     public async get_latestUploadedChapter() : Promise<Chapter>{
         return Chapter.get_ChapterbyId(this.$latestUploadedChapter);
+    }
+    public async get_latestUploadedChapter_all() : Promise<Chapter_withAllIncludes> {
+        return Chapter_withAllIncludes.get_ChapterbyId(this.$latestUploadedChapter)
     }
 }
 

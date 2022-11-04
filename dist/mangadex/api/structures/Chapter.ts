@@ -1,7 +1,7 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
 import { Group } from "./Group";
@@ -350,26 +350,38 @@ export class Chapter_withAllIncludes extends Chapter{
         instance.set_volume(attributes.volume);
         instance.set_relationships_Wany(relationships);
 //        console.log("relationship builded")
-        let groups_any: Array<any> = Attribute.get_some_relationship(relationships, "scanlation_group");
-        let groups : Array<Group> = []
-        for (let index = 0; index < groups_any.length; index++) {
-            groups[index] = Group.build_wANY(groups_any[index]);
+        try {
+            let groups_any: Array<any> = Attribute.get_some_relationship(relationships, "scanlation_group");
+            let groups : Array<Group> = []
+            for (let index = 0; index < groups_any.length; index++) {
+                groups[index] = Group.build_wANY(groups_any[index]);
+            }
+            instance.set_groups(groups);
+        } catch (error) {
+            
         }
-        instance.set_groups(groups);
 //        console.log("group builded")
-        instance.set_manga(Manga_2.build_any(Attribute.get_some_relationship(relationships, "manga")[0]));
-        console.log("relationship builded")
-        instance.set_uploader(User.build_wANY(Attribute.get_some_relationship(relationships, "user")[0]));
+        try {
+            instance.set_manga(Manga_2.build_any(Attribute.get_some_relationship(relationships, "manga")[0]));
+        } catch (error) {
+            
+        }
+        try {
+            instance.set_uploader(User.build_wANY(Attribute.get_some_relationship(relationships, "user")[0]));
+        } catch (error) {
+            
+        }
+        //console.log("relationship builded")
+        
 //        console.log("uploader builded")
         return instance;
     }
     public static async get_ChapterbyId(id: string): Promise<Chapter_withAllIncludes> {
-        var getted: Response<any> = await Api_Request.get_methods("chapter/" + id, {
-            query : {
+        var getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
                 "includes[0]" : "manga",
                 "includes[1]" : "user",
                 "includes[2]" : "scanlation_group"
-            }
+            }), {
         });
         var instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
         return instance;

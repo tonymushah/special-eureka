@@ -45,7 +45,7 @@ export class Manga4 extends React.Component<Manga3Props>{
                                     let coverpath: string = getted.get_CoverImage_thumbnail(256);
                                     return (
                                         <React.Suspense>
-                                            <Card.Img src={coverpath} width={"125px"}/>
+                                            <Card.Img src={coverpath} width={"150px"}/>
                                         </React.Suspense>
                                     )
                                 }}
@@ -117,7 +117,7 @@ export class Manga_swipper2 extends React.Component<Manga_swipperProps>{
                                 <Swiper
                                     spaceBetween={2}
                                     slidesPerView={10}
-                                        pagination={{
+                                    pagination={{
                                         dynamicBullets: true,
                                     }}
                                     autoplay={{

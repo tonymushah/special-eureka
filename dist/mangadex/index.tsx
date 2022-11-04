@@ -34,15 +34,16 @@ const router = createBrowserRouter(
             </Content>
             }
         >
-            <Route index 
-                loader={
+            <Route 
+                index 
+                /*loader={
                     async () => {
                         let loader1 = List.getListByID("4be9338a-3402-4f98-b467-43fb56663927");
                         return defer({
                             loader1
                         })
                     }
-                } 
+                }*/ 
                 element={
                     <Home/>
                 }

@@ -1,6 +1,6 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 
 export class User extends Attribute{
@@ -64,11 +64,12 @@ export class User extends Attribute{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
-            ...(new Querry_list_builder("ids", ids!)).build(),
             username: JSON.stringify(username),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.get_methods("user", {
+        var getted: Response<any> = await Api_Request.get_methods("user?" + 
+            serialize((new Querry_list_builder("ids", ids!)).build())
+        , {
             query: querys
         });
         var data: Array<any> = getted.data.data;

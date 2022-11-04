@@ -19,7 +19,8 @@
         "scope": [
           "https://api.mangadex.org/**", 
           "https://uploads.mangadex.org/**",
-          "http://localhost:9305/*"
+          "http://localhost:9305/*",
+          "https://jumpg-webapi.tokyo-cdn.com/api/**"
         ]
       },
       "dialog": {
