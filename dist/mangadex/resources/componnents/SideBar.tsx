@@ -8,6 +8,7 @@ import { Container, Row, Col, Stack, Button, Navbar, NavbarBrand, Nav, Modal, Sp
 import * as ReactIcons from "react-icons";
 import { ExtLink } from '../../../commons-res/components/ExtLink';
 import * as Chakra from "@chakra-ui/react"
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const MangaDexPath: string = "/mangadex/";
 
@@ -128,8 +129,8 @@ export class Content extends React.Component<React.PropsWithChildren>{
                 <Side_bar toggled={this.isToggled} onToggle={this.toggle}></Side_bar>
                 <Chakra.Box
                     width={"100%"}
-                    //display={"block"}
                     height={"100vh"}
+                    scrollBehavior={"smooth"}
                     overflowY={"scroll"}
                 >
                     <Chakra.Box id="top-content">

@@ -1,10 +1,9 @@
-import React, { Suspense, useCallback } from "react"
-import { Card, CardImg, Carousel, Row, Spinner } from "react-bootstrap";
-import ReactDOM from 'react-dom/client';
+import React from "react"
+import { Card , Spinner } from "react-bootstrap";
 import { Await } from "react-router-dom";
 import { Cover } from "../../../api/structures/Cover";
 import { Alt_title, Lang_and_Data } from '../../../api/internal/Utils';
-import { Manga, Manga_2 } from "../../../api/structures/Manga";
+import { Manga } from "../../../api/structures/Manga";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Mousewheel } from "swiper";
 import { ErrorELAsync } from "../Error_cmp";
@@ -25,7 +24,6 @@ export class Manga3 extends React.Component<Manga3Props>{
     }
     render(): React.ReactNode {
         let title: string = "";
-        let desc: string = "";
         if (this.to_use.get_title().en == null) {
             title = new Alt_title(this.to_use.get_alt_title()).get_quicklang()!;
         }else{
@@ -117,7 +115,20 @@ export class Manga_swipper extends React.Component<Manga_swipperProps>{
     }
     render(): React.ReactNode {
         return (
-            <React.Suspense fallback={<Spinner animation="border"></Spinner>}>
+            <React.Suspense fallback={
+                <Chakra.Box
+                    marginTop={"25px"}
+                    marginBottom={"25px"}
+                >
+                    <Chakra.Center>
+                        <Chakra.Spinner 
+                            size="xl"
+                            color='orange.500'
+                            thickness='4px'
+                        />
+                    </Chakra.Center>
+                </Chakra.Box>
+            }>
                 <Await
                     resolve={this.init_manga_elements()}
                     errorElement={<p>Error on loading</p>}

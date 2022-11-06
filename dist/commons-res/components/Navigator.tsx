@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Container, Row, Col, Stack, Button, Navbar, NavbarBrand, Nav, Modal, ModalTitle } from 'react-bootstrap';
 import Hotkeys from "react-hot-keys";
+import { Kbd } from '@chakra-ui/react';
 export class Navigator extends React.Component{
     modalState: boolean;
     public constructor(props){
@@ -44,7 +45,11 @@ export class Navigator extends React.Component{
                     </Modal.Body>
                     <Modal.Footer>
                         <p>To use the Navigator : </p>
-                        <p><code>Ctrl</code> + <code>K</code></p>
+                        <p><Kbd
+                            textColor={"black"}
+                        >Ctrl</Kbd> + <Kbd
+                            textColor={"black"}
+                        >K</Kbd></p>
                     </Modal.Footer>
                 </Modal>
             </Hotkeys>

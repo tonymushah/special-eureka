@@ -1,22 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import 'react-pro-sidebar/dist/css/styles.css';
 import "bootstrap/dist/css/bootstrap.css";
-import { BrowserRouter, Route, Link, Routes, useHref, Outlet, defer, createBrowserRouter, createRoutesFromElements, RouterProvider, useRouteError} from "react-router-dom"
-import { ProSidebar, Menu, MenuItem, SubMenu , SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
-import { Container, Row, Col, Stack, Button, Navbar, NavbarBrand, Nav, Modal, Spinner } from 'react-bootstrap';
-import * as ReactIcons from "react-icons";
-import { ExtLink } from '../commons-res/components/ExtLink';
-import { Api_Request } from './api/internal/Api_Request';
+import { Route, Outlet, defer, createBrowserRouter, createRoutesFromElements, RouterProvider } from "react-router-dom"
+import { Container, Spinner } from 'react-bootstrap';
 import { Manga } from './api/structures/Manga';
 import Home from "./pages/Home"
 import { Content } from "./resources/componnents/SideBar"
 import { ErrorELRouter } from './resources/componnents/Error_cmp';
 import * as Chakra from "@chakra-ui/react"
 import "./resources/css/manga/slider-manga.css";
-import { List } from './api/structures/List';
 import "./resources/Poppins/Poppins.css"
-import MangaPage from "./pages/MangaPage"
+import MangaPage, { Chapters_, Covers_, Related_ } from "./pages/MangaPage"
 
 const MangaDexPath: string = "/mangadex/";
 const app = ReactDOM.createRoot(document.getElementById("app")!);
@@ -32,6 +27,9 @@ const router = createBrowserRouter(
             <Content>
                 <Outlet/>
             </Content>
+            }
+            errorElement={
+                <ErrorELRouter/>
             }
         >
             <Route 
@@ -51,16 +49,46 @@ const router = createBrowserRouter(
                     <ErrorELRouter/>
                 }
             />
+            
             <Route
                 path='manga'
+                errorElement={
+                    <ErrorELRouter></ErrorELRouter>
+                }
             >
                 <Route path=":id"
                     errorElement={
                         <ErrorELRouter/>
                     }
+                    loader={
+                        async ({ params }) => {
+                            let loader1 = await Manga.getMangaByID(params.id!);
+                            return defer({
+                                loader1
+                            })
+                        }
+                    }
                     element={<MangaPage/>}
                 >
-
+                    <Route
+                        index
+                        errorElement={
+                            <ErrorELRouter/>
+                        }
+                        element={<Chapters_/>}
+                    />
+                    <Route
+                        path="covers"
+                        errorElement={
+                            <ErrorELRouter/>
+                        }
+                        element={<Covers_/>}
+                    />
+                    <Route
+                        path="related"
+                        errorElement={<ErrorELRouter/>}
+                        element={<Related_/>}
+                    />
                 </Route>
             </Route>
         </Route>
@@ -71,7 +99,18 @@ app.render(
         <Chakra.Box
             fontFamily={"Poppins"}
         >
-            <RouterProvider router={router}/>
+            <RouterProvider 
+                router={router}
+                fallbackElement={
+                    <Chakra.AbsoluteCenter>
+                        <Chakra.Spinner 
+                            size="xl"
+                            color='orange.500'
+                            thickness='4px'
+                        />
+                    </Chakra.AbsoluteCenter>
+                }
+            />
         </Chakra.Box>
     </Chakra.ChakraProvider>
 );

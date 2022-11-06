@@ -6,7 +6,13 @@ import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Cover } from '../../../../api/structures/Cover';
 
-export function Cover_Image_(props){
+type Cover_Image_Props = {
+    src: string,
+    id? : string,
+    alt?: string
+}
+
+export function Cover_Image_(props : Cover_Image_Props){
     const [ visible, setVisible ] = React.useState(false);
     return (
         <Card id={props.id}>

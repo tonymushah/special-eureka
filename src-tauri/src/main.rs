@@ -3,16 +3,10 @@
   windows_subsystem = "windows"
 )]
 #[path ="./mangadex_session/main.rs"] mod mangadex_session;
-use tauri_plugin_log::{LogTarget, LoggerBuilder};
 
 fn main() {
   tauri::Builder::default()
     .plugin(tauri_plugin_store::PluginBuilder::default().build())
-    .plugin(LoggerBuilder::default().targets([
-            LogTarget::LogDir,
-            LogTarget::Stdout,
-            LogTarget::Webview,
-        ]).build())
     .plugin(mangadex_session::init())
     .run(tauri::generate_context!())
     .expect("error while running tauri application");

@@ -25,7 +25,6 @@ export class Manga4 extends React.Component<Manga3Props>{
     }
     render(): React.ReactNode {
         let title: string = "";
-        let desc: string = "";
         if (this.to_use.get_title().en == null) {
             title = new Alt_title(this.to_use.get_alt_title()).get_quicklang()!;
         }else{
@@ -56,12 +55,13 @@ export class Manga4 extends React.Component<Manga3Props>{
                             overflow={"hidden"}
                         >
                             <Card.Title className="text-center">
-                                {/* 
-                                <Link to={"/mangadex/manga/" + this.to_use.get_id()}>
-                                    
-                                </Link>
-                                */}
-                                {title}
+                                <Chakra.Text
+                                    noOfLines={1}
+                                >
+                                    <Link to={"/mangadex/manga/" + this.to_use.get_id()}>
+                                        {title}
+                                    </Link>
+                                </Chakra.Text>
                             </Card.Title>
                         </Chakra.Box>
                     </Card.Body>
@@ -108,7 +108,20 @@ export class Manga_swipper2 extends React.Component<Manga_swipperProps>{
     }
     render(): React.ReactNode {
         return (
-            <React.Suspense fallback={<Spinner animation="border"></Spinner>}>
+            <React.Suspense fallback={
+                <Chakra.Box
+                    marginTop={"25px"}
+                    marginBottom={"25px"}
+                >
+                    <Chakra.Center>
+                        <Chakra.Spinner 
+                            size="xl"
+                            color='orange.500'
+                            thickness='4px'
+                        />
+                    </Chakra.Center>
+                </Chakra.Box>
+            }>
                 <Await
                     resolve={this.init_manga_elements()}
                     errorElement={<ErrorELAsync/>}
@@ -120,12 +133,7 @@ export class Manga_swipper2 extends React.Component<Manga_swipperProps>{
                                     pagination={{
                                         dynamicBullets: true,
                                     }}
-                                    autoplay={{
-                                        delay: 2500,
-                                        disableOnInteraction: false,
-                                    }}
                                     mousewheel={true}
-                                    loop={true}
                                     modules={[Pagination, Autoplay, Mousewheel]}
                                     breakpoints={
                                         {
@@ -134,11 +142,11 @@ export class Manga_swipper2 extends React.Component<Manga_swipperProps>{
                                                 spaceBetween : 10
                                             },
                                             786:{
-                                                slidesPerView: 6,
+                                                slidesPerView: 4,
                                                 spaceBetween: 10,
                                             },
                                             1200:{
-                                                slidesPerView: 8,
+                                                slidesPerView: 6,
                                                 spaceBetween: 10,
                                             }
                                         }

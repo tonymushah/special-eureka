@@ -2,7 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Alert, Modal } from "react-bootstrap";
 import { app, tauri } from "@tauri-apps/api";
+
 try{
+    const app = window.__TAURI__.app;
     if((typeof (await app.getName())) != "string" ){
         ReactDOM.createRoot(document.getElementById("verifier")!).render(
             <Modal static>
@@ -42,7 +44,7 @@ try{
                     </div>
                     <div className=" align-content-center">
                         <h4>Error detail</h4>
-                        <Alert variant="error">{e}</Alert>
+                        <Alert variant="error">{e.message}</Alert>
                     </div>
                 </Modal.Body>
             </Modal>
