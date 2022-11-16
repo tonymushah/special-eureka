@@ -4,7 +4,12 @@
 )]
 #[path ="./mangadex_session/main.rs"] mod mangadex_session;
 
-fn main() {
+//use mangadex_desktop_api2::{verify_all_fs, launch_async_server_default};
+
+
+#[tokio::main]
+async fn main() {
+
   tauri::Builder::default()
     .plugin(tauri_plugin_store::PluginBuilder::default().build())
     .plugin(mangadex_session::init())

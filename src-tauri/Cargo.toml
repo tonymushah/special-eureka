@@ -1,8 +1,8 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "a mangadex desktop app build with tauri"
+authors = ["tonymushah"]
 license = ""
 repository = ""
 default-run = "app"
@@ -30,6 +30,10 @@ git = "https://github.com/tauri-apps/tauri-plugin-store"
 #tag = "v0.1.0"
 #branch = "main"
 
+[dependencies.mangadex-desktop-api2]
+git = "https://github.com/tonymushah/eureka-mmanager"
+branch = "main"
+
 [dependencies.tauri-plugin-log]
 git = "https://github.com/tauri-apps/tauri-plugin-log"
 branch = "dev"
@@ -41,3 +45,4 @@ default = [ "custom-protocol" ]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = [ "tauri/custom-protocol" ]
+
