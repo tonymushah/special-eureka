@@ -704,7 +704,37 @@ export class Manga extends Attribute{
         return Chapter_withAllIncludes.get_ChapterbyId(this.$latestUploadedChapter)
     }
     public async get_all_related_manga() : Promise<Array<Manga>>{
-        
+        let returns : Array<Manga> = [];
+
+        let related = this.get_some_relationship("manga");
+        for (let index = 0; index < related.length; index++) {
+            const element = related[index];
+            returns[index] = await Manga.getMangaByID(element.get_id());
+        }
+        return returns;
+    }
+    public get_related_manga_byEnum_length(manga_relation_enum : string): number{
+        let returns = 0;
+        let related = this.get_some_relationship("manga");
+        for (let index = 0; index < related.length; index++) {
+            const element = related[index];
+            if(element.get_related()! == manga_relation_enum){
+                returns = returns + 1;
+            }
+        }
+        return returns;
+    }
+    public async get_related_manga_byEnum(manga_relation_enum : string) : Promise<Array<Manga>>{
+        let returns : Array<Manga> = [];
+        let index1 = 0;
+        let related = this.get_some_relationship("manga");
+        for (let index = 0; index < related.length; index++) {
+            const element = related[index];
+            if(element.get_related()! == manga_relation_enum){
+                returns[index1] = await Manga.getMangaByID(element.get_id());
+            }
+        }
+        return returns;
     }
 }
 

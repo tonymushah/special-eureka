@@ -944,7 +944,7 @@ export class Querry_list_builder<T>{
     }
 }
 
-export const serialize = function(obj) {
+export const serialize = function(obj: any) : string{
   var str = [];
   for (var p in obj)
     if (obj.hasOwnProperty(p)) {

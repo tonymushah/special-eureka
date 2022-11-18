@@ -6,6 +6,7 @@ import { Manga_Page } from "../resources/componnents/mangas/Manga_Page";
 import { Nav, Container } from "react-bootstrap";
 import { Top_Chaps } from "../resources/componnents/mangas/Mainpage/Top_chap";
 import { Covers_Manga } from "../resources/componnents/mangas/Mainpage/Covers_";
+import Related from "../resources/componnents/mangas/Mainpage/Related";
 
 type MangaPage_OutletContex = {
     toUse : Manga
@@ -152,8 +153,9 @@ export function Covers_(){
 }
 
 export function Related_(){
+    let toUse : Manga = useManga().toUse;
     return (
-        <Chakra.Text>Related yes</Chakra.Text>
+        <Related src={toUse}/>
     )
 }
 

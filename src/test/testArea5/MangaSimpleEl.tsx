@@ -55,7 +55,7 @@ export class MangaSimpleEl extends React.Component<MangaSimpleProps>{
                         <Col
                             xs={3}
                             md={2}
-                            lg={2}
+                            lg={3}
                         >
                             <React.Suspense
                                 fallback={
@@ -79,14 +79,15 @@ export class MangaSimpleEl extends React.Component<MangaSimpleProps>{
                         <Col
                             xs={9}
                             md={10}
-                            lg={10}
+                            lg={9}
                         >
                             <Row>
                                 <Chakra.Heading
                                     size={{
                                         "base" : "md",
-                                        "md" : "xl"
+                                        "md" : "lg"
                                     }}
+                                    
                                 >
                                     {title}
                                 </Chakra.Heading>

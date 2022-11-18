@@ -10,7 +10,7 @@ import * as Chakra from "@chakra-ui/react"
 import { useFormik } from 'formik';
 import { Offset_limits } from '../../api/internal/Utils';
 import { Manga } from '../../api/structures/Manga';
-import { ErrorELAsync } from './Error_cmp';
+import { ErrorELAsync, ErrorELAsync1 } from './Error_cmp';
 import { MangaSimpleEl } from './mangas/MangaSimpleEl';
 import * as ChakraIcons from "@chakra-ui/icons"
 
@@ -94,13 +94,13 @@ export class Side_bar extends React.Component<Side_barProps>{
                             <MenuItem>Suggestive</MenuItem>
                         </SubMenu>
                         <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='fas fa-cog fa-spin'></i>} title={"Powerred by "}>
-                            <MenuItem icon={<img id="tauri_icon" src="../commons-res/common-icon/Square30x30Logo.png"/>}>
+                            <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/Square30x30Logo.png"/>}>
                                 <ExtLink href="https://tauri.app">Tauri Apps</ExtLink>
                             </MenuItem>
-                            <MenuItem icon={<img id="tauri_icon" src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg"/>}>
+                            <MenuItem icon={<img id="tauri_icon" src="/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg"/>}>
                                 <ExtLink href="https://api.mangadex.org">Mangadex API</ExtLink>
                             </MenuItem>
-                            <MenuItem icon={<img id="tauri_icon" src="../commons-res/common-icon/favicon.svg" width="28px"/>}>
+                            <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/favicon.svg" width="28px"/>}>
                                 <ExtLink href="https://vitejs.dev">Vite</ExtLink>
                             </MenuItem>
                         </SubMenu>
@@ -175,22 +175,30 @@ type Modal_SearchProps = {
 }
 
 export function Modal_Search(props : Modal_SearchProps){
-     const ref = React.createRef<HTMLDivElement>();
-
+     const ref1 = React.createRef<HTMLDivElement>();
+    const [result, setResult] = React.useState(<></>);
+    const build = (array: Array<Manga>) => {
+        let builded : Array<React.ReactNode> = [];
+        for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            builded[index] = (
+                <MangaSimpleEl src={element}/>
+            )
+        }
+        return builded;
+    }
     const formik = useFormik({
     initialValues: {
         title : ""
     },
     onSubmit: values => {
-        let result_root = ReactDOM.createRoot(ref.current!);
         let offset_limits_1 = new Offset_limits();
         let promise = Manga.search({
             offset_Limits: offset_limits_1,
             title : values.title
         });
         formik.setSubmitting(false);
-        result_root.render(
-            <Chakra.ChakraProvider>
+        setResult(
                 <React.Suspense
                     fallback={
                         <Chakra.Center>
@@ -203,23 +211,22 @@ export function Modal_Search(props : Modal_SearchProps){
                     <Await
                         resolve={promise}
                         errorElement={
-                            <ErrorELAsync/>
+                            <ErrorELAsync1/>
                         }
                     >
-                        {(getted : Array<Manga>) => {
+                        {(getted0 : Array<Manga>) => {
                             return (
                                 <Chakra.Box>
                                     {
-                                        getted.map<React.ReactNode>(value => {
-                                            return (<MangaSimpleEl src={value}/>);
-                                        })
+                                        getted0.map(mangas => (
+                                            <MangaSimpleEl src={mangas}/>
+                                        ))
                                     }
                                 </Chakra.Box>
                             )
                         }}
                     </Await>
                 </React.Suspense>
-            </Chakra.ChakraProvider>
         )
     }
 })
@@ -252,10 +259,8 @@ export function Modal_Search(props : Modal_SearchProps){
             </Modal.Header>
             <Modal.Body>
                 <Chakra.Box
-                    
-                    ref={ref}
                 >
-
+                    {result}
                 </Chakra.Box>
             </Modal.Body>
         </Modal>

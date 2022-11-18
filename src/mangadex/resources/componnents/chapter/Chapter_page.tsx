@@ -347,120 +347,122 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                         <Chakra.DrawerBody>
                                             <Chakra.Box>
                                                 <Row>
-                                                    <React.Suspense>
-                                                        <Await
-                                                            resolve={this.Chapter_toUse.get_previous()}
-                                                            errorElement={
-                                                                <Chakra.Button
-                                                                    as={Link}
-                                                                    to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
-                                                                >
-                                                                    <ChakraIcons.ChevronLeftIcon/>
-                                                                </Chakra.Button>
-                                                            }
-                                                        >
-                                                            {(getted : string) => {
-                                                                return (
+                                                    <Chakra.HStack>
+                                                        <React.Suspense>
+                                                            <Await
+                                                                resolve={this.Chapter_toUse.get_previous()}
+                                                                errorElement={
                                                                     <Chakra.Button
                                                                         as={Link}
-                                                                        to={"/mangadex/chapter/" + getted}
+                                                                        to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
                                                                     >
                                                                         <ChakraIcons.ChevronLeftIcon/>
                                                                     </Chakra.Button>
-                                                                );
-                                                            }}
-                                                        </Await>
-                                                    </React.Suspense>
-                                                    <Chakra.Menu>
-                                                        <Chakra.MenuButton as={Chakra.Button} rightIcon={<ChakraIcons.ChevronDownIcon></ChakraIcons.ChevronDownIcon>}>
-                                                            <Chakra.Text>Chapter</Chakra.Text>
-                                                            <Chakra.Box >
-                                                                <Chakra.Center>
-                                                                    <React.Suspense
-                                                                        fallback={
-                                                                            <Chakra.Skeleton
-                                                                                height="20px"
-                                                                            ></Chakra.Skeleton>
-                                                                        }
-                                                                    >
-                                                                        <Await
-                                                                            resolve={this.Chapter_toUse.get_current()}
-                                                                            errorElement={<ErrorEL></ErrorEL>}
+                                                                }
+                                                            >
+                                                                {(getted : string) => {
+                                                                    return (
+                                                                        <Chakra.Button
+                                                                            as={Link}
+                                                                            to={"/mangadex/chapter/" + getted}
                                                                         >
-                                                                            {(getted : string) => {
-                                                                                return (
-                                                                                    <Chakra.Text>{getted}</Chakra.Text>
-                                                                                )
-                                                                            }}
-                                                                        </Await>
-                                                                    </React.Suspense>
-                                                                </Chakra.Center>
-                                                            </Chakra.Box>
-                                                        </Chakra.MenuButton>
-                                                        <Chakra.MenuList>
-                                                            <React.Suspense>
-                                                                <Await
-                                                                    resolve={this.Chapter_toUse.getAggregateList()}
-                                                                    errorElement={<ErrorEL></ErrorEL>}
-                                                                >
-                                                                    {(getted : Aggregate) => {
-                                                                        let returns : Array<React.ReactNode> = [];
-                                                                        let topIndex = 0;
-                                                                        for (let index = 0; index < getted.get_volumes().length; index++) {
-                                                                            const volume = getted.get_volumes()[index];
-                                                                            for (let index2 = 0; index2 < volume.get_chapters().length; index2++) {
-                                                                                const chapter = volume.get_chapters().reverse()[index2];
-                                                                                returns[topIndex] = (
-                                                                                    <Chakra.MenuItem
-                                                                                        onClick={async () => {
-                                                                                            this.set_Chapter_toUse(await Chapter.get_ChapterbyId(chapter.get_chapters()[0].get_id()));
-                                                                                            this.forceUpdate();
-                                                                                        }}
-                                                                                    >
-                                                                                        Vol. {
-                                                                                            volume.get_name()
-                                                                                        } Ch. {
-                                                                                            chapter.get_name()
-                                                                                        }
-                                                                                    </Chakra.MenuItem>
-                                                                                );
-                                                                                topIndex = topIndex + 1 ;
+                                                                            <ChakraIcons.ChevronRightIcon/>
+                                                                        </Chakra.Button>
+                                                                    );
+                                                                }}
+                                                            </Await>
+                                                        </React.Suspense>
+                                                        <Chakra.Menu>
+                                                            <Chakra.MenuButton as={Chakra.Button} rightIcon={<ChakraIcons.ChevronDownIcon></ChakraIcons.ChevronDownIcon>}>
+                                                                <Chakra.Text>Chapter</Chakra.Text>
+                                                                <Chakra.Box >
+                                                                    <Chakra.Center>
+                                                                        <React.Suspense
+                                                                            fallback={
+                                                                                <Chakra.Skeleton
+                                                                                    height="20px"
+                                                                                ></Chakra.Skeleton>
                                                                             }
-                                                                        }
-                                                                        return (
-                                                                            <>{
-                                                                                returns
-                                                                            }</>
-                                                                        )
-                                                                    }}
-                                                                </Await>
-                                                            </React.Suspense>
-                                                        </Chakra.MenuList>
-                                                    </Chakra.Menu>
-                                                    <React.Suspense>
-                                                        <Await
-                                                            resolve={this.Chapter_toUse.get_next()}
-                                                            errorElement={
-                                                                <Chakra.Button
-                                                                    as={Link}
-                                                                    to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
-                                                                >
-                                                                    <ChakraIcons.ChevronLeftIcon/>
-                                                                </Chakra.Button>
-                                                            }
-                                                        >
-                                                            {(getted : string) => {
-                                                                return (
+                                                                        >
+                                                                            <Await
+                                                                                resolve={this.Chapter_toUse.get_current()}
+                                                                                errorElement={<ErrorEL></ErrorEL>}
+                                                                            >
+                                                                                {(getted : string) => {
+                                                                                    return (
+                                                                                        <Chakra.Text>{getted}</Chakra.Text>
+                                                                                    )
+                                                                                }}
+                                                                            </Await>
+                                                                        </React.Suspense>
+                                                                    </Chakra.Center>
+                                                                </Chakra.Box>
+                                                            </Chakra.MenuButton>
+                                                            <Chakra.MenuList>
+                                                                <React.Suspense>
+                                                                    <Await
+                                                                        resolve={this.Chapter_toUse.getAggregateList()}
+                                                                        errorElement={<ErrorEL></ErrorEL>}
+                                                                    >
+                                                                        {(getted : Aggregate) => {
+                                                                            let returns : Array<React.ReactNode> = [];
+                                                                            let topIndex = 0;
+                                                                            for (let index = 0; index < getted.get_volumes().length; index++) {
+                                                                                const volume = getted.get_volumes()[index];
+                                                                                for (let index2 = 0; index2 < volume.get_chapters().length; index2++) {
+                                                                                    const chapter = volume.get_chapters().reverse()[index2];
+                                                                                    returns[topIndex] = (
+                                                                                        <Chakra.MenuItem
+                                                                                            onClick={async () => {
+                                                                                                this.set_Chapter_toUse(await Chapter.get_ChapterbyId(chapter.get_chapters()[0].get_id()));
+                                                                                                this.forceUpdate();
+                                                                                            }}
+                                                                                        >
+                                                                                            Vol. {
+                                                                                                volume.get_name()
+                                                                                            } Ch. {
+                                                                                                chapter.get_name()
+                                                                                            }
+                                                                                        </Chakra.MenuItem>
+                                                                                    );
+                                                                                    topIndex = topIndex + 1 ;
+                                                                                }
+                                                                            }
+                                                                            return (
+                                                                                <>{
+                                                                                    returns
+                                                                                }</>
+                                                                            )
+                                                                        }}
+                                                                    </Await>
+                                                                </React.Suspense>
+                                                            </Chakra.MenuList>
+                                                        </Chakra.Menu>
+                                                        <React.Suspense>
+                                                            <Await
+                                                                resolve={this.Chapter_toUse.get_next()}
+                                                                errorElement={
                                                                     <Chakra.Button
                                                                         as={Link}
-                                                                        to={"/mangadex/chapter/" + getted}
+                                                                        to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
                                                                     >
                                                                         <ChakraIcons.ChevronLeftIcon/>
                                                                     </Chakra.Button>
-                                                                );
-                                                            }}
-                                                        </Await>
-                                                    </React.Suspense>
+                                                                }
+                                                            >
+                                                                {(getted : string) => {
+                                                                    return (
+                                                                        <Chakra.Button
+                                                                            as={Link}
+                                                                            to={"/mangadex/chapter/" + getted}
+                                                                        >
+                                                                            <ChakraIcons.ChevronLeftIcon/>
+                                                                        </Chakra.Button>
+                                                                    );
+                                                                }}
+                                                            </Await>
+                                                        </React.Suspense>
+                                                    </Chakra.HStack>
                                                 </Row>
                                             </Chakra.Box>
                                             <Chakra.Divider />
@@ -583,12 +585,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                     NSwiper.Navigation,
                                                     NSwiper.Zoom
                                                 ]}
-                                                onReachEnd={async () => {
-                                                    this.set_Chapter_toUse(await Chapter.get_ChapterbyId(await this.Chapter_toUse.get_next()));
-                                                    
-                                                    this.forceUpdate();
-                                                    
-                                                }}
+                                                
                                                 onSlideChange={(swiper) => {
                                                     this.current_page = swiper.activeIndex;
                                                     try{
