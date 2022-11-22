@@ -1,5 +1,4 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "npm run build lint",
     "beforeDevCommand": "npm run dev",
@@ -65,7 +64,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Manga",
       "copyright": "",
       "deb": {
         "depends": []
@@ -107,10 +106,9 @@
         "fullscreen": false,
         "height": 600,
         "resizable": true,
-        "title": "Mangadex-desktop",
+        "title": "Mangadex Desktop",
         "width": 800,
-        "minWidth": 500,
-        "theme":"Light"
+        "minWidth": 500
       }
     ]
   }

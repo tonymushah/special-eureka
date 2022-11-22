@@ -192,7 +192,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
     }
     public makelist_Page(): Array<React.ReactNode>{
         var returns: Array<React.ReactNode> = [];
-        for(let index = 0; index < this.Chapter_toUse.pages; index++){
+        for(let index = 0; index < this.Chapter_toUse.get_pages(); index++){
             returns[index] = (
                 <Chakra.MenuList
                     onClick={() =>{
@@ -360,13 +360,13 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                     </Chakra.Button>
                                                                 }
                                                             >
-                                                                {(getted : string) => {
+                                                                {(getted12 : string) => {
                                                                     return (
                                                                         <Chakra.Button
                                                                             as={Link}
-                                                                            to={"/mangadex/chapter/" + getted}
+                                                                            to={"/mangadex/chapter/" + getted12}
                                                                         >
-                                                                            <ChakraIcons.ChevronRightIcon/>
+                                                                            <ChakraIcons.ChevronLeftIcon/>
                                                                         </Chakra.Button>
                                                                     );
                                                                 }}
@@ -413,10 +413,8 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                                     const chapter = volume.get_chapters().reverse()[index2];
                                                                                     returns[topIndex] = (
                                                                                         <Chakra.MenuItem
-                                                                                            onClick={async () => {
-                                                                                                this.set_Chapter_toUse(await Chapter.get_ChapterbyId(chapter.get_chapters()[0].get_id()));
-                                                                                                this.forceUpdate();
-                                                                                            }}
+                                                                                            as={Link}
+                                                                                            to={"/mangadex/chapter/" + chapter.get_chapters()[0].get_id()}
                                                                                         >
                                                                                             Vol. {
                                                                                                 volume.get_name()
@@ -446,17 +444,17 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                         as={Link}
                                                                         to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
                                                                     >
-                                                                        <ChakraIcons.ChevronLeftIcon/>
+                                                                        <ChakraIcons.ChevronRightIcon/>
                                                                     </Chakra.Button>
                                                                 }
                                                             >
-                                                                {(getted : string) => {
+                                                                {(getted121 : string) => {
                                                                     return (
                                                                         <Chakra.Button
                                                                             as={Link}
-                                                                            to={"/mangadex/chapter/" + getted}
+                                                                            to={"/mangadex/chapter/" + getted121}
                                                                         >
-                                                                            <ChakraIcons.ChevronLeftIcon/>
+                                                                            <ChakraIcons.ChevronRightIcon/>
                                                                         </Chakra.Button>
                                                                     );
                                                                 }}

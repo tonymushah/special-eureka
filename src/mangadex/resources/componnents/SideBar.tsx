@@ -192,6 +192,7 @@ export function Modal_Search(props : Modal_SearchProps){
         title : ""
     },
     onSubmit: values => {
+        setResult(<></>)
         let offset_limits_1 = new Offset_limits();
         let promise = Manga.search({
             offset_Limits: offset_limits_1,
