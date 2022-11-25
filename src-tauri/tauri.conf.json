@@ -78,7 +78,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tony_mushah.dev",
+      "identifier": "com.tonymushah.dev",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
