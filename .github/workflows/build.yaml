@@ -3,13 +3,12 @@ on:
   push: 
     branches:
       - master
+      - realease
 jobs:
   test_build_windows:
     name: windows_test
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
-      
       - name: setup node
         uses: actions/setup-node@v1
         with:
@@ -24,7 +23,7 @@ jobs:
         run: npm install --legacy-peer-deps
         
       - name: Test build
-        run: npm run tauri dev
+        run: npm run tauri build
   test_build_mac_os:
     name: macos_test
     runs-on: macos-latest
@@ -45,6 +44,6 @@ jobs:
         run: npm install --legacy-peer-deps
         
       - name: Test build
-        run: npm run tauri dev
+        run: npm run tauri build
     
       
