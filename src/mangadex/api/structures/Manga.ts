@@ -1,14 +1,13 @@
 import { Response } from "@tauri-apps/api/http";
-import { JsxAttribute, JsxElement, JsxEmit, JsxFlags } from "typescript";
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
 import { Cover } from "./Cover";
 import { Tag } from "./Tag";
-import React from 'react';
 import { Author } from "./Author";
 import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
 import { Chapter, Chapter_withAllIncludes } from "./Chapter";
+import DeskApiRequest from "../offline/DeskApiRequest"
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
     private title: any;
@@ -198,7 +197,13 @@ export class Manga extends Attribute{
             attributes.createdAt,
             tags
         );
-        instance.set_relationships_Wany(relationships);
+        instance.set_related(object.related);
+        try {
+            instance.set_relationships_Wany(relationships);
+        } catch (error) {
+            
+        }
+        
         instance.set_avaible_language(attributes.availableLanguage);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.contentRating);
@@ -233,6 +238,7 @@ export class Manga extends Attribute{
         instance.set_avaible_language(attributes.avaible_language);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.content_rating);
+        instance.set_related(object.related);
         return instance;
     }
     // NOTE Get a random manga
@@ -246,15 +252,29 @@ export class Manga extends Attribute{
         }
     }
     // NOTE get a by his id
-    public static async getMangaByID(id: string): Promise<Manga>{
+    public static async getOfflineMangaByID(id: string): Promise<Manga>{
         try {
-            var getted: Promise<Response<any>> = Api_Request.get_methods(Manga.get_request_a() + id);
+            var getted: Promise<Response<any>> = DeskApiRequest.get_methods(Manga.get_request_a() + id);
             var to_use = await getted;
-            return Manga.build_any(to_use.data.data);
+            return Manga_with_allRelationship.build_any(to_use.data.data);
         } catch (error) {
             throw new Error(error);
         }
     }
+    public static async getMangaByID(id: string): Promise<Manga>{
+        if(await DeskApiRequest.ping()){
+            return await Manga.getOfflineMangaByID(id);
+        }else{
+            try {
+                var getted: Promise<Response<any>> = Api_Request.get_methods(Manga.get_request_a() + id);
+                var to_use = await getted;
+                return Manga.build_any(to_use.data.data);
+            } catch (error) {
+                throw new Error(error);
+            }
+        }
+    }
+    
     // [x] get the manga cover
     public async get_cover_art(): Promise<Cover>{
         try {
@@ -736,6 +756,7 @@ export class Manga extends Attribute{
         }
         return returns;
     }
+
 }
 
 export class Manga_2 extends Manga{
@@ -789,6 +810,7 @@ export class Manga_2 extends Manga{
         instance.set_avaible_language(attributes.avaible_language);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.content_rating);
+        instance.set_related(object.related);
         return instance;
     }
     public async get_cover_art(): Promise<Cover>{
@@ -813,4 +835,152 @@ export class Manga_2 extends Manga{
             throw new Error("No cover art for this manga " + this.get_title().en);
         }
     }
+}
+
+export class Manga_with_allRelationship extends Manga {
+    private authors : Array<Author>;
+    private artists : Array<Author>;
+    private cover : Cover;
+    private related_manga : Array<Manga>;
+
+    /**
+     * Getter $authors
+     * @return {Array<Author>}
+     */
+	public get $authors(): Array<Author> {
+		return this.authors;
+	}
+
+    /**
+     * Setter $authors
+     * @param {Array<Author>} value
+     */
+	public set $authors(value: Array<Author>) {
+		this.authors = value;
+	}
+
+    /**
+     * Getter $artists
+     * @return {Array<Author>}
+     */
+	public get $artists(): Array<Author> {
+		return this.artists;
+	}
+
+    /**
+     * Setter $artists
+     * @param {Array<Author>} value
+     */
+	public set $artists(value: Array<Author>) {
+		this.artists = value;
+	}
+
+    /**
+     * Getter $cover
+     * @return {Cover}
+     */
+	public get $cover(): Cover {
+		return this.cover;
+	}
+
+    /**
+     * Setter $cover
+     * @param {Cover} value
+     */
+	public set $cover(value: Cover) {
+		this.cover = value;
+	}
+
+    /**
+     * Getter $related_manga
+     * @return {Array<Manga>}
+     */
+	public get $related_manga(): Array<Manga> {
+		return this.related_manga;
+	}
+
+    /**
+     * Setter $related_manga
+     * @param {Array<Manga>} value
+     */
+	public set $related_manga(value: Array<Manga>) {
+		this.related_manga = value;
+	}
+
+
+    public static build_any(object: any /*
+    please only input the real data please
+    */): Manga_2{
+        var attributes :any = object.attributes;
+        var relationships: any = object.relationships;
+        var tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
+        for (let index = 0; index < attributes.tags.length; index++) {
+            tags[index] = Tag.build_withAny(attributes.tags[index]);
+        }
+        var instance = new Manga_with_allRelationship(
+            object.id,
+            attributes.title,
+            attributes.description,
+            attributes.altTitles,
+            attributes.status,
+            attributes.lastChapter,
+            attributes.lastVolume,
+            attributes.updatedAt,
+            attributes.createdAt,
+            tags
+        );
+        //instance.set_relationships_Wany(relationships);
+        try {
+            let to_input_manga: Array<Manga> = [];
+            let all_manga : Array<any> = Attribute.get_some_relationship(relationships, "manga");
+            for (let index = 0; index < all_manga.length; index++) {
+                to_input_manga[index] = Manga_2.build_any(all_manga[index]);
+            }
+            instance.$related_manga = to_input_manga;
+        } catch (error) {}
+        try {
+            let to_input_author: Array<Author> = [];
+            let all_author : Array<any> = Attribute.get_some_relationship(relationships, "author");
+            for (let index = 0; index < all_author.length; index++) {
+                to_input_author[index] = Author.build_wANY(all_author[index]);
+            }
+            instance.$authors = to_input_author; 
+        } catch (error) {}
+        try {
+            let to_input_manga: Array<Manga> = [];
+            let all_manga : Array<any> = Attribute.get_some_relationship(relationships, "manga");
+            for (let index = 0; index < all_manga.length; index++) {
+                to_input_manga[index] = Manga_2.build_any(all_manga[index]);
+            }
+            instance.$related_manga = to_input_manga;
+        } catch (error) {}
+        try {
+            let to_input_author: Array<Author> = [];
+            let all_author : Array<any> = Attribute.get_some_relationship(relationships, "artist");
+            for (let index = 0; index < all_author.length; index++) {
+                to_input_author[index] = Author.build_wANY(all_author[index]);
+            }
+            instance.$authors = to_input_author; 
+        } catch (error) {}
+        try {
+            instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
+        } catch (error) {}
+        return instance;
+    }
+    public get_author(): Promise<Author[]> {
+        return new Promise((resolve, reject) => {
+            resolve(this.$authors);
+        });
+    }
+    public get_artist(): Promise<Author[]> {
+        return new Promise((resolve, reject) => {
+            resolve(this.$artists);
+        });
+    }
+    public get_cover_art(): Promise<Cover> {
+        return new Promise((resolve, reject) => {
+            resolve(this.$cover);
+        });
+    }
+    
 }

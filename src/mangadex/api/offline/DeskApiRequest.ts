@@ -1,32 +1,8 @@
 import { Body, Client, getClient, HttpOptions, RequestOptions, Response } from "@tauri-apps/api/http";
 const client:Client = await getClient();
-export class Api_RequestERROR extends Error{
-    protected id: string;
-    protected status: number;
-    protected title: string;
-    protected detail: string;
-    public constructor(id: string, status: number, title: string, detail: string) {
-        super(detail);
-        this.detail = detail;
-        this.id = id;
-        this.title = title;
-        this.status = status;
-    }
-    public getID(): string{
-        return this.id;
-    }
-    public getStatus(): number{
-        return this.status;
-    }
-    protected getTitle(): string{
-        return this.title;
-    }
-    protected getDetail(): string{
-        return this.detail;
-    }
-}
-export class Api_Request{
-    private static url:string = "https://api.mangadex.org/";
+
+export default class Api_Request{
+    private static url:string = "http://localhost:8090/";
     public static get_url() : string {
         return Api_Request.url;
     }
@@ -82,9 +58,9 @@ export class Api_Request{
         return request_res;
     }
     public static async ping(): Promise<boolean>{
-        try{
-            return (await Api_Request.get_methods("ping")).ok;
-        }catch(e){
+        try {
+            return (await Api_Request.get_methods("")).ok;
+        } catch (error) {
             return false;
         }
     }

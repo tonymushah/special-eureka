@@ -1,16 +1,14 @@
 import React from "react"
 import ReactDOM from 'react-dom/client';
-import { Api_Request } from "../../mangadex/api/internal/Api_Request";
+import DeskApiRequest from "../../mangadex/api/offline/DeskApiRequest";
 import ReactJson from 'react-json-view';
 import { getClient, Response } from "@tauri-apps/api/http";
+import { launch_server } from "../../mangadex/api/offline/plugin";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+import { Manga_with_allRelationship } from "../../mangadex/api/structures/Manga";
 
-const client = await getClient();
-client.get("http://localhost:8090").then(((value : Response<any>) => {
-    ReactDOM.createRoot(document.getElementById("root")!).render(
-        <ReactJson src={value.data}></ReactJson>
-    )
-})).catch((e) => {
-    ReactDOM.createRoot(document.getElementById("root")!).render(
-        <>{e}</>
-    )
-})
+if((await DeskApiRequest.ping()) == false){
+    await launch_server();
+}
+
+let getted = Manga_with_allRelationship.getMangaByID()

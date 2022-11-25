@@ -13,6 +13,7 @@
     "tauri-dev": "tauri dev"
   },
   "devDependencies": {
+    "@remix-run/dev": "^1.7.6",
     "@tauri-apps/cli": "^1.0.5",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -23,9 +24,10 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.0.11",
-    "@chakra-ui/react": "^2.3.5",
-    "@emotion/react": "^11.10.4",
-    "@emotion/styled": "^11.10.4",
+    "@chakra-ui/react": "^2.4.1",
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@emotion/styled": "^11.10.5",
     "@fortawesome/fontawesome-free": "^6.2.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
@@ -45,7 +47,7 @@
     "flag-icons": "^6.6.6",
     "font-awesome": "^4.7.0",
     "formik": "^2.2.9",
-    "framer-motion": "^7.5.3",
+    "framer-motion": "^6.5.1",
     "iso-3166": "^4.0.1",
     "iso-639-1": "^2.1.15",
     "javascript-time-ago": "^2.5.7",
@@ -54,7 +56,6 @@
     "query-string": "^7.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
-    "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^18.2.0",
     "react-dyn-tabs": "^5.0.1",
     "react-full-screen": "^1.1.1",

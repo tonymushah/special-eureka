@@ -121,7 +121,12 @@ export class Chapter extends Attribute{
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);
         instance.set_volume(attributes.volume);
-        instance.set_relationships_Wany(relationships);
+        try {
+            instance.set_relationships_Wany(relationships);
+        } catch (error) {
+            
+        }
+        
         return instance;
     }
     public static async get_ChapterbyId(id: string): Promise<Chapter> {
@@ -348,7 +353,12 @@ export class Chapter_withAllIncludes extends Chapter{
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);
         instance.set_volume(attributes.volume);
-        instance.set_relationships_Wany(relationships);
+        try {
+            instance.set_relationships_Wany(relationships);
+        } catch (error) {
+            
+        }
+        
 //        console.log("relationship builded")
         try {
             let groups_any: Array<any> = Attribute.get_some_relationship(relationships, "scanlation_group");

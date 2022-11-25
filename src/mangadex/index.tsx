@@ -7,13 +7,13 @@ import { Container, Spinner } from 'react-bootstrap';
 import { Manga } from './api/structures/Manga';
 import Home from "./pages/Home"
 import { Content } from "./resources/componnents/SideBar"
-import { ErrorELAsync, ErrorELAsync1, ErrorELRouter } from './resources/componnents/Error_cmp';
+import { ErrorELAsync1, ErrorELRouter } from './resources/componnents/Error_cmp';
 import * as Chakra from "@chakra-ui/react"
 import "./resources/css/manga/slider-manga.css";
 import "./resources/Poppins/Poppins.css"
 import MangaPage, { Chapters_, Covers_, Related_ } from "./pages/MangaPage"
-import { Chapter, Chapter_withAllIncludes } from './api/structures/Chapter';
 import Chapter_Page from './pages/Chapter_Page';
+import DownloadsLaoyut from './pages/download/layout';
 
 const MangaDexPath: string = "/mangadex/";
 const app = ReactDOM.createRoot(document.getElementById("app")!);
@@ -137,26 +137,39 @@ const router = createBrowserRouter(
                 >
                 </Route>
             </Route>
+            <Route
+                path="download"
+                element={
+                    <Container>
+                        <DownloadsLaoyut/>
+                    </Container>
+                }
+            >
+                
+            </Route>
         </Route>
     )
 );
 app.render(
-    <Chakra.ChakraProvider>
-        <Chakra.Box
-            fontFamily={"Poppins"}
-        >
-            <RouterProvider 
-                router={router}
-                fallbackElement={
-                    <Chakra.AbsoluteCenter>
-                        <Chakra.Spinner 
-                            size="xl"
-                            color='orange.500'
-                            thickness='4px'
-                        />
-                    </Chakra.AbsoluteCenter>
-                }
-            />
-        </Chakra.Box>
-    </Chakra.ChakraProvider>
+    <>
+        <Chakra.ChakraProvider>
+            <Chakra.Box
+                fontFamily={"Poppins"}
+            >
+                <RouterProvider 
+                    router={router}
+                    fallbackElement={
+                        <Chakra.AbsoluteCenter>
+                            <Chakra.Spinner 
+                                size="xl"
+                                color='orange.500'
+                                thickness='4px'
+                            />
+                        </Chakra.AbsoluteCenter>
+                    }
+                />
+            </Chakra.Box>
+            
+        </Chakra.ChakraProvider>
+    </>
 );

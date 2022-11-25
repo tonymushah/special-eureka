@@ -1,35 +1,159 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import 'react-pro-sidebar/dist/css/styles.css';
 import "bootstrap/dist/css/bootstrap.css";
-import { Link, Await} from "react-router-dom"
-import { ProSidebar, Menu, MenuItem, SubMenu , SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
-import { Container, Button, Navbar, Nav, Modal} from 'react-bootstrap';
+import { Link, Await, useAsyncError } from "react-router-dom"
+import { ProSidebar, Menu, MenuItem, SubMenu, SidebarHeader, SidebarFooter, SidebarContent } from 'react-pro-sidebar';
+import { Container, Button, Navbar, Nav, Modal } from 'react-bootstrap';
 import { ExtLink } from '../../../commons-res/components/ExtLink';
 import * as Chakra from "@chakra-ui/react"
 import { useFormik } from 'formik';
 import { Offset_limits } from '../../api/internal/Utils';
 import { Manga } from '../../api/structures/Manga';
-import { ErrorELAsync, ErrorELAsync1 } from './Error_cmp';
+import { ErrorELAsync1 } from './Error_cmp';
 import { MangaSimpleEl } from './mangas/MangaSimpleEl';
 import * as ChakraIcons from "@chakra-ui/icons"
+import DeskApiRequest from "../../api/offline/DeskApiRequest";
+import { FaArchive } from 'react-icons/fa';
+import * as Offline from "../../api/offline/plugin";
+
+
 
 const MangaDexPath: string = "/mangadex/";
 
-type Side_barProps = {
-    toggled : boolean,
-    onToggle : (value : boolean) => void
+function Side_bar_error_el(props: {
+    toastId: Chakra.ToastId,
+    callAfter: () => void
+}) {
+    let error = useAsyncError();
+    const toast = Chakra.useToast();
+    toast.update(props.toastId, {
+        title: "Error",
+        isClosable: true,
+        duration: 9000,
+        description: error,
+        status: "error"
+    });
+    props.callAfter();
+    return (<></>);
+}
+
+export function Launch_server(props : {
+    callAfter : () => void
+}) {
+    const toast = Chakra.useToast();
+    const toastIdRef = React.useRef<Chakra.ToastId>();
+    toastIdRef.current = toast({
+        title: "Starting server ...",
+        status: "loading",
+        position: "bottom-right"
+    })!
+
+    return (
+        <React.Suspense>
+            <Await
+                resolve={Offline.launch_server()}
+                errorElement={
+                    <Side_bar_error_el toastId={toastIdRef.current} callAfter={props.callAfter}/>
+                }
+            >
+                {(getted: string) => {
+                    toast.update(toastIdRef.current!, {
+                        title: "Server Started",
+                        isClosable: true,
+                        duration: 9000,
+                        status: "success"
+                    });
+                    props.callAfter();
+                    return (<></>);
+                }}
+            </Await>
+        </React.Suspense>
+    )
+}
+
+export function Stop_server(props : {
+    callAfter : () => void
+}) {
+    const toast = Chakra.useToast();
+    const toastIdRef = React.useRef<Chakra.ToastId>();
+    toastIdRef.current = toast({
+        title: "Stoping server ...",
+        status: "loading",
+        position: "bottom-right"
+    })!
+
+    return (
+        <React.Suspense>
+            <Await
+                resolve={Offline.stop_server()}
+                errorElement={
+                    <Side_bar_error_el toastId={toastIdRef.current} callAfter={props.callAfter}/>
+                }
+            >
+                {(getted: string) => {
+                    toast.update(toastIdRef.current!, {
+                        title: "Server Stopped",
+                        isClosable: true,
+                        duration: 9000,
+                        status: "success"
+                    });
+                    props.callAfter();
+                    return (<></>);
+                }}
+            </Await>
+        </React.Suspense>
+    )
+}
+
+function Downloads_badge() {
+    const [loader, setLoader] = React.useState<React.ReactNode>(<></>);
+
+    const [internal_serverStatus, setServ] = React.useState<boolean>();
+
+    DeskApiRequest.ping().then(setServ).catch(() => {
+        
+    });
+
+    function refresh(){
+        DeskApiRequest.ping().then(setServ).catch(setServ);
+    }
+
+    return (
+        <Chakra.Box onClick={() => {
+            if (internal_serverStatus == false) {
+                setLoader(<Launch_server callAfter={refresh}/>)
+            } else {
+                setLoader(<Stop_server callAfter={refresh} />)
+            }
+        }}>
+            {
+                internal_serverStatus ? (
+                    <Chakra.Badge bg='green.500'>ON</Chakra.Badge>
+                ) : (
+                    <Chakra.Badge bg='red.500'>OFF</Chakra.Badge>
+                )
+            }
+            {
+                loader
+            }
+        </Chakra.Box>
+    )
+}
+
+export type Side_barProps = {
+    toggled: boolean,
+    onToggle: (value: boolean) => void
 }
 
 export class Side_bar extends React.Component<Side_barProps>{
     isCollapsed: boolean;
     isRTL: boolean;
-    isToggled: boolean
-    constructor(props: Side_barProps){
+    isToggled: boolean;
+    constructor(props: Side_barProps) {
         super(props);
-        if(sessionStorage.getItem("isCollapsed") == null){
+        if (sessionStorage.getItem("isCollapsed") == null) {
             this.isCollapsed = false;
-        }else{
+        } else {
             this.isCollapsed = JSON.parse(sessionStorage.getItem("isCollapsed")!)
         }
         this.isToggled = false;
@@ -51,15 +175,15 @@ export class Side_bar extends React.Component<Side_barProps>{
         }
         this.forceUpdate();
     }
-    render(){
+    render() {
         return (
-            <ProSidebar 
-                toggled={this.props.toggled} 
-                breakPoint="md" 
-                id="sidebar" 
-                className='sidebar-mgdx overflow-scroll' 
-                rtl={this.isRTL} 
-                collapsed={this.isCollapsed} 
+            <ProSidebar
+                toggled={this.props.toggled}
+                breakPoint="md"
+                id="sidebar"
+                className='sidebar-mgdx overflow-scroll'
+                rtl={this.isRTL}
+                collapsed={this.isCollapsed}
                 onToggle={this.props.onToggle}
             >
                 <SidebarHeader>
@@ -71,61 +195,82 @@ export class Side_bar extends React.Component<Side_barProps>{
                 </SidebarHeader>
                 <SidebarContent>
                     <Menu popperArrow={true} innerSubMenuArrows={true}>
-                        <MenuItem icon={<i onClick={this.collapse.bind(this)} className='far fa-home-alt'></i>}> 
+                        <MenuItem icon={<i onClick={this.collapse.bind(this)} className='far fa-home-alt'></i>}>
                             <Link to={MangaDexPath}>
-                                Home 
+                                Home
                             </Link>
                         </MenuItem>
-                        <SubMenu  defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='far fa-bookmark'></i>} title={"Follow"}>
+                        <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='far fa-bookmark'></i>} title={"Follow"}>
                             <MenuItem>Updates</MenuItem>
                             <MenuItem>Library</MenuItem>
                             <MenuItem>MDLists</MenuItem>
                             <MenuItem>Followed Groups</MenuItem>
                         </SubMenu>
-                        <MenuItem icon={<i onClick={this.collapse.bind(this)} className='far fa-archive'></i>}> Dowmloads </MenuItem>
+                        <SubMenu defaultOpen={false} icon={
+                                <Chakra.Icon
+                                    as={FaArchive}
+                                    onClick={this.collapse.bind(this)}
+                                    size={"xs"}
+                                />
+                            } title={"Download"}>
+                            <MenuItem suffix={
+                                <Downloads_badge/>
+                            }>Server : </MenuItem>
+                            <MenuItem> 
+                                <Link to="/mangadex/download">
+                                    Library 
+                                </Link>
+                            </MenuItem>
+                        </SubMenu>
                         <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='far fa-bookmark'></i>} title={"Titles"}>
                             <MenuItem>Advanced Research</MenuItem>
                             <MenuItem>Latest Updates</MenuItem>
                             <MenuItem>Recently Added</MenuItem>
                             <MenuItem>
-                                <Link to="/mangadex/manga/random"> 
+                                <Link to="/mangadex/manga/random">
                                     Random
                                 </Link></MenuItem>
                             <MenuItem>Suggestive</MenuItem>
                         </SubMenu>
                         <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='fas fa-cog fa-spin'></i>} title={"Powerred by "}>
-                            <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/Square30x30Logo.png"/>}>
-                                <ExtLink href="https://tauri.app">Tauri Apps</ExtLink>
-                            </MenuItem>
-                            <MenuItem icon={<img id="tauri_icon" src="/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg"/>}>
-                                <ExtLink href="https://api.mangadex.org">Mangadex API</ExtLink>
-                            </MenuItem>
-                            <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/favicon.svg" width="28px"/>}>
-                                <ExtLink href="https://vitejs.dev">Vite</ExtLink>
-                            </MenuItem>
+                            <ExtLink href="https://tauri.app">
+                                <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/Square30x30Logo.png" />}>
+                                    Tauri Apps
+                                </MenuItem>
+                            </ExtLink>
+                            <ExtLink href="https://api.mangadex.org">
+                                <MenuItem icon={<img id="tauri_icon" src="/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" />}>
+                                    Mangadex API
+                                </MenuItem>
+                            </ExtLink>
+                            <ExtLink href="https://vitejs.dev">
+                                <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/favicon.svg" width="28px" />}>
+                                    Vite
+                                </MenuItem>
+                            </ExtLink>
                         </SubMenu>
                     </Menu>
                 </SidebarContent>
                 <SidebarFooter onClick={this.collapse.bind(this)}>
                     <Menu>
-                        <MenuItem icon={<i  className='far fa-user-alt'></i>} suffix={<Button>Login</Button>} > Guest </MenuItem>
+                        <MenuItem icon={<i className='far fa-user-alt'></i>} suffix={<Button>Login</Button>} > Guest </MenuItem>
                     </Menu>
                 </SidebarFooter>
             </ProSidebar>
-    );
+        );
     }
 }
 export class Content extends React.Component<React.PropsWithChildren>{
     isToggled: boolean;
-    constructor(props: React.PropsWithChildren){
+    constructor(props: React.PropsWithChildren) {
         super(props);
         this.isToggled = false
         this.toggle = this.toggle.bind(this)
     }
-    toggle(){
-        if(this.isToggled == false){
+    toggle() {
+        if (this.isToggled == false) {
             this.isToggled = true;
-        }else{
+        } else {
             this.isToggled = false
         }
         this.forceUpdate();
@@ -145,11 +290,14 @@ export class Content extends React.Component<React.PropsWithChildren>{
                             <Navbar expand={'sm'} >
                                 <Container>
                                     <Navbar.Brand>
-                                        <div onClick={this.toggle} className='d-md-none'>
+                                        <Chakra.Center onClick={this.toggle} display={{
+                                            base: "flex",
+                                            md: "none"
+                                        }}>
                                             <img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" /> <h4 className='d-inline'>MangaDex </h4>
-                                        </div>
+                                        </Chakra.Center>
                                     </Navbar.Brand>
-                                    <Navbar.Toggle className=" float-end" aria-controls='searc_bar_'/>
+                                    <Navbar.Toggle className=" float-end" aria-controls='searc_bar_' />
                                     <Navbar.Collapse id="searc_bar_" className=" justify-content-end">
                                         <Nav>
                                             <Form1></Form1>
@@ -157,12 +305,12 @@ export class Content extends React.Component<React.PropsWithChildren>{
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
-                            <hr className="header-hr"/>
+                            <hr className="header-hr" />
                         </Container>
                         <Chakra.Box id="content">
                             {this.props.children}
                         </Chakra.Box>
-                    </Chakra.Box> 
+                    </Chakra.Box>
                 </Chakra.Box>
             </div>
         )
@@ -170,36 +318,36 @@ export class Content extends React.Component<React.PropsWithChildren>{
 }
 
 type Modal_SearchProps = {
-    show : boolean,
-    onHide : () => void
+    show: boolean,
+    onHide: () => void
 }
 
-export function Modal_Search(props : Modal_SearchProps){
-     const ref1 = React.createRef<HTMLDivElement>();
+export function Modal_Search(props: Modal_SearchProps) {
+    const ref1 = React.createRef<HTMLDivElement>();
     const [result, setResult] = React.useState(<></>);
     const build = (array: Array<Manga>) => {
-        let builded : Array<React.ReactNode> = [];
+        let builded: Array<React.ReactNode> = [];
         for (let index = 0; index < array.length; index++) {
             const element = array[index];
             builded[index] = (
-                <MangaSimpleEl src={element}/>
+                <MangaSimpleEl src={element} />
             )
         }
         return builded;
     }
     const formik = useFormik({
-    initialValues: {
-        title : ""
-    },
-    onSubmit: values => {
-        setResult(<></>)
-        let offset_limits_1 = new Offset_limits();
-        let promise = Manga.search({
-            offset_Limits: offset_limits_1,
-            title : values.title
-        });
-        formik.setSubmitting(false);
-        setResult(
+        initialValues: {
+            title: ""
+        },
+        onSubmit: values => {
+            setResult(<></>)
+            let offset_limits_1 = new Offset_limits();
+            let promise = Manga.search({
+                offset_Limits: offset_limits_1,
+                title: values.title
+            });
+            formik.setSubmitting(false);
+            setResult(
                 <React.Suspense
                     fallback={
                         <Chakra.Center>
@@ -212,15 +360,15 @@ export function Modal_Search(props : Modal_SearchProps){
                     <Await
                         resolve={promise}
                         errorElement={
-                            <ErrorELAsync1/>
+                            <ErrorELAsync1 />
                         }
                     >
-                        {(getted0 : Array<Manga>) => {
+                        {(getted0: Array<Manga>) => {
                             return (
                                 <Chakra.Box>
                                     {
                                         getted0.map(mangas => (
-                                            <MangaSimpleEl src={mangas}/>
+                                            <MangaSimpleEl src={mangas} />
                                         ))
                                     }
                                 </Chakra.Box>
@@ -228,9 +376,9 @@ export function Modal_Search(props : Modal_SearchProps){
                         }}
                     </Await>
                 </React.Suspense>
-        )
-    }
-})
+            )
+        }
+    })
     return (
         <Modal show={props.show} onHide={props.onHide} className={" w-100"}>
             <Modal.Header closeButton>
@@ -250,7 +398,7 @@ export function Modal_Search(props : Modal_SearchProps){
                             />
                             <Chakra.IconButton
                                 type="submit"
-                                icon={<ChakraIcons.SearchIcon/>}
+                                icon={<ChakraIcons.SearchIcon />}
                                 aria-label={"Search Title"}
                                 isLoading={formik.isSubmitting}
                             />
@@ -271,21 +419,21 @@ export class Form1 extends React.Component {
     modalState: boolean;
     constructor(props) {
         super(props);
-        this.state = {value: ''};
+        this.state = { value: '' };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.modalState = false
     }
-    showModal(){
-        if(this.modalState == false){
+    showModal() {
+        if (this.modalState == false) {
             this.modalState = true;
-        }else{
+        } else {
             this.modalState = false
         }
         this.forceUpdate();
     }
     handleChange(event) {
-        this.setState({value: event.target.value});
+        this.setState({ value: event.target.value });
     }
     handleSubmit(event) {
         event.preventDefault();
@@ -300,7 +448,7 @@ export class Form1 extends React.Component {
                     </label>
                     <Button onClick={this.showModal.bind(this)}><i className='fas fa-search'></i> </Button>
                 </form>
-                <Modal_Search show={this.modalState} onHide={this.showModal.bind(this)}/>
+                <Modal_Search show={this.modalState} onHide={this.showModal.bind(this)} />
             </div>
         );
     }

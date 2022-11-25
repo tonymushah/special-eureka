@@ -81,7 +81,10 @@ export class Author extends Attribute{
         instance.naver = attributes.naver;
         instance.weibo = attributes.weibo;
         instance.website = attributes.website;
-        instance.set_relationships_Wany(relationships);
+        try {
+            instance.set_relationships_Wany(relationships);
+        } catch (error) {
+        }
         return instance;
     }
     public getUrl_twitter(): string|null{

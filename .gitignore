@@ -20,4 +20,5 @@ node_modules
 *.njsproj
 *.sln
 *.sw?
-./dist/test
+dist
+src/test

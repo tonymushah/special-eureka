@@ -110,7 +110,11 @@ export class Cover extends Attribute{
             createdAt,
             updatedAt
         )
-        instance.set_relationships_Wany(relationship);
+        try {
+            instance.set_relationships_Wany(relationship);
+        } catch (error) {
+        }
+        
         return instance;
     }
     public static build_withAny(
@@ -127,7 +131,11 @@ export class Cover extends Attribute{
             attributes.createdAt,
             attributes.updated_at
         )
-        instance.set_relationships_Wany(relationships);
+        try {
+            instance.set_relationships_Wany(relationships);
+        } catch (error) {
+        }
+        
         return instance;
     }
     // [ ] get a cover by his id 
