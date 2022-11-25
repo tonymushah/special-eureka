@@ -9,6 +9,8 @@ jobs:
     name: windows_test
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v2
+      
       - name: setup node
         uses: actions/setup-node@v1
         with:
