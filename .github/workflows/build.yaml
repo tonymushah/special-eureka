@@ -1,17 +1,50 @@
-  name: tauri-build
-  # You may pin to the exact commit or the version.
-  # uses: JonasKruckenberg/tauri-build@406f9292d464c04add8c74e8ed1ed4105b91a20e
-  uses: JonasKruckenberg/tauri-build@v1.0.3
-  with:
-    # Binary to use to build the application
-    runner: # optional
-    # Additional arguments for the build command
-    args: # optional
-    # Path to the root of the project
-    projectPath: # optional
-    # Path to the tauri.conf.json file if you want a configuration different from the default one
-    configPath: # optional
-    # The target triple to build against
-    target: # optional
-    # Builds with the debug flag
-    debug: # optional
+name: build-test
+on: 
+  push: 
+    branches:
+      - master
+jobs:
+  test_build_windows:
+    name: windows_test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+        
+      - name: install Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: Test build
+        run: npm run tauri dev
+  test_build_mac_os:
+    name: macos_test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+        
+      - name: install Rust stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+        
+      - name: Test build
+        run: npm run tauri dev
+    
+      
