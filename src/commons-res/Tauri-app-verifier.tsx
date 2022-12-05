@@ -4,8 +4,12 @@ import { Alert, Modal } from "react-bootstrap";
 import { app, tauri } from "@tauri-apps/api";
 
 try{
-    const app = window.__TAURI__.app;
-    if((typeof (await app.getName())) != "string" ){
+    const app = window!.__TAURI__.app;
+    var app_name = {};
+    app.getName().then((result) => {
+        app_name = result
+    });
+    if((typeof (app_name)) != "string" ){
         ReactDOM.createRoot(document.getElementById("verifier")!).render(
             <Modal static>
                 <Modal.Header>

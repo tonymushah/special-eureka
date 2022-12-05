@@ -26,6 +26,7 @@ lazy_static = "1.4.0"
 log = "^0.4"
 actix-web = "4"
 thiserror = "1.0"
+fern = "0.6"
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"

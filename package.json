@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir",
     "lint": "eslint src && tsc ",
     "preview": "vite preview",
     "tauri": "tauri",
@@ -13,7 +13,6 @@
     "tauri-dev": "tauri dev"
   },
   "devDependencies": {
-    "@remix-run/dev": "^1.7.6",
     "@tauri-apps/cli": "^1.0.5",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
@@ -76,7 +75,6 @@
     "react-zoom-pan-pinch": "^2.1.3",
     "sass": "^1.54.5",
     "swiper": "^8.4.2",
-    "tailwindcss": "^3.1.6",
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
     "tauri-settings": "^0.1.2",

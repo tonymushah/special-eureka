@@ -41,7 +41,7 @@ export class Manga4 extends React.Component<Manga3Props>{
                                 resolve={this.to_use.get_cover_art()}
                                 errorElement={<p>Error while loading cover</p>}
                                 children={(getted: Cover) => {
-                                    let coverpath: string = getted.get_CoverImage_thumbnail(256);
+                                    let coverpath: string = getted.get_CoverImageOnline_thumbnail(256);
                                     return (
                                         <React.Suspense>
                                             <Card.Img src={coverpath} width={"150px"}/>

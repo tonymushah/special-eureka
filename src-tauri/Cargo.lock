@@ -263,6 +263,7 @@ version = "0.1.0"
 dependencies = [
  "actix-web",
  "anyhow",
+ "fern",
  "lazy_static",
  "log",
  "mangadex-api 1.3.0",

@@ -402,7 +402,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                 return (
                                     <>
                                         <Chakra.Box
-                                            backgroundImage={getted.get_CoverImage()}
+                                            backgroundImage={getted.get_CoverImageOnline()}
                                             backgroundRepeat={"no-repeat"}
                                             backgroundPosition={{
                                                 sm: "0px -5em",
@@ -425,7 +425,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                                 <Container>
                                                     <Row>
                                                         <Col xs="3">
-                                                            <Cover_Image_ src={getted.get_CoverImage()} />
+                                                            <Cover_Image_ src={getted.get_CoverImageOnline()} />
                                                         </Col>
                                                         <Col xs="9" className="overflow-hidden">
                                                             <Chakra.Heading

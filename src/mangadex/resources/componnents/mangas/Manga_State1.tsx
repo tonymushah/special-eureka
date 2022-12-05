@@ -6,7 +6,7 @@ import { Alt_title, Lang_and_Data } from '../../../api/internal/Utils';
 import { Manga } from "../../../api/structures/Manga";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, Mousewheel } from "swiper";
-import { ErrorELAsync } from "../Error_cmp";
+import { ErrorELAsync, ErrorELAsync1, ErrorELAsyncWithStack } from "../Error_cmp";
 import 'swiper/css';
 import { Link } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
@@ -37,7 +37,7 @@ export class Manga3 extends React.Component<Manga3Props>{
                             resolve={this.to_use.get_cover_art()}
                             errorElement={<p>Error while loading cover</p>}
                             children={(getted: Cover) => {
-                                let coverpath: string = getted.get_CoverImage_thumbnail(256);
+                                let coverpath: string = getted.get_CoverImageOnline_thumbnail(256);
                                 return (
             
                                         <React.Suspense>
@@ -131,7 +131,7 @@ export class Manga_swipper extends React.Component<Manga_swipperProps>{
             }>
                 <Await
                     resolve={this.init_manga_elements()}
-                    errorElement={<p>Error on loading</p>}
+                    errorElement={<ErrorELAsyncWithStack/>}
                     children={(getted: Array<React.ReactNode>) => {
                             return (
                                 <Swiper

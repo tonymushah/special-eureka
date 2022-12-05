@@ -1,9 +1,11 @@
-import { Response } from "@tauri-apps/api/http";
+import { Response, ResponseType } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
+import DesktopApi from "../offline/DeskApiRequest";
+import DeskApiRequest from "../offline/DeskApiRequest";
 
 export class Cover extends Attribute{
     private description: string;
@@ -138,11 +140,22 @@ export class Cover extends Attribute{
         
         return instance;
     }
-    // [ ] get a cover by his id 
-    public static async getById(id: string): Promise<Cover>{
+    public static async getOnlineByID(id: string): Promise<Cover>{
         var getted = await Api_Request.get_methods("cover/" + id);
         var instance = Cover.build_withAny(getted.data.data);
         return instance;
+    }
+    // [ ] get a cover by his id 
+    public static async getById(id: string): Promise<Cover>{
+        if(await DeskApiRequest.ping()){
+            try{
+                return await Cover.getAOfflineCover(id);
+            }catch(e){
+                return await Cover.getOnlineByID(id);
+            }
+        }else{
+            return await Cover.getOnlineByID(id);
+        }
     }
     // [x] get the manga relative 
     public async get_manga_relative(): Promise<Manga>{
@@ -160,12 +173,19 @@ export class Cover extends Attribute{
     }
     // [ ] get the cover path 
         // [ ] {256, 512}
-        public get_CoverImage_thumbnail(size: number): string{
+        public get_CoverImageOnline_thumbnail(size: number): string{
             return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")[0].get_id() + "/" + this.get_file_name() + "." + size +".jpg");
         }
         // [ ] original
-        public get_CoverImage(): string{
+        public get_CoverImageOnline(): string{
             return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")![0].get_id() + "/" + this.get_file_name());
+        }
+        public async get_CoverImage_promise() : Promise<string>{
+            try {
+                return await Cover.getOfflineCoverImage(this.get_id())
+            } catch (error) {
+                return this.get_CoverImageOnline();
+            }
         }
     public get_key_word():string{
         return RelationshipsTypes.cover_art();
@@ -209,5 +229,23 @@ export class Cover extends Attribute{
             mangaArray[index] = Cover.build_withAny(data[index]);
         }
         return mangaArray;
+    }
+    public static async getAOfflineCover(coverId : string) : Promise<Cover>{
+        if(await DesktopApi.ping() == true){
+            let response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`);
+            return Cover.build_withAny(response.data.data);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async getOfflineCoverImage(coverId: string) : Promise<string> {
+        let resp : Response<BinaryData> = (await DesktopApi.get_methods("cover/" + coverId + "/image", {
+            "responseType" : ResponseType.Binary
+        }));
+        if(resp.ok == true){
+            return DesktopApi.get_url() + "cover/" + coverId + "/image";
+        }else{
+            throw new Error("Cover image for " + coverId + " isn't found");
+        }
     }
 }

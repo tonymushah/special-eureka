@@ -74,7 +74,7 @@ function TestNode(){
                         placeholder="Search"
                         onChange={formik.handleChange}
                         name={"title"}
-                        variant='flushed'
+                        letiant='flushed'
                     />
                     <Chakra.IconButton
                         type="submit"
@@ -95,7 +95,7 @@ function TestNode(){
 
 
 
-/*var arrays : Array<Chapter> | Response<any> = await array![0].getFeed(
+/*let arrays : Array<Chapter> | Response<any> = await array![0].getFeed(
     offset_limits_1,
     undefined,
     undefined,

@@ -11,4 +11,4 @@ if((await DeskApiRequest.ping()) == false){
     await launch_server();
 }
 
-let getted = Manga_with_allRelationship.getMangaByID()
+let getted = Manga_with_allRelationship.getMangaByID("");

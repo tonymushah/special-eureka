@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 export default defineConfig({
   clearScreen: false,
-  
   plugins: [
     react()
   ],
@@ -18,6 +17,8 @@ export default defineConfig({
     minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
+    outDir : "../dist",
   },
-  root: "./src"
+  root: "./src",
+  publicDir : "./public"
 })

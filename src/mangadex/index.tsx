@@ -1,175 +1,253 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import 'react-pro-sidebar/dist/css/styles.css';
 import "bootstrap/dist/css/bootstrap.css";
-import { Route, Outlet, defer, createBrowserRouter, createRoutesFromElements, RouterProvider, Await, redirect, useNavigate } from "react-router-dom"
-import { Container, Spinner } from 'react-bootstrap';
+import { Outlet, Await, useNavigate, RouteObject, redirect } from "react-router-dom"
+import { Container } from 'react-bootstrap';
 import { Manga } from './api/structures/Manga';
 import Home from "./pages/Home"
 import { Content } from "./resources/componnents/SideBar"
 import { ErrorELAsync1, ErrorELRouter } from './resources/componnents/Error_cmp';
 import * as Chakra from "@chakra-ui/react"
+import * as ChakraIcons from "@chakra-ui/icons"
 import "./resources/css/manga/slider-manga.css";
 import "./resources/Poppins/Poppins.css"
 import MangaPage, { Chapters_, Covers_, Related_ } from "./pages/MangaPage"
-import Chapter_Page from './pages/Chapter_Page';
 import DownloadsLaoyut from './pages/download/layout';
+import Chapter_Page from './pages/Chapter_Page';
+import { listen, UnlistenFn } from '@tauri-apps/api/event'
 
-const MangaDexPath: string = "/mangadex/";
-const app = ReactDOM.createRoot(document.getElementById("app")!);
-app.render(
-    <Container className='align-content-center'>
-        <Spinner animation="grow"></Spinner>
-    </Container>
-);
+export function useMangadexEvent() : [boolean, Function] {
+const toast = Chakra.useToast();
 
-const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path={MangaDexPath} element={
+    const [isListening, setListening] = React.useState<boolean>(false);
+
+    const [mangadesk_info, setMangadesk_info] = React.useState<UnlistenFn>();
+
+    const [mangadesk_warn, setMangadesk_warn] = React.useState<UnlistenFn>();
+
+    const [mangadesk_debug, setMangadesk_debug] = React.useState<UnlistenFn>();
+
+    const [mangadesk_error, setMangadesk_error] = React.useState<UnlistenFn>();
+
+    const [mangadesk_trace, setMangadesk_trace] = React.useState<UnlistenFn>();
+
+    function listenAll(){
+        // mangadesk-api-info
+        listen<{
+                message: string
+            }>("info", getted => {
+            let getted_payload = getted.payload;
+            toast({
+                "title" : getted.event,
+                "isClosable" : true,
+                "status" : "info",
+                "icon" : (<ChakraIcons.InfoIcon/>),
+                "description" : getted_payload.message,
+                "duration" : 10000
+            });
+            console.log(getted_payload.message)
+        }).then(value => setMangadesk_info(value))
+        .catch(error => console.error(error))
+        .finally(() => console.log("setted mangadesk api info"));
+        // mangadesk-api-warn
+        listen<{
+                message: string
+            }>("warn", getted => {
+            let getted_payload = getted.payload;
+            toast({
+                "title" : getted.event,
+                "isClosable" : true,
+                "status" : "warning",
+                "description" : getted_payload.message,
+                "duration" : 10000
+            });
+            console.log(getted_payload.message)
+        }).then(value => setMangadesk_warn(value))
+        .catch(error => console.error(error))
+        .finally(() => console.log("setted mangadesk api warn"));
+        // mangadesk-api-debug
+        listen<{
+                message: string
+            }>("debug", getted => {
+            let getted_payload = getted.payload;
+            toast({
+                "title" : getted.event,
+                "isClosable" : true,
+                "status" : "info",
+                "description" : getted_payload.message,
+                "duration" : 10000
+            });
+            console.log(getted_payload.message)
+        }).then(value => setMangadesk_debug(value))
+        .catch(error => console.error(error))
+        .finally(() => console.log("setted mangadesk api debug"));
+        //mangadesk-api-error
+        listen<{
+                message: string
+            }>("error", getted => {
+            let getted_payload = getted.payload;
+            toast({
+                "title" : getted.event,
+                "isClosable" : true,
+                "status" : "error",
+                "description" : getted_payload.message,
+                "duration" : 10000
+            });
+            console.log(getted_payload.message)
+        }).then(value => setMangadesk_error(value))
+        .catch(error => console.error(error))
+        .finally(() => console.log("setted mangadesk api error"));
+        //mangadesk-api-trace
+        listen<{
+                message: string
+            }>("trace", getted => {
+            let getted_payload = getted.payload;
+            toast({
+                "title" : getted.event,
+                "isClosable" : true,
+                "status" : "error",
+                "icon" : (<ChakraIcons.InfoIcon/>),
+                "description" : getted_payload.message,
+                "duration" : 10000
+            });
+            console.log(getted_payload.message)
+        }).then(value => setMangadesk_trace(value))
+        .catch(error => console.error(error))
+        .finally(() => console.log("setted mangadesk api trace"));
+        setListening(true);
+    }
+    function unlistenAll(){
+        try {
+            mangadesk_info!();
+            mangadesk_debug!();
+            mangadesk_warn!();
+            mangadesk_error!();
+            mangadesk_trace!();
+        } catch (error) {
+            console.log(error);
+        }finally{
+            setListening(false);
+        }
+    }
+    function toggleListening(){
+        if(isListening){
+            unlistenAll();
+        }else{
+            listenAll();
+        }
+    }
+    return [isListening, toggleListening];
+}
+
+function useMangadexRouter(): RouteObject{
+    const MangaDexPath: string = "/mangadex";
+
+    
+
+    const Router: RouteObject = {
+        path: MangaDexPath,
+        element: (
             <Content>
-                <Outlet/>
+                <Outlet />
             </Content>
-            }
-            errorElement={
-                <ErrorELRouter/>
-            }
-        >
-            <Route 
-                index 
-                /*loader={
-                    async () => {
-                        let loader1 = List.getListByID("4be9338a-3402-4f98-b467-43fb56663927");
-                        return defer({
-                            loader1
-                        })
-                    }
-                }*/ 
-                element={
-                    <Home/>
-                }
-                errorElement={
-                    <ErrorELRouter/>
-                }
-            />
-            
-            <Route
-                path='manga'
-                errorElement={
-                    <ErrorELRouter></ErrorELRouter>
-                }
-            >
-                <Route path=":id"
-                    errorElement={
-                        <ErrorELRouter/>
-                    }
-                    loader={
-                        async ({ params }) => {
-                            let loader1 = await Manga.getMangaByID(params.id!);
-                            return defer({
-                                loader1
-                            })
-                        }
-                    }
-                    element={<MangaPage/>}
-                >
-                    <Route
-                        index
-                        errorElement={
-                            <ErrorELRouter/>
-                        }
-                        element={<Chapters_/>}
-                    />
-                    <Route
-                        path="covers"
-                        errorElement={
-                            <ErrorELRouter/>
-                        }
-                        element={<Covers_/>}
-                    />
-                    <Route
-                        path="related"
-                        errorElement={<ErrorELRouter/>}
-                        element={<Related_/>}
-                    />
-                </Route>
-                <Route path="random"
-                    errorElement={
-                        <ErrorELRouter/>
-                    }
-                    element={
-                        <React.Suspense
-                            fallback={
-                                <Chakra.AbsoluteCenter>
-                                    <Chakra.Spinner
-                                        size="xl"
-                                    />
-                                </Chakra.AbsoluteCenter>
+        ),
+        errorElement: (<ErrorELRouter />),
+        children: [
+            {
+                index: true,
+                element: (<Home />),
+                errorElement: (<ErrorELRouter />)
+            },
+            {
+                path: "manga",
+                errorElement: (<ErrorELRouter />),
+                children: [
+                    {
+                        path: ":id",
+                        errorElement: (<ErrorELRouter />),
+                        element: (
+                            <MangaPage />
+                        ),
+                        children: [
+                            {
+                                index: true,
+                                element: <Chapters_ />
+                            },
+                            {
+                                path: "covers",
+                                element: <Covers_ />
+                            },
+                            {
+                                path: "related",
+                                element: <Related_ />
                             }
-                        >
-                            <Await
-                                resolve={Manga.getRandom()}
-                                errorElement={<ErrorELAsync1/>}
+                        ]
+                    },
+                    {
+                        path: "random",
+                        errorElement: (<ErrorELRouter />),
+                        element: (
+                            <React.Suspense
+                                fallback={
+                                    <Chakra.AbsoluteCenter>
+                                        <Chakra.Spinner
+                                            size="xl"
+                                            color='orange.500'
+                                            thickness='4px'
+                                        />
+                                    </Chakra.AbsoluteCenter>
+                                }
                             >
-                                {(getted : Manga) => {
-                                    let navigate = useNavigate();
-                                    React.useEffect(() => {
-                                        navigate(MangaDexPath + "manga/" + getted.get_id());
-                                    });
-                                    return (<></>);
-                                }}
-                            </Await>
-                        </React.Suspense>
+                                <Await
+                                    resolve={Manga.getRandom()}
+                                    errorElement={<ErrorELAsync1 />}
+                                >
+                                    {(getted1: Manga) => {
+                                        let navigate = useNavigate();
+                                        React.useEffect(() => {
+                                            /*navigate(MangaDexPath + "/manga/" + getted.get_id(), {
+                                                replace : true
+                                            });*/
+                                            redirect(MangaDexPath + "/manga/" + getted1.get_id())
+                                        });
+                                        return (<></>);
+                                    }}
+                                </Await>
+                            </React.Suspense>
+                        )
                     }
-                >
-                </Route>
-            </Route>
-            <Route
-                path='chapter'
-                errorElement={<ErrorELRouter/>}
-            >
-                <Route
-                    path=':id'
-                    errorElement={<ErrorELRouter/>}
-                    element={
-                        <Chapter_Page/>
+                ]
+            },
+            {
+                path: "chapter",
+                errorElement: (<ErrorELRouter />),
+                children: [
+                    {
+                        path: ":id",
+                        errorElement: (<ErrorELRouter />),
+                        element: (
+                            <Chapter_Page />
+                        )
                     }
-
-                >
-                </Route>
-            </Route>
-            <Route
-                path="download"
-                element={
+                ]
+            },
+            {
+                path: "download",
+                errorElement: (<ErrorELRouter />),
+                element: (
                     <Container>
-                        <DownloadsLaoyut/>
+                        <DownloadsLaoyut />
                     </Container>
-                }
-            >
-                
-            </Route>
-        </Route>
-    )
-);
-app.render(
-    <>
-        <Chakra.ChakraProvider>
-            <Chakra.Box
-                fontFamily={"Poppins"}
-            >
-                <RouterProvider 
-                    router={router}
-                    fallbackElement={
-                        <Chakra.AbsoluteCenter>
-                            <Chakra.Spinner 
-                                size="xl"
-                                color='orange.500'
-                                thickness='4px'
-                            />
-                        </Chakra.AbsoluteCenter>
-                    }
-                />
-            </Chakra.Box>
-            
-        </Chakra.ChakraProvider>
-    </>
-);
+                ),
+                children: [
+
+                ]
+            },
+
+        ]
+    }
+
+    return Router;
+}
+
+export default useMangadexRouter;

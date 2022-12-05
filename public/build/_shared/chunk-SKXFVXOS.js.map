@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../app/context.tsx"],
-  "sourcesContent": ["// context.tsx\nimport React, { createContext } from 'react'\n\nexport interface ServerStyleContextData {\n  key: string\n  ids: Array<string>\n  css: string\n}\n\nexport const ServerStyleContext = createContext<ServerStyleContextData[] | null>(null)\n\nexport interface ClientStyleContextData {\n  reset: () => void\n}\n\nexport const ClientStyleContext = createContext<ClientStyleContextData | null>(null)"],
-  "mappings": ";;;;;;AACA,mBAAqC;AAQ9B,IAAM,yBAAqB,4BAA+C,IAAI;AAM9E,IAAM,yBAAqB,4BAA6C,IAAI;",
-  "names": []
-}

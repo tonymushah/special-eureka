@@ -110,7 +110,8 @@
         "title": "Mangadex Desktop",
         "width": 800,
         "minWidth": 500,
-        "theme":"Light"
+        "theme":"Light",
+        "label": "main"
       }
     ]
   }

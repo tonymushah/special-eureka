@@ -29,6 +29,33 @@ export function ErrorELAsync1(props){
     )
 }
 
+export function ErrorELAsyncWithStack(props){
+    let error : any = useAsyncError();
+    return(
+        <Chakra.Alert 
+            status="error"
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            textAlign='center'
+            height={"max-content"}
+        >
+            <Chakra.AlertIcon/>
+            <Chakra.AlertTitle
+            >
+                We caught some error
+            </Chakra.AlertTitle>
+            <Chakra.AlertDescription>
+                <Chakra.Box>
+                    <Chakra.Text>Message</Chakra.Text>
+                    <Chakra.Text>{error.message!}</Chakra.Text>
+                    <Chakra.Text>{error.stack!}</Chakra.Text>
+                </Chakra.Box>
+            </Chakra.AlertDescription>
+        </Chakra.Alert>
+    )
+}
+
 export function ErrorELAsync(props){
     let error : any = useAsyncError();
     return(
@@ -50,13 +77,8 @@ export function ErrorELAsync(props){
                     <Chakra.Text>Message</Chakra.Text>
                     <Chakra.Text>{error!}</Chakra.Text>
                     <Chakra.Text>{error.message!}</Chakra.Text>
+
                 </Chakra.Box>
-                {
-                    error.detail? (<Chakra.Box>
-                        <Chakra.Text>Details</Chakra.Text>
-                        <Chakra.Text>{error.details!}</Chakra.Text>
-                    </Chakra.Box>) : (<></>)
-                }
             </Chakra.AlertDescription>
         </Chakra.Alert>
     )

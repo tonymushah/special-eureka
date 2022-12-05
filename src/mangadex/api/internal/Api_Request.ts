@@ -1,5 +1,4 @@
 import { Body, Client, getClient, HttpOptions, RequestOptions, Response } from "@tauri-apps/api/http";
-const client:Client = await getClient();
 export class Api_RequestERROR extends Error{
     protected id: string;
     protected status: number;
@@ -27,12 +26,16 @@ export class Api_RequestERROR extends Error{
 }
 export class Api_Request{
     private static url:string = "https://api.mangadex.org/";
+    private static async client(){
+        return await getClient();
+    }
     public static get_url() : string {
         return Api_Request.url;
     }
     public static async get_methods(to_use:string, options?: RequestOptions | undefined): Promise<Response<any>>{
-        var getted = client.get(Api_Request.url + to_use, options);
-        var result = await getted;
+        let client = await Api_Request.client();
+        let getted = client.get(Api_Request.url + to_use, options);
+        let result: any = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -40,8 +43,9 @@ export class Api_Request{
         }
     }
     public static async put_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined): Promise<Response<any>>{
-        var getted = client.put(Api_Request.url + to_use, body,options);
-        var result = await getted;
+        let client = await Api_Request.client();
+        let getted = client.put(Api_Request.url + to_use, body,options);
+        let result: any = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -49,8 +53,9 @@ export class Api_Request{
         }
     }
     public static async post_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined): Promise<Response<any>>{
-        var getted = client.post(Api_Request.url + to_use, body, options);
-        var result = await getted;
+        let client = await Api_Request.client();
+        let getted = client.post(Api_Request.url + to_use, body, options);
+        let result: any = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -58,8 +63,9 @@ export class Api_Request{
         }
     }
     public static async patch_methods(to_use:string, options?: RequestOptions | undefined): Promise<Response<any>>{
-        var getted = client.patch(Api_Request.url + to_use, options);
-        var result = await getted;
+        let client = await Api_Request.client();
+        let getted = client.patch(Api_Request.url + to_use, options);
+        let result: any = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -67,8 +73,9 @@ export class Api_Request{
         }
     }
     public static async delete_methods(to_use:string, options?: RequestOptions | undefined): Promise<Response<any>>{
-        var getted = client.delete(Api_Request.url + to_use, options);
-        var result = await getted;
+        let client = await Api_Request.client();
+        let getted = client.delete(Api_Request.url + to_use, options);
+        let result: any = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -76,8 +83,9 @@ export class Api_Request{
         }
     }
     public static async request_methods(httpOptions: HttpOptions): Promise<Response<any>>{
-        var getted = client.request(httpOptions);
-        var request_res : Response<any>;
+        let client = await Api_Request.client();
+        let getted = client.request(httpOptions);
+        let request_res : Response<any>;
         request_res = await getted;
         return request_res;
     }

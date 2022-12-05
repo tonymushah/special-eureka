@@ -1,7 +1,8 @@
-import { Response } from "@tauri-apps/api/http";
+import { Response, ResponseType } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
+import DeskApiRequest from "../offline/DeskApiRequest";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
 import { Group } from "./Group";
@@ -222,6 +223,80 @@ export class Chapter extends Attribute{
     public async get_current(): Promise<string>{
         return (await this.getAggregateList()).getCurrent(this.get_id());
     }
+    public static async getAOfflineChapter(chapterID : string): Promise<Chapter_withAllIncludes>{
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`);
+            return Chapter_withAllIncludes.build_W_Any(response.data.data);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async getAOfflineChapter_Data(chapterID : string) : Promise<Array<string>> {
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<{
+                data : Array<string>,
+                result : string,
+                type : string
+            }> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data`);
+            return response.data.data;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async getAOfflineChapter_Data_Saver(chapterID : string) : Promise<Array<string>> {
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<{
+                data : Array<string>,
+                result : string,
+                type : string
+            }> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data-saver`);
+            return response.data.data;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public async getOfflineChapter_Data_Saver() : Promise<Array<string>>{
+        return Chapter.getAOfflineChapter_Data_Saver(this.get_id());
+    }
+    public async getOfflineChapter_Data() : Promise<Array<string>>{
+        return Chapter.getAOfflineChapter_Data(this.get_id());
+    }
+    public static async getAOfflineChapter_Data_Image(chapterID : string, filename : string) : Promise<string> {
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data/${filename}`, {
+                responseType : ResponseType.Binary
+            });
+            if(response.ok){
+                return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
+            }else{
+                throw new Error("can't find your image");
+            }
+            
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async getAOfflineChapter_Data_Saver_Image(chapterID : string, filename : string) : Promise<string> {
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data/${filename}`, {
+                responseType : ResponseType.Binary
+            });
+            if(response.ok){
+                return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
+            }else{
+                throw new Error("can't find your image");
+            }
+            
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public async getOfflineChapter_Data_Saver_Image(filename : string) : Promise<string>{
+        return Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), filename);
+    }
+    public async getOfflineChapter_Data_Image(filename : string) : Promise<string>{
+        return Chapter.getAOfflineChapter_Data_Image(this.get_id(), filename);
+    }
 }
 export class Chapters{
     private name: string;
@@ -293,6 +368,7 @@ export class Chapters{
         }
         return false;
     }
+    
 }
 
 export class Chapter_withAllIncludes extends Chapter{

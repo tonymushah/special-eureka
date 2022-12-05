@@ -1,55 +1,293 @@
 [
-    {"name": "English", "two_letter": "en", "three_letter": "eng"},
-    {"name": "Japanese", "two_letter": "ja", "three_letter": "jpn"},
-    {"name": "Japanese (Romaji)", "two_letter": "ja-ro", "three_letter": "jpn"},
-    {"name": "Polish", "two_letter": "pl", "three_letter": "pol"},
-    {"name": "Serbo-Croatian", "two_letter": "sh", "three_letter": "hrv"},
-    {"name": "Dutch", "two_letter": "nl", "three_letter": "dut"},
-    {"name": "Italian", "two_letter": "it", "three_letter": "ita"},
-    {"name": "Russian", "two_letter": "ru", "three_letter": "rus"},
-    {"name": "German", "two_letter": "de", "three_letter": "ger"},
-    {"name": "Hungarian", "two_letter": "hu", "three_letter": "hun"},
-    {"name": "French", "two_letter": "fr", "three_letter": "fre"},
-    {"name": "Finnish", "two_letter": "fi", "three_letter": "fin"},
-    {"name": "Vietnamese", "two_letter": "vi", "three_letter": "vie"},
-    {"name": "Greek", "two_letter": "el", "three_letter": "gre"},
-    {"name": "Bulgarian", "two_letter": "bg", "three_letter": "bul"},
-    {"name": "Spanish (Es)", "two_letter": "es", "three_letter": "spa"},
-    {"name": "Portuguese (Br)", "two_letter": "pt-br", "three_letter": "por"},
-    {"name": "Portuguese (Pt)", "two_letter": "pt", "three_letter": "por"},
-    {"name": "Swedish", "two_letter": "sv", "three_letter": "swe"},
-    {"name": "Arabic", "two_letter": "ar", "three_letter": "ara"},
-    {"name": "Danish", "two_letter": "da", "three_letter": "dan"},
-    {"name": "Chinese (Simp)", "two_letter": "zh", "three_letter": "chi"},
-    {"name": "Chinese (Romaji)", "two_letter": "zh-ro", "three_letter": "chi"},
-    {"name": "Bengali", "two_letter": "bn", "three_letter": "ben"},
-    {"name": "Romanian", "two_letter": "ro", "three_letter": "rum"},
-    {"name": "Czech", "two_letter": "cs", "three_letter": "cze"},
-    {"name": "Mongolian", "two_letter": "mn", "three_letter": "mon"},
-    {"name": "Turkish", "two_letter": "tr", "three_letter": "tur"},
-    {"name": "Indonesian", "two_letter": "id", "three_letter": "ind"},
-    {"name": "Korean", "two_letter": "ko", "three_letter": "kor"},
-    {"name": "Korean (Romaji)", "two_letter": "ko-ro", "three_letter": "kor"},
-    {"name": "Spanish (LATAM)", "two_letter": "es-la", "three_letter": "spa"},
-    {"name": "Persian", "two_letter": "fa", "three_letter": "per"},
-    {"name": "Malay", "two_letter": "ms", "three_letter": "may"},
-    {"name": "Thai", "two_letter": "th", "three_letter": "tha"},
-    {"name": "Catalan", "two_letter": "ca", "three_letter": "cat"},
-    {"name": "Filipino", "two_letter": "tl", "three_letter": "fil"},
-    {"name": "Chinese (Trad)", "two_letter": "zh-hk", "three_letter": "chi"},
-    {"name": "Ukrainian", "two_letter": "uk", "three_letter": "ukr"},
-    {"name": "Burmese", "two_letter": "my", "three_letter": "bur"},
-    {"name": "Lithuanian", "two_letter": "lt", "three_letter": "lit"},
-    {"name": "Hebrew", "two_letter": "he", "three_letter": "heb"},
-    {"name": "Hindi", "two_letter": "hi", "three_letter": "hin"},
-    {"name": "Norwegian", "two_letter": "no", "three_letter": "nor"},
-    {"name": "Latin", "two_letter": "la", "three_letter": "lat"},
-    {"name": "Kazakh", "two_letter": "kk", "three_letter": "kaz"},
-    {"name": "Tamil", "two_letter": "ta", "three_letter": "tam"},
-    {"name": "Croatian", "two_letter": "hr", "three_letter": "hrv"},
-    {"name": "Esperanto", "two_letter": "eo", "three_letter": "epo"},
-    {"name": "Estonian", "two_letter": "et", "three_letter": "est"},
-    {"name": "Nepali", "two_letter": "ne", "three_letter": "nep"},
-    {"name": "Serbian", "two_letter": "sr", "three_letter": "srp"},
-    {"name": "Other", "two_letter": "null", "three_letter": "null"}
+    {
+        "name": "English",
+        "three_letter": "eng",
+        "two_letter": "en",
+        "flag_icon" : "GB"
+    },
+    {
+        "name": "Japanese",
+        "three_letter": "jpn",
+        "two_letter": "ja",
+        "flag_icon": "JP"
+    },
+    {
+        "name": "Japanese (Romaji)",
+        "three_letter": "jpn",
+        "two_letter": "ja-ro",
+        "flag_icon" : "JP"
+    },
+    {
+        "name": "Polish",
+        "three_letter": "pol",
+        "two_letter": "pl",
+        "flag_icon" : "PL"
+    },
+    {
+        "name": "Serbo-Croatian",
+        "three_letter": "hrv",
+        "two_letter": "sh",
+        "flag_icon" : "RS"
+    },
+    {
+        "name": "Dutch",
+        "three_letter": "dut",
+        "two_letter": "nl",
+        "flag_icon" : "NL"
+    },
+    {
+        "name": "Italian",
+        "three_letter": "ita",
+        "two_letter": "it",
+        "flag_icon" : "IT"
+    },
+    {
+        "name": "Russian",
+        "three_letter": "rus",
+        "two_letter": "ru",
+        "flag_icon" : "RU"
+    },
+    {
+        "name": "German",
+        "three_letter": "ger",
+        "two_letter": "de",
+        "flag_icon" : "DE"
+    },
+    {
+        "name": "Hungarian",
+        "three_letter": "hun",
+        "two_letter": "hu",
+        "flag_icon" : "HU"
+    },
+    {
+        "name": "French",
+        "three_letter": "fre",
+        "two_letter": "fr",
+        "flag_icon" : "FR"
+    },
+    {
+        "name": "Finnish",
+        "three_letter": "fin",
+        "two_letter": "fi",
+        "flag_icon" : "FI"
+    },
+    {
+        "name": "Vietnamese",
+        "three_letter": "vie",
+        "two_letter": "vi",
+        "flag_icon" : "VN"
+    },
+    {
+        "name": "Greek",
+        "three_letter": "gre",
+        "two_letter": "el",
+        "flag_icon" : "GR"
+    },
+    {
+        "name": "Bulgarian",
+        "three_letter": "bul",
+        "two_letter": "bg",
+        "flag_icon" : "BG"
+    },
+    {
+        "name": "Spanish (Es)",
+        "three_letter": "spa",
+        "two_letter": "es",
+        "flag_icon" : "ES"
+    },
+    {
+        "name": "Portuguese (Br)",
+        "three_letter": "por",
+        "two_letter": "pt-br",
+        "flag_icon" : "BR"
+    },
+    {
+        "name": "Portuguese (Pt)",
+        "three_letter": "por",
+        "two_letter": "pt",
+        "flag_icon" : "PT"
+    },
+    {
+        "name": "Swedish",
+        "three_letter": "swe",
+        "two_letter": "sv",
+        "flag_icon" : "SE"
+    },
+    {
+        "name": "Arabic",
+        "three_letter": "ara",
+        "two_letter": "ar",
+        "flag_icon" : "EH"
+    },
+    {
+        "name": "Danish",
+        "three_letter": "dan",
+        "two_letter": "da",
+        "flag_icon" : "DK"
+    },
+    {
+        "name": "Chinese (Simp)",
+        "three_letter": "chi",
+        "two_letter": "zh",
+        "flag_icon" : "CN"
+    },
+    {
+        "name": "Chinese (Romaji)",
+        "three_letter": "chi",
+        "two_letter": "zh-ro",
+        "flag_icon" : "CN"
+    },
+    {
+        "name": "Bengali",
+        "three_letter": "ben",
+        "two_letter": "bn",
+        "flag_icon" : "BD"
+    },
+    {
+        "name": "Romanian",
+        "three_letter": "rum",
+        "two_letter": "ro",
+        "flag_icon" : "RO"
+    },
+    {
+        "name": "Czech",
+        "three_letter": "cze",
+        "two_letter": "cs",
+        "flag_icon" : "CZ"
+    },
+    {
+        "name": "Mongolian",
+        "three_letter": "mon",
+        "two_letter": "mn"
+    },
+    {
+        "name": "Turkish",
+        "three_letter": "tur",
+        "two_letter": "tr"
+    },
+    {
+        "name": "Indonesian",
+        "three_letter": "ind",
+        "two_letter": "id"
+    },
+    {
+        "name": "Korean",
+        "three_letter": "kor",
+        "two_letter": "ko"
+    },
+    {
+        "name": "Korean (Romaji)",
+        "three_letter": "kor",
+        "two_letter": "ko-ro"
+    },
+    {
+        "name": "Spanish (LATAM)",
+        "three_letter": "spa",
+        "two_letter": "es-la"
+    },
+    {
+        "name": "Persian",
+        "three_letter": "per",
+        "two_letter": "fa"
+    },
+    {
+        "name": "Malay",
+        "three_letter": "may",
+        "two_letter": "ms"
+    },
+    {
+        "name": "Thai",
+        "three_letter": "tha",
+        "two_letter": "th"
+    },
+    {
+        "name": "Catalan",
+        "three_letter": "cat",
+        "two_letter": "ca"
+    },
+    {
+        "name": "Filipino",
+        "three_letter": "fil",
+        "two_letter": "tl"
+    },
+    {
+        "name": "Chinese (Trad)",
+        "three_letter": "chi",
+        "two_letter": "zh-hk"
+    },
+    {
+        "name": "Ukrainian",
+        "three_letter": "ukr",
+        "two_letter": "uk"
+    },
+    {
+        "name": "Burmese",
+        "three_letter": "bur",
+        "two_letter": "my"
+    },
+    {
+        "name": "Lithuanian",
+        "three_letter": "lit",
+        "two_letter": "lt"
+    },
+    {
+        "name": "Hebrew",
+        "three_letter": "heb",
+        "two_letter": "he"
+    },
+    {
+        "name": "Hindi",
+        "three_letter": "hin",
+        "two_letter": "hi"
+    },
+    {
+        "name": "Norwegian",
+        "three_letter": "nor",
+        "two_letter": "no"
+    },
+    {
+        "name": "Latin",
+        "three_letter": "lat",
+        "two_letter": "la"
+    },
+    {
+        "name": "Kazakh",
+        "three_letter": "kaz",
+        "two_letter": "kk"
+    },
+    {
+        "name": "Tamil",
+        "three_letter": "tam",
+        "two_letter": "ta"
+    },
+    {
+        "name": "Croatian",
+        "three_letter": "hrv",
+        "two_letter": "hr"
+    },
+    {
+        "name": "Esperanto",
+        "three_letter": "epo",
+        "two_letter": "eo"
+    },
+    {
+        "name": "Estonian",
+        "three_letter": "est",
+        "two_letter": "et"
+    },
+    {
+        "name": "Nepali",
+        "three_letter": "nep",
+        "two_letter": "ne"
+    },
+    {
+        "name": "Serbian",
+        "three_letter": "srp",
+        "two_letter": "sr"
+    },
+    {
+        "name": "Other",
+        "three_letter": "null",
+        "two_letter": "null"
+    }
 ]

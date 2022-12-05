@@ -38,7 +38,6 @@ export class User extends Attribute{
         try{
             instance.set_relationships_Wany(relationships);
         }catch(e){
-            console.log(e);
         }
         
         return instance;

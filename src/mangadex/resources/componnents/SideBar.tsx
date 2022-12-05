@@ -17,8 +17,15 @@ import { FaArchive } from 'react-icons/fa';
 import * as Offline from "../../api/offline/plugin";
 
 
+import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+
+import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
+
+import vite_logo from "/commons-res/common-icon/favicon.svg";
 
 const MangaDexPath: string = "/mangadex/";
+
+
 
 function Side_bar_error_el(props: {
     toastId: Chakra.ToastId,
@@ -176,6 +183,7 @@ export class Side_bar extends React.Component<Side_barProps>{
         this.forceUpdate();
     }
     render() {
+        
         return (
             <ProSidebar
                 toggled={this.props.toggled}
@@ -188,8 +196,8 @@ export class Side_bar extends React.Component<Side_barProps>{
             >
                 <SidebarHeader>
                     <Menu>
-                        <MenuItem onClick={this.collapse.bind(this)} icon={<img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" />}>
-                            <h4>MangaDex <span id='exit-chevron' className=' float-end'><i className='fas fa-chevron-left'></i></span></h4>
+                        <MenuItem onClick={this.collapse.bind(this)} icon={<img src={mangadex_logo} />}>
+                            <Chakra.Heading fontFamily={"inherit"} size={"md"}>MangaDex <span id='exit-chevron' className=' float-end'><i className='fas fa-chevron-left'></i></span></Chakra.Heading>
                         </MenuItem>
                     </Menu>
                 </SidebarHeader>
@@ -227,25 +235,25 @@ export class Side_bar extends React.Component<Side_barProps>{
                             <MenuItem>Latest Updates</MenuItem>
                             <MenuItem>Recently Added</MenuItem>
                             <MenuItem>
-                                <Link to="/mangadex/manga/random">
+                                <Link to="/mangadex/manga/random" replace={true} >
                                     Random
                                 </Link></MenuItem>
                             <MenuItem>Suggestive</MenuItem>
                         </SubMenu>
                         <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='fas fa-cog fa-spin'></i>} title={"Powerred by "}>
                             <ExtLink href="https://tauri.app">
-                                <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/Square30x30Logo.png" />}>
-                                    Tauri Apps
+                                <MenuItem icon={<img id="tauri_icon" src={tauri_logo} />}>
+                                    Tauri Apps <ChakraIcons.ExternalLinkIcon/>
                                 </MenuItem>
                             </ExtLink>
                             <ExtLink href="https://api.mangadex.org">
-                                <MenuItem icon={<img id="tauri_icon" src="/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" />}>
-                                    Mangadex API
+                                <MenuItem icon={<img id="tauri_icon" src={mangadex_logo} />}>
+                                    Mangadex API <ChakraIcons.ExternalLinkIcon/>
                                 </MenuItem>
                             </ExtLink>
                             <ExtLink href="https://vitejs.dev">
-                                <MenuItem icon={<img id="tauri_icon" src="/commons-res/common-icon/favicon.svg" width="28px" />}>
-                                    Vite
+                                <MenuItem icon={<img id="tauri_icon" src={vite_logo} width="28px" />}>
+                                    Vite <ChakraIcons.ExternalLinkIcon/>
                                 </MenuItem>
                             </ExtLink>
                         </SubMenu>
@@ -394,7 +402,7 @@ export function Modal_Search(props: Modal_SearchProps) {
                                 placeholder="Search"
                                 onChange={formik.handleChange}
                                 name={"title"}
-                                variant='flushed'
+                                letiant='flushed'
                             />
                             <Chakra.IconButton
                                 type="submit"

@@ -1,5 +1,7 @@
 import { getClient, Response } from "@tauri-apps/api/http";
 import { Author } from "../structures/Author";
+import langs from "../../resources/json/lang.json";
+
 
 export class And_Or{
     private static AND: string = "AND";
@@ -715,9 +717,9 @@ export class Languages{
     }
     public static async initialize(): Promise<Languages>{
         let array: Array<Lang> = [];
-        var res : Response<any> = await (await getClient()).get("http://localhost:9305/mangadex/resources/json/lang.json");
+        var res = langs;
         let index: number = 0;
-        res.data.forEach(element => {
+        res.forEach(element => {
             array[index] = new Lang(element.name, element.two_letter, element.three_letter);
             index = index + 1;
         });

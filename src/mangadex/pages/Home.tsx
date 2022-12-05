@@ -24,7 +24,7 @@ function Home(props){
             >
               <Chakra.Alert 
                 status={"info"} 
-                variant={"top-accent"}
+                letiant={"top-accent"}
                 flexDirection='column'
                 alignItems='center'
                 justifyContent='center'
