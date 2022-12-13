@@ -1,5 +1,7 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
+import "/commons-res/bootstrap.css";
+import "/commons-res/fontawesome-free-6.1.2-web/css/all.css"
 
 export default function App(){
     const Navigator = React.lazy(() => import("./commons-res/components/Navigator_Default"));

@@ -18,7 +18,8 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "allowJs": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   },
-  "include": ["dist"]
+  "include": ["./dist"],
+  "exclude": []
 }

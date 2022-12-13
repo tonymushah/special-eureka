@@ -15,6 +15,9 @@ import MangaPage, { Chapters_, Covers_, Related_ } from "./pages/MangaPage"
 import DownloadsLaoyut from './pages/download/layout';
 import Chapter_Page from './pages/Chapter_Page';
 import { listen, UnlistenFn } from '@tauri-apps/api/event'
+import "./resources/css/basic-styles.css"
+import "./resources/css/manga/thumbail-mg.css"
+import "./resources/css/manga/CardsStyles.css"
 
 export function useMangadexEvent() : [boolean, Function] {
 const toast = Chakra.useToast();
@@ -155,7 +158,7 @@ function useMangadexRouter(): RouteObject{
         children: [
             {
                 index: true,
-                element: (<Home />),
+                element: (<></>),
                 errorElement: (<ErrorELRouter />)
             },
             {

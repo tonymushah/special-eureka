@@ -81,7 +81,7 @@ export class Cover extends Attribute{
         updatedAt: string,
         relationships: Array<Attribute>
     ): Cover{
-        var instance : Cover = new Cover(
+        let instance : Cover = new Cover(
             id,
             description,
             volume,
@@ -103,7 +103,7 @@ export class Cover extends Attribute{
         updatedAt: string,
         relationship: any
     ): Cover{
-        var instance : Cover = new Cover(
+        let instance : Cover = new Cover(
             id,
             description,
             volume,
@@ -122,9 +122,9 @@ export class Cover extends Attribute{
     public static build_withAny(
         object: any
     ): Cover{
-        var attributes = object.attributes;
-        var relationships = object.relationships;
-        var instance = new Cover(
+        let attributes = object.attributes;
+        let relationships = object.relationships;
+        let instance = new Cover(
             object.id,
             attributes.description,
             attributes.volume,
@@ -141,8 +141,8 @@ export class Cover extends Attribute{
         return instance;
     }
     public static async getOnlineByID(id: string): Promise<Cover>{
-        var getted = await Api_Request.get_methods("cover/" + id);
-        var instance = Cover.build_withAny(getted.data.data);
+        let getted = await Api_Request.get_methods("cover/" + id);
+        let instance = Cover.build_withAny(getted.data.data);
         return instance;
     }
     // [ ] get a cover by his id 
@@ -215,7 +215,7 @@ export class Cover extends Attribute{
             "includes[]": (includes),
             ...order?.render()
         };
-        var getted: Response<any> = await Api_Request.get_methods("cover" + "?" + 
+        let getted: Response<any> = await Api_Request.get_methods("cover" + "?" + 
             serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" +
             serialize((new Querry_list_builder<string>("uploaders", uploaders!)).build()) + "&" +
             serialize((new Querry_list_builder<string>("manga", mangaIDs!)).build()) + "&" + 
@@ -223,8 +223,8 @@ export class Cover extends Attribute{
         , {
             query: querys
         });
-        var data: Array<any> = getted.data.data;
-        var mangaArray: Array<Cover> = new Array<Cover>(data.length);
+        let data: Array<any> = getted.data.data;
+        let mangaArray: Array<Cover> = new Array<Cover>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Cover.build_withAny(data[index]);
         }

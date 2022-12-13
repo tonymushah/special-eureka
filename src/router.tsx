@@ -1,10 +1,22 @@
 import React from "react";
 import Index_Page from "./index_page";
-import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
+import { Await, createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
 import ReactHotkeys from "react-hot-keys";
 
 import useMangadexRouter, { useMangadexEvent } from "./mangadex/index";
+import { invoke } from "@tauri-apps/api/tauri";
+
+function Close_splashscreen() {
+    return (
+        <React.Suspense>
+            <Await
+                resolve={invoke("close_splashscreen")}
+            >
+            </Await>
+        </React.Suspense>
+    );
+}
 
 export default function Router() {
     
@@ -70,6 +82,7 @@ export default function Router() {
                     </Chakra.AbsoluteCenter>
                 }
             />
+            <Close_splashscreen/>
         </>
     )
 }

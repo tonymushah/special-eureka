@@ -30,14 +30,14 @@ export class Volume{
         this.set_chapters(chapters);
     }
     public static build_wANY(object: any): Volume{
-        var chapters_getted: any = object.chapters;
-        var chapters_getted_length: number = 0;
+        let chapters_getted: any = object.chapters;
+        let chapters_getted_length: number = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
                 chapters_getted_length = chapters_getted_length + 1;
             }
         }
-        var chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
+        let chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
         let index: number = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
@@ -45,18 +45,18 @@ export class Volume{
                 index = index + 1;
             }
         }
-        var instance: Volume = new Volume(object.volume, object.count, chapters);
+        let instance: Volume = new Volume(object.volume, object.count, chapters);
         return instance;
     }
     public static async build_wANY2(object: any): Promise<Volume>{
-        var chapters_getted: any = object.chapters;
-        var chapters_getted_length: number = 0;
+        let chapters_getted: any = object.chapters;
+        let chapters_getted_length: number = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
                 chapters_getted_length = chapters_getted_length + 1;
             }
         }
-        var chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
+        let chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
         let index: number = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
@@ -64,7 +64,7 @@ export class Volume{
                 index = index + 1;
             }
         }
-        var instance: Volume = new Volume(object.volume, object.count, chapters);
+        let instance: Volume = new Volume(object.volume, object.count, chapters);
         return instance;
     }
     public getNext(id: string): string | boolean{

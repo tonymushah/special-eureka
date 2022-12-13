@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "bun run build",
+    "beforeDevCommand": "bun run dev",
     "devPath": "http://localhost:9305",
     "distDir": "../dist",
     "withGlobalTauri": true
@@ -70,6 +70,9 @@
       "deb": {
         "depends": []
       },
+      "appimage": {
+        "bundleMediaFramework": false
+      },
       "externalBin": [],
       "icon": [
         "icons/32x32.png",
@@ -111,7 +114,17 @@
         "width": 800,
         "minWidth": 500,
         "theme":"Light",
-        "label": "main"
+        "label": "main",
+        "url": "index.html",
+        "visible": false
+      },
+      {
+        "width": 600,
+        "height": 400,
+        "decorations": false,
+        "url": "splashscreen.html",
+        "label": "splashscreen",
+        "center": true
       }
     ]
   }

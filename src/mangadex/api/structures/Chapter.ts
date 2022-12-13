@@ -1,7 +1,7 @@
 import { Response, ResponseType } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
+import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize, Lang, Languages } from "../internal/Utils";
 import DeskApiRequest from "../offline/DeskApiRequest";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
@@ -106,9 +106,9 @@ export class Chapter extends Attribute{
         this.set_publishAt(publishAt);
     }
     public static build_W_Any(object: any): Chapter{
-        var attributes :any = object.attributes;
-        var relationships: any = object.relationships;
-        var instance: Chapter = new Chapter(
+        let attributes :any = object.attributes;
+        let relationships: any = object.relationships;
+        let instance: Chapter = new Chapter(
             object.id,
             attributes.title,
             attributes.pages,
@@ -131,58 +131,70 @@ export class Chapter extends Attribute{
         return instance;
     }
     public static async get_ChapterbyId(id: string): Promise<Chapter> {
-        var getted: Response<any> = await Api_Request.get_methods("chapter/" + id);
-        var instance: Chapter = Chapter.build_W_Any(getted.data.data);
-        return instance;
+        if(await DeskApiRequest.ping() == true){
+            try {
+                return await Chapter.getAOfflineChapter(id);
+            } catch (error) {
+                let getted: Response<any> = await Api_Request.get_methods("chapter/" + id);
+                let instance: Chapter = Chapter.build_W_Any(getted.data.data);
+                return instance;
+            }
+        }else{
+            let getted: Response<any> = await Api_Request.get_methods("chapter/" + id);
+            let instance: Chapter = Chapter.build_W_Any(getted.data.data);
+            return instance;
+        }
     }
-    public static async search_chapter(
-        offset_limits: Offset_limits = new Offset_limits(),
-        ids?: Array<string>,
-        title?: string,
-        group?: Array<string>,
-        uploader?: any,
-        manga?: string,
-        volume?: any,
-        translatedLanguage?: Array<string>,
-        originalLanguage?: Array<string>,
-        excludedOriginalLanguage?: Array<string>,
-        content_rating?: Array<string>,
-        excludedGroup?: Array<string>,
-        excludedUploaders?: Array<string>,
-        includeFutureUpdates?: number,
-        createdAtSince?: string,
-        updatedAtSince?: string,
-        publishAtSince?: string,
-        order? : Order,
-        includes?: string
+    public static async search_chapter(props : 
+        {
+            offset_limits: Offset_limits,
+            ids?: Array<string>,
+            title?: string,
+            group?: Array<string>,
+            uploader?: any,
+            manga?: string,
+            volume?: any,
+            translatedLanguage?: Array<string>,
+            originalLanguage?: Array<string>,
+            excludedOriginalLanguage?: Array<string>,
+            content_rating?: Array<string>,
+            excludedGroup?: Array<string>,
+            excludedUploaders?: Array<string>,
+            includeFutureUpdates?: number,
+            createdAtSince?: string,
+            updatedAtSince?: string,
+            publishAtSince?: string,
+            order? : Order,
+            includes?: string
+        }
     ): Promise<Array<Chapter>>{
         let querys: any = {
-            limit: JSON.stringify(offset_limits.get_limits()),
-            offset: JSON.stringify(offset_limits.get_offset()),
-            ...(new Querry_list_builder<string>("ids", ids!)).build(),
-            title: (title!),
-            ...(new Querry_list_builder<string>("groups", group!)).build(),
-            uploader: (uploader!),
-            manga: (manga!),
-            volume: JSON.stringify(volume!),
-            ...(new Querry_list_builder<string>("translatedLanguage", translatedLanguage!)).build(),
-            ...(new Querry_list_builder<string>("originalLanguage", originalLanguage!)).build(),
-            ...(new Querry_list_builder<string>("excludedOriginalLanguage", excludedOriginalLanguage!)).build(),
-            ...(new Querry_list_builder<string>("contentRating", content_rating!)).build(),
-            ...(new Querry_list_builder<string>("excludedGroup", excludedGroup!)).build(),
-            ...(new Querry_list_builder<string>("excludedUploaders", excludedUploaders!)).build(),
-            includeFutureUpdates: (includeFutureUpdates!),
-            createdAtSince: (createdAtSince!),
-            updatedAtSince: (updatedAtSince!),
-            publishAtSince: (publishAtSince!),
-            ...order?.render(),
-            "includes[]": (includes!)
+            limit: JSON.stringify(props.offset_limits.get_limits()),
+            offset: JSON.stringify(props.offset_limits.get_offset()),
+            ...(new Querry_list_builder<string>("ids", props.ids!)).build(),
+            title: (props.title!),
+            ...(new Querry_list_builder<string>("groups", props.group!)).build(),
+            uploader: (props.uploader!),
+            manga: (props.manga!),
+            volume: JSON.stringify(props.volume!),
+            ...(new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build(),
+            ...(new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build(),
+            ...(new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build(),
+            ...(new Querry_list_builder<string>("contentRating", props.content_rating!)).build(),
+            ...(new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build(),
+            ...(new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build(),
+            includeFutureUpdates: (props.includeFutureUpdates!),
+            createdAtSince: (props.createdAtSince!),
+            updatedAtSince: (props.updatedAtSince!),
+            publishAtSince: (props.publishAtSince!),
+            ...props.order?.render(),
+            "includes[]": (props.includes!)
         }
-        var getted: Response<any> = await Api_Request.get_methods("chapter", {
+        let getted: Response<any> = await Api_Request.get_methods("chapter", {
             query: querys
         });
-        var data: Array<any> = getted.data.data;
-        var mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+        let data: Array<any> = getted.data.data;
+        let mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
@@ -263,30 +275,14 @@ export class Chapter extends Attribute{
     }
     public static async getAOfflineChapter_Data_Image(chapterID : string, filename : string) : Promise<string> {
         if(await DeskApiRequest.ping() == true){
-            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data/${filename}`, {
-                responseType : ResponseType.Binary
-            });
-            if(response.ok){
-                return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
-            }else{
-                throw new Error("can't find your image");
-            }
-            
+            return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
     public static async getAOfflineChapter_Data_Saver_Image(chapterID : string, filename : string) : Promise<string> {
         if(await DeskApiRequest.ping() == true){
-            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data/${filename}`, {
-                responseType : ResponseType.Binary
-            });
-            if(response.ok){
-                return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
-            }else{
-                throw new Error("can't find your image");
-            }
-            
+            return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
         }else{
             throw new Error("The offline server isn't started");
         }
@@ -296,6 +292,29 @@ export class Chapter extends Attribute{
     }
     public async getOfflineChapter_Data_Image(filename : string) : Promise<string>{
         return Chapter.getAOfflineChapter_Data_Image(this.get_id(), filename);
+    }
+    public static async getAll_downloaded_chap() : Promise<Array<string>> {
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<{
+                result : string,
+                type : string, 
+                data : Array<string>
+            }> = await DeskApiRequest.get_methods(`chapter/all`, {
+                responseType : ResponseType.JSON
+            });
+            return response.data.data;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public async get_translated_Lang() : Promise<Lang>{
+        return await (await Languages.initialize()).getLang_byTwo_letter(this.get_translatedLanguage());
+    }
+    public get_manga_id() : string{
+        return this.get_some_relationship("manga")[0].get_id();
+    }
+    public async get_manga() : Promise<Manga>{
+        return Manga.getMangaByID(this.get_manga_id());
     }
 }
 export class Chapters{
@@ -333,7 +352,7 @@ export class Chapters{
         this.set_count(count);
     }
     public async initialize_chapters(){
-        var to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
+        let to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
         for (let index = 0; index < to_input.length; index++) {
             to_input[index] = await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index]);
         }
@@ -344,16 +363,16 @@ export class Chapters{
         return this.get_chapters();
     }
     public static build_wANY(object: any): Chapters{
-        var ids: Array<string> = [object.id];
-        var others: Array<any> = object.others;
+        let ids: Array<string> = [object.id];
+        let others: Array<any> = object.others;
         for (let index = 0; index < others.length; index++) {
             ids.push(others[index]);
         }
-        var instance: Chapters = new Chapters(object.chapter, ids, object.count);
+        let instance: Chapters = new Chapters(object.chapter, ids, object.count);
         return instance;
     }
     public static async build_wANY2(object: any): Promise<Chapters>{
-        var instance: Chapters = Chapters.build_wANY(object);
+        let instance: Chapters = Chapters.build_wANY(object);
         await instance.initialize_chapters();
         return instance;
     }
@@ -390,8 +409,32 @@ export class Chapter_withAllIncludes extends Chapter{
     public get_uploader(): User{
         return this.uploader;
     }
-    public get_manga(): Manga{
-        return this.manga;
+    public get_userUploader(): Promise<User> {
+        return new Promise((resolve, reject) => {
+            try{
+                resolve(this.get_uploader())
+            }catch(e){
+                reject(e);
+            }
+        });
+    }
+    public get_groupUploaders(): Promise<Group[]> {
+        return new Promise((resolve, reject) => {
+            try{
+                resolve(this.get_groups());
+            }catch(e){
+                reject(e)
+            }
+        });
+    }
+    public get_manga(): Promise<Manga>{
+        return new Promise((resolve, reject) => {
+            try{
+                resolve(this.manga)
+            }catch(e){
+                reject(e)
+            }
+        });
     }
     public constructor(
         id: string,
@@ -413,9 +456,9 @@ export class Chapter_withAllIncludes extends Chapter{
         )
     }
     public static build_W_Any(object: any): Chapter_withAllIncludes{
-        var attributes :any = object.attributes;
-        var relationships: any = object.relationships;
-        var instance: Chapter_withAllIncludes = new Chapter_withAllIncludes(
+        let attributes :any = object.attributes;
+        let relationships: any = object.relationships;
+        let instance: Chapter_withAllIncludes = new Chapter_withAllIncludes(
             object.id,
             attributes.title,
             attributes.pages,
@@ -463,13 +506,13 @@ export class Chapter_withAllIncludes extends Chapter{
         return instance;
     }
     public static async get_ChapterbyId(id: string): Promise<Chapter_withAllIncludes> {
-        var getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
+        let getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
                 "includes[0]" : "manga",
                 "includes[1]" : "user",
                 "includes[2]" : "scanlation_group"
             }), {
         });
-        var instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
+        let instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
         return instance;
     }
 }

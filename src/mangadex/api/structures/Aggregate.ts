@@ -26,13 +26,13 @@ export class Aggregate{
         this.set_volumes(volumes);
     }
     public static build_wANY(object: any): Aggregate{
-        var volumes_length: number = 0;
+        let volumes_length: number = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
                 volumes_length = volumes_length + 1;
             }
         }
-        var volumes_: Array<Volume> = new Array<Volume>(volumes_length);
+        let volumes_: Array<Volume> = new Array<Volume>(volumes_length);
         let index: number = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -40,17 +40,17 @@ export class Aggregate{
                 index = index + 1;
             }
         }
-        var instance: Aggregate = new Aggregate(volumes_length, volumes_);
+        let instance: Aggregate = new Aggregate(volumes_length, volumes_);
         return instance;
     }
     public static async build_wANY2(object: any): Promise<Aggregate>{
-        var volumes_length: number = 0;
+        let volumes_length: number = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
                 volumes_length = volumes_length + 1;
             }
         }
-        var volumes_: Array<Volume> = new Array<Volume>(volumes_length);
+        let volumes_: Array<Volume> = new Array<Volume>(volumes_length);
         let index: number = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -58,7 +58,7 @@ export class Aggregate{
                 index = index + 1;
             }
         }
-        var instance: Aggregate = new Aggregate(volumes_length, volumes_);
+        let instance: Aggregate = new Aggregate(volumes_length, volumes_);
         return instance;
     }
     public static async get_aggregate({
@@ -70,7 +70,7 @@ export class Aggregate{
         translatedLanguage?: Array<string>,
         groups? : Array<string>
     }): Promise<Aggregate>{
-        var getted: Response<any> = await Api_Request.get_methods(
+        let getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + mangaID + "/aggregate",
             {
                 query: {

@@ -158,112 +158,134 @@
     {
         "name": "Mongolian",
         "three_letter": "mon",
-        "two_letter": "mn"
+        "two_letter": "mn",
+        "flag_icon" : "mn"
     },
     {
         "name": "Turkish",
         "three_letter": "tur",
-        "two_letter": "tr"
+        "two_letter": "tr",
+        "flag_icon" : "TR"
     },
     {
         "name": "Indonesian",
         "three_letter": "ind",
-        "two_letter": "id"
+        "two_letter": "id",
+        "flag_icon" : "ID"
     },
     {
         "name": "Korean",
         "three_letter": "kor",
-        "two_letter": "ko"
+        "two_letter": "ko",
+        "flag_icon" : "KR"
     },
     {
         "name": "Korean (Romaji)",
         "three_letter": "kor",
-        "two_letter": "ko-ro"
+        "two_letter": "ko-ro",
+        "flag_icon" : "KR"
     },
     {
         "name": "Spanish (LATAM)",
         "three_letter": "spa",
-        "two_letter": "es-la"
+        "two_letter": "es-la",
+        "flag_icon" : "ES"
     },
     {
         "name": "Persian",
         "three_letter": "per",
-        "two_letter": "fa"
+        "two_letter": "fa",
+        "flag_icon" : "IR"
     },
     {
         "name": "Malay",
         "three_letter": "may",
-        "two_letter": "ms"
+        "two_letter": "ms",
+        "flag_icon" : "MY"
     },
     {
         "name": "Thai",
         "three_letter": "tha",
-        "two_letter": "th"
+        "two_letter": "th",
+        "flag_icon" : "TH"
     },
     {
         "name": "Catalan",
         "three_letter": "cat",
-        "two_letter": "ca"
+        "two_letter": "ca",
+        "flag_icon" : "AD"
     },
     {
         "name": "Filipino",
         "three_letter": "fil",
-        "two_letter": "tl"
+        "two_letter": "tl",
+        "flag_icon" : "PH"
     },
     {
         "name": "Chinese (Trad)",
         "three_letter": "chi",
-        "two_letter": "zh-hk"
+        "two_letter": "zh-hk",
+        "flag_icon" : "CN"
     },
     {
         "name": "Ukrainian",
         "three_letter": "ukr",
-        "two_letter": "uk"
+        "two_letter": "uk",
+        "flag_icon" : "UA"
     },
     {
         "name": "Burmese",
         "three_letter": "bur",
-        "two_letter": "my"
+        "two_letter": "my",
+        "flag_icon" : "MM"
     },
     {
         "name": "Lithuanian",
         "three_letter": "lit",
-        "two_letter": "lt"
+        "two_letter": "lt",
+        "flag_icon" : "LT"
     },
     {
         "name": "Hebrew",
         "three_letter": "heb",
-        "two_letter": "he"
+        "two_letter": "he",
+        "flag_icon" : "IL"
     },
     {
         "name": "Hindi",
         "three_letter": "hin",
-        "two_letter": "hi"
+        "two_letter": "hi",
+        "flag_icon" : "IN"
     },
     {
         "name": "Norwegian",
         "three_letter": "nor",
-        "two_letter": "no"
+        "two_letter": "no",
+        "flag_icon" : "NO"
     },
     {
         "name": "Latin",
         "three_letter": "lat",
-        "two_letter": "la"
+        "two_letter": "la",
+        "flag_icon" : "IT"
     },
     {
         "name": "Kazakh",
         "three_letter": "kaz",
-        "two_letter": "kk"
+        "two_letter": "kk",
+        "flag_icon" : "KZ"
     },
     {
         "name": "Tamil",
         "three_letter": "tam",
-        "two_letter": "ta"
+        "two_letter": "ta",
+        "flag_icon" : "IN"
     },
     {
         "name": "Croatian",
         "three_letter": "hrv",
-        "two_letter": "hr"
+        "two_letter": "hr",
+        "flag_icon" : "HR"
     },
     {
         "name": "Esperanto",
@@ -273,17 +295,20 @@
     {
         "name": "Estonian",
         "three_letter": "est",
-        "two_letter": "et"
+        "two_letter": "et",
+        "flag_icon" : "EE"
     },
     {
         "name": "Nepali",
         "three_letter": "nep",
-        "two_letter": "ne"
+        "two_letter": "ne",
+        "flag_icon" : "NP"
     },
     {
         "name": "Serbian",
         "three_letter": "srp",
-        "two_letter": "sr"
+        "two_letter": "sr",
+        "flag_icon" : "RS"
     },
     {
         "name": "Other",

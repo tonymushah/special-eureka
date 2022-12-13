@@ -195,7 +195,7 @@ export class Offset_limits{
         this.set_offset(0);
     }
     public static build(limits: number, offset: number): Offset_limits{
-        var instance: Offset_limits = new Offset_limits();
+        let instance: Offset_limits = new Offset_limits();
         instance.set_limits(limits);
         instance.set_offset(offset);
         return instance;
@@ -221,7 +221,7 @@ export class Author_Artists{
     }
     public initialise_filtred(){
         this.filtred = [];
-        var authors: Array<Author> = this.authors;
+        let authors: Array<Author> = this.authors;
         for (const key in this.artists) {
             if (Object.prototype.hasOwnProperty.call(this.artists, key)) {
                 const element = this.artists[key];
@@ -678,6 +678,10 @@ export class Lang{
     private name: string;
     private two_letter: string;
     private three_letter: string;
+    private flag_icon : string;
+    public set_flag_icon(flag_icon : string){
+        this.flag_icon = flag_icon;
+    }
     public set_name(name: string){
         this.name = name;
     }
@@ -697,10 +701,14 @@ export class Lang{
     public get_three_letter(): string{
         return this.three_letter;
     }
-    public constructor(name: string, two_letter: string, three_letter: string){
+    public get_flag_icon(): string{
+        return this.flag_icon;
+    }
+    public constructor(name: string, two_letter: string, three_letter: string, flag_icon : string){
         this.set_name(name);
         this.set_two_letter(two_letter);
         this.set_three_letter(three_letter);
+        this.set_flag_icon(flag_icon);
     }
 }
 export class Languages{
@@ -717,10 +725,10 @@ export class Languages{
     }
     public static async initialize(): Promise<Languages>{
         let array: Array<Lang> = [];
-        var res = langs;
+        let res = langs;
         let index: number = 0;
         res.forEach(element => {
-            array[index] = new Lang(element.name, element.two_letter, element.three_letter);
+            array[index] = new Lang(element.name, element.two_letter, element.three_letter, element.flag_icon!);
             index = index + 1;
         });
         return new Languages(array);
@@ -744,7 +752,7 @@ export class Languages{
         throw new Error("can't find lang by : " + two_letter);
     }
     public getLang_byThree_letter(three_letter: string): Array<Lang>{
-            var array : Array<Lang>= [];
+            let array : Array<Lang>= [];
             let array_i : number = 0;
             for (let index = 0; index < this.langs.length; index++) {
                 const selected_lang = this.langs[index];
@@ -947,8 +955,8 @@ export class Querry_list_builder<T>{
 }
 
 export const serialize = function(obj: any) : string{
-  var str = [];
-  for (var p in obj)
+  let str = [];
+  for (let p in obj)
     if (obj.hasOwnProperty(p)) {
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }

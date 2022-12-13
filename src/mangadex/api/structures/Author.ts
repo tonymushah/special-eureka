@@ -49,8 +49,8 @@ export class Author extends Attribute{
         return this.works;
     }
     public async build_Works(){
-        var works_length:number = this.get_relationships()!.length;
-        var works: Array<Manga> = new Array<Manga>(works_length);
+        let works_length:number = this.get_relationships()!.length;
+        let works: Array<Manga> = new Array<Manga>(works_length);
         for(let index = 0; index < works_length; index++){
             works[index] = await Manga.getMangaByID(this.get_relationships()![index].get_id());
         }
@@ -62,9 +62,9 @@ export class Author extends Attribute{
         this.set_imageUrl(imageUrl);
     }
     public static build_wANY(object: any): Author{
-        var attributes :any = object.attributes;
-        var relationships: any = object.relationships;
-        var instance: Author = new Author(
+        let attributes :any = object.attributes;
+        let relationships: any = object.relationships;
+        let instance: Author = new Author(
             object.id,
             attributes.name,
             attributes.imageUrl
@@ -183,8 +183,8 @@ export class Author extends Attribute{
     }
     public static async getAuthorById(id:string):Promise<Author>{
         try{
-            var getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id);
-            var instance: Author = Author.build_wANY(getted.data.data);
+            let getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id);
+            let instance: Author = Author.build_wANY(getted.data.data);
             return instance;
         }catch(error){
             throw new Error(error);
@@ -211,14 +211,14 @@ export class Author extends Attribute{
             name: (name),
             ...order?.render(),
         };
-        var getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + "?" + 
+        let getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + "?" + 
             serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" + 
             serialize((new Querry_list_builder<string>("includes", includes!)).build())
         , {
             query: querys
         });
-        var data: Array<any> = getted.data.data;
-        var authorArray: Array<Author> = new Array<Author>(data.length);
+        let data: Array<any> = getted.data.data;
+        let authorArray: Array<Author> = new Array<Author>(data.length);
         for (let index = 0; index < data.length; index++) {
             authorArray[index] = Author.build_wANY(data[index]);
         }

@@ -46,10 +46,10 @@ export class List extends Attribute{
         this.set_visibility(visibility);
     }
     public static build_w_any_includes_manga(object: any): List{
-        var attributes : any = object.attributes;
-        var relationships: any = object.relationships;
-        var array: Array<Manga> = [];
-        var instance : List = new List(
+        let attributes : any = object.attributes;
+        let relationships: any = object.relationships;
+        let array: Array<Manga> = [];
+        let instance : List = new List(
             object.id,
             attributes.name,
             attributes.visibility,
@@ -68,9 +68,9 @@ export class List extends Attribute{
         return instance;
     }
     public static build_w_any(object: any): List{
-        var attributes : any = object.attributes;
-        var relationships: any = object.relationships;
-        var instance : List = new List(
+        let attributes : any = object.attributes;
+        let relationships: any = object.relationships;
+        let instance : List = new List(
             object.id,
             attributes.name,
             attributes.visibility,
@@ -108,11 +108,11 @@ export class List extends Attribute{
         return RelationshipsTypes.custom_list();
     }
     public static async getListByID(id: string): Promise<List>{
-        var response: Response<any> = await Api_Request.get_methods("list/" + id);
+        let response: Response<any> = await Api_Request.get_methods("list/" + id);
         return List.build_w_any(response.data.data);
     }
     public static async getListByID_includes_manga(id: string): Promise<List>{
-        var response: Response<any> = await Api_Request.get_methods("list/" + id, {
+        let response: Response<any> = await Api_Request.get_methods("list/" + id, {
             query : {
                 "includes[]" : "manga"
             }
@@ -125,5 +125,13 @@ export class List extends Attribute{
                 "includes[]" : "manga"
             }
         });
+    }
+    public getMangaIDList() : Array<string>{
+        let mangas_relationships : Array<Attribute> = this.get_some_relationship("manga");
+        let returns : Array<string> = [];
+        for (let index = 0; index < mangas_relationships.length; index++) {
+            returns[index] = mangas_relationships[index].get_id();
+        }
+        return returns;
     }
 }

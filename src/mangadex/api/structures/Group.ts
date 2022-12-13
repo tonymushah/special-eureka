@@ -178,9 +178,9 @@ export class Group extends Attribute{
         this.set_version(version);
     }
     public static build_wANY(object: any): Group{
-        var attributes :any = object.attributes;
-        var relationships: any = object.relationships;
-        var instance: Group = new Group(
+        let attributes :any = object.attributes;
+        let relationships: any = object.relationships;
+        let instance: Group = new Group(
             object.id,
             attributes.name,
             attributes.altNames,
@@ -210,8 +210,8 @@ export class Group extends Attribute{
     }
     public static async get_groupById(id:string): Promise<Group>{
         try {
-            var getted: Promise<Response<any>> = Api_Request.get_methods(Group.get_group_a() + id);
-            var to_use = await getted;
+            let getted: Promise<Response<any>> = Api_Request.get_methods(Group.get_group_a() + id);
+            let to_use = await getted;
             return Group.build_wANY(to_use.data.data);
         } catch (error) {
             throw new Error(error);
@@ -241,14 +241,14 @@ export class Group extends Attribute{
             "includes[]": (includes),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.get_methods("group" + "?" + 
+        let getted: Response<any> = await Api_Request.get_methods("group" + "?" + 
             serialize((new Querry_list_builder("ids", ids!)).build()) + "&" + 
             serialize((new Querry_list_builder("focusedLanguage", focusedLanguage!)).build(),) + "&" 
         , {
             query: querys
         });
-        var data: Array<any> = getted.data.data;
-        var mangaArray: Array<Group> = new Array<Group>(data.length);
+        let data: Array<any> = getted.data.data;
+        let mangaArray: Array<Group> = new Array<Group>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Group.build_wANY(data[index]);
         }

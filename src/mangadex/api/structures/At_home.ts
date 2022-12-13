@@ -57,7 +57,7 @@ export class At_Home{
         data: Array<string>, 
         dataSaver: Array<string>
     ):At_Home{
-        var instance: At_Home = new At_Home(
+        let instance: At_Home = new At_Home(
             baseUrl,
             hash,
             data,
@@ -68,7 +68,7 @@ export class At_Home{
     }
     public static build_wAny(object: any): At_Home{
         let chapter: any = object.chapter;
-        var instance: At_Home = new At_Home(
+        let instance: At_Home = new At_Home(
             object.baseUrl, 
             chapter.hash, 
             chapter.data,
@@ -95,10 +95,10 @@ export class At_Home{
             forcePort443: (forcePort443)
         }
         try{
-            var request: Promise<Response<any>> = Api_Request.get_methods("at-home/server/" + id, {
+            let request: Promise<Response<any>> = Api_Request.get_methods("at-home/server/" + id, {
                 query: querys
             })
-            var getted: Response<any> = await request;
+            let getted: Response<any> = await request;
             return At_Home.build_wAny(getted.data);
         }catch(e){
             throw new Error(e);

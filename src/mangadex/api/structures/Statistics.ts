@@ -67,8 +67,8 @@ export class Statistics{
     }
     public static async get_statsBy_MangaID(id: string): Promise<Statistics>{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id);
-        var stats_not_TS: any = (responses.data.statistics)[id];
-        var rating: any = stats_not_TS.rating;
+        let stats_not_TS: any = (responses.data.statistics)[id];
+        let rating: any = stats_not_TS.rating;
         return new Statistics(
             id,
             stats_not_TS.follows,

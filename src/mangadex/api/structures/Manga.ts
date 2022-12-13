@@ -254,15 +254,18 @@ export class Manga extends Attribute{
     // [x] get the manga cover
     public async get_cover_art(): Promise<Cover>{
         try {
-            for (let index = 0; index < this.get_relationships()!.length; index++) {
-                const to_use = this.get_relationships()![index];
-                if(to_use.get_type() == "cover_art"){
-                    return await Cover.getById(to_use.get_id());
-                }
-            }
-            throw new Error("No cover art for this manga " + this.get_title().en);
+            return await Cover.getById(this.get_some_relationship("cover_art")[0].get_id());
         } catch (error) {
-            throw new Error("No cover art for this manga " + this.get_title().en);
+        console.log("error on manga cover_art " + this.get_id());
+            try {
+                if((await DeskApiRequest.ping()) == true){
+                    return await Manga.getOfflineMangaCover(this.get_id());
+                }else{
+                    throw new Error("No cover art for this manga " + this.get_title().en);
+                }
+            } catch (error) {
+                throw new Error("No cover art for this manga " + this.get_title().en);
+            }
         }
     }
     public static async search({
@@ -888,26 +891,31 @@ export class Manga_2 extends Manga{
         return instance;
     }
     public async get_cover_art(): Promise<Cover>{
-        let orders : Order = new Order();
-        orders.set_volume(Asc_Desc.desc());
-        try {
-            let cover = (await Cover.search(
-                {
-                    offset_Limits : new Offset_limits(),
-                    mangaIDs : [
-                        this.get_id()
-                    ],
-                    order : orders,
+        if((await DeskApiRequest.ping()) == true){
+            return await Manga.getOfflineMangaCover(this.get_id());
+        }else{
+            let orders : Order = new Order();
+            orders.set_volume(Asc_Desc.desc());
+            try {
+                let cover = (await Cover.search(
+                    {
+                        offset_Limits : new Offset_limits(),
+                        mangaIDs : [
+                            this.get_id()
+                        ],
+                        order : orders,
+                    }
+                ))
+                if (cover instanceof Array<Cover>) {
+                    return cover[0];
+                }else{
+                    throw new Error("No cover art for this manga " + this.get_title().en);
                 }
-            ))
-            if (cover instanceof Array<Cover>) {
-                return cover[0];
-            }else{
+            } catch (error) {
                 throw new Error("No cover art for this manga " + this.get_title().en);
             }
-        } catch (error) {
-            throw new Error("No cover art for this manga " + this.get_title().en);
         }
+        
     }
 }
 

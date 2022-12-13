@@ -32,9 +32,9 @@ export class User extends Attribute{
         this.set_version(version);
     }
     public static build_wANY(object: any): User{
-        var attributes :any = object.attributes;
-        var relationships: any = object.relationships;
-        var instance: User = new User(object.id, attributes.username, attributes.roles, attributes.version);
+        let attributes :any = object.attributes;
+        let relationships: any = object.relationships;
+        let instance: User = new User(object.id, attributes.username, attributes.roles, attributes.version);
         try{
             instance.set_relationships_Wany(relationships);
         }catch(e){
@@ -43,8 +43,8 @@ export class User extends Attribute{
         return instance;
     }
     public static async getUserById(id: string): Promise<User>{
-        var getted: Response<any> = await Api_Request.get_methods("user/" + id);
-        var instance: User = User.build_wANY(getted.data.data);
+        let getted: Response<any> = await Api_Request.get_methods("user/" + id);
+        let instance: User = User.build_wANY(getted.data.data);
         return instance;
     }
     public static async search( 
@@ -66,13 +66,13 @@ export class User extends Attribute{
             username: JSON.stringify(username),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.get_methods("user?" + 
+        let getted: Response<any> = await Api_Request.get_methods("user?" + 
             serialize((new Querry_list_builder("ids", ids!)).build())
         , {
             query: querys
         });
-        var data: Array<any> = getted.data.data;
-        var mangaArray: Array<User> = new Array<User>(data.length);
+        let data: Array<any> = getted.data.data;
+        let mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
@@ -99,14 +99,14 @@ export class User extends Attribute{
             username: JSON.stringify(username),
             ...order?.render()
         }
-        var getted: Response<any> = await Api_Request.get_methods("user", {
+        let getted: Response<any> = await Api_Request.get_methods("user", {
             query: querys,
             headers: {
                 Authorization: "Bearer " + token
             }
         });
-        var data: Array<any> = getted.data.data;
-        var mangaArray: Array<User> = new Array<User>(data.length);
+        let data: Array<any> = getted.data.data;
+        let mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
