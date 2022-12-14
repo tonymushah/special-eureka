@@ -6,6 +6,7 @@ import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 import DesktopApi from "../offline/DeskApiRequest";
 import DeskApiRequest from "../offline/DeskApiRequest";
+import { Collection } from "./Collection";
 
 export class Cover extends Attribute{
     private description: string;
@@ -208,7 +209,7 @@ export class Cover extends Attribute{
             order?: Order, 
             includes? : string
         }
-    ): Promise<Array<Cover>>{
+    ): Promise<Collection<Cover>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -228,7 +229,7 @@ export class Cover extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Cover.build_withAny(data[index]);
         }
-        return mangaArray;
+        return new Collection<Cover>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);;
     }
     public static async getAOfflineCover(coverId : string) : Promise<Cover>{
         if(await DesktopApi.ping() == true){

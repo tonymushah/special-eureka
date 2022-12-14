@@ -2,6 +2,7 @@ import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Attribute } from "./Attributes";
+import { Collection } from "./Collection";
 
 export class User extends Attribute{
     private username: string;
@@ -59,7 +60,7 @@ export class User extends Attribute{
             ids?: Array<string>, 
             order?: Order
         }
-    ): Promise<Array<User>>{
+    ): Promise<Collection<User>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -76,7 +77,7 @@ export class User extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
-        return mangaArray;
+        return new Collection<User>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);;
     }
     public static async search_user_wtoken(
         token: string,
@@ -91,7 +92,7 @@ export class User extends Attribute{
             ids?: Array<string>, 
             order?: Order
         }
-    ): Promise<Array<User>>{
+    ): Promise<Collection<User>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -110,7 +111,7 @@ export class User extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
-        return mangaArray;
+        return new Collection<User>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);;
     }
     public get_key_word():string{
         return RelationshipsTypes.user();

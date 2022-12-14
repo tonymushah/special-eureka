@@ -5,6 +5,7 @@ import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serializ
 import DeskApiRequest from "../offline/DeskApiRequest";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
+import { Collection } from "./Collection";
 import { Group } from "./Group";
 import { Manga, Manga_2 } from "./Manga";
 import { User } from "./User";
@@ -145,7 +146,7 @@ export class Chapter extends Attribute{
             return instance;
         }
     }
-    public static async search_chapter(props : 
+    public static async search(props : 
         {
             offset_limits: Offset_limits,
             ids?: Array<string>,
@@ -167,7 +168,7 @@ export class Chapter extends Attribute{
             order? : Order,
             includes?: string
         }
-    ): Promise<Array<Chapter>>{
+    ): Promise<Collection<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
             offset: JSON.stringify(props.offset_limits.get_offset()),
@@ -198,7 +199,7 @@ export class Chapter extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
-        return mangaArray;
+        return new Collection<Chapter>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
     }
     public async get_groupUploaders(): Promise<Array<Group>>{
         let group_atribs: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
@@ -315,6 +316,34 @@ export class Chapter extends Attribute{
     }
     public async get_manga() : Promise<Manga>{
         return Manga.getMangaByID(this.get_manga_id());
+    }
+    public get_user_id() : string{
+        return this.get_some_relationship("user")[0].get_id()
+    }
+    public get_scanlations_groups_id() : Array<string>{
+        let returns : Array<string> = new Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
+        let index = 0;
+        this.get_some_relationship(RelationshipsTypes.scanlation_group()).forEach(element => {
+            returns[index] = element.get_id();
+        });
+        return returns;
+    }
+    protected get_scanlation_group_attr_byID(id : string) : Attribute{
+        let to_compare = this.get_some_relationship(RelationshipsTypes.scanlation_group());
+        for (let index = 0; index < to_compare.length; index++) {
+            const element = to_compare[index];
+            if(element.get_id() == id){
+                return element
+            }
+        }
+        throw new Error("can't find your scanlation group attribute");
+    }
+    public async get_scanlation_group_byID(id : string): Promise<Group>{
+        try {
+            return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id());
+        } catch (error) {
+            throw error
+        }
     }
 }
 export class Chapters{
@@ -514,5 +543,74 @@ export class Chapter_withAllIncludes extends Chapter{
         });
         let instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
         return instance;
+    }
+    public static async search(props : 
+        {
+            offset_limits: Offset_limits,
+            ids?: Array<string>,
+            title?: string,
+            group?: Array<string>,
+            uploader?: any,
+            manga?: string,
+            volume?: any,
+            translatedLanguage?: Array<string>,
+            originalLanguage?: Array<string>,
+            excludedOriginalLanguage?: Array<string>,
+            content_rating?: Array<string>,
+            excludedGroup?: Array<string>,
+            excludedUploaders?: Array<string>,
+            includeFutureUpdates?: number,
+            createdAtSince?: string,
+            updatedAtSince?: string,
+            publishAtSince?: string,
+            order? : Order,
+            includes?: string
+        }
+    ): Promise<Collection<Chapter_withAllIncludes>>{
+        let querys: any = {
+            limit: JSON.stringify(props.offset_limits.get_limits()),
+            offset: JSON.stringify(props.offset_limits.get_offset()),
+            ...(new Querry_list_builder<string>("ids", props.ids!)).build(),
+            title: (props.title!),
+            ...(new Querry_list_builder<string>("groups", props.group!)).build(),
+            uploader: (props.uploader!),
+            manga: (props.manga!),
+            volume: JSON.stringify(props.volume!),
+            ...(new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build(),
+            ...(new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build(),
+            ...(new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build(),
+            ...(new Querry_list_builder<string>("contentRating", props.content_rating!)).build(),
+            ...(new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build(),
+            ...(new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build(),
+            includeFutureUpdates: (props.includeFutureUpdates!),
+            createdAtSince: (props.createdAtSince!),
+            updatedAtSince: (props.updatedAtSince!),
+            publishAtSince: (props.publishAtSince!),
+            ...props.order?.render()
+        }
+        let getted: Response<any> = await Api_Request.get_methods("chapter?" + 
+            serialize(new Querry_list_builder<string>("includes", [
+                "manga",
+                "user",
+                "scanlation_group"
+            ]).build())
+        , {
+            query: querys
+        });
+        let data: Array<any> = getted.data.data;
+        let mangaArray: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            mangaArray[index] = Chapter_withAllIncludes.build_W_Any(data[index]);
+        }
+        return new Collection<Chapter_withAllIncludes>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
+    }
+    public async get_scanlation_group_byID(id: string): Promise<Group> {
+        for (let index = 0; index < this.groups.length; index++) {
+            const element = this.groups[index];
+            if(element.get_id() == id){
+                return element;
+            }
+        }
+        throw new Error("can't find your scanlation group in this chapter");
     }
 }

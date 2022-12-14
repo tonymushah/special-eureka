@@ -2016,7 +2016,7 @@ dependencies = [
 [[package]]
 name = "mangadex-desktop-api2"
 version = "0.1.0"
-source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#5e1a1127bad32c110c3d2795fec5cbafd1c43b69"
+source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#b7ebc96e21aa0a0b0c926e2d50d9885f51cc5a0a"
 dependencies = [
  "actix-files",
  "actix-web",

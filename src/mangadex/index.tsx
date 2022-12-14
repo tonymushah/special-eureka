@@ -158,7 +158,7 @@ function useMangadexRouter(): RouteObject{
         children: [
             {
                 index: true,
-                element: (<></>),
+                element: (<Home/>),
                 errorElement: (<ErrorELRouter />)
             },
             {

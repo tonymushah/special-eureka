@@ -1,8 +1,11 @@
-export class Collection{
-    private data: Array<any>;
+import { Attribute } from "./Attributes";
+
+export class Collection<T extends Attribute>{
+    private data: Array<T>;
     private limit: number;
     private offset: number;
-    private set_data(data: Array<any>){
+    private total: number;
+    private set_data(data: Array<T>){
         this.data = data;
     }
     private set_limit(limit: number){
@@ -11,7 +14,10 @@ export class Collection{
     private set_offset(offset: number){
         this.offset = offset;
     }
-    public get_data(): Array<any>{
+    private set_total(total: number){
+        this.total = total;
+    }
+    public get_data(): Array<T>{
         return this.data;
     }
     public get_limit(): number{
@@ -20,12 +26,16 @@ export class Collection{
     public get_offset(): number{
         return this.offset;
     }
-    public constructor(data: Array<any>, limit: number, offset: number){
+    public get_total(): number{
+        return this.total;
+    }
+    public constructor(data: Array<T>, limit: number, offset: number, total: number){
         this.set_data(data);
         this.set_limit(limit);
-        this.set_offset(offset)
+        this.set_offset(offset);
+        this.set_total(total);
     }
-    public static build_with_any(to_use: any): Collection{
-        return new Collection(to_use.data, to_use.limit, to_use.offset);
+    public static build_with_any<T extends Attribute>(to_use: any): Collection<T>{
+        return new Collection<T>(to_use.data, to_use.limit, to_use.offset, to_use.total);
     }
 }

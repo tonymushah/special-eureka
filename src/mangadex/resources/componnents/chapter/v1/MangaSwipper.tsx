@@ -2,6 +2,10 @@ import React from "react"
 import { Autoplay, FreeMode, Mousewheel, Pagination } from "swiper"
 import { SwiperSlide, Swiper } from "swiper/react"
 import MangaElementDef_wID from "../../mangas/v1/MangaElementDef_wID"
+import 'swiper/css';
+import 'swiper/css/autoplay';
+import 'swiper/css/free-mode';
+import 'swiper/css/pagination';
 
 export default function MangaSwipper(props : {
     mangaIDS : Array<string>
@@ -9,13 +13,14 @@ export default function MangaSwipper(props : {
     return (
         <Swiper
             slidesPerView={"auto"}
-            spaceBetween={10}
+            spaceBetween={30}
             pagination={{
                 clickable: true,
                 dynamicBullets: true
             }}
             grabCursor={true}
             mousewheel={true}
+            autoplay={true}
             modules={[Pagination, Autoplay, Mousewheel, FreeMode]}
             breakpoints={
                 {
@@ -48,7 +53,9 @@ export default function MangaSwipper(props : {
         >
             {
                 props.mangaIDS.map((value : string) => (
-                    <SwiperSlide>
+                    <SwiperSlide
+                        key={value}
+                    >
                         <MangaElementDef_wID mangaID={value}/>
                     </SwiperSlide>
                 ))

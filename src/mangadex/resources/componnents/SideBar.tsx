@@ -22,6 +22,7 @@ import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107
 import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 
 import vite_logo from "/commons-res/common-icon/favicon.svg";
+import { Collection } from '../../api/structures/Collection';
 
 const MangaDexPath: string = "/mangadex/";
 
@@ -286,7 +287,7 @@ export class Content extends React.Component<React.PropsWithChildren>{
     render(): React.ReactNode {
         return (
             <div className='w-100 d-inline-flex'>
-                <Side_bar toggled={this.isToggled} onToggle={this.toggle}></Side_bar>
+                <Side_bar toggled={this.isToggled} onToggle={this.toggle}/>
                 <Chakra.Box
                     width={"100%"}
                     height={"100vh"}
@@ -294,7 +295,7 @@ export class Content extends React.Component<React.PropsWithChildren>{
                     overflowY={"scroll"}
                 >
                     <Chakra.Box id="top-content">
-                        <Container className="content-header">
+                        <Chakra.Box className="content-header">
                             <Navbar expand={'sm'} >
                                 <Container>
                                     <Navbar.Brand>
@@ -308,13 +309,13 @@ export class Content extends React.Component<React.PropsWithChildren>{
                                     <Navbar.Toggle className=" float-end" aria-controls='searc_bar_' />
                                     <Navbar.Collapse id="searc_bar_" className=" justify-content-end">
                                         <Nav>
-                                            <Form1></Form1>
+                                            <Form1/>
                                         </Nav>
                                     </Navbar.Collapse>
                                 </Container>
                             </Navbar>
                             <hr className="header-hr" />
-                        </Container>
+                        </Chakra.Box>
                         <Chakra.Box id="content">
                             {this.props.children}
                         </Chakra.Box>
@@ -371,11 +372,11 @@ export function Modal_Search(props: Modal_SearchProps) {
                             <ErrorELAsync1 />
                         }
                     >
-                        {(getted0: Array<Manga>) => {
+                        {(getted0: Collection<Manga>) => {
                             return (
                                 <Chakra.Box>
                                     {
-                                        getted0.map(mangas => (
+                                        getted0.get_data().map(mangas => (
                                             <MangaSimpleEl src={mangas} />
                                         ))
                                     }
@@ -402,7 +403,7 @@ export function Modal_Search(props: Modal_SearchProps) {
                                 placeholder="Search"
                                 onChange={formik.handleChange}
                                 name={"title"}
-                                letiant='flushed'
+                                variant='flushed'
                             />
                             <Chakra.IconButton
                                 type="submit"

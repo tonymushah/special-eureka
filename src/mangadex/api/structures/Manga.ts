@@ -8,6 +8,7 @@ import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder
 import { Aggregate } from "./Aggregate";
 import { Chapter, Chapter_withAllIncludes } from "./Chapter";
 import DeskApiRequest from "../offline/DeskApiRequest"
+import { Collection } from "./Collection";
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
     private title: any;
@@ -314,7 +315,7 @@ export class Manga extends Attribute{
             hasAvailableChapters? : boolean,
             latestUploadedChapter? : boolean,
             group?: string
-        }): Promise<Array<Manga>>{
+        }): Promise<Collection<Manga>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -349,7 +350,7 @@ export class Manga extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Manga.build_any(data[index]);
         }
-        return mangaArray;
+        return new Collection<Manga>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
     }
     public async get_author(): Promise<Array<Author>>{
         let authors_length: number = this.get_some_relationshipLength("author");
@@ -678,19 +679,19 @@ export class Manga extends Attribute{
             }
         });
     }
-    public async get_allCover(): Promise<Array<Cover>>{
+    public async get_allCover(): Promise<Collection<Cover>>{
         let orderss : Order = new Order();
         orderss.set_volume(Asc_Desc.asc());
         let Offset_Limits: Offset_limits = new Offset_limits();
         Offset_Limits.set_limits(100);
-        let res : Array<Cover> | Response<any> = await Cover.search(
+        let res : Collection<Cover> | Response<any> = await Cover.search(
             {
                 offset_Limits : Offset_Limits,
                 mangaIDs : [this.get_id()],
                 order : orderss
             }
         );
-        if(res instanceof Array<Cover>){
+        if(res instanceof Collection<Cover>){
             return res;
         }else{
             throw new Error("Cover list has no been loaded");
@@ -906,8 +907,8 @@ export class Manga_2 extends Manga{
                         order : orders,
                     }
                 ))
-                if (cover instanceof Array<Cover>) {
-                    return cover[0];
+                if (cover instanceof Collection<Cover>) {
+                    return cover.get_data()[0];
                 }else{
                     throw new Error("No cover art for this manga " + this.get_title().en);
                 }

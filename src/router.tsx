@@ -6,6 +6,8 @@ import ReactHotkeys from "react-hot-keys";
 
 import useMangadexRouter, { useMangadexEvent } from "./mangadex/index";
 import { invoke } from "@tauri-apps/api/tauri";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 function Close_splashscreen() {
     return (
@@ -37,52 +39,56 @@ export default function Router() {
             Mangadex
         ]
     )
-
+    const queryClient = new QueryClient();
     return (
-        <>
-            <ReactHotkeys
-                keyName="ctrl+p"
-                onKeyDown={onOpen}
-            >
-                <Chakra.Modal
-                    isOpen={isOpen}
-                    onClose={onClose}
-                >
-                    <Chakra.ModalOverlay/>
-                    <Chakra.ModalContent>
-                        <Chakra.ModalHeader>Mangadex Desktop Router Settings</Chakra.ModalHeader>
-                        <Chakra.ModalCloseButton/>
-                        <Chakra.ModalBody>
-                            <Chakra.Box>
-                                <Chakra.Text
-                                    size={"md"}
-                                >
-                                    Mangadex Event Display
-                                    &nbsp;
-                                    &nbsp;
-                                    <Chakra.Switch
-                                        isChecked={isToggled}
-                                        onChange={(event) => unlistenAll()}
-                                    />
-                                </Chakra.Text>
-                            </Chakra.Box>
-                        </Chakra.ModalBody>
-                    </Chakra.ModalContent>
-                </Chakra.Modal>
-            </ReactHotkeys>
-            <RouterProvider
-                router={router}
-                fallbackElement={
-                    <Chakra.AbsoluteCenter>
-                        <Chakra.Spinner
-                            size="xl"
-                            color='orange.500'
-                            thickness='4px'
-                        />
-                    </Chakra.AbsoluteCenter>
-                }
+        <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools
+                position={"bottom-right"}
+                initialIsOpen={false}
             />
-            <Close_splashscreen/>
-        </>
+                <ReactHotkeys
+                    keyName="ctrl+p"
+                    onKeyDown={onOpen}
+                >
+                    <Chakra.Modal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                    >
+                        <Chakra.ModalOverlay/>
+                        <Chakra.ModalContent>
+                            <Chakra.ModalHeader>Mangadex Desktop Router Settings</Chakra.ModalHeader>
+                            <Chakra.ModalCloseButton/>
+                            <Chakra.ModalBody>
+                                <Chakra.Box>
+                                    <Chakra.Text
+                                        size={"md"}
+                                    >
+                                        Mangadex Event Display
+                                        &nbsp;
+                                        &nbsp;
+                                        <Chakra.Switch
+                                            isChecked={isToggled}
+                                            onChange={(event) => unlistenAll()}
+                                        />
+                                    </Chakra.Text>
+                                </Chakra.Box>
+                            </Chakra.ModalBody>
+                        </Chakra.ModalContent>
+                    </Chakra.Modal>
+                </ReactHotkeys>
+                <RouterProvider
+                    router={router}
+                    fallbackElement={
+                        <Chakra.AbsoluteCenter>
+                            <Chakra.Spinner
+                                size="xl"
+                                color='orange.500'
+                                thickness='4px'
+                            />
+                        </Chakra.AbsoluteCenter>
+                    }
+                />
+                <Close_splashscreen/>
+        </QueryClientProvider>
     )
 }

@@ -1,30 +1,100 @@
-import { Response } from '@tauri-apps/api/http';
-import React, { useState } from 'react';
-import { Row, Spinner, Carousel, Container, Col, Alert } from 'react-bootstrap';
-import ReactDOM from 'react-dom/client';
-import { Await, useAsyncError, useAsyncValue, useLoaderData } from 'react-router-dom';
-import { Manga } from '../api/structures/Manga';
-import { ErrorELAsync } from '../resources/componnents/Error_cmp';
-import * as Chakra from "@chakra-ui/react"
-import { List } from '../api/structures/List';
-import { Manga_swipper } from '../resources/componnents/mangas/Manga_State1';
-import { Asc_Desc, Offset_limits, Order } from '../api/internal/Utils';
-import { Manga_WithLatest_Chap_01 } from '../resources/componnents/mangas/Mangafeed';
-import { Manga_swipper2 } from '../resources/componnents/mangas/Manga_State2';
+import * as Chakra from "@chakra-ui/react";
+import React from 'react';
+import { Row } from 'react-bootstrap';
+import { useQuery } from 'react-query';
+import { Offset_limits, Order } from '../api/internal/Utils';
+import { Chapter, Chapter_withAllIncludes } from '../api/structures/Chapter';
+import { Collection } from '../api/structures/Collection';
+import MangaFeedElement from '../resources/componnents/chapter/v1/MangaFeedElement';
+import ErrorEL1 from '../resources/componnents/error/ErrorEL1';
+import CustomListSwiper from '../resources/componnents/lists/v1/CustomListSwiper';
 
-function Home(props){
+function Latest_Updates(){
+  const offset_limits_2 : Offset_limits = new Offset_limits();
+  offset_limits_2.set_limits(12);
+  const key = "mdx-home_page-latest_update";
+  const query = useQuery<Collection<Chapter_withAllIncludes>>(key, () => {
+    return Chapter_withAllIncludes.search({
+      offset_limits: offset_limits_2,
+      order: new Order("desc")
+    })
+  }, {
+    staleTime : Infinity
+  })
+  if(query.isLoading){
+    return (
+      <Chakra.Box>
+        <Chakra.Heading>Latest Updates</Chakra.Heading>
+        <Chakra.Button
+          colorScheme={"orange"}
+          onClick={() => query.refetch()}
+        >
+          Refetch
+        </Chakra.Button>
+        <Chakra.Box
+          marginTop={"25px"}
+          marginBottom={"25px"}
+        >
+          <Chakra.Center>
+            <Chakra.Spinner
+              size="xl"
+              color='orange.500'
+              thickness='4px'
+            />
+          </Chakra.Center>
+        </Chakra.Box>
+      </Chakra.Box>
+    )
+  }
+  if(query.isError){
+    return (
+      <Chakra.Box>
+        <Chakra.Heading>Latest Updates</Chakra.Heading>
+        <Chakra.Button
+          colorScheme={"orange"}
+          onClick={() => query.refetch()}
+        >
+          Refetch
+        </Chakra.Button>
+        <ErrorEL1 error={query.data}/>
+      </Chakra.Box>
+    )
+  }
+  return (
+    <Chakra.Box>
+      <Chakra.Heading>Latest Updates</Chakra.Heading>
+        <Chakra.Button
+          colorScheme={"orange"}
+          onClick={() => query.refetch()}
+        >
+          Refetch
+        </Chakra.Button>
+        <Chakra.Wrap>
+          {query.data!.get_data().map((value : Chapter) => (
+            <Chakra.WrapItem>
+              <MangaFeedElement src={value}/>
+            </Chakra.WrapItem>
+          ))}
+        </Chakra.Wrap>
+    </Chakra.Box>
+  )
+}
+
+function Home(){
     let offset_limits_1 : Offset_limits = new Offset_limits();
     offset_limits_1.set_limits(20);
-    let offset_limits_2 : Offset_limits = new Offset_limits();
-    offset_limits_2.set_limits(30);
+    
+    const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
     return (
-        <Container>
+        <Chakra.Box
+         margin={2}
+        >
             <Row 
               className=" d-block"
             >
               <Chakra.Alert 
                 status={"info"} 
-                letiant={"top-accent"}
+                variant={"top-accent"}
                 flexDirection='column'
                 alignItems='center'
                 justifyContent='center'
@@ -50,147 +120,19 @@ function Home(props){
                 </Chakra.AlertDescription>
               </Chakra.Alert>
             </Row>
-            <Row className='d-block'>
-                <React.Suspense 
-                  fallback={
-                    <Chakra.Box
-                      marginTop={"25px"}
-                      marginBottom={"25px"}
-                    >
-                      <Chakra.Center>
-                        <Chakra.Spinner 
-                          size="xl"
-                          color='orange.500'
-                          thickness='4px'
-                        />
-                      </Chakra.Center>
-                    </Chakra.Box>
-                  }
-                >
-                    <Await 
-                        resolve={List.getListByID_includes_manga("4be9338a-3402-4f98-b467-43fb56663927")}
-                        errorElement={<ErrorELAsync/>}
-                    >
-                      {(gettedList : List) => {
-                        return (
-                          <Chakra.Box>
-                            <Chakra.Heading>Seasonal</Chakra.Heading>
-                            <Manga_swipper src={gettedList.get_manga_array()}/>
-                          </Chakra.Box>
-                        )
-                      }}
-                    </Await>
-                </React.Suspense>
+            <Row className='d-block'>                          
+              <Chakra.Box>
+                <Chakra.Heading>Seasonal</Chakra.Heading>
+                <CustomListSwiper listID={id_toUse}/>
+              </Chakra.Box>
             </Row>
             <Chakra.Divider/>
-            <Row>
-                <React.Suspense 
-                  fallback={
-                    <Chakra.Box
-                      marginTop={"25px"}
-                      marginBottom={"25px"}
-                    >
-                      <Chakra.Center>
-                        <Chakra.Spinner 
-                          size="xl"
-                          color='orange.500'
-                          thickness='4px'
-                        />
-                      </Chakra.Center>
-                    </Chakra.Box>
-                  }
-                >
-                    <Await 
-                        resolve={Manga.search({
-                          offset_Limits : offset_limits_1,
-                          order : (new Order(
-                            undefined, 
-                            //undefined,
-                            Asc_Desc.desc(),
-                            undefined,
-                            undefined,
-                            undefined,
-                            undefined,
-                            Asc_Desc.desc()
-                          )),
-                          hasAvailableChapters : true
-                        })}
-                        errorElement={<ErrorELAsync/>}
-                    >
-                      {(getted : Array<Manga>) => {
-                        let returns : Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
-                        for (let index = 0; index < returns.length; index++) {
-                          returns[index] = (
-                            <Manga_WithLatest_Chap_01 src={getted[index]}/>
-                          );
-                        }
-                        return (
-                          <Chakra.Box>
-                            <Chakra.Heading>Latest Updates</Chakra.Heading>
-                            <Chakra.Box>
-                              <Container>
-                                <Row>
-                                  <Col>
-                                      {returns.slice(0, returns.length / 2)}
-                                  </Col>
-                                  <Col>
-                                      {returns.slice(returns.length / 2)}
-                                  </Col>
-                                </Row>
-                              </Container>
-                            </Chakra.Box>
-                          </Chakra.Box>
-                        )
-                      }}
-                    </Await>
-                </React.Suspense>
+            <Row
+              className='d-block'
+            >
+              <Latest_Updates/>
             </Row>
-            <Chakra.Divider/>
-            <Row>
-              <React.Suspense 
-                  fallback={
-                    <Chakra.Box
-                      marginTop={"25px"}
-                      marginBottom={"25px"}
-                    >
-                      <Chakra.Center>
-                        <Chakra.Spinner 
-                          size="xl"
-                          color='orange.500'
-                          thickness='4px'
-                        />
-                      </Chakra.Center>
-                    </Chakra.Box>
-                  }
-                >
-                    <Await 
-                        resolve={Manga.search({
-                          offset_Limits : offset_limits_2,
-                          order : (new Order(
-                            Asc_Desc.desc()))
-                        })}
-                        errorElement={<ErrorELAsync/>}
-                    >
-                      {(getted : Array<Manga>) => {
-                        return (
-                          <Chakra.Box>
-                            <Chakra.Heading>Recently Added</Chakra.Heading>
-                            <Chakra.Box>
-                              <Container>
-                                <Row>
-                                  <Col>
-                                    <Manga_swipper2 src={getted}/>
-                                  </Col>
-                                </Row>
-                              </Container>
-                            </Chakra.Box>
-                          </Chakra.Box>
-                        )
-                      }}
-                    </Await>
-                </React.Suspense>
-            </Row>
-        </Container>
+        </Chakra.Box>
     );
 }
 export default Home;

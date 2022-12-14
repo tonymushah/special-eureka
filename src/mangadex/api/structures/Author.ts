@@ -5,6 +5,7 @@ import { Manga } from "./Manga";
 import { Response } from "@tauri-apps/api/http";
 import { NumberLiteralType } from "typescript";
 import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
+import { Collection } from "./Collection";
 
 export class Author extends Attribute{
     private name:string;
@@ -204,7 +205,7 @@ export class Author extends Attribute{
             order?: Order,
             includes?: Array<string>
         }
-    ): Promise<Array<Author>>{
+    ): Promise<Collection<Author>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -222,7 +223,7 @@ export class Author extends Attribute{
         for (let index = 0; index < data.length; index++) {
             authorArray[index] = Author.build_wANY(data[index]);
         }
-        return authorArray;
+        return new Collection<Author>(authorArray ,getted.data.limit, getted.data.offset, getted.data.total);
         
     }
     public get_key_word():string;

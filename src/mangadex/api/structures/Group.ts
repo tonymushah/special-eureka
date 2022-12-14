@@ -3,6 +3,7 @@ import { Attribute } from "./Attributes";
 import { Response } from "@tauri-apps/api/http";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { StringLiteral } from "typescript";
+import { Collection } from "./Collection";
 
 export class Group extends Attribute{
     protected static group_r: string = "group/";
@@ -233,7 +234,7 @@ export class Group extends Attribute{
             includes?: string,
             order?: Order
         }
-    ): Promise<Array<Group>>{
+    ): Promise<Collection<Group>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -252,7 +253,7 @@ export class Group extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Group.build_wANY(data[index]);
         }
-        return mangaArray;
+        return new Collection<Group>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
     }
     public get_key_word():string{
         return RelationshipsTypes.scanlation_group();

@@ -32,8 +32,7 @@ export default function CoverElementVertical(props: {
                         <Chakra.Image
                             src={to_show}
                             fallbackSrc={Mangadex_placeHolder}
-                            borderTopLeftRadius={"10px"}
-                            borderBottomLeftRadius={"10px"}
+                            borderTopRadius={"10px"}
                         />
                     )
                 }

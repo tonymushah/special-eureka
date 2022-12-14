@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { Alt_title, Lang_and_Data, make_first_UpperCare } from "../../../../api/internal/Utils";
 import { Await } from "react-router-dom";
 import { ErrorELAsync } from "../../Error_cmp";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
 export default function MangaElementDef(props: {
     src: Manga,
@@ -50,6 +51,27 @@ export default function MangaElementDef(props: {
                 )
             ))}
             borderRadius={"10px"}
+            _hover={{
+                backgroundColor : (
+                    props.isRefetching == undefined? (
+                        props.src.get_status() == "ongoing" ? "green.200" : (
+                            props.src.get_status() == "completed"? "blue.200" : (
+                                props.src.get_status() == "hiatus" ? "orange.200" : (
+                                    props.src.get_status() == "cancelled"? "red.200" : "gray.200"
+                                )
+                            )
+                        )
+                    ) : (props.isRefetching? "yellow.200" : (
+                        props.src.get_status() == "ongoing" ? "green.200" : (
+                            props.src.get_status() == "completed"? "blue.200" : (
+                                props.src.get_status() == "hiatus" ? "orange.200" : (
+                                    props.src.get_status() == "cancelled"? "red.200" : "gray.200"
+                                )
+                            )
+                        )
+                    ))
+                )
+            }}
         >
             <Chakra.Center>
                 <Chakra.Box
@@ -108,7 +130,7 @@ export default function MangaElementDef(props: {
                 >
                     <Chakra.Grid
                         width={{
-                            base: "26em"
+                            base: "24em"
                         }}
                         templateRows='repeat(3)'
                         templateColumns='repeat(12, 1fr)'
@@ -157,37 +179,47 @@ export default function MangaElementDef(props: {
                             <Chakra.Heading
                                 noOfLines={2}
                                 marginTop={"5px"}
-                                size={
+                                fontSize={
                                     {
-                                        base: "lg",
-                                        lg: "lg"
+                                        base : "xl"
                                     }
                                 }
+                                marginBottom={0}
                             > {title} </Chakra.Heading>
                         </Chakra.GridItem>
                         <Chakra.GridItem
                             rowSpan={1}
                             colSpan={8}
                         >
-                            <Chakra.Text
-                            >
-                                Publication : 
-                                &nbsp;
-                                <Chakra.Tag
-                                    colorScheme={
-                                        props.src.get_status() == "ongoing" ? "green" : (
-                                            props.src.get_status() == "completed"? "blue" : (
-                                                props.src.get_status() == "hiatus" ? "orange" : (
-                                                    props.src.get_status() == "cancelled"? "red" : "teal"
+                            <Chakra.Box>
+                                <Chakra.Text
+                                    padding={0}
+                                    margin={0}
+                                    fontSize={"xs"}
+                                >
+                                    <Chakra.Center
+                                        display={"inline"}
+                                    >
+                                        Publication : 
+                                        &nbsp;
+                                    </Chakra.Center>
+                                    <Chakra.Tag
+                                        fontSize={"xs"}
+                                        colorScheme={
+                                            props.src.get_status() == "ongoing" ? "green" : (
+                                                props.src.get_status() == "completed"? "blue" : (
+                                                    props.src.get_status() == "hiatus" ? "orange" : (
+                                                        props.src.get_status() == "cancelled"? "red" : "teal"
+                                                    )
                                                 )
                                             )
-                                        )
-                                    }
-                                    variant={"solid"}
-                                >
-                                    <Chakra.TagLabel>{make_first_UpperCare(props.src.get_status())}</Chakra.TagLabel>
-                                </Chakra.Tag>
-                            </Chakra.Text>
+                                        }
+                                        variant={"solid"}
+                                    >
+                                        <Chakra.TagLabel>{make_first_UpperCare(props.src.get_status())}</Chakra.TagLabel>
+                                    </Chakra.Tag>
+                                </Chakra.Text>
+                            </Chakra.Box>
                             <React.Suspense
                                 fallback={
                                     <Chakra.Skeleton
@@ -204,7 +236,8 @@ export default function MangaElementDef(props: {
                                         return (
                                             <Chakra.Text
                                                 noOfLines={3}
-                                                marginBottom={"5px"}
+                                                marginBottom={"1px"}
+                                                fontSize={"sm"}
                                             >
                                                 {getted[0].get_data()}
                                             </Chakra.Text>
