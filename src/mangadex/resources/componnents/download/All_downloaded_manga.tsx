@@ -1,0 +1,143 @@
+import React from "react";
+import * as Chakra from "@chakra-ui/react";
+import { Await } from "react-router-dom";
+import { ErrorELAsync1 } from "../Error_cmp";
+import { Manga } from "../../../api/structures/Manga";
+import MangaElementDef_wID from "../mangas/v1/MangaElementDef_wID";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import ErrorEL1 from "../error/ErrorEL1";
+import { useToast } from "@chakra-ui/react";
+
+export default function AllDownlaodedMangaList() {
+    const queryClient = useQueryClient();
+    const toast = useToast();
+    const query_key = "mdx-dowloaded_manga";
+    const query = useQuery(query_key, () => {
+        return Manga.getAllDownloadedMangaID();
+    }, {
+        staleTime : Infinity
+    })
+    const patch_all_manga = useMutation({
+        mutationFn : () => {
+            toast({
+                position : "bottom-right",
+                title : "Patching all manga...",
+                status : "loading",
+                "duration" : 9000,
+                "isClosable" : true
+            });
+            return Manga.patch_all_manga_cover();
+        },
+        mutationKey : query_key,
+        onSuccess : () => {
+            toast({
+                position : "bottom-right",
+                title : "Patched",
+                status : "success",
+                "duration" : 9000,
+                "isClosable" : true
+            });
+            queryClient.invalidateQueries({
+                queryKey : query_key
+            })
+        },
+        onError(error : Error, variables, context) {
+            toast({
+                position : "bottom-right",
+                title : "Error on patching",
+                description : error.message,
+                status : "error",
+                "duration" : 9000,
+                "isClosable" : true
+            });
+            console.error(error)
+        },
+    })
+    const refetch = useMutation({
+        mutationFn : () => {
+            toast({
+                position : "bottom-right",
+                title : "Patching all manga...",
+                status : "loading",
+                "duration" : 9000,
+                "isClosable" : true
+            });
+            return Manga.refetch_all_manga();
+        },
+        onSuccess : () => {
+            toast({
+                position : "bottom-right",
+                title : "Patched",
+                status : "success",
+                "duration" : 9000,
+                "isClosable" : true
+            });
+            queryClient.invalidateQueries({
+                queryKey : query_key
+            })
+        },
+        onError(error : Error, variables, context) {
+            toast({
+                position : "bottom-right",
+                title : "Error on patching",
+                description : error.message,
+                status : "error",
+                "duration" : 9000,
+                "isClosable" : true
+            });
+            console.error(error)
+        },
+    })
+    return(
+        <Chakra.Box>
+            <Chakra.Button
+                onClick={() => query.refetch()}
+            >Refresh</Chakra.Button>
+            &nbsp;
+            <Chakra.Button
+                colorScheme={"facebook"}
+                onClick={() => patch_all_manga.mutate()}
+            >Patch all manga cover</Chakra.Button>
+            &nbsp;
+            <Chakra.Button
+                colorScheme={"orange"}
+                onClick={() => refetch.mutate()}
+            >Refetch all manga</Chakra.Button>
+            {
+                query.isRefetching ? (
+                    <Chakra.Heading size={"sm"}>Refreshing...</Chakra.Heading>
+                ) : null
+            }
+            {
+                query.isFetching ? (
+                    <Chakra.Heading size={"sm"}>Fetching data...</Chakra.Heading>
+                ) : null
+            }
+            {
+                query.isError ? (
+                    <ErrorEL1 error={query.error!}/>
+                ) : null
+            }
+            {
+                query.isLoading ? (
+                    <Chakra.Center>
+                        <Chakra.Spinner />
+                    </Chakra.Center>
+                ) : null
+            }
+            {
+                query.isSuccess == true && query.isFetching == false && query.isRefetching == false && query.isLoading == false ? (
+                    <Chakra.Wrap>
+                        {
+                            query.data!.map((value: string, index: number) => (
+                                <Chakra.WrapItem key={`allDownloaded${index}`}>
+                                    <MangaElementDef_wID mangaID={value} />
+                                </Chakra.WrapItem>
+                            ))
+                        }
+                    </Chakra.Wrap>
+                ) : null
+            }
+        </Chakra.Box>
+    )
+}

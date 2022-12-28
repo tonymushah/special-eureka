@@ -127,7 +127,7 @@ export class Attribute{
         let index: number = 0;
         for (let index1 = 0; index1 < relationships!.length; index1++) {
             const element = relationships[index1];
-            if(element.type == name){
+            if(name.localeCompare(element.type) == 0){
                 array[index] = element;
                 index = index + 1;
             }

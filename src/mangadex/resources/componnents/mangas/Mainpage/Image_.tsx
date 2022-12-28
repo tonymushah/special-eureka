@@ -1,15 +1,16 @@
 import * as React from 'react';
-import Viewer from 'react-viewer';
-import { Accordion, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse, Overlay, OverlayTrigger } from "react-bootstrap";
-import Zoom from 'react-medium-image-zoom'
+import { Card } from "react-bootstrap";
 import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import Viewer from 'react-viewer';
 import { Cover } from '../../../../api/structures/Cover';
+import { Image } from "@chakra-ui/react";
 
 type Cover_Image_Props = {
     src: string,
     id? : string,
-    alt?: string
+    alt?: string,
+    fallbackElement? : string,
+    fallbackImage? : string
 }
 
 export function Cover_Image_(props : Cover_Image_Props){
@@ -23,7 +24,7 @@ export function Cover_Image_(props : Cover_Image_Props){
                 noFooter={true}
                 zoomSpeed={1}
             />
-            <Card.Img onClick={() => { setVisible(true); } } src={props.src}/>
+            <Image as={Card.Img} fallback={props.fallbackImage} onClick={() => { setVisible(true); } } src={props.src}/>
         </Card>
     );
 }

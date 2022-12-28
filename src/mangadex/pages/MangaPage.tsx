@@ -8,84 +8,83 @@ import { Top_Chaps } from "../resources/componnents/mangas/Mainpage/Top_chap";
 import { Covers_Manga } from "../resources/componnents/mangas/Mainpage/Covers_";
 import Related from "../resources/componnents/mangas/Mainpage/Related";
 import { ErrorELAsync1 } from "../resources/componnents/Error_cmp";
+import { useQuery } from "react-query";
+import ErrorEL1 from "../resources/componnents/error/ErrorEL1";
 
 type MangaPage_OutletContex = {
-    toUse : Manga
+    toUse: Manga
 }
 
-function MangaPage(){
-    const [mangaToUse, setTouse] = React.useState<Manga>();
+function MangaPage() {
     let { id } = useParams();
+    const query = useQuery<Manga>("mdx-manga:" + id, () => {
+        return Manga.getMangaByID(id!);
+    }, {
+        "staleTime": Infinity
+    });
+    if (query.isLoading) {
+        return (
+            <Chakra.AbsoluteCenter>
+                <Chakra.Spinner />
+            </Chakra.AbsoluteCenter>
+        );
+    }
+    if (query.isError) {
+        return (
+            <ErrorEL1 error={query.error} />
+        )
+    }
     return (
-            <React.Suspense
-                fallback={
-                    <Chakra.AbsoluteCenter>
-                        <Chakra.Spinner/>
-                    </Chakra.AbsoluteCenter>
-                }
-            >
-                <Await
-                    resolve={Manga.getMangaByID(id!)}
-                    errorElement={<ErrorELAsync1/>}
-                >
-                    {(gettedManga : Manga) => {
-                        return(
-                            <Manga_Page
-                                src={gettedManga}
+        <Manga_Page
+            src={query.data!}
+        >
+            <Chakra.Box>
+                <Container>
+                    <Nav
+                        variant="tabs"
+                        as={Chakra.Box}
+                    >
+                        <Nav.Item>
+                            <Nav.Link
+                                as={Link}
+                                to="."
+                                eventKey="chapters"
                             >
-                                <Chakra.Box>
-                                    <Container>
-                                        <Nav
-                                            variant="tabs"
-                                            as={Chakra.Box}
-                                        >
-                                            <Nav.Item>
-                                                <Nav.Link 
-                                                    as={Link} 
-                                                    to="."
-                                                    eventKey="chapters"
-                                                >
-                                                    Chapters
-                                                </Nav.Link>
-                                            </Nav.Item>
-                                            <Nav.Item>
-                                                <Nav.Link 
-                                                    as={Link} 
-                                                    to="covers"
-                                                    eventKey="covers"
-                                                >
-                                                    Covers
-                                                </Nav.Link>
-                                            </Nav.Item>
-                                            {
-                                                gettedManga.get_some_relationshipLength("manga") == 0 ? (<></>) : (
-                                                    <Nav.Item>
-                                                        <Nav.Link
-                                                            as={Link}
-                                                            to="related"
-                                                            eventKey="related"
-                                                        >
-                                                            Related
-                                                        </Nav.Link>
-                                                    </Nav.Item>
-                                                )
-                                            }
-                                        </Nav>
-                                    </Container>
-                                </Chakra.Box>
-                                <Chakra.Box>
-                                    <Container>
-                                        <Outlet context={{ toUse : gettedManga }}/>
-                                    </Container>
-                                </Chakra.Box>
-                            </Manga_Page>
-                        )
-                    }}
+                                Chapters
+                            </Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link
+                                as={Link}
+                                to="covers"
+                                eventKey="covers"
+                            >
+                                Covers
+                            </Nav.Link>
+                        </Nav.Item>
+                        {
+                            query.data!.get_some_relationshipLength("manga") == 0 ? (<></>) : (
+                                <Nav.Item>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="related"
+                                        eventKey="related"
+                                    >
+                                        Related
+                                    </Nav.Link>
+                                </Nav.Item>
+                            )
+                        }
+                    </Nav>
+                </Container>
+            </Chakra.Box>
+            <Chakra.Box>
+                <Container>
+                    <Outlet context={{ toUse: query.data! }} />
+                </Container>
+            </Chakra.Box>
+        </Manga_Page>
 
-                </Await>
-            
-                       
-        </React.Suspense>
     )
 }
 /*
@@ -151,28 +150,28 @@ function MangaPage(){
             </Await>
         </React.Suspense>
 */
-function useManga(){
+function useManga() {
     return useOutletContext<MangaPage_OutletContex>();
 }
 
-export function Chapters_(){
-    let toUse : Manga = useManga().toUse;
+export function Chapters_() {
+    let toUse: Manga = useManga().toUse;
     return (
         <Top_Chaps src={toUse}></Top_Chaps>
     )
 }
 
-export function Covers_(){
-    let toUse : Manga = useManga().toUse;
+export function Covers_() {
+    let toUse: Manga = useManga().toUse;
     return (
         <Covers_Manga src={toUse}></Covers_Manga>
     )
 }
 
-export function Related_(){
-    let toUse : Manga = useManga().toUse;
+export function Related_() {
+    let toUse: Manga = useManga().toUse;
     return (
-        <Related src={toUse}/>
+        <Related src={toUse} />
     )
 }
 

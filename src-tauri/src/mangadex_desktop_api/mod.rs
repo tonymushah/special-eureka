@@ -8,7 +8,284 @@ use tauri::{
     AppHandle, Manager, Runtime, State, Window,
 };
 type Result<T> = std::result::Result<T, Error>;
+use mangadex_desktop_api2::settings::{server_options::ServerOptions};
 
+#[tauri::command]
+async fn download_manga(manga_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/manga/{}", server_option.hostname, server_option.port, manga_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn update_cover_data(cover_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.patch(format!("http://{}:{}/cover/{}", server_option.hostname, server_option.port, cover_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn download_cover(cover_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/cover/{}", server_option.hostname, server_option.port, cover_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn download_cover_with_quality(cover_id: String, quality: u32) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.patch(format!("http://{}:{}/cover/{}/{}", server_option.hostname, server_option.port, cover_id, quality));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn download_chapter(chapter_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/chapter/{}", server_option.hostname, server_option.port, chapter_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/chapter/{}/data", server_option.hostname, server_option.port, chapter_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn download_chapter_data_saver_mode(chapter_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/chapter/{}/data-saver", server_option.hostname, server_option.port, chapter_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+
+#[tauri::command]
+async fn download_manga_cover(manga_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/manga/{}/cover", server_option.hostname, server_option.port, manga_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn download_manga_covers(manga_id: String) -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.put(format!("http://{}:{}/manga/{}/covers", server_option.hostname, server_option.port, manga_id));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+#[tauri::command]
+async fn refetch_all_manga() -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.patch(format!("http://{}:{}/chapters/all/patch-manga", server_option.hostname, server_option.port));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
+
+
+#[tauri::command]
+async fn patch_all_manga_cover() -> Result<String> {
+    let server_option = match ServerOptions::new() {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let client = reqwest::Client::new();
+    let request = client.patch(format!("http://{}:{}/mangas/all/cover", server_option.hostname, server_option.port));
+    let response = match request.send().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    let response_text = match response.text().await {
+        Err(e) => {
+            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
+        },
+        Ok(f) => f
+    };
+    Ok(response_text)
+}
 #[derive(Clone)]
 struct Payload {
     message: String,
@@ -132,7 +409,21 @@ async fn stop_server(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Resul
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("mangadex-desktop-api")
-        .invoke_handler(tauri::generate_handler![launch_server, stop_server])
+        .invoke_handler(tauri::generate_handler![
+            launch_server, 
+            stop_server, 
+            refetch_all_manga, 
+            patch_all_manga_cover,
+            download_manga_covers,
+            download_manga_cover,
+            download_manga,
+            update_cover_data,
+            download_cover,
+            download_cover_with_quality,
+            download_chapter,
+            download_chapter_normal_mode,
+            download_chapter_data_saver_mode
+        ])
         .setup(move |app| {
             let app2 = app.app_handle();
             app.manage(MyState::default());

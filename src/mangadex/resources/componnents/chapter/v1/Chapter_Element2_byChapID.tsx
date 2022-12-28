@@ -1,9 +1,9 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { Chapter } from "../../../../api/structures/Chapter";
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 
-export default function Chapter_Element1_byChapID(props: {
+export default function Chapter_Element2_byChapID(props: {
     id: string
 }) {
     const query = useQuery("mdx-chapter:" + props.id, () => {
@@ -12,7 +12,7 @@ export default function Chapter_Element1_byChapID(props: {
         staleTime: Infinity
     })
     const ErrorEL1 = React.lazy(() => import("../../error/ErrorEL1"));
-    const Chapter_Element1 = React.lazy(() => import("./Chapter_Element1"));
+    const Chapter_Element2 = React.lazy(() => import("./Chapter_Element2"));
     if (query.isLoading) {
         return (
             <Chakra.Box width={"full"}>
@@ -47,10 +47,10 @@ export default function Chapter_Element1_byChapID(props: {
                 </Chakra.Box>
             }
         >
-            <Chapter_Element1
+            <Chapter_Element2
                 chapter={query.data!}
             />
         </React.Suspense>
     );
-    
+
 }

@@ -15,7 +15,7 @@
     "allowlist": {
       "http": {
         "all": true, 
-        "request": true ,
+        "request": true,
         "scope": [
           "https://api.mangadex.org/**", 
           "https://uploads.mangadex.org/**",

@@ -4,8 +4,10 @@ import * as ChakraIcons from "@chakra-ui/icons";
 import { Manga } from "../../../../api/structures/Manga";
 import { make_first_UpperCare, Manga_related } from "../../../../api/internal/Utils";
 import { Await } from "react-router-dom";
-import { ErrorELAsync } from "../../Error_cmp";
+import { ErrorELAsync, ErrorELAsync1 } from "../../Error_cmp";
 import { MangaSimpleEl } from "../MangaSimpleEl";
+import MangaElementDef_wRelated from "../v1/MangaElementDef_WRelated";
+import MangaElementDef from "../v1/MangaElementDef";
 
 type RelatedProps = {
     src : Manga
@@ -34,15 +36,17 @@ export function MangaRelated_Section(props: {
                     >
                         <Await
                             resolve={props.src.get_related_manga_byEnum(props.enum)}
-                            errorElement={<ErrorELAsync/>}
+                            errorElement={<ErrorELAsync1/>}
                         >
                             {(getted : Array<Manga>) => {
                                 return (
-                                    <>
-                                    {getted.map(value => (
-                                        <MangaSimpleEl src={value}/>
-                                    ))}
-                                    </>
+                                    <Chakra.Wrap>
+                                        {getted.map(value => (
+                                            <Chakra.WrapItem>
+                                                <MangaElementDef src={value}/>
+                                            </Chakra.WrapItem>
+                                        ))}
+                                    </Chakra.Wrap>
                                 )
                             }}
                         </Await>

@@ -18,6 +18,10 @@ import { listen, UnlistenFn } from '@tauri-apps/api/event'
 import "./resources/css/basic-styles.css"
 import "./resources/css/manga/thumbail-mg.css"
 import "./resources/css/manga/CardsStyles.css"
+import Download_Index_Page from './pages/download';
+import "flag-icons/css/flag-icons.min.css";
+import Lonstrip from './pages/ChapterReadingMode/Longstrip';
+import Widestrip from './pages/ChapterReadingMode/Widestrip';
 
 export function useMangadexEvent() : [boolean, Function] {
 const toast = Chakra.useToast();
@@ -145,8 +149,6 @@ const toast = Chakra.useToast();
 function useMangadexRouter(): RouteObject{
     const MangaDexPath: string = "/mangadex";
 
-    
-
     const Router: RouteObject = {
         path: MangaDexPath,
         element: (
@@ -230,7 +232,31 @@ function useMangadexRouter(): RouteObject{
                         errorElement: (<ErrorELRouter />),
                         element: (
                             <Chapter_Page />
-                        )
+                        ),
+                        children : [
+                            {
+                                index: true,
+                                element: (<Chakra.Box>
+                                    <Lonstrip/>
+                                </Chakra.Box>)
+                            },
+                            {
+                                path: "swipper",
+                                element: (
+                                    <Chakra.Box>
+                                        <Chakra.Heading>swipper</Chakra.Heading>
+                                    </Chakra.Box>
+                                )
+                            },
+                            {
+                                path: "widestrip",
+                                element: (
+                                    <Chakra.Box>
+                                        <Widestrip/>
+                                    </Chakra.Box>
+                                )
+                            }
+                        ]
                     }
                 ]
             },
@@ -238,12 +264,21 @@ function useMangadexRouter(): RouteObject{
                 path: "download",
                 errorElement: (<ErrorELRouter />),
                 element: (
-                    <Container>
+                    <Chakra.Box
+                        margin={10}
+                    >
                         <DownloadsLaoyut />
-                    </Container>
+                    </Chakra.Box>
                 ),
                 children: [
-
+                    {
+                        index: true,
+                        element : (
+                            <Chakra.Box>
+                                <Download_Index_Page/>
+                            </Chakra.Box>
+                        )
+                    }
                 ]
             },
 

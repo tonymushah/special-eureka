@@ -71,50 +71,6 @@ function MangaWarpW_manga(props : {
     )
 }
 
-function AllDownlaodedMangaList() {
-    return (
-        <React.Suspense
-            fallback={
-                <Chakra.Center>
-                    <Chakra.Spinner />
-                </Chakra.Center>
-            }
-        >
-            <Await
-                resolve={Manga.getAllDownloadedMangaID()}
-                errorElement={<ErrorELAsync1 />}
-            >
-                {(getted: Array<string>) => {
-                    if (getted != null && getted.length > 0) {
-                        return (
-                            <>
-                                <Chakra.Heading>List of Downloaded Manga</Chakra.Heading>
-                                <Chakra.Wrap>
-                                    {
-                                        getted.map((value: string, index: number) => (
-                                            <Chakra.WrapItem key={`allDownloaded${index}`}>
-                                                <MangaElementDef_wID mangaID={value} />
-                                            </Chakra.WrapItem>
-                                        ))
-                                    }
-                                </Chakra.Wrap>
-                            </>
-                        )
-                    } else {
-                        return (
-                            <>
-                                <Chakra.Heading>List of Downloaded Manga</Chakra.Heading>
-                                <Chakra.Text>Seem like we have nothing here</Chakra.Text>
-                            </>
-                        )
-                    }
-
-                }}
-            </Await>
-        </React.Suspense>
-    )
-}
-
 function All_downloaded_chapter() {
     return (
         <React.Suspense

@@ -6,6 +6,7 @@ import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 import { Chapter } from "../../../../api/structures/Chapter";
 import { useQuery } from "react-query";
+import Chapter_Element2 from "./Chapter_Element2";
 
 export default function MangaFeedElement(props: {
     src : Chapter
@@ -31,7 +32,7 @@ export default function MangaFeedElement(props: {
             src={query.data!}
             isRefetching={query.isRefetching}
         >
-            <Chapter_Element1
+            <Chapter_Element2
                 chapter={props.src}
             />
         </MangaElementDef_WChildren>

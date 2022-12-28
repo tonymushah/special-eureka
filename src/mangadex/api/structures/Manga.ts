@@ -4,11 +4,13 @@ import { Attribute } from "./Attributes";
 import { Cover } from "./Cover";
 import { Tag } from "./Tag";
 import { Author } from "./Author";
-import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
+import { Asc_Desc, Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize, Includes, Author_Artists } from "../internal/Utils";
 import { Aggregate } from "./Aggregate";
 import { Chapter, Chapter_withAllIncludes } from "./Chapter";
 import DeskApiRequest from "../offline/DeskApiRequest"
 import { Collection } from "./Collection";
+import { invoke } from "@tauri-apps/api/tauri"
+import { json } from "stream/consumers";
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
     private title: any;
@@ -736,6 +738,18 @@ export class Manga extends Attribute{
         }
         return returns;
     }
+    public async get_related_mangaID_byEnum(manga_relation_enum : string) : Promise<Array<string>>{
+        let returns : Array<string> = [];
+        let index1 = 0;
+        let related = this.get_some_relationship("manga");
+        for (let index = 0; index < related.length; index++) {
+            const element = related[index];
+            if(element.get_related()! == manga_relation_enum){
+                returns[index1] = element.get_id();
+            }
+        }
+        return returns;
+    }
     // NOTE get a by his id
     public static async getOfflineMangaByID(id: string): Promise<Manga>{
         try {
@@ -834,7 +848,118 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    
+    public static async delete_aDownloaded_manga(mangaID : string) : Promise<any>{
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<{
+                result : string,
+                type : string,
+                data : any,
+                message : string
+            }> = await DeskApiRequest.delete_methods("manga/" + mangaID);
+            return response.data.data;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public async get_manga_related_by_id(mangaID : string) : Promise<Manga>{
+        let to_use = this.get_some_relationship("manga");
+        for (let index = 0; index < to_use.length; index++) {
+            const element = to_use[index];
+            if (element.get_id() == mangaID) {
+                return Manga.getMangaByID(element.get_id());
+            }
+        }
+        throw new Error("The manga " + mangaID + " is not related to " + this.get_id());
+    }
+    public static async download_manga(mangaID: string) : Promise<Manga>{
+        if(await DeskApiRequest.ping() == true){
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga", { manga_id : mangaID });
+            let response_Json : {
+                result : string,
+                type : string,
+                id : string
+            } = JSON.parse(response);
+            return await Manga.getOfflineMangaByID(response_Json.id);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async download_all_manga_covers(mangaID: string) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping() == true){
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_covers", { manga_id : mangaID });
+            let response_Json : {
+                result : string,
+                type : string,
+                id : string,
+                downloaded : Array<string>
+            } = JSON.parse(response);
+            return response_Json.downloaded;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async download_manga_cover(mangaID : string) : Promise<Cover>{
+        if(await DeskApiRequest.ping() == true){
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_cover", { manga_id : mangaID });
+            let response_Json : {
+                result : string,
+                type : string,
+                id : string,
+                downloaded : string
+            } = JSON.parse(response);
+            return Cover.getAOfflineCover(response_Json.downloaded);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async download_manga_cover_with_quality(mangaID : string, quality : number) : Promise<Cover>{
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<{
+                result : string,
+                type : string
+                downloaded : string
+            }> = await DeskApiRequest.put_methods("manga/" + mangaID + "/cover/" + quality);
+            return Cover.getAOfflineCover(response.data.downloaded);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async patch_all_manga_cover(): Promise<Array<string>>{
+        if(await DeskApiRequest.ping() == true){
+
+            let response = await invoke<string>("plugin:mangadex-desktop-api|patch_all_manga_cover");
+            let response_Json : any = JSON.parse(response);
+            return response_Json.data;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async getMangaCover(mangaID : string): Promise<Cover>{
+        if(await DeskApiRequest.ping() == true){
+            let response : Response<any> = await DeskApiRequest.get_methods(`manga/${mangaID}/cover`);
+            return Cover.build_withAny(response.data.data);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public async delete_this(){
+        return await Manga.delete_aDownloaded_manga(this.get_id());
+    }
+    public async download() : Promise<Manga>{
+        return await Manga.download_manga(this.get_id());
+    }
+    public async download_cover_art() : Promise<Cover>{
+        return await Manga.download_manga_cover(this.get_id());
+    }
+    public static async refetch_all_manga() : Promise<Array<string>>{
+        if(await DeskApiRequest.ping() == true){
+            let response = await invoke<string>("plugin:mangadex-desktop-api|refetch_all_manga");
+            let response_Json : any = JSON.parse(response);
+            return response_Json.data;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
 }
 
 export class Manga_2 extends Manga{
@@ -885,13 +1010,18 @@ export class Manga_2 extends Manga{
             tags
         );
         //instance.set_relationships_Wany(relationships);
-        instance.set_avaible_language(attributes.avaible_language);
+        instance.set_avaible_language(attributes.availableLanguage);
         instance.set_links(attributes.links);
-        instance.set_ranting(attributes.content_rating);
+        instance.set_ranting(attributes.contentRating);
+        instance.set_demographic(attributes.publicationDemographic);
+        instance.set_state(attributes.state);
+        instance.set_originalLanguage(attributes.originalLanguage);
+        instance.$latestUploadedChapter = attributes.latestUploadedChapter;
         instance.set_related(object.related);
         return instance;
     }
     public async get_cover_art(): Promise<Cover>{
+        console.log("dsadsadoasdldas");
         if((await DeskApiRequest.ping()) == true){
             return await Manga.getOfflineMangaCover(this.get_id());
         }else{
@@ -993,7 +1123,7 @@ export class Manga_with_allRelationship extends Manga {
 
     public static build_any(object: any /*
     please only input the real data please
-    */): Manga_2{
+    */): Manga_with_allRelationship{
         let attributes :any = object.attributes;
         let relationships: any = object.relationships;
         let tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
@@ -1012,50 +1142,53 @@ export class Manga_with_allRelationship extends Manga {
             attributes.createdAt,
             tags
         );
-        //instance.set_relationships_Wany(relationships);
+        instance.set_relationships_Wany(relationships);
         try {
             let to_input_manga: Array<Manga> = [];
             let all_manga : Array<any> = Attribute.get_some_relationship(relationships, "manga");
             for (let index = 0; index < all_manga.length; index++) {
-                to_input_manga[index] = Manga_2.build_any(all_manga[index]);
+                try {
+                    to_input_manga[index] = Manga_2.build_any(all_manga[index]);
+                } catch (error) {
+                }
             }
             instance.$related_manga = to_input_manga;
-        } catch (error) {}
+        } catch (error) {
+            console.log(error);
+        }
         try {
             let to_input_author: Array<Author> = [];
             let all_author : Array<any> = Attribute.get_some_relationship(relationships, "author");
             for (let index = 0; index < all_author.length; index++) {
                 to_input_author[index] = Author.build_wANY(all_author[index]);
             }
-            instance.$authors = to_input_author; 
+            instance.$authors = new Author_Artists(to_input_author, []).filtred; 
+            console.log(instance.$authors.length);
         } catch (error) {}
         try {
-            let to_input_manga: Array<Manga> = [];
-            let all_manga : Array<any> = Attribute.get_some_relationship(relationships, "manga");
-            for (let index = 0; index < all_manga.length; index++) {
-                to_input_manga[index] = Manga_2.build_any(all_manga[index]);
+            let to_input_artists: Array<Author> = [];
+            let all_artists : Array<any> = Attribute.get_some_relationship(relationships, "artist");
+            for (let index = 0; index < all_artists.length; index++) {
+                to_input_artists[index] = Author.build_wANY(all_artists[index]);
             }
-            instance.$related_manga = to_input_manga;
-        } catch (error) {}
-        try {
-            let to_input_author: Array<Author> = [];
-            let all_author : Array<any> = Attribute.get_some_relationship(relationships, "artist");
-            for (let index = 0; index < all_author.length; index++) {
-                to_input_author[index] = Author.build_wANY(all_author[index]);
-            }
-            instance.$authors = to_input_author; 
+            instance.$artists = to_input_artists; 
         } catch (error) {}
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
         } catch (error) {}
+        instance.set_avaible_language(attributes.availableLanguage);
+        instance.set_links(attributes.links);
+        instance.set_ranting(attributes.contentRating);
+        instance.set_demographic(attributes.publicationDemographic);
+        instance.set_state(attributes.state);
+        instance.set_originalLanguage(attributes.originalLanguage);
+        instance.$latestUploadedChapter = attributes.latestUploadedChapter;
         return instance;
     }
-    public get_author(): Promise<Author[]> {
-        return new Promise((resolve, reject) => {
-            resolve(this.$authors);
-        });
+    public async get_author(): Promise<Array<Author>> {
+        return new Author_Artists(this.$authors, []).filtred;
     }
-    public get_artist(): Promise<Author[]> {
+    public async get_artist(): Promise<Array<Author>> {
         return new Promise((resolve, reject) => {
             resolve(this.$artists);
         });
@@ -1065,5 +1198,48 @@ export class Manga_with_allRelationship extends Manga {
             resolve(this.$cover);
         });
     }
-    
+    public async get_all_related_manga(): Promise<Manga[]> {
+        return this.$related_manga;
+    }
+    public get_related_manga_byEnum_length(manga_relation_enum: string): number {
+        let returns = 0;
+        for (let index = 0; index < this.$related_manga.length; index++) {
+            const element = this.$related_manga[index];
+            if(element.get_related() == manga_relation_enum){
+                returns++
+            }
+        }
+        return returns;
+    }
+    public async get_related_manga_byEnum(manga_relation_enum: string): Promise<Manga[]> {
+        let returns : Array<Manga> = new Array(this.get_related_manga_byEnum_length(manga_relation_enum));
+        let index1 = 0
+        this.$related_manga.forEach(element => {
+            if(element.get_related() == manga_relation_enum){
+                returns[index1] = element;
+                index1++;
+            }
+        });
+        return returns;
+    }
+    public async get_manga_related_by_id(mangaID: string): Promise<Manga> {
+        for (let index = 0; index < this.$related_manga.length; index++) {
+            const element = this.$related_manga[index];
+            if(element.get_related() == mangaID){
+                return element;
+            }
+        }
+        throw new Error("this manga " + mangaID + " is'nt related to " + this.get_id());
+    }
+    public async get_related_mangaID_byEnum(manga_relation_enum: string): Promise<string[]> {
+        let returns : Array<string> = new Array(this.get_related_manga_byEnum_length(manga_relation_enum));
+        let index1 = 0
+        this.$related_manga.forEach(element => {
+            if(element.get_related() == manga_relation_enum){
+                returns[index1] = element.get_id();
+                index1++;
+            }
+        });
+        return returns;
+    }
 }

@@ -7,19 +7,23 @@ import { Alt_title, Author_Artists, Lang_and_Data, make_first_UpperCare, Content
 import { Cover } from "../../../api/structures/Cover";
 import { Cover_Image_ } from "./Mainpage/Image_";
 import "flag-icons/css/flag-icons.min.css";
-import { Await } from "react-router-dom";
+import { Await, Link } from "react-router-dom";
 import * as Chakra from '@chakra-ui/react'
 import "../../css/manga/mg-p.css"
 import "../../css/manga/thumbail-mg.css"
 import { Statistics } from "../../../api/structures/Statistics";
 import { ErrorELAsync } from "../Error_cmp";
 import { NumericFormat } from "react-number-format"
+import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
+import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
+import { useQuery } from "react-query";
+import ErrorEL1 from "../error/ErrorEL1";
 
 export function Statis(props: {
     src: Statistics
 }) {
     const initialFocusRef = React.useRef();
-    let getted : Statistics = props.src;
+    let getted: Statistics = props.src;
     return (
         <Chakra.Popover
             initialFocusRef={initialFocusRef}
@@ -38,8 +42,8 @@ export function Statis(props: {
                     <Chakra.Text>
                         <Chakra.Icon as={FontAwesome.FaBookmark} />
                         &nbsp;
-                        <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"}/>
-                    </Chakra.Text> 
+                        <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
+                    </Chakra.Text>
                 </Chakra.Box>
             </Chakra.PopoverTrigger>
             <Chakra.Portal>
@@ -53,55 +57,55 @@ export function Statis(props: {
                             <Chakra.Icon as={FontAwesome.FaBookmark} />
                             <NumericFormat displayType={"text"} valueIsNumericString={true} value={getted.get_follows()} />
                         </Chakra.Text>
-                        <Chakra.PopoverCloseButton/>
+                        <Chakra.PopoverCloseButton />
                     </Chakra.PopoverHeader>
                     <Chakra.PopoverBody>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             10 <Chakra.Progress value={(getted.get_distribution()[10] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[10]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             9 <Chakra.Progress value={(getted.get_distribution()[9] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[9]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             8 <Chakra.Progress value={(getted.get_distribution()[8] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[8]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             7 <Chakra.Progress value={(getted.get_distribution()[7] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[7]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             6 <Chakra.Progress value={(getted.get_distribution()[6] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[6]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             5 <Chakra.Progress value={(getted.get_distribution()[5] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[5]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             4 <Chakra.Progress value={(getted.get_distribution()[4] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[4]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             3 <Chakra.Progress value={(getted.get_distribution()[3] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[3]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             2 <Chakra.Progress value={(getted.get_distribution()[2] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[2]} &#41;
                         </Chakra.Box>
-                        <Chakra.Box 
+                        <Chakra.Box
                         >
                             1 <Chakra.Progress value={(getted.get_distribution()[1] / getted.get_distribution_sum()) * 100} />
                             &#40; {getted.get_distribution()[1]} &#41;
@@ -117,54 +121,44 @@ type MangaPageProps = {
     src: Manga,
     children: React.ReactNode
 }
-export class Manga_Page extends React.Component<MangaPageProps>{
-    private to_use: Manga;
-    private key: string;
-    //private _cover: Cover;
-    public constructor(props: MangaPageProps) {
-        super(props);
-        this.to_use = this.props.src;
-        this.key = "chapters";
+
+export function Manga_Page(props: MangaPageProps) {
+    let title: string = "";
+    const cover_key = "mdx-manga_cover-" + props.src.get_id();
+    const coverQuery = useQuery(cover_key, () => {
+        return props.src.get_cover_art()
+    }, {
+        "staleTime": Infinity
+    });
+    const title_query = useQuery("mdx-manga_title-" + props.src.get_id(), () => {
+        return Lang_and_Data.initializeArrayByAltTitle_obj(props.src.get_alt_title());
+    }, {
+        "staleTime": Infinity
+    });
+    if (props.src.get_title().en == null) {
+        title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
+    } else {
+        title = props.src.get_title().en;
     }
-    public set_key(key: string) {
-        this.key = key;
-    }
-    public async authors_artists(): Promise<Array<React.ReactNode>> {
-        let returns: Author_Artists = new Author_Artists(await this.to_use.get_author(), await this.to_use.get_artist());
+    async function authors_artists(): Promise<Array<React.ReactNode>> {
+        let returns: Author_Artists = new Author_Artists(await props.src.get_author(), await props.src.get_artist());
         let returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
         for (let index = 0; index < returns.filtred.length; index++) {
             const element = returns.filtred[index];
             if (index == (returns.filtred.length - 1)) {
                 returns2[index] = (
-                    <span>{element.get_Name()}</span>
+                    <Chakra.Link as={Link} to={"/mangadex/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
                 )
             } else {
                 returns2[index] = (
-                    <span>{element.get_Name()},</span>
+                    <Chakra.Link as={Link} to={"/mangadex/author/" + element.get_id()}>{element.get_Name()},</Chakra.Link>
                 )
             }
         }
         return returns2;
     }
-    public async build_themes_manga(): Promise<Array<React.ReactNode>> {
-        let index = 0;
-        let returns: Array<React.ReactNode> = [];
-        if (this.to_use.get_ranting() != ContentRating.safe()) {
-            if (this.to_use.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="success" size="sm">{make_first_UpperCare(this.to_use.get_ranting())}</Button>);
-            } else {
-                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(this.to_use.get_ranting())}</Button>);
-            }
-            index = index + 1;
-        }
-        for (let index1 = 0; index1 < this.to_use.get_tags().length; index1++) {
-            const element = this.to_use.get_tags()[index1];
-            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
-        }
-        return returns;
-    }
-    public get_status_color(): React.ReactNode {
-        switch (this.to_use.get_status()) {
+    function get_status_color(): React.ReactNode {
+        switch (props.src.get_status()) {
             case Status.ongoing():
                 return (<Button size="sm" variant="success" disabled> </Button>)
                 break;
@@ -182,381 +176,152 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                 break;
         }
     }
-    public render(): React.ReactNode {
-
-        let manga_cover: string = "/mangadex/resources/imgs/cover-not-found.jpg";
-        let placeholder: string = "/mangadex/resources/imgs/cover-placeholder.png";
-        //let manga_cover: string = "..";
-        let title: string = "";
-        //let desc: string = "";
-        if (this.to_use.get_title().en == null) {
-            title = new Alt_title(this.to_use.get_alt_title()).get_quicklang()!;
-        } else {
-            title = this.to_use.get_title().en;
+    function build_themes_manga(): Array<React.ReactNode> {
+        let index = 0;
+        let returns: Array<React.ReactNode> = [];
+        if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
+            if (props.src.get_ranting() == ContentRating.suggestive()) {
+                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+            } else {
+                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+            }
+            index = index + 1;
         }
-        return (
-            <Chakra.Box>
-                <React.Suspense
-                    fallback={
-                        <>
-                            <Chakra.Box
-                                backgroundImage={placeholder}
-                                backgroundRepeat={"no-repeat"}
-                                backgroundPosition={{
-                                    sm: "0px -5em",
-                                    md: "center -10em",
-                                    lg: "center -20em",
-                                    xl: "center -20em",
-                                    '2xl': "center -20em",
-                                }}
-                                backgroundSize={"cover"}
-                            >
-                                <Chakra.Box
-                                    backdropFilter={"auto"}
-                                    backdropBlur={"10px"}
-                                    bgGradient="linear(#FFF 75%)"
-                                    paddingTop={"10px"}
-                                >
-                                    <Container>
-                                        <Row>
-                                            <Col xs="3">
-                                                <Cover_Image_ src={placeholder} />
-                                            </Col>
-                                            <Col xs="9" className="overflow-hidden">
-                                                <Chakra.Box>
-                                                    <Chakra.Center
-                                                        display={"block"}
-                                                    >
-                                                        <Chakra.Spinner
-                                                            size="xl"
-                                                            color='orange.500'
-                                                            thickness='4px'
-                                                        />
-                                                    </Chakra.Center>
-                                                </Chakra.Box>
-                                            </Col>
-                                        </Row>
-                                    </Container>
-                                </Chakra.Box>
-                            </Chakra.Box>
-                        </>
-                    }
+        for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
+            const element = props.src.get_tags()[index1];
+            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+        }
+        return returns;
+    }
+    return (
+        <Chakra.Box>
+            <Chakra.Box
+                backgroundImage={coverQuery.isLoading ?
+                    Mangadex_placeHolder : (
+                        coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!.get_Cover_image()
+                    )}
+                backgroundRepeat={"no-repeat"}
+                backgroundPosition={{
+                    sm: "0px -5em",
+                    md: "center -10em",
+                    lg: "center -20em",
+                    xl: "center -20em",
+                    '2xl': "center -20em",
+                }}
+                backgroundSize={"cover"}
+                borderTopRadius={"10px"}
+            >
+                <Chakra.Box
+                    backdropFilter={"auto"}
+                    backdropBlur={"10px"}
+                    bgGradient="linear(#FFF 75%)"
+                    paddingTop={"10px"}
                 >
-                    <Await
-                        resolve={this.to_use.get_cover_art()}
-                        errorElement={
-                            <>
-                                <Chakra.Box
-                                    backgroundImage={manga_cover}
-                                    backgroundRepeat={"no-repeat"}
-                                    backgroundPosition={{
-                                        sm: "0px -5em",
-                                        md: "center -10em",
-                                        lg: "center -20em",
-                                        xl: "center -20em",
-                                        '2xl': "center -20em",
-                                    }}
-                                    backgroundSize={"cover"}
-                                >
-                                    <Chakra.Box
-                                        backdropFilter={"auto"}
-                                        backdropBlur={"10px"}
-                                        backgroundImage={"url('/mangadex/resources/svg/wavy-white.svg')"}
-                                        backgroundRepeat={"no-repeat"}
-                                        backgroundPosition={"center"}
-                                        backgroundSize={"cover"}
-                                        paddingTop={"10px"}
+                    <Container>
+                        <Row>
+                            <Col xs="3">
+                                <Cover_Image_ src={coverQuery.isLoading ?
+                                    Mangadex_placeHolder : (
+                                        coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!.get_Cover_image()
+                                    )} fallbackElement={Mangadex_placeHolder} />
+                            </Col>
+                            <Col xs="9" className="overflow-hidden">
+                                <Chakra.Box>
+                                    <Chakra.Center
+                                        display={"block"}
                                     >
-                                        <Container>
-                                            <Row>
-                                                <Col xs="3">
-                                                    <Cover_Image_ src={manga_cover} />
-                                                </Col>
-                                                <Col xs="9" className="overflow-hidden">
-                                                    <Chakra.Heading
-                                                        size={{
-                                                            base: "lg",
-                                                            sm: "xl",
-                                                            md: "2xl",
-                                                            xl: "3xl"
-                                                        }}
-                                                        noOfLines={1}
-                                                        marginBottom={{
-                                                            md: "1vh",
-                                                            lg: "1em"
-                                                        }}
-                                                    >
-                                                        {title}
-                                                    </Chakra.Heading>
-                                                    <Chakra.Heading
-                                                        size={{
-                                                            base: "sm",
-                                                            md: "lg"
-                                                        }}
-                                                        noOfLines={1}
-                                                        marginBottom={{
-                                                            md: "1em"
-                                                        }}
-                                                    >
-                                                        <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
-                                                            <Await
-                                                                resolve={Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title())}
-                                                                errorElement={<div></div>}
-                                                                children={(getted: Array<Lang_and_Data>) => {
-                                                                    if (Lang_and_Data.find_data_by_lang2l("en", getted) instanceof Lang_and_Data) {
-                                                                        return (
-                                                                            <Chakra.Heading fontFamily="Poppins" size="lg" className="title-bended">{Lang_and_Data.find_data_by_lang2l("en", getted)!.get_data()}</Chakra.Heading>
-                                                                        );
-                                                                    } else {
-                                                                        return (
-                                                                            <Chakra.Heading fontFamily="Poppins" size="lg" className="title-bended">{getted[Math.floor(Math.random() * getted.length)].get_data()}</Chakra.Heading>
-                                                                        );
-                                                                    }
-                                                                }}
-                                                            />
-
-                                                        </React.Suspense>
-                                                    </Chakra.Heading>
-                                                    <Chakra.Box
-                                                        backgroundColor={"white"}
-                                                        height={"full"}
-                                                        borderTopRadius={"10px"}
-                                                        p={"1em"}
-                                                        boxShadow={"md"}
-                                                    >
-                                                        <Chakra.Box
-                                                            marginLeft={"20px"}
-                                                            marginTop={"1vh"}
-                                                        >
-                                                            <Chakra.Heading
-
-                                                                size={{
-                                                                    base: "xs",
-                                                                    lg: "md"
-                                                                }}
-                                                            >
-                                                                <React.Suspense fallback={
-                                                                    <Placeholder xs={5}></Placeholder>
-                                                                }>
-                                                                    <Await
-                                                                        resolve={this.authors_artists()}
-                                                                        errorElement={<span></span>}
-                                                                        children={(getted: Array<React.ReactNode>) => {
-                                                                            return (
-                                                                                <>
-                                                                                    {getted}
-                                                                                </>
-                                                                            )
-                                                                        }}
-                                                                    />
-                                                                </React.Suspense>
-                                                            </Chakra.Heading>
-                                                            <Row className=" mdP-top-themes mb-1">
-                                                                <React.Suspense fallback={<Placeholder xs={4}></Placeholder>}>
-                                                                    <Await
-                                                                        resolve={this.build_themes_manga()}
-                                                                        errorElement={<span> </span>}
-                                                                        children={(getted: Array<React.ReactNode>) => {
-                                                                            return (<Col>{getted}</Col>);
-                                                                        }}
-                                                                    />
-                                                                </React.Suspense>
-                                                            </Row>
-                                                            <Row>
-                                                                <Chakra.Heading size={{
-                                                                    base: "xs",
-                                                                    lg: "md"
-                                                                }}>Publication : {this.get_status_color()} {make_first_UpperCare(this.to_use.get_status())}</Chakra.Heading>
-                                                            </Row>
-                                                            <Row>
-                                                                <React.Suspense
-                                                                    fallback={<Chakra.Spinner></Chakra.Spinner>}
-                                                                >
-                                                                    <Await
-                                                                        resolve={Statistics.get_statsBy_MangaID(this.to_use.get_id())}
-                                                                        errorElement={
-                                                                            <ErrorELAsync />
-                                                                        }
-                                                                    >
-                                                                        {(getted: Statistics) => {
-
-                                                                            return (
-                                                                                <Statis src={getted}/>
-                                                                            );
-                                                                        }}
-                                                                    </Await>
-                                                                </React.Suspense>
-                                                            </Row>
-                                                        </Chakra.Box>
-                                                    </Chakra.Box>
-                                                </Col>
-                                            </Row>
-                                        </Container>
-                                    </Chakra.Box>
-                                </Chakra.Box>
-                            </>
-                        }
-                    >
-                        {
-                            (getted: Cover) => {
-                                return (
-                                    <>
-                                        <Chakra.Box
-                                            backgroundImage={getted.get_CoverImageOnline()}
-                                            backgroundRepeat={"no-repeat"}
-                                            backgroundPosition={{
-                                                sm: "0px -5em",
-                                                md: "center -10em",
-                                                lg: "center -20em",
-                                                xl: "center -20em",
-                                                '2xl': "center -20em",
+                                        <Chakra.Heading
+                                            noOfLines={1}
+                                            fontFamily={"inherit"}
+                                            blendMode={"difference"}
+                                            size={{
+                                                base: "md",
+                                                sm: "lg",
+                                                md: "2xl",
+                                                lg: "3xl"
                                             }}
-                                            backgroundSize={"cover"}
                                         >
-                                            <Chakra.Box
-                                                backdropFilter={"auto"}
-                                                backdropBlur={"10px"}
-                                                backgroundImage={"url('/mangadex/resources/svg/wavy-white.svg')"}
-                                                backgroundRepeat={"no-repeat"}
-                                                backgroundPosition={"center"}
-                                                backgroundSize={"cover"}
-                                                paddingTop={"10px"}
+                                            {
+                                                title
+                                            }
+                                        </Chakra.Heading>
+                                        <Chakra.Heading
+                                            noOfLines={1}
+                                            fontFamily={"inherit"}
+                                            blendMode={"difference"}
+                                            size={{
+                                                base: "sm",
+                                                sm: "md",
+                                                md: "lg"
+                                            }}
+                                        >
+                                            {
+                                                title_query.isLoading ? <Placeholder md={6}></Placeholder> : (
+                                                    title_query.isError ? <ErrorEL1 error={title_query.error} /> : (
+                                                        Lang_and_Data.find_data_by_lang2l("en", title_query.data!) instanceof Lang_and_Data ?
+                                                            <>{Lang_and_Data.find_data_by_lang2l("en", title_query.data!)!.get_data()}</>
+                                                            :
+                                                            <>{title_query.data![Math.floor(Math.random() * title_query.data!.length)].get_data()}</>
+                                                    )
+                                                )
+                                            }
+                                        </Chakra.Heading>
+                                        <Chakra.Text>
+                                            <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
+                                                <Await
+                                                    resolve={authors_artists()}
+                                                    errorElement={<div></div>}
+                                                    children={(getted: Array<React.ReactNode>) => {
+                                                        return (
+                                                            <>
+                                                                {
+                                                                    getted.map((value) => (
+                                                                        <>{value}</>
+                                                                    ))
+                                                                }
+                                                            </>
+                                                        )
+                                                    }}
+                                                />
+                                            </React.Suspense>
+                                        </Chakra.Text>
+                                        <Chakra.Text
+                                            fontWeight={"bold"}
+                                        >
+                                            <Chakra.Center
+                                                width={"fit-content"}
                                             >
-                                                <Container>
-                                                    <Row>
-                                                        <Col xs="3">
-                                                            <Cover_Image_ src={getted.get_CoverImageOnline()} />
-                                                        </Col>
-                                                        <Col xs="9" className="overflow-hidden">
-                                                            <Chakra.Heading
-                                                                size={{
-                                                                    base: "lg",
-                                                                    sm: "xl",
-                                                                    md: "2xl",
-                                                                    xl: "3xl"
-                                                                }}
-                                                                noOfLines={1}
-                                                                marginBottom={{
-                                                                    md: "1vh",
-                                                                    lg: "1em"
-                                                                }}
-                                                                fontFamily="Poppins"
-                                                                blendMode={"exclusion"}
-                                                            >
-                                                                {title}
-                                                            </Chakra.Heading>
-                                                            <Chakra.Heading
-                                                                size={{
-                                                                    base: "sm",
-                                                                    md: "lg"
-                                                                }}
-                                                                fontFamily="Poppins"
-                                                                noOfLines={1}
-                                                                marginBottom={{
-                                                                    md: "1em"
-                                                                }}
-                                                            >
-                                                                <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
-                                                                    <Await
-                                                                        resolve={Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title())}
-                                                                        errorElement={<div></div>}
-                                                                        children={(getted: Array<Lang_and_Data>) => {
-                                                                            if (Lang_and_Data.find_data_by_lang2l("en", getted) instanceof Lang_and_Data) {
-                                                                                return (
-                                                                                    <>{Lang_and_Data.find_data_by_lang2l("en", getted)!.get_data()}</>
-                                                                                );
-                                                                            } else {
-                                                                                return (
-                                                                                    <>{getted[Math.floor(Math.random() * getted.length)].get_data()}</>
-                                                                                );
-                                                                            }
-                                                                        }}
-                                                                    />
-
-                                                                </React.Suspense>
-                                                            </Chakra.Heading>
-                                                            <Chakra.Box
-                                                                height={"full"}
-                                                                borderTopRadius={"10px"}
-                                                            >
-                                                                <Chakra.Box
-                                                                    marginLeft={"20px"}
-                                                                    marginTop={"1vh"}
-                                                                >
-                                                                    <Chakra.Heading
-                                                                        paddingTop={"10px"}
-                                                                        size={{
-                                                                            base: "xs",
-                                                                            lg: "md"
-                                                                        }}
-                                                                    >
-                                                                        <React.Suspense fallback={
-                                                                            <Placeholder xs={5}></Placeholder>
-                                                                        }>
-                                                                            <Await
-                                                                                resolve={this.authors_artists()}
-                                                                                errorElement={<span></span>}
-                                                                                children={(getted: Array<React.ReactNode>) => {
-                                                                                    return (
-                                                                                        <>
-                                                                                            {getted}
-                                                                                        </>
-                                                                                    )
-                                                                                }}
-                                                                            />
-                                                                        </React.Suspense>
-                                                                    </Chakra.Heading>
-                                                                </Chakra.Box>
-                                                                <Row className=" mdP-top-themes mb-1">
-                                                                    <React.Suspense fallback={<Placeholder xs={4}></Placeholder>}>
-                                                                        <Await
-                                                                            resolve={this.build_themes_manga()}
-                                                                            errorElement={<span> </span>}
-                                                                            children={(getted: Array<React.ReactNode>) => {
-                                                                                return (<Col>{getted}</Col>);
-                                                                            }}
-                                                                        />
-                                                                    </React.Suspense>
-                                                                </Row>
-                                                                <Row>
-                                                                    <Chakra.Heading size="md">Publication : {this.get_status_color()} {make_first_UpperCare(this.to_use.get_status())}</Chakra.Heading>
-                                                                </Row>
-                                                                <Row>
-                                                                    <React.Suspense
-                                                                        fallback={<Chakra.Spinner></Chakra.Spinner>}
-                                                                    >
-                                                                        <Await
-                                                                            resolve={Statistics.get_statsBy_MangaID(this.to_use.get_id())}
-                                                                            errorElement={
-                                                                                <ErrorELAsync />
-                                                                            }
-                                                                        >
-                                                                            {(getted: Statistics) => {
-                                                                                return (
-                                                                                    <Statis src={getted}/>
-                                                                                );
-                                                                            }}
-                                                                        </Await>
-                                                                    </React.Suspense>
-                                                                </Row>
-                                                            </Chakra.Box>
-                                                        </Col>
-                                                    </Row>
-                                                </Container>
-                                            </Chakra.Box>
-                                        </Chakra.Box>
-                                    </>
-                                );
-                            }
-                        }
-                    </Await>
-                </React.Suspense>
-                <Chakra.Box>
-                    {this.props.children}
+                                                Publication : 
+                                                &nbsp;
+                                                {
+                                                    get_status_color()
+                                                }
+                                                &nbsp;
+                                                {
+                                                    make_first_UpperCare(props.src.get_status())
+                                                }
+                                            </Chakra.Center>
+                                        </Chakra.Text>
+                                        <Chakra.Text>
+                                            {
+                                                build_themes_manga().map((value) => value)
+                                            }
+                                        </Chakra.Text>
+                                        <Chakra.Text>
+                                            {props.src.get_originalLanguage()}
+                                        </Chakra.Text>
+                                    </Chakra.Center>
+                                </Chakra.Box>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Chakra.Box>
             </Chakra.Box>
-        );
-    }
+            <Chakra.Box>
+                {props.children}
+            </Chakra.Box>
+        </Chakra.Box>
+    )
 }
 
 // old 

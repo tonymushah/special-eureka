@@ -188,6 +188,13 @@ export class Cover extends Attribute{
                 return this.get_CoverImageOnline();
             }
         }
+        public get_Cover_image() : string{
+            try {
+                return this.get_CoverImageOnline();
+            } catch (error) {
+                return Cover.getOfflineCoverImage_notasync(this.get_id());
+            }
+        }
     public get_key_word():string{
         return RelationshipsTypes.cover_art();
     }
@@ -248,5 +255,8 @@ export class Cover extends Attribute{
         }else{
             throw new Error("Cover image for " + coverId + " isn't found");
         }
+    }
+    public static getOfflineCoverImage_notasync(coverId: string) : string{
+        return DesktopApi.get_url() + "cover/" + coverId + "/image";
     }
 }

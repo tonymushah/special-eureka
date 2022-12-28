@@ -1,10 +1,12 @@
+import { emit } from "@tauri-apps/api/event";
 import { Response, ResponseType } from "@tauri-apps/api/http";
+import { invoke } from "@tauri-apps/api/tauri";
 import { Api_Request } from "../internal/Api_Request";
-import { Upload } from "../internal/Upload_Retrieve";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize, Lang, Languages } from "../internal/Utils";
 import DeskApiRequest from "../offline/DeskApiRequest";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
+import { At_Home } from "./At_home";
 import { Collection } from "./Collection";
 import { Group } from "./Group";
 import { Manga, Manga_2 } from "./Manga";
@@ -343,6 +345,76 @@ export class Chapter extends Attribute{
             return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id());
         } catch (error) {
             throw error
+        }
+    }
+    public async get_offlineDataImages() : Promise<Array<string>>{
+        let data = await Chapter.getAOfflineChapter_Data(this.get_id());
+        let returns : Array<string> = new Array<string>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            returns[index] = await Chapter.getAOfflineChapter_Data_Image(this.get_id(), data[index]);
+        }
+        return returns;
+    }
+    public async get_offlineDataSaverImages(): Promise<Array<string>>{
+        let data = await Chapter.getAOfflineChapter_Data_Saver(this.get_id());
+        let returns : Array<string> = new Array<string>(data.length);
+        for (let index = 0; index < data.length; index++) {
+            returns[index] = await Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), data[index]);
+        }
+        return returns;
+    }
+    public async get_onlineDataImages(): Promise<Array<string>>{
+        let at_home = await At_Home.getAt_Home_wChID(this.get_id());
+        return at_home.get_data_ImgURL();
+    }
+    public async get_onlineDataSaverImages(): Promise<Array<string>>{
+        let at_home = await At_Home.getAt_Home_wChID(this.get_id());
+        return at_home.get_dataSaver_ImgURL();
+    }
+    public async get_dataImages(): Promise<Array<string>>{
+        try {
+            return await this.get_offlineDataImages();
+        } catch (error) {
+            await emit("warn", {
+                payload : "Changing to online mode"
+            });
+            return await this.get_onlineDataImages();
+        }
+    }
+    public async get_dataSaverImages(): Promise<Array<string>>{
+        try {
+            return await this.get_offlineDataSaverImages();
+        } catch (error) {
+            await emit("warn", {
+                payload : "Changing to online mode"
+            });
+            return await this.get_onlineDataSaverImages();
+        }
+    }
+    public static async download(chapterID : string) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping() == true){
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter", { chapter_id : chapterID });
+            let response_Json : {
+                result : string,
+                dir : string,
+                downloaded : Array<string>
+            } = JSON.parse(response);
+            return response_Json.downloaded;
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+    }
+    public static async download_data_saver(chapterID : string) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping() == true){
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter_data_saver_mode", { chapter_id : chapterID });
+            let response_Json : {
+                result : string,
+                dir : string,
+                downloaded : Array<string>
+            } = JSON.parse(response);
+            return response_Json.downloaded;
+        }else{
+            throw new Error("The offline server isn't started");
         }
     }
 }

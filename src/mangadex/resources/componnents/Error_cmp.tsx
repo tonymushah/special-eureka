@@ -23,6 +23,7 @@ export function ErrorELAsync1(props){
                 <Chakra.Box>
                     <Chakra.Text>Message</Chakra.Text>
                     <Chakra.Text>{error.message!}</Chakra.Text>
+                    <Chakra.Text>{error.stack!}</Chakra.Text>
                 </Chakra.Box>
             </Chakra.AlertDescription>
         </Chakra.Alert>

@@ -23,6 +23,7 @@ import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 
 import vite_logo from "/commons-res/common-icon/favicon.svg";
 import { Collection } from '../../api/structures/Collection';
+import MangaManagerState from '../hooks/MangaManagerState';
 
 const MangaDexPath: string = "/mangadex/";
 
@@ -110,6 +111,43 @@ export function Stop_server(props : {
                 }}
             </Await>
         </React.Suspense>
+    )
+}
+
+function Downloads_badge_(){
+    const server_state = MangaManagerState()
+    const toast = Chakra.useToast();
+    const toastIdRef = React.useRef<Chakra.ToastId>();
+    server_state.server_query.isRefetching ? toastIdRef.current = toast({
+        title: "Sending operation...",
+        status: "loading",
+        position: "bottom-right"
+    })! : null;
+    server_state.server_query.data == true? toast.update(toastIdRef.current!, {
+                        title: "Server Started",
+                        isClosable: true,
+                        duration: 9000,
+                        status: "success"
+                    }) : null;
+    server_state.server_query.data == false ? toast.update(toastIdRef.current!, {
+                        title: "Server Stopped",
+                        isClosable: true,
+                        duration: 9000,
+                        status: "success"
+                    }) : null;
+    
+    return (
+        <Chakra.Box onClick={() => {
+            server_state.switch_server_state.mutate()
+        }}>
+            {
+                server_state.server_query.data == true ? (
+                    <Chakra.Badge bg='green.500'>ON</Chakra.Badge>
+                ) : (
+                    <Chakra.Badge bg='red.500'>OFF</Chakra.Badge>
+                )
+            }
+        </Chakra.Box>
     )
 }
 
@@ -203,7 +241,10 @@ export class Side_bar extends React.Component<Side_barProps>{
                     </Menu>
                 </SidebarHeader>
                 <SidebarContent>
-                    <Menu popperArrow={true} innerSubMenuArrows={true}>
+                    <Menu
+                        popperArrow={false}
+                        subMenuBullets={false}
+                    >
                         <MenuItem icon={<i onClick={this.collapse.bind(this)} className='far fa-home-alt'></i>}>
                             <Link to={MangaDexPath}>
                                 Home
@@ -223,7 +264,7 @@ export class Side_bar extends React.Component<Side_barProps>{
                                 />
                             } title={"Download"}>
                             <MenuItem suffix={
-                                <Downloads_badge/>
+                                <Downloads_badge_/>
                             }>Server : </MenuItem>
                             <MenuItem> 
                                 <Link to="/mangadex/download">
@@ -303,7 +344,7 @@ export class Content extends React.Component<React.PropsWithChildren>{
                                             base: "flex",
                                             md: "none"
                                         }}>
-                                            <img src="./resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg" /> <h4 className='d-inline'>MangaDex </h4>
+                                            <img src={mangadex_logo} /> &nbsp; <h4 className='d-inline'>MangaDex </h4>
                                         </Chakra.Center>
                                     </Navbar.Brand>
                                     <Navbar.Toggle className=" float-end" aria-controls='searc_bar_' />

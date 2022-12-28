@@ -8,9 +8,7 @@ export default function DownloadsLaoyut(){
         <Chakra.Box>
             <Chakra.Heading>Download</Chakra.Heading>
             <Chakra.Text>A place where you manage all of your downloaded manga</Chakra.Text>
-            <Chakra.Box
-                as={Container}
-            >
+            <Chakra.Box>
                 <Outlet/>
             </Chakra.Box>
         </Chakra.Box>
