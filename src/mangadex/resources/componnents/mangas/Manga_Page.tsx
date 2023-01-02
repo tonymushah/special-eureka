@@ -246,7 +246,7 @@ export function Manga_Page(props: MangaPageProps) {
                                             }
                                         </Chakra.Heading>
                                         <Chakra.Heading
-                                            noOfLines={1}
+                                            noOfLines={0}
                                             fontFamily={"inherit"}
                                             blendMode={"difference"}
                                             size={{

@@ -1990,8 +1990,8 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.1.0"
-source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#007cd3bd2f8f3b2995e455606a26d561091d628e"
+version = "0.1.1-rc1"
+source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#3e18fa6524af484575335fbb70864d0ddadbd492"
 dependencies = [
  "actix-files",
  "actix-web",
