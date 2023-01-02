@@ -38,5 +38,10 @@ jobs:
 
       - uses: JonasKruckenberg/tauri-build@v1
         id: tauri_build
-
+        with:
+          tagName: mangadex-desktop-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: 'App v__VERSION__'
+          releaseBody: 'See the assets to download this version and install. a prerealease workflow'
+          releaseDraft: true
+          prerelease: true
     # You can now use the JSON array of artifacts under `steps.tauri_build.outputs.artifacts` to post-process/upload your bundles
