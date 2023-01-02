@@ -7,6 +7,7 @@ import { Chapter, Chapters, Chapter_withAllIncludes } from '../../../../../api/s
 import { Chapter_, Chapter_includes } from '../../../chapters/Chapter_';
 import { Await } from 'react-router-dom';
 import { ErrorELAsync } from '../../../Error_cmp';
+import Chapter_Element1_byChapID from '../../../chapter/v1/Chapter_Element1_byChapID';
 
 type Chapters_ElementProps = {
     headersTitle: string
@@ -40,80 +41,60 @@ function Chapters_Element(props: Chapters_ElementProps) {
 }
 
 type ChaptersProps = {
-    src : Chapters
+    src: Chapters
 }
 
 export class ChaptersComp extends React.Component<ChaptersProps>{
     state: boolean;
     private toUse: Chapters;
-    public constructor(props: ChaptersProps){
+    public constructor(props: ChaptersProps) {
         super(props)
-    //    this.initializer();
+        //    this.initializer();
         this.setState(true);
         this.toUse = this.props.src
     }
-    public setState(state: boolean){
+    public setState(state: boolean) {
         this.state = state;
     }
-    
+
     render(): React.ReactNode {
-        if(this.toUse.get_count() == 1){
+        if (this.toUse.get_count() == 1) {
             return (
                 <React.Suspense fallback={
                     <div className="text-center">
-                            <Spinner animation="border">
-                            </Spinner>
-                            <br/>
+                        <Spinner animation="border">
+                        </Spinner>
+                        <br />
                         <span>Initializing chapters ...</span>
                     </div>
                 }>
-                    <Await
-                        resolve={this.toUse.initialize_and_get_Chapters()}
-                        errorElement={
-                            <Alert variant="danger">
-                                <span>Error on loading chapter</span>
-                            </Alert>
-                        }
-                        children={(getted: Array<Chapter_withAllIncludes>) => {
-                                return (
-                                    <Chapter_includes chapter={getted[0]}></Chapter_includes>
-                                );
-                            }
-                        }
-                    />
+                    {
+                        this.toUse.get_ids().map((value) => (
+                            <Chapter_Element1_byChapID id={value} />
+                        ))
+                    }
                 </React.Suspense>
             );
-        }else{
+        } else {
             return (
                 <React.Suspense fallback={
                     <div className="text-center">
-                            <Spinner animation="border">
-                            </Spinner>
-                            <br/>
+                        <Spinner animation="border">
+                        </Spinner>
+                        <br />
                         <span>Initializing chapters ...</span>
                     </div>
                 }>
-                    <Await
-                        resolve={this.toUse.initialize_and_get_Chapters()}
-                        errorElement={
-                            <ErrorELAsync/>
+                    <Chapters_Element headersTitle={"Chapter " + this.toUse.get_name()}>
+                        {
+                            this.toUse.get_ids().map((value) => (
+                                <Chapter_Element1_byChapID id={value} />
+                            ))
                         }
-                        children={(dGetted: Array<Chapter_withAllIncludes>) => {
-                                return (
-                                    <Chapters_Element headersTitle={"Chapter " + this.toUse.get_name()}>
-                                        {
-                                            dGetted.reverse().map(getted => (
-                                                <Chapter_includes chapter={getted}></Chapter_includes>
-                                            ))
-                                        }
-                                    </Chapters_Element>
-                                );
-                            }
-                        }
-                    />
+                    </Chapters_Element>
                 </React.Suspense>
             );
         }
-        
+
     }
 }

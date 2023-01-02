@@ -17,12 +17,12 @@ export default function MangaFeedElement(props: {
     },{
         staleTime : Infinity
     });
-    if(query.isLoading){
+    if(query.isLoading == true){
         return (
             <MangaElementFallback/>
         );
     }
-    if(query.isError){
+    if(query.isError == true){
         return (
             <ErrorEL1 error={query.error}/>
         );

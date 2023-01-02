@@ -393,7 +393,7 @@ export class Chapter extends Attribute{
     }
     public static async download(chapterID : string) : Promise<Array<string>>{
         if(await DeskApiRequest.ping() == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter", { chapter_id : chapterID });
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter", { chapterId : chapterID });
             let response_Json : {
                 result : string,
                 dir : string,
@@ -406,7 +406,7 @@ export class Chapter extends Attribute{
     }
     public static async download_data_saver(chapterID : string) : Promise<Array<string>>{
         if(await DeskApiRequest.ping() == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter_data_saver_mode", { chapter_id : chapterID });
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter_data_saver_mode", { chapterId : chapterID });
             let response_Json : {
                 result : string,
                 dir : string,
@@ -416,6 +416,12 @@ export class Chapter extends Attribute{
         }else{
             throw new Error("The offline server isn't started");
         }
+    }
+    public async download_this() : Promise<Array<string>>{
+        return await Chapter.download(this.get_id());
+    }
+    public async download_this_data_saver() : Promise<Array<string>>{
+        return await Chapter.download_data_saver(this.get_id());
     }
 }
 export class Chapters{

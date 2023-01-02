@@ -96,7 +96,7 @@ export default function ChapterNavigationModal(props: {
                                         >
                                             {
                                                 (getted: Aggregate) => (
-                                                    <Chakra.VStack>
+                                                    <Chakra.VStack width={"full"}>
                                                         {
                                                             getted.get_volumes().map((volume) => (
                                                                 <>
@@ -105,7 +105,7 @@ export default function ChapterNavigationModal(props: {
                                                                             <>
                                                                                 {
                                                                                     chapters.get_ids().map((chapter) => (
-                                                                                        <Chakra.Box>
+                                                                                        <Chakra.Box width={"full"}>
                                                                                             <Chakra.Text>
                                                                                                 Volume {
                                                                                                     volume.get_name()

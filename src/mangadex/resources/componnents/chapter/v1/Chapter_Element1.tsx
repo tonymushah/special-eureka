@@ -2,7 +2,7 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { useQueries, useQuery, UseQueryResult } from "react-query";
+import { UseMutationResult, useQueries, useQuery, UseQueryResult } from "react-query";
 import { Await } from "react-router-dom";
 import Timeago from "react-timeago";
 import { Lang } from "../../../../api/internal/Utils";
@@ -13,7 +13,8 @@ import ErrorEL1 from "../../error/ErrorEL1";
 import { Link } from "react-router-dom"
 
 export default function Chapter_Element1(props: {
-    chapter: Chapter
+    chapter: Chapter,
+    downloadMutation? : UseMutationResult<string[], Error, void>
 }) {
     const user_query_key = "mdx-user-" + props.chapter.get_user_id();
     const user_query = useQuery<User>(user_query_key, () => {
@@ -33,7 +34,7 @@ export default function Chapter_Element1(props: {
         ))
     )
     return (
-        <Chakra.LinkBox
+        <Chakra.Box
             width={"full"}
             padding={1}
             _hover={{
@@ -78,14 +79,14 @@ export default function Chapter_Element1(props: {
                     <Chakra.Box
                     >
                         <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
-                            <Chakra.LinkOverlay
+                            <Chakra.Link
                                 as={Link}
                                 to={"/mangadex/chapter/" + props.chapter.get_id()}
                             >
                                 Chapter {props.chapter.get_chapter()} {
                                     props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
                                 }
-                            </Chakra.LinkOverlay>
+                            </Chakra.Link>
                         </Chakra.Heading>
                     </Chakra.Box>
                 </Col>
@@ -112,20 +113,35 @@ export default function Chapter_Element1(props: {
                     lg={1}
                 >
                     <Chakra.Center>
-                        <React.Suspense
-                            fallback={<Chakra.Spinner />}
-                        >
-                            <Await
-                                resolve={Chapter.getAOfflineChapter(props.chapter.get_id())}
-                                errorElement={<ChakraIcon.DownloadIcon />}
-                            >
-                                <Chakra.Tooltip
-                                    label="Downloaded Chapter"
+                        {
+                            props.downloadMutation?.isLoading? (<Chakra.Spinner size={"md"}/>) : (
+                                <React.Suspense
+                                    fallback={<Chakra.Spinner />}
                                 >
-                                    <ChakraIcon.CheckIcon />
-                                </Chakra.Tooltip>
-                            </Await>
-                        </React.Suspense>
+                                    <Await
+                                        resolve={Chapter.getAOfflineChapter(props.chapter.get_id())}
+                                        errorElement={<ChakraIcon.DownloadIcon _hover={{
+                                            color : "blue"
+                                        }} onClick={() => {
+                                            props.downloadMutation?.mutate()
+                                        }}/>}
+                                    >
+                                        <Chakra.Tooltip
+                                            label="Downloaded Chapter"
+                                        >
+                                            <ChakraIcon.CheckIcon 
+                                                _hover={{
+                                                    color : "orange"
+                                                }}
+                                                onClick={() => {
+                                                    props.downloadMutation?.mutate()
+                                                }}
+                                            />
+                                        </Chakra.Tooltip>
+                                    </Await>
+                                </React.Suspense>
+                            )
+                        }
                     </Chakra.Center>
                 </Col>
                 <Col
@@ -159,6 +175,6 @@ export default function Chapter_Element1(props: {
                     }
                 </Col>
             </Row>
-        </Chakra.LinkBox>
+        </Chakra.Box>
     )
 }

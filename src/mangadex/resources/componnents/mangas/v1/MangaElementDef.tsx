@@ -12,10 +12,10 @@ import { ErrorELAsync } from "../../Error_cmp";
 export default function MangaElementDef(props: {
     src: Manga,
     isRefetching?: boolean,
-    refetch? : Function,
-    download? : Function,
-    delete? : Function,
-    update? : Function
+    refetch?: Function,
+    download?: Function,
+    delete?: Function,
+    update?: Function
 }) {
     let title: string = "";
     const cover_key = "mdx-manga_cover-" + props.src.get_id();
@@ -39,7 +39,7 @@ export default function MangaElementDef(props: {
                 marginBottom={10}
                 width={"min-content"}
                 height={{
-                    base : "min-content",
+                    base: "min-content",
                     md: "initial"
                 }}
                 boxSize={"min-content"}
@@ -91,8 +91,8 @@ export default function MangaElementDef(props: {
                         variant={"outline"}
                         zIndex={"dropdown"}
                         float={{
-                            base : "none",
-                            md:"left"
+                            base: "none",
+                            md: "left"
                         }}
                     >
                         <ChakraIcons.HamburgerIcon />
@@ -101,24 +101,24 @@ export default function MangaElementDef(props: {
                         <Chakra.MenuItem
                             onClick={() => props.refetch!()}
                         >Refresh</Chakra.MenuItem>
-                        <Chakra.MenuItem 
+                        <Chakra.MenuItem
                             onClick={() => props.download!()}
                             textColor={"green"}
-                            icon={<ChakraIcons.DownloadIcon/>}
+                            icon={<ChakraIcons.DownloadIcon />}
                         >
                             Download
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
                             onClick={() => props.update!()}
                             textColor={"blue"}
-                            icon={<ChakraIcons.RepeatIcon/>}
+                            icon={<ChakraIcons.RepeatIcon />}
                         >
                             Update
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
                             onClick={() => props.delete!()}
                             textColor={"red"}
-                            icon={<ChakraIcons.DeleteIcon/>}
+                            icon={<ChakraIcons.DeleteIcon />}
                         >
                             Delete
                         </Chakra.MenuItem>
@@ -126,16 +126,16 @@ export default function MangaElementDef(props: {
                 </Chakra.Menu>
                 <Chakra.Center
                     width={{
-                        base : "max-content",
-                        md : "initial"
+                        base: "max-content",
+                        md: "initial"
                     }}
                     position={"relative"}
                     right={{
-                        base:"initial",
+                        base: "initial",
                         md: "25px"
                     }}
                     top={{
-                        base : "-40px",
+                        base: "-40px",
                         md: "initial"
                     }}
                 >
@@ -214,7 +214,7 @@ export default function MangaElementDef(props: {
                                 colSpan={4}
                             >
                                 {
-                                    coverQuery.isFetching? (
+                                    coverQuery.isFetching ? (
                                         <Chakra.Image
                                             src={Mangadex_placeHolder}
                                             fallbackSrc={Mangadex_placeHolder}
@@ -318,15 +318,19 @@ export default function MangaElementDef(props: {
                                         resolve={Lang_and_Data.initializeByDesc(props.src.get_description())}
                                         errorElement={<ErrorELAsync />}
                                         children={(getted: Array<Lang_and_Data>) => {
-                                            return (
-                                                <Chakra.Text
-                                                    noOfLines={3}
-                                                    marginBottom={"1px"}
-                                                    fontSize={"sm"}
-                                                >
-                                                    {getted[0].get_data()}
-                                                </Chakra.Text>
-                                            );
+                                            if (getted.length == 0) {
+                                                return (<></>);
+                                            } else {
+                                                return (
+                                                    <Chakra.Text
+                                                        noOfLines={3}
+                                                        marginBottom={"1px"}
+                                                        fontSize={"sm"}
+                                                    >
+                                                        {getted[0].get_data()}
+                                                    </Chakra.Text>
+                                                );
+                                            }
                                         }}
                                     />
                                 </React.Suspense>

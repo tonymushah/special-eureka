@@ -10,7 +10,7 @@ import { Tag } from "../../../../api/structures/Tag";
 import { AuthorCol } from "./boutons/author_boutons";
 import { LinksRow } from "./boutons/links_boutons";
 import { LAD_Tabs } from "./tabs/Lang_data_tabs";
-import { Aggregate_box } from "./aggregate/Aggregate_box";
+import { Aggregate_box, Aggregate_box_reverse } from "./aggregate/Aggregate_box";
 import * as Chakra from '@chakra-ui/react'
 import { Aggregate } from "../../../../api/structures/Aggregate";
 import { ErrorELAsync } from "../../Error_cmp";
@@ -57,6 +57,46 @@ function CollapseHeight(props: React.PropsWithChildren) {
     )
 }
 
+function Aggregate_part(props : {
+    src : Aggregate
+}){
+    const [order, setOrder] = React.useState<"desc" | "asc">("desc");
+    return (
+        <Chakra.Box>
+            <Chakra.Menu isLazy>
+                <Chakra.MenuButton>
+                    {order == "desc" ? ("Descending") : ("Ascending")}
+                </Chakra.MenuButton>
+                <Chakra.MenuList>
+                    <Chakra.MenuItem
+                        onClick={() => {
+                            setOrder("asc");
+                        }}
+                    >
+                        Ascending
+                    </Chakra.MenuItem>
+                    <Chakra.MenuItem 
+                        onClick={() => {
+                            setOrder("desc");
+                        }}
+                    >
+                        Descending
+                    </Chakra.MenuItem>
+                </Chakra.MenuList>
+            </Chakra.Menu>
+            <Chakra.Box>
+                {
+                    order == "asc" ? (
+                        <Aggregate_box selected={0} src={props.src} separator={3}></Aggregate_box>
+                    ) : (
+                        <Aggregate_box_reverse selected={0} src={props.src} separator={3}></Aggregate_box_reverse>
+                    )
+                }
+            </Chakra.Box>
+        </Chakra.Box>
+    )
+}
+
 type MangaPageProps = {
     src: Manga
 }
@@ -94,22 +134,23 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                 <Row className="mg-top-content">
 
                     <Col>
-                        <Accordion>
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
-                                <Accordion.Body>
-                                    <React.Suspense fallback={<Placeholder lg={12}></Placeholder>}>
-                                        <Await
-                                            resolve={Lang_and_Data.initializeByDesc(this.to_use.get_description())}
-                                            errorElement={<p>Description not found</p>}
-                                            children={(getted: Array<Lang_and_Data>) => {
-                                                return (<LAD_Tabs src={getted}></LAD_Tabs>);
-                                            }}
-                                        />
-                                    </React.Suspense>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                        <React.Suspense fallback={<Placeholder lg={12}></Placeholder>}>
+                            <Await
+                                resolve={Lang_and_Data.initializeByDesc(this.to_use.get_description())}
+                                errorElement={<></>}
+                                children={(getted: Array<Lang_and_Data>) => {
+                                    return (<Accordion>
+                                        <Accordion.Item eventKey="0">
+                                            <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
+                                            <Accordion.Body>
+                                                <LAD_Tabs src={getted}></LAD_Tabs>
+                                            </Accordion.Body>
+                                        </Accordion.Item>
+                                    </Accordion>
+                                    );
+                                }}
+                            />
+                        </React.Suspense>
                     </Col>
                 </Row>
                 <Row className="mg-top-content">
@@ -258,7 +299,7 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                             <Chakra.TabPanels>
                                 <Chakra.TabPanel>
                                     <Container>
-                                        {/*
+
                                         <React.Suspense fallback={
                                             <Chakra.Box m={2} bg="inherit">
                                                 <div className=" text-center">
@@ -276,11 +317,11 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                                     <ErrorELAsync />
                                                 }
                                                 children={(getted: Aggregate) => {
-                                                    return (<Aggregate_box selected={0} src={getted} separator={3}></Aggregate_box>);
+                                                    return (<Aggregate_part src={getted}/>);
                                                 }}
                                             />
-                                        </React.Suspense> 
-                                        */}
+                                        </React.Suspense>
+
                                     </Container>
                                 </Chakra.TabPanel>
                                 <Chakra.TabPanel>

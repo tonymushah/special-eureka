@@ -25,7 +25,44 @@ export class Volume_ extends React.Component<Volume_Props>{
         }
     }
     public render(): React.ReactNode{
-        var chapter_name: string = "Volume";
+        return (
+                <Chakra.AccordionItem>
+                    <h2>
+                        <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
+                            <Chakra.Box flex='1' textAlign='left'>
+                                Volume {this.toUse.get_name()}
+                            </Chakra.Box>
+                            <Chakra.AccordionIcon />
+                        </Chakra.AccordionButton>
+                    </h2>
+                    <Chakra.AccordionPanel>
+                        <Row>
+                            <>
+                                {
+                                    this.toUse.get_chapters().map(getted => (
+                                        <ChaptersComp src={getted}></ChaptersComp>
+                                    ))
+                                }
+                            </>
+                        </Row>
+                    </Chakra.AccordionPanel>
+                </Chakra.AccordionItem>
+        );
+    }
+}
+export class Volume__reverse extends React.Component<Volume_Props>{
+    private toUse: Volume;
+    private open: boolean;
+    public constructor(props: Volume_Props){
+        super(props);
+        this.toUse = this.props.src;
+        if(this.props.open == undefined){
+            this.open = true;
+        }else{
+            this.open = this.props.open!;
+        }
+    }
+    public render(): React.ReactNode{
         return (
                 <Chakra.AccordionItem>
                     <h2>

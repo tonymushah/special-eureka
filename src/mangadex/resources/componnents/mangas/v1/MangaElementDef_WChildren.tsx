@@ -1,19 +1,20 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { Alt_title } from "../../../../api/internal/Utils";
 import { Manga } from "../../../../api/structures/Manga";
 import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
 export default function MangaElementDef_WChildren(props: React.PropsWithChildren<{
     src: Manga,
-    isRefetching? : boolean
+    isRefetching?: boolean
 }>) {
     let title: string = "";
     const cover_key = "mdx-manga_cover:" + props.src.get_id();
-    const coverQuery = useQuery(cover_key , () => {
+    const coverQuery = useQuery(cover_key, () => {
         return props.src.get_cover_art()
-    },{
+    }, {
         "staleTime": Infinity
     });
     const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
@@ -27,7 +28,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
         <Chakra.Box
             marginBottom={10}
             width={"fit-content"}
-            backgroundColor={props.isRefetching == undefined? "gray.100" : (props.isRefetching? "orange.100" : "gray.100")}
+            backgroundColor={props.isRefetching == undefined ? "gray.100" : (props.isRefetching ? "orange.100" : "gray.100")}
             borderRadius={"10px"}
         >
             <Chakra.Center>
@@ -54,22 +55,22 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                             colSpan={4}
                         >
                             {
-                                coverQuery.isLoading? (<Chakra.Skeleton
-                                        borderTopLeftRadius={"10px"}
-                                        borderBottomLeftRadius={"10px"}
-                                        height={"full"}
-                                    />) : null
+                                coverQuery.isLoading ? (<Chakra.Skeleton
+                                    borderTopLeftRadius={"10px"}
+                                    borderBottomLeftRadius={"10px"}
+                                    height={"full"}
+                                />) : null
                             }
                             {
-                                coverQuery.isError? (<Chakra.Image
-                                            src={Mangadex_cover_not_found}
-                                            fallbackSrc={Mangadex_placeHolder}
-                                            borderTopLeftRadius={"10px"}
-                                            borderBottomLeftRadius={"10px"}
-                                        />) : null
+                                coverQuery.isError ? (<Chakra.Image
+                                    src={Mangadex_cover_not_found}
+                                    fallbackSrc={Mangadex_placeHolder}
+                                    borderTopLeftRadius={"10px"}
+                                    borderBottomLeftRadius={"10px"}
+                                />) : null
                             }
                             {
-                                coverQuery.isSuccess? (
+                                coverQuery.isSuccess ? (
                                     <React.Suspense
                                         fallback={
                                             <Chakra.Skeleton
@@ -87,16 +88,23 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                             rowSpan={1}
                             colSpan={8}
                         >
-                            <Chakra.Heading
-                                noOfLines={2}
-                                marginTop={"5px"}
-                                size={
-                                    {
-                                        base: "lg",
-                                        lg: "lg"
+                            <Chakra.Link
+                                as={Link}
+                                to={"/mangadex/manga/" + props.src.get_id()}
+                            >
+                                <Chakra.Heading
+                                    noOfLines={2}
+                                    marginTop={"5px"}
+                                    size={
+                                        {
+                                            base: "lg",
+                                            lg: "lg"
+                                        }
                                     }
-                                }
-                            > {title} </Chakra.Heading>
+                                >
+                                    {title}
+                                </Chakra.Heading>
+                            </Chakra.Link>
                         </Chakra.GridItem>
                         <Chakra.GridItem
                             rowSpan={1}

@@ -42,7 +42,6 @@ export default class Api_Request{
     public static async patch_methods(to_use:string, options?: RequestOptions | undefined): Promise<Response<any>>{
         let client = await Api_Request.client();
         try {
-            console.log(Api_Request.url + to_use);
             let result: Response<any> = await client.patch(Api_Request.url + to_use, options);
             if(result.status >= 200 && result.status < 400 && result.ok == true){
                 return result;
@@ -50,7 +49,6 @@ export default class Api_Request{
                 throw new Api_RequestERROR(result.data.id, result.status, "desktop error", result.data.message);
             }
         } catch (error) {
-            console.log(error);
             throw error;
         }
         

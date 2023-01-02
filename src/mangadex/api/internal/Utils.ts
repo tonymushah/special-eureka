@@ -945,7 +945,7 @@ export class Querry_list_builder<T>{
         try{
             for (let index = 0; index < this.array.length; index++) {
                 const element = this.array[index];
-                returns[this.$name + "[" + index + "]"] = element;
+                returns[this.$name + "[" + index +"]"] = element;
             }
         }catch(e){
             returns = null;

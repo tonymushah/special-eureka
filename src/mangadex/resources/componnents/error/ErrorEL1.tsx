@@ -9,7 +9,7 @@ export default function ErrorEL1(props : {
         <Chakra.Alert status="error">
             <Chakra.AlertIcon></Chakra.AlertIcon>
             <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
-            <Chakra.AlertDescription>{error}</Chakra.AlertDescription>
+            <Chakra.AlertDescription>Error on loading</Chakra.AlertDescription>
         </Chakra.Alert>
     )
 }

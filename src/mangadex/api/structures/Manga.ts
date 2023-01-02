@@ -259,7 +259,6 @@ export class Manga extends Attribute{
         try {
             return await Cover.getById(this.get_some_relationship("cover_art")[0].get_id());
         } catch (error) {
-        console.log("error on manga cover_art " + this.get_id());
             try {
                 if((await DeskApiRequest.ping()) == true){
                     return await Manga.getOfflineMangaCover(this.get_id());
@@ -873,7 +872,7 @@ export class Manga extends Attribute{
     }
     public static async download_manga(mangaID: string) : Promise<Manga>{
         if(await DeskApiRequest.ping() == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga", { manga_id : mangaID });
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga", { mangaId : mangaID });
             let response_Json : {
                 result : string,
                 type : string,
@@ -886,7 +885,7 @@ export class Manga extends Attribute{
     }
     public static async download_all_manga_covers(mangaID: string) : Promise<Array<string>>{
         if(await DeskApiRequest.ping() == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_covers", { manga_id : mangaID });
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_covers", { mangaId : mangaID });
             let response_Json : {
                 result : string,
                 type : string,
@@ -900,7 +899,7 @@ export class Manga extends Attribute{
     }
     public static async download_manga_cover(mangaID : string) : Promise<Cover>{
         if(await DeskApiRequest.ping() == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_cover", { manga_id : mangaID });
+            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_cover", { mangaId : mangaID });
             let response_Json : {
                 result : string,
                 type : string,
@@ -945,7 +944,7 @@ export class Manga extends Attribute{
     public async delete_this(){
         return await Manga.delete_aDownloaded_manga(this.get_id());
     }
-    public async download() : Promise<Manga>{
+    public async download_this() : Promise<Manga>{
         return await Manga.download_manga(this.get_id());
     }
     public async download_cover_art() : Promise<Cover>{
@@ -1020,12 +1019,8 @@ export class Manga_2 extends Manga{
         instance.set_related(object.related);
         return instance;
     }
-    public async get_cover_art(): Promise<Cover>{
-        console.log("dsadsadoasdldas");
-        if((await DeskApiRequest.ping()) == true){
-            return await Manga.getOfflineMangaCover(this.get_id());
-        }else{
-            let orders : Order = new Order();
+    public async get_online_coverArt() : Promise<Cover>{
+        let orders : Order = new Order();
             orders.set_volume(Asc_Desc.desc());
             try {
                 let cover = (await Cover.search(
@@ -1045,8 +1040,17 @@ export class Manga_2 extends Manga{
             } catch (error) {
                 throw new Error("No cover art for this manga " + this.get_title().en);
             }
+    }
+    public async get_cover_art(): Promise<Cover>{
+        if((await DeskApiRequest.ping()) == true){
+            try {
+                return await Manga.getOfflineMangaCover(this.get_id());
+            } catch (error) {
+                return await this.get_online_coverArt();
+            }
+        }else{
+            return await this.get_online_coverArt();
         }
-        
     }
 }
 
@@ -1154,7 +1158,6 @@ export class Manga_with_allRelationship extends Manga {
             }
             instance.$related_manga = to_input_manga;
         } catch (error) {
-            console.log(error);
         }
         try {
             let to_input_author: Array<Author> = [];
@@ -1163,7 +1166,6 @@ export class Manga_with_allRelationship extends Manga {
                 to_input_author[index] = Author.build_wANY(all_author[index]);
             }
             instance.$authors = new Author_Artists(to_input_author, []).filtred; 
-            console.log(instance.$authors.length);
         } catch (error) {}
         try {
             let to_input_artists: Array<Author> = [];

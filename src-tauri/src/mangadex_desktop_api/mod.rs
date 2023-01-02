@@ -1,36 +1,78 @@
 use actix_web::dev::{Server, ServerHandle};
 use mangadex_desktop_api2;
-use serde::{ser::Serializer, Serialize};
-use std::{collections::HashMap, sync::Mutex, };
+use serde::{ser::Serializer, Deserialize, Serialize};
+use std::{collections::HashMap, sync::Mutex};
 use tauri::{
     command,
     plugin::{Builder, TauriPlugin},
     AppHandle, Manager, Runtime, State, Window,
 };
 type Result<T> = std::result::Result<T, Error>;
-use mangadex_desktop_api2::settings::{server_options::ServerOptions};
+use mangadex_desktop_api2::settings::server_options::ServerOptions;
+
+#[derive(Serialize, Deserialize)]
+struct ErrorPayload {
+    result: String,
+    message: String,
+}
+
+macro_rules! this_eureka_reqwest_result {
+    ($to_use:expr) => {
+        match $to_use.send().await {
+            Err(e) => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    e.to_string().as_str(),
+                )));
+            }
+            Ok(f) => {
+                if f.status().is_success() {
+                    f
+                } else {
+                    let to_return: ErrorPayload = match f.json().await {
+                        Ok(data) => data,
+                        Err(e) => {
+                            return Err(Error::Io(std::io::Error::new(
+                                std::io::ErrorKind::Other,
+                                e.to_string().as_str(),
+                            )));
+                        }
+                    };
+                    return Err(Error::Io(std::io::Error::new(
+                        std::io::ErrorKind::Other,
+                        to_return.message,
+                    )));
+                }
+            }
+        }
+    };
+}
 
 #[tauri::command]
 async fn download_manga(manga_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/manga/{}", server_option.hostname, server_option.port, manga_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/manga/{}",
+        server_option.hostname, server_option.port, manga_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -39,23 +81,27 @@ async fn download_manga(manga_id: String) -> Result<String> {
 async fn update_cover_data(cover_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.patch(format!("http://{}:{}/cover/{}", server_option.hostname, server_option.port, cover_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.patch(format!(
+        "http://{}:{}/cover/{}",
+        server_option.hostname, server_option.port, cover_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -64,23 +110,27 @@ async fn update_cover_data(cover_id: String) -> Result<String> {
 async fn download_cover(cover_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/cover/{}", server_option.hostname, server_option.port, cover_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/cover/{}",
+        server_option.hostname, server_option.port, cover_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -89,23 +139,27 @@ async fn download_cover(cover_id: String) -> Result<String> {
 async fn download_cover_with_quality(cover_id: String, quality: u32) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.patch(format!("http://{}:{}/cover/{}/{}", server_option.hostname, server_option.port, cover_id, quality));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.patch(format!(
+        "http://{}:{}/cover/{}/{}",
+        server_option.hostname, server_option.port, cover_id, quality
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -114,23 +168,27 @@ async fn download_cover_with_quality(cover_id: String, quality: u32) -> Result<S
 async fn download_chapter(chapter_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/chapter/{}", server_option.hostname, server_option.port, chapter_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/chapter/{}",
+        server_option.hostname, server_option.port, chapter_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -139,23 +197,27 @@ async fn download_chapter(chapter_id: String) -> Result<String> {
 async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/chapter/{}/data", server_option.hostname, server_option.port, chapter_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/chapter/{}/data",
+        server_option.hostname, server_option.port, chapter_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -164,49 +226,56 @@ async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
 async fn download_chapter_data_saver_mode(chapter_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/chapter/{}/data-saver", server_option.hostname, server_option.port, chapter_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/chapter/{}/data-saver",
+        server_option.hostname, server_option.port, chapter_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
-
 
 #[tauri::command]
 async fn download_manga_cover(manga_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/manga/{}/cover", server_option.hostname, server_option.port, manga_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/manga/{}/cover",
+        server_option.hostname, server_option.port, manga_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -215,23 +284,27 @@ async fn download_manga_cover(manga_id: String) -> Result<String> {
 async fn download_manga_covers(manga_id: String) -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.put(format!("http://{}:{}/manga/{}/covers", server_option.hostname, server_option.port, manga_id));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.put(format!(
+        "http://{}:{}/manga/{}/covers",
+        server_option.hostname, server_option.port, manga_id
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
@@ -240,60 +313,67 @@ async fn download_manga_covers(manga_id: String) -> Result<String> {
 async fn refetch_all_manga() -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.patch(format!("http://{}:{}/chapters/all/patch-manga", server_option.hostname, server_option.port));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.patch(format!(
+        "http://{}:{}/chapters/all/patch-manga",
+        server_option.hostname, server_option.port
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
-
 
 #[tauri::command]
 async fn patch_all_manga_cover() -> Result<String> {
     let server_option = match ServerOptions::new() {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     let client = reqwest::Client::new();
-    let request = client.patch(format!("http://{}:{}/mangas/all/cover", server_option.hostname, server_option.port));
-    let response = match request.send().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
-    };
+    let request = client.patch(format!(
+        "http://{}:{}/mangas/all/cover",
+        server_option.hostname, server_option.port
+    ));
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string().as_str())));
-        },
-        Ok(f) => f
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                e.to_string().as_str(),
+            )));
+        }
+        Ok(f) => f,
     };
     Ok(response_text)
 }
 #[derive(Clone)]
 struct Payload {
     message: String,
-    level : log::Level
+    level: log::Level,
 }
 #[derive(Clone, serde::Serialize)]
 struct ExportPayload {
-    message: String
+    message: String,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -410,9 +490,9 @@ async fn stop_server(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Resul
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("mangadex-desktop-api")
         .invoke_handler(tauri::generate_handler![
-            launch_server, 
-            stop_server, 
-            refetch_all_manga, 
+            launch_server,
+            stop_server,
+            refetch_all_manga,
             patch_all_manga_cover,
             download_manga_covers,
             download_manga_cover,
@@ -428,52 +508,55 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             let app2 = app.app_handle();
             app.manage(MyState::default());
             app.manage(MangadexDesktopApiHandle::default());
-            let out_put = fern::Output::call(move |record1|{
-                let payload : Payload = Payload { message: record1.args().to_string(), level : record1.level() };
+            let out_put = fern::Output::call(move |record1| {
+                let payload: Payload = Payload {
+                    message: record1.args().to_string(),
+                    level: record1.level(),
+                };
                 //let app2 = app3.app_handle();
-                    if payload.level == log::LevelFilter::Info {
-                            app2.emit_all(
-                                "info",
-                                ExportPayload{
-                                    message : payload.message
-                                }
-                            )
-                            .unwrap();
-                        } else if payload.level == log::LevelFilter::Warn {
-                            app2.emit_all(
-                                "warn",
-                                ExportPayload{
-                                    message : payload.message
-                                }
-                            )
-                            .unwrap();
-                        } else if payload.level == log::LevelFilter::Debug {
-                            app2.emit_all(
-                                "debug",
-                                ExportPayload{
-                                    message : payload.message
-                                }
-                            )
-                            .unwrap();
-                        } else if payload.level == log::LevelFilter::Error {
-                            app2.emit_all(
-                                "error",
-                                ExportPayload{
-                                    message : payload.message
-                                }
-                            )
-                            .unwrap();
-                        } else if payload.level == log::LevelFilter::Trace {
-                            app2.emit_all(
-                                "trace",
-                                ExportPayload{
-                                    message : payload.message
-                                }
-                            )
-                            .unwrap();
-                        }
-                    println!(" log : {}", record1.args().to_string());
-                });
+                if payload.level == log::LevelFilter::Info {
+                    app2.emit_all(
+                        "info",
+                        ExportPayload {
+                            message: payload.message,
+                        },
+                    )
+                    .unwrap();
+                } else if payload.level == log::LevelFilter::Warn {
+                    app2.emit_all(
+                        "warn",
+                        ExportPayload {
+                            message: payload.message,
+                        },
+                    )
+                    .unwrap();
+                } else if payload.level == log::LevelFilter::Debug {
+                    app2.emit_all(
+                        "debug",
+                        ExportPayload {
+                            message: payload.message,
+                        },
+                    )
+                    .unwrap();
+                } else if payload.level == log::LevelFilter::Error {
+                    app2.emit_all(
+                        "error",
+                        ExportPayload {
+                            message: payload.message,
+                        },
+                    )
+                    .unwrap();
+                } else if payload.level == log::LevelFilter::Trace {
+                    app2.emit_all(
+                        "trace",
+                        ExportPayload {
+                            message: payload.message,
+                        },
+                    )
+                    .unwrap();
+                }
+                println!(" log : {}", record1.args().to_string());
+            });
             fern::Dispatch::new()
                 .level(log::LevelFilter::Info)
                 .chain(out_put)

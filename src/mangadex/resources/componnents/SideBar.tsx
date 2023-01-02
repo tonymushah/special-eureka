@@ -24,6 +24,7 @@ import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 import vite_logo from "/commons-res/common-icon/favicon.svg";
 import { Collection } from '../../api/structures/Collection';
 import MangaManagerState from '../hooks/MangaManagerState';
+import MangaElementDef from './mangas/v1/MangaElementDef';
 
 const MangaDexPath: string = "/mangadex/";
 
@@ -380,7 +381,7 @@ export function Modal_Search(props: Modal_SearchProps) {
         for (let index = 0; index < array.length; index++) {
             const element = array[index];
             builded[index] = (
-                <MangaSimpleEl src={element} />
+                <MangaElementDef src={element}/>
             )
         }
         return builded;

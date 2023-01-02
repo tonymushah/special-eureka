@@ -65,7 +65,7 @@ export default function MangaElementDef_wID(props: {
                 status : "loading",
                 duration : 9000
             });
-            return query.data!.download()
+            return Manga.download_manga(query.data!.get_id())
         },
         onSuccess : () => {
             queryClient.invalidateQueries({
