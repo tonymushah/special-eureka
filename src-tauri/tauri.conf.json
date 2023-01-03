@@ -116,7 +116,7 @@
         "theme":"Light",
         "label": "main",
         "url": "index.html",
-        "visible": true
+        "visible": false
       },
       {
         "width": 600,

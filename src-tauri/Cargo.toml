@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
+name = "mangadex-desktop"
+version = "0.1.0-beta1"
 description = "a mangadex desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
 repository = ""
-default-run = "app"
+default-run = "mangadex-desktop"
 edition = "2021"
 rust-version = "1.57"
 

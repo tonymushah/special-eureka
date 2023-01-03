@@ -3,8 +3,9 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Manga } from "../../../../api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
-import MangaElementDef from "./MangaElementDef";
 import MangaElementFallback from "./MangaElementFallback";
+
+const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
 
 export default function MangaElementDef_wID(props: {
     mangaID: string
@@ -94,12 +95,18 @@ export default function MangaElementDef_wID(props: {
         )
     }
     return (
-        <MangaElementDef 
-            src={query.data!} 
-            isRefetching={query.isRefetching} 
-            refetch={query.refetch} 
-            download={download_.mutate}
-            delete={delete_.mutate}
-        />
+        <React.Suspense
+            fallback={
+                <MangaElementFallback/>
+            }
+        >
+            <MangaElementDef 
+                src={query.data!} 
+                isRefetching={query.isRefetching} 
+                refetch={query.refetch} 
+                download={download_.mutate}
+                delete={delete_.mutate}
+            />
+        </React.Suspense>
     )
 }
