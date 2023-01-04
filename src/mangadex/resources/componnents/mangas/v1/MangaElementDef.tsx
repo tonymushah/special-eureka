@@ -150,8 +150,7 @@ export default function MangaElementDef(props: {
                     >
                         {
                             coverQuery.isFetching ? (<Chakra.Image
-                                src={Mangadex_cover_not_found}
-                                fallbackSrc={Mangadex_placeHolder}
+                                src={Mangadex_placeHolder}
                                 borderTopRadius={"10px"}
                             />) : (
                                 coverQuery.isLoading ? (<Chakra.Skeleton
