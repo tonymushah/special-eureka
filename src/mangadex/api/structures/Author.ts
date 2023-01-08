@@ -1,11 +1,57 @@
 import { Api_Request } from "../internal/Api_Request";
-import { Upload } from "../internal/Upload_Retrieve";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
 import { Response } from "@tauri-apps/api/http";
-import { NumberLiteralType } from "typescript";
 import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
 import { Collection } from "./Collection";
+import AuthorSearchType from "./SearchType/Author";
+
+class AuthorCollection extends Collection<Author>{
+    private prev_search_type : AuthorSearchType;
+    /**
+     * Getter $prev_search_type
+     * @return {AuthorSearchType}
+     */
+	public get $prev_search_type(): AuthorSearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {AuthorSearchType} value
+     */
+	public set $prev_search_type(value: AuthorSearchType) {
+		this.prev_search_type = value;
+	}
+    constructor(data : Author[], limit : number, offset : number, total: number, previous_search_type: AuthorSearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+    }
+    public next(): Promise<Collection<Author>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return Author.searchAuthor(this.prev_search_type);
+        }else{
+            throw new Error("no next autho");
+        }
+    }
+    public previous(): Promise<Collection<Author>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return Author.searchAuthor(this.prev_search_type);
+        }else{
+            throw new Error("no previous manga");
+        }
+    }
+}
 
 export class Author extends Attribute{
     private name:string;
@@ -198,13 +244,7 @@ export class Author extends Attribute{
             ids,
             order,
             includes
-        } : {
-            offset_Limits: Offset_limits,
-            name?: string,
-            ids?: Array<string>,
-            order?: Order,
-            includes?: Array<string>
-        }
+        } : AuthorSearchType
     ): Promise<Collection<Author>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -223,8 +263,13 @@ export class Author extends Attribute{
         for (let index = 0; index < data.length; index++) {
             authorArray[index] = Author.build_wANY(data[index]);
         }
-        return new Collection<Author>(authorArray ,getted.data.limit, getted.data.offset, getted.data.total);
-        
+        return new AuthorCollection(authorArray ,getted.data.limit, getted.data.offset, getted.data.total, {
+            offset_Limits : offset_Limits,
+            name : name,
+            ids : ids,
+            order : order,
+            includes : includes
+        });
     }
     public get_key_word():string;
     public get_key_word(isArtist?: boolean):string{

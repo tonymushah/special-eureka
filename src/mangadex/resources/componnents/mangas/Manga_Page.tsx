@@ -1,32 +1,29 @@
-import React from "react";
-import { Manga } from "../../../api/structures/Manga";
-import { Button, Container, Row, Col, Placeholder } from "react-bootstrap";
 import * as ChakraIcons from "@chakra-ui/icons";
-import * as FontAwesome from "react-icons/fa";
-import { Alt_title, Author_Artists, Lang_and_Data, make_first_UpperCare, ContentRating, Status } from "../../../api/internal/Utils";
-import { Cover } from "../../../api/structures/Cover";
-import { Cover_Image_ } from "./Mainpage/Image_";
+import * as Chakra from '@chakra-ui/react';
 import "flag-icons/css/flag-icons.min.css";
+import React from "react";
+import { Button, Col, Container, Placeholder, Row } from "react-bootstrap";
+import * as FontAwesome from "react-icons/fa";
+import { NumericFormat } from "react-number-format";
+import { useQueries, useQuery } from "react-query";
 import { Await, Link } from "react-router-dom";
-import * as Chakra from '@chakra-ui/react'
-import "../../css/manga/mg-p.css"
-import "../../css/manga/thumbail-mg.css"
+import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "../../../api/internal/Utils";
+import { Author } from "../../../api/structures/Author";
+import { Manga } from "../../../api/structures/Manga";
 import { Statistics } from "../../../api/structures/Statistics";
-import { ErrorELAsync } from "../Error_cmp";
-import { NumericFormat } from "react-number-format"
-import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
+import "../../css/manga/mg-p.css";
+import "../../css/manga/thumbail-mg.css";
 import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
-import { useQuery } from "react-query";
+import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../error/ErrorEL1";
+import { Cover_Image_ } from "./Mainpage/Image_";
 
 export function Statis(props: {
     src: Statistics
 }) {
-    const initialFocusRef = React.useRef();
     let getted: Statistics = props.src;
     return (
         <Chakra.Popover
-            initialFocusRef={initialFocusRef}
             closeOnBlur={false}
         >
             <Chakra.PopoverTrigger>
@@ -122,6 +119,13 @@ type MangaPageProps = {
     children: React.ReactNode
 }
 
+const ExtLink = React.lazy(async () => {
+    let res = await import("../../../../commons-res/components/ExtLink");
+    return {
+        default: res.ExtLink
+    };
+})
+
 export function Manga_Page(props: MangaPageProps) {
     let title: string = "";
     const cover_key = "mdx-manga_cover-" + props.src.get_id();
@@ -135,13 +139,59 @@ export function Manga_Page(props: MangaPageProps) {
     }, {
         "staleTime": Infinity
     });
+    const authors = useQueries(
+        props.src.get_authors_id().map(author_id => {
+            return {
+                queryKey: "mdx-author-" + author_id,
+                queryFn: () => {
+                    return props.src.get_author_byID(author_id);
+                },
+                staleTime: Infinity
+            }
+        })
+    )
+    const artistists = useQueries(
+        props.src.get_artists_id().map(author_id => {
+            return {
+                queryKey: "mdx-author-" + author_id,
+                queryFn: () => {
+                    return props.src.get_artist_byID(author_id);
+                },
+                staleTime: Infinity
+            }
+        })
+    )
+    const manga_statistics = useQuery<Statistics, Error>("mdx-manga_stats-", () => {
+        return Statistics.get_statsBy_MangaID(props.src.get_id());
+    }, {
+        staleTime: Infinity
+    });
+    function is_Author_artists_finished(): boolean {
+        let all_isSuccess_Authors = authors.map<boolean>((value) => {
+            return value.isSuccess;
+        });
+        let is_allAuthors_Success = !all_isSuccess_Authors.includes(false);
+        let all_isSuccess_Artists = artistists.map<boolean>((value) => {
+            return value.isSuccess;
+        });
+        let is_allArtists_Success = !all_isSuccess_Artists.includes(false);
+        if (is_allArtists_Success == true && is_allAuthors_Success == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
     } else {
         title = props.src.get_title().en;
     }
-    async function authors_artists(): Promise<Array<React.ReactNode>> {
-        let returns: Author_Artists = new Author_Artists(await props.src.get_author(), await props.src.get_artist());
+    function authors_artists(): Array<React.ReactNode> {
+        let returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
+            return value.data!;
+        }), artistists.map<Author>((value) => {
+            return value.data!;
+        }));
         let returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
         for (let index = 0; index < returns.filtred.length; index++) {
             const element = returns.filtred[index];
@@ -267,7 +317,14 @@ export function Manga_Page(props: MangaPageProps) {
                                             }
                                         </Chakra.Heading>
                                         <Chakra.Text>
-                                            <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
+                                            {
+                                                !is_Author_artists_finished() ? (
+                                                    <Placeholder md={6}></Placeholder>
+                                                ) : (
+                                                    authors_artists()
+                                                )
+                                            }
+                                            {/* <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
                                                 <Await
                                                     resolve={authors_artists()}
                                                     errorElement={<div></div>}
@@ -283,37 +340,183 @@ export function Manga_Page(props: MangaPageProps) {
                                                         )
                                                     }}
                                                 />
-                                            </React.Suspense>
+                                            </React.Suspense> */}
                                         </Chakra.Text>
-                                        <Chakra.Text
-                                            fontWeight={"bold"}
+                                        <Chakra.Box
+                                            display={{
+                                                base: "inherit",
+                                                lg: "none"
+                                            }}
                                         >
-                                            <Chakra.Center
-                                                width={"fit-content"}
-                                            >
-                                                Publication : 
-                                                &nbsp;
-                                                {
-                                                    get_status_color()
-                                                }
-                                                &nbsp;
-                                                {
-                                                    make_first_UpperCare(props.src.get_status())
-                                                }
-                                            </Chakra.Center>
-                                        </Chakra.Text>
-                                        <Chakra.Text>
                                             {
-                                                build_themes_manga().map((value) => value)
+                                                manga_statistics.isLoading ? (
+                                                    <Chakra.Skeleton
+                                                        height={"20px"}
+                                                        width={"md"}
+                                                    />
+                                                ) : (
+                                                    manga_statistics.isError ? (
+                                                        <Chakra.Alert status={"error"}>
+                                                            <Chakra.AlertIcon />
+                                                            <Chakra.AlertTitle>Error on loading Stats</Chakra.AlertTitle>
+                                                            <Chakra.AlertDescription>{manga_statistics.error.message}</Chakra.AlertDescription>
+                                                        </Chakra.Alert>
+                                                    ) : (
+                                                        manga_statistics.isSuccess ? (
+                                                            <Statis src={manga_statistics.data} />
+                                                        ) : (
+                                                            <></>
+                                                        )
+                                                    )
+                                                )
                                             }
-                                        </Chakra.Text>
-                                        <Chakra.Text>
-                                            {props.src.get_originalLanguage()}
-                                        </Chakra.Text>
+                                        </Chakra.Box>
+                                        <Chakra.Box
+                                            display={{
+                                                base: "none",
+                                                lg: "inherit"
+                                            }}
+                                        >
+                                            <Chakra.Text
+                                                fontWeight={"bold"}
+                                                padding={0}
+                                                margin={0}
+                                            >
+                                                <Chakra.Center
+                                                    width={"fit-content"}
+                                                >
+                                                    Publication :
+                                                    &nbsp;
+                                                    {
+                                                        get_status_color()
+                                                    }
+                                                    &nbsp;
+                                                    {
+                                                        make_first_UpperCare(props.src.get_status())
+                                                    }
+                                                </Chakra.Center>
+                                            </Chakra.Text>
+                                            <Chakra.Text
+                                                noOfLines={0}
+                                                padding={0}
+                                                margin={0}
+                                            >
+                                                {
+                                                    build_themes_manga().map((value) => value)
+                                                }
+                                            </Chakra.Text>
+                                            <Chakra.Box>
+                                                <React.Suspense
+                                                    fallback={
+                                                        <Chakra.Button
+                                                            isLoading
+                                                            colorScheme={"orange"}
+                                                            loadingText={"Loading..."}
+                                                        />
+                                                    }
+                                                >
+                                                    <ExtLink
+                                                        href={"https://mangadex.org/title/" + props.src.get_id()}
+                                                    >
+                                                        <Chakra.Button
+                                                            colorScheme={"orange"}
+                                                            rightIcon={<ChakraIcons.ExternalLinkIcon />}
+                                                        >
+                                                            Open to Mangadex
+                                                        </Chakra.Button>
+                                                    </ExtLink>
+                                                </React.Suspense>
+                                            </Chakra.Box>
+                                            <Chakra.Box>
+                                                {
+                                                    manga_statistics.isLoading ? (
+                                                        <Chakra.Skeleton
+                                                            height={"20px"}
+                                                            width={"md"}
+                                                        />
+                                                    ) : (
+                                                        manga_statistics.isError ? (
+                                                            <Chakra.Alert status={"error"}>
+                                                                <Chakra.AlertIcon />
+                                                                <Chakra.AlertTitle>Error on loading Stats</Chakra.AlertTitle>
+                                                                <Chakra.AlertDescription>{manga_statistics.error.message}</Chakra.AlertDescription>
+                                                            </Chakra.Alert>
+                                                        ) : (
+                                                            manga_statistics.isSuccess ? (
+                                                                <Statis src={manga_statistics.data} />
+                                                            ) : (
+                                                                <></>
+                                                            )
+                                                        )
+                                                    )
+                                                }
+                                            </Chakra.Box>
+                                        </Chakra.Box>
                                     </Chakra.Center>
                                 </Chakra.Box>
                             </Col>
                         </Row>
+                        <Chakra.Box
+                            display={{
+                                base: "inherit",
+                                lg: "none"
+                            }}
+                        >
+                            <>
+                                <Row>
+                                    <Chakra.Text
+                                        fontWeight={"bold"}
+                                        padding={0}
+                                        margin={0}
+                                    >
+                                        <Chakra.Center
+                                            width={"fit-content"}
+                                        >
+                                            Publication :
+                                            &nbsp;
+                                            {
+                                                get_status_color()
+                                            }
+                                            &nbsp;
+                                            {
+                                                make_first_UpperCare(props.src.get_status())
+                                            }
+                                        </Chakra.Center>
+                                    </Chakra.Text>
+                                    <Chakra.Text
+                                        noOfLines={0}
+                                        padding={0}
+                                        margin={0}
+                                    >
+                                        {
+                                            build_themes_manga().map((value) => value)
+                                        }
+                                    </Chakra.Text>
+                                    <Chakra.Box>
+                                        <React.Suspense
+                                            fallback={
+                                                <Chakra.Button
+                                                    isLoading
+                                                    colorScheme={"orange"}
+                                                    loadingText={"Loading..."}
+                                                />
+                                            }
+                                        >
+                                            <ExtLink
+                                                href={"https://mangadex.org/title/" + props.src.get_id()}
+                                            >
+                                                <Chakra.Button
+                                                    colorScheme={"orange"}
+                                                    rightIcon={<ChakraIcons.ExternalLinkIcon />}
+                                                >
+                                                    Open to Mangadex
+                                                </Chakra.Button>
+                                            </ExtLink>
+                                        </React.Suspense>
+                                    </Chakra.Box>
+                                </Row>
+                            </>
+                        </Chakra.Box>
                     </Container>
                 </Chakra.Box>
             </Chakra.Box>

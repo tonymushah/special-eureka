@@ -156,7 +156,9 @@ function useMangadexRouter(): RouteObject {
                                 >
                                     {(getted1: Manga) => {
                                         let navigate = useNavigate();
-                                        navigate(MangaDexPath + "/manga/" + getted1.get_id())
+                                        React.useEffect(() => {
+                                            navigate(MangaDexPath + "/manga/" + getted1.get_id())
+                                        });
                                         return (<></>);
                                     }}
                                 </Await>

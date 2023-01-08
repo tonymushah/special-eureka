@@ -1,15 +1,14 @@
+import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Link, Outlet, useOutletContext, useLoaderData, useParams, Await } from "react-router-dom";
-import * as Chakra from "@chakra-ui/react"
+import { Container, Nav } from "react-bootstrap";
+import { useQuery } from "react-query";
+import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
 import { Manga } from "../api/structures/Manga";
-import { Manga_Page } from "../resources/componnents/mangas/Manga_Page";
-import { Nav, Container } from "react-bootstrap";
-import { Top_Chaps } from "../resources/componnents/mangas/Mainpage/Top_chap";
+import ErrorEL1 from "../resources/componnents/error/ErrorEL1";
 import { Covers_Manga } from "../resources/componnents/mangas/Mainpage/Covers_";
 import Related from "../resources/componnents/mangas/Mainpage/Related";
-import { ErrorELAsync1 } from "../resources/componnents/Error_cmp";
-import { useQuery } from "react-query";
-import ErrorEL1 from "../resources/componnents/error/ErrorEL1";
+import { Top_Chaps } from "../resources/componnents/mangas/Mainpage/Top_chap";
+import { Manga_Page } from "../resources/componnents/mangas/Manga_Page";
 
 type MangaPage_OutletContex = {
     toUse: Manga

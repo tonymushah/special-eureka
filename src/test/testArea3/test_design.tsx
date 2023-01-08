@@ -1,280 +1,208 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Manga } from "../../mangadex/api/structures/Manga";
 //import MangaList from "../../mangadex/api/tsx/MangaList";
 //import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
-import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
+import * as ChakraIcon from "@chakra-ui/icons";
 import "flag-icons/css/flag-icons.min.css";
 import "font-awesome/css/font-awesome.css";
+import "bootstrap/dist/css/bootstrap.css";
+import { FaUsers } from "react-icons/fa"
+import { Col, Container, Row } from "react-bootstrap"
 import {
 
     QueryClient,
 
-    QueryClientProvider, useQuery
+    QueryClientProvider,
+    useQuery
 } from 'react-query';
 import { ReactQueryDevtools } from "react-query/devtools";
-import { Await, useAsyncError } from "react-router-dom";
-import Timeago from "react-timeago";
-import { Autoplay, FreeMode, Mousewheel, Pagination } from "swiper";
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Lang } from "../../mangadex/api/internal/Utils";
-import { Chapter } from "../../mangadex/api/structures/Chapter";
-import { Group } from "../../mangadex/api/structures/Group";
-import { List } from "../../mangadex/api/structures/List";
-import { User } from "../../mangadex/api/structures/User";
-import { ErrorELAsync1 } from "../../mangadex/resources/componnents/Error_cmp";
-import MangaElementDef_wID from "../../mangadex/resources/componnents/mangas/v1/MangaElementDef_wID";
-import MangaElementFallback from "../../mangadex/resources/componnents/mangas/v1/MangaElementFallback";
-import Mangadex_placeHolder from "../../mangadex/resources/imgs/cover-placeholder.png";
-import MangaElementDef_WChildren from "../../mangadex/resources/componnents/mangas/v1/MangaElementDef_WChildren";
-import Chapter_Element1 from "../../mangadex/resources/componnents/chapter/v1/Chapter_Element1";
-import MangaFeedElement_byChapID from "../../mangadex/resources/componnents/chapter/v1/MangaFeedElement_byChapID";
+import { Group, Group_WithAllRelationShip } from "../../mangadex/api/structures/Group";
+
+import test_group from "./test_groups/ab24085f-b16c-4029-8c05-38fe16592a85_all_includes.json";
 import ErrorEL1 from "../../mangadex/resources/componnents/error/ErrorEL1";
-import MangaSwipper from "../../mangadex/resources/componnents/chapter/v1/MangaSwipper";
+import WaveHaikei from "./imgs/wave-haikei-1.svg";
+import { Await } from "react-router-dom"
+import { ErrorELAsync } from "../../mangadex/resources/componnents/Error_cmp";
 
-function MangaWarpW_idList(props : {
-    mangaIDarray: Array<string>
-}){
-    return(
-        <Chakra.Wrap>
-            {
-                props.mangaIDarray.map((value : string) => (
-                    <Chakra.WrapItem>
-                        <MangaElementDef_wID
-                            mangaID={value}
-                        />
-                    </Chakra.WrapItem>
-                ))
-            }
-        </Chakra.Wrap>
-    )
-}
-
-function MangaWarpW_manga(props : {
-    mangaIDarray: Array<Manga>
-}){
-    return(
-        <Chakra.Wrap>
-            {
-                props.mangaIDarray.map((value : Manga) => (
-                    <Chakra.WrapItem>
-                        <MangaElementDef src={value}/>
-                    </Chakra.WrapItem>
-                ))
-            }
-        </Chakra.Wrap>
-    )
-}
-
-function All_downloaded_chapter() {
-    return (
-        <React.Suspense
-            fallback={
-                <Chakra.Center>
-                    <Chakra.Spinner />
-                </Chakra.Center>
-            }
-        >
-            <Await
-                resolve={Chapter.getAll_downloaded_chap()}
-                errorElement={<ErrorELAsync1 />}
-            >
-                {
-                    (getted: Array<string>) => {
-                        return (
-                            <Chakra.Wrap>
-                                {
-                                    getted.map((value: string) => (
-                                        <Chakra.WrapItem>
-                                            <MangaFeedElement_byChapID id={value}/>
-                                        </Chakra.WrapItem>
-                                    ))
-                                }
-                            </Chakra.Wrap>
-                        );
-                    }
-                }
-            </Await>
-        </React.Suspense>
-    );
-}
-
-function LongStrip(props: {
-    chapID: string,
-    src: Array<string>,
-}) {
+function GroupFallBackElement(){
     return (
         <Chakra.Box>
-            <Chakra.Box
-            >
-                {
-                    props.src.map((value: string, index: number) => (
-                        <Chakra.Box
-                            id={"page_nb" + index}
-                        >
-                            <React.Suspense
-                                fallback={
-                                    <Chakra.Box
-                                        margin={"15em"}
-                                    >
-                                        <Chakra.Center>
-                                            <Chakra.Spinner
-                                                thickness='10px'
-                                                speed='0.65s'
-                                                emptyColor='gray.200'
-                                                color='orange.500'
-                                                size='xl'
-                                            />
-                                        </Chakra.Center>
-                                    </Chakra.Box>
-                                }
-                            >
-                                <Await
-                                    resolve={Chapter.getAOfflineChapter_Data_Image(props.chapID, value)}
-                                    errorElement={<ErrorELAsync1 />}
-                                >
-                                    {
-                                        (getted_value: string) => (
-                                            <Chakra.Image
-                                                fallback={
-                                                    <Chakra.Box
-                                                        margin={"15em"}
-                                                    >
-                                                        <Chakra.Center>
-                                                            <Chakra.Spinner
-                                                                thickness='10px'
-                                                                speed='0.65s'
-                                                                emptyColor='gray.200'
-                                                                color='orange.500'
-                                                                size='xl'
-                                                            />
-                                                        </Chakra.Center>
-                                                    </Chakra.Box>
-                                                }
-                                                src={getted_value}
-                                            />
-                                        )
-                                    }
-                                </Await>
-                            </React.Suspense>
-                        </Chakra.Box>
-                    ))
-                }
-            </Chakra.Box>
-        </Chakra.Box>
-    )
-}
-
-function Offline_Chapter_reading(props: {
-    chapter: Chapter
-}) {
-    const [position, setPosition] = React.useState(0);
-    const page_numbers = props.chapter.get_pages();
-    function move_to_page(page_number: number) {
-        document.getElementById("page_nb" + page_number)!.scrollIntoView();
-        setPosition(page_number);
-    }
-    return (
-        <Chakra.Box
-        >
-
-            <React.Suspense
-                fallback={
-                    <Chakra.Center>
-                        <Chakra.Spinner
-                            thickness='10px'
-                            speed='0.65s'
-                            emptyColor='gray.200'
-                            color='orange.500'
-                            size='xl'
-                        />
-                    </Chakra.Center>
-                }
-            >
-                <Await
-                    resolve={Chapter.getAOfflineChapter_Data(props.chapter.get_id())}
-                    errorElement={<ErrorELAsync1 />}
-                >
-                    {(getted: Array<string>) => {
-                        return (
-                            <>
-                                <LongStrip
-                                    chapID={props.chapter.get_id()}
-                                    src={getted}
-                                />
-                            </>
-                        )
-                    }}
-                </Await>
-            </React.Suspense>
+            <Chakra.Skeleton 
+                height={"30px"}
+                width={"sm"}
+                borderRadius={"10px"}
+            />
         </Chakra.Box>
     );
 }
 
-function Test_Chapter_Reading() {
+function Group_Simple_Element(props: {
+    src: Group
+}) {
+    const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
+    const leader_query = useQuery(leader_queryKey, () => {
+        return props.src.getLeader();
+    }, {
+        staleTime: Infinity
+    })
     return (
-        <React.Suspense
-            fallback={
-                <Chakra.Center>
-                    <Chakra.Spinner
-                        thickness='10px'
-                        speed='0.65s'
-                        emptyColor='gray.200'
-                        color='orange.500'
-                        size='xl'
-                    />
-                </Chakra.Center>
-            }
+        <Chakra.Tooltip
+            label={`This group has ${props.src.getMembersID().length} members`}
         >
-            <Await
-                resolve={Chapter.getAOfflineChapter(id_toUse)}
-                errorElement={<ErrorELAsync1 />}
+            <Chakra.Box width={"sm"} _hover={{
+                bg: "gray.100",
+                borderRadius: "10px"
+            }}
             >
-                {(getted: Chapter) => {
-                    return (
-                        <Chakra.Box>
-                            <Offline_Chapter_reading chapter={getted} />
-                        </Chakra.Box>
-                    )
-                }}
-            </Await>
-        </React.Suspense>
+                <Container>
+                    <Row>
+                        <Col xs={1}>
+                            <Chakra.Icon as={FaUsers} />
+                        </Col>
+                        <Col xs={6}>
+                            <Chakra.Box textAlign={"center"}>
+                                <Chakra.Text size={"sm"}>
+                                    <Chakra.Link>
+                                        {props.src.get_name()}
+                                    </Chakra.Link>
+                                </Chakra.Text>
+                            </Chakra.Box>
+                        </Col>
+                        <Col xs={5}>
+                            <Chakra.Box
+                                bg={"gray.100"}
+                                textAlign={"center"}
+                                borderRadius={"5px"}
+                            >
+                                <Chakra.Text>
+                                    Leader : &nbsp;
+                                    {
+                                        leader_query.isLoading ? (
+                                            <Chakra.Skeleton height={"sm"} />
+                                        ) : (
+                                            leader_query.isSuccess ? (
+                                                <Chakra.Link>{
+                                                    leader_query.data.get_username()
+                                                }</Chakra.Link>
+                                            ) : (
+                                                <></>
+                                            )
+                                        )
+                                    }
+                                </Chakra.Text>
+                            </Chakra.Box>
+                        </Col>
+                    </Row>
+                </Container>
+            </Chakra.Box>
+        </Chakra.Tooltip>
     )
 }
 
-const customTheme = Chakra.extendTheme({
-    semanticTokens: {
-        colors: {
-            error: 'red.500',
-            text: {
-                default: 'gray.900',
-                _dark: 'gray.50',
-            },
-        },
-    },
-})
+function Group_Simple_Element_ByID(props : {
+    id : string
+}){
+    const query_key = "mdx-groups-" + props.id;
+    const query = useQuery<Group, Error>(query_key, () => {
+        return Group.get_groupById(props.id);
+    });
+    if(query.isLoading){
+        return (
+            <GroupFallBackElement/>
+        )
+    }
+    if(query.isError){
+        return (
+            <ErrorEL1 error={query.error}/>
+        );
+    }
+    return (
+        <Group_Simple_Element
+            src={query.data!}
+        />
+    );
+}
+
+function Group_Page(props : React.PropsWithChildren<{
+    src : Group
+}>){
+    const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
+    const leader_query = useQuery(leader_queryKey, () => {
+        return props.src.getLeader();
+    }, {
+        staleTime: Infinity
+    })
+    return (
+        <Chakra.Box as={Container}>
+            <Chakra.Box 
+                height={"sm"} 
+                backgroundImage={WaveHaikei}
+                backgroundPosition={"bottom"}
+                backgroundRepeat={"no-repeat"}
+                backgroundSize={"cover"}
+            >
+                <Chakra.Center height={"full"}>
+                    <Chakra.Box textAlign={"center"}>
+                    <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
+                    {
+                        leader_query.isSuccess ? (
+                            <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
+                        ) : (
+                            <></>
+                        )
+                    }
+                    </Chakra.Box>
+                </Chakra.Center>
+            </Chakra.Box>
+            <Chakra.Box
+                background={"gray.200"}
+            >
+                <Chakra.Tabs>
+                    <Chakra.TabList>
+                        <Chakra.Tab>Group Details</Chakra.Tab>
+                        <Chakra.Tab>Titles</Chakra.Tab>
+                        <Chakra.Tab>Feed</Chakra.Tab>
+                    </Chakra.TabList>
+                </Chakra.Tabs>
+            </Chakra.Box>
+        </Chakra.Box>
+    );
+}
 
 const queryClient = new QueryClient();
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
-const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
+//const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
+const to_use_group = Group.get_groupById(test_group.data[0].id);
+
 test_area.render(
-    <Chakra.ChakraProvider theme={customTheme}>
+    <Chakra.ChakraProvider >
         <QueryClientProvider
             client={queryClient}
         >
             <ReactQueryDevtools
                 initialIsOpen={false}
             />
-                <Chakra.Box
-                    margin={10}
-                >
-                    <All_downloaded_chapter/>
-                </Chakra.Box>
+            <Chakra.Box
+                margin={10}
+            >
+                <React.Suspense>
+                    <Await
+                        resolve={to_use_group}
+                        errorElement={<ErrorELAsync/>}
+                    >
+                        {(getted : Group) => (
+                            <Group_Page src={getted}/>
+                        )}
+                    </Await>
+                    
+                </React.Suspense>
+                
+            </Chakra.Box>
         </QueryClientProvider>
     </Chakra.ChakraProvider>
 );

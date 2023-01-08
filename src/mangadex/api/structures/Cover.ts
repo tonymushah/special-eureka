@@ -7,6 +7,54 @@ import { Manga } from "./Manga";
 import DesktopApi from "../offline/DeskApiRequest";
 import DeskApiRequest from "../offline/DeskApiRequest";
 import { Collection } from "./Collection";
+import CoverSearchType from "./SearchType/Cover";
+
+class CoverCollection extends Collection<Cover>{
+    private prev_search_type : CoverSearchType;
+    /**
+     * Getter $prev_search_type
+     * @return {CoverSearchType}
+     */
+	public get $prev_search_type(): CoverSearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {CoverSearchType} value
+     */
+	public set $prev_search_type(value: CoverSearchType) {
+		this.prev_search_type = value;
+	}
+    constructor(data : Cover[], limit : number, offset : number, total: number, previous_search_type: CoverSearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+    }
+    public next(): Promise<Collection<Cover>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return Cover.search(this.prev_search_type);
+        }else{
+            throw new Error("no next cover");
+        }
+    }
+    public previous(): Promise<Collection<Cover>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return Cover.search(this.prev_search_type);
+        }else{
+            throw new Error("no previous cover");
+        }
+    }
+}
 
 export class Cover extends Attribute{
     private description: string;
@@ -207,15 +255,7 @@ export class Cover extends Attribute{
             locales,
             order,
             includes
-        }:{
-            offset_Limits : Offset_limits,
-            mangaIDs?: Array<string>,
-            ids?: Array<string>,
-            uploaders?: Array<string>,
-            locales?: Array<string>,
-            order?: Order, 
-            includes? : string
-        }
+        }: CoverSearchType
     ): Promise<Collection<Cover>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -236,7 +276,15 @@ export class Cover extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Cover.build_withAny(data[index]);
         }
-        return new Collection<Cover>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);;
+        return new CoverCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, {
+            offset_Limits : offset_Limits,
+            mangaIDs : mangaIDs,
+            ids: ids,
+            uploaders : uploaders,
+            locales : locales,
+            order : order,
+            includes : includes
+        });
     }
     public static async getAOfflineCover(coverId : string) : Promise<Cover>{
         if(await DesktopApi.ping() == true){

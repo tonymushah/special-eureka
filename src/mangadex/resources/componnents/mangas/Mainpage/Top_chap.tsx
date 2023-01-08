@@ -15,6 +15,7 @@ import * as Chakra from '@chakra-ui/react'
 import { Aggregate } from "../../../../api/structures/Aggregate";
 import { ErrorELAsync } from "../../Error_cmp";
 import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
+import { useQueries } from "react-query";
 
 function CollapseHeight(props: React.PropsWithChildren) {
     const [show, setShow] = React.useState(false)
@@ -57,9 +58,9 @@ function CollapseHeight(props: React.PropsWithChildren) {
     )
 }
 
-function Aggregate_part(props : {
-    src : Aggregate
-}){
+function Aggregate_part(props: {
+    src: Aggregate
+}) {
     const [order, setOrder] = React.useState<"desc" | "asc">("desc");
     return (
         <Chakra.Box>
@@ -75,7 +76,7 @@ function Aggregate_part(props : {
                     >
                         Ascending
                     </Chakra.MenuItem>
-                    <Chakra.MenuItem 
+                    <Chakra.MenuItem
                         onClick={() => {
                             setOrder("desc");
                         }}
@@ -96,6 +97,70 @@ function Aggregate_part(props : {
         </Chakra.Box>
     )
 }
+
+
+function Author_Artists(props: {
+    src: Manga
+}) {
+    const authors = useQueries(
+        props.src.get_authors_id().map(author_id => {
+            return {
+                queryKey: "mdx-author-" + author_id,
+                queryFn: () => {
+                    return props.src.get_author_byID(author_id);
+                },
+                staleTime: Infinity
+            }
+        })
+    )
+    const artistists = useQueries(
+        props.src.get_artists_id().map(author_id => {
+            return {
+                queryKey: "mdx-author-" + author_id,
+                queryFn: () => {
+                    return props.src.get_artist_byID(author_id);
+                },
+                staleTime: Infinity
+            }
+        })
+    )
+    function is_Artists_finished(): boolean {
+        let all_isSuccess_Artists = artistists.map<boolean>((value) => {
+            return value.isSuccess;
+        });
+        let is_allArtists_Success = !all_isSuccess_Artists.includes(false);
+        return is_allArtists_Success;
+    }
+    function is_Authors_finished(): boolean {
+        let all_isSuccess_Authors = authors.map<boolean>((value) => {
+            return value.isSuccess;
+        });
+        let is_allAuthors_Success = !all_isSuccess_Authors.includes(false);
+        return is_allAuthors_Success;
+    }
+    if (is_Artists_finished() == false && is_Authors_finished() == false) {
+        return (
+            <Placeholder lg={10}></Placeholder>
+        );
+    }
+    return (
+        <Row>
+            <>
+
+                <AuthorCol title="Authors" src={authors.map<Author>((value) => {
+                    return value.data!;
+                })} />
+
+            </>
+            <>
+                <AuthorCol title="Artistists" src={artistists.map<Author>((value) => {
+                    return value.data!;
+                })}/>
+            </>
+        </Row>
+    )
+}
+
 
 type MangaPageProps = {
     src: Manga
@@ -127,7 +192,12 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
         return returns;
     }
     public render(): React.ReactNode {
-        let links: MangaLinksData = MangaLinksData.build_wAny(this.to_use.get_links());
+        let links: MangaLinksData | null = null;
+        try {
+            links = MangaLinksData.build_wAny(this.to_use.get_links());
+        } catch (error) {
+        }
+
         return (
             <div>
 
@@ -156,47 +226,7 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                 <Row className="mg-top-content">
                     <CollapseHeight>
                         <Col md="4" lg="4" className="d-sm-block">
-                            <Row>
-                                <>
-                                    <React.Suspense fallback={
-                                        <Col>
-                                            <Placeholder lg={10}></Placeholder>
-                                        </Col>
-                                    }>
-                                        <Await
-                                            resolve={this.to_use.get_author()}
-                                            errorElement={
-                                                <>
-                                                    <div> </div>
-                                                </>
-                                            }
-                                            children={(getted: Array<Author>) => {
-                                                console.log(getted.length);
-                                                return (<AuthorCol title="Authors" src={getted} />);
-                                            }}
-                                        />
-                                    </React.Suspense>
-                                </>
-                                <>
-                                    <React.Suspense fallback={
-                                        <Col>
-                                            <Placeholder lg={10}></Placeholder>
-                                        </Col>
-                                    }>
-                                        <Await
-                                            resolve={this.to_use.get_artist()}
-                                            errorElement={
-                                                <>
-                                                    <div> </div>
-                                                </>
-                                            }
-                                            children={(getted: Array<Author>) => {
-                                                return (<AuthorCol title="Artistists" src={getted} />);
-                                            }}
-                                        />
-                                    </React.Suspense>
-                                </>
-                            </Row>
+                            <Author_Artists src={this.to_use}/>
                             <>
                                 <React.Suspense fallback={
                                     <Row>
@@ -264,10 +294,14 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                 </div>
                             </Row>
                             <>
-                                <LinksRow src={links.read_or_buy()} title="Read or Buy" />
+                                {
+                                    links == null ? (<></>) : (<LinksRow src={links.read_or_buy()} title="Read or Buy" />)
+                                }
                             </>
                             <>
-                                <LinksRow src={links.track()} title="Track" />
+                                {
+                                    links == null ? (<></>) : (<LinksRow src={links.track()} title="Track" />)
+                                }
                             </>
                             <Row>
                                 <h5>Atlernative Titles</h5>
@@ -317,7 +351,7 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                                     <ErrorELAsync />
                                                 }
                                                 children={(getted: Aggregate) => {
-                                                    return (<Aggregate_part src={getted}/>);
+                                                    return (<Aggregate_part src={getted} />);
                                                 }}
                                             />
                                         </React.Suspense>

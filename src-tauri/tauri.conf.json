@@ -21,7 +21,8 @@
           "https://uploads.mangadex.org/**",
           "http://localhost:9305/*",
           "https://jumpg-webapi.tokyo-cdn.com/api/**",
-          "http://localhost:8090/**"
+          "http://localhost:8090/**",
+          "http://localhost:8145/**"
         ]
       },
       "dialog": {

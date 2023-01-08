@@ -8,6 +8,7 @@ import { useQuery } from "react-query";
 import { Alt_title, Lang_and_Data, make_first_UpperCare } from "../../../../api/internal/Utils";
 import { Await, Link } from "react-router-dom";
 import { ErrorELAsync } from "../../Error_cmp";
+import ReactContextMenu from "react-jsx-context-menu"
 
 export default function MangaElementDef(props: {
     src: Manga,
@@ -33,7 +34,40 @@ export default function MangaElementDef(props: {
         title = props.src.get_title().en;
     }
     return (
-        <>
+        <ReactContextMenu
+            menu={
+                <Chakra.Menu
+                    isOpen
+                >
+                    <Chakra.MenuList>
+                        <Chakra.MenuItem
+                            onClick={() => props.refetch!()}
+                        >Refresh</Chakra.MenuItem>
+                        <Chakra.MenuItem
+                            onClick={() => props.download!()}
+                            textColor={"green"}
+                            icon={<ChakraIcons.DownloadIcon />}
+                        >
+                            Download
+                        </Chakra.MenuItem>
+                        <Chakra.MenuItem
+                            onClick={() => props.update!()}
+                            textColor={"blue"}
+                            icon={<ChakraIcons.RepeatIcon />}
+                        >
+                            Update
+                        </Chakra.MenuItem>
+                        <Chakra.MenuItem
+                            onClick={() => props.delete!()}
+                            textColor={"red"}
+                            icon={<ChakraIcons.DeleteIcon />}
+                        >
+                            Delete
+                        </Chakra.MenuItem>
+                    </Chakra.MenuList>
+                </Chakra.Menu>
+            }
+        >
             <Chakra.LinkBox
                 as={Chakra.Box}
                 marginBottom={10}
@@ -83,61 +117,7 @@ export default function MangaElementDef(props: {
                     )
                 }}
             >
-                <Chakra.Menu
-                    isLazy
-                >
-                    <Chakra.MenuButton
-                        as={Chakra.Button}
-                        variant={"outline"}
-                        zIndex={"dropdown"}
-                        float={{
-                            base: "none",
-                            md: "left"
-                        }}
-                    >
-                        <ChakraIcons.HamburgerIcon />
-                    </Chakra.MenuButton>
-                    <Chakra.MenuList>
-                        <Chakra.MenuItem
-                            onClick={() => props.refetch!()}
-                        >Refresh</Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => props.download!()}
-                            textColor={"green"}
-                            icon={<ChakraIcons.DownloadIcon />}
-                        >
-                            Download
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => props.update!()}
-                            textColor={"blue"}
-                            icon={<ChakraIcons.RepeatIcon />}
-                        >
-                            Update
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => props.delete!()}
-                            textColor={"red"}
-                            icon={<ChakraIcons.DeleteIcon />}
-                        >
-                            Delete
-                        </Chakra.MenuItem>
-                    </Chakra.MenuList>
-                </Chakra.Menu>
                 <Chakra.Center
-                    width={{
-                        base: "max-content",
-                        md: "initial"
-                    }}
-                    position={"relative"}
-                    right={{
-                        base: "initial",
-                        md: "25px"
-                    }}
-                    top={{
-                        base: "-40px",
-                        md: "initial"
-                    }}
                 >
                     <Chakra.Box
                         display={
@@ -340,6 +320,6 @@ export default function MangaElementDef(props: {
                 </Chakra.Center>
 
             </Chakra.LinkBox>
-        </>
+        </ReactContextMenu>
     )
 }

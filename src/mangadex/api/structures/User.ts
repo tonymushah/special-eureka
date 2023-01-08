@@ -3,6 +3,119 @@ import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Collection } from "./Collection";
+import UserSearchType from "./SearchType/User";
+
+class UserCollection extends Collection<User>{
+    private prev_search_type : UserSearchType;
+    /**
+     * Getter $prev_search_type
+     * @return {UserSearchType}
+     */
+	public get $prev_search_type(): UserSearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {UserSearchType} value
+     */
+	public set $prev_search_type(value: UserSearchType) {
+		this.prev_search_type = value;
+	}
+    constructor(data : User[], limit : number, offset : number, total: number, previous_search_type: UserSearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+    }
+    public next(): Promise<Collection<User>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return User.search(this.prev_search_type);
+        }else{
+            throw new Error("no next user");
+        }
+    }
+    public previous(): Promise<Collection<User>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return User.search(this.prev_search_type);
+        }else{
+            throw new Error("no previous user");
+        }
+    }
+}
+
+class UserCollectionWToken extends Collection<User>{
+    private prev_search_type : UserSearchType;
+    private token : string;
+    /**
+     * Getter $prev_search_type
+     * @return {UserSearchType}
+     */
+	public get $prev_search_type(): UserSearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {UserSearchType} value
+     */
+	public set $prev_search_type(value: UserSearchType) {
+		this.prev_search_type = value;
+	}
+    /**
+     * Getter $token
+     * @return {string}
+     */
+	public get $token(): string {
+		return this.token;
+	}
+
+    /**
+     * Setter $token
+     * @param {string} value
+     */
+	public set $token(value: string) {
+		this.token = value;
+	}
+    constructor(data : User[], limit : number, offset : number, total: number, token : string, previous_search_type: UserSearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+        this.$token = token;
+    }
+    public next(): Promise<Collection<User>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return User.search_user_wtoken(this.$token, this.prev_search_type);
+        }else{
+            throw new Error("no next user");
+        }
+    }
+    public previous(): Promise<Collection<User>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return User.search_user_wtoken(this.$token, this.prev_search_type);
+        }else{
+            throw new Error("no previous user");
+        }
+    }
+}
+
 
 export class User extends Attribute{
     private username: string;
@@ -54,12 +167,7 @@ export class User extends Attribute{
             username,
             ids,
             order
-        } : {
-            offset_Limits: Offset_limits, 
-            username?: string, 
-            ids?: Array<string>, 
-            order?: Order
-        }
+        } : UserSearchType
     ): Promise<Collection<User>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -77,7 +185,12 @@ export class User extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
-        return new Collection<User>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);;
+        return new UserCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, {
+            offset_Limits : offset_Limits,
+            username : username,
+            ids : ids,
+            order : order
+        });
     }
     public static async search_user_wtoken(
         token: string,
@@ -111,7 +224,12 @@ export class User extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
-        return new Collection<User>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);;
+        return new UserCollectionWToken(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, token,{
+            offset_Limits : offset_Limits,
+            username : username,
+            ids : ids,
+            order : order
+        });
     }
     public get_key_word():string{
         return RelationshipsTypes.user();

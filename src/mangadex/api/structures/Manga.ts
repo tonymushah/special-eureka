@@ -10,7 +10,55 @@ import { Chapter, Chapter_withAllIncludes } from "./Chapter";
 import DeskApiRequest from "../offline/DeskApiRequest"
 import { Collection } from "./Collection";
 import { invoke } from "@tauri-apps/api/tauri"
-import { json } from "stream/consumers";
+import MangaSearchType from "./SearchType/Manga";
+
+class MangaCollection extends Collection<Manga>{
+    private prev_search_type : MangaSearchType;
+    /**
+     * Getter $prev_search_type
+     * @return {MangaSearchType}
+     */
+	public get $prev_search_type(): MangaSearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {MangaSearchType} value
+     */
+	public set $prev_search_type(value: MangaSearchType) {
+		this.prev_search_type = value;
+	}
+    constructor(data : Manga[], limit : number, offset : number, total: number, previous_search_type: MangaSearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+    }
+    public next(): Promise<Collection<Manga>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return Manga.search(this.prev_search_type);
+        }else{
+            throw new Error("no next manga");
+        }
+    }
+    public previous(): Promise<Collection<Manga>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_Limits = current_offset_limits;
+            return Manga.search(this.prev_search_type);
+        }else{
+            throw new Error("no previous manga");
+        }
+    }
+}
+
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
     private title: any;
@@ -293,30 +341,7 @@ export class Manga extends Attribute{
             hasAvailableChapters,
             latestUploadedChapter,
             group
-        } : {
-            offset_Limits : Offset_limits,
-            title?: string,
-            authors?: Array<string>,
-            artists?: Array<string>,
-            year?: number,
-            includedTags?: Array<string>,
-            includedTagsMode?: string,
-            excludedTags?: Array<string>,
-            excludedTagsMode?: string,
-            status?: Array<string>,
-            originalLanguage?: Array<string>,
-            excludedOriginalLanguage?: Array<string>,
-            availableTranslatedLanguage?: Array<string>,
-            publicationDemographic?: Array<string>,
-            mangaIDs?: Array<string>,
-            createdAtSince?: string,
-            updatedAtSince?: string,
-            order?: Order, 
-            includes? : string,
-            hasAvailableChapters? : boolean,
-            latestUploadedChapter? : boolean,
-            group?: string
-        }): Promise<Collection<Manga>>{
+        } : MangaSearchType): Promise<Collection<Manga>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -351,7 +376,31 @@ export class Manga extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Manga.build_any(data[index]);
         }
-        return new Collection<Manga>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
+        return new MangaCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, 
+            {
+            offset_Limits : offset_Limits,
+            title : title,
+            authors : authors,
+            artists : artists,
+            year : year,
+            includedTags : includedTags,
+            includedTagsMode : includedTagsMode,
+            excludedTags : excludedTags,
+            excludedTagsMode : excludedTagsMode,
+            status : status,
+            originalLanguage : originalLanguage,
+            excludedOriginalLanguage : excludedOriginalLanguage,
+            availableTranslatedLanguage : availableTranslatedLanguage,
+            publicationDemographic : publicationDemographic,
+            mangaIDs : mangaIDs,
+            createdAtSince : createdAtSince,
+            updatedAtSince : updatedAtSince,
+            order : order, 
+            includes : includes,
+            hasAvailableChapters : hasAvailableChapters,
+            latestUploadedChapter : latestUploadedChapter,
+            group : group
+        });
     }
     public async get_author(): Promise<Array<Author>>{
         let authors_length: number = this.get_some_relationshipLength("author");
@@ -959,6 +1008,44 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
+    public get_authors_id() : Array<string>{
+        let authors_length: number = this.get_some_relationshipLength("author");
+        let authors_: Array<string> = new Array<string>(authors_length);
+        let authors_attributes: Array<Attribute> = this.get_some_relationship("author");
+        for(let index = 0; index < authors_length; index++){
+            authors_[index] = (authors_attributes[index].get_id());
+        }
+        return authors_;
+    }
+    public get_artists_id() : Array<string>{
+        let authors_length: number = this.get_some_relationshipLength("artist");
+        let authors_: Array<string> = new Array<string>(authors_length);
+        let authors_attributes: Array<Attribute> = this.get_some_relationship("artist");
+        for(let index = 0; index < authors_length; index++){
+            authors_[index] = (authors_attributes[index].get_id());
+        }
+        return authors_;
+    }
+    public async get_author_byID(author_id : string) : Promise<Author>{
+        let authors_ids = this.get_authors_id();
+        for (let index = 0; index < authors_ids.length; index++) {
+            const element = authors_ids[index];
+            if(element == author_id){
+                return await Author.getAuthorById(element);
+            }
+        }
+        throw new Error(`no Author ${author_id} related to ${this.get_id()}`);
+    }
+    public async get_artist_byID(author_id : string) : Promise<Author>{
+        let authors_ids = this.get_artists_id();
+        for (let index = 0; index < authors_ids.length; index++) {
+            const element = authors_ids[index];
+            if(element == author_id){
+                return await Author.getAuthorById(element);
+            }
+        }
+        throw new Error(`no Artists ${author_id} related to ${this.get_id()}`);
+    }
 }
 
 export class Manga_2 extends Manga{
@@ -1243,5 +1330,23 @@ export class Manga_with_allRelationship extends Manga {
             }
         });
         return returns;
+    }
+    public async get_author_byID(author_id : string) : Promise<Author>{
+        for (let index = 0; index < this.$authors.length; index++) {
+            const element = this.$authors[index];
+            if(element.get_id() == author_id){
+                return element;
+            }
+        }
+        throw new Error(`no Author ${author_id} related to ${this.get_id()}`);
+    }
+    public async get_artist_byID(author_id : string) : Promise<Author>{
+        for (let index = 0; index < this.$artists.length; index++) {
+            const element = this.$artists[index];
+            if(element.get_id() == author_id){
+                return element;
+            }
+        }
+        throw new Error(`no Artists ${author_id} related to ${this.get_id()}`);
     }
 }

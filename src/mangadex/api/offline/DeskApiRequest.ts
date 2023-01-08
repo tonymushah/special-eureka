@@ -2,7 +2,7 @@ import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Re
 import { Api_RequestERROR } from "../internal/Api_Request";
 
 export default class Api_Request{
-    private static url:string = "http://localhost:8090/";
+    private static url:string = "http://localhost:8145/";
     private static async client(options?: ClientOptions){
         return await getClient(options);
     }

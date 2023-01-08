@@ -22,7 +22,7 @@ export default function Chapter_Element2(props: {
     }, {
         staleTime: Infinity
     });
-    const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries<Array<Group>>(
+    const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
         props.chapter.get_scanlations_groups_id().map((value: string) => (
             {
                 queryKey: "mdx-groups-" + value,

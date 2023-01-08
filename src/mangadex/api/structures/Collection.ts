@@ -1,6 +1,6 @@
 import { Attribute } from "./Attributes";
 
-export class Collection<T extends Attribute>{
+export abstract class Collection<T extends Attribute>{
     private data: Array<T>;
     private limit: number;
     private offset: number;
@@ -35,7 +35,6 @@ export class Collection<T extends Attribute>{
         this.set_offset(offset);
         this.set_total(total);
     }
-    public static build_with_any<T extends Attribute>(to_use: any): Collection<T>{
-        return new Collection<T>(to_use.data, to_use.limit, to_use.offset, to_use.total);
-    }
+    public abstract next(): Promise<Collection<T>>;
+    public abstract previous() : Promise<Collection<T>>;
 }

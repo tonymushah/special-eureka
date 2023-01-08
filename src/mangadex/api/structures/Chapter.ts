@@ -10,7 +10,56 @@ import { At_Home } from "./At_home";
 import { Collection } from "./Collection";
 import { Group } from "./Group";
 import { Manga, Manga_2 } from "./Manga";
+import ChapterSearchType from "./SearchType/Chapter";
+import Chapter_withAllIncludes_SearchType from "./SearchType/Chapter_WAllIncludes";
 import { User } from "./User";
+
+class ChapterCollection extends Collection<Chapter>{
+    private prev_search_type : ChapterSearchType;
+    /**
+     * Getter $prev_search_type
+     * @return {ChapterSearchType}
+     */
+	public get $prev_search_type(): ChapterSearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {ChapterSearchType} value
+     */
+	public set $prev_search_type(value: ChapterSearchType) {
+		this.prev_search_type = value;
+	}
+    constructor(data : Chapter[], limit : number, offset : number, total: number, previous_search_type: ChapterSearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+    }
+    public next(): Promise<Collection<Chapter>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_limits = current_offset_limits;
+            return Chapter.search(this.prev_search_type);
+        }else{
+            throw new Error("no next chapter");
+        }
+    }
+    public previous(): Promise<Collection<Chapter>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_limits = current_offset_limits;
+            return Chapter.search(this.prev_search_type);
+        }else{
+            throw new Error("no previous group");
+        }
+    }
+}
 
 export class Chapter extends Attribute{
     private title: string;
@@ -149,27 +198,7 @@ export class Chapter extends Attribute{
         }
     }
     public static async search(props : 
-        {
-            offset_limits: Offset_limits,
-            ids?: Array<string>,
-            title?: string,
-            group?: Array<string>,
-            uploader?: any,
-            manga?: string,
-            volume?: any,
-            translatedLanguage?: Array<string>,
-            originalLanguage?: Array<string>,
-            excludedOriginalLanguage?: Array<string>,
-            content_rating?: Array<string>,
-            excludedGroup?: Array<string>,
-            excludedUploaders?: Array<string>,
-            includeFutureUpdates?: number,
-            createdAtSince?: string,
-            updatedAtSince?: string,
-            publishAtSince?: string,
-            order? : Order,
-            includes?: string
-        }
+        ChapterSearchType
     ): Promise<Collection<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
@@ -201,7 +230,7 @@ export class Chapter extends Attribute{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
-        return new Collection<Chapter>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
+        return new ChapterCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, props);
     }
     public async get_groupUploaders(): Promise<Array<Group>>{
         let group_atribs: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
@@ -497,6 +526,53 @@ export class Chapters{
     
 }
 
+class Chapter_WAllIncludesCollection extends Collection<Chapter_withAllIncludes>{
+    private prev_search_type : Chapter_withAllIncludes_SearchType;
+    /**
+     * Getter $prev_search_type
+     * @return {Chapter_withAllIncludes_SearchType}
+     */
+	public get $prev_search_type(): Chapter_withAllIncludes_SearchType {
+		return this.prev_search_type;
+	}
+
+    /**
+     * Setter $prev_search_type
+     * @param {Chapter_withAllIncludes_SearchType} value
+     */
+	public set $prev_search_type(value: Chapter_withAllIncludes_SearchType) {
+		this.prev_search_type = value;
+	}
+    constructor(data : Chapter_withAllIncludes[], limit : number, offset : number, total: number, previous_search_type: Chapter_withAllIncludes_SearchType) {
+        super(data, limit, offset, total);
+        this.$prev_search_type = previous_search_type;
+    }
+    public next(): Promise<Collection<Chapter_withAllIncludes>> {
+        let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset < this.get_total() && new_offset > 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_limits = current_offset_limits;
+            return Chapter_withAllIncludes.search(this.prev_search_type);
+        }else{
+            throw new Error("no next chapter");
+        }
+    }
+    public previous(): Promise<Collection<Chapter_withAllIncludes>> {
+        let new_offset = this.get_offset() - this.get_limit();
+        if(new_offset < 0){
+            let current_offset_limits = new Offset_limits();
+            current_offset_limits.set_limits(this.get_limit());
+            current_offset_limits.set_offset(new_offset);
+            this.$prev_search_type.offset_limits = current_offset_limits;
+            return Chapter_withAllIncludes.search(this.prev_search_type);
+        }else{
+            throw new Error("no previous group");
+        }
+    }
+}
+
 export class Chapter_withAllIncludes extends Chapter{
     private groups: Array<Group>;
     private uploader: User;
@@ -623,27 +699,7 @@ export class Chapter_withAllIncludes extends Chapter{
         return instance;
     }
     public static async search(props : 
-        {
-            offset_limits: Offset_limits,
-            ids?: Array<string>,
-            title?: string,
-            group?: Array<string>,
-            uploader?: any,
-            manga?: string,
-            volume?: any,
-            translatedLanguage?: Array<string>,
-            originalLanguage?: Array<string>,
-            excludedOriginalLanguage?: Array<string>,
-            content_rating?: Array<string>,
-            excludedGroup?: Array<string>,
-            excludedUploaders?: Array<string>,
-            includeFutureUpdates?: number,
-            createdAtSince?: string,
-            updatedAtSince?: string,
-            publishAtSince?: string,
-            order? : Order,
-            includes?: string
-        }
+        Chapter_withAllIncludes_SearchType
     ): Promise<Collection<Chapter_withAllIncludes>>{
         let querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
@@ -680,7 +736,7 @@ export class Chapter_withAllIncludes extends Chapter{
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter_withAllIncludes.build_W_Any(data[index]);
         }
-        return new Collection<Chapter_withAllIncludes>(mangaArray, getted.data.limit, getted.data.offset, getted.data.total);
+        return new Chapter_WAllIncludesCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, props);
     }
     public async get_scanlation_group_byID(id: string): Promise<Group> {
         for (let index = 0; index < this.groups.length; index++) {

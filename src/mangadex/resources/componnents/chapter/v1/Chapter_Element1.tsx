@@ -22,16 +22,16 @@ export default function Chapter_Element1(props: {
     }, {
         staleTime: Infinity
     });
-    const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries<Array<Group>>(
-        props.chapter.get_scanlations_groups_id().map((value: string) => (
-            {
+    const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
+        props.chapter.get_scanlations_groups_id().map((value: string) => {
+            return {
                 queryKey: "mdx-groups-" + value,
                 queryFn: () => {
                     return props.chapter.get_scanlation_group_byID(value);
                 },
                 staleTime: Infinity
             }
-        ))
+        })
     )
     return (
         <Chakra.Box
