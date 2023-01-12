@@ -21,9 +21,8 @@ export function ErrorELAsync1(props){
             </Chakra.AlertTitle>
             <Chakra.AlertDescription>
                 <Chakra.Box>
-                    <Chakra.Text>Message</Chakra.Text>
-                    <Chakra.Text>{error?.message!}</Chakra.Text>
-                    <Chakra.Text>{error?.stack!}</Chakra.Text>
+                    <Chakra.Text>Details</Chakra.Text>
+                    <Chakra.Text>{JSON.stringify(error)}</Chakra.Text>
                 </Chakra.Box>
             </Chakra.AlertDescription>
         </Chakra.Alert>
@@ -49,7 +48,7 @@ export function ErrorELAsyncWithStack(props){
             <Chakra.AlertDescription>
                 <Chakra.Box>
                     <Chakra.Text>Message</Chakra.Text>
-                    <Chakra.Text>{error?.message!}</Chakra.Text>
+                    <Chakra.Text>{JSON.stringify(error)}</Chakra.Text>
                     <Chakra.Text>{error?.stack!}</Chakra.Text>
                 </Chakra.Box>
             </Chakra.AlertDescription>
@@ -75,8 +74,10 @@ export function ErrorELAsync(props){
             </Chakra.AlertTitle>
             <Chakra.AlertDescription>
                 <Chakra.Box>
-                    <Chakra.Text>Message</Chakra.Text>
-                    <Chakra.Text>{error?.message!}</Chakra.Text>
+                    <Chakra.Text>{error.message}</Chakra.Text>
+                    <Chakra.Box overflow={"scroll"}>{
+                        error.stack
+                        }</Chakra.Box>
                 </Chakra.Box>
             </Chakra.AlertDescription>
         </Chakra.Alert>

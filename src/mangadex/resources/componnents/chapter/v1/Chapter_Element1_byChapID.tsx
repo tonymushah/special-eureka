@@ -9,12 +9,13 @@ export default function Chapter_Element1_byChapID(props: {
     const queryClient = useQueryClient()
     const toast = Chakra.useToast();
     const key = "mdx-chapter:" + props.id;
-    const query = useQuery(key, () => {
+    const query = useQuery<Chapter, Error>(key, () => {
         return Chapter.get_ChapterbyId(props.id);
     }, {
         staleTime: Infinity,
     });
     const download_query = useMutation({
+        mutationKey : "mdx-mutation-chapter-download-" + props.id,
         mutationFn : () => {
             return query.data!.download_this();
         },
@@ -26,7 +27,7 @@ export default function Chapter_Element1_byChapID(props: {
                 duration : 9000,
                 title : "Error on downloading",
                 description : error.message
-            })
+            });
         },
         onSuccess(data, variables, context) {
             toast({

@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { Await, Link, Outlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import Chapter_history from "../api/history/Chapter.history";
 import { Lang } from "../api/internal/Utils";
+import { Aggregate } from "../api/structures/Aggregate";
 import { Chapter } from "../api/structures/Chapter";
 import { Manga } from "../api/structures/Manga";
 import ChapterNavigationModal from "../resources/componnents/chapter/ChapterNavigationModal";
@@ -55,7 +56,7 @@ export function useChapterPageOutletContext(): ChapterPage_outlet_context {
 }
 
 function Chapter_Reading_mode(props: {
-    chapterID: Array<string>
+    chapterID: string
 }) {
     const [type, setType] = React.useState("Lonstrip");
     const navigate = useNavigate();
@@ -85,16 +86,31 @@ function Chapter_Reading_mode(props: {
 export default function Chapter_Page() {
     let { id } = useParams();
     const history = new Chapter_history()
-    const query = useQuery("mdx-chapter:" + id!, () => {
+    const query = useQuery<Chapter, Error>("mdx-chapter:" + id!, () => {
         return Chapter.get_ChapterbyId(id!);
     }, {
         staleTime: Infinity
     })
-    const mangaQuery = useQuery("mdx-manga:" + query.data?.get_manga_id(), () => {
-        return Manga.getMangaByID(query.data?.get_manga_id());
+    const mangaQuery = useQuery<Manga, Error>("mdx-manga:" + query.data?.get_manga_id(), () => {
+        return Manga.getMangaByID(query.data!.get_manga_id());
     }, {
-        staleTime: Infinity
+        staleTime: Infinity,
+        enabled: !!query.data
     })
+    const chapter_aggregate_queryKey = ["mdx-agreggate", query.data?.getAggregateList_options()];
+    const chapter_aggregate_query = useQuery<Aggregate, Error>(chapter_aggregate_queryKey, () => {
+        return query.data!.getAggregateList();
+    }, {
+        staleTime: 1000 * 60 * 10,
+        enabled: !!query.data
+    })
+    const chapter_data_images_queryKey = "mdx-chapter-" + id + "-data";
+    const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
+        return query.data!.get_dataImages()
+    }, {
+        staleTime: Infinity,
+        enabled: !!query.data
+    });
     if (query.isLoading) {
         return (
             <Chakra.Box
@@ -178,60 +194,86 @@ export default function Chapter_Page() {
                         <Row>
                             <Col>
                                 <Chakra.Center>
-                                    <Chakra.ButtonGroup
-                                        colorScheme={"orange"}
-                                    >
-                                        <React.Suspense
-                                            fallback={
+                                    {
+                                        chapter_aggregate_query.isLoading || chapter_aggregate_query.isIdle ? (
+                                            <Chakra.ButtonGroup
+                                                colorScheme={"orange"}
+                                            >
                                                 <Chakra.IconButton isLoading aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
-                                            }
-                                        >
-                                            <Await
-                                                resolve={query.data!.get_previous()}
-                                                errorElement={
-                                                    <Chakra.Tooltip
-                                                        hasArrow
-                                                        label="No previous Chapter"
-                                                        aria-label="chapter-previous-label"
-                                                    >
-                                                        <Chakra.IconButton isDisabled aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
-                                                    </Chakra.Tooltip>
-                                                }
-                                            >
-                                                {(getted: string) => (
-                                                    <Chakra.IconButton as={Link} to={"/mangadex/chapter/" + getted} aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
-                                                )}
-                                            </Await>
-                                        </React.Suspense>
-                                        <React.Suspense
-                                            fallback={
                                                 <Chakra.IconButton isLoading aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
-                                            }
-                                        >
-                                            <Await
-                                                resolve={query.data!.get_next()}
-                                                errorElement={
-                                                    <Chakra.Tooltip
-                                                        hasArrow
-                                                        label="No next Chapter"
-                                                        aria-label="chapter-next-label"
+                                            </Chakra.ButtonGroup>
+                                        ) : (
+                                            chapter_aggregate_query.isError ? (
+                                                <ErrorEL1 error={chapter_aggregate_query.error} />
+                                            ) : (
+                                                chapter_aggregate_query.isSuccess ? (
+                                                    <Chakra.ButtonGroup
+                                                        colorScheme={"orange"}
                                                     >
-                                                        <Chakra.IconButton isDisabled aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
-                                                    </Chakra.Tooltip>
-                                                }
-                                            >
-                                                {(getted: string) => (
-                                                    <Chakra.IconButton as={Link} to={"/mangadex/chapter/" + getted} aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
-                                                )}
-                                            </Await>
-                                        </React.Suspense>
-                                    </Chakra.ButtonGroup>
+                                                        <React.Suspense
+                                                            fallback={
+                                                                <Chakra.IconButton isLoading aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
+                                                            }
+                                                        >
+                                                            <Await
+                                                                resolve={query.data!.get_previous(chapter_aggregate_query.data)}
+                                                                errorElement={
+                                                                    <Chakra.Tooltip
+                                                                        hasArrow
+                                                                        label="No previous Chapter"
+                                                                        aria-label="chapter-previous-label"
+                                                                    >
+                                                                        <Chakra.IconButton isDisabled aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
+                                                                    </Chakra.Tooltip>
+                                                                }
+                                                            >
+                                                                {(getted: string) => (
+                                                                    <Chakra.IconButton as={Link} to={"/mangadex/chapter/" + getted} aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
+                                                                )}
+                                                            </Await>
+                                                        </React.Suspense>
+                                                        <React.Suspense
+                                                            fallback={
+                                                                <Chakra.IconButton isLoading aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
+                                                            }
+                                                        >
+                                                            <Await
+                                                                resolve={query.data!.get_next(chapter_aggregate_query.data)}
+                                                                errorElement={
+                                                                    <Chakra.Tooltip
+                                                                        hasArrow
+                                                                        label="No next Chapter"
+                                                                        aria-label="chapter-next-label"
+                                                                    >
+                                                                        <Chakra.IconButton isDisabled aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
+                                                                    </Chakra.Tooltip>
+                                                                }
+                                                            >
+                                                                {(getted: string) => (
+                                                                    <Chakra.IconButton as={Link} to={"/mangadex/chapter/" + getted} aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
+                                                                )}
+                                                            </Await>
+                                                        </React.Suspense>
+                                                    </Chakra.ButtonGroup>
+                                                ) : (<></>)
+                                            )
+                                        )
+                                    }
                                 </Chakra.Center>
                             </Col>
                             <Col>
                                 <Chakra.FormControl>
                                     <Chakra.FormLabel>Chapter Reading mode</Chakra.FormLabel>
-                                    <Chapter_Reading_mode chapterID={query.data?.get_id()} />
+                                    {
+                                        query.isSuccess ? (
+                                            <Chapter_Reading_mode chapterID={query.data.get_id()} />
+                                        ) : (
+                                            <Chakra.Skeleton
+                                                height={"20px"}
+                                                width={"30px"}
+                                            />
+                                        )
+                                    }
                                 </Chakra.FormControl>
                             </Col>
                             <Col>
@@ -240,31 +282,34 @@ export default function Chapter_Page() {
                         </Row>
                     </Chakra.Box>
                     <ChapterFullScreen>
-                        <React.Suspense
-                            fallback={
-                                <Chakra.AbsoluteCenter>
-                                    <Chakra.Box>
-                                        <Chakra.Spinner
-                                            color={"orange"}
-                                            thickness={"2px"}
-                                        />
-                                        <br />
-                                        <Chakra.Text>Loading...</Chakra.Text>
-                                    </Chakra.Box>
-                                </Chakra.AbsoluteCenter>
-                            }
-                        >
-                            <Await
-                                resolve={query.data?.get_dataImages()}
-                                errorElement={<ErrorELAsync1 />}
-                            >
-                                {(getted: Array<string>) => (
-                                    <Outlet context={{
-                                        images: getted
+                        <>
+                            {
+                                chapter_data_images_query.isLoading || chapter_data_images_query.isIdle ? (
+                                    <Chakra.AbsoluteCenter>
+                                        <Chakra.Box>
+                                            <Chakra.Spinner
+                                                color={"orange"}
+                                                thickness={"2px"}
+                                            />
+                                            <br />
+                                            <Chakra.Text>Loading...</Chakra.Text>
+                                        </Chakra.Box>
+                                    </Chakra.AbsoluteCenter>
+                                ) : (
+                                    chapter_data_images_query.isSuccess ? (
+                                        <Outlet context={{
+                                        images: chapter_data_images_query.data
                                     }} />
-                                )}
-                            </Await>
-                        </React.Suspense>
+                                    ) : (
+                                        chapter_data_images_query.isError ? (
+                                            <ErrorEL1 error={chapter_data_images_query.error}/>
+                                        ) : (
+                                            <></>
+                                        )
+                                    )
+                                )
+                            }
+                        </>
                     </ChapterFullScreen>
                 </Chakra.Box>
             </HotkeysProvider>

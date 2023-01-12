@@ -6,7 +6,7 @@ import { ErrorELAsync } from "../../../resources/componnents/Error_cmp";
 import { Alt_title, make_first_UpperCare, ContentRating, Status } from "../../../api/internal/Utils";
 import { Await, Link } from "react-router-dom";
 import { Cover } from "../../../api/structures/Cover";
-import { Statistics } from "../../../api/structures/Statistics";
+import { Statistics_Manga } from "../../../api/structures/Statistics";
 import { Statis } from "../../../resources/componnents/mangas/Manga_Page";
 
 type MangaSimpleProps = {
@@ -98,10 +98,10 @@ export class MangaSimpleEl extends React.Component<MangaSimpleProps>{
                                     fallback={<Chakra.Spinner />}
                                 >
                                     <Await
-                                        resolve={Statistics.get_statsBy_MangaID(this.to_use.get_id())}
+                                        resolve={Statistics_Manga.get_statsBy_MangaID(this.to_use.get_id())}
                                         errorElement={<ErrorELAsync />}
                                     >
-                                        {(stats: Statistics) => {
+                                        {(stats: Statistics_Manga) => {
                                             return (<Statis src={stats} />);
                                         }}
                                     </Await>
@@ -241,10 +241,10 @@ export class MangaSimpleEl1 extends React.Component<MangaSimpleProps>{
                                     fallback={<Chakra.Spinner />}
                                 >
                                     <Await
-                                        resolve={Statistics.get_statsBy_MangaID(this.to_use.get_id())}
+                                        resolve={Statistics_Manga.get_statsBy_MangaID(this.to_use.get_id())}
                                         errorElement={<ErrorELAsync />}
                                     >
-                                        {(stats: Statistics) => {
+                                        {(stats: Statistics_Manga) => {
                                             return (<Statis src={stats} />);
                                         }}
                                     </Await>

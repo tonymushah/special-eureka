@@ -9,6 +9,7 @@ import { Alt_title, Lang_and_Data, make_first_UpperCare } from "../../../../api/
 import { Await, Link } from "react-router-dom";
 import { ErrorELAsync } from "../../Error_cmp";
 import ReactContextMenu from "react-jsx-context-menu"
+import ErrorEL1 from "../../error/ErrorEL1";
 
 export default function MangaElementDef(props: {
     src: Manga,
@@ -25,6 +26,10 @@ export default function MangaElementDef(props: {
     }, {
         "staleTime": Infinity
     });
+    const manga_description_querykey = "mdx-manga-" + props.src + "-description";
+    const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
+        return Lang_and_Data.initializeByDesc(props.src.get_description());
+    })
     const CoverElementVertical = React.lazy(() => import("../../covers/v1/CoverElementVertical"));
     const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
     //let desc: string = "";
@@ -284,35 +289,35 @@ export default function MangaElementDef(props: {
                                         </Chakra.Tag>
                                     </Chakra.Text>
                                 </Chakra.Box>
-                                <React.Suspense
-                                    fallback={
+                                {
+                                    manga_description_query.isLoading || manga_description_query.isIdle? (
                                         <Chakra.Skeleton
                                             height={"full"}
                                             //borderTopLeftRadius={"10px"}
                                             borderBottomRightRadius={"10px"}
                                         />
-                                    }
-                                >
-                                    <Await
-                                        resolve={Lang_and_Data.initializeByDesc(props.src.get_description())}
-                                        errorElement={<ErrorELAsync />}
-                                        children={(getted: Array<Lang_and_Data>) => {
-                                            if (getted.length == 0) {
-                                                return (<></>);
-                                            } else {
-                                                return (
-                                                    <Chakra.Text
+                                    ) : (
+                                        manga_description_query.isSuccess? (
+                                            manga_description_query.data.length == 0 ? (
+                                                <></>
+                                            ) : (
+                                                 <Chakra.Text
                                                         noOfLines={3}
                                                         marginBottom={"1px"}
                                                         fontSize={"sm"}
                                                     >
-                                                        {getted[0].get_data()}
+                                                        {manga_description_query.data[0].get_data()}
                                                     </Chakra.Text>
-                                                );
-                                            }
-                                        }}
-                                    />
-                                </React.Suspense>
+                                            )
+                                        ) : (
+                                            manga_description_query.isError? (
+                                                <ErrorEL1 error={manga_description_query.error}/>
+                                            ) : (
+                                                <></>
+                                            )
+                                        )
+                                    )
+                                }
                             </Chakra.GridItem>
                         </Chakra.Grid>
 

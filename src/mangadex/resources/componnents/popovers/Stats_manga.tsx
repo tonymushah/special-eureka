@@ -2,7 +2,7 @@ import React, { Suspense, useState } from 'react';
 import { Card, Placeholder, Carousel, Popover, Alert, ListGroup, Container, Row } from 'react-bootstrap';
 import ReactDOM from 'react-dom/client';
 import { Await, useAsyncError, useAsyncValue, useRouteError } from 'react-router-dom';
-import { Statistics } from '../../../api/structures/Statistics';
+import { Statistics_Manga } from '../../../api/structures/Statistics';
 import { NumericFormat } from 'react-number-format';
 
 function PopError(props): React.ReactNode{
@@ -33,7 +33,7 @@ function Box_error(props): React.ReactNode{
     );
 }
 export class Popover1 extends React.Component{
-    private promise_stats: Promise<Statistics>;
+    private promise_stats: Promise<Statistics_Manga>;
     constructor(props) {
         super(props);
         this.promise_stats = this.props.promise_stats;
@@ -77,7 +77,7 @@ export class Popover1 extends React.Component{
     }
 }
 export class State_box extends React.Component{
-    private promise_stats: Promise<Statistics>;
+    private promise_stats: Promise<Statistics_Manga>;
     constructor(props) {
         super(props);
         this.promise_stats = this.props.promise_stats;

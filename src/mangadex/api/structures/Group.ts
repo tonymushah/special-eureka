@@ -3,16 +3,16 @@ import { Attribute } from "./Attributes";
 import { Response } from "@tauri-apps/api/http";
 import {
     Offset_limits,
-    Order,
     RelationshipsTypes,
     Querry_list_builder,
     serialize,
 } from "../internal/Utils";
-import { StringLiteral } from "typescript";
 import { Collection } from "./Collection";
 import { User } from "./User";
 import GroupSearchType from "./SearchType/Group";
 import Group_WithAllRelationShip_SearchType from "./SearchType/GroupWAllIncludes";
+import { Manga } from "./Manga";
+import { Chapter } from "./Chapter";
 
 class GroupCollection extends Collection<Group>{
     private prev_search_type : GroupSearchType;
@@ -36,28 +36,35 @@ class GroupCollection extends Collection<Group>{
         this.$prev_search_type = previous_search_type;
     }
     public next(): Promise<Collection<Group>> {
-        let new_offset = this.get_offset() + this.get_limit();
-        if(new_offset < this.get_total() && new_offset > 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Group.search(this.prev_search_type);
-        }else{
-            throw new Error("no next group");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                resolve(Group.search(this.prev_search_type));
+            }else{
+                reject(new Error("no next group"));
+            }
+        });
+        
     }
     public previous(): Promise<Collection<Group>> {
-        let new_offset = this.get_offset() - this.get_limit();
-        if(new_offset < 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Group.search(this.prev_search_type);
-        }else{
-            throw new Error("no previous group");
-        }
+        return new Promise<Collection<Group>>((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            console.log(new_offset);
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                resolve(Group.search(this.prev_search_type));
+            }else{
+                reject(new Error("no previous group"));
+            }
+        });
+        
     }
 }
 
@@ -297,8 +304,7 @@ export class Group extends Attribute {
             "&" +
             serialize(
                 new Querry_list_builder("focusedLanguage", focusedLanguage!).build()
-            ) +
-            "&",
+            ),
             {
                 query: querys,
             }
@@ -360,6 +366,20 @@ export class Group extends Attribute {
             `this user ${id} is not a member of the group ${this.get_id()}`
         );
     }
+    public async getTitle() : Promise<Collection<Manga>>{
+        return Manga.search({
+            offset_Limits : new Offset_limits(),
+            group : this.get_id()
+        })
+    }
+    public async getFeed() : Promise<Collection<Chapter>>{
+        return Chapter.search({
+            offset_limits: new Offset_limits(),
+            group : [
+                this.get_id()
+            ]
+        })
+    }
 }
 
 class Group_WithAllRelationShip_Collection extends Collection<Group_WithAllRelationShip>{
@@ -384,28 +404,34 @@ class Group_WithAllRelationShip_Collection extends Collection<Group_WithAllRelat
         this.$prev_search_type = previous_search_type;
     }
     public next(): Promise<Collection<Group_WithAllRelationShip>> {
-        let new_offset = this.get_offset() + this.get_limit();
-        if(new_offset < this.get_total() && new_offset > 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Group_WithAllRelationShip.search(this.prev_search_type);
-        }else{
-            throw new Error("no next group");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                return Group_WithAllRelationShip.search(this.prev_search_type);
+            }else{
+                throw new Error("no next group");
+            }
+        });
+        
     }
     public previous(): Promise<Collection<Group_WithAllRelationShip>> {
-        let new_offset = this.get_offset() - this.get_limit();
-        if(new_offset < 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Group_WithAllRelationShip.search(this.prev_search_type);
-        }else{
-            throw new Error("no previous group");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                resolve(Group_WithAllRelationShip.search(this.prev_search_type));
+            }else{
+                reject(new Error("no previous group"));
+            }
+        });
+        
     }
 }
 

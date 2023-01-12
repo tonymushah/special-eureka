@@ -11,16 +11,21 @@ import { Group } from "../../../../api/structures/Group";
 import { User } from "../../../../api/structures/User";
 import ErrorEL1 from "../../error/ErrorEL1";
 import { Link } from "react-router-dom"
+import { FaQuestionCircle } from "react-icons/fa";
 
 export default function Chapter_Element1(props: {
     chapter: Chapter,
-    downloadMutation? : UseMutationResult<string[], Error, void>
+    downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
     const user_query_key = "mdx-user-" + props.chapter.get_user_id();
-    const user_query = useQuery<User>(user_query_key, () => {
+    const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader()
     }, {
         staleTime: Infinity
+    });
+    const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
+    const download_query = useQuery(is_downloaded_queryKey, () => {
+        return Chapter.is_chapter_downloaded(props.chapter.get_id());
     });
     const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
         props.chapter.get_scanlations_groups_id().map((value: string) => {
@@ -33,12 +38,16 @@ export default function Chapter_Element1(props: {
             }
         })
     )
+    const this_chapter_lang_querykey = "mdx-chapter-" + props.chapter.get_id()+ "-lang";
+    const this_chapter_lang_query = useQuery(this_chapter_lang_querykey, () => {
+        return props.chapter.get_translated_Lang();
+    })
     return (
         <Chakra.Box
             width={"full"}
             padding={1}
             _hover={{
-                background : "gray.100"
+                background: "gray.100"
             }}
             borderRadius={10}
         >
@@ -53,23 +62,27 @@ export default function Chapter_Element1(props: {
                     lg={1}
                 >
                     <Chakra.Center>
-                        <React.Suspense>
-                            <Await
-                                resolve={props.chapter.get_translated_Lang()}
-                                errorElement={<></>}
-                            >
-                                {
-                                    (to_use_lang: Lang) => (
-                                        <Chakra.Tooltip
+                        {
+                            this_chapter_lang_query.isSuccess ? (
+                                <Chakra.Tooltip
                                             hasArrow
-                                            label={to_use_lang.get_name()}
+                                            label={this_chapter_lang_query.data.get_name()}
                                         >
-                                            <Chakra.Box height={"fit-content"} className={"fi fi-" + to_use_lang.get_flag_icon().toLowerCase()} />
+                                            <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
                                         </Chakra.Tooltip>
-                                    )
-                                }
-                            </Await>
-                        </React.Suspense>
+                            ) : (
+                                this_chapter_lang_query.isError ? (
+                                    <Chakra.Tooltip
+                                        hasArrow
+                                        label={"Language not found"}
+                                    >
+                                        <Chakra.Icon as={FaQuestionCircle}/>
+                                    </Chakra.Tooltip>
+                                ) : (
+                                    <></>
+                                )
+                            )
+                        }
                     </Chakra.Center>
                 </Col>
                 <Col
@@ -96,7 +109,7 @@ export default function Chapter_Element1(props: {
                 >
                     <Chakra.Text
                         fontSize={{
-                            base : 15
+                            base: 15
                         }}
                         noOfLines={1}
                         margin={0}
@@ -114,32 +127,33 @@ export default function Chapter_Element1(props: {
                 >
                     <Chakra.Center>
                         {
-                            props.downloadMutation?.isLoading? (<Chakra.Spinner size={"md"}/>) : (
-                                <React.Suspense
-                                    fallback={<Chakra.Spinner />}
-                                >
-                                    <Await
-                                        resolve={Chapter.getAOfflineChapter(props.chapter.get_id())}
-                                        errorElement={<ChakraIcon.DownloadIcon _hover={{
-                                            color : "blue"
-                                        }} onClick={() => {
-                                            props.downloadMutation?.mutate()
-                                        }}/>}
-                                    >
-                                        <Chakra.Tooltip
-                                            label="Downloaded Chapter"
-                                        >
-                                            <ChakraIcon.CheckIcon 
-                                                _hover={{
-                                                    color : "orange"
-                                                }}
-                                                onClick={() => {
-                                                    props.downloadMutation?.mutate()
-                                                }}
-                                            />
-                                        </Chakra.Tooltip>
-                                    </Await>
-                                </React.Suspense>
+                            props.downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
+                                download_query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
+                                    download_query.isSuccess ? (
+                                        download_query.data? (
+                                            <Chakra.Tooltip
+                                                label="Downloaded Chapter"
+                                            >
+                                                <ChakraIcon.CheckIcon
+                                                    _hover={{
+                                                        color: "orange"
+                                                    }}
+                                                    onClick={() => {
+                                                        props.downloadMutation?.mutate()
+                                                    }}
+                                                />
+                                            </Chakra.Tooltip>
+                                        ) : (
+                                            <ChakraIcon.DownloadIcon _hover={{
+                                                color: "blue"
+                                            }} onClick={() => {
+                                                props.downloadMutation?.mutate()
+                                            }} />
+                                        )
+                                    ) : (
+                                        <ChakraIcon.WarningIcon/>
+                                    )
+                                )
                             )
                         }
                     </Chakra.Center>

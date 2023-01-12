@@ -36,28 +36,34 @@ class ChapterCollection extends Collection<Chapter>{
         this.$prev_search_type = previous_search_type;
     }
     public next(): Promise<Collection<Chapter>> {
-        let new_offset = this.get_offset() + this.get_limit();
-        if(new_offset < this.get_total() && new_offset > 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_limits = current_offset_limits;
-            return Chapter.search(this.prev_search_type);
-        }else{
-            throw new Error("no next chapter");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_limits = current_offset_limits;
+                resolve(Chapter.search(this.prev_search_type));
+            }else{
+                reject(new Error("no next chapter"));
+            }
+        });
+        
     }
     public previous(): Promise<Collection<Chapter>> {
-        let new_offset = this.get_offset() - this.get_limit();
-        if(new_offset < 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_limits = current_offset_limits;
-            return Chapter.search(this.prev_search_type);
-        }else{
-            throw new Error("no previous group");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_limits = current_offset_limits;
+                resolve(Chapter.search(this.prev_search_type));
+            }else{
+                reject(new Error("no previous group"));
+            }
+        });
+        
     }
 }
 
@@ -203,18 +209,10 @@ export class Chapter extends Attribute{
         let querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
             offset: JSON.stringify(props.offset_limits.get_offset()),
-            ...(new Querry_list_builder<string>("ids", props.ids!)).build(),
             title: (props.title!),
-            ...(new Querry_list_builder<string>("groups", props.group!)).build(),
             uploader: (props.uploader!),
             manga: (props.manga!),
             volume: JSON.stringify(props.volume!),
-            ...(new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build(),
-            ...(new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build(),
-            ...(new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build(),
-            ...(new Querry_list_builder<string>("contentRating", props.content_rating!)).build(),
-            ...(new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build(),
-            ...(new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build(),
             includeFutureUpdates: (props.includeFutureUpdates!),
             createdAtSince: (props.createdAtSince!),
             updatedAtSince: (props.updatedAtSince!),
@@ -222,7 +220,23 @@ export class Chapter extends Attribute{
             ...props.order?.render(),
             "includes[]": (props.includes!)
         }
-        let getted: Response<any> = await Api_Request.get_methods("chapter", {
+        let getted: Response<any> = await Api_Request.get_methods("chapter?" + 
+            serialize((new Querry_list_builder<string>("ids", props.ids!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("groups", props.group!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build()) +
+            "&" +
+            serialize((new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("contentRating", props.content_rating!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build()) +
+            "&" + 
+            serialize((new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build())
+            , {
             query: querys
         });
         let data: Array<any> = getted.data.data;
@@ -252,20 +266,48 @@ export class Chapter extends Attribute{
             const element = groupss[index];
             groups[index] = element.get_id();
         }
-        return Aggregate.get_aggregate({
+        return Aggregate.get_aggregate(this.getAggregateList_options());
+    }
+    public getAggregateList_options(): {
+        mangaID: string, 
+        translatedLanguage?: Array<string>,
+        groups? : Array<string>
+    }{
+        let manga_id: string = this.get_some_relationship("manga")[0].get_id();
+        let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
+        let groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
+        for (let index = 0; index < groups.length; index++) {
+            const element = groupss[index];
+            groups[index] = element.get_id();
+        }
+        return ({
             mangaID : manga_id, 
             translatedLanguage : [this.get_translatedLanguage()], 
             groups: groups
         });
     }
-    public async get_next(): Promise<string>{
-        return (await this.getAggregateList()).getNext(this.get_id());
+    public async get_next(aggregate_list? : Aggregate): Promise<string>{
+        if(aggregate_list === undefined){
+            return (await this.getAggregateList()).getNext(this.get_id());
+        }else{
+            return aggregate_list.getNext(this.get_id());
+        }
+        
     }
-    public async get_previous(): Promise<string>{
-        return (await this.getAggregateList()).getPrevious(this.get_id());
+    public async get_previous(aggregate_list? : Aggregate): Promise<string>{
+        if(aggregate_list === undefined){
+            return (await this.getAggregateList()).getPrevious(this.get_id());
+        }else{
+            return aggregate_list.getPrevious(this.get_id());
+        }
     }
-    public async get_current(): Promise<string>{
-        return (await this.getAggregateList()).getCurrent(this.get_id());
+    public async get_current(aggregate_list? : Aggregate): Promise<string>{
+        if(aggregate_list === undefined){
+            return (await this.getAggregateList()).getCurrent(this.get_id());
+        }else{
+            return aggregate_list.getCurrent(this.get_id());
+        }
+        
     }
     public static async getAOfflineChapter(chapterID : string): Promise<Chapter_withAllIncludes>{
         if(await DeskApiRequest.ping() == true){
@@ -297,6 +339,14 @@ export class Chapter extends Attribute{
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
+        }
+    }
+    public static async is_chapter_downloaded(chapterID : string) : Promise<boolean>{
+        try {
+            await Chapter.getAOfflineChapter(chapterID);
+            return true;
+        } catch (error) {
+            return false;
         }
     }
     public async getOfflineChapter_Data_Saver() : Promise<Array<string>>{
@@ -548,28 +598,33 @@ class Chapter_WAllIncludesCollection extends Collection<Chapter_withAllIncludes>
         this.$prev_search_type = previous_search_type;
     }
     public next(): Promise<Collection<Chapter_withAllIncludes>> {
-        let new_offset = this.get_offset() + this.get_limit();
-        if(new_offset < this.get_total() && new_offset > 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_limits = current_offset_limits;
-            return Chapter_withAllIncludes.search(this.prev_search_type);
-        }else{
-            throw new Error("no next chapter");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_limits = current_offset_limits;
+                resolve(Chapter_withAllIncludes.search(this.prev_search_type));
+            }else{
+                reject(new Error("no next chapter"));
+            }
+        });
+        
     }
     public previous(): Promise<Collection<Chapter_withAllIncludes>> {
-        let new_offset = this.get_offset() - this.get_limit();
-        if(new_offset < 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_limits = current_offset_limits;
-            return Chapter_withAllIncludes.search(this.prev_search_type);
-        }else{
-            throw new Error("no previous group");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_limits = current_offset_limits;
+                resolve(Chapter_withAllIncludes.search(this.prev_search_type));
+            }else{
+                reject(new Error("no previous group"));
+            }
+        });
     }
 }
 
@@ -704,18 +759,10 @@ export class Chapter_withAllIncludes extends Chapter{
         let querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
             offset: JSON.stringify(props.offset_limits.get_offset()),
-            ...(new Querry_list_builder<string>("ids", props.ids!)).build(),
             title: (props.title!),
-            ...(new Querry_list_builder<string>("groups", props.group!)).build(),
             uploader: (props.uploader!),
             manga: (props.manga!),
             volume: JSON.stringify(props.volume!),
-            ...(new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build(),
-            ...(new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build(),
-            ...(new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build(),
-            ...(new Querry_list_builder<string>("contentRating", props.content_rating!)).build(),
-            ...(new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build(),
-            ...(new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build(),
             includeFutureUpdates: (props.includeFutureUpdates!),
             createdAtSince: (props.createdAtSince!),
             updatedAtSince: (props.updatedAtSince!),
@@ -727,7 +774,23 @@ export class Chapter_withAllIncludes extends Chapter{
                 "manga",
                 "user",
                 "scanlation_group"
-            ]).build())
+            ]).build()) + 
+            "&" + serialize((new Querry_list_builder<string>("ids", props.ids!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("groups", props.group!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build()) +
+            "&" +
+            serialize((new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("contentRating", props.content_rating!)).build()) + 
+            "&" + 
+            serialize((new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build()) +
+            "&" + 
+            serialize((new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build())
+            
         , {
             query: querys
         });

@@ -2,7 +2,7 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { useQueries, useQuery, UseQueryResult } from "react-query";
+import { UseMutationResult, useQueries, useQuery, UseQueryResult } from "react-query";
 import { Await } from "react-router-dom";
 import Timeago from "react-timeago";
 import { Lang } from "../../../../api/internal/Utils";
@@ -14,10 +14,11 @@ import { Link } from "react-router-dom"
 import { FaUser, FaUsers } from "react-icons/fa"
 
 export default function Chapter_Element2(props: {
-    chapter: Chapter
+    chapter: Chapter,
+    downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
     const user_query_key = "mdx-user-" + props.chapter.get_user_id();
-    const user_query = useQuery<User>(user_query_key, () => {
+    const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader()
     }, {
         staleTime: Infinity
@@ -33,6 +34,10 @@ export default function Chapter_Element2(props: {
             }
         ))
     )
+    const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
+    const download_query = useQuery(is_downloaded_queryKey, () => {
+        return Chapter.is_chapter_downloaded(props.chapter.get_id());
+    });
     return (
         <Chakra.Tooltip
             label={
@@ -105,20 +110,36 @@ export default function Chapter_Element2(props: {
                 <Row>
                     <Col xs={2}>
                         <Chakra.Center>
-                            <React.Suspense
-                                fallback={<Chakra.Spinner />}
-                            >
-                                <Await
-                                    resolve={Chapter.getAOfflineChapter(props.chapter.get_id())}
-                                    errorElement={<ChakraIcon.DownloadIcon />}
-                                >
-                                    <Chakra.Tooltip
-                                        label="Downloaded Chapter"
-                                    >
-                                        <ChakraIcon.CheckIcon />
-                                    </Chakra.Tooltip>
-                                </Await>
-                            </React.Suspense>
+                            {
+                                props.downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
+                                    download_query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
+                                        download_query.isSuccess ? (
+                                            download_query.data ? (
+                                                <Chakra.Tooltip
+                                                    label="Downloaded Chapter"
+                                                >
+                                                    <ChakraIcon.CheckIcon
+                                                        _hover={{
+                                                            color: "orange"
+                                                        }}
+                                                        onClick={() => {
+                                                            props.downloadMutation?.mutate()
+                                                        }}
+                                                    />
+                                                </Chakra.Tooltip>
+                                            ) : (
+                                                <ChakraIcon.DownloadIcon _hover={{
+                                                    color: "blue"
+                                                }} onClick={() => {
+                                                    props.downloadMutation?.mutate()
+                                                }} />
+                                            )
+                                        ) : (
+                                            <ChakraIcon.WarningIcon />
+                                        )
+                                    )
+                                )
+                            }
                         </Chakra.Center>
                     </Col>
                     <Col xs={10}>

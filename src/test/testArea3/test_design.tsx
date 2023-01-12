@@ -28,11 +28,14 @@ import ErrorEL1 from "../../mangadex/resources/componnents/error/ErrorEL1";
 import WaveHaikei from "./imgs/wave-haikei-1.svg";
 import { Await } from "react-router-dom"
 import { ErrorELAsync } from "../../mangadex/resources/componnents/Error_cmp";
+import { CollectionComponnent, CollectionComponnent_WithQuery } from "../../mangadex/resources/componnents/Collection/Collection";
+import { Collection } from "../../mangadex/api/structures/Collection";
+import { Offset_limits } from "../../mangadex/api/internal/Utils";
 
-function GroupFallBackElement(){
+function GroupFallBackElement() {
     return (
         <Chakra.Box>
-            <Chakra.Skeleton 
+            <Chakra.Skeleton
                 height={"30px"}
                 width={"sm"}
                 borderRadius={"10px"}
@@ -44,81 +47,125 @@ function GroupFallBackElement(){
 function Group_Simple_Element(props: {
     src: Group
 }) {
-    const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
-    const leader_query = useQuery(leader_queryKey, () => {
-        return props.src.getLeader();
-    }, {
-        staleTime: Infinity
-    })
-    return (
-        <Chakra.Tooltip
-            label={`This group has ${props.src.getMembersID().length} members`}
-        >
-            <Chakra.Box width={"sm"} _hover={{
-                bg: "gray.100",
-                borderRadius: "10px"
-            }}
+    try {
+        const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
+        const leader_query = useQuery(leader_queryKey, () => {
+            return props.src.getLeader();
+        }, {
+            staleTime: Infinity
+        })
+        return (
+            <Chakra.Tooltip
+                label={`This group has ${props.src.getMembersID().length} members`}
             >
-                <Container>
-                    <Row>
-                        <Col xs={1}>
-                            <Chakra.Icon as={FaUsers} />
-                        </Col>
-                        <Col xs={6}>
-                            <Chakra.Box textAlign={"center"}>
-                                <Chakra.Text size={"sm"}>
-                                    <Chakra.Link>
-                                        {props.src.get_name()}
-                                    </Chakra.Link>
-                                </Chakra.Text>
-                            </Chakra.Box>
-                        </Col>
-                        <Col xs={5}>
-                            <Chakra.Box
-                                bg={"gray.100"}
-                                textAlign={"center"}
-                                borderRadius={"5px"}
-                            >
-                                <Chakra.Text>
-                                    Leader : &nbsp;
-                                    {
-                                        leader_query.isLoading ? (
-                                            <Chakra.Skeleton height={"sm"} />
-                                        ) : (
-                                            leader_query.isSuccess ? (
-                                                <Chakra.Link>{
-                                                    leader_query.data.get_username()
-                                                }</Chakra.Link>
+                <Chakra.Box width={"sm"} _hover={{
+                    bg: "gray.100",
+                    borderRadius: "10px"
+                }}
+                >
+                    <Container>
+                        <Row>
+                            <Col xs={1}>
+                                <Chakra.Icon as={FaUsers} />
+                            </Col>
+                            <Col xs={6}>
+                                <Chakra.Box textAlign={"center"}>
+                                    <Chakra.Text size={"sm"}>
+                                        <Chakra.Link>
+                                            {props.src.get_name()}
+                                        </Chakra.Link>
+                                    </Chakra.Text>
+                                </Chakra.Box>
+                            </Col>
+                            <Col xs={5}>
+                                <Chakra.Box
+                                    bg={"gray.100"}
+                                    textAlign={"center"}
+                                    borderRadius={"5px"}
+                                >
+                                    <Chakra.Text>
+                                        Leader : &nbsp;
+                                        {
+                                            leader_query.isLoading ? (
+                                                <Chakra.Skeleton height={"10px"} />
                                             ) : (
-                                                <></>
+                                                leader_query.isSuccess ? (
+                                                    <Chakra.Link>{
+                                                        leader_query.data.get_username()
+                                                    }</Chakra.Link>
+                                                ) : (
+                                                    <></>
+                                                )
                                             )
-                                        )
-                                    }
-                                </Chakra.Text>
-                            </Chakra.Box>
-                        </Col>
-                    </Row>
-                </Container>
-            </Chakra.Box>
-        </Chakra.Tooltip>
-    )
+                                        }
+                                    </Chakra.Text>
+                                </Chakra.Box>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Chakra.Box>
+            </Chakra.Tooltip>
+        )
+    } catch (e) {
+        return (
+            <Chakra.Tooltip
+                label={`This group has ${props.src.getMembersID().length} members`}
+            >
+                <Chakra.Box width={"sm"} _hover={{
+                    bg: "gray.100",
+                    borderRadius: "10px"
+                }}
+                >
+                    <Container>
+                        <Row>
+                            <Col xs={1}>
+                                <Chakra.Icon as={FaUsers} />
+                            </Col>
+                            <Col xs={6}>
+                                <Chakra.Box textAlign={"center"}>
+                                    <Chakra.Text size={"sm"}>
+                                        <Chakra.Link>
+                                            {props.src.get_name()}
+                                        </Chakra.Link>
+                                    </Chakra.Text>
+                                </Chakra.Box>
+                            </Col>
+                            <Col xs={5}>
+                                <Chakra.Box
+                                    bg={"gray.100"}
+                                    textAlign={"center"}
+                                    borderRadius={"5px"}
+                                >
+                                    <Chakra.Text>
+                                        Leader : &nbsp;
+                                        None
+                                    </Chakra.Text>
+                                </Chakra.Box>
+                            </Col>
+                        </Row>
+                    </Container>
+                </Chakra.Box>
+            </Chakra.Tooltip>
+        )
+    }
+
 }
 
-function Group_Simple_Element_ByID(props : {
-    id : string
-}){
+function Group_Simple_Element_ByID(props: {
+    id: string
+}) {
     const query_key = "mdx-groups-" + props.id;
     const query = useQuery<Group, Error>(query_key, () => {
         return Group.get_groupById(props.id);
     });
-    if(query.isLoading){
+    if (query.isLoading) {
         return (
-            <GroupFallBackElement/>
+            <GroupFallBackElement />
         )
     }
-    if(query.isError){
+    if (query.isError) {
         return (
-            <ErrorEL1 error={query.error}/>
+            <ErrorEL1 error={query.error} />
         );
     }
     return (
@@ -128,9 +175,9 @@ function Group_Simple_Element_ByID(props : {
     );
 }
 
-function Group_Page(props : React.PropsWithChildren<{
-    src : Group
-}>){
+function Group_Page(props: React.PropsWithChildren<{
+    src: Group
+}>) {
     const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
     const leader_query = useQuery(leader_queryKey, () => {
         return props.src.getLeader();
@@ -139,8 +186,8 @@ function Group_Page(props : React.PropsWithChildren<{
     })
     return (
         <Chakra.Box as={Container}>
-            <Chakra.Box 
-                height={"sm"} 
+            <Chakra.Box
+                height={"sm"}
                 backgroundImage={WaveHaikei}
                 backgroundPosition={"bottom"}
                 backgroundRepeat={"no-repeat"}
@@ -148,14 +195,14 @@ function Group_Page(props : React.PropsWithChildren<{
             >
                 <Chakra.Center height={"full"}>
                     <Chakra.Box textAlign={"center"}>
-                    <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
-                    {
-                        leader_query.isSuccess ? (
-                            <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
-                        ) : (
-                            <></>
-                        )
-                    }
+                        <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
+                        {
+                            leader_query.isSuccess ? (
+                                <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
+                            ) : (
+                                <></>
+                            )
+                        }
                     </Chakra.Box>
                 </Chakra.Center>
             </Chakra.Box>
@@ -177,7 +224,7 @@ function Group_Page(props : React.PropsWithChildren<{
 const queryClient = new QueryClient();
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
 //const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
-const to_use_group = Group.get_groupById(test_group.data[0].id);
+//const to_use_group = Group.get_groupById(test_group.data[0].id);
 
 test_area.render(
     <Chakra.ChakraProvider >
@@ -190,19 +237,33 @@ test_area.render(
             <Chakra.Box
                 margin={10}
             >
-                <React.Suspense>
-                    <Await
-                        resolve={to_use_group}
-                        errorElement={<ErrorELAsync/>}
-                    >
-                        {(getted : Group) => (
-                            <Group_Page src={getted}/>
-                        )}
-                    </Await>
-                    
-                </React.Suspense>
-                
+                <CollectionComponnent_WithQuery<Group>
+                    queryKey={"mdx-search_group"}
+                    fn={() => {
+                        return Group.search({
+                            offset_Limits: new Offset_limits()
+                        });
+                    }}
+                    query_options={
+                        {
+                            "staleTime" : Infinity
+                        }
+                    }
+                >
+                    {
+                        (value: Collection<Group>) => (
+                            <Container>
+                                {
+                                    value.get_data().map((value2) => (
+                                        <Group_Simple_Element src={value2} />
+                                    ))
+                                }
+                            </Container>
+                        )
+                    }
+                </CollectionComponnent_WithQuery>
             </Chakra.Box>
         </QueryClientProvider>
     </Chakra.ChakraProvider>
 );
+/**/

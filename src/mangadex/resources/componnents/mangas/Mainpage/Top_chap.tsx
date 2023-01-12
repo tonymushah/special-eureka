@@ -15,7 +15,7 @@ import * as Chakra from '@chakra-ui/react'
 import { Aggregate } from "../../../../api/structures/Aggregate";
 import { ErrorELAsync } from "../../Error_cmp";
 import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
-import { useQueries } from "react-query";
+import { useQueries, useQuery, useQueryClient } from "react-query";
 
 function CollapseHeight(props: React.PropsWithChildren) {
     const [show, setShow] = React.useState(false)
@@ -55,6 +55,41 @@ function CollapseHeight(props: React.PropsWithChildren) {
                 Show {show ? 'Less' : 'More'}
             </Chakra.Button>
         </>
+    )
+}
+
+function Top_Chaps_Desc_Part(props: {
+    src: Manga
+}) {
+    const queryClient = useQueryClient();
+    const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
+    const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
+        return Lang_and_Data.initializeByDesc(props.src.get_description());
+    });
+    if (manga_description_query.isIdle || manga_description_query.isLoading) {
+        return (
+            <Placeholder lg={12}></Placeholder>
+        );
+    }
+    if (manga_description_query.isError) {
+        return (
+            <></>
+        );
+    }
+    if (manga_description_query.isSuccess) {
+        return (
+            <Accordion>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
+                    <Accordion.Body>
+                        <LAD_Tabs src={manga_description_query.data}></LAD_Tabs>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion >
+        )
+    }
+    return (
+        <></>
     )
 }
 
@@ -155,7 +190,7 @@ function Author_Artists(props: {
             <>
                 <AuthorCol title="Artistists" src={artistists.map<Author>((value) => {
                     return value.data!;
-                })}/>
+                })} />
             </>
         </Row>
     )
@@ -204,29 +239,13 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                 <Row className="mg-top-content">
 
                     <Col>
-                        <React.Suspense fallback={<Placeholder lg={12}></Placeholder>}>
-                            <Await
-                                resolve={Lang_and_Data.initializeByDesc(this.to_use.get_description())}
-                                errorElement={<></>}
-                                children={(getted: Array<Lang_and_Data>) => {
-                                    return (<Accordion>
-                                        <Accordion.Item eventKey="0">
-                                            <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
-                                            <Accordion.Body>
-                                                <LAD_Tabs src={getted}></LAD_Tabs>
-                                            </Accordion.Body>
-                                        </Accordion.Item>
-                                    </Accordion>
-                                    );
-                                }}
-                            />
-                        </React.Suspense>
+                        <Top_Chaps_Desc_Part src={this.to_use} />
                     </Col>
                 </Row>
                 <Row className="mg-top-content">
                     <CollapseHeight>
                         <Col md="4" lg="4" className="d-sm-block">
-                            <Author_Artists src={this.to_use}/>
+                            <Author_Artists src={this.to_use} />
                             <>
                                 <React.Suspense fallback={
                                     <Row>

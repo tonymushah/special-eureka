@@ -28,28 +28,34 @@ class AuthorCollection extends Collection<Author>{
         this.$prev_search_type = previous_search_type;
     }
     public next(): Promise<Collection<Author>> {
-        let new_offset = this.get_offset() + this.get_limit();
-        if(new_offset < this.get_total() && new_offset > 0){
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+        if(new_offset <= this.get_total() && new_offset >= 0){
             let current_offset_limits = new Offset_limits();
             current_offset_limits.set_limits(this.get_limit());
             current_offset_limits.set_offset(new_offset);
             this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Author.searchAuthor(this.prev_search_type);
+            resolve(Author.searchAuthor(this.prev_search_type));
         }else{
-            throw new Error("no next autho");
+            reject(new Error("no next author"));
         }
+        });
+        
     }
     public previous(): Promise<Collection<Author>> {
-        let new_offset = this.get_offset() - this.get_limit();
-        if(new_offset < 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Author.searchAuthor(this.prev_search_type);
-        }else{
-            throw new Error("no previous manga");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                resolve(Author.searchAuthor(this.prev_search_type));
+            }else{
+                reject(new Error("no previous author"));
+            }
+        });
+        
     }
 }
 

@@ -1,10 +1,8 @@
-import { Api_Request } from "../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
-import { Chapters } from "./Chapter";
-import { Volume } from "./Volume";
+import { Api_Request } from "../internal/Api_Request";
+import { Querry_list_builder, serialize } from "../internal/Utils";
 import { Manga } from "./Manga";
-import { Querry_list_builder } from "../internal/Utils";
-import { getCurrent } from "@tauri-apps/api/window";
+import { Volume } from "./Volume";
 
 export class Aggregate{
     private count: number;
@@ -71,13 +69,10 @@ export class Aggregate{
         groups? : Array<string>
     }): Promise<Aggregate>{
         let getted: Response<any> = await Api_Request.get_methods(
-            Manga.get_request_a() + mangaID + "/aggregate",
-            {
-                query: {
-                    ...(new Querry_list_builder("translatedLanguage", translatedLanguage!)).build(),
-                    ...(new Querry_list_builder("groups", groups!)).build()
-                }
-            }
+            Manga.get_request_a() + mangaID + "/aggregate?" + 
+                serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + 
+                "&" + 
+                serialize((new Querry_list_builder("groups", groups!)).build())
             );
         return Aggregate.build_wANY(getted.data.volumes);
     }

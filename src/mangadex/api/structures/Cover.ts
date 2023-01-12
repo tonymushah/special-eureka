@@ -31,28 +31,34 @@ class CoverCollection extends Collection<Cover>{
         this.$prev_search_type = previous_search_type;
     }
     public next(): Promise<Collection<Cover>> {
-        let new_offset = this.get_offset() + this.get_limit();
-        if(new_offset < this.get_total() && new_offset > 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Cover.search(this.prev_search_type);
-        }else{
-            throw new Error("no next cover");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                resolve(Cover.search(this.prev_search_type));
+            }else{
+                reject(new Error("no next cover"));
+            }
+        });
+        
     }
     public previous(): Promise<Collection<Cover>> {
-        let new_offset = this.get_offset() - this.get_limit();
-        if(new_offset < 0){
-            let current_offset_limits = new Offset_limits();
-            current_offset_limits.set_limits(this.get_limit());
-            current_offset_limits.set_offset(new_offset);
-            this.$prev_search_type.offset_Limits = current_offset_limits;
-            return Cover.search(this.prev_search_type);
-        }else{
-            throw new Error("no previous cover");
-        }
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                this.$prev_search_type.offset_Limits = current_offset_limits;
+                resolve(Cover.search(this.prev_search_type));
+            }else{
+                reject(new Error("no previous cover"));
+            }
+        });
+        
     }
 }
 

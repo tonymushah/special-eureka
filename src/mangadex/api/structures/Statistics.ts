@@ -1,9 +1,9 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Querry_list_builder, serialize } from "../internal/Utils";
-import { Manga } from "./Manga";
+import Comments from "./Comments";
 
-export class Statistics{
+export class Statistics_Manga{
     private mangaID: string;
     private follows: number;
     private average: number;
@@ -20,6 +20,8 @@ export class Statistics{
         "2" : number,
         "1" : number
     };
+    private comments? : Comments
+
     public static distr_length: Array<number> = [1, 10];
     public set_mangaID(mangaID: string){
         this.mangaID = mangaID;
@@ -35,6 +37,9 @@ export class Statistics{
     }
     public set_distribution(distribution: any){
         this.distribution = distribution;
+    }
+    public set_comments(comments : Comments){
+        this.comments = comments;
     }
 
     public get_mangaID(): string{
@@ -52,6 +57,9 @@ export class Statistics{
     public get_distribution(): any{
         return this.distribution
     }
+    public get_comments(): Comments | undefined{
+        return this.comments;
+    }
     public constructor(
         mangaID: string,
         follows: number,
@@ -65,11 +73,11 @@ export class Statistics{
         this.set_baeysian(baeysian);
         this.set_distribution(distribution);
     }
-    public static async get_statsBy_MangaID(id: string): Promise<Statistics>{
+    public static async get_statsBy_MangaID(id: string): Promise<Statistics_Manga>{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id);
         let stats_not_TS: any = (responses.data.statistics)[id];
         let rating: any = stats_not_TS.rating;
-        return new Statistics(
+        return new Statistics_Manga(
             id,
             stats_not_TS.follows,
             rating.average,
@@ -77,20 +85,21 @@ export class Statistics{
             rating.distribution
         );
     }
-    public static async get_quick_statsBy_MangaID(id: Array<string>): Promise<Array<Statistics>>{
+    public static async get_quick_statsBy_MangaID(id: Array<string>): Promise<Array<Statistics_Manga>>{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/?" + serialize((new Querry_list_builder<string>("manga", id)).build()), {
         });
-        let to_return : Array<Statistics> = new Array<Statistics>(id.length);
+        let to_return : Array<Statistics_Manga> = new Array<Statistics_Manga>(id.length);
         for (let index = 0; index < to_return.length; index++) {
             let stats_not_TS: any = (responses.data.statistics)[id[index]];
             let rating: any = stats_not_TS.rating;
-            to_return[index] = new Statistics(
+            to_return[index] = new Statistics_Manga(
                 id[index],
                 stats_not_TS.follows,
                 rating.average,
                 rating.baeysian,
                 rating.distribution
             );
+            to_return[index].set_comments(stats_not_TS.comments);
         }
         return to_return;
     }
@@ -109,3 +118,4 @@ export class Statistics{
         );
     }
 }
+

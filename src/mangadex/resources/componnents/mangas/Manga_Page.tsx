@@ -10,7 +10,7 @@ import { Await, Link } from "react-router-dom";
 import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "../../../api/internal/Utils";
 import { Author } from "../../../api/structures/Author";
 import { Manga } from "../../../api/structures/Manga";
-import { Statistics } from "../../../api/structures/Statistics";
+import { Statistics_Manga } from "../../../api/structures/Statistics";
 import "../../css/manga/mg-p.css";
 import "../../css/manga/thumbail-mg.css";
 import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
@@ -19,9 +19,9 @@ import ErrorEL1 from "../error/ErrorEL1";
 import { Cover_Image_ } from "./Mainpage/Image_";
 
 export function Statis(props: {
-    src: Statistics
+    src: Statistics_Manga
 }) {
-    let getted: Statistics = props.src;
+    let getted: Statistics_Manga = props.src;
     return (
         <Chakra.Popover
             closeOnBlur={false}
@@ -134,7 +134,7 @@ export function Manga_Page(props: MangaPageProps) {
     }, {
         "staleTime": Infinity
     });
-    const title_query = useQuery("mdx-manga_title-" + props.src.get_id(), () => {
+    const title_query = useQuery<Array<Lang_and_Data>, Error>("mdx-manga_title-" + props.src.get_id(), () => {
         return Lang_and_Data.initializeArrayByAltTitle_obj(props.src.get_alt_title());
     }, {
         "staleTime": Infinity
@@ -161,8 +161,8 @@ export function Manga_Page(props: MangaPageProps) {
             }
         })
     )
-    const manga_statistics = useQuery<Statistics, Error>("mdx-manga_stats-", () => {
-        return Statistics.get_statsBy_MangaID(props.src.get_id());
+    const manga_statistics = useQuery<Statistics_Manga, Error>("mdx-manga_stats-", () => {
+        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id());
     }, {
         staleTime: Infinity
     });
