@@ -82,10 +82,10 @@ function Top_Chaps_Desc_Part(props: {
                 <Accordion.Item eventKey="0">
                     <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
                     <Accordion.Body>
-                        <LAD_Tabs src={manga_description_query.data}></LAD_Tabs>
+                        <LAD_Tabs src={manga_description_query.data} />
                     </Accordion.Body>
                 </Accordion.Item>
-            </Accordion >
+            </Accordion>
         )
     }
     return (
@@ -163,37 +163,41 @@ function Author_Artists(props: {
         let all_isSuccess_Artists = artistists.map<boolean>((value) => {
             return value.isSuccess;
         });
-        let is_allArtists_Success = !all_isSuccess_Artists.includes(false);
+        let is_allArtists_Success = all_isSuccess_Artists.includes(false) ? false : true;
         return is_allArtists_Success;
     }
     function is_Authors_finished(): boolean {
         let all_isSuccess_Authors = authors.map<boolean>((value) => {
             return value.isSuccess;
         });
-        let is_allAuthors_Success = !all_isSuccess_Authors.includes(false);
+        let is_allAuthors_Success = all_isSuccess_Authors.includes(false) ? false : true;
         return is_allAuthors_Success;
     }
     if (is_Artists_finished() == false && is_Authors_finished() == false) {
         return (
             <Placeholder lg={10}></Placeholder>
         );
+    } else {
+        return (
+            <Row>
+                <>
+
+                    <AuthorCol title="Authors" src={authors.map<Author>((value) => {
+                        return value.data!;
+                    })} />
+
+                </>
+                <>
+                    <AuthorCol title="Artistists" src={artistists.map<Author>((value) => {
+                        return value.data!;
+                    })} />
+                </>
+            </Row>
+        );
     }
-    return (
-        <Row>
-            <>
-
-                <AuthorCol title="Authors" src={authors.map<Author>((value) => {
-                    return value.data!;
-                })} />
-
-            </>
-            <>
-                <AuthorCol title="Artistists" src={artistists.map<Author>((value) => {
-                    return value.data!;
-                })} />
-            </>
-        </Row>
-    )
+    return(
+        <></>
+    );
 }
 
 

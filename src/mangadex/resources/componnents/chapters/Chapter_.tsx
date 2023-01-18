@@ -85,7 +85,7 @@ export class Chapter_ extends React.Component<Chapter_Props>{
                                                 }else if(getted.length == 1){
                                                     return (<span>{getted[0].get_name()}</span>);
                                                 }else{
-                                                    var span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
+                                                    let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
                                                     for (let index = 0; index < getted.length; index++) {
                                                         const element = getted[index];
                                                         if(index < (getted.length - 1)){
@@ -198,7 +198,7 @@ export class Chapter_2 extends React.Component<Chapter_Props>{
                                                 }else if(getted.length == 1){
                                                     return (<span>{getted[0].get_name()}</span>);
                                                 }else{
-                                                    var span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
+                                                    let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
                                                     for (let index = 0; index < getted.length; index++) {
                                                         const element = getted[index];
                                                         if(index < (getted.length - 1)){
@@ -255,7 +255,7 @@ export class Chapter_includes extends React.Component<Chapter_includes_Props>{
         }else if(this.chapter_to_use.get_groups().length == 1){
             return (<span>{this.chapter_to_use.get_groups()[0].get_name()}</span>);
         }else{
-            var span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
+            let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
             for (let index = 0; index < this.chapter_to_use.get_groups().length; index++) {
                 const element = this.chapter_to_use.get_groups()[index];
                 if(index < (this.chapter_to_use.get_groups().length - 1)){
@@ -319,7 +319,7 @@ export class Chapter_includes2 extends React.Component<Chapter_includes_Props>{
         }else if(this.chapter_to_use.get_groups().length == 1){
             return (<span>{this.chapter_to_use.get_groups()[0].get_name()}</span>);
         }else{
-            var span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
+            let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
             for (let index = 0; index < this.chapter_to_use.get_groups().length; index++) {
                 const element = this.chapter_to_use.get_groups()[index];
                 if(index < (this.chapter_to_use.get_groups().length - 1)){

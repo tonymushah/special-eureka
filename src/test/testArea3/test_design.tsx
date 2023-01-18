@@ -7,8 +7,8 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import "flag-icons/css/flag-icons.min.css";
 import "font-awesome/css/font-awesome.css";
 import "bootstrap/dist/css/bootstrap.css";
-import { FaUsers } from "react-icons/fa"
-import { Col, Container, Row } from "react-bootstrap"
+import { FaDiscord, FaUsers } from "react-icons/fa"
+import { Button, Col, Container, Row } from "react-bootstrap"
 import {
 
     QueryClient,
@@ -31,6 +31,17 @@ import { ErrorELAsync } from "../../mangadex/resources/componnents/Error_cmp";
 import { CollectionComponnent, CollectionComponnent_WithQuery } from "../../mangadex/resources/componnents/Collection/Collection";
 import { Collection } from "../../mangadex/api/structures/Collection";
 import { Offset_limits } from "../../mangadex/api/internal/Utils";
+import { writeText, readText } from '@tauri-apps/api/clipboard';
+import { Manga } from "../../mangadex/api/structures/Manga";
+import MangaElementDef from "../../mangadex/resources/componnents/mangas/v1/MangaElementDef";
+
+const ExtLink = React.lazy(async () => {
+    let res = await import("../../commons-res/components/ExtLink");
+    return {
+        default: res.ExtLink
+    };
+})
+const ReactMarkDown = React.lazy(() => import("react-markdown"));
 
 function GroupFallBackElement() {
     return (
@@ -58,7 +69,7 @@ function Group_Simple_Element(props: {
             <Chakra.Tooltip
                 label={`This group has ${props.src.getMembersID().length} members`}
             >
-                <Chakra.Box width={"sm"} _hover={{
+                <Chakra.Box _hover={{
                     bg: "gray.100",
                     borderRadius: "10px"
                 }}
@@ -111,7 +122,7 @@ function Group_Simple_Element(props: {
             <Chakra.Tooltip
                 label={`This group has ${props.src.getMembersID().length} members`}
             >
-                <Chakra.Box width={"sm"} _hover={{
+                <Chakra.Box _hover={{
                     bg: "gray.100",
                     borderRadius: "10px"
                 }}
@@ -175,6 +186,189 @@ function Group_Simple_Element_ByID(props: {
     );
 }
 
+function Group_Details(props: {
+    src: Group
+}) {
+    const toast = Chakra.useToast({
+        position : "bottom-right",
+        duration : 9000,
+        isClosable : true
+    });
+    return (
+        <Chakra.Box>
+            <Container>
+                <Row>
+                    <Col xs={3}>
+                        <Chakra.Box>
+                            <Chakra.Text>
+                                {
+                                    props.src.get_official() ? (
+                                        <Chakra.Button>
+                                            <ChakraIcon.CheckIcon boxSize={"1em"} color={"green"} />
+                                        </Chakra.Button>
+                                    ) : (
+                                        <Chakra.Button>
+                                            <ChakraIcon.SmallCloseIcon boxSize={"1em"} color={"red"} />
+                                        </Chakra.Button>
+                                    )
+                                }
+                                &nbsp;
+                                Official
+                            </Chakra.Text>
+                            <Chakra.Text>
+                                {
+                                    props.src.get_verified() ? (
+                                        <Chakra.Button>
+                                            <ChakraIcon.CheckIcon boxSize={"1em"} color={"green"} />
+                                        </Chakra.Button>
+                                    ) : (
+                                        <Chakra.Button>
+                                            <ChakraIcon.SmallCloseIcon boxSize={"1em"} color={"red"} />
+                                        </Chakra.Button>
+                                    )
+                                }
+                                &nbsp;
+                                Verified
+                            </Chakra.Text>
+                            <Chakra.Text>
+                                {
+                                    props.src.get_inactive() ? (
+                                        <Chakra.Button>
+                                            <ChakraIcon.CheckIcon boxSize={"1em"} color={"green"} />
+                                        </Chakra.Button>
+                                    ) : (
+                                        <Chakra.Button>
+                                            <ChakraIcon.SmallCloseIcon boxSize={"1em"} color={"red"} />
+                                        </Chakra.Button>
+                                    )
+                                }
+                                &nbsp;
+                                Inactive
+                            </Chakra.Text>
+                        </Chakra.Box>
+                    </Col>
+                    <Col xs={9}>
+                        <Chakra.Box>
+                            <Chakra.Heading size={"md"}>Where to find</Chakra.Heading>
+                            <React.Suspense>
+                                {
+                                    props.src.get_website() !== undefined && props.src.get_website() !== null ? (
+                                        <ExtLink href={props.src.get_website()}>
+                                            <Chakra.Button leftIcon={<ChakraIcon.ExternalLinkIcon/>} colorScheme={"gray"} >Website</Chakra.Button>
+                                        </ExtLink>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                                {
+                                    props.src.get_discord() != undefined && props.src.get_discord() != null ? (
+                                        <ExtLink href={"https://discord.gg/" + props.src.get_discord()}>
+                                            <Chakra.Button leftIcon={<Chakra.Icon as={FaDiscord}/>} colorScheme={"facebook"} >Discord</Chakra.Button>
+                                        </ExtLink>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                                {
+                                    props.src.get_contactEmail() != undefined && props.src.get_contactEmail() != null? (
+                                        <Chakra.Button onClick={() =>{
+                                            writeText(props.src.get_contactEmail()).then(() => {
+                                                toast({
+                                                    status : "success",
+                                                    title : "Email copied to clipboard"
+                                                })
+                                            }).catch(() => {
+                                                toast({
+                                                    status : "error",
+                                                    title : "Error on copying to clipboard"
+                                                })
+                                            })
+                                        }} leftIcon={<ChakraIcon.EmailIcon/>}>Email</Chakra.Button>
+                                    ) : (
+                                        <></>
+                                    )
+                                }
+                            </React.Suspense>
+                        </Chakra.Box>
+                        <Chakra.Box>
+                            {
+                                props.src.get_description() == null || props.src.get_description() == undefined ? (
+                                    <></>
+                                ) : (
+                                    <Chakra.Box>
+                                        <Chakra.Heading size={"md"}>Group description</Chakra.Heading>
+                                        <Chakra.Box>
+                                            <React.Suspense
+                                                fallback={<Chakra.Box
+                                                    width={"full"}
+                                                >
+                                                    <Chakra.Center>
+                                                        <Chakra.Spinner />
+                                                    </Chakra.Center>
+                                                </Chakra.Box>}
+                                            >
+                                                <ReactMarkDown
+                                                    children={props.src.get_description()}
+                                                    components={{
+                                                        a(node, href, ...props) {
+                                                            return (
+                                                                <React.Suspense
+                                                                    fallback={<Chakra.Skeleton width={"10px"} height={"10px"} />}
+                                                                >
+                                                                    <Chakra.Link as={ExtLink} href={href} children={node.children} />
+                                                                </React.Suspense>
+                                                            )
+                                                        }
+                                                    }}
+                                                />
+                                            </React.Suspense>
+                                        </Chakra.Box>
+                                    </Chakra.Box>
+                                )
+                            }
+                        </Chakra.Box>
+                    </Col>
+                </Row>
+            </Container>
+        </Chakra.Box>
+    )
+}
+
+function Group_Titles(props : {
+    id: string
+}){
+    return(
+        <CollectionComponnent_WithQuery<Manga>
+            queryKey={"mdx-group_titles-" + props.id}
+            fn={() => {
+                return Manga.search({
+                    offset_Limits : new Offset_limits(),
+                    group : props.id
+                })
+            }}
+            query_options={
+                {
+                    "staleTime": Infinity
+                }
+            }
+        >
+            {
+                (value: Collection<Manga>) => (
+                    <Chakra.Wrap>
+                        {
+                            value.get_data().map((value2) => (
+                                <Chakra.WrapItem>
+                                    <MangaElementDef src={value2}/>
+                                </Chakra.WrapItem>
+                            ))
+                        }
+                    </Chakra.Wrap>
+                )
+            }
+        </CollectionComponnent_WithQuery>
+    )
+}
+
 function Group_Page(props: React.PropsWithChildren<{
     src: Group
 }>) {
@@ -209,22 +403,61 @@ function Group_Page(props: React.PropsWithChildren<{
             <Chakra.Box
                 background={"gray.200"}
             >
-                <Chakra.Tabs>
+                <Chakra.Tabs isLazy>
                     <Chakra.TabList>
                         <Chakra.Tab>Group Details</Chakra.Tab>
                         <Chakra.Tab>Titles</Chakra.Tab>
                         <Chakra.Tab>Feed</Chakra.Tab>
                     </Chakra.TabList>
+                    <Chakra.TabPanels>
+                        <Chakra.TabPanel>
+                            <Group_Details src={props.src} />
+                        </Chakra.TabPanel>
+                        <Chakra.TabPanel>
+                            <Group_Titles id={props.src.get_id()}/>
+                        </Chakra.TabPanel>
+                    </Chakra.TabPanels>
                 </Chakra.Tabs>
             </Chakra.Box>
         </Chakra.Box>
     );
 }
 
+
+function GroupSearch_Test1() {
+    return (
+        <CollectionComponnent_WithQuery<Group>
+            queryKey={"mdx-search_group"}
+            fn={() => {
+                return Group.search({
+                    offset_Limits: new Offset_limits()
+                });
+            }}
+            query_options={
+                {
+                    "staleTime": Infinity
+                }
+            }
+        >
+            {
+                (value: Collection<Group>) => (
+                    <Container>
+                        {
+                            value.get_data().map((value2) => (
+                                <Group_Simple_Element src={value2} />
+                            ))
+                        }
+                    </Container>
+                )
+            }
+        </CollectionComponnent_WithQuery>
+    );
+}
+
 const queryClient = new QueryClient();
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
 //const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
-//const to_use_group = Group.get_groupById(test_group.data[0].id);
+const to_use_group = Group_WithAllRelationShip.build_wANY(test_group.data[0]);
 
 test_area.render(
     <Chakra.ChakraProvider >
@@ -237,31 +470,7 @@ test_area.render(
             <Chakra.Box
                 margin={10}
             >
-                <CollectionComponnent_WithQuery<Group>
-                    queryKey={"mdx-search_group"}
-                    fn={() => {
-                        return Group.search({
-                            offset_Limits: new Offset_limits()
-                        });
-                    }}
-                    query_options={
-                        {
-                            "staleTime" : Infinity
-                        }
-                    }
-                >
-                    {
-                        (value: Collection<Group>) => (
-                            <Container>
-                                {
-                                    value.get_data().map((value2) => (
-                                        <Group_Simple_Element src={value2} />
-                                    ))
-                                }
-                            </Container>
-                        )
-                    }
-                </CollectionComponnent_WithQuery>
+                <Group_Page src={to_use_group} />
             </Chakra.Box>
         </QueryClientProvider>
     </Chakra.ChakraProvider>

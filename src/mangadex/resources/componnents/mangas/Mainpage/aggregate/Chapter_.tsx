@@ -6,11 +6,11 @@ import { Alert, Col, Row } from "react-bootstrap";
 
 export class Chapter_{
     public render(): React.ReactNode{
-        var country: string = "jp";
-        var ch_number: number = 0;
-        var title: string = "Some title";
-        var group: string = "some group";
-        var uploader: string = "random uploader";
+        let country: string = "jp";
+        let ch_number: number = 0;
+        let title: string = "Some title";
+        let group: string = "some group";
+        let uploader: string = "random uploader";
         return (
             <Row>
                 <Alert variant="secondary">

@@ -30,7 +30,7 @@ export class Covers_Manga extends React.Component<MangaPageProps>{
         this.to_use = this.props.src;
     }
     public async build_covers(): Promise<Array<React.ReactNode>>{
-        var covers : Array<Cover> = await this.to_use.get_allCover();
+        let covers : Array<Cover> = (await this.to_use.get_allCover()).get_data();
         let returns: Array<React.ReactNode> = new Array<React.ReactNode>(covers.length);
         for (let index = 0; index < covers.length; index++) {
             const element = covers[index];

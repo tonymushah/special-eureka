@@ -8,7 +8,7 @@ import MangaFeedElement from "./MangaFeedElement";
 export default function MangaFeedElement_byChapID(props: {
     id: string
 }) {
-    const query = useQuery("mdx-chapter:" + props.id, () => {
+    const query = useQuery<Chapter, Error>("mdx-chapter:" + props.id, () => {
         return Chapter.get_ChapterbyId(props.id);
     }, {
         staleTime: Infinity

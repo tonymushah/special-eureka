@@ -36,7 +36,13 @@ export default function Router() {
             Mangadex
         ]
     )
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        "defaultOptions" : {
+            "queries" : {
+                "cacheTime" : 1000 * 60 * 2
+            }
+        }
+    });
     return (
         <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools

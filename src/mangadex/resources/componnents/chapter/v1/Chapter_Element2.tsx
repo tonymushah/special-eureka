@@ -37,6 +37,8 @@ export default function Chapter_Element2(props: {
     const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.chapter.get_id());
+    }, {
+        cacheTime : 1000 * 60
     });
     return (
         <Chakra.Tooltip

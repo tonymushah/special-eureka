@@ -26,7 +26,7 @@ export default function MangaElementDef(props: {
     }, {
         "staleTime": Infinity
     });
-    const manga_description_querykey = "mdx-manga-" + props.src + "-description";
+    const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     })
@@ -241,8 +241,8 @@ export default function MangaElementDef(props: {
                                 colSpan={8}
                             >
                                 <Chakra.LinkOverlay
-                                    as={Link}
-                                    to={"/mangadex/manga/" + props.src.get_id()}
+                                    //as={Link}
+                                    //to={"/mangadex/manga/" + props.src.get_id()}
                                 >
                                     <Chakra.Heading
                                         noOfLines={2}

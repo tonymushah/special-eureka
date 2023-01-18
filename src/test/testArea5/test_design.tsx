@@ -74,7 +74,7 @@ function TestNode(){
                         placeholder="Search"
                         onChange={formik.handleChange}
                         name={"title"}
-                        letiant='flushed'
+                        variant='flushed'
                     />
                     <Chakra.IconButton
                         type="submit"

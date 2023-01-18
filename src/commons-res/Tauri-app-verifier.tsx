@@ -5,7 +5,7 @@ import { app, tauri } from "@tauri-apps/api";
 
 try{
     const app = window!.__TAURI__.app;
-    var app_name = {};
+    letapp_name = {};
     app.getName().then((result) => {
         app_name = result
     });

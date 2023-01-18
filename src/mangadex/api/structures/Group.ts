@@ -88,8 +88,12 @@ export class Group extends Attribute {
     private version: number;
     private createdAt: string;
     private updatedAt: string;
+    private verified: boolean;
     public static get_group_a(): string {
         return Group.group_r;
+    }
+    public get_verified(): boolean{
+        return this.verified;
     }
     public get_name(): string {
         return this.name;
@@ -200,6 +204,10 @@ export class Group extends Attribute {
     public set_version(version: number) {
         this.version = version;
     }
+    public set_verified(verified: boolean){
+        this.verified = verified;
+    }
+
     public constructor(
         id: string,
         name: string,
@@ -268,7 +276,7 @@ export class Group extends Attribute {
         try {
             instance.set_relationships_Wany(relationships);
         } catch (e) { }
-
+        instance.set_verified(attributes.verified);
         return instance;
     }
     public static async get_groupById(id: string): Promise<Group> {
@@ -559,6 +567,7 @@ export class Group_WithAllRelationShip extends Group {
             }
             instance.$members = members_;
         } catch (error) { }
+        instance.set_verified(attributes.verified);
         return instance;
     }
     public static async get_groupById(id: string): Promise<Group_WithAllRelationShip> {

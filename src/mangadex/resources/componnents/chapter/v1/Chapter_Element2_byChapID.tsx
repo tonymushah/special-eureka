@@ -6,7 +6,7 @@ import * as Chakra from "@chakra-ui/react";
 export default function Chapter_Element2_byChapID(props: {
     id: string
 }) {
-    const query = useQuery("mdx-chapter:" + props.id, () => {
+    const query = useQuery<Chapter, Error>("mdx-chapter:" + props.id, () => {
         return Chapter.get_ChapterbyId(props.id);
     }, {
         staleTime: Infinity

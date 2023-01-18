@@ -25,6 +25,11 @@
           "http://localhost:8145/**"
         ]
       },
+      "clipboard": {
+        "all": false,
+        "readText": false,
+        "writeText": true
+      },
       "dialog": {
         "all": false,
         "ask": false,
@@ -62,6 +67,9 @@
       },
       "path": {
         "all": true
+      },
+      "os": {
+        "all": false
       }
     },
     "bundle": {
@@ -104,7 +112,15 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": false,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDcxRTExQThEQjFCODBGQzgKUldUSUQ3aXhqUnJoY1JvelFxeFBwZ1ZuU0hZL1QzMExxeWhRM2xWb0VpUFp3S25GYUZVYVF1SmgK",
+      "endpoints": [
+        "http://localhost:3001/api/update/{{target}}/{{current_version}}"
+      ],
+      "dialog" : false,
+      "windows": {
+        "installMode": "basicUi"
+      }
     },
     "windows": [
       {

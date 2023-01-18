@@ -26,6 +26,8 @@ export default function Chapter_Element1(props: {
     const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.chapter.get_id());
+    }, {
+        cacheTime : 1000 * 60
     });
     const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
         props.chapter.get_scanlations_groups_id().map((value: string) => {
@@ -41,6 +43,8 @@ export default function Chapter_Element1(props: {
     const this_chapter_lang_querykey = "mdx-chapter-" + props.chapter.get_id()+ "-lang";
     const this_chapter_lang_query = useQuery(this_chapter_lang_querykey, () => {
         return props.chapter.get_translated_Lang();
+    }, {
+        cacheTime : 1000 * 60
     })
     return (
         <Chakra.Box

@@ -16,7 +16,7 @@ type Chapters_ElementProps = {
 
 function Chapters_Element(props: Chapters_ElementProps) {
     const [open, setOpen] = useState(true);
-    var rand = Math.floor(Math.random() * 1000) + 1;
+    let rand = Math.floor(Math.random() * 1000) + 1;
     return (
         <Container>
             <Row>

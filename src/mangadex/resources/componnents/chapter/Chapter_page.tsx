@@ -190,7 +190,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
         }
     }
     public makelist_Page(): Array<React.ReactNode>{
-        var returns: Array<React.ReactNode> = [];
+        letreturns: Array<React.ReactNode> = [];
         for(let index = 0; index < this.Chapter_toUse.get_pages(); index++){
             returns[index] = (
                 <Chakra.MenuList

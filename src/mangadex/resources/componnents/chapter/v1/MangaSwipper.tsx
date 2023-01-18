@@ -22,8 +22,8 @@ export default function MangaSwipper(props: {
                 }}
                 grabCursor={true}
                 mousewheel={true}
-                autoplay={true}
-                modules={[Pagination, Autoplay, Mousewheel, FreeMode]}
+                freeMode={true}
+                modules={[Pagination, Mousewheel, FreeMode]}
                 breakpoints={
                     {
                         374: {
@@ -35,7 +35,7 @@ export default function MangaSwipper(props: {
                             spaceBetween: 10
                         },
                         733: {
-                            slidesPerView: 2,
+                            slidesPerView: 4,
                             spaceBetween: 10
                         },
                         786: {

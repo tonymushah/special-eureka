@@ -69,7 +69,7 @@ export class LAD_Tabs extends React.Component<LAD_TabsProps>{
                                                             <React.Suspense
                                                                 fallback={<Skeleton width={"10px"} height={"10px"}/>}
                                                             >
-                                                                <Link as={ExtLink} href={href}>{node}</Link>
+                                                                <Link as={ExtLink} href={href} children={node.children}/>
                                                             </React.Suspense>
                                                         )
                                                     }
