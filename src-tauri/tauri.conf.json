@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "Mangadex-Desktop",
-    "version": "0.1.0"
+    "version": "0.1.0-beta3"
   },
   "tauri": {
     "allowlist": {
