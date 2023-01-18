@@ -1,9 +1,9 @@
 [package]
 name = "mangadex-desktop"
-version = "0.1.0-beta1"
+version = "0.1.0-beta3"
 description = "a mangadex desktop app build with tauri"
 authors = ["tonymushah"]
-license = ""
+license = "https://github.com/tonymushah/special-eureka"
 repository = ""
 default-run = "mangadex-desktop"
 edition = "2021"
