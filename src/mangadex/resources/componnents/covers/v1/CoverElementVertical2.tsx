@@ -1,17 +1,21 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Await } from "react-router-dom";
 import { Cover } from "../../../../api/structures/Cover";
 import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
 import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
 import { useQuery } from "react-query";
 
 export default function CoverElementVertical2(props: {
-    src: Cover
+    src: Cover,
+    isThumbail?: boolean
 }) {
-    const cover_image_querykey = "mdx-cover-" + props.src.get_id() + "-image";
+    const cover_image_querykey = props.isThumbail == undefined || props.isThumbail == false ? "mdx-cover-" + props.src.get_id() + "-image" : "mdx-cover-" + props.src.get_id() + "-image-512";
     const cover_image_query = useQuery(cover_image_querykey, () => {
-        return props.src.get_CoverImage_promise();
+        if(props.isThumbail == undefined || props.isThumbail == false){
+            return props.src.get_CoverImage_promise();
+        }else{
+            return props.src.get_CoverImage_thumbnail_promise(512);
+        }
     }, {
         staleTime: 1000 * 60 * 5
     });

@@ -324,6 +324,9 @@ export class Manga extends Attribute{
             }
         }
     }
+    public get_cover_art_id() : string{
+        return this.get_some_relationship("cover_art")[0].get_id();
+    }
     public static async search({
             offset_Limits = new Offset_limits(),
             title,

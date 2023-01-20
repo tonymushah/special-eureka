@@ -228,12 +228,19 @@ export class Cover extends Attribute{
     }
     // [ ] get the cover path 
         // [ ] {256, 512}
-        public get_CoverImageOnline_thumbnail(size: number): string{
+        public get_CoverImageOnline_thumbnail(size: 256 | 512): string{
             return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")[0].get_id() + "/" + this.get_file_name() + "." + size +".jpg");
         }
         // [ ] original
         public get_CoverImageOnline(): string{
             return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")![0].get_id() + "/" + this.get_file_name());
+        }
+        public async get_CoverImage_thumbnail_promise(size: 256 | 512): Promise<string>{
+            try {
+                return await Cover.getOfflineCoverImage(this.get_id())
+            } catch (error) {
+                return this.get_CoverImageOnline_thumbnail(size);
+            }
         }
         public async get_CoverImage_promise() : Promise<string>{
             try {

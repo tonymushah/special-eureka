@@ -6,10 +6,13 @@ import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
 import { Manga } from "../../../../api/structures/Manga";
 import { useQuery } from "react-query";
 import { Alt_title, Lang_and_Data, make_first_UpperCare } from "../../../../api/internal/Utils";
-import { Await, Link } from "react-router-dom";
-import { ErrorELAsync } from "../../Error_cmp";
 import ReactContextMenu from "react-jsx-context-menu"
 import ErrorEL1 from "../../error/ErrorEL1";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { Link } from "react-router-dom";
+
+const CoverElementVertical = React.lazy(() => import("../../covers/v1/CoverElementVertical"));
+const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
 
 export default function MangaElementDef(props: {
     src: Manga,
@@ -30,8 +33,6 @@ export default function MangaElementDef(props: {
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     })
-    const CoverElementVertical = React.lazy(() => import("../../covers/v1/CoverElementVertical"));
-    const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
     //let desc: string = "";
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
@@ -161,7 +162,7 @@ export default function MangaElementDef(props: {
                                         />
                                     }
                                 >
-                                    <CoverElementVertical src={coverQuery.data} />
+                                    <CoverElementVertical src={coverQuery.data} isThumbail />
                                 </React.Suspense>
                             ) : null
                         }
@@ -231,7 +232,7 @@ export default function MangaElementDef(props: {
                                                 />
                                             }
                                         >
-                                            <CoverElementVertical2 src={coverQuery.data} />
+                                            <CoverElementVertical2 src={coverQuery.data} isThumbail />
                                         </React.Suspense>
                                     ) : null
                                 }
@@ -240,21 +241,42 @@ export default function MangaElementDef(props: {
                                 rowSpan={1}
                                 colSpan={8}
                             >
-                                <Chakra.LinkOverlay
-                                    //as={Link}
-                                    //to={"/mangadex/manga/" + props.src.get_id()}
+                                <TryCatch
+                                    catch={() => (
+                                        <Chakra.LinkOverlay
+                                        //as={Link}
+                                        //to={"/mangadex/manga/" + props.src.get_id()}
+                                        >
+                                            <Chakra.Heading
+                                                noOfLines={2}
+                                                marginTop={"5px"}
+                                                fontSize={
+                                                    {
+                                                        base: "xl"
+                                                    }
+                                                }
+                                                marginBottom={0}
+                                            > {title} </Chakra.Heading>
+                                        </Chakra.LinkOverlay>
+                                    )}
                                 >
-                                    <Chakra.Heading
-                                        noOfLines={2}
-                                        marginTop={"5px"}
-                                        fontSize={
-                                            {
-                                                base: "xl"
+                                    <Chakra.LinkOverlay
+                                        as={Link}
+                                        to={"/mangadex/manga/" + props.src.get_id()}
+                                    >
+                                        <Chakra.Heading
+                                            noOfLines={2}
+                                            marginTop={"5px"}
+                                            fontSize={
+                                                {
+                                                    base: "xl"
+                                                }
                                             }
-                                        }
-                                        marginBottom={0}
-                                    > {title} </Chakra.Heading>
-                                </Chakra.LinkOverlay>
+                                            marginBottom={0}
+                                        > {title} </Chakra.Heading>
+                                    </Chakra.LinkOverlay>
+                                </TryCatch>
+
                             </Chakra.GridItem>
                             <Chakra.GridItem
                                 rowSpan={1}
@@ -290,28 +312,28 @@ export default function MangaElementDef(props: {
                                     </Chakra.Text>
                                 </Chakra.Box>
                                 {
-                                    manga_description_query.isLoading || manga_description_query.isIdle? (
+                                    manga_description_query.isLoading || manga_description_query.isIdle ? (
                                         <Chakra.Skeleton
                                             height={"full"}
                                             //borderTopLeftRadius={"10px"}
                                             borderBottomRightRadius={"10px"}
                                         />
                                     ) : (
-                                        manga_description_query.isSuccess? (
+                                        manga_description_query.isSuccess ? (
                                             manga_description_query.data.length == 0 ? (
                                                 <></>
                                             ) : (
-                                                 <Chakra.Text
-                                                        noOfLines={3}
-                                                        marginBottom={"1px"}
-                                                        fontSize={"sm"}
-                                                    >
-                                                        {manga_description_query.data[0].get_data()}
-                                                    </Chakra.Text>
+                                                <Chakra.Text
+                                                    noOfLines={3}
+                                                    marginBottom={"1px"}
+                                                    fontSize={"sm"}
+                                                >
+                                                    {manga_description_query.data[0].get_data()}
+                                                </Chakra.Text>
                                             )
                                         ) : (
-                                            manga_description_query.isError? (
-                                                <ErrorEL1 error={manga_description_query.error}/>
+                                            manga_description_query.isError ? (
+                                                <ErrorEL1 error={manga_description_query.error} />
                                             ) : (
                                                 <></>
                                             )

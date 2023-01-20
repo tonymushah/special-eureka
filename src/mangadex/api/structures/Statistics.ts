@@ -77,13 +77,15 @@ export class Statistics_Manga{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id);
         let stats_not_TS: any = (responses.data.statistics)[id];
         let rating: any = stats_not_TS.rating;
-        return new Statistics_Manga(
+        let instance = new Statistics_Manga(
             id,
             stats_not_TS.follows,
             rating.average,
             rating.baeysian,
             rating.distribution
         );
+        instance.set_comments(stats_not_TS.comments);
+        return instance;
     }
     public static async get_quick_statsBy_MangaID(id: Array<string>): Promise<Array<Statistics_Manga>>{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/?" + serialize((new Querry_list_builder<string>("manga", id)).build()), {
@@ -116,6 +118,9 @@ export class Statistics_Manga{
             this.distribution[9] + 
             this.distribution[10] 
         );
+    }
+    public get_distribution_length() : number{
+        return 10;
     }
 }
 

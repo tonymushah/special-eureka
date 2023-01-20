@@ -8,10 +8,15 @@ import { useQuery } from "react-query";
 
 export default function CoverElementVertical(props: {
     src: Cover
+    isThumbail? : boolean
 }) {
-    const cover_image_querykey = "mdx-cover-" + props.src.get_id() + "-image";
+    const cover_image_querykey = props.isThumbail == undefined || props.isThumbail == false ? "mdx-cover-" + props.src.get_id() + "-image" : "mdx-cover-" + props.src.get_id() + "-image-256";
     const cover_image_query = useQuery(cover_image_querykey, () => {
-        return props.src.get_CoverImage_promise();
+        if(props.isThumbail == undefined || props.isThumbail == false){
+            return props.src.get_CoverImage_promise();
+        }else{
+            return props.src.get_CoverImage_thumbnail_promise(256);
+        }
     }, {
         staleTime: 1000 * 60 * 5
     });
