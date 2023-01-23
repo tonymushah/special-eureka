@@ -1,4 +1,4 @@
-A manga reader based on the [Mangadex](mangadex.org) website
+A manga reader based on the [Mangadex](https://mangadex.org) website
 
 ## RoadMap :
 
