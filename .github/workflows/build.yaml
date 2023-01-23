@@ -3,7 +3,7 @@ on:
   push: 
     branches:
       - master
-      - realease
+      - realease/*
 jobs:
   test-tauri:
     strategy:
@@ -29,9 +29,11 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: building app
         run: npm run tauri build
+        env :
+          TAURI_PRIVATE_KEY : ${{ secrets.TAURI_PRIVATE_KEY }}
       - uses: tauri-apps/tauri-action@v0
         env:
-          GITHUB_TOKEN: ${{ secrets.TAURI_PRIVATE_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag: v__VERSION__
           releaseName: 'Mangadex Desktop v__VERSION__'
