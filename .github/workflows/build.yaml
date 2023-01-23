@@ -29,12 +29,12 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: building app
         run: npm run tauri build
-      - uses: tauri-apps/tauri-action@v0
+      - uses: tauri-apps/tauri-action@latest
         env:
           GITHUB_TOKEN: ${{ secrets.TAURI_PRIVATE_KEY }}
         with:
-          tagName: v0.1.1
-          releaseName: 'Mangadex Desktop v0.1.1'
+          tagName: mdx-desk-v__VERSION__
+          releaseName: 'Mangadex Desktop mdx-deskp-v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: true
