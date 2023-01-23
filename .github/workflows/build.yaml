@@ -30,10 +30,11 @@ jobs:
       - name: building app
         run: npm run tauri build
         env :
-          TAURI_PRIVATE_KEY : ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
         with:
           tagName: v__VERSION__
           releaseName: 'Mangadex Desktop v__VERSION__'
