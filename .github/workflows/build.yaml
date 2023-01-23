@@ -33,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TAURI_PRIVATE_KEY }}
         with:
-          tagName: v0.1.0
-          releaseName: 'Mangadex Desktop v0.1.0'
+          tagName: v0.1.1
+          releaseName: 'Mangadex Desktop v0.1.1'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
           prerelease: true
