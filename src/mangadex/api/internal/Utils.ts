@@ -1,6 +1,8 @@
 import { getClient, Response } from "@tauri-apps/api/http";
 import { Author } from "../structures/Author";
 import langs from "../../resources/json/lang.json";
+import { Chapter } from "../structures/Chapter";
+import MangaChapter_Accordion from "./utils/MangaChapter_Accordion";
 
 
 export class And_Or{
@@ -961,4 +963,29 @@ export const serialize = function(obj: any) : string{
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }
   return str.join("&");
+}
+
+export function get_manga_listBy_chapter_array(to_use: Array<Chapter>) : Array<string>{
+    let returns : Array<string> = new Array<string>();
+    to_use.forEach(element => {
+        try {
+            let manga_id : string = element.get_manga_id();
+            if(manga_id != undefined && returns.includes(manga_id) == false){
+                returns.push(manga_id);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    });
+    return returns;
+}
+
+export function get_MangaChapter_Accordions_byChapterArray(to_use : Array<Chapter>) : Array<MangaChapter_Accordion>{
+    return get_manga_listBy_chapter_array(to_use).map<MangaChapter_Accordion>((value : string) => {
+        let instance = new MangaChapter_Accordion(value);
+        to_use.forEach((chapter) => {
+            instance.insertChapter(chapter);
+        })
+        return instance;
+    })
 }

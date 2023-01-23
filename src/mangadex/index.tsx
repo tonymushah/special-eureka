@@ -8,6 +8,7 @@ import { ErrorELAsync1, ErrorELRouter } from './resources/componnents/Error_cmp'
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
 import "../commons-res/fontawesome-free-6.1.2-web/css/all.css"
+import { Offset_limits } from "./api/internal/Utils";
 
 const MangaPage = React.lazy(() => import("./pages/MangaPage"));
 
@@ -48,7 +49,11 @@ const Content = React.lazy(() => import("./resources/componnents/SideBar"));
 
 const SinglePage = React.lazy(() => import("./pages/ChapterReadingMode/SwipperMode"));
 
-function Mangadex_suspense(props: React.PropsWithChildren) {
+const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
+
+const Group_Search = React.lazy(() => import("./pages/groups/search"));
+
+export function Mangadex_suspense(props: React.PropsWithChildren) {
     return (
         <React.Suspense
             fallback={
@@ -195,7 +200,7 @@ function useMangadexRouter(): RouteObject {
                                 element: (
                                     <Mangadex_suspense>
                                         <Chakra.Box>
-                                            <SinglePage/>
+                                            <SinglePage />
                                         </Chakra.Box>
                                     </Mangadex_suspense>
                                 )
@@ -204,9 +209,9 @@ function useMangadexRouter(): RouteObject {
                                 path: "widestrip",
                                 element: (
                                     <Mangadex_suspense>
-                                    <Chakra.Box>
-                                        <Widestrip />
-                                    </Chakra.Box>
+                                        <Chakra.Box>
+                                            <Widestrip />
+                                        </Chakra.Box>
                                     </Mangadex_suspense>
                                 )
                             }
@@ -239,7 +244,28 @@ function useMangadexRouter(): RouteObject {
                     }
                 ]
             },
-
+            {
+                path: "group",
+                children: [
+                    {
+                        path: ":id",
+                        element: (
+                            <Mangadex_suspense>
+                                <Group_Page_ />
+                            </Mangadex_suspense>
+                        )
+                    },
+                    {
+                        path: "search",
+                        element:  (
+                                <Mangadex_suspense>
+                                    <Group_Search />
+                                </Mangadex_suspense>
+                            )
+                        
+                    }
+                ]
+            }
         ]
     }
 

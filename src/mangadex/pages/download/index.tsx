@@ -1,7 +1,9 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import AllDownlaodedMangaList from "../../resources/componnents/download/All_downloaded_manga";
 import All_downloaded_chapter from "../../resources/componnents/download/All_downloaded_chapter";
+
+const AllDownlaodedMangaConsumer = React.lazy(() => import("../../resources/componnents/download/All_downloaded_Manga_Consumer"));
+const MangaListByArrayMangaID = React.lazy(() => import("../../resources/componnents/mangas/v1/MangaListByArrayMangaID"));
 
 export default function Download_Index_Page() {
     return (
@@ -13,7 +15,35 @@ export default function Download_Index_Page() {
                 </Chakra.TabList>
                 <Chakra.TabPanels>
                     <Chakra.TabPanel>
-                        <AllDownlaodedMangaList />
+                        <React.Suspense 
+                            fallback={
+                                <Chakra.Box>
+                                    <Chakra.Text>Loading...</Chakra.Text>
+                                </Chakra.Box>
+                            }
+                        >
+                            <AllDownlaodedMangaConsumer>
+                        {
+                            (value: Array<string>) => (
+                                <React.Suspense
+                                    fallback={
+                                        <Chakra.Center>
+                                            <Chakra.Box textAlign={"center"}>
+                                                <Chakra.Spinner
+                                                    size={"md"}
+                                                />
+                                                <Chakra.Text>Loading componnent...</Chakra.Text>
+                                            </Chakra.Box>
+                                        </Chakra.Center>
+                                    }
+                                >
+                                    <MangaListByArrayMangaID src={value} />
+                                </React.Suspense>
+                            )
+                        }
+                    </AllDownlaodedMangaConsumer>
+                        </React.Suspense>
+                        
                     </Chakra.TabPanel>
                     <Chakra.TabPanel>
                         <All_downloaded_chapter/>

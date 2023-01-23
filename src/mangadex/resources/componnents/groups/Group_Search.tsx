@@ -1,0 +1,120 @@
+import React from "react";
+import * as Chakra from "@chakra-ui/react";
+import { Offset_limits } from "../../../api/internal/Utils";
+import { useFormik } from "formik"
+import { Group } from "../../../api/structures/Group";
+import { Collection } from "../../../api/structures/Collection";
+import GroupFallBackElement from "./GroupFallBackElement";
+import { Attribute } from "../../../api/structures/Attributes";
+
+const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
+const CollectionComponnent_WithQuery = React.lazy(async () =>{
+    let res = await import("../Collection/Collection");
+    return {
+        default : res.CollectionComponnent_WithQuery
+    }
+})
+
+export default function Group_Search(props : {
+    offset_limits : Offset_limits
+}){
+    const [result, setResult] = React.useState(<></>);
+    const formik = useFormik({
+        initialValues : {
+            name : ""
+        },
+        onSubmit(values, formikHelpers) {
+            let random = Math.random() * 100;
+            setResult(
+                <React.Suspense fallback={
+                    <Chakra.Box>
+                        <Chakra.Center>
+                            <Chakra.Spinner/>
+                        </Chakra.Center>
+                    </Chakra.Box>
+                }>
+                    <CollectionComponnent_WithQuery 
+                        fn={() => {
+                            return Group.search({
+                                offset_Limits : props.offset_limits,
+                                name : values.name
+                            })
+                        }}
+                        queryKey={"mdx-group-search-"+random}
+                    >
+                        {
+                            (value : Collection<Attribute>) => (
+                                <Chakra.Wrap>
+                                    {
+                                        value.get_data().map((group) => (
+                                            <Chakra.WrapItem>
+                                                <React.Suspense
+                                                    fallback={
+                                                        <GroupFallBackElement/>
+                                                    }
+                                                >
+                                                    {
+                                                        group instanceof Group? (
+                                                            <Group_Simple_Element src={group}/>
+                                                        ) : (
+                                                            <></>
+                                                        )
+                                                    }
+                                                </React.Suspense>
+                                            </Chakra.WrapItem>
+                                        ))
+                                    }
+                                </Chakra.Wrap>
+                            )
+                        }
+                    </CollectionComponnent_WithQuery>
+                </React.Suspense>
+            )
+        },
+        validate(values) {
+            let error :{
+                name? : string
+            } = {}
+            if(values.name === ""){
+                error.name = "Invalid name"
+            }
+            return error;
+        }
+    })
+    return (
+        <Chakra.Stack>
+            <form
+                onSubmit={formik.handleSubmit}
+            >
+                <Chakra.FormControl isInvalid={formik.errors.name != undefined ? true : false}>
+                    <Chakra.FormLabel>
+                        Group name
+                    </Chakra.FormLabel>
+                    <Chakra.Input 
+                        type={"search"} 
+                        name={"name"}
+                        onChange={formik.handleChange}
+                        value={formik.values.name}
+                    />
+                    {
+                        formik.errors.name != undefined ? (
+                            <Chakra.FormErrorMessage>
+                                {
+                                    formik.errors.name
+                                }
+                            </Chakra.FormErrorMessage>
+                        ) : (
+                            <></>
+                        )
+                    }
+                </Chakra.FormControl>
+            </form>
+        <Chakra.Box>
+            {
+                result
+            }
+        </Chakra.Box>
+        </Chakra.Stack>
+        
+    )
+}

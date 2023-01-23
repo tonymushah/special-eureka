@@ -2,7 +2,7 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { UseMutationResult, useQueries, useQuery, UseQueryResult } from "react-query";
+import { useMutation, UseMutationResult, useQueries, useQuery, UseQueryResult, useQueryClient } from "react-query";
 import { Await } from "react-router-dom";
 import Timeago from "react-timeago";
 import { Lang } from "../../../../api/internal/Utils";
@@ -12,11 +12,47 @@ import { User } from "../../../../api/structures/User";
 import ErrorEL1 from "../../error/ErrorEL1";
 import { Link } from "react-router-dom"
 import { FaQuestionCircle } from "react-icons/fa";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
 
 export default function Chapter_Element1(props: {
     chapter: Chapter,
     downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
+    let downloadMutation: UseMutationResult<string[], Error, void> | undefined = props.downloadMutation;
+    const queryClient = useQueryClient()
+    const toast = Chakra.useToast();
+    const key = "mdx-chapter:" + props.chapter.get_id();
+    if (downloadMutation == undefined) {
+        downloadMutation = useMutation({
+            mutationKey: "mdx-mutation-chapter-download-" + props.chapter.get_id(),
+            mutationFn: () => {
+                return props.chapter.download_this();
+            },
+            onError(error: Error) {
+                toast({
+                    position: "bottom-right",
+                    status: "error",
+                    isClosable: true,
+                    duration: 9000,
+                    title: "Error on downloading",
+                    description: error.message
+                });
+            },
+            onSuccess(data, variables, context) {
+                toast({
+                    position: "bottom-right",
+                    status: "success",
+                    isClosable: true,
+                    duration: 9000,
+                    title: "Downloaded chapter",
+                    description: props.chapter.get_id()
+                });
+                queryClient.invalidateQueries({
+                    queryKey: key
+                });
+            },
+        })
+    }
     const user_query_key = "mdx-user-" + props.chapter.get_user_id();
     const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader()
@@ -27,7 +63,7 @@ export default function Chapter_Element1(props: {
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.chapter.get_id());
     }, {
-        cacheTime : 1000 * 60
+        cacheTime: 1000 * 60
     });
     const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
         props.chapter.get_scanlations_groups_id().map((value: string) => {
@@ -40,11 +76,11 @@ export default function Chapter_Element1(props: {
             }
         })
     )
-    const this_chapter_lang_querykey = "mdx-chapter-" + props.chapter.get_id()+ "-lang";
+    const this_chapter_lang_querykey = "mdx-chapter-" + props.chapter.get_id() + "-lang";
     const this_chapter_lang_query = useQuery(this_chapter_lang_querykey, () => {
         return props.chapter.get_translated_Lang();
     }, {
-        cacheTime : 1000 * 60
+        cacheTime: 1000 * 60
     })
     return (
         <Chakra.Box
@@ -69,18 +105,18 @@ export default function Chapter_Element1(props: {
                         {
                             this_chapter_lang_query.isSuccess ? (
                                 <Chakra.Tooltip
-                                            hasArrow
-                                            label={this_chapter_lang_query.data.get_name()}
-                                        >
-                                            <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
-                                        </Chakra.Tooltip>
+                                    hasArrow
+                                    label={this_chapter_lang_query.data.get_name()}
+                                >
+                                    <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
+                                </Chakra.Tooltip>
                             ) : (
                                 this_chapter_lang_query.isError ? (
                                     <Chakra.Tooltip
                                         hasArrow
                                         label={"Language not found"}
                                     >
-                                        <Chakra.Icon as={FaQuestionCircle}/>
+                                        <Chakra.Icon as={FaQuestionCircle} />
                                     </Chakra.Tooltip>
                                 ) : (
                                     <></>
@@ -95,15 +131,24 @@ export default function Chapter_Element1(props: {
                 >
                     <Chakra.Box
                     >
+
                         <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
-                            <Chakra.Link
-                                as={Link}
-                                to={"/mangadex/chapter/" + props.chapter.get_id()}
+                            <TryCatch
+                                catch={() => (
+                                    <>Chapter {props.chapter.get_chapter()} {
+                                        props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
+                                    }</>
+                                )}
                             >
-                                Chapter {props.chapter.get_chapter()} {
-                                    props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
-                                }
-                            </Chakra.Link>
+                                <Chakra.Link
+                                    as={Link}
+                                    to={"/mangadex/chapter/" + props.chapter.get_id()}
+                                >
+                                    Chapter {props.chapter.get_chapter()} {
+                                        props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
+                                    }
+                                </Chakra.Link>
+                            </TryCatch>
                         </Chakra.Heading>
                     </Chakra.Box>
                 </Col>
@@ -131,10 +176,10 @@ export default function Chapter_Element1(props: {
                 >
                     <Chakra.Center>
                         {
-                            props.downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
+                            downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
                                 download_query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
                                     download_query.isSuccess ? (
-                                        download_query.data? (
+                                        download_query.data ? (
                                             <Chakra.Tooltip
                                                 label="Downloaded Chapter"
                                             >
@@ -151,11 +196,11 @@ export default function Chapter_Element1(props: {
                                             <ChakraIcon.DownloadIcon _hover={{
                                                 color: "blue"
                                             }} onClick={() => {
-                                                props.downloadMutation?.mutate()
+                                                downloadMutation?.mutate()
                                             }} />
                                         )
                                     ) : (
-                                        <ChakraIcon.WarningIcon/>
+                                        <ChakraIcon.WarningIcon />
                                     )
                                 )
                             )
@@ -173,9 +218,26 @@ export default function Chapter_Element1(props: {
                                     return (<></>);
                                 }
                                 if (value.isError) {
-                                    (<></>);
+                                    return (<></>);
                                 }
-                                return (<Chakra.Link>{value.data!.get_name()}</Chakra.Link>)
+                                if (value.isSuccess) {
+                                    return (
+                                        <TryCatch
+                                            catch={(error) => (
+                                                <Chakra.Link>{value.data!.get_name()}</Chakra.Link>
+                                            )}
+                                        >
+                                            <Chakra.Link
+                                                as={Link}
+                                                to={"/mangadex/group/" + value.data.get_id()}
+                                            >
+                                                {value.data!.get_name()}
+                                            </Chakra.Link>
+                                        </TryCatch>
+                                    );
+                                    return (<></>)
+                                }
+
                             })
                         )
                     }

@@ -3,11 +3,10 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Manga } from "../../../../api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
-import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
+import MangaFallback2 from "./MangaElement2Fallback";
+const MangaElementDef2 = React.lazy(() => import("./MangaElementDef2"));
 
-const MangaVerticalElement = React.lazy(() => import("./MangaVerticalElement"));
-
-export default function MangaVerticalElement_wID(props: {
+export default function MangaElementDef2_withID(props: {
     mangaID: string
 }) {
     const toast = useToast({
@@ -82,7 +81,7 @@ export default function MangaVerticalElement_wID(props: {
     })
     if (query.isLoading) {
         return (
-            <MangaVerticalElementFallback />
+            <MangaFallback2 />
         )
     }
     if (query.isError) {
@@ -92,9 +91,9 @@ export default function MangaVerticalElement_wID(props: {
     }
     return (
         <React.Suspense fallback={
-            <MangaVerticalElementFallback />
+            <MangaFallback2 />
         }>
-            <MangaVerticalElement 
+            <MangaElementDef2
                 src={query.data!}
                 isRefetching={query.isRefetching}
                 refetch={query.refetch}
@@ -102,5 +101,6 @@ export default function MangaVerticalElement_wID(props: {
                 delete={delete_.mutate}
             />
         </React.Suspense>
+
     )
 }

@@ -301,7 +301,9 @@ export class Cover extends Attribute{
     }
     public static async getAOfflineCover(coverId : string) : Promise<Cover>{
         if(await DesktopApi.ping() == true){
+
             let response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`);
+            console.log(response);
             return Cover.build_withAny(response.data.data);
         }else{
             throw new Error("The offline server isn't started");

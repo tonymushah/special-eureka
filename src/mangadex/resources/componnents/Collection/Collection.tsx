@@ -25,7 +25,7 @@ export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
     children: (value: Collection<T>) => React.ReactNode,
     queryKey: QueryKey,
     query_options?: Omit<UseQueryOptions<Collection<T>, Error>, 'queryKey' | 'queryFn'>,
-    onLoading? : React.ReactNode
+    onLoading?: React.ReactNode
 }) {
     const toast = useToast();
     const toastID = React.useRef<ToastId>();
@@ -112,27 +112,27 @@ export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
             })
         },
     });
-    if(search_query.isLoading){
-        if(props.onLoading != undefined){
+    if (search_query.isLoading) {
+        if (props.onLoading != undefined) {
             return (<>
                 {
                     props.onLoading
                 }
             </>)
-        }else{
+        } else {
             return (
                 <Box>
                     <Center>
-                        <Spinner/>
+                        <Spinner />
                     </Center>
                 </Box>
             );
         }
     }
-    if(search_query.isError){
+    if (search_query.isError) {
         return (
             <Box>
-                <ErrorEL1 error={search_query.error}/>
+                <ErrorEL1 error={search_query.error} />
             </Box>
         )
     }
@@ -141,14 +141,14 @@ export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
             <Box>
                 <Center>
                     {
-                        next.isLoading? (
+                        next.isLoading ? (
                             <Text>Loading next page ...</Text>
                         ) : (
                             <></>
                         )
                     }
                     {
-                        previous.isLoading? (
+                        previous.isLoading ? (
                             <Text>Loading previous page...</Text>
                         ) : (
                             <></>
@@ -166,19 +166,19 @@ export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
             <Box>
                 <Center>
                     <ButtonGroup>
-                        <Button 
+                        <Button
                             onClick={() => {
                                 previous.mutate()
                             }}
                         >
-                            <ChakraIcon.ArrowBackIcon/>
+                            <ChakraIcon.ArrowBackIcon />
                         </Button>
-                        <Button>
-                            <ChakraIcon.ArrowForwardIcon
-                                onClick={() => {
-                                    next.mutate()
-                                }}
-                            />
+                        <Button
+                            onClick={() => {
+                                next.mutate()
+                            }}
+                        >
+                            <ChakraIcon.ArrowForwardIcon />
                         </Button>
                     </ButtonGroup>
                 </Center>

@@ -115,6 +115,13 @@ export default class Side_bar extends React.Component<Side_barProps>{
                                 </Link></MenuItem>
                             <MenuItem>Suggestive</MenuItem>
                         </SubMenu>
+                        <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className={"far fa-users"}></i>} title={"Community"}>
+                            <MenuItem>
+                                <Link to={"/mangadex/group/search"}>
+                                    Groups
+                                </Link>
+                            </MenuItem>
+                        </SubMenu>
                         <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='fas fa-cog fa-spin'></i>} title={"Powerred by "}>
                             <ExtLink href="https://tauri.app">
                                 <MenuItem icon={<img id="tauri_icon" src={tauri_logo} />}>

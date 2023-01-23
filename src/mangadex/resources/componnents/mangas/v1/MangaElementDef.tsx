@@ -82,6 +82,7 @@ export default function MangaElementDef(props: {
                     base: "min-content",
                     md: "initial"
                 }}
+                textAlign={"start"}
                 boxSize={"min-content"}
                 backgroundColor={props.isRefetching == undefined ? (
                     props.src.get_status() == "ongoing" ? "green.100" : (
@@ -186,7 +187,7 @@ export default function MangaElementDef(props: {
                     >
                         <Chakra.Grid
                             width={{
-                                base: "24em"
+                                base: "23em"
                             }}
                             templateRows='repeat(3)'
                             templateColumns='repeat(12, 1fr)'

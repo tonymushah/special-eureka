@@ -12,6 +12,7 @@ import { User } from "../../../../api/structures/User";
 import ErrorEL1 from "../../error/ErrorEL1";
 import { Link } from "react-router-dom"
 import { FaUser, FaUsers } from "react-icons/fa"
+import TryCatch from "../../../../../commons-res/components/TryCatch";
 
 export default function Chapter_Element2(props: {
     chapter: Chapter,
@@ -38,7 +39,7 @@ export default function Chapter_Element2(props: {
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.chapter.get_id());
     }, {
-        cacheTime : 1000 * 60
+        cacheTime: 1000 * 60
     });
     return (
         <Chakra.Tooltip
@@ -98,14 +99,26 @@ export default function Chapter_Element2(props: {
                     </Col>
                     <Col xs={10}>
                         <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
-                            <Chakra.LinkOverlay
-                                as={Link}
-                                to={"/mangadex/chapter/" + props.chapter.get_id()}
+                            <TryCatch
+                                catch={() => {
+                                    <Chakra.LinkOverlay
+                                    >
+                                        Chapter {props.chapter.get_chapter()} {
+                                            props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
+                                        }
+                                    </Chakra.LinkOverlay>
+                                }}
                             >
-                                Chapter {props.chapter.get_chapter()} {
-                                    props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
-                                }
-                            </Chakra.LinkOverlay>
+                                <Chakra.LinkOverlay
+                                    as={Link}
+                                    to={"/mangadex/chapter/" + props.chapter.get_id()}
+                                >
+                                    Chapter {props.chapter.get_chapter()} {
+                                        props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
+                                    }
+                                </Chakra.LinkOverlay>
+                            </TryCatch>
+
                         </Chakra.Heading>
                     </Col>
                 </Row>

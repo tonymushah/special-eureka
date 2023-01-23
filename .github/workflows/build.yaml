@@ -31,8 +31,7 @@ jobs:
         run: npm run tauri build
       - uses: tauri-apps/tauri-action@v0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          name: 'publish'
+          GITHUB_TOKEN: ${{ secrets.TAURI_PRIVATE_KEY }}
         with:
           tagName: v__VERSION__
           releaseName: 'Mangadex Desktop v__VERSION__'

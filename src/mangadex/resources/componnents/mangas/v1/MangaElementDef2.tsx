@@ -1,0 +1,244 @@
+import React from "react";
+import * as Chakra from "@chakra-ui/react";
+import * as ChakraIcons from "@chakra-ui/icons";
+import { Manga } from "../../../../api/structures/Manga";
+import { useQuery } from "react-query";
+import { Alt_title, ContentRating, Lang_and_Data, make_first_UpperCare } from "../../../../api/internal/Utils";
+import ReactContextMenu from "react-jsx-context-menu"
+import ErrorEL1 from "../../error/ErrorEL1";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { Link } from "react-router-dom";
+import { NumericFormat } from "react-number-format";
+import { Statistics_Manga } from "../../../../api/structures/Statistics";
+import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
+import { Statis } from "../Manga_Page";
+import MangaTitle from "./MangaTitle";
+import { FaBookmark } from "react-icons/fa";
+
+
+export default function MangaElementDef2(props: {
+    src: Manga,
+    isRefetching?: boolean,
+    refetch?: Function,
+    download?: Function,
+    delete?: Function,
+    update?: Function
+}) {
+    const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
+    const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
+        return Lang_and_Data.initializeByDesc(props.src.get_description());
+    })
+    const manga_statistic_queryKey = "mdx-manga-" + props.src.get_id() + "-statistics";
+    const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
+        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id());
+    }, {
+        staleTime: Infinity
+    });
+    const card_maxHeight: Chakra.ResponsiveValue<any> = {
+        base: "10em"
+    }
+    const card_minHeight: Chakra.ResponsiveValue<any> = {
+        base: ""
+    }
+    function build_themes_manga(): Array<React.ReactNode> {
+        let index = 0;
+        let returns: Array<React.ReactNode> = [];
+        if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
+            if (props.src.get_ranting() == ContentRating.suggestive()) {
+                returns[index] = (<Chakra.Tag colorScheme={"green"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
+            } else {
+                returns[index] = (<Chakra.Tag colorScheme={"red"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
+            }
+            index = index + 1;
+        }
+        for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
+            const element = props.src.get_tags()[index1];
+            returns[index + index1] = (<Chakra.Tag colorScheme={"gray"}>{element.get_name().en}</Chakra.Tag>)
+        }
+        return returns;
+    }
+    return (
+        <ReactContextMenu
+            menu={
+                <Chakra.Menu
+                    isOpen
+                >
+                    <Chakra.MenuList>
+                        <Chakra.MenuItem
+                            onClick={() => props.refetch!()}
+                        >Refresh</Chakra.MenuItem>
+                        <Chakra.MenuItem
+                            onClick={() => props.download!()}
+                            textColor={"green"}
+                            icon={<ChakraIcons.DownloadIcon />}
+                        >
+                            Download
+                        </Chakra.MenuItem>
+                        <Chakra.MenuItem
+                            onClick={() => props.update!()}
+                            textColor={"blue"}
+                            icon={<ChakraIcons.RepeatIcon />}
+                        >
+                            Update
+                        </Chakra.MenuItem>
+                        <Chakra.MenuItem
+                            onClick={() => props.delete!()}
+                            textColor={"red"}
+                            icon={<ChakraIcons.DeleteIcon />}
+                        >
+                            Delete
+                        </Chakra.MenuItem>
+                    </Chakra.MenuList>
+                </Chakra.Menu>
+            }
+        >
+            <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"}>
+                <CoverImageByCoverID coverID={props.src.get_cover_art_id()} isThumbail size={512} image_props={{
+                    maxHeight: card_maxHeight,
+                    "objectFit": "contain"
+                }} />
+                <Chakra.Stack spacing={"0px"}>
+                    <Chakra.CardBody marginTop={"0px"}>
+                        <Chakra.HStack spacing={"5px"}>
+                            <TryCatch
+                                catch={() => (
+                                    <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
+                                )}
+                            >
+                                <Link to={"/mangadex/manga/" + props.src.get_id()}>
+                                    <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
+                                </Link>
+                            </TryCatch>
+                            {
+                                manga_statistic_query.isSuccess ? (
+                                    <TryCatch
+                                        catch={(error: Error) => (
+                                            <Chakra.Tag>{error.message}</Chakra.Tag>
+                                        )}
+                                    >
+                                        <Statis src={manga_statistic_query.data}>
+                                            {
+                                                (getted: Statistics_Manga) => (
+                                                    <Chakra.Box>
+                                                        <Chakra.Box display={{
+                                                            base: "none",
+                                                            xl: "inherit"
+                                                        }}>
+                                                            <Chakra.Box display={"flex"} width={"fit-content"}>
+                                                                <Chakra.Text textAlign={"center"}>
+                                                                    <ChakraIcons.StarIcon />
+                                                                    &nbsp;
+                                                                    {getted.get_average()}
+                                                                </Chakra.Text>
+                                                                &nbsp;
+                                                                &nbsp;
+                                                                <Chakra.Text textAlign={"center"}>
+                                                                    <Chakra.Icon as={FaBookmark} />
+                                                                    &nbsp;
+                                                                    <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
+                                                                </Chakra.Text>
+                                                                &nbsp;
+                                                                &nbsp;
+                                                                <Chakra.Text textAlign={"center"}>
+                                                                    <ChakraIcons.ChatIcon />
+                                                                    &nbsp;
+                                                                    {
+                                                                        getted.get_comments() !== undefined ? (
+                                                                            <>{getted.get_comments()!.repliesCount}</>
+                                                                        ) : (
+                                                                            <>0</>
+                                                                        )
+                                                                    }
+                                                                </Chakra.Text>
+                                                            </Chakra.Box>
+                                                        </Chakra.Box>
+                                                        <Chakra.Box display={{
+                                                            base: "inherit",
+                                                            xl: "none"
+                                                        }}>
+                                                            <Chakra.Tag>Stats</Chakra.Tag>
+                                                        </Chakra.Box>
+                                                    </Chakra.Box>
+                                                )
+                                            }
+                                        </Statis>
+                                    </TryCatch>
+
+                                ) : (
+                                    <Chakra.Skeleton height={"10px"} width={"20px"} />
+                                )
+                            }
+                            <Chakra.Text
+                                padding={0}
+                                margin={0}
+                                fontSize={"xs"}
+                            >
+                                <Chakra.Center
+                                    display={{
+                                        base: "none",
+                                        xl: "inline"
+                                    }}
+                                >
+                                    Publication :
+                                    &nbsp;
+                                </Chakra.Center>
+                                <Chakra.Tag
+                                    fontSize={"xs"}
+                                    colorScheme={
+                                        props.src.get_status() == "ongoing" ? "green" : (
+                                            props.src.get_status() == "completed" ? "blue" : (
+                                                props.src.get_status() == "hiatus" ? "orange" : (
+                                                    props.src.get_status() == "cancelled" ? "red" : "teal"
+                                                )
+                                            )
+                                        )
+                                    }
+                                    variant={"solid"}
+                                >
+                                    <Chakra.TagLabel>{make_first_UpperCare(props.src.get_status())}</Chakra.TagLabel>
+                                </Chakra.Tag>
+                            </Chakra.Text>
+                        </Chakra.HStack>
+                        <Chakra.Box textAlign={"start"}>
+                            <Chakra.Box noOfLines={1}>
+                                {
+                                    build_themes_manga()
+                                }
+                            </Chakra.Box>
+
+                            {
+                                manga_description_query.isLoading || manga_description_query.isIdle ? (
+                                    <Chakra.Skeleton
+                                        height={"full"}
+                                        width={"full"}
+                                    />
+                                ) : (
+                                    manga_description_query.isSuccess ? (
+                                        manga_description_query.data.length == 0 ? (
+                                            <></>
+                                        ) : (
+                                            <Chakra.Text
+                                                noOfLines={3}
+                                                marginBottom={"1px"}
+                                                fontSize={"md"}
+                                            >
+                                                {manga_description_query.data[0].get_data()}
+                                            </Chakra.Text>
+                                        )
+                                    ) : (
+                                        manga_description_query.isError ? (
+                                            <ErrorEL1 error={manga_description_query.error} />
+                                        ) : (
+                                            <></>
+                                        )
+                                    )
+                                )
+                            }
+                        </Chakra.Box>
+
+                    </Chakra.CardBody>
+                </Chakra.Stack>
+            </Chakra.Card>
+        </ReactContextMenu>
+    )
+}

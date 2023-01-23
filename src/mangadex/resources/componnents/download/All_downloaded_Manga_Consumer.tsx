@@ -7,8 +7,13 @@ import MangaElementDef_wID from "../mangas/v1/MangaElementDef_wID";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import ErrorEL1 from "../error/ErrorEL1";
 import { useToast } from "@chakra-ui/react";
+import Consumer from "../../../../commons-res/components/Consumer";
 
-export default function AllDownlaodedMangaList() {
+
+
+export default function AllDownlaodedMangaConsumer(props : {
+    children : (value : Array<string>) => React.ReactNode
+}) {
     const queryClient = useQueryClient();
     const toast = useToast();
     const query_key = "mdx-dowloaded_manga";
@@ -127,15 +132,11 @@ export default function AllDownlaodedMangaList() {
             }
             {
                 query.isSuccess == true && query.isFetching == false && query.isRefetching == false && query.isLoading == false ? (
-                    <Chakra.Wrap>
+                    <Consumer<Array<string>> to_consume={query.data}>
                         {
-                            query.data!.map((value: string, index: number) => (
-                                <Chakra.WrapItem key={`allDownloaded${index}`}>
-                                    <MangaElementDef_wID mangaID={value} />
-                                </Chakra.WrapItem>
-                            ))
+                            props.children
                         }
-                    </Chakra.Wrap>
+                    </Consumer>
                 ) : null
             }
         </Chakra.Box>

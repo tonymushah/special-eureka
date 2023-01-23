@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "tauri": "tauri",
     "vite-tauri": "vite-tauri",
-    "tauri-dev": "tauri dev"
+    "tauri-dev": "tauri dev",
+    "clean-src-tauri": "cd src-tauri && cargo clean",
+    "update-api": "cd src-tauri && cargo update -p mangadex-desktop-api2"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
@@ -36,6 +38,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@tauri-apps/api": "^1.2.0",
+    "@textea/json-viewer": "^2.13.0",
     "@types/long": "^5.0.0",
     "@types/node": "^18.11.9",
     "@types/react-inner-image-zoom": "^3.0.0",
