@@ -29,7 +29,7 @@ jobs:
         run: npm install --legacy-peer-deps
       - name: building app
         run: npm run tauri build
-      - uses: tauri-apps/tauri-action@latest
+      - uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.TAURI_PRIVATE_KEY }}
         with:
