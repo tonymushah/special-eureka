@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import * as Chakra from "@chakra-ui/react"
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
@@ -33,6 +33,9 @@ export default function Group_Page_(){
         const client = useHTTPClient()
         const queryClient = useQueryClient();
         const query_key = "mdx-group-" + id;
+        useMemo(() => {
+            queryClient.removeQueries(query_key);
+        },[]);
         const query = useQuery<Group, Error>(query_key, () => {
             return Group.get_groupById(id, client);
         }, {

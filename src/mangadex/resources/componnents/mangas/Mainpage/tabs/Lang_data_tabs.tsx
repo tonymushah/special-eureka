@@ -1,13 +1,15 @@
 import { Box, Center, Link, Skeleton, Spinner } from "@chakra-ui/react";
 import React from "react";
 import { Col, Nav, Row, Tab } from "react-bootstrap";
+import TryCatch from "../../../../../../commons-res/components/TryCatch";
 import { Lang_and_Data } from "../../../../../api/internal/Utils";
+import ErrorEL1 from "../../../error/ErrorEL1";
 
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
-const ExtLink = React.lazy( async () => {
+const ExtLink = React.lazy(async () => {
     let res = await import("../../../../../../commons-res/components/ExtLink");
     return {
-        default : res.ExtLink
+        default: res.ExtLink
     };
 })
 
@@ -57,24 +59,38 @@ export class LAD_Tabs extends React.Component<LAD_TabsProps>{
                                                 width={"full"}
                                             >
                                                 <Center>
-                                                    <Spinner/>
+                                                    <Spinner />
                                                 </Center>
                                             </Box>}
                                         >
-                                            <ReactMarkDown 
-                                                children={getted.get_data()}
-                                                components={{
-                                                    a(node, href, ...props){
-                                                        return (
-                                                            <React.Suspense
-                                                                fallback={<Skeleton width={"10px"} height={"10px"}/>}
-                                                            >
-                                                                <Link as={ExtLink} href={href} children={node.children}/>
-                                                            </React.Suspense>
-                                                        )
-                                                    }
-                                                }}
-                                            />
+                                            <TryCatch
+                                                catch={(e) => (
+                                                    <ErrorEL1 error={e} />
+                                                )}
+                                            >
+                                                <ReactMarkDown
+                                                    children={getted.get_data()}
+                                                    components={{
+                                                        a(node, href, ...props) {
+                                                            return (
+                                                                <React.Suspense
+                                                                    fallback={<Skeleton width={"10px"} height={"10px"} />}
+                                                                >
+                                                                    {
+                                                                        node.href == undefined ? (
+                                                                            <Link>{node.children}</Link>
+                                                                        ) : (
+                                                                            <ExtLink href={node.href}>
+                                                                                <Link>{node.children}</Link>
+                                                                            </ExtLink>
+                                                                        )
+                                                                    }
+                                                                </React.Suspense>
+                                                            )
+                                                        }
+                                                    }}
+                                                />
+                                            </TryCatch>
                                         </React.Suspense>
                                     </Tab.Pane>
                                 ))

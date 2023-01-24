@@ -43,66 +43,118 @@ function Group_Page_Suspense(props: React.PropsWithChildren) {
 export default function Group_Page(props: React.PropsWithChildren<{
     src: Group
 }>) {
-    
     const client = useHTTPClient();
-    const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
-    const leader_query = useQuery(leader_queryKey, () => {
-        return props.src.getLeader(client);
-    }, {
-        staleTime: Infinity
-    })
-    return (
-        <Chakra.Box>
-            <Chakra.Box
-                height={"sm"}
-                backgroundImage={WaveHaikei}
-                backgroundPosition={"bottom"}
-                backgroundRepeat={"no-repeat"}
-                backgroundSize={"cover"}
-            >
-                <Chakra.Center height={"full"}>
-                    <Chakra.Box textAlign={"center"}>
-                        <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
-                        {
-                            leader_query.isSuccess ? (
-                                <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
-                            ) : (
-                                <></>
-                            )
-                        }
-                    </Chakra.Box>
-                </Chakra.Center>
+    try {
+        const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
+        const leader_query = useQuery(leader_queryKey, () => {
+            return props.src.getLeader(client);
+        }, {
+            staleTime: Infinity
+        })
+        return (
+            <Chakra.Box>
+                <Chakra.Box
+                    height={"sm"}
+                    backgroundImage={WaveHaikei}
+                    backgroundPosition={"bottom"}
+                    backgroundRepeat={"no-repeat"}
+                    backgroundSize={"cover"}
+                >
+                    <Chakra.Center height={"full"}>
+                        <Chakra.Box textAlign={"center"}>
+                            <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
+                            {
+                                leader_query.isSuccess ? (
+                                    <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
+                                ) : (
+                                    <></>
+                                )
+                            }
+                        </Chakra.Box>
+                    </Chakra.Center>
+                </Chakra.Box>
+                <Chakra.Box
+                    background={"gray.200"}
+                >
+                    <Container>
+                        <Chakra.Tabs isLazy>
+                            <Chakra.TabList>
+                                <Chakra.Tab>Group Details</Chakra.Tab>
+                                <Chakra.Tab>Titles</Chakra.Tab>
+                                <Chakra.Tab>Feed</Chakra.Tab>
+                            </Chakra.TabList>
+                            <Chakra.TabPanels>
+                                <Chakra.TabPanel>
+                                    <Group_Page_Suspense>
+                                        <Group_Details src={props.src} />
+                                    </Group_Page_Suspense>
+                                </Chakra.TabPanel>
+                                <Chakra.TabPanel>
+                                    <Group_Page_Suspense>
+                                        <Group_Titles id={props.src.get_id()} />
+                                    </Group_Page_Suspense>
+                                </Chakra.TabPanel>
+                                <Chakra.TabPanel>
+                                    <Group_Page_Suspense>
+                                        <Group_Feeds id={props.src.get_id()} />
+                                    </Group_Page_Suspense>
+                                </Chakra.TabPanel>
+                            </Chakra.TabPanels>
+                        </Chakra.Tabs>
+                    </Container>
+                </Chakra.Box>
             </Chakra.Box>
-            <Chakra.Box
-                background={"gray.200"}
-            >
-                <Container>
-                    <Chakra.Tabs isLazy>
-                        <Chakra.TabList>
-                            <Chakra.Tab>Group Details</Chakra.Tab>
-                            <Chakra.Tab>Titles</Chakra.Tab>
-                            <Chakra.Tab>Feed</Chakra.Tab>
-                        </Chakra.TabList>
-                        <Chakra.TabPanels>
-                            <Chakra.TabPanel>
-                                <Group_Page_Suspense>
-                                    <Group_Details src={props.src} />
-                                </Group_Page_Suspense>
-                            </Chakra.TabPanel>
-                            <Chakra.TabPanel>
-                                <Group_Page_Suspense>
-                                    <Group_Titles id={props.src.get_id()} />
-                                </Group_Page_Suspense>
-                            </Chakra.TabPanel>
-                            <Chakra.TabPanel>
-                                <Group_Page_Suspense>
-                                    <Group_Feeds id={props.src.get_id()} />
-                                </Group_Page_Suspense>
-                            </Chakra.TabPanel>
-                        </Chakra.TabPanels>
-                    </Chakra.Tabs>
-                </Container>
+        );
+    } catch (error) {
+        return (
+            <Chakra.Box>
+                <Chakra.Box
+                    height={"sm"}
+                    backgroundImage={WaveHaikei}
+                    backgroundPosition={"bottom"}
+                    backgroundRepeat={"no-repeat"}
+                    backgroundSize={"cover"}
+                >
+                    <Chakra.Center height={"full"}>
+                        <Chakra.Box textAlign={"center"}>
+                            <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
+                            <Chakra.Heading fontSize={"lg"}>Leader : None</Chakra.Heading>
+                        </Chakra.Box>
+                    </Chakra.Center>
+                </Chakra.Box>
+                <Chakra.Box
+                    background={"gray.200"}
+                >
+                    <Container>
+                        <Chakra.Tabs isLazy>
+                            <Chakra.TabList>
+                                <Chakra.Tab>Group Details</Chakra.Tab>
+                                <Chakra.Tab>Titles</Chakra.Tab>
+                                <Chakra.Tab>Feed</Chakra.Tab>
+                            </Chakra.TabList>
+                            <Chakra.TabPanels>
+                                <Chakra.TabPanel>
+                                    <Group_Page_Suspense>
+                                        <Group_Details src={props.src} />
+                                    </Group_Page_Suspense>
+                                </Chakra.TabPanel>
+                                <Chakra.TabPanel>
+                                    <Group_Page_Suspense>
+                                        <Group_Titles id={props.src.get_id()} />
+                                    </Group_Page_Suspense>
+                                </Chakra.TabPanel>
+                                <Chakra.TabPanel>
+                                    <Group_Page_Suspense>
+                                        <Group_Feeds id={props.src.get_id()} />
+                                    </Group_Page_Suspense>
+                                </Chakra.TabPanel>
+                            </Chakra.TabPanels>
+                        </Chakra.Tabs>
+                    </Container>
+                </Chakra.Box>
             </Chakra.Box>
-        </Chakra.Box>
-    );
+        );
+    }
+
+
 }

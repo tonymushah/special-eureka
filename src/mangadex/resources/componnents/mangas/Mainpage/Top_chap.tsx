@@ -257,7 +257,7 @@ function Offline_Chapters(props: MangaPageProps) {
                 }
             >
                 <Await
-                    resolve={props.src.getAllDownloadedChapters()}
+                    resolve={props.src.getAllDownloadedChapters(client)}
                     errorElement={
                         <ErrorELAsync />
                     }
