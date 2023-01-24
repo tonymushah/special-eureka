@@ -4,12 +4,14 @@ import { useQuery } from "react-query";
 import { Chapter } from "../../../api/structures/Chapter";
 import ErrorEL1 from "../error/ErrorEL1";
 import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 export default function All_downloaded_chapter() {
+    const client = useHTTPClient();
     const [mode, setMode] = React.useState<"line" | "box">("line");
     const query_key = "mdx-downloaded_chapter";
-    const query = useQuery(query_key, () => {
-        return Chapter.getAll_downloaded_chap();
+    const query = useQuery<Array<string>, Error>(query_key, () => {
+        return Chapter.getAll_downloaded_chap(client);
     }, {
         staleTime: Infinity
     });

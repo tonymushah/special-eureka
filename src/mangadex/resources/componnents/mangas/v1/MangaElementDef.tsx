@@ -10,6 +10,7 @@ import ReactContextMenu from "react-jsx-context-menu"
 import ErrorEL1 from "../../error/ErrorEL1";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 const CoverElementVertical = React.lazy(() => import("../../covers/v1/CoverElementVertical"));
 const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
@@ -22,10 +23,11 @@ export default function MangaElementDef(props: {
     delete?: Function,
     update?: Function
 }) {
+    const client = useHTTPClient();
     let title: string = "";
     const cover_key = "mdx-manga_cover-" + props.src.get_id();
     const coverQuery = useQuery(cover_key, () => {
-        return props.src.get_cover_art()
+        return props.src.get_cover_art(client)
     }, {
         "staleTime": Infinity
     });

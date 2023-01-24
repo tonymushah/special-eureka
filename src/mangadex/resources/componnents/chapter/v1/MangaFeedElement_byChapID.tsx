@@ -4,12 +4,14 @@ import { useQuery } from "react-query";
 import { Chapter } from "../../../../api/structures/Chapter";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFeedElement from "./MangaFeedElement";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 export default function MangaFeedElement_byChapID(props: {
     id: string
 }) {
+    const client = useHTTPClient();
     const query = useQuery<Chapter, Error>("mdx-chapter:" + props.id, () => {
-        return Chapter.get_ChapterbyId(props.id);
+        return Chapter.get_ChapterbyId(props.id, client);
     }, {
         staleTime: Infinity
     })

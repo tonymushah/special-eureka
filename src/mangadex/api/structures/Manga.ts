@@ -1,4 +1,4 @@
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
 import { Cover } from "./Cover";
@@ -299,9 +299,9 @@ export class Manga extends Attribute{
         return instance;
     }
     // NOTE Get a random manga
-    public static async getRandom(): Promise<Manga>{
+    public static async getRandom(client? : Client): Promise<Manga>{
         try {
-            let getted: Promise<Response<any>> = Api_Request.get_methods(Manga.get_request_a() + "random");
+            let getted: Promise<Response<any>> = Api_Request.get_methods(Manga.get_request_a() + "random", undefined, client);
             let to_use = await getted;
             return Manga.build_any(to_use.data.data);
         } catch (error) {
@@ -309,13 +309,13 @@ export class Manga extends Attribute{
         }
     }
     // [x] get the manga cover
-    public async get_cover_art(): Promise<Cover>{
+    public async get_cover_art(client? : Client): Promise<Cover>{
         try {
-            return await Cover.getById(this.get_some_relationship("cover_art")[0].get_id());
+            return await Cover.getById(this.get_some_relationship("cover_art")[0].get_id(), client);
         } catch (error) {
             try {
-                if((await DeskApiRequest.ping()) == true){
-                    return await Manga.getOfflineMangaCover(this.get_id());
+                if((await DeskApiRequest.ping(client)) == true){
+                    return await Manga.getOfflineMangaCover(this.get_id(), client);
                 }else{
                     throw new Error("No cover art for this manga " + this.get_title().en);
                 }
@@ -349,7 +349,8 @@ export class Manga extends Attribute{
             includes,
             hasAvailableChapters,
             latestUploadedChapter,
-            group
+            group,
+            client
         } : MangaSearchType): Promise<Collection<Manga>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -379,7 +380,7 @@ export class Manga extends Attribute{
             serialize((new Querry_list_builder("ids", mangaIDs!)).build()) + "&" 
         , {
             query: querys
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Manga> = new Array<Manga>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -411,27 +412,28 @@ export class Manga extends Attribute{
             group : group
         });
     }
-    public async get_author(): Promise<Array<Author>>{
+    public async get_author(client? : Client): Promise<Array<Author>>{
         let authors_length: number = this.get_some_relationshipLength("author");
         let authors_: Array<Author> = new Array<Author>(authors_length);
         let authors_attributes: Array<Attribute> = this.get_some_relationship("author");
         for(let index = 0; index < authors_length; index++){
-            authors_[index] = await Author.getAuthorById(authors_attributes[index].get_id());
+            authors_[index] = await Author.getAuthorById(authors_attributes[index].get_id(), client);
         }
         return authors_;
     }
-    public async get_artist(): Promise<Array<Author>>{
+    public async get_artist(client?: Client): Promise<Array<Author>>{
         let authors_length: number = this.get_some_relationshipLength("artist");
         let authors_: Array<Author> = new Array<Author>(authors_length);
         let authors_attributes: Array<Attribute> = this.get_some_relationship("artist");
         for(let index = 0; index < authors_length; index++){
-            authors_[index] = await Author.getAuthorById(authors_attributes[index].get_id());
+            authors_[index] = await Author.getAuthorById(authors_attributes[index].get_id(), client);
         }
         return authors_;
     }
     public async aggregate_1(
         translatedLanguage?: Array<string>, 
-        groups?: Array<string>
+        groups?: Array<string>,
+        client?: Client
         ): Promise<void>{
         let getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + this.get_id() + "/aggregate?" + 
@@ -440,13 +442,15 @@ export class Manga extends Attribute{
             ,
             {
                 
-            }
+            },
+            client
             );
         this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
     }
     public async aggregate_1_get(
         translatedLanguage?: Array<string>, 
-        groups?: Array<string>
+        groups?: Array<string>,
+        client? : Client
         ): Promise<Aggregate>{
         let getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + this.get_id() + "/aggregate?" + 
@@ -455,14 +459,16 @@ export class Manga extends Attribute{
             ,
             {
                 
-            }
+            },
+            client
             );
         this.set_aggregate(Aggregate.build_wANY(getted.data.volumes));
         return this.get_aggregate();
     }
     public async aggregate_2(
         translatedLanguage?: Array<string>, 
-        groups?: Array<string>
+        groups?: Array<string>,
+        client? : Client
         ): Promise<void>{
         let getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + this.get_id() + "/aggregate?" + 
@@ -471,7 +477,8 @@ export class Manga extends Attribute{
             ,
             {
                 
-            }
+            },
+            client
             );
         this.set_aggregate(await Aggregate.build_wANY2(getted.data.volumes));
     }
@@ -494,7 +501,8 @@ export class Manga extends Attribute{
             includes,
             includeEmptyPages,
             includeFuturePublishAt,
-            includeExternalUrl
+            includeExternalUrl,
+            client
         }
         :
         {
@@ -512,7 +520,8 @@ export class Manga extends Attribute{
             includes? : string,
             includeEmptyPages?: boolean,
             includeFuturePublishAt?: boolean,
-            includeExternalUrl?: boolean
+            includeExternalUrl?: boolean,
+            client?: Client
         }): Promise<Array<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -535,7 +544,9 @@ export class Manga extends Attribute{
             serialize((new Querry_list_builder("excludedUploaders", excludedUploaders!)).build())
         , {
             query: querys
-        });
+        }, 
+        client
+        );
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -558,7 +569,8 @@ export class Manga extends Attribute{
             order,
             includeEmptyPages,
             includeFuturePublishAt,
-            includeExternalUrl
+            includeExternalUrl,
+            client
         }
         :
         {
@@ -575,7 +587,8 @@ export class Manga extends Attribute{
             order?: Order,
             includeEmptyPages?: boolean,
             includeFuturePublishAt?: boolean,
-            includeExternalUrl?: boolean
+            includeExternalUrl?: boolean,
+            client?: Client
         }): Promise<Array<Chapter>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -602,7 +615,7 @@ export class Manga extends Attribute{
             + "&" + serialize((new Querry_list_builder("excludedUploaders", excludedUploaders!)).build())
         , {
             query: querys
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -623,7 +636,8 @@ export class Manga extends Attribute{
         createdAtSince?: string,
         updatedAtSince?: string,
         order?: Order, 
-        includes? : string): Promise<Array<Chapter> | Response<any>>{
+        includes? : string,
+        client? : Client): Promise<Array<Chapter> | Response<any>>{
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
@@ -642,7 +656,7 @@ export class Manga extends Attribute{
             serialize((new Querry_list_builder("excludedUploaders", excludedUploaders!)).build())
         , {
             query: querys
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -738,7 +752,7 @@ export class Manga extends Attribute{
             }
         });
     }
-    public async get_allCover(): Promise<Collection<Cover>>{
+    public async get_allCover(client?: Client): Promise<Collection<Cover>>{
         let orderss : Order = new Order();
         orderss.set_volume(Asc_Desc.asc());
         let Offset_Limits: Offset_limits = new Offset_limits();
@@ -747,7 +761,8 @@ export class Manga extends Attribute{
             {
                 offset_Limits : Offset_Limits,
                 mangaIDs : [this.get_id()],
-                order : orderss
+                order : orderss,
+                client: client
             }
         );
         if(res instanceof Collection<Cover>){
@@ -756,19 +771,19 @@ export class Manga extends Attribute{
             throw new Error("Cover list has no been loaded");
         }
     }
-    public async get_latestUploadedChapter() : Promise<Chapter>{
-        return Chapter.get_ChapterbyId(this.$latestUploadedChapter);
+    public async get_latestUploadedChapter(client? : Client) : Promise<Chapter>{
+        return Chapter.get_ChapterbyId(this.$latestUploadedChapter, client);
     }
-    public async get_latestUploadedChapter_all() : Promise<Chapter_withAllIncludes> {
-        return Chapter_withAllIncludes.get_ChapterbyId(this.$latestUploadedChapter)
+    public async get_latestUploadedChapter_all(client?: Client) : Promise<Chapter_withAllIncludes> {
+        return Chapter_withAllIncludes.get_ChapterbyId(this.$latestUploadedChapter, client)
     }
-    public async get_all_related_manga() : Promise<Array<Manga>>{
+    public async get_all_related_manga(client?: Client) : Promise<Array<Manga>>{
         let returns : Array<Manga> = [];
 
         let related = this.get_some_relationship("manga");
         for (let index = 0; index < related.length; index++) {
             const element = related[index];
-            returns[index] = await Manga.getMangaByID(element.get_id());
+            returns[index] = await Manga.getMangaByID(element.get_id(), client);
         }
         return returns;
     }
@@ -783,14 +798,14 @@ export class Manga extends Attribute{
         }
         return returns;
     }
-    public async get_related_manga_byEnum(manga_relation_enum : string) : Promise<Array<Manga>>{
+    public async get_related_manga_byEnum(manga_relation_enum : string, client?: Client) : Promise<Array<Manga>>{
         let returns : Array<Manga> = [];
         let index1 = 0;
         let related = this.get_some_relationship("manga");
         for (let index = 0; index < related.length; index++) {
             const element = related[index];
             if(element.get_related()! == manga_relation_enum){
-                returns[index1] = await Manga.getMangaByID(element.get_id());
+                returns[index1] = await Manga.getMangaByID(element.get_id(), client);
             }
         }
         return returns;
@@ -808,111 +823,111 @@ export class Manga extends Attribute{
         return returns;
     }
     // NOTE get a by his id
-    public static async getOfflineMangaByID(id: string): Promise<Manga>{
+    public static async getOfflineMangaByID(id: string, client? : Client): Promise<Manga>{
         try {
-            let getted: Promise<Response<any>> = DeskApiRequest.get_methods(Manga.get_request_a() + id);
+            let getted: Promise<Response<any>> = DeskApiRequest.get_methods(Manga.get_request_a() + id, undefined, client);
             let to_use = await getted;
             return Manga_with_allRelationship.build_any(to_use.data.data);
         } catch (error) {
             throw new Error(error);
         }
     }
-    public static async getOnlinebyID(id: string): Promise<Manga>{
+    public static async getOnlinebyID(id: string, client? : Client): Promise<Manga>{
         try {
-            let getted: Promise<Response<any>> = Api_Request.get_methods(Manga.get_request_a() + id);
+            let getted: Promise<Response<any>> = Api_Request.get_methods(Manga.get_request_a() + id, undefined, client);
             let to_use = await getted;
             return Manga.build_any(to_use.data.data);
         } catch (error) {
             throw new Error(error);
         }
     }
-    public static async getMangaByID(id: string): Promise<Manga>{
-        if(await DeskApiRequest.ping()){
+    public static async getMangaByID(id: string, client? : Client): Promise<Manga>{
+        if(await DeskApiRequest.ping(client)){
             try{
-                return await Manga.getOfflineMangaByID(id);
+                return await Manga.getOfflineMangaByID(id, client);
             }catch(e){
-                return await Manga.getOnlinebyID(id);
+                return await Manga.getOnlinebyID(id, client);
             }
         }else{
             return await Manga.getOnlinebyID(id);
         }
     }
-    public static async getOfflineMangaCover(mangaId : string) : Promise<Cover>{
-        if(await DeskApiRequest.ping() == true){
-            let response : Response<any> = await DeskApiRequest.get_methods(`manga/${mangaId}/cover`);
+    public static async getOfflineMangaCover(mangaId : string, client? : Client) : Promise<Cover>{
+        if(await DeskApiRequest.ping(client) == true){
+            let response : Response<any> = await DeskApiRequest.get_methods(`manga/${mangaId}/cover`, undefined, client);
             return Cover.build_withAny(response.data.data);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllOfflineMangaID() : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async getAllOfflineMangaID(client?: Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 data : Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`mangas/all`);
+            }> = await DeskApiRequest.get_methods(`mangas/all`, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllDownloadedChapters_ofAManga(mangaId : string) : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async getAllDownloadedChapters_ofAManga(mangaId : string, client?: Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 data : Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`manga/${mangaId}/chapters`);
+            }> = await DeskApiRequest.get_methods(`manga/${mangaId}/chapters`, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public async getAllDownloadedChapters() : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public async getAllDownloadedChapters(client? : Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 data : Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`manga/${this.get_id()}/chapters`);
+            }> = await DeskApiRequest.get_methods(`manga/${this.get_id()}/chapters`, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllDownloadedMangaID(): Promise<Array<string>>{
-        if((await DeskApiRequest.ping()) == true){
+    public static async getAllDownloadedMangaID(client? : Client): Promise<Array<string>>{
+        if((await DeskApiRequest.ping(client)) == true){
             let resp : Response<{
                 data: Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods("mangas/all");
+            }> = await DeskApiRequest.get_methods("mangas/all", undefined, client);
             return resp.data.data;
         }else{
-            return []
+            return [];
         }
     }
-    public static async getAllDownloadedCover_ofAManga(mangaID : string) : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async getAllDownloadedCover_ofAManga(mangaID : string, client? : Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 data : Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`manga/${mangaID}/covers`);
+            }> = await DeskApiRequest.get_methods(`manga/${mangaID}/covers`, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async delete_aDownloaded_manga(mangaID : string) : Promise<any>{
-        if(await DeskApiRequest.ping() == true){
+    public static async delete_aDownloaded_manga(mangaID : string, client? : Client) : Promise<any>{
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 result : string,
                 type : string,
                 data : any,
                 message : string
-            }> = await DeskApiRequest.delete_methods("manga/" + mangaID);
+            }> = await DeskApiRequest.delete_methods("manga/" + mangaID, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
@@ -928,8 +943,8 @@ export class Manga extends Attribute{
         }
         throw new Error("The manga " + mangaID + " is not related to " + this.get_id());
     }
-    public static async download_manga(mangaID: string) : Promise<Manga>{
-        if(await DeskApiRequest.ping() == true){
+    public static async download_manga(mangaID: string, client?: Client) : Promise<Manga>{
+        if(await DeskApiRequest.ping(client) == true){
             let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga", { mangaId : mangaID });
             let response_Json : {
                 result : string,
@@ -941,8 +956,8 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async download_all_manga_covers(mangaID: string) : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async download_all_manga_covers(mangaID: string, client? : Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_covers", { mangaId : mangaID });
             let response_Json : {
                 result : string,
@@ -955,8 +970,8 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async download_manga_cover(mangaID : string) : Promise<Cover>{
-        if(await DeskApiRequest.ping() == true){
+    public static async download_manga_cover(mangaID : string, client? : Client) : Promise<Cover>{
+        if(await DeskApiRequest.ping(client) == true){
             let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_cover", { mangaId : mangaID });
             let response_Json : {
                 result : string,
@@ -969,20 +984,20 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async download_manga_cover_with_quality(mangaID : string, quality : number) : Promise<Cover>{
-        if(await DeskApiRequest.ping() == true){
+    public static async download_manga_cover_with_quality(mangaID : string, quality : number, client? : Client) : Promise<Cover>{
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 result : string,
                 type : string
                 downloaded : string
-            }> = await DeskApiRequest.put_methods("manga/" + mangaID + "/cover/" + quality);
+            }> = await DeskApiRequest.put_methods("manga/" + mangaID + "/cover/" + quality, undefined, undefined, client);
             return Cover.getAOfflineCover(response.data.downloaded);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async patch_all_manga_cover(): Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async patch_all_manga_cover(client? : Client): Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
 
             let response = await invoke<string>("plugin:mangadex-desktop-api|patch_all_manga_cover");
             let response_Json : any = JSON.parse(response);
@@ -991,25 +1006,25 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getMangaCover(mangaID : string): Promise<Cover>{
-        if(await DeskApiRequest.ping() == true){
-            let response : Response<any> = await DeskApiRequest.get_methods(`manga/${mangaID}/cover`);
+    public static async getMangaCover(mangaID : string, client? : Client): Promise<Cover>{
+        if(await DeskApiRequest.ping(client) == true){
+            let response : Response<any> = await DeskApiRequest.get_methods(`manga/${mangaID}/cover`, undefined, client);
             return Cover.build_withAny(response.data.data);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public async delete_this(){
-        return await Manga.delete_aDownloaded_manga(this.get_id());
+    public async delete_this(client? : Client){
+        return await Manga.delete_aDownloaded_manga(this.get_id(), client);
     }
-    public async download_this() : Promise<Manga>{
-        return await Manga.download_manga(this.get_id());
+    public async download_this(client? : Client) : Promise<Manga>{
+        return await Manga.download_manga(this.get_id(), client);
     }
-    public async download_cover_art() : Promise<Cover>{
-        return await Manga.download_manga_cover(this.get_id());
+    public async download_cover_art(client?: Client) : Promise<Cover>{
+        return await Manga.download_manga_cover(this.get_id(), client);
     }
-    public static async refetch_all_manga() : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async refetch_all_manga(client? : Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response = await invoke<string>("plugin:mangadex-desktop-api|refetch_all_manga");
             let response_Json : any = JSON.parse(response);
             return response_Json.data;
@@ -1035,22 +1050,22 @@ export class Manga extends Attribute{
         }
         return authors_;
     }
-    public async get_author_byID(author_id : string) : Promise<Author>{
+    public async get_author_byID(author_id : string, client? : Client) : Promise<Author>{
         let authors_ids = this.get_authors_id();
         for (let index = 0; index < authors_ids.length; index++) {
             const element = authors_ids[index];
             if(element == author_id){
-                return await Author.getAuthorById(element);
+                return await Author.getAuthorById(element, client);
             }
         }
         throw new Error(`no Author ${author_id} related to ${this.get_id()}`);
     }
-    public async get_artist_byID(author_id : string) : Promise<Author>{
+    public async get_artist_byID(author_id : string, client? : Client) : Promise<Author>{
         let authors_ids = this.get_artists_id();
         for (let index = 0; index < authors_ids.length; index++) {
             const element = authors_ids[index];
             if(element == author_id){
-                return await Author.getAuthorById(element);
+                return await Author.getAuthorById(element, client);
             }
         }
         throw new Error(`no Artists ${author_id} related to ${this.get_id()}`);
@@ -1115,7 +1130,7 @@ export class Manga_2 extends Manga{
         instance.set_related(object.related);
         return instance;
     }
-    public async get_online_coverArt() : Promise<Cover>{
+    public async get_online_coverArt(client?: Client) : Promise<Cover>{
         let orders : Order = new Order();
             orders.set_volume(Asc_Desc.desc());
             try {
@@ -1126,6 +1141,7 @@ export class Manga_2 extends Manga{
                             this.get_id()
                         ],
                         order : orders,
+                        client : client
                     }
                 ))
                 if (cover instanceof Collection<Cover>) {
@@ -1137,15 +1153,15 @@ export class Manga_2 extends Manga{
                 throw new Error("No cover art for this manga " + this.get_title().en);
             }
     }
-    public async get_cover_art(): Promise<Cover>{
-        if((await DeskApiRequest.ping()) == true){
+    public async get_cover_art(client? : Client): Promise<Cover>{
+        if((await DeskApiRequest.ping(client)) == true){
             try {
-                return await Manga.getOfflineMangaCover(this.get_id());
+                return await Manga.getOfflineMangaCover(this.get_id(), client);
             } catch (error) {
-                return await this.get_online_coverArt();
+                return await this.get_online_coverArt(client);
             }
         }else{
-            return await this.get_online_coverArt();
+            return await this.get_online_coverArt(client);
         }
     }
 }

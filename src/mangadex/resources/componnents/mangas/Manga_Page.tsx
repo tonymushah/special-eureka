@@ -7,6 +7,7 @@ import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useQueries, useQuery } from "react-query";
 import { Await, Link } from "react-router-dom";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "../../../api/internal/Utils";
 import { Author } from "../../../api/structures/Author";
 import { Manga } from "../../../api/structures/Manga";
@@ -141,9 +142,10 @@ const ExtLink = React.lazy(async () => {
 
 export function Manga_Page(props: MangaPageProps) {
     let title: string = "";
+    const client = useHTTPClient();
     const cover_key = "mdx-manga_cover-" + props.src.get_id();
     const coverQuery = useQuery(cover_key, () => {
-        return props.src.get_cover_art()
+        return props.src.get_cover_art(client)
     }, {
         "staleTime": Infinity
     });
@@ -157,7 +159,7 @@ export function Manga_Page(props: MangaPageProps) {
             return {
                 queryKey: "mdx-author-" + author_id,
                 queryFn: () => {
-                    return props.src.get_author_byID(author_id);
+                    return props.src.get_author_byID(author_id, client);
                 },
                 staleTime: Infinity
             }
@@ -168,14 +170,14 @@ export function Manga_Page(props: MangaPageProps) {
             return {
                 queryKey: "mdx-author-" + author_id,
                 queryFn: () => {
-                    return props.src.get_artist_byID(author_id);
+                    return props.src.get_artist_byID(author_id, client);
                 },
                 staleTime: Infinity
             }
         })
     )
     const manga_statistics = useQuery<Statistics_Manga, Error>("mdx-manga_stats-", () => {
-        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id());
+        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {
         staleTime: Infinity
     });

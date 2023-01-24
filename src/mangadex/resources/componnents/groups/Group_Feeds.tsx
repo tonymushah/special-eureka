@@ -17,6 +17,7 @@ import { CollectionComponnent_WithQuery } from "../../../resources/componnents/C
 import MangaFallback2 from "../../../resources/componnents/mangas/v1/MangaElement2Fallback";
 
 import { Chapter } from "../../../api/structures/Chapter";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 const MangaChapterAccordion_Element = React.lazy(() => import("../mangas/v1/MangaChapterAccordion_Element"));
 
@@ -24,6 +25,7 @@ const MangaChapterAccordion_Element = React.lazy(() => import("../mangas/v1/Mang
 export default function Group_Feeds(props: {
     id: string
 }) {
+    const client = useHTTPClient();
     return (
         <CollectionComponnent_WithQuery<Chapter>
             queryKey={"mdx-group_feeds-" + props.id}
@@ -35,7 +37,8 @@ export default function Group_Feeds(props: {
                     "group": [
                         props.id
                     ],
-                    order: new Order(Asc_Desc.desc())
+                    order: new Order(Asc_Desc.desc()),
+                    client: client
                 })
             }}
             query_options={{

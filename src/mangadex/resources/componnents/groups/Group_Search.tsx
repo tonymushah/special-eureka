@@ -6,6 +6,7 @@ import { Group } from "../../../api/structures/Group";
 import { Collection } from "../../../api/structures/Collection";
 import GroupFallBackElement from "./GroupFallBackElement";
 import { Attribute } from "../../../api/structures/Attributes";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 const CollectionComponnent_WithQuery = React.lazy(async () =>{
@@ -19,6 +20,7 @@ export default function Group_Search(props : {
     offset_limits : Offset_limits
 }){
     const [result, setResult] = React.useState(<></>);
+    const client = useHTTPClient();
     const formik = useFormik({
         initialValues : {
             name : ""
@@ -37,7 +39,8 @@ export default function Group_Search(props : {
                         fn={() => {
                             return Group.search({
                                 offset_Limits : props.offset_limits,
-                                name : values.name
+                                name : values.name,
+                                client : client
                             })
                         }}
                         queryKey={"mdx-group-search-"+random}

@@ -2,22 +2,24 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Chapter } from "../../../../api/structures/Chapter";
 import * as Chakra from "@chakra-ui/react"
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 export default function Chapter_Element1_byChapID(props: {
     id: string
 }) {
+    const client = useHTTPClient();
     const queryClient = useQueryClient()
     const toast = Chakra.useToast();
     const key = "mdx-chapter:" + props.id;
     const query = useQuery<Chapter, Error>(key, () => {
-        return Chapter.get_ChapterbyId(props.id);
+        return Chapter.get_ChapterbyId(props.id, client);
     }, {
         staleTime: Infinity,
     });
     const download_query = useMutation({
         mutationKey : "mdx-mutation-chapter-download-" + props.id,
         mutationFn : () => {
-            return query.data!.download_this();
+            return query.data!.download_this(client);
         },
         onError(error : Error){
             toast({

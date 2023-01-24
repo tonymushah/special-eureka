@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import React from 'react';
 import { useQuery } from 'react-query';
+import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Offset_limits, Order } from '../../api/internal/Utils';
 import { Chapter, Chapter_withAllIncludes } from '../../api/structures/Chapter';
 import { Collection } from '../../api/structures/Collection';
@@ -12,11 +13,13 @@ const MangaFeedElement = React.lazy(() => import('../../resources/componnents/ch
 export default function Latest_Updates(){
   const offset_limits_2 : Offset_limits = new Offset_limits();
   offset_limits_2.set_limits(12);
+  const client = useHTTPClient()
   const key = "mdx-home_page-latest_update";
-  const query = useQuery<Collection<Chapter_withAllIncludes>>(key, () => {
+  const query = useQuery<Collection<Chapter_withAllIncludes>, Error>(key, () => {
     return Chapter_withAllIncludes.search({
       offset_limits: offset_limits_2,
-      order: new Order("desc")
+      order: new Order("desc"),
+      client: client
     })
   }, {
     staleTime : Infinity
@@ -56,7 +59,7 @@ export default function Latest_Updates(){
         >
           Refetch
         </Chakra.Button>
-        <ErrorEL1 error={query.data}/>
+        <ErrorEL1 error={query.error}/>
       </Chakra.Box>
     )
   }

@@ -15,7 +15,7 @@ export default function Download_Index_Page() {
                 </Chakra.TabList>
                 <Chakra.TabPanels>
                     <Chakra.TabPanel>
-                        <React.Suspense 
+                        <React.Suspense
                             fallback={
                                 <Chakra.Box>
                                     <Chakra.Text>Loading...</Chakra.Text>
@@ -23,30 +23,30 @@ export default function Download_Index_Page() {
                             }
                         >
                             <AllDownlaodedMangaConsumer>
-                        {
-                            (value: Array<string>) => (
-                                <React.Suspense
-                                    fallback={
-                                        <Chakra.Center>
-                                            <Chakra.Box textAlign={"center"}>
-                                                <Chakra.Spinner
-                                                    size={"md"}
-                                                />
-                                                <Chakra.Text>Loading componnent...</Chakra.Text>
-                                            </Chakra.Box>
-                                        </Chakra.Center>
-                                    }
-                                >
-                                    <MangaListByArrayMangaID src={value} />
-                                </React.Suspense>
-                            )
-                        }
-                    </AllDownlaodedMangaConsumer>
+                                {
+                                    (value: Array<string>) => (
+                                        <React.Suspense
+                                            fallback={
+                                                <Chakra.Center>
+                                                    <Chakra.Box textAlign={"center"}>
+                                                        <Chakra.Spinner
+                                                            size={"md"}
+                                                        />
+                                                        <Chakra.Text>Loading componnent...</Chakra.Text>
+                                                    </Chakra.Box>
+                                                </Chakra.Center>
+                                            }
+                                        >
+                                            <MangaListByArrayMangaID src={value} />
+                                        </React.Suspense>
+                                    )
+                                }
+                            </AllDownlaodedMangaConsumer>
                         </React.Suspense>
-                        
+
                     </Chakra.TabPanel>
                     <Chakra.TabPanel>
-                        <All_downloaded_chapter/>
+                        <All_downloaded_chapter />
                     </Chakra.TabPanel>
                 </Chakra.TabPanels>
             </Chakra.Tabs>

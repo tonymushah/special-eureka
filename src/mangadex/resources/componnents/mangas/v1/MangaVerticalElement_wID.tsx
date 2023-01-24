@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Manga } from "../../../../api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
@@ -13,10 +14,11 @@ export default function MangaVerticalElement_wID(props: {
     const toast = useToast({
         position: "bottom-right"
     });
+    const client = useHTTPClient();
     const queryClient = useQueryClient();
     const key = "mdx-manga:" + props.mangaID;
     const query = useQuery<Manga, Error>(key, () => {
-        return Manga.getMangaByID(props.mangaID);
+        return Manga.getMangaByID(props.mangaID, client);
     }, {
         "staleTime": Infinity
     });
@@ -29,7 +31,7 @@ export default function MangaVerticalElement_wID(props: {
                 duration: 9000,
                 isClosable: true
             });
-            return query.data!.delete_this()
+            return query.data!.delete_this(client)
         },
         onSuccess: () => {
             toast({
@@ -62,7 +64,7 @@ export default function MangaVerticalElement_wID(props: {
                 status: "loading",
                 duration: 9000
             });
-            return Manga.download_manga(query.data!.get_id())
+            return Manga.download_manga(query.data!.get_id(), client)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

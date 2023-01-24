@@ -9,7 +9,7 @@ export default function MangaElementDef_wRelated(props: {
     mangaID: string,
     promise : Promise<Manga>
 }) {
-    const query = useQuery<Manga>("mdx-manga:" + props.mangaID, () => { 
+    const query = useQuery<Manga, Error>("mdx-manga:" + props.mangaID, () => { 
         return props.promise;
     }, {
         "staleTime": Infinity

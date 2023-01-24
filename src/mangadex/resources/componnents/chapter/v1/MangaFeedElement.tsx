@@ -7,13 +7,16 @@ import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 import { Chapter } from "../../../../api/structures/Chapter";
 import { useQuery } from "react-query";
 import Chapter_Element2 from "./Chapter_Element2";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { Manga } from "../../../../api/structures/Manga";
 
 export default function MangaFeedElement(props: {
     src : Chapter
 }) {
+    const client = useHTTPClient();
     const manga_query_key = "mdx-manga:" + props.src.get_manga_id();
-    const query = useQuery(manga_query_key, () => {
-        return props.src.get_manga()
+    const query = useQuery<Manga, Error>(manga_query_key, () => {
+        return props.src.get_manga(client)
     },{
         staleTime : Infinity
     });

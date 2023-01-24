@@ -16,6 +16,7 @@ import { Aggregate } from "../../../../api/structures/Aggregate";
 import { ErrorELAsync } from "../../Error_cmp";
 import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
 import { useQueries, useQuery, useQueryClient } from "react-query";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 function CollapseHeight(props: React.PropsWithChildren) {
     const [show, setShow] = React.useState(false)
@@ -61,7 +62,6 @@ function CollapseHeight(props: React.PropsWithChildren) {
 function Top_Chaps_Desc_Part(props: {
     src: Manga
 }) {
-    const queryClient = useQueryClient();
     const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
@@ -137,12 +137,13 @@ function Aggregate_part(props: {
 function Author_Artists(props: {
     src: Manga
 }) {
+    const client_ = useHTTPClient();
     const authors = useQueries(
         props.src.get_authors_id().map(author_id => {
             return {
                 queryKey: "mdx-author-" + author_id,
                 queryFn: () => {
-                    return props.src.get_author_byID(author_id);
+                    return props.src.get_author_byID(author_id, client_);
                 },
                 staleTime: Infinity
             }
@@ -153,7 +154,7 @@ function Author_Artists(props: {
             return {
                 queryKey: "mdx-author-" + author_id,
                 queryFn: () => {
-                    return props.src.get_artist_byID(author_id);
+                    return props.src.get_artist_byID(author_id, client_);
                 },
                 staleTime: Infinity
             }
@@ -195,7 +196,7 @@ function Author_Artists(props: {
             </Row>
         );
     }
-    return(
+    return (
         <></>
     );
 }
@@ -204,6 +205,78 @@ function Author_Artists(props: {
 type MangaPageProps = {
     src: Manga
 }
+
+function Online_Chapter(props: MangaPageProps) {
+    const client = useHTTPClient()
+    return (
+        <Chakra.TabPanel>
+            <Container>
+
+                <React.Suspense fallback={
+                    <Chakra.Box m={2} bg="inherit">
+                        <div className=" text-center">
+                            <Spinner
+                                animation="border"
+                            ></Spinner>
+                            <br />
+                            <p>Loading chapters ...</p>
+                        </div>
+                    </Chakra.Box>
+                }>
+                    <Await
+                        resolve={props.src.aggregate_1_get(undefined, undefined, client)}
+                        errorElement={
+                            <ErrorELAsync />
+                        }
+                        children={(getted: Aggregate) => {
+                            return (<Aggregate_part src={getted} />);
+                        }}
+                    />
+                </React.Suspense>
+
+            </Container>
+        </Chakra.TabPanel>
+    )
+}
+
+function Offline_Chapters(props: MangaPageProps) {
+    const client = useHTTPClient()
+    return (
+        <Chakra.TabPanel>
+            <React.Suspense
+                fallback={
+                    <Chakra.Box m={2} bg="inherit">
+                        <div className=" text-center">
+                            <Spinner
+                                animation="border"
+                            ></Spinner>
+                            <br />
+                            <p>Loading chapters ...</p>
+                        </div>
+                    </Chakra.Box>
+                }
+            >
+                <Await
+                    resolve={props.src.getAllDownloadedChapters()}
+                    errorElement={
+                        <ErrorELAsync />
+                    }
+                >
+                    {(getted: Array<string>) => (
+                        <Chakra.VStack>
+                            {
+                                getted.map((value: string) => (
+                                    <Chapter_Element1_byChapID id={value} />
+                                ))
+                            }
+                        </Chakra.VStack>
+                    )}
+                </Await>
+            </React.Suspense>
+        </Chakra.TabPanel>
+    )
+}
+
 export class Top_Chaps extends React.Component<MangaPageProps>{
     private to_use: Manga;
     //private _cover: Cover;
@@ -354,65 +427,12 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                 <Chakra.Tab>Offline</Chakra.Tab>
                             </Chakra.TabList>
                             <Chakra.TabPanels>
-                                <Chakra.TabPanel>
-                                    <Container>
-
-                                        <React.Suspense fallback={
-                                            <Chakra.Box m={2} bg="inherit">
-                                                <div className=" text-center">
-                                                    <Spinner
-                                                        animation="border"
-                                                    ></Spinner>
-                                                    <br />
-                                                    <p>Loading chapters ...</p>
-                                                </div>
-                                            </Chakra.Box>
-                                        }>
-                                            <Await
-                                                resolve={this.to_use.aggregate_1_get()}
-                                                errorElement={
-                                                    <ErrorELAsync />
-                                                }
-                                                children={(getted: Aggregate) => {
-                                                    return (<Aggregate_part src={getted} />);
-                                                }}
-                                            />
-                                        </React.Suspense>
-
-                                    </Container>
-                                </Chakra.TabPanel>
-                                <Chakra.TabPanel>
-                                    <React.Suspense
-                                        fallback={
-                                            <Chakra.Box m={2} bg="inherit">
-                                                <div className=" text-center">
-                                                    <Spinner
-                                                        animation="border"
-                                                    ></Spinner>
-                                                    <br />
-                                                    <p>Loading chapters ...</p>
-                                                </div>
-                                            </Chakra.Box>
-                                        }
-                                    >
-                                        <Await
-                                            resolve={this.to_use.getAllDownloadedChapters()}
-                                            errorElement={
-                                                <ErrorELAsync />
-                                            }
-                                        >
-                                            {(getted: Array<string>) => (
-                                                <Chakra.VStack>
-                                                    {
-                                                        getted.map((value: string) => (
-                                                            <Chapter_Element1_byChapID id={value} />
-                                                        ))
-                                                    }
-                                                </Chakra.VStack>
-                                            )}
-                                        </Await>
-                                    </React.Suspense>
-                                </Chakra.TabPanel>
+                                <Online_Chapter
+                                    src={this.to_use}
+                                />
+                                <Offline_Chapters
+                                    src={this.to_use}
+                                />
                             </Chakra.TabPanels>
                         </Chakra.Tabs>
 

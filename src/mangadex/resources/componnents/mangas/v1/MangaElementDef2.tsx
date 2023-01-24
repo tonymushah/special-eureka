@@ -14,6 +14,7 @@ import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import { Statis } from "../Manga_Page";
 import MangaTitle from "./MangaTitle";
 import { FaBookmark } from "react-icons/fa";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 
 export default function MangaElementDef2(props: {
@@ -24,13 +25,14 @@ export default function MangaElementDef2(props: {
     delete?: Function,
     update?: Function
 }) {
+    const client = useHTTPClient();
     const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     })
     const manga_statistic_queryKey = "mdx-manga-" + props.src.get_id() + "-statistics";
     const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
-        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id());
+        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {
         staleTime: Infinity
     });

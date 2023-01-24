@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import React from 'react';
 import { Modal } from 'react-bootstrap';
 import { Await } from 'react-router-dom';
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 import { Offset_limits } from '../../../api/internal/Utils';
 import { Collection } from '../../../api/structures/Collection';
 import { Manga } from '../../../api/structures/Manga';
@@ -19,6 +20,7 @@ const MangaElementDef = React.lazy(() => import('../mangas/v1/MangaElementDef'))
 
 export default function Modal_Search(props: Modal_SearchProps) {
     const ref1 = React.createRef<HTMLDivElement>();
+    const client = useHTTPClient();
     const [result, setResult] = React.useState(<></>);
     const build = (array: Array<Manga>) => {
         let builded: Array<React.ReactNode> = [];
@@ -43,7 +45,8 @@ export default function Modal_Search(props: Modal_SearchProps) {
             let offset_limits_1 = new Offset_limits();
             let promise = Manga.search({
                 offset_Limits: offset_limits_1,
-                title: values.title
+                title: values.title,
+                client : client
             });
             formik.setSubmitting(false);
             setResult(

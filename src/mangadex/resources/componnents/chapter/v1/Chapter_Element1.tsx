@@ -13,6 +13,7 @@ import ErrorEL1 from "../../error/ErrorEL1";
 import { Link } from "react-router-dom"
 import { FaQuestionCircle } from "react-icons/fa";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 
 
@@ -20,6 +21,7 @@ export default function Chapter_Element1(props: {
     chapter: Chapter,
     downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
+    const client = useHTTPClient();
     let downloadMutation: UseMutationResult<string[], Error, void> | undefined = props.downloadMutation;
     const queryClient = useQueryClient()
     const toast = Chakra.useToast();
@@ -28,7 +30,7 @@ export default function Chapter_Element1(props: {
         downloadMutation = useMutation({
             mutationKey: "mdx-mutation-chapter-download-" + props.chapter.get_id(),
             mutationFn: () => {
-                return props.chapter.download_this();
+                return props.chapter.download_this(client);
             },
             onError(error: Error) {
                 toast({
@@ -57,13 +59,13 @@ export default function Chapter_Element1(props: {
     }
     const user_query_key = "mdx-user-" + props.chapter.get_user_id();
     const user_query = useQuery<User, Error>(user_query_key, () => {
-        return props.chapter.get_userUploader()
+        return props.chapter.get_userUploader(client)
     }, {
         staleTime: Infinity
     });
     const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
     const download_query = useQuery(is_downloaded_queryKey, () => {
-        return Chapter.is_chapter_downloaded(props.chapter.get_id());
+        return Chapter.is_chapter_downloaded(props.chapter.get_id(), client);
     }, {
         cacheTime: 1000 * 60
     });
@@ -72,7 +74,7 @@ export default function Chapter_Element1(props: {
             return {
                 queryKey: "mdx-groups-" + value,
                 queryFn: () => {
-                    return props.chapter.get_scanlation_group_byID(value);
+                    return props.chapter.get_scanlation_group_byID(value, client);
                 },
                 staleTime: Infinity
             }

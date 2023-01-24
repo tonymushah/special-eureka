@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import React from 'react';
 import { Row } from 'react-bootstrap';
+import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Offset_limits } from '../../api/internal/Utils';
 
 const CustomListSwiper = React.lazy(() => import('../../resources/componnents/lists/v1/CustomListSwiper'));
@@ -9,7 +10,6 @@ const Latest_Updates = React.lazy(() => import("./Latest_Update"));
 function Home(){
     let offset_limits_1 : Offset_limits = new Offset_limits();
     offset_limits_1.set_limits(20);
-    
     const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
     return (
         <Chakra.Box

@@ -1,6 +1,6 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import {
     Offset_limits,
     RelationshipsTypes,
@@ -279,11 +279,11 @@ export class Group extends Attribute {
         instance.set_verified(attributes.verified);
         return instance;
     }
-    public static async get_groupById(id: string): Promise<Group> {
+    public static async get_groupById(id: string, client?: Client): Promise<Group> {
         try {
             let getted: Promise<Response<any>> = Api_Request.get_methods(
                 Group.get_group_a() + id
-            );
+            , undefined, client);
             let to_use = await getted;
             return Group.build_wANY(to_use.data.data);
         } catch (error) {
@@ -297,6 +297,7 @@ export class Group extends Attribute {
         focusedLanguage,
         includes,
         order,
+        client
     }: GroupSearchType): Promise<Collection<Group>> {
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -315,7 +316,8 @@ export class Group extends Attribute {
             ),
             {
                 query: querys,
-            }
+            },
+            client
         );
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Group> = new Array<Group>(data.length);
@@ -348,44 +350,53 @@ export class Group extends Attribute {
             value.get_id()
         );
     }
-    public async getLeader(): Promise<User> {
+    public async getLeader(client?: Client): Promise<User> {
         return await User.getUserById(
-            this.get_some_relationship("leader")[0].get_id()
+            this.get_some_relationship("leader")[0].get_id(),
+            client
         );
     }
-    public async getMembers(): Promise<Array<User>> {
+    public async getMembers(client?: Client): Promise<Array<User>> {
         let members = this.get_some_relationship("member");
         let members_ = new Array<User>(members.length);
         for (let index = 0; index < members.length; index++) {
             const element = members[index];
-            members_.push(await User.getUserById(element.get_id()));
+            members_.push(await User.getUserById(element.get_id(), client));
         }
         return members_;
     }
-    public async getMemberById(id: string): Promise<User> {
+    public async getMemberById(id: string, client?: Client): Promise<User> {
         let members = this.get_some_relationship("member");
         for (let index = 0; index < members.length; index++) {
             const element = members[index];
             if (element.get_id() == id) {
-                return await User.getUserById(element.get_id());
+                return await User.getUserById(element.get_id(), client);
             }
         }
         throw new Error(
             `this user ${id} is not a member of the group ${this.get_id()}`
         );
     }
-    public async getTitle() : Promise<Collection<Manga>>{
+    public async getTitle(offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<Manga>>{
+        if(offset_Limits == undefined){
+            offset_Limits = new Offset_limits()
+        }
         return Manga.search({
-            offset_Limits : new Offset_limits(),
-            group : this.get_id()
+            offset_Limits : offset_Limits,
+            group : this.get_id(),
+            client : client
         })
     }
-    public async getFeed() : Promise<Collection<Chapter>>{
+    public async getFeed(offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<Chapter>>{
+        if(offset_Limits == undefined){
+            offset_Limits = new Offset_limits()
+        }
         return Chapter.search({
-            offset_limits: new Offset_limits(),
+            offset_limits: offset_Limits,
             group : [
                 this.get_id()
-            ]
+            ],
+            client: client
         })
     }
 }
@@ -570,7 +581,7 @@ export class Group_WithAllRelationShip extends Group {
         instance.set_verified(attributes.verified);
         return instance;
     }
-    public static async get_groupById(id: string): Promise<Group_WithAllRelationShip> {
+    public static async get_groupById(id: string, client? : Client): Promise<Group_WithAllRelationShip> {
         try {
             let getted: Promise<Response<any>> = Api_Request.get_methods(
                 Group.get_group_a() + id + "?" + 
@@ -579,7 +590,9 @@ export class Group_WithAllRelationShip extends Group {
                         "leader",
                         "member"
                     ]).build()
-                )
+                ),
+                undefined,
+                client
             );
             let to_use = await getted;
             return Group_WithAllRelationShip.build_wANY(to_use.data.data);
@@ -593,6 +606,7 @@ export class Group_WithAllRelationShip extends Group {
         ids,
         focusedLanguage,
         order,
+        client
     }: Group_WithAllRelationShip_SearchType): Promise<Collection<Group_WithAllRelationShip>> {
         let querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -616,7 +630,8 @@ export class Group_WithAllRelationShip extends Group {
             ),
             {
                 query: querys,
-            }
+            },
+            client
         );
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Group_WithAllRelationShip> = new Array<Group_WithAllRelationShip>(data.length);

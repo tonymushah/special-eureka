@@ -2,6 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Alt_title } from "../../../../api/internal/Utils";
 import { Manga } from "../../../../api/structures/Manga";
 import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
@@ -10,10 +11,11 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
     src: Manga,
     isRefetching?: boolean
 }>) {
+    const client = useHTTPClient();
     let title: string = "";
     const cover_key = "mdx-manga_cover:" + props.src.get_id();
     const coverQuery = useQuery(cover_key, () => {
-        return props.src.get_cover_art()
+        return props.src.get_cover_art(client)
     }, {
         "staleTime": Infinity
     });

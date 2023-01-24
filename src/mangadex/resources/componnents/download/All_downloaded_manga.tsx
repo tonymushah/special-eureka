@@ -7,13 +7,15 @@ import MangaElementDef_wID from "../mangas/v1/MangaElementDef_wID";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import ErrorEL1 from "../error/ErrorEL1";
 import { useToast } from "@chakra-ui/react";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 export default function AllDownlaodedMangaList() {
     const queryClient = useQueryClient();
+    const client = useHTTPClient();
     const toast = useToast();
     const query_key = "mdx-dowloaded_manga";
     const query = useQuery<Array<string>, Error>(query_key, () => {
-        return Manga.getAllDownloadedMangaID();
+        return Manga.getAllDownloadedMangaID(client);
     }, {
         staleTime : Infinity
     })
@@ -26,7 +28,7 @@ export default function AllDownlaodedMangaList() {
                 "duration" : 9000,
                 "isClosable" : true
             });
-            return Manga.patch_all_manga_cover();
+            return Manga.patch_all_manga_cover(client);
         },
         mutationKey : query_key,
         onSuccess : () => {
@@ -62,7 +64,7 @@ export default function AllDownlaodedMangaList() {
                 "duration" : 9000,
                 "isClosable" : true
             });
-            return Manga.refetch_all_manga();
+            return Manga.refetch_all_manga(client);
         },
         onSuccess : () => {
             toast({

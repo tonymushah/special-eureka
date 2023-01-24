@@ -13,14 +13,16 @@ import ErrorEL1 from "../../error/ErrorEL1";
 import { Link } from "react-router-dom"
 import { FaUser, FaUsers } from "react-icons/fa"
 import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 export default function Chapter_Element2(props: {
     chapter: Chapter,
     downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
+    const client = useHTTPClient();
     const user_query_key = "mdx-user-" + props.chapter.get_user_id();
     const user_query = useQuery<User, Error>(user_query_key, () => {
-        return props.chapter.get_userUploader()
+        return props.chapter.get_userUploader(client)
     }, {
         staleTime: Infinity
     });
@@ -29,7 +31,7 @@ export default function Chapter_Element2(props: {
             {
                 queryKey: "mdx-groups-" + value,
                 queryFn: () => {
-                    return props.chapter.get_scanlation_group_byID(value);
+                    return props.chapter.get_scanlation_group_byID(value, client);
                 },
                 staleTime: Infinity
             }
@@ -37,7 +39,7 @@ export default function Chapter_Element2(props: {
     )
     const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
     const download_query = useQuery(is_downloaded_queryKey, () => {
-        return Chapter.is_chapter_downloaded(props.chapter.get_id());
+        return Chapter.is_chapter_downloaded(props.chapter.get_id(), client);
     }, {
         cacheTime: 1000 * 60
     });
@@ -100,14 +102,14 @@ export default function Chapter_Element2(props: {
                     <Col xs={10}>
                         <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
                             <TryCatch
-                                catch={() => {
+                                catch={() => (
                                     <Chakra.LinkOverlay
                                     >
                                         Chapter {props.chapter.get_chapter()} {
                                             props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
                                         }
                                     </Chakra.LinkOverlay>
-                                }}
+                                )}
                             >
                                 <Chakra.LinkOverlay
                                     as={Link}

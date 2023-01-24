@@ -17,14 +17,16 @@ import 'swiper/css/pagination';
 import { Group } from "../../../api/structures/Group";
 import TryCatch from "../../../../commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 export default function Group_Simple_Element(props: {
     src: Group
 }) {
+    const client = useHTTPClient();
     try {
         const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
         const leader_query = useQuery(leader_queryKey, () => {
-            return props.src.getLeader();
+            return props.src.getLeader(client);
         }, {
             staleTime: Infinity
         })

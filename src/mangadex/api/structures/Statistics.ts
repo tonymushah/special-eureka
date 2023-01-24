@@ -1,4 +1,4 @@
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Querry_list_builder, serialize } from "../internal/Utils";
 import Comments from "./Comments";
@@ -73,8 +73,8 @@ export class Statistics_Manga{
         this.set_baeysian(baeysian);
         this.set_distribution(distribution);
     }
-    public static async get_statsBy_MangaID(id: string): Promise<Statistics_Manga>{
-        let responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id);
+    public static async get_statsBy_MangaID(id: string, client?: Client): Promise<Statistics_Manga>{
+        let responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id, undefined, client);
         let stats_not_TS: any = (responses.data.statistics)[id];
         let rating: any = stats_not_TS.rating;
         let instance = new Statistics_Manga(
@@ -87,9 +87,9 @@ export class Statistics_Manga{
         instance.set_comments(stats_not_TS.comments);
         return instance;
     }
-    public static async get_quick_statsBy_MangaID(id: Array<string>): Promise<Array<Statistics_Manga>>{
+    public static async get_quick_statsBy_MangaID(id: Array<string>, client?: Client): Promise<Array<Statistics_Manga>>{
         let responses: Response<any> = await Api_Request.get_methods("statistics/manga/?" + serialize((new Querry_list_builder<string>("manga", id)).build()), {
-        });
+        }, client);
         let to_return : Array<Statistics_Manga> = new Array<Statistics_Manga>(id.length);
         for (let index = 0; index < to_return.length; index++) {
             let stats_not_TS: any = (responses.data.statistics)[id[index]];

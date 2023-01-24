@@ -1,3 +1,4 @@
+import { Client } from "@tauri-apps/api/http";
 import { Offset_limits, Order } from "../../internal/Utils";
 
 export default interface GroupSearchType {
@@ -7,4 +8,5 @@ export default interface GroupSearchType {
   focusedLanguage?: Array<string>;
   includes?: string;
   order?: Order;
+  client?: Client
 }

@@ -1,3 +1,4 @@
+import { Client } from "@tauri-apps/api/http";
 import { Offset_limits, Order } from "../../internal/Utils";
 
 export default interface CoverSearchType {
@@ -8,4 +9,5 @@ export default interface CoverSearchType {
   locales?: Array<string>;
   order?: Order;
   includes?: string;
+  client? : Client;
 }

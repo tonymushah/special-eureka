@@ -3,6 +3,7 @@ import * as Chakra from "@chakra-ui/react"
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "react-query";
 import { Group } from "../../api/structures/Group";
+import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 
 const Group_Page = React.lazy(() => import("../../resources/componnents/groups/Group_Page"));
 
@@ -29,10 +30,11 @@ function Group_Page_Suspense(props : React.PropsWithChildren){
 export default function Group_Page_(){
     const { id } = useParams();
     if(id != undefined){
+        const client = useHTTPClient()
         const queryClient = useQueryClient();
         const query_key = "mdx-group-" + id;
         const query = useQuery<Group, Error>(query_key, () => {
-            return Group.get_groupById(id);
+            return Group.get_groupById(id, client);
         }, {
             staleTime : Infinity
         })

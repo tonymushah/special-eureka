@@ -24,7 +24,7 @@ export function Cover_Image_(props : Cover_Image_Props){
                 noFooter={true}
                 zoomSpeed={1}
             />
-            <Image as={Card.Img} fallback={props.fallbackImage} onClick={() => { setVisible(true); } } src={props.src}/>
+            <Image as={Card.Img} fallbackSrc={props.fallbackImage} onClick={() => { setVisible(true); } } src={props.src}/>
         </Card>
     );
 }
@@ -38,14 +38,14 @@ export function Cover_Image_2(props){
             <Viewer
                 visible={visible}
                 onClose={() => { setVisible(false); } }
-                images={[{src: to_use.get_CoverImage(), alt: "Volume " + to_use.get_volume()}]}
+                images={[{src: to_use.get_Cover_image(), alt: "Volume " + to_use.get_volume()}]}
                 noFooter={true}
                 zoomSpeed={1}
             />
             <Card.ImgOverlay className="cover-volume" onClick={() => { setVisible(true); } } onMouseOver={() => {setShow(false);}} onMouseLeave={() => {setShow(true);}}>
                 <Card.Title className="cover-volumeT cover-volume" hidden={show}>{"Volume " + to_use.get_volume()}</Card.Title>
             </Card.ImgOverlay>
-            <Card.Img className='cover-volume-img' onClick={() => { setVisible(true); } } alt={"Volume " + to_use.get_volume()} src={to_use.get_CoverImage()}/>
+            <Card.Img className='cover-volume-img' onClick={() => { setVisible(true); } } alt={"Volume " + to_use.get_volume()} src={to_use.get_Cover_image()}/>
             
         </Card>
     );

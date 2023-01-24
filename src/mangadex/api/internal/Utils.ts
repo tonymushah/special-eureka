@@ -4,7 +4,6 @@ import langs from "../../resources/json/lang.json";
 import { Chapter } from "../structures/Chapter";
 import MangaChapter_Accordion from "./utils/MangaChapter_Accordion";
 
-
 export class And_Or{
     private static AND: string = "AND";
     private static OR: string = "OR";

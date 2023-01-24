@@ -6,6 +6,7 @@ import { Manga } from "../../../../api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFallback2 from "./MangaElement2Fallback";
 import * as Chakra from "@chakra-ui/react"
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
 const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"))
@@ -14,6 +15,7 @@ const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Eleme
 export default function MangaChapterAccordion_Element(props: {
     src: MangaChapter_Accordion
 }) {
+    const client = useHTTPClient();
     const mangaID = props.src.$mangaid;
     const toast = useToast({
         position: "bottom-right"
@@ -21,7 +23,7 @@ export default function MangaChapterAccordion_Element(props: {
     const queryClient = useQueryClient();
     const key = "mdx-manga:" + mangaID;
     const query = useQuery<Manga, Error>(key, () => {
-        return Manga.getMangaByID(mangaID);
+        return Manga.getMangaByID(mangaID, client);
     }, {
         "staleTime": Infinity
     });
@@ -34,7 +36,7 @@ export default function MangaChapterAccordion_Element(props: {
                 duration: 9000,
                 isClosable: true
             });
-            return query.data!.delete_this()
+            return query.data!.delete_this(client)
         },
         onSuccess: () => {
             toast({
@@ -67,7 +69,7 @@ export default function MangaChapterAccordion_Element(props: {
                 status: "loading",
                 duration: 9000
             });
-            return Manga.download_manga(query.data!.get_id())
+            return Manga.download_manga(query.data!.get_id(), client)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({

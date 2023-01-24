@@ -7,6 +7,7 @@ import ReactHotkeys from "react-hot-keys";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import { useQuery } from "react-query";
 import { Await, Link, Outlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { useHTTPClient } from "../../commons-res/components/HTTPClientProvider";
 import Chapter_history from "../api/history/Chapter.history";
 import { Lang } from "../api/internal/Utils";
 import { Aggregate } from "../api/structures/Aggregate";
@@ -86,27 +87,28 @@ function Chapter_Reading_mode(props: {
 export default function Chapter_Page() {
     let { id } = useParams();
     const history = new Chapter_history()
+    const client = useHTTPClient()
     const query = useQuery<Chapter, Error>("mdx-chapter:" + id!, () => {
-        return Chapter.get_ChapterbyId(id!);
+        return Chapter.get_ChapterbyId(id!, client);
     }, {
         staleTime: Infinity
     })
     const mangaQuery = useQuery<Manga, Error>("mdx-manga:" + query.data?.get_manga_id(), () => {
-        return Manga.getMangaByID(query.data!.get_manga_id());
+        return Manga.getMangaByID(query.data!.get_manga_id(), client);
     }, {
         staleTime: Infinity,
         enabled: !!query.data
     })
     const chapter_aggregate_queryKey = ["mdx-agreggate", query.data?.getAggregateList_options()];
     const chapter_aggregate_query = useQuery<Aggregate, Error>(chapter_aggregate_queryKey, () => {
-        return query.data!.getAggregateList();
+        return query.data!.getAggregateList(client);
     }, {
         staleTime: 1000 * 60 * 10,
         enabled: !!query.data
     })
     const chapter_data_images_queryKey = "mdx-chapter-" + id + "-data";
     const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
-        return query.data!.get_dataImages()
+        return query.data!.get_dataImages(client)
     }, {
         staleTime: Infinity,
         enabled: !!query.data

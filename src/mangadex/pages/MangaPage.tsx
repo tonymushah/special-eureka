@@ -1,8 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
+import React, { useMemo } from "react";
 import { Container, Nav } from "react-bootstrap";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
+import { useHTTPClient } from "../../commons-res/components/HTTPClientProvider";
 import { Manga } from "../api/structures/Manga";
 import ErrorEL1 from "../resources/componnents/error/ErrorEL1";
 import { Covers_Manga } from "../resources/componnents/mangas/Mainpage/Covers_";
@@ -15,9 +16,15 @@ type MangaPage_OutletContex = {
 }
 
 function MangaPage() {
+    const client = useHTTPClient();
+    const queryClient = useQueryClient()
     let { id } = useParams();
-    const query = useQuery<Manga>("mdx-manga:" + id, () => {
-        return Manga.getMangaByID(id!);
+    const query_key = "mdx-manga:" + id;
+    useMemo<void>(() => {
+        queryClient.removeQueries(query_key);
+    }, [])
+    const query = useQuery<Manga, Error>(query_key, () => {
+        return Manga.getMangaByID(id!, client);
     }, {
         "staleTime": Infinity
     });

@@ -1,6 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Manga } from "../../../../api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementFallback from "./MangaElementFallback";
@@ -10,11 +11,12 @@ const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
 export default function MangaElementDef_wID(props: {
     mangaID: string
 }) {
+    const client = useHTTPClient();
     const toast = useToast();
     const queryClient = useQueryClient();
     const key = "mdx-manga:" + props.mangaID;
-    const query = useQuery<Manga>(key, () => {
-        return Manga.getMangaByID(props.mangaID);
+    const query = useQuery<Manga, Error>(key, () => {
+        return Manga.getMangaByID(props.mangaID, client);
     }, {
         "staleTime": Infinity
     });
@@ -27,7 +29,7 @@ export default function MangaElementDef_wID(props: {
                 duration : 9000,
                 isClosable : true
             });
-            return query.data!.delete_this()},
+            return query.data!.delete_this(client)},
         onSuccess : () => {
             toast({
                 position : "bottom-right",
@@ -66,7 +68,7 @@ export default function MangaElementDef_wID(props: {
                 status : "loading",
                 duration : 9000
             });
-            return Manga.download_manga(query.data!.get_id())
+            return Manga.download_manga(query.data!.get_id(), client)
         },
         onSuccess : () => {
             queryClient.invalidateQueries({

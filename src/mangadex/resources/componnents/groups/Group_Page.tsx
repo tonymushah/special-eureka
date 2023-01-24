@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 //import MangaList from "../../mangadex/api/tsx/MangaList";
 //import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as Chakra from "@chakra-ui/react";
@@ -16,6 +16,7 @@ import 'swiper/css/pagination';
 import { Group } from "../../../api/structures/Group";
 
 import WaveHaikei from "./wave-haikei-1.svg";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 const Group_Details = React.lazy(() => import("./Group_Details"));
 const Group_Feeds = React.lazy(() => import("./Group_Feeds"));
@@ -42,14 +43,16 @@ function Group_Page_Suspense(props: React.PropsWithChildren) {
 export default function Group_Page(props: React.PropsWithChildren<{
     src: Group
 }>) {
+    
+    const client = useHTTPClient();
     const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
     const leader_query = useQuery(leader_queryKey, () => {
-        return props.src.getLeader();
+        return props.src.getLeader(client);
     }, {
         staleTime: Infinity
     })
     return (
-        <Chakra.Box as={Container}>
+        <Chakra.Box>
             <Chakra.Box
                 height={"sm"}
                 backgroundImage={WaveHaikei}
@@ -73,30 +76,32 @@ export default function Group_Page(props: React.PropsWithChildren<{
             <Chakra.Box
                 background={"gray.200"}
             >
-                <Chakra.Tabs isLazy>
-                    <Chakra.TabList>
-                        <Chakra.Tab>Group Details</Chakra.Tab>
-                        <Chakra.Tab>Titles</Chakra.Tab>
-                        <Chakra.Tab>Feed</Chakra.Tab>
-                    </Chakra.TabList>
-                    <Chakra.TabPanels>
-                        <Chakra.TabPanel>
-                            <Group_Page_Suspense>
-                                <Group_Details src={props.src} />
-                            </Group_Page_Suspense>
-                        </Chakra.TabPanel>
-                        <Chakra.TabPanel>
-                            <Group_Page_Suspense>
-                                <Group_Titles id={props.src.get_id()} />
-                            </Group_Page_Suspense>
-                        </Chakra.TabPanel>
-                        <Chakra.TabPanel>
-                            <Group_Page_Suspense>
-                                <Group_Feeds id={props.src.get_id()} />
-                            </Group_Page_Suspense>
-                        </Chakra.TabPanel>
-                    </Chakra.TabPanels>
-                </Chakra.Tabs>
+                <Container>
+                    <Chakra.Tabs isLazy>
+                        <Chakra.TabList>
+                            <Chakra.Tab>Group Details</Chakra.Tab>
+                            <Chakra.Tab>Titles</Chakra.Tab>
+                            <Chakra.Tab>Feed</Chakra.Tab>
+                        </Chakra.TabList>
+                        <Chakra.TabPanels>
+                            <Chakra.TabPanel>
+                                <Group_Page_Suspense>
+                                    <Group_Details src={props.src} />
+                                </Group_Page_Suspense>
+                            </Chakra.TabPanel>
+                            <Chakra.TabPanel>
+                                <Group_Page_Suspense>
+                                    <Group_Titles id={props.src.get_id()} />
+                                </Group_Page_Suspense>
+                            </Chakra.TabPanel>
+                            <Chakra.TabPanel>
+                                <Group_Page_Suspense>
+                                    <Group_Feeds id={props.src.get_id()} />
+                                </Group_Page_Suspense>
+                            </Chakra.TabPanel>
+                        </Chakra.TabPanels>
+                    </Chakra.Tabs>
+                </Container>
             </Chakra.Box>
         </Chakra.Box>
     );

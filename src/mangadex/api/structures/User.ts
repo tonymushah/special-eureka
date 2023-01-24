@@ -1,4 +1,4 @@
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
 import { Attribute } from "./Attributes";
@@ -168,8 +168,8 @@ export class User extends Attribute{
         
         return instance;
     }
-    public static async getUserById(id: string): Promise<User>{
-        let getted: Response<any> = await Api_Request.get_methods("user/" + id);
+    public static async getUserById(id: string, client?: Client): Promise<User>{
+        let getted: Response<any> = await Api_Request.get_methods("user/" + id, undefined, client);
         let instance: User = User.build_wANY(getted.data.data);
         return instance;
     }
@@ -178,7 +178,8 @@ export class User extends Attribute{
             offset_Limits = new Offset_limits(),
             username,
             ids,
-            order
+            order,
+            client
         } : UserSearchType
     ): Promise<Collection<User>>{
         let querys: any = {
@@ -191,7 +192,7 @@ export class User extends Attribute{
             serialize((new Querry_list_builder("ids", ids!)).build())
         , {
             query: querys
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -210,12 +211,14 @@ export class User extends Attribute{
             offset_Limits = new Offset_limits(),
             username,
             ids,
-            order
+            order,
+            client
         } : {
             offset_Limits: Offset_limits, 
             username?: string, 
             ids?: Array<string>, 
-            order?: Order
+            order?: Order,
+            client? : Client
         }
     ): Promise<Collection<User>>{
         let querys: any = {
@@ -229,7 +232,7 @@ export class User extends Attribute{
             headers: {
                 Authorization: "Bearer " + token
             }
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {

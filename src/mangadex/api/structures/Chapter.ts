@@ -246,19 +246,19 @@ export class Chapter extends Attribute{
         }
         return new ChapterCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, props);
     }
-    public async get_groupUploaders(): Promise<Array<Group>>{
+    public async get_groupUploaders(client?: Client): Promise<Array<Group>>{
         let group_atribs: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
         let groups: Array<Group> = new Array<Group>(group_atribs.length);
         for (let index = 0; index < group_atribs.length; index++) {
             const element = group_atribs[index];
-            groups[index] = await Group.get_groupById(element.get_id());
+            groups[index] = await Group.get_groupById(element.get_id(), client);
         }
         return groups;
     }
-    public get_userUploader(): Promise<User>{
-        return User.getUserById(this.get_some_relationship(RelationshipsTypes.user())[0].get_id());
+    public get_userUploader(client?: Client): Promise<User>{
+        return User.getUserById(this.get_some_relationship(RelationshipsTypes.user())[0].get_id(), client);
     }
-    public async getAggregateList(): Promise<Aggregate>{
+    public async getAggregateList(client? : Client): Promise<Aggregate>{
         let manga_id: string = this.get_some_relationship("manga")[0].get_id();
         let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
         let groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
@@ -266,12 +266,13 @@ export class Chapter extends Attribute{
             const element = groupss[index];
             groups[index] = element.get_id();
         }
-        return Aggregate.get_aggregate(this.getAggregateList_options());
+        return Aggregate.get_aggregate(this.getAggregateList_options(client));
     }
-    public getAggregateList_options(): {
+    public getAggregateList_options(client?: Client): {
         mangaID: string, 
         translatedLanguage?: Array<string>,
-        groups? : Array<string>
+        groups? : Array<string>,
+        client? : Client
     }{
         let manga_id: string = this.get_some_relationship("manga")[0].get_id();
         let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
@@ -283,7 +284,8 @@ export class Chapter extends Attribute{
         return ({
             mangaID : manga_id, 
             translatedLanguage : [this.get_translatedLanguage()], 
-            groups: groups
+            groups: groups,
+            client: client
         });
     }
     public async get_next(aggregate_list? : Aggregate): Promise<string>{
@@ -311,79 +313,79 @@ export class Chapter extends Attribute{
     }
     public static async getAOfflineChapter(chapterID : string, client?: Client): Promise<Chapter_withAllIncludes>{
         if(await DeskApiRequest.ping() == true){
-            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`);
+            let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`, undefined, client);
             return Chapter_withAllIncludes.build_W_Any(response.data.data);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAOfflineChapter_Data(chapterID : string) : Promise<Array<string>> {
+    public static async getAOfflineChapter_Data(chapterID : string, client? : Client) : Promise<Array<string>> {
         if(await DeskApiRequest.ping() == true){
             let response : Response<{
                 data : Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data`);
+            }> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data`, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAOfflineChapter_Data_Saver(chapterID : string) : Promise<Array<string>> {
+    public static async getAOfflineChapter_Data_Saver(chapterID : string, client? : Client) : Promise<Array<string>> {
         if(await DeskApiRequest.ping() == true){
             let response : Response<{
                 data : Array<string>,
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data-saver`);
+            }> = await DeskApiRequest.get_methods(`chapter/${chapterID}/data-saver`, undefined, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async is_chapter_downloaded(chapterID : string) : Promise<boolean>{
+    public static async is_chapter_downloaded(chapterID : string, client?: Client) : Promise<boolean>{
         try {
-            await Chapter.getAOfflineChapter(chapterID);
+            await Chapter.getAOfflineChapter(chapterID, client);
             return true;
         } catch (error) {
             return false;
         }
     }
-    public async getOfflineChapter_Data_Saver() : Promise<Array<string>>{
-        return Chapter.getAOfflineChapter_Data_Saver(this.get_id());
+    public async getOfflineChapter_Data_Saver(client?: Client) : Promise<Array<string>>{
+        return Chapter.getAOfflineChapter_Data_Saver(this.get_id(), client);
     }
-    public async getOfflineChapter_Data() : Promise<Array<string>>{
-        return Chapter.getAOfflineChapter_Data(this.get_id());
+    public async getOfflineChapter_Data(client?: Client) : Promise<Array<string>>{
+        return Chapter.getAOfflineChapter_Data(this.get_id(), client);
     }
-    public static async getAOfflineChapter_Data_Image(chapterID : string, filename : string) : Promise<string> {
-        if(await DeskApiRequest.ping() == true){
+    public static async getAOfflineChapter_Data_Image(chapterID : string, filename : string, client?: Client) : Promise<string> {
+        if(await DeskApiRequest.ping(client) == true){
             return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAOfflineChapter_Data_Saver_Image(chapterID : string, filename : string) : Promise<string> {
-        if(await DeskApiRequest.ping() == true){
+    public static async getAOfflineChapter_Data_Saver_Image(chapterID : string, filename : string, client?: Client) : Promise<string> {
+        if(await DeskApiRequest.ping(client) == true){
             return DeskApiRequest.get_url() + `chapter/${chapterID}/data/${filename}`;
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public async getOfflineChapter_Data_Saver_Image(filename : string) : Promise<string>{
-        return Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), filename);
+    public async getOfflineChapter_Data_Saver_Image(filename : string, client?: Client) : Promise<string>{
+        return Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), filename, client);
     }
-    public async getOfflineChapter_Data_Image(filename : string) : Promise<string>{
-        return Chapter.getAOfflineChapter_Data_Image(this.get_id(), filename);
+    public async getOfflineChapter_Data_Image(filename : string, client?: Client) : Promise<string>{
+        return Chapter.getAOfflineChapter_Data_Image(this.get_id(), filename, client);
     }
-    public static async getAll_downloaded_chap() : Promise<Array<string>> {
-        if(await DeskApiRequest.ping() == true){
+    public static async getAll_downloaded_chap(client?: Client) : Promise<Array<string>> {
+        if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
                 result : string,
                 type : string, 
                 data : Array<string>
             }> = await DeskApiRequest.get_methods(`chapter/all`, {
                 responseType : ResponseType.JSON
-            });
+            }, client);
             return response.data.data;
         }else{
             throw new Error("The offline server isn't started");
@@ -395,8 +397,8 @@ export class Chapter extends Attribute{
     public get_manga_id() : string{
         return this.get_some_relationship("manga")[0].get_id();
     }
-    public async get_manga() : Promise<Manga>{
-        return Manga.getMangaByID(this.get_manga_id());
+    public async get_manga(client?: Client) : Promise<Manga>{
+        return Manga.getMangaByID(this.get_manga_id(), client);
     }
     public get_user_id() : string{
         return this.get_some_relationship("user")[0].get_id()
@@ -419,59 +421,59 @@ export class Chapter extends Attribute{
         }
         throw new Error("can't find your scanlation group attribute");
     }
-    public async get_scanlation_group_byID(id : string): Promise<Group>{
+    public async get_scanlation_group_byID(id : string, client? : Client): Promise<Group>{
         try {
-            return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id());
+            return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id(), client);
         } catch (error) {
             throw error
         }
     }
-    public async get_offlineDataImages() : Promise<Array<string>>{
-        let data = await Chapter.getAOfflineChapter_Data(this.get_id());
+    public async get_offlineDataImages(client?: Client) : Promise<Array<string>>{
+        let data = await Chapter.getAOfflineChapter_Data(this.get_id(), client);
         let returns : Array<string> = new Array<string>(data.length);
         for (let index = 0; index < data.length; index++) {
-            returns[index] = await Chapter.getAOfflineChapter_Data_Image(this.get_id(), data[index]);
+            returns[index] = await Chapter.getAOfflineChapter_Data_Image(this.get_id(), data[index], client);
         }
         return returns;
     }
-    public async get_offlineDataSaverImages(): Promise<Array<string>>{
-        let data = await Chapter.getAOfflineChapter_Data_Saver(this.get_id());
+    public async get_offlineDataSaverImages(client?: Client): Promise<Array<string>>{
+        let data = await Chapter.getAOfflineChapter_Data_Saver(this.get_id(), client);
         let returns : Array<string> = new Array<string>(data.length);
         for (let index = 0; index < data.length; index++) {
-            returns[index] = await Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), data[index]);
+            returns[index] = await Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), data[index], client);
         }
         return returns;
     }
-    public async get_onlineDataImages(): Promise<Array<string>>{
-        let at_home = await At_Home.getAt_Home_wChID(this.get_id());
+    public async get_onlineDataImages(client? : Client): Promise<Array<string>>{
+        let at_home = await At_Home.getAt_Home_wChID(this.get_id(), undefined, client);
         return at_home.get_data_ImgURL();
     }
-    public async get_onlineDataSaverImages(): Promise<Array<string>>{
-        let at_home = await At_Home.getAt_Home_wChID(this.get_id());
+    public async get_onlineDataSaverImages(client? : Client): Promise<Array<string>>{
+        let at_home = await At_Home.getAt_Home_wChID(this.get_id(), undefined,client);
         return at_home.get_dataSaver_ImgURL();
     }
-    public async get_dataImages(): Promise<Array<string>>{
+    public async get_dataImages(client? : Client): Promise<Array<string>>{
         try {
-            return await this.get_offlineDataImages();
+            return await this.get_offlineDataImages(client);
         } catch (error) {
             await emit("warn", {
                 payload : "Changing to online mode"
             });
-            return await this.get_onlineDataImages();
+            return await this.get_onlineDataImages(client);
         }
     }
-    public async get_dataSaverImages(): Promise<Array<string>>{
+    public async get_dataSaverImages(client?: Client): Promise<Array<string>>{
         try {
-            return await this.get_offlineDataSaverImages();
+            return await this.get_offlineDataSaverImages(client);
         } catch (error) {
             await emit("warn", {
                 payload : "Changing to online mode"
             });
-            return await this.get_onlineDataSaverImages();
+            return await this.get_onlineDataSaverImages(client);
         }
     }
-    public static async download(chapterID : string) : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async download(chapterID : string, client?: Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter", { chapterId : chapterID });
             let response_Json : {
                 result : string,
@@ -483,8 +485,8 @@ export class Chapter extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async download_data_saver(chapterID : string) : Promise<Array<string>>{
-        if(await DeskApiRequest.ping() == true){
+    public static async download_data_saver(chapterID : string, client?: Client) : Promise<Array<string>>{
+        if(await DeskApiRequest.ping(client) == true){
             let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter_data_saver_mode", { chapterId : chapterID });
             let response_Json : {
                 result : string,
@@ -496,11 +498,11 @@ export class Chapter extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public async download_this() : Promise<Array<string>>{
-        return await Chapter.download(this.get_id());
+    public async download_this(client?: Client) : Promise<Array<string>>{
+        return await Chapter.download(this.get_id(), client);
     }
-    public async download_this_data_saver() : Promise<Array<string>>{
-        return await Chapter.download_data_saver(this.get_id());
+    public async download_this_data_saver(client?: Client) : Promise<Array<string>>{
+        return await Chapter.download_data_saver(this.get_id(), client);
     }
 }
 export class Chapters{
@@ -537,15 +539,15 @@ export class Chapters{
         this.set_ids(ids);
         this.set_count(count);
     }
-    public async initialize_chapters(){
+    public async initialize_chapters(client?: Client){
         let to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
         for (let index = 0; index < to_input.length; index++) {
-            to_input[index] = await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index]);
+            to_input[index] = await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index], client);
         }
         this.set_chapters(to_input);
     }
-    public async initialize_and_get_Chapters(): Promise<Array<Chapter_withAllIncludes>>{
-        await this.initialize_chapters();
+    public async initialize_and_get_Chapters(client?: Client): Promise<Array<Chapter_withAllIncludes>>{
+        await this.initialize_chapters(client);
         return this.get_chapters();
     }
     public static build_wANY(object: any): Chapters{
@@ -743,13 +745,13 @@ export class Chapter_withAllIncludes extends Chapter{
 //        console.log("uploader builded")
         return instance;
     }
-    public static async get_ChapterbyId(id: string): Promise<Chapter_withAllIncludes> {
+    public static async get_ChapterbyId(id: string, client? : Client): Promise<Chapter_withAllIncludes> {
         let getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
                 "includes[0]" : "manga",
                 "includes[1]" : "user",
                 "includes[2]" : "scanlation_group"
             }), {
-        });
+        }, client);
         let instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
         return instance;
     }
@@ -793,7 +795,7 @@ export class Chapter_withAllIncludes extends Chapter{
             
         , {
             query: querys
-        });
+        }, props.client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(data.length);
         for (let index = 0; index < data.length; index++) {

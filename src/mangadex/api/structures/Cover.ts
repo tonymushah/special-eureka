@@ -1,4 +1,4 @@
-import { Response, ResponseType } from "@tauri-apps/api/http";
+import { Client, Response, ResponseType } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
@@ -195,33 +195,33 @@ export class Cover extends Attribute{
         
         return instance;
     }
-    public static async getOnlineByID(id: string): Promise<Cover>{
-        let getted = await Api_Request.get_methods("cover/" + id);
+    public static async getOnlineByID(id: string, client? : Client): Promise<Cover>{
+        let getted = await Api_Request.get_methods("cover/" + id, undefined, client);
         let instance = Cover.build_withAny(getted.data.data);
         return instance;
     }
     // [ ] get a cover by his id 
-    public static async getById(id: string): Promise<Cover>{
-        if(await DeskApiRequest.ping()){
+    public static async getById(id: string, client?: Client): Promise<Cover>{
+        if(await DeskApiRequest.ping(client)){
             try{
-                return await Cover.getAOfflineCover(id);
+                return await Cover.getAOfflineCover(id, client);
             }catch(e){
-                return await Cover.getOnlineByID(id);
+                return await Cover.getOnlineByID(id, client);
             }
         }else{
             return await Cover.getOnlineByID(id);
         }
     }
     // [x] get the manga relative 
-    public async get_manga_relative(): Promise<Manga>{
+    public async get_manga_relative(client?: Client): Promise<Manga>{
         try {
             for (let index = 0; index < this.get_relationships()!.length; index++) {
                 const lol = this.get_relationships()![index];
                 if(lol.get_type() == "manga"){
-                    return await Manga.getMangaByID(lol.get_id());
+                    return await Manga.getMangaByID(lol.get_id(), client);
                 }
             }
-            throw new Error("this conver has no relative Manga");
+            throw new Error("this cover has no relative Manga");
         } catch (error) {
             throw new Error("this conver has no relationships");
         }
@@ -235,16 +235,16 @@ export class Cover extends Attribute{
         public get_CoverImageOnline(): string{
             return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")![0].get_id() + "/" + this.get_file_name());
         }
-        public async get_CoverImage_thumbnail_promise(size: 256 | 512): Promise<string>{
+        public async get_CoverImage_thumbnail_promise(size: 256 | 512, client?: Client): Promise<string>{
             try {
-                return await Cover.getOfflineCoverImage(this.get_id())
+                return await Cover.getOfflineCoverImage(this.get_id(), client)
             } catch (error) {
                 return this.get_CoverImageOnline_thumbnail(size);
             }
         }
-        public async get_CoverImage_promise() : Promise<string>{
+        public async get_CoverImage_promise(client?: Client) : Promise<string>{
             try {
-                return await Cover.getOfflineCoverImage(this.get_id())
+                return await Cover.getOfflineCoverImage(this.get_id(), client)
             } catch (error) {
                 return this.get_CoverImageOnline();
             }
@@ -267,7 +267,8 @@ export class Cover extends Attribute{
             uploaders,
             locales,
             order,
-            includes
+            includes,
+            client
         }: CoverSearchType
     ): Promise<Collection<Cover>>{
         let querys: any = {
@@ -283,7 +284,7 @@ export class Cover extends Attribute{
             serialize(((new Querry_list_builder<string>("locales", locales!)).build())) 
         , {
             query: querys
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Cover> = new Array<Cover>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -299,20 +300,19 @@ export class Cover extends Attribute{
             includes : includes
         });
     }
-    public static async getAOfflineCover(coverId : string) : Promise<Cover>{
+    public static async getAOfflineCover(coverId : string, client? : Client) : Promise<Cover>{
         if(await DesktopApi.ping() == true){
-
-            let response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`);
+            let response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`, undefined, client);
             console.log(response);
             return Cover.build_withAny(response.data.data);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getOfflineCoverImage(coverId: string) : Promise<string> {
+    public static async getOfflineCoverImage(coverId: string, client?: Client) : Promise<string> {
         let resp : Response<BinaryData> = (await DesktopApi.get_methods("cover/" + coverId + "/image", {
             "responseType" : ResponseType.Binary
-        }));
+        }, client));
         if(resp.ok == true){
             return DesktopApi.get_url() + "cover/" + coverId + "/image";
         }else{

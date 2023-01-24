@@ -1,3 +1,4 @@
+import { Client } from "@tauri-apps/api/http";
 import { Offset_limits, Order } from "../../internal/Utils";
 
 export default interface MangaSearchType {
@@ -23,4 +24,5 @@ export default interface MangaSearchType {
   hasAvailableChapters?: boolean;
   latestUploadedChapter?: boolean;
   group?: string;
+  client? : Client;
 }
