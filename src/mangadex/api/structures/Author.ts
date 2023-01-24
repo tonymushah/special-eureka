@@ -1,7 +1,7 @@
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
 import { Manga } from "./Manga";
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
 import { Collection } from "./Collection";
 import AuthorSearchType from "./SearchType/Author";
@@ -234,9 +234,9 @@ export class Author extends Attribute{
     public static get_request_a():string{
         return "author/";
     }
-    public static async getAuthorById(id:string):Promise<Author>{
+    public static async getAuthorById(id:string, client? : Client):Promise<Author>{
         try{
-            let getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id);
+            let getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id, undefined, client);
             let instance: Author = Author.build_wANY(getted.data.data);
             return instance;
         }catch(error){
@@ -249,7 +249,8 @@ export class Author extends Attribute{
             name,
             ids,
             order,
-            includes
+            includes,
+            client
         } : AuthorSearchType
     ): Promise<Collection<Author>>{
         let querys: any = {
@@ -263,7 +264,7 @@ export class Author extends Attribute{
             serialize((new Querry_list_builder<string>("includes", includes!)).build())
         , {
             query: querys
-        });
+        }, client);
         let data: Array<any> = getted.data.data;
         let authorArray: Array<Author> = new Array<Author>(data.length);
         for (let index = 0; index < data.length; index++) {

@@ -1,4 +1,4 @@
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 export class Attribute{
     private id: string;
@@ -88,9 +88,9 @@ export class Attribute{
             return instance;
         }
     // [x] get an object via the attribute id and type
-    public async get_any_byTypeID(): Promise<any>{
+    public async get_any_byTypeID(client? : Client): Promise<any>{
         try {
-            let getted: Promise<Response<any>> = Api_Request.get_methods(this.get_type() + "/" + this.get_id());
+            let getted: Promise<Response<any>> = Api_Request.get_methods(this.get_type() + "/" + this.get_id(), undefined, client);
             let to_use = await getted;
             return to_use.data.data;
         } catch (error) {

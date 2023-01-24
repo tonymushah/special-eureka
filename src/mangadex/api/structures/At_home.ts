@@ -1,4 +1,4 @@
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { forEachChild } from "typescript";
 import { Api_Request } from "../internal/Api_Request";
 import { Chapter } from "./Chapter";
@@ -90,14 +90,14 @@ export class At_Home{
         }
         return instance;
     }
-    public static async getAt_Home_wChID(id: string, forcePort443?: boolean): Promise<At_Home>{
+    public static async getAt_Home_wChID(id: string, forcePort443?: boolean, client?: Client): Promise<At_Home>{
         let querys: any = {
             forcePort443: (forcePort443)
         }
         try{
             let request: Promise<Response<any>> = Api_Request.get_methods("at-home/server/" + id, {
                 query: querys
-            })
+            }, client)
             let getted: Response<any> = await request;
             return At_Home.build_wAny(getted.data);
         }catch(e){

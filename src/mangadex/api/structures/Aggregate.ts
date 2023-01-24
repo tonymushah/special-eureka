@@ -1,4 +1,4 @@
-import { Response } from "@tauri-apps/api/http";
+import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Querry_list_builder, serialize } from "../internal/Utils";
 import { Manga } from "./Manga";
@@ -62,18 +62,20 @@ export class Aggregate{
     public static async get_aggregate({
         mangaID,
         translatedLanguage,
-        groups
+        groups,
+        client
     } : {
         mangaID: string, 
         translatedLanguage?: Array<string>,
-        groups? : Array<string>
+        groups? : Array<string>,
+        client? : Client
     }): Promise<Aggregate>{
         let getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + mangaID + "/aggregate?" + 
                 serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + 
                 "&" + 
                 serialize((new Querry_list_builder("groups", groups!)).build())
-            );
+            , undefined, client);
         return Aggregate.build_wANY(getted.data.volumes);
     }
     public async getNext(id: string) : Promise<string>{

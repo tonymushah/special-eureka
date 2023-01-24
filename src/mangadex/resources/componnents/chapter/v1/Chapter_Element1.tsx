@@ -14,6 +14,8 @@ import { Link } from "react-router-dom"
 import { FaQuestionCircle } from "react-icons/fa";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
 
+
+
 export default function Chapter_Element1(props: {
     chapter: Chapter,
     downloadMutation?: UseMutationResult<string[], Error, void>

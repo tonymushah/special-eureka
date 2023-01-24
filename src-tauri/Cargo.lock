@@ -1968,7 +1968,7 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -1990,8 +1990,8 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.1.1-rc1"
-source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#2a2932d6bcbf4518d298c7db436d7f0c3e56f37d"
+version = "0.1.2"
+source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#5e1d814b776cb9956010743608cc759e149115a5"
 dependencies = [
  "actix-files",
  "actix-web",
@@ -3776,9 +3776,9 @@ checksum = "cda74da7e1a664f795bb1f8a87ec406fb89a02522cf6e50620d016add6dbbf5c"
 
 [[package]]
 name = "tokio"
-version = "1.21.2"
+version = "1.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9e03c497dc955702ba729190dc4aac6f2a0ce97f913e5b1b5912fc5039d9099"
+checksum = "597a12a59981d9e3c38d216785b0c37399f6e415e8d0712047620f189371b0bb"
 dependencies = [
  "autocfg",
  "bytes",
@@ -3791,7 +3791,7 @@ dependencies = [
  "signal-hook-registry",
  "socket2",
  "tokio-macros",
- "winapi",
+ "windows-sys 0.42.0",
 ]
 
 [[package]]

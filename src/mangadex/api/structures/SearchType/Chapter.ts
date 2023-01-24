@@ -1,3 +1,4 @@
+import { Client } from "@tauri-apps/api/http";
 import { Offset_limits, Order } from "../../internal/Utils";
 
 export default interface ChapterSearchType {
@@ -20,4 +21,5 @@ export default interface ChapterSearchType {
   publishAtSince?: string;
   order?: Order;
   includes?: string;
+  client? : Client
 }

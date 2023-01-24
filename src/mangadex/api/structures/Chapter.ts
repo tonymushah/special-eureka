@@ -1,5 +1,5 @@
 import { emit } from "@tauri-apps/api/event";
-import { Response, ResponseType } from "@tauri-apps/api/http";
+import { Client, Response, ResponseType } from "@tauri-apps/api/http";
 import { invoke } from "@tauri-apps/api/tauri";
 import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize, Lang, Languages } from "../internal/Utils";
@@ -188,17 +188,17 @@ export class Chapter extends Attribute{
         
         return instance;
     }
-    public static async get_ChapterbyId(id: string): Promise<Chapter> {
+    public static async get_ChapterbyId(id: string, client?: Client): Promise<Chapter> {
         if(await DeskApiRequest.ping() == true){
             try {
-                return await Chapter.getAOfflineChapter(id);
+                return await Chapter.getAOfflineChapter(id, client);
             } catch (error) {
-                let getted: Response<any> = await Api_Request.get_methods("chapter/" + id);
+                let getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
                 let instance: Chapter = Chapter.build_W_Any(getted.data.data);
                 return instance;
             }
         }else{
-            let getted: Response<any> = await Api_Request.get_methods("chapter/" + id);
+            let getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
             let instance: Chapter = Chapter.build_W_Any(getted.data.data);
             return instance;
         }
@@ -238,7 +238,7 @@ export class Chapter extends Attribute{
             serialize((new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build())
             , {
             query: querys
-        });
+        },props.client);
         let data: Array<any> = getted.data.data;
         let mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -309,7 +309,7 @@ export class Chapter extends Attribute{
         }
         
     }
-    public static async getAOfflineChapter(chapterID : string): Promise<Chapter_withAllIncludes>{
+    public static async getAOfflineChapter(chapterID : string, client?: Client): Promise<Chapter_withAllIncludes>{
         if(await DeskApiRequest.ping() == true){
             let response : Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`);
             return Chapter_withAllIncludes.build_W_Any(response.data.data);
