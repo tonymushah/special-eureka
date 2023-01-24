@@ -11,7 +11,9 @@ export default function MangaManagerState(){
     const query = useQuery(key, async () => {
         let getted = await DesktopApi.ping(client)
         return getted;
-    }, {})
+    }, {
+        staleTime : Infinity
+    })
     const switch_server_state = useMutation({
         "mutationFn" : () => query.data == false ? launch_server() : stop_server(),
         onSuccess: () => {
