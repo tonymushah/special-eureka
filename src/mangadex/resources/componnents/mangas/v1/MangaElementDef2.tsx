@@ -15,7 +15,82 @@ import { Statis } from "../Manga_Page";
 import MangaTitle from "./MangaTitle";
 import { FaBookmark } from "react-icons/fa";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import IsPingable from "../../IsPingable";
 
+function MangaElementDef2_Stats(props: {
+    src: Manga
+}) {
+    const client = useHTTPClient();
+    const manga_statistic_queryKey = "mdx-manga:" + props.src.get_id() + "-statistics";
+    const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
+        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
+    }, {
+        staleTime: Infinity
+    });
+    return (
+        <React.Fragment>
+            {
+                manga_statistic_query.isSuccess ? (
+                    <TryCatch
+                        catch={(error: Error) => (
+                            <Chakra.Tag>{error.message}</Chakra.Tag>
+                        )}
+                    >
+                        <Statis src={manga_statistic_query.data}>
+                            {
+                                (getted: Statistics_Manga) => (
+                                    <Chakra.Box>
+                                        <Chakra.Box display={{
+                                            base: "none",
+                                            xl: "inherit"
+                                        }}>
+                                            <Chakra.Box display={"flex"} width={"fit-content"}>
+                                                <Chakra.Text textAlign={"center"}>
+                                                    <ChakraIcons.StarIcon />
+                                                    &nbsp;
+                                                    {getted.get_average()}
+                                                </Chakra.Text>
+                                                &nbsp;
+                                                &nbsp;
+                                                <Chakra.Text textAlign={"center"}>
+                                                    <Chakra.Icon as={FaBookmark} />
+                                                    &nbsp;
+                                                    <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
+                                                </Chakra.Text>
+                                                &nbsp;
+                                                &nbsp;
+                                                <Chakra.Text textAlign={"center"}>
+                                                    <ChakraIcons.ChatIcon />
+                                                    &nbsp;
+                                                    {
+                                                        getted.get_comments() !== undefined ? (
+                                                            <>{getted.get_comments()!.repliesCount}</>
+                                                        ) : (
+                                                            <>0</>
+                                                        )
+                                                    }
+                                                </Chakra.Text>
+                                            </Chakra.Box>
+                                        </Chakra.Box>
+                                        <Chakra.Box display={{
+                                            base: "inherit",
+                                            xl: "none"
+                                        }}>
+                                            <Chakra.Tag>Stats</Chakra.Tag>
+                                        </Chakra.Box>
+                                    </Chakra.Box>
+                                )
+                            }
+                        </Statis>
+                    </TryCatch>
+
+                ) : (
+                    <Chakra.Skeleton height={"10px"} width={"20px"} />
+                )
+            }
+        </React.Fragment>
+    )
+}
 
 export default function MangaElementDef2(props: {
     src: Manga,
@@ -26,16 +101,10 @@ export default function MangaElementDef2(props: {
     update?: Function
 }) {
     const client = useHTTPClient();
-    const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
+    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     })
-    const manga_statistic_queryKey = "mdx-manga-" + props.src.get_id() + "-statistics";
-    const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
-        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
-    }, {
-        staleTime: Infinity
-    });
     const card_maxHeight: Chakra.ResponsiveValue<any> = {
         base: "10em"
     }
@@ -111,65 +180,16 @@ export default function MangaElementDef2(props: {
                                     <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 </Link>
                             </TryCatch>
-                            {
-                                manga_statistic_query.isSuccess ? (
-                                    <TryCatch
-                                        catch={(error: Error) => (
-                                            <Chakra.Tag>{error.message}</Chakra.Tag>
-                                        )}
-                                    >
-                                        <Statis src={manga_statistic_query.data}>
-                                            {
-                                                (getted: Statistics_Manga) => (
-                                                    <Chakra.Box>
-                                                        <Chakra.Box display={{
-                                                            base: "none",
-                                                            xl: "inherit"
-                                                        }}>
-                                                            <Chakra.Box display={"flex"} width={"fit-content"}>
-                                                                <Chakra.Text textAlign={"center"}>
-                                                                    <ChakraIcons.StarIcon />
-                                                                    &nbsp;
-                                                                    {getted.get_average()}
-                                                                </Chakra.Text>
-                                                                &nbsp;
-                                                                &nbsp;
-                                                                <Chakra.Text textAlign={"center"}>
-                                                                    <Chakra.Icon as={FaBookmark} />
-                                                                    &nbsp;
-                                                                    <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
-                                                                </Chakra.Text>
-                                                                &nbsp;
-                                                                &nbsp;
-                                                                <Chakra.Text textAlign={"center"}>
-                                                                    <ChakraIcons.ChatIcon />
-                                                                    &nbsp;
-                                                                    {
-                                                                        getted.get_comments() !== undefined ? (
-                                                                            <>{getted.get_comments()!.repliesCount}</>
-                                                                        ) : (
-                                                                            <>0</>
-                                                                        )
-                                                                    }
-                                                                </Chakra.Text>
-                                                            </Chakra.Box>
-                                                        </Chakra.Box>
-                                                        <Chakra.Box display={{
-                                                            base: "inherit",
-                                                            xl: "none"
-                                                        }}>
-                                                            <Chakra.Tag>Stats</Chakra.Tag>
-                                                        </Chakra.Box>
-                                                    </Chakra.Box>
-                                                )
-                                            }
-                                        </Statis>
-                                    </TryCatch>
-
-                                ) : (
-                                    <Chakra.Skeleton height={"10px"} width={"20px"} />
-                                )
-                            }
+                            <IsPingable
+                                client={client}
+                                onError={() => (
+                                    <></>
+                                )}
+                                onSuccess={() => (
+                                    <MangaElementDef2_Stats src={props.src}/>
+                                )}
+                                onLoading={<Chakra.Skeleton height={"10px"} width={"20px"} />}
+                            />
                             <Chakra.Text
                                 padding={0}
                                 margin={0}

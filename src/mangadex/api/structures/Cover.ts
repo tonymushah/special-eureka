@@ -202,14 +202,14 @@ export class Cover extends Attribute{
     }
     // [ ] get a cover by his id 
     public static async getById(id: string, client?: Client): Promise<Cover>{
-        if(await DeskApiRequest.ping(client)){
+        if(await DeskApiRequest.ping(client) == true){
             try{
                 return await Cover.getAOfflineCover(id, client);
             }catch(e){
                 return await Cover.getOnlineByID(id, client);
             }
         }else{
-            return await Cover.getOnlineByID(id);
+            return await Cover.getOnlineByID(id, client);
         }
     }
     // [x] get the manga relative 
@@ -301,7 +301,7 @@ export class Cover extends Attribute{
         });
     }
     public static async getAOfflineCover(coverId : string, client? : Client) : Promise<Cover>{
-        if(await DesktopApi.ping() == true){
+        if(await DesktopApi.ping(client) == true){
             let response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`, undefined, client);
             console.log(response);
             return Cover.build_withAny(response.data.data);

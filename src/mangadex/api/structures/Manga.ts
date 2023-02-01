@@ -1,4 +1,4 @@
-import { Client, Response } from "@tauri-apps/api/http";
+import { Client, getClient, Response, ResponseType } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Attribute } from "./Attributes";
 import { Cover } from "./Cover";
@@ -63,6 +63,193 @@ class MangaCollection extends Collection<Manga>{
         });
         
     }
+}
+
+class AllDownloadedMangaCollection extends Collection<string>{
+    private client: Client;
+    /**
+     * Getter $client
+     * @return {Client}
+     */
+	public get $client(): Client {
+		return this.client;
+	}
+
+    /**
+     * Setter $client
+     * @param {Client} value
+     */
+	public set $client(value: Client) {
+		this.client = value;
+	}
+    constructor(params:{data: Array<string>, limit: number, offset: number, total: number}, client: Client) {
+        super(params.data, params.limit, params.offset, params.total);
+        this.$client = client;
+    }
+    public next(): Promise<Collection<string>> {
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                resolve(Manga.getAllOfflineMangaID(current_offset_limits, this.$client));
+            }else{
+                reject(new Error("no next page"));
+            }
+        });
+    }
+    public previous(): Promise<Collection<string>> {
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                resolve(Manga.getAllOfflineMangaID(current_offset_limits, this.$client));
+            }else{
+                reject(new Error("no previous page"));
+            }
+        });
+    }
+}
+
+class AllDownloadedChap_Of_aMangaCollection extends Collection<string>{
+    private client: Client;
+    private manga_id: string;
+
+    /**
+     * Getter $manga_id
+     * @return {string}
+     */
+	public get $manga_id(): string {
+		return this.manga_id;
+	}
+
+    /**
+     * Setter $manga_id
+     * @param {string} value
+     */
+	public set $manga_id(value: string) {
+		this.manga_id = value;
+	}
+
+    /**
+     * Getter $client
+     * @return {Client}
+     */
+	public get $client(): Client {
+		return this.client;
+	}
+
+    /**
+     * Setter $client
+     * @param {Client} value
+     */
+	public set $client(value: Client) {
+		this.client = value;
+	}
+    constructor(params:{data: Array<string>, limit: number, offset: number, total: number}, manga_id: string ,client: Client) {
+        super(params.data, params.limit, params.offset, params.total);
+        this.$client = client;
+        this.$manga_id = manga_id;
+    }
+    public next(): Promise<Collection<string>> {
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                resolve(Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, current_offset_limits, this.client));
+            }else{
+                reject(new Error("no next page"));
+            }
+        });
+    }
+    public previous(): Promise<Collection<string>> {
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                resolve(Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, current_offset_limits, this.client));
+            }else{
+                reject(new Error("no previous page"));
+            }
+        });
+    }
+    
+}
+
+class AllDownloadedCover_Of_aMangaCollection extends Collection<string>{
+    private client: Client;
+    private manga_id: string;
+
+    /**
+     * Getter $manga_id
+     * @return {string}
+     */
+	public get $manga_id(): string {
+		return this.manga_id;
+	}
+
+    /**
+     * Setter $manga_id
+     * @param {string} value
+     */
+	public set $manga_id(value: string) {
+		this.manga_id = value;
+	}
+
+    /**
+     * Getter $client
+     * @return {Client}
+     */
+	public get $client(): Client {
+		return this.client;
+	}
+
+    /**
+     * Setter $client
+     * @param {Client} value
+     */
+	public set $client(value: Client) {
+		this.client = value;
+	}
+    constructor(params:{data: Array<string>, limit: number, offset: number, total: number}, manga_id: string ,client: Client) {
+        super(params.data, params.limit, params.offset, params.total);
+        this.$client = client;
+        this.$manga_id = manga_id;
+    }
+    public next(): Promise<Collection<string>> {
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                resolve(Manga.getAllDownloadedCover_ofAManga(this.$manga_id, current_offset_limits, this.client));
+            }else{
+                reject(new Error("no next page"));
+            }
+        });
+    }
+    public previous(): Promise<Collection<string>> {
+        return new Promise((resolve, reject) => {
+            let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                resolve(Manga.getAllDownloadedCover_ofAManga(this.$manga_id, current_offset_limits, this.client));
+            }else{
+                reject(new Error("no previous page"));
+            }
+        });
+    }
+    
 }
 
 export class Manga extends Attribute{
@@ -261,7 +448,7 @@ export class Manga extends Attribute{
             
         }
         
-        instance.set_avaible_language(attributes.availableLanguage);
+        instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.contentRating);
         instance.set_demographic(attributes.publicationDemographic);
@@ -292,7 +479,7 @@ export class Manga extends Attribute{
             tags
         );
         //instance.set_relationships_Wany(relationships);
-        instance.set_avaible_language(attributes.avaible_language);
+        instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.content_rating);
         instance.set_related(object.related);
@@ -409,7 +596,8 @@ export class Manga extends Attribute{
             includes : includes,
             hasAvailableChapters : hasAvailableChapters,
             latestUploadedChapter : latestUploadedChapter,
-            group : group
+            group : group,
+            client : client
         });
     }
     public async get_author(client? : Client): Promise<Array<Author>>{
@@ -842,7 +1030,7 @@ export class Manga extends Attribute{
         }
     }
     public static async getMangaByID(id: string, client? : Client): Promise<Manga>{
-        if(await DeskApiRequest.ping(client)){
+        if(await DeskApiRequest.ping(client) == true){
             try{
                 return await Manga.getOfflineMangaByID(id, client);
             }catch(e){
@@ -860,62 +1048,97 @@ export class Manga extends Attribute{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllOfflineMangaID(client?: Client) : Promise<Array<string>>{
+    public static async getAllOfflineMangaID(offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<string>>{
+        if(offset_Limits == undefined){
+            offset_Limits = new Offset_limits();
+        }
+        if(client == undefined){
+            client = await getClient();
+        }
         if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
-                data : Array<string>,
+                data : {
+                    data: Array<string>,
+                    offset: number,
+                    limit: number,
+                    total: number
+                },
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`mangas/all`, undefined, client);
-            return response.data.data;
+            }> = await DeskApiRequest.get_methods(`manga`, {
+                query : {
+                    offset: JSON.stringify(offset_Limits.get_offset()),
+                    limit: JSON.stringify(offset_Limits.get_limits())
+                }
+            }, client);
+            return new AllDownloadedMangaCollection(response.data.data, client);
+        }else{
+            throw new Error("The offline server isn't started");
+        }
+        
+    }
+    public static async getAllDownloadedChapters_ofAManga(mangaId : string, offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<string>>{
+        if(offset_Limits == undefined){
+            offset_Limits = new Offset_limits();
+        }
+        if(client == undefined){
+            client = await getClient();
+        }
+        if(await DeskApiRequest.ping(client) == true){
+            let response : Response<{
+                data : {
+                    data: Array<string>,
+                    offset: number,
+                    limit: number,
+                    total: number
+                },
+                result : string,
+                type : string
+            }> = await DeskApiRequest.get_methods(`manga/${mangaId}/chapters`, {
+                query : {
+                    offset: JSON.stringify(offset_Limits.get_offset()),
+                    limit: JSON.stringify(offset_Limits.get_limits())
+                }
+            }, client);
+            return new AllDownloadedChap_Of_aMangaCollection(response.data.data, mangaId, client);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllDownloadedChapters_ofAManga(mangaId : string, client?: Client) : Promise<Array<string>>{
+    public async getAllDownloadedChapters(offset_Limits? : Offset_limits,client? : Client) : Promise<Collection<string>>{
         if(await DeskApiRequest.ping(client) == true){
-            let response : Response<{
-                data : Array<string>,
-                result : string,
-                type : string
-            }> = await DeskApiRequest.get_methods(`manga/${mangaId}/chapters`, undefined, client);
-            return response.data.data;
+            return Manga.getAllDownloadedChapters_ofAManga(this.get_id(), offset_Limits, client);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
-    public async getAllDownloadedChapters(client? : Client) : Promise<Array<string>>{
+    public static async getAllDownloadedMangaID(offset_Limits?: Offset_limits,client? : Client): Promise<Collection<string>>{
+        return await Manga.getAllOfflineMangaID(offset_Limits, client);
+    }
+    public static async getAllDownloadedCover_ofAManga(manga_id: string, offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<string>>{
+        if(offset_Limits == undefined){
+            offset_Limits = new Offset_limits();
+        }
+        if(client == undefined){
+            client = await getClient();
+        }
         if(await DeskApiRequest.ping(client) == true){
             let response : Response<{
-                data : Array<string>,
+                data : {
+                    data: Array<string>,
+                    offset: number,
+                    limit: number,
+                    total: number
+                },
                 result : string,
                 type : string
-            }> = await DeskApiRequest.get_methods(`manga/${this.get_id()}/chapters`, undefined, client);
-            return response.data.data;
-        }else{
-            throw new Error("The offline server isn't started");
-        }
-    }
-    public static async getAllDownloadedMangaID(client? : Client): Promise<Array<string>>{
-        if((await DeskApiRequest.ping(client)) == true){
-            let resp : Response<{
-                data: Array<string>,
-                result : string,
-                type : string
-            }> = await DeskApiRequest.get_methods("mangas/all", undefined, client);
-            return resp.data.data;
-        }else{
-            return [];
-        }
-    }
-    public static async getAllDownloadedCover_ofAManga(mangaID : string, client? : Client) : Promise<Array<string>>{
-        if(await DeskApiRequest.ping(client) == true){
-            let response : Response<{
-                data : Array<string>,
-                result : string,
-                type : string
-            }> = await DeskApiRequest.get_methods(`manga/${mangaID}/covers`, undefined, client);
-            return response.data.data;
+            }> = await DeskApiRequest.get_methods(`manga/${manga_id}/chapters`, {
+                query : {
+                    offset: JSON.stringify(offset_Limits.get_offset()),
+                    limit: JSON.stringify(offset_Limits.get_limits())
+                }
+            }, client);
+            return new AllDownloadedCover_Of_aMangaCollection(response.data.data, manga_id, client);
         }else{
             throw new Error("The offline server isn't started");
         }
@@ -1120,7 +1343,7 @@ export class Manga_2 extends Manga{
             tags
         );
         //instance.set_relationships_Wany(relationships);
-        instance.set_avaible_language(attributes.availableLanguage);
+        instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.contentRating);
         instance.set_demographic(attributes.publicationDemographic);
@@ -1290,7 +1513,7 @@ export class Manga_with_allRelationship extends Manga {
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
         } catch (error) {}
-        instance.set_avaible_language(attributes.availableLanguage);
+        instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.contentRating);
         instance.set_demographic(attributes.publicationDemographic);

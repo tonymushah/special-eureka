@@ -1,5 +1,6 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
+import { useQuery } from "@chakra-ui/react";
 import { useFormik } from 'formik';
 import React from 'react';
 import { Modal } from 'react-bootstrap';
@@ -8,7 +9,9 @@ import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProv
 import { Offset_limits } from '../../../api/internal/Utils';
 import { Collection } from '../../../api/structures/Collection';
 import { Manga } from '../../../api/structures/Manga';
+import MangaSearchType from "../../../api/structures/SearchType/Manga";
 import { ErrorELAsync1 } from '../Error_cmp';
+import IsPingable from "../IsPingable";
 import MangaElementFallback from '../mangas/v1/MangaElementFallback';
 
 type Modal_SearchProps = {
@@ -16,10 +19,9 @@ type Modal_SearchProps = {
     onHide: () => void
 }
 
-const MangaElementDef = React.lazy(() => import('../mangas/v1/MangaElementDef'))
+const MangaElementDef = React.lazy(() => import('../mangas/v1/MangaElementDef'));
 
 export default function Modal_Search(props: Modal_SearchProps) {
-    const ref1 = React.createRef<HTMLDivElement>();
     const client = useHTTPClient();
     const [result, setResult] = React.useState(<></>);
     const build = (array: Array<Manga>) => {
@@ -28,9 +30,9 @@ export default function Modal_Search(props: Modal_SearchProps) {
             const element = array[index];
             builded[index] = (
                 <React.Suspense
-                    fallback={<MangaElementFallback/>}
+                    fallback={<MangaElementFallback />}
                 >
-                    <MangaElementDef src={element}/>
+                    <MangaElementDef src={element} />
                 </React.Suspense>
             )
         }
@@ -46,36 +48,62 @@ export default function Modal_Search(props: Modal_SearchProps) {
             let promise = Manga.search({
                 offset_Limits: offset_limits_1,
                 title: values.title,
-                client : client
+                client: client
             });
             formik.setSubmitting(false);
             setResult(
-                <React.Suspense
-                    fallback={
+                <IsPingable
+                    client={client}
+                    onError={
+                        (query) => (
+                            <Chakra.Alert>
+                                <Chakra.AlertIcon />
+                                <Chakra.AlertTitle>Can't access to MangaDex website</Chakra.AlertTitle>
+                                <Chakra.AlertDescription>
+                                    <Chakra.Button
+                                        colorScheme={"orange"}
+                                        onClick={() => query.refetch()}
+                                    >Refresh</Chakra.Button>
+                                </Chakra.AlertDescription>
+                            </Chakra.Alert>
+                        )
+                    }
+                    onSuccess={() => (
+                        <React.Suspense
+                            fallback={
+                                <Chakra.Center>
+                                    <Chakra.Spinner
+                                        size={"xl"}
+                                    />
+                                </Chakra.Center>
+                            }
+                        >
+                            <Await
+                                resolve={promise}
+                                errorElement={
+                                    <ErrorELAsync1 />
+                                }
+                            >
+                                {(getted0: Collection<Manga>) => {
+                                    return (
+                                        <Chakra.Box>
+                                            {
+                                                build(getted0.get_data())
+                                            }
+                                        </Chakra.Box>
+                                    )
+                                }}
+                            </Await>
+                        </React.Suspense>
+                    )}
+                    onLoading={
                         <Chakra.Center>
                             <Chakra.Spinner
                                 size={"xl"}
                             />
                         </Chakra.Center>
                     }
-                >
-                    <Await
-                        resolve={promise}
-                        errorElement={
-                            <ErrorELAsync1 />
-                        }
-                    >
-                        {(getted0: Collection<Manga>) => {
-                            return (
-                                <Chakra.Box>
-                                    {
-                                        build(getted0.get_data())
-                                    }
-                                </Chakra.Box>
-                            )
-                        }}
-                    </Await>
-                </React.Suspense>
+                />
             )
         }
     })

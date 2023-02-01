@@ -1,9 +1,9 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import All_downloaded_chapter from "../../resources/componnents/download/All_downloaded_chapter";
 
 const AllDownlaodedMangaConsumer = React.lazy(() => import("../../resources/componnents/download/All_downloaded_Manga_Consumer"));
 const MangaListByArrayMangaID = React.lazy(() => import("../../resources/componnents/mangas/v1/MangaListByArrayMangaID"));
+const All_downloaded_chapter = React.lazy(() => import("../../resources/componnents/download/All_downloaded_chapter"));
 
 export default function Download_Index_Page() {
     return (
@@ -46,7 +46,15 @@ export default function Download_Index_Page() {
 
                     </Chakra.TabPanel>
                     <Chakra.TabPanel>
-                        <All_downloaded_chapter />
+                        <React.Suspense
+                            fallback={
+                                <Chakra.Box>
+                                    <Chakra.Text>Loading...</Chakra.Text>
+                                </Chakra.Box>
+                            }
+                        >
+                            <All_downloaded_chapter />
+                        </React.Suspense>
                     </Chakra.TabPanel>
                 </Chakra.TabPanels>
             </Chakra.Tabs>

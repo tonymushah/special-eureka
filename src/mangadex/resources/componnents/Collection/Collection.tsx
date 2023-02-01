@@ -6,7 +6,7 @@ import { Attribute } from "../../../api/structures/Attributes";
 import { Collection } from "../../../api/structures/Collection";
 import ErrorEL1 from "../error/ErrorEL1";
 
-export function UseCollection<T extends Attribute>(props: {
+export function UseCollection<T>(props: {
     src: Collection<T>,
     children: (value: Collection<T>) => React.ReactNode
 }) {
@@ -20,7 +20,7 @@ export function UseCollection<T extends Attribute>(props: {
     )
 }
 
-export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
+export function CollectionComponnent_WithQuery<T>(props: {
     fn: () => Promise<Collection<T>>,
     children: (value: Collection<T>) => React.ReactNode,
     queryKey: QueryKey,
@@ -112,7 +112,31 @@ export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
             })
         },
     });
-    if (search_query.isLoading) {
+    if (next.isLoading || previous.isLoading) {
+        return (
+            <Box>
+                <Box>
+                    <Center>
+                        {
+                            next.isLoading ? (
+                                <Text>Loading next page ...</Text>
+                            ) : (
+                                <></>
+                            )
+                        }
+                        {
+                            previous.isLoading ? (
+                                <Text>Loading previous page...</Text>
+                            ) : (
+                                <></>
+                            )
+                        }
+                    </Center>
+                </Box>
+            </Box>
+        );
+    }
+    if (search_query.isLoading || search_query.isRefetching) {
         if (props.onLoading != undefined) {
             return (<>
                 {
@@ -138,24 +162,6 @@ export function CollectionComponnent_WithQuery<T extends Attribute>(props: {
     }
     return (
         <Box>
-            <Box>
-                <Center>
-                    {
-                        next.isLoading ? (
-                            <Text>Loading next page ...</Text>
-                        ) : (
-                            <></>
-                        )
-                    }
-                    {
-                        previous.isLoading ? (
-                            <Text>Loading previous page...</Text>
-                        ) : (
-                            <></>
-                        )
-                    }
-                </Center>
-            </Box>
             <Box>
                 <UseCollection<T> src={search_query.data!}>
                     {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Manga } from "../../../../api/structures/Manga";
 import { Accordion, Spinner, Button, Container, Row, Col, Placeholder } from "react-bootstrap";
-import { Lang_and_Data, make_first_UpperCare, MangaLinksData } from "../../../../api/internal/Utils";
+import { Lang, Languages, Lang_and_Data, make_first_UpperCare, MangaLinksData } from "../../../../api/internal/Utils";
 import { Author } from "../../../../api/structures/Author";
 import "flag-icons/css/flag-icons.min.css";
 import { Await } from "react-router-dom";
@@ -17,6 +17,11 @@ import { ErrorELAsync } from "../../Error_cmp";
 import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
 import { useQueries, useQuery, useQueryClient } from "react-query";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { Client } from "@tauri-apps/api/http";
+import ErrorEL1 from "../../error/ErrorEL1";
+import IsPingable from "../../IsPingable";
+
+const All_downloaded_Chapter_manga = React.lazy(() => import("../../download/All_downloaded_Chapter_manga"))
 
 function CollapseHeight(props: React.PropsWithChildren) {
     const [show, setShow] = React.useState(false)
@@ -62,7 +67,7 @@ function CollapseHeight(props: React.PropsWithChildren) {
 function Top_Chaps_Desc_Part(props: {
     src: Manga
 }) {
-    const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
+    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     });
@@ -77,6 +82,9 @@ function Top_Chaps_Desc_Part(props: {
         );
     }
     if (manga_description_query.isSuccess) {
+        if (manga_description_query.data.length == 0) {
+            return (<></>);
+        }
         return (
             <Accordion>
                 <Accordion.Item eventKey="0">
@@ -141,7 +149,7 @@ function Author_Artists(props: {
     const authors = useQueries(
         props.src.get_authors_id().map(author_id => {
             return {
-                queryKey: "mdx-author-" + author_id,
+                queryKey: "mdx-author:" + author_id,
                 queryFn: () => {
                     return props.src.get_author_byID(author_id, client_);
                 },
@@ -152,7 +160,7 @@ function Author_Artists(props: {
     const artistists = useQueries(
         props.src.get_artists_id().map(author_id => {
             return {
-                queryKey: "mdx-author-" + author_id,
+                queryKey: "mdx-author:" + author_id,
                 queryFn: () => {
                     return props.src.get_artist_byID(author_id, client_);
                 },
@@ -206,36 +214,189 @@ type MangaPageProps = {
     src: Manga
 }
 
+function Manga_Page_Aggregate(props: {
+    src: Manga,
+    to_see_lang?: Array<string>,
+    to_use_groups?: Array<string>
+}) {
+    const client: Client = useHTTPClient();
+    const aggregate_list_option: {
+        mangaID: string,
+        translatedLanguage?: Array<string>,
+        groups?: Array<string>,
+        client?: Client
+    } = {
+        mangaID: props.src.get_id(),
+        translatedLanguage: props.to_see_lang,
+        client: client
+    }
+    const queryKey = ["mdx-aggregate", aggregate_list_option]
+    const query = useQuery<Aggregate, Error>(queryKey, () => {
+        return Aggregate.get_aggregate(aggregate_list_option);
+    }, {
+        staleTime: Infinity
+    });
+    if (query.isRefetching == true && query.isLoading) {
+        return (
+            <Chakra.Box m={2} bg="inherit">
+                <div className=" text-center">
+                    <Spinner
+                        animation="border"
+                    ></Spinner>
+                    <br />
+                    <p>Loading chapters ...</p>
+                </div>
+            </Chakra.Box>
+        )
+    }
+    if (query.isSuccess) {
+        return (
+            <Aggregate_part
+                src={query.data}
+            />
+        )
+    }
+    if (query.isError) {
+        return (
+            <ErrorEL1
+                error={query.error}
+            />
+        )
+    }
+    return (
+        <Chakra.Box m={2} bg="inherit">
+            <div className=" text-center">
+                <Spinner
+                    animation="border"
+                ></Spinner>
+                <br />
+                <p>Loading chapters ...</p>
+            </div>
+        </Chakra.Box>
+    )
+}
+
+function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
+    const [to_see_lang, setTo_see_lang] = React.useState<string | undefined>(undefined);
+    const query = useQuery<Languages, Error>("mdx-lang", () => {
+        return Languages.initialize()
+    }, {
+        staleTime: Infinity
+    })
+    if (query.isLoading == true && query.isRefetching) {
+        return (
+            <Chakra.Box m={2} bg="inherit">
+                <div className=" text-center">
+                    <Spinner
+                        animation="border"
+                    ></Spinner>
+                    <br />
+                    <p>Loading chapters ...</p>
+                </div>
+            </Chakra.Box>
+        )
+    }
+    if (query.isError) {
+        return (
+            <ErrorEL1
+                error={query.error}
+            />
+        )
+    }
+    if (query.isSuccess) {
+        return (
+            <Chakra.Box>
+                <Chakra.HStack>
+                    <Chakra.Text>Language</Chakra.Text>
+                    <Chakra.Menu>
+                        <Chakra.MenuButton>
+                            <Chakra.Button>{
+                                to_see_lang == undefined ? "All" : (
+                                    <>
+                                        <Chakra.Box height={"fit-content"} className={"fi fi-" + query.data.getLang_byTwo_letter(to_see_lang).get_flag_icon().toLowerCase()} />
+                                        {
+                                            query.data.getLang_byTwo_letter(to_see_lang).get_name()
+                                        }
+                                    </>
+                                )
+                            }
+                            </Chakra.Button>
+                        </Chakra.MenuButton>
+                        <Chakra.MenuList>
+                            {
+                                props.src.get_avaible_language().map((value) => (
+                                    <Chakra.MenuItem
+                                        onClick={() => setTo_see_lang(value)}
+                                    >{
+                                            <>
+                                                <Chakra.Box height={"fit-content"} className={"fi fi-" + query.data.getLang_byTwo_letter(value).get_flag_icon().toLowerCase()} />
+                                                {
+                                                    query.data.getLang_byTwo_letter(value).get_name()
+                                                }
+                                            </>
+                                        }</Chakra.MenuItem>
+                                ))
+                            }
+                        </Chakra.MenuList>
+                    </Chakra.Menu>
+                </Chakra.HStack>
+                <Chakra.Box>
+                    <Manga_Page_Aggregate
+                        src={props.src}
+                        to_see_lang={to_see_lang == undefined ? undefined : [to_see_lang]}
+                    />
+                </Chakra.Box>
+            </Chakra.Box>
+        )
+    }
+    return (
+        <Chakra.Box m={2} bg="inherit">
+            <div className=" text-center">
+                <Spinner
+                    animation="border"
+                ></Spinner>
+                <br />
+                <p>Loading chapters ...</p>
+            </div>
+        </Chakra.Box>
+    )
+}
+
 function Online_Chapter(props: MangaPageProps) {
-    const client = useHTTPClient()
+    const client = useHTTPClient();
     return (
         <Chakra.TabPanel>
             <Container>
-
-                <React.Suspense fallback={
-                    <Chakra.Box m={2} bg="inherit">
-                        <div className=" text-center">
-                            <Spinner
-                                animation="border"
-                            ></Spinner>
-                            <br />
-                            <p>Loading chapters ...</p>
-                        </div>
-                    </Chakra.Box>
-                }>
-                    <Await
-                        resolve={props.src.aggregate_1_get(undefined, undefined, client)}
-                        errorElement={
-                            <ErrorELAsync />
-                        }
-                        children={(getted: Aggregate) => {
-                            return (<Aggregate_part src={getted} />);
-                        }}
-                    />
-                </React.Suspense>
-
+                <IsPingable
+                    client={client}
+                    onError={(query) => (
+                        <Chakra.Alert status="error">
+                            <Chakra.AlertIcon />
+                            <Chakra.AlertTitle>Can't ping the Mangadex API</Chakra.AlertTitle>
+                            <Chakra.AlertDescription>
+                                <Chakra.Button onClick={() => query.refetch()} colorScheme={"orange"}>Refresh</Chakra.Button>
+                            </Chakra.AlertDescription>
+                        </Chakra.Alert>
+                    )}
+                    onSuccess={(query) => (
+                        <Online_Chapter_Lang_Chooser
+                            src={props.src}
+                        />
+                    )}
+                    onLoading={
+                        <Chakra.Box m={2} bg="inherit">
+                            <div className=" text-center">
+                                <Spinner
+                                    animation="border"
+                                ></Spinner>
+                                <br />
+                                <p>Loading chapters ...</p>
+                            </div>
+                        </Chakra.Box>
+                    }
+                />
             </Container>
-        </Chakra.TabPanel>
+        </Chakra.TabPanel >
     )
 }
 
@@ -243,6 +404,7 @@ function Offline_Chapters(props: MangaPageProps) {
     const client = useHTTPClient()
     return (
         <Chakra.TabPanel>
+
             <React.Suspense
                 fallback={
                     <Chakra.Box m={2} bg="inherit">
@@ -256,11 +418,8 @@ function Offline_Chapters(props: MangaPageProps) {
                     </Chakra.Box>
                 }
             >
-                <Await
-                    resolve={props.src.getAllDownloadedChapters(client)}
-                    errorElement={
-                        <ErrorELAsync />
-                    }
+                <All_downloaded_Chapter_manga
+                    mangaID={props.src.get_id()}
                 >
                     {(getted: Array<string>) => (
                         <Chakra.VStack>
@@ -271,7 +430,7 @@ function Offline_Chapters(props: MangaPageProps) {
                             }
                         </Chakra.VStack>
                     )}
-                </Await>
+                </All_downloaded_Chapter_manga>
             </React.Suspense>
         </Chakra.TabPanel>
     )

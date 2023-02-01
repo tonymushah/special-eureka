@@ -9,6 +9,7 @@ import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
 import "../commons-res/fontawesome-free-6.1.2-web/css/all.css"
 import { Offset_limits } from "./api/internal/Utils";
+import { useHTTPClient } from "../commons-res/components/HTTPClientProvider";
 
 const MangaPage = React.lazy(() => import("./pages/MangaPage"));
 
@@ -53,6 +54,7 @@ const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
 
 const Group_Search = React.lazy(() => import("./pages/groups/search"));
 
+
 export function Mangadex_suspense(props: React.PropsWithChildren) {
     return (
         <React.Suspense
@@ -80,19 +82,48 @@ export function Mangadex_suspense(props: React.PropsWithChildren) {
 
 function useMangadexRouter(): RouteObject {
     const MangaDexPath: string = "/mangadex";
+    const Random_Manga = React.lazy(async () => {
+        function random_manga() {
+            const client = useHTTPClient()
+            return (
+                <Mangadex_suspense>
+                    <Await
+                        resolve={Manga.getRandom(client)}
+                        errorElement={<ErrorELAsync1 />}
+                    >
+                        {(getted1: Manga) => {
+                            let navigate = useNavigate();
+                            React.useEffect(() => {
+                                navigate(MangaDexPath + "/manga/" + getted1.get_id())
+                            });
+                            return (<></>);
+                        }}
+                    </Await>
+                </Mangadex_suspense>
+            )
+        }
+        return {
+            default: random_manga
+        }
+    })
 
     const Router: RouteObject = {
         path: MangaDexPath,
         element: (
             <React.Suspense
                 fallback={
-                    <Chakra.AbsoluteCenter>
-                        <Chakra.Spinner
-                            size="xl"
-                            color='orange.500'
-                            thickness='4px'
-                        />
-                    </Chakra.AbsoluteCenter>
+                    <Chakra.Box
+                        width={"100%"}
+                        height={"100vh"}
+                    >
+                        <Chakra.AbsoluteCenter>
+                            <Chakra.Spinner
+                                size="xl"
+                                color='orange.500'
+                                thickness='4px'
+                            />
+                        </Chakra.AbsoluteCenter>
+                    </Chakra.Box>
                 }
             >
                 <Content>
@@ -155,18 +186,7 @@ function useMangadexRouter(): RouteObject {
                         errorElement: (<ErrorELRouter />),
                         element: (
                             <Mangadex_suspense>
-                                <Await
-                                    resolve={Manga.getRandom()}
-                                    errorElement={<ErrorELAsync1 />}
-                                >
-                                    {(getted1: Manga) => {
-                                        let navigate = useNavigate();
-                                        React.useEffect(() => {
-                                            navigate(MangaDexPath + "/manga/" + getted1.get_id())
-                                        });
-                                        return (<></>);
-                                    }}
-                                </Await>
+                                <Random_Manga />
                             </Mangadex_suspense>
                         )
                     }
@@ -257,12 +277,12 @@ function useMangadexRouter(): RouteObject {
                     },
                     {
                         path: "search",
-                        element:  (
-                                <Mangadex_suspense>
-                                    <Group_Search />
-                                </Mangadex_suspense>
-                            )
-                        
+                        element: (
+                            <Mangadex_suspense>
+                                <Group_Search />
+                            </Mangadex_suspense>
+                        )
+
                     }
                 ]
             }

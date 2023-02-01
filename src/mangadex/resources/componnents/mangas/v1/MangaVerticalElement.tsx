@@ -22,7 +22,7 @@ export default function MangaVerticalElement(props: {
 }) {
     let title: string = "";
     const client = useHTTPClient();
-    const cover_key = "mdx-manga_cover-" + props.src.get_id();
+    const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
     const coverQuery = useQuery(cover_key, () => {
         return props.src.get_cover_art(client);
     }, {

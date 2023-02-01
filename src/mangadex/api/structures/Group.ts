@@ -53,7 +53,6 @@ class GroupCollection extends Collection<Group>{
     public previous(): Promise<Collection<Group>> {
         return new Promise<Collection<Group>>((resolve, reject) => {
             let new_offset = this.get_offset() - this.get_limit();
-            console.log(new_offset);
             if(new_offset <= this.get_total() && new_offset >= 0){
                 let current_offset_limits = new Offset_limits();
                 current_offset_limits.set_limits(this.get_limit());

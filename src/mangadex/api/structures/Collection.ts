@@ -1,6 +1,4 @@
-import { Attribute } from "./Attributes";
-
-export abstract class Collection<T extends Attribute>{
+export abstract class Collection<T>{
     private data: Array<T>;
     private limit: number;
     private offset: number;

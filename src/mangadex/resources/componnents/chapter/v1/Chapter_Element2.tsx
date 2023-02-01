@@ -20,7 +20,7 @@ export default function Chapter_Element2(props: {
     downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
     const client = useHTTPClient();
-    const user_query_key = "mdx-user-" + props.chapter.get_user_id();
+    const user_query_key = "mdx-user:" + props.chapter.get_user_id();
     const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader(client)
     }, {
@@ -29,7 +29,7 @@ export default function Chapter_Element2(props: {
     const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
         props.chapter.get_scanlations_groups_id().map((value: string) => (
             {
-                queryKey: "mdx-groups-" + value,
+                queryKey: "mdx-group-" + value,
                 queryFn: () => {
                     return props.chapter.get_scanlation_group_byID(value, client);
                 },
@@ -37,7 +37,7 @@ export default function Chapter_Element2(props: {
             }
         ))
     )
-    const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
+    const is_downloaded_queryKey = "mdx-chapter:" + props.chapter.get_id() + "-is_downloaded";
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.chapter.get_id(), client);
     }, {

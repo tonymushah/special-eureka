@@ -6,9 +6,9 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Mangadex from "./mangadex/index";
-import { Client, getClient } from "@tauri-apps/api/http";
+import { getClient } from "@tauri-apps/api/http";
 
-const HTTPClientProvider = React.lazy(() => import("./commons-res/components/HTTPClientProvider"))
+const HTTPClientProvider_Client = React.lazy(() => import("./commons-res/components/HTTPClientProvider_Query"));
 
 function Close_splashscreen() {
     return (
@@ -23,16 +23,11 @@ function Close_splashscreen() {
 
 export default function Router() {
 
-    const { isOpen, onOpen, onClose } = Chakra.useDisclosure();
-
     const All_Routes: RouteObject = {
         "path": "/",
         "element": <Index_Page />,
     }
-
-    const RouterList = [
-        "./mangadex/index"
-    ]
+    
     const router = createBrowserRouter(
         [
             All_Routes,
@@ -42,7 +37,14 @@ export default function Router() {
     const queryClient = new QueryClient({
         "defaultOptions": {
             "queries": {
-                "cacheTime": 1000 * 60 * 2
+                "cacheTime": 1000 * 30,
+                retry(failureCount, error) {
+                    if (failureCount >= 3) {
+                        return false
+                    } else {
+                        return true;
+                    }
+                },
             }
         }
     });
@@ -64,72 +66,82 @@ export default function Router() {
                 </Chakra.Box>
             }
         >
-            <Await
-                resolve={HTTPClient}
-                errorElement={<Chakra.Box
-                    width={"100%"}
-                    height={"100vh"}
-                >
-                    <Chakra.AbsoluteCenter>
-                        <Chakra.Box>
-                            <Chakra.Alert>
-                                <Chakra.AlertIcon />
-                                <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
-                            </Chakra.Alert>
-                        </Chakra.Box>
-                    </Chakra.AbsoluteCenter>
-                </Chakra.Box>}
-            >
-                {
-                    (client: Client) => (
-                        <React.Suspense
-                            fallback={
-                                <Chakra.Box
-                                    width={"100%"}
-                                    height={"100vh"}
-                                >
-                                    <Chakra.AbsoluteCenter>
-                                        <Chakra.Spinner
-                                            size="xl"
-                                            color='orange.500'
-                                            thickness='4px'
-                                        />
-                                    </Chakra.AbsoluteCenter>
-                                </Chakra.Box>
-                            }
+            <QueryClientProvider client={queryClient}>
+                <ReactQueryDevtools
+                    position={"bottom-right"}
+                    initialIsOpen={false}
+                />
+                <React.Suspense
+                    fallback={
+                        <Chakra.Box
+                            width={"100%"}
+                            height={"100vh"}
                         >
-                            <HTTPClientProvider
-                                value={client}
+                            <Chakra.AbsoluteCenter>
+                                <Chakra.Spinner
+                                    size="xl"
+                                    color='orange.500'
+                                    thickness='4px'
+                                />
+                            </Chakra.AbsoluteCenter>
+                        </Chakra.Box>
+                    }
+                >
+                    <HTTPClientProvider_Client
+                        value={HTTPClient}
+                        onLoading={
+                            <Chakra.Box
+                                width={"100%"}
+                                height={"100vh"}
                             >
-                                <QueryClientProvider client={queryClient}>
-                                    <ReactQueryDevtools
-                                        position={"bottom-right"}
-                                        initialIsOpen={false}
+                                <Chakra.AbsoluteCenter>
+                                    <Chakra.Spinner
+                                        size="xl"
+                                        color='orange.500'
+                                        thickness='4px'
                                     />
-                                    <RouterProvider
-                                        router={router}
-                                        fallbackElement={
-                                            <Chakra.Box
-                                                width={"100%"}
-                                                height={"100vh"}
-                                            >
-                                                <Chakra.AbsoluteCenter>
-                                                    <Chakra.Spinner
-                                                        size="xl"
-                                                        color='orange.500'
-                                                        thickness='4px'
-                                                    />
-                                                </Chakra.AbsoluteCenter>
-                                            </Chakra.Box>
-                                        }
-                                    />
-                                    <Close_splashscreen />
-                                </QueryClientProvider>
-                            </HTTPClientProvider>
-                        </React.Suspense>
-                    )
-                }
-            </Await>
+                                </Chakra.AbsoluteCenter>
+                            </Chakra.Box>
+                        }
+                        onError={(error) => (
+                            <Chakra.Box
+                                width={"100%"}
+                                height={"100vh"}
+                            >
+                                <Chakra.AbsoluteCenter>
+                                    <Chakra.Box>
+                                        <Chakra.Alert>
+                                            <Chakra.AlertIcon />
+                                            <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
+                                        </Chakra.Alert>
+                                    </Chakra.Box>
+                                </Chakra.AbsoluteCenter>
+                            </Chakra.Box>
+                        )}
+                    >
+                        <React.Fragment>
+                            <RouterProvider
+                                router={router}
+                                fallbackElement={
+                                    <Chakra.Box
+                                        width={"100%"}
+                                        height={"100vh"}
+                                    >
+                                        <Chakra.AbsoluteCenter>
+                                            <Chakra.Spinner
+                                                size="xl"
+                                                color='orange.500'
+                                                thickness='4px'
+                                            />
+                                        </Chakra.AbsoluteCenter>
+                                    </Chakra.Box>
+                                }
+                            />
+                            <Close_splashscreen />
+                        </React.Fragment>
+                    </HTTPClientProvider_Client>
+                </React.Suspense>
+            </QueryClientProvider>
         </React.Suspense>
 
     )

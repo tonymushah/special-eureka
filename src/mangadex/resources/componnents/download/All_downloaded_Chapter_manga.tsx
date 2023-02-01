@@ -1,0 +1,34 @@
+import React from "react";
+import Consumer from "../../../../commons-res/components/Consumer";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { Offset_limits } from "../../../api/internal/Utils";
+import { Manga } from "../../../api/structures/Manga";
+import { CollectionComponnent_WithQuery } from "../Collection/Collection";
+
+export default function All_downloaded_Chapter_manga(props: {
+    children : (value: Array<string>) => React.ReactNode,
+    mangaID : string,
+    offset_limit?: Offset_limits,
+    onLoading? : React.ReactNode
+}){
+    const client = useHTTPClient();
+    const query_key = "mdx-manga-" + props.mangaID + "-offline-chapters";
+    return (
+        <CollectionComponnent_WithQuery<string>
+            fn={() => {
+                return Manga.getAllDownloadedChapters_ofAManga(props.mangaID, props.offset_limit, client);
+            }}
+            queryKey={query_key}
+        >
+            {
+                (value) => (
+                    <Consumer to_consume={value.get_data()}>
+                        {
+                            props.children
+                        }
+                    </Consumer>
+                )
+            }
+        </CollectionComponnent_WithQuery>
+    )
+}

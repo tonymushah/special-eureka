@@ -973,7 +973,6 @@ export function get_manga_listBy_chapter_array(to_use: Array<Chapter>) : Array<s
                 returns.push(manga_id);
             }
         } catch (error) {
-            console.error(error);
         }
     });
     return returns;

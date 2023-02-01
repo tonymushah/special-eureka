@@ -25,13 +25,13 @@ export default function MangaElementDef(props: {
 }) {
     const client = useHTTPClient();
     let title: string = "";
-    const cover_key = "mdx-manga_cover-" + props.src.get_id();
+    const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
     const coverQuery = useQuery(cover_key, () => {
         return props.src.get_cover_art(client)
     }, {
         "staleTime": Infinity
     });
-    const manga_description_querykey = "mdx-manga-" + props.src.get_id() + "-description";
+    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     })

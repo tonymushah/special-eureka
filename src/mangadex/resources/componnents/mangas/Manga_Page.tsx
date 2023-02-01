@@ -19,6 +19,8 @@ import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../error/ErrorEL1";
 import { Cover_Image_ } from "./Mainpage/Image_";
 
+const IsPingable = React.lazy(() => import("../IsPingable"));
+
 export function Statis(props: {
     src: Statistics_Manga,
     children?: (value: Statistics_Manga) => React.ReactNode
@@ -140,16 +142,56 @@ const ExtLink = React.lazy(async () => {
     };
 })
 
+function Manga_Page_Statis(props: MangaPageProps) {
+    const client = useHTTPClient();
+    const manga_statistics = useQuery<Statistics_Manga, Error>("mdx-manga:" + props.src.get_id() + "-statistics", () => {
+        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
+    }, {
+        staleTime: Infinity
+    });
+    return (
+        <Chakra.Box
+            display={{
+                base: "inherit",
+                lg: "none"
+            }}
+        >
+            {
+                manga_statistics.isLoading ? (
+                    <Chakra.Skeleton
+                        height={"20px"}
+                        width={"md"}
+                    />
+                ) : (
+                    manga_statistics.isError ? (
+                        <Chakra.Alert status={"error"}>
+                            <Chakra.AlertIcon />
+                            <Chakra.AlertTitle>Error on loading Stats</Chakra.AlertTitle>
+                            <Chakra.AlertDescription>{manga_statistics.error.message}</Chakra.AlertDescription>
+                        </Chakra.Alert>
+                    ) : (
+                        manga_statistics.isSuccess ? (
+                            <Statis src={manga_statistics.data} />
+                        ) : (
+                            <></>
+                        )
+                    )
+                )
+            }
+        </Chakra.Box>
+    )
+}
+
 export function Manga_Page(props: MangaPageProps) {
     let title: string = "";
     const client = useHTTPClient();
-    const cover_key = "mdx-manga_cover-" + props.src.get_id();
+    const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
     const coverQuery = useQuery(cover_key, () => {
         return props.src.get_cover_art(client)
     }, {
         "staleTime": Infinity
     });
-    const title_query = useQuery<Array<Lang_and_Data>, Error>("mdx-manga_title-" + props.src.get_id(), () => {
+    const title_query = useQuery<Array<Lang_and_Data>, Error>("mdx-manga:" + props.src.get_id() + "-title", () => {
         return Lang_and_Data.initializeArrayByAltTitle_obj(props.src.get_alt_title());
     }, {
         "staleTime": Infinity
@@ -157,7 +199,7 @@ export function Manga_Page(props: MangaPageProps) {
     const authors = useQueries(
         props.src.get_authors_id().map(author_id => {
             return {
-                queryKey: "mdx-author-" + author_id,
+                queryKey: "mdx-author:" + author_id,
                 queryFn: () => {
                     return props.src.get_author_byID(author_id, client);
                 },
@@ -168,7 +210,7 @@ export function Manga_Page(props: MangaPageProps) {
     const artistists = useQueries(
         props.src.get_artists_id().map(author_id => {
             return {
-                queryKey: "mdx-author-" + author_id,
+                queryKey: "mdx-author:" + author_id,
                 queryFn: () => {
                     return props.src.get_artist_byID(author_id, client);
                 },
@@ -176,11 +218,7 @@ export function Manga_Page(props: MangaPageProps) {
             }
         })
     )
-    const manga_statistics = useQuery<Statistics_Manga, Error>("mdx-manga_stats-", () => {
-        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
-    }, {
-        staleTime: Infinity
-    });
+
     function is_Author_artists_finished(): boolean {
         let all_isSuccess_Authors = authors.map<boolean>((value) => {
             return value.isSuccess;
@@ -357,35 +395,7 @@ export function Manga_Page(props: MangaPageProps) {
                                                 />
                                             </React.Suspense> */}
                                         </Chakra.Text>
-                                        <Chakra.Box
-                                            display={{
-                                                base: "inherit",
-                                                lg: "none"
-                                            }}
-                                        >
-                                            {
-                                                manga_statistics.isLoading ? (
-                                                    <Chakra.Skeleton
-                                                        height={"20px"}
-                                                        width={"md"}
-                                                    />
-                                                ) : (
-                                                    manga_statistics.isError ? (
-                                                        <Chakra.Alert status={"error"}>
-                                                            <Chakra.AlertIcon />
-                                                            <Chakra.AlertTitle>Error on loading Stats</Chakra.AlertTitle>
-                                                            <Chakra.AlertDescription>{manga_statistics.error.message}</Chakra.AlertDescription>
-                                                        </Chakra.Alert>
-                                                    ) : (
-                                                        manga_statistics.isSuccess ? (
-                                                            <Statis src={manga_statistics.data} />
-                                                        ) : (
-                                                            <></>
-                                                        )
-                                                    )
-                                                )
-                                            }
-                                        </Chakra.Box>
+
                                         <Chakra.Box
                                             display={{
                                                 base: "none",
@@ -443,28 +453,33 @@ export function Manga_Page(props: MangaPageProps) {
                                                 </React.Suspense>
                                             </Chakra.Box>
                                             <Chakra.Box>
-                                                {
-                                                    manga_statistics.isLoading ? (
+                                                <React.Suspense
+                                                    fallback={
                                                         <Chakra.Skeleton
                                                             height={"20px"}
                                                             width={"md"}
                                                         />
-                                                    ) : (
-                                                        manga_statistics.isError ? (
-                                                            <Chakra.Alert status={"error"}>
-                                                                <Chakra.AlertIcon />
-                                                                <Chakra.AlertTitle>Error on loading Stats</Chakra.AlertTitle>
-                                                                <Chakra.AlertDescription>{manga_statistics.error.message}</Chakra.AlertDescription>
-                                                            </Chakra.Alert>
-                                                        ) : (
-                                                            manga_statistics.isSuccess ? (
-                                                                <Statis src={manga_statistics.data} />
-                                                            ) : (
-                                                                <></>
-                                                            )
-                                                        )
-                                                    )
-                                                }
+                                                    }
+                                                >
+                                                <IsPingable
+                                                    client={client}
+                                                    onError={(query) => (
+                                                        <></>
+                                                    )}
+                                                    onLoading={
+                                                        <Chakra.Skeleton
+                                                            height={"20px"}
+                                                            width={"md"}
+                                                        />
+                                                    }
+                                                    onSuccess={(query) => (
+                                                        <Manga_Page_Statis
+                                                            src={props.src}
+                                                            children={<></>}
+                                                        />
+                                                    )}
+                                                />
+                                                </React.Suspense>
                                             </Chakra.Box>
                                         </Chakra.Box>
                                     </Chakra.Center>

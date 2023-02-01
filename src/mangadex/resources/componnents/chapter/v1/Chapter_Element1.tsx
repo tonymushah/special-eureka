@@ -57,22 +57,20 @@ export default function Chapter_Element1(props: {
             },
         })
     }
-    const user_query_key = "mdx-user-" + props.chapter.get_user_id();
+    const user_query_key = "mdx-user:" + props.chapter.get_user_id();
     const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader(client)
     }, {
         staleTime: Infinity
     });
-    const is_downloaded_queryKey = "mdx-chapter-" + props.chapter.get_id() + "-is_downloaded";
+    const is_downloaded_queryKey = "mdx-chapter:" + props.chapter.get_id() + "-is_downloaded";
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.chapter.get_id(), client);
-    }, {
-        cacheTime: 1000 * 60
     });
     const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
         props.chapter.get_scanlations_groups_id().map((value: string) => {
             return {
-                queryKey: "mdx-groups-" + value,
+                queryKey: "mdx-group-" + value,
                 queryFn: () => {
                     return props.chapter.get_scanlation_group_byID(value, client);
                 },
@@ -80,7 +78,7 @@ export default function Chapter_Element1(props: {
             }
         })
     )
-    const this_chapter_lang_querykey = "mdx-chapter-" + props.chapter.get_id() + "-lang";
+    const this_chapter_lang_querykey = "mdx-chapter:" + props.chapter.get_id() + "-lang";
     const this_chapter_lang_query = useQuery(this_chapter_lang_querykey, () => {
         return props.chapter.get_translated_Lang();
     }, {

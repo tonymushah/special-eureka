@@ -5,45 +5,52 @@ import { Chapter } from "../../../api/structures/Chapter";
 import ErrorEL1 from "../error/ErrorEL1";
 import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 
 export default function All_downloaded_chapter() {
     const client = useHTTPClient();
-    const [mode, setMode] = React.useState<"line" | "box">("line");
     const query_key = "mdx-downloaded_chapter";
-    const query = useQuery<Array<string>, Error>(query_key, () => {
-        return Chapter.getAll_downloaded_chap(client);
-    }, {
-        staleTime: Infinity
-    });
-    if (query.isLoading) {
-        return (
-            <Chakra.AbsoluteCenter>
-                <Chakra.Box>
-                    <Chakra.Spinner
-                        color={"orange"}
-                        thickness={"10px"}
-                        size={"xl"}
-                    />
-                </Chakra.Box>
-            </Chakra.AbsoluteCenter>
-        )
-    }
-    if (query.isError) {
-        return (
-            <Chakra.Box>
-                <ErrorEL1 error={query.error} />
-            </Chakra.Box>
-        )
-    }
     return (
         <Chakra.Box>
-            <Chakra.VStack>
-                {
-                    query.data?.map((value) => (
-                        <Chapter_Element1_byChapID id={value} />
-                    ))
+            <CollectionComponnent_WithQuery<string>
+                fn={() => {
+                    return Chapter.getAll_downloaded_chap(undefined, client)
+                }}
+                queryKey={query_key}
+                onLoading={
+                    <Chakra.AbsoluteCenter>
+                        <Chakra.Box>
+                            <Chakra.Spinner
+                                color={"orange"}
+                                thickness={"10px"}
+                                size={"xl"}
+                            />
+                        </Chakra.Box>
+                    </Chakra.AbsoluteCenter>
                 }
-            </Chakra.VStack>
+            >
+                {
+                    (value) => (<Chakra.VStack>
+                        {
+                            value.get_data().map((value) => (
+                                <React.Suspense
+                                    fallback={
+                                        <Chakra.Box width={"full"}>
+                                            <Chakra.Center>
+                                                <Chakra.Spinner />
+                                            </Chakra.Center>
+                                        </Chakra.Box>
+                                    }
+                                >
+                                    <Chapter_Element1_byChapID id={value} />
+                                </React.Suspense>
+                            ))
+                        }
+                    </Chakra.VStack>
+                    )
+                }
+            </CollectionComponnent_WithQuery>
+
         </Chakra.Box>
     );
 }

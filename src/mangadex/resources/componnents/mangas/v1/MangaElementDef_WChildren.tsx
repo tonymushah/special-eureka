@@ -13,7 +13,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
 }>) {
     const client = useHTTPClient();
     let title: string = "";
-    const cover_key = "mdx-manga_cover:" + props.src.get_id();
+    const cover_key = "mdx-cover:" + props.src.get_cover_art_id();
     const coverQuery = useQuery(cover_key, () => {
         return props.src.get_cover_art(client)
     }, {

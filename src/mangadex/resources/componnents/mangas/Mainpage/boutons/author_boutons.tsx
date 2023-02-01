@@ -5,7 +5,6 @@ import { Author } from "../../../../../api/structures/Author";
 export function AuthorButton(props : {
     src : Author
 }){
-    console.log(props.src);
     if(props.src !== undefined){
         return (<Button className="mdP-bout m-1" variant="dark" size="sm">{props.src.get_Name()}</Button>);
     }else{
@@ -22,7 +21,6 @@ export class AuthorCol extends React.Component<AuthorColProps>{
     private title: string;
     constructor(props : AuthorColProps){
         super(props);
-        console.log(props);
         this.to_use = this.props.src;
         this.title = this.props.title;
     }

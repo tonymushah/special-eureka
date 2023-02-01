@@ -16,7 +16,7 @@ export default function MangaFeedElement(props: {
     const client = useHTTPClient();
     const manga_query_key = "mdx-manga:" + props.src.get_manga_id();
     const query = useQuery<Manga, Error>(manga_query_key, () => {
-        return props.src.get_manga(client)
+        return Manga.getMangaByID(props.src.get_manga_id(), client);
     },{
         staleTime : Infinity
     });

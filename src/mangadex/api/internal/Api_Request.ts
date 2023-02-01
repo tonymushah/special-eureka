@@ -1,4 +1,4 @@
-import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Response } from "@tauri-apps/api/http";
+import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Response, ResponseType } from "@tauri-apps/api/http";
 export class Api_RequestERROR extends Error{
     protected id: string;
     protected status: number;
@@ -37,7 +37,7 @@ export class Api_Request{
             client = await Api_Request.client();
         }
         let getted = client.get(Api_Request.url + to_use, options);
-        let result: any = await getted;
+        let result : any = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -103,7 +103,9 @@ export class Api_Request{
     }
     public static async ping(client? : Client): Promise<boolean>{
         try{
-            return (await Api_Request.get_methods("ping", undefined, client)).ok;
+            return (await Api_Request.get_methods("ping", {
+                "responseType" : ResponseType.Text
+            }, client)).ok;
         }catch(e){
             return false;
         }
