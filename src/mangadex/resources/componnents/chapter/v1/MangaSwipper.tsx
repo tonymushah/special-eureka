@@ -15,6 +15,7 @@ export default function MangaSwipper(props: {
         <React.Suspense>
             <Swiper
                 slidesPerView={"auto"}
+                slidesPerGroupAuto={true}
                 spaceBetween={30}
                 pagination={{
                     clickable: true,
@@ -24,48 +25,24 @@ export default function MangaSwipper(props: {
                 mousewheel={true}
                 freeMode={true}
                 modules={[Pagination, Mousewheel, FreeMode]}
-                breakpoints={
-                    {
-                        374: {
-                            slidesPerView: 2,
-                            spaceBetween: 10
-                        },
-                        535: {
-                            slidesPerView: 3,
-                            spaceBetween: 10
-                        },
-                        733: {
-                            slidesPerView: 4,
-                            spaceBetween: 10
-                        },
-                        786: {
-                            slidesPerView: 2,
-                            spaceBetween: 10
-                        },
-                        1222: {
-                            slidesPerView: 2,
-                            spaceBetween: 10
-                        },
-                        1300: {
-                            slidesPerView: 3,
-                            spaceBetween: 10,
-                        }
-                    }
-                }
             >
                 {
                     props.mangaIDS.map((value: string) => (
-                            <SwiperSlide
-                                key={value}
+                        <SwiperSlide
+                            key={value}
+                            style={{
+                                display: "inline-block",
+                                width: "min-content"
+                            }}
+                        >
+                            <React.Suspense
+                                fallback={
+                                    <MangaElementFallback />
+                                }
                             >
-                                <React.Suspense
-                                    fallback={
-                                        <MangaElementFallback />
-                                    }
-                                >
-                                    <MangaElementDef_wID mangaID={value} />
-                                </React.Suspense>
-                            </SwiperSlide>
+                                <MangaElementDef_wID mangaID={value} />
+                            </React.Suspense>
+                        </SwiperSlide>
                     ))
                 }
             </Swiper>

@@ -1,25 +1,26 @@
-import React from "react";
-import { Manga } from "../../../../api/structures/Manga";
-import { Accordion, Spinner, Button, Container, Row, Col, Placeholder } from "react-bootstrap";
-import { Lang, Languages, Lang_and_Data, make_first_UpperCare, MangaLinksData } from "../../../../api/internal/Utils";
-import { Author } from "../../../../api/structures/Author";
+import * as Chakra from '@chakra-ui/react';
+import { Client } from "@tauri-apps/api/http";
 import "flag-icons/css/flag-icons.min.css";
+import React from "react";
+import { Accordion, Button, Col, Container, Placeholder, Row, Spinner } from "react-bootstrap";
+import { useQuery } from "react-query";
 import { Await } from "react-router-dom";
-import { TagRow } from "../Mainpage/boutons/tag_boutons";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { Languages, Lang_and_Data, make_first_UpperCare, MangaLinksData } from "../../../../api/internal/Utils";
+import { Aggregate } from "../../../../api/structures/Aggregate";
+import { Author } from "../../../../api/structures/Author";
+import { Manga } from "../../../../api/structures/Manga";
 import { Tag } from "../../../../api/structures/Tag";
+import { get_manga_page_authors_artists } from "../../../hooks/MangaStateHooks";
+import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
+import ErrorEL1 from "../../error/ErrorEL1";
+import IsPingable from "../../IsPingable";
+import { TagRow } from "../Mainpage/boutons/tag_boutons";
+import { MangaPageProps } from "../Manga_Page";
+import { Aggregate_box, Aggregate_box_reverse } from "./aggregate/Aggregate_box";
 import { AuthorCol } from "./boutons/author_boutons";
 import { LinksRow } from "./boutons/links_boutons";
 import { LAD_Tabs } from "./tabs/Lang_data_tabs";
-import { Aggregate_box, Aggregate_box_reverse } from "./aggregate/Aggregate_box";
-import * as Chakra from '@chakra-ui/react'
-import { Aggregate } from "../../../../api/structures/Aggregate";
-import { ErrorELAsync } from "../../Error_cmp";
-import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
-import { useQueries, useQuery, useQueryClient } from "react-query";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import { Client } from "@tauri-apps/api/http";
-import ErrorEL1 from "../../error/ErrorEL1";
-import IsPingable from "../../IsPingable";
 
 const All_downloaded_Chapter_manga = React.lazy(() => import("../../download/All_downloaded_Chapter_manga"))
 
@@ -145,43 +146,13 @@ function Aggregate_part(props: {
 function Author_Artists(props: {
     src: Manga
 }) {
-    const client_ = useHTTPClient();
-    const authors = useQueries(
-        props.src.get_authors_id().map(author_id => {
-            return {
-                queryKey: "mdx-author:" + author_id,
-                queryFn: () => {
-                    return props.src.get_author_byID(author_id, client_);
-                },
-                staleTime: Infinity
-            }
-        })
-    )
-    const artistists = useQueries(
-        props.src.get_artists_id().map(author_id => {
-            return {
-                queryKey: "mdx-author:" + author_id,
-                queryFn: () => {
-                    return props.src.get_artist_byID(author_id, client_);
-                },
-                staleTime: Infinity
-            }
-        })
-    )
-    function is_Artists_finished(): boolean {
-        let all_isSuccess_Artists = artistists.map<boolean>((value) => {
-            return value.isSuccess;
-        });
-        let is_allArtists_Success = all_isSuccess_Artists.includes(false) ? false : true;
-        return is_allArtists_Success;
-    }
-    function is_Authors_finished(): boolean {
-        let all_isSuccess_Authors = authors.map<boolean>((value) => {
-            return value.isSuccess;
-        });
-        let is_allAuthors_Success = all_isSuccess_Authors.includes(false) ? false : true;
-        return is_allAuthors_Success;
-    }
+    const {
+        authors, 
+        artistists,
+        is_Artists_finished,
+        is_Authors_finished
+    } = get_manga_page_authors_artists(props);
+    
     if (is_Artists_finished() == false && is_Authors_finished() == false) {
         return (
             <Placeholder lg={10}></Placeholder>
@@ -204,14 +175,6 @@ function Author_Artists(props: {
             </Row>
         );
     }
-    return (
-        <></>
-    );
-}
-
-
-type MangaPageProps = {
-    src: Manga
 }
 
 function Manga_Page_Aggregate(props: {

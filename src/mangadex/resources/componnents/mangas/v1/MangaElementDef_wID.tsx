@@ -3,6 +3,7 @@ import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Manga } from "../../../../api/structures/Manga";
+import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementFallback from "./MangaElementFallback";
 
@@ -11,81 +12,10 @@ const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
 export default function MangaElementDef_wID(props: {
     mangaID: string
 }) {
-    const client = useHTTPClient();
-    const toast = useToast();
-    const queryClient = useQueryClient();
-    const key = "mdx-manga:" + props.mangaID;
-    const query = useQuery<Manga, Error>(key, () => {
-        return Manga.getMangaByID(props.mangaID, client);
-    }, {
-        "staleTime": Infinity
+    const { query } = get_manga_byId({
+        mangaID : props.mangaID
     });
-    const delete_ = useMutation({
-        mutationFn : () => {
-            toast({
-                position : "bottom-right",
-                title : "Deleting manga...",
-                status : "loading",
-                duration : 9000,
-                isClosable : true
-            });
-            return query.data!.delete_this(client)},
-        onSuccess : () => {
-            toast({
-                position : "bottom-right",
-                title : "Deleted manga",
-                status : "success",
-                duration : 9000,
-                isClosable : true
-            })
-            queryClient.removeQueries({
-                queryKey : key
-            })
-        },
-        onError(error : any, variables, context) {
-            toast({
-                position : "bottom-right",
-                title : "Error on deleting manga",
-                status : "error",
-                description : error.message,
-                variant : "solid",
-                duration : 9000,
-                isClosable : true
-            })
-        },
-    });
-    const download_ = useMutation({
-        mutationFn : () => {
-            toast({
-                position : "bottom-right",
-                title : "Downloaded manga",
-                status : "success",
-                duration : 9000,
-                isClosable : true
-            })
-            toast({
-                title : "Downloading manga...",
-                status : "loading",
-                duration : 9000
-            });
-            return Manga.download_manga(query.data!.get_id(), client)
-        },
-        onSuccess : () => {
-            queryClient.invalidateQueries({
-                queryKey: key
-            })
-        },
-        onError(error : Error, variables, context) {
-            toast({
-                position : "bottom-right",
-                title : "Error on downloading manga",
-                description : error.message,
-                status : "error",
-                duration : 9000,
-                isClosable : true
-            })
-        },
-    })
+    const { delete_, download_ } = useMangaDownload_Delete(props);
     if (query.isLoading) {
         return(
             <MangaElementFallback/>

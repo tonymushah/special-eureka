@@ -5,15 +5,14 @@ import { Chapter } from "../../../../api/structures/Chapter";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFeedElement from "./MangaFeedElement";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { get_ChapterbyId } from "../../../hooks/ChapterStateHooks";
 
 export default function MangaFeedElement_byChapID(props: {
     id: string
 }) {
     const client = useHTTPClient();
-    const query = useQuery<Chapter, Error>("mdx-chapter:" + props.id, () => {
-        return Chapter.get_ChapterbyId(props.id, client);
-    }, {
-        staleTime: Infinity
+    const {query} = get_ChapterbyId({
+        id : props.id
     })
     if(query.isLoading){
         return (

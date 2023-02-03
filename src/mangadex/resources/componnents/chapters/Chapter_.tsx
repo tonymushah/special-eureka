@@ -7,6 +7,10 @@ import { Chapter, Chapter_withAllIncludes } from "../../../api/structures/Chapte
 import { Await, Link } from "react-router-dom";
 import TimeAgo from 'react-timeago'
 import * as Chakra from '@chakra-ui/react'
+import { getMangaDexPath } from "../../..";
+
+const MangaDexPath = getMangaDexPath();
+
 type Chapter_Props = {
     chapter: Chapter;
 }
@@ -42,7 +46,7 @@ export class Chapter_ extends React.Component<Chapter_Props>{
                     <Row>
                         <Col xs={7} sm={8} md={9} lg={10} xl={10}>
                             <Row>
-                                <Link to={"/mangadex/chapter/" + this.chapter_to_use.get_id()}>
+                                <Link to={MangaDexPath + "/chapter/" + this.chapter_to_use.get_id()}>
                                     <React.Suspense
                                         fallback={
                                             <Chakra.SkeletonText></Chakra.SkeletonText>
@@ -155,7 +159,7 @@ export class Chapter_2 extends React.Component<Chapter_Props>{
                     <Row>
                         <Col xs={7}>
                             <Row>
-                                <Link to={"/mangadex/chapter/" + this.chapter_to_use.get_id()}>
+                                <Link to={MangaDexPath + "/chapter/" + this.chapter_to_use.get_id()}>
                                     <React.Suspense
                                         fallback={
                                             <Chakra.SkeletonText></Chakra.SkeletonText>
@@ -275,7 +279,7 @@ export class Chapter_includes extends React.Component<Chapter_includes_Props>{
                     <Row>
                         <Col xs={7} sm={8} md={8} lg={9} xl={9}>
                             <Row>
-                                <Link to={"/mangadex/chapter/" + this.chapter_to_use.get_id()}>Ch.{this.chapter_to_use.get_chapter()} {this.chapter_to_use.get_title()}</Link>
+                                <Link to={MangaDexPath + "/chapter/" + this.chapter_to_use.get_id()}>Ch.{this.chapter_to_use.get_chapter()} {this.chapter_to_use.get_title()}</Link>
                             </Row>
                             <Row>
                                 <Col className="">
@@ -339,7 +343,7 @@ export class Chapter_includes2 extends React.Component<Chapter_includes_Props>{
                     <Row>
                         <Col xs={7}>
                             <Row>
-                                <Link to={"/mangadex/chapter/" + this.chapter_to_use.get_id()}>Ch.{this.chapter_to_use.get_chapter()} {this.chapter_to_use.get_title()}</Link>
+                                <Link to={MangaDexPath   + "/chapter/" + this.chapter_to_use.get_id()}>Ch.{this.chapter_to_use.get_chapter()} {this.chapter_to_use.get_title()}</Link>
                             </Row>
                             <Row>
                                 <Col className="">

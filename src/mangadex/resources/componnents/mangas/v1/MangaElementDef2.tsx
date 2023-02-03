@@ -1,21 +1,25 @@
-import React from "react";
-import * as Chakra from "@chakra-ui/react";
 import * as ChakraIcons from "@chakra-ui/icons";
-import { Manga } from "../../../../api/structures/Manga";
-import { useQuery } from "react-query";
-import { Alt_title, ContentRating, Lang_and_Data, make_first_UpperCare } from "../../../../api/internal/Utils";
-import ReactContextMenu from "react-jsx-context-menu"
-import ErrorEL1 from "../../error/ErrorEL1";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Link } from "react-router-dom";
+import * as Chakra from "@chakra-ui/react";
+import React from "react";
+import { FaBookmark } from "react-icons/fa";
+import ReactContextMenu from "react-jsx-context-menu";
 import { NumericFormat } from "react-number-format";
+import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
+import { getMangaDexPath } from "../../../..";
+import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { ContentRating, make_first_UpperCare } from "../../../../api/internal/Utils";
+import { Manga } from "../../../../api/structures/Manga";
 import { Statistics_Manga } from "../../../../api/structures/Statistics";
+import { get_manga_description, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
+import ErrorEL1 from "../../error/ErrorEL1";
+import IsPingable from "../../IsPingable";
 import { Statis } from "../Manga_Page";
 import MangaTitle from "./MangaTitle";
-import { FaBookmark } from "react-icons/fa";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import IsPingable from "../../IsPingable";
+
+const MangaDexPath = getMangaDexPath();
 
 function MangaElementDef2_Stats(props: {
     src: Manga
@@ -101,10 +105,19 @@ export default function MangaElementDef2(props: {
     update?: Function
 }) {
     const client = useHTTPClient();
-    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
-    const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
-        return Lang_and_Data.initializeByDesc(props.src.get_description());
-    })
+    if(props.download == undefined && props.delete == undefined && props.update == undefined){
+        const { download_, delete_ } = useMangaDownload_Delete({
+            mangaID : props.src.get_id()
+        });
+        props.download = download_.mutate;
+        props.delete = delete_.mutate;
+        props.update = download_.mutate;
+    }
+    const {
+        manga_description_query
+    } = get_manga_description({
+        src : props.src
+    });
     const card_maxHeight: Chakra.ResponsiveValue<any> = {
         base: "10em"
     }
@@ -176,7 +189,7 @@ export default function MangaElementDef2(props: {
                                     <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 )}
                             >
-                                <Link to={"/mangadex/manga/" + props.src.get_id()}>
+                                <Link to={MangaDexPath + "/manga/" + props.src.get_id()}>
                                     <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 </Link>
                             </TryCatch>

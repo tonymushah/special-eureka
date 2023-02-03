@@ -2,47 +2,43 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { UseMutationResult, useQueries, useQuery, UseQueryResult } from "react-query";
-import { Await } from "react-router-dom";
+import { FaQuestionCircle, FaUser, FaUsers } from "react-icons/fa";
+import { UseMutationResult } from "react-query";
+import { Link } from "react-router-dom";
 import Timeago from "react-timeago";
-import { Lang } from "../../../../api/internal/Utils";
-import { Chapter } from "../../../../api/structures/Chapter";
-import { Group } from "../../../../api/structures/Group";
-import { User } from "../../../../api/structures/User";
-import ErrorEL1 from "../../error/ErrorEL1";
-import { Link } from "react-router-dom"
-import { FaUser, FaUsers } from "react-icons/fa"
+import { getMangaDexPath } from "../../../..";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { Chapter } from "../../../../api/structures/Chapter";
+import { get_ChapterbyId, get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang, is_chapter_downloaded, useChapterDownloadMutation } from "../../../hooks/ChapterStateHooks";
+import ErrorEL1 from "../../error/ErrorEL1";
+
+const MangaDexPath = getMangaDexPath();
 
 export default function Chapter_Element2(props: {
     chapter: Chapter,
     downloadMutation?: UseMutationResult<string[], Error, void>
 }) {
-    const client = useHTTPClient();
-    const user_query_key = "mdx-user:" + props.chapter.get_user_id();
-    const user_query = useQuery<User, Error>(user_query_key, () => {
-        return props.chapter.get_userUploader(client)
-    }, {
-        staleTime: Infinity
+    let downloadMutation: UseMutationResult<string[], Error, void> | undefined = props.downloadMutation;
+    const { is_downloaded_queryKey, is_downloaded_query } = is_chapter_downloaded({
+        chapter: props.chapter
     });
-    const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries(
-        props.chapter.get_scanlations_groups_id().map((value: string) => (
-            {
-                queryKey: "mdx-group-" + value,
-                queryFn: () => {
-                    return props.chapter.get_scanlation_group_byID(value, client);
-                },
-                staleTime: Infinity
-            }
-        ))
-    )
-    const is_downloaded_queryKey = "mdx-chapter:" + props.chapter.get_id() + "-is_downloaded";
-    const download_query = useQuery(is_downloaded_queryKey, () => {
-        return Chapter.is_chapter_downloaded(props.chapter.get_id(), client);
-    }, {
-        cacheTime: 1000 * 60
+    const { queryKey } = get_ChapterbyId({
+        id: props.chapter.get_id()
     });
+    if (downloadMutation == undefined) {
+        downloadMutation = useChapterDownloadMutation({
+            chapID: props.chapter.get_id(),
+            toInvalidate: [
+                is_downloaded_queryKey,
+                queryKey
+            ]
+        })
+    }
+    const { user_query } = get_chapter_user_uploader(props);
+    const groups_query = get_chapter_groups(props)
+    const {
+        this_chapter_lang_query
+    } = get_this_chapter_lang(props);
     return (
         <Chakra.Tooltip
             label={
@@ -80,23 +76,27 @@ export default function Chapter_Element2(props: {
                 <Row>
                     <Col xs={2}>
                         <Chakra.Center>
-                            <React.Suspense>
-                                <Await
-                                    resolve={props.chapter.get_translated_Lang()}
-                                    errorElement={<></>}
-                                >
-                                    {
-                                        (to_use_lang: Lang) => (
-                                            <Chakra.Tooltip
-                                                hasArrow
-                                                label={to_use_lang.get_name()}
-                                            >
-                                                <Chakra.Box height={"fit-content"} className={"fi fi-" + to_use_lang.get_flag_icon().toLowerCase()} />
-                                            </Chakra.Tooltip>
-                                        )
-                                    }
-                                </Await>
-                            </React.Suspense>
+                            {
+                                this_chapter_lang_query.isSuccess ? (
+                                    <Chakra.Tooltip
+                                        hasArrow
+                                        label={this_chapter_lang_query.data.get_name()}
+                                    >
+                                        <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
+                                    </Chakra.Tooltip>
+                                ) : (
+                                    this_chapter_lang_query.isError ? (
+                                        <Chakra.Tooltip
+                                            hasArrow
+                                            label={"Language not found"}
+                                        >
+                                            <Chakra.Icon as={FaQuestionCircle} />
+                                        </Chakra.Tooltip>
+                                    ) : (
+                                        <></>
+                                    )
+                                )
+                            }
                         </Chakra.Center>
                     </Col>
                     <Col xs={10}>
@@ -113,7 +113,7 @@ export default function Chapter_Element2(props: {
                             >
                                 <Chakra.LinkOverlay
                                     as={Link}
-                                    to={"/mangadex/chapter/" + props.chapter.get_id()}
+                                    to={MangaDexPath +"/chapter/" + props.chapter.get_id()}
                                 >
                                     Chapter {props.chapter.get_chapter()} {
                                         props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
@@ -129,9 +129,9 @@ export default function Chapter_Element2(props: {
                         <Chakra.Center>
                             {
                                 props.downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                                    download_query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                                        download_query.isSuccess ? (
-                                            download_query.data ? (
+                                    is_downloaded_query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
+                                        is_downloaded_query.isSuccess ? (
+                                            is_downloaded_query.data ? (
                                                 <Chakra.Tooltip
                                                     label="Downloaded Chapter"
                                                 >

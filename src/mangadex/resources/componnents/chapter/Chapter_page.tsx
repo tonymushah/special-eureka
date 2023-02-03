@@ -17,6 +17,8 @@ import { Alt_title } from "../../../api/internal/Utils";
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as FaReactIcons from "react-icons/fa"
 import { Aggregate } from "../../../api/structures/Aggregate";
+import { getMangaDexPath } from "../../..";
+const MangaDexPath = getMangaDexPath();
 function ErrorEL(props){
     let error : any = useAsyncError();
     return(
@@ -190,7 +192,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
         }
     }
     public makelist_Page(): Array<React.ReactNode>{
-        letreturns: Array<React.ReactNode> = [];
+        let returns: Array<React.ReactNode> = [];
         for(let index = 0; index < this.Chapter_toUse.get_pages(); index++){
             returns[index] = (
                 <Chakra.MenuList
@@ -261,7 +263,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                             title = getted.get_title().en;
                                         }
                                         return (
-                                            <Chakra.Text><Link to={"/mangadex/manga/" + getted.get_id()} >{title}</Link></Chakra.Text>
+                                            <Chakra.Text><Link to={MangaDexPath + "/manga/" + getted.get_id()} >{title}</Link></Chakra.Text>
                                         );
                                     }}
                                 />
@@ -327,7 +329,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                     title = getted.get_title().en;
                                                                 }
                                                                 return (
-                                                                    <Chakra.Text><Link to={"/mangadex/manga/" + getted.get_id()} >{title}</Link></Chakra.Text>
+                                                                    <Chakra.Text><Link to={MangaDexPath + "/manga/" + getted.get_id()} >{title}</Link></Chakra.Text>
                                                                 );
                                                             }}
                                                         />
@@ -353,7 +355,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                 errorElement={
                                                                     <Chakra.Button
                                                                         as={Link}
-                                                                        to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
+                                                                        to={MangaDexPath + "/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
                                                                     >
                                                                         <ChakraIcons.ChevronLeftIcon/>
                                                                     </Chakra.Button>
@@ -363,7 +365,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                     return (
                                                                         <Chakra.Button
                                                                             as={Link}
-                                                                            to={"/mangadex/chapter/" + getted12}
+                                                                            to={MangaDexPath + "/chapter/" + getted12}
                                                                         >
                                                                             <ChakraIcons.ChevronLeftIcon/>
                                                                         </Chakra.Button>
@@ -413,7 +415,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                                     returns[topIndex] = (
                                                                                         <Chakra.MenuItem
                                                                                             as={Link}
-                                                                                            to={"/mangadex/chapter/" + chapter.get_chapters()[0].get_id()}
+                                                                                            to={MangaDexPath + "/chapter/" + chapter.get_chapters()[0].get_id()}
                                                                                         >
                                                                                             Vol. {
                                                                                                 volume.get_name()
@@ -441,7 +443,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                 errorElement={
                                                                     <Chakra.Button
                                                                         as={Link}
-                                                                        to={"/mangadex/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
+                                                                        to={MangaDexPath + "/manga/"+this.Chapter_toUse.get_some_relationship("manga")[0].get_id()}
                                                                     >
                                                                         <ChakraIcons.ChevronRightIcon/>
                                                                     </Chakra.Button>
@@ -451,7 +453,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                     return (
                                                                         <Chakra.Button
                                                                             as={Link}
-                                                                            to={"/mangadex/chapter/" + getted121}
+                                                                            to={MangaDexPath + "/chapter/" + getted121}
                                                                         >
                                                                             <ChakraIcons.ChevronRightIcon/>
                                                                         </Chakra.Button>

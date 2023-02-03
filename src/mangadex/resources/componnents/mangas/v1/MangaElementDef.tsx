@@ -1,19 +1,21 @@
-import React from "react";
-import * as Chakra from "@chakra-ui/react";
 import * as ChakraIcons from "@chakra-ui/icons";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import { Manga } from "../../../../api/structures/Manga";
-import { useQuery } from "react-query";
-import { Alt_title, Lang_and_Data, make_first_UpperCare } from "../../../../api/internal/Utils";
-import ReactContextMenu from "react-jsx-context-menu"
-import ErrorEL1 from "../../error/ErrorEL1";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
+import * as Chakra from "@chakra-ui/react";
+import React from "react";
+import ReactContextMenu from "react-jsx-context-menu";
 import { Link } from "react-router-dom";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { getMangaDexPath } from "../../../..";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { Alt_title, make_first_UpperCare } from "../../../../api/internal/Utils";
+import { Manga } from "../../../../api/structures/Manga";
+import { get_manga_description, get_manga_page_cover, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
+import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
+import ErrorEL1 from "../../error/ErrorEL1";
 
 const CoverElementVertical = React.lazy(() => import("../../covers/v1/CoverElementVertical"));
 const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
+
+const MangaDexPath = getMangaDexPath();
 
 export default function MangaElementDef(props: {
     src: Manga,
@@ -22,19 +24,26 @@ export default function MangaElementDef(props: {
     download?: Function,
     delete?: Function,
     update?: Function
-}) {
-    const client = useHTTPClient();
+}){
+    if(props.download == undefined && props.delete == undefined && props.update == undefined){
+        const { download_, delete_ } = useMangaDownload_Delete({
+            mangaID : props.src.get_id()
+        });
+        props.download = download_.mutate;
+        props.delete = delete_.mutate;
+        props.update = download_.mutate;
+    }
     let title: string = "";
-    const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
-    const coverQuery = useQuery(cover_key, () => {
-        return props.src.get_cover_art(client)
-    }, {
-        "staleTime": Infinity
+    const {
+        coverQuery,
+    } = get_manga_page_cover({
+        src : props.src
     });
-    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
-    const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
-        return Lang_and_Data.initializeByDesc(props.src.get_description());
-    })
+    const {
+        manga_description_query
+    } = get_manga_description({
+        src : props.src
+    });
     //let desc: string = "";
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
@@ -42,6 +51,10 @@ export default function MangaElementDef(props: {
         title = props.src.get_title().en;
     }
     return (
+        <Chakra.Box
+            display={"flex"}
+            width={"min-content"}
+        >
         <ReactContextMenu
             menu={
                 <Chakra.Menu
@@ -248,7 +261,7 @@ export default function MangaElementDef(props: {
                                     catch={() => (
                                         <Chakra.LinkOverlay
                                         //as={Link}
-                                        //to={"/mangadex/manga/" + props.src.get_id()}
+                                        //to={MangaDexPath + "/manga/" + props.src.get_id()}
                                         >
                                             <Chakra.Heading
                                                 noOfLines={2}
@@ -265,7 +278,7 @@ export default function MangaElementDef(props: {
                                 >
                                     <Chakra.LinkOverlay
                                         as={Link}
-                                        to={"/mangadex/manga/" + props.src.get_id()}
+                                        to={MangaDexPath + "/manga/" + props.src.get_id()}
                                     >
                                         <Chakra.Heading
                                             noOfLines={2}
@@ -351,5 +364,6 @@ export default function MangaElementDef(props: {
 
             </Chakra.LinkBox>
         </ReactContextMenu>
+        </Chakra.Box>
     )
 }

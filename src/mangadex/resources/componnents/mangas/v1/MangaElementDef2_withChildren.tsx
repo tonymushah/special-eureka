@@ -7,6 +7,9 @@ import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import MangaTitle from "./MangaTitle";
 import ReactContextMenu from "react-jsx-context-menu";
 import * as ChakraIcons from "@chakra-ui/icons";
+import { getMangaDexPath } from "../../../..";
+
+const MangaDexPath = getMangaDexPath();
 
 export default function MangaElementDef2_withChildren(props: React.PropsWithChildren<{
     src: Manga,
@@ -72,7 +75,7 @@ export default function MangaElementDef2_withChildren(props: React.PropsWithChil
                                     <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 )}
                             >
-                                <Link to={"/mangadex/manga/" + props.src.get_id()}>
+                                <Link to={MangaDexPath + "/manga/" + props.src.get_id()}>
                                     <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 </Link>
                             </TryCatch>

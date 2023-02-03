@@ -7,6 +7,7 @@ import ReactHotkeys from "react-hot-keys";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import { useQuery, useQueryClient } from "react-query";
 import { Await, Link, Outlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { getMangaDexPath } from "..";
 import { useHTTPClient } from "../../commons-res/components/HTTPClientProvider";
 import Chapter_history from "../api/history/Chapter.history";
 import { Lang } from "../api/internal/Utils";
@@ -21,6 +22,8 @@ import MangaTitle from "../resources/componnents/mangas/v1/MangaTitle";
 const ChapterNavigationModal = React.lazy(() => import("../resources/componnents/chapter/ChapterNavigationModal"));
 
 const IsPingable = React.lazy(() => import("../resources/componnents/IsPingable"));
+
+const MangaDexPath = getMangaDexPath();
 
 export function ChapterFullScreen(props: React.PropsWithChildren) {
     const FullscreenHandle = Fullscreen.useFullScreenHandle();
@@ -72,7 +75,7 @@ function Chapter_Reading_mode(props: {
             <Chakra.MenuList>
                 <Chakra.MenuItem onClick={() => {
                     setType("Longstrip");
-                    navigate("/mangadex/chapter/" + props.chapterID);
+                    navigate(MangaDexPath + "/chapter/" + props.chapterID);
                 }}>Longstrip</Chakra.MenuItem>
                 <Chakra.MenuItem onClick={() => {
                     setType("Swipper");
@@ -133,7 +136,7 @@ function Chapter_Previous_Next(props: {
                                         }
                                     >
                                         {(getted: string) => (
-                                            <Chakra.IconButton as={Link} to={"/mangadex/chapter/" + getted} aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
+                                            <Chakra.IconButton as={Link} to={MangaDexPath + "/chapter/" + getted} aria-label="previous" icon={<ChakraIcon.ChevronLeftIcon />} />
                                         )}
                                     </Await>
                                 </React.Suspense>
@@ -155,7 +158,7 @@ function Chapter_Previous_Next(props: {
                                         }
                                     >
                                         {(getted: string) => (
-                                            <Chakra.IconButton as={Link} to={"/mangadex/chapter/" + getted} aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
+                                            <Chakra.IconButton as={Link} to={MangaDexPath +  "/chapter/" + getted} aria-label="next" icon={<ChakraIcon.ChevronRightIcon />} />
                                         )}
                                     </Await>
                                 </React.Suspense>
@@ -266,7 +269,7 @@ export default function Chapter_Page() {
                                 ) : (
                                     <Chakra.Link
                                         as={Link}
-                                        to={"/mangadex/manga/" + mangaQuery.data?.get_id()}
+                                        to={MangaDexPath + "/manga/" + mangaQuery.data?.get_id()}
                                     >
                                         <MangaTitle src={mangaQuery.data!} />
                                     </Chakra.Link>

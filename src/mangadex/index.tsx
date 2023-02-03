@@ -8,31 +8,23 @@ import { ErrorELAsync1, ErrorELRouter } from './resources/componnents/Error_cmp'
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
 import "../commons-res/fontawesome-free-6.1.2-web/css/all.css"
-import { Offset_limits } from "./api/internal/Utils";
 import { useHTTPClient } from "../commons-res/components/HTTPClientProvider";
+import { ProSidebarProvider } from "react-pro-sidebar";
+import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
 
-const MangaPage = React.lazy(() => import("./pages/MangaPage"));
+const MangaDexPath: string = "/mangadex";
 
-const Chapters_ = React.lazy(async () => {
-    let to_use = await import("./pages/MangaPage");
-    return {
-        default: to_use.Chapters_
-    };
-})
+export function getMangaDexPath(){
+    return MangaDexPath
+};
 
-const Covers_ = React.lazy(async () => {
-    let to_use = await import("./pages/MangaPage");
-    return {
-        default: to_use.Covers_
-    };
-})
+const MangaPage = React.lazy(() => import("./pages/manga/index"));
 
-const Related_ = React.lazy(async () => {
-    let to_use = await import("./pages/MangaPage");
-    return {
-        default: to_use.Related_
-    };
-})
+const Chapters_ = React.lazy(() => import("./pages/manga/Chapters_"))
+
+const Covers_ = React.lazy(() => import("./pages/manga/Covers_"))
+
+const Related_ = React.lazy(() => import("./pages/manga/Related_"));
 
 const DownloadsLaoyut = React.lazy(() => import('./pages/download/layout'));
 
@@ -54,6 +46,7 @@ const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
 
 const Group_Search = React.lazy(() => import("./pages/groups/search"));
 
+const Random_Manga = React.lazy(() => import("./pages/manga/Random"));
 
 export function Mangadex_suspense(props: React.PropsWithChildren) {
     return (
@@ -81,55 +74,33 @@ export function Mangadex_suspense(props: React.PropsWithChildren) {
 }
 
 function useMangadexRouter(): RouteObject {
-    const MangaDexPath: string = "/mangadex";
-    const Random_Manga = React.lazy(async () => {
-        function random_manga() {
-            const client = useHTTPClient()
-            return (
-                <Mangadex_suspense>
-                    <Await
-                        resolve={Manga.getRandom(client)}
-                        errorElement={<ErrorELAsync1 />}
-                    >
-                        {(getted1: Manga) => {
-                            let navigate = useNavigate();
-                            React.useEffect(() => {
-                                navigate(MangaDexPath + "/manga/" + getted1.get_id())
-                            });
-                            return (<></>);
-                        }}
-                    </Await>
-                </Mangadex_suspense>
-            )
-        }
-        return {
-            default: random_manga
-        }
-    })
-
     const Router: RouteObject = {
         path: MangaDexPath,
         element: (
-            <React.Suspense
-                fallback={
-                    <Chakra.Box
-                        width={"100%"}
-                        height={"100vh"}
+            <MyErrorBounderies>
+                <ProSidebarProvider>
+                    <React.Suspense
+                        fallback={
+                            <Chakra.Box
+                                width={"100%"}
+                                height={"100vh"}
+                            >
+                                <Chakra.AbsoluteCenter>
+                                    <Chakra.Spinner
+                                        size="xl"
+                                        color='orange.500'
+                                        thickness='4px'
+                                    />
+                                </Chakra.AbsoluteCenter>
+                            </Chakra.Box>
+                        }
                     >
-                        <Chakra.AbsoluteCenter>
-                            <Chakra.Spinner
-                                size="xl"
-                                color='orange.500'
-                                thickness='4px'
-                            />
-                        </Chakra.AbsoluteCenter>
-                    </Chakra.Box>
-                }
-            >
-                <Content>
-                    <Outlet />
-                </Content>
-            </React.Suspense>
+                        <Content>
+                            <Outlet />
+                        </Content>
+                    </React.Suspense>
+                </ProSidebarProvider>
+            </MyErrorBounderies>
         ),
         errorElement: (<ErrorELRouter />),
         children: [
@@ -150,17 +121,21 @@ function useMangadexRouter(): RouteObject {
                         path: ":id",
                         errorElement: (<ErrorELRouter />),
                         element: (
-                            <Mangadex_suspense>
-                                <MangaPage />
-                            </Mangadex_suspense>
+                            <MyErrorBounderies>
+                                <Mangadex_suspense>
+                                    <MangaPage />
+                                </Mangadex_suspense>
+                            </MyErrorBounderies>
                         ),
                         children: [
                             {
                                 index: true,
                                 element: (
-                                    <Mangadex_suspense>
-                                        <Chapters_ />
-                                    </Mangadex_suspense>
+                                    <MyErrorBounderies>
+                                        <Mangadex_suspense>
+                                            <Chapters_ />
+                                        </Mangadex_suspense>
+                                    </MyErrorBounderies>
                                 )
                             },
                             {

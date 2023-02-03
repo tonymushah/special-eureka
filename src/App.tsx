@@ -3,11 +3,9 @@ import * as Chakra from "@chakra-ui/react";
 import "/commons-res/bootstrap.css";
 import "/commons-res/fontawesome-free-6.1.2-web/css/all.css"
 import TryCatch from "./commons-res/components/TryCatch";
-
-export default function App(){
     const Navigator = React.lazy(() => import("./commons-res/components/Navigator_Default"));
     const Router = React.lazy(() => import("./router"));
-
+export default function App(){
     return (
         <Chakra.Box
             fontFamily={"Poppins"}

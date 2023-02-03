@@ -1,152 +1,221 @@
 import React from "react";
-import { Menu, MenuItem, ProSidebar, SidebarContent, SidebarFooter, SidebarHeader, SubMenu } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { ExtLink } from "../../../../commons-res/components/ExtLink";
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import "bootstrap/dist/css/bootstrap.css";
 import { Button } from 'react-bootstrap';
-import { FaArchive, FaHome } from 'react-icons/fa';
-import 'react-pro-sidebar/dist/css/styles.css';
+import { FaArchive, FaBookmark, FaHome, FaServer, FaUser } from 'react-icons/fa';
 import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 import vite_logo from "/commons-res/common-icon/favicon.svg";
+import { Sidebar, Menu, SubMenu, MenuItem, useProSidebar, sidebarClasses } from "react-pro-sidebar";
+import { getMangaDexPath } from "../../..";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
-export type Side_barProps = {
-    toggled: boolean,
-    onToggle: (value: boolean) => void
-}
-const MangaDexPath: string = "/mangadex/";
+const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Badge_with_Server_Icon"));
 
-export default class Side_bar extends React.Component<Side_barProps>{
-    isCollapsed: boolean;
-    isRTL: boolean;
-    isToggled: boolean;
-    constructor(props: Side_barProps) {
-        super(props);
-        if (sessionStorage.getItem("isCollapsed") == null) {
-            this.isCollapsed = false;
-        } else {
-            this.isCollapsed = JSON.parse(sessionStorage.getItem("isCollapsed")!)
-        }
-        this.isToggled = false;
-    }
-    collapse() {
-        if (this.isCollapsed == false) {
-            this.isCollapsed = true;
-        } else {
-            this.isCollapsed = false;
-        }
-        sessionStorage.setItem("isCollapsed", JSON.stringify(this.isCollapsed));
-        this.forceUpdate();
-    }
-    RTL() {
-        if (this.isRTL == false) {
-            this.isRTL = true;
-        } else {
-            this.isRTL = false;
-        }
-        this.forceUpdate();
-    }
-    render() {
+const MangaDexPath: string = getMangaDexPath() + "/";
 
-        return (
-            <ProSidebar
-                toggled={this.props.toggled}
-                breakPoint="md"
-                id="sidebar"
-                className='sidebar-mgdx overflow-scroll'
-                rtl={this.isRTL}
-                collapsed={this.isCollapsed}
-                onToggle={this.props.onToggle}
+export default function Side_bar() {
+    const { collapseSidebar } = useProSidebar();
+    return (
+        <Sidebar
+            breakPoint="md"
+            rootStyles={{
+                [`.${sidebarClasses.container}`]: {
+                    backgroundColor: '#2c2c2c',
+                    color: '#f2f2f2'
+                }
+            }}
+        >
+            <Menu
+                rootStyles={{
+                    "paddingTop": "1em",
+                    "paddingBottom": "1em"
+                }}
+                menuItemStyles={{
+                    button: {
+                        ":hover": {
+                            backgroundColor: '#2c2c2c'
+                        }
+                    }
+                }}
             >
-                <SidebarHeader>
-                    <Menu>
-                        <MenuItem onClick={this.collapse.bind(this)} icon={<img src={mangadex_logo} />}>
-                            <Chakra.Heading fontFamily={"inherit"} size={"md"}>MangaDex <span id='exit-chevron' className=' float-end'><i className='fas fa-chevron-left'></i></span></Chakra.Heading>
-                        </MenuItem>
-                    </Menu>
-                </SidebarHeader>
-                <SidebarContent>
+                <MenuItem
+                    icon={
+                        <img src={mangadex_logo} />
+                    }
+                    suffix={
+                        <i className='fas fa-chevron-left'></i>
+                    }
+                    onClick={() => collapseSidebar()}
+                >
+                    <span
+                        style={{
+                            "fontSize": "20px",
+                            fontFamily: "inherit",
+                            fontWeight: "bold"
+                        }}
+                    >MangaDex</span>
+                </MenuItem>
+            </Menu>
+            <Menu
+                menuItemStyles={{
+                    button: {
+                        ":hover": {
+                            backgroundColor: '#2c2c2c'
+                        }
+                    }
+                }}
+                rootStyles={{
+                    maxHeight : "80vh",
+                    height: "80vh",
+                    overflowY : "scroll",
+                    overflowX : "hidden"
+                }}
+            >
+
+                <MenuItem
+                    icon={
+                        <FaHome />
+                    }
+                    component={
+                        <Link to={MangaDexPath} />
+                    }
+                >
+                    Home
+                </MenuItem>
+                <SubMenu
+                    icon={
+                        <FaBookmark />
+                    }
+                    label="Follows"
+                    rootStyles={{
+                        backgroundColor: "inherit"
+                    }}
+                >
                     <Menu
-                        popperArrow={false}
-                        subMenuBullets={false}
+                        menuItemStyles={{
+                            button: {
+                                backgroundColor: '#2c2c2c',
+                                ":hover": {
+                                    backgroundColor: '#2c2c2c'
+                                }
+                            }
+                        }}
                     >
-                        <MenuItem icon={<FaHome onClick={this.collapse.bind(this)}></FaHome>}>
-                            <Link to={MangaDexPath}>
-                                Home
-                            </Link>
+                        <MenuItem
+                            component={
+                                <Link
+                                    to={MangaDexPath + "download"}
+                                />
+                            }
+                        >
+                            Offline Library
                         </MenuItem>
-                        <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='far fa-bookmark'></i>} title={"Follow"}>
-                            <MenuItem>Updates</MenuItem>
-                            <MenuItem>Library</MenuItem>
-                            <MenuItem>MDLists</MenuItem>
-                            <MenuItem>Followed Groups</MenuItem>
-                        </SubMenu>
-                        <SubMenu defaultOpen={false} icon={
-                            <Chakra.Icon
-                                as={FaArchive}
-                                onClick={this.collapse.bind(this)}
-                                size={"xs"}
-                            />
-                        } title={"Download"}>
-                            <MenuItem suffix={
-                                <React.Suspense
-                                    fallback={<Chakra.Spinner/>}
-                                >
-                                    <Downloads_badge_ />
-                                </React.Suspense>
-                            }>Server : </MenuItem>
-                            <MenuItem>
-                                <Link to="/mangadex/download">
-                                    Library
-                                </Link>
-                            </MenuItem>
-                        </SubMenu>
-                        <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='far fa-bookmark'></i>} title={"Titles"}>
-                            <MenuItem>Advanced Research</MenuItem>
-                            <MenuItem>Latest Updates</MenuItem>
-                            <MenuItem>Recently Added</MenuItem>
-                            <MenuItem>
-                                <Link to="/mangadex/manga/random" replace={true} >
-                                    Random
-                                </Link></MenuItem>
-                            <MenuItem>Suggestive</MenuItem>
-                        </SubMenu>
-                        <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className={"far fa-users"}></i>} title={"Community"}>
-                            <MenuItem>
-                                <Link to={"/mangadex/group/search"}>
-                                    Groups
-                                </Link>
-                            </MenuItem>
-                        </SubMenu>
-                        <SubMenu defaultOpen={false} icon={<i onClick={this.collapse.bind(this)} className='fas fa-cog fa-spin'></i>} title={"Powerred by "}>
-                            <ExtLink href="https://tauri.app">
-                                <MenuItem icon={<img id="tauri_icon" src={tauri_logo} />}>
-                                    Tauri Apps <ChakraIcons.ExternalLinkIcon />
-                                </MenuItem>
-                            </ExtLink>
-                            <ExtLink href="https://api.mangadex.org">
-                                <MenuItem icon={<img id="tauri_icon" src={mangadex_logo} />}>
-                                    Mangadex API <ChakraIcons.ExternalLinkIcon />
-                                </MenuItem>
-                            </ExtLink>
-                            <ExtLink href="https://vitejs.dev">
-                                <MenuItem icon={<img id="tauri_icon" src={vite_logo} width="28px" />}>
-                                    Vite <ChakraIcons.ExternalLinkIcon />
-                                </MenuItem>
-                            </ExtLink>
-                        </SubMenu>
+                        <MenuItem>Updates</MenuItem>
+                        <MenuItem> Online Library</MenuItem>
+                        <MenuItem>MDLists</MenuItem>
+                        <MenuItem>Followed Groups</MenuItem>
                     </Menu>
-                </SidebarContent>
-                <SidebarFooter onClick={this.collapse.bind(this)}>
-                    <Menu>
-                        <MenuItem icon={<i className='far fa-user-alt'></i>} suffix={<Button>Login</Button>} > Guest </MenuItem>
+                </SubMenu>
+                <MenuItem
+                    icon={
+                        <React.Suspense
+                            fallback={<Chakra.Spinner />}
+                        >
+                            <Downloads_badge_With_Server_Icon />
+                        </React.Suspense>
+                    }
+                    suffix={
+                        <React.Suspense
+                            fallback={<Chakra.Spinner />}
+                        >
+                            <Downloads_badge_ />
+                        </React.Suspense>
+                    }
+                > Offline Server </MenuItem>
+                <SubMenu defaultOpen={false} icon={<i onClick={() => collapseSidebar()} className={"far fa-users"}></i>} label={"Community"}>
+                    <Menu
+                        menuItemStyles={{
+                            button: {
+                                backgroundColor: '#2c2c2c',
+                                ":hover": {
+                                    backgroundColor: '#2c2c2c'
+                                }
+                            }
+                        }}
+                    >
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "/group/search"} />
+                            }
+                        >
+
+                            Groups
+
+                        </MenuItem>
                     </Menu>
-                </SidebarFooter>
-            </ProSidebar>
-        );
-    }
+                </SubMenu>
+                <SubMenu defaultOpen={false} icon={<i onClick={() => collapseSidebar()} className='fas fa-cog fa-spin'></i>} label={"Powerred by "}>
+                    <Menu
+                        menuItemStyles={{
+                            button: {
+                                backgroundColor: '#2c2c2c',
+                                ":hover": {
+                                    backgroundColor: '#2c2c2c'
+                                }
+                            }
+                        }}
+                    >
+                        <ExtLink href="https://tauri.app">
+                            <MenuItem icon={<img id="tauri_icon" src={tauri_logo} />}>
+                                Tauri Apps <ChakraIcons.ExternalLinkIcon />
+                            </MenuItem>
+                        </ExtLink>
+                        <ExtLink href="https://api.mangadex.org">
+                            <MenuItem icon={<img id="tauri_icon" src={mangadex_logo} />}>
+                                Mangadex API <ChakraIcons.ExternalLinkIcon />
+                            </MenuItem>
+                        </ExtLink>
+                        <ExtLink href="https://vitejs.dev">
+                            <MenuItem icon={<img id="tauri_icon" src={vite_logo} width="28px" />}>
+                                Vite <ChakraIcons.ExternalLinkIcon />
+                            </MenuItem>
+                        </ExtLink>
+                    </Menu>
+                </SubMenu>
+
+            </Menu>
+            <Menu
+                rootStyles={{
+
+                }}
+                menuItemStyles={{
+                    button: {
+                        ":hover": {
+                            backgroundColor: '#2c2c2c'
+                        }
+                    }
+                }}
+            >
+                <MenuItem
+                    icon={
+                        <FaUser />
+                    }
+                    suffix={
+                        <Chakra.Button
+                            colorScheme={"facebook"}
+                        >
+                            Login
+                        </Chakra.Button>
+                    }
+                >
+                    Guest
+                </MenuItem>
+            </Menu>
+        </Sidebar>
+    )
 }

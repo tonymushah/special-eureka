@@ -10,14 +10,13 @@ import { FaUsers } from "react-icons/fa";
 import {
     useQuery
 } from 'react-query';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
 import { Group } from "../../../api/structures/Group";
 import TryCatch from "../../../../commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { getMangaDexPath } from "../../..";
+
+const MangaDexPath = getMangaDexPath();
 
 export default function Group_Simple_Element(props: {
     src: Group
@@ -56,7 +55,7 @@ export default function Group_Simple_Element(props: {
                                                 )
                                             }
                                         >
-                                            <Chakra.Link as={Link} to={"/mangadex/group/" + props.src.get_id()}>
+                                            <Chakra.Link as={Link} to={MangaDexPath + "/group/" + props.src.get_id()}>
                                                 {props.src.get_name()}
                                             </Chakra.Link>
                                         </TryCatch>

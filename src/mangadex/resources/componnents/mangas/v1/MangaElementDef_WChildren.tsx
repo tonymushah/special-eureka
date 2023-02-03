@@ -2,11 +2,16 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { getMangaDexPath } from "../../../..";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Alt_title } from "../../../../api/internal/Utils";
 import { Manga } from "../../../../api/structures/Manga";
 import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
+const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
+
+const MangaDexPath = getMangaDexPath();
+
 export default function MangaElementDef_WChildren(props: React.PropsWithChildren<{
     src: Manga,
     isRefetching?: boolean
@@ -19,7 +24,6 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
     }, {
         "staleTime": Infinity
     });
-    const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
     //let desc: string = "";
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
@@ -92,7 +96,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                         >
                             <Chakra.Link
                                 as={Link}
-                                to={"/mangadex/manga/" + props.src.get_id()}
+                                to={MangaDexPath + "/manga/" + props.src.get_id()}
                             >
                                 <Chakra.Heading
                                     noOfLines={2}

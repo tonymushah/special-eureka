@@ -11,6 +11,10 @@ import * as ChakraIcons from "@chakra-ui/icons";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import { useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
+import { getMangaDexPath } from "../../../..";
+
+const MangaDexPath = getMangaDexPath();
 
 export default function MangaVerticalElement(props: {
     src: Manga,
@@ -20,6 +24,14 @@ export default function MangaVerticalElement(props: {
     delete?: Function,
     update?: Function
 }) {
+    if(props.download == undefined && props.delete == undefined && props.update == undefined){
+        const { download_, delete_ } = useMangaDownload_Delete({
+            mangaID : props.src.get_id()
+        });
+        props.download = download_.mutate;
+        props.delete = delete_.mutate;
+        props.update = download_.mutate;
+    }
     let title: string = "";
     const client = useHTTPClient();
     const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
@@ -116,7 +128,7 @@ export default function MangaVerticalElement(props: {
                                 )}>
                                     <Chakra.LinkOverlay
                                         as={Link}
-                                        to={"/mangadex/manga/" + props.src.get_id()}
+                                        to={MangaDexPath + "/manga/" + props.src.get_id()}
                                     >
                                         {title}
                                     </Chakra.LinkOverlay>
