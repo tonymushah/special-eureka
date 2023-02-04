@@ -10,6 +10,7 @@ import { At_Home } from "./At_home";
 import { Collection } from "./Collection";
 import { Group } from "./Group";
 import { Manga, Manga_2 } from "./Manga";
+import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import ChapterSearchType from "./SearchType/Chapter";
 import Chapter_withAllIncludes_SearchType from "./SearchType/Chapter_WAllIncludes";
 import { User } from "./User";
@@ -308,7 +309,6 @@ export class Chapter extends Attribute {
         return User.getUserById(this.get_some_relationship(RelationshipsTypes.user())[0].get_id(), client);
     }
     public async getAggregateList(client?: Client): Promise<Aggregate> {
-        let manga_id: string = this.get_some_relationship("manga")[0].get_id();
         let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
         let groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
         for (let index = 0; index < groups.length; index++) {
@@ -317,12 +317,7 @@ export class Chapter extends Attribute {
         }
         return Aggregate.get_aggregate(this.getAggregateList_options(client));
     }
-    public getAggregateList_options(client?: Client): {
-        mangaID: string,
-        translatedLanguage?: Array<string>,
-        groups?: Array<string>,
-        client?: Client
-    } {
+    public getAggregateList_options(client?: Client): AggregateListOptions {
 
         let manga_id: string = this.get_some_relationship("manga")[0].get_id();
         let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());

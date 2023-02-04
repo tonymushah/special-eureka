@@ -5,7 +5,7 @@ import * as Chakra from "@chakra-ui/react";
 import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
 import "font-awesome/css/font-awesome.css";
-import { Container } from "react-bootstrap";
+import { Container, Stack } from "react-bootstrap";
 import {
     useQuery
 } from 'react-query';
@@ -135,9 +135,43 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                 </Group_Page_Suspense>
                             </Chakra.TabPanel>
                             <Chakra.TabPanel>
-                                <Group_Page_Suspense>
-                                    <Group_Titles id={props.src.get_id()} />
-                                </Group_Page_Suspense>
+                                <TryCatch
+                                    catch={(error) => (
+                                        <Chakra.Alert
+                                            status="error"
+                                            flexDirection='column'
+                                            alignItems='center'
+                                            justifyContent='center'
+                                            textAlign='center'
+                                            height={"max-content"}
+                                        >
+                                            <Chakra.AlertIcon />
+                                            <Chakra.AlertTitle>
+                                                {
+                                                    error.name
+                                                }
+                                            </Chakra.AlertTitle>
+                                            <Chakra.AlertDescription>
+                                                <Stack
+                                                >
+                                                    <Chakra.Text>{
+                                                        error.message
+                                                    }</Chakra.Text>
+                                                    <Chakra.Box>
+                                                        {
+                                                            error.stack
+                                                        }
+                                                    </Chakra.Box>
+                                                </Stack>
+                                            </Chakra.AlertDescription>
+                                        </Chakra.Alert>
+                                    )}
+                                >
+                                    <Group_Page_Suspense>
+                                        <Group_Titles id={props.src.get_id()} />
+                                    </Group_Page_Suspense>
+                                </TryCatch>
+
                             </Chakra.TabPanel>
                             <Chakra.TabPanel>
                                 <Group_Page_Suspense>

@@ -1,13 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
 import React from 'react';
 import { Row } from 'react-bootstrap';
+import { Mangadex_suspense } from "../..";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Offset_limits } from '../../api/internal/Utils';
 
 const CustomListSwiper = React.lazy(() => import('../../resources/componnents/lists/v1/CustomListSwiper'));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
-
+const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
 function Home() {
   let offset_limits_1: Offset_limits = new Offset_limits();
   offset_limits_1.set_limits(20);
@@ -60,18 +61,11 @@ function Home() {
         <IsPingable
           client={client}
           onError={(query) => (
-            <Chakra.Alert status={"error"}>
-              <Chakra.AlertIcon />
-              <Chakra.AlertTitle>Can't find Mangadex Website</Chakra.AlertTitle>
-              <Chakra.AlertDescription>
-                <Chakra.Button 
-                  colorScheme={"green"} 
-                  onClick={() => query.refetch()}
-                >
-                  Refresh
-                </Chakra.Button>
-              </Chakra.AlertDescription>
-            </Chakra.Alert>
+            <Mangadex_suspense>
+              <IsPingable_defaultError
+                query={query}
+              />
+            </Mangadex_suspense>
           )}
           onLoading={
             <Chakra.AbsoluteCenter>

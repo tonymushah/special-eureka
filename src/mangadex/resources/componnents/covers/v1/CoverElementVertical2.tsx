@@ -1,25 +1,17 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Cover } from "../../../../api/structures/Cover";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
+import { get_cover_art_image } from "../../../hooks/CoverStateHooks";
 import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import { useQuery } from "react-query";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
 
 export default function CoverElementVertical2(props: {
     src: Cover,
     isThumbail?: boolean
 }) {
-    const client = useHTTPClient();
-    const cover_image_querykey = props.isThumbail == undefined || props.isThumbail == false ? "mdx-cover-" + props.src.get_id() + "-image" : "mdx-cover-" + props.src.get_id() + "-image-512";
-    const cover_image_query = useQuery(cover_image_querykey, () => {
-        if(props.isThumbail == undefined || props.isThumbail == false){
-            return props.src.get_CoverImage_promise(client);
-        }else{
-            return props.src.get_CoverImage_thumbnail_promise(512, client);
-        }
-    }, {
-        staleTime: 1000 * 60 * 5
+    const { cover_image_query } = get_cover_art_image({
+        src: props.src,
+        isThumbail: props.isThumbail
     });
     if (cover_image_query.isLoading) {
         return (

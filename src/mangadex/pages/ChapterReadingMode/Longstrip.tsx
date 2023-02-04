@@ -1,6 +1,6 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { useChapterPageOutletContext } from "../Chapter_Page";
+import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
 
 export default function Lonstrip() {
     let data = useChapterPageOutletContext()

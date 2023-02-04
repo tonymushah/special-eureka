@@ -111,7 +111,8 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
                         {
                             this.Chapters_parts.map<React.ReactNode>((volumes, index, array) => (
                                 <Chakra.TabPanel>
-                                    <Chakra.Accordion defaultIndex={[0]} allowMultiple>
+                                    <Chakra.Accordion 
+                                    defaultIndex={[0]} allowMultiple>
                                         {
                                             volumes.map<React.ReactNode>(volume => (
                                                 <Volume__reverse src={volume} open={true}></Volume__reverse>

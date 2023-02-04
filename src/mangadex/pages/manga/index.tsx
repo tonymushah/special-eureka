@@ -6,6 +6,7 @@ import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Manga } from "../../api/structures/Manga";
 import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
+import Download_Manga_withHotkeys from "../../resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "../../resources/componnents/mangas/Manga_Page";
 
 type MangaPage_OutletContex = {
@@ -43,55 +44,60 @@ export default function MangaPage() {
         )
     }
     return (
-        <Manga_Page
-            src={query.data!}
-        >
-            <Chakra.Box>
-                <Container>
-                    <Nav
-                        variant="tabs"
-                        as={Chakra.Box}
-                    >
-                        <Nav.Item>
-                            <Nav.Link
-                                as={Link}
-                                to="."
-                                eventKey="chapters"
-                            >
-                                Chapters
-                            </Nav.Link>
-                        </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link
-                                as={Link}
-                                to="covers"
-                                eventKey="covers"
-                            >
-                                Covers
-                            </Nav.Link>
-                        </Nav.Item>
-                        {
-                            query.data!.get_some_relationshipLength("manga") == 0 ? (<></>) : (
-                                <Nav.Item>
-                                    <Nav.Link
-                                        as={Link}
-                                        to="related"
-                                        eventKey="related"
-                                    >
-                                        Related
-                                    </Nav.Link>
-                                </Nav.Item>
-                            )
-                        }
-                    </Nav>
-                </Container>
-            </Chakra.Box>
-            <Chakra.Box>
-                <Container>
-                    <Outlet context={{ toUse: query.data! }} />
-                </Container>
-            </Chakra.Box>
-        </Manga_Page>
+        <>
+            <Download_Manga_withHotkeys
+                mangaID={id!}
+            />
+            <Manga_Page
+                src={query.data!}
+            >
+                <Chakra.Box>
+                    <Container>
+                        <Nav
+                            variant="tabs"
+                            as={Chakra.Box}
+                        >
+                            <Nav.Item>
+                                <Nav.Link
+                                    as={Link}
+                                    to="."
+                                    eventKey="chapters"
+                                >
+                                    Chapters
+                                </Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link
+                                    as={Link}
+                                    to="covers"
+                                    eventKey="covers"
+                                >
+                                    Covers
+                                </Nav.Link>
+                            </Nav.Item>
+                            {
+                                query.data!.get_some_relationshipLength("manga") == 0 ? (<></>) : (
+                                    <Nav.Item>
+                                        <Nav.Link
+                                            as={Link}
+                                            to="related"
+                                            eventKey="related"
+                                        >
+                                            Related
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                )
+                            }
+                        </Nav>
+                    </Container>
+                </Chakra.Box>
+                <Chakra.Box>
+                    <Container>
+                        <Outlet context={{ toUse: query.data! }} />
+                    </Container>
+                </Chakra.Box>
+            </Manga_Page>
+        </>
 
     )
 }

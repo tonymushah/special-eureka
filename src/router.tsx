@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import Mangadex from "./mangadex/index";
 import { getClient } from "@tauri-apps/api/http";
 
+const NotFound404 = React.lazy(() => import("./commons-res/404NotFound"));
 const HTTPClientProvider_Client = React.lazy(() => import("./commons-res/components/HTTPClientProvider_Query"));
 
 function Close_splashscreen() {
@@ -31,7 +32,30 @@ export default function Router() {
     const router = createBrowserRouter(
         [
             All_Routes,
-            Mangadex
+            Mangadex,
+            {
+                path : "*",
+                element : (
+                    <React.Suspense
+            fallback={
+                <Chakra.Box
+                    width={"100%"}
+                    height={"100vh"}
+                >
+                    <Chakra.AbsoluteCenter>
+                        <Chakra.Spinner
+                            size="xl"
+                            color='orange.500'
+                            thickness='4px'
+                        />
+                    </Chakra.AbsoluteCenter>
+                </Chakra.Box>
+            }
+        >
+            <NotFound404/>
+        </React.Suspense>
+                )
+            }
         ]
     )
     const queryClient = new QueryClient({

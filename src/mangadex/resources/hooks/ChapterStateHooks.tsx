@@ -5,12 +5,20 @@ import { Chapter } from "../../api/structures/Chapter";
 import { Group } from "../../api/structures/Group";
 import { User } from "../../api/structures/User";
 
+export function get_chapter_queryKey(props : {
+    id : string
+}){
+    return "mdx-chapter:" + props.id;
+}
+
 export function get_ChapterbyId(props: {
     id: string,
     options?: Omit<UseQueryOptions<Chapter, Error>, 'queryKey' | 'queryFn'>
 }) {
     const client = useHTTPClient();
-    const key = "mdx-chapter:" + props.id;
+    const key = get_chapter_queryKey({
+        id : props.id
+    });
     const query = useQuery<Chapter, Error>(key, () => {
         return Chapter.get_ChapterbyId(props.id, client);
     }, props.options == undefined ? {
@@ -99,28 +107,31 @@ export function useChapterDownloadMutation(props: {
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient()
-    const toast = useToast();
+    const toast = useToast({
+        position: "bottom-right",
+        duration: 9000,
+    });
     const download_query = useMutation({
         mutationKey: "mdx-mutation-chapter-download-" + props.chapID,
         mutationFn: () => {
+            toast({
+                status: "loading",
+                title : "Downloading chapter"
+            })
             return Chapter.download(props.chapID, client);
         },
         onError(error: Error) {
             toast({
-                position: "bottom-right",
                 status: "error",
                 isClosable: true,
-                duration: 9000,
                 title: "Error on downloading",
                 description: error.message
             });
         },
         onSuccess(data, variables, context) {
             toast({
-                position: "bottom-right",
                 status: "success",
                 isClosable: true,
-                duration: 9000,
                 title: "Downloaded chapter",
                 description: props.chapID
             });

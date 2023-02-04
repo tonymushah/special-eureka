@@ -1,6 +1,6 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { useChapterPageOutletContext } from "../Chapter_Page";
+import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
 
 export default function Widestrip() {
     let data = useChapterPageOutletContext()
@@ -8,7 +8,6 @@ export default function Widestrip() {
             <Chakra.HStack>
                 {
                     data.images.map((value) => (
-
                         <Chakra.Image
                             fallback={
                                 <Chakra.Box width={"full"}>
@@ -23,7 +22,6 @@ export default function Widestrip() {
                             }
                             src={value}
                         />
-
                     ))
                 }
             </Chakra.HStack>

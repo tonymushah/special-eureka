@@ -1,7 +1,7 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
 import { Zoom } from "swiper"
-import { useChapterPageOutletContext } from "../Chapter_Page";
+import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
 import 'swiper/css';
 import 'swiper/css/zoom';
 import { SwiperSlide, Swiper } from "swiper/react"

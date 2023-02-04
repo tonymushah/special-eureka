@@ -10,7 +10,9 @@ import { Languages, Lang_and_Data, make_first_UpperCare, MangaLinksData } from "
 import { Aggregate } from "../../../../api/structures/Aggregate";
 import { Author } from "../../../../api/structures/Author";
 import { Manga } from "../../../../api/structures/Manga";
+import { AggregateListOptions } from '../../../../api/structures/SearchType/AggregateListOptions';
 import { Tag } from "../../../../api/structures/Tag";
+import { get_aggregate_query } from '../../../hooks/AgreggateStateHooks';
 import { get_manga_page_authors_artists } from "../../../hooks/MangaStateHooks";
 import Chapter_Element1_byChapID from "../../chapter/v1/Chapter_Element1_byChapID";
 import ErrorEL1 from "../../error/ErrorEL1";
@@ -183,21 +185,13 @@ function Manga_Page_Aggregate(props: {
     to_use_groups?: Array<string>
 }) {
     const client: Client = useHTTPClient();
-    const aggregate_list_option: {
-        mangaID: string,
-        translatedLanguage?: Array<string>,
-        groups?: Array<string>,
-        client?: Client
-    } = {
+    const aggregate_list_option: AggregateListOptions = {
         mangaID: props.src.get_id(),
         translatedLanguage: props.to_see_lang,
         client: client
     }
-    const queryKey = ["mdx-aggregate", aggregate_list_option]
-    const query = useQuery<Aggregate, Error>(queryKey, () => {
-        return Aggregate.get_aggregate(aggregate_list_option);
-    }, {
-        staleTime: Infinity
+    const {query} = get_aggregate_query({
+        aggregate_options: aggregate_list_option
     });
     if (query.isRefetching == true && query.isLoading) {
         return (

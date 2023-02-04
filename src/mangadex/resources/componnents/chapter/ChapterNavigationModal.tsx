@@ -11,6 +11,7 @@ import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProv
 import IsPingable from "../IsPingable";
 import { useQuery } from "react-query";
 import ErrorEL1 from "../error/ErrorEL1";
+import { get_aggregate_query } from "../../hooks/AgreggateStateHooks";
 
 const All_downloaded_Chapter_manga = React.lazy(() => import("../download/All_downloaded_Chapter_manga"));
 
@@ -18,12 +19,12 @@ function ChapterNavigationModal_Online_Chapters(props: {
     chapter: Chapter
 }) {
     const client = useHTTPClient();
-    const queryKey = ["mdx-aggregate", props.chapter.getAggregateList_options()]
-    const query = useQuery<Aggregate, Error>(queryKey, () => {
-        return props.chapter.getAggregateList(client);
-    }, {
-        staleTime: Infinity
-    })
+    const { query } = get_aggregate_query({
+        aggregate_options : props.chapter.getAggregateList_options(client),
+        queryOption : {
+            staleTime : 1000 * 60 * 2
+        }
+    });
     if (query.isRefetching == true) {
         return (
             <Chakra.Center>

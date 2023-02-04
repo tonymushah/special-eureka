@@ -6,6 +6,7 @@ import { getMangaDexPath } from "../../../..";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Alt_title } from "../../../../api/internal/Utils";
 import { Manga } from "../../../../api/structures/Manga";
+import { get_manga_page_cover } from "../../../hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
 const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
@@ -18,11 +19,8 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
 }>) {
     const client = useHTTPClient();
     let title: string = "";
-    const cover_key = "mdx-cover:" + props.src.get_cover_art_id();
-    const coverQuery = useQuery(cover_key, () => {
-        return props.src.get_cover_art(client)
-    }, {
-        "staleTime": Infinity
+    const { coverQuery } = get_manga_page_cover({
+        src : props.src
     });
     //let desc: string = "";
     if (props.src.get_title().en == null) {

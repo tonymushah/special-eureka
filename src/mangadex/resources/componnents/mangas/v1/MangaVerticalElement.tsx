@@ -11,7 +11,7 @@ import * as ChakraIcons from "@chakra-ui/icons";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import { useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
+import { get_manga_page_cover, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 import { getMangaDexPath } from "../../../..";
 
 const MangaDexPath = getMangaDexPath();
@@ -24,21 +24,22 @@ export default function MangaVerticalElement(props: {
     delete?: Function,
     update?: Function
 }) {
-    if(props.download == undefined && props.delete == undefined && props.update == undefined){
-        const { download_, delete_ } = useMangaDownload_Delete({
-            mangaID : props.src.get_id()
-        });
-        props.download = download_.mutate;
-        props.delete = delete_.mutate;
-        props.update = download_.mutate;
-    }
+    const getMangaDownload_Delete = () => {
+        let getted = useMangaDownload_Delete({
+            mangaID: props.src.get_id()
+        })
+        return {
+            download_ : getted.download_.mutate,
+            delete_ : getted.delete_.mutate
+        }
+    };
+    const { download_, delete_ } = (props.download == undefined || props.delete == undefined || props.update == undefined) ? getMangaDownload_Delete() : {
+        download_: props.download,
+        delete_: props.delete
+    };
     let title: string = "";
-    const client = useHTTPClient();
-    const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
-    const coverQuery = useQuery(cover_key, () => {
-        return props.src.get_cover_art(client);
-    }, {
-        "staleTime": Infinity
+    const { coverQuery } = get_manga_page_cover({
+        src : props.src
     });
     //let desc: string = "";
     if (props.src.get_title().en == null) {
@@ -57,21 +58,21 @@ export default function MangaVerticalElement(props: {
                             onClick={() => props.refetch!()}
                         >Refresh</Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => props.download!()}
+                            onClick={() => download_()}
                             textColor={"green"}
                             icon={<ChakraIcons.DownloadIcon />}
                         >
                             Download
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => props.update!()}
+                            onClick={() => download_()}
                             textColor={"blue"}
                             icon={<ChakraIcons.RepeatIcon />}
                         >
                             Update
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => props.delete!()}
+                            onClick={() => delete_()}
                             textColor={"red"}
                             icon={<ChakraIcons.DeleteIcon />}
                         >

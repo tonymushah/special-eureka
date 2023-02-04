@@ -211,7 +211,15 @@ export default function Group_Details(props: {
                                                                 <React.Suspense
                                                                     fallback={<Chakra.Skeleton width={"10px"} height={"10px"} />}
                                                                 >
-                                                                    <Chakra.Link as={ExtLink} href={href} children={node.children} />
+                                                                    {
+                                                                        node.href == undefined ? (
+                                                                            <Chakra.Link>{node.children}</Chakra.Link>
+                                                                        ) : (
+                                                                            <ExtLink href={node.href}>
+                                                                                <Chakra.Link>{node.children}</Chakra.Link>
+                                                                            </ExtLink>
+                                                                        )
+                                                                    }
                                                                 </React.Suspense>
                                                             )
                                                         }

@@ -25,14 +25,19 @@ export default function MangaElementDef(props: {
     delete?: Function,
     update?: Function
 }){
-    if(props.download == undefined && props.delete == undefined && props.update == undefined){
-        const { download_, delete_ } = useMangaDownload_Delete({
-            mangaID : props.src.get_id()
-        });
-        props.download = download_.mutate;
-        props.delete = delete_.mutate;
-        props.update = download_.mutate;
-    }
+    const getMangaDownload_Delete = () => {
+        let getted = useMangaDownload_Delete({
+            mangaID: props.src.get_id()
+        })
+        return {
+            download_ : getted.download_.mutate,
+            delete_ : getted.delete_.mutate
+        }
+    };
+    const { download_, delete_ } = (props.download == undefined || props.delete == undefined || props.update == undefined) ? getMangaDownload_Delete() : {
+        download_: props.download,
+        delete_: props.delete
+    };
     let title: string = "";
     const {
         coverQuery,
@@ -65,21 +70,21 @@ export default function MangaElementDef(props: {
                             onClick={() => props.refetch!()}
                         >Refresh</Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => props.download!()}
+                            onClick={() => download_()}
                             textColor={"green"}
                             icon={<ChakraIcons.DownloadIcon />}
                         >
                             Download
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => props.update!()}
+                            onClick={() => download_()}
                             textColor={"blue"}
                             icon={<ChakraIcons.RepeatIcon />}
                         >
                             Update
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => props.delete!()}
+                            onClick={() => delete_()}
                             textColor={"red"}
                             icon={<ChakraIcons.DeleteIcon />}
                         >

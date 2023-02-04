@@ -2,6 +2,7 @@ import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Querry_list_builder, serialize } from "../internal/Utils";
 import { Manga } from "./Manga";
+import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import { Volume } from "./Volume";
 
 export class Aggregate{
@@ -64,12 +65,7 @@ export class Aggregate{
         translatedLanguage,
         groups,
         client
-    } : {
-        mangaID: string, 
-        translatedLanguage?: Array<string>,
-        groups? : Array<string>,
-        client? : Client
-    }): Promise<Aggregate>{
+    } : AggregateListOptions): Promise<Aggregate>{
         let getted: Response<any> = await Api_Request.get_methods(
             Manga.get_request_a() + mangaID + "/aggregate?" + 
                 serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + 

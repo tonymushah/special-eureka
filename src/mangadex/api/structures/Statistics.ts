@@ -20,7 +20,7 @@ export class Statistics_Manga{
         "2" : number,
         "1" : number
     };
-    private comments? : Comments
+    public comments? : Comments
 
     public static distr_length: Array<number> = [1, 10];
     public set_mangaID(mangaID: string){

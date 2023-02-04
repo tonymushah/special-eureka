@@ -2,19 +2,17 @@ import * as Chakra from "@chakra-ui/react";
 import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
 import React from 'react';
-import { Await, Outlet, redirect, RouteObject, useNavigate } from "react-router-dom";
-import { Manga } from './api/structures/Manga';
-import { ErrorELAsync1, ErrorELRouter } from './resources/componnents/Error_cmp';
+import { ProSidebarProvider } from "react-pro-sidebar";
+import { Outlet, RouteObject } from "react-router-dom";
+import "../commons-res/fontawesome-free-6.1.2-web/css/all.css";
+import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
+import { ErrorELRouter } from './resources/componnents/Error_cmp';
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
-import "../commons-res/fontawesome-free-6.1.2-web/css/all.css"
-import { useHTTPClient } from "../commons-res/components/HTTPClientProvider";
-import { ProSidebarProvider } from "react-pro-sidebar";
-import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
 
 const MangaDexPath: string = "/mangadex";
 
-export function getMangaDexPath(){
+export function getMangaDexPath() {
     return MangaDexPath
 };
 
@@ -30,7 +28,7 @@ const DownloadsLaoyut = React.lazy(() => import('./pages/download/layout'));
 
 const Download_Index_Page = React.lazy(() => import('./pages/download'));
 
-const Chapter_Page = React.lazy(() => import('./pages/Chapter_Page'))
+const Chapter_Page = React.lazy(() => import('./pages/chapter/Chapter_Page'))
 
 const Home = React.lazy(() => import("./pages/Home/Home"));
 
@@ -47,6 +45,8 @@ const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
 const Group_Search = React.lazy(() => import("./pages/groups/search"));
 
 const Random_Manga = React.lazy(() => import("./pages/manga/Random"));
+
+const RecentlyAdded = React.lazy(() => import("./pages/titles/RecentlyAdded"));
 
 export function Mangadex_suspense(props: React.PropsWithChildren) {
     return (
@@ -175,9 +175,11 @@ function useMangadexRouter(): RouteObject {
                         path: ":id",
                         errorElement: (<ErrorELRouter />),
                         element: (
-                            <Mangadex_suspense>
-                                <Chapter_Page />
-                            </Mangadex_suspense>
+                            <MyErrorBounderies>
+                                <Mangadex_suspense>
+                                    <Chapter_Page />
+                                </Mangadex_suspense>
+                            </MyErrorBounderies>
                         ),
                         children: [
                             {
@@ -258,6 +260,19 @@ function useMangadexRouter(): RouteObject {
                             </Mangadex_suspense>
                         )
 
+                    }
+                ]
+            },
+            {
+                path: "titles",
+                children: [
+                    {
+                        path: "recently-added",
+                        element: (
+                            <Mangadex_suspense>
+                                <RecentlyAdded />
+                            </Mangadex_suspense>
+                        )
                     }
                 ]
             }
