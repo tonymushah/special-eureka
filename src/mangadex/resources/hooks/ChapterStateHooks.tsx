@@ -136,7 +136,7 @@ export function useChapterDownloadMutation(props: {
                 description: props.chapID
             });
             props.toInvalidate.map((value) => {
-                queryClient.invalidateQueries({
+                queryClient.refetchQueries({
                     queryKey: value
                 });
             })

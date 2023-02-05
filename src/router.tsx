@@ -1,8 +1,7 @@
 import React from "react";
 import Index_Page from "./index_page";
-import { Await, createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
-import { invoke } from "@tauri-apps/api/tauri";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import Mangadex from "./mangadex/index";
@@ -11,16 +10,6 @@ import { getClient } from "@tauri-apps/api/http";
 const NotFound404 = React.lazy(() => import("./commons-res/404NotFound"));
 const HTTPClientProvider_Client = React.lazy(() => import("./commons-res/components/HTTPClientProvider_Query"));
 
-function Close_splashscreen() {
-    return (
-        <React.Suspense>
-            <Await
-                resolve={invoke("close_splashscreen")}
-            >
-            </Await>
-        </React.Suspense>
-    );
-}
 
 export default function Router() {
 
@@ -161,7 +150,6 @@ export default function Router() {
                                     </Chakra.Box>
                                 }
                             />
-                            <Close_splashscreen />
                         </React.Fragment>
                     </HTTPClientProvider_Client>
                 </React.Suspense>

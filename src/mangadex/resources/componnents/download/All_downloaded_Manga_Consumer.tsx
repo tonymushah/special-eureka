@@ -51,7 +51,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                 "duration" : 9000,
                 "isClosable" : true
             });
-            queryClient.invalidateQueries({
+            queryClient.refetchQueries({
                 queryKey : query_key
             })
         },
@@ -85,7 +85,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                 "duration" : 9000,
                 "isClosable" : true
             });
-            queryClient.invalidateQueries({
+            queryClient.refetchQueries({
                 queryKey : query_key
             })
         },
@@ -104,7 +104,7 @@ export default function AllDownlaodedMangaConsumer(props : {
         <Chakra.Box>
             <Chakra.Button
                 onClick={() => {
-                    queryClient.invalidateQueries(query_key);
+                    queryClient.resetQueries(query_key);
                 }}
             >Refresh</Chakra.Button>
             &nbsp;

@@ -1,3 +1,4 @@
+import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
@@ -8,19 +9,36 @@ export default function MangaManagerState(){
     const queryClient = useQueryClient();
     const client = useHTTPClient()
     const key= "mdx-offline_server"
+    const toast = useToast({
+        position: "bottom-right",
+        duration: 9000
+    });
     const query = useQuery(key, async () => {
         let getted = await DesktopApi.ping(client)
         return getted;
     }, {
-        staleTime : Infinity
+        "staleTime" : Infinity
     })
     const switch_server_state = useMutation({
-        "mutationFn" : () => query.data == false ? launch_server() : stop_server(),
+        "mutationFn" : () => {
+            return query.data == false ? launch_server() : stop_server()
+        },
         onSuccess: () => {
-            queryClient.invalidateQueries({
+            queryClient.refetchQueries({
                 "queryKey" : key
             });
-        }
+        }, 
+        onError(error) {
+            toast({
+                status: "error",
+                title: "Error on executing",
+                description : JSON.stringify(error),
+                isClosable: true
+            })
+            queryClient.refetchQueries({
+                "queryKey" : key
+            });
+        },
     })
     return {
         server_query : query,
