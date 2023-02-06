@@ -6,23 +6,23 @@ const App = React.lazy(() => import("./App"));
 
 ReactDOM.hydrateRoot(document.getElementById("app")!, (
     <React.StrictMode>
-            <ChakraProvider>
-                <React.Suspense
-                    fallback={
-                        <Box width={"100%"} height={"100vh"}>
-                            <AbsoluteCenter>
-                                <Spinner
-                                    size="xl"
-                                    color='orange.500'
-                                    thickness='4px'
-                                />
-                            </AbsoluteCenter>
-                        </Box>
-                    }
-                >
-                    <App />
-                </React.Suspense>
-            </ChakraProvider>
+        <ChakraProvider>
+            <React.Suspense
+                fallback={
+                    <Box width={"100%"} height={"100vh"}>
+                        <AbsoluteCenter>
+                            <Spinner
+                                size="xl"
+                                color='orange.500'
+                                thickness='4px'
+                            />
+                        </AbsoluteCenter>
+                    </Box>
+                }
+            >
+                <App />
+            </React.Suspense>
+        </ChakraProvider>
     </React.StrictMode>
 ));
 

@@ -1,67 +1,61 @@
 import React from "react";
-import Index_Page from "./index_page";
-import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import Mangadex from "./mangadex/index";
-import { getClient } from "@tauri-apps/api/http";
 
 const NotFound404 = React.lazy(() => import("./commons-res/404NotFound"));
-const HTTPClientProvider_Client = React.lazy(() => import("./commons-res/components/HTTPClientProvider_Query"));
 
+const Index_Page = React.lazy(() => import("./index_page"));
+
+const Route_Objects = React.lazy(() => import("./router/GetActiveRoutes"));
 
 export default function Router() {
 
     const All_Routes: RouteObject = {
         "path": "/",
-        "element": <Index_Page />,
+        "element": (
+            <React.Suspense
+                fallback={
+                    <Chakra.Box
+                        width={"100%"}
+                        height={"100vh"}
+                    >
+                        <Chakra.AbsoluteCenter>
+                            <Chakra.Spinner
+                                size="xl"
+                                color='orange.500'
+                                thickness='4px'
+                            />
+                        </Chakra.AbsoluteCenter>
+                    </Chakra.Box>
+                }
+            >
+                <Index_Page />
+            </React.Suspense>
+        ),
     }
-    
-    const router = createBrowserRouter(
-        [
-            All_Routes,
-            Mangadex,
-            {
-                path : "*",
-                element : (
-                    <React.Suspense
-            fallback={
-                <Chakra.Box
-                    width={"100%"}
-                    height={"100vh"}
-                >
-                    <Chakra.AbsoluteCenter>
-                        <Chakra.Spinner
-                            size="xl"
-                            color='orange.500'
-                            thickness='4px'
-                        />
-                    </Chakra.AbsoluteCenter>
-                </Chakra.Box>
-            }
-        >
-            <NotFound404/>
-        </React.Suspense>
-                )
-            }
-        ]
-    )
-    const queryClient = new QueryClient({
-        "defaultOptions": {
-            "queries": {
-                "cacheTime": 1000 * 30,
-                retry(failureCount, error) {
-                    if (failureCount >= 3) {
-                        return false
-                    } else {
-                        return true;
-                    }
-                },
-            }
-        }
-    });
-    const HTTPClient = getClient();
+    const notFoundRoute: RouteObject = {
+        path: "*",
+        element: (
+            <React.Suspense
+                fallback={
+                    <Chakra.Box
+                        width={"100%"}
+                        height={"100vh"}
+                    >
+                        <Chakra.AbsoluteCenter>
+                            <Chakra.Spinner
+                                size="xl"
+                                color='orange.500'
+                                thickness='4px'
+                            />
+                        </Chakra.AbsoluteCenter>
+                    </Chakra.Box>
+                }
+            >
+                <NotFound404 />
+            </React.Suspense>
+        )
+    }
     return (
         <React.Suspense
             fallback={
@@ -79,82 +73,12 @@ export default function Router() {
                 </Chakra.Box>
             }
         >
-            <QueryClientProvider client={queryClient}>
-                <ReactQueryDevtools
-                    position={"bottom-right"}
-                    initialIsOpen={false}
-                />
-                <React.Suspense
-                    fallback={
-                        <Chakra.Box
-                            width={"100%"}
-                            height={"100vh"}
-                        >
-                            <Chakra.AbsoluteCenter>
-                                <Chakra.Spinner
-                                    size="xl"
-                                    color='orange.500'
-                                    thickness='4px'
-                                />
-                            </Chakra.AbsoluteCenter>
-                        </Chakra.Box>
-                    }
-                >
-                    <HTTPClientProvider_Client
-                        value={HTTPClient}
-                        onLoading={
-                            <Chakra.Box
-                                width={"100%"}
-                                height={"100vh"}
-                            >
-                                <Chakra.AbsoluteCenter>
-                                    <Chakra.Spinner
-                                        size="xl"
-                                        color='orange.500'
-                                        thickness='4px'
-                                    />
-                                </Chakra.AbsoluteCenter>
-                            </Chakra.Box>
-                        }
-                        onError={(error) => (
-                            <Chakra.Box
-                                width={"100%"}
-                                height={"100vh"}
-                            >
-                                <Chakra.AbsoluteCenter>
-                                    <Chakra.Box>
-                                        <Chakra.Alert>
-                                            <Chakra.AlertIcon />
-                                            <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
-                                        </Chakra.Alert>
-                                    </Chakra.Box>
-                                </Chakra.AbsoluteCenter>
-                            </Chakra.Box>
-                        )}
-                    >
-                        <React.Fragment>
-                            <RouterProvider
-                                router={router}
-                                fallbackElement={
-                                    <Chakra.Box
-                                        width={"100%"}
-                                        height={"100vh"}
-                                    >
-                                        <Chakra.AbsoluteCenter>
-                                            <Chakra.Spinner
-                                                size="xl"
-                                                color='orange.500'
-                                                thickness='4px'
-                                            />
-                                        </Chakra.AbsoluteCenter>
-                                    </Chakra.Box>
-                                }
-                            />
-                        </React.Fragment>
-                    </HTTPClientProvider_Client>
-                </React.Suspense>
-            </QueryClientProvider>
+            <Route_Objects
+                additional_routes={[
+                    All_Routes,
+                    notFoundRoute
+                ]}
+            />
         </React.Suspense>
-
     )
 }

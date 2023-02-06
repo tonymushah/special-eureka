@@ -1,11 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "react-query";
-import { FreeMode } from "swiper";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { List } from "../../../../api/structures/List";
 import ErrorEL1 from "../../error/ErrorEL1";
-import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 
 const MangaSwipper = React.lazy(() => import("../../chapter/v1/MangaSwipper"));
 
@@ -25,12 +23,16 @@ export default function CustomListSwiper(props: {
         return (
             <React.Suspense
                 fallback={
-                    <Chakra.Center>
-                        <Chakra.Spinner/>
-                    </Chakra.Center>
+                    <Chakra.Box>
+                        <Chakra.Center>
+                            <Chakra.Spinner
+                                size={"xl"}
+                            />
+                        </Chakra.Center>
+                    </Chakra.Box>
                 }
             >
-                <CustomListSwiperSuspense/>
+                <CustomListSwiperSuspense />
             </React.Suspense>
         )
     }
@@ -42,17 +44,19 @@ export default function CustomListSwiper(props: {
     return (
         <React.Suspense
             fallback={
-                <Chakra.Wrap>
-                    <Chakra.WrapItem>
-                        <MangaElementFallback />
-                    </Chakra.WrapItem>
-                    <Chakra.WrapItem>
-                        <MangaElementFallback />
-                    </Chakra.WrapItem>
-                    <Chakra.WrapItem>
-                        <MangaElementFallback />
-                    </Chakra.WrapItem>
-                </Chakra.Wrap>
+                <React.Suspense
+                    fallback={
+                        <Chakra.Box>
+                            <Chakra.Center>
+                                <Chakra.Spinner
+                                    size={"xl"}
+                                />
+                            </Chakra.Center>
+                        </Chakra.Box>
+                    }
+                >
+                    <CustomListSwiperSuspense />
+                </React.Suspense>
             }
         >
             <MangaSwipper mangaIDS={query.data!.getMangaIDList()} />
