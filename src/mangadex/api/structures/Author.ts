@@ -125,7 +125,7 @@ export class Author extends Attribute{
         instance.twitter = attributes.twitter;
         instance.pixiv = attributes.pixiv;
         instance.melonBook = attributes.melonBook;
-        instance.fanbox = attributes.fanbox;
+        instance.fanbox = attributes.fanBox;
         instance.booth = attributes.booth;
         instance.nicoVideo = attributes.nicoVideo;
         instance.skeb = attributes.skeb;
@@ -134,6 +134,8 @@ export class Author extends Attribute{
         instance.naver = attributes.naver;
         instance.weibo = attributes.weibo;
         instance.website = attributes.website;
+        instance.youtube = attributes.youtube
+        instance.set_biography(attributes.biography);
         try {
             instance.set_relationships_Wany(relationships);
         } catch (error) {

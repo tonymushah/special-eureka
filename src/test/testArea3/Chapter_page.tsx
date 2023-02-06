@@ -184,7 +184,6 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                 <>{this.current_page_ref.current!.innerText}</>
             )
         }catch(e){
-            console.log(e)
             return(
                 <>{this.$current_page}</>
             )
@@ -540,7 +539,6 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                         this.current_page_ref.current!.innerText = "" + (this.$current_page + 1);
                                                         this.current_page_ref2.current!.innerText = "" + (this.$current_page + 1);
                                                     }catch(e){
-                                                        console.log(e)
                                                     }   
                                                     document.getElementById("atHome_pages")!.scrollIntoView()
                                                 }}
