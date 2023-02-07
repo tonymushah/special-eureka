@@ -2,14 +2,14 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "bun run build_preview",
     "devPath": "http://localhost:9305",
     "distDir": "../dist",
     "withGlobalTauri": true
   },
   "package": {
     "productName": "Mangadex-Desktop",
-    "version": "0.1.2"
+    "version": "0.1.3"
   },
   "tauri": {
     "allowlist": {
@@ -100,7 +100,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "A MangaReader based on the Mangadex website",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,

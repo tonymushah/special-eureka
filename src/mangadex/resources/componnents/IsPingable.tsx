@@ -13,7 +13,8 @@ export default function IsPingable(props: {
     const query = useQuery<boolean, Error>(query_key, () => {
         return Api_Request.ping(props.client);
     }, {
-        refetchOnWindowFocus : false
+        refetchOnWindowFocus : true,
+        refetchOnMount: false
     });
     const context = React.createContext(query)
     if (query.isLoading == true) {

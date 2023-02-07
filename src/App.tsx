@@ -15,19 +15,19 @@ const HTTPClientProvider_Client = React.lazy(() => import("./commons-res/compone
 export default function App() {
     const HTTPClient = getClient();
     const queryClient = new QueryClient({
-    "defaultOptions": {
-        "queries": {
-            "cacheTime": 1000 * 30,
-            retry(failureCount, error) {
-                if (failureCount >= 3) {
-                    return false
-                } else {
-                    return true;
-                }
-            },
+        "defaultOptions": {
+            "queries": {
+                "cacheTime": 1000 * 30,
+                retry(failureCount, error) {
+                    if (failureCount >= 3) {
+                        return false
+                    } else {
+                        return true;
+                    }
+                },
+            }
         }
-    }
-});
+    });
     return (
         <Chakra.Box
             fontFamily={"Poppins"}
@@ -121,7 +121,8 @@ export default function App() {
                                 <Navigator />
                                 <Router />
                             </React.Suspense>
-                        </HTTPClientProvider_Client></React.Suspense>
+                        </HTTPClientProvider_Client>
+                    </React.Suspense>
                 </QueryClientProvider>
             </TryCatch>
             <React.Suspense>

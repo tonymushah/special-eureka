@@ -40,7 +40,7 @@ import tumblr_logo from "./authors_brands_logo/tumblr_logo.svg";
 import weibo_logo from "./authors_brands_logo/weibo_logo.ico";
 import naver_logo from "./authors_brands_logo/naver_logo.ico"
 import { Manga } from "../../mangadex/api/structures/Manga";
-import { get_author_works } from "../../mangadex/resources/hooks/AuthorState";
+import { get_author_works, get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "../../mangadex/resources/hooks/AuthorState";
 import ErrorEL1 from "../../mangadex/resources/componnents/error/ErrorEL1";
 import { CollectionComponnent_WithQuery } from "../../mangadex/resources/componnents/Collection/Collection";
 import { Collection } from "../../mangadex/api/structures/Collection";
@@ -473,53 +473,62 @@ function Author_Page_Socials(props: {
 function Author_works(props: {
     src: Author
 }) {
-    const { query_key, query } = get_author_works(props);
-    if (query.isError) {
-        return (
-            <ErrorEL1
-                error={query.error}
-            />
-        )
-    }
-    if (query.isSuccess) {
-        return (
-            <Chakra.Box
-            >
-                <Chakra.Text>Works : {query.data.get_total()}</Chakra.Text>
-                <Chakra.Box>
-                    <CollectionComponnent_WithQuery<Manga>
-                        fn={() => {
-                            return new Promise((resolve, reject) => {
-                                resolve(query.data)
-                            });
-                        }}
-                        queryKey={query_key}
-                    >
-                        {
-                            (data: Collection<Manga>) => (
-                                <MangaList
-                                    src={data.get_data()}
-                                />
-                            )
-                        }
-                    </CollectionComponnent_WithQuery>
-                </Chakra.Box>
-            </Chakra.Box>
-        )
-    }
+    const client = useHTTPClient();
+    const query_key = get_author_works_query_key_byAuthor_ID({
+        author_id: props.src.get_id()
+    });
     return (
-        <Chakra.Box>
-            <Chakra.Center>
-                <Chakra.Spinner />
-            </Chakra.Center>
+        <Chakra.Box
+        >
+            <Chakra.Text>Works : {props.src.get_some_relationshipLength("manga")}</Chakra.Text>
+            <IsPingable
+                client={client}
+                onError={(query) => (
+                    <IsPingable_defaultError
+                        query={query}
+                    />
+                )}
+                onSuccess={(query) => (
+                    <Chakra.Box>
+                        <CollectionComponnent_WithQuery<Manga>
+                            fn={() => {
+                                return get_author_works_promise({
+                                    author_id: props.src.get_id(),
+                                    client: client
+                                });
+                            }}
+                            queryKey={query_key}
+                            query_options={{
+                                staleTime: Infinity
+                            }}
+                        >
+                            {
+                                (data: Collection<Manga>) => (
+                                    <MangaList
+                                        src={data.get_data()}
+                                    />
+                                )
+                            }
+                        </CollectionComponnent_WithQuery>
+                    </Chakra.Box>
+                )}
+                onLoading={
+                    <Chakra.Box>
+                        <Chakra.Center>
+                            <Chakra.Spinner />
+                        </Chakra.Center>
+                    </Chakra.Box>
+                }
+            />
+
         </Chakra.Box>
     )
+
 }
 
 function Author_Page(props: {
     src: Author
 }) {
-    const client = useHTTPClient();
     return (
         <Chakra.Box>
             <Chakra.Box
@@ -562,25 +571,8 @@ function Author_Page(props: {
                             />
                         </Chakra.Box>
                         <Chakra.Box>
-                            <IsPingable
-                                client={client}
-                                onError={(query) => (
-                                    <IsPingable_defaultError
-                                        query={query}
-                                    />
-                                )}
-                                onSuccess={(query) => (
-                                    <Author_works
-                                        {...props}
-                                    />
-                                )}
-                                onLoading={
-                                    <Chakra.Box>
-                                        <Chakra.Center>
-                                            <Chakra.Spinner />
-                                        </Chakra.Center>
-                                    </Chakra.Box>
-                                }
+                            <Author_works
+                                {...props}
                             />
                         </Chakra.Box>
                     </Chakra.Box>
