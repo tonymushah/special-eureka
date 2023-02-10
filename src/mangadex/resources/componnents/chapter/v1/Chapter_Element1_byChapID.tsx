@@ -7,10 +7,12 @@ import { get_ChapterbyId, is_chapter_downloaded_with_ChapID, useChapterDownloadM
 const ErrorEL1 = React.lazy(() => import("../../error/ErrorEL1"));
 const Chapter_Element1 = React.lazy(() => import("./Chapter_Element1"));
 export default function Chapter_Element1_byChapID(props: {
-    id: string
+    id: string,
+    with_all_includes?: boolean
 }) {
     const { query, queryKey } = get_ChapterbyId({
-        id : props.id
+        id : props.id,
+        with_all_includes : props.with_all_includes
     })
     const { is_downloaded_queryKey } = is_chapter_downloaded_with_ChapID(props);
     const download_query = useChapterDownloadMutation({

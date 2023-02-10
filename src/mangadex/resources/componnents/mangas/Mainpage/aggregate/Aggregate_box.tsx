@@ -50,12 +50,15 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate
                         {
                             this.Chapters_parts.map<React.ReactNode>((volumes, index, array) => (
                                 <Chakra.TabPanel>
-                                    <Chakra.Accordion defaultIndex={[0]} allowMultiple>
+                                    <Chakra.Accordion
+                                        allowMultiple={true}
+                                        defaultIndex={[0]}
+                                    >
                                         {
                                             volumes.map<React.ReactNode>(volume => (
                                                 <Volume_ src={volume} open={true}></Volume_>
                                             ))
-                                        }
+                                        } 
                                     </Chakra.Accordion>
                                 </Chakra.TabPanel>
                             ))
@@ -98,7 +101,7 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
         }
     }
     sliceAll() {
-        let to_use_volume : Array<Volume> = this.toUse.get_volumes().reverse();
+        let to_use_volume: Array<Volume> = this.toUse.get_volumes().reverse();
         for (let index = 0; index < this.parts; index++) {
             this.Chapters_parts[index] = (to_use_volume.slice(index * this.separator, (index + 1) * this.separator));
         }
@@ -111,13 +114,15 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
                         {
                             this.Chapters_parts.map<React.ReactNode>((volumes, index, array) => (
                                 <Chakra.TabPanel>
-                                    <Chakra.Accordion 
-                                    defaultIndex={[0]} allowMultiple>
+                                    <Chakra.Accordion
+                                        allowMultiple={true}
+                                        defaultIndex={[0]}
+                                    >
                                         {
                                             volumes.map<React.ReactNode>(volume => (
                                                 <Volume__reverse src={volume} open={true}></Volume__reverse>
                                             ))
-                                        }
+                                        } 
                                     </Chakra.Accordion>
                                 </Chakra.TabPanel>
                             ))

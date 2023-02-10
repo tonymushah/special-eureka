@@ -3,7 +3,7 @@ import React from "react";
 import { useQueryClient, useQuery, useMutation, UseQueryOptions, useQueries } from "react-query";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Alt_title, Lang_and_Data } from "../../api/internal/Utils";
-import { Manga } from "../../api/structures/Manga";
+import { Manga, Manga_with_allRelationship } from "../../api/structures/Manga";
 import { MangaPageProps } from "../componnents/mangas/Manga_Page";
 
 
@@ -128,12 +128,17 @@ export function useMangaDownload_Delete(props: {
 
 export function get_manga_byId(props: {
     mangaID: string,
+    with_all_includes? : boolean,
     options?: Omit<UseQueryOptions<Manga, Error>, 'queryKey' | 'queryFn'>
 }) {
     const client = useHTTPClient();
     const key = "mdx-manga:" + props.mangaID;
     const query = useQuery<Manga, Error>(key, () => {
-        return Manga.getMangaByID(props.mangaID, client);
+        if(props.with_all_includes == true){
+            return Manga_with_allRelationship.getMangaByID(props.mangaID, client);
+        }else{
+            return Manga.getMangaByID(props.mangaID, client);
+        }
     }, props.options == undefined ? {
         "staleTime": Infinity
     } : props.options);
@@ -145,7 +150,14 @@ export function get_manga_byId(props: {
 
 export function get_manga_page_cover(props: MangaPageProps) {
     const client = useHTTPClient();
-    const cover_key = "mdx-cover-" + props.src.get_cover_art_id();
+    console.log("debug1");
+    let cover_key_ = "";
+    try{
+        cover_key_ = "mdx-cover-" + props.src.get_cover_art_id();
+    }catch{
+        cover_key_ = "mdx-manga:" + props.src.get_id() + "-cover";
+    }
+    const cover_key = cover_key_;
     const coverQuery = useQuery(cover_key, () => {
         return props.src.get_cover_art(client)
     }, {

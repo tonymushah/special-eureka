@@ -13,59 +13,8 @@ import GroupSearchType from "./SearchType/Group";
 import Group_WithAllRelationShip_SearchType from "./SearchType/GroupWAllIncludes";
 import { Manga } from "./Manga";
 import { Chapter } from "./Chapter";
-
-class GroupCollection extends Collection<Group>{
-    private prev_search_type : GroupSearchType;
-    /**
-     * Getter $prev_search_type
-     * @return {GroupSearchType}
-     */
-	public get $prev_search_type(): GroupSearchType {
-		return this.prev_search_type;
-	}
-
-    /**
-     * Setter $prev_search_type
-     * @param {GroupSearchType} value
-     */
-	public set $prev_search_type(value: GroupSearchType) {
-		this.prev_search_type = value;
-	}
-    constructor(data : Group[], limit : number, offset : number, total: number, previous_search_type: GroupSearchType) {
-        super(data, limit, offset, total);
-        this.$prev_search_type = previous_search_type;
-    }
-    public next(): Promise<Collection<Group>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() + this.get_limit();
-            if(new_offset <= this.get_total() && new_offset >= 0){
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_Limits = current_offset_limits;
-                resolve(Group.search(this.prev_search_type));
-            }else{
-                reject(new Error("no next group"));
-            }
-        });
-        
-    }
-    public previous(): Promise<Collection<Group>> {
-        return new Promise<Collection<Group>>((resolve, reject) => {
-            let new_offset = this.get_offset() - this.get_limit();
-            if(new_offset <= this.get_total() && new_offset >= 0){
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_Limits = current_offset_limits;
-                resolve(Group.search(this.prev_search_type));
-            }else{
-                reject(new Error("no previous group"));
-            }
-        });
-        
-    }
-}
+import GroupCollection from "./CollectionTypes/GroupCollection";
+import Group_WithAllRelationShip_Collection from "./CollectionTypes/Group_WithAllRelationShip_Collection";
 
 export class Group extends Attribute {
     protected static group_r: string = "group/";
@@ -397,59 +346,6 @@ export class Group extends Attribute {
             ],
             client: client
         })
-    }
-}
-
-class Group_WithAllRelationShip_Collection extends Collection<Group_WithAllRelationShip>{
-    private prev_search_type : Group_WithAllRelationShip_SearchType;
-    /**
-     * Getter $prev_search_type
-     * @return {Group_WithAllRelationShip_SearchType}
-     */
-	public get $prev_search_type(): Group_WithAllRelationShip_SearchType {
-		return this.prev_search_type;
-	}
-
-    /**
-     * Setter $prev_search_type
-     * @param {Group_WithAllRelationShip_SearchType} value
-     */
-	public set $prev_search_type(value: Group_WithAllRelationShip_SearchType) {
-		this.prev_search_type = value;
-	}
-    constructor(data : Group_WithAllRelationShip[], limit : number, offset : number, total: number, previous_search_type: Group_WithAllRelationShip_SearchType) {
-        super(data, limit, offset, total);
-        this.$prev_search_type = previous_search_type;
-    }
-    public next(): Promise<Collection<Group_WithAllRelationShip>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() + this.get_limit();
-            if(new_offset <= this.get_total() && new_offset >= 0){
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_Limits = current_offset_limits;
-                return Group_WithAllRelationShip.search(this.prev_search_type);
-            }else{
-                throw new Error("no next group");
-            }
-        });
-        
-    }
-    public previous(): Promise<Collection<Group_WithAllRelationShip>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() - this.get_limit();
-            if(new_offset <= this.get_total() && new_offset >= 0){
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_Limits = current_offset_limits;
-                resolve(Group_WithAllRelationShip.search(this.prev_search_type));
-            }else{
-                reject(new Error("no previous group"));
-            }
-        });
-        
     }
 }
 

@@ -88,7 +88,7 @@ export class ChaptersComp extends React.Component<ChaptersProps>{
                     <Chapters_Element headersTitle={"Chapter " + this.toUse.get_name()}>
                         {
                             this.toUse.get_ids().map((value) => (
-                                <Chapter_Element1_byChapID id={value} />
+                                <Chapter_Element1_byChapID id={value} with_all_includes/>
                             ))
                         }
                     </Chapters_Element>

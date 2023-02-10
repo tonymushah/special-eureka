@@ -8,114 +8,15 @@ import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
 import { At_Home } from "./At_home";
 import { Collection } from "./Collection";
+import ChapterCollection from "./CollectionTypes/ChapterCollection";
 import { Group } from "./Group";
 import { Manga, Manga_2 } from "./Manga";
 import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import ChapterSearchType from "./SearchType/Chapter";
 import Chapter_withAllIncludes_SearchType from "./SearchType/Chapter_WAllIncludes";
 import { User } from "./User";
-
-class ChapterCollection extends Collection<Chapter>{
-    private prev_search_type: ChapterSearchType;
-    /**
-     * Getter $prev_search_type
-     * @return {ChapterSearchType}
-     */
-    public get $prev_search_type(): ChapterSearchType {
-        return this.prev_search_type;
-    }
-
-    /**
-     * Setter $prev_search_type
-     * @param {ChapterSearchType} value
-     */
-    public set $prev_search_type(value: ChapterSearchType) {
-        this.prev_search_type = value;
-    }
-    constructor(data: Chapter[], limit: number, offset: number, total: number, previous_search_type: ChapterSearchType) {
-        super(data, limit, offset, total);
-        this.$prev_search_type = previous_search_type;
-    }
-    public next(): Promise<Collection<Chapter>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() + this.get_limit();
-            if (new_offset <= this.get_total() && new_offset >= 0) {
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_limits = current_offset_limits;
-                resolve(Chapter.search(this.prev_search_type));
-            } else {
-                reject(new Error("no next chapter"));
-            }
-        });
-
-    }
-    public previous(): Promise<Collection<Chapter>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() - this.get_limit();
-            if (new_offset <= this.get_total() && new_offset >= 0) {
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_limits = current_offset_limits;
-                resolve(Chapter.search(this.prev_search_type));
-            } else {
-                reject(new Error("no previous group"));
-            }
-        });
-
-    }
-}
-
-class AllDownloadedChapterCollection extends Collection<string>{
-    private client: Client;
-    /**
-     * Getter $client
-     * @return {Client}
-     */
-	public get $client(): Client {
-		return this.client;
-	}
-
-    /**
-     * Setter $client
-     * @param {Client} value
-     */
-	public set $client(value: Client) {
-		this.client = value;
-	}
-    constructor(params:{data: Array<string>, limit: number, offset: number, total: number}, client: Client) {
-        super(params.data, params.limit, params.offset, params.total);
-        this.$client = client;
-    }
-    public next(): Promise<Collection<string>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() + this.get_limit();
-            if(new_offset <= this.get_total() && new_offset >= 0){
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                resolve(Chapter.getAll_downloaded_chap(current_offset_limits, this.client));
-            }else{
-                reject(new Error("no next page"));
-            }
-        });
-    }
-    public previous(): Promise<Collection<string>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() - this.get_limit();
-            if(new_offset <= this.get_total() && new_offset >= 0){
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                resolve(Chapter.getAll_downloaded_chap(current_offset_limits, this.client));
-            }else{
-                reject(new Error("no previous page"));
-            }
-        });
-    }
-}
+import AllDownloadedChapterCollection from "./CollectionTypes/AllDownloadedChapterCollection";
+import Chapter_WAllIncludesCollection from "./CollectionTypes/Chapter_WAllIncludesCollection";
 
 export class Chapter extends Attribute {
     private title: string;
@@ -633,58 +534,6 @@ export class Chapters {
         return false;
     }
 
-}
-
-class Chapter_WAllIncludesCollection extends Collection<Chapter_withAllIncludes>{
-    private prev_search_type: Chapter_withAllIncludes_SearchType;
-    /**
-     * Getter $prev_search_type
-     * @return {Chapter_withAllIncludes_SearchType}
-     */
-    public get $prev_search_type(): Chapter_withAllIncludes_SearchType {
-        return this.prev_search_type;
-    }
-
-    /**
-     * Setter $prev_search_type
-     * @param {Chapter_withAllIncludes_SearchType} value
-     */
-    public set $prev_search_type(value: Chapter_withAllIncludes_SearchType) {
-        this.prev_search_type = value;
-    }
-    constructor(data: Chapter_withAllIncludes[], limit: number, offset: number, total: number, previous_search_type: Chapter_withAllIncludes_SearchType) {
-        super(data, limit, offset, total);
-        this.$prev_search_type = previous_search_type;
-    }
-    public next(): Promise<Collection<Chapter_withAllIncludes>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() + this.get_limit();
-            if (new_offset <= this.get_total() && new_offset >= 0) {
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_limits = current_offset_limits;
-                resolve(Chapter_withAllIncludes.search(this.prev_search_type));
-            } else {
-                reject(new Error("no next chapter"));
-            }
-        });
-
-    }
-    public previous(): Promise<Collection<Chapter_withAllIncludes>> {
-        return new Promise((resolve, reject) => {
-            let new_offset = this.get_offset() - this.get_limit();
-            if (new_offset <= this.get_total() && new_offset >= 0) {
-                let current_offset_limits = new Offset_limits();
-                current_offset_limits.set_limits(this.get_limit());
-                current_offset_limits.set_offset(new_offset);
-                this.$prev_search_type.offset_limits = current_offset_limits;
-                resolve(Chapter_withAllIncludes.search(this.prev_search_type));
-            } else {
-                reject(new Error("no previous group"));
-            }
-        });
-    }
 }
 
 export class Chapter_withAllIncludes extends Chapter {

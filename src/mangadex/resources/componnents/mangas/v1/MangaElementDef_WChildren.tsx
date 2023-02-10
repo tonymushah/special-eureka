@@ -1,9 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "../../../..";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Alt_title } from "../../../../api/internal/Utils";
 import { Manga } from "../../../../api/structures/Manga";
 import { get_manga_page_cover } from "../../../hooks/MangaStateHooks";
@@ -17,7 +16,6 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
     src: Manga,
     isRefetching?: boolean
 }>) {
-    const client = useHTTPClient();
     let title: string = "";
     const { coverQuery } = get_manga_page_cover({
         src : props.src
@@ -92,23 +90,46 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                             rowSpan={1}
                             colSpan={8}
                         >
-                            <Chakra.Link
-                                as={Link}
-                                to={MangaDexPath + "/manga/" + props.src.get_id()}
+                            <TryCatch
+                                catch={(error) => (
+                                    <Chakra.Link
+                                        //as={Link}
+                                        //to={MangaDexPath + "/manga/" + props.src.get_id()}
+                                    >
+                                        <Chakra.Heading
+                                            noOfLines={2}
+                                            marginTop={"5px"}
+                                            size={
+                                                {
+                                                    base: "lg",
+                                                    lg: "lg"
+                                                }
+                                            }
+                                        >
+                                            {title}
+                                        </Chakra.Heading>
+                                    </Chakra.Link>
+                                )}
                             >
-                                <Chakra.Heading
-                                    noOfLines={2}
-                                    marginTop={"5px"}
-                                    size={
-                                        {
-                                            base: "lg",
-                                            lg: "lg"
-                                        }
-                                    }
+                                <Chakra.Link
+                                    as={Link}
+                                    to={MangaDexPath + "/manga/" + props.src.get_id()}
                                 >
-                                    {title}
-                                </Chakra.Heading>
-                            </Chakra.Link>
+                                    <Chakra.Heading
+                                        noOfLines={2}
+                                        marginTop={"5px"}
+                                        size={
+                                            {
+                                                base: "lg",
+                                                lg: "lg"
+                                            }
+                                        }
+                                    >
+                                        {title}
+                                    </Chakra.Heading>
+                                </Chakra.Link>
+                            </TryCatch>
+                            
                         </Chakra.GridItem>
                         <Chakra.GridItem
                             rowSpan={1}

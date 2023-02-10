@@ -66,13 +66,17 @@ export class Aggregate{
         groups,
         client
     } : AggregateListOptions): Promise<Aggregate>{
-        let getted: Response<any> = await Api_Request.get_methods(
-            Manga.get_request_a() + mangaID + "/aggregate?" + 
-                serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + 
-                "&" + 
-                serialize((new Querry_list_builder("groups", groups!)).build())
-            , undefined, client);
-        return Aggregate.build_wANY(getted.data.volumes);
+        try{
+            let getted: Response<any> = await Api_Request.get_methods( 
+                Manga.get_request_a() + mangaID + "/aggregate?" +
+                    serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) + 
+                    "&" +
+                    serialize((new Querry_list_builder("groups", groups!)).build())
+                , undefined, client);
+            return Aggregate.build_wANY(getted.data.volumes);
+        }catch(error){
+            throw new Error(error);
+        }
     }
     public async getNext(id: string) : Promise<string>{
         for (let index = 0; index < this.volumes.length; index++) {

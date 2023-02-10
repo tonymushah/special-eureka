@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "bun run build_preview",
+    "beforeDevCommand": "bun run dev",
     "devPath": "http://localhost:9305",
     "distDir": "../dist",
     "withGlobalTauri": true
@@ -141,6 +141,9 @@
         "label": "splashscreen",
         "center": true
       }
-    ]
+    ],
+    "systemTray": {
+      "iconPath": "./icons/icon.png"
+    }
   }
 }

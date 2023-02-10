@@ -1,7 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import { useQueryClient, useMutation, QueryKey, useQuery, UseQueryOptions, useQueries, UseQueryResult } from "react-query";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Chapter } from "../../api/structures/Chapter";
+import { Chapter, Chapter_withAllIncludes } from "../../api/structures/Chapter";
 import { Group } from "../../api/structures/Group";
 import { User } from "../../api/structures/User";
 
@@ -13,6 +13,7 @@ export function get_chapter_queryKey(props : {
 
 export function get_ChapterbyId(props: {
     id: string,
+    with_all_includes?: boolean,
     options?: Omit<UseQueryOptions<Chapter, Error>, 'queryKey' | 'queryFn'>
 }) {
     const client = useHTTPClient();
@@ -20,7 +21,11 @@ export function get_ChapterbyId(props: {
         id : props.id
     });
     const query = useQuery<Chapter, Error>(key, () => {
-        return Chapter.get_ChapterbyId(props.id, client);
+        if(props.with_all_includes==true){
+            return Chapter_withAllIncludes.get_ChapterbyId(props.id, client)
+        }else{
+            return Chapter.get_ChapterbyId(props.id, client);
+        }
     }, props.options == undefined ? {
         staleTime: Infinity,
     } : props.options);

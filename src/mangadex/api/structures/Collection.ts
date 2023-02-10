@@ -1,3 +1,5 @@
+import { Offset_limits } from "../internal/Utils";
+
 export abstract class Collection<T>{
     private data: Array<T>;
     private limit: number;
@@ -32,6 +34,28 @@ export abstract class Collection<T>{
         this.set_limit(limit);
         this.set_offset(offset);
         this.set_total(total);
+    }
+    public next_offset_limit(): Offset_limits{
+        let new_offset = this.get_offset() + this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                return current_offset_limits;
+            }else{
+                throw (new Error("no next page"));
+            }
+    }
+    public previous_offset_limit(): Offset_limits{
+        let new_offset = this.get_offset() - this.get_limit();
+            if(new_offset <= this.get_total() && new_offset >= 0){
+                let current_offset_limits = new Offset_limits();
+                current_offset_limits.set_limits(this.get_limit());
+                current_offset_limits.set_offset(new_offset);
+                return current_offset_limits;
+            }else{
+                throw (new Error("no previous page"));
+            }
     }
     public abstract next(): Promise<Collection<T>>;
     public abstract previous() : Promise<Collection<T>>;

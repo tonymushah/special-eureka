@@ -69,11 +69,16 @@ function MangaElementDef2_Stats(props: {
                                                         <ChakraIcons.ChatIcon />
                                                         &nbsp;
                                                         {
-                                                            getted.get_comments() !== undefined || getted.get_comments() !== null ? (
-                                                                <>{getted.get_comments()!.repliesCount}</>
-                                                            ) : (
+                                                            getted.get_comments() !== undefined && getted.get_comments() !== null ? (
+                                                                <>{
+                                                                    getted.get_comments()!.repliesCount !== null && getted.get_comments()!.repliesCount !== undefined ? (
+                                                                        <>{getted.get_comments()!.repliesCount}</>
+                                                                    ) : (
+                                                                        <>0</>
+                                                                    )
+                                                                }</>
+                                                            ) :
                                                                 <>0</>
-                                                            )
                                                         }
                                                     </Chakra.Text>
                                                 </Chakra.Box>
@@ -107,15 +112,15 @@ export default function MangaElementDef2(props: {
     delete?: Function,
     update?: Function
 }) {
-    
+
     const client = useHTTPClient();
     const getMangaDownload_Delete = () => {
         let getted = useMangaDownload_Delete({
             mangaID: props.src.get_id()
         })
         return {
-            download_ : getted.download_.mutate,
-            delete_ : getted.delete_.mutate
+            download_: getted.download_.mutate,
+            delete_: getted.delete_.mutate
         }
     };
     const { download_, delete_ } = (props.download == undefined || props.delete == undefined || props.update == undefined) ? getMangaDownload_Delete() : {

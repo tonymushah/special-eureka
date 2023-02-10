@@ -50,6 +50,8 @@ import { useHTTPClient } from "../../commons-res/components/HTTPClientProvider";
 import IsPingable_defaultError from "../../mangadex/resources/componnents/IsPingable_defaultError";
 import { getClient } from "@tauri-apps/api/http";
 import HTTPClientProvider_Query from "../../commons-res/components/HTTPClientProvider_Query"
+import MangaFeedElement from "../../mangadex/resources/componnents/chapter/v1/MangaFeedElement";
+import { Chapter_withAllIncludes } from "../../mangadex/api/structures/Chapter";
 
 
 const ExtLink = React.lazy(async () => {

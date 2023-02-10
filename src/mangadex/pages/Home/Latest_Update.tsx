@@ -2,16 +2,18 @@ import * as Chakra from "@chakra-ui/react";
 import React from 'react';
 import { useQuery } from 'react-query';
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
+import TryCatch from "../../../commons-res/components/TryCatch";
 import { Offset_limits, Order } from '../../api/internal/Utils';
 import { Chapter, Chapter_withAllIncludes } from '../../api/structures/Chapter';
 import { Collection } from '../../api/structures/Collection';
 import ErrorEL1 from '../../resources/componnents/error/ErrorEL1';
+import MyErrorBounderies from "../../resources/componnents/error/MyErrorBounderies";
 import MangaElementFallback from "../../resources/componnents/mangas/v1/MangaElementFallback";
 
 const MangaFeedElement = React.lazy(() => import('../../resources/componnents/chapter/v1/MangaFeedElement'));
 
-export default function Latest_Updates(){
-  const offset_limits_2 : Offset_limits = new Offset_limits();
+export default function Latest_Updates() {
+  const offset_limits_2: Offset_limits = new Offset_limits();
   offset_limits_2.set_limits(12);
   const client = useHTTPClient()
   const key = "mdx-home_page-latest_update";
@@ -22,9 +24,9 @@ export default function Latest_Updates(){
       client: client
     })
   }, {
-    staleTime : Infinity
+    staleTime: Infinity
   })
-  if(query.isLoading){
+  if (query.isLoading) {
     return (
       <Chakra.Box>
         <Chakra.Heading>Latest Updates</Chakra.Heading>
@@ -49,7 +51,7 @@ export default function Latest_Updates(){
       </Chakra.Box>
     )
   }
-  if(query.isError){
+  if (query.isError) {
     return (
       <Chakra.Box>
         <Chakra.Heading>Latest Updates</Chakra.Heading>
@@ -59,33 +61,34 @@ export default function Latest_Updates(){
         >
           Refetch
         </Chakra.Button>
-        <ErrorEL1 error={query.error}/>
+        <ErrorEL1 error={query.error} />
       </Chakra.Box>
     )
   }
   return (
     <Chakra.Box>
       <Chakra.Heading>Latest Updates</Chakra.Heading>
-        <Chakra.Button
-          colorScheme={"orange"}
-          onClick={() => query.refetch()}
-        >
-          Refetch
-        </Chakra.Button>
-        <Chakra.Wrap>
-          {query.data!.get_data().map((value : Chapter) => (
-            <Chakra.WrapItem>
-              <React.Suspense
-                fallback={
-                  <MangaElementFallback/>
-                }
-              >
-                <MangaFeedElement src={value}/>
-              </React.Suspense>
-              
-            </Chakra.WrapItem>
-          ))}
-        </Chakra.Wrap>
+      <Chakra.Button
+        colorScheme={"orange"}
+        onClick={() => query.refetch()}
+      >
+        Refetch
+      </Chakra.Button>
+      <Chakra.Wrap>
+        {query.data!.get_data().map((value: Chapter) => (
+          <Chakra.WrapItem>
+            <React.Suspense
+              fallback={
+                <MangaElementFallback />
+              }
+            >
+              <MangaFeedElement src={value} />
+            </React.Suspense>
+
+          </Chakra.WrapItem>
+        ))}
+      </Chakra.Wrap>
+
     </Chakra.Box>
   )
 }

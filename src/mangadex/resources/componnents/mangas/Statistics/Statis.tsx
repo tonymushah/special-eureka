@@ -4,6 +4,7 @@ import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Statistics_Manga } from "../../../../api/structures/Statistics";
 
 export default function Statis(props: {
@@ -49,7 +50,11 @@ export default function Statis(props: {
                                 {
                                     getted.comments !== undefined && getted.comments !== null ? (
                                         <>{
-                                            getted.comments.repliesCount
+                                            getted.get_comments()!.repliesCount !== null && getted.get_comments()!.repliesCount !== undefined ? (
+                                                <>{getted.get_comments()!.repliesCount}</>
+                                            ) : (
+                                                <>0</>
+                                            )
                                         }</>
                                     ) : (
                                         <>0</>
@@ -82,7 +87,13 @@ export default function Statis(props: {
                             &nbsp;
                             {
                                 getted.comments !== undefined && getted.comments !== null ? (
-                                    <>{getted.comments.repliesCount}</>
+                                    <>{
+                                        getted.get_comments()!.repliesCount !== null || getted.get_comments()!.repliesCount !== undefined ? (
+                                            <>{getted.get_comments()!.repliesCount}</>
+                                        ) : (
+                                            <>0</>
+                                        )
+                                    }</>
                                 ) : (
                                     <>0</>
                                 )

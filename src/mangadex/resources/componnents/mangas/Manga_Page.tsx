@@ -76,7 +76,7 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
                                             <Chakra.Box>
                                                 <Chakra.Box display={{
                                                     base: "none",
-                                                    xl: "inherit"
+                                                    xl: "block"
                                                 }}>
                                                     <Chakra.Box display={"flex"} width={"fit-content"}>
                                                         <Chakra.Text textAlign={"center"}>
@@ -107,7 +107,7 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
                                                     </Chakra.Box>
                                                 </Chakra.Box>
                                                 <Chakra.Box display={{
-                                                    base: "inherit",
+                                                    base: "block",
                                                     xl: "none"
                                                 }}>
                                                     <Chakra.Tag>Stats</Chakra.Tag>
