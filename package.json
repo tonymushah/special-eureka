@@ -16,7 +16,8 @@
     "vite-tauri": "vite-tauri",
     "tauri-dev": "tauri dev",
     "clean-src-tauri": "cd src-tauri && cargo clean",
-    "update-api": "cd src-tauri && cargo update -p mangadex-desktop-api2"
+    "update-api": "cd src-tauri && cargo update -p mangadex-desktop-api2",
+    "check-src-tauri": "cd src-tauri && cargo check"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
