@@ -1,14 +1,118 @@
 use actix_web::dev::{Server, ServerHandle};
 use mangadex_desktop_api2;
+use mangadex_desktop_api2::settings::server_options::ServerOptions;
+use once_cell::sync::OnceCell;
 use serde::{ser::Serializer, Deserialize, Serialize};
-use std::{collections::HashMap, sync::Mutex };
+use std::{collections::HashMap, sync::Mutex, thread::JoinHandle};
 use tauri::{
     command,
     plugin::{Builder, TauriPlugin},
     AppHandle, Manager, Runtime, State, Window,
 };
+
+use self::intelligent_notification_system::Download_Entry;
+pub mod intelligent_notification_system;
 type Result<T> = std::result::Result<T, Error>;
-use mangadex_desktop_api2::settings::server_options::ServerOptions;
+
+static mut INS_CHAPTER: OnceCell<Download_Entry<String>> = OnceCell::new();
+
+static mut INS_CHAPTER_CHECKER : OnceCell<JoinHandle<()>> = OnceCell::new();
+
+fn init_ins_chapter_handle() -> Result<()> {
+    match std::thread::spawn(move || -> Result<()> { unsafe {
+        match INS_CHAPTER.set(Download_Entry::new()) {
+            Ok(_) => return Ok(()),
+            Err(_) => {
+                Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::AlreadyExists,
+                "The ins chapter handle already setted",
+                )))
+            }
+        }
+    }})
+    .join()
+    {
+        Ok(res) => res,
+        Err(_) => Err(Error::Io(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Something inexecpeted happens when initializing the INS Handler",
+        ))),
+    }
+}
+
+fn get_ins_handle() -> Result<&'static Download_Entry<String>> {
+    let data_: &'static Download_Entry<String>;
+    unsafe {
+        match INS_CHAPTER.get() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS CHAPTER handle not found",
+                )))
+            }
+            Some(data) => {
+                data_ = data;
+            }
+        }
+    }
+    Ok(data_)
+}
+
+fn get_ins_handle_mut() -> Result<&'static mut Download_Entry<String>> {
+    let data_: &'static mut Download_Entry<String>;
+    unsafe {
+        match INS_CHAPTER.get_mut() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS CHAPTER handle not found",
+                )))
+            }
+            Some(data) => {
+                data_ = data;
+            }
+        }
+    }
+    Ok(data_)
+}
+fn reset_ins_handle() -> Result<()>{
+    unsafe {
+        match INS_CHAPTER.take() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS CHAPTER handle not found",
+                )))
+            }
+            Some(_) => ()
+        }
+    }
+    init_ins_chapter_handle()?;
+    Ok(())
+}
+
+fn add_in_chapter_queue(id: String) -> Result<()> {
+    let handle = get_ins_handle_mut()?;
+    handle.add_in_queue(id)?;
+    Ok(())
+}
+
+fn add_in_chapter_success(id: String) -> Result<()> {
+    let handle = get_ins_handle_mut()?;
+    handle.add_in_success(id)?;
+    Ok(())
+}
+
+fn add_in_chapter_failed(id: String) -> Result<()> {
+    let handle = get_ins_handle_mut()?;
+    handle.add_in_failed(id)?;
+    Ok(())
+}
+
+fn check_if_ins_finished() -> Result<bool>{
+    let handle = get_ins_handle_mut()?;
+    Ok(handle.is_all_finished())
+}
 
 #[derive(Serialize, Deserialize)]
 struct ErrorPayload {
@@ -51,13 +155,51 @@ macro_rules! this_eureka_reqwest_result {
 macro_rules! handle_error {
     ($to_use:expr) => {
         match $to_use {
-            Err(e) => return Err(Error::Io(std::io::Error::new(
+            Err(e) => {
+                return Err(Error::Io(std::io::Error::new(
                     std::io::ErrorKind::Other,
                     e.to_string().as_str(),
-                ))),
-            Ok(f) => f
+                )))
+            }
+            Ok(f) => f,
         }
     };
+}
+
+#[derive(Clone, serde::Serialize)]
+struct ExportPayload {
+    message: String,
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+}
+
+impl Serialize for Error {
+    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(self.to_string().as_ref())
+    }
+}
+
+//#[derive(Default)]
+struct MangadexDesktopApiHandle {
+    key: Mutex<String>,
+    def: Mutex<HashMap<String, ServerHandle>>,
+}
+
+impl Default for MangadexDesktopApiHandle {
+    fn default() -> Self {
+        let hash_maps: HashMap<String, ServerHandle> = HashMap::new();
+        MangadexDesktopApiHandle {
+            def: Mutex::new(hash_maps),
+            key: Mutex::new("default".to_string()),
+        }
+    }
 }
 
 #[tauri::command]
@@ -378,46 +520,6 @@ async fn patch_all_manga_cover() -> Result<String> {
     };
     Ok(response_text)
 }
-
-#[derive(Clone, serde::Serialize)]
-struct ExportPayload {
-    message: String,
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error(transparent)]
-    Io(#[from] std::io::Error),
-}
-
-impl Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
-    }
-}
-
-#[derive(Default)]
-struct MyState(Mutex<HashMap<String, String>>);
-
-//#[derive(Default)]
-struct MangadexDesktopApiHandle {
-    key: Mutex<String>,
-    def: Mutex<HashMap<String, ServerHandle>>,
-}
-
-impl Default for MangadexDesktopApiHandle {
-    fn default() -> Self {
-        let hash_maps: HashMap<String, ServerHandle> = HashMap::new();
-        MangadexDesktopApiHandle {
-            def: Mutex::new(hash_maps),
-            key: Mutex::new("default".to_string()),
-        }
-    }
-}
-
 // remember to call `.manage(MyState::default())`
 #[command]
 async fn launch_server<R: Runtime>(
@@ -429,10 +531,7 @@ async fn launch_server<R: Runtime>(
     let server: Server = mangadex_desktop_api2::launch_async_server_default()?;
     let handle: ServerHandle = server.handle();
     tauri::async_runtime::spawn(server);
-    handle_error!(state.def.lock()).insert(
-        handle_error!(state.key.lock()).to_string(),
-        handle,
-    );
+    handle_error!(state.def.lock()).insert(handle_error!(state.key.lock()).to_string(), handle);
     Ok("server launched".to_string())
 }
 
@@ -443,7 +542,10 @@ async fn stop_server(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Resul
     let handle_base = match start.get_mut(&(key)) {
         Some(data) => data,
         None => {
-            return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, "Can't find the server handle".to_string())))
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Can't find the server handle".to_string(),
+            )))
         }
     };
     let handle = handle_base.stop(true);
@@ -452,13 +554,13 @@ async fn stop_server(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Resul
 }
 
 fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
-    fern::Output::call(move|record| {
+    fern::Output::call(move |record| {
         let app = &app_handle;
         if record.level() == log::LevelFilter::Info {
             app.emit_all(
                 "mangadesk_api_info",
                 ExportPayload {
-                    message: record.args().to_string()
+                    message: record.args().to_string(),
                 },
             )
             .unwrap();
@@ -466,7 +568,7 @@ fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
             app.emit_all(
                 "mangadesk_api_warn",
                 ExportPayload {
-                    message: record.args().to_string()
+                    message: record.args().to_string(),
                 },
             )
             .unwrap();
@@ -474,7 +576,7 @@ fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
             app.emit_all(
                 "mangadesk_api_debug",
                 ExportPayload {
-                    message: record.args().to_string()
+                    message: record.args().to_string(),
                 },
             )
             .unwrap();
@@ -482,7 +584,7 @@ fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
             app.emit_all(
                 "mangadex_api_error",
                 ExportPayload {
-                    message: record.args().to_string()
+                    message: record.args().to_string(),
                 },
             )
             .unwrap();
@@ -490,7 +592,7 @@ fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
             app.emit_all(
                 "mangadesk_api_trace",
                 ExportPayload {
-                    message: record.args().to_string()
+                    message: record.args().to_string(),
                 },
             )
             .unwrap();
@@ -505,12 +607,15 @@ async fn emit_events_to_webview<R: Runtime>(app: tauri::AppHandle<R>) -> Result<
     let dispatch = fern::Dispatch::new().chain(output);
     match dispatch.apply() {
         Ok(_) => (),
-        Err(error) => return Err(Error::Io(std::io::Error::new(std::io::ErrorKind::Other, error.to_string())))
+        Err(error) => {
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                error.to_string(),
+            )))
+        }
     };
     Ok("Result setted".into())
 }
-
-
 
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
@@ -532,8 +637,11 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             emit_events_to_webview
         ])
         .setup(move |app| {
-            app.manage(MyState::default());
             app.manage(MangadexDesktopApiHandle::default());
+            init_ins_chapter_handle()?;
+            std::thread::spawn(||  {
+                
+            });
             Ok(())
         })
         .build()

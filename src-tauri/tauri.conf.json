@@ -41,9 +41,6 @@
       "notification": {
         "all": true
       },
-      "shell": {
-        "open": true 
-      },
       "process": {
         "all": false,
         "exit": true,
@@ -74,7 +71,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Lifestyle",
       "copyright": "",
       "deb": {
         "depends": []
