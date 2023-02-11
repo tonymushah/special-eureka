@@ -125,12 +125,12 @@ export function useChapterDownloadMutation(props: {
             })
             return Chapter.download(props.chapID, client);
         },
-        onError(error: Error) {
+        onError(error) {
             toast({
                 status: "error",
                 isClosable: true,
                 title: "Error on downloading",
-                description: error.message
+                description: JSON.stringify(error)
             });
         },
         onSuccess(data, variables, context) {

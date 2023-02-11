@@ -59,41 +59,6 @@ macro_rules! this_eureka_reqwest_result {
     };
 }
 
-macro_rules! this_eureka_reqwest_result_with_ins {
-    ($to_use:expr, $id:expr) => {
-        match $to_use.send().await {
-            Err(e) => {
-                add_in_chapter_failed($id)?;
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::Other,
-                    e.to_string().as_str(),
-                )));
-            }
-            Ok(f) => {
-                if f.status().is_success() {
-                    f
-                } else {
-                    let to_return: ErrorPayload = match f.json().await {
-                        Ok(data) => data,
-                        Err(e) => {
-                            add_in_chapter_failed($id)?;
-                            return Err(Error::Io(std::io::Error::new(
-                                std::io::ErrorKind::Other,
-                                e.to_string().as_str(),
-                            )));
-                        }
-                    };
-                    add_in_chapter_failed($id)?;
-                    return Err(Error::Io(std::io::Error::new(
-                        std::io::ErrorKind::Other,
-                        to_return.message,
-                    )));
-                }
-            }
-        }
-    };
-}
-
 macro_rules! handle_error {
     ($to_use:expr) => {
         match $to_use {
@@ -425,13 +390,7 @@ async fn download_cover_with_quality(cover_id: String, quality: u32) -> Result<S
     Ok(response_text)
 }
 
-#[tauri::command]
-async fn download_chapter(chapter_id: String) -> Result<String> {
-    Ok(download_chapter_normal_mode(chapter_id).await?)
-}
-
-#[tauri::command]
-async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
+async fn download_chapter_normal_func(chapter_id: String) -> Result<String>{
     let server_option = match ServerOptions::new() {
         Err(e) => {
             return Err(Error::Io(std::io::Error::new(
@@ -441,15 +400,12 @@ async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
         }
         Ok(f) => f,
     };
-    let chap_id_ = chapter_id.clone();
-    let chap_id__ = chapter_id.clone();
-    add_in_chapter_queue(chap_id_)?;
     let client = reqwest::Client::new();
     let request = client.put(format!(
         "http://{}:{}/chapter/{}/data",
         server_option.hostname, server_option.port, chapter_id
     ));
-    let response = this_eureka_reqwest_result_with_ins!(request, chapter_id);
+    let response = this_eureka_reqwest_result!(request);
     let response_text = match response.text().await {
         Err(e) => {
             add_in_chapter_failed(chapter_id)?;
@@ -460,8 +416,29 @@ async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
         }
         Ok(f) => f,
     };
-    add_in_chapter_success(chap_id__)?;
-    Ok(response_text)
+    Ok(response_text)    
+}
+
+#[tauri::command]
+async fn download_chapter(chapter_id: String) -> Result<String> {
+    Ok(download_chapter_normal_mode(chapter_id).await?)
+}
+
+#[tauri::command]
+async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
+    let chap_id_ = chapter_id.clone();
+    let chap_id__ = chapter_id.clone();
+    add_in_chapter_queue(chap_id_)?;
+    match download_chapter_normal_func(chapter_id).await {
+        Ok(data) => {
+            add_in_chapter_success(chap_id__)?;
+            return Ok(data);
+        },
+        Err(err) => {
+            add_in_chapter_failed(chap_id__)?;
+            return Err(err);
+        }
+    }
 }
 
 #[tauri::command]

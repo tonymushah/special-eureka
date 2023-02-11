@@ -16,19 +16,11 @@ export function useMangaDownload(props: {
         duration: 9000
     });
     const toastID = React.useRef<ToastId>();
-    function addToast(props?: UseToastOptions) {
-        toastID.current = toast(props)
-    }
-    function updateToast(props?: UseToastOptions) {
-        if (toastID.current != undefined && props != undefined) {
-            toast.update(toastID.current, props);
-        }
-    }
     const queryClient = useQueryClient();
     const key = "mdx-manga:" + props.mangaID;
     const download_ = useMutation({
         mutationFn: () => {
-            addToast({
+            toast({
                 title: "Downloading manga...",
                 status: "loading",
                 duration: 9000
@@ -42,7 +34,7 @@ export function useMangaDownload(props: {
             } else {
                 title = manga.get_title().en;
             }
-            updateToast({
+            toast({
                 title: "Downloaded manga",
                 status: "success",
                 description: title,
@@ -52,8 +44,8 @@ export function useMangaDownload(props: {
                 queryKey: key
             })
         },
-        onError(error: any, variables, context) {
-            updateToast({
+        onError(error, variables, context) {
+            toast({
                 title: "Error on downloading manga",
                 description: JSON.stringify(error),
                 status: "error",

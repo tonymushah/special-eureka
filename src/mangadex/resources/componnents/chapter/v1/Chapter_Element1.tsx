@@ -16,9 +16,9 @@ const MangaDexPath = getMangaDexPath();
 
 export default function Chapter_Element1(props: {
     chapter: Chapter,
-    downloadMutation?: UseMutationResult<string[], Error, void>
+    downloadMutation?: UseMutationResult<string[], unknown, void>
 }) {
-    let downloadMutation: UseMutationResult<string[], Error, void> | undefined = props.downloadMutation;
+    let downloadMutation: UseMutationResult<string[], unknown, void> | undefined = props.downloadMutation;
     const { is_downloaded_queryKey, is_downloaded_query } = is_chapter_downloaded({
         chapter : props.chapter
     });
