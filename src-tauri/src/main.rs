@@ -8,35 +8,32 @@ use std::io::Result;
 
 use tauri::Manager;
 use tauri::SystemTray;
-use tauri::api::notification::Notification;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
 use once_cell::sync::OnceCell;
-use tauri::api::dialog::message;
 
-static mut NOTIFICATION_HANDLE : OnceCell<Notification> = OnceCell::new();
+static mut INDENTIFIER : OnceCell<String> = OnceCell::new();
 
-fn set_notification_handle(identifier: impl Into<String>) -> Result<()>{
-  let noti = Notification::new(identifier);
+fn set_indentifier(identifier: String) -> Result<()>{
   match std::thread::spawn(move|| -> Result<()> {
     unsafe{
-      match NOTIFICATION_HANDLE.set(noti) {
+      match INDENTIFIER.set(identifier) {
       Ok(_) => return Ok(()),
       Err(_) => {
-        return Err(std::io::Error::new(std::io::ErrorKind::Other, "The notification handle already setted"));
+        return Err(std::io::Error::new(std::io::ErrorKind::AlreadyExists, "The identifier already setted"));
       }
     }
     }
   }).join(){
     Ok(res) => res,
-    Err(_) => Err(std::io::Error::new(std::io::ErrorKind::Other, "The notification handle already setted"))
+    Err(_) => Err(std::io::Error::new(std::io::ErrorKind::Other, "Error on loading notification handle"))
   }
 }
 
-pub fn get_notification_handle() -> Result<&'static Notification>{
-  let data_: &'static Notification;
+pub fn get_indentifier() -> Result<&'static String>{
+  let data_: &'static String;
   unsafe{
-    match NOTIFICATION_HANDLE.get(){
-      None => return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Notification handle not found")),
+    match INDENTIFIER.get(){
+      None => return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Identifier not found")),
       Some(data) => {
         data_ = data;
       }
@@ -44,6 +41,20 @@ pub fn get_notification_handle() -> Result<&'static Notification>{
   }
   Ok(data_)
 }
+
+pub fn get_notification_handle_mut() -> Result<&'static mut String>{
+  let data_: &'static mut String;
+  unsafe{
+    match INDENTIFIER.get_mut(){
+      None => return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "Identifier not found")),
+      Some(data) => {
+        data_ = data;
+      }
+    }
+  }
+  Ok(data_)
+}
+
 
 #[tauri::command]
 async fn close_splashscreen(window: tauri::Window) {
@@ -62,6 +73,13 @@ async fn main() {
   let context = tauri::generate_context!();
   let identifier = context.config().tauri.bundle.identifier.clone();
 
+  match set_indentifier(identifier){
+    Ok(_) => (),
+    Err(err) => {
+      panic!("{}", err.to_string());
+    }
+  };
+
   let quit = CustomMenuItem::new("quit".to_string(), "Quit");
   let hide = CustomMenuItem::new("hide".to_string(), "Hide");
   let tray_menu = SystemTrayMenu::new()
@@ -70,18 +88,11 @@ async fn main() {
     .add_item(hide);
   let tray = SystemTray::new().with_menu(tray_menu);
 
-  match tauri::Builder::default().setup(move |_app| {
-      let identifier = &identifier;
-      set_notification_handle(identifier).unwrap();
-      Ok(())
-    })
+  match tauri::Builder::default()
     .system_tray(tray)
     .invoke_handler(tauri::generate_handler![close_splashscreen])
     .plugin(tauri_plugin_store::PluginBuilder::default().build())
     .plugin(mangadex_desktop_api::init())
-    .setup(|app_| {
-      Ok(())
-    })
     .build(context){
       Ok(app) => {
         app.run(|_app_handle, _event| {
@@ -89,6 +100,7 @@ async fn main() {
         })
       },
       Err(error) => {
+        panic!("{}", error.to_string());
       }
     };
   

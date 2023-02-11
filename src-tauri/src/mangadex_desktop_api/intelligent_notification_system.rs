@@ -79,4 +79,7 @@ impl<T: Clone + PartialEq> Download_Entry<T>{
             self.get_finished_len() >= self.get_queue_len()
         }
     }
+    pub fn is_empty(&self) -> bool{
+        self.queue.is_empty()
+    }
 }

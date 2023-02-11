@@ -10,109 +10,16 @@ use tauri::{
     AppHandle, Manager, Runtime, State, Window,
 };
 
+use crate::get_indentifier;
+
 use self::intelligent_notification_system::Download_Entry;
+use tauri::api::notification::Notification;
 pub mod intelligent_notification_system;
 type Result<T> = std::result::Result<T, Error>;
 
 static mut INS_CHAPTER: OnceCell<Download_Entry<String>> = OnceCell::new();
 
-static mut INS_CHAPTER_CHECKER : OnceCell<JoinHandle<()>> = OnceCell::new();
-
-fn init_ins_chapter_handle() -> Result<()> {
-    match std::thread::spawn(move || -> Result<()> { unsafe {
-        match INS_CHAPTER.set(Download_Entry::new()) {
-            Ok(_) => return Ok(()),
-            Err(_) => {
-                Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::AlreadyExists,
-                "The ins chapter handle already setted",
-                )))
-            }
-        }
-    }})
-    .join()
-    {
-        Ok(res) => res,
-        Err(_) => Err(Error::Io(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "Something inexecpeted happens when initializing the INS Handler",
-        ))),
-    }
-}
-
-fn get_ins_handle() -> Result<&'static Download_Entry<String>> {
-    let data_: &'static Download_Entry<String>;
-    unsafe {
-        match INS_CHAPTER.get() {
-            None => {
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::NotFound,
-                    "INS CHAPTER handle not found",
-                )))
-            }
-            Some(data) => {
-                data_ = data;
-            }
-        }
-    }
-    Ok(data_)
-}
-
-fn get_ins_handle_mut() -> Result<&'static mut Download_Entry<String>> {
-    let data_: &'static mut Download_Entry<String>;
-    unsafe {
-        match INS_CHAPTER.get_mut() {
-            None => {
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::NotFound,
-                    "INS CHAPTER handle not found",
-                )))
-            }
-            Some(data) => {
-                data_ = data;
-            }
-        }
-    }
-    Ok(data_)
-}
-fn reset_ins_handle() -> Result<()>{
-    unsafe {
-        match INS_CHAPTER.take() {
-            None => {
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::NotFound,
-                    "INS CHAPTER handle not found",
-                )))
-            }
-            Some(_) => ()
-        }
-    }
-    init_ins_chapter_handle()?;
-    Ok(())
-}
-
-fn add_in_chapter_queue(id: String) -> Result<()> {
-    let handle = get_ins_handle_mut()?;
-    handle.add_in_queue(id)?;
-    Ok(())
-}
-
-fn add_in_chapter_success(id: String) -> Result<()> {
-    let handle = get_ins_handle_mut()?;
-    handle.add_in_success(id)?;
-    Ok(())
-}
-
-fn add_in_chapter_failed(id: String) -> Result<()> {
-    let handle = get_ins_handle_mut()?;
-    handle.add_in_failed(id)?;
-    Ok(())
-}
-
-fn check_if_ins_finished() -> Result<bool>{
-    let handle = get_ins_handle_mut()?;
-    Ok(handle.is_all_finished())
-}
+static mut INS_CHAPTER_CHECKER: OnceCell<JoinHandle<()>> = OnceCell::new();
 
 #[derive(Serialize, Deserialize)]
 struct ErrorPayload {
@@ -142,6 +49,41 @@ macro_rules! this_eureka_reqwest_result {
                             )));
                         }
                     };
+                    return Err(Error::Io(std::io::Error::new(
+                        std::io::ErrorKind::Other,
+                        to_return.message,
+                    )));
+                }
+            }
+        }
+    };
+}
+
+macro_rules! this_eureka_reqwest_result_with_ins {
+    ($to_use:expr, $id:expr) => {
+        match $to_use.send().await {
+            Err(e) => {
+                add_in_chapter_failed($id)?;
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    e.to_string().as_str(),
+                )));
+            }
+            Ok(f) => {
+                if f.status().is_success() {
+                    f
+                } else {
+                    let to_return: ErrorPayload = match f.json().await {
+                        Ok(data) => data,
+                        Err(e) => {
+                            add_in_chapter_failed($id)?;
+                            return Err(Error::Io(std::io::Error::new(
+                                std::io::ErrorKind::Other,
+                                e.to_string().as_str(),
+                            )));
+                        }
+                    };
+                    add_in_chapter_failed($id)?;
                     return Err(Error::Io(std::io::Error::new(
                         std::io::ErrorKind::Other,
                         to_return.message,
@@ -200,6 +142,171 @@ impl Default for MangadexDesktopApiHandle {
             key: Mutex::new("default".to_string()),
         }
     }
+}
+
+
+fn set_ins_chapter_checker_handle(joinhandle: JoinHandle<()>) -> Result<()> {
+    match std::thread::spawn(move || -> Result<()> {
+        unsafe {
+            match INS_CHAPTER_CHECKER.set(joinhandle) {
+                Ok(_) => return Ok(()),
+                Err(_) => {
+                    return Err(Error::Io(std::io::Error::new(
+                        std::io::ErrorKind::AlreadyExists,
+                        "The ins chapter checker handle already setted",
+                    )));
+                }
+            }
+        }
+    })
+    .join()
+    {
+        Ok(res) => res,
+        Err(_) => Err(Error::Io(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Error on loading the ins chapter checker",
+        ))),
+    }
+}
+
+pub fn get_ins_checker_handle() -> Result<&'static JoinHandle<()>> {
+    let data_: &'static JoinHandle<()>;
+    unsafe {
+        match INS_CHAPTER_CHECKER.get() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS Chapter checker handle not found",
+                )))
+            }
+            Some(data) => {
+                data_ = data;
+            }
+        }
+    }
+    Ok(data_)
+}
+
+fn init_ins_chapter_handle() -> Result<()> {
+    match std::thread::spawn(move || -> Result<()> {
+        unsafe {
+            match INS_CHAPTER.set(Download_Entry::new()) {
+                Ok(_) => return Ok(()),
+                Err(_) => Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::AlreadyExists,
+                    "The ins chapter handle already setted",
+                ))),
+            }
+        }
+    })
+    .join()
+    {
+        Ok(res) => res,
+        Err(_) => Err(Error::Io(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Something inexecpeted happens when initializing the INS Handler",
+        ))),
+    }
+}
+
+fn get_ins_handle() -> Result<&'static Download_Entry<String>> {
+    let data_: &'static Download_Entry<String>;
+    unsafe {
+        match INS_CHAPTER.get() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS CHAPTER handle not found",
+                )))
+            }
+            Some(data) => {
+                data_ = data;
+            }
+        }
+    }
+    Ok(data_)
+}
+
+fn get_ins_handle_mut() -> Result<&'static mut Download_Entry<String>> {
+    let data_: &'static mut Download_Entry<String>;
+    unsafe {
+        match INS_CHAPTER.get_mut() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS CHAPTER handle not found",
+                )))
+            }
+            Some(data) => {
+                data_ = data;
+            }
+        }
+    }
+    Ok(data_)
+}
+
+fn reset_ins_handle() -> Result<()> {
+    unsafe {
+        match INS_CHAPTER.take() {
+            None => {
+                return Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::NotFound,
+                    "INS CHAPTER handle not found",
+                )))
+            }
+            Some(_) => (),
+        }
+    }
+    init_ins_chapter_handle()?;
+    Ok(())
+}
+
+fn add_in_chapter_queue(id: String) -> Result<()> {
+    let handle = get_ins_handle_mut()?;
+    handle.add_in_queue(id)?;
+    Ok(())
+}
+
+fn add_in_chapter_success(id: String) -> Result<()> {
+    let handle = get_ins_handle_mut()?;
+    handle.add_in_success(id)?;
+    Ok(())
+}
+
+fn add_in_chapter_failed(id: String) -> Result<()> {
+    let handle = get_ins_handle_mut()?;
+    handle.add_in_failed(id)?;
+    Ok(())
+}
+
+fn check_if_ins_finished() -> Result<bool> {
+    let handle = get_ins_handle_mut()?;
+    if handle.is_empty() == true{
+        return Ok(false);
+    }
+    Ok(handle.is_all_finished())
+}
+
+fn check_plus_notify() -> Result<()> {
+    
+    let check_ = check_if_ins_finished()?;
+    let ins_chapter = get_ins_handle_mut()?;
+    let identifier = get_indentifier()?;
+    let identifier = format!("{}", identifier);
+    let notification_handle = Notification::new(identifier);
+    if check_ == true {
+        match notification_handle
+            .title("Chapter download finished")
+            .body(format!("Success {} \n Failed {}", ins_chapter.get_success_len(), ins_chapter.get_failed_len()))
+            .show(){
+                Ok(_) => (),
+                Err(error) => {
+                    println!("{}", error.to_string());
+                }
+            }
+        reset_ins_handle()?;
+    }
+    Ok(())
 }
 
 #[tauri::command]
@@ -320,31 +427,7 @@ async fn download_cover_with_quality(cover_id: String, quality: u32) -> Result<S
 
 #[tauri::command]
 async fn download_chapter(chapter_id: String) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
-    let request = client.put(format!(
-        "http://{}:{}/chapter/{}",
-        server_option.hostname, server_option.port, chapter_id
-    ));
-    let response = this_eureka_reqwest_result!(request);
-    let response_text = match response.text().await {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    Ok(response_text)
+    Ok(download_chapter_normal_mode(chapter_id).await?)
 }
 
 #[tauri::command]
@@ -358,14 +441,18 @@ async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
         }
         Ok(f) => f,
     };
+    let chap_id_ = chapter_id.clone();
+    let chap_id__ = chapter_id.clone();
+    add_in_chapter_queue(chap_id_)?;
     let client = reqwest::Client::new();
     let request = client.put(format!(
         "http://{}:{}/chapter/{}/data",
         server_option.hostname, server_option.port, chapter_id
     ));
-    let response = this_eureka_reqwest_result!(request);
+    let response = this_eureka_reqwest_result_with_ins!(request, chapter_id);
     let response_text = match response.text().await {
         Err(e) => {
+            add_in_chapter_failed(chapter_id)?;
             return Err(Error::Io(std::io::Error::new(
                 std::io::ErrorKind::Other,
                 e.to_string().as_str(),
@@ -373,6 +460,7 @@ async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
         }
         Ok(f) => f,
     };
+    add_in_chapter_success(chap_id__)?;
     Ok(response_text)
 }
 
@@ -639,9 +727,18 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .setup(move |app| {
             app.manage(MangadexDesktopApiHandle::default());
             init_ins_chapter_handle()?;
-            std::thread::spawn(||  {
+            set_ins_chapter_checker_handle(std::thread::spawn(|| {
+                loop {
+                    match check_plus_notify() {
+                        Ok(()) => (),
+                        Err(error) => {
+                            println!("{}", error.to_string());
+                        }
+                    }
+                    std::thread::sleep(std::time::Duration::from_millis(500));
+                }
                 
-            });
+            }))?;
             Ok(())
         })
         .build()
