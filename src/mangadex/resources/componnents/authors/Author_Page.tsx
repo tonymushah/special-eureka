@@ -37,9 +37,10 @@ export default function Author_Page(props: {
                 backgroundRepeat={"no-repeat"}
                 backgroundSize={"cover"}
             >
-                <Chakra.Heading paddingTop={"5em"} marginLeft={"2em"} size={"2xl"}>{props.src.get_Name()}</Chakra.Heading>
+                <Chakra.Heading paddingTop={"5em"} marginLeft={"2em"} size={"2xl"} marginBottom={"0px"}>{props.src.get_Name()}</Chakra.Heading>
             </Chakra.Box>
             <Chakra.Box
+                marginTop={"0px"}
                 backgroundColor={"#e2e8f0"}
             >
                 <Chakra.Box paddingTop={"25px"} as={Container}>

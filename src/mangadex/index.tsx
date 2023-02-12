@@ -50,6 +50,8 @@ const RecentlyAdded = React.lazy(() => import("./pages/titles/RecentlyAdded"));
 
 const Author_Page_index = React.lazy(() => import("./pages/author"));
 
+const IsPingable_default_client = React.lazy(() => import("./resources/componnents/IsPingable_default_client"))
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -293,7 +295,16 @@ function useMangadexRouter(): RouteObject {
                         errorElement: (<ErrorELRouter/>),
                         element : (
                             <Mangadex_suspense>
-                                <Author_Page_index/>
+                                <IsPingable_default_client
+                                    onLoading={
+                                        <Mangadex_suspense__/>
+                                    }
+                                    onSuccess={() => (
+                                        <Mangadex_suspense>
+                                            <Author_Page_index/>
+                                        </Mangadex_suspense>
+                                    )}
+                                />
                             </Mangadex_suspense>
                         )
                     }
