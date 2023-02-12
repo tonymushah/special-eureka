@@ -48,22 +48,30 @@ const Random_Manga = React.lazy(() => import("./pages/manga/Random"));
 
 const RecentlyAdded = React.lazy(() => import("./pages/titles/RecentlyAdded"));
 
+const Author_Page_index = React.lazy(() => import("./pages/author"));
+
+export function Mangadex_suspense__() {
+    return (
+        <Chakra.Box
+            width={"full"}
+            height={"100vh"}
+        >
+            <Chakra.Center>
+                <Chakra.Spinner
+                    size={"lg"}
+                    thickness={"2px"}
+                    color={"orange"}
+                />
+            </Chakra.Center>
+        </Chakra.Box>
+    )
+}
+
 export function Mangadex_suspense(props: React.PropsWithChildren) {
     return (
         <React.Suspense
             fallback={
-                <Chakra.Box
-                    width={"full"}
-                    height={"100vh"}
-                >
-                    <Chakra.Center>
-                        <Chakra.Spinner
-                            size={"lg"}
-                            thickness={"2px"}
-                            color={"orange"}
-                        />
-                    </Chakra.Center>
-                </Chakra.Box>
+                <Mangadex_suspense__ />
             }
         >
             {
@@ -271,6 +279,21 @@ function useMangadexRouter(): RouteObject {
                         element: (
                             <Mangadex_suspense>
                                 <RecentlyAdded />
+                            </Mangadex_suspense>
+                        )
+                    }
+                ]
+            },
+            {
+                path: "author",
+                errorElement: (<ErrorELRouter/>),
+                children: [
+                    {
+                        path: ":id",
+                        errorElement: (<ErrorELRouter/>),
+                        element : (
+                            <Mangadex_suspense>
+                                <Author_Page_index/>
                             </Mangadex_suspense>
                         )
                     }

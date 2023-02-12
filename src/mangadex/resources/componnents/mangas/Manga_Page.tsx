@@ -158,7 +158,10 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 )
             } else {
                 returns2[index] = (
-                    <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()},</Chakra.Link>
+                    <>
+                        <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
+                        ,&nbsp;
+                    </>
                 )
             }
         }

@@ -1,12 +1,17 @@
 import React from "react";
 import { Button, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { getMangaDexPath } from "../../../../..";
 import { make_first_UpperCare } from "../../../../../api/internal/Utils";
 import { Author } from "../../../../../api/structures/Author";
+
+const MangaDexPath = getMangaDexPath()
+
 export function AuthorButton(props : {
     src : Author
 }){
     if(props.src !== undefined){
-        return (<Button className="mdP-bout m-1" variant="dark" size="sm">{props.src.get_Name()}</Button>);
+        return (<Link to={MangaDexPath + "/author/" + props.src.get_id()}><Button className="mdP-bout m-1" variant="dark" size="sm">{props.src.get_Name()}</Button></Link>);
     }else{
         return (<></>)
     }

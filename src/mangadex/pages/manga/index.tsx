@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React from "react";
 import { Container, Nav } from "react-bootstrap";
 import { useQuery, useQueryClient } from "react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
@@ -23,9 +23,9 @@ export default function MangaPage() {
     const queryClient = useQueryClient()
     let { id } = useParams();
     const query_key = "mdx-manga:" + id;
-    useMemo<void>(() => {
+    React.useMemo<void>(() => {
         queryClient.removeQueries(query_key);
-    }, []);
+    }, [queryClient, query_key]);
     const query = useQuery<Manga, Error>(query_key, () => {
         return Manga.getMangaByID(id!, client);
     }, {
