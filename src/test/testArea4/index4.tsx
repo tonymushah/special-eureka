@@ -26,14 +26,12 @@ function Chaps(props): React.ReactNode{
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.Suspense fallback={<Spinner size="lg" animation="border"/>}>
         <Await
-            resolve={Chapter.search_chapter()}
+            resolve={Chapter.search({
+                offset_limits : new Offset_limits()
+            })}
             errorElement={<p className="hidden">Errors</p>}
-            children={(getted) => {
-                if(getted instanceof Array<Chapter>){
+            children={(getted : Array<Chapter>) => {
                     return (<Chaps to_use={getted}/>);
-                }else{
-                    return (<p>ERROR again</p>);
-                }
                 //</Chapter>return (<p>{JSON.stringify(getted)}</p>)
             }}
         />

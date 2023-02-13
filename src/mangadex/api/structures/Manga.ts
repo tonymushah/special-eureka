@@ -725,7 +725,7 @@ export class Manga extends Attribute{
         orderss.set_volume(Asc_Desc.asc());
         let Offset_Limits: Offset_limits = new Offset_limits();
         Offset_Limits.set_limits(100);
-        let res : Collection<Cover> | Response<any> = await Cover.search(
+        let res : Collection<Cover> = await Cover.search(
             {
                 offset_Limits : Offset_Limits,
                 mangaIDs : [this.get_id()],
@@ -733,11 +733,7 @@ export class Manga extends Attribute{
                 client: client
             }
         );
-        if(res instanceof Collection<Cover>){
-            return res;
-        }else{
-            throw new Error("Cover list has no been loaded");
-        }
+        return res;
     }
     public async get_latestUploadedChapter(client? : Client) : Promise<Chapter>{
         return Chapter.get_ChapterbyId(this.$latestUploadedChapter, client);
@@ -1148,11 +1144,7 @@ export class Manga_2 extends Manga{
                         client : client
                     }
                 ))
-                if (cover instanceof Collection<Cover>) {
-                    return cover.get_data()[0];
-                }else{
-                    throw new Error("No cover art for this manga " + this.get_title().en);
-                }
+                return cover.get_data()[0];
             } catch (error) {
                 throw new Error("No cover art for this manga " + this.get_title().en);
             }

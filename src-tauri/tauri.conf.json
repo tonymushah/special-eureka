@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "npm run build",
-    "beforeDevCommand": "bun run dev",
+    "beforeBuildCommand": "pnpm run vite:build",
+    "beforeDevCommand": "bun run vite:dev",
     "devPath": "http://localhost:9305",
     "distDir": "../dist",
     "withGlobalTauri": true

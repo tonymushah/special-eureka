@@ -7,17 +7,19 @@
     "url": "https://github.com/tonymushah/special-eureka"
   },
   "scripts": {
-    "dev": "vite",
-    "build_preview": "vite build --emptyOutDir && vite preview --port 9305",
-    "build": "vite build --emptyOutDir",
-    "lint": "eslint src && tsc ",
-    "preview": "vite preview --port 9305",
+    "vite:dev": "vite",
+    "vite:build_preview": "vite:build && vite:preview",
+    "vite:build": "vite build --emptyOutDir",
+    "lint": "eslint src && tsc",
+    "vite:preview": "vite preview --port 9305",
     "tauri": "tauri",
     "vite-tauri": "vite-tauri",
     "tauri-dev": "tauri dev",
     "clean-src-tauri": "cd src-tauri && cargo clean",
     "update-api": "cd src-tauri && cargo update -p mangadex-desktop-api2",
-    "check-src-tauri": "cd src-tauri && cargo check"
+    "check-src-tauri": "cd src-tauri && cargo check",
+    "dev": "tauri dev",
+    "build": "tauri build"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
