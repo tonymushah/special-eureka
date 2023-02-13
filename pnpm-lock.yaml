@@ -44,6 +44,7 @@ specifiers:
   javascript-time-ago: ^2.5.9
   kute.js: ^2.2.4
   minidenticons: ^2.0.0
+  prop-types: ^15.8.1
   protobufjs: ^7.2.2
   query-string: ^7.1.3
   react: ^18.2.0
@@ -54,6 +55,7 @@ specifiers:
   react-hotkeys-hook: ^4.3.5
   react-icons: ^4.7.1
   react-image-size: ^1.0.6
+  react-inner-image-zoom: ^3.0.2
   react-jsx-context-menu: ^1.0.10
   react-lazy-load: ^4.0.1
   react-lazy-load-image-component: ^1.5.6
@@ -117,6 +119,7 @@ dependencies:
   javascript-time-ago: 2.5.9
   kute.js: 2.2.4
   minidenticons: 2.0.0
+  prop-types: 15.8.1
   protobufjs: 7.2.2
   query-string: 7.1.3
   react: 18.2.0
@@ -127,6 +130,7 @@ dependencies:
   react-hotkeys-hook: 4.3.5_biqbaboplfbrettd7655fr4n2y
   react-icons: 4.7.1_react@18.2.0
   react-image-size: 1.0.6
+  react-inner-image-zoom: 3.0.2_sh5qlbywuemxd2y3xkrw2y2kr4
   react-jsx-context-menu: 1.0.10_biqbaboplfbrettd7655fr4n2y
   react-lazy-load: 4.0.1_biqbaboplfbrettd7655fr4n2y
   react-lazy-load-image-component: 1.5.6_biqbaboplfbrettd7655fr4n2y
@@ -5913,6 +5917,16 @@ packages:
 
   /react-image-size/1.0.6:
     resolution: {integrity: sha512-jpCktrUdsUiBbdJQ/VOexAYPm3f5fTqDpQsiLvfSXApamdXMTw497BD7G1CVeeyGptVXzcNOkxBy1ywvGe40gQ==}
+    dev: false
+
+  /react-inner-image-zoom/3.0.2_sh5qlbywuemxd2y3xkrw2y2kr4:
+    resolution: {integrity: sha512-ICjyz0wdKmLufuQkUyg4iyP0yIF2elDeHjY1+S1pOKPggrW0g9V2SCmOSA39405ZX8GVVaxadmUYWwz3OF4V5A==}
+    peerDependencies:
+      prop-types: '>=15.6.2'
+      react: '>=16.8.0'
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:
