@@ -1,10 +1,12 @@
 import { Client } from "@tauri-apps/api/http";
+import { Offset_limits } from "mangadex/api/internal/Utils";
 import { Collection } from "../Collection";
 import { Manga } from "../Manga";
 
 export default class AllDownloadedChap_Of_aMangaCollection extends Collection<string>{
-    private client: Client;
-    private manga_id: string;
+    
+    private client!: Client;
+    private manga_id!: string;
 
     /**
      * Getter $manga_id
@@ -42,25 +44,7 @@ export default class AllDownloadedChap_Of_aMangaCollection extends Collection<st
         this.$client = client;
         this.$manga_id = manga_id;
     }
-    public next(): Promise<Collection<string>> {
-        return new Promise((resolve, reject) => {
-            try {
-                let current_offset_limits = this.next_offset_limit();
-                resolve(Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, current_offset_limits, this.client));
-            } catch (error) {
-                reject(error);
-            }
-        });
+    public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<string>> {
+        return Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, offset_limits, this.client)
     }
-    public previous(): Promise<Collection<string>> {
-        return new Promise((resolve, reject) => {
-            try {
-                let current_offset_limits = this.previous_offset_limit();
-                resolve(Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, current_offset_limits, this.client));
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
-    
 }

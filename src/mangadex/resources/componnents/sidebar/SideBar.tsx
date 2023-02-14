@@ -1,16 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { ExtLink } from "../../../../commons-res/components/ExtLink";
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Button } from 'react-bootstrap';
-import { FaArchive, FaBookmark, FaBookOpen, FaComments, FaHome, FaServer, FaUser } from 'react-icons/fa';
-import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
-import vite_logo from "/commons-res/common-icon/favicon.svg";
-import { Sidebar, Menu, SubMenu, MenuItem, useProSidebar, sidebarClasses } from "react-pro-sidebar";
+import React from "react";
+import { FaBookmark, FaBookOpen, FaComments, FaHome, FaUser } from 'react-icons/fa';
+import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from "react-pro-sidebar";
+import { Link } from "react-router-dom";
 import { getMangaDexPath } from "../../..";
+import { ExtLink } from "../../../../commons-res/components/ExtLink";
+import vite_logo from "/commons-res/common-icon/favicon.svg";
+import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
+import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 

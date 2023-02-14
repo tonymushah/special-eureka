@@ -5,7 +5,7 @@ const Modal_Search = React.lazy(() => import("./Modal_Search"));
 
 export default class Form1 extends React.Component {
     modalState: boolean;
-    constructor(props) {
+    constructor(props: {} | Readonly<{}>) {
         super(props);
         this.state = { value: '' };
         this.handleChange = this.handleChange.bind(this);
@@ -20,10 +20,10 @@ export default class Form1 extends React.Component {
         }
         this.forceUpdate();
     }
-    handleChange(event) {
+    handleChange(event: { target: { value: any; }; }) {
         this.setState({ value: event.target.value });
     }
-    handleSubmit(event) {
+    handleSubmit(event: { preventDefault: () => void; }) {
         event.preventDefault();
     }
 

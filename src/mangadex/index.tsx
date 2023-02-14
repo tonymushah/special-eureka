@@ -18,9 +18,9 @@ export function getMangaDexPath() {
 
 const MangaPage = React.lazy(() => import("./pages/manga/index"));
 
-const Chapters_ = React.lazy(() => import("./pages/manga/Chapters_"))
+const Chapters_ = React.lazy(() => import("./pages/manga/Chapters_"));
 
-const Covers_ = React.lazy(() => import("./pages/manga/Covers_"))
+const Covers_ = React.lazy(() => import("./pages/manga/Covers_"));
 
 const Related_ = React.lazy(() => import("./pages/manga/Related_"));
 
@@ -28,7 +28,7 @@ const DownloadsLaoyut = React.lazy(() => import('./pages/download/layout'));
 
 const Download_Index_Page = React.lazy(() => import('./pages/download'));
 
-const Chapter_Page = React.lazy(() => import('./pages/chapter/Chapter_Page'))
+const Chapter_Page = React.lazy(() => import('./pages/chapter/Chapter_Page'));
 
 const Home = React.lazy(() => import("./pages/Home/Home"));
 
@@ -50,7 +50,7 @@ const RecentlyAdded = React.lazy(() => import("./pages/titles/RecentlyAdded"));
 
 const Author_Page_index = React.lazy(() => import("./pages/author"));
 
-const IsPingable_default_client = React.lazy(() => import("./resources/componnents/IsPingable_default_client"))
+const IsPingable_default_client = React.lazy(() => import("./resources/componnents/IsPingable_default_client"));
 
 export function Mangadex_suspense__() {
     return (

@@ -3,7 +3,8 @@ import { Collection } from "../Collection";
 import { Manga } from "../Manga";
 import MangaSearchType from "../SearchType/Manga";
 export default class MangaCollection extends Collection<Manga>{
-    private prev_search_type : MangaSearchType;
+    
+    private prev_search_type!: MangaSearchType;
     /**
      * Getter $prev_search_type
      * @return {MangaSearchType}
@@ -46,5 +47,10 @@ export default class MangaCollection extends Collection<Manga>{
             }
         });
         
+    }
+    public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Manga>> {
+        let current_offset_limits = offset_limits;
+        this.$prev_search_type.offset_Limits = current_offset_limits;
+        return (Manga.search(this.prev_search_type));
     }
 }

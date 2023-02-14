@@ -109,7 +109,6 @@ impl Default for MangadexDesktopApiHandle {
     }
 }
 
-
 fn set_ins_chapter_checker_handle(joinhandle: JoinHandle<()>) -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {
         unsafe {
@@ -667,6 +666,12 @@ fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
 }
 
 #[tauri::command]
+async fn reset_queue() -> Result<String>{
+    reset_ins_handle()?;
+    Ok("Queue reinitialized".to_string())
+}
+
+#[tauri::command]
 async fn emit_events_to_webview<R: Runtime>(app: tauri::AppHandle<R>) -> Result<String> {
     let output = emit_events(app);
     let dispatch = fern::Dispatch::new().chain(output);
@@ -699,7 +704,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             download_chapter,
             download_chapter_normal_mode,
             download_chapter_data_saver_mode,
-            emit_events_to_webview
+            emit_events_to_webview,
+            reset_queue
         ])
         .setup(move |app| {
             app.manage(MangadexDesktopApiHandle::default());

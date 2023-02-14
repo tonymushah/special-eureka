@@ -3,7 +3,8 @@ import { Offset_limits } from "../../internal/Utils";
 import { Collection } from "../Collection";
 import { Manga } from "../Manga";
 export default class AllDownloadedMangaCollection extends Collection<string>{
-    private client: Client;
+    
+    private client!: Client;
     /**
      * Getter $client
      * @return {Client}
@@ -23,24 +24,7 @@ export default class AllDownloadedMangaCollection extends Collection<string>{
         super(params.data, params.limit, params.offset, params.total);
         this.$client = client;
     }
-    public next(): Promise<Collection<string>> {
-        return new Promise((resolve, reject) => {
-            try {
-                let current_offset_limits = this.next_offset_limit();
-                resolve(Manga.getAllOfflineMangaID(current_offset_limits, this.$client));
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
-    public previous(): Promise<Collection<string>> {
-        return new Promise((resolve, reject) => {
-            try {
-                let current_offset_limits = this.previous_offset_limit();
-                resolve(Manga.getAllOfflineMangaID(current_offset_limits, this.$client));
-            } catch (error) {
-                reject(error);
-            }
-        });
+    public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<string>> {
+        return Manga.getAllOfflineMangaID(offset_limits, this.$client);
     }
 }

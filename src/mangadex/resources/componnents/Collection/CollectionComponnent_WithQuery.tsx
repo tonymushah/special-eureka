@@ -1,0 +1,266 @@
+import * as ChakraIcon from "@chakra-ui/icons";
+import { Box, Button, ButtonGroup, Center, Spinner, Text, ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
+import React from "react";
+import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
+import { Collection } from "../../../api/structures/Collection";
+import ErrorEL1 from "../error/ErrorEL1";
+import UseCollection from "./UseCollection";
+
+export default function CollectionComponnent_WithQuery<T>(props: {
+    fn: () => Promise<Collection<T>>,
+    children: (value: Collection<T>) => React.ReactNode,
+    queryKey: QueryKey,
+    query_options?: Omit<UseQueryOptions<Collection<T>, Error>, 'queryKey' | 'queryFn'>,
+    onLoading?: React.ReactNode
+}) {
+    const toast = useToast();
+    const toastID = React.useRef<ToastId>();
+    function addToast(props?: UseToastOptions) {
+        toastID.current = toast(props)
+    }
+    function updateToast(props?: UseToastOptions) {
+        if (toastID.current != undefined && props != undefined) {
+            toast.update(toastID.current, props);
+        }
+    }
+    const search_query = useQuery<Collection<T>, Error>(props.queryKey, props.fn, props.query_options);
+    const queryClient = useQueryClient();
+
+    const previous = useMutation({
+        mutationFn: () => {
+            return new Promise<Collection<T>>((resolve, reject) => {
+                addToast({
+                    status: "loading",
+                    "title": "Loading to previous page",
+                    isClosable: false,
+                    "position": "bottom-right"
+                })
+                if (search_query.data != undefined) {
+                    resolve(search_query.data.previous())
+                } else {
+                    reject(new Error("the search query is'nt finished"));
+                }
+            });
+        },
+        onSuccess(data) {
+            updateToast({
+                status: "success",
+                "title": "Previous page Loaded",
+                isClosable: true,
+                "duration": 9000
+            })
+            queryClient.setQueryData(props.queryKey, data, {
+            });
+        },
+        onError(error: Error) {
+            updateToast({
+                status: "error",
+                "title": "Error on Loading previous page",
+                isClosable: true,
+                description: error.message,
+                "duration": 9000
+            })
+        },
+    });
+    const next = useMutation({
+        mutationFn: () => {
+            return new Promise<Collection<T>>((resolve, reject) => {
+                addToast({
+                    status: "loading",
+                    "title": "Loading to next page",
+                    isClosable: false,
+                    "position": "bottom-right"
+                })
+                if (search_query.data != undefined) {
+                    resolve(search_query.data.next())
+                } else {
+                    reject(new Error("the search query is'nt finished"));
+                }
+            });
+        },
+        onSuccess(data) {
+            updateToast({
+                status: "success",
+                "title": "Next page Loaded",
+                isClosable: true,
+                "duration": 9000
+            })
+            queryClient.setQueryData(props.queryKey, data, {
+            });
+        },
+        onError(error: Error) {
+            updateToast({
+                status: "error",
+                "title": "Error on Loading next page",
+                isClosable: true,
+                description: error.message,
+                "duration": 9000
+            })
+        },
+    });
+    const first_page = useMutation({
+        mutationFn: () => {
+            return new Promise<Collection<T>>((resolve, reject) => {
+                addToast({
+                    status: "loading",
+                    "title": "Loading to first page",
+                    isClosable: false,
+                    "position": "bottom-right"
+                })
+                if (search_query.data != undefined) {
+                    resolve(search_query.data.get_first_page())
+                } else {
+                    reject(new Error("the search query is'nt finished"));
+                }
+            });
+        },
+        onSuccess(data) {
+            updateToast({
+                status: "success",
+                "title": "First page Loaded",
+                isClosable: true,
+                "duration": 9000
+            })
+            queryClient.setQueryData(props.queryKey, data, {
+            });
+        },
+        onError(error: Error) {
+            updateToast({
+                status: "error",
+                "title": "Error on Loading first page",
+                isClosable: true,
+                description: error.message,
+                "duration": 9000
+            })
+        },
+    });
+    const last_page = useMutation({
+        mutationFn: () => {
+            return new Promise<Collection<T>>((resolve, reject) => {
+                addToast({
+                    status: "loading",
+                    "title": "Loading to last page",
+                    isClosable: false,
+                    "position": "bottom-right"
+                })
+                if (search_query.data != undefined) {
+                    resolve(search_query.data.get_last_page())
+                } else {
+                    reject(new Error("the search query is'nt finished"));
+                }
+            });
+        },
+        onSuccess(data) {
+            updateToast({
+                status: "success",
+                "title": "Last page Loaded",
+                isClosable: true,
+                "duration": 9000
+            })
+            queryClient.setQueryData(props.queryKey, data, {
+            });
+        },
+        onError(error: Error) {
+            updateToast({
+                status: "error",
+                "title": "Error on LastK first page",
+                isClosable: true,
+                description: error.message,
+                "duration": 9000
+            })
+        },
+    });
+    if (next.isLoading || previous.isLoading) {
+        return (
+            <Box>
+                <Box>
+                    <Center>
+                        {
+                            next.isLoading ? (
+                                <Text>Loading next page ...</Text>
+                            ) : (
+                                <></>
+                            )
+                        }
+                        {
+                            previous.isLoading ? (
+                                <Text>Loading previous page...</Text>
+                            ) : (
+                                <></>
+                            )
+                        }
+                    </Center>
+                </Box>
+            </Box>
+        );
+    }
+    if (search_query.isLoading || search_query.isRefetching) {
+        if (props.onLoading != undefined) {
+            return (<>
+                {
+                    props.onLoading
+                }
+            </>)
+        } else {
+            return (
+                <Box>
+                    <Center>
+                        <Spinner />
+                    </Center>
+                </Box>
+            );
+        }
+    }
+    if (search_query.isError) {
+        return (
+            <Box>
+                <ErrorEL1 error={search_query.error} />
+            </Box>
+        )
+    }
+    return (
+        <Box>
+            <Box>
+                <UseCollection<T> src={search_query.data!}>
+                    {
+                        props.children
+                    }
+                </UseCollection>
+            </Box>
+            <Box>
+                <Center>
+                    <ButtonGroup>
+                        <Button
+                            onClick={() => {
+                                first_page.mutate()
+                            }}
+                        >
+                            <ChakraIcon.ArrowLeftIcon />
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                previous.mutate()
+                            }}
+                        >
+                            <ChakraIcon.ArrowBackIcon />
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                next.mutate()
+                            }}
+                        >
+                            <ChakraIcon.ArrowForwardIcon />
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                last_page.mutate()
+                            }}
+                        >
+                            <ChakraIcon.ArrowRightIcon />
+                        </Button>
+                    </ButtonGroup>
+                </Center>
+            </Box>
+        </Box>
+    )
+}

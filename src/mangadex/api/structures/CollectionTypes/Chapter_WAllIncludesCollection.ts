@@ -4,7 +4,7 @@ import { Collection } from "../Collection";
 import Chapter_withAllIncludes_SearchType from "../SearchType/Chapter_WAllIncludes";
 
 export default class Chapter_WAllIncludesCollection extends Collection<Chapter_withAllIncludes>{
-    private prev_search_type: Chapter_withAllIncludes_SearchType;
+    private prev_search_type!: Chapter_withAllIncludes_SearchType;
     /**
      * Getter $prev_search_type
      * @return {Chapter_withAllIncludes_SearchType}
@@ -45,5 +45,10 @@ export default class Chapter_WAllIncludesCollection extends Collection<Chapter_w
                 reject(error);
             }
         });
+    }
+    public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Chapter_withAllIncludes>> {
+        let current_offset_limits = offset_limits;
+        this.$prev_search_type.offset_limits = current_offset_limits;
+        return (Chapter_withAllIncludes.search(this.prev_search_type));
     }
 }

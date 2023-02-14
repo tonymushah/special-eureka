@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import { reset_queue } from "/mangadex/api/offline/plugin";
 import { useQueryClient, useMutation, QueryKey, useQuery, UseQueryOptions, useQueries, UseQueryResult } from "react-query";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Chapter, Chapter_withAllIncludes } from "../../api/structures/Chapter";
@@ -9,6 +10,35 @@ export function get_chapter_queryKey(props : {
     id : string
 }){
     return "mdx-chapter:" + props.id;
+}
+
+export function reset_queue_mutation(){
+    const toast = useToast({
+        position: "bottom-right",
+        duration: 9000,
+    });
+    const mutation = useMutation({
+        mutationKey : "mdx-queue_reset",
+        mutationFn: () => {
+            return reset_queue();
+        },
+        onError(error: string) {
+            toast({
+                status: "error",
+                isClosable: true,
+                title: "Error on reset",
+                description: error
+            });
+        },
+        onSuccess() {
+            toast({
+                status: "success",
+                isClosable: true,
+                title: "Queue reinitilized"
+            });
+        },
+    })
+    return mutation;
 }
 
 export function get_ChapterbyId(props: {
@@ -133,7 +163,50 @@ export function useChapterDownloadMutation(props: {
                 description: JSON.stringify(error)
             });
         },
-        onSuccess(data, variables, context) {
+        onSuccess() {
+            toast({
+                status: "success",
+                isClosable: true,
+                title: "Downloaded chapter",
+                description: props.chapID
+            });
+            props.toInvalidate.map((value) => {
+                queryClient.refetchQueries({
+                    queryKey: value
+                });
+            })
+        },
+    })
+    return download_query;
+}
+export function useChapterDataSaverDownloadMutation(props: {
+    chapID: string,
+    toInvalidate: Array<QueryKey>
+}) {
+    const client = useHTTPClient();
+    const queryClient = useQueryClient()
+    const toast = useToast({
+        position: "bottom-right",
+        duration: 9000,
+    });
+    const download_query = useMutation({
+        mutationKey: "mdx-mutation-chapter-data-saver-download-" + props.chapID,
+        mutationFn: () => {
+            toast({
+                status: "loading",
+                title : "Downloading chapter"
+            })
+            return Chapter.download_data_saver(props.chapID, client);
+        },
+        onError(error: string) {
+            toast({
+                status: "error",
+                isClosable: true,
+                title: "Error on downloading",
+                description: error
+            });
+        },
+        onSuccess() {
             toast({
                 status: "success",
                 isClosable: true,

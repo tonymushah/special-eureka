@@ -45,7 +45,7 @@ test_area.render(
                         height={"100vh"}
                     >
                         <Chakra.AbsoluteCenter>
-                            <Chakra.Box>
+                            <Chakra.Box >
                                 <Chakra.Alert>
                                     <Chakra.AlertIcon />
                                     <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
