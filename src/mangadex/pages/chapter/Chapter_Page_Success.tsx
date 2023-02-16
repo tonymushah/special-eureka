@@ -160,7 +160,6 @@ export default function Chapter_Page_Success(props: {
                             <Col>
                                 <Chakra.FormControl>
                                     <Chakra.FormLabel>Chapter Reading mode</Chakra.FormLabel>
-
                                     <React.Suspense
                                         fallback={
                                             <Chakra.Center>
@@ -170,7 +169,6 @@ export default function Chapter_Page_Success(props: {
                                     >
                                         <Chapter_Reading_mode chapterID={props.data.get_id()} />
                                     </React.Suspense>
-
                                 </Chakra.FormControl>
                             </Col>
                             <Col>
@@ -221,7 +219,6 @@ export default function Chapter_Page_Success(props: {
                         </ChapterFullScreen>
                     </React.Suspense>
                 </Chakra.Box>
-
             </HotkeysProvider>
         </>
     );

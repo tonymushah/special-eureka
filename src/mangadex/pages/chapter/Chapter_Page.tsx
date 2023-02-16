@@ -43,7 +43,7 @@ export default function Chapter_Page() {
                 }
             >
                 <Chapter_Page_Success
-                    data={query.data}
+                    data={query.data.data}
                 />
             </React.Suspense>
         )

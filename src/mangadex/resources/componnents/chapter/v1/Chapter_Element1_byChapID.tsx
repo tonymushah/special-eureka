@@ -1,16 +1,13 @@
+import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Chapter } from "../../../../api/structures/Chapter";
-import * as Chakra from "@chakra-ui/react"
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import { get_ChapterbyId, is_chapter_downloaded_with_ChapID, useChapterDownloadMutation } from "../../../hooks/ChapterStateHooks";
+import { get_ChapterbyId } from "../../../hooks/ChapterStateHooks";
 const ErrorEL1 = React.lazy(() => import("../../error/ErrorEL1"));
 const Chapter_Element1 = React.lazy(() => import("./Chapter_Element1"));
 export default function Chapter_Element1_byChapID(props: {
     id: string,
     with_all_includes?: boolean
 }) {
-    const { query, queryKey } = get_ChapterbyId({
+    const { query } = get_ChapterbyId({
         id : props.id,
         with_all_includes : props.with_all_includes
     })
