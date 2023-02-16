@@ -14,14 +14,6 @@ export default function Chapter_Element1_byChapID(props: {
         id : props.id,
         with_all_includes : props.with_all_includes
     })
-    const { is_downloaded_queryKey } = is_chapter_downloaded_with_ChapID(props);
-    const download_query = useChapterDownloadMutation({
-        chapID : props.id,
-        toInvalidate : [
-            queryKey,
-            is_downloaded_queryKey
-        ]
-    })
     if (query.isLoading) {
         return (
             <Chakra.Box width={"full"}>
@@ -57,8 +49,7 @@ export default function Chapter_Element1_byChapID(props: {
             }
         >
             <Chapter_Element1
-                chapter={query.data!}
-                downloadMutation={download_query}
+                chapter={query.data!.data}
             />
         </React.Suspense>
     );

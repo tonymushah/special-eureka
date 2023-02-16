@@ -1,9 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
 import React from 'react';
 import { Row } from 'react-bootstrap';
+import { useQuery } from "react-query";
 import { Mangadex_suspense } from "../..";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Offset_limits } from '../../api/internal/Utils';
+import { getVersion } from '@tauri-apps/api/app';
 
 const CustomListSwiper = React.lazy(() => import('../../resources/componnents/lists/v1/CustomListSwiper'));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
@@ -12,8 +14,13 @@ const IsPingable_defaultError = React.lazy(() => import("../../resources/componn
 function Home() {
   let offset_limits_1: Offset_limits = new Offset_limits();
   offset_limits_1.set_limits(20);
-  const id_toUse = "4be9338a-3402-4f98-b467-43fb56663927";
+  const id_toUse = "44224004-1fad-425e-b416-45b46b74d3d1";
   const client = useHTTPClient();
+  const app_version_query = useQuery("special-eureka-version", () => {
+    return getVersion();
+  }, {
+    staleTime: Infinity
+  })
   return (
     <Chakra.Box
       margin={2}
@@ -39,7 +46,13 @@ function Home() {
             mb={1}
             fontSize='lg'
           >
-            Welcome to Mangadex Desktop v0.1.0
+            Welcome to Mangadex Desktop {
+              app_version_query.isSuccess? (
+                <span>{app_version_query.data}</span>
+              ) : (
+                <Chakra.Skeleton width={"10px"} height={"10px"}/>
+              )
+            }
           </Chakra.AlertTitle>
           <Chakra.AlertDescription
             maxWidth='sm'

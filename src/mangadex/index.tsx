@@ -52,6 +52,8 @@ const Author_Page_index = React.lazy(() => import("./pages/author"));
 
 const IsPingable_default_client = React.lazy(() => import("./resources/componnents/IsPingable_default_client"));
 
+const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -114,6 +116,7 @@ function useMangadexRouter(): RouteObject {
         ),
         errorElement: (<ErrorELRouter />),
         children: [
+            // Home
             {
                 index: true,
                 element: (
@@ -123,10 +126,12 @@ function useMangadexRouter(): RouteObject {
                 ),
                 errorElement: (<ErrorELRouter />)
             },
+            // Manga
             {
                 path: "manga",
                 errorElement: (<ErrorELRouter />),
                 children: [
+                    // Manga by ID
                     {
                         path: ":id",
                         errorElement: (<ErrorELRouter />),
@@ -138,6 +143,7 @@ function useMangadexRouter(): RouteObject {
                             </MyErrorBounderies>
                         ),
                         children: [
+                            // Top Chap
                             {
                                 index: true,
                                 element: (
@@ -148,6 +154,7 @@ function useMangadexRouter(): RouteObject {
                                     </MyErrorBounderies>
                                 )
                             },
+                            // Covers
                             {
                                 path: "covers",
                                 element: (
@@ -156,6 +163,7 @@ function useMangadexRouter(): RouteObject {
                                     </Mangadex_suspense>
                                 )
                             },
+                            // Related
                             {
                                 path: "related",
                                 element: (
@@ -166,6 +174,7 @@ function useMangadexRouter(): RouteObject {
                             }
                         ]
                     },
+                    // Random
                     {
                         path: "random",
                         errorElement: (<ErrorELRouter />),
@@ -177,10 +186,12 @@ function useMangadexRouter(): RouteObject {
                     }
                 ]
             },
+            // Chapter
             {
                 path: "chapter",
                 errorElement: (<ErrorELRouter />),
                 children: [
+                    // Chapter by ID
                     {
                         path: ":id",
                         errorElement: (<ErrorELRouter />),
@@ -192,6 +203,7 @@ function useMangadexRouter(): RouteObject {
                             </MyErrorBounderies>
                         ),
                         children: [
+                            // Longstrip
                             {
                                 index: true,
                                 element: (
@@ -202,6 +214,7 @@ function useMangadexRouter(): RouteObject {
                                     </Mangadex_suspense>
                                 )
                             },
+                            // SinglePage
                             {
                                 path: "swipper",
                                 element: (
@@ -212,6 +225,7 @@ function useMangadexRouter(): RouteObject {
                                     </Mangadex_suspense>
                                 )
                             },
+                            // Widestrip
                             {
                                 path: "widestrip",
                                 element: (
@@ -226,6 +240,7 @@ function useMangadexRouter(): RouteObject {
                     }
                 ]
             },
+            // Download
             {
                 path: "download",
                 errorElement: (<ErrorELRouter />),
@@ -239,6 +254,7 @@ function useMangadexRouter(): RouteObject {
                     </Chakra.Box>
                 ),
                 children: [
+                    // index
                     {
                         index: true,
                         element: (
@@ -251,9 +267,11 @@ function useMangadexRouter(): RouteObject {
                     }
                 ]
             },
+            // Group
             {
                 path: "group",
                 children: [
+                    // Group by ID
                     {
                         path: ":id",
                         element: (
@@ -262,6 +280,7 @@ function useMangadexRouter(): RouteObject {
                             </Mangadex_suspense>
                         )
                     },
+                    // Search
                     {
                         path: "search",
                         element: (
@@ -273,9 +292,11 @@ function useMangadexRouter(): RouteObject {
                     }
                 ]
             },
+            // Titles
             {
                 path: "titles",
                 children: [
+                    // Recently Added
                     {
                         path: "recently-added",
                         element: (
@@ -283,9 +304,19 @@ function useMangadexRouter(): RouteObject {
                                 <RecentlyAdded />
                             </Mangadex_suspense>
                         )
+                    },
+                    // Latest Updates
+                    {
+                        path: "latest-updates",
+                        element: (
+                            <Mangadex_suspense>
+                                <LatestUpdates/>
+                            </Mangadex_suspense>
+                        )
                     }
                 ]
             },
+            // Author
             {
                 path: "author",
                 errorElement: (<ErrorELRouter/>),

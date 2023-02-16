@@ -10,7 +10,7 @@ import { ExtLink } from "../../../../commons-res/components/ExtLink";
 import vite_logo from "/commons-res/common-icon/favicon.svg";
 import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-
+import react_logo from "/commons-res/common-icon/React-icon.svg";
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
 const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Badge_with_Server_Icon"));
@@ -169,7 +169,11 @@ export default function Side_bar() {
                                 <Link to={MangaDexPath + "titles/recently-added"}/>
                             }
                         >Recently Added</MenuItem>
-                        <MenuItem>Latest Updates</MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "titles/latest-updates"}/>
+                            }
+                        >Latest Updates</MenuItem>
                         <MenuItem
                             component={
                                 <Link to={MangaDexPath + "manga/random"} />
@@ -239,6 +243,14 @@ export default function Side_bar() {
                                 suffix={<ChakraIcons.ExternalLinkIcon />}
                             >
                                 Vite 
+                            </MenuItem>
+                        </ExtLink>
+                        <ExtLink href="https://reactjs.org/">
+                            <MenuItem 
+                                icon={<img id="tauri_icon" src={react_logo} width="28px" />}
+                                suffix={<ChakraIcons.ExternalLinkIcon />}
+                            >
+                                React
                             </MenuItem>
                         </ExtLink>
                     </Menu>

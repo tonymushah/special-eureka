@@ -16,7 +16,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "baseUrl": "./src",
+    "baseUrl": "src",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
   },

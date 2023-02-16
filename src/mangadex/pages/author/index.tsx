@@ -2,10 +2,10 @@ import React from "react";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { Mangadex_suspense, Mangadex_suspense__ } from "../..";
-import Author_Page from "../../resources/componnents/authors/Author_Page";
 import { get_author_byID, get_author_queryKey_byID } from "../../resources/hooks/AuthorState";
 
 const ErrorEL1 = React.lazy(() => import("../../resources/componnents/error/ErrorEL1"));
+const Author_Page = React.lazy(() => import("../../resources/componnents/authors/Author_Page"))
 
 export default function Author_Page_index(){
     const { id } = useParams();

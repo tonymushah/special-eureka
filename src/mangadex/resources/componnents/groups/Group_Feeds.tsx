@@ -49,7 +49,7 @@ export default function Group_Feeds(props: {
                 (value1: Collection<Chapter>) => (
                     <TryCatch
                         catch={(error) => (
-                            <Chakra.Alert>
+                            <Chakra.Alert status="error">
                                 <Chakra.AlertIcon />
                                 <Chakra.AlertTitle>
                                     {

@@ -1,4 +1,3 @@
-import React from "react";
 import { useQuery } from "react-query";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Chapter } from "../../../../api/structures/Chapter";

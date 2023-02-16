@@ -17,6 +17,7 @@ import Chapter_withAllIncludes_SearchType from "./SearchType/Chapter_WAllInclude
 import { User } from "./User";
 import AllDownloadedChapterCollection from "./CollectionTypes/AllDownloadedChapterCollection";
 import Chapter_WAllIncludesCollection from "./CollectionTypes/Chapter_WAllIncludesCollection";
+import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
 
 export class Chapter extends Attribute {
     private title: string;
@@ -139,19 +140,35 @@ export class Chapter extends Attribute {
 
         return instance;
     }
-    public static async get_ChapterbyId(id: string, client?: Client): Promise<Chapter> {
+    public static async get_OnlineChapterbyId(id: string, client?: Client): Promise<Chapter> {
+        let getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
+        let instance: Chapter = Chapter.build_W_Any(getted.data.data);
+        return instance;
+    }
+    public static async get_ChapterbyId(id: string, client?: Client): Promise<GetChapterByIdResult> {
         if (await DeskApiRequest.ping(client) == true) {
+
             try {
-                return await Chapter.getAOfflineChapter(id, client);
+                let getted = await Chapter.getAOfflineChapter(id, client)
+                let result: GetChapterByIdResult = {
+                    data: getted.data,
+                    hasFailed: getted.hasFailed,
+                    isDownloaded: true
+                };
+                return result
             } catch (error) {
-                let getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
-                let instance: Chapter = Chapter.build_W_Any(getted.data.data);
-                return instance;
+                return {
+                    data: await Chapter.get_OnlineChapterbyId(id, client),
+                    isDownloaded: false,
+                    hasFailed: false
+                }
             }
         } else {
-            let getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
-            let instance: Chapter = Chapter.build_W_Any(getted.data.data);
-            return instance;
+            return {
+                data: await Chapter.get_OnlineChapterbyId(id, client),
+                isDownloaded: false,
+                hasFailed: false
+            }
         }
     }
     public static async search(props:
@@ -257,10 +274,14 @@ export class Chapter extends Attribute {
         }
 
     }
-    public static async getAOfflineChapter(chapterID: string, client?: Client): Promise<Chapter_withAllIncludes> {
+    public static async getAOfflineChapter(chapterID: string, client?: Client): Promise<{ data: Chapter_withAllIncludes, hasFailed: boolean }> {
         if (await DeskApiRequest.ping(client) == true) {
             let response: Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`, undefined, client);
-            return Chapter_withAllIncludes.build_W_Any(response.data.data);
+            let hasFailed: boolean = JSON.parse(response.headers["x-download-failed"]);
+            return {
+                data: Chapter_withAllIncludes.build_W_Any(response.data.data),
+                hasFailed: hasFailed
+            };
         } else {
             throw new Error("The offline server isn't started");
         }
@@ -324,11 +345,11 @@ export class Chapter extends Attribute {
     public async getOfflineChapter_Data_Image(filename: string, client?: Client): Promise<string> {
         return Chapter.getAOfflineChapter_Data_Image(this.get_id(), filename, client);
     }
-    public static async getAll_downloaded_chap(offset_limits? : Offset_limits,client?: Client): Promise<Collection<string>> {
-        if(offset_limits == undefined){
+    public static async getAll_downloaded_chap(offset_limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
+        if (offset_limits == undefined) {
             offset_limits = new Offset_limits();
         }
-        if(client == undefined){
+        if (client == undefined) {
             client = await getClient();
         }
         if (await DeskApiRequest.ping(client) == true) {
@@ -342,7 +363,7 @@ export class Chapter extends Attribute {
                     total: number
                 }
             }> = await DeskApiRequest.get_methods(`chapter`, {
-                query : {
+                query: {
                     offset: JSON.stringify(offset_limits.get_offset()),
                     limit: JSON.stringify(offset_limits.get_limits())
                 }
@@ -651,7 +672,7 @@ export class Chapter_withAllIncludes extends Chapter {
         //        console.log("uploader builded")
         return instance;
     }
-    public static async get_ChapterbyId(id: string, client?: Client): Promise<Chapter_withAllIncludes> {
+    public static async get_OnlineChapterbyId(id: string, client?: Client | undefined): Promise<Chapter_withAllIncludes> {
         let getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
             "includes[0]": "manga",
             "includes[1]": "user",
@@ -660,6 +681,28 @@ export class Chapter_withAllIncludes extends Chapter {
         }, client);
         let instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
         return instance;
+    }
+    public static async get_ChapterbyId(id: string, client?: Client): Promise<GetChapterByIdResult> {
+        if (await DeskApiRequest.ping(client) == true) {
+            try {
+                return {
+                    isDownloaded: true,
+                    ...(await Chapter.getAOfflineChapter(id, client))
+                }
+            } catch (error) {
+                return {
+                    data: await Chapter_withAllIncludes.get_OnlineChapterbyId(id, client),
+                    isDownloaded: false,
+                    hasFailed: false
+                }
+            }
+        } else {
+            return {
+                data: await Chapter_withAllIncludes.get_OnlineChapterbyId(id, client),
+                isDownloaded: false,
+                hasFailed: false
+            }
+        }
     }
     public static async search(props:
         Chapter_withAllIncludes_SearchType

@@ -1,10 +1,11 @@
 import { useToast } from "@chakra-ui/react";
-import { reset_queue } from "/mangadex/api/offline/plugin";
+import { reset_queue } from "../../api/offline/plugin";
 import { useQueryClient, useMutation, QueryKey, useQuery, UseQueryOptions, useQueries, UseQueryResult } from "react-query";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Chapter, Chapter_withAllIncludes } from "../../api/structures/Chapter";
 import { Group } from "../../api/structures/Group";
 import { User } from "../../api/structures/User";
+import GetChapterByIdResult from "../../api/structures/additonal_types/GetChapterByIdResult";
 
 export function get_chapter_queryKey(props : {
     id : string
@@ -44,13 +45,13 @@ export function reset_queue_mutation(){
 export function get_ChapterbyId(props: {
     id: string,
     with_all_includes?: boolean,
-    options?: Omit<UseQueryOptions<Chapter, Error>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<GetChapterByIdResult, Error>, 'queryKey' | 'queryFn'>
 }) {
     const client = useHTTPClient();
     const key = get_chapter_queryKey({
         id : props.id
     });
-    const query = useQuery<Chapter, Error>(key, () => {
+    const query = useQuery<GetChapterByIdResult, Error>(key, () => {
         if(props.with_all_includes==true){
             return Chapter_withAllIncludes.get_ChapterbyId(props.id, client)
         }else{
@@ -162,6 +163,11 @@ export function useChapterDownloadMutation(props: {
                 title: "Error on downloading",
                 description: JSON.stringify(error)
             });
+            props.toInvalidate.map((value) => {
+                queryClient.refetchQueries({
+                    queryKey: value
+                });
+            })
         },
         onSuccess() {
             toast({

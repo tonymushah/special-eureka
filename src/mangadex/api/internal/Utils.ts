@@ -1,6 +1,5 @@
-import { getClient, Response } from "@tauri-apps/api/http";
-import { Author } from "../structures/Author";
 import langs from "../../resources/json/lang.json";
+import { Author } from "../structures/Author";
 import { Chapter } from "../structures/Chapter";
 import MangaChapter_Accordion from "./utils/MangaChapter_Accordion";
 
@@ -793,7 +792,6 @@ export class Alt_title{
         return alt_title;
     }
     public get_quicklang(): string | undefined{
-        let alt_title: Array<string> = [];
         for (let index = 0; index < this.to_use.length; index++) {
             const element = this.to_use[index];
             for (const key in element) {

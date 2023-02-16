@@ -1,39 +1,20 @@
-import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import { FaQuestionCircle } from "react-icons/fa";
-import { UseMutationResult } from "react-query";
 import { Link } from "react-router-dom";
 import Timeago from "react-timeago";
 import { getMangaDexPath } from "../../../..";
 import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Chapter } from "../../../../api/structures/Chapter";
-import { get_ChapterbyId, get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang, is_chapter_downloaded, useChapterDownloadMutation } from "../../../hooks/ChapterStateHooks";
+import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "../../../hooks/ChapterStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
-
+const ChapterDownloadButton = React.lazy(() => import("./ChapterDownloadButton"));
 const MangaDexPath = getMangaDexPath();
 
 export default function Chapter_Element1(props: {
     chapter: Chapter,
-    downloadMutation?: UseMutationResult<string[], unknown, void>
 }) {
-    let downloadMutation: UseMutationResult<string[], unknown, void> | undefined = props.downloadMutation;
-    const { is_downloaded_queryKey, is_downloaded_query } = is_chapter_downloaded({
-        chapter : props.chapter
-    });
-    const { queryKey } = get_ChapterbyId({
-        id : props.chapter.get_id()
-    });
-    if (downloadMutation == undefined) {
-        downloadMutation = useChapterDownloadMutation({
-            chapID : props.chapter.get_id(),
-            toInvalidate : [
-                is_downloaded_queryKey,
-                queryKey
-            ]
-        })
-    }
     const { user_query } = get_chapter_user_uploader(props);
     const groups_query = get_chapter_groups(props)
     const {
@@ -132,36 +113,13 @@ export default function Chapter_Element1(props: {
                     lg={1}
                 >
                     <Chakra.Center>
-                        {
-                            downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                                is_downloaded_query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                                    is_downloaded_query.isSuccess ? (
-                                        is_downloaded_query.data ? (
-                                            <Chakra.Tooltip
-                                                label="Downloaded Chapter"
-                                            >
-                                                <ChakraIcon.CheckIcon
-                                                    _hover={{
-                                                        color: "orange"
-                                                    }}
-                                                    onClick={() => {
-                                                        props.downloadMutation?.mutate()
-                                                    }}
-                                                />
-                                            </Chakra.Tooltip>
-                                        ) : (
-                                            <ChakraIcon.DownloadIcon _hover={{
-                                                color: "blue"
-                                            }} onClick={() => {
-                                                downloadMutation?.mutate()
-                                            }} />
-                                        )
-                                    ) : (
-                                        <ChakraIcon.WarningIcon />
-                                    )
-                                )
-                            )
-                        }
+                        <React.Suspense
+                                fallback={
+                                    <Chakra.Spinner size={"md"} />
+                                }
+                            >
+                                <ChapterDownloadButton chapter={props.chapter}/>
+                            </React.Suspense>
                     </Chakra.Center>
                 </Col>
                 <Col
@@ -172,15 +130,15 @@ export default function Chapter_Element1(props: {
                         groups_query.length == 0 ? (<></>) : (
                             groups_query.map((value) => {
                                 if (value.isLoading) {
-                                    return (<></>);
+                                    return (<i>Loading...</i>);
                                 }
                                 if (value.isError) {
-                                    return (<></>);
+                                    return (<i>No Groups</i>);
                                 }
                                 if (value.isSuccess) {
                                     return (
                                         <TryCatch
-                                            catch={(error) => (
+                                            catch={() => (
                                                 <Chakra.Link>{value.data!.get_name()}</Chakra.Link>
                                             )}
                                         >
@@ -192,9 +150,8 @@ export default function Chapter_Element1(props: {
                                             </Chakra.Link>
                                         </TryCatch>
                                     );
-                                    return (<></>)
                                 }
-
+                                return (<></>);
                             })
                         )
                     }

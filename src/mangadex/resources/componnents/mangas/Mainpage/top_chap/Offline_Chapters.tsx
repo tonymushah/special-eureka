@@ -9,7 +9,6 @@ import { MangaPageProps } from "../../Manga_Page";
 const All_downloaded_Chapter_manga = React.lazy(() => import("../../../download/All_downloaded_Chapter_manga"))
 
 export default function Offline_Chapters(props: MangaPageProps) {
-    const client = useHTTPClient()
     return (
         <Chakra.TabPanel>
 
