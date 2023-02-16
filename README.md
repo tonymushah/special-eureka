@@ -1,5 +1,5 @@
 # Special Eureka (or mangadex-desktop ...)
-[![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml)
+[![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml) \
 A manga reader based on the [Mangadex](https://mangadex.org) website
 
 It's build in [Tauri](https://tauri.app) and [React](https://reactjs.org) 
