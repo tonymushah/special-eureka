@@ -10,11 +10,16 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: setup node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: 16
+          node-version: 18
+      - name: install pnpm 
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+          run_install: false
     - name: install Rust stable
       uses: actions-rs/toolchain@v1
       with:
@@ -24,8 +29,10 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
-    - name: install app dependencies and build it
-      run: yarn && yarn build
-    - uses: tauri-apps/tauri-action@v0
+    - name: install app dependencies
+      run: pnpm install 
+    - name: build it the app
+      run: pnpm build
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+        TAURI_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
