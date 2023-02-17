@@ -14,6 +14,8 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
+      - name: private key checkout 
+        run: echo ${{ secrets.TAURI_PRIVATE_KEY }}
       - name: setup node
         uses: actions/setup-node@v3
         with:
