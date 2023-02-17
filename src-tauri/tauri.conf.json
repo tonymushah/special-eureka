@@ -110,7 +110,7 @@
     },
     "updater": {
       "active": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEIwMjAyQTEyNzQ5MDA4MDUKUldRRkNKQjBFaW9nc0ZNb1pYODFYdDJIaFE1TEpGTXRRbmpIeEp1c24ycU44aFJoOElTbStTVEQK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU5RkM0NjNGRkE3RTE4MEQKUldRTkdINzZQMGI4NlRBVDF5OUgvaVRyQ1RyU3Rocmw3U0lQYVlNZ002bytsVmwyZWRBNTJpa3YK",
       "endpoints": [
         "https://raw.githubusercontent.com/tonymushah/special-eureka/master/.tauri/update.json"
       ],
