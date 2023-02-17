@@ -15,7 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: private key checkout 
-        run: echo ${{ secrets.TAURI_PRIVATE_KEY }}
+        shell: bash
+        env:
+          SUPER_SECRET: ${{ secrets.TAURI_PRIVATE_KEY }}
+        run: |
+          echo "$SUPER_SECRET"
       - name: setup node
         uses: actions/setup-node@v3
         with:
