@@ -34,7 +34,7 @@ jobs:
         run: pnpm install 
       - name: building app
         run: pnpm run build
-        env :
+        env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
       - uses: tauri-apps/tauri-action@v0
         env:
