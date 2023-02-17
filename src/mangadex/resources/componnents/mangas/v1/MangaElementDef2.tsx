@@ -2,7 +2,6 @@ import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { FaBookmark } from "react-icons/fa";
-import ReactContextMenu from "react-jsx-context-menu";
 import { NumericFormat } from "react-number-format";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
@@ -12,10 +11,11 @@ import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { ContentRating, make_first_UpperCare } from "../../../../api/internal/Utils";
 import { Manga } from "../../../../api/structures/Manga";
 import { Statistics_Manga } from "../../../../api/structures/Statistics";
-import { get_manga_description, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
+import { get_manga_description } from "../../../hooks/MangaStateHooks";
 import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import ErrorEL1 from "../../error/ErrorEL1";
 import IsPingable from "../../IsPingable";
+import MangaContextMenu from "./MangaContextMenu";
 import MangaTitle from "./MangaTitle";
 
 const Statis = React.lazy(() => import("../Statistics/Statis"));
@@ -107,26 +107,10 @@ function MangaElementDef2_Stats(props: {
 export default function MangaElementDef2(props: {
     src: Manga,
     isRefetching?: boolean,
-    refetch?: Function,
-    download?: Function,
-    delete?: Function,
-    update?: Function
+    refetch?: Function
 }) {
 
     const client = useHTTPClient();
-    const getMangaDownload_Delete = () => {
-        let getted = useMangaDownload_Delete({
-            mangaID: props.src.get_id()
-        })
-        return {
-            download_: getted.download_.mutate,
-            delete_: getted.delete_.mutate
-        }
-    };
-    const { download_, delete_ } = (props.download == undefined || props.delete == undefined || props.update == undefined) ? getMangaDownload_Delete() : {
-        download_: props.download,
-        delete_: props.delete
-    }
     const {
         manga_description_query
     } = get_manga_description({
@@ -156,39 +140,9 @@ export default function MangaElementDef2(props: {
         return returns;
     }
     return (
-        <ReactContextMenu
-            menu={
-                <Chakra.Menu
-                    isOpen
-                >
-                    <Chakra.MenuList>
-                        <Chakra.MenuItem
-                            onClick={() => props.refetch!()}
-                        >Refresh</Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => download_()}
-                            textColor={"green"}
-                            icon={<ChakraIcons.DownloadIcon />}
-                        >
-                            Download
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => download_()}
-                            textColor={"blue"}
-                            icon={<ChakraIcons.RepeatIcon />}
-                        >
-                            Update
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => delete_()}
-                            textColor={"red"}
-                            icon={<ChakraIcons.DeleteIcon />}
-                        >
-                            Delete
-                        </Chakra.MenuItem>
-                    </Chakra.MenuList>
-                </Chakra.Menu>
-            }
+        <MangaContextMenu
+            mangaId={props.src.get_id()}
+            refetch={props.refetch}
         >
             <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"}>
                 <CoverImageByCoverID coverID={props.src.get_cover_art_id()} isThumbail size={512} image_props={{
@@ -288,6 +242,6 @@ export default function MangaElementDef2(props: {
                     </Chakra.CardBody>
                 </Chakra.Stack>
             </Chakra.Card>
-        </ReactContextMenu>
+        </MangaContextMenu>
     )
 }

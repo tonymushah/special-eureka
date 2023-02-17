@@ -7,14 +7,15 @@ import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvide
 import { Offset_limits } from '../../api/internal/Utils';
 import { getVersion } from '@tauri-apps/api/app';
 
-const CustomListSwiper = React.lazy(() => import('../../resources/componnents/lists/v1/CustomListSwiper'));
+const Seasonal = React.lazy(() => import("./Seasonal"));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
+
 function Home() {
   let offset_limits_1: Offset_limits = new Offset_limits();
   offset_limits_1.set_limits(20);
-  const id_toUse = "44224004-1fad-425e-b416-45b46b74d3d1";
+
   const client = useHTTPClient();
   const app_version_query = useQuery("special-eureka-version", () => {
     return getVersion();
@@ -47,10 +48,10 @@ function Home() {
             fontSize='lg'
           >
             Welcome to Mangadex Desktop {
-              app_version_query.isSuccess? (
+              app_version_query.isSuccess ? (
                 <span>{app_version_query.data}</span>
               ) : (
-                <Chakra.Skeleton width={"10px"} height={"10px"}/>
+                <Chakra.Skeleton width={"10px"} height={"10px"} />
               )
             }
           </Chakra.AlertTitle>
@@ -90,20 +91,17 @@ function Home() {
           onSuccess={() => (
             <React.Fragment>
               <Row className='d-block'>
-                <Chakra.Box>
-                  <Chakra.Heading>Seasonal</Chakra.Heading>
-                  <React.Suspense
-                    fallback={<Chakra.Box >
-                      <Chakra.Center>
-                        <Chakra.Spinner
-                          size={"xl"}
-                        />
-                      </Chakra.Center>
-                    </Chakra.Box>}
-                  >
-                    <CustomListSwiper listID={id_toUse} />
-                  </React.Suspense>
-                </Chakra.Box>
+                <React.Suspense
+                  fallback={<Chakra.Box >
+                    <Chakra.Center>
+                      <Chakra.Spinner
+                        size={"xl"}
+                      />
+                    </Chakra.Center>
+                  </Chakra.Box>}
+                >
+                  <Seasonal/>
+                </React.Suspense>
               </Row>
               <Chakra.Divider />
               <Row

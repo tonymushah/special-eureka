@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@babel/core': ^7.20.12
   '@babel/runtime': ^7.20.13
+  '@builder.io/partytown': ^0.7.5
   '@chakra-ui/icons': ^2.0.17
   '@chakra-ui/react': ^2.4.9
   '@chakra-ui/system': ^2.3.8
@@ -84,6 +85,7 @@ specifiers:
 dependencies:
   '@babel/core': 7.20.12
   '@babel/runtime': 7.20.13
+  '@builder.io/partytown': 0.7.5
   '@chakra-ui/icons': 2.0.17_i3shekjw4uogiqsyudihvyzi2i
   '@chakra-ui/react': 2.4.9_aqfl2kd2jx2e5w55xnra42klxy
   '@chakra-ui/system': 2.3.8_dovxhg2tvkkxkdnqyoum6wzcxm
@@ -408,6 +410,11 @@ packages:
       '@babel/helper-string-parser': 7.19.4
       '@babel/helper-validator-identifier': 7.19.1
       to-fast-properties: 2.0.0
+    dev: false
+
+  /@builder.io/partytown/0.7.5:
+    resolution: {integrity: sha512-Zbr2Eo0AQ4yzmQr/36/h+6LKjmdVBB3Q5cGzO6rtlIKB/IOpbQVUZW+XAnhpJmJr9sIF97OZjgbhG9k7Sjn4yw==}
+    hasBin: true
     dev: false
 
   /@chakra-ui/accordion/2.1.8_zhj3xqkacc7ahty4nmhickdzea:

@@ -2,12 +2,14 @@ import React from "react";
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
 import Mangadex from "../mangadex";
+import Dashboard from "../dashboard";
 
 export default function Route_Objects(props: {
     additional_routes?: RouteObject[]
 }) {
     let data = [
-        Mangadex
+        Mangadex,
+        Dashboard
     ];
     if (props.additional_routes != undefined) {
         props.additional_routes.forEach((value) => {

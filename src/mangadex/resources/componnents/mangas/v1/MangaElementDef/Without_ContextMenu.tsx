@@ -1,43 +1,24 @@
-import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import ReactContextMenu from "react-jsx-context-menu";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../../..";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Alt_title, make_first_UpperCare } from "../../../../api/internal/Utils";
-import { Manga } from "../../../../api/structures/Manga";
-import { get_manga_description, get_manga_page_cover, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
-import ErrorEL1 from "../../error/ErrorEL1";
+import { getMangaDexPath } from "../../../../..";
+import TryCatch from "../../../../../../commons-res/components/TryCatch";
+import { Alt_title, make_first_UpperCare } from "../../../../../api/internal/Utils";
+import { Manga } from "../../../../../api/structures/Manga";
+import { get_manga_description, get_manga_page_cover } from "../../../../hooks/MangaStateHooks";
+import Mangadex_cover_not_found from "../../../../imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "../../../../imgs/cover-placeholder.png";
+import ErrorEL1 from "../../../error/ErrorEL1";
 
-const CoverElementVertical = React.lazy(() => import("../../covers/v1/CoverElementVertical"));
-const CoverElementVertical2 = React.lazy(() => import("../../covers/v1/CoverElementVertical2"));
+const CoverElementVertical = React.lazy(() => import("../../../covers/v1/CoverElementVertical"));
+const CoverElementVertical2 = React.lazy(() => import("../../../covers/v1/CoverElementVertical2"));
 
 const MangaDexPath = getMangaDexPath();
 
-export default function MangaElementDef(props: {
+export default function MangaElementDef_without_Context_Menu(props: {
     src: Manga,
-    isRefetching?: boolean,
-    refetch?: Function,
-    download?: Function,
-    delete?: Function,
-    update?: Function
+    isRefetching?: boolean
 }){
-    const getMangaDownload_Delete = () => {
-        let getted = useMangaDownload_Delete({
-            mangaID: props.src.get_id()
-        })
-        return {
-            download_ : getted.download_.mutate,
-            delete_ : getted.delete_.mutate
-        }
-    };
-    const { download_, delete_ } = (props.download == undefined || props.delete == undefined || props.update == undefined) ? getMangaDownload_Delete() : {
-        download_: props.download,
-        delete_: props.delete
-    };
     let title: string = "";
     const {
         coverQuery,
@@ -60,40 +41,7 @@ export default function MangaElementDef(props: {
             display={"flex"}
             width={"min-content"}
         >
-        <ReactContextMenu
-            menu={
-                <Chakra.Menu
-                    isOpen
-                >
-                    <Chakra.MenuList>
-                        <Chakra.MenuItem
-                            onClick={() => props.refetch!()}
-                        >Refresh</Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => download_()}
-                            textColor={"green"}
-                            icon={<ChakraIcons.DownloadIcon />}
-                        >
-                            Download
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => download_()}
-                            textColor={"blue"}
-                            icon={<ChakraIcons.RepeatIcon />}
-                        >
-                            Update
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => delete_()}
-                            textColor={"red"}
-                            icon={<ChakraIcons.DeleteIcon />}
-                        >
-                            Delete
-                        </Chakra.MenuItem>
-                    </Chakra.MenuList>
-                </Chakra.Menu>
-            }
-        >
+        <>
             <Chakra.LinkBox
                 as={Chakra.Box}
                 marginBottom={10}
@@ -368,7 +316,7 @@ export default function MangaElementDef(props: {
                 </Chakra.Center>
 
             </Chakra.LinkBox>
-        </ReactContextMenu>
+        </>
         </Chakra.Box>
     )
 }

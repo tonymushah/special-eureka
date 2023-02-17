@@ -8,7 +8,6 @@ export class List extends Attribute{
     private name: string;
     private visibility: string;
     private version: number;
-    private manga_array: Array<Manga>;
     public set_name(name: string){
         this.name = name;
     }

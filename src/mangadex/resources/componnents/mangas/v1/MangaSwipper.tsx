@@ -1,12 +1,13 @@
-import React from "react"
-import { Autoplay, FreeMode, Mousewheel, Pagination } from "swiper"
-import MangaElementDef_wID from "../../mangas/v1/MangaElementDef_wID"
+import React from "react";
+import { FreeMode, Mousewheel, Pagination } from "swiper";
 import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
-import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 import { Swiper, SwiperSlide } from "swiper/react";
+import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
+
+const MangaElementDef_wID = React.lazy(() => import("../../mangas/v1/MangaElementDef_wID"));
 
 export default function MangaSwipper(props: {
     mangaIDS: Array<string>

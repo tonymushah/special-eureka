@@ -9,8 +9,7 @@ export default function MangaElementDef2_withID(props: {
 }) {
     const { query } = get_manga_byId({
         mangaID : props.mangaID
-    });
-    const { delete_, download_ } = useMangaDownload_Delete(props);
+    });;
     if (query.isLoading) {
         return (
             <MangaFallback2 />
@@ -29,8 +28,6 @@ export default function MangaElementDef2_withID(props: {
                 src={query.data!}
                 isRefetching={query.isRefetching}
                 refetch={query.refetch}
-                download={download_.mutate}
-                delete={delete_.mutate}
             />
         </React.Suspense>
 

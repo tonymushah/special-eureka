@@ -1,5 +1,5 @@
 import React from "react";
-import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
+import { get_manga_byId } from "../../../hooks/MangaStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
 
@@ -11,7 +11,6 @@ export default function MangaVerticalElement_wID(props: {
     const { query } = get_manga_byId({
         mangaID : props.mangaID
     });
-    const { delete_, download_ } = useMangaDownload_Delete(props);
     if (query.isLoading) {
         return (
             <MangaVerticalElementFallback />
@@ -30,8 +29,6 @@ export default function MangaVerticalElement_wID(props: {
                 src={query.data!}
                 isRefetching={query.isRefetching}
                 refetch={query.refetch}
-                download={download_.mutate}
-                delete={delete_.mutate}
             />
         </React.Suspense>
     )

@@ -5,7 +5,7 @@ import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientP
 import { List } from "../../../../api/structures/List";
 import ErrorEL1 from "../../error/ErrorEL1";
 
-const MangaSwipper = React.lazy(() => import("../../chapter/v1/MangaSwipper"));
+const MangaSwipperWithMangaObjects = React.lazy(() => import("../../mangas/v1/MangaSwipperWithMangaObjects"));
 
 const CustomListSwiperSuspense = React.lazy(() => import("./CustomListSuspense"));
 
@@ -15,7 +15,7 @@ export default function CustomListSwiper(props: {
     const client = useHTTPClient();
     const key = "mdx-custom_list:" + props.listID;
     const query = useQuery<List, Error>(key, () => {
-        return List.getListByID(props.listID, client);
+        return List.getListByID_includes_manga(props.listID, client);
     }, {
         "staleTime": Infinity
     })
@@ -59,7 +59,7 @@ export default function CustomListSwiper(props: {
                 </React.Suspense>
             }
         >
-            <MangaSwipper mangaIDS={query.data!.getMangaIDList()} />
+            <MangaSwipperWithMangaObjects mangaArray={query.data!.get_manga_array()} />
         </React.Suspense>
 
     );

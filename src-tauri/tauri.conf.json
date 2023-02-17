@@ -141,6 +141,9 @@
     ],
     "systemTray": {
       "iconPath": "./icons/icon.png"
+    },
+    "pattern": {
+      "use": "brownfield"
     }
   }
 }

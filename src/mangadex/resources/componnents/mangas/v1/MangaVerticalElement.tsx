@@ -1,42 +1,22 @@
-import React from "react";
-import * as Chakra from "@chakra-ui/react"
-import { Manga } from "../../../../api/structures/Manga";
-import { Alt_title } from "../../../../api/internal/Utils";
-import { useQuery } from "react-query";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import CoverElementVertical from "../../covers/v1/CoverElementVertical";
-import ReactContextMenu from "react-jsx-context-menu"
-import * as ChakraIcons from "@chakra-ui/icons";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
+import * as Chakra from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import { get_manga_page_cover, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 import { getMangaDexPath } from "../../../..";
+import TryCatch from "../../../../../commons-res/components/TryCatch";
+import { Alt_title } from "../../../../api/internal/Utils";
+import { Manga } from "../../../../api/structures/Manga";
+import { get_manga_page_cover } from "../../../hooks/MangaStateHooks";
+import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
+import CoverElementVertical from "../../covers/v1/CoverElementVertical";
+import MangaContextMenu from "./MangaContextMenu";
 
 const MangaDexPath = getMangaDexPath();
 
 export default function MangaVerticalElement(props: {
     src: Manga,
     isRefetching?: boolean,
-    refetch?: Function,
-    download?: Function,
-    delete?: Function,
-    update?: Function
+    refetch?: Function
 }) {
-    const getMangaDownload_Delete = () => {
-        let getted = useMangaDownload_Delete({
-            mangaID: props.src.get_id()
-        })
-        return {
-            download_ : getted.download_.mutate,
-            delete_ : getted.delete_.mutate
-        }
-    };
-    const { download_, delete_ } = (props.download == undefined || props.delete == undefined || props.update == undefined) ? getMangaDownload_Delete() : {
-        download_: props.download,
-        delete_: props.delete
-    };
     let title: string = "";
     const { coverQuery } = get_manga_page_cover({
         src : props.src
@@ -48,39 +28,9 @@ export default function MangaVerticalElement(props: {
         title = props.src.get_title().en;
     }
     return (
-        <ReactContextMenu
-            menu={
-                <Chakra.Menu
-                    isOpen
-                >
-                    <Chakra.MenuList>
-                        <Chakra.MenuItem
-                            onClick={() => props.refetch!()}
-                        >Refresh</Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => download_()}
-                            textColor={"green"}
-                            icon={<ChakraIcons.DownloadIcon />}
-                        >
-                            Download
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => download_()}
-                            textColor={"blue"}
-                            icon={<ChakraIcons.RepeatIcon />}
-                        >
-                            Update
-                        </Chakra.MenuItem>
-                        <Chakra.MenuItem
-                            onClick={() => delete_()}
-                            textColor={"red"}
-                            icon={<ChakraIcons.DeleteIcon />}
-                        >
-                            Delete
-                        </Chakra.MenuItem>
-                    </Chakra.MenuList>
-                </Chakra.Menu>
-            }
+        <MangaContextMenu
+            mangaId={props.src.get_id()}
+            refetch={props.refetch}
         >
             <Chakra.LinkBox
                 marginBottom={10}
@@ -139,6 +89,6 @@ export default function MangaVerticalElement(props: {
                     </Chakra.Box>
                 </Chakra.Center>
             </Chakra.LinkBox>
-        </ReactContextMenu>
+        </MangaContextMenu>
     )
 }
