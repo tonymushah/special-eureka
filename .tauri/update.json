@@ -1,23 +1,23 @@
 {
-    "version": "v0.1.3",
+    "version": "v0.1.2",
     "notes": "",
-    "pub_date": "2020-06-22T19:25:57Z",
+    "pub_date": "2023-02-17T20:54:19.183Z",
     "platforms": {
         "darwin-x86_64": {
             "signature": "",
-            "url": "https://github.com/lemarier/tauri-test/releases/download/v1.0.0/app.app.tar.gz"
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/Mangadex-Desktop.app.tar.gz"
         },
         "darwin-aarch64": {
             "signature": "",
-            "url": "https://github.com/lemarier/tauri-test/releases/download/v1.0.0/silicon/app.app.tar.gz"
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/Mangadex-Desktop.app.tar.gz"
         },
         "linux-x86_64": {
             "signature": "",
-            "url": "https://github.com/lemarier/tauri-test/releases/download/v1.0.0/app.AppImage.tar.gz"
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/mangadex-desktop_0.1.2_amd64.AppImage"
         },
         "windows-x86_64": {
             "signature": "",
-            "url": "https://github.com/lemarier/tauri-test/releases/download/v1.0.0/app.x64.msi.zip"
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/Mangadex-Desktop_0.1.2_x64_en-US.msi"
         }
     }
 }
