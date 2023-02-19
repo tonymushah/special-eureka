@@ -11,6 +11,7 @@ const Seasonal = React.lazy(() => import("./Seasonal"));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
+const RecentlyAdded = React.lazy(() => import("./RecentlyAdded"));
 
 function Home() {
   let offset_limits_1: Offset_limits = new Offset_limits();
@@ -117,6 +118,21 @@ function Home() {
                   </Chakra.Box>}
                 >
                   <Latest_Updates />
+                </React.Suspense>
+              </Row>
+              <Row
+                className='d-block'
+              >
+                <React.Suspense
+                  fallback={<Chakra.Box >
+                    <Chakra.Center>
+                      <Chakra.Spinner
+                        size={"xl"}
+                      />
+                    </Chakra.Center>
+                  </Chakra.Box>}
+                >
+                  <RecentlyAdded />
                 </React.Suspense>
               </Row>
             </React.Fragment>

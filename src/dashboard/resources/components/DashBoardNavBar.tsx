@@ -1,33 +1,18 @@
 import {
-    Box,
-    Flex,
-    Text,
-    IconButton,
-    Button,
-    Stack,
-    Collapse,
-    Icon,
-    Link,
-    Popover,
-    PopoverTrigger,
-    PopoverContent,
-    useColorModeValue,
-    useBreakpointValue,
-    useDisclosure,
-    Image,
-} from '@chakra-ui/react';
-import {
-    HamburgerIcon,
-    CloseIcon,
     ChevronDownIcon,
-    ChevronRightIcon,
+    ChevronRightIcon, CloseIcon, HamburgerIcon
 } from '@chakra-ui/icons';
-import {Link as ReactRouterLink} from "react-router-dom";
-
-import special_eureka_logo from "../commons-res/common-icon/eureka-logo6.svg"
+import {
+    Box, Center, Collapse, Flex, Icon, IconButton, Image, Link,
+    Popover, PopoverContent, PopoverTrigger, Stack, Text, useBreakpointValue, useColorModeValue, useDisclosure
+} from '@chakra-ui/react';
+import { Link as ReactRouterLink } from "react-router-dom";
+import MangadexLogo from "../../../mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg"
+import special_eureka_logo from "../../../commons-res/common-icon/eureka-logo6.svg";
+import Tauri_Updater from './Tauri_updater_button';
 export default function WithSubnavigation() {
-    const { isOpen, onToggle } = useDisclosure();
 
+    const { isOpen, onToggle } = useDisclosure();
     return (
         <Box>
             <Flex
@@ -65,7 +50,7 @@ export default function WithSubnavigation() {
                         />
                     </Text>
 
-                    <Flex display={{ base: 'none', md: 'flex' }} ml={10} alignItems={{base: 'normal', md: "center"}}>
+                    <Flex display={{ base: 'none', md: 'flex' }} ml={10} alignItems={{ base: 'normal', md: "center" }}>
                         <DesktopNav />
                     </Flex>
                 </Flex>
@@ -75,27 +60,7 @@ export default function WithSubnavigation() {
                     justify={'flex-end'}
                     direction={'row'}
                     spacing={6}>
-                    <Button
-                        as={'a'}
-                        fontSize={'sm'}
-                        fontWeight={400}
-                        variant={'link'}
-                        href={'#'}>
-                        Sign In
-                    </Button>
-                    <Button
-                        as={'a'}
-                        display={{ base: 'none', md: 'inline-flex' }}
-                        fontSize={'sm'}
-                        fontWeight={600}
-                        color={'white'}
-                        bg={'pink.400'}
-                        href={'#'}
-                        _hover={{
-                            bg: 'pink.300',
-                        }}>
-                        Sign Up
-                    </Button>
+                    <Tauri_Updater />
                 </Stack>
             </Flex>
 
@@ -117,7 +82,7 @@ const DesktopNav = () => {
                 <Box key={navItem.label}>
                     <Popover trigger={'hover'} placement={'bottom-start'}>
                         <PopoverTrigger>
-                            <Link 
+                            <Link
                                 as={ReactRouterLink}
                                 p={2}
                                 fontSize={'sm'}
@@ -155,7 +120,7 @@ const DesktopNav = () => {
     );
 };
 
-const DesktopSubNav = ({ label, subLabel, to }: NavItem) => {
+const DesktopSubNav = ({ label, subLabel, to, icon }: NavItem) => {
     return (
         <Link
             as={ReactRouterLink}
@@ -167,12 +132,19 @@ const DesktopSubNav = ({ label, subLabel, to }: NavItem) => {
             _hover={{ bg: useColorModeValue('pink.50', 'gray.900') }}>
             <Stack direction={'row'} align={'center'}>
                 <Box>
-                    <Text
-                        transition={'all .3s ease'}
-                        _groupHover={{ color: 'pink.400' }}
-                        fontWeight={500}>
-                        {label}
-                    </Text>
+                    <Stack
+                        direction={"row"}
+                        align={"centerz"}
+                    >
+                        {icon}
+                        <Text
+                            transition={'all .3s ease'}
+                            _groupHover={{ color: 'pink.400' }}
+                            fontWeight={500}>
+                            {label}
+                        </Text>
+                    </Stack>
+
                     <Text fontSize={'sm'}>{subLabel}</Text>
                 </Box>
                 <Flex
@@ -203,7 +175,7 @@ const MobileNav = () => {
     );
 };
 
-const MobileNavItem = ({ label, children, to}: NavItem) => {
+const MobileNavItem = ({ label, children, to, icon }: NavItem) => {
     const { isOpen, onToggle } = useDisclosure();
 
     return (
@@ -217,11 +189,14 @@ const MobileNavItem = ({ label, children, to}: NavItem) => {
                 _hover={{
                     textDecoration: 'none',
                 }}>
-                <Text
-                    fontWeight={600}
-                    color={useColorModeValue('gray.600', 'gray.200')}>
-                    {label}
-                </Text>
+                <Center>
+                    {icon}
+                    <Text
+                        fontWeight={600}
+                        color={useColorModeValue('gray.600', 'gray.200')}>
+                        {label}
+                    </Text>
+                </Center>
                 {children && (
                     <Icon
                         as={ChevronDownIcon}
@@ -243,12 +218,13 @@ const MobileNavItem = ({ label, children, to}: NavItem) => {
                     align={'start'}>
                     {children &&
                         children.map((child) => (
-                            <Link 
-                                key={child.label} 
+                            <Link
+                                key={child.label}
                                 as={ReactRouterLink}
-                                to={child.to ?? "#"} 
+                                to={child.to ?? "#"}
                                 py={2}
                             >
+                                {child.icon}
                                 {child.label}
                             </Link>
                         ))}
@@ -273,7 +249,13 @@ const NAV_ITEMS: Array<NavItem> = [
             {
                 label: 'Mangadex',
                 subLabel: 'High Quality Images, no ads',
-                to: "/mangadex"
+                to: "/mangadex",
+                icon: (
+                    <Image
+                        margin={0}
+                        src={MangadexLogo}
+                    />
+                )
             },
             {
                 label: 'New & Noteworthy',

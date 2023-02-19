@@ -7,11 +7,15 @@ import 'swiper/css/pagination';
 import MangaElementFallback from "./MangaElementFallback";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Manga } from "../../../../api/structures/Manga";
+import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
 
 const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
 
+const MangaVerticalElement = React.lazy(() => import("./MangaVerticalElement"));
+
 export default function MangaSwipperWithMangaObjects(props: {
-    mangaArray: Array<Manga>
+    mangaArray: Array<Manga>,
+    isVertical?: boolean
 }) {
     return (
         <React.Suspense>
@@ -37,13 +41,28 @@ export default function MangaSwipperWithMangaObjects(props: {
                                 width: "min-content"
                             }}
                         >
-                            <React.Suspense
-                                fallback={
-                                    <MangaElementFallback />
-                                }
-                            >
-                                <MangaElementDef src={value} />
-                            </React.Suspense>
+                            {
+                                props.isVertical == true ? (
+                                    <React.Suspense
+                                        fallback={
+                                            <MangaVerticalElementFallback />
+                                        }
+                                    >
+                                        <MangaVerticalElement
+                                            src={value}
+                                        />
+                                    </React.Suspense>
+                                ) : (
+                                    <React.Suspense
+                                        fallback={
+                                            <MangaElementFallback />
+                                        }
+                                    >
+                                        <MangaElementDef src={value} />
+                                    </React.Suspense>
+                                )
+                            }
+
                         </SwiperSlide>
                     ))
                 }

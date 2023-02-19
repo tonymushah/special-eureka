@@ -10,7 +10,6 @@ import Mangadex_cover_not_found from "../../../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../../../error/ErrorEL1";
 
-const CoverElementVertical = React.lazy(() => import("../../../covers/v1/CoverElementVertical"));
 const CoverElementVertical2 = React.lazy(() => import("../../../covers/v1/CoverElementVertical2"));
 
 const MangaDexPath = getMangaDexPath();
@@ -95,63 +94,7 @@ export default function MangaElementDef_without_Context_Menu(props: {
                 <Chakra.Center
                 >
                     <Chakra.Box
-                        display={
-                            {
-                                base: "inline-block",
-                                md: "none"
-                            }
-                        }
-                        width={"150px"}
-                    >
-                        {
-                            coverQuery.isFetching ? (<Chakra.Image
-                                src={Mangadex_placeHolder}
-                                borderTopRadius={"10px"}
-                            />) : (
-                                coverQuery.isLoading ? (<Chakra.Skeleton
-                                    borderTopRadius={"10px"}
-                                    height={"150px"}
-                                />) : null
-                            )
-                        }
-                        {
-                            coverQuery.isError ? (<Chakra.Image
-                                src={Mangadex_cover_not_found}
-                                fallbackSrc={Mangadex_placeHolder}
-                                borderTopRadius={"10px"}
-                            />) : null
-                        }
-                        {
-                            coverQuery.isSuccess ? (
-                                <React.Suspense
-                                    fallback={
-                                        <Chakra.Skeleton
-                                            borderTopRadius={"10px"}
-                                            height={"150px"}
-                                        />
-                                    }
-                                >
-                                    <CoverElementVertical src={coverQuery.data} isThumbail />
-                                </React.Suspense>
-                            ) : null
-                        }
-                        <Chakra.Center>
-                            <Chakra.Heading
-                                //textAlign={"center"}
-                                size={"md"}
-                                noOfLines={2}
-                                margin={"15px"}
-                            > {title} </Chakra.Heading>
-                        </Chakra.Center>
-                    </Chakra.Box>
-                    <Chakra.Box
                         width={"fit-content"}
-                        display={
-                            {
-                                base: "none",
-                                md: "inline-block"
-                            }
-                        }
                     >
                         <Chakra.Grid
                             width={{

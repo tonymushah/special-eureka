@@ -11,7 +11,8 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     children: (value: Collection<T>) => React.ReactNode,
     queryKey: QueryKey,
     query_options?: Omit<UseQueryOptions<Collection<T>, Error>, 'queryKey' | 'queryFn'>,
-    onLoading?: React.ReactNode
+    onLoading?: React.ReactNode,
+    withoutNavigation?: boolean
 }) {
     const toast = useToast();
     const toastID = React.useRef<ToastId>();
@@ -227,40 +228,47 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                     }
                 </UseCollection>
             </Box>
-            <Box>
-                <Center>
-                    <ButtonGroup>
-                        <Button
-                            onClick={() => {
-                                first_page.mutate()
-                            }}
-                        >
-                            <ChakraIcon.ArrowLeftIcon />
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                previous.mutate()
-                            }}
-                        >
-                            <ChakraIcon.ArrowBackIcon />
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                next.mutate()
-                            }}
-                        >
-                            <ChakraIcon.ArrowForwardIcon />
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                last_page.mutate()
-                            }}
-                        >
-                            <ChakraIcon.ArrowRightIcon />
-                        </Button>
-                    </ButtonGroup>
-                </Center>
-            </Box>
+            {
+                props.withoutNavigation == true ? (
+                    <></>
+                ) : (
+                    <Box>
+                        <Center>
+                            <ButtonGroup>
+                                <Button
+                                    onClick={() => {
+                                        first_page.mutate()
+                                    }}
+                                >
+                                    <ChakraIcon.ArrowLeftIcon />
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        previous.mutate()
+                                    }}
+                                >
+                                    <ChakraIcon.ArrowBackIcon />
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        next.mutate()
+                                    }}
+                                >
+                                    <ChakraIcon.ArrowForwardIcon />
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        last_page.mutate()
+                                    }}
+                                >
+                                    <ChakraIcon.ArrowRightIcon />
+                                </Button>
+                            </ButtonGroup>
+                        </Center>
+                    </Box>
+                )
+            }
+
         </Box>
     )
 }
