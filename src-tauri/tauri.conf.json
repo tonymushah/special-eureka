@@ -67,6 +67,13 @@
       },
       "os": {
         "all": false
+      },
+      "shell": {
+        "all": false,
+        "execute": false,
+        "open": true,
+        "scope": [],
+        "sidecar": false
       }
     },
     "bundle": {
@@ -138,7 +145,8 @@
         "decorations": false,
         "url": "splashscreen.html",
         "label": "splashscreen",
-        "center": true
+        "center": true,
+        "resizable": false
       }
     ],
     "systemTray": {

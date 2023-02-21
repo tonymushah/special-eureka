@@ -257,29 +257,16 @@ const NAV_ITEMS: Array<NavItem> = [
                     />
                 )
             },
-            {
-                label: 'New & Noteworthy',
-                subLabel: 'Up-and-coming Designers',
-            },
         ],
     },
     {
-        label: 'Find Work',
-        children: [
-            {
-                label: 'Job Board',
-                subLabel: 'Find your dream design job'
-            },
-            {
-                label: 'Freelance Projects',
-                subLabel: 'An exclusive list for contract work',
-            },
-        ],
+        label: 'Guides',
+        to: "#"
     },
     {
-        label: 'Learn Design'
+        label: 'Announcements'
     },
     {
-        label: 'Hire Designers',
+        label: 'Versions',
     },
 ];

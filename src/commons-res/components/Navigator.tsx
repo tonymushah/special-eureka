@@ -88,6 +88,7 @@ export class NavigatorReactRouter extends React.Component{
                     onHide={this.showModal}
                     size="lg"
                     aria-labelledby="contained-modal-title-vcenter"
+                    
                     centered
                 >
                     <Modal.Header 

@@ -54,6 +54,7 @@ const IsPingable_default_client = React.lazy(() => import("./resources/componnen
 
 const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
 
+const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -90,28 +91,33 @@ function useMangadexRouter(): RouteObject {
         path: MangaDexPath,
         element: (
             <MyErrorBounderies>
-                <ProSidebarProvider>
-                    <React.Suspense
-                        fallback={
-                            <Chakra.Box
-                                width={"100%"}
-                                height={"100vh"}
+                <Mangadex_suspense>
+                    <NavigatorReactRouter>
+                        <ProSidebarProvider>
+                            <React.Suspense
+                                fallback={
+                                    <Chakra.Box
+                                        width={"100%"}
+                                        height={"100vh"}
+                                    >
+                                        <Chakra.AbsoluteCenter>
+                                            <Chakra.Spinner
+                                                size="xl"
+                                                color='orange.500'
+                                                thickness='4px'
+                                            />
+                                        </Chakra.AbsoluteCenter>
+                                    </Chakra.Box>
+                                }
                             >
-                                <Chakra.AbsoluteCenter>
-                                    <Chakra.Spinner
-                                        size="xl"
-                                        color='orange.500'
-                                        thickness='4px'
-                                    />
-                                </Chakra.AbsoluteCenter>
-                            </Chakra.Box>
-                        }
-                    >
-                        <Content>
-                            <Outlet />
-                        </Content>
-                    </React.Suspense>
-                </ProSidebarProvider>
+                                <Content>
+                                    <Outlet />
+                                </Content>
+                            </React.Suspense>
+                        </ProSidebarProvider>
+                    </NavigatorReactRouter>
+                </Mangadex_suspense>
+
             </MyErrorBounderies>
         ),
         errorElement: (<ErrorELRouter />),
@@ -310,7 +316,7 @@ function useMangadexRouter(): RouteObject {
                         path: "latest-updates",
                         element: (
                             <Mangadex_suspense>
-                                <LatestUpdates/>
+                                <LatestUpdates />
                             </Mangadex_suspense>
                         )
                     }
@@ -319,20 +325,20 @@ function useMangadexRouter(): RouteObject {
             // Author
             {
                 path: "author",
-                errorElement: (<ErrorELRouter/>),
+                errorElement: (<ErrorELRouter />),
                 children: [
                     {
                         path: ":id",
-                        errorElement: (<ErrorELRouter/>),
-                        element : (
+                        errorElement: (<ErrorELRouter />),
+                        element: (
                             <Mangadex_suspense>
                                 <IsPingable_default_client
                                     onLoading={
-                                        <Mangadex_suspense__/>
+                                        <Mangadex_suspense__ />
                                     }
                                     onSuccess={() => (
                                         <Mangadex_suspense>
-                                            <Author_Page_index/>
+                                            <Author_Page_index />
                                         </Mangadex_suspense>
                                     )}
                                 />

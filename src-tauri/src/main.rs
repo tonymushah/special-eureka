@@ -7,6 +7,7 @@ mod mangadex_desktop_api;
 use std::io::Result;
 
 use tauri::Manager;
+use tauri::Menu;
 use tauri::SystemTray;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
 use once_cell::sync::OnceCell;
@@ -87,7 +88,6 @@ async fn main() {
     .add_native_item(SystemTrayMenuItem::Separator)
     .add_item(hide);
   let tray = SystemTray::new().with_menu(tray_menu);
-
   match tauri::Builder::default()
     .system_tray(tray)
     .invoke_handler(tauri::generate_handler![close_splashscreen])

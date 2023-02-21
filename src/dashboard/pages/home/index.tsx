@@ -3,6 +3,13 @@ import * as Chakra from "@chakra-ui/react"
 import haikei_red from "../../resources/haikei/layered-waves-haikei-red.svg";
 import haikei_blue from "../../resources/haikei/layered-waves-haikei-blue.svg";
 import haikei_violet from "../../resources/haikei/layered-waves-haikei-violet.svg";
+import haikei_yellow from "../../resources/haikei/layered-waves-haikei-yellow.svg";
+import Welcome from "./Welcome";
+import CurrentlySupportedWebsites from "./CurrentlySupportedWebsite";
+import DevNotes from "./DevNotes";
+import Contacts from "./Contacts";
+import PoweredBy from "./PoweredBy";
+import { Stack, VStack } from "@chakra-ui/react";
 export default function Home() {
     return (
         <React.Fragment>
@@ -12,8 +19,9 @@ export default function Home() {
                 backgroundSize={"cover"}
                 backgroundRepeat={"no-repeat"}
                 width={"100%"}
-                height={"25em"}
+                minHeight={"25em"}
             >
+                <Welcome/>
             </Chakra.Box>
             <Chakra.Box
                 backgroundColor={"#bb004d"}
@@ -24,8 +32,9 @@ export default function Home() {
                     backgroundSize={"cover"}
                     backgroundRepeat={"no-repeat"}
                     width={"100%"}
-                    height={"25em"}
+                    minHeight={"25em"}
                 >
+                    <CurrentlySupportedWebsites/>
                 </Chakra.Box>
             </Chakra.Box>
             <Chakra.Box
@@ -37,8 +46,26 @@ export default function Home() {
                     backgroundSize={"cover"}
                     backgroundRepeat={"no-repeat"}
                     width={"100%"}
-                    height={"25em"}
+                    minHeight={"25em"}
                 >
+                    <DevNotes/>
+                </Chakra.Box>
+            </Chakra.Box>
+            <Chakra.Box
+                backgroundColor={"#b500ba"}
+            >
+                <Chakra.Box
+                    backgroundImage={haikei_yellow}
+                    backgroundPosition={"bottom"}
+                    backgroundSize={"cover"}
+                    backgroundRepeat={"no-repeat"}
+                    width={"100%"}
+                    minHeight={"25em"}
+                >
+                    <VStack spacing={"10"}>
+                        <Contacts/>
+                    <PoweredBy/>
+                    </VStack>
                 </Chakra.Box>
             </Chakra.Box>
         </React.Fragment>

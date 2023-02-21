@@ -7,10 +7,7 @@ import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from 
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "../../..";
 import { ExtLink } from "../../../../commons-res/components/ExtLink";
-import vite_logo from "/commons-res/common-icon/favicon.svg";
-import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import react_logo from "/commons-res/common-icon/React-icon.svg";
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
 const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Badge_with_Server_Icon"));
@@ -222,35 +219,12 @@ export default function Side_bar() {
                             }
                         }}
                     >
-                        <ExtLink href="https://tauri.app">
-                            <MenuItem icon={<img id="tauri_icon" src={tauri_logo} />}
-                                suffix={<ChakraIcons.ExternalLinkIcon />}
-                            >
-                                Tauri Apps 
-                            </MenuItem>
-                        </ExtLink>
                         <ExtLink href="https://api.mangadex.org">
                             <MenuItem 
                                 icon={<img id="tauri_icon" src={mangadex_logo} />}
                                 suffix={<ChakraIcons.ExternalLinkIcon />}
                             >
                                 Mangadex API
-                            </MenuItem>
-                        </ExtLink>
-                        <ExtLink href="https://vitejs.dev">
-                            <MenuItem 
-                                icon={<img id="tauri_icon" src={vite_logo} width="28px" />}
-                                suffix={<ChakraIcons.ExternalLinkIcon />}
-                            >
-                                Vite 
-                            </MenuItem>
-                        </ExtLink>
-                        <ExtLink href="https://reactjs.org/">
-                            <MenuItem 
-                                icon={<img id="tauri_icon" src={react_logo} width="28px" />}
-                                suffix={<ChakraIcons.ExternalLinkIcon />}
-                            >
-                                React
                             </MenuItem>
                         </ExtLink>
                     </Menu>

@@ -34,6 +34,7 @@
     "turbo": "^1.7.4",
     "typescript": "^4.9.5",
     "vite": "^4.1.1",
+    "vite-plugin-progress": "^0.0.6",
     "vite-plugin-tauri": "^2.3.0"
   },
   "dependencies": {
@@ -43,6 +44,7 @@
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.4.9",
     "@chakra-ui/system": "^2.3.8",
+    "@dnd-kit/core": "^6.0.8",
     "@emotion/react": "^11.10.5",
     "@emotion/server": "^11.10.0",
     "@emotion/styled": "^11.10.5",
@@ -106,6 +108,7 @@
     "swiper": "^9.0.4",
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
-    "tauri-settings": "^0.1.2"
+    "tauri-settings": "^0.1.2",
+    "vite-plugin-remark-rehype": "^0.1.0"
   }
 }

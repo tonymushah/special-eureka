@@ -1,11 +1,18 @@
 import { defineConfig } from 'vite'
 //import react from '@vitejs/plugin-react'
 import react from "@vitejs/plugin-react-swc"
+import remarkRehypePlugin from "vite-plugin-remark-rehype";
+import progress from "vite-plugin-progress";
+
 import { resolve } from 'path'
 export default defineConfig({
   clearScreen: false,
   plugins: [
-    react()
+    react(),
+    remarkRehypePlugin({
+      
+    }),
+    progress({})
   ],
   envPrefix: ['VITE_', 'TAURI_'],
   server: {

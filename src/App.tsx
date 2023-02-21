@@ -1,14 +1,14 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import "/commons-res/bootstrap.css";
-import "/commons-res/fontawesome-free-6.1.2-web/css/all.css"
-import TryCatch from "./commons-res/components/TryCatch";
+import { getClient } from "@tauri-apps/api/http";
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { getClient } from "@tauri-apps/api/http";
+import TryCatch from "./commons-res/components/TryCatch";
+import "/commons-res/bootstrap.css";
+import "/commons-res/fontawesome-free-6.1.2-web/css/all.css";
 
 const Close_splashscreen = React.lazy(() => import("./splashscreen/Close_splashscreen"));
-const Navigator = React.lazy(() => import("./commons-res/components/Navigator_Default"));
+//const Navigator = React.lazy(() => import("./commons-res/components/Navigator_Default"));
 const Router = React.lazy(() => import("./router"));
 const HTTPClientProvider_Client = React.lazy(() => import("./commons-res/components/HTTPClientProvider_Query"));
 
@@ -118,7 +118,6 @@ export default function App() {
                                     </Chakra.Box>
                                 }
                             >
-                                <Navigator />
                                 <Router />
                             </React.Suspense>
                         </HTTPClientProvider_Client>

@@ -1,32 +1,16 @@
-import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
-import { checkUpdate, UpdateResult } from "@tauri-apps/api/updater";
-import React from "react";
+import { checkUpdate, installUpdate, UpdateResult } from "@tauri-apps/api/updater";
 import { useQuery } from "react-query";
+import { useDashboardToast } from "./DashBoardToasts";
 
 
-export function TauriCheckUpdateQuery(){
-    const toast_ref = React.useRef<ToastId>();
-    const toast = useToast({
-        "position" : "bottom-right",
-        "isClosable" : false,
-        "duration" : 9000
-    });
-    
-    function addToast(props? : UseToastOptions){
-        toast_ref.current = toast(props)
-    }
-    
-    function updateToast(props : UseToastOptions){
-        if(toast_ref.current !== undefined){
-            toast.update(toast_ref.current, props);
-        }else{
-            addToast(props);
-        }
-    }
+export function TauriCheckUpdateQuery(props : {
+    withoutToast?: boolean
+}){
+    const { addToast } = useDashboardToast();
 
     const queryKey = "special-eureka-updater";
     const updater_query = useQuery<UpdateResult, string>(queryKey, () => {
-        return new Promise<UpdateResult>((resolve, reject) => {
+        return new Promise<UpdateResult>((resolve) => {
             checkUpdate().then((value) => {
                 console.log(value);
                 resolve(value);
@@ -41,18 +25,23 @@ export function TauriCheckUpdateQuery(){
         staleTime : Infinity,
         onSuccess(data) {
             if(data.shouldUpdate == false){
-                addToast({
-                    status : "success",
-                    title : "No update required",
-                    isClosable : true
-                })
+                if(props.withoutToast != true){
+                    addToast({
+                        status : "success",
+                        title : "No update required",
+                        isClosable : true
+                    })
+                }
+                
             }else{
-                addToast({
-                    status : "success",
-                    title : "Update Available",
-                    isClosable : true,
-                    description : (<></>)
-                })
+                if(props.withoutToast != true){
+                    addToast({
+                        status : "success",
+                        title : "Update Available",
+                        isClosable : true,
+                        description : (<></>)
+                    })
+                }
             }
         },
         onError(err) {
@@ -68,5 +57,60 @@ export function TauriCheckUpdateQuery(){
     return {
         queryKey,
         query: updater_query
+    }
+}
+
+export function useTauriInstallUpdate(props: {
+    withoutToast?: boolean,
+    notify?: boolean
+}){
+    const { addToast } = useDashboardToast();
+    const queryKey = "special-eureka-install-update";
+    const query = useQuery(queryKey, () => {
+        addToast({
+            "title" : "Installing the update",
+            "description" : "You can do something else but don't close the application",
+            "status" : "loading"
+        })
+        return installUpdate();
+    }, {
+        staleTime: Infinity,
+        enabled: false,
+        onSuccess() {
+            if(props.withoutToast == true){
+                addToast({
+                    "title" : "Update downloaded",
+                    "description" : "The update will be seen after an app reload",
+                    duration: 9000,
+                    isClosable: true,
+                    status: "success"
+                })
+            }
+        },
+        onError(err) {
+            if(props.withoutToast == true){
+                if(err instanceof Error){
+                    addToast({
+                        title: err.name,
+                        description: err.message,
+                        duration: 9000,
+                        isClosable: true,
+                        status: "error"
+                    })
+                }else{
+                    addToast({
+                        title: "Update Error",
+                        description: JSON.stringify(err),
+                        duration: 9000,
+                        isClosable: true,
+                        status: "error"
+                    })
+                }
+            }
+        },
+    })
+    return {
+        queryKey,
+        query
     }
 }

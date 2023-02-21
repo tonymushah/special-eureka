@@ -19,6 +19,7 @@
     "baseUrl": "src",
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["vite-plugin-remark-rehype/types"]
   },
   "include": ["./src"],
   "exclude": []
