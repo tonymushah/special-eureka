@@ -23,6 +23,6 @@ It's build in [Tauri](https://tauri.app) and [React](https://reactjs.org)
 - [ ] Chapter reading history
 - [X] Group page
 - [ ] User Page 
-- [ ] Author Page
+- [X] Author Page
 - [ ] Log in
 - [ ] Custom lists pages
