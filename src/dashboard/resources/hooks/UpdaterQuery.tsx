@@ -64,21 +64,24 @@ export function useTauriInstallUpdate(props: {
     withoutToast?: boolean,
     notify?: boolean
 }){
-    const { addToast } = useDashboardToast();
+    const { addToast , updateToast } = useDashboardToast();
     const queryKey = "special-eureka-install-update";
-    const query = useQuery(queryKey, () => {
+    const query = useQuery(queryKey, async () => {
         addToast({
             "title" : "Installing the update",
             "description" : "You can do something else but don't close the application",
             "status" : "loading"
         })
-        return installUpdate();
+        return await installUpdate();
     }, {
         staleTime: Infinity,
         enabled: false,
+        retry(failureCount) {
+            return failureCount >= 1;
+        },
         onSuccess() {
             if(props.withoutToast == true){
-                addToast({
+                updateToast({
                     "title" : "Update downloaded",
                     "description" : "The update will be seen after an app reload",
                     duration: 9000,
@@ -90,7 +93,7 @@ export function useTauriInstallUpdate(props: {
         onError(err) {
             if(props.withoutToast == true){
                 if(err instanceof Error){
-                    addToast({
+                    updateToast({
                         title: err.name,
                         description: err.message,
                         duration: 9000,
@@ -98,7 +101,7 @@ export function useTauriInstallUpdate(props: {
                         status: "error"
                     })
                 }else{
-                    addToast({
+                    updateToast({
                         title: "Update Error",
                         description: JSON.stringify(err),
                         duration: 9000,

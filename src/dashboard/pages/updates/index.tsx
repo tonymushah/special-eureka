@@ -1,10 +1,10 @@
 import { Box, Button, Center, Heading, Link, Skeleton, Text } from "@chakra-ui/react";
-import { ExtLink } from "../../../commons-res/components/ExtLink";
 import React from "react";
 import { Container } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
-import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "../../resources/hooks/UpdaterQuery";
+import { ExtLink } from "../../../commons-res/components/ExtLink";
 import Tauri_Updater from "../../resources/components/Tauri_updater_button";
+import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "../../resources/hooks/UpdaterQuery";
 
 export default function InstallUpdate() {
     const shouldUpdate = TauriCheckUpdateQuery({
@@ -54,22 +54,25 @@ export default function InstallUpdate() {
                         />
                         <Center>
                             <Center>
-                                <Button colorScheme={"red"} onClick={() => {
-                                    installUpdate.query.refetch()
-                                }}>Update</Button>
+                                <Button colorScheme={"red"}
+                                    isLoading={installUpdate.query.isLoading || installUpdate.query.isFetching}
+                                    isDisabled={installUpdate.query.isError}
+                                    onClick={() => {
+                                        installUpdate.query.refetch()
+                                    }}>Update</Button>
                             </Center>
                         </Center>
                     </Container>
                 </Box>
             )
         }
-    }else{
+    } else {
         return (
             <Box>
                 <Container>
-                    <Heading textAlign={"center"}>Please if there is some update first</Heading>
+                    <Heading textAlign={"center"}>Please check if there is some update first</Heading>
                     <Center>
-                        <Tauri_Updater/>
+                        <Tauri_Updater />
                     </Center>
                 </Container>
             </Box>

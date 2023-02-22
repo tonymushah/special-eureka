@@ -6,6 +6,8 @@ const DashboardNavBar = React.lazy(() => import("./resources/components/DashBoar
 const Home = React.lazy(() => import("./pages/home/index"));
 const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
 
+const Updates = React.lazy(() => import("./pages/updates/index"));
+
 export function getDashboardPath() {
     return "/dashboard"
 }
@@ -78,6 +80,28 @@ function DashboardRouter(): RouteObject {
                         <Home />
                     </React.Suspense>
                 )
+            },
+            {
+                path: "update-latest",
+                element: (
+                    <React.Suspense
+                        fallback={
+                            <Chakra.Box
+                                width={"100%"}
+                                height={"100vh"}
+                            >
+                                <Chakra.AbsoluteCenter>
+                                    <Chakra.Spinner
+                                        size="xl"
+                                        color='orange.500'
+                                        thickness='4px'
+                                    />
+                                </Chakra.AbsoluteCenter>
+                            </Chakra.Box>
+                        }
+                    >
+                        <Updates />
+                    </React.Suspense>)
             }
         ]
     }
