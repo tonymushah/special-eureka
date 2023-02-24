@@ -1,11 +1,11 @@
 [package]
-name = "mangadex-desktop"
-version = "0.1.3"
+name = "special-eureka"
+version = "0.1.4"
 description = "a mangadex desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
 repository = "https://github.com/tonymushah/special-eureka"
-default-run = "mangadex-desktop"
+default-run = "special-eureka"
 edition = "2021"
 rust-version = "1.57"
 

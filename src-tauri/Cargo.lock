@@ -2013,30 +2013,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mangadex-desktop"
-version = "0.1.3"
-dependencies = [
- "actix-web",
- "anyhow",
- "event-listener",
- "fern",
- "lazy_static",
- "log",
- "mangadex-api 1.3.0",
- "mangadex-desktop-api2",
- "once_cell",
- "reqwest",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-log",
- "tauri-plugin-store",
- "thiserror",
- "tokio",
-]
-
-[[package]]
 name = "mangadex-desktop-api2"
 version = "0.1.3"
 source = "git+https://github.com/tonymushah/eureka-mmanager?branch=main#a2012c77ada6471aab07e257ac22c4190518f3d1"
@@ -3344,6 +3320,30 @@ dependencies = [
  "gobject-sys",
  "libc",
  "system-deps 5.0.0",
+]
+
+[[package]]
+name = "special-eureka"
+version = "0.1.4"
+dependencies = [
+ "actix-web",
+ "anyhow",
+ "event-listener",
+ "fern",
+ "lazy_static",
+ "log",
+ "mangadex-api 1.3.0",
+ "mangadex-desktop-api2",
+ "once_cell",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-log",
+ "tauri-plugin-store",
+ "thiserror",
+ "tokio",
 ]
 
 [[package]]

@@ -8,8 +8,8 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "Mangadex-Desktop",
-    "version": "0.1.3"
+    "productName": "Special-Eureka",
+    "version": "0.1.4"
   },
   "tauri": {
     "allowlist": {
