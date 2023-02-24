@@ -1,23 +1,23 @@
 {
     "version": "v0.1.3",
-    "notes": "Complete release note [here](https://github.com/tonymushah/special-eureka/releases/tag/v0.1.2)",
-    "pub_date": "2023-02-17T20:54:19.183Z",
+    "notes": "Complete release note [here](https://github.com/tonymushah/special-eureka/releases/tag/v0.1.3)",
+    "pub_date": "2023-02-23T16:48:16Z",
     "platforms": {
         "darwin-x86_64": {
-            "signature": "",
-            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/Mangadex-Desktop.app.tar.gz"
+            "signature": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/Mangadex-Desktop.app.tar.gz.sig",
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/Mangadex-Desktop.app.tar.gz"
         },
         "darwin-aarch64": {
-            "signature": "",
+            "signature": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/Mangadex-Desktop.app.tar.gz.sig",
             "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/Mangadex-Desktop.app.tar.gz"
         },
         "linux-x86_64": {
-            "signature": "",
-            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/mangadex-desktop_0.1.2_amd64.AppImage"
+            "signature": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/mangadex-desktop_0.1.3_amd64.AppImage.tar.gz.sig",
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/mangadex-desktop_0.1.3_amd64.AppImage.tar.gz"
         },
         "windows-x86_64": {
-            "signature": "",
-            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.2/Mangadex-Desktop_0.1.2_x64_en-US.msi"
+            "signature": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/Mangadex-Desktop_0.1.3_x64_en-US.msi.zip.sig",
+            "url": "https://github.com/tonymushah/special-eureka/releases/download/v0.1.3/Mangadex-Desktop_0.1.3_x64_en-US.msi.zip"
         }
     }
 }
