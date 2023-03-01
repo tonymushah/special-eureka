@@ -1,31 +1,40 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import * as FontAwesome from "react-icons/fa";
-import MangaFallback2 from "./MangaElement2Fallback";
-import MangaElementFallback from "./MangaElementFallback";
-import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
+import MangaFallback2 from "../MangaElement2Fallback";
+import MangaElementFallback from "../MangaElementFallback";
+import MangaVerticalElementFallback from "../MangaVerticalElementFallback";
 import React from "react";
+import { useMangaListOption } from "../../../../hooks/MangaListManagerState";
 
-const MangaElementDef2_withID = React.lazy(() => import("./MangaElementDef2_withID"));
-const MangaElementDef_wID = React.lazy(() => import("./MangaElementDef_wID"));
-const MangaVerticalElement_wID = React.lazy(() => import("./MangaVerticalElement_wID"));
+const MangaElementDef2_withID = React.lazy(() => import("../MangaElementDef2_withID"));
+const MangaElementDef_wID = React.lazy(() => import("../MangaElementDef_wID"));
+const MangaVerticalElement_wID = React.lazy(() => import("../MangaVerticalElement_wID"));
 
 export default function MangaListByArrayMangaID(props: {
     src: Array<string>
 }) {
+    const { data , updateListOption } = useMangaListOption({})
     return (
-        <Chakra.Tabs isLazy align={"end"}>
+        <Chakra.Tabs isLazy align={"end"} index={data}>
             <Chakra.TabList>
-                <Chakra.Tab>
+                <Chakra.Tab
+                    onClick={() => {
+                        updateListOption(0)
+                    }}
+                >
                     <FontAwesome.FaThList />
                 </Chakra.Tab>
-                <Chakra.Tab>
+                <Chakra.Tab
+                    onClick={() => {
+                        updateListOption(1)
+                    }}
+                >
                     <FontAwesome.FaThLarge />
                 </Chakra.Tab>
                 <Chakra.Tab
-                    display={{
-                        base: "none",
-                        md: "initial"
+                    onClick={() => {
+                        updateListOption(2)
                     }}
                 >
                     <FontAwesome.FaTh />

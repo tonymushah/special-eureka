@@ -1,10 +1,11 @@
 # Special Eureka (or mangadex-desktop ...)
 [![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml) \
+[![Dev Builds](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml) \
 A manga reader based on the [Mangadex](https://mangadex.org) website
 
 It's build in [Tauri](https://tauri.app) and [React](https://reactjs.org) 
 
-## RoadMap :
+## Mangadex RoadMap :
 
 - [ ] Typescript API :
   - [x] Manga

@@ -16,6 +16,8 @@ import MangaTitle from "../../resources/componnents/mangas/v1/MangaTitle";
 import { get_manga_byId } from "../../resources/hooks/MangaStateHooks";
 import Download_Chapter_withHotkeys from "./Download_Chapter_withHotkeys";
 
+const ReadingOptions = React.lazy(() => import("./ReadingOption"));
+
 const Chapter_Previous_Next = React.lazy(() => import("./Chapter_Previous_Next"));
 
 const Chapter_Reading_mode = React.lazy(() => import("./ChapterReadingMode"));
@@ -95,6 +97,12 @@ export default function Chapter_Page_Success(props: {
                                     }
                                 </Await>
                             </React.Suspense>
+                            &nbsp;
+                            {
+                                props.data!.get_volume() != null ? (
+                                    <>Volume {props.data!.get_volume()}</>
+                                ) : (<></>)
+                            }
                             &nbsp;
                             Chapter {props.data!.get_chapter()} {
                                 props.data!.get_title() == null || props.data!.get_title() == "" ? (<></>) : (<> - {props.data!.get_title()}</>)
@@ -177,6 +185,13 @@ export default function Chapter_Page_Success(props: {
                                 >
                                     <ChapterNavigationModal chapter={props.data!} />
                                 </React.Suspense>
+                                <React.Suspense
+                                    fallback={<Chakra.Spinner></Chakra.Spinner>}
+                                >
+                                    <ReadingOptions
+                                        chapter={props.data!}
+                                    />
+                                </React.Suspense>
                             </Col>
                         </Row>
                     </Chakra.Box>
@@ -187,7 +202,7 @@ export default function Chapter_Page_Success(props: {
                             </Chakra.AbsoluteCenter>
                         }
                     >
-                        <ChapterFullScreen>
+                        <ChapterFullScreen chapter={props.data}>
                             <>
                                 {
                                     chapter_data_images_query.isLoading || chapter_data_images_query.isIdle ? (

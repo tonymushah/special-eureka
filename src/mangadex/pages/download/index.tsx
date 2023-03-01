@@ -22,7 +22,11 @@ export default function Download_Index_Page() {
                                 </Chakra.Box>
                             }
                         >
-                            <AllDownlaodedMangaConsumer>
+                            <AllDownlaodedMangaConsumer
+                                query_options={{
+                                    staleTime: Infinity
+                                }}
+                            >
                                 {
                                     (value: Array<string>) => (
                                         <React.Suspense
@@ -53,7 +57,9 @@ export default function Download_Index_Page() {
                                 </Chakra.Box>
                             }
                         >
-                            <All_downloaded_chapter />
+                            <All_downloaded_chapter query_options={{
+                                staleTime: Infinity
+                            }}/>
                         </React.Suspense>
                     </Chakra.TabPanel>
                 </Chakra.TabPanels>

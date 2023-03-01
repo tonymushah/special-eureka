@@ -9,32 +9,41 @@ import 'swiper/css/free-mode';
 import 'swiper/css/pagination';
 
 import * as FontAwesome from "react-icons/fa";
-import { Manga } from "../../../../api/structures/Manga";
-import MangaFallback2 from "./MangaElement2Fallback";
-import MangaElementFallback from "./MangaElementFallback";
-import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
+import { Manga } from "../../../../../api/structures/Manga";
+import MangaFallback2 from "../MangaElement2Fallback";
+import MangaElementFallback from "../MangaElementFallback";
+import MangaVerticalElementFallback from "../MangaVerticalElementFallback";
+import { useMangaListOption } from "../../../../hooks/MangaListManagerState";
 
-const MangaElementDef2 = React.lazy(() => import("./MangaElementDef2"));
-const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
-const MangaVerticalElement = React.lazy(() => import("./MangaVerticalElement"));
+const MangaElementDef2 = React.lazy(() => import("../MangaElementDef2"));
+const MangaElementDef = React.lazy(() => import("../MangaElementDef"));
+const MangaVerticalElement = React.lazy(() => import("../MangaVerticalElement"));
 
 
 export default function MangaList(props: {
     src: Array<Manga>
 }) {
+    const { data , updateListOption } = useMangaListOption({})
     return (
-        <Chakra.Tabs align="end" isLazy>
+        <Chakra.Tabs align="end" isLazy index={data}>
             <Chakra.TabList>
-                <Chakra.Tab>
+                <Chakra.Tab
+                    onClick={() => {
+                        updateListOption(0)
+                    }}
+                >
                     <FontAwesome.FaThList />
                 </Chakra.Tab>
-                <Chakra.Tab>
+                <Chakra.Tab
+                    onClick={() => {
+                        updateListOption(1)
+                    }}
+                >
                     <FontAwesome.FaThLarge />
                 </Chakra.Tab>
                 <Chakra.Tab
-                    display={{
-                        base: "none",
-                        md: "initial"
+                    onClick={() => {
+                        updateListOption(2)
                     }}
                 >
                     <FontAwesome.FaTh />

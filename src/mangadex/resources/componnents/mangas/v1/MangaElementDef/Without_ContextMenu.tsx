@@ -12,6 +12,8 @@ import ErrorEL1 from "../../../error/ErrorEL1";
 
 const CoverElementVertical2 = React.lazy(() => import("../../../covers/v1/CoverElementVertical2"));
 
+const CoverImage = React.lazy(() => import("../../../covers/v1/CoverImage"));
+
 const MangaDexPath = getMangaDexPath();
 
 export default function MangaElementDef_without_Context_Menu(props: {
@@ -90,6 +92,7 @@ export default function MangaElementDef_without_Context_Menu(props: {
                         ))
                     )
                 }}
+                boxShadow={"md"}
             >
                 <Chakra.Center
                 >

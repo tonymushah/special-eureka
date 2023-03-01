@@ -19,33 +19,39 @@ export default function SinglePage() {
                 </Chakra.AbsoluteCenter>
             }
         >
-            <Swiper
-                slidesPerView={1}
-                zoom={true}
-                centeredSlides={true}
-                modules={[Zoom]}
-            >
-                {
-                    data.images.map((value) => (
-                            <SwiperSlide>
-                                <Chakra.Image
-                                    fallback={
-                                        <Chakra.Box width={"full"}>
-                                            <Chakra.Center>
-                                                <Chakra.Spinner
-                                                    size={"xl"}
-                                                    color={"orange"}
-                                                    thickness={"10px"}
-                                                />
-                                            </Chakra.Center>
-                                        </Chakra.Box>
-                                    }
-                                    src={value}
-                                />
-                            </SwiperSlide>
-                    ))
-                }
-            </Swiper>
+            <Chakra.Box id="top-chap-view">
+                <Swiper
+                    slidesPerView={1}
+                    zoom={true}
+                    centeredSlides={true}
+                    modules={[Zoom]}
+                    onChange={() => {
+                        document.getElementById("top-chap-view")?.scrollIntoView()
+                    }}
+                >
+                    {
+                        data.images.map((value) => (
+                                <SwiperSlide>
+                                    <Chakra.Image
+                                        fallback={
+                                            <Chakra.Box width={"full"}>
+                                                <Chakra.Center>
+                                                    <Chakra.Spinner
+                                                        size={"xl"}
+                                                        color={"orange"}
+                                                        thickness={"10px"}
+                                                    />
+                                                </Chakra.Center>
+                                            </Chakra.Box>
+                                        }
+                                        width={"100%"}
+                                        src={value}
+                                    />
+                                </SwiperSlide>
+                        ))
+                    }
+                </Swiper>
+            </Chakra.Box>
         </React.Suspense>
     )
 }
