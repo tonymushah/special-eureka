@@ -131,6 +131,7 @@
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
     "tauri-settings": "^0.1.2",
+    "tsconfig-paths": "^3.14.2",
     "tslib": "^2.3.0",
     "vite-plugin-remark-rehype": "^0.1.0"
   },

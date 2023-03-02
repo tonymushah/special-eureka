@@ -17,11 +17,12 @@ export default defineConfig({
   clearScreen: false,
   plugins: [
     ReactInspector(),
-    progress({}),
+    progress(),
     ViteAliases({
       "dir" : "src",
       useConfig : true,
-      useTypescript : true
+      useTypescript : true,
+      "useIndexes" : true
     }),
     react(),
     remarkRehypePlugin({

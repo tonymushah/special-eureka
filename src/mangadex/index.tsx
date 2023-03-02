@@ -9,12 +9,21 @@ import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
 import { ErrorELRouter } from './resources/componnents/Error_cmp';
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
+import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 
 const MangaDexPath: string = "/mangadex";
 
 export function getMangaDexPath() {
     return MangaDexPath
 };
+
+export function getProjectPath(){
+    return getMangaDexPath()
+}
+
+export function getLogo(){
+    return MangadexLogo
+}
 
 const MangaPage = React.lazy(() => import("./pages/manga/index"));
 

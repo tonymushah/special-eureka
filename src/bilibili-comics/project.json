@@ -1,0 +1,12 @@
+{
+  "name": "bilibili-comics",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "./src/bilibili-comics",
+  "targets": {
+    "build": {
+      "executor": "special-eureka-nx:build"
+    }
+  },
+  "tags": []
+}
