@@ -1,7 +1,7 @@
 import { ThemeTypings } from "@chakra-ui/react";
 import { To } from "react-router";
-import Dashboard_logo from "./commons-res/common-icon/eureka-logo6.svg";
-import MangadexLogo from "./mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import Dashboard_logo from "@commons-res/common-icon/eureka-logo6.svg";
+import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 export interface WebSite {
     name: string,
     route: To,

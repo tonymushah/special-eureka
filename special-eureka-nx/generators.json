@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "special-eureka-nx",
+  "version": "0.0.1",
+  "generators": {
+    "special-eureka-nx": {
+      "factory": "./src/generators/special-eureka-nx/generator",
+      "schema": "./src/generators/special-eureka-nx/schema.json",
+      "description": "special-eureka-nx generator"
+    },
+    "generate-website": {
+      "factory": "./src/generators/generate-website/generator",
+      "schema": "./src/generators/generate-website/schema.json",
+      "description": "generate-website generator"
+    }
+  }
+}
