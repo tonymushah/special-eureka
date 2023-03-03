@@ -22,7 +22,8 @@
     "update-api": "cd src-tauri && cargo update -p mangadex-desktop-api2",
     "check-src-tauri": "cd src-tauri && cargo check",
     "dev": "tauri dev",
-    "build": "tauri build"
+    "build": "tauri build",
+    "generate-website" : "nx generate special-eureka-nx:generate-website"
   },
   "devDependencies": {
     "@nrwl/devkit": "15.8.1",

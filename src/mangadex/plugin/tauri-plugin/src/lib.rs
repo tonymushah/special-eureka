@@ -1,39 +1,20 @@
-use actix_web::dev::{Server, ServerHandle};
-use mangadex_desktop_api2;
-use serde::{ser::Serializer, Deserialize, Serialize};
-use std::{collections::HashMap, sync::Mutex};
 use tauri::{
-    command,
     plugin::{Builder, TauriPlugin},
-    AppHandle, Manager, Runtime, State, Window,
+    AppHandle, Manager, Runtime
 };
 pub mod utils;
 pub mod intelligent_notification_system;
 use ins_handle::{reset_ins_handle, set_ins_chapter_checker_handle, init_ins_chapter_handle, check_plus_notify};
 use utils::{set_indentifier};
-
-use crate::commands::download;
+use serde::{ser::Serializer, Deserialize, Serialize};
+use crate::commands::{download, server};
 pub mod ins_handle;
 pub mod commands;
 pub type Result<T> = std::result::Result<T, Error>;
-pub struct MangadexDesktopApiHandle {
-    key: Mutex<String>,
-    def: Mutex<HashMap<String, ServerHandle>>,
-}
-
-impl Default for MangadexDesktopApiHandle {
-    fn default() -> Self {
-        let hash_maps: HashMap<String, ServerHandle> = HashMap::new();
-        MangadexDesktopApiHandle {
-            def: Mutex::new(hash_maps),
-            key: Mutex::new("default".to_string()),
-        }
-    }
-}
 
 
 #[derive(Serialize, Deserialize)]
-struct ErrorPayload {
+pub struct ErrorPayload {
     result: String,
     message: String,
 }
@@ -110,37 +91,6 @@ impl Serialize for Error {
 
 
 // remember to call `.manage(MyState::default())`
-#[command]
-async fn launch_server<R: Runtime>(
-    _app: AppHandle<R>,
-    _window: Window<R>,
-    state: State<'_, MangadexDesktopApiHandle>,
-) -> Result<String> {
-    mangadex_desktop_api2::verify_all_fs()?;
-    let server: Server = mangadex_desktop_api2::launch_async_server_default()?;
-    let handle: ServerHandle = server.handle();
-    tauri::async_runtime::spawn(server);
-    handle_error!(state.def.lock()).insert(handle_error!(state.key.lock()).to_string(), handle);
-    Ok("server launched".to_string())
-}
-
-#[tauri::command]
-async fn stop_server(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
-    let key = handle_error!(state.key.lock()).to_string();
-    let mut start = handle_error!(state.def.lock());
-    let handle_base = match start.get_mut(&(key)) {
-        Some(data) => data,
-        None => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Can't find the server handle".to_string(),
-            )))
-        }
-    };
-    let handle = handle_base.stop(true);
-    tauri::async_runtime::spawn(handle);
-    Ok("stopped server".to_string())
-}
 
 fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
     fern::Output::call(move |record| {
@@ -216,8 +166,8 @@ async fn emit_events_to_webview<R: Runtime>(app: tauri::AppHandle<R>) -> Result<
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
     Builder::new("mangadex-desktop-api")
         .invoke_handler(tauri::generate_handler![
-            launch_server,
-            stop_server,
+            server::launch_server,
+            server::stop_server,
             download::refetch_all_manga,
             download::patch_all_manga_cover,
             download::download_manga_covers,
@@ -241,7 +191,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
                     panic!("{}", err.to_string());
                     }
                 };
-            app.manage(MangadexDesktopApiHandle::default());
+            app.manage(server::MangadexDesktopApiHandle::default());
             init_ins_chapter_handle()?;
             set_ins_chapter_checker_handle(std::thread::spawn(|| {
                 loop {

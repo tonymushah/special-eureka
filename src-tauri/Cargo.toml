@@ -19,9 +19,6 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.2.4", features = ["clipboard-write-text", "dialog-message", "fs-all", "http-all", "notification-all", "path-all", "process-exit", "shell-open", "system-tray", "updater"] }
 tokio = "1.20.1"
-anyhow = "1.0.58"
-
-
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/tauri-plugin-store"

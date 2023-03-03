@@ -1,4 +1,3 @@
-
 use serde::{ser::Serializer, Serialize};
 use tauri::{
   command,

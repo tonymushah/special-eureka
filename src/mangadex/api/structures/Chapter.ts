@@ -18,6 +18,7 @@ import { User } from "./User";
 import AllDownloadedChapterCollection from "./CollectionTypes/AllDownloadedChapterCollection";
 import Chapter_WAllIncludesCollection from "./CollectionTypes/Chapter_WAllIncludesCollection";
 import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
+import { download_chapter, download_chapter_data_saver } from "@mangadex/plugin";
 
 export class Chapter extends Attribute {
     private title: string;
@@ -453,12 +454,7 @@ export class Chapter extends Attribute {
     }
     public static async download(chapterID: string, client?: Client): Promise<Array<string>> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter", { chapterId: chapterID });
-            let response_Json: {
-                result: string,
-                dir: string,
-                downloaded: Array<string>
-            } = JSON.parse(response);
+            let response_Json = await download_chapter(chapterID);
             return response_Json.downloaded;
         } else {
             throw new Error("The offline server isn't started");
@@ -466,12 +462,7 @@ export class Chapter extends Attribute {
     }
     public static async download_data_saver(chapterID: string, client?: Client): Promise<Array<string>> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_chapter_data_saver_mode", { chapterId: chapterID });
-            let response_Json: {
-                result: string,
-                dir: string,
-                downloaded: Array<string>
-            } = JSON.parse(response);
+            let response_Json = await download_chapter_data_saver(chapterID);
             return response_Json.downloaded;
         } else {
             throw new Error("The offline server isn't started");
