@@ -3,16 +3,30 @@ import { defineConfig } from 'vite'
 import react from "@vitejs/plugin-react-swc"
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import progress from "vite-plugin-progress";
+import { resolve } from 'path';
+import { ViteAliases } from 'vite-aliases'
+//import ReactInspector from 'vite-plugin-react-inspector'
 
-import { resolve } from 'path'
+/*function getPathSrc(){
+  const path = `${process.cwd()}/src`;
+  console.log(path);
+  return path;
+}*/
+
 export default defineConfig({
   clearScreen: false,
   plugins: [
+    //ReactInspector(),
+    progress(),
+    ViteAliases({
+      "dir" : "src",
+      useConfig : true,
+      useTypescript : true,
+      "useIndexes" : true
+    }),
     react(),
     remarkRehypePlugin({
-      
-    }),
-    progress({})
+    })
   ],
   envPrefix: ['VITE_', 'TAURI_'],
   server: {
@@ -35,5 +49,5 @@ export default defineConfig({
     }
   },
   root: "./src",
-  publicDir : "./public"
+  publicDir : "./public",
 })

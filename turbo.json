@@ -3,10 +3,10 @@
       "build": {
         "outputs": ["dist/**"]
       },
-      "lint": {
-        "outputs": []
+      "vite:build": {
+        "outputs": ["dist/**"]
       },
-      "tauri dev" : {
+      "lint" : {
         "outputs" : []
       }
     }

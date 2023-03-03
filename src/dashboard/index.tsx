@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet, RouteObject } from "react-router";
 import * as Chakra from "@chakra-ui/react";
+import Dashboard_logo from "@commons-res/common-icon/eureka-logo6.svg";
 const DashboardNavBar = React.lazy(() => import("./resources/components/DashBoardNavBar"));
 
 const Home = React.lazy(() => import("./pages/home/index"));
@@ -11,6 +12,15 @@ const Updates = React.lazy(() => import("./pages/updates/index"));
 export function getDashboardPath() {
     return "/dashboard"
 }
+
+export function getLogo() {
+    return Dashboard_logo;
+}
+
+export function getProjectPath(){
+    return getDashboardPath()
+}
+
 
 function DashboardRouter(): RouteObject {
     const router: RouteObject = {

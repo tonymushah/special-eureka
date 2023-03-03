@@ -3,6 +3,8 @@ on:
   push: 
     branches:
       - dev
+      - nx-importation
+
 jobs:
   test-tauri:
     strategy:
@@ -46,6 +48,6 @@ jobs:
         with:
           tagName: "v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
           releaseName: "Special Eureka v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
-          releaseBody: "This is a dev release of v__VERSION__. It's unstable and might break, so please see to the latest stable realeases"
+          releaseBody: "This is a dev release of v__VERSION__ from branch ${{ github.ref }}. It's unstable and might break, so please see to the latest stable realeases"
           releaseDraft: false
           prerelease: true
