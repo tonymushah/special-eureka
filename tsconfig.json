@@ -26,6 +26,9 @@
             "vite-plugin-remark-rehype/types"
         ],
         "paths": {
+            "@": [
+                "src"
+            ],
             "@/*": [
                 "src/*"
             ],
@@ -36,11 +39,23 @@
             "@bilbili_comics/*": [
                 "src/bilbili_comics/*"
             ],
+            "@bilibili-comics": [
+                "src/bilibili-comics"
+            ],
+            "@commons-res": [
+                "src/commons-res"
+            ],
             "@commons-res/*": [
                 "src/commons-res/*"
             ],
+            "@dashboard": [
+                "src/dashboard"
+            ],
             "@dashboard/*": [
                 "src/dashboard/*"
+            ],
+            "@mangadex": [
+                "src/mangadex"
             ],
             "@mangadex/*": [
                 "src/mangadex/*"
@@ -48,41 +63,26 @@
             "@mangaplus/*": [
                 "src/mangaplus/*"
             ],
+            "@router": [
+                "src/router"
+            ],
             "@router/*": [
                 "src/router/*"
             ],
+            "@splashscreen": [
+                "src/splashscreen"
+            ],
             "@splashscreen/*": [
                 "src/splashscreen/*"
+            ],
+            "@test": [
+                "src/test"
             ],
             "@test/*": [
                 "src/test/*"
             ],
             "special-eureka-nx": [
                 "special-eureka-nx/src/index.ts"
-            ],
-            "@bilibili-comics": [
-                "src/bilibili-comics"
-            ],
-            "@commons-res": [
-                "src/commons-res"
-            ],
-            "@dashboard": [
-                "src/dashboard"
-            ],
-            "@mangadex": [
-                "src/mangadex"
-            ],
-            "@router": [
-                "src/router"
-            ],
-            "@splashscreen": [
-                "src/splashscreen"
-            ],
-            "@test": [
-                "src/test"
-            ],
-            "@": [
-                "src"
             ]
         }
     },
