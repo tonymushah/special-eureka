@@ -54,7 +54,6 @@
     "vite-aliases": "^0.10.0",
     "vite-plugin-checker": "^0.5.6",
     "vite-plugin-progress": "^0.0.6",
-    "vite-plugin-react-inspector": "^0.3.3",
     "vite-plugin-tauri": "^3.1.0"
   },
   "dependencies": {

@@ -5,7 +5,7 @@ import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import progress from "vite-plugin-progress";
 import { resolve } from 'path';
 import { ViteAliases } from 'vite-aliases'
-import ReactInspector from 'vite-plugin-react-inspector'
+//import ReactInspector from 'vite-plugin-react-inspector'
 
 /*function getPathSrc(){
   const path = `${process.cwd()}/src`;
@@ -16,7 +16,7 @@ import ReactInspector from 'vite-plugin-react-inspector'
 export default defineConfig({
   clearScreen: false,
   plugins: [
-    ReactInspector(),
+    //ReactInspector(),
     progress(),
     ViteAliases({
       "dir" : "src",
