@@ -34,8 +34,8 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
                             onCloseButtonClick={FullscreenHandle.exit}
                         />
                         {
-                            props.children
-                        }
+                                props.children
+                            }
                     </FullScreenOptionsProvider>
                 </Chakra.Box>
             </Fullscreen.FullScreen>

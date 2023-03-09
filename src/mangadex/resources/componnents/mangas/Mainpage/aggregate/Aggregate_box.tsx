@@ -1,10 +1,9 @@
-import React from "react";
+import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
-import { Aggregate } from "../../../../../api/structures/Aggregate";
+import React from "react";
+import { Aggregate } from "@mangadex/api/structures/Aggregate";
+import { Volume } from "@mangadex/api/structures/Volume";
 import { Volume_, Volume__reverse } from "./Volume";
-import { Volume } from "../../../../../api/structures/Volume";
-import * as ChakraIcons from "@chakra-ui/icons"
-import * as Chakra from "@chakra-ui/react"
 type Aggregate_boxProps = {
     src: Aggregate
     separator: number
@@ -19,9 +18,8 @@ type Aggregate_boxState = {
 export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate_boxState>{
     private toUse: Aggregate;
     private separator: number;
-    private parts: number;
+    private parts!: number;
     private Chapters_parts: Array<Array<Volume>>;
-    private selected: number;
     constructor(props: Aggregate_boxProps) {
         super(props);
         this.toUse = this.props.src;
@@ -48,7 +46,7 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate
                 <Chakra.Tabs isLazy>
                     <Chakra.TabPanels>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volumes, index, array) => (
+                            this.Chapters_parts.map<React.ReactNode>((volumes) => (
                                 <Chakra.TabPanel>
                                     <Chakra.Accordion
                                         allowMultiple={true}
@@ -66,7 +64,7 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate
                     </Chakra.TabPanels>
                     <Chakra.TabList>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volume, index, array) => (
+                            this.Chapters_parts.map<React.ReactNode>((volume, index) => (
                                 <Chakra.Tab>
                                     {index}
                                 </Chakra.Tab>
@@ -82,9 +80,8 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate
 export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, Aggregate_boxState>{
     private toUse: Aggregate;
     private separator: number;
-    private parts: number;
+    private parts!: number;
     private Chapters_parts: Array<Array<Volume>>;
-    private selected: number;
     constructor(props: Aggregate_boxProps) {
         super(props);
         this.toUse = this.props.src;
@@ -112,7 +109,7 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
                 <Chakra.Tabs isLazy>
                     <Chakra.TabPanels>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volumes, index, array) => (
+                            this.Chapters_parts.map<React.ReactNode>((volumes) => (
                                 <Chakra.TabPanel>
                                     <Chakra.Accordion
                                         allowMultiple={true}
@@ -130,7 +127,7 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
                     </Chakra.TabPanels>
                     <Chakra.TabList>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volume, index, array) => (
+                            this.Chapters_parts.map<React.ReactNode>((volume, index) => (
                                 <Chakra.Tab>
                                     {index}
                                 </Chakra.Tab>

@@ -10,7 +10,10 @@ import DevNotes from "./DevNotes";
 import Contacts from "./Contacts";
 import PoweredBy from "./PoweredBy";
 import { Stack, VStack } from "@chakra-ui/react";
+import { appWindow } from "@tauri-apps/api/window";
+
 export default function Home() {
+    appWindow.setTitle("Welcome to Special-Eureka | Dashboard").then()
     return (
         <React.Fragment>
             <Chakra.Box

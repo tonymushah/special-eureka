@@ -1,12 +1,13 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from '@chakra-ui/react';
+import { appWindow } from "@tauri-apps/api/window";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Button, Col, Container, Placeholder, Row } from "react-bootstrap";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useQueries, useQuery } from "react-query";
-import { Await, Link } from "react-router-dom";
+import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { getMangaDexPath } from "../../..";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 import TryCatch from "../../../../commons-res/components/TryCatch";
@@ -14,9 +15,7 @@ import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_Upp
 import { Author } from "../../../api/structures/Author";
 import { Manga } from "../../../api/structures/Manga";
 import { Statistics_Manga } from "../../../api/structures/Statistics";
-import "../../css/manga/mg-p.css";
-import "../../css/manga/thumbail-mg.css";
-import { get_manga_page_authors_artists, get_manga_page_cover, get_manga_page_titles } from "../../hooks/MangaStateHooks";
+import { get_manga_page_authors_artists, get_manga_page_titles } from "../../hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../error/ErrorEL1";
@@ -127,22 +126,36 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     )
 }
 
+function get_manga_page_cover_art_image(props: MangaPageProps) {
+    const client = useHTTPClient();
+    const query_key = "mdx-manga-" + props.src.get_id() + "-cover-art-image";
+    const query = useQuery<string>(query_key, async () => {
+        return await (await props.src.get_cover_art(client)).get_CoverImage_promise(client);
+    }, {
+        staleTime: 1000 * 60 * 5
+    })
+    return {
+        query_key,
+        query
+    }
+}
+
 export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     let title: string = "";
     const client = useHTTPClient();
-    const { coverQuery } = get_manga_page_cover(props);
     const { title_query } = get_manga_page_titles(props);
     const {
         authors,
         artistists,
         is_Author_artists_finished
     } = get_manga_page_authors_artists(props);
-
+    const coverQuery = get_manga_page_cover_art_image(props).query;
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
     } else {
         title = props.src.get_title().en;
     }
+    appWindow.setTitle(`${title} | Mangadex`).then()
     function authors_artists(): Array<React.ReactNode> {
         let returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
             return value.data!;
@@ -191,15 +204,27 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
         let returns: Array<React.ReactNode> = [];
         if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
             if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+                returns[index] = (<Button style={{
+                    fontWeight: 700,
+                    margin: "1px",
+                    padding: "2px"
+                }} className="d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
             } else {
-                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+                returns[index] = (<Button style={{
+                    fontWeight: 700,
+                    margin: "1px",
+                    padding: "2px"
+                }} className=" d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
             }
             index = index + 1;
         }
         for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
             const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+            returns[index + index1] = (<Button style={{
+                fontWeight: 700,
+                margin: "1px",
+                padding: "2px"
+            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
         }
         return returns;
     }
@@ -208,7 +233,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
             <Chakra.Box
                 backgroundImage={coverQuery.isLoading ?
                     Mangadex_placeHolder : (
-                        coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!.get_Cover_image()
+                        coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!
                     )}
                 backgroundRepeat={"no-repeat"}
                 backgroundPosition={{
@@ -235,7 +260,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                 <Col xs="3">
                                     <Cover_Image_ src={coverQuery.isLoading ?
                                         Mangadex_placeHolder : (
-                                            coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!.get_Cover_image()
+                                            coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!
                                         )} fallbackElement={Mangadex_placeHolder} />
                                 </Col>
                                 <Col xs="9" className="overflow-hidden">

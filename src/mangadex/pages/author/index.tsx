@@ -1,3 +1,4 @@
+import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
@@ -19,6 +20,7 @@ export default function Author_Page_index(){
     const { query } = get_author_byID({
         author_id : id!
     });
+    appWindow.setTitle(`Loading... | Mangadex`).then()
     if(query.isSuccess) {
         return (
             <Mangadex_suspense>
@@ -29,6 +31,7 @@ export default function Author_Page_index(){
         )
     }
     if(query.isError){
+        appWindow.setTitle(`Error on loading author ${id!} | Mangadex`).then()
         return (
             <Mangadex_suspense>
                 <ErrorEL1
