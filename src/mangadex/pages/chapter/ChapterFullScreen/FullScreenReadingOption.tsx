@@ -4,7 +4,7 @@ import { Chapter } from "@mangadex/api/structures/Chapter";
 import { motion } from 'framer-motion';
 import React from "react";
 
-const Chapter_Reading_mode = React.lazy(() => import("../ChapterReadingMode"));
+//const Chapter_Reading_mode = React.lazy(() => import("../ChapterReadingMode"));
 
 const IsPingable = React.lazy(() => import("../../../resources/componnents/IsPingable"));
 
@@ -91,7 +91,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                             <ImageWidthSlider/>
                         </React.Suspense>
                     </Chakra.Stack>
-                    <Chakra.Box
+                    {/*<Chakra.Box
                         marginTop={10}
                     >
                         <Chakra.Text p={0} m={0}>Chapter Reading mode</Chakra.Text>
@@ -104,7 +104,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                         >
                             <Chapter_Reading_mode chapterID={chapter.get_id()} />
                         </React.Suspense>
-                    </Chakra.Box>
+                    </Chakra.Box>*/}
 
                     <Chakra.Text mt={3} mb={0}>
                         Select a page
