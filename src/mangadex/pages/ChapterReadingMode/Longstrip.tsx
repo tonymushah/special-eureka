@@ -1,18 +1,22 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
+import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
 import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
-import { useFullScreenOptions, useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
+import useChapterPages from "../chapter/useChapterPages";
 
 export default function Lonstrip() {
     const data = useChapterPageOutletContext()
     const fullScreenOptions = useFullScreenOptions_Query();
+    const reading_state = useChapterPages({
+        chapter : data.chapter
+    });
     return (
-        
             <Chakra.VStack>
                 {
-                    data.images.map((value) => (
-
+                    data.images.map((value, index) => (
                         <Chakra.Image
+                            onMouseOver={() => {
+                                reading_state.setCurrentPage(index + 1);
+                            }}
                             fallback={
                                 <Chakra.Box width={"full"}>
                                     <Chakra.Center>
@@ -26,8 +30,8 @@ export default function Lonstrip() {
                             }
                             width={fullScreenOptions.query.data != undefined? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
                             src={value}
+                            id={`mdx-chapter-${data.chapter.get_id()}-${index+1}`}
                         />
-
                     ))
                 }
             </Chakra.VStack>

@@ -1,25 +1,38 @@
 import React from "react";
 import { Chapter } from "../../api/structures/Chapter";
-import { useFullScreenOptions, useFullScreenOptions_Query, FullScreenOptions_Context } from "./ChapterFullScreen/FullScreenOptionsProvider";
 import * as Chakra from "@chakra-ui/react";
 import * as ChakraIcons from "@chakra-ui/icons";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+
+const Chapter_Reading_mode = React.lazy(() => import("./ChapterReadingMode"));
+
+const ChapterNavigationModal = React.lazy(() => import("../../resources/componnents/chapter/ChapterNavigationModal"));
+
+const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
+
+const Chapter_Previous_Next = React.lazy(() => import("./Chapter_Previous_Next"));
+
+const PageSelection = React.lazy(() => import("./PageSelection"));
+
+const ImageWidthSlider = React.lazy(() => import("./ChapterFullScreen/ImageWidthSlider"));
+
 export default function ReadingOptions(props: {
     chapter: Chapter,
 }) {
-    const { query, updateOptions } = useFullScreenOptions_Query();
     const { isOpen, onOpen, onClose } = Chakra.useDisclosure();
-    const [showTooltip, setShowTooltip] = React.useState(false);
     const [isOverlay, state] = Chakra.useBoolean(true);
-    const btnRef = React.useRef<HTMLButtonElement>();
+    const btnRef = React.createRef<HTMLButtonElement>();
+    const client = useHTTPClient();
     return (
         <React.Fragment>
-                <Chakra.IconButton
-                    aria-label="Reading Options"
-                    colorScheme={"orange"}
-                    icon={<ChakraIcons.HamburgerIcon />}
-                    ref={btnRef}
-                    onClick={onOpen}
-                />
+            <Chakra.Button
+                leftIcon={<ChakraIcons.HamburgerIcon />}
+                ref={btnRef}
+                onClick={onOpen}
+                colorScheme={"orange"}
+            >
+                Reading Options
+            </Chakra.Button>
             <Chakra.Drawer
                 isOpen={isOpen}
                 onClose={onClose}
@@ -41,11 +54,47 @@ export default function ReadingOptions(props: {
                         Reading Option
                     </Chakra.DrawerHeader>
                     <Chakra.DrawerBody>
+                        <Chakra.Box>
+                            Navigation (Online) :
+                            &nbsp;
+                            <React.Suspense
+                                fallback={<Chakra.Spinner />}
+                            >
+                                <IsPingable
+                                    client={client}
+                                    onError={(query) => (
+                                        <Chakra.Button
+                                            colorScheme={"orange"}
+                                            onClick={() => query.refetch()}
+                                        >
+                                            Refresh
+                                        </Chakra.Button>
+                                    )}
+                                    onLoading={
+                                        <Chakra.Spinner />
+                                    }
+                                    onSuccess={() => (
+                                        <React.Suspense
+                                            fallback={
+                                                <Chakra.Center>
+                                                    <Chakra.Spinner />
+                                                </Chakra.Center>
+                                            }
+                                        >
+                                            <Chapter_Previous_Next
+                                                src={props.chapter!}
+                                            />
+                                        </React.Suspense>
+                                    )}
+                                />
+                            </React.Suspense>
+                        </Chakra.Box>
                         <Chakra.Stack
-                            spacing={"10px"}
+                            mt={3}
+                            spacing={"2px"}
                             direction="column"
                         >
-                            <Chakra.Text>
+                            <Chakra.Text p={0} m={0}>
                                 Option Overlay :
                             </Chakra.Text>
                             <Chakra.Switch isChecked={isOverlay} onChange={() => {
@@ -53,53 +102,41 @@ export default function ReadingOptions(props: {
                             }} />
                         </Chakra.Stack>
                         <Chakra.Stack
-                            spacing={"10px"}
+                            mt={3}
+                            spacing={"2px"}
                             direction="column"
                         >
-                            <Chakra.Text>
-                                Image width :
-                            </Chakra.Text>
-                            return (
-                            <Chakra.Slider
-                                id='slider'
-                                defaultValue={query.data == undefined ? 0 : query.data.image_width}
-                                min={0}
-                                max={100}
-                                colorScheme='teal'
-                                onChange={(v) => {
-                                    let new_option: FullScreenOptions_Context = query.data == undefined ? {
-                                        image_width: 0
-                                    } : query.data;
-                                    new_option.image_width = v;
-                                    updateOptions(new_option);
-                                }}
-                                onMouseEnter={() => setShowTooltip(true)}
-                                onMouseLeave={() => setShowTooltip(false)}
-                            >
-                                <Chakra.SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
-                                    25%
-                                </Chakra.SliderMark>
-                                <Chakra.SliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>
-                                    50%
-                                </Chakra.SliderMark>
-                                <Chakra.SliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
-                                    75%
-                                </Chakra.SliderMark>
-                                <Chakra.SliderTrack>
-                                    <Chakra.SliderFilledTrack />
-                                </Chakra.SliderTrack>
-                                <Chakra.Tooltip
-                                    hasArrow
-                                    bg='teal.500'
-                                    color='white'
-                                    placement='top'
-                                    isOpen={showTooltip}
-                                    label={`${query.data == undefined ? 0 : query.data.image_width}%`}
-                                >
-                                    <Chakra.SliderThumb />
-                                </Chakra.Tooltip>
-                            </Chakra.Slider>
+                            <React.Suspense>
+                                <ImageWidthSlider/>
+                            </React.Suspense>
                         </Chakra.Stack>
+                        <Chakra.Box
+                            marginTop={10}
+                        >
+                            <Chakra.Text p={0} m={0}>Chapter Reading mode</Chakra.Text>
+                            <React.Suspense
+                                fallback={
+                                    <Chakra.Center>
+                                        <Chakra.Spinner />
+                                    </Chakra.Center>
+                                }
+                            >
+                                <Chapter_Reading_mode chapterID={props.chapter.get_id()} />
+                            </React.Suspense>
+                        </Chakra.Box>
+                        <React.Suspense
+                            fallback={<Chakra.Spinner></Chakra.Spinner>}
+                        >
+                            <ChapterNavigationModal chapter={props.chapter} />
+                        </React.Suspense>
+                        <Chakra.Text mt={3} mb={0}>
+                            Select a page
+                        </Chakra.Text>
+                        <React.Suspense
+                            fallback={<Chakra.Spinner></Chakra.Spinner>}
+                        >
+                            <PageSelection chapter={props.chapter}/>
+                        </React.Suspense>
                     </Chakra.DrawerBody>
                 </Chakra.DrawerContent>
             </Chakra.Drawer>

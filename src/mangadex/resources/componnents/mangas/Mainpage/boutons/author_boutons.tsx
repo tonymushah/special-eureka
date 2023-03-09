@@ -7,38 +7,46 @@ import { Author } from "../../../../../api/structures/Author";
 
 const MangaDexPath = getMangaDexPath()
 
-export function AuthorButton(props : {
-    src : Author
-}){
-    if(props.src !== undefined){
-        return (<Link to={MangaDexPath + "/author/" + props.src.get_id()}><Button className="mdP-bout m-1" variant="dark" size="sm">{props.src.get_Name()}</Button></Link>);
-    }else{
+export function AuthorButton(props: {
+    src: Author
+}) {
+    if (props.src !== undefined) {
+        return (
+            <Link to={MangaDexPath + "/author/" + props.src.get_id()}>
+                <Button style={{
+                    fontWeight: "800"
+                }} className="m-1" variant="dark" size="sm">
+                    {props.src.get_Name()}
+                </Button>
+            </Link>
+        );
+    } else {
         return (<></>)
     }
-    
+
 }
 type AuthorColProps = {
-    src : Array<Author>,
+    src: Array<Author>,
     title: "Authors" | "Artistists";
 }
 export class AuthorCol extends React.Component<AuthorColProps>{
     private to_use: Array<Author>;
     private title: string;
-    constructor(props : AuthorColProps){
+    constructor(props: AuthorColProps) {
         super(props);
         this.to_use = this.props.src;
         this.title = this.props.title;
     }
-    public build_AuthorButtons(): Array<React.ReactNode>{
-        let returns : Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
+    public build_AuthorButtons(): Array<React.ReactNode> {
+        let returns: Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
         for (let index = 0; index < this.to_use.length; index++) {
-            returns[index] = (<AuthorButton src={this.to_use[index]}/>);
+            returns[index] = (<AuthorButton src={this.to_use[index]} />);
         }
         return returns;
     }
     render(): React.ReactNode {
-        let tagButtons : Array<React.ReactNode> = this.build_AuthorButtons()
-        if(tagButtons.length > 0){
+        let tagButtons: Array<React.ReactNode> = this.build_AuthorButtons()
+        if (tagButtons.length > 0) {
             return (
                 <Col>
                     <h5>{make_first_UpperCare(this.title)}</h5>
@@ -47,7 +55,7 @@ export class AuthorCol extends React.Component<AuthorColProps>{
                     </div>
                 </Col>
             )
-        }else{
+        } else {
             return (<></>);
         }
     }

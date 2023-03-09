@@ -164,7 +164,11 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                 <Row>
                                     <h5>Demographics</h5>
                                     <div className="d-md-inline">
-                                        <Button className="mdP-bout m-1" variant="dark" size="sm">{make_first_UpperCare(this.to_use.get_demographic()!)}</Button>
+                                        <Button
+                                            style={{
+                                                fontWeight: "800"
+                                            }}
+                                            className="m-1" variant="dark" size="sm">{make_first_UpperCare(this.to_use.get_demographic()!)}</Button>
                                     </div>
                                 </Row>
                                 <>
