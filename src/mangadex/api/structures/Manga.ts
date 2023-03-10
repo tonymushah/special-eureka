@@ -1442,6 +1442,8 @@ export class Manga_with_allRelationship extends Manga {
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Manga_with_allRelationship.build_any(data[index]);
         }
+        console.log("search finished");
+        console.log(getted);
         return new Manga_withAllIncludes_Collection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, 
             {
             offset_Limits : offset_Limits,

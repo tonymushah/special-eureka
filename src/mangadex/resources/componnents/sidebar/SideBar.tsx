@@ -102,15 +102,6 @@ export default function Side_bar() {
                             }
                         }}
                     >
-                        <MenuItem
-                            component={
-                                <Link
-                                    to={MangaDexPath + "download"}
-                                />
-                            }
-                        >
-                            Offline Library
-                        </MenuItem>
                         <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
                             <MenuItem>
                                 <s>Updates</s>
@@ -168,6 +159,15 @@ export default function Side_bar() {
                             }
                         }}
                     >
+                        <MenuItem
+                            component={
+                                <Link
+                                    to={MangaDexPath + "download"}
+                                />
+                            }
+                        >
+                            Offline Library
+                        </MenuItem>
                         <Chakra.Tooltip placement="right" hasArrow label={"Will available in the next update"}>
                             <MenuItem>
                                 <s>Advanced Search</s>
@@ -189,6 +189,13 @@ export default function Side_bar() {
                             }
                         >
                             Random
+                        </MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "titles/recently-popular"} />
+                            }
+                        >
+                            Recently Popular
                         </MenuItem>
                     </Menu>
                 </SubMenu>

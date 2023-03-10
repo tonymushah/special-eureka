@@ -64,6 +64,9 @@ const IsPingable_default_client = React.lazy(() => import("./resources/componnen
 const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
 
 const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
+
+const RecentlyPopularPage = React.lazy(() => import("@mangadex/pages/titles/RecentlyPopular"));
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -326,6 +329,14 @@ function useMangadexRouter(): RouteObject {
                         element: (
                             <Mangadex_suspense>
                                 <LatestUpdates />
+                            </Mangadex_suspense>
+                        )
+                    },
+                    {
+                        path : "recently-popular",
+                        element: (
+                            <Mangadex_suspense>
+                                <RecentlyPopularPage/>
                             </Mangadex_suspense>
                         )
                     }
