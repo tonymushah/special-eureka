@@ -105,6 +105,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                                                     lg: "lg"
                                                 }
                                             }
+                                            fontFamily={"inherit"}
                                         >
                                             {title}
                                         </Chakra.Heading>
@@ -124,6 +125,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                                                 lg: "lg"
                                             }
                                         }
+                                        fontFamily={"inherit"}
                                     >
                                         {title}
                                     </Chakra.Heading>

@@ -37,7 +37,7 @@ export default function Author_Page(props: {
                 backgroundRepeat={"no-repeat"}
                 backgroundSize={"cover"}
             >
-                <Chakra.Heading paddingTop={"5em"} marginLeft={"2em"} size={"2xl"} marginBottom={"0px"}>{props.src.get_Name()}</Chakra.Heading>
+                <Chakra.Heading fontFamily={"inherit"} paddingTop={"5em"} marginLeft={"2em"} size={"2xl"} marginBottom={"0px"}>{props.src.get_Name()}</Chakra.Heading>
             </Chakra.Box>
             <Chakra.Box
                 marginTop={"0px"}
@@ -45,7 +45,7 @@ export default function Author_Page(props: {
             >
                 <Chakra.Box paddingTop={"25px"} as={Container}>
                     <Chakra.Box>
-                        <Chakra.Heading size={"md"}>
+                        <Chakra.Heading size={"md"} fontFamily={"inherit"}>
                             Biography
                         </Chakra.Heading>
                         <Chakra.Box
@@ -64,7 +64,7 @@ export default function Author_Page(props: {
                         </Chakra.Box>
                     </Chakra.Box>
                     <Chakra.Box>
-                        <Chakra.Heading size={"md"}>
+                        <Chakra.Heading size={"md"} fontFamily={"inherit"}>
                             Where to find
                         </Chakra.Heading>
                         <Chakra.Box>

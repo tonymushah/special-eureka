@@ -31,6 +31,7 @@ export default function MangaElementFallback() {
                                 size={"md"}
                                 noOfLines={2}
                                 margin={"15px"}
+                                fontFamily={"inherit"}
                             >
                                 Loading...
                             </Chakra.Heading>
@@ -82,6 +83,7 @@ export default function MangaElementFallback() {
                                             lg: "lg"
                                         }
                                     }
+                                    fontFamily={"inherit"}
                                 > Loading </Chakra.Heading>
                             </Chakra.GridItem>
                             <Chakra.GridItem

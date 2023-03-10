@@ -82,7 +82,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
             >
                 <Chakra.Center height={"full"}>
                     <Chakra.Box textAlign={"center"}>
-                        <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
+                        <Chakra.Heading fontFamily={"inherit"}>{props.src.get_name()}</Chakra.Heading>
                         <React.Suspense
                             fallback={
                                 <Chakra.Text>Loading...</Chakra.Text>
@@ -95,7 +95,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                 onSuccess={(query) => (
                                     <TryCatch
                                         catch={(error) => (
-                                            <Chakra.Heading fontSize={"lg"}>Leader : None</Chakra.Heading>
+                                            <Chakra.Heading fontSize={"lg"} fontFamily={"inherit"}>Leader : None</Chakra.Heading>
                                         )}
                                     >
                                         <Leader_query_for_GroupPage

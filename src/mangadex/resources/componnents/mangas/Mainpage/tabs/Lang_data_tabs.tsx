@@ -71,7 +71,7 @@ export class LAD_Tabs extends React.Component<LAD_TabsProps>{
                                                 <ReactMarkDown
                                                     children={getted.get_data()}
                                                     components={{
-                                                        a(node, href, ...props) {
+                                                        a(node) {
                                                             return (
                                                                 <React.Suspense
                                                                     fallback={<Skeleton width={"10px"} height={"10px"} />}

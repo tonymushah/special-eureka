@@ -15,7 +15,7 @@ import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_Upp
 import { Author } from "../../../api/structures/Author";
 import { Manga } from "../../../api/structures/Manga";
 import { Statistics_Manga } from "../../../api/structures/Statistics";
-import { get_manga_page_authors_artists, get_manga_page_titles } from "../../hooks/MangaStateHooks";
+import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "../../hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../error/ErrorEL1";
@@ -124,20 +124,6 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
             }
         </Chakra.Box>
     )
-}
-
-function get_manga_page_cover_art_image(props: MangaPageProps) {
-    const client = useHTTPClient();
-    const query_key = "mdx-manga-" + props.src.get_id() + "-cover-art-image";
-    const query = useQuery<string>(query_key, async () => {
-        return await (await props.src.get_cover_art(client)).get_CoverImage_promise(client);
-    }, {
-        staleTime: 1000 * 60 * 5
-    })
-    return {
-        query_key,
-        query
-    }
 }
 
 export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
@@ -253,7 +239,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 >
                     <Chakra.Box
                         backdropFilter={"auto"}
-                        backdropBrightness={"-20%"}
+                        backdropBrightness={"1"}
                     >
                         <Container>
                             <Row>

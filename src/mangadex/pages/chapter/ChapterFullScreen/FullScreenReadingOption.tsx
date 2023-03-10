@@ -43,7 +43,9 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                     padding: "15px"
                 }}
             >
-                <Chakra.Heading size={"md"}>
+                <Chakra.Heading size={"md"}
+                    fontFamily={"inherit"}
+                >
                     Reading Option
                 </Chakra.Heading>
                 <Chakra.Box>

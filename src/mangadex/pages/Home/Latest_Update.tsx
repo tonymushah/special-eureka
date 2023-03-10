@@ -29,7 +29,7 @@ export default function Latest_Updates() {
   if (query.isLoading) {
     return (
       <Chakra.Box>
-        <Chakra.Heading>Latest Updates</Chakra.Heading>
+        <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
         <Chakra.Button
           colorScheme={"orange"}
           onClick={() => query.refetch()}
@@ -54,7 +54,7 @@ export default function Latest_Updates() {
   if (query.isError) {
     return (
       <Chakra.Box>
-        <Chakra.Heading>Latest Updates</Chakra.Heading>
+        <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
         <Chakra.Button
           colorScheme={"orange"}
           onClick={() => query.refetch()}
@@ -67,7 +67,7 @@ export default function Latest_Updates() {
   }
   return (
     <Chakra.Box>
-      <Chakra.Heading>Latest Updates</Chakra.Heading>
+      <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
       <Chakra.Button
         colorScheme={"orange"}
         onClick={() => query.refetch()}

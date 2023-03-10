@@ -1,6 +1,6 @@
 import { AbsoluteCenter, Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
-import TryCatch from "../../../../commons-res/components/TryCatch";
+import TryCatch from "@commons-res/components/TryCatch";
 
 export default function MyErrorBounderies(props: React.PropsWithChildren) {
     return (
@@ -12,7 +12,7 @@ export default function MyErrorBounderies(props: React.PropsWithChildren) {
                 >
                     <AbsoluteCenter>
                         <Box textAlign={"center"}>
-                            <Heading>Error on loading the app</Heading>
+                            <Heading fontFamily={"inherit"}>Error on loading the app</Heading>
                             <Text>Error Details</Text>
                             <Alert status="error">
                                 <AlertIcon />

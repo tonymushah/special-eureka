@@ -13,7 +13,7 @@ export default function RecentlyAdded() {
     offset_limits.set_limits(25)
     return (
         <React.Fragment>
-            <Chakra.Heading>Recently Added</Chakra.Heading>
+            <Chakra.Heading fontFamily={"inherit"}>Recently Added</Chakra.Heading>
             <CollectionComponnent_WithQuery
                 fn={() => {
                     return Manga.search({

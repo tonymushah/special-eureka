@@ -258,3 +258,17 @@ export function get_manga_description(props: {
         manga_description_querykey
     }
 }
+
+export function get_manga_page_cover_art_image(props: MangaPageProps) {
+    const client = useHTTPClient();
+    const query_key = "mdx-manga-" + props.src.get_id() + "-cover-art-image";
+    const query = useQuery<string>(query_key, async () => {
+        return await (await props.src.get_cover_art(client)).get_CoverImage_promise(client);
+    }, {
+        staleTime: 1000 * 60 * 5
+    })
+    return {
+        query_key,
+        query
+    }
+}
