@@ -259,11 +259,24 @@ export function get_manga_description(props: {
     }
 }
 
-export function get_manga_page_cover_art_image(props: MangaPageProps) {
+export function get_manga_page_cover_art_image(props: {
+    src : Manga,
+    isThumbail? : boolean,
+    scale? : 256 | 512
+}) {
     const client = useHTTPClient();
     const query_key = "mdx-manga-" + props.src.get_id() + "-cover-art-image";
     const query = useQuery<string>(query_key, async () => {
-        return await (await props.src.get_cover_art(client)).get_CoverImage_promise(client);
+        const data = (await props.src.get_cover_art(client));
+        if(props.isThumbail == true) {
+            if(props.scale == 512) {
+                return await data.get_CoverImage_thumbnail_promise(512, client);
+            }else{
+                return await data.get_CoverImage_thumbnail_promise(256, client);
+            }
+        }else{
+            return await data.get_CoverImage_promise(client);
+        }
     }, {
         staleTime: 1000 * 60 * 5
     })

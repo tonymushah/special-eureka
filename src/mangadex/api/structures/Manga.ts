@@ -1268,6 +1268,8 @@ export class Manga_with_allRelationship extends Manga {
         } catch (error) {}
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
+            let manga_rel = new Attribute(instance.get_id(), "manga");
+            instance.$cover.set_relationships([manga_rel])
         } catch (error) {}
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
@@ -1286,7 +1288,7 @@ export class Manga_with_allRelationship extends Manga {
             resolve(this.$artists);
         });
     }
-    public get_cover_art(): Promise<Cover> {
+    public async get_cover_art(client? : Client): Promise<Cover> {
         return new Promise((resolve, reject) => {
             resolve(this.$cover);
         });

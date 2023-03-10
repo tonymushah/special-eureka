@@ -233,13 +233,13 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 borderTopRadius={"10px"}
             >
                 <Chakra.Box
-                    backdropFilter={"auto"}
-                    backdropBlur={"10px"}
-                    paddingTop={"10px"}
+                    backdropFilter='auto'
+                    backdropBlur={"20px"}
+                    backdropBrightness={"1.1"}
                 >
                     <Chakra.Box
-                        backdropFilter={"auto"}
-                        backdropBrightness={"1"}
+                        paddingTop={"10px"}
+                        background={"rgba(255, 255,255, 0.2)"}
                     >
                         <Container>
                             <Row>
@@ -257,7 +257,6 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             <Chakra.Heading
                                                 noOfLines={1}
                                                 fontFamily={"inherit"}
-                                                blendMode={"difference"}
                                                 size={{
                                                     base: "md",
                                                     sm: "lg",
@@ -272,7 +271,6 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             <Chakra.Heading
                                                 noOfLines={0}
                                                 fontFamily={"inherit"}
-                                                blendMode={"difference"}
                                                 size={{
                                                     base: "sm",
                                                     sm: "md",

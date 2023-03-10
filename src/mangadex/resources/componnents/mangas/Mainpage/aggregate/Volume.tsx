@@ -14,31 +14,43 @@ export function Volume_(props: Volume_Props) {
     return (
         <Chakra.AccordionItem
         >
-            <h2>
-                <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
-                    <Chakra.Box flex='1' textAlign='left'>
-                        Volume {props.src.get_name()}
-                    </Chakra.Box>
-                    <Chakra.AccordionIcon />
-                </Chakra.AccordionButton>
-            </h2>
-            <Chakra.AccordionPanel
-                motionProps={{
-                    unmountOnExit: true
-                }}
-            >
-                <>
-                    <Row>
-                        <>
-                            {
-                                props.src.get_chapters().reverse().map(getted => (
-                                    <ChaptersComp src={getted}></ChaptersComp>
-                                ))
-                            }
-                        </>
-                    </Row>
-                </>
-            </Chakra.AccordionPanel>
+            {({ isExpanded }) => (
+                <React.Fragment>
+                    <h2>
+                        <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
+                            <Chakra.Box flex='1' textAlign='left'>
+                                Volume {props.src.get_name()}
+                            </Chakra.Box>
+                            <Chakra.AccordionIcon />
+                        </Chakra.AccordionButton>
+                    </h2>
+                    <Chakra.AccordionPanel
+                        motionProps={{
+                            unmountOnExit: true
+                        }}
+                    >
+                        {
+                            isExpanded == true ? (
+                                <>
+                                    <Row>
+                                        <>
+                                            {
+                                                props.src.get_chapters().map(getted => (
+                                                    <ChaptersComp src={getted}></ChaptersComp>
+                                                ))
+                                            }
+                                        </>
+                                    </Row>
+                                </>
+                            ) : (
+                                <></>
+                            )
+                        }
+
+                    </Chakra.AccordionPanel>
+                </React.Fragment>
+            )}
+
         </Chakra.AccordionItem>
     );
 }
@@ -47,31 +59,43 @@ export function Volume__reverse(props: Volume_Props) {
     return (
         <Chakra.AccordionItem
         >
-            <h2>
-                <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
-                    <Chakra.Box flex='1' textAlign='left'>
-                        Volume {props.src.get_name()}
-                    </Chakra.Box>
-                    <Chakra.AccordionIcon />
-                </Chakra.AccordionButton>
-            </h2>
-            <Chakra.AccordionPanel
-                motionProps={{
-                    unmountOnExit: true
-                }}
-            >
-                <>
-                    <Row>
-                        <>
-                            {
-                                props.src.get_chapters().reverse().map(getted => (
-                                    <ChaptersComp src={getted}></ChaptersComp>
-                                ))
-                            }
-                        </>
-                    </Row>
-                </>
-            </Chakra.AccordionPanel>
+            {({ isExpanded }) => (
+                <React.Fragment>
+                    <h2>
+                        <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
+                            <Chakra.Box flex='1' textAlign='left'>
+                                Volume {props.src.get_name()}
+                            </Chakra.Box>
+                            <Chakra.AccordionIcon />
+                        </Chakra.AccordionButton>
+                    </h2>
+                    <Chakra.AccordionPanel
+                        motionProps={{
+                            unmountOnExit: true
+                        }}
+                    >
+                        {
+                            isExpanded == true ? (
+                                <>
+                                    <Row>
+                                        <>
+                                            {
+                                                props.src.get_chapters().reverse().map(getted => (
+                                                    <ChaptersComp src={getted}></ChaptersComp>
+                                                ))
+                                            }
+                                        </>
+                                    </Row>
+                                </>
+                            ) : (
+                                <></>
+                            )
+                        }
+
+                    </Chakra.AccordionPanel>
+                </React.Fragment>
+            )}
+
         </Chakra.AccordionItem>
     );
 }

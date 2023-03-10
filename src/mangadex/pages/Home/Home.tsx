@@ -11,6 +11,7 @@ const Latest_Updates = React.lazy(() => import("./Latest_Update"));
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
 const RecentlyAdded = React.lazy(() => import("./RecentlyAdded"));
+const PopularRecently = React.lazy(() => import("./PopularTitles"));
 
 function Home() {
     let offset_limits_1: Offset_limits = new Offset_limits();
@@ -49,6 +50,17 @@ function Home() {
                     onSuccess={() => (
                         <React.Fragment>
                             <Row className='d-block'>
+                                <React.Suspense
+                                    fallback={<Chakra.Box >
+                                        <Chakra.Center>
+                                            <Chakra.Spinner
+                                                size={"xl"}
+                                            />
+                                        </Chakra.Center>
+                                    </Chakra.Box>}
+                                >
+                                    <PopularRecently/>
+                                </React.Suspense>
                                 <React.Suspense
                                     fallback={<Chakra.Box >
                                         <Chakra.Center>

@@ -11,6 +11,7 @@ import { get_manga_description, get_manga_page_authors_artists, get_manga_page_c
 import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import React from "react";
 import { Button, Placeholder } from "react-bootstrap";
+import { Link } from "react-router-dom"
 
 const MangaDexPath = getMangaDexPath()
 
@@ -19,7 +20,10 @@ const ReactMarkDown = React.lazy(() => import("react-markdown"));
 export default function MangaPopularElement(props: {
     src: Manga
 }) {
-    const coverQuery = get_manga_page_cover_art_image(props).query;
+    const coverQuery = get_manga_page_cover_art_image({
+        src: props.src,
+        isThumbail: true
+    }).query;
     const {
         manga_description_query
     } = get_manga_description(props);
@@ -39,18 +43,40 @@ export default function MangaPopularElement(props: {
             const element = returns.filtred[index];
             if (index == (returns.filtred.length - 1)) {
                 returns2[index] = (
-                    <Chakra.Link
-                    //as={Link} 
-                    //to={MangaDexPath + "/author/" + element.get_id()}
-                    >{element.get_Name()}</Chakra.Link>
+                    <TryCatch
+                        catch={() => (
+                            <Chakra.Link
+                            //as={Link} 
+                            //to={MangaDexPath + "/author/" + element.get_id()}
+                            >
+                                {element.get_Name()}
+                            </Chakra.Link>
+                        )}
+                    >
+                        <Chakra.Link
+                            as={Link}
+                            to={MangaDexPath + "/author/" + element.get_id()}
+                        >{element.get_Name()}</Chakra.Link>
+                    </TryCatch>
                 )
             } else {
                 returns2[index] = (
                     <>
-                        <Chakra.Link
-                        //as={Link} 
-                        //to={MangaDexPath + "/author/" + element.get_id()}
-                        >{element.get_Name()}</Chakra.Link>
+                        <TryCatch
+                            catch={() => (
+                                <Chakra.Link
+                                //as={Link} 
+                                //to={MangaDexPath + "/author/" + element.get_id()}
+                                >
+                                    {element.get_Name()}
+                                </Chakra.Link>
+                            )}
+                        >
+                            <Chakra.Link
+                                as={Link}
+                                to={MangaDexPath + "/author/" + element.get_id()}
+                            >{element.get_Name()}</Chakra.Link>
+                        </TryCatch>
                         ,&nbsp;
                     </>
                 )
@@ -89,7 +115,7 @@ export default function MangaPopularElement(props: {
     }
     return (
         <Chakra.Card
-            backgroundImage={{ base: "none", md: coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder }}
+            backgroundImage={{ base: "none", lg: coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder }}
             backgroundRepeat={"no-repeat"}
             backgroundSize={"cover"}
             backgroundPosition={"0px -400px"}
@@ -97,12 +123,13 @@ export default function MangaPopularElement(props: {
             margin={5}
         >
             <Chakra.Card
-                background={"none"}
+                background={"rgba(255, 255,255, 0.5)"}
                 backdropFilter='auto'
-                backdropBlur={"10px"}
+                backdropBlur={"20px"}
                 backdropBrightness={"1.1"}
                 direction={"row"}
                 variant={"outline"}
+                
             >
                 <Chakra.Image
                     src={coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder}
@@ -113,9 +140,24 @@ export default function MangaPopularElement(props: {
                     borderRadius={"10px"}
                 />
                 <Chakra.CardBody>
-                    <Chakra.Heading fontFamily={"inherit"} noOfLines={2}>
-                        <MangaTitle src={props.src} />
-                    </Chakra.Heading>
+                    <TryCatch
+                        catch={() => (
+                            <Chakra.Heading fontFamily={"inherit"} noOfLines={2}>
+                                <MangaTitle src={props.src} />
+                            </Chakra.Heading>
+                        )}
+                    >
+                        <Chakra.Heading
+                            fontFamily={"inherit"}
+                            noOfLines={2}
+                            as={Link}
+                            to={MangaDexPath + "/manga/" + props.src.get_id()}
+                            textDecoration={"none"}
+                            color={"black"}
+                        >
+                            <MangaTitle src={props.src} />
+                        </Chakra.Heading>
+                    </TryCatch>
                     <Chakra.Text
                         noOfLines={0}
                         padding={0}
@@ -164,10 +206,10 @@ export default function MangaPopularElement(props: {
                                                             </React.Suspense>
                                                         )
                                                     },
-                                                    p(node){
-                                                        return(
+                                                    p(node) {
+                                                        return (
                                                             <Chakra.Text
-                                                                noOfLines={3}
+                                                                noOfLines={1}
                                                                 marginBottom={"1px"}
                                                                 fontSize={"md"}
                                                             >
@@ -189,7 +231,7 @@ export default function MangaPopularElement(props: {
                             )
                         )
                     }
-                    <Chakra.Heading fontFamily={"inherit"} size={"md"} marginTop={5} fontFamily={"inherit"}>
+                    <Chakra.Heading fontFamily={"inherit"} size={"md"} marginTop={5}>
                         {
                             !is_Author_artists_finished() ? (
                                 <Placeholder md={6}></Placeholder>

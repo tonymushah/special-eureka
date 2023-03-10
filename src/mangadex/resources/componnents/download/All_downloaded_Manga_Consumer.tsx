@@ -130,6 +130,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                         <Chakra.Spinner />
                     </Chakra.Center>
                 }
+                query_options={props.query_options}
             >{
                 (value) => (
                     <Consumer<Array<string>> to_consume={value.get_data()}>

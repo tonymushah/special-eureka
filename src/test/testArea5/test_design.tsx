@@ -27,6 +27,7 @@ import { Author_Artists, ContentRating, make_first_UpperCare, Status } from "@ma
 import { Author } from "@mangadex/api/structures/Author";
 import { getMangaDexPath } from "@mangadex";
 import MangaPopularElementByMangaId from "@mangadex/resources/componnents/mangas/v1/MangadexPopularElement/ById";
+import RecentlyPopular from "@/mangadex/pages/Home/PopularTitles";
 
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
 const queryClient = new QueryClient()
@@ -69,21 +70,7 @@ test_area.render(
                     </Chakra.Box>
                 )}
             >
-                <AllDownlaodedMangaConsumer>
-                    {(ids) => (
-                        <Swiper
-                            navigation={true}
-                            keyboard={true}
-                            modules={[Navigation, Keyboard]}
-                        >
-                            {ids.map((id) => (
-                                <SwiperSlide>
-                                    <MangaPopularElementByMangaId mangaID={id} />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    )}
-                </AllDownlaodedMangaConsumer>
+                <RecentlyPopular/>
             </HTTPClientProvider_Query>
         </QueryClientProvider>
     </Chakra.ChakraProvider>
