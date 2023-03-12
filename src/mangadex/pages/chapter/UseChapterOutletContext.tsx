@@ -24,6 +24,6 @@ export default function useChapterPageOutletContext(): ChapterPage_outlet_contex
     });
     return {
         images: images,
-        data: data.chapter
+        chapter: data.chapter
     };
 }

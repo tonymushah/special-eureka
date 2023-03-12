@@ -23,7 +23,7 @@
     "check-src-tauri": "cd src-tauri && cargo check",
     "dev": "tauri dev",
     "build": "tauri build",
-    "generate-website" : "nx generate special-eureka-nx:generate-website"
+    "generate-website": "nx generate special-eureka-nx:generate-website"
   },
   "devDependencies": {
     "@nrwl/devkit": "15.8.1",
@@ -72,6 +72,9 @@
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@fullcalendar/core": "^6.1.4",
+    "@fullcalendar/daygrid": "^6.1.4",
+    "@fullcalendar/react": "^6.1.4",
     "@mui/material": "^5.11.8",
     "@nrwl/nx-plugin": "^15.8.1",
     "@popperjs/core": "^2.11.6",
