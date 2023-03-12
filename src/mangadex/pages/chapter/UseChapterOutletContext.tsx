@@ -1,7 +1,9 @@
+import { Chapter } from "@mangadex/api/structures/Chapter";
 import { useOutletContext } from "react-router-dom";
 
 type ChapterPage_outlet_context = {
     images: Array<string>
+    chapter : Chapter
 }
 
 function getLastInURL(my_url: string) {
@@ -21,6 +23,7 @@ export default function useChapterPageOutletContext(): ChapterPage_outlet_contex
         return 0;
     });
     return {
-        images: images
+        images: images,
+        data: data.chapter
     };
 }

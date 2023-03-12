@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { ExtLink } from "../../../commons-res/components/ExtLink";
 import Tauri_Updater from "../../resources/components/Tauri_updater_button";
 import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "../../resources/hooks/UpdaterQuery";
+import { appWindow } from "@tauri-apps/api/window";
 
 export default function InstallUpdate() {
     const shouldUpdate = TauriCheckUpdateQuery({
@@ -13,8 +14,10 @@ export default function InstallUpdate() {
     const installUpdate = useTauriInstallUpdate({
         withoutToast: true
     })
+    appWindow.setTitle("Checking updates... | Dashboard").then()
     if (shouldUpdate.query.isSuccess) {
         if (shouldUpdate.query.data.shouldUpdate == false) {
+            appWindow.setTitle("No update required | Dashboard").then()
             return (
                 <Box>
                     <Container>
@@ -24,6 +27,7 @@ export default function InstallUpdate() {
                 </Box>
             );
         } else {
+            appWindow.setTitle(`Special Eureka ${shouldUpdate.query.data.manifest?.version} is available | Dashboard`).then()
             return (
                 <Box>
                     <Container>
@@ -33,7 +37,7 @@ export default function InstallUpdate() {
                         <ReactMarkdown
                             children={shouldUpdate.query.data.manifest ? shouldUpdate.query.data.manifest.body : ""}
                             components={{
-                                a(node, href, ...props) {
+                                a(node) {
                                     return (
                                         <React.Suspense
                                             fallback={<Skeleton width={"10px"} height={"10px"} />}

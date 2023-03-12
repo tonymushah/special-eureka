@@ -1,4 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
+import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Container, Nav } from "react-bootstrap";
 import { useQuery, useQueryClient } from "react-query";
@@ -32,6 +33,7 @@ export default function MangaPage() {
         "staleTime": Infinity
     });
     if (query.isLoading) {
+        appWindow.setTitle("Loading... | Mangadex");
         return (
             <Chakra.AbsoluteCenter>
                 <Chakra.Spinner />
@@ -39,12 +41,14 @@ export default function MangaPage() {
         );
     }
     if (query.isError) {
+        appWindow.setTitle(`Error on loading title ${id!} | Mangadex`);
         return (
             <ErrorEL1 error={query.error} />
         )
     }
     return (
-        <>
+        
+        <React.Fragment>
             <Download_Manga_withHotkeys
                 mangaID={id!}
             />
@@ -97,7 +101,7 @@ export default function MangaPage() {
                     </Container>
                 </Chakra.Box>
             </Manga_Page>
-        </>
+        </React.Fragment>
 
     )
 }

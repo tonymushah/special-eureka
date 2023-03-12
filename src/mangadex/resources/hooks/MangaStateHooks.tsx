@@ -15,7 +15,6 @@ export function useMangaDownload(props: {
         position: "bottom-right",
         duration: 9000
     });
-    const toastID = React.useRef<ToastId>();
     const queryClient = useQueryClient();
     const key = "mdx-manga:" + props.mangaID;
     const download_ = useMutation({
@@ -44,7 +43,7 @@ export function useMangaDownload(props: {
                 queryKey: key
             })
         },
-        onError(error, variables, context) {
+        onError(error) {
             toast({
                 title: "Error on downloading manga",
                 description: JSON.stringify(error),
@@ -94,7 +93,7 @@ export function useMangaDelete(props: {
                 queryKey: key
             })
         },
-        onError(error: any, variables, context) {
+        onError(error: any) {
             updateToast({
                 title: "Error on deleting manga",
                 status: "error",

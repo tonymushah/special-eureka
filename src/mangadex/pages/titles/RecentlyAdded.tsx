@@ -6,6 +6,7 @@ import { Manga } from "../../api/structures/Manga";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense } from "../..";
 import { Container } from "react-bootstrap";
+import { appWindow } from "@tauri-apps/api/window";
 
 const MangaList = React.lazy(() => import("../../resources/componnents/mangas/v1/MangaList"));
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
@@ -16,6 +17,7 @@ export default function RecentlyAdded() {
     offset_limit.set_limits(25);
     const client = useHTTPClient();
     const queryKey = "mdx-recently-added";
+    appWindow.setTitle("Recently Added | Mangadex");
     return (
         <Mangadex_suspense>
             <IsPingable
