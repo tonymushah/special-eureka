@@ -71,6 +71,7 @@ export default function MangaVerticalElement(props: {
                                 size={"md"}
                                 noOfLines={2}
                                 margin={"15px"}
+                                fontFamily={"inherit"}
                             >
                                 <TryCatch catch={() => (
                                     <Chakra.LinkOverlay>

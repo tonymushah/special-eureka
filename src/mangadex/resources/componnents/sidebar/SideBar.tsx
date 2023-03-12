@@ -66,10 +66,10 @@ export default function Side_bar() {
                     }
                 }}
                 rootStyles={{
-                    maxHeight : "80vh",
+                    maxHeight: "80vh",
                     height: "80vh",
-                    overflowY : "scroll",
-                    overflowX : "hidden"
+                    overflowY: "scroll",
+                    overflowX: "hidden"
                 }}
             >
 
@@ -102,19 +102,26 @@ export default function Side_bar() {
                             }
                         }}
                     >
-                        <MenuItem
-                            component={
-                                <Link
-                                    to={MangaDexPath + "download"}
-                                />
-                            }
-                        >
-                            Offline Library
-                        </MenuItem>
-                        <MenuItem>Updates</MenuItem>
-                        <MenuItem> Online Library</MenuItem>
-                        <MenuItem>MDLists</MenuItem>
-                        <MenuItem>Followed Groups</MenuItem>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>Updates</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>Online Library</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>MDLists</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>Followed Groups</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
                     </Menu>
                 </SubMenu>
                 <MenuItem
@@ -159,16 +166,21 @@ export default function Side_bar() {
                                 />
                             }
                         >
-                            Advanced Search
+                            Offline Library
                         </MenuItem>
+                        <Chakra.Tooltip placement="right" hasArrow label={"Will available in the next update"}>
+                            <MenuItem>
+                                <s>Advanced Search</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
                         <MenuItem
                             component={
-                                <Link to={MangaDexPath + "titles/recently-added"}/>
+                                <Link to={MangaDexPath + "titles/recently-added"} />
                             }
                         >Recently Added</MenuItem>
                         <MenuItem
                             component={
-                                <Link to={MangaDexPath + "titles/latest-updates"}/>
+                                <Link to={MangaDexPath + "titles/latest-updates"} />
                             }
                         >Latest Updates</MenuItem>
                         <MenuItem
@@ -177,6 +189,13 @@ export default function Side_bar() {
                             }
                         >
                             Random
+                        </MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "titles/recently-popular"} />
+                            }
+                        >
+                            Recently Popular
                         </MenuItem>
                     </Menu>
                 </SubMenu>
@@ -192,11 +211,11 @@ export default function Side_bar() {
                         }}
                     >
                         <ExtLink href="https://forums.mangadex.org/">
-                            <MenuItem 
-                                icon={<FaComments/>}
+                            <MenuItem
+                                icon={<FaComments />}
                                 suffix={<ChakraIcons.ExternalLinkIcon />}
                             >
-                                Forums 
+                                Forums
                             </MenuItem>
                         </ExtLink>
                         <MenuItem
@@ -220,7 +239,7 @@ export default function Side_bar() {
                         }}
                     >
                         <ExtLink href="https://api.mangadex.org">
-                            <MenuItem 
+                            <MenuItem
                                 icon={<img id="tauri_icon" src={mangadex_logo} />}
                                 suffix={<ChakraIcons.ExternalLinkIcon />}
                             >
@@ -248,11 +267,13 @@ export default function Side_bar() {
                         <FaUser />
                     }
                     suffix={
-                        <Chakra.Button
-                            colorScheme={"facebook"}
-                        >
-                            Login
-                        </Chakra.Button>
+                        <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>
+                            <Chakra.Button
+                                colorScheme={"facebook"}
+                            >
+                                <s>Login</s>
+                            </Chakra.Button>
+                        </Chakra.Tooltip>
                     }
                 >
                     Guest

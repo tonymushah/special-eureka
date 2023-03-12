@@ -70,7 +70,7 @@ export default function Chapter_Element1(props: {
                     <Chakra.Box
                     >
 
-                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
+                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                             <TryCatch
                                 catch={() => (
                                     <>Chapter {props.chapter.get_chapter()} {

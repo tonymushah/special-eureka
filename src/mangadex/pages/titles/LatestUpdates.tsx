@@ -9,6 +9,7 @@ import { Chapter } from "../../api/structures/Chapter";
 import { CollectionComponnent_WithQuery } from "../../resources/componnents/Collection/Collection";
 import MangaFallback2 from "../../resources/componnents/mangas/v1/MangaElement2Fallback";
 import { Container } from "react-bootstrap";
+import { appWindow } from "@tauri-apps/api/window";
 
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"))
@@ -19,6 +20,7 @@ export default function LatestUpdates() {
     offset_limit.set_limits(25);
     const client = useHTTPClient();
     const queryKey = "mdx-latest-updates";
+    appWindow.setTitle(`Latest Updates | Mangadex`);
     return (
         <Container>
             <Mangadex_suspense>

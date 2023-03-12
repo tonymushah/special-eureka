@@ -1,42 +1,43 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { Accordion, Overlay, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse, Placeholder } from "react-bootstrap";
-import { make_first_UpperCare, MangaLinksData } from "../../../../../api/internal/Utils";
+import { Button, Row } from "react-bootstrap";
 import { ExtLink } from "../../../../../../commons-res/components/ExtLink";
-type LinkButtonProps = { 
+import { make_first_UpperCare } from "../../../../../api/internal/Utils";
+type LinkButtonProps = {
     title: string,
     href: string
 };
-export function LinkButton(props: LinkButtonProps){
+export function LinkButton(props: LinkButtonProps) {
     return (
         <ExtLink href={props.href}>
-            <Button className="m-1 mdP-bout" variant="dark" size="sm">{props.title}</Button>
+            <Button style={{
+                fontWeight: "800"
+            }} className="m-1" variant="dark" size="sm">{props.title}</Button>
         </ExtLink>
     );
 }
 
 type LinksRowProps = {
-    src : any,
+    src: any,
     title: "Read or Buy" | "Track";
 }
 export class LinksRow extends React.Component<LinksRowProps>{
     private to_use: any;
     private title: string;
-    constructor(props : LinksRowProps){
+    constructor(props: LinksRowProps) {
         super(props);
         this.to_use = this.props.src;
         this.title = this.props.title;
     }
-    public build_LinkButtons(): Array<React.ReactNode>{
-        let returns : Array<React.ReactNode> = [];
+    public build_LinkButtons(): Array<React.ReactNode> {
+        let returns: Array<React.ReactNode> = [];
         let index = 0;
         for (const key in this.to_use) {
             if (Object.prototype.hasOwnProperty.call(this.to_use, key)) {
                 const element = this.to_use[key];
-                if(element == null){
+                if (element == null) {
                     continue
-                }else{
-                    returns[index] = (<LinkButton title={key} href={element}/>)
+                } else {
+                    returns[index] = (<LinkButton title={key} href={element} />)
                     index = index + 1;
                 }
             }
@@ -44,8 +45,8 @@ export class LinksRow extends React.Component<LinksRowProps>{
         return returns;
     }
     render(): React.ReactNode {
-        let LinksButtons : Array<React.ReactNode> = this.build_LinkButtons()
-        if(LinksButtons.length != 0){
+        let LinksButtons: Array<React.ReactNode> = this.build_LinkButtons()
+        if (LinksButtons.length != 0) {
             return (
                 <Row>
                     <h5>{make_first_UpperCare(this.title)}</h5>
@@ -54,7 +55,7 @@ export class LinksRow extends React.Component<LinksRowProps>{
                     </div>
                 </Row>
             )
-        }else{
+        } else {
             return (<></>);
         }
     }

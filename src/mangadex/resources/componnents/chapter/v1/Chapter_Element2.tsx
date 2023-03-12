@@ -81,7 +81,7 @@ export default function Chapter_Element2(props: {
                         </Chakra.Center>
                     </Col>
                     <Col xs={10}>
-                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
+                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                             <TryCatch
                                 catch={() => (
                                     <Chakra.LinkOverlay

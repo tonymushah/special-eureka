@@ -89,7 +89,7 @@ export default function Group_Details(props: {
                     </Col>
                     <Col xs={9}>
                         <Chakra.Box>
-                            <Chakra.Heading size={"md"}>Where to find</Chakra.Heading>
+                            <Chakra.Heading fontFamily={"inherit"} size={"md"}>Where to find</Chakra.Heading>
                             <React.Suspense>
                                 {
                                     props.src.get_website() !== undefined && props.src.get_website() !== null ? (
@@ -192,7 +192,7 @@ export default function Group_Details(props: {
                                     <></>
                                 ) : (
                                     <Chakra.Box>
-                                        <Chakra.Heading size={"md"}>Group description</Chakra.Heading>
+                                        <Chakra.Heading fontFamily={"inherit"} size={"md"}>Group description</Chakra.Heading>
                                         <Chakra.Box>
                                             <React.Suspense
                                                 fallback={<Chakra.Box

@@ -1,4 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
+import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
@@ -19,8 +20,9 @@ export default function Chapter_Page() {
     const { query } = get_ChapterbyId({
         id: id!
     });
-
+    appWindow.setTitle(`Loading... | Mangadex`).then()
     if (query.isError) {
+        appWindow.setTitle(`Error on loading chapter ${id!} | Mangadex`).then()
         return (
             <ErrorEL1 error={query.error} />
         )

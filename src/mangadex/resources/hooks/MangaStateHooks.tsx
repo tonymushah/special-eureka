@@ -15,7 +15,6 @@ export function useMangaDownload(props: {
         position: "bottom-right",
         duration: 9000
     });
-    const toastID = React.useRef<ToastId>();
     const queryClient = useQueryClient();
     const key = "mdx-manga:" + props.mangaID;
     const download_ = useMutation({
@@ -44,7 +43,7 @@ export function useMangaDownload(props: {
                 queryKey: key
             })
         },
-        onError(error, variables, context) {
+        onError(error) {
             toast({
                 title: "Error on downloading manga",
                 description: JSON.stringify(error),
@@ -94,7 +93,7 @@ export function useMangaDelete(props: {
                 queryKey: key
             })
         },
-        onError(error: any, variables, context) {
+        onError(error: any) {
             updateToast({
                 title: "Error on deleting manga",
                 status: "error",
@@ -257,5 +256,32 @@ export function get_manga_description(props: {
     return {
         manga_description_query,
         manga_description_querykey
+    }
+}
+
+export function get_manga_page_cover_art_image(props: {
+    src : Manga,
+    isThumbail? : boolean,
+    scale? : 256 | 512
+}) {
+    const client = useHTTPClient();
+    const query_key = "mdx-manga-" + props.src.get_id() + "-cover-art-image";
+    const query = useQuery<string>(query_key, async () => {
+        const data = (await props.src.get_cover_art(client));
+        if(props.isThumbail == true) {
+            if(props.scale == 512) {
+                return await data.get_CoverImage_thumbnail_promise(512, client);
+            }else{
+                return await data.get_CoverImage_thumbnail_promise(256, client);
+            }
+        }else{
+            return await data.get_CoverImage_promise(client);
+        }
+    }, {
+        staleTime: 1000 * 60 * 5
+    })
+    return {
+        query_key,
+        query
     }
 }

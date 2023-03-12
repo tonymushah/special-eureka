@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 //import MangaList from "../../mangadex/api/tsx/MangaList";
 //import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as Chakra from "@chakra-ui/react";
@@ -19,6 +19,7 @@ import WaveHaikei from "./wave-haikei-1.svg";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 import { Client } from "@tauri-apps/api/http";
 import TryCatch from "../../../../commons-res/components/TryCatch";
+import { appWindow } from "@tauri-apps/api/window";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
 const Group_Details = React.lazy(() => import("./Group_Details"));
@@ -69,6 +70,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
     src: Group
 }>) {
     const client = useHTTPClient();
+    appWindow.setTitle(`${props.src.get_name()} | Mangadex`).then()
     return (
         <Chakra.Box>
             <Chakra.Box
@@ -80,7 +82,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
             >
                 <Chakra.Center height={"full"}>
                     <Chakra.Box textAlign={"center"}>
-                        <Chakra.Heading>{props.src.get_name()}</Chakra.Heading>
+                        <Chakra.Heading fontFamily={"inherit"}>{props.src.get_name()}</Chakra.Heading>
                         <React.Suspense
                             fallback={
                                 <Chakra.Text>Loading...</Chakra.Text>
@@ -93,7 +95,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                 onSuccess={(query) => (
                                     <TryCatch
                                         catch={(error) => (
-                                            <Chakra.Heading fontSize={"lg"}>Leader : None</Chakra.Heading>
+                                            <Chakra.Heading fontSize={"lg"} fontFamily={"inherit"}>Leader : None</Chakra.Heading>
                                         )}
                                     >
                                         <Leader_query_for_GroupPage

@@ -985,3 +985,7 @@ export function get_MangaChapter_Accordions_byChapterArray(to_use : Array<Chapte
         return instance;
     })
 }
+
+export function formatDate(mydate: Date): string{
+    return mydate.toJSON().split('.')[0]
+}

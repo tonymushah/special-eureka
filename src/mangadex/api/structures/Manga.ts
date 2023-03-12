@@ -17,6 +17,8 @@ import AllDownloadedChap_Of_aMangaCollection from "./CollectionTypes/AllDownload
 import AllDownloadedCover_Of_aMangaCollection from "./CollectionTypes/AllDownloadedCover_Of_aMangaCollection";
 import MangaSearch_withAllIncludes from "./SearchType/MangaSearch_withAllIncludes";
 import Manga_withAllIncludes_Collection from "./CollectionTypes/Manga_withAllIncludes_Collection";
+import { download_all_manga_covers, download_manga, download_manga_cover, patch_all_manga_cover, refetch_all_manga } from "@mangadex/plugin"
+
 
 export class Manga extends Attribute{
     protected static request_a: string = "manga/";
@@ -944,12 +946,7 @@ export class Manga extends Attribute{
     }
     public static async download_manga(mangaID: string, client?: Client) : Promise<Manga>{
         if(await DeskApiRequest.ping(client) == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga", { mangaId : mangaID });
-            let response_Json : {
-                result : string,
-                type : string,
-                id : string
-            } = JSON.parse(response);
+            let response_Json = await download_manga(mangaID);
             return await Manga.getOfflineMangaByID(response_Json.id);
         }else{
             throw new Error("The offline server isn't started");
@@ -957,13 +954,7 @@ export class Manga extends Attribute{
     }
     public static async download_all_manga_covers(mangaID: string, client? : Client) : Promise<Array<string>>{
         if(await DeskApiRequest.ping(client) == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_covers", { mangaId : mangaID });
-            let response_Json : {
-                result : string,
-                type : string,
-                id : string,
-                downloaded : Array<string>
-            } = JSON.parse(response);
+            let response_Json = await download_all_manga_covers(mangaID);
             return response_Json.downloaded;
         }else{
             throw new Error("The offline server isn't started");
@@ -971,13 +962,7 @@ export class Manga extends Attribute{
     }
     public static async download_manga_cover(mangaID : string, client? : Client) : Promise<Cover>{
         if(await DeskApiRequest.ping(client) == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|download_manga_cover", { mangaId : mangaID });
-            let response_Json : {
-                result : string,
-                type : string,
-                id : string,
-                downloaded : string
-            } = JSON.parse(response);
+            let response_Json = await download_manga_cover(mangaID);
             return Cover.getAOfflineCover(response_Json.downloaded);
         }else{
             throw new Error("The offline server isn't started");
@@ -997,9 +982,7 @@ export class Manga extends Attribute{
     }
     public static async patch_all_manga_cover(client? : Client): Promise<Array<string>>{
         if(await DeskApiRequest.ping(client) == true){
-
-            let response = await invoke<string>("plugin:mangadex-desktop-api|patch_all_manga_cover");
-            let response_Json : any = JSON.parse(response);
+            let response_Json = await patch_all_manga_cover();
             return response_Json.data;
         }else{
             throw new Error("The offline server isn't started");
@@ -1024,8 +1007,7 @@ export class Manga extends Attribute{
     }
     public static async refetch_all_manga(client? : Client) : Promise<Array<string>>{
         if(await DeskApiRequest.ping(client) == true){
-            let response = await invoke<string>("plugin:mangadex-desktop-api|refetch_all_manga");
-            let response_Json : any = JSON.parse(response);
+            let response_Json : any = await refetch_all_manga();
             return response_Json.data;
         }else{
             throw new Error("The offline server isn't started");
@@ -1286,6 +1268,8 @@ export class Manga_with_allRelationship extends Manga {
         } catch (error) {}
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
+            let manga_rel = new Attribute(instance.get_id(), "manga");
+            instance.$cover.set_relationships([manga_rel])
         } catch (error) {}
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
@@ -1304,7 +1288,7 @@ export class Manga_with_allRelationship extends Manga {
             resolve(this.$artists);
         });
     }
-    public get_cover_art(): Promise<Cover> {
+    public async get_cover_art(client? : Client): Promise<Cover> {
         return new Promise((resolve, reject) => {
             resolve(this.$cover);
         });
@@ -1458,6 +1442,8 @@ export class Manga_with_allRelationship extends Manga {
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Manga_with_allRelationship.build_any(data[index]);
         }
+        console.log("search finished");
+        console.log(getted);
         return new Manga_withAllIncludes_Collection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, 
             {
             offset_Limits : offset_Limits,

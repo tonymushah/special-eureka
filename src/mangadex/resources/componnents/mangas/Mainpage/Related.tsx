@@ -1,12 +1,9 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import * as ChakraIcons from "@chakra-ui/icons";
-import { Manga } from "../../../../api/structures/Manga";
-import { make_first_UpperCare, Manga_related } from "../../../../api/internal/Utils";
+import React from "react";
 import { Await } from "react-router-dom";
-import { ErrorELAsync, ErrorELAsync1 } from "../../Error_cmp";
-import { MangaSimpleEl } from "../MangaSimpleEl";
-import MangaElementDef_wRelated from "../v1/MangaElementDef_WRelated";
+import { make_first_UpperCare, Manga_related } from "../../../../api/internal/Utils";
+import { Manga } from "../../../../api/structures/Manga";
+import { ErrorELAsync1 } from "../../Error_cmp";
 import MangaElementDef from "../v1/MangaElementDef";
 
 type RelatedProps = {
@@ -23,7 +20,7 @@ export function MangaRelated_Section(props: {
     }else{
         return (
             <Chakra.Box>
-                <Chakra.Heading>{make_first_UpperCare(props.enum)}</Chakra.Heading>
+                <Chakra.Heading fontFamily={"inherit"}>{make_first_UpperCare(props.enum)}</Chakra.Heading>
                 <Chakra.Box>
                     <React.Suspense
                         fallback={

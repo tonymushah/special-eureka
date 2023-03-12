@@ -72,11 +72,11 @@ export default function MangaElementDef2_withChildren(props: React.PropsWithChil
                         <Chakra.HStack spacing={"5px"}>
                             <TryCatch
                                 catch={() => (
-                                    <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
+                                    <Chakra.Heading fontFamily={"inherit"} marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 )}
                             >
                                 <Link to={MangaDexPath + "/manga/" + props.src.get_id()}>
-                                    <Chakra.Heading marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
+                                    <Chakra.Heading fontFamily={"inherit"} marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 </Link>
                             </TryCatch>
                         </Chakra.HStack>

@@ -466,7 +466,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                             </Chakra.Box>
                                             <Chakra.Divider />
                                             <Row>
-                                                <Chakra.Heading size={"lg"}>
+                                                <Chakra.Heading size={"lg"} fontFamily={"inherit"}>
                                                     Uploaded by
                                                 </Chakra.Heading>
                                                 <Chakra.Box>
