@@ -1,34 +1,14 @@
+import TryCatch from "@/commons-res/components/TryCatch";
 import * as Chakra from "@chakra-ui/react";
+import HTTPClientProvider_Query from "@commons-res/components/HTTPClientProvider_Query";
 import { getClient } from "@tauri-apps/api/http";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { Composition } from "remotion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import HTTPClientProvider_Query from "@commons-res/components/HTTPClientProvider_Query";
-import TryCatch from "@commons-res/components/TryCatch";
-import Api_Request from "../../mangadex/api/offline/DeskApiRequest";
-import { Manga } from "@mangadex/api/structures/Manga";
-import "swiper/css/bundle"
-import AllDownlaodedMangaConsumer from "@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer";
-import MangaElementDef_wID from "@mangadex/resources/componnents/mangas/v1/MangaElementDef_wID";
-import { FreeMode, Keyboard, Navigation } from "swiper"
-import App from "./dnd/App";
-import { get_manga_byId, get_manga_description, get_manga_page_authors_artists, get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
-import { CardBody, Heading } from "@chakra-ui/react";
-import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
-import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
-import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
-import { ExtLink } from "@commons-res/components/ExtLink";
-import { Button, Placeholder } from "react-bootstrap";
-import { Author_Artists, ContentRating, make_first_UpperCare, Status } from "@mangadex/api/internal/Utils";
-import { Author } from "@mangadex/api/structures/Author";
-import { getMangaDexPath } from "@mangadex";
-import MangaPopularElementByMangaId from "@mangadex/resources/componnents/mangas/v1/MangadexPopularElement/ById";
-import RecentlyPopular from "@/mangadex/pages/Home/PopularTitles";
+import "swiper/css/bundle";
 
+const SelectLanguage = React.lazy(() => import("@mangadex/resources/componnents/userOption/SelectLanguages"))
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
 const queryClient = new QueryClient()
 
@@ -70,7 +50,22 @@ test_area.render(
                     </Chakra.Box>
                 )}
             >
-                <RecentlyPopular/>
+                <TryCatch
+                    catch={(error) => (
+                        <Chakra.Alert status="error">
+                            <Chakra.AlertIcon />
+                            <Chakra.AlertTitle>{error.name}</Chakra.AlertTitle>
+                            <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+                        </Chakra.Alert>
+                    )}
+                >
+                    <React.Suspense fallback={
+                        <Chakra.Spinner/>
+                    }>
+                        <SelectLanguage />
+                    </React.Suspense>
+                </TryCatch>
+
             </HTTPClientProvider_Query>
         </QueryClientProvider>
     </Chakra.ChakraProvider>

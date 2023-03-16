@@ -2,7 +2,7 @@ import React from "react";
 import "flag-icons/css/flag-icons.min.css";
 import { Box, Icon, BoxProps } from "@chakra-ui/react";
 
-class Flag_icons_props{
+type Flag_icons_props = {
     locale : string;
 }
 
