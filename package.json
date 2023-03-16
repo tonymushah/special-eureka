@@ -133,6 +133,8 @@
     "swiper": "^9.0.4",
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
+    "tauri-plugin-upload-api": "github:tauri-apps/tauri-plugin-upload",
+    "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket",
     "tauri-settings": "^0.1.2",
     "tsconfig-paths": "^3.14.2",
     "tslib": "^2.3.0",

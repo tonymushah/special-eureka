@@ -1,6 +1,6 @@
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
 const HTTPClientProvider = React.lazy(() => import("./HTTPClientProvider"));
 
@@ -15,14 +15,21 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
     }, {
         staleTime: Infinity,
         cacheTime: 0,
-        retry(failureCount, error) {
+        retry(failureCount) {
             if (failureCount >= 3) {
                 return false;
             } else {
                 return true;
             }
-        }
+        },
     })
+    React.useEffect(() => {
+        return () => {
+            if(query.data != undefined){
+                query.data.drop()
+            }
+        }
+    }, [query.data])
     if (query.isSuccess == true) {
         if (props.children == undefined) {
             return (<></>)
@@ -35,13 +42,13 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
                         </>
                     }
                 >
-                <HTTPClientProvider
-                    value={query.data}
-                >
-                    {
-                        props.children
-                    }
-                </HTTPClientProvider>
+                    <HTTPClientProvider
+                        value={query.data}
+                    >
+                        {
+                            props.children
+                        }
+                    </HTTPClientProvider>
                 </React.Suspense>
             );
         }

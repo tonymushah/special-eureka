@@ -1,4 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
+import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
 import React from 'react';
@@ -9,7 +10,6 @@ import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
 import { ErrorELRouter } from './resources/componnents/Error_cmp';
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
-import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 
 const MangaDexPath: string = "/mangadex";
 
@@ -17,11 +17,11 @@ export function getMangaDexPath() {
     return MangaDexPath
 };
 
-export function getProjectPath(){
+export function getProjectPath() {
     return getMangaDexPath()
 }
 
-export function getLogo(){
+export function getLogo() {
     return MangadexLogo
 }
 
@@ -63,9 +63,9 @@ const IsPingable_default_client = React.lazy(() => import("./resources/componnen
 
 const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
 
-const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
-
 const RecentlyPopularPage = React.lazy(() => import("@mangadex/pages/titles/RecentlyPopular"));
+
+const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"));
 
 export function Mangadex_suspense__() {
     return (
@@ -104,33 +104,18 @@ function useMangadexRouter(): RouteObject {
         element: (
             <MyErrorBounderies>
                 <Mangadex_suspense>
-                    <NavigatorReactRouter>
+                    <BasicWebsitesRessources>
                         <ProSidebarProvider>
-                            <React.Suspense
-                                fallback={
-                                    <Chakra.Box
-                                        width={"100%"}
-                                        height={"100vh"}
-                                    >
-                                        <Chakra.AbsoluteCenter>
-                                            <Chakra.Spinner
-                                                size="xl"
-                                                color='orange.500'
-                                                thickness='4px'
-                                            />
-                                        </Chakra.AbsoluteCenter>
-                                    </Chakra.Box>
-                                }
-                            >
+                            <Mangadex_suspense>
                                 <Content>
                                     <Outlet />
                                 </Content>
-                            </React.Suspense>
+                            </Mangadex_suspense>
                         </ProSidebarProvider>
-                    </NavigatorReactRouter>
+                    </BasicWebsitesRessources>
                 </Mangadex_suspense>
-
             </MyErrorBounderies>
+
         ),
         errorElement: (<ErrorELRouter />),
         children: [
@@ -333,10 +318,10 @@ function useMangadexRouter(): RouteObject {
                         )
                     },
                     {
-                        path : "recently-popular",
+                        path: "recently-popular",
                         element: (
                             <Mangadex_suspense>
-                                <RecentlyPopularPage/>
+                                <RecentlyPopularPage />
                             </Mangadex_suspense>
                         )
                     }

@@ -1,6 +1,6 @@
 import * as Chakra from '@chakra-ui/react';
 import React from "react";
-import { Aggregate } from "../../../../../api/structures/Aggregate";
+import { Aggregate } from "@mangadex/api/structures/Aggregate";
 import { Aggregate_box, Aggregate_box_reverse } from "../aggregate/Aggregate_box";
 
 export default function Aggregate_part(props: {

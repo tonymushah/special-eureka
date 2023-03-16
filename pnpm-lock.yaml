@@ -97,6 +97,8 @@ specifiers:
   swiper: ^9.0.4
   tauri-plugin-log-api: github:tauri-apps/tauri-plugin-log#dev
   tauri-plugin-store-api: github:tauri-apps/tauri-plugin-store#dev
+  tauri-plugin-upload-api: github:tauri-apps/tauri-plugin-upload
+  tauri-plugin-websocket-api: github:tauri-apps/tauri-plugin-websocket
   tauri-settings: ^0.1.2
   ts-jest: ^29.0.5
   ts-node: 10.9.1
@@ -187,6 +189,8 @@ dependencies:
   swiper: 9.0.4
   tauri-plugin-log-api: github.com/tauri-apps/tauri-plugin-log/05a9bfd9edb9b5f4ab95412bb607691708b65a25
   tauri-plugin-store-api: github.com/tauri-apps/tauri-plugin-store/201639d72bc8c4dec6f40ff7c02162c7926bfa3d
+  tauri-plugin-upload-api: github.com/tauri-apps/tauri-plugin-upload/483a46c5df6a4ef3918726fa22e3f5df29c54aef
+  tauri-plugin-websocket-api: github.com/tauri-apps/tauri-plugin-websocket/ee8a3465278043d8bfa09f5d79fd9f23bf2a5aa9
   tauri-settings: 0.1.2
   tsconfig-paths: 3.14.2
   tslib: 2.5.0
@@ -12198,6 +12202,22 @@ packages:
   github.com/tauri-apps/tauri-plugin-store/201639d72bc8c4dec6f40ff7c02162c7926bfa3d:
     resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/201639d72bc8c4dec6f40ff7c02162c7926bfa3d}
     name: tauri-plugin-store-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.2.0
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-upload/483a46c5df6a4ef3918726fa22e3f5df29c54aef:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-upload/tar.gz/483a46c5df6a4ef3918726fa22e3f5df29c54aef}
+    name: tauri-plugin-upload-api
+    version: 0.0.0
+    dependencies:
+      '@tauri-apps/api': 1.2.0
+    dev: false
+
+  github.com/tauri-apps/tauri-plugin-websocket/ee8a3465278043d8bfa09f5d79fd9f23bf2a5aa9:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/ee8a3465278043d8bfa09f5d79fd9f23bf2a5aa9}
+    name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:
       '@tauri-apps/api': 1.2.0

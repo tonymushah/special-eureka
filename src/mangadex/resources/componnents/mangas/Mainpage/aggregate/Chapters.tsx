@@ -25,7 +25,7 @@ function Chapters_Element(props: Chapters_ElementProps) {
                         {props.headersTitle}
                     </Alert.Link>
                 </Col>
-                <Collapse in={open}>
+                <Collapse in={open} unmountOnExit>
                     <div id={"ch-" + rand}>
                         {props.children}
                     </div>

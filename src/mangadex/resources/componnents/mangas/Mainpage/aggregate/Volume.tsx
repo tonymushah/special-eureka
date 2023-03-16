@@ -14,7 +14,7 @@ export function Volume_(props: Volume_Props) {
     return (
         <Chakra.AccordionItem
         >
-            {({ isExpanded }) => (
+            {({ isExpanded, isDisabled }) => (
                 <React.Fragment>
                     <h2>
                         <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
@@ -30,7 +30,7 @@ export function Volume_(props: Volume_Props) {
                         }}
                     >
                         {
-                            isExpanded == true ? (
+                            isExpanded == true && isDisabled == false ? (
                                 <>
                                     <Row>
                                         <>
@@ -46,7 +46,6 @@ export function Volume_(props: Volume_Props) {
                                 <></>
                             )
                         }
-
                     </Chakra.AccordionPanel>
                 </React.Fragment>
             )}
@@ -59,7 +58,7 @@ export function Volume__reverse(props: Volume_Props) {
     return (
         <Chakra.AccordionItem
         >
-            {({ isExpanded }) => (
+            {({ isExpanded , isDisabled }) => (
                 <React.Fragment>
                     <h2>
                         <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
@@ -75,7 +74,7 @@ export function Volume__reverse(props: Volume_Props) {
                         }}
                     >
                         {
-                            isExpanded == true ? (
+                            isExpanded == true && isDisabled == false ? (
                                 <>
                                     <Row>
                                         <>
