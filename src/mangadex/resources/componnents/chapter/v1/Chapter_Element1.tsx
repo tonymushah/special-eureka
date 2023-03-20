@@ -9,6 +9,7 @@ import TryCatch from "../../../../../commons-res/components/TryCatch";
 import { Chapter } from "../../../../api/structures/Chapter";
 import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "../../../hooks/ChapterStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
+import Flag_icons from "../../FlagIcons";
 const ChapterDownloadButton = React.lazy(() => import("./ChapterDownloadButton"));
 const MangaDexPath = getMangaDexPath();
 
@@ -46,7 +47,7 @@ export default function Chapter_Element1(props: {
                                     hasArrow
                                     label={this_chapter_lang_query.data.get_name()}
                                 >
-                                    <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
+                                    <Flag_icons locale={this_chapter_lang_query.data.get_flag_icon().toLowerCase()}/>
                                 </Chakra.Tooltip>
                             ) : (
                                 this_chapter_lang_query.isError ? (
