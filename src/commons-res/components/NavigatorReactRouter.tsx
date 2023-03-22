@@ -46,7 +46,7 @@ export default function NavigatorReactRouter_(props: React.PropsWithChildren) {
                                         src={value.icon}
                                         width={"20px"}
                                     />
-                                }>{value.name}</Button>
+                                } key={value.name}>{value.name}</Button>
                             ))
                         }
                     </ModalBody>

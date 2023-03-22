@@ -1,5 +1,4 @@
 import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Response } from "@tauri-apps/api/http";
-import console from "console";
 import { Api_RequestERROR } from "../internal/Api_Request";
 
 export default class Api_Request{

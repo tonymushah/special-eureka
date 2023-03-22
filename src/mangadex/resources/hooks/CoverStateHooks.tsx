@@ -37,9 +37,7 @@ export function get_cover_art_image(props : {
         }else{
             return props.src.get_CoverImage_thumbnail_promise(props.size != undefined? props.size : 256, client);
         }
-    }, props.query_options == undefined? {
-        staleTime: 1000 * 60 * 5
-    } : props.query_options);
+    }, props.query_options == undefined? undefined : props.query_options);
     return {
         cover_image_query,
         cover_image_querykey

@@ -265,7 +265,6 @@ export class Manga extends Attribute{
     }
     // [x] get the manga cover
     public async get_cover_art(client? : Client): Promise<Cover>{
-        console.log("debug2");
         try {
             let rel = await this.get_cover_art_id_();
             let data = await Cover.getById(rel, client);
@@ -290,7 +289,6 @@ export class Manga extends Attribute{
         return this.get_some_relationship("cover_art")[0].get_id();
     }
     public get_cover_art_id() : string{
-        console.log("dsadsa");
         if(this.get_relationships() == undefined){
             throw new Error("Relationship are undefined");
         }
@@ -1101,7 +1099,7 @@ export class Manga_2 extends Manga{
             tags
         );
         //instance.set_relationships_Wany(relationships);
-        console.log("debug4");
+
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.contentRating);
@@ -1132,7 +1130,6 @@ export class Manga_2 extends Manga{
             }
     }
     public async get_cover_art(client? : Client): Promise<Cover>{
-        console.log("debug3");
         if((await DeskApiRequest.ping(client)) == true){
             try {
                 return await Manga.getOfflineMangaCover(this.get_id(), client);
@@ -1442,8 +1439,6 @@ export class Manga_with_allRelationship extends Manga {
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Manga_with_allRelationship.build_any(data[index]);
         }
-        console.log("search finished");
-        console.log(getted);
         return new Manga_withAllIncludes_Collection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, 
             {
             offset_Limits : offset_Limits,

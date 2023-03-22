@@ -1,28 +1,11 @@
-import React, { useState } from "react";
-import Viewer from 'react-viewer';
-import ReactDOM from "react-dom/client";
-import { Api_Request, Api_RequestERROR } from "../../../../api/internal/Api_Request"
-import AccordionBody from "react-bootstrap/esm/AccordionBody";
-import { Body } from "@tauri-apps/api/http";
-import { Manga } from "../../../../api/structures/Manga";
-import { Accordion, Tabs, Tab, Overlay, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse, Placeholder } from "react-bootstrap";
-import * as FontAwesome from "@fortawesome/react-fontawesome";
-import { Alt_title, Author_Artists, Lang_and_Data, Languages, Lang, make_first_UpperCare, Offset_limits } from "../../../../api/internal/Utils";
-import { Cover } from "../../../../api/structures/Cover";
-import CardHeader from "react-bootstrap/esm/CardHeader";
-import { Author } from "../../../../api/structures/Author";
-import { Cover_Image_, Cover_Image_2 } from "../Mainpage/Image_";
 import * as Chakra from "@chakra-ui/react";
-import { Volume_ } from "./aggregate/Volume";
-import "flag-icons/css/flag-icons.min.css";
-import { Await } from "react-router-dom";
-import { TagRow, TagButton } from "../Mainpage/boutons/tag_boutons";
-import { Tag } from "../../../../api/structures/Tag";
-import { AuthorCol } from "./boutons/author_boutons";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import React from "react";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
+import { Cover } from "@mangadex/api/structures/Cover";
+import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
 import CoverImage from "../../covers/v1/CoverImage";
-import { Skeleton } from "@chakra-ui/react";
 
 const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
 
@@ -48,7 +31,7 @@ export function Covers_Manga(props: MangaPageProps) {
             }}
             queryKey={queryKey}
             query_options={{
-                staleTime: 1000 * 60 * 5
+                staleTime: 1000 * 60 * 30
             }}
             onLoading={
                 <Chakra.Box

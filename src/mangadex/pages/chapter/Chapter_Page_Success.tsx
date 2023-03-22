@@ -76,16 +76,11 @@ export default function Chapter_Page_Success(props: {
     const chapter_groups = get_chapter_groups({
         chapter: props.data
     });
+    React.useEffect(() => {
+        history.addChapter(props.data!.get_id())
+    }, [props.data])
     return (
         <React.Fragment>
-            <React.Suspense>
-                <Await
-                    resolve={history.addChapter(props.data!.get_id())}
-                    errorElement={<></>}
-                >
-                    <></>
-                </Await>
-            </React.Suspense>
             <HotkeysProvider>
                 <Download_Chapter_withHotkeys
                     chap_id={props.data.get_id()}

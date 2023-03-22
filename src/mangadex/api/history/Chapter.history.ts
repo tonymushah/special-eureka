@@ -16,6 +16,7 @@ export default class Chapter_history extends Store{
         }];
         current.push(...last_history!);
         await this.set("history", current);
+        this.getChapters().then(console.log);
     }
     public async getChapters() : Promise<Array<HistoryInput>>{
         let last_history : Array<HistoryInput> | null = await this.get<Array<HistoryInput>>("history");
