@@ -8,6 +8,6 @@ type Flag_icons_props = {
 
 export default function Flag_icons(props: Flag_icons_props){
     return (
-        <Box className={"fi fi-" + props.locale.toLowerCase()}></Box>
+        <Box as={"span"} className={"fi fi-" + props.locale.toLowerCase()}></Box>
     )
 }

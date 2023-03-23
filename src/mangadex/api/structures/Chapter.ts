@@ -474,6 +474,19 @@ export class Chapter extends Attribute {
     public async download_this_data_saver(client?: Client): Promise<Array<string>> {
         return await Chapter.download_data_saver(this.get_id(), client);
     }
+    public static async delete_a_downloaded_chapter(id: string, client?: Client){
+        if(await DeskApiRequest.ping(client) == true){
+            await DeskApiRequest.delete_methods(`chapter/${id}`, {
+                
+            }, client);
+        }else{
+            throw new Error("Can't ping the offline server");
+            
+        }
+    }
+    public async delete(client? : Client){
+        await Chapter.delete_a_downloaded_chapter(this.get_id(), client);
+    }
 }
 export class Chapters {
     private name: string;

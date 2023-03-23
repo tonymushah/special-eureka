@@ -8,7 +8,8 @@ import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import SideBarUserOption from "./useroption";
-import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import { RiGroupLine } from "react-icons/ri"
+
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
 const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Badge_with_Server_Icon"));
@@ -200,7 +201,7 @@ export default function Side_bar() {
                         </MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<i onClick={() => collapseSidebar()} className={"far fa-users"}></i>} label={"Community"}>
+                <SubMenu defaultOpen={false} icon={<RiGroupLine onClick={() => collapseSidebar()}/>} label={"Community"}>
                     <Menu
                         menuItemStyles={{
                             button: {
