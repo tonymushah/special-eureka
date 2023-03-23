@@ -1,11 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Cover } from "../../../../api/structures/Cover";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import { useQuery } from "react-query";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import get_cover_art_byId from "../../../hooks/CoverStateHooks";
+import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
 
 const CoverImage = React.lazy(() => import("./CoverImage"));
 

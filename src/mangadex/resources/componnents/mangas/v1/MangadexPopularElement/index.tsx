@@ -180,6 +180,8 @@ export default function MangaPopularElement(props: {
                                     <></>
                                 ) : (
                                     <Chakra.Box
+                                        maxH={"200px"}
+                                        overflowY={"scroll"}
                                     >
                                         <TryCatch
                                             catch={(e) => (
@@ -207,15 +209,7 @@ export default function MangaPopularElement(props: {
                                                         )
                                                     },
                                                     p(node) {
-                                                        return (
-                                                            <Chakra.Text
-                                                                noOfLines={1}
-                                                                marginBottom={"1px"}
-                                                                fontSize={"md"}
-                                                            >
-                                                                {node.children}
-                                                            </Chakra.Text>
-                                                        )
+                                                        return (<Chakra.Text m={0}>{node.children}</Chakra.Text>)
                                                     }
                                                 }}
                                             />

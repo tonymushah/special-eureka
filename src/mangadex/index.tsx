@@ -1,15 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
+import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
 import React from 'react';
-import { ProSidebarProvider } from "react-pro-sidebar";
-import { Outlet, RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import "../commons-res/fontawesome-free-6.1.2-web/css/all.css";
 import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
 import { ErrorELRouter } from './resources/componnents/Error_cmp';
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
-import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 
 const MangaDexPath: string = "/mangadex";
 
@@ -17,11 +16,11 @@ export function getMangaDexPath() {
     return MangaDexPath
 };
 
-export function getProjectPath(){
+export function getProjectPath() {
     return getMangaDexPath()
 }
 
-export function getLogo(){
+export function getLogo() {
     return MangadexLogo
 }
 
@@ -45,8 +44,6 @@ const Longstrip = React.lazy(() => import('./pages/ChapterReadingMode/Longstrip'
 
 const Widestrip = React.lazy(() => import('./pages/ChapterReadingMode/Widestrip'));
 
-const Content = React.lazy(() => import("./resources/componnents/SideBar"));
-
 const SinglePage = React.lazy(() => import("./pages/ChapterReadingMode/SwipperMode"));
 
 const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
@@ -63,9 +60,9 @@ const IsPingable_default_client = React.lazy(() => import("./resources/componnen
 
 const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
 
-const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
-
 const RecentlyPopularPage = React.lazy(() => import("@mangadex/pages/titles/RecentlyPopular"));
+
+const MangadexLayout = React.lazy(() => import("@mangadex/pages/Layout"));
 
 export function Mangadex_suspense__() {
     return (
@@ -102,35 +99,9 @@ function useMangadexRouter(): RouteObject {
     const Router: RouteObject = {
         path: MangaDexPath,
         element: (
-            <MyErrorBounderies>
-                <Mangadex_suspense>
-                    <NavigatorReactRouter>
-                        <ProSidebarProvider>
-                            <React.Suspense
-                                fallback={
-                                    <Chakra.Box
-                                        width={"100%"}
-                                        height={"100vh"}
-                                    >
-                                        <Chakra.AbsoluteCenter>
-                                            <Chakra.Spinner
-                                                size="xl"
-                                                color='orange.500'
-                                                thickness='4px'
-                                            />
-                                        </Chakra.AbsoluteCenter>
-                                    </Chakra.Box>
-                                }
-                            >
-                                <Content>
-                                    <Outlet />
-                                </Content>
-                            </React.Suspense>
-                        </ProSidebarProvider>
-                    </NavigatorReactRouter>
-                </Mangadex_suspense>
-
-            </MyErrorBounderies>
+            <Mangadex_suspense>
+                <MangadexLayout />
+            </Mangadex_suspense>
         ),
         errorElement: (<ErrorELRouter />),
         children: [
@@ -333,10 +304,10 @@ function useMangadexRouter(): RouteObject {
                         )
                     },
                     {
-                        path : "recently-popular",
+                        path: "recently-popular",
                         element: (
                             <Mangadex_suspense>
-                                <RecentlyPopularPage/>
+                                <RecentlyPopularPage />
                             </Mangadex_suspense>
                         )
                     }

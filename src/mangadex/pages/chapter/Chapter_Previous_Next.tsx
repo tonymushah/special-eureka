@@ -1,11 +1,9 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { useQuery } from "react-query";
 import { Await, Link } from "react-router-dom";
 import { getMangaDexPath } from "../..";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Aggregate } from "../../api/structures/Aggregate";
 import { Chapter } from "../../api/structures/Chapter";
 import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
 import { get_aggregate_query } from "../../resources/hooks/AgreggateStateHooks";
@@ -19,7 +17,7 @@ export default function Chapter_Previous_Next(props: {
     const {query} = get_aggregate_query({
         aggregate_options : props.src.getAggregateList_options(client),
         queryOption : {
-            staleTime: 1000 * 60 * 10
+            staleTime: 1000 * 60 * 30
         }
     });
     const chapter_aggregate_query = query

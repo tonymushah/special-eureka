@@ -59,7 +59,7 @@
         "renameFile": true,
         "exists": true,
         "scope": [
-          "$APP/dist/*"
+          "$APP/**"
         ]
       },
       "path": {

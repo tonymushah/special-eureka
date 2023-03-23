@@ -277,8 +277,6 @@ export function get_manga_page_cover_art_image(props: {
         }else{
             return await data.get_CoverImage_promise(client);
         }
-    }, {
-        staleTime: 1000 * 60 * 5
     })
     return {
         query_key,

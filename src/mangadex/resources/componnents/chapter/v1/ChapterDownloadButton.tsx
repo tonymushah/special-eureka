@@ -30,85 +30,90 @@ export default function ChapterDownloadButton(props: {
             ]
         })
     }
-    return (
-        <React.Fragment>
-            {
-                downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                    query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                        query.isSuccess ? (
-                            query.data.isDownloaded ? (
-                                query.data.hasFailed == true ? (
-                                    <Chakra.HStack>
-                                        <Chakra.Tooltip
-                                            label="Some images are missing"
-                                        >
-                                            <ChakraIcon.WarningIcon
-                                                color={"orange"}
-                                                _hover={{
-                                                    color: "orange.500"
-                                                }}
-                                                onClick={() => {
-                                                    downloadMutation?.mutate()
-                                                }}
-                                            />
-                                        </Chakra.Tooltip>
-                                        <Chakra.Tooltip
-                                            label="Delete Chapter"
-                                        >
-                                            <ChakraIcon.DeleteIcon
-                                                color={"red.500"}
-                                                _hover={{
-                                                    color: "red"
-                                                }}
-                                                onClick={() => {
-                                                    deleteMutation?.mutate()
-                                                }}
-                                            />
-                                        </Chakra.Tooltip>
-                                    </Chakra.HStack>
-                                ) : (
-                                    <Chakra.HStack>
-                                        <Chakra.Tooltip
-                                            label="Downloaded Chapter"
-                                        >
-                                            <ChakraIcon.CheckIcon
-                                                color={"green.500"}
-                                                _hover={{
-                                                    color: "green"
-                                                }}
-                                                onClick={() => {
-                                                    downloadMutation?.mutate()
-                                                }}
-                                            />
-                                        </Chakra.Tooltip>
-                                        <Chakra.Tooltip
-                                            label="Delete Chapter"
-                                        >
-                                            <ChakraIcon.DeleteIcon
-                                                color={"red.500"}
-                                                _hover={{
-                                                    color: "red"
-                                                }}
-                                                onClick={() => {
-                                                    deleteMutation?.mutate()
-                                                }}
-                                            />
-                                        </Chakra.Tooltip>
-                                    </Chakra.HStack>
-                                )
-                            ) : (
-                                <ChakraIcon.DownloadIcon _hover={{
-                                    color: "blue"
-                                }} onClick={() => {
+    if (downloadMutation?.isLoading) {
+        return (<Chakra.Spinner size={"md"} />);
+    } else {
+        if (query.isSuccess) {
+            if (query.data.isDownloaded == true) {
+                if (query.data.hasFailed == true) {
+                    return (<Chakra.HStack>
+                        <Chakra.Tooltip
+                            label="Some images are missing"
+                        >
+                            <ChakraIcon.WarningIcon
+                                color={"orange"}
+                                _hover={{
+                                    color: "orange.500"
+                                }}
+                                onClick={() => {
                                     downloadMutation?.mutate()
-                                }} />
-                            )
-                        ) : (
-                            <ChakraIcon.WarningIcon />
-                        )
-                    )
+                                }}
+                            />
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip
+                            label="Delete Chapter"
+                        >
+                            <ChakraIcon.DeleteIcon
+                                color={"red.500"}
+                                _hover={{
+                                    color: "red"
+                                }}
+                                onClick={() => {
+                                    deleteMutation?.mutate()
+                                }}
+                            />
+                        </Chakra.Tooltip>
+                    </Chakra.HStack>
+                    );
+                } else {
+                    return (
+                        <Chakra.HStack>
+                            <Chakra.Tooltip
+                                label="Downloaded Chapter"
+                            >
+                                <ChakraIcon.CheckIcon
+                                    color={"green.500"}
+                                    _hover={{
+                                        color: "green"
+                                    }}
+                                    onClick={() => {
+                                        downloadMutation?.mutate()
+                                    }}
+                                />
+                            </Chakra.Tooltip>
+                            <Chakra.Tooltip
+                                label="Delete Chapter"
+                            >
+                                <ChakraIcon.DeleteIcon
+                                    color={"red.500"}
+                                    _hover={{
+                                        color: "red"
+                                    }}
+                                    onClick={() => {
+                                        deleteMutation?.mutate()
+                                    }}
+                                />
+                            </Chakra.Tooltip>
+                        </Chakra.HStack>
+                    );
+                }
+            } else {
+                return (
+                    <ChakraIcon.DownloadIcon _hover={{
+                        color: "blue"
+                    }} onClick={() => {
+                        downloadMutation?.mutate()
+                    }} />
                 )
             }
-        </React.Fragment>
-    )
+        } else if (query.isLoading) {
+            return (
+                <Chakra.Spinner size={"md"} />
+            )
+        }else{
+            return (
+                <Chakra.Spinner size={"md"} />
+            );
+        }
+    }
 }

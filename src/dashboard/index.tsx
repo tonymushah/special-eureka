@@ -9,7 +9,7 @@ const Home = React.lazy(() => import("./pages/home/index"));
 
 const ToDevModal = React.lazy(() => import("./resources/components/ToDevModal"))
 
-const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
+const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"))
 
 const Updates = React.lazy(() => import("./pages/updates/index"));
 
@@ -47,7 +47,7 @@ function DashboardRouter(): RouteObject {
                 }
             >
                 <ToDevModal/>
-                <NavigatorReactRouter>
+                <BasicWebsitesRessources>
                     <React.Suspense
                         fallback={
                             <Chakra.Box
@@ -69,7 +69,7 @@ function DashboardRouter(): RouteObject {
                             <Outlet />
                         </React.Fragment>
                     </React.Suspense>
-                </NavigatorReactRouter>
+                </BasicWebsitesRessources>
             </React.Suspense>
         ),
         children: [

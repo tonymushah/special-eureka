@@ -4,7 +4,8 @@ import react from "@vitejs/plugin-react-swc"
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import progress from "vite-plugin-progress";
 import { resolve } from 'path';
-import { ViteAliases } from 'vite-aliases'
+import { ViteAliases } from 'vite-aliases';
+import VitePluginLegacy from "@vitejs/plugin-legacy";
 //import ReactInspector from 'vite-plugin-react-inspector'
 
 /*function getPathSrc(){
@@ -17,21 +18,25 @@ export default defineConfig({
   clearScreen: false,
   plugins: [
     //ReactInspector(),
-    progress(),
+    //progress(),
     ViteAliases({
       "dir" : "src",
       useConfig : true,
       useTypescript : true,
       "useIndexes" : true
     }),
-    react(),
+    react({
+      "tsDecorators" : true
+    }),
     remarkRehypePlugin({
-    })
+    }),
+    //splitVendorChunkPlugin()
   ],
   envPrefix: ['VITE_', 'TAURI_'],
   server: {
     port: 9305,
-    strictPort: true
+    strictPort: true,
+    open: false,
   },
   build: {
     // Tauri supports es2021
@@ -45,9 +50,9 @@ export default defineConfig({
       input : {
         main : resolve(__dirname, "src/index.html"),
         splashscreen : resolve(__dirname, "src/splashscreen.html")
-      }
+      },
     }
   },
   root: "./src",
-  publicDir : "./public",
+  publicDir : "./public"
 })

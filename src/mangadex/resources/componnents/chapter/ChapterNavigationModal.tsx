@@ -1,17 +1,12 @@
-import React from "react";
-import { Chapter, Chapters } from "../../../api/structures/Chapter";
 import * as Chakra from "@chakra-ui/react";
-import Hotkeys from "react-hot-keys"
-import { Await } from "react-router-dom";
-import { ErrorELAsync1 } from "../Error_cmp";
-import { Aggregate } from "../../../api/structures/Aggregate";
-import Chapter_Element1_byChapID from "./v1/Chapter_Element1_byChapID";
-import { Manga } from "../../../api/structures/Manga";
+import React from "react";
+import Hotkeys from "react-hot-keys";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import IsPingable from "../IsPingable";
-import { useQuery } from "react-query";
-import ErrorEL1 from "../error/ErrorEL1";
+import { Chapter } from "../../../api/structures/Chapter";
 import { get_aggregate_query } from "../../hooks/AgreggateStateHooks";
+import ErrorEL1 from "../error/ErrorEL1";
+import IsPingable from "../IsPingable";
+import Chapter_Element1_byChapID from "./v1/Chapter_Element1_byChapID";
 
 const All_downloaded_Chapter_manga = React.lazy(() => import("../download/All_downloaded_Chapter_manga"));
 
@@ -22,7 +17,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
     const { query } = get_aggregate_query({
         aggregate_options : props.chapter.getAggregateList_options(client),
         queryOption : {
-            staleTime : 1000 * 60 * 2
+            staleTime : 1000 * 60 * 30
         }
     });
     if (query.isRefetching == true) {

@@ -171,6 +171,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             })
         },
     });
+
     if (next.isLoading || previous.isLoading) {
         return (
             <Box>

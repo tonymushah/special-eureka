@@ -15,7 +15,7 @@ export default function CurrentlySupportedWebsites() {
         <Wrap spacing={"10px"}>
             {
                 websites.map((value) => (
-                    <WrapItem>
+                    <WrapItem key={value.name}>
                         <Website_Componnent
                             to_use={value}
                         />
