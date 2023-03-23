@@ -23,50 +23,51 @@ export default function ChapterDownloadButton(props: {
         <>
             {
                 downloadMutation?.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                    query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
-                        query.isSuccess ? (
-                            query.data.isDownloaded ? ( 
-                                query.data.hasFailed == true ? (
-                                    <Chakra.Tooltip
-                                        label="Some images are missing"
-                                    >
-                                        <ChakraIcon.WarningIcon
-                                            color={"orange"}
-                                            _hover={{
-                                                color: "orange.500"
-                                            }}
-                                            onClick={() => {
-                                                downloadMutation?.mutate()
-                                            }}
-                                        />
-                                    </Chakra.Tooltip>
-                                ) : (
-                                    <Chakra.Tooltip
-                                        label="Downloaded Chapter"
-                                    >
-                                        <ChakraIcon.CheckIcon
-                                            color={"green.500"}
-                                            _hover={{
-                                                color: "green"
-                                            }}
-                                            onClick={() => {
-                                                downloadMutation?.mutate()
-                                            }}
-                                        />
-                                    </Chakra.Tooltip>
-                                )
+                    query.isSuccess ? (
+                        query.data.isDownloaded ? (
+                            query.data.hasFailed == true ? (
+                                <Chakra.Tooltip
+                                    label="Some images are missing"
+                                >
+                                    <ChakraIcon.WarningIcon
+                                        color={"orange"}
+                                        _hover={{
+                                            color: "orange.500"
+                                        }}
+                                        onClick={() => {
+                                            downloadMutation?.mutate()
+                                        }}
+                                    />
+                                </Chakra.Tooltip>
                             ) : (
-                                <ChakraIcon.DownloadIcon _hover={{
-                                    color: "blue"
-                                }} onClick={() => {
-                                    downloadMutation?.mutate()
-                                }} />
+                                <Chakra.Tooltip
+                                    label="Downloaded Chapter"
+                                >
+                                    <ChakraIcon.CheckIcon
+                                        color={"green.500"}
+                                        _hover={{
+                                            color: "green"
+                                        }}
+                                        onClick={() => {
+                                            downloadMutation?.mutate()
+                                        }}
+                                    />
+                                </Chakra.Tooltip>
                             )
                         ) : (
+                            <ChakraIcon.DownloadIcon _hover={{
+                                color: "blue"
+                            }} onClick={() => {
+                                downloadMutation?.mutate()
+                            }} />
+                        )
+                    ) : (
+                        query.isLoading ? (<Chakra.Spinner size={"md"} />) : (
                             <ChakraIcon.WarningIcon />
                         )
                     )
                 )
-            }</>
+            }
+        </>
     )
 }

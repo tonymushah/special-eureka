@@ -10,6 +10,7 @@ export default function SelectLanguages() {
     if (query.isSuccess) {
         return (
             <React.Fragment>
+                <Chakra.Box width={"full"}>
                 <Chakra.Box color={"black"} onClick={onToggle}>
                     {
                         query.data.length == 0 ? (
@@ -46,7 +47,8 @@ export default function SelectLanguages() {
                                                 handleInput(lang);
                                             }}
                                         >
-                                            <Chakra.Checkbox isChecked={isIn(lang)}>
+                                            <Chakra.Checkbox isChecked={isIn(lang)}
+                                            >
                                                 <Chakra.HStack spacing={"5px"}>
                                                     {
                                                         lang.get_flag_icon() !== undefined ? (
@@ -72,9 +74,10 @@ export default function SelectLanguages() {
                         </Chakra.Collapse>
                     )}
                 </LangConsumer>
+                </Chakra.Box>
             </React.Fragment>
         )
     } else {
-        return (<Chakra.Heading fontFamily={"inherit"}>Loading...</Chakra.Heading>)
+        return (<Chakra.Tag fontFamily={"inherit"}>Loading...</Chakra.Tag>)
     }
 }

@@ -3,8 +3,7 @@ import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f1071
 import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
 import React from 'react';
-import { ProSidebarProvider } from "react-pro-sidebar";
-import { Outlet, RouteObject } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import "../commons-res/fontawesome-free-6.1.2-web/css/all.css";
 import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
 import { ErrorELRouter } from './resources/componnents/Error_cmp';
@@ -45,8 +44,6 @@ const Longstrip = React.lazy(() => import('./pages/ChapterReadingMode/Longstrip'
 
 const Widestrip = React.lazy(() => import('./pages/ChapterReadingMode/Widestrip'));
 
-const Content = React.lazy(() => import("./resources/componnents/SideBar"));
-
 const SinglePage = React.lazy(() => import("./pages/ChapterReadingMode/SwipperMode"));
 
 const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
@@ -65,7 +62,7 @@ const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
 
 const RecentlyPopularPage = React.lazy(() => import("@mangadex/pages/titles/RecentlyPopular"));
 
-const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"));
+const MangadexLayout = React.lazy(() => import("@mangadex/pages/Layout"));
 
 export function Mangadex_suspense__() {
     return (
@@ -102,20 +99,9 @@ function useMangadexRouter(): RouteObject {
     const Router: RouteObject = {
         path: MangaDexPath,
         element: (
-            <MyErrorBounderies>
-                <Mangadex_suspense>
-                    <BasicWebsitesRessources>
-                        <ProSidebarProvider>
-                            <Mangadex_suspense>
-                                <Content>
-                                    <Outlet />
-                                </Content>
-                            </Mangadex_suspense>
-                        </ProSidebarProvider>
-                    </BasicWebsitesRessources>
-                </Mangadex_suspense>
-            </MyErrorBounderies>
-
+            <Mangadex_suspense>
+                <MangadexLayout />
+            </Mangadex_suspense>
         ),
         errorElement: (<ErrorELRouter />),
         children: [

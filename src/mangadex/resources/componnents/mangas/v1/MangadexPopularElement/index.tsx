@@ -120,7 +120,6 @@ export default function MangaPopularElement(props: {
             backgroundSize={"cover"}
             backgroundPosition={"0px -400px"}
             minW={"md"}
-            height={"sm"}
             margin={5}
         >
             <Chakra.Card
@@ -181,7 +180,7 @@ export default function MangaPopularElement(props: {
                                     <></>
                                 ) : (
                                     <Chakra.Box
-                                        height={"sm"}
+                                        maxH={"200px"}
                                         overflowY={"scroll"}
                                     >
                                         <TryCatch
@@ -208,6 +207,9 @@ export default function MangaPopularElement(props: {
                                                                 }
                                                             </React.Suspense>
                                                         )
+                                                    },
+                                                    p(node) {
+                                                        return (<Chakra.Text m={0}>{node.children}</Chakra.Text>)
                                                     }
                                                 }}
                                             />
