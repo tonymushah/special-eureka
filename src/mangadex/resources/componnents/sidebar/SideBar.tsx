@@ -9,6 +9,7 @@ import { getMangaDexPath } from "@mangadex";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import SideBarUserOption from "./useroption";
 import { RiGroupLine } from "react-icons/ri"
+import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 

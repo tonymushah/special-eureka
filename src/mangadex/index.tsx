@@ -2,26 +2,26 @@ import * as Chakra from "@chakra-ui/react";
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
-import React from 'react';
+import React from "react";
 import { RouteObject } from "react-router-dom";
 import "../commons-res/fontawesome-free-6.1.2-web/css/all.css";
 import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
-import { ErrorELRouter } from './resources/componnents/Error_cmp';
+import { ErrorELRouter } from "./resources/componnents/Error_cmp";
 import "./resources/css/basic-styles.css";
 import "./resources/Poppins/Poppins.css";
 
-const MangaDexPath: string = "/mangadex";
+const MangaDexPath = "/mangadex";
 
 export function getMangaDexPath() {
-    return MangaDexPath
-};
+    return MangaDexPath;
+}
 
 export function getProjectPath() {
-    return getMangaDexPath()
+    return getMangaDexPath();
 }
 
 export function getLogo() {
-    return MangadexLogo
+    return MangadexLogo;
 }
 
 const MangaPage = React.lazy(() => import("./pages/manga/index"));
@@ -32,17 +32,17 @@ const Covers_ = React.lazy(() => import("./pages/manga/Covers_"));
 
 const Related_ = React.lazy(() => import("./pages/manga/Related_"));
 
-const DownloadsLaoyut = React.lazy(() => import('./pages/download/layout'));
+const DownloadsLaoyut = React.lazy(() => import("./pages/download/layout"));
 
-const Download_Index_Page = React.lazy(() => import('./pages/download'));
+const Download_Index_Page = React.lazy(() => import("./pages/download"));
 
-const Chapter_Page = React.lazy(() => import('./pages/chapter/Chapter_Page'));
+const Chapter_Page = React.lazy(() => import("./pages/chapter/Chapter_Page"));
 
 const Home = React.lazy(() => import("./pages/Home/Home"));
 
-const Longstrip = React.lazy(() => import('./pages/ChapterReadingMode/Longstrip'));
+const Longstrip = React.lazy(() => import("./pages/ChapterReadingMode/Longstrip"));
 
-const Widestrip = React.lazy(() => import('./pages/ChapterReadingMode/Widestrip'));
+const Widestrip = React.lazy(() => import("./pages/ChapterReadingMode/Widestrip"));
 
 const SinglePage = React.lazy(() => import("./pages/ChapterReadingMode/SwipperMode"));
 
@@ -78,7 +78,7 @@ export function Mangadex_suspense__() {
                 />
             </Chakra.Center>
         </Chakra.Box>
-    )
+    );
 }
 
 export function Mangadex_suspense(props: React.PropsWithChildren) {
@@ -339,7 +339,7 @@ function useMangadexRouter(): RouteObject {
                 ]
             }
         ]
-    }
+    };
 
     return Router;
 }

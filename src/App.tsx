@@ -11,22 +11,34 @@ const Router = React.lazy(() => import("./router"));
 export default function App() {
     return (
         <Chakra.Box
-            fontFamily={"Poppins"}
+            fontFamily="Poppins"
         >
             <TryCatch
                 catch={(error: Error) => (
                     <Chakra.Box
-                        width={"full"}
-                        height={"100vh"}
+                        height="100vh"
+                        width="full"
                     >
                         <Chakra.AbsoluteCenter>
-                            <Chakra.Box textAlign={"center"}>
-                                <Chakra.Heading>Error on loading the app</Chakra.Heading>
-                                <Chakra.Text>Error Details</Chakra.Text>
+                            <Chakra.Box textAlign="center">
+                                <Chakra.Heading>
+                                    Error on loading the app
+                                </Chakra.Heading>
+
+                                <Chakra.Text>
+                                    Error Details
+                                </Chakra.Text>
+
                                 <Chakra.Alert status="error">
                                     <Chakra.AlertIcon />
-                                    <Chakra.AlertTitle>{error.name}</Chakra.AlertTitle>
-                                    <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+
+                                    <Chakra.AlertTitle>
+                                        {error.name}
+                                    </Chakra.AlertTitle>
+
+                                    <Chakra.AlertDescription>
+                                        {error.message}
+                                    </Chakra.AlertDescription>
                                 </Chakra.Alert>
                             </Chakra.Box>
                         </Chakra.AbsoluteCenter>
@@ -36,11 +48,14 @@ export default function App() {
 
                 <React.Suspense
                     fallback={
-                        <Chakra.Box width={"100%"} height={"100vh"}>
+                        <Chakra.Box
+                            height="100vh"
+                            width="100%"
+                        >
                             <Chakra.AbsoluteCenter>
                                 <Chakra.Spinner
-                                    size="xl"
                                     color='orange.500'
+                                    size="xl"
                                     thickness='4px'
                                 />
                             </Chakra.AbsoluteCenter>
@@ -51,6 +66,7 @@ export default function App() {
                 </React.Suspense>
 
             </TryCatch>
+
             <React.Suspense>
                 <Close_splashscreen />
             </React.Suspense>

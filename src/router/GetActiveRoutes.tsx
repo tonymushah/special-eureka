@@ -7,14 +7,14 @@ import Dashboard from "@dashboard";
 export default function Route_Objects(props: {
     additional_routes?: RouteObject[]
 }) {
-    let data = [
+    const data = [
         Mangadex,
         Dashboard
     ];
     if (props.additional_routes != undefined) {
         props.additional_routes.forEach((value) => {
             data.push(value);
-        })
+        });
     }
     const router = createBrowserRouter(data);
     return (
@@ -35,6 +35,6 @@ export default function Route_Objects(props: {
                 </Chakra.Box>
             }
         />
-    )
+    );
 
 }

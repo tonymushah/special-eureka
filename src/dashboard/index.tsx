@@ -7,14 +7,14 @@ const DashboardNavBar = React.lazy(() => import("./resources/components/DashBoar
 
 const Home = React.lazy(() => import("./pages/home/index"));
 
-const ToDevModal = React.lazy(() => import("./resources/components/ToDevModal"))
+const ToDevModal = React.lazy(() => import("./resources/components/ToDevModal"));
 
-const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"))
+const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"));
 
 const Updates = React.lazy(() => import("./pages/updates/index"));
 
 export function getDashboardPath() {
-    return "/dashboard"
+    return "/dashboard";
 }
 
 export function getLogo() {
@@ -22,7 +22,7 @@ export function getLogo() {
 }
 
 export function getProjectPath(){
-    return getDashboardPath()
+    return getDashboardPath();
 }
 
 
@@ -119,8 +119,8 @@ function DashboardRouter(): RouteObject {
                     </React.Suspense>)
             }
         ]
-    }
+    };
     return router;
 }
 
-export default DashboardRouter()
+export default DashboardRouter();
