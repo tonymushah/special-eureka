@@ -4,7 +4,12 @@
     "**/*"
   ],
   "plugins": [
-    "@nrwl/nx"
+    "@nrwl/nx",
+    "react"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/all"
   ],
   "overrides": [
     {
@@ -38,7 +43,9 @@
         "*.tsx"
       ],
       "extends": [
-        "plugin:@nrwl/nx/typescript"
+        "plugin:@nrwl/nx/typescript",
+        "eslint:recommended",
+        "plugin:react/recommended"
       ],
       "rules": {}
     },
@@ -48,7 +55,9 @@
         "*.jsx"
       ],
       "extends": [
-        "plugin:@nrwl/nx/javascript"
+        "plugin:@nrwl/nx/javascript",
+        "eslint:recommended",
+        "plugin:react/recommended"
       ],
       "rules": {}
     },
@@ -69,5 +78,10 @@
       "parser": "jsonc-eslint-parser",
       "rules": {}
     }
-  ]
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
 }
