@@ -5,13 +5,13 @@ import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../../..";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { ContentRating, make_first_UpperCare } from "../../../../api/internal/Utils";
-import { Manga } from "../../../../api/structures/Manga";
-import { Statistics_Manga } from "../../../../api/structures/Statistics";
-import { get_manga_description } from "../../../hooks/MangaStateHooks";
+import { getMangaDexPath } from "@mangadex";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import TryCatch from "@commons-res/components/TryCatch";
+import { ContentRating, make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
+import { get_manga_description } from "@mangadex/resources/hooks/MangaStateHooks";
 import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import ErrorEL1 from "../../error/ErrorEL1";
 import IsPingable from "../../IsPingable";
@@ -101,13 +101,13 @@ function MangaElementDef2_Stats(props: {
                 )
             }
         </React.Fragment>
-    )
+    );
 }
 
 export default function MangaElementDef2(props: {
     src: Manga,
     isRefetching?: boolean,
-    refetch?: Function
+    refetch?: () => void
 }) {
 
     const client = useHTTPClient();
@@ -118,13 +118,13 @@ export default function MangaElementDef2(props: {
     });
     const card_maxHeight: Chakra.ResponsiveValue<any> = {
         base: "10em"
-    }
+    };
     const card_minHeight: Chakra.ResponsiveValue<any> = {
         base: ""
-    }
+    };
     function build_themes_manga(): Array<React.ReactNode> {
         let index = 0;
-        let returns: Array<React.ReactNode> = [];
+        const returns: Array<React.ReactNode> = [];
         if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
             if (props.src.get_ranting() == ContentRating.suggestive()) {
                 returns[index] = (<Chakra.Tag colorScheme={"green"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
@@ -135,7 +135,7 @@ export default function MangaElementDef2(props: {
         }
         for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
             const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Chakra.Tag colorScheme={"gray"}>{element.get_name().en}</Chakra.Tag>)
+            returns[index + index1] = (<Chakra.Tag colorScheme={"gray"}>{element.get_name().en}</Chakra.Tag>);
         }
         return returns;
     }
@@ -243,5 +243,5 @@ export default function MangaElementDef2(props: {
                 </Chakra.Stack>
             </Chakra.Card>
         </MangaContextMenu>
-    )
+    );
 }

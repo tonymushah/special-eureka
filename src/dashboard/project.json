@@ -2,7 +2,7 @@
   "name": "dashboard",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "@dashboard",
+  "sourceRoot": "./src/dashboard",
   "targets": {
     "build": {
       "executor": "special-eureka-nx:build"

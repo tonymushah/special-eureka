@@ -1,13 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
+import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../../..";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Alt_title } from "../../../../api/internal/Utils";
-import { Manga } from "../../../../api/structures/Manga";
-import { get_manga_page_cover } from "../../../hooks/MangaStateHooks";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
-import CoverElementVertical from "../../covers/v1/CoverElementVertical";
+import { getMangaDexPath } from "@mangadex";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Alt_title } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import MangaContextMenu from "./MangaContextMenu";
 
 const MangaDexPath = getMangaDexPath();
@@ -15,12 +14,13 @@ const MangaDexPath = getMangaDexPath();
 export default function MangaVerticalElement(props: {
     src: Manga,
     isRefetching?: boolean,
-    refetch?: Function
+    refetch?: () => void
 }) {
-    let title: string = "";
-    const { coverQuery } = get_manga_page_cover({
-        src : props.src
-    });
+    let title = "";
+    const coverQuery = get_manga_page_cover_art_image({
+        src: props.src,
+        isThumbail: true
+    }).query;
     //let desc: string = "";
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
@@ -62,7 +62,11 @@ export default function MangaVerticalElement(props: {
                         }
                         {
                             coverQuery.isSuccess ? (
-                                <CoverElementVertical src={coverQuery.data} isThumbail />
+                                <Chakra.Image
+                                src={coverQuery.data}
+                                fallbackSrc={Mangadex_placeHolder}
+                                borderTopRadius={"10px"}
+                            />
                             ) : null
                         }
                         <Chakra.Center>
@@ -91,5 +95,5 @@ export default function MangaVerticalElement(props: {
                 </Chakra.Center>
             </Chakra.LinkBox>
         </MangaContextMenu>
-    )
+    );
 }

@@ -1,16 +1,28 @@
 import TryCatch from "@/commons-res/components/TryCatch";
 import * as Chakra from "@chakra-ui/react";
 import HTTPClientProvider_Query from "@commons-res/components/HTTPClientProvider_Query";
+import { User } from "@mangadex/api/structures/User";
+import UserPage from "@mangadex/pages/user";
 import { getClient } from "@tauri-apps/api/http";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import "swiper/css/bundle";
+import monka from "./test-data/user/63849d8f-2eb3-457f-bb90-0e1f7d43588b.json";
 
-const SelectLanguage = React.lazy(() => import("@mangadex/resources/componnents/userOption/SelectLanguages"))
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    "defaultOptions": {
+        "queries": {
+            "staleTime": Infinity
+        }
+    }
+});
+
+const testUser = User.build_wANY(monka.data);
 
 test_area.render(
     <Chakra.ChakraProvider>
@@ -34,7 +46,7 @@ test_area.render(
                         </Chakra.AbsoluteCenter>
                     </Chakra.Box>
                 }
-                onError={(error) => (
+                onError={() => (
                     <Chakra.Box
                         width={"100%"}
                         height={"100vh"}
@@ -60,15 +72,14 @@ test_area.render(
                     )}
                 >
                     <React.Suspense fallback={
-                        <Chakra.Spinner/>
+                        <Chakra.Spinner />
                     }>
-                        <SelectLanguage />
+                        <UserPage user={testUser} />
                     </React.Suspense>
                 </TryCatch>
-
             </HTTPClientProvider_Query>
         </QueryClientProvider>
     </Chakra.ChakraProvider>
-)
+);
 
 

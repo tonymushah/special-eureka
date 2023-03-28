@@ -1,8 +1,8 @@
 import { Chapter } from "../../structures/Chapter";
 
 export default class MangaChapter_Accordion{
-    private mangaid : string;
-    private chapters : Array<Chapter>;
+    private mangaid! : string;
+    private chapters! : Array<Chapter>;
     /**
      * Getter $mangaid
      * @return {string}
@@ -38,7 +38,7 @@ export default class MangaChapter_Accordion{
 
     public constructor(mangaID? : string, chapters? : Array<Chapter>){
         if(mangaID !== undefined){
-            this.$mangaid = mangaID
+            this.$mangaid = mangaID;
         }
         if(chapters !== undefined){
             this.$chapters = chapters;
@@ -64,7 +64,7 @@ export default class MangaChapter_Accordion{
     }
     public isChapterRelated_manga_id(chapter: Chapter) : boolean{
         try {
-            let manga_id = chapter.get_manga_id();
+            const manga_id = chapter.get_manga_id();
             if(manga_id == this.$mangaid){
                 return true;
             }else{

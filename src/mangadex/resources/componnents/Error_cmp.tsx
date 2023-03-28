@@ -1,10 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import * as Chakra from "@chakra-ui/react"
-import { useAsyncError, useRouteError } from 'react-router';
+import * as Chakra from "@chakra-ui/react";
+import { useAsyncError, useRouteError } from "react-router";
 
-export function ErrorELAsync1(props){
-    let error : any = useAsyncError();
+export function ErrorELAsync1(){
+    const error : any = useAsyncError();
     return(
         <Chakra.Alert 
             status="error"
@@ -26,11 +24,11 @@ export function ErrorELAsync1(props){
                 </Chakra.Box>
             </Chakra.AlertDescription>
         </Chakra.Alert>
-    )
+    );
 }
 
-export function ErrorELAsyncWithStack(props){
-    let error : any = useAsyncError();
+export function ErrorELAsyncWithStack(){
+    const error : any = useAsyncError();
     return(
         <Chakra.Alert 
             status="error"
@@ -49,15 +47,15 @@ export function ErrorELAsyncWithStack(props){
                 <Chakra.Box>
                     <Chakra.Text>Message</Chakra.Text>
                     <Chakra.Text>{JSON.stringify(error)}</Chakra.Text>
-                    <Chakra.Text>{error?.stack!}</Chakra.Text>
+                    <Chakra.Text>{error?.stack}</Chakra.Text>
                 </Chakra.Box>
             </Chakra.AlertDescription>
         </Chakra.Alert>
-    )
+    );
 }
 
-export function ErrorELAsync(props){
-    let error : any = useAsyncError();
+export function ErrorELAsync(){
+    const error : any = useAsyncError();
     return(
         <Chakra.Alert 
             status="error"
@@ -81,10 +79,10 @@ export function ErrorELAsync(props){
                 </Chakra.Box>
             </Chakra.AlertDescription>
         </Chakra.Alert>
-    )
+    );
 }
-export function ErrorELRouter(props){
-    let error : any = useRouteError();
+export function ErrorELRouter(){
+    const error : any = useRouteError();
     return(
         <Chakra.Alert 
             status="error"
@@ -112,5 +110,5 @@ export function ErrorELRouter(props){
                 }
             </Chakra.AlertDescription>
         </Chakra.Alert>
-    )
+    );
 }

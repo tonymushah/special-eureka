@@ -12,13 +12,13 @@ export default function Welcome() {
         return getVersion();
     }, {
         staleTime: Infinity
-    })
+    });
     return (
         <Container>
             <Heading size={"2xl"} textAlign={"center"} marginTop={"100px"}>
                 Welcome to Special Eureka
             </Heading>
-            <Heading textAlign={"center"} blendMode={"darken"}>You're currently to version {
+            <Heading textAlign={"center"} blendMode={"darken"}>You&apos;re currently to version {
                 app_version_query.isSuccess ? (
                     <>{app_version_query.data}</>
                 ) : (
@@ -26,7 +26,7 @@ export default function Welcome() {
                 )
             }</Heading>
             <Center>
-                <Stack direction={['column', 'row']} spacing={"4px"}>
+                <Stack direction={["column", "row"]} spacing={"4px"}>
                     <ExtLink
                         href={"https://github.com/tonymushah/special-eureka"}
                     >
@@ -42,5 +42,5 @@ export default function Welcome() {
                 </Stack>
             </Center>
         </Container>
-    )
+    );
 }

@@ -22,7 +22,7 @@ function ThisLoading() {
                 />
             </Chakra.AbsoluteCenter>
         </Chakra.Box>
-    )
+    );
 }
 
 function ThisSuspense(props: React.PropsWithChildren) {
@@ -36,7 +36,7 @@ function ThisSuspense(props: React.PropsWithChildren) {
                 props.children
             }
         </React.Suspense>
-    )
+    );
 }
 
 export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
@@ -50,7 +50,7 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                 "cacheTime": 1000 * 30,
                 retry(failureCount) {
                     if (failureCount >= 3) {
-                        return false
+                        return false;
                     } else {
                         return true;
                     }
@@ -61,7 +61,7 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
     React.useEffect(() => {
         return () => {
             queryClient.unmount();
-        }
+        };
     }, []);
     return (
         <QueryClientProvider client={queryClient}>
@@ -99,5 +99,5 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                 </HTTPClientProvider_Client>
             </ThisSuspense>
         </QueryClientProvider>
-    )
+    );
 }
