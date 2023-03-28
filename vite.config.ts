@@ -23,8 +23,7 @@ export default defineConfig({
     ViteAliases({
       "dir" : "src",
       useConfig : true,
-      useTypescript : true,
-      "useIndexes" : true
+      useTypescript : true
     }),
     react({
       "tsDecorators" : true

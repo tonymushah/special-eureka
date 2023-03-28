@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Manga } from "../../../../api/structures/Manga";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Manga } from "@mangadex/api/structures/Manga";
 import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import MangaTitle from "./MangaTitle";
 import ReactContextMenu from "react-jsx-context-menu";
@@ -14,19 +14,19 @@ const MangaDexPath = getMangaDexPath();
 export default function MangaElementDef2_withChildren(props: React.PropsWithChildren<{
     src: Manga,
     isRefetching?: boolean,
-    refetch?: Function,
-    download?: Function,
-    delete?: Function,
-    update?: Function
+    refetch?: () => void,
+    download?: () => void,
+    delete?: () => void,
+    update?: () => void
 }>) {
     const card_maxHeight: Chakra.ResponsiveValue<any> = {
         base: "15em"
-    }
+    };
     const card_minHeight: Chakra.ResponsiveValue<any> = {
         base: ""
-    }
+    };
     return (
-        <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"}>
+        <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"} boxShadow={"md"}>
             <ReactContextMenu
                 menu={
                     <Chakra.Menu
@@ -89,5 +89,5 @@ export default function MangaElementDef2_withChildren(props: React.PropsWithChil
                 </Chakra.CardBody>
             </Chakra.Stack>
         </Chakra.Card>
-    )
+    );
 }

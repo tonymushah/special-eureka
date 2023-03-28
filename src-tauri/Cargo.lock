@@ -1932,9 +1932,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a54adb441f315edb6acdca843c89a6e95eca241cf9a50eae46cf29c2650e72b"
+checksum = "7bf3cb773edb4deefb829ad9069dff8eaa3e6474aba0186e509b2284adebf009"
 dependencies = [
  "actix-files",
  "actix-web",

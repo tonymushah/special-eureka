@@ -1,16 +1,16 @@
-import MangaChapter_Accordion from "../../../../api/internal/utils/MangaChapter_Accordion";
+import MangaChapter_Accordion from "@mangadex/api/internal/utils/MangaChapter_Accordion";
 import { useToast } from "@chakra-ui/react";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Manga } from "../../../../api/structures/Manga";
+import { Manga } from "@mangadex/api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFallback2 from "./MangaElement2Fallback";
-import * as Chakra from "@chakra-ui/react"
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
+import * as Chakra from "@chakra-ui/react";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
-const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"))
+const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"));
 
 
 export default function MangaChapterAccordion_Element(props: {
@@ -18,23 +18,23 @@ export default function MangaChapterAccordion_Element(props: {
 }) {
     const mangaID = props.src.$mangaid;
     const { query } = get_manga_byId({
-        mangaID : mangaID,
-        options : {
-            staleTime : Infinity
+        mangaID: mangaID,
+        options: {
+            staleTime: Infinity
         }
-    })
+    });
     const { download_, delete_ } = useMangaDownload_Delete({
-        mangaID : mangaID
-    })
+        mangaID: mangaID
+    });
     if (query.isLoading) {
         return (
             <MangaFallback2 />
-        )
+        );
     }
     if (query.isError) {
         return (
             <ErrorEL1 error={query.error} />
-        )
+        );
     }
     return (
         <React.Suspense fallback={
@@ -48,28 +48,28 @@ export default function MangaChapterAccordion_Element(props: {
                 delete={delete_.mutate}
             >
                 <Chakra.Box width={"full"}>
-                <Chakra.Stack>
-                {
-                    props.src.$chapters.map((value) => (
-                        <React.Suspense
-                            fallback={
-                                <Chakra.Box width={"full"}>
-                                    <Chakra.Center>
-                                        <Chakra.Spinner />
-                                    </Chakra.Center>
-                                </Chakra.Box>
-                            }
-                        >
-                            <Chapter_Element1
-                                chapter={value}
-                            />
-                        </React.Suspense>
-                    ))
-                }
-                </Chakra.Stack>
+                    <Chakra.Stack>
+                        {
+                            props.src.$chapters.map((value, index) => index < 3 ? (
+                                <React.Suspense
+                                    fallback={
+                                        <Chakra.Box width={"full"}>
+                                            <Chakra.Center>
+                                                <Chakra.Spinner />
+                                            </Chakra.Center>
+                                        </Chakra.Box>
+                                    }
+                                    key={value.get_id()}
+                                >
+                                    <Chapter_Element1
+                                        chapter={value}
+                                    />
+                                </React.Suspense>
+                            ) : (<React.Fragment key={value.get_id()}></React.Fragment>))
+                        }
+                    </Chakra.Stack>
                 </Chakra.Box>
             </MangaElementDef2_withChildren>
         </React.Suspense>
-
-    )
+    );
 }

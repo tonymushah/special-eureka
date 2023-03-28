@@ -4,8 +4,8 @@ import { Chapter } from "../structures/Chapter";
 import MangaChapter_Accordion from "./utils/MangaChapter_Accordion";
 
 export class And_Or{
-    private static AND: string = "AND";
-    private static OR: string = "OR";
+    private static AND = "AND";
+    private static OR = "OR";
     public static and():string{
         return And_Or.AND;
     }
@@ -21,10 +21,10 @@ export class And_Or{
 }
 
 export class Status{
-    private static ONGOING: string = "ongoing";
-    private static COMPLETED: string = "completed";
-    private static HIATUS: string = "hiatus";
-    private static CANCELLED: string = "cancelled";
+    private static ONGOING = "ongoing";
+    private static COMPLETED = "completed";
+    private static HIATUS = "hiatus";
+    private static CANCELLED = "cancelled";
     public static ongoing(): string{
         return Status.ONGOING;
     }
@@ -48,11 +48,11 @@ export class Status{
 }
 
 export class Demographic{
-    private static SHOUJO: string = "shoujo";
-    private static JOSEI: string = "josei";
-    private static SHOUNEN: string = "shounen";
-    private static SEINEN: string = "seinen";
-    private static NONE: string = "none";
+    private static SHOUJO = "shoujo";
+    private static JOSEI = "josei";
+    private static SHOUNEN = "shounen";
+    private static SEINEN = "seinen";
+    private static NONE = "none";
     public static shoujo(): string{
         return Demographic.SHOUJO;
     }
@@ -80,10 +80,10 @@ export class Demographic{
 }
 
 export class ContentRating{
-    private static SAFE: string = "safe";
-    private static SUGGESTIVE: string = "suggestive";
-    private static EROTICA: string = "erotica";
-    private static PORNOGRAPHIC: string = "pornographic";
+    private static SAFE = "safe";
+    private static SUGGESTIVE = "suggestive";
+    private static EROTICA = "erotica";
+    private static PORNOGRAPHIC = "pornographic";
     public static safe(): string{
         return ContentRating.SAFE;
     }
@@ -107,41 +107,41 @@ export class ContentRating{
 }
 
 export class Includes{
-    private static MANGA: string = "manga";
-    private static CHAPTER: string = "chapter";
-    private static COVER_ART: string = "cover_art";
-    private static AUTHOR: string = "author";
-    private static ARTIST: string = "artist";
-    private static SCANLATION_GROUP: string = "scanlation_group";
-    private static TAG: string = "tag";
-    private static USER: string = "user";
-    private static CUSTOM_LIST: string = "custom_list";
+    private static MANGA = "manga";
+    private static CHAPTER = "chapter";
+    private static COVER_ART = "cover_art";
+    private static AUTHOR = "author";
+    private static ARTIST = "artist";
+    private static SCANLATION_GROUP = "scanlation_group";
+    private static TAG = "tag";
+    private static USER = "user";
+    private static CUSTOM_LIST = "custom_list";
     public static manga(): string{
-        return Includes.MANGA
+        return Includes.MANGA;
     }
     public static chapter(): string{
-        return Includes.CHAPTER
+        return Includes.CHAPTER;
     }
     public static cover_art(): string{
-        return Includes.COVER_ART
+        return Includes.COVER_ART;
     }
     public static author(): string{
-        return Includes.AUTHOR
+        return Includes.AUTHOR;
     }
     public static artist(): string{
-        return Includes.ARTIST
+        return Includes.ARTIST;
     }
     public static scanlation_group(): string{
-        return Includes.SCANLATION_GROUP
+        return Includes.SCANLATION_GROUP;
     }
     public static tag(): string{
-        return Includes.TAG
+        return Includes.TAG;
     }
     public static user(): string{
-        return Includes.USER
+        return Includes.USER;
     }
     public static custom_list(): string{
-        return Includes.CUSTOM_LIST
+        return Includes.CUSTOM_LIST;
     }
     public static array(): Array<string>{
         return [
@@ -159,8 +159,8 @@ export class Includes{
 }
 
 export class Asc_Desc{
-    private static ASC: string = "asc";
-    private static DESC: string = "desc";
+    private static ASC = "asc";
+    private static DESC = "desc";
     public static asc():string{
         return Asc_Desc.ASC;
     }
@@ -195,7 +195,7 @@ export class Offset_limits{
         this.set_offset(0);
     }
     public static build(limits: number, offset: number): Offset_limits{
-        let instance: Offset_limits = new Offset_limits();
+        const instance: Offset_limits = new Offset_limits();
         instance.set_limits(limits);
         instance.set_offset(offset);
         return instance;
@@ -221,7 +221,7 @@ export class Author_Artists{
     }
     public initialise_filtred(){
         this.filtred = [];
-        let authors: Array<Author> = this.authors;
+        const authors: Array<Author> = this.authors;
         for (const key in this.artists) {
             if (Object.prototype.hasOwnProperty.call(this.artists, key)) {
                 const element = this.artists[key];
@@ -530,7 +530,7 @@ export class MangaLinksData{
         if(this.mal != null){
             return ("https://myanimelist.net/manga/" + this.mal);
         }else{
-            return null
+            return null;
         }
     }
     public url_CDJapan(): string | null{
@@ -724,9 +724,9 @@ export class Languages{
         this.set_langs(langs);
     }
     public static async initialize(): Promise<Languages>{
-        let array: Array<Lang> = [];
-        let res = langs;
-        let index: number = 0;
+        const array: Array<Lang> = [];
+        const res = langs;
+        let index = 0;
         res.forEach(element => {
             array[index] = new Lang(element.name, element.two_letter, element.three_letter, element.flag_icon!);
             index = index + 1;
@@ -737,7 +737,7 @@ export class Languages{
         for (let index = 0; index < this.langs.length; index++) {
             const selected_lang = this.langs[index];
             if(selected_lang.get_name() == name){
-                return selected_lang
+                return selected_lang;
             }
         }
         throw new Error("can't find lang by : " + name);
@@ -752,8 +752,8 @@ export class Languages{
         throw new Error("can't find lang by : " + two_letter);
     }
     public getLang_byThree_letter(three_letter: string): Array<Lang>{
-            let array : Array<Lang>= [];
-            let array_i : number = 0;
+            const array : Array<Lang>= [];
+            let array_i  = 0;
             for (let index = 0; index < this.langs.length; index++) {
                 const selected_lang = this.langs[index];
                 if(selected_lang.get_two_letter() == three_letter){
@@ -777,7 +777,7 @@ export class Alt_title{
         this.set_to_use(to_use);
     }
     public get_lang(name: string): Array<string> | null{
-        let alt_title: Array<string> = [];
+        const alt_title: Array<string> = [];
         for (let index = 0; index < this.to_use.length; index++) {
             const element = this.to_use[index];
             for (const key in element) {
@@ -835,7 +835,7 @@ export class Lang_and_Data{
         throw new Error("Type mismatch...");
     }
     public static async initializeArrayByAltTitle_obj(alt_titles: Array<any>): Promise<Array<Lang_and_Data>>{
-        let returns : Array<Lang_and_Data> = [];
+        const returns : Array<Lang_and_Data> = [];
         let index0 = 0;
         for (let index = 0; index < alt_titles.length; index++) {
             const alt_title = alt_titles[index];
@@ -851,8 +851,8 @@ export class Lang_and_Data{
         //throw new Error("Type mismatch...");
     }
     public static async initializeByDesc(desc: any): Promise<Array<Lang_and_Data>>{
-        let array: Array<Lang_and_Data> = []
-        let index : number= 0;
+        const array: Array<Lang_and_Data> = [];
+        let index = 0;
         for (const key in desc) {
             if (Object.prototype.hasOwnProperty.call(desc, key)) {
                 const data = desc[key];
@@ -940,7 +940,7 @@ export class Querry_list_builder<T>{
         this.$array = (array);
 	}
     public build(): any{
-        let returns : any = {}
+        let returns : any = {};
         try{
             for (let index = 0; index < this.array.length; index++) {
                 const element = this.array[index];
@@ -954,19 +954,19 @@ export class Querry_list_builder<T>{
 }
 
 export const serialize = function(obj: any) : string{
-  let str = [];
-  for (let p in obj)
+  const str = [];
+  for (const p in obj)
     if (obj.hasOwnProperty(p)) {
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }
   return str.join("&");
-}
+};
 
 export function get_manga_listBy_chapter_array(to_use: Array<Chapter>) : Array<string>{
-    let returns : Array<string> = new Array<string>();
+    const returns : Array<string> = new Array<string>();
     to_use.forEach(element => {
         try {
-            let manga_id : string = element.get_manga_id();
+            const manga_id : string = element.get_manga_id();
             if(manga_id != undefined && returns.includes(manga_id) == false){
                 returns.push(manga_id);
             }
@@ -978,14 +978,14 @@ export function get_manga_listBy_chapter_array(to_use: Array<Chapter>) : Array<s
 
 export function get_MangaChapter_Accordions_byChapterArray(to_use : Array<Chapter>) : Array<MangaChapter_Accordion>{
     return get_manga_listBy_chapter_array(to_use).map<MangaChapter_Accordion>((value : string) => {
-        let instance = new MangaChapter_Accordion(value);
+        const instance = new MangaChapter_Accordion(value);
         to_use.forEach((chapter) => {
             instance.insertChapter(chapter);
-        })
+        });
         return instance;
-    })
+    });
 }
 
 export function formatDate(mydate: Date): string{
-    return mydate.toJSON().split('.')[0]
+    return mydate.toJSON().split(".")[0];
 }

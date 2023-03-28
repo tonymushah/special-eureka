@@ -10,14 +10,14 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     fn: () => Promise<Collection<T>>,
     children: (value: Collection<T>) => React.ReactNode,
     queryKey: QueryKey,
-    query_options?: Omit<UseQueryOptions<Collection<T>, Error>, 'queryKey' | 'queryFn'>,
+    query_options?: Omit<UseQueryOptions<Collection<T>, Error>, "queryKey" | "queryFn">,
     onLoading?: React.ReactNode,
     withoutNavigation?: boolean
 }) {
     const toast = useToast();
     const toastID = React.useRef<ToastId>();
     function addToast(props?: UseToastOptions) {
-        toastID.current = toast(props)
+        toastID.current = toast(props);
     }
     function updateToast(props?: UseToastOptions) {
         if (toastID.current != undefined && props != undefined) {
@@ -35,9 +35,9 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                     "title": "Loading to previous page",
                     isClosable: false,
                     "position": "bottom-right"
-                })
+                });
                 if (search_query.data != undefined) {
-                    resolve(search_query.data.previous())
+                    resolve(search_query.data.previous());
                 } else {
                     reject(new Error("the search query is'nt finished"));
                 }
@@ -49,7 +49,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 "title": "Previous page Loaded",
                 isClosable: true,
                 "duration": 9000
-            })
+            });
             queryClient.setQueryData(props.queryKey, data, {
             });
         },
@@ -60,7 +60,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 isClosable: true,
                 description: error.message,
                 "duration": 9000
-            })
+            });
         },
     });
     const next = useMutation({
@@ -71,9 +71,9 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                     "title": "Loading to next page",
                     isClosable: false,
                     "position": "bottom-right"
-                })
+                });
                 if (search_query.data != undefined) {
-                    resolve(search_query.data.next())
+                    resolve(search_query.data.next());
                 } else {
                     reject(new Error("the search query is'nt finished"));
                 }
@@ -85,7 +85,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 "title": "Next page Loaded",
                 isClosable: true,
                 "duration": 9000
-            })
+            });
             queryClient.setQueryData(props.queryKey, data, {
             });
         },
@@ -96,7 +96,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 isClosable: true,
                 description: error.message,
                 "duration": 9000
-            })
+            });
         },
     });
     const first_page = useMutation({
@@ -107,9 +107,9 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                     "title": "Loading to first page",
                     isClosable: false,
                     "position": "bottom-right"
-                })
+                });
                 if (search_query.data != undefined) {
-                    resolve(search_query.data.get_first_page())
+                    resolve(search_query.data.get_first_page());
                 } else {
                     reject(new Error("the search query is'nt finished"));
                 }
@@ -121,7 +121,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 "title": "First page Loaded",
                 isClosable: true,
                 "duration": 9000
-            })
+            });
             queryClient.setQueryData(props.queryKey, data, {
             });
         },
@@ -132,7 +132,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 isClosable: true,
                 description: error.message,
                 "duration": 9000
-            })
+            });
         },
     });
     const last_page = useMutation({
@@ -143,9 +143,9 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                     "title": "Loading to last page",
                     isClosable: false,
                     "position": "bottom-right"
-                })
+                });
                 if (search_query.data != undefined) {
-                    resolve(search_query.data.get_last_page())
+                    resolve(search_query.data.get_last_page());
                 } else {
                     reject(new Error("the search query is'nt finished"));
                 }
@@ -157,7 +157,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 "title": "Last page Loaded",
                 isClosable: true,
                 "duration": 9000
-            })
+            });
             queryClient.setQueryData(props.queryKey, data, {
             });
         },
@@ -168,7 +168,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 isClosable: true,
                 description: error.message,
                 "duration": 9000
-            })
+            });
         },
     });
 
@@ -202,7 +202,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                 {
                     props.onLoading
                 }
-            </>)
+            </>);
         } else {
             return (
                 <Box>
@@ -218,7 +218,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             <Box>
                 <ErrorEL1 error={search_query.error} />
             </Box>
-        )
+        );
     }
     return (
         <Box>
@@ -238,28 +238,28 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                             <ButtonGroup>
                                 <Button
                                     onClick={() => {
-                                        first_page.mutate()
+                                        first_page.mutate();
                                     }}
                                 >
                                     <ChakraIcon.ArrowLeftIcon />
                                 </Button>
                                 <Button
                                     onClick={() => {
-                                        previous.mutate()
+                                        previous.mutate();
                                     }}
                                 >
                                     <ChakraIcon.ArrowBackIcon />
                                 </Button>
                                 <Button
                                     onClick={() => {
-                                        next.mutate()
+                                        next.mutate();
                                     }}
                                 >
                                     <ChakraIcon.ArrowForwardIcon />
                                 </Button>
                                 <Button
                                     onClick={() => {
-                                        last_page.mutate()
+                                        last_page.mutate();
                                     }}
                                 >
                                     <ChakraIcon.ArrowRightIcon />
@@ -271,5 +271,5 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             }
 
         </Box>
-    )
+    );
 }

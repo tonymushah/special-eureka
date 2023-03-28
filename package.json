@@ -38,6 +38,7 @@
     "@nrwl/jest": "15.8.1",
     "@nrwl/js": "15.8.1",
     "@nrwl/linter": "15.8.1",
+    "@nrwl/react": "^15.8.9",
     "@rollup/plugin-eslint": "^9.0.3",
     "@swc-node/register": "^1.4.2",
     "@swc/cli": "^0.1.61",
