@@ -1,4 +1,3 @@
-import React from "react";
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
 import Mangadex from "@mangadex";
@@ -16,7 +15,9 @@ export default function Route_Objects(props: {
             data.push(value);
         });
     }
-    const router = createBrowserRouter(data);
+    const router = createBrowserRouter(data , {
+        
+    });
     return (
         <RouterProvider
             router={router}

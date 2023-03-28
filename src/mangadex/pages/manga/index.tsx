@@ -21,8 +21,8 @@ export function useManga() {
 
 export default function MangaPage() {
     const client = useHTTPClient();
-    const queryClient = useQueryClient()
-    let { id } = useParams();
+    const queryClient = useQueryClient();
+    const { id } = useParams();
     const query_key = "mdx-manga:" + id;
     React.useMemo<void>(() => {
         queryClient.removeQueries(query_key);
@@ -42,9 +42,7 @@ export default function MangaPage() {
     }
     if (query.isError) {
         appWindow.setTitle(`Error on loading title ${id!} | Mangadex`);
-        return (
-            <ErrorEL1 error={query.error} />
-        )
+        throw query.error;
     }
     return (
         
@@ -103,5 +101,5 @@ export default function MangaPage() {
             </Manga_Page>
         </React.Fragment>
 
-    )
+    );
 }

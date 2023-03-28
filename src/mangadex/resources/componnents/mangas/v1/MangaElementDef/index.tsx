@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { Manga } from "../../../../../api/structures/Manga";
+import { Manga } from "@mangadex/api/structures/Manga";
 import MangaElementDef_without_Context_Menu from "./Without_ContextMenu";
 
 import MangaContextMenu from "../MangaContextMenu";
@@ -8,7 +8,7 @@ import MangaContextMenu from "../MangaContextMenu";
 export default function MangaElementDef(props: {
     src: Manga,
     isRefetching?: boolean,
-    refetch?: Function
+    refetch?: () => void
 }) {
     return (
         <Chakra.Box
@@ -25,5 +25,5 @@ export default function MangaElementDef(props: {
                 />
             </MangaContextMenu>
         </Chakra.Box>
-    )
+    );
 }

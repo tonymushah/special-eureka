@@ -52,7 +52,8 @@ export default defineConfig({
         main : resolve(__dirname, "src/index.html"),
         splashscreen : resolve(__dirname, "src/splashscreen.html")
       },
-    }
+    },
+    "emptyOutDir" : true
   },
   root: "./src",
   publicDir : "./public"

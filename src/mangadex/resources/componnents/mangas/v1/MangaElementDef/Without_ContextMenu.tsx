@@ -1,18 +1,16 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../../../..";
-import TryCatch from "../../../../../../commons-res/components/TryCatch";
-import { Alt_title, make_first_UpperCare } from "../../../../../api/internal/Utils";
-import { Manga } from "../../../../../api/structures/Manga";
-import { get_manga_description, get_manga_page_cover } from "../../../../hooks/MangaStateHooks";
-import Mangadex_cover_not_found from "../../../../imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "../../../../imgs/cover-placeholder.png";
+import { getMangaDexPath } from "@mangadex";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Alt_title, make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { get_manga_description, get_manga_page_cover } from "@mangadex/resources/hooks/MangaStateHooks";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import ErrorEL1 from "../../../error/ErrorEL1";
 
-const CoverElementVertical2 = React.lazy(() => import("../../../covers/v1/CoverElementVertical2"));
-
-const CoverImage = React.lazy(() => import("../../../covers/v1/CoverImage"));
+const CoverElementVertical2 = React.lazy(() => import("@mangadex/resources/componnents/covers/v1/CoverElementVertical2"));
 
 const MangaDexPath = getMangaDexPath();
 
@@ -20,7 +18,7 @@ export default function MangaElementDef_without_Context_Menu(props: {
     src: Manga,
     isRefetching?: boolean
 }){
-    let title: string = "";
+    let title = "";
     const {
         coverQuery,
     } = get_manga_page_cover({
@@ -266,5 +264,5 @@ export default function MangaElementDef_without_Context_Menu(props: {
             </Chakra.LinkBox>
         </>
         </Chakra.Box>
-    )
+    );
 }
