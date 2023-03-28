@@ -65,6 +65,10 @@ const MangadexLayout = React.lazy(() => import("@mangadex/pages/Layout"));
 
 const UserPage = React.lazy(() => import("@mangadex/pages/user/UserPage+Loader"));
 
+const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"));
+
+const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -353,7 +357,29 @@ function useMangadexRouter(): RouteObject {
                             <Mangadex_suspense>
                                 <UserPage/>
                             </Mangadex_suspense>
-                        )
+                        ),
+                        children : [
+                            {
+                                index : true,
+                                errorElement : (<ErrorELRouter/>),
+                                element : (
+                                    <Mangadex_suspense>
+                                        <UserPageInfo/>
+                                    </Mangadex_suspense>
+                                )
+                            },
+                            {
+                                path : "feed",
+                                errorElement : (
+                                    <ErrorELRouter/>
+                                ),
+                                element : (
+                                    <Mangadex_suspense>
+                                        <UserPageFeed/>
+                                    </Mangadex_suspense>
+                                )
+                            }
+                        ]
                     }
                 ]
             }

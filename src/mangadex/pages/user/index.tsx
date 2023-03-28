@@ -1,10 +1,21 @@
 import * as Chakra from "@chakra-ui/react";
+import { getMangaDexPath } from "@mangadex";
 import { User } from "@mangadex/api/structures/User";
-import UserFeed from "@mangadex/resources/componnents/user/userPage/UserFeed";
-import UserPageInfo from "@mangadex/resources/componnents/user/userPage/UserPageInfo";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
+import { Outlet, useOutletContext } from "react-router";
+import { Link } from "react-router-dom";
 import UserPage_Links from "./UserPage_Links";
+
+const MangadexPath = getMangaDexPath();
+
+type UserPage_OutletContext = {
+    user : User
+}
+
+export function useUserPageOutlet(){
+    return useOutletContext<UserPage_OutletContext>();
+}
 
 export default function UserPage(props: React.PropsWithChildren<{
     user: User
@@ -12,19 +23,17 @@ export default function UserPage(props: React.PropsWithChildren<{
     const links: UserPage_Links[] = [
         {
             title: "User Information",
-            "link_to": "/",
+            "link_to": `${MangadexPath}/user/${props.user.get_id()}/`,
             tabPanelChildren: (
-                <UserPageInfo {...props} />
+                <Outlet context={props}/>
             ),
             key: "user-inf"
         },
         {
             title: "Feed",
-            "link_to": "/",
+            "link_to": `${MangadexPath}/user/${props.user.get_id()}/feed`,
             tabPanelChildren: (
-                <React.Fragment>
-                    <UserFeed user_id={props.user.get_id()}/>
-                </React.Fragment>
+                <Outlet context={props}/>
             ),
             key: "user-feed"
         }
@@ -45,7 +54,7 @@ export default function UserPage(props: React.PropsWithChildren<{
                 >
                     <Chakra.TabList>
                         {links.map((value) => (
-                            <Chakra.Tab key={value.key}>{value.title}</Chakra.Tab>
+                            <Chakra.Tab as={Link} to={value.link_to} key={value.key}>{value.title}</Chakra.Tab>
                         ))}
                     </Chakra.TabList>
                     <Chakra.TabPanels>

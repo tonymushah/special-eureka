@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import Hotkeys from "react-hot-keys";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import { Chapter } from "../../../api/structures/Chapter";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Chapter } from "@mangadex/api/structures/Chapter";
 import { get_aggregate_query } from "../../hooks/AgreggateStateHooks";
 import ErrorEL1 from "../error/ErrorEL1";
 import IsPingable from "../IsPingable";
@@ -29,7 +29,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
                     thickness={"10px"}
                 />
             </Chakra.Center>
-        )
+        );
     }
     if (query.isLoading == true) {
         return (
@@ -40,14 +40,14 @@ function ChapterNavigationModal_Online_Chapters(props: {
                     thickness={"10px"}
                 />
             </Chakra.Center>
-        )
+        );
     }
     if (query.isError) {
         return (
             <ErrorEL1
                 error={query.error}
             />
-        )
+        );
     }
     if (query.isSuccess) {
         return (
@@ -62,7 +62,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
                                         <>
                                             {
                                                 chapters.get_ids().map((chapter) => (
-                                                    <Chakra.Box width={"full"}>
+                                                    <Chakra.Box width={"full"} key={chapter}>
                                                         <Chakra.Text>
                                                             Volume {
                                                                 volume.get_name()
@@ -83,7 +83,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
                     }
                 </Chakra.VStack>
             </>
-        )
+        );
     }
     return (
         <Chakra.Center>
@@ -93,7 +93,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
                 thickness={"10px"}
             />
         </Chakra.Center>
-    )
+    );
 }
 
 export default function ChapterNavigationModal(props: {
@@ -182,7 +182,7 @@ export default function ChapterNavigationModal(props: {
                                                 status="error"
                                             >
                                                 <Chakra.AlertIcon />
-                                                <Chakra.AlertTitle>Can't ping the Mangadex API</Chakra.AlertTitle>
+                                                <Chakra.AlertTitle>Can&apos;t ping the Mangadex API</Chakra.AlertTitle>
                                                 <Chakra.AlertDescription>
                                                     <Chakra.Button
                                                         colorScheme={"orange"}
@@ -223,6 +223,7 @@ export default function ChapterNavigationModal(props: {
                                                         getted.map((value) => (
                                                             <Chakra.Box
                                                                 width={"full"}
+                                                                key={value}
                                                             >
                                                                 <Chapter_Element1_byChapID id={value} />
                                                             </Chakra.Box>
@@ -252,14 +253,5 @@ export default function ChapterNavigationModal(props: {
                 </Chakra.ModalContent>
             </Chakra.Modal>
         </Hotkeys>
-    )
+    );
 }
-/*
-<>
-<>
-
-</>
-
-
-</>
-*/

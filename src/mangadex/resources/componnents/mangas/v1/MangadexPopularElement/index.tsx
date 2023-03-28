@@ -11,9 +11,9 @@ import { get_manga_description, get_manga_page_authors_artists, get_manga_page_c
 import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import React from "react";
 import { Button, Placeholder } from "react-bootstrap";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
-const MangaDexPath = getMangaDexPath()
+const MangaDexPath = getMangaDexPath();
 
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
 
@@ -33,12 +33,12 @@ export default function MangaPopularElement(props: {
         is_Author_artists_finished
     } = get_manga_page_authors_artists(props);
     function authors_artists(): Array<React.ReactNode> {
-        let returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
+        const returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
             return value.data!;
         }), artistists.map<Author>((value) => {
             return value.data!;
         }));
-        let returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
+        const returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
         for (let index = 0; index < returns.filtred.length; index++) {
             const element = returns.filtred[index];
             if (index == (returns.filtred.length - 1)) {
@@ -58,7 +58,7 @@ export default function MangaPopularElement(props: {
                             to={MangaDexPath + "/author/" + element.get_id()}
                         >{element.get_Name()}</Chakra.Link>
                     </TryCatch>
-                )
+                );
             } else {
                 returns2[index] = (
                     <>
@@ -79,14 +79,14 @@ export default function MangaPopularElement(props: {
                         </TryCatch>
                         ,&nbsp;
                     </>
-                )
+                );
             }
         }
         return returns2;
     }
     function build_themes_manga(): Array<React.ReactNode> {
         let index = 0;
-        let returns: Array<React.ReactNode> = [];
+        const returns: Array<React.ReactNode> = [];
         if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
             if (props.src.get_ranting() == ContentRating.suggestive()) {
                 returns[index] = (<Button style={{
@@ -109,7 +109,7 @@ export default function MangaPopularElement(props: {
                 fontWeight: 700,
                 margin: "1px",
                 padding: "2px"
-            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
         }
         return returns;
     }
@@ -129,7 +129,6 @@ export default function MangaPopularElement(props: {
                 backdropBrightness={"1.1"}
                 direction={"row"}
                 variant={"outline"}
-                
             >
                 <Chakra.Image
                     src={coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder}
@@ -189,7 +188,6 @@ export default function MangaPopularElement(props: {
                                             )}
                                         >
                                             <ReactMarkDown
-                                                children={manga_description_query.data[0].get_data()}
                                                 components={{
                                                     a(node) {
                                                         return (
@@ -206,13 +204,15 @@ export default function MangaPopularElement(props: {
                                                                     )
                                                                 }
                                                             </React.Suspense>
-                                                        )
+                                                        );
                                                     },
                                                     p(node) {
-                                                        return (<Chakra.Text m={0}>{node.children}</Chakra.Text>)
+                                                        return (<Chakra.Text m={0}>{node.children}</Chakra.Text>);
                                                     }
                                                 }}
-                                            />
+                                            >
+                                                {manga_description_query.data[0].get_data()}
+                                            </ReactMarkDown>
                                         </TryCatch>
                                     </Chakra.Box>
                                 )
@@ -237,5 +237,5 @@ export default function MangaPopularElement(props: {
                 </Chakra.CardBody>
             </Chakra.Card>
         </Chakra.Card>
-    )
+    );
 }
