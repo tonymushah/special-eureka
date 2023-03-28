@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { get_MangaChapter_Accordions_byChapterArray, Offset_limits } from "@mangadex/api/internal/Utils";
+import { Asc_Desc, get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
 import MangaChapterAccordion_Element from "@mangadex/resources/componnents/mangas/v1/MangaChapterAccordion_Element";
@@ -21,7 +21,8 @@ export default function UserFeed(props : {
                     return Chapter_withAllIncludes.search({
                         client: client,
                         "uploader": props.user_id,
-                        offset_limits: offset_limits
+                        offset_limits: offset_limits,
+                        order : new Order().set_createdAt(Asc_Desc.desc())
                     });
                 }}
                 queryKey={queryKey}

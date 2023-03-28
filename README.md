@@ -24,7 +24,7 @@ It's build in [Tauri](https://tauri.app) and [React](https://reactjs.org)
 - [x] Chapter downloading + offline reading
 - [ ] Chapter reading history
 - [X] Group page
-- [ ] User Page
+- [X] User Page
 - [X] Author Page
 - [ ] Log in
 - [ ] Custom lists pages

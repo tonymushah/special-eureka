@@ -255,33 +255,43 @@ export class Order{
     private relevance : string;
     public set_createdAt(createdAt: string){
         this.createdAt = createdAt;
+        return this;
     }
     public set_title(title: string){
         this.title = title;
+        return this;
     }
     public set_updatedAt(updatedAt: string){
         this.updatedAt = updatedAt;
+        return this;
     }
     public set_publishAt(publishAt: string){
         this.publishAt = publishAt;
+        return this;
     }
     public set_readableAt(readableAt: string){
         this.readableAt = readableAt;
+        return this;
     }
     public set_volume(volume: string){
         this.volume = volume;
+        return this;
     }
     public set_chapter(chapter: string){
         this.chapter = chapter;
+        return this;
     }
     public set_latestUploadedChapter(latestUploadedChapter: string){
         this.latestUploadedChapter = latestUploadedChapter;
+        return this;
     }
     public set_followedCount(followedCount: string){
         this.followedCount = followedCount;
+        return this;
     }
     public set_relevance(relevance: string){
         this.relevance = relevance;
+        return this;
     }
     public constructor(
         createdAt?: string,
