@@ -188,7 +188,9 @@ export class Chapter extends Attribute {
             updatedAtSince: (props.updatedAtSince!),
             publishAtSince: (props.publishAtSince!),
             ...props.order?.render(),
-            "includes[]": (props.includes!)
+            "includes[]": (props.includes!),
+            includeExternalUrl : "0",
+            includeEmptyPages : "0"
         };
         const getted: Response<any> = await Api_Request.get_methods("chapter?" +
             serialize((new Querry_list_builder<string>("ids", props.ids!)).build()) +
@@ -737,6 +739,8 @@ export class Chapter_withAllIncludes extends Chapter {
             createdAtSince: (props.createdAtSince!),
             updatedAtSince: (props.updatedAtSince!),
             publishAtSince: (props.publishAtSince!),
+            includeExternalUrl : "0",
+            includeEmptyPages : "0",
             ...props.order?.render()
         };
         const getted: Response<any> = await Api_Request.get_methods("chapter?" +

@@ -89,6 +89,12 @@ export default function MangaVerticalElement(props: {
                                     <Chakra.LinkOverlay
                                         as={Link}
                                         to={MangaDexPath + "/manga/" + props.src.get_id()}
+                                        color={"black"}
+                                        textDecoration={"none"}
+                                        _hover={{
+                                            color : "orange",
+                                            textDecoration : "none"
+                                        }}
                                     >
                                         {title}
                                     </Chakra.LinkOverlay>

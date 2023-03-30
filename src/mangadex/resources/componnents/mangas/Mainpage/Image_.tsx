@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 import { Card } from "react-bootstrap";
-import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
-import Viewer from 'react-viewer';
-import { Cover } from '../../../../api/structures/Cover';
+import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
+import Viewer from "react-viewer";
+import { Cover } from "../../../../api/structures/Cover";
 import { Image } from "@chakra-ui/react";
 
 type Cover_Image_Props = {
@@ -20,7 +20,7 @@ export function Cover_Image_(props : Cover_Image_Props){
             <Viewer
                 visible={visible}
                 onClose={() => { setVisible(false); } }
-                images={[{src: props.src, alt: ''}]}
+                images={[{src: props.src, alt: ""}]}
                 noFooter={true}
                 zoomSpeed={1}
             />
@@ -32,7 +32,7 @@ export function Cover_Image_2(props){
     const [ visible, setVisible ] = React.useState(false);
     const [show, setShow] = React.useState(true);
     const target = React.useRef(null);
-    let to_use: Cover = props.src;
+    const to_use: Cover = props.src;
     return (
         <Card id={props.id} className={props.className} >
             <Viewer

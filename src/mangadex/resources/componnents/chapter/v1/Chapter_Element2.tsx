@@ -96,6 +96,12 @@ export default function Chapter_Element2(props: {
                                 <Chakra.LinkOverlay
                                     as={Link}
                                     to={MangaDexPath +"/chapter/" + props.chapter.get_id()}
+                                    color={"black"}
+                                    textDecoration={"none"}
+                                    _hover={{
+                                        color : "orange",
+                                        textDecoration : "none"
+                                    }}
                                 >
                                     Chapter {props.chapter.get_chapter()} {
                                         props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)

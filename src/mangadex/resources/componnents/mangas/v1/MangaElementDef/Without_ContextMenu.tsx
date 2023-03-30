@@ -160,6 +160,12 @@ export default function MangaElementDef_without_Context_Menu(props: {
                                                     }
                                                     marginBottom={0}
                                                     fontFamily={"inherit"}
+                                                    color={"black"}
+                                                    textDecoration="none"
+                                                    _hover={{
+                                                        color: "orange",
+                                                        textDecoration: "none"
+                                                    }}
                                                 > {title} </Chakra.Heading>
                                             </Chakra.LinkOverlay>
                                         )}
@@ -167,6 +173,13 @@ export default function MangaElementDef_without_Context_Menu(props: {
                                         <Chakra.LinkOverlay
                                             as={Link}
                                             to={MangaDexPath + "/manga/" + props.src.get_id()}
+                                            color={"black"}
+                                            textDecoration="none"
+                                            _hover={{
+                                                color: "orange",
+                                                textDecoration: "none"
+                                            }}
+                                            fontFamily={"inherit"}
                                         >
                                             <Chakra.Heading
                                                 noOfLines={2}

@@ -12,6 +12,7 @@ import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetCh
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks";
 import { Client } from "@tauri-apps/api/http";
+import UserOptions from "@mangadex/api/internal/UserOptions";
 
 const MangaFeedElement = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/MangaFeedElement"));
 
@@ -19,41 +20,42 @@ export async function loader({
     client,
     queryClient
 }: {
-    client : Client,
-    queryClient : QueryClient
-}){
+    client: Client,
+    queryClient: QueryClient
+}) {
     const offset_limits_2: Offset_limits = new Offset_limits();
     offset_limits_2.set_limits(12);
     const search_result = await Chapter_withAllIncludes.search({
-            offset_limits: offset_limits_2,
-            order: new Order("desc"),
-            client: client
-        });
-        search_result.get_data().forEach((chapter) => {
-            Chapter.downloaded(chapter.get_id(), client).then((value) => {
-                const queryKey = get_chapter_queryKey({
-                    id : chapter.get_id()
-                });
-                queryClient.setQueryData<GetChapterByIdResult>(queryKey, {
-                    "data" : chapter,
-                    hasFailed : value.hasFailed,
-                    "isDownloaded" : value.isDownloaded
-                });
+        offset_limits: offset_limits_2,
+        order: new Order("desc"),
+        translatedLanguage : (await new UserOptions().getLanguages()).map((value) => value.get_two_letter()),
+        client: client
+    });
+    search_result.get_data().forEach((chapter) => {
+        Chapter.downloaded(chapter.get_id(), client).then((value) => {
+            const queryKey = get_chapter_queryKey({
+                id: chapter.get_id()
+            });
+            queryClient.setQueryData<GetChapterByIdResult>(queryKey, {
+                "data": chapter,
+                hasFailed: value.hasFailed,
+                "isDownloaded": value.isDownloaded
             });
         });
-        const mangaIDs = search_result.get_data().map((value) => value.get_manga_id());
-        const newMangaOffset = new Offset_limits();
-        newMangaOffset.set_limits(mangaIDs.length);
-        (await Manga_with_allRelationship.search({
-            offset_Limits : newMangaOffset,
-            mangaIDs : mangaIDs
-        })).get_data().forEach((manga) => {
-            const mangaQueryKey = get_mangaQueryKey_byID({
-                mangaID : manga.get_id()
-            });
-            queryClient.setQueryData(mangaQueryKey, manga);
+    });
+    const mangaIDs = search_result.get_data().map((value) => value.get_manga_id());
+    const newMangaOffset = new Offset_limits();
+    newMangaOffset.set_limits(mangaIDs.length);
+    (await Manga_with_allRelationship.search({
+        offset_Limits: newMangaOffset,
+        mangaIDs: mangaIDs
+    })).get_data().forEach((manga) => {
+        const mangaQueryKey = get_mangaQueryKey_byID({
+            mangaID: manga.get_id()
         });
-        return search_result;
+        queryClient.setQueryData(mangaQueryKey, manga);
+    });
+    return search_result;
 }
 
 export const queryKey = "mdx-home_page-latest_update";

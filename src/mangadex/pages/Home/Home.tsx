@@ -68,14 +68,11 @@ function Home() {
             >
                 <React.Suspense
                     fallback={
-                        <Chakra.Container
-                            centerContent
-                            height={"full"}
-                        >
+                        <Chakra.AbsoluteCenter>
                             <Chakra.Spinner
                                 size={"lg"}
                             />
-                        </Chakra.Container>
+                        </Chakra.AbsoluteCenter>
                     }
                 >
                     <IsPingable
@@ -161,14 +158,11 @@ function Home() {
     }
 
     return (
-        <Chakra.Container
-            centerContent
-            height={"full"}
-        >
+        <Chakra.AbsoluteCenter>
             <Chakra.Spinner
                 size={"lg"}
             />
-        </Chakra.Container>
+        </Chakra.AbsoluteCenter>
     );
 }
 export default Home;

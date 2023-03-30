@@ -46,6 +46,12 @@ export default function MangaPopularElement(props: {
                     <TryCatch
                         catch={() => (
                             <Chakra.Link
+                                color={"black"}
+                                textDecoration={"none"}
+                                _hover={{
+                                    color: "orange",
+                                    textDecoration: "none"
+                                }}
                             //as={Link} 
                             //to={MangaDexPath + "/author/" + element.get_id()}
                             >
@@ -54,6 +60,12 @@ export default function MangaPopularElement(props: {
                         )}
                     >
                         <Chakra.Link
+                            color={"black"}
+                            textDecoration={"none"}
+                            _hover={{
+                                color: "orange",
+                                textDecoration: "none"
+                            }}
                             as={Link}
                             to={MangaDexPath + "/author/" + element.get_id()}
                         >{element.get_Name()}</Chakra.Link>
@@ -65,8 +77,14 @@ export default function MangaPopularElement(props: {
                         <TryCatch
                             catch={() => (
                                 <Chakra.Link
-                                //as={Link} 
-                                //to={MangaDexPath + "/author/" + element.get_id()}
+                                    //as={Link} 
+                                    //to={MangaDexPath + "/author/" + element.get_id()}
+                                    color={"black"}
+                                    textDecoration={"none"}
+                                    _hover={{
+                                        color: "orange",
+                                        textDecoration: "none"
+                                    }}
                                 >
                                     {element.get_Name()}
                                 </Chakra.Link>
@@ -75,6 +93,12 @@ export default function MangaPopularElement(props: {
                             <Chakra.Link
                                 as={Link}
                                 to={MangaDexPath + "/author/" + element.get_id()}
+                                color={"black"}
+                                textDecoration={"none"}
+                                _hover={{
+                                    color: "orange",
+                                    textDecoration: "none"
+                                }}
                             >{element.get_Name()}</Chakra.Link>
                         </TryCatch>
                         ,&nbsp;
@@ -153,6 +177,10 @@ export default function MangaPopularElement(props: {
                             to={MangaDexPath + "/manga/" + props.src.get_id()}
                             textDecoration={"none"}
                             color={"black"}
+                            _hover={{
+                                color: "orange",
+                                textDecoration: "none"
+                            }}
                         >
                             <MangaTitle src={props.src} />
                         </Chakra.Heading>
@@ -180,7 +208,7 @@ export default function MangaPopularElement(props: {
                                 ) : (
                                     <Chakra.Box
                                         maxH={"200px"}
-                                        overflowY={"scroll"}
+                                        overflowY={"clip"}
                                     >
                                         <TryCatch
                                             catch={(e) => (
