@@ -1,19 +1,16 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
-import "flag-icons/css/flag-icons.min.css";
-import "font-awesome/css/font-awesome.css";
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
 
 import * as FontAwesome from "react-icons/fa";
-import { Manga } from "../../../../../api/structures/Manga";
+import { Manga } from "@mangadex/api/structures/Manga";
 import MangaFallback2 from "../MangaElement2Fallback";
 import MangaElementFallback from "../MangaElementFallback";
 import MangaVerticalElementFallback from "../MangaVerticalElementFallback";
-import { useMangaListOption } from "../../../../hooks/MangaListManagerState";
+import { useMangaListOption } from "@mangadex/resources/hooks/MangaListManagerState";
 
 const MangaElementDef2 = React.lazy(() => import("../MangaElementDef2"));
 const MangaElementDef = React.lazy(() => import("../MangaElementDef"));
@@ -23,27 +20,27 @@ const MangaVerticalElement = React.lazy(() => import("../MangaVerticalElement"))
 export default function MangaList(props: {
     src: Array<Manga>
 }) {
-    const { data , updateListOption } = useMangaListOption({})
+    const { data , updateListOption } = useMangaListOption({});
     return (
         <Chakra.Tabs align="end" isLazy index={data}>
             <Chakra.TabList>
                 <Chakra.Tab
                     onClick={() => {
-                        updateListOption(0)
+                        updateListOption(0);
                     }}
                 >
                     <FontAwesome.FaThList />
                 </Chakra.Tab>
                 <Chakra.Tab
                     onClick={() => {
-                        updateListOption(1)
+                        updateListOption(1);
                     }}
                 >
                     <FontAwesome.FaThLarge />
                 </Chakra.Tab>
                 <Chakra.Tab
                     onClick={() => {
-                        updateListOption(2)
+                        updateListOption(2);
                     }}
                 >
                     <FontAwesome.FaTh />
@@ -58,6 +55,7 @@ export default function MangaList(props: {
                                     fallback={
                                         <MangaFallback2 />
                                     }
+                                    key={value.get_id()}
                                 >
                                     <MangaElementDef2 src={value} />
                                 </React.Suspense>
@@ -69,7 +67,9 @@ export default function MangaList(props: {
                     <Chakra.Wrap>
                         {
                             props.src.map((value) => (
-                                <Chakra.WrapItem>
+                                <Chakra.WrapItem
+                                    key={value.get_id()}
+                                > 
                                     <React.Suspense
                                         fallback={
                                             <MangaElementFallback />
@@ -86,7 +86,7 @@ export default function MangaList(props: {
                     <Chakra.Wrap>
                         {
                             props.src.map((value) => (
-                                <Chakra.WrapItem>
+                                <Chakra.WrapItem key={value.get_id()}>
                                     <React.Suspense
                                         fallback={
                                             <MangaVerticalElementFallback/>

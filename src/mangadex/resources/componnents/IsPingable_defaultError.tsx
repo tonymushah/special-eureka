@@ -1,11 +1,10 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button } from "@chakra-ui/react"
-import React from "react"
-import { UseQueryResult } from "react-query"
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button } from "@chakra-ui/react";
+import { UseQueryResult } from "react-query";
 
 export default function IsPingable_defaultError(props: {
     query: UseQueryResult<boolean, Error>
 }) {
-    const { query } = props
+    const { query } = props;
     return (
         <Alert
             status="error"
@@ -18,7 +17,7 @@ export default function IsPingable_defaultError(props: {
             <AlertIcon />
             <AlertTitle
             >
-                Can't ping Mangadex API
+                Can&apos;t ping Mangadex API
             </AlertTitle>
             <AlertDescription>
                 <Box>
@@ -31,5 +30,5 @@ export default function IsPingable_defaultError(props: {
                 </Box>
             </AlertDescription>
         </Alert>
-    )
+    );
 }

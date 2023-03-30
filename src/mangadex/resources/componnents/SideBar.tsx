@@ -1,9 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
-import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
-import { ProSidebarProvider, useProSidebar } from "react-pro-sidebar";
-import TryCatch from "../../../commons-res/components/TryCatch";
+import React from "react";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { useProSidebar } from "react-pro-sidebar";
 import MyErrorBounderies from "./error/MyErrorBounderies";
 
 import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
@@ -40,7 +38,7 @@ export default function Content(props: React.PropsWithChildren) {
             >
                 <Chakra.Box id="top-content">
                     <Chakra.Box className="content-header">
-                        <Navbar expand={'sm'} >
+                        <Navbar expand={"sm"} >
                             <Container>
                                 <Navbar.Brand>
                                     <Chakra.Center onClick={() => toggleSidebar()} display={{
@@ -74,6 +72,6 @@ export default function Content(props: React.PropsWithChildren) {
                 </Chakra.Box>
             </Chakra.Box>
         </div>
-    )
+    );
 }
 

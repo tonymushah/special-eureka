@@ -1,23 +1,17 @@
 import React from "react";
-//import MangaList from "../../mangadex/api/tsx/MangaList";
-//import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
-import "flag-icons/css/flag-icons.min.css";
-import "font-awesome/css/font-awesome.css";
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
-"../../../"
-import TryCatch from "../../../../commons-res/components/TryCatch";
-import { Asc_Desc, get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "../../../api/internal/Utils";
-import { Collection } from "../../../api/structures/Collection";
-import { CollectionComponnent_WithQuery } from "../../../resources/componnents/Collection/Collection";
-import MangaFallback2 from "../../../resources/componnents/mangas/v1/MangaElement2Fallback";
 
-import { Chapter } from "../../../api/structures/Chapter";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Asc_Desc, get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Collection } from "@mangadex/api/structures/Collection";
+import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
+import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
+
+import { Chapter } from "@mangadex/api/structures/Chapter";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { useQueryClient } from "react-query";
+import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
+import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
 
 const MangaChapterAccordion_Element = React.lazy(() => import("../mangas/v1/MangaChapterAccordion_Element"));
 
@@ -26,20 +20,34 @@ export default function Group_Feeds(props: {
     id: string
 }) {
     const client = useHTTPClient();
+    const queryClient = useQueryClient();
     return (
         <CollectionComponnent_WithQuery<Chapter>
             queryKey={"mdx-group_feeds-" + props.id}
-            fn={() => {
-                let offset_Limits = new Offset_limits();
+            fn={async () => {
+                const offset_Limits = new Offset_limits();
                 offset_Limits.set_limits(25);
-                return Chapter.search({
+                const search_result = await Chapter.search({
                     offset_limits: offset_Limits,
                     "group": [
                         props.id
                     ],
                     order: new Order(Asc_Desc.desc()),
                     client: client
-                })
+                });
+                search_result.get_data().forEach((chapter) => {
+                    Chapter.downloaded(chapter.get_id(), client).then((value) => {
+                        const queryKey = get_chapter_queryKey({
+                            id: chapter.get_id()
+                        });
+                        queryClient.setQueryData<GetChapterByIdResult>(queryKey, {
+                            "data": chapter,
+                            hasFailed: value.hasFailed,
+                            "isDownloaded": value.isDownloaded
+                        });
+                    });
+                });
+                return search_result;
             }}
             query_options={{
                 staleTime: Infinity
@@ -74,6 +82,7 @@ export default function Group_Feeds(props: {
                                             fallback={
                                                 <MangaFallback2 />
                                             }
+                                            key={value2.$mangaid}
                                         >
                                             <MangaChapterAccordion_Element src={value2} />
                                         </React.Suspense>
@@ -85,5 +94,5 @@ export default function Group_Feeds(props: {
                 )
             }
         </CollectionComponnent_WithQuery>
-    )
+    );
 }

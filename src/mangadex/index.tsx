@@ -1,13 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import "bootstrap/dist/css/bootstrap.css";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { RouteObject } from "react-router-dom";
-import "@/commons-res/fontawesome-free-6.1.2-web/css/all.css";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
 import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import "@mangadex/resources/Poppins/Poppins.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const MangaDexPath = "/mangadex";
 

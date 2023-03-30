@@ -1,10 +1,11 @@
 import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
+import { Cover } from "@mangadex/api/structures/Cover";
 import React from "react";
 import { useQueryClient, useQuery, useMutation, UseQueryOptions, useQueries } from "react-query";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Alt_title, Lang_and_Data } from "../../api/internal/Utils";
-import { Manga, Manga_with_allRelationship } from "../../api/structures/Manga";
-import { MangaPageProps } from "../componnents/mangas/Manga_Page";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Alt_title, Lang_and_Data } from "@mangadex/api/internal/Utils";
+import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import { MangaPageProps } from "@mangadex/resources/componnents/mangas/Manga_Page";
 
 
 export function useMangaDownload(props: {
@@ -273,8 +274,21 @@ export function get_manga_page_cover_art_image(props: {
     const query_key = "mdx-manga:" + props.src.get_id() + "-cover-art-image";
     const queryClient = useQueryClient();
     const query = useQuery<string>(query_key, async () => {
-        const data = (await props.src.get_cover_art(client));
-        queryClient.setQueryData(`mdx-cover-${data.get_id()}`, data);
+        let data : Cover | undefined = undefined;
+        try {
+            const cover_id = props.src.get_cover_art_id();
+            const cover_query_key = `mdx-cover-${cover_id}`;
+            const queryData = queryClient.getQueryData<Cover>(cover_query_key);
+            if(queryData == undefined){
+                data = (await props.src.get_cover_art(client));
+                data = queryClient.setQueryData(`mdx-cover-${data.get_id()}`, data);
+            }else{
+                data = queryData;
+            }
+        } catch (error) {
+            data = (await props.src.get_cover_art(client));
+            data = queryClient.setQueryData(`mdx-cover-${data.get_id()}`, data);
+        }
         if(props.isThumbail == true) {
             if(props.scale == 512) {
                 return await data.get_CoverImage_thumbnail_promise(512, client);

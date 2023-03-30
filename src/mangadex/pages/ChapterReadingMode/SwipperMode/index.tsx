@@ -1,17 +1,17 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Keyboard, Zoom } from "swiper"
+import { Keyboard, Zoom } from "swiper";
 import useChapterPageOutletContext from "../../chapter/UseChapterOutletContext";
-import 'swiper/css';
-import 'swiper/css/zoom';
-import { SwiperSlide, Swiper, SwiperRef } from "swiper/react"
+import "swiper/css";
+import "swiper/css/zoom";
+import { SwiperSlide, Swiper, SwiperRef } from "swiper/react";
 import { useFullScreenOptions_Query } from "../../chapter/ChapterFullScreen/FullScreenOptionsProvider";
 import { Container } from "react-bootstrap";
 import useChapterPages from "../../chapter/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
 
 export default function SinglePage() {
-    let data = useChapterPageOutletContext()
+    const data = useChapterPageOutletContext();
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
         chapter : data.chapter
@@ -44,12 +44,11 @@ export default function SinglePage() {
                     keyboard={true}
                     ref={swipperRef}
                     onKeyDown={(e) => {
-                        console.log("pressed");
                         if(e.key == "ArrowLeft"){
-                            swipperRef.current?.swiper.slidePrev()
+                            swipperRef.current?.swiper.slidePrev();
                         }
                         if(e.key == "ArrowRight"){
-                            swipperRef.current?.swiper.slideNext()
+                            swipperRef.current?.swiper.slideNext();
                         }
                     }}
                 >
@@ -57,7 +56,7 @@ export default function SinglePage() {
                         data.images.map((value, index) => (
                             <SwiperSlide onMouseOver={() => {
                                 reading_state.setCurrentPage(index + 1);
-                            }}>
+                            }} key={`${data.chapter.get_id()}-${index}`}>
                                 <Container>
                                     <Chakra.Center>
                                         <Chakra.Image
@@ -84,5 +83,5 @@ export default function SinglePage() {
                 </Swiper>
             </Chakra.Box>
         </React.Suspense>
-    )
+    );
 }
