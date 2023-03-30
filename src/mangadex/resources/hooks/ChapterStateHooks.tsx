@@ -6,7 +6,7 @@ import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapt
 import { Group } from "@mangadex/api/structures/Group";
 import { User } from "@mangadex/api/structures/User";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaTitle from "../componnents/mangas/v1/MangaTitle";
 import React from "react";
 import { get_mangaQueryKey_byID } from "./MangaStateHooks";
@@ -427,6 +427,7 @@ export function get_manga_of_chapter(props : {
             });
             const queryData = queryClient.getQueryData<Manga>(mangaQueryKey);
             if(queryData == undefined) {
+                //Manga_with_allRelationship.getMangaByID(manga_id);
                 const manga = await props.chapter.get_manga();
                 return queryClient.setQueryData(mangaQueryKey, manga);
             }else{

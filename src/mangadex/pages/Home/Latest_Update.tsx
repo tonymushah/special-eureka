@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
@@ -9,17 +9,22 @@ import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MangaElementFallback from "@mangadex/resources/componnents/mangas/v1/MangaElementFallback";
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
+import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks";
+import { Client } from "@tauri-apps/api/http";
 
 const MangaFeedElement = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/MangaFeedElement"));
 
-export default function Latest_Updates() {
+export async function loader({
+    client,
+    queryClient
+}: {
+    client : Client,
+    queryClient : QueryClient
+}){
     const offset_limits_2: Offset_limits = new Offset_limits();
     offset_limits_2.set_limits(12);
-    const client = useHTTPClient();
-    const queryClient = useQueryClient();
-    const key = "mdx-home_page-latest_update";
-    const query = useQuery<Collection<Chapter_withAllIncludes>, Error>(key, async () => {
-        const search_result = await Chapter_withAllIncludes.search({
+    const search_result = await Chapter_withAllIncludes.search({
             offset_limits: offset_limits_2,
             order: new Order("desc"),
             client: client
@@ -36,7 +41,32 @@ export default function Latest_Updates() {
                 });
             });
         });
+        const mangaIDs = search_result.get_data().map((value) => value.get_manga_id());
+        const newMangaOffset = new Offset_limits();
+        newMangaOffset.set_limits(mangaIDs.length);
+        (await Manga_with_allRelationship.search({
+            offset_Limits : newMangaOffset,
+            mangaIDs : mangaIDs
+        })).get_data().forEach((manga) => {
+            const mangaQueryKey = get_mangaQueryKey_byID({
+                mangaID : manga.get_id()
+            });
+            queryClient.setQueryData(mangaQueryKey, manga);
+        });
         return search_result;
+}
+
+export const queryKey = "mdx-home_page-latest_update";
+
+export default function Latest_Updates() {
+    const client = useHTTPClient();
+    const queryClient = useQueryClient();
+    const key = queryKey;
+    const query = useQuery<Collection<Chapter_withAllIncludes>, Error>(key, () => {
+        return loader({
+            client,
+            queryClient
+        });
     }, {
         staleTime: Infinity
     });

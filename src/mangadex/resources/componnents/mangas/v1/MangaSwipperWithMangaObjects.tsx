@@ -1,12 +1,12 @@
-import React from "react"
-import { FreeMode, Mousewheel, Pagination } from "swiper"
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
+import React from "react";
+import { FreeMode, Mousewheel, Pagination } from "swiper";
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
 import MangaElementFallback from "./MangaElementFallback";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Manga } from "../../../../api/structures/Manga";
+import { Manga } from "@mangadex/api/structures/Manga";
 import MangaVerticalElementFallback from "./MangaVerticalElementFallback";
 
 const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
@@ -68,5 +68,5 @@ export default function MangaSwipperWithMangaObjects(props: {
                 }
             </Swiper>
         </React.Suspense>
-    )
+    );
 }

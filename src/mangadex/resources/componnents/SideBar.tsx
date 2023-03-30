@@ -4,7 +4,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { useProSidebar } from "react-pro-sidebar";
 import MyErrorBounderies from "./error/MyErrorBounderies";
 
-import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 

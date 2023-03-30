@@ -4,33 +4,42 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "react-query";
 import { Keyboard, Navigation } from "swiper";
 import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Heading } from "@chakra-ui/react";
+import { Client } from "@tauri-apps/api/http";
 
-const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"))
+const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
-
-export default function RecentlyPopular() {
-    const client = useHTTPClient();
+export async function loader({
+    client
+}: {
+    client: Client
+}) {
     const offset_limits = new Offset_limits();
-    offset_limits.set_limits(10)
+    offset_limits.set_limits(10);
     const order = new Order();
     order.set_followedCount(Asc_Desc.desc());
     const touse_date_ = new Date();
     touse_date_.setMonth(touse_date_.getMonth() - 1);
     const touse_date = formatDate(touse_date_);
-    const queryKey = "mdx-popular-recent-titles";
+    return await Manga_with_allRelationship.search({
+        offset_Limits: offset_limits,
+        order: order,
+        client,
+        createdAtSince: touse_date,
+        hasAvailableChapters: true
+    });
+}
+
+export const queryKey = "mdx-popular-recent-titles";
+
+export default function RecentlyPopular() {
+    const client = useHTTPClient();
     const query = useQuery(queryKey, () => {
-        return Manga_with_allRelationship.search({
-            offset_Limits: offset_limits,
-            order: order,
-            client,
-            createdAtSince: touse_date,
-            hasAvailableChapters: true
-        })
+        return loader({ client });
     }, {
         staleTime: Infinity
     });
@@ -49,7 +58,9 @@ export default function RecentlyPopular() {
                             {query.data.get_data().map((value, index) => {
                                 queryClient.setQueryData("mdx-manga:" + value.get_id(), value);
                                 return (
-                                    <SwiperSlide>
+                                    <SwiperSlide
+                                        key={value.get_id()}
+                                    >
                                         {
                                             index == 0 ? (
                                                 <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{index + 1}</Heading>
@@ -57,7 +68,7 @@ export default function RecentlyPopular() {
                                                 <Heading m={2} fontFamily={"inherit"} size={"sm"}>No.{index + 1}</Heading>
                                             )
                                         }
-                                        
+
                                         <React.Suspense
                                             fallback={
                                                 <MangaFallback2 />
@@ -66,7 +77,7 @@ export default function RecentlyPopular() {
                                             <MangaPopularElement src={value} />
                                         </React.Suspense>
                                     </SwiperSlide>
-                                )
+                                );
                             })}
                         </Swiper>
                     ) : (
@@ -74,9 +85,9 @@ export default function RecentlyPopular() {
                     )}
                 </Chakra.Box>
             </React.Fragment>
-        )
+        );
     }
     return (
         <MangaFallback2 />
-    )
+    );
 }
