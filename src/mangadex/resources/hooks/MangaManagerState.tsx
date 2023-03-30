@@ -1,27 +1,26 @@
-import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
-import React from "react";
+import { useToast } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import DesktopApi from "../../api/offline/DeskApiRequest";
-import { launch_server, stop_server } from "../../api/offline/plugin";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import DesktopApi from "@mangadex/api/offline/DeskApiRequest";
+import { launch_server, stop_server } from "@mangadex/api/offline/plugin";
 
 export default function MangaManagerState(){
     const queryClient = useQueryClient();
-    const client = useHTTPClient()
-    const key= "mdx-offline_server"
+    const client = useHTTPClient();
+    const key= "mdx-offline_server";
     const toast = useToast({
         position: "bottom-right",
         duration: 9000
     });
     const query = useQuery(key, async () => {
-        let getted = await DesktopApi.ping(client)
+        const getted = await DesktopApi.ping(client);
         return getted;
     }, {
-        "staleTime" : Infinity
-    })
+        "staleTime" : 0
+    });
     const switch_server_state = useMutation({
         "mutationFn" : () => {
-            return query.data == false ? launch_server() : stop_server()
+            return query.data == false ? launch_server() : stop_server();
         },
         onSuccess: () => {
             queryClient.refetchQueries({
@@ -29,19 +28,36 @@ export default function MangaManagerState(){
             });
         }, 
         onError(error) {
-            toast({
-                status: "error",
-                title: "Error on executing",
-                description : JSON.stringify(error),
-                isClosable: true
-            })
+            if(typeof error == "string"){
+                toast({
+                    status: "error",
+                    title: "Error on executing",
+                    description : error,
+                    isClosable: true
+                });
+            }else if (typeof error == "object" && error instanceof Error){
+                toast({
+                    status: "error",
+                    title: "Error on executing",
+                    description : error.message,
+                    isClosable: true
+                });
+            }else{
+                toast({
+                    status: "error",
+                    title: "Error on executing",
+                    description : JSON.stringify(error),
+                    isClosable: true
+                });
+            }
+            
             queryClient.refetchQueries({
                 "queryKey" : key
             });
         },
-    })
+    });
     return {
         server_query : query,
         switch_server_state: switch_server_state
-    }
+    };
 }

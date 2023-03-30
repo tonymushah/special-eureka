@@ -19,6 +19,7 @@ import AllDownloadedChapterCollection from "./CollectionTypes/AllDownloadedChapt
 import Chapter_WAllIncludesCollection from "./CollectionTypes/Chapter_WAllIncludesCollection";
 import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
 import { download_chapter, download_chapter_data_saver } from "@mangadex/plugin";
+import IsDownloadedResult from "./additonal_types/IsDownloadedResult";
 
 export class Chapter extends Attribute {
     private title: string;
@@ -33,34 +34,34 @@ export class Chapter extends Attribute {
     private readableAt: string;
     private chapNo: number;
     public set_title(title: string) {
-        this.title = title
+        this.title = title;
     }
     public set_volume(volume: string) {
-        this.volume = volume
+        this.volume = volume;
     }
     public set_pages(pages: number) {
-        this.pages = pages
+        this.pages = pages;
     }
     public set_translatedLanguage(translatedLanguage: string) {
-        this.translatedLanguage = translatedLanguage
+        this.translatedLanguage = translatedLanguage;
     }
     public set_externalUrl(externalUrl: string) {
-        this.externalUrl = externalUrl
+        this.externalUrl = externalUrl;
     }
     public set_version(version: number) {
-        this.version = version
+        this.version = version;
     }
     public set_createdAt(createdAt: string) {
-        this.createdAt = createdAt
+        this.createdAt = createdAt;
     }
     public set_updateAt(updateAt: string) {
-        this.updateAt = updateAt
+        this.updateAt = updateAt;
     }
     public set_publishAt(publishAt: string) {
-        this.publishAt = publishAt
+        this.publishAt = publishAt;
     }
     public set_readableAt(readableAt: string) {
-        this.readableAt = readableAt
+        this.readableAt = readableAt;
     }
     public set_chapter(chapter: number) {
         this.chapNo = chapter;
@@ -76,28 +77,28 @@ export class Chapter extends Attribute {
         return this.volume;
     }
     public get_pages(): number {
-        return this.pages
+        return this.pages;
     }
     public get_translatedLanguage(): string {
-        return this.translatedLanguage
+        return this.translatedLanguage;
     }
     public get_externalUrl(): string {
-        return this.externalUrl
+        return this.externalUrl;
     }
     public get_version(): number {
-        return this.version
+        return this.version;
     }
     public get_createdAt(): string {
-        return this.createdAt
+        return this.createdAt;
     }
     public get_updateAt(): string {
-        return this.updateAt
+        return this.updateAt;
     }
     public get_publishAt(): string {
-        return this.publishAt
+        return this.publishAt;
     }
     public get_readableAt(): string {
-        return this.readableAt
+        return this.readableAt;
     }
     public constructor(
         id: string,
@@ -117,9 +118,9 @@ export class Chapter extends Attribute {
         this.set_publishAt(publishAt);
     }
     public static build_W_Any(object: any): Chapter {
-        let attributes: any = object.attributes;
-        let relationships: any = object.relationships;
-        let instance: Chapter = new Chapter(
+        const attributes: any = object.attributes;
+        const relationships: any = object.relationships;
+        const instance: Chapter = new Chapter(
             object.id,
             attributes.title,
             attributes.pages,
@@ -142,40 +143,40 @@ export class Chapter extends Attribute {
         return instance;
     }
     public static async get_OnlineChapterbyId(id: string, client?: Client): Promise<Chapter> {
-        let getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
-        let instance: Chapter = Chapter.build_W_Any(getted.data.data);
+        const getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
+        const instance: Chapter = Chapter.build_W_Any(getted.data.data);
         return instance;
     }
     public static async get_ChapterbyId(id: string, client?: Client): Promise<GetChapterByIdResult> {
         if (await DeskApiRequest.ping(client) == true) {
 
             try {
-                let getted = await Chapter.getAOfflineChapter(id, client)
-                let result: GetChapterByIdResult = {
+                const getted = await Chapter.getAOfflineChapter(id, client);
+                const result: GetChapterByIdResult = {
                     data: getted.data,
                     hasFailed: getted.hasFailed,
                     isDownloaded: true
                 };
-                return result
+                return result;
             } catch (error) {
                 return {
                     data: await Chapter.get_OnlineChapterbyId(id, client),
                     isDownloaded: false,
                     hasFailed: false
-                }
+                };
             }
         } else {
             return {
                 data: await Chapter.get_OnlineChapterbyId(id, client),
                 isDownloaded: false,
                 hasFailed: false
-            }
+            };
         }
     }
     public static async search(props:
         ChapterSearchType
     ): Promise<Collection<Chapter>> {
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
             offset: JSON.stringify(props.offset_limits.get_offset()),
             title: (props.title!),
@@ -188,8 +189,8 @@ export class Chapter extends Attribute {
             publishAtSince: (props.publishAtSince!),
             ...props.order?.render(),
             "includes[]": (props.includes!)
-        }
-        let getted: Response<any> = await Api_Request.get_methods("chapter?" +
+        };
+        const getted: Response<any> = await Api_Request.get_methods("chapter?" +
             serialize((new Querry_list_builder<string>("ids", props.ids!)).build()) +
             "&" +
             serialize((new Querry_list_builder<string>("groups", props.group!)).build()) +
@@ -208,16 +209,16 @@ export class Chapter extends Attribute {
             , {
                 query: querys
             }, props.client);
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter.build_W_Any(data[index]);
         }
         return new ChapterCollection(mangaArray, getted.data.limit, getted.data.offset, getted.data.total, props);
     }
     public async get_groupUploaders(client?: Client): Promise<Array<Group>> {
-        let group_atribs: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
-        let groups: Array<Group> = new Array<Group>(group_atribs.length);
+        const group_atribs: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
+        const groups: Array<Group> = new Array<Group>(group_atribs.length);
         for (let index = 0; index < group_atribs.length; index++) {
             const element = group_atribs[index];
             groups[index] = await Group.get_groupById(element.get_id(), client);
@@ -228,8 +229,8 @@ export class Chapter extends Attribute {
         return User.getUserById(this.get_some_relationship(RelationshipsTypes.user())[0].get_id(), client);
     }
     public async getAggregateList(client?: Client): Promise<Aggregate> {
-        let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
-        let groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
+        const groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
+        const groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
         for (let index = 0; index < groups.length; index++) {
             const element = groupss[index];
             groups[index] = element.get_id();
@@ -238,9 +239,9 @@ export class Chapter extends Attribute {
     }
     public getAggregateList_options(client?: Client): AggregateListOptions {
 
-        let manga_id: string = this.get_some_relationship("manga")[0].get_id();
-        let groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
-        let groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
+        const manga_id: string = this.get_some_relationship("manga")[0].get_id();
+        const groupss: Array<Attribute> = this.get_some_relationship(RelationshipsTypes.scanlation_group());
+        const groups: Array<string> = Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
         for (let index = 0; index < groups.length; index++) {
             const element = groupss[index];
             groups[index] = element.get_id();
@@ -277,8 +278,8 @@ export class Chapter extends Attribute {
     }
     public static async getAOfflineChapter(chapterID: string, client?: Client): Promise<{ data: Chapter_withAllIncludes, hasFailed: boolean }> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response: Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`, undefined, client);
-            let hasFailed: boolean = JSON.parse(response.headers["x-download-failed"]);
+            const response: Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`, undefined, client);
+            const hasFailed: boolean = JSON.parse(response.headers["x-download-failed"]);
             return {
                 data: Chapter_withAllIncludes.build_W_Any(response.data.data),
                 hasFailed: hasFailed
@@ -289,7 +290,7 @@ export class Chapter extends Attribute {
     }
     public static async getAOfflineChapter_Data(chapterID: string, client?: Client): Promise<Array<string>> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response: Response<{
+            const response: Response<{
                 data: Array<string>,
                 result: string,
                 type: string
@@ -301,7 +302,7 @@ export class Chapter extends Attribute {
     }
     public static async getAOfflineChapter_Data_Saver(chapterID: string, client?: Client): Promise<Array<string>> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response: Response<{
+            const response: Response<{
                 data: Array<string>,
                 result: string,
                 type: string
@@ -316,8 +317,8 @@ export class Chapter extends Attribute {
             Chapter.getAOfflineChapter(chapterID, client).then(() => {
                 resolve(true);
             }).catch(() => {
-                resolve(false)
-            })
+                resolve(false);
+            });
         });
     }
     public async getOfflineChapter_Data_Saver(client?: Client): Promise<Array<string>> {
@@ -354,7 +355,7 @@ export class Chapter extends Attribute {
             client = await getClient();
         }
         if (await DeskApiRequest.ping(client) == true) {
-            let response: Response<{
+            const response: Response<{
                 result: string,
                 type: string,
                 data: {
@@ -363,7 +364,7 @@ export class Chapter extends Attribute {
                     limit: number,
                     total: number
                 }
-            }> = await DeskApiRequest.get_methods(`chapter`, {
+            }> = await DeskApiRequest.get_methods("chapter", {
                 query: {
                     offset: JSON.stringify(offset_limits.get_offset()),
                     limit: JSON.stringify(offset_limits.get_limits())
@@ -384,22 +385,22 @@ export class Chapter extends Attribute {
         return Manga.getMangaByID(this.get_manga_id(), client);
     }
     public get_user_id(): string {
-        return this.get_some_relationship("user")[0].get_id()
+        return this.get_some_relationship("user")[0].get_id();
     }
     public get_scanlations_groups_id(): Array<string> {
-        let returns: Array<string> = new Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
-        let index = 0;
+        const returns: Array<string> = new Array<string>(this.get_some_relationshipLength(RelationshipsTypes.scanlation_group()));
+        const index = 0;
         this.get_some_relationship(RelationshipsTypes.scanlation_group()).forEach(element => {
             returns[index] = element.get_id();
         });
         return returns;
     }
     protected get_scanlation_group_attr_byID(id: string): Attribute {
-        let to_compare = this.get_some_relationship(RelationshipsTypes.scanlation_group());
+        const to_compare = this.get_some_relationship(RelationshipsTypes.scanlation_group());
         for (let index = 0; index < to_compare.length; index++) {
             const element = to_compare[index];
             if (element.get_id() == id) {
-                return element
+                return element;
             }
         }
         throw new Error("can't find your scanlation group attribute");
@@ -408,31 +409,31 @@ export class Chapter extends Attribute {
         try {
             return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id(), client);
         } catch (error) {
-            throw error
+            throw error;
         }
     }
     public async get_offlineDataImages(client?: Client): Promise<Array<string>> {
-        let data = await Chapter.getAOfflineChapter_Data(this.get_id(), client);
-        let returns: Array<string> = new Array<string>(data.length);
+        const data = await Chapter.getAOfflineChapter_Data(this.get_id(), client);
+        const returns: Array<string> = new Array<string>(data.length);
         for (let index = 0; index < data.length; index++) {
             returns[index] = await Chapter.getAOfflineChapter_Data_Image(this.get_id(), data[index], client);
         }
         return returns;
     }
     public async get_offlineDataSaverImages(client?: Client): Promise<Array<string>> {
-        let data = await Chapter.getAOfflineChapter_Data_Saver(this.get_id(), client);
-        let returns: Array<string> = new Array<string>(data.length);
+        const data = await Chapter.getAOfflineChapter_Data_Saver(this.get_id(), client);
+        const returns: Array<string> = new Array<string>(data.length);
         for (let index = 0; index < data.length; index++) {
             returns[index] = await Chapter.getAOfflineChapter_Data_Saver_Image(this.get_id(), data[index], client);
         }
         return returns;
     }
     public async get_onlineDataImages(client?: Client): Promise<Array<string>> {
-        let at_home = await At_Home.getAt_Home_wChID(this.get_id(), undefined, client);
+        const at_home = await At_Home.getAt_Home_wChID(this.get_id(), undefined, client);
         return at_home.get_data_ImgURL();
     }
     public async get_onlineDataSaverImages(client?: Client): Promise<Array<string>> {
-        let at_home = await At_Home.getAt_Home_wChID(this.get_id(), undefined, client);
+        const at_home = await At_Home.getAt_Home_wChID(this.get_id(), undefined, client);
         return at_home.get_dataSaver_ImgURL();
     }
     public async get_dataImages(client?: Client): Promise<Array<string>> {
@@ -454,7 +455,7 @@ export class Chapter extends Attribute {
     }
     public static async download(chapterID: string, client?: Client): Promise<Array<string>> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response_Json = await download_chapter(chapterID);
+            const response_Json = await download_chapter(chapterID);
             return response_Json.downloaded;
         } else {
             throw new Error("The offline server isn't started");
@@ -462,7 +463,7 @@ export class Chapter extends Attribute {
     }
     public static async download_data_saver(chapterID: string, client?: Client): Promise<Array<string>> {
         if (await DeskApiRequest.ping(client) == true) {
-            let response_Json = await download_chapter_data_saver(chapterID);
+            const response_Json = await download_chapter_data_saver(chapterID);
             return response_Json.downloaded;
         } else {
             throw new Error("The offline server isn't started");
@@ -486,6 +487,20 @@ export class Chapter extends Attribute {
     }
     public async delete(client? : Client){
         await Chapter.delete_a_downloaded_chapter(this.get_id(), client);
+    }
+    public static async downloaded(chap_id : string, client? : Client) : Promise<IsDownloadedResult>{
+        try {
+            const data = await Chapter_withAllIncludes.getAOfflineChapter(chap_id, client);
+            return {
+                isDownloaded : true,
+                hasFailed : data.hasFailed
+            };
+        } catch (error) {
+            return {
+                isDownloaded : false,
+                hasFailed : false
+            };
+        }
     }
 }
 export class Chapters {
@@ -523,7 +538,7 @@ export class Chapters {
         this.set_count(count);
     }
     public async initialize_chapters(client?: Client) {
-        let to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
+        const to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
         for (let index = 0; index < to_input.length; index++) {
             to_input[index] = await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index], client);
         }
@@ -534,16 +549,16 @@ export class Chapters {
         return this.get_chapters();
     }
     public static build_wANY(object: any): Chapters {
-        let ids: Array<string> = [object.id];
-        let others: Array<any> = object.others;
+        const ids: Array<string> = [object.id];
+        const others: Array<any> = object.others;
         for (let index = 0; index < others.length; index++) {
             ids.push(others[index]);
         }
-        let instance: Chapters = new Chapters(object.chapter, ids, object.count);
+        const instance: Chapters = new Chapters(object.chapter, ids, object.count);
         return instance;
     }
     public static async build_wANY2(object: any): Promise<Chapters> {
-        let instance: Chapters = Chapters.build_wANY(object);
+        const instance: Chapters = Chapters.build_wANY(object);
         await instance.initialize_chapters();
         return instance;
     }
@@ -583,7 +598,7 @@ export class Chapter_withAllIncludes extends Chapter {
     public get_userUploader(): Promise<User> {
         return new Promise((resolve, reject) => {
             try {
-                resolve(this.get_uploader())
+                resolve(this.get_uploader());
             } catch (e) {
                 reject(e);
             }
@@ -594,16 +609,16 @@ export class Chapter_withAllIncludes extends Chapter {
             try {
                 resolve(this.get_groups());
             } catch (e) {
-                reject(e)
+                reject(e);
             }
         });
     }
     public get_manga(): Promise<Manga> {
         return new Promise((resolve, reject) => {
             try {
-                resolve(this.manga)
+                resolve(this.manga);
             } catch (e) {
-                reject(e)
+                reject(e);
             }
         });
     }
@@ -624,12 +639,12 @@ export class Chapter_withAllIncludes extends Chapter {
             createdAt,
             updatedAt,
             publishAt
-        )
+        );
     }
     public static build_W_Any(object: any): Chapter_withAllIncludes {
-        let attributes: any = object.attributes;
-        let relationships: any = object.relationships;
-        let instance: Chapter_withAllIncludes = new Chapter_withAllIncludes(
+        const attributes: any = object.attributes;
+        const relationships: any = object.relationships;
+        const instance: Chapter_withAllIncludes = new Chapter_withAllIncludes(
             object.id,
             attributes.title,
             attributes.pages,
@@ -651,8 +666,8 @@ export class Chapter_withAllIncludes extends Chapter {
 
         //        console.log("relationship builded")
         try {
-            let groups_any: Array<any> = Attribute.get_some_relationship(relationships, "scanlation_group");
-            let groups: Array<Group> = []
+            const groups_any: Array<any> = Attribute.get_some_relationship(relationships, "scanlation_group");
+            const groups: Array<Group> = [];
             for (let index = 0; index < groups_any.length; index++) {
                 groups[index] = Group.build_wANY(groups_any[index]);
             }
@@ -677,13 +692,13 @@ export class Chapter_withAllIncludes extends Chapter {
         return instance;
     }
     public static async get_OnlineChapterbyId(id: string, client?: Client | undefined): Promise<Chapter_withAllIncludes> {
-        let getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
+        const getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
             "includes[0]": "manga",
             "includes[1]": "user",
             "includes[2]": "scanlation_group"
         }), {
         }, client);
-        let instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
+        const instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
         return instance;
     }
     public static async get_ChapterbyId(id: string, client?: Client): Promise<GetChapterByIdResult> {
@@ -692,26 +707,26 @@ export class Chapter_withAllIncludes extends Chapter {
                 return {
                     isDownloaded: true,
                     ...(await Chapter.getAOfflineChapter(id, client))
-                }
+                };
             } catch (error) {
                 return {
                     data: await Chapter_withAllIncludes.get_OnlineChapterbyId(id, client),
                     isDownloaded: false,
                     hasFailed: false
-                }
+                };
             }
         } else {
             return {
                 data: await Chapter_withAllIncludes.get_OnlineChapterbyId(id, client),
                 isDownloaded: false,
                 hasFailed: false
-            }
+            };
         }
     }
     public static async search(props:
         Chapter_withAllIncludes_SearchType
     ): Promise<Collection<Chapter_withAllIncludes>> {
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
             offset: JSON.stringify(props.offset_limits.get_offset()),
             title: (props.title!),
@@ -723,8 +738,8 @@ export class Chapter_withAllIncludes extends Chapter {
             updatedAtSince: (props.updatedAtSince!),
             publishAtSince: (props.publishAtSince!),
             ...props.order?.render()
-        }
-        let getted: Response<any> = await Api_Request.get_methods("chapter?" +
+        };
+        const getted: Response<any> = await Api_Request.get_methods("chapter?" +
             serialize(new Querry_list_builder<string>("includes", [
                 "manga",
                 "user",
@@ -749,8 +764,8 @@ export class Chapter_withAllIncludes extends Chapter {
             , {
                 query: querys
             }, props.client);
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter_withAllIncludes.build_W_Any(data[index]);
         }

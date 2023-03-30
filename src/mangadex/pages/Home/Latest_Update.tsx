@@ -1,29 +1,45 @@
 import * as Chakra from "@chakra-ui/react";
-import React from 'react';
-import { useQuery } from 'react-query';
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Offset_limits, Order } from '../../api/internal/Utils';
-import { Chapter, Chapter_withAllIncludes } from '../../api/structures/Chapter';
-import { Collection } from '../../api/structures/Collection';
-import ErrorEL1 from '../../resources/componnents/error/ErrorEL1';
-import MangaElementFallback from "../../resources/componnents/mangas/v1/MangaElementFallback";
+import React from "react";
+import { useQuery, useQueryClient } from "react-query";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
+import { Collection } from "@mangadex/api/structures/Collection";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import MangaElementFallback from "@mangadex/resources/componnents/mangas/v1/MangaElementFallback";
+import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
+import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 
-const MangaFeedElement = React.lazy(() => import('../../resources/componnents/chapter/v1/MangaFeedElement'));
+const MangaFeedElement = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/MangaFeedElement"));
 
 export default function Latest_Updates() {
     const offset_limits_2: Offset_limits = new Offset_limits();
     offset_limits_2.set_limits(12);
-    const client = useHTTPClient()
+    const client = useHTTPClient();
+    const queryClient = useQueryClient();
     const key = "mdx-home_page-latest_update";
-    const query = useQuery<Collection<Chapter_withAllIncludes>, Error>(key, () => {
-        return Chapter_withAllIncludes.search({
+    const query = useQuery<Collection<Chapter_withAllIncludes>, Error>(key, async () => {
+        const search_result = await Chapter_withAllIncludes.search({
             offset_limits: offset_limits_2,
             order: new Order("desc"),
             client: client
-        })
+        });
+        search_result.get_data().forEach((chapter) => {
+            Chapter.downloaded(chapter.get_id(), client).then((value) => {
+                const queryKey = get_chapter_queryKey({
+                    id : chapter.get_id()
+                });
+                queryClient.setQueryData<GetChapterByIdResult>(queryKey, {
+                    "data" : chapter,
+                    hasFailed : value.hasFailed,
+                    "isDownloaded" : value.isDownloaded
+                });
+            });
+        });
+        return search_result;
     }, {
         staleTime: Infinity
-    })
+    });
     if (query.isLoading) {
         return (
             <Chakra.Box>
@@ -47,7 +63,7 @@ export default function Latest_Updates() {
                     </Chakra.Center>
                 </Chakra.Box>
             </Chakra.Box>
-        )
+        );
     }
     if (query.isError) {
         return (
@@ -61,7 +77,7 @@ export default function Latest_Updates() {
                 </Chakra.Button>
                 <ErrorEL1 error={query.error} />
             </Chakra.Box>
-        )
+        );
     }
     return (
         <Chakra.Box>
@@ -82,11 +98,9 @@ export default function Latest_Updates() {
                         >
                             <MangaFeedElement src={value} />
                         </React.Suspense>
-
                     </Chakra.WrapItem>
                 ))}
             </Chakra.Wrap>
-
         </Chakra.Box>
-    )
+    );
 }

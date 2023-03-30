@@ -21,11 +21,11 @@ export function get_author_byID(props : {
         return Author.getAuthorById(props.author_id, client);
     },{
         staleTime : Infinity
-    })
+    });
     return {
         query_key,
         query
-    }
+    };
 }
 
 export function get_author_works_promise(props: {
@@ -41,7 +41,7 @@ export function get_author_works_promise(props: {
             props.author_id
         ],
         client: props.client
-    })
+    });
 }
 
 export function get_author_works_query_key_byAuthor_ID(props: {
@@ -65,7 +65,7 @@ export function get_author_works_byAuthor_ID(props: {
     return {
         query_key,
         query
-    }
+    };
 }
 
 export function get_author_works(props: {

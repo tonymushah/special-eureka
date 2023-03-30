@@ -1,10 +1,10 @@
 import { Button, Center, Heading, Image, Tooltip, Wrap, WrapItem } from "@chakra-ui/react";
+import vite_logo from "@commons-res/common-icon/favicon.svg";
+import chakra_ui_logo from "@commons-res/common-icon/icons8-chakra-ui-480.svg";
+import react_logo from "@commons-res/common-icon/React-icon.svg";
+import tauri_logo from "@commons-res/common-icon/Square30x30Logo.png";
+import { ExtLink } from "@commons-res/components/ExtLink";
 import { Container, Row } from "react-bootstrap";
-import chakra_ui_logo from "../../../commons-res/common-icon/icons8-chakra-ui-480.svg";
-import react_logo from "../../../commons-res/common-icon/React-icon.svg";
-import { ExtLink } from "../../../commons-res/components/ExtLink";
-import vite_logo from "/commons-res/common-icon/favicon.svg";
-import tauri_logo from "/commons-res/common-icon/Square30x30Logo.png";
 
 export default function PoweredBy() {
     return (
@@ -87,5 +87,5 @@ export default function PoweredBy() {
                 </Center>
             </Row>
         </Container>
-    )
+    );
 }
