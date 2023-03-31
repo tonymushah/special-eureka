@@ -120,7 +120,15 @@ export default function HomeAfterPing() {
             </React.Fragment>
         );
     }
-
+    if(query.isError){
+        return (
+            <Chakra.Container>
+                <Chakra.Heading fontFamily={"inherit"}>
+                    Error on loading the home page
+                </Chakra.Heading>
+            </Chakra.Container>
+        );
+    }
     return (
         <Chakra.AbsoluteCenter>
             <Chakra.Box>
@@ -129,7 +137,7 @@ export default function HomeAfterPing() {
                         size={"lg"}
                     />
                     <Chakra.Text>
-                        Fetching the all home page data...
+                        Fetching all home page data...
                     </Chakra.Text>
                 </Chakra.HStack>
             </Chakra.Box>
