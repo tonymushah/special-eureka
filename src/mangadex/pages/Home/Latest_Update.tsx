@@ -79,6 +79,7 @@ export default function Latest_Updates() {
                 <Chakra.Button
                     colorScheme={"orange"}
                     onClick={() => query.refetch()}
+                    isLoading={query.isLoading}
                 >
                     Refetch
                 </Chakra.Button>
@@ -104,6 +105,7 @@ export default function Latest_Updates() {
                 <Chakra.Button
                     colorScheme={"orange"}
                     onClick={() => query.refetch()}
+                    isLoading={query.isLoading || query.isRefetching}
                 >
                     Refetch
                 </Chakra.Button>
@@ -117,6 +119,7 @@ export default function Latest_Updates() {
             <Chakra.Button
                 colorScheme={"orange"}
                 onClick={() => query.refetch()}
+                isLoading={query.isLoading || query.isRefetching}
             >
                 Refetch
             </Chakra.Button>

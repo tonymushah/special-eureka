@@ -106,7 +106,14 @@ export default function MangaElementDef_without_Context_Menu(props: {
                                 <Chakra.GridItem
                                     rowSpan={2}
                                     colSpan={4}
-                                >
+                                >{
+                                        coverQuery.isSuccess ? (<Chakra.Image
+                                            src={coverQuery.data}
+                                            fallbackSrc={Mangadex_placeHolder}
+                                            borderTopLeftRadius={"10px"}
+                                            borderBottomLeftRadius={"10px"}
+                                        />) : null
+                                    }
                                     {
                                         coverQuery.isFetching ? (
                                             <Chakra.Image
@@ -131,14 +138,7 @@ export default function MangaElementDef_without_Context_Menu(props: {
                                             borderBottomLeftRadius={"10px"}
                                         />) : null
                                     }
-                                    {
-                                        coverQuery.isSuccess ? (<Chakra.Image
-                                            src={coverQuery.data}
-                                            fallbackSrc={Mangadex_placeHolder}
-                                            borderTopLeftRadius={"10px"}
-                                            borderBottomLeftRadius={"10px"}
-                                        />) : null
-                                    }
+                                    
                                 </Chakra.GridItem>
                                 <Chakra.GridItem
                                     rowSpan={1}
