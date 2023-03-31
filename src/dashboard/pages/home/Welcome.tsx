@@ -39,6 +39,10 @@ export default function Welcome() {
                         >Star this project on Github</Button>
                     </ExtLink>
                     <Tauri_Updater />
+                    <Button
+                        colorScheme={"blackAlpha"}>
+                        <img src="https://img.shields.io/github/stars/tonymushah/special-eureka?style=social" alt="stars - special-eureka" />
+                    </Button>
                 </Stack>
             </Center>
         </Container>
