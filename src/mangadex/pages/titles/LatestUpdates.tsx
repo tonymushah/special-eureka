@@ -1,26 +1,28 @@
 import * as Chakra from "@chakra-ui/react";
-import TryCatch from "../../../commons-res/components/TryCatch";
-import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
+import TryCatch from "@commons-res/components/TryCatch";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
-import { Mangadex_suspense } from "../..";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "../../api/internal/Utils";
-import { Chapter } from "../../api/structures/Chapter";
-import { CollectionComponnent_WithQuery } from "../../resources/componnents/Collection/Collection";
-import MangaFallback2 from "../../resources/componnents/mangas/v1/MangaElement2Fallback";
+import { Mangadex_suspense } from "@mangadex";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Chapter } from "@mangadex/api/structures/Chapter";
+import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
+import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import { Container } from "react-bootstrap";
 import { appWindow } from "@tauri-apps/api/window";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
 
-const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
-const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"))
-const MangaChapterAccordion_Element = React.lazy(() => import("../../resources/componnents/mangas/v1/MangaChapterAccordion_Element"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
+const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
+const MangaChapterAccordion_Element = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaChapterAccordion_Element"));
 
 export default function LatestUpdates() {
     const offset_limit = new Offset_limits();
     offset_limit.set_limits(25);
     const client = useHTTPClient();
     const queryKey = "mdx-latest-updates";
-    appWindow.setTitle(`Latest Updates | Mangadex`);
+    const userOption = useUserOption();
+    appWindow.setTitle("Latest Updates | Mangadex");
     return (
         <Container>
             <Mangadex_suspense>
@@ -61,12 +63,14 @@ export default function LatestUpdates() {
                                     )}
                                 >
                                     <CollectionComponnent_WithQuery<Chapter>
-                                        fn={() => {
-                                            return Chapter.search({
+                                        fn={async () => {
+                                            const userLanguages = await userOption.getLanguages();
+                                            return await Chapter.search({
                                                 offset_limits: offset_limit,
                                                 order: new Order("desc"),
-                                                client: client
-                                            })
+                                                client: client,
+                                                translatedLanguage : userLanguages.map((lang) => lang.get_two_letter())
+                                            });
                                         }}
                                         queryKey={queryKey}
                                     >
@@ -80,6 +84,7 @@ export default function LatestUpdates() {
                                                                     fallback={
                                                                         <MangaFallback2 />
                                                                     }
+                                                                    key={value.$mangaid}
                                                                 >
                                                                     <MangaChapterAccordion_Element src={value} />
                                                                 </React.Suspense>
@@ -97,5 +102,5 @@ export default function LatestUpdates() {
                 />
             </Mangadex_suspense>
         </Container>
-    )
+    );
 }

@@ -1,15 +1,41 @@
 # Thank you for downloading this application
 
 i'm [Tony Mushah](#tony-mushah-links) the developper behind this app
-I'm glad that you dowload this application,
 
-Okay, if you already use this app (like using the version 0.1.2 or 0.1.1), there is a lot of changes :
+I'm glad that you dowload this application.
 
-- First, the dashboard is changed to this curvy website style
-- Mangadex Home Page perfomance improved (the loading time dicreased)
-- Mangadex Downloading System also improved : you can now see if some chapter are failed are not
-- More Mangadex Page also added : Author page, Recently added page
-    Note : I don't know every page added so you should check them out
-- an Special Updater so you will never miss about the newest realease
+First, big thanks for [anotherducking](https://github.com/anotherduckling) for bug reporting.
+[There](https://github.com/tonymushah/special-eureka/discussions/36) is the discussion by the way
+
+You can also discuss and report to the [Special Eureka Discussions](https://github.com/tonymushah/special-eureka/discussions)
+
+For Mangadex related question, please use the [Mangadex Special-Eureka Q/A Discussions](https://github.com/tonymushah/special-eureka/discussions/categories/mangadex-special-eureka-q-a)
+
+Okay, let me now introduce you the notes :
+
+## For Mangadex
+
+### 1 - Added 
+
+- The Recently popular added on the Home page
+- The user page 
+- The Recently popular page
+- A delete icon is now added of chapter component (You can now delete your favorite/or not chapter)
+- Offline Server AutoStarting
+- Chapter Reading Options 
+- Translated language option
+
+### 2 - Changed 
+
+- Removed language chooser on Manga Page
+- Most of the links color are change
+- Mangadex home page loading stategry improved (it still slow if you have a slow connection)
+
+### 3 - Excepted Bug
+
+- The mangadex random page sometime crash because of the titles
+- The Statistics doesn't appear in the Mangapage
+- The ServerAutoStart will sometimes popup an error `Can't find server handle`
+- The translated language not sync with the recently added on the home page
 
 ### Note : the Guide, Annoucements and Versions on the navbar will be added in a future version
