@@ -1,26 +1,84 @@
 {
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
-    "strict": true,
-    "sourceMap": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true,
-    "baseUrl": "src",
-    "allowJs": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["vite-plugin-remark-rehype/types"]
-  },
-  "include": ["./src"],
-  "exclude": []
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "lib": [
+            "ESNext",
+            "DOM"
+        ],
+        "moduleResolution": "Node",
+        "strict": true,
+        "sourceMap": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "allowJs": true,
+        "forceConsistentCasingInFileNames": true,
+        "types": [
+            "vite-plugin-remark-rehype/types",
+            "@types/mdx"
+        ],
+        "paths": {
+            "@bilibili-comics": [
+                "src/bilibili-comics"
+            ],
+            "@commons-res": [
+                "src/commons-res"
+            ],
+            "@dashboard": [
+                "src/dashboard"
+            ],
+            "@mangadex": [
+                "src/mangadex"
+            ],
+            "@router": [
+                "src/router"
+            ],
+            "@splashscreen": [
+                "src/splashscreen"
+            ],
+            "@test": [
+                "src/test"
+            ],
+            "@": [
+                "src"
+            ],
+            "@bilibili-comics/*": [
+                "src/bilibili-comics/*"
+            ],
+            "@commons-res/*": [
+                "src/commons-res/*"
+            ],
+            "@dashboard/*": [
+                "src/dashboard/*"
+            ],
+            "@mangadex/*": [
+                "src/mangadex/*"
+            ],
+            "@router/*": [
+                "src/router/*"
+            ],
+            "@splashscreen/*": [
+                "src/splashscreen/*"
+            ],
+            "@test/*": [
+                "src/test/*"
+            ],
+            "@/*": [
+                "src/*"
+            ]
+        }
+    },
+    "exclude": [
+        "./dist",
+        "./vite.config.ts"
+    ]
 }

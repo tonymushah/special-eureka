@@ -1,13 +1,13 @@
 import * as Chakra from "@chakra-ui/react";
+import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Container, Nav } from "react-bootstrap";
 import { useQuery, useQueryClient } from "react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Manga } from "../../api/structures/Manga";
-import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
-import Download_Manga_withHotkeys from "../../resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
-import { Manga_Page } from "../../resources/componnents/mangas/Manga_Page";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Manga } from "@mangadex/api/structures/Manga";
+import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
+import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
 
 type MangaPage_OutletContex = {
     toUse: Manga
@@ -20,8 +20,8 @@ export function useManga() {
 
 export default function MangaPage() {
     const client = useHTTPClient();
-    const queryClient = useQueryClient()
-    let { id } = useParams();
+    const queryClient = useQueryClient();
+    const { id } = useParams();
     const query_key = "mdx-manga:" + id;
     React.useMemo<void>(() => {
         queryClient.removeQueries(query_key);
@@ -32,6 +32,7 @@ export default function MangaPage() {
         "staleTime": Infinity
     });
     if (query.isLoading) {
+        appWindow.setTitle("Loading... | Mangadex");
         return (
             <Chakra.AbsoluteCenter>
                 <Chakra.Spinner />
@@ -39,12 +40,12 @@ export default function MangaPage() {
         );
     }
     if (query.isError) {
-        return (
-            <ErrorEL1 error={query.error} />
-        )
+        appWindow.setTitle(`Error on loading title ${id!} | Mangadex`);
+        throw query.error;
     }
     return (
-        <>
+        
+        <React.Fragment>
             <Download_Manga_withHotkeys
                 mangaID={id!}
             />
@@ -97,7 +98,7 @@ export default function MangaPage() {
                     </Container>
                 </Chakra.Box>
             </Manga_Page>
-        </>
+        </React.Fragment>
 
-    )
+    );
 }

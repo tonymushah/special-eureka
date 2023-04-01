@@ -1,4 +1,5 @@
 import { AbsoluteCenter, Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Spinner, Text } from "@chakra-ui/react";
+import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Await, useNavigate } from "react-router-dom";
 import { getMangaDexPath, Mangadex_suspense } from "../..";
@@ -12,7 +13,7 @@ const MangaDexPath = getMangaDexPath();
 
 export default function Random_Manga() {
     const client = useHTTPClient();
-
+    appWindow.setTitle("Loading a Random Manga | Mangadex");
     return (
         <IsPingable
             onLoading={
@@ -23,11 +24,14 @@ export default function Random_Manga() {
                     />
                 </AbsoluteCenter>
             }
-            onError={(query) => (
-                <IsPingable_defaultError
-                    query={query}
-                />
-            )}
+            onError={(query) => {
+                appWindow.setTitle("Error on loading a Random Manga | Mangadex");
+                return (
+                    <IsPingable_defaultError
+                        query={query}
+                    />
+                )
+            }}
             client={client}
             onSuccess={() => (
                 <Mangadex_suspense>

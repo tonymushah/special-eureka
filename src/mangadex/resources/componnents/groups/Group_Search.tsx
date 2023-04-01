@@ -1,3 +1,4 @@
+/*eslint-env broswer*/
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
 import { Offset_limits } from "../../../api/internal/Utils";
@@ -12,7 +13,7 @@ const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 const CollectionComponnent_WithQuery = React.lazy(async () =>{
     let res = await import("../Collection/Collection");
     return {
-        default : res.CollectionComponnent_WithQuery
+        default : res.CollectionComponnent_WithQuery<Attribute>
     }
 })
 
@@ -25,7 +26,7 @@ export default function Group_Search(props : {
         initialValues : {
             name : ""
         },
-        onSubmit(values, formikHelpers) {
+        onSubmit(values) {
             let random = Math.random() * 100;
             setResult(
                 <React.Suspense fallback={
@@ -50,7 +51,7 @@ export default function Group_Search(props : {
                                 <Chakra.Wrap>
                                     {
                                         value.get_data().map((group) => (
-                                            <Chakra.WrapItem>
+                                            <Chakra.WrapItem key={group.get_id()}>
                                                 <React.Suspense
                                                     fallback={
                                                         <GroupFallBackElement/>

@@ -1,21 +1,20 @@
 import { Client, Response, ResponseType } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize } from "../internal/Utils";
+import { Offset_limits, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
+import { default as DeskApiRequest, default as DesktopApi } from "../offline/DeskApiRequest";
 import { Attribute } from "./Attributes";
-import { Manga } from "./Manga";
-import DesktopApi from "../offline/DeskApiRequest";
-import DeskApiRequest from "../offline/DeskApiRequest";
 import { Collection } from "./Collection";
-import CoverSearchType from "./SearchType/Cover";
 import CoverCollection from "./CollectionTypes/CoverCollection";
+import { Manga } from "./Manga";
+import CoverSearchType from "./SearchType/Cover";
 export class Cover extends Attribute{
-    private description: string;
-    private volume: number;
-    private file_name: string;
-    private locale: string;
-    private createdAt: string;
-    private updatedAt: string;
+    private description!: string;
+    private volume!: number;
+    private file_name!: string;
+    private locale!: string;
+    private createdAt!: string;
+    private updatedAt!: string;
     // [x] set for every args
     public set_description(description: string){
         this.description = description;
@@ -83,7 +82,7 @@ export class Cover extends Attribute{
         updatedAt: string,
         relationships: Array<Attribute>
     ): Cover{
-        let instance : Cover = new Cover(
+        const instance : Cover = new Cover(
             id,
             description,
             volume,
@@ -91,7 +90,7 @@ export class Cover extends Attribute{
             locale,
             createdAt,
             updatedAt
-        )
+        );
         instance.set_relationships(relationships);
         return instance;
     }
@@ -105,7 +104,7 @@ export class Cover extends Attribute{
         updatedAt: string,
         relationship: any
     ): Cover{
-        let instance : Cover = new Cover(
+        const instance : Cover = new Cover(
             id,
             description,
             volume,
@@ -113,7 +112,7 @@ export class Cover extends Attribute{
             locale,
             createdAt,
             updatedAt
-        )
+        );
         try {
             instance.set_relationships_Wany(relationship);
         } catch (error) {
@@ -124,9 +123,9 @@ export class Cover extends Attribute{
     public static build_withAny(
         object: any
     ): Cover{
-        let attributes = object.attributes;
-        let relationships = object.relationships;
-        let instance = new Cover(
+        const attributes = object.attributes;
+        const relationships = object.relationships;
+        const instance = new Cover(
             object.id,
             attributes.description,
             attributes.volume,
@@ -134,7 +133,7 @@ export class Cover extends Attribute{
             attributes.locale,
             attributes.createdAt,
             attributes.updated_at
-        )
+        );
         try {
             instance.set_relationships_Wany(relationships);
         } catch (error) {
@@ -143,8 +142,8 @@ export class Cover extends Attribute{
         return instance;
     }
     public static async getOnlineByID(id: string, client? : Client): Promise<Cover>{
-        let getted = await Api_Request.get_methods("cover/" + id, undefined, client);
-        let instance = Cover.build_withAny(getted.data.data);
+        const getted = await Api_Request.get_methods("cover/" + id, undefined, client);
+        const instance = Cover.build_withAny(getted.data.data);
         return instance;
     }
     // [ ] get a cover by his id 
@@ -184,14 +183,14 @@ export class Cover extends Attribute{
         }
         public async get_CoverImage_thumbnail_promise(size: 256 | 512, client?: Client): Promise<string>{
             try {
-                return await Cover.getOfflineCoverImage(this.get_id(), client)
+                return await Cover.getOfflineCoverImage(this.get_id(), client);
             } catch (error) {
                 return this.get_CoverImageOnline_thumbnail(size);
             }
         }
         public async get_CoverImage_promise(client?: Client) : Promise<string>{
             try {
-                return await Cover.getOfflineCoverImage(this.get_id(), client)
+                return await Cover.getOfflineCoverImage(this.get_id(), client);
             } catch (error) {
                 return this.get_CoverImageOnline();
             }
@@ -218,13 +217,13 @@ export class Cover extends Attribute{
             client
         }: CoverSearchType
     ): Promise<Collection<Cover>>{
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             "includes[]": (includes),
             ...order?.render()
         };
-        let getted: Response<any> = await Api_Request.get_methods("cover" + "?" + 
+        const getted: Response<any> = await Api_Request.get_methods("cover" + "?" + 
             serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" +
             serialize((new Querry_list_builder<string>("uploaders", uploaders!)).build()) + "&" +
             serialize((new Querry_list_builder<string>("manga", mangaIDs!)).build()) + "&" + 
@@ -232,8 +231,8 @@ export class Cover extends Attribute{
         , {
             query: querys
         }, client);
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<Cover> = new Array<Cover>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<Cover> = new Array<Cover>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Cover.build_withAny(data[index]);
         }
@@ -249,14 +248,14 @@ export class Cover extends Attribute{
     }
     public static async getAOfflineCover(coverId : string, client? : Client) : Promise<Cover>{
         if(await DesktopApi.ping(client) == true){
-            let response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`, undefined, client);
+            const response : Response<any> = await DesktopApi.get_methods(`cover/${coverId}`, undefined, client);
             return Cover.build_withAny(response.data.data);
         }else{
             throw new Error("The offline server isn't started");
         }
     }
     public static async getOfflineCoverImage(coverId: string, client?: Client) : Promise<string> {
-        let resp : Response<BinaryData> = (await DesktopApi.get_methods("cover/" + coverId + "/image", {
+        const resp : Response<BinaryData> = (await DesktopApi.get_methods("cover/" + coverId + "/image", {
             "responseType" : ResponseType.Binary
         }, client));
         if(resp.ok == true){

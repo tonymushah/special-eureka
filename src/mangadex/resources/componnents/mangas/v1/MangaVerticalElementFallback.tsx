@@ -25,6 +25,7 @@ export default function MangaVerticalElementFallback() {
                                 size={"md"}
                                 noOfLines={2}
                                 margin={"15px"}
+                                fontFamily={"inherit"}
                             >
                                 Loading...
                             </Chakra.Heading>

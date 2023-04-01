@@ -2,6 +2,7 @@ import { useQuery, UseQueryResult } from "react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
 import { Api_Request } from "../../api/internal/Api_Request";
+import { useToast } from "@chakra-ui/react";
 
 export default function IsPingable(props: {
     client: Client,
@@ -13,28 +14,14 @@ export default function IsPingable(props: {
     const query = useQuery<boolean, Error>(query_key, () => {
         return Api_Request.ping(props.client);
     }, {
-        refetchOnWindowFocus : false,
-        refetchOnMount: false
+        staleTime : 0,
+        refetchOnMount : false
     });
-    const context = React.createContext(query)
-    if (query.isLoading == true) {
-        return (
-            <React.Fragment>
-                {
-                    props.onLoading
-                }
-            </React.Fragment>
-        )
-    }
-    if (query.isRefetching == true) {
-        return (
-            <React.Fragment>
-                {
-                    props.onLoading
-                }
-            </React.Fragment>
-        )
-    }
+    const toast = useToast({
+        "duration" : 9000,
+        "position" : "bottom-right"
+    });
+    const context = React.createContext(query);
     if (query.isSuccess == true) {
         if (query.data == true) {
             return (
@@ -43,7 +30,7 @@ export default function IsPingable(props: {
                         props.onSuccess
                     }
                 </context.Consumer>
-            )
+            );
         } else {
             return (
                 <context.Consumer>
@@ -51,10 +38,38 @@ export default function IsPingable(props: {
                         props.onError
                     }
                 </context.Consumer>
-            )
+            );
         }
-
     }
+    if (query.isLoading == true) {
+        toast({
+            "title" : "Pinging the Mangadex API",
+            "status" : "loading",
+            isClosable : true
+        });
+        return (
+            <React.Fragment>
+                {
+                    props.onLoading
+                }
+            </React.Fragment>
+        );
+    }
+    if (query.isRefetching == true) {
+        toast({
+            "title" : "Pinging the Mangadex API",
+            "status" : "loading",
+            isClosable : true
+        });
+        return (
+            <React.Fragment>
+                {
+                    props.onLoading
+                }
+            </React.Fragment>
+        );
+    }
+    
     if (query.isError == true) {
         return (
             <context.Consumer>
@@ -62,7 +77,7 @@ export default function IsPingable(props: {
                     props.onError
                 }
             </context.Consumer>
-        )
+        );
     }
     return (
         <React.Fragment>
@@ -70,5 +85,5 @@ export default function IsPingable(props: {
                 props.onLoading
             }
         </React.Fragment>
-    )
+    );
 }

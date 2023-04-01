@@ -1,16 +1,32 @@
 import React from "react";
 import { Outlet, RouteObject } from "react-router";
 import * as Chakra from "@chakra-ui/react";
+import Dashboard_logo from "@commons-res/common-icon/eureka-logo6.svg";
+
+import "bootstrap/dist/css/bootstrap-grid.min.css";
+
 const DashboardNavBar = React.lazy(() => import("./resources/components/DashBoardNavBar"));
 
 const Home = React.lazy(() => import("./pages/home/index"));
-const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
+
+const ToDevModal = React.lazy(() => import("./resources/components/ToDevModal"));
+
+const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"));
 
 const Updates = React.lazy(() => import("./pages/updates/index"));
 
 export function getDashboardPath() {
-    return "/dashboard"
+    return "/dashboard";
 }
+
+export function getLogo() {
+    return Dashboard_logo;
+}
+
+export function getProjectPath(){
+    return getDashboardPath();
+}
+
 
 function DashboardRouter(): RouteObject {
     const router: RouteObject = {
@@ -32,7 +48,8 @@ function DashboardRouter(): RouteObject {
                     </Chakra.Box>
                 }
             >
-                <NavigatorReactRouter>
+                <ToDevModal/>
+                <BasicWebsitesRessources>
                     <React.Suspense
                         fallback={
                             <Chakra.Box
@@ -54,7 +71,7 @@ function DashboardRouter(): RouteObject {
                             <Outlet />
                         </React.Fragment>
                     </React.Suspense>
-                </NavigatorReactRouter>
+                </BasicWebsitesRessources>
             </React.Suspense>
         ),
         children: [
@@ -104,8 +121,8 @@ function DashboardRouter(): RouteObject {
                     </React.Suspense>)
             }
         ]
-    }
+    };
     return router;
 }
 
-export default DashboardRouter()
+export default DashboardRouter();

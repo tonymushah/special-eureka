@@ -3,26 +3,20 @@ import React from "react";
 //import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
-import "flag-icons/css/flag-icons.min.css";
-import "font-awesome/css/font-awesome.css";
 import { Col, Container, Row } from "react-bootstrap";
 import { FaDiscord } from "react-icons/fa";
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
-import { Group } from "../../../api/structures/Group";
 
-import { writeText } from '@tauri-apps/api/clipboard';
+import { Group } from "@mangadex/api/structures/Group";
+
+import { writeText } from "@tauri-apps/api/clipboard";
 import * as FontAwesome from "react-icons/fa";
 
 const ExtLink = React.lazy(async () => {
-    let res = await import("../../../../commons-res/components/ExtLink");
+    const res = await import("@commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };
-})
+});
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
 
 
@@ -89,7 +83,7 @@ export default function Group_Details(props: {
                     </Col>
                     <Col xs={9}>
                         <Chakra.Box>
-                            <Chakra.Heading size={"md"}>Where to find</Chakra.Heading>
+                            <Chakra.Heading fontFamily={"inherit"} size={"md"}>Where to find</Chakra.Heading>
                             <React.Suspense>
                                 {
                                     props.src.get_website() !== undefined && props.src.get_website() !== null ? (
@@ -116,13 +110,13 @@ export default function Group_Details(props: {
                                                 toast({
                                                     status: "success",
                                                     title: "Email copied to clipboard"
-                                                })
+                                                });
                                             }).catch(() => {
                                                 toast({
                                                     status: "error",
                                                     title: "Error on copying to clipboard"
-                                                })
-                                            })
+                                                });
+                                            });
                                         }} leftIcon={<ChakraIcon.EmailIcon />}>Email</Chakra.Button>
                                     ) : (
                                         <></>
@@ -153,13 +147,13 @@ export default function Group_Details(props: {
                                                 toast({
                                                     status: "success",
                                                     title: "IrcChannel copied to clipboard"
-                                                })
+                                                });
                                             }).catch(() => {
                                                 toast({
                                                     status: "error",
                                                     title: "Error on copying IrcChannel to clipboard"
-                                                })
-                                            })
+                                                });
+                                            });
                                         }}>IrcChannel</Chakra.Button>
                                     ) : (
                                         <></>
@@ -172,13 +166,13 @@ export default function Group_Details(props: {
                                                 toast({
                                                     status: "success",
                                                     title: "IrcServer copied to clipboard"
-                                                })
+                                                });
                                             }).catch(() => {
                                                 toast({
                                                     status: "error",
                                                     title: "Error on copying IrcServer to clipboard"
-                                                })
-                                            })
+                                                });
+                                            });
                                         }}>IrcServer</Chakra.Button>
                                     ) : (
                                         <></>
@@ -192,7 +186,7 @@ export default function Group_Details(props: {
                                     <></>
                                 ) : (
                                     <Chakra.Box>
-                                        <Chakra.Heading size={"md"}>Group description</Chakra.Heading>
+                                        <Chakra.Heading fontFamily={"inherit"} size={"md"}>Group description</Chakra.Heading>
                                         <Chakra.Box>
                                             <React.Suspense
                                                 fallback={<Chakra.Box
@@ -204,7 +198,6 @@ export default function Group_Details(props: {
                                                 </Chakra.Box>}
                                             >
                                                 <ReactMarkDown
-                                                    children={props.src.get_description()}
                                                     components={{
                                                         a(node, href, ...props) {
                                                             return (
@@ -221,10 +214,12 @@ export default function Group_Details(props: {
                                                                         )
                                                                     }
                                                                 </React.Suspense>
-                                                            )
+                                                            );
                                                         }
                                                     }}
-                                                />
+                                                >
+                                                    {props.src.get_description()}
+                                                </ReactMarkDown>
                                             </React.Suspense>
                                         </Chakra.Box>
                                     </Chakra.Box>
@@ -235,5 +230,5 @@ export default function Group_Details(props: {
                 </Row>
             </Container>
         </Chakra.Box>
-    )
+    );
 }

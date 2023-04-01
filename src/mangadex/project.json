@@ -1,0 +1,12 @@
+{
+  "name": "mangadex",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "./src/mangadex",
+  "targets": {
+    "build": {
+      "executor": "special-eureka-nx:build"
+    }
+  },
+  "tags": []
+}

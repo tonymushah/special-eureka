@@ -1,0 +1,53 @@
+name: "Dev Builds"
+on: 
+  push: 
+    branches:
+      - dev
+      - nx-importation
+
+jobs:
+  test-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: install pnpm 
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
+          run_install: false
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: install app dependencies
+        run: pnpm install 
+      - name: Get current time
+        uses: josStorer/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DD
+          utcOffset: "+08:00"
+      - name: build the actual app with tauri action
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_PASSWORD }}
+        with:
+          tagName: "v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
+          releaseName: "Special Eureka v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
+          releaseBody: "This is a dev release of v__VERSION__ from branch ${{ github.ref }}. It's unstable and might break, so please see to the latest stable realeases"
+          releaseDraft: false
+          prerelease: true

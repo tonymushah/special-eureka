@@ -6,7 +6,7 @@ import ReactContextMenu from "react-jsx-context-menu";
 
 export default function MangaContextMenu(props: {
     mangaId : string,
-    refetch?: Function,
+    refetch?: () => void,
     children: React.ReactElement
 }){
     const {delete_, download_} = useMangaDownload_Delete({

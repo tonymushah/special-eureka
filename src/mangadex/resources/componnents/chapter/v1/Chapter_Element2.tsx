@@ -4,11 +4,12 @@ import { Col, Row } from "react-bootstrap";
 import { FaQuestionCircle, FaUser, FaUsers } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Timeago from "react-timeago";
-import { getMangaDexPath } from "../../../..";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Chapter } from "../../../../api/structures/Chapter";
-import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "../../../hooks/ChapterStateHooks";
+import { getMangaDexPath } from "@mangadex";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Chapter } from "@mangadex/api/structures/Chapter";
+import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "@mangadex/resources/hooks/ChapterStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
+import Flag_icons from "../../FlagIcons";
 const ChapterDownloadButton = React.lazy(() => import("./ChapterDownloadButton"));
 const MangaDexPath = getMangaDexPath();
 
@@ -16,7 +17,7 @@ export default function Chapter_Element2(props: {
     chapter: Chapter,
 }) {
     const { user_query } = get_chapter_user_uploader(props);
-    const groups_query = get_chapter_groups(props)
+    const groups_query = get_chapter_groups(props);
     const {
         this_chapter_lang_query
     } = get_this_chapter_lang(props);
@@ -36,7 +37,7 @@ export default function Chapter_Element2(props: {
                                 if (value.isError) {
                                     (<></>);
                                 }
-                                return (<Chakra.Link>{value.data!.get_name()}</Chakra.Link>)
+                                return (<Chakra.Link key={value.data!.get_id()} as={Link} to={MangaDexPath + `/group/${value.data!.get_id()}`}>{value.data!.get_name()}</Chakra.Link>);
                             })
                         )
                     }
@@ -45,7 +46,7 @@ export default function Chapter_Element2(props: {
                         <Chakra.Icon as={FaUser} /> {
                             user_query.isLoading ? <Chakra.Skeleton height={"20px"} /> : (
                                 user_query.isError ? <ErrorEL1 error={user_query.error} /> : (
-                                    user_query.isSuccess ? <Chakra.Link>{user_query.data!.get_username()}</Chakra.Link> : null
+                                    user_query.isSuccess ? <Chakra.Link key={user_query.data!.get_id()} as={Link} to={MangaDexPath + `/user/${user_query.data!.get_id()}`}>{user_query.data!.get_username()}</Chakra.Link> : null
                                 )
                             )
                         }
@@ -63,7 +64,7 @@ export default function Chapter_Element2(props: {
                                         hasArrow
                                         label={this_chapter_lang_query.data.get_name()}
                                     >
-                                        <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
+                                        <Flag_icons locale={this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
                                     </Chakra.Tooltip>
                                 ) : (
                                     this_chapter_lang_query.isError ? (
@@ -81,7 +82,7 @@ export default function Chapter_Element2(props: {
                         </Chakra.Center>
                     </Col>
                     <Col xs={10}>
-                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
+                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                             <TryCatch
                                 catch={() => (
                                     <Chakra.LinkOverlay
@@ -95,6 +96,12 @@ export default function Chapter_Element2(props: {
                                 <Chakra.LinkOverlay
                                     as={Link}
                                     to={MangaDexPath +"/chapter/" + props.chapter.get_id()}
+                                    color={"black"}
+                                    textDecoration={"none"}
+                                    _hover={{
+                                        color : "orange",
+                                        textDecoration : "none"
+                                    }}
                                 >
                                     Chapter {props.chapter.get_chapter()} {
                                         props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
@@ -131,5 +138,5 @@ export default function Chapter_Element2(props: {
                 </Row>
             </Chakra.LinkBox>
         </Chakra.Tooltip>
-    )
+    );
 }

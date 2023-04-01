@@ -1,21 +1,28 @@
+import TryCatch from "@/commons-res/components/TryCatch";
 import * as Chakra from "@chakra-ui/react";
+import HTTPClientProvider_Query from "@commons-res/components/HTTPClientProvider_Query";
+import { User } from "@mangadex/api/structures/User";
+import UserPage from "@mangadex/pages/user";
 import { getClient } from "@tauri-apps/api/http";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { Composition } from "remotion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import HTTPClientProvider_Query from "../../commons-res/components/HTTPClientProvider_Query";
-import TryCatch from "../../commons-res/components/TryCatch";
-import Api_Request from "../../mangadex/api/offline/DeskApiRequest";
-import { Manga } from "../../mangadex/api/structures/Manga";
-import "swiper/css/bundle"
-import AllDownlaodedMangaConsumer from "../../mangadex/resources/componnents/download/All_downloaded_Manga_Consumer";
-import MangaElementDef_wID from "../../mangadex/resources/componnents/mangas/v1/MangaElementDef_wID";
-import { FreeMode } from "swiper"
+import "swiper/css/bundle";
+import monka from "./test-data/user/63849d8f-2eb3-457f-bb90-0e1f7d43588b.json";
+
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const test_area = ReactDOM.createRoot(document.getElementById("test_area")!);
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+    "defaultOptions": {
+        "queries": {
+            "staleTime": Infinity
+        }
+    }
+});
+
+const testUser = User.build_wANY(monka.data);
 
 test_area.render(
     <Chakra.ChakraProvider>
@@ -39,7 +46,7 @@ test_area.render(
                         </Chakra.AbsoluteCenter>
                     </Chakra.Box>
                 }
-                onError={(error) => (
+                onError={() => (
                     <Chakra.Box
                         width={"100%"}
                         height={"100vh"}
@@ -55,38 +62,24 @@ test_area.render(
                     </Chakra.Box>
                 )}
             >
-                <AllDownlaodedMangaConsumer>
-                    {
-                        (mangas) => (
-                            <Swiper
-                                slidesPerGroupAuto={true}
-                                slidesPerView={"auto"}
-                                spaceBetween={20}
-                                freeMode={true}
-                                modules={[FreeMode]}
-                            >
-                                {
-                                    mangas.map((value, index) => (
-                                        <SwiperSlide
-                                            key={index}
-                                            style={{
-                                                display : "inline-block",
-                                                width : "min-content"
-                                            }}
-                                        >
-                                            <MangaElementDef_wID
-                                                mangaID={value}
-                                            />
-                                        </SwiperSlide>
-                                    ))
-                                }
-                            </Swiper>
-                        )
-                    }
-                </AllDownlaodedMangaConsumer>
+                <TryCatch
+                    catch={(error) => (
+                        <Chakra.Alert status="error">
+                            <Chakra.AlertIcon />
+                            <Chakra.AlertTitle>{error.name}</Chakra.AlertTitle>
+                            <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
+                        </Chakra.Alert>
+                    )}
+                >
+                    <React.Suspense fallback={
+                        <Chakra.Spinner />
+                    }>
+                        <UserPage user={testUser} />
+                    </React.Suspense>
+                </TryCatch>
             </HTTPClientProvider_Query>
         </QueryClientProvider>
     </Chakra.ChakraProvider>
-)
+);
 
 

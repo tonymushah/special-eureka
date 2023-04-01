@@ -1,28 +1,22 @@
-# Special Eureka (or mangadex-desktop ...)
+# Special Eureka
+
 [![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml) \
-A manga reader based on the [Mangadex](https://mangadex.org) website
+[![Dev Builds](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml) \
 
-It's build in [Tauri](https://tauri.app) and [React](https://reactjs.org) 
+A desktop manga reader which support for :
 
-## RoadMap :
+- the [Mangadex](https://mangadex.org) website. [Code source](https://github.com/tonymushah/special-eureka/tree/master/src/mangadex)
 
-- [ ] Typescript API :
-  - [x] Manga
-  - [x] Chapter
-  - [x] Group
-  - [x] List
-  - [x] User
-  - [x] Cover
-  - [ ] Auth
-  - [ ] Upload
-- [ ] Manga Research
-  - [x] Simple
-  - [ ] Advanced
-- [x] Chapter reading
-- [x] Chapter downloading + offline reading
-- [ ] Chapter reading history
-- [X] Group page
-- [ ] User Page 
-- [X] Author Page
-- [ ] Log in
-- [ ] Custom lists pages
+It's build in [Tauri](https://tauri.app) and [React](https://reactjs.org)
+
+## Bug reporting
+
+If you fing a bug or something, please report to :
+
+- [Mangadex Special-Eureka Q/A Discussions](https://github.com/tonymushah/special-eureka/discussions/categories/mangadex-special-eureka-q-a) for Mangadex related bug report
+
+## Feedbacks
+
+If you want to give some feedback, please put them to :
+
+### [Feedbacks Discussions](https://github.com/tonymushah/special-eureka/discussions/categories/feedbacks)

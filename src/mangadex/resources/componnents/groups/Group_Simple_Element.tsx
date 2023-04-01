@@ -1,20 +1,14 @@
-import React from "react";
-//import MangaList from "../../mangadex/api/tsx/MangaList";
-//import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
-import "flag-icons/css/flag-icons.min.css";
-import "font-awesome/css/font-awesome.css";
 import { Col, Container, Row } from "react-bootstrap";
 import { FaUsers } from "react-icons/fa";
 import {
     useQuery
-} from 'react-query';
-import { Group } from "../../../api/structures/Group";
-import TryCatch from "../../../../commons-res/components/TryCatch";
+} from "react-query";
+import { Group } from "@mangadex/api/structures/Group";
+import TryCatch from "@commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import { getMangaDexPath } from "../../..";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { getMangaDexPath } from "@mangadex";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -28,7 +22,7 @@ export default function Group_Simple_Element(props: {
             return props.src.getLeader(client);
         }, {
             staleTime: Infinity
-        })
+        });
         return (
             <Chakra.Tooltip
                 label={`This group has ${props.src.getMembersID().length} members`}
@@ -91,7 +85,7 @@ export default function Group_Simple_Element(props: {
                     </Container>
                 </Chakra.Box>
             </Chakra.Tooltip>
-        )
+        );
     } catch (e) {
         return (
             <Chakra.Tooltip
@@ -132,7 +126,7 @@ export default function Group_Simple_Element(props: {
                     </Container>
                 </Chakra.Box>
             </Chakra.Tooltip>
-        )
+        );
     }
 
 }

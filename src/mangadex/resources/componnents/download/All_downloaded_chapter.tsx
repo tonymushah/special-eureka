@@ -1,13 +1,15 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { useQuery } from "react-query";
-import { Chapter } from "../../../api/structures/Chapter";
-import ErrorEL1 from "../error/ErrorEL1";
-import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
+import React from "react";
+import { UseQueryOptions } from "react-query";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { Chapter } from "../../../api/structures/Chapter";
+import { Collection } from "../../../api/structures/Collection";
+import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 
-export default function All_downloaded_chapter() {
+export default function All_downloaded_chapter(props: {
+    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, 'queryKey' | 'queryFn'>,
+}) {
     const client = useHTTPClient();
     const query_key = "mdx-downloaded_chapter";
     return (
@@ -28,6 +30,7 @@ export default function All_downloaded_chapter() {
                         </Chakra.Box>
                     </Chakra.AbsoluteCenter>
                 }
+                query_options={props.query_options}
             >
                 {
                     (value) => (<Chakra.VStack>

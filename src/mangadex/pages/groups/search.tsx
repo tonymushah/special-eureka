@@ -1,3 +1,4 @@
+import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Container } from "react-bootstrap";
 import { Mangadex_suspense } from "../..";
@@ -8,6 +9,7 @@ const Group_Search = React.lazy(() => import("../../resources/componnents/groups
 export default function Group_Search_default(){
     let offset_Limits = new Offset_limits()
     offset_Limits.set_limits(25);
+    appWindow.setTitle("Groups | Mangadex");
     return (
         <Mangadex_suspense>
             <Container>

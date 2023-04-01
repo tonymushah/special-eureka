@@ -1,60 +1,73 @@
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
+import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import "flag-icons/css/flag-icons.min.css";
-import React from 'react';
-import { ProSidebarProvider } from "react-pro-sidebar";
-import { Outlet, RouteObject } from "react-router-dom";
-import "../commons-res/fontawesome-free-6.1.2-web/css/all.css";
-import MyErrorBounderies from "./resources/componnents/error/MyErrorBounderies";
-import { ErrorELRouter } from './resources/componnents/Error_cmp';
-import "./resources/css/basic-styles.css";
-import "./resources/Poppins/Poppins.css";
+import React from "react";
+import { RouteObject } from "react-router-dom";
+import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
+import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
+import "@mangadex/resources/Poppins/Poppins.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-const MangaDexPath: string = "/mangadex";
+const MangaDexPath = "/mangadex";
 
 export function getMangaDexPath() {
-    return MangaDexPath
-};
+    return MangaDexPath;
+}
 
-const MangaPage = React.lazy(() => import("./pages/manga/index"));
+export function getProjectPath() {
+    return getMangaDexPath();
+}
 
-const Chapters_ = React.lazy(() => import("./pages/manga/Chapters_"));
+export function getLogo() {
+    return MangadexLogo;
+}
 
-const Covers_ = React.lazy(() => import("./pages/manga/Covers_"));
+const MangaPage = React.lazy(() => import("@mangadex/pages/manga/index"));
 
-const Related_ = React.lazy(() => import("./pages/manga/Related_"));
+const Chapters_ = React.lazy(() => import("@mangadex/pages/manga/Chapters_"));
 
-const DownloadsLaoyut = React.lazy(() => import('./pages/download/layout'));
+const Covers_ = React.lazy(() => import("@mangadex/pages/manga/Covers_"));
 
-const Download_Index_Page = React.lazy(() => import('./pages/download'));
+const Related_ = React.lazy(() => import("@mangadex/pages/manga/Related_"));
 
-const Chapter_Page = React.lazy(() => import('./pages/chapter/Chapter_Page'));
+const DownloadsLaoyut = React.lazy(() => import("@mangadex/pages/download/layout"));
 
-const Home = React.lazy(() => import("./pages/Home/Home"));
+const Download_Index_Page = React.lazy(() => import("@mangadex/pages/download"));
 
-const Longstrip = React.lazy(() => import('./pages/ChapterReadingMode/Longstrip'));
+const Chapter_Page = React.lazy(() => import("@mangadex/pages/chapter/Chapter_Page"));
 
-const Widestrip = React.lazy(() => import('./pages/ChapterReadingMode/Widestrip'));
+const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
 
-const Content = React.lazy(() => import("./resources/componnents/SideBar"));
+const Longstrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Longstrip"));
 
-const SinglePage = React.lazy(() => import("./pages/ChapterReadingMode/SwipperMode"));
+const Widestrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Widestrip"));
 
-const Group_Page_ = React.lazy(() => import("./pages/groups/index"));
+const SinglePage = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/SwipperMode"));
 
-const Group_Search = React.lazy(() => import("./pages/groups/search"));
+const Group_Page_ = React.lazy(() => import("@mangadex/pages/groups/index"));
 
-const Random_Manga = React.lazy(() => import("./pages/manga/Random"));
+const Group_Search = React.lazy(() => import("@mangadex/pages/groups/search"));
 
-const RecentlyAdded = React.lazy(() => import("./pages/titles/RecentlyAdded"));
+const Random_Manga = React.lazy(() => import("@mangadex/pages/manga/Random"));
 
-const Author_Page_index = React.lazy(() => import("./pages/author"));
+const RecentlyAdded = React.lazy(() => import("@mangadex/pages/titles/RecentlyAdded"));
 
-const IsPingable_default_client = React.lazy(() => import("./resources/componnents/IsPingable_default_client"));
+const Author_Page_index = React.lazy(() => import("@mangadex/pages/author"));
 
-const LatestUpdates = React.lazy(() => import("./pages/titles/LatestUpdates"));
+const IsPingable_default_client = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_default_client"));
 
-const NavigatorReactRouter = React.lazy(() => import("../commons-res/components/NavigatorReactRouter"));
+const LatestUpdates = React.lazy(() => import("@mangadex/pages/titles/LatestUpdates"));
+
+const RecentlyPopularPage = React.lazy(() => import("@mangadex/pages/titles/RecentlyPopular"));
+
+const MangadexLayout = React.lazy(() => import("@mangadex/pages/Layout"));
+
+const UserPage = React.lazy(() => import("@mangadex/pages/user/UserPage+Loader"));
+
+const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"));
+
+const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -69,7 +82,7 @@ export function Mangadex_suspense__() {
                 />
             </Chakra.Center>
         </Chakra.Box>
-    )
+    );
 }
 
 export function Mangadex_suspense(props: React.PropsWithChildren) {
@@ -90,35 +103,9 @@ function useMangadexRouter(): RouteObject {
     const Router: RouteObject = {
         path: MangaDexPath,
         element: (
-            <MyErrorBounderies>
-                <Mangadex_suspense>
-                    <NavigatorReactRouter>
-                        <ProSidebarProvider>
-                            <React.Suspense
-                                fallback={
-                                    <Chakra.Box
-                                        width={"100%"}
-                                        height={"100vh"}
-                                    >
-                                        <Chakra.AbsoluteCenter>
-                                            <Chakra.Spinner
-                                                size="xl"
-                                                color='orange.500'
-                                                thickness='4px'
-                                            />
-                                        </Chakra.AbsoluteCenter>
-                                    </Chakra.Box>
-                                }
-                            >
-                                <Content>
-                                    <Outlet />
-                                </Content>
-                            </React.Suspense>
-                        </ProSidebarProvider>
-                    </NavigatorReactRouter>
-                </Mangadex_suspense>
-
-            </MyErrorBounderies>
+            <Mangadex_suspense>
+                <MangadexLayout />
+            </Mangadex_suspense>
         ),
         errorElement: (<ErrorELRouter />),
         children: [
@@ -319,6 +306,14 @@ function useMangadexRouter(): RouteObject {
                                 <LatestUpdates />
                             </Mangadex_suspense>
                         )
+                    },
+                    {
+                        path: "recently-popular",
+                        element: (
+                            <Mangadex_suspense>
+                                <RecentlyPopularPage />
+                            </Mangadex_suspense>
+                        )
                     }
                 ]
             },
@@ -346,9 +341,49 @@ function useMangadexRouter(): RouteObject {
                         )
                     }
                 ]
+            },
+            // User 
+            {
+                path : "user",
+                errorElement : (
+                    <ErrorELRouter/>
+                ),
+                children : [
+                    {
+                        path : ":user_id",
+                        errorElement : (<ErrorELRouter/>),
+                        element : (
+                            <Mangadex_suspense>
+                                <UserPage/>
+                            </Mangadex_suspense>
+                        ),
+                        children : [
+                            {
+                                index : true,
+                                errorElement : (<ErrorELRouter/>),
+                                element : (
+                                    <Mangadex_suspense>
+                                        <UserPageInfo/>
+                                    </Mangadex_suspense>
+                                )
+                            },
+                            {
+                                path : "feed",
+                                errorElement : (
+                                    <ErrorELRouter/>
+                                ),
+                                element : (
+                                    <Mangadex_suspense>
+                                        <UserPageFeed/>
+                                    </Mangadex_suspense>
+                                )
+                            }
+                        ]
+                    }
+                ]
             }
         ]
-    }
+    };
 
     return Router;
 }

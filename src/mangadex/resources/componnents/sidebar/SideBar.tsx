@@ -1,13 +1,16 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
 import React from "react";
-import { FaBookmark, FaBookOpen, FaComments, FaHome, FaUser } from 'react-icons/fa';
+import { FaBookmark, FaBookOpen, FaCog, FaComments, FaHome, FaUser } from "react-icons/fa";
 import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../..";
-import { ExtLink } from "../../../../commons-res/components/ExtLink";
-import mangadex_logo from "/mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import { getMangaDexPath } from "@mangadex";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import SideBarUserOption from "./useroption";
+import { RiGroupLine } from "react-icons/ri";
+import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import "@mangadex/resources/css/sidebar.css";
+
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
 const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Badge_with_Server_Icon"));
@@ -21,8 +24,8 @@ export default function Side_bar() {
             breakPoint="md"
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
-                    backgroundColor: '#2c2c2c',
-                    color: '#f2f2f2'
+                    backgroundColor: "#2c2c2c",
+                    color: "#f2f2f2"
                 }
             }}
         >
@@ -34,7 +37,7 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: '#2c2c2c'
+                            backgroundColor: "#2c2c2c"
                         }
                     }
                 }}
@@ -61,15 +64,15 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: '#2c2c2c'
+                            backgroundColor: "#2c2c2c"
                         }
                     }
                 }}
                 rootStyles={{
-                    maxHeight : "80vh",
+                    maxHeight: "80vh",
                     height: "80vh",
-                    overflowY : "scroll",
-                    overflowX : "hidden"
+                    overflowY: "scroll",
+                    overflowX: "hidden"
                 }}
             >
 
@@ -95,26 +98,33 @@ export default function Side_bar() {
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
                     >
-                        <MenuItem
-                            component={
-                                <Link
-                                    to={MangaDexPath + "download"}
-                                />
-                            }
-                        >
-                            Offline Library
-                        </MenuItem>
-                        <MenuItem>Updates</MenuItem>
-                        <MenuItem> Online Library</MenuItem>
-                        <MenuItem>MDLists</MenuItem>
-                        <MenuItem>Followed Groups</MenuItem>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>Updates</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>Online Library</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>MDLists</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
+                        <Chakra.Tooltip hasArrow placement="right" label={"Available only for signed users"}>
+                            <MenuItem>
+                                <s>Followed Groups</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
                     </Menu>
                 </SubMenu>
                 <MenuItem
@@ -145,9 +155,9 @@ export default function Side_bar() {
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
@@ -159,16 +169,21 @@ export default function Side_bar() {
                                 />
                             }
                         >
-                            Advanced Search
+                            Offline Library
                         </MenuItem>
+                        <Chakra.Tooltip placement="right" hasArrow label={"Will available in the next update"}>
+                            <MenuItem>
+                                <s>Advanced Search</s>
+                            </MenuItem>
+                        </Chakra.Tooltip>
                         <MenuItem
                             component={
-                                <Link to={MangaDexPath + "titles/recently-added"}/>
+                                <Link to={MangaDexPath + "titles/recently-added"} />
                             }
                         >Recently Added</MenuItem>
                         <MenuItem
                             component={
-                                <Link to={MangaDexPath + "titles/latest-updates"}/>
+                                <Link to={MangaDexPath + "titles/latest-updates"} />
                             }
                         >Latest Updates</MenuItem>
                         <MenuItem
@@ -178,25 +193,32 @@ export default function Side_bar() {
                         >
                             Random
                         </MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "titles/recently-popular"} />
+                            }
+                        >
+                            Recently Popular
+                        </MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<i onClick={() => collapseSidebar()} className={"far fa-users"}></i>} label={"Community"}>
+                <SubMenu defaultOpen={false} icon={<RiGroupLine onClick={() => collapseSidebar()}/>} label={"Community"}>
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
                     >
                         <ExtLink href="https://forums.mangadex.org/">
-                            <MenuItem 
-                                icon={<FaComments/>}
+                            <MenuItem
+                                icon={<FaComments />}
                                 suffix={<ChakraIcons.ExternalLinkIcon />}
                             >
-                                Forums 
+                                Forums
                             </MenuItem>
                         </ExtLink>
                         <MenuItem
@@ -208,19 +230,25 @@ export default function Side_bar() {
                         </MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<i onClick={() => collapseSidebar()} className='fas fa-cog fa-spin'></i>} label={"Powerred by "}>
+                <SubMenu defaultOpen={false} icon={
+                    <Chakra.Icon
+                        as={FaCog}
+                        onClick={() => collapseSidebar()}
+                        className={"fa-spin"}
+                    />
+                } label={"Powerred by "}>
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
                     >
                         <ExtLink href="https://api.mangadex.org">
-                            <MenuItem 
+                            <MenuItem
                                 icon={<img id="tauri_icon" src={mangadex_logo} />}
                                 suffix={<ChakraIcons.ExternalLinkIcon />}
                             >
@@ -238,26 +266,30 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: '#2c2c2c'
+                            backgroundColor: "#2c2c2c"
                         }
                     }
                 }}
             >
-                <MenuItem
-                    icon={
-                        <FaUser />
-                    }
-                    suffix={
-                        <Chakra.Button
-                            colorScheme={"facebook"}
-                        >
-                            Login
-                        </Chakra.Button>
-                    }
-                >
-                    Guest
-                </MenuItem>
+                <SideBarUserOption>
+                    <MenuItem
+                        icon={
+                            <FaUser />
+                        }
+                        suffix={
+                            <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>
+                                <Chakra.Button
+                                    colorScheme={"facebook"}
+                                >
+                                    <s>Login</s>
+                                </Chakra.Button>
+                            </Chakra.Tooltip>
+                        }
+                    >
+                        Guest
+                    </MenuItem>
+                </SideBarUserOption>
             </Menu>
         </Sidebar>
-    )
+    );
 }

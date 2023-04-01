@@ -1,27 +1,27 @@
 import * as ChakraIcons from "@chakra-ui/icons";
-import * as Chakra from '@chakra-ui/react';
+import * as Chakra from "@chakra-ui/react";
+import { appWindow } from "@tauri-apps/api/window";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Button, Col, Container, Placeholder, Row } from "react-bootstrap";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useQueries, useQuery } from "react-query";
-import { Await, Link } from "react-router-dom";
-import { getMangaDexPath } from "../../..";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import TryCatch from "../../../../commons-res/components/TryCatch";
-import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "../../../api/internal/Utils";
-import { Author } from "../../../api/structures/Author";
-import { Manga } from "../../../api/structures/Manga";
-import { Statistics_Manga } from "../../../api/structures/Statistics";
-import "../../css/manga/mg-p.css";
-import "../../css/manga/thumbail-mg.css";
-import { get_manga_page_authors_artists, get_manga_page_cover, get_manga_page_titles } from "../../hooks/MangaStateHooks";
+import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
+import { getMangaDexPath } from "@mangadex";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "@mangadex/api/internal/Utils";
+import { Author } from "@mangadex/api/structures/Author";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
+import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "@mangadex/resources/hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../error/ErrorEL1";
 import { Cover_Image_ } from "./Mainpage/Image_";
 import Statis from "./Statistics/Statis";
+import MangaTitle from "./v1/MangaTitle";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
 
@@ -34,11 +34,11 @@ export type MangaPageProps = {
 }
 
 const ExtLink = React.lazy(async () => {
-    let res = await import("../../../../commons-res/components/ExtLink");
+    const res = await import("@commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };
-})
+});
 
 function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     const client = useHTTPClient();
@@ -124,45 +124,45 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
                 )
             }
         </Chakra.Box>
-    )
+    );
 }
 
 export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
-    let title: string = "";
+    let title = "";
     const client = useHTTPClient();
-    const { coverQuery } = get_manga_page_cover(props);
     const { title_query } = get_manga_page_titles(props);
     const {
         authors,
         artistists,
         is_Author_artists_finished
     } = get_manga_page_authors_artists(props);
-
+    const coverQuery = get_manga_page_cover_art_image(props).query;
     if (props.src.get_title().en == null) {
         title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
     } else {
         title = props.src.get_title().en;
     }
+    appWindow.setTitle(`${title} | Mangadex`).then();
     function authors_artists(): Array<React.ReactNode> {
-        let returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
+        const returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
             return value.data!;
         }), artistists.map<Author>((value) => {
             return value.data!;
         }));
-        let returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
+        const returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
         for (let index = 0; index < returns.filtred.length; index++) {
             const element = returns.filtred[index];
             if (index == (returns.filtred.length - 1)) {
                 returns2[index] = (
                     <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
-                )
+                );
             } else {
                 returns2[index] = (
                     <>
                         <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
                         ,&nbsp;
                     </>
-                )
+                );
             }
         }
         return returns2;
@@ -170,16 +170,16 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     function get_status_color(): React.ReactNode {
         switch (props.src.get_status()) {
             case Status.ongoing():
-                return (<Button size="sm" variant="success" disabled> </Button>)
+                return (<Button size="sm" variant="success" disabled> </Button>);
                 break;
             case Status.completed():
-                return (<Button size="sm" variant="info" disabled> </Button>)
+                return (<Button size="sm" variant="info" disabled> </Button>);
                 break;
             case Status.hiatus():
-                return (<Button size="sm" variant="warning" disabled> </Button>)
+                return (<Button size="sm" variant="warning" disabled> </Button>);
                 break;
             case Status.cancelled():
-                return (<Button size="sm" variant="danger" disabled> </Button>)
+                return (<Button size="sm" variant="danger" disabled> </Button>);
                 break;
             default:
                 return (<></>);
@@ -188,18 +188,30 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     }
     function build_themes_manga(): Array<React.ReactNode> {
         let index = 0;
-        let returns: Array<React.ReactNode> = [];
+        const returns: Array<React.ReactNode> = [];
         if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
             if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+                returns[index] = (<Button style={{
+                    fontWeight: 700,
+                    margin: "1px",
+                    padding: "2px"
+                }} className="d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
             } else {
-                returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+                returns[index] = (<Button style={{
+                    fontWeight: 700,
+                    margin: "1px",
+                    padding: "2px"
+                }} className=" d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
             }
             index = index + 1;
         }
         for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
             const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+            returns[index + index1] = (<Button style={{
+                fontWeight: 700,
+                margin: "1px",
+                padding: "2px"
+            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
         }
         return returns;
     }
@@ -208,7 +220,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
             <Chakra.Box
                 backgroundImage={coverQuery.isLoading ?
                     Mangadex_placeHolder : (
-                        coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!.get_Cover_image()
+                        coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!
                     )}
                 backgroundRepeat={"no-repeat"}
                 backgroundPosition={{
@@ -216,26 +228,26 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                     md: "center -10em",
                     lg: "center -20em",
                     xl: "center -20em",
-                    '2xl': "center -20em",
+                    "2xl": "center -20em",
                 }}
                 backgroundSize={"cover"}
                 borderTopRadius={"10px"}
             >
                 <Chakra.Box
-                    backdropFilter={"auto"}
-                    backdropBlur={"10px"}
-                    paddingTop={"10px"}
+                    backdropFilter='auto'
+                    backdropBlur={"20px"}
+                    backdropBrightness={"1.1"}
                 >
                     <Chakra.Box
-                        backdropFilter={"auto"}
-                        backdropBrightness={"-20%"}
+                        paddingTop={"10px"}
+                        background={"rgba(255, 255,255, 0.2)"}
                     >
                         <Container>
                             <Row>
                                 <Col xs="3">
                                     <Cover_Image_ src={coverQuery.isLoading ?
                                         Mangadex_placeHolder : (
-                                            coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!.get_Cover_image()
+                                            coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!
                                         )} fallbackElement={Mangadex_placeHolder} />
                                 </Col>
                                 <Col xs="9" className="overflow-hidden">
@@ -246,7 +258,6 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             <Chakra.Heading
                                                 noOfLines={1}
                                                 fontFamily={"inherit"}
-                                                blendMode={"difference"}
                                                 size={{
                                                     base: "md",
                                                     sm: "lg",
@@ -261,23 +272,15 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             <Chakra.Heading
                                                 noOfLines={0}
                                                 fontFamily={"inherit"}
-                                                blendMode={"difference"}
                                                 size={{
                                                     base: "sm",
                                                     sm: "md",
                                                     md: "lg"
                                                 }}
                                             >
-                                                {
-                                                    title_query.isLoading ? <Placeholder md={6}></Placeholder> : (
-                                                        title_query.isError ? <ErrorEL1 error={title_query.error} /> : (
-                                                            Lang_and_Data.find_data_by_lang2l("en", title_query.data!) instanceof Lang_and_Data ?
-                                                                <>{Lang_and_Data.find_data_by_lang2l("en", title_query.data!)!.get_data()}</>
-                                                                :
-                                                                <>{title_query.data![Math.floor(Math.random() * title_query.data!.length)].get_data()}</>
-                                                        )
-                                                    )
-                                                }
+                                                <MangaTitle
+                                                    src={props.src}
+                                                />
                                             </Chakra.Heading>
                                             <Chakra.Text>
                                                 {
@@ -473,130 +476,5 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 {props.children}
             </Chakra.Box>
         </Chakra.Box>
-    )
+    );
 }
-
-// old 
-/*
- <Container>
-                <Row className=" overflow-hidden h-50 " id="mg-pHeader"  >
-                    <React.Suspense fallback={
-                        <div id="mg-container-cover">
-                            <img src={placeholder} className=" placeholder-active" id="cover-big"/>
-                        </div>
-                    }>
-                        <Await
-                            resolve={this.to_use.get_cover_art()}
-                            errorElement={
-                                <div id="mg-container-cover">
-                                    <img src={manga_cover} id="cover-big"/>
-                                </div>
-                            }
-                            children={(getted: Cover) => {
-                                return (
-                                    <div id="mg-container-cover">
-                                        <img src={getted.get_CoverImage()} id="cover-big"/>
-                                    </div>
-                                )
-                            }}
-                        />
-                    </React.Suspense>
-                    <div id="mg-container-content">
-                        <Row className="top-100">
-                            <Col xs="5" sm="4" md="3" lg="3" xl="3">
-                                <React.Suspense fallback={
-                                    <Cover_Image_ id="top-cover" state={false} src={placeholder}/>
-                                }>
-                                    <Await
-                                        resolve={this.to_use.get_cover_art()}
-                                        errorElement={
-                                            <div id="mg-container-cover">
-                                                <img src={manga_cover} id="cover-big"/>
-                                            </div>
-                                        }
-                                        children={(getted: Cover) => {
-                                            return (
-                                                <Cover_Image_ id="top-cover" state={false} src={getted.get_CoverImage()}/>
-                                            )
-                                        }}
-                                    />
-                                </React.Suspense>
-                            </Col>
-                            <Col xs="7" sm="8" md="9" lg="9" xl="9">
-                                <Container>
-                                    <Row className="mb-xs-1 mb-md-3 mb-lg-5 mb-sm-1">
-                                        <Chakra.Heading fontFamily="Poppins" size="2xl" fontWeight="bolder" className="title-bended">{title}</Chakra.Heading>
-                                    </Row>
-                                    <Row className="mb-lg-5 mb-sm-1">
-                                        <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
-                                            <Await
-                                                resolve={Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title())}
-                                                errorElement={<div></div>}
-                                                children={(getted: Array<Lang_and_Data>) => {
-                                                    if(Lang_and_Data.find_data_by_lang2l("en", getted) instanceof Lang_and_Data){
-                                                        return (
-                                                            <Chakra.Heading fontFamily="Poppins" size="lg" className="title-bended">{Lang_and_Data.find_data_by_lang2l("en", getted)!.get_data()}</Chakra.Heading>
-                                                        );
-                                                    }else{
-                                                        return (
-                                                            <Chakra.Heading fontFamily="Poppins" size="lg" className="title-bended">{getted[Math.floor(Math.random() * getted.length)].get_data()}</Chakra.Heading>
-                                                        );
-                                                    }
-                                                }}
-                                            />
-                                            
-                                        </React.Suspense>
-                                    </Row>
-                                    <Row>
-                                        <div className=" d-block h-100" >
-                                            <p> </p>
-                                        </div>
-                                    </Row>
-                                    <Row>
-                                        <div id="cover-cutter">
-                                            <p> </p>
-                                        </div>
-                                    </Row>
-                                    <Row className="mt-1">
-                                        <h5>
-                                            <React.Suspense fallback={
-                                                <Placeholder xs={5}></Placeholder>
-                                            }>
-                                                <Await
-                                                    resolve={this.authors_artists()}
-                                                    errorElement={<span></span>}
-                                                    children={(getted : Array<React.ReactNode>) => {
-                                                        return (
-                                                            <>
-                                                                {getted}
-                                                            </>
-                                                        )
-                                                    }}
-                                                />
-                                            </React.Suspense>
-                                        </h5>
-                                    </Row>
-                                    <Row className=" mdP-top-themes mb-1">
-                                        <React.Suspense fallback={<Placeholder xs={4}></Placeholder>}>
-                                            <Await
-                                                resolve={this.build_themes_manga()}
-                                                errorElement={<span> </span>}
-                                                children={(getted: Array<React.ReactNode>) => {
-                                                    return (<Col>{getted}</Col>);
-                                                }}
-                                            />
-                                        </React.Suspense>
-                                    </Row>
-                                    <Row>
-                                        <h6>Publication : {this.get_status_color()} {make_first_UpperCare(this.to_use.get_status())}</h6>
-                                    </Row>
-                                </Container>
-                            </Col>
-                        </Row>
-                </div>
-            </Row>
-            <Row>
-                {this.props.children}
-            </Row>
-        </Container>
-*/

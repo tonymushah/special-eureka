@@ -1,7 +1,6 @@
-import React from "react"
-import ReactDOM from 'react-dom/client';
-import { Button, Modal, Tooltip,OverlayTrigger } from 'react-bootstrap';
-import { open } from '@tauri-apps/api/shell';
+import { open } from "@tauri-apps/api/shell";
+import React from "react";
+import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 type ExtLinkProps = {
     href: string;
@@ -22,7 +21,7 @@ export class ExtLink extends React.Component<ExtLinkProps>{
         if(this.modalState == false){
             this.modalState = true;
         }else{
-            this.modalState = false
+            this.modalState = false;
         }
         this.forceUpdate();
     }
@@ -37,7 +36,7 @@ export class ExtLink extends React.Component<ExtLinkProps>{
                 <span id={this.props.a_id!} onClick={this.showModal}>{this.props.children}</span>
                 <Modal show={this.modalState} onHide={this.showModal}>
                     <Modal.Header closeButton>
-                        <h2>You're quiting the app</h2>
+                        <h2>You are quiting the app</h2>
                     </Modal.Header>
                     <Modal.Body>
                         <p>The app will open the link or the path to :</p>

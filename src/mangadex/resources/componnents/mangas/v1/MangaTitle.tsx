@@ -1,6 +1,6 @@
 import React from "react";
-import { Alt_title } from "../../../../api/internal/Utils";
-import { Manga } from "../../../../api/structures/Manga";
+import { Alt_title } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
 
 export default function MangaTitle(props: {
     src : Manga

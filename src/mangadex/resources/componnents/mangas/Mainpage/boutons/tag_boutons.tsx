@@ -1,11 +1,14 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { Accordion, Overlay, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse, Placeholder } from "react-bootstrap";
-import { Tag } from "../../../../../api/structures/Tag";
-import { make_first_UpperCare } from "../../../../../api/internal/Utils";
-export function TagButton(props){
+import { Button, Row } from "react-bootstrap";
+import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { Tag } from "@mangadex/api/structures/Tag";
+export function TagButton(props : {
+    src : Tag
+}){
     const tag_toUse: Tag = props.src;
-    return (<Button className="m-1 mdP-bout" variant="dark" size="sm">{tag_toUse.get_name().en}</Button>);
+    return (<Button style={{
+        fontWeight : "800"
+    }} className="m-1" variant="dark" size="sm">{tag_toUse.get_name().en}</Button>);
 }
 type TagRowProps = {
     src : Array<Tag>,

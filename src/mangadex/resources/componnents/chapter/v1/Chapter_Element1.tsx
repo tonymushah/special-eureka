@@ -4,11 +4,12 @@ import { Col, Row } from "react-bootstrap";
 import { FaQuestionCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Timeago from "react-timeago";
-import { getMangaDexPath } from "../../../..";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Chapter } from "../../../../api/structures/Chapter";
-import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "../../../hooks/ChapterStateHooks";
+import { getMangaDexPath } from "@mangadex";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Chapter } from "@mangadex/api/structures/Chapter";
+import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "@mangadex/resources/hooks/ChapterStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
+import Flag_icons from "../../FlagIcons";
 const ChapterDownloadButton = React.lazy(() => import("./ChapterDownloadButton"));
 const MangaDexPath = getMangaDexPath();
 
@@ -16,7 +17,7 @@ export default function Chapter_Element1(props: {
     chapter: Chapter,
 }) {
     const { user_query } = get_chapter_user_uploader(props);
-    const groups_query = get_chapter_groups(props)
+    const groups_query = get_chapter_groups(props);
     const {
         this_chapter_lang_query
     } = get_this_chapter_lang(props);
@@ -46,7 +47,7 @@ export default function Chapter_Element1(props: {
                                     hasArrow
                                     label={this_chapter_lang_query.data.get_name()}
                                 >
-                                    <Chakra.Box height={"fit-content"} className={"fi fi-" + this_chapter_lang_query.data.get_flag_icon().toLowerCase()} />
+                                    <Flag_icons locale={this_chapter_lang_query.data.get_flag_icon().toLowerCase()}/>
                                 </Chakra.Tooltip>
                             ) : (
                                 this_chapter_lang_query.isError ? (
@@ -70,7 +71,7 @@ export default function Chapter_Element1(props: {
                     <Chakra.Box
                     >
 
-                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"}>
+                        <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                             <TryCatch
                                 catch={() => (
                                     <>Chapter {props.chapter.get_chapter()} {
@@ -130,14 +131,15 @@ export default function Chapter_Element1(props: {
                         groups_query.length == 0 ? (<></>) : (
                             groups_query.map((value) => {
                                 if (value.isLoading) {
-                                    return (<i>Loading...</i>);
+                                    return (<i key={Math.random() * 100}>Loading...</i>);
                                 }
                                 if (value.isError) {
-                                    return (<i>No Groups</i>);
+                                    return (<i key={Math.random() * 100}>No Groups</i>);
                                 }
                                 if (value.isSuccess) {
                                     return (
                                         <TryCatch
+                                            key={value.data.get_id()}
                                             catch={() => (
                                                 <Chakra.Link>{value.data!.get_name()}</Chakra.Link>
                                             )}
@@ -163,12 +165,12 @@ export default function Chapter_Element1(props: {
                     {
                         user_query.isLoading ? <Chakra.Skeleton height={"20px"} /> : (
                             user_query.isError ? <ErrorEL1 error={user_query.error} /> : (
-                                user_query.isSuccess ? <Chakra.Link noOfLines={1} size={"sm"}>{user_query.data!.get_username()}</Chakra.Link> : (<></>)
+                                user_query.isSuccess ? <Chakra.Link as={Link} to={MangaDexPath + `/user/${user_query.data.get_id()}`} noOfLines={1} size={"sm"}>{user_query.data!.get_username()}</Chakra.Link> : (<></>)
                             )
                         )
                     }
                 </Col>
             </Row>
         </Chakra.Box>
-    )
+    );
 }

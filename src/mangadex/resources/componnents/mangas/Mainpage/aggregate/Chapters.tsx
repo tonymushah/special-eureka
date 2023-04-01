@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
-import Viewer from 'react-viewer';
-import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
-import { Accordion, Alert, Col, Collapse, Container, Row, Spinner } from "react-bootstrap";
-import { Chapter, Chapters, Chapter_withAllIncludes } from '../../../../../api/structures/Chapter';
-import { Chapter_, Chapter_includes } from '../../../chapters/Chapter_';
-import { Await } from 'react-router-dom';
-import { ErrorELAsync } from '../../../Error_cmp';
-import Chapter_Element1_byChapID from '../../../chapter/v1/Chapter_Element1_byChapID';
+import React, { useState } from 'react';
+import { Alert, Col, Collapse, Container, Row, Spinner } from "react-bootstrap";
+import { Chapters } from '@mangadex/api/structures/Chapter';
+import Chapter_Element1_byChapID from '@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID';
 
 type Chapters_ElementProps = {
     headersTitle: string
@@ -30,7 +25,7 @@ function Chapters_Element(props: Chapters_ElementProps) {
                         {props.headersTitle}
                     </Alert.Link>
                 </Col>
-                <Collapse in={open}>
+                <Collapse in={open} unmountOnExit>
                     <div id={"ch-" + rand}>
                         {props.children}
                     </div>
@@ -45,7 +40,7 @@ type ChaptersProps = {
 }
 
 export class ChaptersComp extends React.Component<ChaptersProps>{
-    state: boolean;
+    declare state: boolean;
     private toUse: Chapters;
     public constructor(props: ChaptersProps) {
         super(props)

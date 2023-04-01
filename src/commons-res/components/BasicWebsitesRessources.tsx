@@ -1,0 +1,103 @@
+import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+import * as Chakra from "@chakra-ui/react";
+import { Client, getClient } from "@tauri-apps/api/http";
+
+const HTTPClientProvider_Client = React.lazy(() => import("@commons-res/components/HTTPClientProvider_Query"));
+
+const NavigatorReactRouter = React.lazy(() => import("@commons-res/components/NavigatorReactRouter"));
+
+function ThisLoading() {
+    return (
+        <Chakra.Box
+            width={"100%"}
+            height={"100vh"}
+        >
+            <Chakra.AbsoluteCenter>
+                <Chakra.Spinner
+                    size="xl"
+                    color='orange.500'
+                    thickness='4px'
+                />
+            </Chakra.AbsoluteCenter>
+        </Chakra.Box>
+    );
+}
+
+function ThisSuspense(props: React.PropsWithChildren) {
+    return (
+        <React.Suspense
+            fallback={
+                <ThisLoading />
+            }
+        >
+            {
+                props.children
+            }
+        </React.Suspense>
+    );
+}
+
+export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
+    client? : () => Promise<Client>,
+    queryClient? : QueryClient
+}>) {
+    const HTTPClient = props.client != undefined ? props.client() : getClient();
+    const queryClient = props.queryClient ?? new QueryClient({
+        "defaultOptions": {
+            "queries": {
+                "cacheTime": 1000 * 30,
+                retry(failureCount) {
+                    if (failureCount >= 3) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
+            }
+        }
+    });
+    React.useEffect(() => {
+        return () => {
+            queryClient.unmount();
+        };
+    }, []);
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools
+                position={"bottom-right"}
+                initialIsOpen={false}
+            />
+            <ThisSuspense>
+                <HTTPClientProvider_Client
+                    value={HTTPClient}
+                    onLoading={
+                        <ThisLoading />
+                    }
+                    onError={() => (
+                        <Chakra.Box
+                            width={"100%"}
+                            height={"100vh"}
+                        >
+                            <Chakra.AbsoluteCenter>
+                                <Chakra.Box>
+                                    <Chakra.Alert>
+                                        <Chakra.AlertIcon />
+                                        <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
+                                    </Chakra.Alert>
+                                </Chakra.Box>
+                            </Chakra.AbsoluteCenter>
+                        </Chakra.Box>
+                    )}
+                >
+                    <NavigatorReactRouter>
+                        {
+                            props.children
+                        }
+                    </NavigatorReactRouter>
+                </HTTPClientProvider_Client>
+            </ThisSuspense>
+        </QueryClientProvider>
+    );
+}

@@ -1,12 +1,10 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Cover } from "../../../../api/structures/Cover";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import { useQuery } from "react-query";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import Consumer from "../../../../../commons-res/components/Consumer";
-import { get_cover_art_image } from "../../../hooks/CoverStateHooks";
+import Consumer from "@commons-res/components/Consumer";
+import { Cover } from "@mangadex/api/structures/Cover";
+import { get_cover_art_image } from "@mangadex/resources/hooks/CoverStateHooks";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 
 export default function CoverImage(props: {
     src: Cover,
@@ -27,7 +25,7 @@ export default function CoverImage(props: {
                 {
                     props.other_comp
                 }
-            </Consumer>
+            </Consumer>;
         }else{
             return(
                 <Chakra.Image
@@ -35,7 +33,7 @@ export default function CoverImage(props: {
                     fallbackSrc={Mangadex_placeHolder}
                     {...props.image_props}
                 />
-            )
+            );
         }
         
     }
@@ -45,12 +43,12 @@ export default function CoverImage(props: {
                 src={Mangadex_cover_not_found}
                 {...props.image_props}
             />
-        )
+        );
     }
     return(
         <Chakra.Image
             src={Mangadex_placeHolder}
             {...props.image_props}
         />
-    )
+    );
 }

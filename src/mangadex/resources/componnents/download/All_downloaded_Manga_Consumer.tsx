@@ -1,11 +1,12 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Manga } from "../../../api/structures/Manga";
-import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useToast } from "@chakra-ui/react";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import React from "react";
+import { useMutation, useQueryClient, UseQueryOptions } from "react-query";
 import Consumer from "../../../../commons-res/components/Consumer";
-import {CollectionComponnent_WithQuery} from "../Collection/Collection"
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { Collection } from "../../../api/structures/Collection";
+import { Manga } from "../../../api/structures/Manga";
+import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 
 
 function This_Suspense(props: React.PropsWithChildren){
@@ -25,7 +26,8 @@ function This_Suspense(props: React.PropsWithChildren){
 }
 
 export default function AllDownlaodedMangaConsumer(props : {
-    children : (value : Array<string>) => React.ReactNode
+    children : (value : Array<string>) => React.ReactNode,
+    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, 'queryKey' | 'queryFn'>,
 }) {
     const queryClient = useQueryClient();
     const client = useHTTPClient();
@@ -128,6 +130,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                         <Chakra.Spinner />
                     </Chakra.Center>
                 }
+                query_options={props.query_options}
             >{
                 (value) => (
                     <Consumer<Array<string>> to_consume={value.get_data()}>

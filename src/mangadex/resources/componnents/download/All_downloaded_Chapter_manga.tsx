@@ -19,6 +19,11 @@ export default function All_downloaded_Chapter_manga(props: {
                 return Manga.getAllDownloadedChapters_ofAManga(props.mangaID, props.offset_limit, client);
             }}
             queryKey={query_key}
+            query_options={
+                {
+                    "staleTime" : 0
+                }
+            }
         >
             {
                 (value) => (
