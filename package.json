@@ -1,7 +1,7 @@
 {
   "name": "special-eureka",
   "private": true,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "repository": {
     "url": "https://github.com/tonymushah/special-eureka"
