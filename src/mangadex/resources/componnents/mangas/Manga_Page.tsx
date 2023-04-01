@@ -1,5 +1,5 @@
 import * as ChakraIcons from "@chakra-ui/icons";
-import * as Chakra from '@chakra-ui/react';
+import * as Chakra from "@chakra-ui/react";
 import { appWindow } from "@tauri-apps/api/window";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
@@ -8,19 +8,20 @@ import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../..";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import TryCatch from "../../../../commons-res/components/TryCatch";
-import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "../../../api/internal/Utils";
-import { Author } from "../../../api/structures/Author";
-import { Manga } from "../../../api/structures/Manga";
-import { Statistics_Manga } from "../../../api/structures/Statistics";
-import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "../../hooks/MangaStateHooks";
+import { getMangaDexPath } from "@mangadex";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import TryCatch from "@commons-res/components/TryCatch";
+import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "@mangadex/api/internal/Utils";
+import { Author } from "@mangadex/api/structures/Author";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
+import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "@mangadex/resources/hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
 import ErrorEL1 from "../error/ErrorEL1";
 import { Cover_Image_ } from "./Mainpage/Image_";
 import Statis from "./Statistics/Statis";
+import MangaTitle from "./v1/MangaTitle";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
 
@@ -33,11 +34,11 @@ export type MangaPageProps = {
 }
 
 const ExtLink = React.lazy(async () => {
-    let res = await import("../../../../commons-res/components/ExtLink");
+    const res = await import("@commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };
-})
+});
 
 function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     const client = useHTTPClient();
@@ -123,11 +124,11 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
                 )
             }
         </Chakra.Box>
-    )
+    );
 }
 
 export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
-    let title: string = "";
+    let title = "";
     const client = useHTTPClient();
     const { title_query } = get_manga_page_titles(props);
     const {
@@ -141,27 +142,27 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     } else {
         title = props.src.get_title().en;
     }
-    appWindow.setTitle(`${title} | Mangadex`).then()
+    appWindow.setTitle(`${title} | Mangadex`).then();
     function authors_artists(): Array<React.ReactNode> {
-        let returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
+        const returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
             return value.data!;
         }), artistists.map<Author>((value) => {
             return value.data!;
         }));
-        let returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
+        const returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
         for (let index = 0; index < returns.filtred.length; index++) {
             const element = returns.filtred[index];
             if (index == (returns.filtred.length - 1)) {
                 returns2[index] = (
                     <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
-                )
+                );
             } else {
                 returns2[index] = (
                     <>
                         <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
                         ,&nbsp;
                     </>
-                )
+                );
             }
         }
         return returns2;
@@ -169,16 +170,16 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     function get_status_color(): React.ReactNode {
         switch (props.src.get_status()) {
             case Status.ongoing():
-                return (<Button size="sm" variant="success" disabled> </Button>)
+                return (<Button size="sm" variant="success" disabled> </Button>);
                 break;
             case Status.completed():
-                return (<Button size="sm" variant="info" disabled> </Button>)
+                return (<Button size="sm" variant="info" disabled> </Button>);
                 break;
             case Status.hiatus():
-                return (<Button size="sm" variant="warning" disabled> </Button>)
+                return (<Button size="sm" variant="warning" disabled> </Button>);
                 break;
             case Status.cancelled():
-                return (<Button size="sm" variant="danger" disabled> </Button>)
+                return (<Button size="sm" variant="danger" disabled> </Button>);
                 break;
             default:
                 return (<></>);
@@ -187,7 +188,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     }
     function build_themes_manga(): Array<React.ReactNode> {
         let index = 0;
-        let returns: Array<React.ReactNode> = [];
+        const returns: Array<React.ReactNode> = [];
         if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
             if (props.src.get_ranting() == ContentRating.suggestive()) {
                 returns[index] = (<Button style={{
@@ -210,7 +211,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 fontWeight: 700,
                 margin: "1px",
                 padding: "2px"
-            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
         }
         return returns;
     }
@@ -227,7 +228,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                     md: "center -10em",
                     lg: "center -20em",
                     xl: "center -20em",
-                    '2xl': "center -20em",
+                    "2xl": "center -20em",
                 }}
                 backgroundSize={"cover"}
                 borderTopRadius={"10px"}
@@ -277,16 +278,9 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                     md: "lg"
                                                 }}
                                             >
-                                                {
-                                                    title_query.isLoading ? <Placeholder md={6}></Placeholder> : (
-                                                        title_query.isError ? <ErrorEL1 error={title_query.error} /> : (
-                                                            Lang_and_Data.find_data_by_lang2l("en", title_query.data!) instanceof Lang_and_Data ?
-                                                                <>{Lang_and_Data.find_data_by_lang2l("en", title_query.data!)!.get_data()}</>
-                                                                :
-                                                                <>{title_query.data![Math.floor(Math.random() * title_query.data!.length)].get_data()}</>
-                                                        )
-                                                    )
-                                                }
+                                                <MangaTitle
+                                                    src={props.src}
+                                                />
                                             </Chakra.Heading>
                                             <Chakra.Text>
                                                 {
@@ -482,5 +476,5 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 {props.children}
             </Chakra.Box>
         </Chakra.Box>
-    )
+    );
 }

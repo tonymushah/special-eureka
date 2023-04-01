@@ -1,24 +1,14 @@
 import React from "react";
-//import MangaList from "../../mangadex/api/tsx/MangaList";
-//import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
-import "flag-icons/css/flag-icons.min.css";
-import "font-awesome/css/font-awesome.css";
 import { Container, Stack } from "react-bootstrap";
 import {
     useQuery
-} from 'react-query';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
-import { Group } from "../../../api/structures/Group";
-
+} from "react-query";
+import { Group } from "@mangadex/api/structures/Group";
 import WaveHaikei from "./wave-haikei-1.svg";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Client } from "@tauri-apps/api/http";
-import TryCatch from "../../../../commons-res/components/TryCatch";
+import TryCatch from "@commons-res/components/TryCatch";
 import { appWindow } from "@tauri-apps/api/window";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
@@ -41,7 +31,7 @@ function Group_Page_Suspense(props: React.PropsWithChildren) {
                 props.children
             }
         </React.Suspense>
-    )
+    );
 }
 
 function Leader_query_for_GroupPage(props: {
@@ -53,7 +43,7 @@ function Leader_query_for_GroupPage(props: {
         return props.src.getLeader(props.client);
     }, {
         staleTime: Infinity
-    })
+    });
     return (
         <>
             {
@@ -63,14 +53,14 @@ function Leader_query_for_GroupPage(props: {
                     <></>
                 )
             }</>
-    )
+    );
 }
 
 export default function Group_Page(props: React.PropsWithChildren<{
     src: Group
 }>) {
     const client = useHTTPClient();
-    appWindow.setTitle(`${props.src.get_name()} | Mangadex`).then()
+    appWindow.setTitle(`${props.src.get_name()} | Mangadex`).then();
     return (
         <Chakra.Box>
             <Chakra.Box

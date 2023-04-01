@@ -1,34 +1,34 @@
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
 import { Chapter } from "@mangadex/api/structures/Chapter";
+import { get_manga_of_chapter } from "@mangadex/resources/hooks/ChapterStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementDef_WChildren from "../../mangas/v1/MangaElementDef_WChildren";
 import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 import Chapter_Element2 from "./Chapter_Element2";
 
 export default function MangaFeedElement(props: {
-    src : Chapter
+    src: Chapter
 }) {
-    const { query } = get_manga_byId({
-        mangaID : props.src.get_manga_id()
+    const { query } = get_manga_of_chapter({
+        chapter: props.src
     });
-    if(query.isLoading == true){
+    if (query.isSuccess) {
         return (
-            <MangaElementFallback/>
+            <MangaElementDef_WChildren
+                src={query.data}
+                isRefetching={query.isRefetching}
+            >
+                <Chapter_Element2
+                    chapter={props.src}
+                />
+            </MangaElementDef_WChildren>
         );
     }
-    if(query.isError == true){
+    if (query.isError == true) {
         return (
-            <ErrorEL1 error={query.error}/>
+            <ErrorEL1 error={query.error} />
         );
     }
     return (
-        <MangaElementDef_WChildren 
-            src={query.data!}
-            isRefetching={query.isRefetching}
-        >
-            <Chapter_Element2
-                chapter={props.src}
-            />
-        </MangaElementDef_WChildren>
+        <MangaElementFallback />
     );
 }

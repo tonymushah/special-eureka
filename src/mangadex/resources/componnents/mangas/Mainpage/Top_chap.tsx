@@ -1,4 +1,4 @@
-import * as Chakra from '@chakra-ui/react';
+import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
@@ -29,8 +29,8 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
         this.to_use = this.props.src;
     }
     public async build_altTitle(): Promise<Array<React.ReactNode>> {
-        let altTitle_inLang: Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title());
-        let returns: Array<React.ReactNode> = Array<React.ReactNode>(altTitle_inLang.length);
+        const altTitle_inLang: Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title());
+        const returns: Array<React.ReactNode> = Array<React.ReactNode>(altTitle_inLang.length);
         for (let index = 0; index < altTitle_inLang.length; index++) {
             const element = altTitle_inLang[index];
             returns[index] = (
@@ -109,10 +109,11 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                         <Await
                                             resolve={this.to_use.get_async_genre()}
                                             errorElement={<div> </div>}
-                                            children={(getted: Array<Tag>) => {
+                                        >
+                                            {(getted: Array<Tag>) => {
                                                 return (<TagRow title="Genre" src={getted} />);
                                             }}
-                                        />
+                                        </Await>
                                     </React.Suspense>
                                 </>
                                 <>
@@ -127,10 +128,11 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                                     <div> </div>
                                                 </>
                                             }
-                                            children={(getted: Array<Tag>) => {
+                                        >
+                                            {(getted: Array<Tag>) => {
                                                 return (<TagRow title="Theme" src={getted} />);
                                             }}
-                                        />
+                                        </Await>
                                     </React.Suspense>
                                 </>
                                 <>
@@ -141,10 +143,11 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                         <Await
                                             resolve={this.to_use.get_async_format()}
                                             errorElement={<div> </div>}
-                                            children={(getted: Array<Tag>) => {
+                                        >
+                                            {(getted: Array<Tag>) => {
                                                 return (<TagRow title="Format" src={getted} />);
                                             }}
-                                        />
+                                        </Await>
                                     </React.Suspense>
                                 </>
                                 <>
@@ -155,10 +158,11 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                         <Await
                                             resolve={this.to_use.get_async_content()}
                                             errorElement={<div> </div>}
-                                            children={(getted: Array<Tag>) => {
+                                        >
+                                            {(getted: Array<Tag>) => {
                                                 return (<TagRow title="Content" src={getted} />);
                                             }}
-                                        />
+                                        </Await>
                                     </React.Suspense>
                                 </>
                                 <Row>
@@ -190,15 +194,19 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                         <Await
                                             resolve={this.build_altTitle()}
                                             errorElement={<> </>}
-                                            children={(getted: Array<React.ReactNode>) => {
+                                        >
+                                            {(getted: Array<React.ReactNode>) => {
                                                 return (
                                                     <>
                                                         {getted}
                                                     </>
                                                 );
                                             }}
-                                        />
+                                        </Await>
                                     </React.Suspense>
+                                </Row>
+                                <Row>
+                                    
                                 </Row>
                             </Col>
                         </CollapseHeight>

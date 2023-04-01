@@ -26,7 +26,11 @@ export default function SideBarUserOption(props: React.PropsWithChildren) {
                     <Chakra.ModalBody>
                         <Chakra.VStack width={"full"} divider={<Chakra.Divider />}>
                             <Chakra.Box width={"full"}>
-                                <Chakra.Text as={"span"}>Languages : </Chakra.Text>
+                                <Chakra.Text as={"span"}>Translated Languages : <Chakra.Tooltip
+                                    label={"It's applies for chapters"}
+                                >
+                                    <ChakraIcons.QuestionIcon/>
+                                </Chakra.Tooltip></Chakra.Text>
                                 <React.Suspense
                                     fallback={<Chakra.Tag>Loading...</Chakra.Tag>}
                                 >
@@ -50,5 +54,5 @@ export default function SideBarUserOption(props: React.PropsWithChildren) {
                 </Chakra.ModalContent>
             </Chakra.Modal>
         </React.Fragment>
-    )
+    );
 }

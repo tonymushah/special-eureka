@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { useQuery } from "react-query";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import { List } from "../../../../api/structures/List";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { List } from "@mangadex/api/structures/List";
 import ErrorEL1 from "../../error/ErrorEL1";
 
 const MangaSwipperWithMangaObjects = React.lazy(() => import("../../mangas/v1/MangaSwipperWithMangaObjects"));
@@ -16,9 +16,10 @@ export default function CustomListSwiper(props: {
     const key = "mdx-custom_list:" + props.listID;
     const query = useQuery<List, Error>(key, () => {
         return List.getListByID_includes_manga(props.listID, client);
+        
     }, {
         "staleTime": Infinity
-    })
+    });
     if (query.isLoading) {
         return (
             <React.Suspense
@@ -34,12 +35,12 @@ export default function CustomListSwiper(props: {
             >
                 <CustomListSwiperSuspense />
             </React.Suspense>
-        )
+        );
     }
     if (query.isError) {
         return (
             <ErrorEL1 error={query.error} />
-        )
+        );
     }
     return (
         <React.Suspense

@@ -110,6 +110,12 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                                 <Chakra.Link
                                     as={Link}
                                     to={MangaDexPath + "/manga/" + props.src.get_id()}
+                                    color={"black"}
+                                    textDecoration={"none"}
+                                    _hover={{
+                                        color: "orange",
+                                        textDecoration: "none"
+                                    }}
                                 >
                                     <Chakra.Heading
                                         noOfLines={2}

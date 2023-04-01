@@ -1,23 +1,16 @@
 import * as Chakra from "@chakra-ui/react";
-import React from 'react';
-import { Row } from 'react-bootstrap';
-import { Mangadex_suspense } from "../..";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Offset_limits } from '../../api/internal/Utils';
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Mangadex_suspense } from "@mangadex";
 import { appWindow } from "@tauri-apps/api/window";
+import React from "react";
 
-const Seasonal = React.lazy(() => import("./Seasonal"));
-const Latest_Updates = React.lazy(() => import("./Latest_Update"));
-const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
-const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
-const RecentlyAdded = React.lazy(() => import("./RecentlyAdded"));
-const PopularRecently = React.lazy(() => import("./PopularTitles"));
+const HomePageAfterPing = React.lazy(() => import("@mangadex/pages/Home/HomeAfterPing"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
+const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
 
 function Home() {
-    let offset_limits_1: Offset_limits = new Offset_limits();
-    offset_limits_1.set_limits(20);
     const client = useHTTPClient();
-    appWindow.setTitle("High Quality Image, no ads | Mangadex");
+    appWindow.setTitle("Loading the Home Page... | Mangadex");
     return (
         <Chakra.Box
             margin={2}
@@ -42,69 +35,37 @@ function Home() {
                     )}
                     onLoading={
                         <Chakra.AbsoluteCenter>
-                            <Chakra.Spinner
-                                size={"lg"}
-                            />
+                            <Chakra.Box>
+                                <Chakra.HStack>
+                                    <Chakra.Spinner
+                                        size={"lg"}
+                                    />
+                                    <Chakra.Text>
+                                        Pinging the Mangadex API
+                                    </Chakra.Text>
+                                </Chakra.HStack>
+                            </Chakra.Box>
                         </Chakra.AbsoluteCenter>
                     }
                     onSuccess={() => (
-                        <React.Fragment>
-                            <Row className='d-block'>
-                                <React.Suspense
-                                    fallback={<Chakra.Box >
-                                        <Chakra.Center>
+                        <React.Suspense
+                            fallback={
+                                <Chakra.AbsoluteCenter>
+                                    <Chakra.Box>
+                                        <Chakra.HStack>
                                             <Chakra.Spinner
-                                                size={"xl"}
+                                                size={"lg"}
                                             />
-                                        </Chakra.Center>
-                                    </Chakra.Box>}
-                                >
-                                    <PopularRecently/>
-                                </React.Suspense>
-                                <React.Suspense
-                                    fallback={<Chakra.Box >
-                                        <Chakra.Center>
-                                            <Chakra.Spinner
-                                                size={"xl"}
-                                            />
-                                        </Chakra.Center>
-                                    </Chakra.Box>}
-                                >
-                                    <Seasonal />
-                                </React.Suspense>
-                            </Row>
-                            <Chakra.Divider />
-                            <Row
-                                className='d-block'
-                            >
-                                <React.Suspense
-                                    fallback={<Chakra.Box >
-                                        <Chakra.Center>
-                                            <Chakra.Spinner
-                                                size={"xl"}
-                                            />
-                                        </Chakra.Center>
-                                    </Chakra.Box>}
-                                >
-                                    <Latest_Updates />
-                                </React.Suspense>
-                            </Row>
-                            <Row
-                                className='d-block'
-                            >
-                                <React.Suspense
-                                    fallback={<Chakra.Box >
-                                        <Chakra.Center>
-                                            <Chakra.Spinner
-                                                size={"xl"}
-                                            />
-                                        </Chakra.Center>
-                                    </Chakra.Box>}
-                                >
-                                    <RecentlyAdded />
-                                </React.Suspense>
-                            </Row>
-                        </React.Fragment>
+                                            <Chakra.Text>
+                                                Pinging the Mangadex API
+                                            </Chakra.Text>
+                                        </Chakra.HStack>
+                                    </Chakra.Box>
+                                </Chakra.AbsoluteCenter>
+                            }
+                        >
+                            <HomePageAfterPing />
+                        </React.Suspense>
                     )}
                 />
             </React.Suspense>
@@ -112,5 +73,8 @@ function Home() {
 
     );
 }
+
+
+
 export default Home;
 

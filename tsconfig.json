@@ -23,7 +23,8 @@
         "allowJs": true,
         "forceConsistentCasingInFileNames": true,
         "types": [
-            "vite-plugin-remark-rehype/types"
+            "vite-plugin-remark-rehype/types",
+            "@types/mdx"
         ],
         "paths": {
             "@bilibili-comics": [

@@ -4,11 +4,10 @@ import React from "react";
 import { Container, Nav } from "react-bootstrap";
 import { useQuery, useQueryClient } from "react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Manga } from "../../api/structures/Manga";
-import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
-import Download_Manga_withHotkeys from "../../resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
-import { Manga_Page } from "../../resources/componnents/mangas/Manga_Page";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Manga } from "@mangadex/api/structures/Manga";
+import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
+import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
 
 type MangaPage_OutletContex = {
     toUse: Manga

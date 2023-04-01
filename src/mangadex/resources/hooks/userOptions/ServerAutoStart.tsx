@@ -5,23 +5,22 @@ export default function useServerAutoStart(query_options? : Omit<UseQueryOptions
     const queryKey = "mdx-server-auto-start";
     const userCachedOption = useUserOption();
     const query = useQuery(queryKey, async () => {
-        return userCachedOption.getServerAutoStart()
+        return userCachedOption.getServerAutoStart();
     }, query_options);
     const changeOptionMutation = useMutation({
         mutationFn : async (new_ : boolean) => {
-            console.log("test")
-            await userCachedOption.setServerAutoStart(new_)
+            await userCachedOption.setServerAutoStart(new_);
         },
         onSuccess(){
-            query.refetch()
+            query.refetch();
         }
-    })
+    });
     const changeOption = changeOptionMutation.mutate;
     const toggle = () => {
         if(query.isSuccess){
             changeOption(!query.data);
         }
-    }
+    };
     return {
         query,
         queryKey,

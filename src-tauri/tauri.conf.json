@@ -1,192 +1,190 @@
 {
-  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
-  "build": {
-    "beforeBuildCommand": "pnpm run vite:build",
-    "beforeDevCommand": "pnpm run vite:dev",
-    "devPath": "http://localhost:9305",
-    "distDir": "../dist",
-    "withGlobalTauri": true
-  },
-  "package": {
-    "productName": "Special-Eureka",
-    "version": "0.1.4"
-  },
-  "tauri": {
-    "allowlist": {
-      "http": {
-        "all": true, 
-        "request": true,
-        "scope": [
-          "https://api.mangadex.org/**", 
-          "https://uploads.mangadex.org/**",
-          "http://localhost:9305/*",
-          "https://jumpg-webapi.tokyo-cdn.com/api/**",
-          "http://localhost:8090/**",
-          "http://localhost:8145/**"
-        ]
-      },
-      "clipboard": {
-        "all": false,
-        "readText": false,
-        "writeText": true
-      },
-      "dialog": {
-        "all": false,
-        "ask": false,
-        "confirm": false,
-        "message": true,
-        "open": false,
-        "save": false
-      },
-      "notification": {
-        "all": true
-      },
-      "process": {
-        "all": false,
-        "exit": true,
-        "relaunch": false,
-        "relaunchDangerousAllowSymlinkMacos": false
-      },
-      "fs": {
-        "all": true,
-        "readFile": true,
-        "writeFile": true,
-        "readDir": true,
-        "copyFile": true,
-        "createDir": true,
-        "removeDir": true,
-        "removeFile": true,
-        "renameFile": true,
-        "exists": true,
-        "scope": [
-          "$APP/**"
-        ]
-      },
-      "path": {
-        "all": true
-      },
-      "os": {
-        "all": false
-      },
-      "shell": {
-        "all": false,
-        "execute": false,
-        "open": true,
-        "scope": [],
-        "sidecar": false
-      },
-      "window": {
-        "all": false,
-        "center": false,
-        "close": false,
-        "create": false,
-        "hide": false,
-        "maximize": false,
-        "minimize": false,
-        "print": false,
-        "requestUserAttention": false,
-        "setAlwaysOnTop": false,
-        "setCursorGrab": false,
-        "setCursorIcon": false,
-        "setCursorPosition": false,
-        "setCursorVisible": false,
-        "setDecorations": false,
-        "setFocus": false,
-        "setFullscreen": false,
-        "setIcon": true,
-        "setIgnoreCursorEvents": false,
-        "setMaxSize": false,
-        "setMinSize": false,
-        "setPosition": false,
-        "setResizable": false,
-        "setSize": false,
-        "setSkipTaskbar": false,
-        "setTitle": true,
-        "show": false,
-        "startDragging": false,
-        "unmaximize": false,
-        "unminimize": false
-      }
+    "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+    "build": {
+        "beforeBuildCommand": "pnpm run vite:build",
+        "beforeDevCommand": "pnpm run vite:preview",
+        "devPath": "http://localhost:9305",
+        "distDir": "../dist",
+        "withGlobalTauri": true
     },
-    "bundle": {
-      "active": true,
-      "category": "Lifestyle",
-      "copyright": "",
-      "deb": {
-        "depends": []
-      },
-      "appimage": {
-        "bundleMediaFramework": false
-      },
-      "externalBin": [],
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "com.tonymushah.dev",
-      "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
-      "resources": [],
-      "shortDescription": "A MangaReader based on the Mangadex website",
-      "targets": "all",
-      "windows": {
-        "certificateThumbprint": null,
-        "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      }
+    "package": {
+        "productName": "Special-Eureka",
+        "version": "0.1.4"
     },
-    "security": {
-      "csp": null
-    },
-    "updater": {
-      "active": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU5RkM0NjNGRkE3RTE4MEQKUldRTkdINzZQMGI4NlRBVDF5OUgvaVRyQ1RyU3Rocmw3U0lQYVlNZ002bytsVmwyZWRBNTJpa3YK",
-      "endpoints": [
-        "https://raw.githubusercontent.com/tonymushah/special-eureka/master/.tauri/update.json"
-      ],
-      "dialog" : false,
-      "windows": {
-        "installMode": "basicUi"
-      }
-    },
-    "windows": [
-      {
-        "fullscreen": false,
-        "height": 600,
-        "resizable": true,
-        "title": "Special Eureka",
-        "width": 800,
-        "minWidth": 500,
-        "theme":"Light",
-        "label": "main",
-        "url": "index.html",
-        "visible": false
-      },
-      {
-        "width": 600,
-        "height": 400,
-        "decorations": false,
-        "title": "Special Eureka Loader",
-        "url": "splashscreen.html",
-        "label": "splashscreen",
-        "center": true,
-        "resizable": false
-      }
-    ],
-    "systemTray": {
-      "iconPath": "./icons/icon.png"
-    },
-    "pattern": {
-      "use": "brownfield"
+    "tauri": {
+        "allowlist": {
+            "http": {
+                "all": true,
+                "request": true,
+                "scope": [
+                    "https://api.mangadex.org/**",
+                    "https://uploads.mangadex.org/**",
+                    "http://localhost:9305/*",
+                    "https://jumpg-webapi.tokyo-cdn.com/api/**",
+                    "http://localhost:8090/**",
+                    "http://localhost:8145/**"
+                ]
+            },
+            "clipboard": {
+                "all": false,
+                "readText": false,
+                "writeText": true
+            },
+            "dialog": {
+                "all": false,
+                "ask": false,
+                "confirm": false,
+                "message": true,
+                "open": false,
+                "save": false
+            },
+            "notification": {
+                "all": true
+            },
+            "process": {
+                "all": false,
+                "exit": true,
+                "relaunch": false,
+                "relaunchDangerousAllowSymlinkMacos": false
+            },
+            "fs": {
+                "all": true,
+                "readFile": true,
+                "writeFile": true,
+                "readDir": true,
+                "copyFile": true,
+                "createDir": true,
+                "removeDir": true,
+                "removeFile": true,
+                "renameFile": true,
+                "exists": true,
+                "scope": ["$APP/**"]
+            },
+            "path": {
+                "all": true
+            },
+            "os": {
+                "all": false
+            },
+            "shell": {
+                "all": false,
+                "execute": false,
+                "open": true,
+                "scope": [],
+                "sidecar": false
+            },
+            "window": {
+                "all": false,
+                "center": false,
+                "close": false,
+                "create": false,
+                "hide": false,
+                "maximize": false,
+                "minimize": false,
+                "print": false,
+                "requestUserAttention": false,
+                "setAlwaysOnTop": false,
+                "setCursorGrab": false,
+                "setCursorIcon": false,
+                "setCursorPosition": false,
+                "setCursorVisible": false,
+                "setDecorations": false,
+                "setFocus": false,
+                "setFullscreen": false,
+                "setIcon": true,
+                "setIgnoreCursorEvents": false,
+                "setMaxSize": false,
+                "setMinSize": false,
+                "setPosition": false,
+                "setResizable": false,
+                "setSize": false,
+                "setSkipTaskbar": false,
+                "setTitle": true,
+                "show": false,
+                "startDragging": false,
+                "unmaximize": false,
+                "unminimize": false
+            }
+        },
+        "bundle": {
+            "active": true,
+            "category": "Lifestyle",
+            "copyright": "",
+            "deb": {
+                "depends": []
+            },
+            "appimage": {
+                "bundleMediaFramework": false
+            },
+            "externalBin": [],
+            "icon": [
+                "icons/32x32.png",
+                "icons/128x128.png",
+                "icons/128x128@2x.png",
+                "icons/icon.icns",
+                "icons/icon.ico"
+            ],
+            "identifier": "com.tonymushah.dev",
+            "longDescription": "",
+            "macOS": {
+                "entitlements": null,
+                "exceptionDomain": "",
+                "frameworks": [],
+                "providerShortName": null,
+                "signingIdentity": null
+            },
+            "resources": [],
+            "shortDescription": "A MangaReader based on the Mangadex website",
+            "targets": "all",
+            "windows": {
+                "certificateThumbprint": null,
+                "digestAlgorithm": "sha256",
+                "timestampUrl": ""
+            }
+        },
+        "security": {
+            "csp": null
+        },
+        "updater": {
+            "active": true,
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU5RkM0NjNGRkE3RTE4MEQKUldRTkdINzZQMGI4NlRBVDF5OUgvaVRyQ1RyU3Rocmw3U0lQYVlNZ002bytsVmwyZWRBNTJpa3YK",
+            "endpoints": [
+                "https://raw.githubusercontent.com/tonymushah/special-eureka/master/.tauri/update.json"
+            ],
+            "dialog": false,
+            "windows": {
+                "installMode": "basicUi"
+            }
+        },
+        "windows": [
+            {
+                "fullscreen": false,
+                "height": 600,
+                "resizable": true,
+                "title": "Special Eureka",
+                "width": 800,
+                "minWidth": 500,
+                "theme": "Light",
+                "label": "main",
+                "url": "index.html",
+                "visible": false
+            },
+            {
+                "width": 600,
+                "height": 400,
+                "decorations": false,
+                "title": "Special Eureka Loader",
+                "url": "splashscreen.html",
+                "label": "splashscreen",
+                "center": true,
+                "resizable": false
+            }
+        ],
+        "systemTray": {
+            "iconPath": "./icons/icon.png"
+        },
+        "pattern": {
+            "use": "brownfield"
+        }
     }
-  }
 }

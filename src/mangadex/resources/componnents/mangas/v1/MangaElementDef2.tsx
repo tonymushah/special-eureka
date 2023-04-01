@@ -157,9 +157,18 @@ export default function MangaElementDef2(props: {
                                     <Chakra.Heading fontFamily={"inherit"} marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 )}
                             >
-                                <Link to={MangaDexPath + "/manga/" + props.src.get_id()}>
+                                <Chakra.Link 
+                                    as={Link}
+                                    to={MangaDexPath + "/manga/" + props.src.get_id()}
+                                    color={"black"}
+                                    textDecoration={"none"}
+                                    _hover={{
+                                        color: "orange",
+                                        textDecoration: "none"
+                                    }}
+                                >
                                     <Chakra.Heading fontFamily={"inherit"} marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
-                                </Link>
+                                </Chakra.Link>
                             </TryCatch>
                             <IsPingable
                                 client={client}

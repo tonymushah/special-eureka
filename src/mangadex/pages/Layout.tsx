@@ -15,7 +15,6 @@ export default function MangadexLayout() {
     const queryClient = new QueryClient({
         "defaultOptions" : {
             "queries" : {
-                "cacheTime" : 1000 * 30,
                 retry(failureCount) {
                     if (failureCount >= 3) {
                         return false;

@@ -23,6 +23,7 @@ export default function SelectLanguages() {
                                 {
                                     query.data.map((value) => (
                                         <Chakra.Avatar
+                                            key={value.get_three_letter()}
                                             icon={value.get_flag_icon() !== undefined ? (
                                                 <Flag_icons locale={value.get_flag_icon()} />
                                             ) : (
@@ -43,6 +44,7 @@ export default function SelectLanguages() {
                                 {
                                     all_language.map((lang) => (
                                         <Chakra.WrapItem
+                                            key={lang.get_three_letter()}
                                             onClick={() => {
                                                 handleInput(lang);
                                             }}
@@ -66,7 +68,7 @@ export default function SelectLanguages() {
                                     ))
                                 }
                                 <Chakra.WrapItem onClick={() => {
-                                    clear()
+                                    clear();
                                 }} color={"red"}>
                                     Clear All
                                 </Chakra.WrapItem>
@@ -76,8 +78,8 @@ export default function SelectLanguages() {
                 </LangConsumer>
                 </Chakra.Box>
             </React.Fragment>
-        )
+        );
     } else {
-        return (<Chakra.Tag fontFamily={"inherit"}>Loading...</Chakra.Tag>)
+        return (<Chakra.Tag fontFamily={"inherit"}>Loading...</Chakra.Tag>);
     }
 }

@@ -48,25 +48,29 @@ export default function MangaVerticalElement(props: {
                         width={"150px"}
                     >
                         {
-                            coverQuery.isLoading ? (<Chakra.Skeleton
-                                borderTopRadius={"10px"}
-                                height={"150px"}
-                            />) : null
+                            coverQuery.isLoading ? (
+                                <Chakra.Skeleton
+                                    borderTopRadius={"10px"}
+                                    height={"150px"}
+                                />
+                            ) : null
                         }
                         {
-                            coverQuery.isError ? (<Chakra.Image
-                                src={Mangadex_cover_not_found}
-                                fallbackSrc={Mangadex_placeHolder}
-                                borderTopRadius={"10px"}
-                            />) : null
+                            coverQuery.isError ? (
+                                <Chakra.Image
+                                    src={Mangadex_cover_not_found}
+                                    fallbackSrc={Mangadex_placeHolder}
+                                    borderTopRadius={"10px"}
+                                />
+                            ) : null
                         }
                         {
                             coverQuery.isSuccess ? (
                                 <Chakra.Image
-                                src={coverQuery.data}
-                                fallbackSrc={Mangadex_placeHolder}
-                                borderTopRadius={"10px"}
-                            />
+                                    src={coverQuery.data}
+                                    fallbackSrc={Mangadex_placeHolder}
+                                    borderTopRadius={"10px"}
+                                />
                             ) : null
                         }
                         <Chakra.Center>
@@ -85,6 +89,12 @@ export default function MangaVerticalElement(props: {
                                     <Chakra.LinkOverlay
                                         as={Link}
                                         to={MangaDexPath + "/manga/" + props.src.get_id()}
+                                        color={"black"}
+                                        textDecoration={"none"}
+                                        _hover={{
+                                            color : "orange",
+                                            textDecoration : "none"
+                                        }}
                                     >
                                         {title}
                                     </Chakra.LinkOverlay>

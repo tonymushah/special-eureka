@@ -1,15 +1,15 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import "bootstrap/dist/css/bootstrap.css";
 import React from "react";
-import { FaBookmark, FaBookOpen, FaComments, FaHome, FaUser } from 'react-icons/fa';
+import { FaBookmark, FaBookOpen, FaCog, FaComments, FaHome, FaUser } from "react-icons/fa";
 import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import SideBarUserOption from "./useroption";
-import { RiGroupLine } from "react-icons/ri"
+import { RiGroupLine } from "react-icons/ri";
 import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import "@mangadex/resources/css/sidebar.css";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
@@ -24,8 +24,8 @@ export default function Side_bar() {
             breakPoint="md"
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
-                    backgroundColor: '#2c2c2c',
-                    color: '#f2f2f2'
+                    backgroundColor: "#2c2c2c",
+                    color: "#f2f2f2"
                 }
             }}
         >
@@ -37,7 +37,7 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: '#2c2c2c'
+                            backgroundColor: "#2c2c2c"
                         }
                     }
                 }}
@@ -64,7 +64,7 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: '#2c2c2c'
+                            backgroundColor: "#2c2c2c"
                         }
                     }
                 }}
@@ -98,9 +98,9 @@ export default function Side_bar() {
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
@@ -155,9 +155,9 @@ export default function Side_bar() {
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
@@ -206,9 +206,9 @@ export default function Side_bar() {
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
@@ -230,13 +230,19 @@ export default function Side_bar() {
                         </MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<i onClick={() => collapseSidebar()} className='fas fa-cog fa-spin'></i>} label={"Powerred by "}>
+                <SubMenu defaultOpen={false} icon={
+                    <Chakra.Icon
+                        as={FaCog}
+                        onClick={() => collapseSidebar()}
+                        className={"fa-spin"}
+                    />
+                } label={"Powerred by "}>
                     <Menu
                         menuItemStyles={{
                             button: {
-                                backgroundColor: '#2c2c2c',
+                                backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: '#2c2c2c'
+                                    backgroundColor: "#2c2c2c"
                                 }
                             }
                         }}
@@ -260,7 +266,7 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: '#2c2c2c'
+                            backgroundColor: "#2c2c2c"
                         }
                     }
                 }}
@@ -285,5 +291,5 @@ export default function Side_bar() {
                 </SideBarUserOption>
             </Menu>
         </Sidebar>
-    )
+    );
 }

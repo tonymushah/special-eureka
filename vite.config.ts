@@ -14,47 +14,51 @@ import eslintPlugin from "@nabla/vite-plugin-eslint";
   console.log(path);
   return path;
 }*/
+import mdx from "@mdx-js/rollup";
+
 
 export default defineConfig({
-  clearScreen: false,
-  plugins: [
-    //ReactInspector(),
-    //progress(),
-    ViteAliases({
-      "dir" : "src",
-      useConfig : true,
-      useTypescript : true
-    }),
-    react({
-      "tsDecorators" : true
-    }),
-    remarkRehypePlugin({
-    }),
-    eslintPlugin({})
-    //splitVendorChunkPlugin()
-  ],
-  envPrefix: ["VITE_", "TAURI_"],
-  server: {
-    port: 9305,
-    strictPort: true,
-    open: false,
-  },
-  build: {
-    // Tauri supports es2021
-    target: ["es2021", "chrome100", "safari13"],
-    // don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
-    // produce sourcemaps for debug builds
-    sourcemap: !!process.env.TAURI_DEBUG,
-    outDir : "../dist",
-    rollupOptions : {
-      input : {
-        main : resolve(__dirname, "src/index.html"),
-        splashscreen : resolve(__dirname, "src/splashscreen.html")
-      },
+    clearScreen: false,
+    plugins: [
+        mdx()
+        ,
+        //ReactInspector(),
+        //progress(),
+        ViteAliases({
+            "dir": "src",
+            useConfig: true,
+            useTypescript: true
+        }),
+        react({
+            "tsDecorators": true
+        }),
+        remarkRehypePlugin({
+        }),
+        eslintPlugin({})
+        //splitVendorChunkPlugin()
+    ],
+    envPrefix: ["VITE_", "TAURI_"],
+    server: {
+        port: 9305,
+        strictPort: true,
+        open: false,
     },
-    "emptyOutDir" : true
-  },
-  root: "./src",
-  publicDir : "./public"
+    build: {
+        // Tauri supports es2021
+        target: ["es2021", "chrome100", "safari13"],
+        // don't minify for debug builds
+        minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
+        // produce sourcemaps for debug builds
+        sourcemap: !!process.env.TAURI_DEBUG,
+        outDir: "../dist",
+        rollupOptions: {
+            input: {
+                main: resolve(__dirname, "src/index.html"),
+                splashscreen: resolve(__dirname, "src/splashscreen.html")
+            },
+        },
+        "emptyOutDir": true
+    },
+    root: "./src",
+    publicDir: "./public"
 });
