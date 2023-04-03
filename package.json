@@ -32,6 +32,7 @@
     "generate-website": "nx generate special-eureka-nx:generate-website"
   },
   "devDependencies": {
+    "@microsoft/eslint-formatter-sarif": "^3.0.0",
     "@nabla/vite-plugin-eslint": "^1.5.0",
     "@nrwl/devkit": "15.8.1",
     "@nrwl/eslint-plugin-nx": "15.8.1",

@@ -34,12 +34,7 @@ jobs:
         uses: pnpm/action-setup@v2
         with:
           version: 8
-          run_install: false
-          
-      - name: Install ESLint
-        run: |
-          pnpm install eslint@8.10.0
-          pnpm install @microsoft/eslint-formatter-sarif@2.1.7
+          run_install: true
 
       - name: Run ESLint
         run: pnpm eslint ./src
