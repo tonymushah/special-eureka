@@ -21,7 +21,7 @@ on:
 jobs:
   eslint:
     name: Run eslint scanning
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
