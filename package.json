@@ -76,7 +76,7 @@
     "@babel/runtime": "^7.20.13",
     "@builder.io/partytown": "^0.7.5",
     "@chakra-ui/icons": "^2.0.17",
-    "@chakra-ui/react": "^2.4.9",
+    "@chakra-ui/react": "^2.5.5",
     "@chakra-ui/system": "^2.3.8",
     "@dnd-kit/core": "^6.0.8",
     "@emotion/react": "^11.10.5",
