@@ -25,4 +25,4 @@ src/test
 data
 settings
 .eslintcache
-.eslint-results.md
+eslint-results.md
