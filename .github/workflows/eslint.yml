@@ -11,7 +11,7 @@ name: ESLint
 
 on:
     push:
-        branches: ["master", dev-*version*]
+        branches: *
     pull_request:
         # The branches below must be a subset of the branches above
         branches: ["master"]
@@ -35,11 +35,22 @@ jobs:
                   run_install: true
 
             - name: Run ESLint
-              run: pnpm eslint ./src --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif
+              run: pnpm eslint ./src --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format --format node_modules/eslint-formatter-markdown/markdown.js --output-file eslint-results.md
               continue-on-error: true
 
-            - name: Upload analysis results to GitHub
-              uses: github/codeql-action/upload-sarif@v2
+            - name: Get current time
+              uses: josStorer/get-current-time@v2
+              id: current-time
               with:
-                  sarif_file: eslint-results.sarif
-                  wait-for-processing: true
+                format: YYYYMMDD-HH
+
+            - name: Create a new GitHub Discussion
+              id: create-discussion
+              uses: abirismyname/create-discussion@v1.x
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              with:
+                  title: ESLint checkout from ${{ github.ref }} 
+                  body-filepath: eslint-results.md
+                  repository-id: "special-eureka"
+                  category-id: "eslint-checks"
