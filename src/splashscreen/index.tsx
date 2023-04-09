@@ -35,4 +35,4 @@ ReactDOM.hydrateRoot(document.getElementById("root")!, (
             </Box>
         </Box>
     </ChakraProvider>
-))
+));
