@@ -36,7 +36,7 @@ jobs:
                   run_install: true
 
             - name: Run ESLint
-              run: pnpm eslint ./src --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format --format node_modules/eslint-formatter-markdown/markdown.js --output-file eslint-results.md
+              run: pnpm eslint ./src --config .eslintrc.cjs --ext .js,.jsx,.ts,.tsx --format node_modules/eslint-formatter-markdown/markdown.js --output-file eslint-results.md
               continue-on-error: true
 
             - name: Get current time
@@ -47,7 +47,7 @@ jobs:
 
             - name: Create a new GitHub Discussion
               id: create-discussion
-              uses: abirismyname/create-discussion@v1.x
+              uses: abirismyname/create-discussion@v1.1.0
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
