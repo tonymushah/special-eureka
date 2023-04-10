@@ -22,12 +22,12 @@ function This_Suspense(props: React.PropsWithChildren){
                 props.children
             }
         </React.Suspense>
-    )
+    );
 }
 
 export default function AllDownlaodedMangaConsumer(props : {
     children : (value : Array<string>) => React.ReactNode,
-    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, 'queryKey' | 'queryFn'>,
+    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
 }) {
     const queryClient = useQueryClient();
     const client = useHTTPClient();
@@ -55,7 +55,7 @@ export default function AllDownlaodedMangaConsumer(props : {
             });
             queryClient.refetchQueries({
                 queryKey : query_key
-            })
+            });
         },
         onError(error : Error, variables, context) {
             toast({
@@ -67,7 +67,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                 "isClosable" : true
             });
         },
-    })
+    });
     const refetch = useMutation({
         mutationFn : () => {
             toast({
@@ -89,7 +89,7 @@ export default function AllDownlaodedMangaConsumer(props : {
             });
             queryClient.refetchQueries({
                 queryKey : query_key
-            })
+            });
         },
         onError(error : Error, variables, context) {
             toast({
@@ -101,7 +101,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                 "isClosable" : true
             });
         },
-    })
+    });
     return(
         <Chakra.Box>
             <Chakra.Button

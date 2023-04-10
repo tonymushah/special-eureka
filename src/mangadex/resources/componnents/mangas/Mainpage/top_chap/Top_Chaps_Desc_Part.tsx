@@ -35,9 +35,9 @@ export default function Top_Chaps_Desc_Part(props: {
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-        )
+        );
     }
     return (
         <></>
-    )
+    );
 }

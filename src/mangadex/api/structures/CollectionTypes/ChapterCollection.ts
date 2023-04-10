@@ -32,7 +32,7 @@ export default class ChapterCollection extends Collection<Chapter> {
     public get_by_Offset_limit(
         offset_limits: Offset_limits
     ): Promise<Collection<Chapter>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_limits = current_offset_limits;
         return Chapter.search(this.prev_search_type);
     }

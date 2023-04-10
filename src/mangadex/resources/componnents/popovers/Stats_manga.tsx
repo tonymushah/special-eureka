@@ -1,12 +1,12 @@
-import React, { Suspense, useState } from 'react';
-import { Card, Placeholder, Carousel, Popover, Alert, ListGroup, Container, Row } from 'react-bootstrap';
-import ReactDOM from 'react-dom/client';
-import { Await, useAsyncError, useAsyncValue, useRouteError } from 'react-router-dom';
-import { Statistics_Manga } from '../../../api/structures/Statistics';
-import { NumericFormat } from 'react-number-format';
+import React, { Suspense, useState } from "react";
+import { Card, Placeholder, Carousel, Popover, Alert, ListGroup, Container, Row } from "react-bootstrap";
+import ReactDOM from "react-dom/client";
+import { Await, useAsyncError, useAsyncValue, useRouteError } from "react-router-dom";
+import { Statistics_Manga } from "../../../api/structures/Statistics";
+import { NumericFormat } from "react-number-format";
 
 function PopError(props): React.ReactNode{
-    let error: string = JSON.stringify(useAsyncError());
+    const error: string = JSON.stringify(useAsyncError());
     return (
         <div>
             <Alert variant='danger'>
@@ -20,7 +20,7 @@ function PopError(props): React.ReactNode{
 }
 
 function Box_error(props): React.ReactNode{
-    let error: string = JSON.stringify(useAsyncError());
+    const error: string = JSON.stringify(useAsyncError());
     return (
         <div>
             <Alert variant='danger'>

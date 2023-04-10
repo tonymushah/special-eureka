@@ -8,12 +8,12 @@ import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaEleme
 import React from "react";
 import { useQueryClient } from "react-query";
 
-const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"))
+const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
 export default function RecentlyPopularPage() {
     const client = useHTTPClient();
     const offset_limits = new Offset_limits();
-    offset_limits.set_limits(10)
+    offset_limits.set_limits(10);
     const order = new Order();
     order.set_followedCount(Asc_Desc.desc());
     const touse_date_ = new Date();
@@ -33,7 +33,7 @@ export default function RecentlyPopularPage() {
                         client,
                         createdAtSince: touse_date,
                         hasAvailableChapters: true
-                    })
+                    });
                 }}
                 query_options={{
                     staleTime: Infinity
@@ -63,7 +63,7 @@ export default function RecentlyPopularPage() {
                                             <MangaPopularElement src={value} />
                                         </React.Suspense>
                                     </Chakra.Card>
-                                )
+                                );
                             })}
                         </Chakra.VStack>
                     </Chakra.Box>
@@ -71,5 +71,5 @@ export default function RecentlyPopularPage() {
             </CollectionComponnent_WithQuery>
 
         </React.Fragment>
-    )
+    );
 }

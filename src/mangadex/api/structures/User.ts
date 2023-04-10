@@ -36,9 +36,9 @@ export class User extends Attribute{
         this.set_version(version);
     }
     public static build_wANY(object: any): User{
-        let attributes :any = object.attributes;
-        let relationships: any = object.relationships;
-        let instance: User = new User(object.id, attributes.username, attributes.roles, attributes.version);
+        const attributes :any = object.attributes;
+        const relationships: any = object.relationships;
+        const instance: User = new User(object.id, attributes.username, attributes.roles, attributes.version);
         try{
             instance.set_relationships_Wany(relationships);
         }catch(e){
@@ -47,8 +47,8 @@ export class User extends Attribute{
         return instance;
     }
     public static async getUserById(id: string, client?: Client): Promise<User>{
-        let getted: Response<any> = await Api_Request.get_methods("user/" + id, undefined, client);
-        let instance: User = User.build_wANY(getted.data.data);
+        const getted: Response<any> = await Api_Request.get_methods("user/" + id, undefined, client);
+        const instance: User = User.build_wANY(getted.data.data);
         return instance;
     }
     public static async search( 
@@ -60,19 +60,19 @@ export class User extends Attribute{
             client
         } : UserSearchType
     ): Promise<Collection<User>>{
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             username: JSON.stringify(username),
             ...order?.render()
-        }
-        let getted: Response<any> = await Api_Request.get_methods("user?" + 
+        };
+        const getted: Response<any> = await Api_Request.get_methods("user?" + 
             serialize((new Querry_list_builder("ids", ids!)).build())
         , {
             query: querys
         }, client);
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<User> = new Array<User>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }
@@ -99,20 +99,20 @@ export class User extends Attribute{
             client? : Client
         }
     ): Promise<Collection<User>>{
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             username: JSON.stringify(username),
             ...order?.render()
-        }
-        let getted: Response<any> = await Api_Request.get_methods("user?" + serialize((new Querry_list_builder("ids", ids!)).build(),), {
+        };
+        const getted: Response<any> = await Api_Request.get_methods("user?" + serialize((new Querry_list_builder("ids", ids!)).build(),), {
             query: querys,
             headers: {
                 Authorization: "Bearer " + token
             }
         }, client);
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<User> = new Array<User>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = User.build_wANY(data[index]);
         }

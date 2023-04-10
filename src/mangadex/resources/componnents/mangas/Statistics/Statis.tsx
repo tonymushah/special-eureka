@@ -1,5 +1,5 @@
 import * as ChakraIcons from "@chakra-ui/icons";
-import * as Chakra from '@chakra-ui/react';
+import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import * as FontAwesome from "react-icons/fa";
@@ -11,8 +11,8 @@ export default function Statis(props: {
     src: Statistics_Manga,
     children?: (value: Statistics_Manga) => React.ReactNode
 }) {
-    let getted: Statistics_Manga = props.src;
-    const context = React.createContext(getted)
+    const getted: Statistics_Manga = props.src;
+    const context = React.createContext(getted);
     return (
         <Chakra.Popover
             isLazy={true}
@@ -104,7 +104,7 @@ export default function Statis(props: {
                     <Chakra.PopoverBody height={"xs"} overflowY={"scroll"}>
                         {
                             Array.from({ length: props.src.get_distribution_length() }, (_, i) => i + 1).reverse().map((value) => {
-                                let purcent = (getted.get_distribution()[value] / getted.get_distribution_sum()) * 100
+                                const purcent = (getted.get_distribution()[value] / getted.get_distribution_sum()) * 100;
                                 return (
                                     <Chakra.Tooltip label={purcent + "%"}>
                                         <Chakra.HStack>

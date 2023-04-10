@@ -6,7 +6,7 @@ import { Mangadex_suspense, Mangadex_suspense__ } from "../..";
 import { get_author_byID, get_author_queryKey_byID } from "../../resources/hooks/AuthorState";
 
 const ErrorEL1 = React.lazy(() => import("../../resources/componnents/error/ErrorEL1"));
-const Author_Page = React.lazy(() => import("../../resources/componnents/authors/Author_Page"))
+const Author_Page = React.lazy(() => import("../../resources/componnents/authors/Author_Page"));
 
 export default function Author_Page_index(){
     const { id } = useParams();
@@ -20,7 +20,7 @@ export default function Author_Page_index(){
     const { query } = get_author_byID({
         author_id : id!
     });
-    appWindow.setTitle(`Loading... | Mangadex`).then()
+    appWindow.setTitle("Loading... | Mangadex").then();
     if(query.isSuccess) {
         return (
             <Mangadex_suspense>
@@ -28,19 +28,19 @@ export default function Author_Page_index(){
                     src={query.data}
                 />
             </Mangadex_suspense>
-        )
+        );
     }
     if(query.isError){
-        appWindow.setTitle(`Error on loading author ${id!} | Mangadex`).then()
+        appWindow.setTitle(`Error on loading author ${id!} | Mangadex`).then();
         return (
             <Mangadex_suspense>
                 <ErrorEL1
                     error={query.error}
                 />
             </Mangadex_suspense>
-        )
+        );
     }
     return(
         <Mangadex_suspense__/>
-    )
+    );
 }

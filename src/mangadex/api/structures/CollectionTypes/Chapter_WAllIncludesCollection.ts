@@ -27,7 +27,7 @@ export default class Chapter_WAllIncludesCollection extends Collection<Chapter_w
     public next(): Promise<Collection<Chapter_withAllIncludes>> {
         return new Promise((resolve, reject) => {
             try {
-                let current_offset_limits = this.next_offset_limit();
+                const current_offset_limits = this.next_offset_limit();
                 this.$prev_search_type.offset_limits = current_offset_limits;
                 resolve(Chapter_withAllIncludes.search(this.prev_search_type));
             } catch (error) {
@@ -38,7 +38,7 @@ export default class Chapter_WAllIncludesCollection extends Collection<Chapter_w
     public previous(): Promise<Collection<Chapter_withAllIncludes>> {
         return new Promise((resolve, reject) => {
             try {
-                let current_offset_limits = this.previous_offset_limit();
+                const current_offset_limits = this.previous_offset_limit();
                 this.$prev_search_type.offset_limits = current_offset_limits;
                 resolve(Chapter_withAllIncludes.search(this.prev_search_type));
             } catch (error) {
@@ -47,7 +47,7 @@ export default class Chapter_WAllIncludesCollection extends Collection<Chapter_w
         });
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Chapter_withAllIncludes>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_limits = current_offset_limits;
         return (Chapter_withAllIncludes.search(this.prev_search_type));
     }

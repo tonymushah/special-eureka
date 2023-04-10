@@ -20,6 +20,6 @@ export type MangaAttributes = {
     createdAt : Date,
     updatedAt : Date,
     version : number,
-    availableTranslatedLanguages : Array<String>
+    availableTranslatedLanguages : Array<string>
     latestUploadedChapter: string
 }

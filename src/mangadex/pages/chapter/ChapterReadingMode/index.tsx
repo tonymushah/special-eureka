@@ -35,9 +35,9 @@ export default function Chapter_Reading_mode(props: {
                     }}>Widestrip</Chakra.MenuItem>
                 </Chakra.MenuList>
             </Chakra.Menu>
-        )
+        );
     }
     return (
         <Chakra.Skeleton />
-    )
+    );
 }

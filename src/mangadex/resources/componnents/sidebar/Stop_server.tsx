@@ -13,7 +13,7 @@ export default function Stop_server(props : {
         title: "Stoping server ...",
         status: "loading",
         position: "bottom-right"
-    })!
+    })!;
 
     return (
         <React.Suspense>
@@ -35,5 +35,5 @@ export default function Stop_server(props : {
                 }}
             </Await>
         </React.Suspense>
-    )
+    );
 }

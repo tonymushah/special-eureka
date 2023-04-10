@@ -4,14 +4,14 @@ import { useQuery } from "react-query";
 export function getLanguages(){
     const queryKey = "mdx-languages";
     const query = useQuery<Languages>(queryKey, async () =>{
-        return await Languages.initialize()
+        return await Languages.initialize();
     }, {
         staleTime : Infinity
     });
     return {
         queryKey,
         query
-    }
+    };
 }
 
 export function getAllLang(){
@@ -26,9 +26,9 @@ export function getAllLang(){
     }, {
         staleTime : Infinity,
         enabled : !!required_query.data
-    })
+    });
     return {
         queryKey,
         query
-    }
+    };
 }

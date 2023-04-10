@@ -11,20 +11,20 @@ export function useFullScreenOptions_Query(){
     const query_key = "mdx-chapter-fullscreen-option";
     const query = useQuery<FullScreenOptions_Context | undefined>(query_key, () => {
         return new Promise((resolve) => {
-            resolve(undefined)
-        })
+            resolve(undefined);
+        });
     }, {
         staleTime: Infinity
     });
     const queryClient = useQueryClient();
     const updateOptions = (option: FullScreenOptions_Context) => {
         queryClient.setQueryData(query_key, option);
-    }
+    };
     return {
         query_key,
         query,
         updateOptions
-    }
+    };
 }
 
 export default function FullScreenOptionsProvider(props : React.PropsWithChildren){
@@ -35,7 +35,7 @@ export default function FullScreenOptionsProvider(props : React.PropsWithChildre
                 props.children
             }
         </context.Provider>
-    )
+    );
 }
 
 export function useFullScreenOptions(){

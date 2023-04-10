@@ -9,12 +9,12 @@ export function launch_server(){
         title : "Starting server ...",
         status : "loading",
         position : "bottom-right"
-    })!
+    })!;
     return (
         <React.Suspense>
             
         </React.Suspense>
-    )
+    );
 }
 
 export async function stop_server() : Promise<string>{
@@ -24,9 +24,9 @@ export async function stop_server() : Promise<string>{
         title : "Stopping server ...",
         status : "loading",
         position : "bottom-right"
-    })!
+    })!;
     try {
-        let promise = await Offline.stop_server();
+        const promise = await Offline.stop_server();
         toast.update(toastIdRef.current, {
             title : "Server Stop",
             isClosable : true,

@@ -1,5 +1,5 @@
-import { Chapter } from "@mangadex/api/structures/Chapter"
-import { useQuery, useQueryClient } from "react-query"
+import { Chapter } from "@mangadex/api/structures/Chapter";
+import { useQuery, useQueryClient } from "react-query";
 
 export type ChapterPages = {
     current : number, 
@@ -18,18 +18,18 @@ export default function useChapterPages(props : {
         };
     }, {
         staleTime : Infinity
-    })
+    });
     const setCurrentPage = (index : number) => {
         if(0 < index && index <= props.chapter.get_pages()){
             queryClient.setQueryData<ChapterPages>(queryKey, {
                 current : index,
                 limit: props.chapter.get_pages()
-            })
+            });
         }
-    }
+    };
     return {
         queryKey, 
         query,
         setCurrentPage
-    }
+    };
 }

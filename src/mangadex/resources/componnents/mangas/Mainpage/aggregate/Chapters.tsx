@@ -1,8 +1,8 @@
 import "flag-icons/css/flag-icons.min.css";
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { Alert, Col, Collapse, Container, Row, Spinner } from "react-bootstrap";
-import { Chapters } from '@mangadex/api/structures/Chapter';
-import Chapter_Element1_byChapID from '@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID';
+import { Chapters } from "@mangadex/api/structures/Chapter";
+import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 
 type Chapters_ElementProps = {
     headersTitle: string
@@ -11,7 +11,7 @@ type Chapters_ElementProps = {
 
 function Chapters_Element(props: Chapters_ElementProps) {
     const [open, setOpen] = useState(true);
-    let rand = Math.floor(Math.random() * 1000) + 1;
+    const rand = Math.floor(Math.random() * 1000) + 1;
     return (
         <Container>
             <Row>
@@ -43,10 +43,10 @@ export class ChaptersComp extends React.Component<ChaptersProps>{
     declare state: boolean;
     private toUse: Chapters;
     public constructor(props: ChaptersProps) {
-        super(props)
+        super(props);
         //    this.initializer();
         this.setState(true);
-        this.toUse = this.props.src
+        this.toUse = this.props.src;
     }
     public setState(state: boolean) {
         this.state = state;

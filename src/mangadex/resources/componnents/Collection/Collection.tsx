@@ -6,4 +6,4 @@ export {
     CollectionComponnent_WithQuery,
     UseCollection,
     CollectionComponnent
-} 
+}; 

@@ -4,7 +4,7 @@ import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScr
 import useChapterPages from "../chapter/useChapterPages";
 
 export default function Widestrip() {
-    let data = useChapterPageOutletContext()
+    const data = useChapterPageOutletContext();
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
         chapter : data.chapter
@@ -35,5 +35,5 @@ export default function Widestrip() {
                     ))
                 }
             </Chakra.HStack>
-    )
+    );
 }

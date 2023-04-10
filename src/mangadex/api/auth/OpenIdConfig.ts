@@ -67,8 +67,8 @@ export interface MtlsEndpointAliases {
 export interface RootObject {
         realm: string;
         public_key: string;
-        'token-service': string;
-        'account-service': string;
-        'tokens-not-before': number;
+        "token-service": string;
+        "account-service": string;
+        "tokens-not-before": number;
     }
 

@@ -1,5 +1,5 @@
-import { Store } from 'tauri-plugin-store-api';
-import { Lang, Languages } from '../Utils';
+import { Store } from "tauri-plugin-store-api";
+import { Lang, Languages } from "../Utils";
 
 export enum UserOptionsKeys{
     languages = "languages",

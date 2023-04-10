@@ -22,7 +22,7 @@ function Author_Page_Suspense(props: React.PropsWithChildren){
                 props.children
             }
         </React.Suspense>
-    )
+    );
 }
 
 export default function Author_Page(props: {
@@ -85,5 +85,5 @@ export default function Author_Page(props: {
                 </Chakra.Box>
             </Chakra.Box>
         </Chakra.Box>
-    )
+    );
 }

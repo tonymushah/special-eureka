@@ -17,14 +17,14 @@ export default function MangaElementDef_wRelated(props: {
     if (query.isLoading) {
         return(
             <MangaElementFallback/>
-        )
+        );
     }
     if(query.isError){
         return(
             <ErrorEL1 error={query.error}/>
-        )
+        );
     }
     return (
         <MangaElementDef src={query.data!} isRefetching={query.isRefetching} refetch={query.refetch}/>
-    )
+    );
 }

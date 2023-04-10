@@ -18,26 +18,26 @@ export default function useSwipperModeRef(props : {
         return props.swipper;
     }, {
         staleTime : Infinity
-    })
+    });
     return {
         queryKey,
         query
-    }
+    };
 }
 
 export function useSwipperModeRefData(props: {
     chapter : Chapter
 }){
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     const swipperModeRef_QueryKey = getUseSwipperModeRef_QueryKey(props);
     const queryKey = `${swipperModeRef_QueryKey}-listner`;
     const query = useQuery<React.RefObject<SwiperRef>>(queryKey, async () => {
         return queryClient.getQueryData<React.RefObject<SwiperRef>>(swipperModeRef_QueryKey)!;
     }, {
         enabled : !!queryClient.getQueryData<React.RefObject<SwiperRef>>(swipperModeRef_QueryKey)
-    })
+    });
     return {
         query,
         queryKey
-    }
+    };
 }

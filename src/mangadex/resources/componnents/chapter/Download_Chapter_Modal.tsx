@@ -9,7 +9,7 @@ import {
     ModalBody,
     ModalCloseButton,
     Text
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 import Consumer from "../../../../commons-res/components/Consumer";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 import { useChapterDownloadMutation } from "../../hooks/ChapterStateHooks";
@@ -117,5 +117,5 @@ export default function Download_Chapter_Modal(props: {
                 }
             </Consumer>
         </>
-    )
+    );
 }

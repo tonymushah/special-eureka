@@ -35,5 +35,5 @@ export default function All_downloaded_Chapter_manga(props: {
                 )
             }
         </CollectionComponnent_WithQuery>
-    )
+    );
 }

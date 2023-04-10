@@ -25,7 +25,7 @@ export default class Manga_withAllIncludes_Collection extends Collection<Manga_w
         this.$prev_search_type = previous_search_type;
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Manga_with_allRelationship>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_Limits = current_offset_limits;
         return (Manga_with_allRelationship.search(this.prev_search_type));
     }

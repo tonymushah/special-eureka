@@ -21,5 +21,5 @@ export default function IsPingable_default_client(props : {
             client={client}
             onLoading={props.onLoading}
         />
-    )
+    );
 }

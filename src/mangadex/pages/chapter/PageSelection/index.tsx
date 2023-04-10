@@ -21,7 +21,7 @@ export default function PageSelection(props : {
                 >
                     <SwipperPS {...props}/>
                 </React.Suspense>
-            )
+            );
         }else{
             return (
                 <React.Suspense
@@ -31,10 +31,10 @@ export default function PageSelection(props : {
                 >
                     <Long_Wide_StripPS {...props}/>
                 </React.Suspense>
-            )
+            );
         }
     }
     return (
         <Text>Loading...</Text>
-    )
+    );
 }

@@ -28,5 +28,5 @@ export default function MyErrorBounderies(props: React.PropsWithChildren) {
                 props.children
             }
         </TryCatch>
-    )
+    );
 }

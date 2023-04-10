@@ -30,7 +30,7 @@ export default function Random_Manga() {
                     <IsPingable_defaultError
                         query={query}
                     />
-                )
+                );
             }}
             client={client}
             onSuccess={() => (
@@ -40,9 +40,9 @@ export default function Random_Manga() {
                         errorElement={<ErrorELAsync1 />}
                     >
                         {(getted1: Manga) => {
-                            let navigate = useNavigate();
+                            const navigate = useNavigate();
                             React.useEffect(() => {
-                                navigate(MangaDexPath + "/manga/" + getted1.get_id())
+                                navigate(MangaDexPath + "/manga/" + getted1.get_id());
                             });
                             return (<></>);
                         }}
@@ -51,5 +51,5 @@ export default function Random_Manga() {
             )}
         />
 
-    )
+    );
 }

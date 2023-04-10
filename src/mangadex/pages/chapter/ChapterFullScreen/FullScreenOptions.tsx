@@ -1,6 +1,6 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
 
@@ -11,7 +11,7 @@ export default function FullScreenOptions(props: React.PropsWithChildren<{
     chapter: Chapter,
     onCloseButtonClick: () => void
 }>) {
-    const { getButtonProps, getDisclosureProps, isOpen } = useDisclosure()
+    const { getButtonProps, getDisclosureProps, isOpen } = useDisclosure();
     const [hidden, setHidden] = React.useState(!isOpen);
     if (props.isShow == true) {
         return (
@@ -31,7 +31,7 @@ export default function FullScreenOptions(props: React.PropsWithChildren<{
                             opacity: "1"
                         }}
                         onClick={() => {
-                            props.onCloseButtonClick()
+                            props.onCloseButtonClick();
                         }}
                     />
 
@@ -54,9 +54,9 @@ export default function FullScreenOptions(props: React.PropsWithChildren<{
                     />
                 </React.Suspense>
             </React.Fragment>
-        )
+        );
     }
     return (
         <React.Fragment></React.Fragment>
-    )
+    );
 }

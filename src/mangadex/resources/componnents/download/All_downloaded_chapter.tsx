@@ -8,7 +8,7 @@ import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 
 export default function All_downloaded_chapter(props: {
-    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, 'queryKey' | 'queryFn'>,
+    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
 }) {
     const client = useHTTPClient();
     const query_key = "mdx-downloaded_chapter";
@@ -16,7 +16,7 @@ export default function All_downloaded_chapter(props: {
         <Chakra.Box>
             <CollectionComponnent_WithQuery<string>
                 fn={() => {
-                    return Chapter.getAll_downloaded_chap(undefined, client)
+                    return Chapter.getAll_downloaded_chap(undefined, client);
                 }}
                 queryKey={query_key}
                 onLoading={

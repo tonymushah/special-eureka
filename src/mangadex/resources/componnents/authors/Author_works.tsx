@@ -64,6 +64,6 @@ export default function Author_works(props: {
             />
 
         </Chakra.Box>
-    )
+    );
 
 }

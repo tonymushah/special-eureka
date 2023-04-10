@@ -111,5 +111,5 @@ export default function Download_Manga_Modal(props: {
                 }
             </Consumer>
         </>
-    )
+    );
 }

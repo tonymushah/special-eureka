@@ -50,8 +50,8 @@ export class Author extends Attribute{
         return this.works;
     }
     public async build_Works(){
-        let works_length:number = this.get_relationships()!.length;
-        let works: Array<Manga> = new Array<Manga>(works_length);
+        const works_length:number = this.get_relationships()!.length;
+        const works: Array<Manga> = new Array<Manga>(works_length);
         for(let index = 0; index < works_length; index++){
             works[index] = await Manga.getMangaByID(this.get_relationships()![index].get_id());
         }
@@ -63,9 +63,9 @@ export class Author extends Attribute{
         this.set_imageUrl(imageUrl);
     }
     public static build_wANY(object: any): Author{
-        let attributes :any = object.attributes;
-        let relationships: any = object.relationships;
-        let instance: Author = new Author(
+        const attributes :any = object.attributes;
+        const relationships: any = object.relationships;
+        const instance: Author = new Author(
             object.id,
             attributes.name,
             attributes.imageUrl
@@ -82,7 +82,7 @@ export class Author extends Attribute{
         instance.naver = attributes.naver;
         instance.weibo = attributes.weibo;
         instance.website = attributes.website;
-        instance.youtube = attributes.youtube
+        instance.youtube = attributes.youtube;
         instance.set_biography(attributes.biography);
         try {
             instance.set_relationships_Wany(relationships);
@@ -160,7 +160,7 @@ export class Author extends Attribute{
             return "https://www.youtube.com/" + this.youtube;
         }
     }
-    public getUrl_weibo(domain:string = "cn"): string|null{
+    public getUrl_weibo(domain = "cn"): string|null{
         if(this.weibo == null){
             return null;
         }else{
@@ -186,8 +186,8 @@ export class Author extends Attribute{
     }
     public static async getAuthorById(id:string, client? : Client):Promise<Author>{
         try{
-            let getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id, undefined, client);
-            let instance: Author = Author.build_wANY(getted.data.data);
+            const getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id, undefined, client);
+            const instance: Author = Author.build_wANY(getted.data.data);
             return instance;
         }catch(error){
             throw new Error(error);
@@ -203,20 +203,20 @@ export class Author extends Attribute{
             client
         } : AuthorSearchType
     ): Promise<Collection<Author>>{
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             name: (name),
             ...order?.render(),
         };
-        let getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + "?" + 
+        const getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + "?" + 
             serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" + 
             serialize((new Querry_list_builder<string>("includes", includes!)).build())
         , {
             query: querys
         }, client);
-        let data: Array<any> = getted.data.data;
-        let authorArray: Array<Author> = new Array<Author>(data.length);
+        const data: Array<any> = getted.data.data;
+        const authorArray: Array<Author> = new Array<Author>(data.length);
         for (let index = 0; index < data.length; index++) {
             authorArray[index] = Author.build_wANY(data[index]);
         }

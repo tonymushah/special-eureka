@@ -30,48 +30,48 @@ export class Volume{
         this.set_chapters(chapters);
     }
     public static build_wANY(object: any): Volume{
-        let chapters_getted: any = object.chapters;
-        let chapters_getted_length: number = 0;
+        const chapters_getted: any = object.chapters;
+        let chapters_getted_length = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
                 chapters_getted_length = chapters_getted_length + 1;
             }
         }
-        let chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
-        let index: number = 0;
+        const chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
+        let index = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
                 chapters[index] = Chapters.build_wANY(chapters_getted[key]);
                 index = index + 1;
             }
         }
-        let instance: Volume = new Volume(object.volume, object.count, chapters);
+        const instance: Volume = new Volume(object.volume, object.count, chapters);
         return instance;
     }
     public static async build_wANY2(object: any): Promise<Volume>{
-        let chapters_getted: any = object.chapters;
-        let chapters_getted_length: number = 0;
+        const chapters_getted: any = object.chapters;
+        let chapters_getted_length = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
                 chapters_getted_length = chapters_getted_length + 1;
             }
         }
-        let chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
-        let index: number = 0;
+        const chapters: Array<Chapters> = new Array<Chapters>(chapters_getted_length);
+        let index = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
                 chapters[index] = await Chapters.build_wANY2(chapters_getted[key]);
                 index = index + 1;
             }
         }
-        let instance: Volume = new Volume(object.volume, object.count, chapters);
+        const instance: Volume = new Volume(object.volume, object.count, chapters);
         return instance;
     }
     public getNext(id: string): string | boolean{
         for (let index = 0; index < this.chapters.length; index++) {
             const chapters_to_use : Chapters = this.chapters[index];
             if(chapters_to_use.is_there(id) == true){
-                let index_to_use = index + 1;
+                const index_to_use = index + 1;
                 if(index_to_use >= this.chapters.length){
                     return true;
                 }else{
@@ -85,7 +85,7 @@ export class Volume{
         for (let index = 0; index < this.chapters.length; index++) {
             const chapters_to_use : Chapters = this.chapters[index];
             if(chapters_to_use.is_there(id) == true){
-                let index_to_use = index - 1;
+                const index_to_use = index - 1;
                 if(index_to_use >= this.chapters.length || index_to_use < 0){
                     return true;
                 }else{

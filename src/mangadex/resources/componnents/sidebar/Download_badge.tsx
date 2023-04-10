@@ -5,10 +5,10 @@ import * as Chakra from "@chakra-ui/react";
 
 
 export default function Downloads_badge_(){
-    const server_state = MangaManagerState()
+    const server_state = MangaManagerState();
     return (
         <Chakra.Box onClick={() => {
-            server_state.switch_server_state.mutate()
+            server_state.switch_server_state.mutate();
         }}>
             {
                 server_state.server_query.data == true ? (
@@ -18,5 +18,5 @@ export default function Downloads_badge_(){
                 )
             }
         </Chakra.Box>
-    )
+    );
 }

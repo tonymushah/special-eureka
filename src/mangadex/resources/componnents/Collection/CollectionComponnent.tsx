@@ -13,7 +13,7 @@ export default function CollectionComponnent<T extends Attribute>(props: {
     const toastID = React.useRef<ToastId>();
     const [collection, setCollection] = React.useState<Collection<T>>(props.src);
     function addToast(props?: UseToastOptions) {
-        toastID.current = toast(props)
+        toastID.current = toast(props);
     }
     function updateToast(props?: UseToastOptions) {
         if (toastID.current != undefined && props != undefined) {
@@ -36,14 +36,14 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                 "title": "Loading to previous page",
                                 isClosable: false,
                                 "position": "bottom-right"
-                            })
+                            });
                             collection.previous().then((value: Collection<T>) => {
                                 updateToast({
                                     status: "success",
                                     "title": "Previous page Loaded",
                                     isClosable: true,
                                     "duration": 9000
-                                })
+                                });
                                 setCollection(value);
                             }).catch(reason => {
                                 updateToast({
@@ -51,8 +51,8 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                     "title": "Error on Loading Previous page",
                                     isClosable: true,
                                     "duration": 9000
-                                })
-                            })
+                                });
+                            });
                         }}
                     >
                         <ChakraIcon.ArrowLeftIcon />
@@ -64,14 +64,14 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                 "title": "Loading next page",
                                 "position": "bottom-right",
                                 isClosable: false
-                            })
+                            });
                             collection.next().then((value: Collection<T>) => {
                                 updateToast({
                                     status: "success",
                                     "title": "Next page Loaded",
                                     isClosable: true,
                                     "duration": 9000
-                                })
+                                });
                                 setCollection(value);
                             }).catch(reason => {
                                 updateToast({
@@ -79,8 +79,8 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                     "title": "Error on Loading next page",
                                     isClosable: true,
                                     "duration": 9000
-                                })
-                            })
+                                });
+                            });
                         }}
                     >
                         <ChakraIcon.ArrowRightIcon />
@@ -88,5 +88,5 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                 </Center>
             </Box>
         </Box>
-    )
+    );
 }

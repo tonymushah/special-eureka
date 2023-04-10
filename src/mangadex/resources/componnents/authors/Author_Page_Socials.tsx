@@ -14,11 +14,11 @@ import tumblr_logo from "./authors_brands_logo/tumblr_logo.svg";
 import weibo_logo from "./authors_brands_logo/weibo_logo.ico";
 
 const ExtLink = React.lazy(async () => {
-    let res = await import("../../../../commons-res/components/ExtLink");
+    const res = await import("../../../../commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };
-})
+});
 
 export default function Author_Page_Socials(props: {
     src: Author
@@ -395,5 +395,5 @@ export default function Author_Page_Socials(props: {
                 ) : (<></>)
             }
         </Chakra.Wrap>
-    )
+    );
 }

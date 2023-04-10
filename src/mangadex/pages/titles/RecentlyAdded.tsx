@@ -1,6 +1,6 @@
-import React from "react"
-import { Asc_Desc, Offset_limits, Order } from "../../api/internal/Utils"
-import * as Chakra from "@chakra-ui/react"
+import React from "react";
+import { Asc_Desc, Offset_limits, Order } from "../../api/internal/Utils";
+import * as Chakra from "@chakra-ui/react";
 import { CollectionComponnent_WithQuery } from "../../resources/componnents/Collection/Collection";
 import { Manga } from "../../api/structures/Manga";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
@@ -10,7 +10,7 @@ import { appWindow } from "@tauri-apps/api/window";
 
 const MangaList = React.lazy(() => import("../../resources/componnents/mangas/v1/MangaList"));
 const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
-const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"))
+const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
 
 export default function RecentlyAdded() {
     const offset_limit = new Offset_limits();
@@ -78,5 +78,5 @@ export default function RecentlyAdded() {
                 )}
             />
         </Mangadex_suspense>
-    )
+    );
 }

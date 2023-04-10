@@ -14,7 +14,7 @@ export function MangaRelated_Section(props: {
     src: Manga,
     enum : string
 }){
-    let length = props.src.get_related_manga_byEnum_length(props.enum);
+    const length = props.src.get_related_manga_byEnum_length(props.enum);
     if(length == 0){
         return (<></>);
     }else{
@@ -44,13 +44,13 @@ export function MangaRelated_Section(props: {
                                             </Chakra.WrapItem>
                                         ))}
                                     </Chakra.Wrap>
-                                )
+                                );
                             }}
                         </Await>
                     </React.Suspense>
                 </Chakra.Box>
             </Chakra.Box>
-        )
+        );
     }
 }
 
@@ -145,6 +145,6 @@ export default class Related extends React.Component<RelatedProps>{
                     enum={Manga_related.spin_off()}
                 />
             </Chakra.VStack>
-        )
+        );
     }
 }

@@ -1,4 +1,4 @@
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 import React from "react";
 
 export default function ErrorEL1(props : {
@@ -10,5 +10,5 @@ export default function ErrorEL1(props : {
             <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
             <Chakra.AlertDescription>{props.error.message}</Chakra.AlertDescription>
         </Chakra.Alert>
-    )
+    );
 }

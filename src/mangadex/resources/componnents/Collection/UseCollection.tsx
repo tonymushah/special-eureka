@@ -12,5 +12,5 @@ export default function UseCollection<T>(props: {
                 props.children
             }
         </context.Consumer>
-    )
+    );
 }

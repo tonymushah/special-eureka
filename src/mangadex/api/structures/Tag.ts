@@ -34,10 +34,10 @@ export class Tag extends Attribute{
     }
     // [ ] constructor with the object id and type
     public static build_withAny(object: any): Tag{
-        let attributes = object.attributes;
-        let relationship = object.relationships;
-        let instance: Tag = new Tag(object.id, attributes.name, attributes.description, attributes.group);
-        let getted: Array<Attribute> = new Array<Attribute>(relationship.length);
+        const attributes = object.attributes;
+        const relationship = object.relationships;
+        const instance: Tag = new Tag(object.id, attributes.name, attributes.description, attributes.group);
+        const getted: Array<Attribute> = new Array<Attribute>(relationship.length);
             for (let index = 0; index < getted.length; index++) {
                 getted[index] = Attribute.build_wRelated_any(relationship[index], relationship[index].related);
             }

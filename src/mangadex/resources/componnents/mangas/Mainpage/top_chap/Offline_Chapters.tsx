@@ -1,4 +1,4 @@
-import * as Chakra from '@chakra-ui/react';
+import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Spinner } from "react-bootstrap";
@@ -6,7 +6,7 @@ import { useHTTPClient } from "../../../../../../commons-res/components/HTTPClie
 import Chapter_Element1_byChapID from "../../../chapter/v1/Chapter_Element1_byChapID";
 import { MangaPageProps } from "../../Manga_Page";
 
-const All_downloaded_Chapter_manga = React.lazy(() => import("../../../download/All_downloaded_Chapter_manga"))
+const All_downloaded_Chapter_manga = React.lazy(() => import("../../../download/All_downloaded_Chapter_manga"));
 
 export default function Offline_Chapters(props: MangaPageProps) {
     return (
@@ -40,5 +40,5 @@ export default function Offline_Chapters(props: MangaPageProps) {
                 </All_downloaded_Chapter_manga>
             </React.Suspense>
         </Chakra.TabPanel>
-    )
+    );
 }

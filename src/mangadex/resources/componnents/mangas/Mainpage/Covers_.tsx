@@ -27,7 +27,7 @@ export function Covers_Manga(props: MangaPageProps) {
                         props.src.get_id()
                     ],
                     client: client
-                })
+                });
             }}
             queryKey={queryKey}
             query_options={{
@@ -72,5 +72,5 @@ export function Covers_Manga(props: MangaPageProps) {
                 </Chakra.Wrap>
             )}
         </CollectionComponnent_WithQuery>
-    )
+    );
 }

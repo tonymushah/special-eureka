@@ -98,7 +98,7 @@ export default function ReadingOptions(props: {
                                 Option Overlay :
                             </Chakra.Text>
                             <Chakra.Switch isChecked={isOverlay} onChange={() => {
-                                state.toggle()
+                                state.toggle();
                             }} />
                         </Chakra.Stack>
                         <Chakra.Stack
@@ -141,5 +141,5 @@ export default function ReadingOptions(props: {
                 </Chakra.DrawerContent>
             </Chakra.Drawer>
         </React.Fragment>
-    )
+    );
 }

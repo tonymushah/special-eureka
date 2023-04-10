@@ -16,38 +16,38 @@ export default function useLanguageUserOption(){
             await userCachedOption.setLanguages(new_);
         },
         onSuccess() {
-            query.refetch()
+            query.refetch();
         },
-    })
+    });
     const changeOption = changeOptionMutation.mutate;
     const isIn = (input : Lang) => {
         if(query.isSuccess == true){
             return query.data.map((data) => data.get_two_letter()).includes(input.get_two_letter());
         }
         return undefined;
-    }
+    };
     const add = (input: Lang) => {
         if(query.isSuccess == true){
-            let data = query.data;
+            const data = query.data;
             data.push(input);
             changeOption(data);
         }
-    }
+    };
     const remove = (input : Lang) => {
         if(query.isSuccess == true){
             changeOption(query.data.filter(item => item.get_two_letter() !== input.get_two_letter()));
         }
-    }
+    };
     const handleInput = (input : Lang) => {
         if(isIn(input)){
-            remove(input)
+            remove(input);
         }else{
             add(input);
         }
-    }
+    };
     const clear = () => {
         changeOption([]);
-    }
+    };
     return {
         queryKey,
         query,
@@ -55,5 +55,5 @@ export default function useLanguageUserOption(){
         handleInput,
         isIn,
         clear
-    }
+    };
 }

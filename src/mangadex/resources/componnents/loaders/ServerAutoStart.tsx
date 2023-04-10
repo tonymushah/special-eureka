@@ -12,7 +12,7 @@ export default function ServerAutoStartLoader(){
     React.useEffect(() => {
         if(query.isSuccess && server_state.server_query.data != true){
             if(query.data == true){
-                server_state.switch_server_state.mutate()
+                server_state.switch_server_state.mutate();
             }
         }
     }, [query.data]);

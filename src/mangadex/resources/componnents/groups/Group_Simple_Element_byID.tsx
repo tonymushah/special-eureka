@@ -18,7 +18,7 @@ export default function Group_Simple_Element_ByID(props: {
     if (query.isLoading) {
         return (
             <GroupFallBackElement />
-        )
+        );
     }
     if (query.isError) {
         return (

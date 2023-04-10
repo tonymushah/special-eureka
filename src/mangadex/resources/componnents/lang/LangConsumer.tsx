@@ -14,7 +14,7 @@ export default function LangConsumer(props: {
                     props.children
                 }
             </Consumer>
-        )
+        );
     } else {
         return (
             <></>

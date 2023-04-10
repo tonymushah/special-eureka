@@ -4,7 +4,7 @@ import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
 import useChapterPages from "../chapter/useChapterPages";
 
 export default function Lonstrip() {
-    const data = useChapterPageOutletContext()
+    const data = useChapterPageOutletContext();
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
         chapter : data.chapter
@@ -35,5 +35,5 @@ export default function Lonstrip() {
                     ))
                 }
             </Chakra.VStack>
-    )
+    );
 }

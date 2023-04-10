@@ -12,13 +12,13 @@ export default function useChapterReadingModeOption(){
         return ReadingMode.Longstrip;
     }, {
         staleTime: Infinity
-    })
+    });
     const setReadingMode = (mode : ReadingMode) => {
         queryClient.setQueryData<ReadingMode>(query_key, mode);
-    }
+    };
     return {
         query_key,
         query,
         setReadingMode
-    }
+    };
 }

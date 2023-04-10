@@ -98,7 +98,7 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
         }
     }
     sliceAll() {
-        let to_use_volume: Array<Volume> = this.toUse.get_volumes().reverse();
+        const to_use_volume: Array<Volume> = this.toUse.get_volumes().reverse();
         for (let index = 0; index < this.parts; index++) {
             this.Chapters_parts[index] = (to_use_volume.slice(index * this.separator, (index + 1) * this.separator));
         }

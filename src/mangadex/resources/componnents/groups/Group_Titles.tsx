@@ -1,10 +1,10 @@
-import React from "react"
-import { Collection } from "../../../api/structures/Collection"
-import { Offset_limits } from "../../../api/internal/Utils"
-import { Manga } from "../../../api/structures/Manga"
-import { CollectionComponnent_WithQuery } from "../Collection/Collection"
-import MangaList from "../mangas/v1/MangaList"
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider"
+import React from "react";
+import { Collection } from "../../../api/structures/Collection";
+import { Offset_limits } from "../../../api/internal/Utils";
+import { Manga } from "../../../api/structures/Manga";
+import { CollectionComponnent_WithQuery } from "../Collection/Collection";
+import MangaList from "../mangas/v1/MangaList";
+import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 
 export default function Group_Titles(props: {
     id: string
@@ -18,7 +18,7 @@ export default function Group_Titles(props: {
                     offset_Limits: new Offset_limits(),
                     group: props.id,
                     client: client
-                })
+                });
             }}
             query_options={
                 {
@@ -32,5 +32,5 @@ export default function Group_Titles(props: {
                 )
             }
         </CollectionComponnent_WithQuery>
-    )
+    );
 }

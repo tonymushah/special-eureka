@@ -9,23 +9,23 @@ import { get_ChapterbyId, get_chapter_queryKey } from "../../resources/hooks/Cha
 const Chapter_Page_Success = React.lazy(() => import("./Chapter_Page_Success"));
 
 export default function Chapter_Page() {
-    let { id } = useParams();
+    const { id } = useParams();
     const queryKey = get_chapter_queryKey({
         id: id!
-    })
+    });
     const queryClient = useQueryClient();
     React.useMemo(() => {
         queryClient.removeQueries(queryKey);
-    }, [queryClient, id])
+    }, [queryClient, id]);
     const { query } = get_ChapterbyId({
         id: id!
     });
-    appWindow.setTitle(`Loading... | Mangadex`).then()
+    appWindow.setTitle("Loading... | Mangadex").then();
     if (query.isError) {
-        appWindow.setTitle(`Error on loading chapter ${id!} | Mangadex`).then()
+        appWindow.setTitle(`Error on loading chapter ${id!} | Mangadex`).then();
         return (
             <ErrorEL1 error={query.error} />
-        )
+        );
     }
     if (query.isSuccess) {
         return (
@@ -48,7 +48,7 @@ export default function Chapter_Page() {
                     data={query.data.data}
                 />
             </React.Suspense>
-        )
+        );
     }
     return (
         <Chakra.Box
@@ -62,6 +62,6 @@ export default function Chapter_Page() {
                 />
             </Chakra.AbsoluteCenter>
         </Chakra.Box>
-    )
+    );
 
 }
