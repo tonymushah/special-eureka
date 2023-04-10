@@ -41,14 +41,14 @@ async function recentlyAdded_loader(client: Client, queryClient: QueryClient) {
 async function seasonal_loader(client: Client, queryClient: QueryClient) {
     const seasonal_id = getSeasonalId();
     const data = await List.getListByID_includes_manga(seasonal_id, client);
-    const key = "mdx-custom_list:" + seasonal_id;
+    const key = ["mdx", "custom_list", seasonal_id];
     queryClient.setQueryData(key, data);
 }
 
 export default function HomeAfterPing() {
     const client = useHTTPClient();
     
-    const queryKey = "mdx-home-page-loader";
+    const queryKey = ["mdx", "home", "page", "loader"];
     const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {
         (await Promise.allSettled([

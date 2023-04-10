@@ -16,7 +16,7 @@ export default function RecentlyAdded() {
     const offset_limit = new Offset_limits();
     offset_limit.set_limits(25);
     const client = useHTTPClient();
-    const queryKey = "mdx-recently-added";
+    const queryKey = ["mdx", "recently-added"];
     appWindow.setTitle("Recently Added | Mangadex");
     return (
         <Mangadex_suspense>

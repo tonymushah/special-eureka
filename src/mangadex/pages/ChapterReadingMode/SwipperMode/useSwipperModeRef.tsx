@@ -1,12 +1,12 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SwiperRef } from "swiper/react";
 
 export function getUseSwipperModeRef_QueryKey(props : {
     chapter : Chapter
-}){
-    return `mdx-chapter-${props.chapter.get_id()}-swipper`;
+}): QueryKey{
+    return ["mdx", "chapter", props.chapter.get_id(), "swipper"];
 }
 
 export default function useSwipperModeRef(props : {
@@ -30,7 +30,7 @@ export function useSwipperModeRefData(props: {
 }){
     const queryClient = useQueryClient();
     const swipperModeRef_QueryKey = getUseSwipperModeRef_QueryKey(props);
-    const queryKey = `${swipperModeRef_QueryKey}-listner`;
+    const queryKey = [swipperModeRef_QueryKey, "listner"];
     const query = useQuery<React.RefObject<SwiperRef>>(queryKey, async () => {
         return queryClient.getQueryData<React.RefObject<SwiperRef>>(swipperModeRef_QueryKey)!;
     }, {

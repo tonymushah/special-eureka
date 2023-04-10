@@ -19,7 +19,7 @@ export default function RecentlyPopularPage() {
     const touse_date_ = new Date();
     touse_date_.setMonth(touse_date_.getMonth() - 1);
     const touse_date = formatDate(touse_date_);
-    const queryKey = "mdx-popular-recent-titles";
+    const queryKey = ["mdx", "popular-recent-titles"];
     const queryClient = useQueryClient();
     return (
         <React.Fragment>
@@ -45,9 +45,9 @@ export default function RecentlyPopularPage() {
                             <Chakra.Divider />
                         }>
                             {data.get_data().map((value, index) => {
-                                queryClient.setQueryData("mdx-manga:" + value.get_id(), value);
+                                queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
                                 return (
-                                    <Chakra.Card>
+                                    <Chakra.Card key={value.get_id()}>
                                         {
                                             data.get_offset() + index == 0 ? (
                                                 <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{data.get_offset() + index + 1}</Heading>

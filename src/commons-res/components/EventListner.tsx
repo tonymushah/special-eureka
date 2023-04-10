@@ -6,7 +6,7 @@ export default function EventListener_<T = unknown>(props: React.PropsWithChildr
     event_id: string,
     callback_fn: EventCallback<T>
 }>){
-    const queryKey = ["special-eureka-event", {
+    const queryKey = ["special-eureka", "event", {
         id: props.event_id
     }];
     const query = useQuery(queryKey, () => {

@@ -34,7 +34,7 @@ export default function Group_Page_(){
     if(id != undefined){
         const client = useHTTPClient();
         const queryClient = useQueryClient();
-        const query_key = "mdx-group-" + id;
+        const query_key = ["mdx", "group", id];
         useMemo(() => {
             queryClient.removeQueries(query_key);
         },[]);

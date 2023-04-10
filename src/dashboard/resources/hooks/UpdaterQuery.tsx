@@ -51,8 +51,7 @@ export function TauriCheckUpdateQuery(props : {
                 isClosable : true,
                 description : err
             });
-        },
-        enabled: false
+        }
     });
     return {
         queryKey,

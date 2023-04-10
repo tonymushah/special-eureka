@@ -6,7 +6,7 @@ export enum ReadingMode{
     WideStrip = "WideStrip"
 }
 export default function useChapterReadingModeOption(){
-    const query_key = "mdx-chapter-reading-mode";
+    const query_key = ["mdx", "chapter", "reading-mode"];
     const queryClient = useQueryClient();
     const query = useQuery<ReadingMode>(query_key, async () => {
         return ReadingMode.Longstrip;

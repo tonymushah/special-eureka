@@ -34,7 +34,7 @@ export async function loader({
     });
 }
 
-export const queryKey = "mdx-popular-recent-titles";
+export const queryKey = ["mdx", "popular-recent-titles"];
 
 export default function RecentlyPopular() {
     const client = useHTTPClient();
@@ -56,7 +56,7 @@ export default function RecentlyPopular() {
                             modules={[Navigation, Keyboard]}
                         >
                             {query.data.get_data().map((value, index) => {
-                                queryClient.setQueryData("mdx-manga:" + value.get_id(), value);
+                                queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
                                 return (
                                     <SwiperSlide
                                         key={value.get_id()}

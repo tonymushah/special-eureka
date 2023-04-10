@@ -58,7 +58,7 @@ export async function loader({
     return search_result;
 }
 
-export const queryKey = "mdx-home_page-latest_update";
+export const queryKey = ["mdx", "home_page", "latest_update"];
 
 export default function Latest_Updates() {
     const client = useHTTPClient();

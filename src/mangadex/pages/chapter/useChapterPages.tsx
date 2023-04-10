@@ -10,7 +10,7 @@ export default function useChapterPages(props : {
     chapter : Chapter
 }){
     const queryClient = useQueryClient();
-    const queryKey = "mdx-current-chapter:" + props.chapter.get_id() + "-reading-state";
+    const queryKey = ["mdx", "current-chapter", props.chapter.get_id(), "reading-state"];
     const query = useQuery<ChapterPages>(queryKey, async () => {
         return {
             current : 1,

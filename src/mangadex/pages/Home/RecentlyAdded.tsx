@@ -20,7 +20,7 @@ export async function loader({ client }: {
     });
 }
 
-export const queryKey = "mdx-recently-added";
+export const queryKey = ["mdx", "recently-added"];
 
 export default function RecentlyAdded() {
     const client = useHTTPClient();

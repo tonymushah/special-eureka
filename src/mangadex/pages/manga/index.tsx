@@ -22,7 +22,7 @@ export default function MangaPage() {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
     const { id } = useParams();
-    const query_key = "mdx-manga:" + id;
+    const query_key = ["mdx", "manga", id];
     React.useMemo<void>(() => {
         queryClient.removeQueries(query_key);
     }, [queryClient, query_key]);

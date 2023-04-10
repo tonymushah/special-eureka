@@ -66,7 +66,7 @@ export default function Chapter_Page_Success(props: {
             appWindow.setTitle(`Chapter ${props.data.get_chapter()} - ${title} | Mangadex`).then();
         });
     }
-    const chapter_data_images_queryKey = "mdx-chapter:" + props.data.get_id() + "-data";
+    const chapter_data_images_queryKey = ["mdx", "chapter", props.data.get_id(), "data"];
     const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
         return props.data.get_dataImages(client);
     }, {
@@ -121,8 +121,8 @@ export default function Chapter_Page_Success(props: {
                             <Chakra.HStack>
                                 <FaUsers/>
                                 {
-                                    chapter_groups.map((query) => (
-                                        <React.Fragment>
+                                    chapter_groups.map((query, index) => (
+                                        <React.Fragment key={``}>
                                             {
                                                 query.isSuccess ? (
                                                     <Chakra.Link as={Link} to={`${MangaDexPath}/groups/${query.data.get_id()}`}>
@@ -200,7 +200,7 @@ export default function Chapter_Page_Success(props: {
                         <ChapterFullScreen chapter={props.data}>
                             <>
                                 {
-                                    chapter_data_images_query.isLoading || chapter_data_images_query.isIdle ? (
+                                    chapter_data_images_query.isLoading || chapter_data_images_query.isPaused ? (
                                         <Chakra.AbsoluteCenter>
                                             <Chakra.Box>
                                                 <Chakra.Spinner

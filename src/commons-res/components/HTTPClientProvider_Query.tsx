@@ -9,7 +9,7 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
     onLoading: React.ReactNode,
     onError: (error: Error) => React.ReactNode
 }>) {
-    const queryKey = "tauri-http_client";
+    const queryKey = ["tauri", "http_client"];
     const query = useQuery<Client, Error>(queryKey, () => {
         return props.value;
     }, {
