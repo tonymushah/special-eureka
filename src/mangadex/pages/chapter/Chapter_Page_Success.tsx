@@ -18,7 +18,6 @@ import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
 import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
 import Download_Chapter_withHotkeys from "./Download_Chapter_withHotkeys";
-import useChapterReadingModeOption from "./ChapterReadingMode/useChapterReadingModeOption";
 
 const ReadingOptions = React.lazy(() => import("./ReadingOption"));
 
@@ -122,10 +121,10 @@ export default function Chapter_Page_Success(props: {
                                 <FaUsers/>
                                 {
                                     chapter_groups.map((query, index) => (
-                                        <React.Fragment key={``}>
+                                        <React.Fragment key={`mdx-chapter-success-${props.data.get_id()}-${index}`}>
                                             {
                                                 query.isSuccess ? (
-                                                    <Chakra.Link as={Link} to={`${MangaDexPath}/groups/${query.data.get_id()}`}>
+                                                    <Chakra.Link as={Link} to={`${MangaDexPath}/group/${query.data.get_id()}`}>
                                                         {
                                                             query.data.get_name()
                                                         }
