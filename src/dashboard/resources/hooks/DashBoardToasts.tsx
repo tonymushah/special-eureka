@@ -9,7 +9,7 @@ export function useDashboardToast(){
         "duration" : 9000
     });
     function addToast(props? : UseToastOptions){
-        toast_ref.current = toast(props)
+        toast_ref.current = toast(props);
     }
     function updateToast(props : UseToastOptions){
         if(toast_ref.current !== undefined){
@@ -21,5 +21,5 @@ export function useDashboardToast(){
     return {
         addToast, 
         updateToast
-    }
+    };
 }

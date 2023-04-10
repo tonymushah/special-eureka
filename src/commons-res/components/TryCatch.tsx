@@ -12,7 +12,7 @@ function ErrorProvider(props: {
                 props.children
             }
         </context.Consumer>
-    )
+    );
 }
 
 type TryCatchProps = {
@@ -29,7 +29,7 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
         super(props);
         this.state = {
             hasError: false
-        }
+        };
     }
     static getDerivedStateFromError(error: Error) {
         return { hasError: true, error: error };
@@ -47,11 +47,11 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
                                 this.props.catch
                             }
                         </ErrorProvider>
-                    )
+                    );
                 }else{
                     return (
                         <></>
-                    )
+                    );
                 }
             }else{
                 if (this.props.catch != undefined) {
@@ -61,11 +61,11 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
                                 this.props.catch
                             }
                         </ErrorProvider>
-                    )
+                    );
                 }else{
                     return (
                         <></>
-                    )
+                    );
                 }
             }
         }

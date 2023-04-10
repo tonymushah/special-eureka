@@ -21,7 +21,7 @@ export default function About(){
               <Outlet context={{ text : "lol" }}/>
             </Box>
           </Box>
-    )
+    );
 }
 
 export function useText(){

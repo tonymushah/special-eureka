@@ -11,7 +11,7 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
 }>) {
     const queryKey = "tauri-http_client";
     const query = useQuery<Client, Error>(queryKey, () => {
-        return props.value
+        return props.value;
     }, {
         staleTime: Infinity,
         cacheTime: 0,
@@ -22,17 +22,17 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
                 return true;
             }
         },
-    })
+    });
     React.useEffect(() => {
         return () => {
             if(query.data != undefined){
-                query.data.drop()
+                query.data.drop();
             }
-        }
-    }, [query.data])
+        };
+    }, [query.data]);
     if (query.isSuccess == true) {
         if (props.children == undefined) {
-            return (<></>)
+            return (<></>);
         } else {
             return (
                 <React.Suspense
@@ -61,7 +61,7 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
                     props.onError
                 }
             </context.Consumer>
-        )
+        );
     }
     return (
         <>

@@ -28,15 +28,15 @@ export class LinksRow extends React.Component<LinksRowProps>{
         this.title = this.props.title;
     }
     public build_LinkButtons(): Array<React.ReactNode>{
-        var returns : Array<React.ReactNode> = [];
+        const returns : Array<React.ReactNode> = [];
         let index = 0;
         for (const key in this.to_use) {
             if (Object.prototype.hasOwnProperty.call(this.to_use, key)) {
                 const element = this.to_use[key];
                 if(element == null){
-                    continue
+                    continue;
                 }else{
-                    returns[index] = (<LinkButton title={key} href={element}/>)
+                    returns[index] = (<LinkButton title={key} href={element}/>);
                     index = index + 1;
                 }
             }
@@ -44,7 +44,7 @@ export class LinksRow extends React.Component<LinksRowProps>{
         return returns;
     }
     render(): React.ReactNode {
-        var LinksButtons : Array<React.ReactNode> = this.build_LinkButtons()
+        const LinksButtons : Array<React.ReactNode> = this.build_LinkButtons();
         if(LinksButtons.length != 0){
             return (
                 <Row>
@@ -53,7 +53,7 @@ export class LinksRow extends React.Component<LinksRowProps>{
                         {LinksButtons}
                     </div>
                 </Row>
-            )
+            );
         }else{
             return (<></>);
         }

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import { Container, Row, Col, Stack, Button, Navbar, NavbarBrand, Nav, Modal, ModalTitle } from 'react-bootstrap';
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import { Container, Row, Col, Stack, Button, Navbar, NavbarBrand, Nav, Modal, ModalTitle } from "react-bootstrap";
 import Hotkeys from "react-hot-keys";
 export class PathIndicator extends React.Component{
     modalState: boolean;
@@ -13,7 +13,7 @@ export class PathIndicator extends React.Component{
         if(this.modalState == false){
             this.modalState = true;
         }else{
-            this.modalState = false
+            this.modalState = false;
         }
         this.forceUpdate();
     }

@@ -13,11 +13,11 @@ export default function InstallUpdate() {
     });
     const installUpdate = useTauriInstallUpdate({
         withoutToast: true
-    })
-    appWindow.setTitle("Checking updates... | Dashboard").then()
+    });
+    appWindow.setTitle("Checking updates... | Dashboard").then();
     if (shouldUpdate.query.isSuccess) {
         if (shouldUpdate.query.data.shouldUpdate == false) {
-            appWindow.setTitle("No update required | Dashboard").then()
+            appWindow.setTitle("No update required | Dashboard").then();
             return (
                 <Box>
                     <Container>
@@ -27,7 +27,7 @@ export default function InstallUpdate() {
                 </Box>
             );
         } else {
-            appWindow.setTitle(`Special Eureka ${shouldUpdate.query.data.manifest?.version} is available | Dashboard`).then()
+            appWindow.setTitle(`Special Eureka ${shouldUpdate.query.data.manifest?.version} is available | Dashboard`).then();
             return (
                 <Box>
                     <Container>
@@ -52,7 +52,7 @@ export default function InstallUpdate() {
                                                 )
                                             }
                                         </React.Suspense>
-                                    )
+                                    );
                                 }
                             }}
                         />
@@ -62,13 +62,13 @@ export default function InstallUpdate() {
                                     isLoading={installUpdate.query.isLoading || installUpdate.query.isFetching}
                                     isDisabled={installUpdate.query.isError}
                                     onClick={() => {
-                                        installUpdate.query.refetch()
+                                        installUpdate.query.refetch();
                                     }}>Update</Button>
                             </Center>
                         </Center>
                     </Container>
                 </Box>
-            )
+            );
         }
     } else {
         return (
@@ -80,6 +80,6 @@ export default function InstallUpdate() {
                     </Center>
                 </Container>
             </Box>
-        )
+        );
     }
 }

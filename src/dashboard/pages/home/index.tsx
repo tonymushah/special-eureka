@@ -1,5 +1,5 @@
 import React from "react";
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 import haikei_red from "../../resources/haikei/layered-waves-haikei-red.svg";
 import haikei_blue from "../../resources/haikei/layered-waves-haikei-blue.svg";
 import haikei_violet from "../../resources/haikei/layered-waves-haikei-violet.svg";
@@ -13,7 +13,7 @@ import { Stack, VStack } from "@chakra-ui/react";
 import { appWindow } from "@tauri-apps/api/window";
 
 export default function Home() {
-    appWindow.setTitle("Welcome to Special-Eureka | Dashboard").then()
+    appWindow.setTitle("Welcome to Special-Eureka | Dashboard").then();
     return (
         <React.Fragment>
             <Chakra.Box
@@ -72,5 +72,5 @@ export default function Home() {
                 </Chakra.Box>
             </Chakra.Box>
         </React.Fragment>
-    )
+    );
 }

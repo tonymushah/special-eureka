@@ -1,5 +1,5 @@
 import React from "react";
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { ErrorELAsync } from "../../mangadex/resources/componnents/Error_cmp";
@@ -21,7 +21,7 @@ export class MangaSimpleEl extends React.Component<MangaSimpleProps>{
     }
     public async build_themes_manga(): Promise<Array<React.ReactNode>> {
         let index = 0;
-        let returns: Array<React.ReactNode> = [];
+        const returns: Array<React.ReactNode> = [];
         if (this.to_use.get_ranting() != ContentRating.safe()) {
             if (this.to_use.get_ranting() == ContentRating.suggestive()) {
                 returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="success" size="sm">{make_first_UpperCare(this.to_use.get_ranting())}</Button>);
@@ -32,12 +32,12 @@ export class MangaSimpleEl extends React.Component<MangaSimpleProps>{
         }
         for (let index1 = 0; index1 < this.to_use.get_tags().length; index1++) {
             const element = this.to_use.get_tags()[index1];
-            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
         }
         return returns;
     }
     render(): React.ReactNode {
-        let title: string = "";
+        let title = "";
         //let desc: string = "";
         if (this.to_use.get_title().en == null) {
             title = new Alt_title(this.to_use.get_alt_title()).get_quicklang()!;

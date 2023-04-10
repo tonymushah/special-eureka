@@ -1,5 +1,5 @@
 import React from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
 import { Accordion, Alert, Col, Container, Row } from "react-bootstrap";
@@ -25,11 +25,11 @@ export class Volume_ extends React.Component<Volume_Props>{
         }
     }
     public render(): React.ReactNode{
-        var chapter_name: string = "Volume";
+        const chapter_name = "Volume";
         return (
                 <Chakra.AccordionItem>
                     <h2>
-                        <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
+                        <Chakra.AccordionButton _expanded={{ bg: "#ff6740", color: "white" }}>
                             <Chakra.Box flex='1' textAlign='left'>
                                 Volume {this.toUse.get_name()}
                             </Chakra.Box>

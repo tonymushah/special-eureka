@@ -80,5 +80,5 @@ export default function Contacts(){
                 </Box>
             </Row>
         </Container>
-    )
+    );
 }

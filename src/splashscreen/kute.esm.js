@@ -50,7 +50,7 @@ class CubicBezier {
     const BezierEasing = (t) => this.sampleCurveY(this.solveCurveX(t));
 
     // this function needs a name
-    Object.defineProperty(BezierEasing, 'name', { writable: true });
+    Object.defineProperty(BezierEasing, "name", { writable: true });
     BezierEasing.name = functionName || `cubic-bezier(${[p1x, p1y, p2x, p2y]})`;
 
     return BezierEasing;
@@ -148,8 +148,8 @@ const Tweens = [];
 
 let gl0bal;
 
-if (typeof global !== 'undefined') gl0bal = global;
-else if (typeof window !== 'undefined') gl0bal = window.self;
+if (typeof global !== "undefined") gl0bal = global;
+else if (typeof window !== "undefined") gl0bal = window.self;
 else gl0bal = {};
 
 const globalObject = gl0bal;
@@ -169,7 +169,7 @@ let performanceNow;
 // In node.js, use process.hrtime.
 // eslint-disable-next-line
 // @ts-ignore
-if (typeof self === 'undefined' && typeof process !== 'undefined' && process.hrtime) {
+if (typeof self === "undefined" && typeof process !== "undefined" && process.hrtime) {
   performanceNow = () => {
     // eslint-disable-next-line
 		// @ts-ignore
@@ -178,12 +178,12 @@ if (typeof self === 'undefined' && typeof process !== 'undefined' && process.hrt
     // Convert [seconds, nanoseconds] to milliseconds.
     return time[0] * 1000 + time[1] / 1000000;
   };
-} else if (typeof self !== 'undefined' && self.performance !== undefined && self.performance.now !== undefined) {
+} else if (typeof self !== "undefined" && self.performance !== undefined && self.performance.now !== undefined) {
   // In a browser, use self.performance.now if it is available.
   // This must be bound, because directly assigning this function
   // leads to an invocation exception in Chrome.
   performanceNow = self.performance.now.bind(self.performance);
-} else if (typeof Date !== 'undefined' && Date.now) {
+} else if (typeof Date !== "undefined" && Date.now) {
   // Use Date.now if it is available.
   performanceNow = Date.now;
 } else {
@@ -222,7 +222,7 @@ function stop() {
       cancelAnimationFrame(Tick);
       Tick = null;
       Object.keys(onStart).forEach((obj) => {
-        if (typeof (onStart[obj]) === 'function') {
+        if (typeof (onStart[obj]) === "function") {
           if (KEC[obj]) delete KEC[obj];
         } else {
           Object.keys(onStart[obj]).forEach((prop) => {
@@ -245,7 +245,7 @@ const Render = {
 };
 Object.keys(Render).forEach((blob) => {
   if (!KEC[blob]) {
-    KEC[blob] = blob === 'Time' ? Time.now : Render[blob];
+    KEC[blob] = blob === "Time" ? Time.now : Render[blob];
   }
 });
 
@@ -259,7 +259,7 @@ const defaultValues = {};
 const defaultOptions$1 = {
   duration: 700,
   delay: 0,
-  easing: 'linear',
+  easing: "linear",
   repeat: 0,
   repeatDelay: 0,
   yoyo: false,
@@ -339,20 +339,20 @@ function linkInterpolation() { // DON'T change
     const componentProps = supportedProperties[component];
 
     Object.keys(componentLink).forEach((fnObj) => {
-      if (typeof (componentLink[fnObj]) === 'function' // ATTR, colors, scroll, boxModel, borderRadius
+      if (typeof (componentLink[fnObj]) === "function" // ATTR, colors, scroll, boxModel, borderRadius
           && Object.keys(this.valuesEnd).some((i) => (componentProps && componentProps.includes(i))
-          || (i === 'attr' && Object.keys(this.valuesEnd[i]).some((j) => componentProps && componentProps.includes(j))))) {
+          || (i === "attr" && Object.keys(this.valuesEnd[i]).some((j) => componentProps && componentProps.includes(j))))) {
         if (!KEC[fnObj]) KEC[fnObj] = componentLink[fnObj];
       } else {
         Object.keys(this.valuesEnd).forEach((prop) => {
           const propObject = this.valuesEnd[prop];
           if (propObject instanceof Object) {
             Object.keys(propObject).forEach((i) => {
-              if (typeof (componentLink[i]) === 'function') { // transformCSS3
+              if (typeof (componentLink[i]) === "function") { // transformCSS3
                 if (!KEC[i]) KEC[i] = componentLink[i];
               } else {
                 Object.keys(componentLink[fnObj]).forEach((j) => {
-                  if (componentLink[i] && typeof (componentLink[i][j]) === 'function') { // transformMatrix
+                  if (componentLink[i] && typeof (componentLink[i][j]) === "function") { // transformMatrix
                     if (!KEC[j]) KEC[j] = componentLink[i][j];
                   }
                 });
@@ -386,21 +386,21 @@ function getInlineStyle(el) {
   // if the scroll applies to `window` it returns as it has no styling
   if (!el.style) return false;
   // the cssText | the resulting transform object
-  const css = el.style.cssText.replace(/\s/g, '').split(';');
+  const css = el.style.cssText.replace(/\s/g, "").split(";");
   const transformObject = {};
-  const arrayFn = ['translate3d', 'translate', 'scale3d', 'skew'];
+  const arrayFn = ["translate3d", "translate", "scale3d", "skew"];
 
   css.forEach((cs) => {
     if (/transform/i.test(cs)) {
       // all transform properties
-      const tps = cs.split(':')[1].split(')');
+      const tps = cs.split(":")[1].split(")");
       tps.forEach((tpi) => {
-        const tpv = tpi.split('(');
+        const tpv = tpi.split("(");
         const tp = tpv[0];
         // each transform property
         const tv = tpv[1];
         if (!/matrix/.test(tp)) {
-          transformObject[tp] = arrayFn.includes(tp) ? tv.split(',') : tv;
+          transformObject[tp] = arrayFn.includes(tp) ? tv.split(",") : tv;
         }
       });
     }
@@ -427,7 +427,7 @@ function getStyleForProperty(elem, propertyName) {
     ? styleAttribute[propertyName]
     : computedStyle[propertyName];
 
-  if (propertyName !== 'transform' && (propertyName in computedStyle || propertyName in styleAttribute)) {
+  if (propertyName !== "transform" && (propertyName in computedStyle || propertyName in styleAttribute)) {
     result = styleValue;
   }
 
@@ -443,7 +443,7 @@ function getStyleForProperty(elem, propertyName) {
  * @param {string} fn toggles between the two
  */
 function prepareObject(obj, fn) { // this, props object, type: start/end
-  const propertiesObject = fn === 'start' ? this.valuesStart : this.valuesEnd;
+  const propertiesObject = fn === "start" ? this.valuesStart : this.valuesEnd;
 
   Object.keys(prepareProperty).forEach((component) => {
     const prepareComponent = prepareProperty[component];
@@ -459,12 +459,12 @@ function prepareObject(obj, fn) { // this, props object, type: start/end
             .call(this, tweenProp, obj[tweenProp]);
 
         // transform
-        } else if (!defaultValues[tweenCategory] && tweenCategory === 'transform'
+        } else if (!defaultValues[tweenCategory] && tweenCategory === "transform"
           && supportComponent.includes(tweenProp)) {
           transformObject[tweenProp] = obj[tweenProp];
 
         // allow transformFunctions to work with preprocessed input values
-        } else if (!defaultValues[tweenProp] && tweenProp === 'transform') {
+        } else if (!defaultValues[tweenProp] && tweenProp === "transform") {
           propertiesObject[tweenProp] = obj[tweenProp];
 
         // colors, boxModel, category
@@ -524,7 +524,7 @@ function getStartValues() {
   });
 
   this.valuesStart = {};
-  prepareObject.call(this, startValues, 'start');
+  prepareObject.call(this, startValues, "start");
 }
 
 var Process = {
@@ -540,38 +540,38 @@ connect.tween = null;
 connect.processEasing = null;
 
 const Easing = {
-  linear: new CubicBezier(0, 0, 1, 1, 'linear'),
-  easingSinusoidalIn: new CubicBezier(0.47, 0, 0.745, 0.715, 'easingSinusoidalIn'),
-  easingSinusoidalOut: new CubicBezier(0.39, 0.575, 0.565, 1, 'easingSinusoidalOut'),
-  easingSinusoidalInOut: new CubicBezier(0.445, 0.05, 0.55, 0.95, 'easingSinusoidalInOut'),
+  linear: new CubicBezier(0, 0, 1, 1, "linear"),
+  easingSinusoidalIn: new CubicBezier(0.47, 0, 0.745, 0.715, "easingSinusoidalIn"),
+  easingSinusoidalOut: new CubicBezier(0.39, 0.575, 0.565, 1, "easingSinusoidalOut"),
+  easingSinusoidalInOut: new CubicBezier(0.445, 0.05, 0.55, 0.95, "easingSinusoidalInOut"),
 
-  easingQuadraticIn: new CubicBezier(0.550, 0.085, 0.680, 0.530, 'easingQuadraticIn'),
-  easingQuadraticOut: new CubicBezier(0.250, 0.460, 0.450, 0.940, 'easingQuadraticOut'),
-  easingQuadraticInOut: new CubicBezier(0.455, 0.030, 0.515, 0.955, 'easingQuadraticInOut'),
+  easingQuadraticIn: new CubicBezier(0.550, 0.085, 0.680, 0.530, "easingQuadraticIn"),
+  easingQuadraticOut: new CubicBezier(0.250, 0.460, 0.450, 0.940, "easingQuadraticOut"),
+  easingQuadraticInOut: new CubicBezier(0.455, 0.030, 0.515, 0.955, "easingQuadraticInOut"),
 
-  easingCubicIn: new CubicBezier(0.55, 0.055, 0.675, 0.19, 'easingCubicIn'),
-  easingCubicOut: new CubicBezier(0.215, 0.61, 0.355, 1, 'easingCubicOut'),
-  easingCubicInOut: new CubicBezier(0.645, 0.045, 0.355, 1, 'easingCubicInOut'),
+  easingCubicIn: new CubicBezier(0.55, 0.055, 0.675, 0.19, "easingCubicIn"),
+  easingCubicOut: new CubicBezier(0.215, 0.61, 0.355, 1, "easingCubicOut"),
+  easingCubicInOut: new CubicBezier(0.645, 0.045, 0.355, 1, "easingCubicInOut"),
 
-  easingQuarticIn: new CubicBezier(0.895, 0.03, 0.685, 0.22, 'easingQuarticIn'),
-  easingQuarticOut: new CubicBezier(0.165, 0.84, 0.44, 1, 'easingQuarticOut'),
-  easingQuarticInOut: new CubicBezier(0.77, 0, 0.175, 1, 'easingQuarticInOut'),
+  easingQuarticIn: new CubicBezier(0.895, 0.03, 0.685, 0.22, "easingQuarticIn"),
+  easingQuarticOut: new CubicBezier(0.165, 0.84, 0.44, 1, "easingQuarticOut"),
+  easingQuarticInOut: new CubicBezier(0.77, 0, 0.175, 1, "easingQuarticInOut"),
 
-  easingQuinticIn: new CubicBezier(0.755, 0.05, 0.855, 0.06, 'easingQuinticIn'),
-  easingQuinticOut: new CubicBezier(0.23, 1, 0.32, 1, 'easingQuinticOut'),
-  easingQuinticInOut: new CubicBezier(0.86, 0, 0.07, 1, 'easingQuinticInOut'),
+  easingQuinticIn: new CubicBezier(0.755, 0.05, 0.855, 0.06, "easingQuinticIn"),
+  easingQuinticOut: new CubicBezier(0.23, 1, 0.32, 1, "easingQuinticOut"),
+  easingQuinticInOut: new CubicBezier(0.86, 0, 0.07, 1, "easingQuinticInOut"),
 
-  easingExponentialIn: new CubicBezier(0.95, 0.05, 0.795, 0.035, 'easingExponentialIn'),
-  easingExponentialOut: new CubicBezier(0.19, 1, 0.22, 1, 'easingExponentialOut'),
-  easingExponentialInOut: new CubicBezier(1, 0, 0, 1, 'easingExponentialInOut'),
+  easingExponentialIn: new CubicBezier(0.95, 0.05, 0.795, 0.035, "easingExponentialIn"),
+  easingExponentialOut: new CubicBezier(0.19, 1, 0.22, 1, "easingExponentialOut"),
+  easingExponentialInOut: new CubicBezier(1, 0, 0, 1, "easingExponentialInOut"),
 
-  easingCircularIn: new CubicBezier(0.6, 0.04, 0.98, 0.335, 'easingCircularIn'),
-  easingCircularOut: new CubicBezier(0.075, 0.82, 0.165, 1, 'easingCircularOut'),
-  easingCircularInOut: new CubicBezier(0.785, 0.135, 0.15, 0.86, 'easingCircularInOut'),
+  easingCircularIn: new CubicBezier(0.6, 0.04, 0.98, 0.335, "easingCircularIn"),
+  easingCircularOut: new CubicBezier(0.075, 0.82, 0.165, 1, "easingCircularOut"),
+  easingCircularInOut: new CubicBezier(0.785, 0.135, 0.15, 0.86, "easingCircularInOut"),
 
-  easingBackIn: new CubicBezier(0.6, -0.28, 0.735, 0.045, 'easingBackIn'),
-  easingBackOut: new CubicBezier(0.175, 0.885, 0.32, 1.275, 'easingBackOut'),
-  easingBackInOut: new CubicBezier(0.68, -0.55, 0.265, 1.55, 'easingBackInOut'),
+  easingBackIn: new CubicBezier(0.6, -0.28, 0.735, 0.045, "easingBackIn"),
+  easingBackOut: new CubicBezier(0.175, 0.885, 0.32, 1.275, "easingBackOut"),
+  easingBackInOut: new CubicBezier(0.68, -0.55, 0.265, 1.55, "easingBackInOut"),
 };
 
 /**
@@ -581,12 +581,12 @@ const Easing = {
  * @returns {KUTE.easingFunction} a valid easingfunction
  */
 function processBezierEasing(fn) {
-  if (typeof fn === 'function') {
+  if (typeof fn === "function") {
     return fn;
-  } if (typeof (Easing[fn]) === 'function') {
+  } if (typeof (Easing[fn]) === "function") {
     return Easing[fn];
   } if (/bezier/.test(fn)) {
-    const bz = fn.replace(/bezier|\s|\(|\)/g, '').split(',');
+    const bz = fn.replace(/bezier|\s|\(|\)/g, "").split(",");
     return new CubicBezier(bz[0] * 1, bz[1] * 1, bz[2] * 1, bz[3] * 1); // bezier easing
   }
   // if (/elastic|bounce/i.test(fn)) {
@@ -627,7 +627,7 @@ function selector(el, multi) {
 function queueStart() {
   // fire onStart actions
   Object.keys(onStart).forEach((obj) => {
-    if (typeof (onStart[obj]) === 'function') {
+    if (typeof (onStart[obj]) === "function") {
       onStart[obj].call(this, obj); // easing functions
     } else {
       Object.keys(onStart[obj]).forEach((prop) => {
@@ -676,7 +676,7 @@ class TweenBase {
     this._resetStart = options.resetStart || 0;
     // you can only set a core easing function as default
     /** @type {KUTE.easingOption} */
-    this._easing = typeof (options.easing) === 'function' ? options.easing : connect.processEasing(options.easing);
+    this._easing = typeof (options.easing) === "function" ? options.easing : connect.processEasing(options.easing);
     /** @type {number} */
     this._duration = options.duration || defaultOptions$1.duration; // duration option | default
     /** @type {number} */
@@ -715,7 +715,7 @@ class TweenBase {
     add(this);
     this.playing = true;
 
-    this._startTime = typeof time !== 'undefined' ? time : KEC.Time();
+    this._startTime = typeof time !== "undefined" ? time : KEC.Time();
     this._startTime += this._delay;
 
     if (!this._startFired) {
@@ -864,13 +864,13 @@ class Tween extends TweenBase {
     const [startObject, endObject, options] = args.slice(1);
 
     // set valuesEnd
-    prepareObject.call(this, endObject, 'end');
+    prepareObject.call(this, endObject, "end");
 
     // set valuesStart
     if (this._resetStart) {
       this.valuesStart = startObject;
     } else {
-      prepareObject.call(this, startObject, 'start');
+      prepareObject.call(this, startObject, "start");
     }
 
     // ready for crossCheck
@@ -1191,7 +1191,7 @@ class TweenCollection {
     } else if (args instanceof connect.tween) {
       lastTween.chain(args);
     } else {
-      throw new TypeError('KUTE.js - invalid chain value');
+      throw new TypeError("KUTE.js - invalid chain value");
     }
     return this;
   }
@@ -1341,7 +1341,7 @@ class Animation {
       || Component.subProperties || Component.property;
 
     // set defaultValues
-    if ('defaultValue' in Component) { // value 0 will invalidate
+    if ("defaultValue" in Component) { // value 0 will invalidate
       defaultValues[Property] = Component.defaultValue;
 
       // minimal info
@@ -1367,7 +1367,7 @@ class Animation {
     if (Component.functions) {
       Object.keys(Functions).forEach((fn) => {
         if (fn in Component.functions) {
-          if (typeof (Component.functions[fn]) === 'function') {
+          if (typeof (Component.functions[fn]) === "function") {
             // if (!Functions[fn][ Category||Property ]) {
             //   Functions[fn][ Category||Property ] = Component.functions[fn];
             // }
@@ -1392,11 +1392,11 @@ class Animation {
     if (Component.Interpolate) {
       Object.keys(Component.Interpolate).forEach((fni) => {
         const compIntObj = Component.Interpolate[fni];
-        if (typeof (compIntObj) === 'function' && !interpolate[fni]) {
+        if (typeof (compIntObj) === "function" && !interpolate[fni]) {
           interpolate[fni] = compIntObj;
         } else {
           Object.keys(compIntObj).forEach((sfn) => {
-            if (typeof (compIntObj[sfn]) === 'function' && !interpolate[fni]) {
+            if (typeof (compIntObj[sfn]) === "function" && !interpolate[fni]) {
               interpolate[fni] = compIntObj[sfn];
             }
           });
@@ -1429,16 +1429,16 @@ class Animation {
  */
 const trueDimension = (dimValue, isAngle) => {
   const intValue = parseInt(dimValue, 10) || 0;
-  const mUnits = ['px', '%', 'deg', 'rad', 'em', 'rem', 'vh', 'vw'];
+  const mUnits = ["px", "%", "deg", "rad", "em", "rem", "vh", "vw"];
   let theUnit;
 
   for (let mIndex = 0; mIndex < mUnits.length; mIndex += 1) {
-    if (typeof dimValue === 'string' && dimValue.includes(mUnits[mIndex])) {
+    if (typeof dimValue === "string" && dimValue.includes(mUnits[mIndex])) {
       theUnit = mUnits[mIndex]; break;
     }
   }
   if (theUnit === undefined) {
-    theUnit = isAngle ? 'deg' : 'px';
+    theUnit = isAngle ? "deg" : "px";
   }
 
   return { v: intValue, u: theUnit };
@@ -1496,12 +1496,12 @@ function getBoxModel(tweenProp) {
  */
 function prepareBoxModel(tweenProp, value) {
   const boxValue = trueDimension(value);
-  const offsetProp = tweenProp === 'height' ? 'offsetHeight' : 'offsetWidth';
-  return boxValue.u === '%' ? (boxValue.v * this.element[offsetProp]) / 100 : boxValue.v;
+  const offsetProp = tweenProp === "height" ? "offsetHeight" : "offsetWidth";
+  return boxValue.u === "%" ? (boxValue.v * this.element[offsetProp]) / 100 : boxValue.v;
 }
 
 // Component Base Props
-const essentialBoxProps = ['top', 'left', 'width', 'height'];
+const essentialBoxProps = ["top", "left", "width", "height"];
 const essentialBoxPropsValues = {
   top: 0, left: 0, width: 0, height: 0,
 };
@@ -1518,8 +1518,8 @@ const essentialBoxModelFunctions = {
 
 // Component Essential
 const BoxModelEssential = {
-  component: 'essentialBoxModel',
-  category: 'boxModel',
+  component: "essentialBoxModel",
+  category: "boxModel",
   properties: essentialBoxProps,
   defaultValues: essentialBoxPropsValues,
   Interpolate: { numbers },
@@ -1560,7 +1560,7 @@ const hexToRGB = (hex) => {
 const trueColor = (colorString) => {
   let result;
   if (/rgb|rgba/.test(colorString)) { // first check if it's a rgb string
-    const vrgb = colorString.replace(/\s|\)/, '').split('(')[1].split(',');
+    const vrgb = colorString.replace(/\s|\)/, "").split("(")[1].split(",");
     const colorAlpha = vrgb[3] ? vrgb[3] : null;
     if (!colorAlpha) {
       result = { r: parseInt(vrgb[0], 10), g: parseInt(vrgb[1], 10), b: parseInt(vrgb[2], 10) };
@@ -1583,11 +1583,11 @@ const trueColor = (colorString) => {
   // maybe we can check for web safe colors
   // only works in a browser
   if (!/^#|^rgb/.test(colorString)) {
-    const siteHead = document.getElementsByTagName('head')[0];
+    const siteHead = document.getElementsByTagName("head")[0];
     siteHead.style.color = colorString;
     let webColor = getComputedStyle(siteHead, null).color;
-    webColor = /rgb/.test(webColor) ? webColor.replace(/[^\d,]/g, '').split(',') : [0, 0, 0];
-    siteHead.style.color = '';
+    webColor = /rgb/.test(webColor) ? webColor.replace(/[^\d,]/g, "").split(",") : [0, 0, 0];
+    siteHead.style.color = "";
     result = {
       r: parseInt(webColor[0], 10),
       g: parseInt(webColor[1], 10),
@@ -1607,13 +1607,13 @@ const trueColor = (colorString) => {
  */
 function colors(a, b, v) {
   const _c = {};
-  const ep = ')';
-  const cm = ',';
-  const rgb = 'rgb(';
-  const rgba = 'rgba(';
+  const ep = ")";
+  const cm = ",";
+  const rgb = "rgb(";
+  const rgba = "rgba(";
 
   Object.keys(b).forEach((c) => {
-    if (c !== 'a') {
+    if (c !== "a") {
       _c[c] = numbers(a[c], b[c], v) >> 0 || 0; // eslint-disable-line no-bitwise
     } else if (a[c] && b[c]) {
       _c[c] = (numbers(a[c], b[c], v) * 100 >> 0) / 100; // eslint-disable-line no-bitwise
@@ -1643,14 +1643,14 @@ function onStartColors(tweenProp) {
 // supported formats
 // 'hex', 'rgb', 'rgba' '#fff' 'rgb(0,0,0)' / 'rgba(0,0,0,0)' 'red' (IE9+)
 const supportedColors = [
-  'color', 'backgroundColor', 'outlineColor',
-  'borderColor', 'borderTopColor', 'borderRightColor',
-  'borderBottomColor', 'borderLeftColor',
+  "color", "backgroundColor", "outlineColor",
+  "borderColor", "borderTopColor", "borderRightColor",
+  "borderBottomColor", "borderLeftColor",
 ];
 
 const defaultColors = {};
 supportedColors.forEach((tweenProp) => {
-  defaultColors[tweenProp] = '#000';
+  defaultColors[tweenProp] = "#000";
 });
 
 // Component Functions
@@ -1687,8 +1687,8 @@ const colorFunctions = {
 
 // Component Full
 const colorProperties = {
-  component: 'colorProperties',
-  category: 'colors',
+  component: "colorProperties",
+  category: "colors",
   properties: supportedColors,
   defaultValues: defaultColors,
   Interpolate: { numbers, colors },
@@ -1729,10 +1729,10 @@ const onStartAttr = {
 };
 
 // Component Name
-const ComponentName = 'htmlAttributes';
+const ComponentName = "htmlAttributes";
 
 // Component Properties
-const svgColors = ['fill', 'stroke', 'stop-color'];
+const svgColors = ["fill", "stroke", "stop-color"];
 
 // Component Util
 /**
@@ -1740,7 +1740,7 @@ const svgColors = ['fill', 'stroke', 'stop-color'];
  * @param {string} a the camelcase property name
  * @returns {string} the non-camelcase property name
  */
-function replaceUppercase(a) { return a.replace(/[A-Z]/g, '-$&').toLowerCase(); }
+function replaceUppercase(a) { return a.replace(/[A-Z]/g, "-$&").toLowerCase(); }
 
 // Component Functions
 /**
@@ -1754,10 +1754,10 @@ function getAttr(/* tweenProp, */_, value) {
   Object.keys(value).forEach((attr) => {
     // get the value for 'fill-opacity' not fillOpacity
     // also 'width' not the internal 'width_px'
-    const attribute = replaceUppercase(attr).replace(/_+[a-z]+/, '');
+    const attribute = replaceUppercase(attr).replace(/_+[a-z]+/, "");
     const currentValue = this.element.getAttribute(attribute);
     attrStartValues[attribute] = svgColors.includes(attribute)
-      ? (currentValue || 'rgba(0,0,0,0)')
+      ? (currentValue || "rgba(0,0,0,0)")
       : (currentValue || (/opacity/i.test(attr) ? 1 : 0));
   });
 
@@ -1776,19 +1776,19 @@ function prepareAttr(tweenProp, attrObj) { // attr (string),attrObj (object)
   Object.keys(attrObj).forEach((p) => {
     const prop = replaceUppercase(p);
     const regex = /(%|[a-z]+)$/;
-    const currentValue = this.element.getAttribute(prop.replace(/_+[a-z]+/, ''));
+    const currentValue = this.element.getAttribute(prop.replace(/_+[a-z]+/, ""));
 
     if (!svgColors.includes(prop)) {
       // attributes set with unit suffixes
       if (currentValue !== null && regex.test(currentValue)) {
         const unit = trueDimension(currentValue).u || trueDimension(attrObj[p]).u;
-        const suffix = /%/.test(unit) ? '_percent' : `_${unit}`;
+        const suffix = /%/.test(unit) ? "_percent" : `_${unit}`;
 
         // most "unknown" attributes cannot register into onStart, so we manually add them
         onStart[ComponentName][prop + suffix] = (tp) => {
           if (this.valuesEnd[tweenProp] && this.valuesEnd[tweenProp][tp] && !(tp in attributes)) {
             attributes[tp] = (elem, oneAttr, a, b, v) => {
-              const _p = oneAttr.replace(suffix, '');
+              const _p = oneAttr.replace(suffix, "");
               /* eslint no-bitwise: ["error", { "allow": [">>"] }] */
               elem.setAttribute(_p, ((numbers(a.v, b.v, v) * 1000 >> 0) / 1000) + b.u);
             };
@@ -1833,16 +1833,16 @@ const attrFunctions = {
 // Component Full
 const htmlAttributes = {
   component: ComponentName,
-  property: 'attr',
+  property: "attr",
   // the Animation class will need some values to validate this Object attribute
-  subProperties: ['fill', 'stroke', 'stop-color', 'fill-opacity', 'stroke-opacity'],
+  subProperties: ["fill", "stroke", "stop-color", "fill-opacity", "stroke-opacity"],
   defaultValue: {
-    fill: 'rgb(0,0,0)',
-    stroke: 'rgb(0,0,0)',
-    'stop-color': 'rgb(0,0,0)',
+    fill: "rgb(0,0,0)",
+    stroke: "rgb(0,0,0)",
+    "stop-color": "rgb(0,0,0)",
     opacity: 1,
-    'stroke-opacity': 1,
-    'fill-opacity': 1, // same here
+    "stroke-opacity": 1,
+    "fill-opacity": 1, // same here
   },
   Interpolate: { numbers, colors },
   functions: attrFunctions,
@@ -1902,18 +1902,18 @@ const opacityFunctions = {
 
 // Full Component
 const OpacityProperty = {
-  component: 'opacityProperty',
-  property: 'opacity',
+  component: "opacityProperty",
+  property: "opacity",
   defaultValue: 1,
   Interpolate: { numbers },
   functions: opacityFunctions,
 };
 
 // Component Values
-const lowerCaseAlpha = String('abcdefghijklmnopqrstuvwxyz').split(''); // lowercase
-const upperCaseAlpha = String('abcdefghijklmnopqrstuvwxyz').toUpperCase().split(''); // uppercase
-const nonAlpha = String("~!@#$%^&*()_+{}[];'<>,./?=-").split(''); // symbols
-const numeric = String('0123456789').split(''); // numeric
+const lowerCaseAlpha = String("abcdefghijklmnopqrstuvwxyz").split(""); // lowercase
+const upperCaseAlpha = String("abcdefghijklmnopqrstuvwxyz").toUpperCase().split(""); // uppercase
+const nonAlpha = String("~!@#$%^&*()_+{}[];'<>,./?=-").split(""); // symbols
+const numeric = String("0123456789").split(""); // numeric
 const alphaNumeric = lowerCaseAlpha.concat(upperCaseAlpha, numeric); // alpha numeric
 const allTypes = alphaNumeric.concat(nonAlpha); // all caracters
 
@@ -1946,9 +1946,9 @@ const onStartWrite = {
       }
 
       KEC[tweenProp] = (elem, a, b, v) => {
-        let initialText = '';
-        let endText = '';
-        const finalText = b === '' ? ' ' : b;
+        let initialText = "";
+        let endText = "";
+        const finalText = b === "" ? " " : b;
         const firstLetterA = a.substring(0);
         const firstLetterB = b.substring(0);
         /* eslint-disable */
@@ -1997,15 +1997,15 @@ const onStartWrite = {
 function wrapContentsSpan(el, classNAME) {
   let textWriteWrapper;
   let newElem;
-  if (typeof (el) === 'string') {
-    newElem = document.createElement('SPAN');
+  if (typeof (el) === "string") {
+    newElem = document.createElement("SPAN");
     newElem.innerHTML = el;
     newElem.className = classNAME;
     return newElem;
   }
   if (!el.children.length || (el.children.length && el.children[0].className !== classNAME)) {
     const elementInnerHTML = el.innerHTML;
-    textWriteWrapper = document.createElement('SPAN');
+    textWriteWrapper = document.createElement("SPAN");
     textWriteWrapper.className = classNAME;
     textWriteWrapper.innerHTML = elementInnerHTML;
     /* eslint-disable no-param-reassign -- impossible to satisfy */
@@ -2031,22 +2031,22 @@ function getTextPartsArray(el, classNAME) {
       childOuter = currentChild.outerHTML;
       wrapperParts = remainingMarkup.split(childOuter);
 
-      if (wrapperParts[0] !== '') {
+      if (wrapperParts[0] !== "") {
         unTaggedContent = wrapContentsSpan(wrapperParts[0], classNAME);
         textParts.push(unTaggedContent);
-        remainingMarkup = remainingMarkup.replace(wrapperParts[0], '');
-      } else if (wrapperParts[1] !== '') {
-        unTaggedContent = wrapContentsSpan(wrapperParts[1].split('<')[0], classNAME);
+        remainingMarkup = remainingMarkup.replace(wrapperParts[0], "");
+      } else if (wrapperParts[1] !== "") {
+        unTaggedContent = wrapContentsSpan(wrapperParts[1].split("<")[0], classNAME);
         textParts.push(unTaggedContent);
-        remainingMarkup = remainingMarkup.replace(wrapperParts[0].split('<')[0], '');
+        remainingMarkup = remainingMarkup.replace(wrapperParts[0].split("<")[0], "");
       }
 
       if (!currentChild.classList.contains(classNAME)) currentChild.classList.add(classNAME);
       textParts.push(currentChild);
-      remainingMarkup = remainingMarkup.replace(childOuter, '');
+      remainingMarkup = remainingMarkup.replace(childOuter, "");
     }
 
-    if (remainingMarkup !== '') {
+    if (remainingMarkup !== "") {
       const unTaggedRemaining = wrapContentsSpan(remainingMarkup, classNAME);
       textParts.push(unTaggedRemaining);
     }
@@ -2059,13 +2059,13 @@ function getTextPartsArray(el, classNAME) {
 }
 
 function setSegments(target, newText) {
-  const oldTargetSegs = getTextPartsArray(target, 'text-part');
-  const newTargetSegs = getTextPartsArray(wrapContentsSpan(newText), 'text-part');
+  const oldTargetSegs = getTextPartsArray(target, "text-part");
+  const newTargetSegs = getTextPartsArray(wrapContentsSpan(newText), "text-part");
 
   /* eslint-disable no-param-reassign */
-  target.innerHTML = '';
-  target.innerHTML += oldTargetSegs.map((s) => { s.className += ' oldText'; return s.outerHTML; }).join('');
-  target.innerHTML += newTargetSegs.map((s) => { s.className += ' newText'; return s.outerHTML.replace(s.innerHTML, ''); }).join('');
+  target.innerHTML = "";
+  target.innerHTML += oldTargetSegs.map((s) => { s.className += " oldText"; return s.outerHTML; }).join("");
+  target.innerHTML += newTargetSegs.map((s) => { s.className += " newText"; return s.outerHTML.replace(s.innerHTML, ""); }).join("");
   /* eslint-enable no-param-reassign */
 
   return [oldTargetSegs, newTargetSegs];
@@ -2077,8 +2077,8 @@ function createTextTweens(target, newText, ops) {
   const options = ops || {};
   options.duration = 1000;
 
-  if (ops.duration === 'auto') {
-    options.duration = 'auto';
+  if (ops.duration === "auto") {
+    options.duration = "auto";
   } else if (Number.isFinite(ops.duration * 1)) {
     options.duration = ops.duration * 1;
   }
@@ -2087,21 +2087,21 @@ function createTextTweens(target, newText, ops) {
   const segs = setSegments(target, newText);
   const oldTargetSegs = segs[0];
   const newTargetSegs = segs[1];
-  const oldTargets = [].slice.call(target.getElementsByClassName('oldText')).reverse();
-  const newTargets = [].slice.call(target.getElementsByClassName('newText'));
+  const oldTargets = [].slice.call(target.getElementsByClassName("oldText")).reverse();
+  const newTargets = [].slice.call(target.getElementsByClassName("newText"));
 
   let textTween = [];
   let totalDelay = 0;
 
   textTween = textTween.concat(oldTargets.map((el, i) => {
-    options.duration = options.duration === 'auto'
+    options.duration = options.duration === "auto"
       ? oldTargetSegs[i].innerHTML.length * 75
       : options.duration;
     options.delay = totalDelay;
     options.onComplete = null;
 
     totalDelay += options.duration;
-    return new TweenContructor(el, { text: el.innerHTML }, { text: '' }, options);
+    return new TweenContructor(el, { text: el.innerHTML }, { text: "" }, options);
   }));
   textTween = textTween.concat(newTargets.map((el, i) => {
     function onComplete() {
@@ -2111,12 +2111,12 @@ function createTextTweens(target, newText, ops) {
       /* eslint-enable no-param-reassign */
     }
 
-    options.duration = options.duration === 'auto' ? newTargetSegs[i].innerHTML.length * 75 : options.duration;
+    options.duration = options.duration === "auto" ? newTargetSegs[i].innerHTML.length * 75 : options.duration;
     options.delay = totalDelay;
     options.onComplete = i === newTargetSegs.length - 1 ? onComplete : null;
     totalDelay += options.duration;
 
-    return new TweenContructor(el, { text: '' }, { text: newTargetSegs[i].innerHTML }, options);
+    return new TweenContructor(el, { text: "" }, { text: newTargetSegs[i].innerHTML }, options);
   }));
 
   textTween.start = function startTweens() {
@@ -2146,11 +2146,11 @@ function getWrite(/* tweenProp, value */) {
  * @returns {number | string} the property tween object
  */
 function prepareText(tweenProp, value) {
-  if (tweenProp === 'number') {
+  if (tweenProp === "number") {
     return parseFloat(value);
   }
   // empty strings crash the update function
-  return value === '' ? ' ' : value;
+  return value === "" ? " " : value;
 }
 
 // All Component Functions
@@ -2162,11 +2162,11 @@ const textWriteFunctions = {
 
 // Full Component
 const TextWrite = {
-  component: 'textWriteProperties',
-  category: 'textWrite',
-  properties: ['text', 'number'],
-  defaultValues: { text: ' ', number: '0' },
-  defaultOptions: { textChars: 'alpha' },
+  component: "textWriteProperties",
+  category: "textWrite",
+  properties: ["text", "number"],
+  defaultValues: { text: " ", number: "0" },
+  defaultOptions: { textChars: "alpha" },
   Interpolate: { numbers },
   functions: textWriteFunctions,
   // export to global for faster execution
@@ -2203,7 +2203,7 @@ function translate3d(a, b, u, v) {
       // eslint-disable-next-line no-bitwise
       ? ((a[ax] + (b[ax] - a[ax]) * v) * 1000 >> 0) / 1000 : 0) + u;
   }
-  return `translate3d(${translateArray.join(',')})`;
+  return `translate3d(${translateArray.join(",")})`;
 }
 
 /**
@@ -2216,13 +2216,13 @@ function translate3d(a, b, u, v) {
  * @returns {string} the interpolated 3D rotation string
  */
 function rotate3d(a, b, u, v) {
-  let rotateStr = '';
+  let rotateStr = "";
   // eslint-disable-next-line no-bitwise
-  rotateStr += a[0] || b[0] ? `rotateX(${((a[0] + (b[0] - a[0]) * v) * 1000 >> 0) / 1000}${u})` : '';
+  rotateStr += a[0] || b[0] ? `rotateX(${((a[0] + (b[0] - a[0]) * v) * 1000 >> 0) / 1000}${u})` : "";
   // eslint-disable-next-line no-bitwise
-  rotateStr += a[1] || b[1] ? `rotateY(${((a[1] + (b[1] - a[1]) * v) * 1000 >> 0) / 1000}${u})` : '';
+  rotateStr += a[1] || b[1] ? `rotateY(${((a[1] + (b[1] - a[1]) * v) * 1000 >> 0) / 1000}${u})` : "";
   // eslint-disable-next-line no-bitwise
-  rotateStr += a[2] || b[2] ? `rotateZ(${((a[2] + (b[2] - a[2]) * v) * 1000 >> 0) / 1000}${u})` : '';
+  rotateStr += a[2] || b[2] ? `rotateZ(${((a[2] + (b[2] - a[2]) * v) * 1000 >> 0) / 1000}${u})` : "";
   return rotateStr;
 }
 
@@ -2240,8 +2240,8 @@ function translate(a, b, u, v) {
   // eslint-disable-next-line no-bitwise
   translateArray[0] = (a[0] === b[0] ? b[0] : ((a[0] + (b[0] - a[0]) * v) * 1000 >> 0) / 1000) + u;
   // eslint-disable-next-line no-bitwise
-  translateArray[1] = a[1] || b[1] ? ((a[1] === b[1] ? b[1] : ((a[1] + (b[1] - a[1]) * v) * 1000 >> 0) / 1000) + u) : '0';
-  return `translate(${translateArray.join(',')})`;
+  translateArray[1] = a[1] || b[1] ? ((a[1] === b[1] ? b[1] : ((a[1] + (b[1] - a[1]) * v) * 1000 >> 0) / 1000) + u) : "0";
+  return `translate(${translateArray.join(",")})`;
 }
 
 /**
@@ -2285,8 +2285,8 @@ function skew(a, b, u, v) {
   // eslint-disable-next-line no-bitwise
   skewArray[0] = (a[0] === b[0] ? b[0] : ((a[0] + (b[0] - a[0]) * v) * 1000 >> 0) / 1000) + u;
   // eslint-disable-next-line no-bitwise
-  skewArray[1] = a[1] || b[1] ? ((a[1] === b[1] ? b[1] : ((a[1] + (b[1] - a[1]) * v) * 1000 >> 0) / 1000) + u) : '0';
-  return `skew(${skewArray.join(',')})`;
+  skewArray[1] = a[1] || b[1] ? ((a[1] === b[1] ? b[1] : ((a[1] + (b[1] - a[1]) * v) * 1000 >> 0) / 1000) + u) : "0";
+  return `skew(${skewArray.join(",")})`;
 }
 
 // Component Functions
@@ -2299,11 +2299,11 @@ function onStartTransform(tweenProp) {
   if (!KEC[tweenProp] && this.valuesEnd[tweenProp]) {
     KEC[tweenProp] = (elem, a, b, v) => {
       // eslint-disable-next-line no-param-reassign
-      elem.style[tweenProp] = (a.perspective || b.perspective ? perspective(a.perspective, b.perspective, 'px', v) : '') // one side might be 0
-        + (a.translate3d ? translate3d(a.translate3d, b.translate3d, 'px', v) : '') // array [x,y,z]
-        + (a.rotate3d ? rotate3d(a.rotate3d, b.rotate3d, 'deg', v) : '') // array [x,y,z]
-        + (a.skew ? skew(a.skew, b.skew, 'deg', v) : '') // array [x,y]
-        + (a.scale || b.scale ? scale(a.scale, b.scale, v) : ''); // one side might be 0
+      elem.style[tweenProp] = (a.perspective || b.perspective ? perspective(a.perspective, b.perspective, "px", v) : "") // one side might be 0
+        + (a.translate3d ? translate3d(a.translate3d, b.translate3d, "px", v) : "") // array [x,y,z]
+        + (a.rotate3d ? rotate3d(a.rotate3d, b.rotate3d, "deg", v) : "") // array [x,y,z]
+        + (a.skew ? skew(a.skew, b.skew, "deg", v) : "") // array [x,y]
+        + (a.scale || b.scale ? scale(a.scale, b.scale, v) : ""); // one side might be 0
     };
   }
 }
@@ -2329,24 +2329,24 @@ function getTransform(tweenProp/* , value */) {
  * @returns {KUTE.transformFObject} the property tween object
  */
 function prepareTransform(/* prop, */_, obj) {
-  const prepAxis = ['X', 'Y', 'Z']; // coordinates
+  const prepAxis = ["X", "Y", "Z"]; // coordinates
   const transformObject = {};
   const translateArray = []; const rotateArray = []; const skewArray = [];
-  const arrayFunctions = ['translate3d', 'translate', 'rotate3d', 'skew'];
+  const arrayFunctions = ["translate3d", "translate", "rotate3d", "skew"];
 
   Object.keys(obj).forEach((x) => {
-    const pv = typeof obj[x] === 'object' && obj[x].length
+    const pv = typeof obj[x] === "object" && obj[x].length
       ? obj[x].map((v) => parseInt(v, 10))
       : parseInt(obj[x], 10);
 
     if (arrayFunctions.includes(x)) {
-      const propId = x === 'translate' || x === 'rotate' ? `${x}3d` : x;
+      const propId = x === "translate" || x === "rotate" ? `${x}3d` : x;
 
-      if (x === 'skew') {
+      if (x === "skew") {
         transformObject[propId] = pv.length
           ? [pv[0] || 0, pv[1] || 0]
           : [pv || 0, 0];
-      } else if (x === 'translate') {
+      } else if (x === "translate") {
         transformObject[propId] = pv.length
           ? [pv[0] || 0, pv[1] || 0, pv[2] || 0]
           : [pv || 0, 0, 0];
@@ -2354,16 +2354,16 @@ function prepareTransform(/* prop, */_, obj) {
         transformObject[propId] = [pv[0] || 0, pv[1] || 0, pv[2] || 0];
       }
     } else if (/[XYZ]/.test(x)) {
-      const fn = x.replace(/[XYZ]/, '');
-      const fnId = fn === 'skew' ? fn : `${fn}3d`;
-      const fnLen = fn === 'skew' ? 2 : 3;
+      const fn = x.replace(/[XYZ]/, "");
+      const fnId = fn === "skew" ? fn : `${fn}3d`;
+      const fnLen = fn === "skew" ? 2 : 3;
       let fnArray = [];
 
-      if (fn === 'translate') {
+      if (fn === "translate") {
         fnArray = translateArray;
-      } else if (fn === 'rotate') {
+      } else if (fn === "rotate") {
         fnArray = rotateArray;
-      } else if (fn === 'skew') {
+      } else if (fn === "skew") {
         fnArray = skewArray;
       }
 
@@ -2372,10 +2372,10 @@ function prepareTransform(/* prop, */_, obj) {
         fnArray[fnIndex] = (`${fn}${fnAxis}` in obj) ? parseInt(obj[`${fn}${fnAxis}`], 10) : 0;
       }
       transformObject[fnId] = fnArray;
-    } else if (x === 'rotate') { //  rotate
+    } else if (x === "rotate") { //  rotate
       transformObject.rotate3d = [0, 0, pv];
     } else { // scale | perspective
-      transformObject[x] = x === 'scale' ? parseFloat(obj[x]) : pv;
+      transformObject[x] = x === "scale" ? parseFloat(obj[x]) : pv;
     }
   });
 
@@ -2405,11 +2405,11 @@ const transformFunctions = {
 };
 
 const supportedTransformProperties = [
-  'perspective',
-  'translate3d', 'translateX', 'translateY', 'translateZ', 'translate',
-  'rotate3d', 'rotateX', 'rotateY', 'rotateZ', 'rotate',
-  'skewX', 'skewY', 'skew',
-  'scale',
+  "perspective",
+  "translate3d", "translateX", "translateY", "translateZ", "translate",
+  "rotate3d", "rotateX", "rotateY", "rotateZ", "rotate",
+  "skewX", "skewY", "skew",
+  "scale",
 ];
 
 const defaultTransformValues = {
@@ -2432,8 +2432,8 @@ const defaultTransformValues = {
 
 // Full Component
 const TransformFunctions = {
-  component: 'transformFunctions',
-  property: 'transform',
+  component: "transformFunctions",
+  property: "transform",
   subProperties: supportedTransformProperties,
   defaultValues: defaultTransformValues,
   functions: transformFunctions,
@@ -2490,8 +2490,8 @@ function percent(v, l) {
  * @returns {number} the `<rect>` length
  */
 function getRectLength(el) {
-  const w = el.getAttribute('width');
-  const h = el.getAttribute('height');
+  const w = el.getAttribute("width");
+  const h = el.getAttribute("height");
   return (w * 2) + (h * 2);
 }
 
@@ -2501,12 +2501,12 @@ function getRectLength(el) {
  * @returns {number} the element length
  */
 function getPolyLength(el) {
-  const points = el.getAttribute('points').split(' ');
+  const points = el.getAttribute("points").split(" ");
 
   let len = 0;
   if (points.length > 1) {
     const coord = (p) => {
-      const c = p.split(',');
+      const c = p.split(",");
       if (c.length !== 2) { return 0; } // return undefined
       if (Number.isNaN(c[0] * 1) || Number.isNaN(c[1] * 1)) { return 0; }
       return [parseFloat(c[0]), parseFloat(c[1])];
@@ -2524,7 +2524,7 @@ function getPolyLength(el) {
         len += dist(coord(points[i]), coord(points[i + 1]));
       }
     }
-    len += el.tagName === 'polygon'
+    len += el.tagName === "polygon"
       ? dist(coord(points[0]), coord(points[points.length - 1])) : 0;
   }
   return len;
@@ -2536,10 +2536,10 @@ function getPolyLength(el) {
  * @returns {number} the element length
  */
 function getLineLength(el) {
-  const x1 = el.getAttribute('x1');
-  const x2 = el.getAttribute('x2');
-  const y1 = el.getAttribute('y1');
-  const y2 = el.getAttribute('y2');
+  const x1 = el.getAttribute("x1");
+  const x2 = el.getAttribute("x2");
+  const y1 = el.getAttribute("y1");
+  const y2 = el.getAttribute("y2");
   return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
 }
 
@@ -2549,7 +2549,7 @@ function getLineLength(el) {
  * @returns {number} the element length
  */
 function getCircleLength(el) {
-  const r = el.getAttribute('r');
+  const r = el.getAttribute("r");
   return 2 * Math.PI * r;
 }
 
@@ -2560,8 +2560,8 @@ function getCircleLength(el) {
  * @returns {number} the element length
  */
 function getEllipseLength(el) {
-  const rx = el.getAttribute('rx');
-  const ry = el.getAttribute('ry');
+  const rx = el.getAttribute("rx");
+  const ry = el.getAttribute("ry");
   const len = 2 * rx;
   const wid = 2 * ry;
   return ((Math.sqrt(0.5 * ((len * len) + (wid * wid)))) * (Math.PI * 2)) / 2;
@@ -2573,15 +2573,15 @@ function getEllipseLength(el) {
  * @returns {number} the element length
  */
 function getTotalLength$1(el) {
-  if (el.tagName === 'rect') {
+  if (el.tagName === "rect") {
     return getRectLength(el);
-  } if (el.tagName === 'circle') {
+  } if (el.tagName === "circle") {
     return getCircleLength(el);
-  } if (el.tagName === 'ellipse') {
+  } if (el.tagName === "ellipse") {
     return getEllipseLength(el);
-  } if (['polygon', 'polyline'].includes(el.tagName)) {
+  } if (["polygon", "polyline"].includes(el.tagName)) {
     return getPolyLength(el);
-  } if (el.tagName === 'line') {
+  } if (el.tagName === "line") {
     return getLineLength(el);
   }
   // ESLint
@@ -2603,15 +2603,15 @@ function getDraw(element, value) {
   let dasharray;
   let offset;
 
-  if (value instanceof Object && Object.keys(value).every((v) => ['s', 'e', 'l'].includes(v))) {
+  if (value instanceof Object && Object.keys(value).every((v) => ["s", "e", "l"].includes(v))) {
     return value;
-  } if (typeof value === 'string') {
+  } if (typeof value === "string") {
     const v = value.split(/,|\s/);
     start = /%/.test(v[0]) ? percent(v[0].trim(), length) : parseFloat(v[0]);
     end = /%/.test(v[1]) ? percent(v[1].trim(), length) : parseFloat(v[1]);
-  } else if (typeof value === 'undefined') {
-    offset = parseFloat(getStyleForProperty(element, 'stroke-dashoffset'));
-    dasharray = getStyleForProperty(element, 'stroke-dasharray').split(',');
+  } else if (typeof value === "undefined") {
+    offset = parseFloat(getStyleForProperty(element, "stroke-dashoffset"));
+    dasharray = getStyleForProperty(element, "stroke-dasharray").split(",");
 
     start = 0 - offset;
     end = parseFloat(dasharray[0]) + start || length;
@@ -2625,8 +2625,8 @@ function getDraw(element, value) {
  */
 function resetDraw(elem) {
   /* eslint-disable no-param-reassign -- impossible to satisfy */
-  elem.style.strokeDashoffset = '';
-  elem.style.strokeDasharray = '';
+  elem.style.strokeDashoffset = "";
+  elem.style.strokeDasharray = "";
   /* eslint-disable no-param-reassign -- impossible to satisfy */
 }
 
@@ -2657,9 +2657,9 @@ const svgDrawFunctions = {
 
 // Component Full
 const SvgDrawProperty = {
-  component: 'svgDraw',
-  property: 'draw',
-  defaultValue: '0% 0%',
+  component: "svgDraw",
+  property: "draw",
+  defaultValue: "0% 0%",
   Interpolate: { numbers },
   functions: svgDrawFunctions,
   // Export to global for faster execution
@@ -2691,8 +2691,8 @@ function fixArc(path, allPathCommands, i) {
     let ni = i; // ESLint
     while (segment.length) {
       // if created multiple C:s, their original seg is saved
-      allPathCommands[i] = 'A';
-      path.splice(ni += 1, 0, ['C', ...segment.splice(0, 6)]);
+      allPathCommands[i] = "A";
+      path.splice(ni += 1, 0, ["C", ...segment.splice(0, 6)]);
     }
     path.splice(i, 1);
   }
@@ -2715,7 +2715,7 @@ const paramsCount = {
 function isPathArray(path) {
   return Array.isArray(path) && path.every((seg) => {
     const lk = seg[0].toLowerCase();
-    return paramsCount[lk] === seg.length - 1 && 'achlmqstvz'.includes(lk);
+    return paramsCount[lk] === seg.length - 1 && "achlmqstvz".includes(lk);
   });
 }
 
@@ -2742,7 +2742,7 @@ function isAbsoluteArray(path) {
  */
 function isNormalizedArray(path) {
   // `isAbsoluteArray` also checks if it's `Array`
-  return isAbsoluteArray(path) && path.every(([pc]) => 'ACLMQZ'.includes(pc));
+  return isAbsoluteArray(path) && path.every(([pc]) => "ACLMQZ".includes(pc));
 }
 
 /**
@@ -2754,7 +2754,7 @@ function isNormalizedArray(path) {
  */
 function isCurveArray(path) {
   // `isPathArray` also checks if it's `Array`
-  return isNormalizedArray(path) && path.every(([pc]) => 'MC'.includes(pc));
+  return isNormalizedArray(path) && path.every(([pc]) => "MC".includes(pc));
 }
 
 /**
@@ -2780,10 +2780,10 @@ function finalizeSegment(path) {
   while (data.length >= paramsCount[LK]) {
     // overloaded `moveTo`
     // https://github.com/rveciana/svg-path-properties/blob/master/src/parse.ts
-    if (LK === 'm' && data.length > 2) {
+    if (LK === "m" && data.length > 2) {
       path.segments.push([pathCommand, ...data.splice(0, 2)]);
-      LK = 'l';
-      pathCommand = pathCommand === 'm' ? 'l' : 'L';
+      LK = "l";
+      pathCommand = pathCommand === "m" ? "l" : "L";
     } else {
       path.segments.push([pathCommand, ...data.splice(0, paramsCount[LK])]);
     }
@@ -2794,7 +2794,7 @@ function finalizeSegment(path) {
   }
 }
 
-const error = 'SVGPathCommander error';
+const error = "SVGPathCommander error";
 
 /**
  * Validates an A (arc-to) specific path command value.
@@ -2831,7 +2831,7 @@ function isDigit(code) {
   return (code >= 48 && code <= 57); // 0..9
 }
 
-const invalidPathValue = 'Invalid path value';
+const invalidPathValue = "Invalid path value";
 
 /**
  * Validates every character of the path string,
@@ -3096,7 +3096,7 @@ function PathParser(pathString) {
   /** @type {any} */
   this.data = [];
   /** @type {string} */
-  this.err = '';
+  this.err = "";
 }
 
 /**
@@ -3147,26 +3147,26 @@ function pathToAbsolute(pathInput) {
     /** @type {SVGPath.absoluteCommand} */
     const absCommand = pathCommand.toUpperCase();
 
-    if (pathCommand === 'M') {
+    if (pathCommand === "M") {
       [x, y] = values;
       mx = x;
       my = y;
-      return ['M', x, y];
+      return ["M", x, y];
     }
     /** @type {SVGPath.absoluteSegment} */
     let absoluteSegment = [];
 
     if (pathCommand !== absCommand) {
       switch (absCommand) {
-        case 'A':
+        case "A":
           absoluteSegment = [
             absCommand, values[0], values[1], values[2],
             values[3], values[4], values[5] + x, values[6] + y];
           break;
-        case 'V':
+        case "V":
           absoluteSegment = [absCommand, values[0] + y];
           break;
-        case 'H':
+        case "H":
           absoluteSegment = [absCommand, values[0] + x];
           break;
         default: {
@@ -3183,21 +3183,21 @@ function pathToAbsolute(pathInput) {
 
     const segLength = absoluteSegment.length;
     switch (absCommand) {
-      case 'Z':
+      case "Z":
         x = mx;
         y = my;
         break;
-      case 'H':
+      case "H":
         [, x] = absoluteSegment;
         break;
-      case 'V':
+      case "V":
         [, y] = absoluteSegment;
         break;
       default:
         x = absoluteSegment[segLength - 2];
         y = absoluteSegment[segLength - 1];
 
-        if (absCommand === 'M') {
+        if (absCommand === "M") {
           mx = x;
           my = y;
         }
@@ -3221,29 +3221,29 @@ function normalizeSegment(segment, params) {
   const values = segment.slice(1).map(Number);
   let result = segment;
 
-  if (!'TQ'.includes(pathCommand)) {
+  if (!"TQ".includes(pathCommand)) {
     // optional but good to be cautious
     params.qx = null;
     params.qy = null;
   }
 
-  if (pathCommand === 'H') {
-    result = ['L', segment[1], py1];
-  } else if (pathCommand === 'V') {
-    result = ['L', px1, segment[1]];
-  } else if (pathCommand === 'S') {
+  if (pathCommand === "H") {
+    result = ["L", segment[1], py1];
+  } else if (pathCommand === "V") {
+    result = ["L", px1, segment[1]];
+  } else if (pathCommand === "S") {
     const x1 = px1 * 2 - px2;
     const y1 = py1 * 2 - py2;
     params.x1 = x1;
     params.y1 = y1;
-    result = ['C', x1, y1, ...values];
-  } else if (pathCommand === 'T') {
+    result = ["C", x1, y1, ...values];
+  } else if (pathCommand === "T") {
     const qx = px1 * 2 - params.qx;
     const qy = py1 * 2 - params.qy;
     params.qx = qx;
     params.qy = qy;
-    result = ['Q', qx, qy, ...values];
-  } else if (pathCommand === 'Q') {
+    result = ["Q", qx, qy, ...values];
+  } else if (pathCommand === "Q") {
     const [nqx, nqy] = values;
     params.qx = nqx;
     params.qy = nqy;
@@ -3489,7 +3489,7 @@ function segmentLineFactory(x1, y1, x2, y2, distance) {
   let point = { x: 0, y: 0 };
 
   /* istanbul ignore else */
-  if (typeof distance === 'number') {
+  if (typeof distance === "number") {
     if (distance <= 0) {
       point = { x: x1, y: y1 };
     } else if (distance >= length) {
@@ -3558,28 +3558,28 @@ function segmentToCubic(segment, params) {
     x1: px1, y1: py1, x: px, y: py,
   } = params;
 
-  if (!'TQ'.includes(pathCommand)) {
+  if (!"TQ".includes(pathCommand)) {
     params.qx = null;
     params.qy = null;
   }
 
   switch (pathCommand) {
-    case 'M':
+    case "M":
       params.x = x;
       params.y = y;
       return segment;
-    case 'A':
+    case "A":
       args = [px1, py1, ...values];
-      return ['C', ...arcToCubic(...args)];
-    case 'Q':
+      return ["C", ...arcToCubic(...args)];
+    case "Q":
       params.qx = x;
       params.qy = y;
       args = [px1, py1, ...values];
-      return ['C', ...quadToCubic(...args)];
-    case 'L':
-      return ['C', ...lineToCubic(px1, py1, x, y)];
-    case 'Z':
-      return ['C', ...lineToCubic(px1, py1, px, py)];
+      return ["C", ...quadToCubic(...args)];
+    case "L":
+      return ["C", ...lineToCubic(px1, py1, x, y)];
+    case "Z":
+      return ["C", ...lineToCubic(px1, py1, px, py)];
   }
   return segment;
 }
@@ -3605,7 +3605,7 @@ function pathToCurve(pathInput) {
   const path = normalizePath(pathInput);
   const params = { ...paramsParser };
   const allPathCommands = [];
-  let pathCommand = ''; // ts-lint
+  let pathCommand = ""; // ts-lint
   let ii = path.length;
 
   for (let i = 0; i < ii; i += 1) {
@@ -3647,13 +3647,13 @@ const defaultOptions = {
  */
 function roundPath(path, roundOption) {
   let { round } = defaultOptions;
-  if (roundOption === 'off' || round === 'off') return clonePath(path);
+  if (roundOption === "off" || round === "off") return clonePath(path);
   // round = roundOption >= 1 ? roundOption : round;
   // allow for ZERO decimals
   round = roundOption >= 0 ? roundOption : round;
   // to round values to the power
   // the `round` value must be integer
-  const pow = typeof round === 'number' && round >= 1 ? (10 ** round) : 1;
+  const pow = typeof round === "number" && round >= 1 ? (10 ** round) : 1;
 
   return path.map((pi) => {
     const values = pi.slice(1).map(Number)
@@ -3672,7 +3672,7 @@ function roundPath(path, roundOption) {
  */
 function pathToString(path, round) {
   return roundPath(path, round)
-    .map((x) => x[0] + x.slice(1).join(' ')).join('');
+    .map((x) => x[0] + x.slice(1).join(" ")).join("");
 }
 
 /**
@@ -3692,7 +3692,7 @@ function splitPath(pathInput) {
   let pi = -1;
 
   pathInput.forEach((seg) => {
-    if (seg[0] === 'M') {
+    if (seg[0] === "M") {
       path = [seg];
       pi += 1;
     } else {
@@ -3854,7 +3854,7 @@ function getPointAtArcSegmentLength(x1, y1, RX, RY, angle, LAF, SF, x, y, t) {
  * @returns {SVGPath.lengthFactory} the segment length, point, min & max
  */
 function segmentArcFactory(X1, Y1, RX, RY, angle, LAF, SF, X2, Y2, distance) {
-  const distanceIsNumber = typeof distance === 'number';
+  const distanceIsNumber = typeof distance === "number";
   let x = X1; let y = Y1;
   let LENGTH = 0;
   let prev = [x, y, LENGTH];
@@ -3950,7 +3950,7 @@ function getPointAtCubicSegmentLength(x1, y1, c1x, c1y, c2x, c2y, x2, y2, t) {
  * @returns {SVGPath.lengthFactory} the segment length, point, min & max
  */
 function segmentCubicFactory(x1, y1, c1x, c1y, c2x, c2y, x2, y2, distance) {
-  const distanceIsNumber = typeof distance === 'number';
+  const distanceIsNumber = typeof distance === "number";
   let x = x1; let y = y1;
   let LENGTH = 0;
   let prev = [x, y, LENGTH];
@@ -4042,7 +4042,7 @@ function getPointAtQuadSegmentLength(x1, y1, cx, cy, x2, y2, t) {
  * @returns {SVGPath.lengthFactory} the segment length, point, min & max
  */
 function segmentQuadFactory(x1, y1, qx, qy, x2, y2, distance) {
-  const distanceIsNumber = typeof distance === 'number';
+  const distanceIsNumber = typeof distance === "number";
   let x = x1; let y = y1;
   let LENGTH = 0;
   let prev = [x, y, LENGTH];
@@ -4105,7 +4105,7 @@ function segmentQuadFactory(x1, y1, qx, qy, x2, y2, distance) {
  */
 function pathLengthFactory(pathInput, distance) {
   const path = normalizePath(pathInput);
-  const distanceIsNumber = typeof distance === 'number';
+  const distanceIsNumber = typeof distance === "number";
   let isM;
   let data = [];
   let pathCommand;
@@ -4126,7 +4126,7 @@ function pathLengthFactory(pathInput, distance) {
   for (let i = 0, ll = path.length; i < ll; i += 1) {
     seg = path[i];
     [pathCommand] = seg;
-    isM = pathCommand === 'M';
+    isM = pathCommand === "M";
     data = !isM ? [x, y, ...seg.slice(1)] : data;
 
     // this segment is always ZERO
@@ -4141,23 +4141,23 @@ function pathLengthFactory(pathInput, distance) {
       if (distanceIsNumber && distance < 0.001) {
         POINT = min;
       }
-    } else if (pathCommand === 'L') {
+    } else if (pathCommand === "L") {
       ({
         length, min, max, point,
       } = segmentLineFactory(...data, (distance || 0) - LENGTH));
-    } else if (pathCommand === 'A') {
+    } else if (pathCommand === "A") {
       ({
         length, min, max, point,
       } = segmentArcFactory(...data, (distance || 0) - LENGTH));
-    } else if (pathCommand === 'C') {
+    } else if (pathCommand === "C") {
       ({
         length, min, max, point,
       } = segmentCubicFactory(...data, (distance || 0) - LENGTH));
-    } else if (pathCommand === 'Q') {
+    } else if (pathCommand === "Q") {
       ({
         length, min, max, point,
       } = segmentQuadFactory(...data, (distance || 0) - LENGTH));
-    } else if (pathCommand === 'Z') {
+    } else if (pathCommand === "Z") {
       data = [x, y, mx, my];
       ({
         length, min, max, point,
@@ -4172,7 +4172,7 @@ function pathLengthFactory(pathInput, distance) {
     MIN = [...MIN, min];
     LENGTH += length;
 
-    [x, y] = pathCommand !== 'Z' ? seg.slice(-2) : [mx, my];
+    [x, y] = pathCommand !== "Z" ? seg.slice(-2) : [mx, my];
   }
 
   // native `getPointAtLength` behavior when the given distance
@@ -4308,7 +4308,7 @@ function onStartSVGMorph(tweenProp) {
     KEC[tweenProp] = (elem, a, b, v) => {
       const path1 = a.polygon; const path2 = b.polygon;
       const len = path2.length;
-      elem.setAttribute('d', (v === 1 ? b.original : `M${coords(path1, path2, len, v).join('L')}Z`));
+      elem.setAttribute("d", (v === 1 ? b.original : `M${coords(path1, path2, len, v).join("L")}Z`));
     };
   }
 }
@@ -4326,9 +4326,9 @@ function exactPolygon(pathArray) {
   const polygon = [];
   const pathlen = pathArray.length;
   let segment = [];
-  let pathCommand = '';
+  let pathCommand = "";
 
-  if (!pathArray.length || pathArray[0][0] !== 'M') {
+  if (!pathArray.length || pathArray[0][0] !== "M") {
     return false;
   }
 
@@ -4336,9 +4336,9 @@ function exactPolygon(pathArray) {
     segment = pathArray[i];
     [pathCommand] = segment;
 
-    if ((pathCommand === 'M' && i) || pathCommand === 'Z') {
+    if ((pathCommand === "M" && i) || pathCommand === "Z") {
       break; // !!
-    } else if ('ML'.includes(pathCommand)) {
+    } else if ("ML".includes(pathCommand)) {
       polygon.push([segment[1], segment[2]]);
     } else {
       return false;
@@ -4507,7 +4507,7 @@ function getPolygon(input, maxSegmentLength) {
   let skipBisect;
   let polygon;
 
-  if (typeof (input) === 'string') {
+  if (typeof (input) === "string") {
     const converted = pathStringToPolygon(input, maxSegmentLength);
     ({ polygon, skipBisect } = converted);
   } else if (!Array.isArray(input)) {
@@ -4562,7 +4562,7 @@ function getInterpolationPoints(path1, path2, precision) {
  * @returns {string} the `d` attribute value
  */
 function getSVGMorph(/* tweenProp */) {
-  return this.element.getAttribute('d');
+  return this.element.getAttribute("d");
 }
 
 /**
@@ -4574,7 +4574,7 @@ function getSVGMorph(/* tweenProp */) {
 function prepareSVGMorph(/* tweenProp */_, value) {
   const pathObject = {};
   // remove newlines, they brake JSON strings sometimes
-  const pathReg = new RegExp('\\n', 'ig');
+  const pathReg = new RegExp("\\n", "ig");
   let elem = null;
 
   if (value instanceof SVGPathElement) {
@@ -4584,13 +4584,13 @@ function prepareSVGMorph(/* tweenProp */_, value) {
   }
 
   // first make sure we return pre-processed values
-  if (typeof (value) === 'object' && value.polygon) {
+  if (typeof (value) === "object" && value.polygon) {
     return value;
-  } if (elem && ['path', 'glyph'].includes(elem.tagName)) {
-    pathObject.original = elem.getAttribute('d').replace(pathReg, '');
+  } if (elem && ["path", "glyph"].includes(elem.tagName)) {
+    pathObject.original = elem.getAttribute("d").replace(pathReg, "");
   // maybe it's a string path already
-  } else if (!elem && typeof (value) === 'string') {
-    pathObject.original = value.replace(pathReg, '');
+  } else if (!elem && typeof (value) === "string") {
+    pathObject.original = value.replace(pathReg, "");
   }
 
   return pathObject;
@@ -4631,8 +4631,8 @@ const svgMorphFunctions = {
 
 // Component Full
 const SVGMorph = {
-  component: 'svgMorph',
-  property: 'path',
+  component: "svgMorph",
+  property: "path",
   defaultValue: [],
   Interpolate: coords,
   defaultOptions: { morphPrecision: 10 },

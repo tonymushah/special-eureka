@@ -1,48 +1,48 @@
 import {
     ChevronDownIcon,
     ChevronRightIcon, CloseIcon, HamburgerIcon
-} from '@chakra-ui/icons';
+} from "@chakra-ui/icons";
 import {
     Box, Center, Collapse, Flex, Icon, IconButton, Image, Link,
     Popover, PopoverContent, PopoverTrigger, Stack, Text, useBreakpointValue, useColorModeValue, useDisclosure
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
-import MangadexLogo from "../../../mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg"
+import MangadexLogo from "../../../mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import special_eureka_logo from "../../../commons-res/common-icon/eureka-logo6.svg";
-import Tauri_Updater from './Tauri_updater_button';
+import Tauri_Updater from "./Tauri_updater_button";
 export default function WithSubnavigation() {
 
     const { isOpen, onToggle } = useDisclosure();
     return (
         <Box>
             <Flex
-                bg={useColorModeValue('white', 'gray.800')}
-                color={useColorModeValue('gray.600', 'white')}
-                minH={'60px'}
+                bg={useColorModeValue("white", "gray.800")}
+                color={useColorModeValue("gray.600", "white")}
+                minH={"60px"}
                 py={{ base: 2 }}
                 px={{ base: 4 }}
                 borderBottom={1}
-                borderStyle={'solid'}
-                borderColor={useColorModeValue('gray.200', 'gray.900')}
-                align={'center'}>
+                borderStyle={"solid"}
+                borderColor={useColorModeValue("gray.200", "gray.900")}
+                align={"center"}>
                 <Flex
-                    flex={{ base: 1, md: 'auto' }}
+                    flex={{ base: 1, md: "auto" }}
                     ml={{ base: -2 }}
-                    display={{ base: 'flex', md: 'none' }}>
+                    display={{ base: "flex", md: "none" }}>
                     <IconButton
                         onClick={onToggle}
                         icon={
                             isOpen ? <CloseIcon w={3} h={3} /> : <HamburgerIcon w={5} h={5} />
                         }
-                        variant={'ghost'}
-                        aria-label={'Toggle Navigation'}
+                        variant={"ghost"}
+                        aria-label={"Toggle Navigation"}
                     />
                 </Flex>
-                <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
+                <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
                     <Text
-                        textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+                        textAlign={useBreakpointValue({ base: "center", md: "left" })}
                         marginBottom={0}
-                        color={useColorModeValue('gray.800', 'white')}
+                        color={useColorModeValue("gray.800", "white")}
                     >
                         <Image
                             width={"50px"}
@@ -50,15 +50,15 @@ export default function WithSubnavigation() {
                         />
                     </Text>
 
-                    <Flex display={{ base: 'none', md: 'flex' }} ml={10} alignItems={{ base: 'normal', md: "center" }}>
+                    <Flex display={{ base: "none", md: "flex" }} ml={10} alignItems={{ base: "normal", md: "center" }}>
                         <DesktopNav />
                     </Flex>
                 </Flex>
 
                 <Stack
                     flex={{ base: 1, md: 0 }}
-                    justify={'flex-end'}
-                    direction={'row'}
+                    justify={"flex-end"}
+                    direction={"row"}
                     spacing={6}>
                     <Tauri_Updater />
                 </Stack>
@@ -72,24 +72,24 @@ export default function WithSubnavigation() {
 }
 
 const DesktopNav = () => {
-    const linkColor = useColorModeValue('gray.600', 'gray.200');
-    const linkHoverColor = useColorModeValue('gray.800', 'white');
-    const popoverContentBgColor = useColorModeValue('white', 'gray.800');
+    const linkColor = useColorModeValue("gray.600", "gray.200");
+    const linkHoverColor = useColorModeValue("gray.800", "white");
+    const popoverContentBgColor = useColorModeValue("white", "gray.800");
 
     return (
-        <Stack direction={'row'} spacing={4}>
+        <Stack direction={"row"} spacing={4}>
             {NAV_ITEMS.map((navItem) => (
                 <Box key={navItem.label}>
-                    <Popover trigger={'hover'} placement={'bottom-start'}>
+                    <Popover trigger={"hover"} placement={"bottom-start"}>
                         <PopoverTrigger>
                             <Link
                                 as={ReactRouterLink}
                                 p={2}
-                                fontSize={'sm'}
+                                fontSize={"sm"}
                                 fontWeight={500}
                                 color={linkColor}
                                 _hover={{
-                                    textDecoration: 'none',
+                                    textDecoration: "none",
                                     color: linkHoverColor,
                                 }}
                                 to={navItem.to ?? "#"}
@@ -101,11 +101,11 @@ const DesktopNav = () => {
                         {navItem.children && (
                             <PopoverContent
                                 border={0}
-                                boxShadow={'xl'}
+                                boxShadow={"xl"}
                                 bg={popoverContentBgColor}
                                 p={4}
-                                rounded={'xl'}
-                                minW={'sm'}>
+                                rounded={"xl"}
+                                minW={"sm"}>
                                 <Stack>
                                     {navItem.children.map((child) => (
                                         <DesktopSubNav key={child.label} {...child} />
@@ -125,12 +125,12 @@ const DesktopSubNav = ({ label, subLabel, to, icon }: NavItem) => {
         <Link
             as={ReactRouterLink}
             to={to ?? "#"}
-            role={'group'}
-            display={'block'}
+            role={"group"}
+            display={"block"}
             p={2}
-            rounded={'md'}
-            _hover={{ bg: useColorModeValue('pink.50', 'gray.900') }}>
-            <Stack direction={'row'} align={'center'}>
+            rounded={"md"}
+            _hover={{ bg: useColorModeValue("pink.50", "gray.900") }}>
+            <Stack direction={"row"} align={"center"}>
                 <Box>
                     <Stack
                         direction={"row"}
@@ -138,24 +138,24 @@ const DesktopSubNav = ({ label, subLabel, to, icon }: NavItem) => {
                     >
                         {icon}
                         <Text
-                            transition={'all .3s ease'}
-                            _groupHover={{ color: 'pink.400' }}
+                            transition={"all .3s ease"}
+                            _groupHover={{ color: "pink.400" }}
                             fontWeight={500}>
                             {label}
                         </Text>
                     </Stack>
 
-                    <Text fontSize={'sm'}>{subLabel}</Text>
+                    <Text fontSize={"sm"}>{subLabel}</Text>
                 </Box>
                 <Flex
-                    transition={'all .3s ease'}
-                    transform={'translateX(-10px)'}
+                    transition={"all .3s ease"}
+                    transform={"translateX(-10px)"}
                     opacity={0}
-                    _groupHover={{ opacity: '100%', transform: 'translateX(0)' }}
-                    justify={'flex-end'}
-                    align={'center'}
+                    _groupHover={{ opacity: "100%", transform: "translateX(0)" }}
+                    justify={"flex-end"}
+                    align={"center"}
                     flex={1}>
-                    <Icon color={'pink.400'} w={5} h={5} as={ChevronRightIcon} />
+                    <Icon color={"pink.400"} w={5} h={5} as={ChevronRightIcon} />
                 </Flex>
             </Stack>
         </Link>
@@ -165,9 +165,9 @@ const DesktopSubNav = ({ label, subLabel, to, icon }: NavItem) => {
 const MobileNav = () => {
     return (
         <Stack
-            bg={useColorModeValue('white', 'gray.800')}
+            bg={useColorModeValue("white", "gray.800")}
             p={4}
-            display={{ md: 'none' }}>
+            display={{ md: "none" }}>
             {NAV_ITEMS.map((navItem) => (
                 <MobileNavItem key={navItem.label} {...navItem} />
             ))}
@@ -183,39 +183,39 @@ const MobileNavItem = ({ label, children, to, icon }: NavItem) => {
             <Flex
                 py={2}
                 as={ReactRouterLink}
-                to={to ?? '#'}
-                justify={'space-between'}
-                align={'center'}
+                to={to ?? "#"}
+                justify={"space-between"}
+                align={"center"}
                 _hover={{
-                    textDecoration: 'none',
+                    textDecoration: "none",
                 }}>
                 <Center>
                     {icon}
                     <Text
                         fontWeight={600}
-                        color={useColorModeValue('gray.600', 'gray.200')}>
+                        color={useColorModeValue("gray.600", "gray.200")}>
                         {label}
                     </Text>
                 </Center>
                 {children && (
                     <Icon
                         as={ChevronDownIcon}
-                        transition={'all .25s ease-in-out'}
-                        transform={isOpen ? 'rotate(180deg)' : ''}
+                        transition={"all .25s ease-in-out"}
+                        transform={isOpen ? "rotate(180deg)" : ""}
                         w={6}
                         h={6}
                     />
                 )}
             </Flex>
 
-            <Collapse in={isOpen} animateOpacity style={{ marginTop: '0!important' }}>
+            <Collapse in={isOpen} animateOpacity style={{ marginTop: "0!important" }}>
                 <Stack
                     mt={2}
                     pl={4}
                     borderLeft={1}
-                    borderStyle={'solid'}
-                    borderColor={useColorModeValue('gray.200', 'gray.700')}
-                    align={'start'}>
+                    borderStyle={"solid"}
+                    borderColor={useColorModeValue("gray.200", "gray.700")}
+                    align={"start"}>
                     {children &&
                         children.map((child) => (
                             <Link
@@ -244,11 +244,11 @@ interface NavItem {
 
 const NAV_ITEMS: Array<NavItem> = [
     {
-        label: 'Websites',
+        label: "Websites",
         children: [
             {
-                label: 'Mangadex',
-                subLabel: 'High Quality Images, no ads',
+                label: "Mangadex",
+                subLabel: "High Quality Images, no ads",
                 to: "/mangadex",
                 icon: (
                     <Image
@@ -260,13 +260,13 @@ const NAV_ITEMS: Array<NavItem> = [
         ],
     },
     {
-        label: 'Guides',
+        label: "Guides",
         to: "#"
     },
     {
-        label: 'Announcements'
+        label: "Announcements"
     },
     {
-        label: 'Versions',
+        label: "Versions",
     },
 ];

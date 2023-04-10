@@ -7,7 +7,7 @@ try{
     const app = window!.__TAURI__.app;
     letapp_name = {};
     app.getName().then((result) => {
-        app_name = result
+        app_name = result;
     });
     if((typeof (app_name)) != "string" ){
         ReactDOM.createRoot(document.getElementById("verifier")!).render(
@@ -28,7 +28,7 @@ try{
                 </Modal.Body>
             </Modal>
         );
-        stop()
+        stop();
     }
 }catch(e){
     ReactDOM.createRoot(document.getElementById("verifier")!).render(

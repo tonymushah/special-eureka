@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
-import { Api_Request, Api_RequestERROR } from "../../../mangadex/api/internal/Api_Request"
+import { Api_Request, Api_RequestERROR } from "../../../mangadex/api/internal/Api_Request";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../../mangadex/api/structures/Manga";
@@ -22,7 +22,7 @@ import { LinksRow } from "./boutons/links_boutons";
 import { ExtLink } from "../../../commons-res/components/ExtLink";
 import { LAD_Tabs } from "./tabs/Lang_data_tabs";
 import { Aggregate_box } from "./aggregate/Aggregate_box";
-import * as Chakra from '@chakra-ui/react'
+import * as Chakra from "@chakra-ui/react";
 import { Aggregate } from "../../../mangadex/api/structures/Aggregate";
 
 type MangaPageProps = {
@@ -36,8 +36,8 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
         this.to_use = this.props.src;
     }
     public async build_altTitle(): Promise<Array<React.ReactNode>>{
-        let altTitle_inLang : Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title());
-        let returns : Array<React.ReactNode> = Array<React.ReactNode>(altTitle_inLang.length);
+        const altTitle_inLang : Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(this.to_use.get_alt_title());
+        const returns : Array<React.ReactNode> = Array<React.ReactNode>(altTitle_inLang.length);
         for (let index = 0; index < altTitle_inLang.length; index++) {
             const element = altTitle_inLang[index];
             returns[index] = (<span><span>{element.get_language().get_name()} :</span> {element.get_data()}</span>);
@@ -45,7 +45,7 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
         return returns;
     }
     public render(): React.ReactNode{
-        let links : MangaLinksData = MangaLinksData.build_wAny(this.to_use.get_links());
+        const links : MangaLinksData = MangaLinksData.build_wAny(this.to_use.get_links());
         return (
             <div>
                 <Row className="mg-top-content">

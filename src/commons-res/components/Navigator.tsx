@@ -1,7 +1,7 @@
-import React from 'react';
-import {Stack, Button, Modal} from 'react-bootstrap';
+import React from "react";
+import {Stack, Button, Modal} from "react-bootstrap";
 import Hotkeys from "react-hot-keys";
-import { Kbd } from '@chakra-ui/react';
+import { Kbd } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
 export class Navigator extends React.Component{
@@ -15,7 +15,7 @@ export class Navigator extends React.Component{
         if(this.modalState == false){
             this.modalState = true;
         }else{
-            this.modalState = false
+            this.modalState = false;
         }
         this.forceUpdate();
     }
@@ -73,7 +73,7 @@ export class NavigatorReactRouter extends React.Component{
         if(this.modalState == false){
             this.modalState = true;
         }else{
-            this.modalState = false
+            this.modalState = false;
         }
         this.forceUpdate();
     }

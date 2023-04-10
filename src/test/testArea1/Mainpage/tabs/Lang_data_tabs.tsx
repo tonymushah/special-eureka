@@ -11,7 +11,7 @@ type LAD_TabsProps = {
 }
 
 export class LAD_Tabs extends React.Component<LAD_TabsProps>{
-    private to_use: Array<Lang_and_Data>
+    private to_use: Array<Lang_and_Data>;
     constructor(props: LAD_TabsProps){
         super(props);
         this.to_use = this.props.src;
@@ -53,6 +53,6 @@ export class LAD_Tabs extends React.Component<LAD_TabsProps>{
                     </Col>
                 </Row>
             </Tab.Container>
-        )
+        );
     }
 }

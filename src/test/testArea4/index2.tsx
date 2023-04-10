@@ -1,7 +1,7 @@
-import React from "react"
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 import DeskApiRequest from "../../mangadex/api/offline/DeskApiRequest";
-import ReactJson from 'react-json-view';
+import ReactJson from "react-json-view";
 import { getClient, Response } from "@tauri-apps/api/http";
 import { launch_server } from "../../mangadex/api/offline/plugin";
 import { faL } from "@fortawesome/free-solid-svg-icons";
@@ -24,7 +24,7 @@ function Tauri_Updater(){
     });
     
     function addToast(props? : UseToastOptions){
-        toast_ref.current = toast(props)
+        toast_ref.current = toast(props);
     }
     
     function updateToast(props : UseToastOptions){
@@ -42,8 +42,8 @@ function Tauri_Updater(){
             }).catch((reason) => {
                 resolve({
                     "shouldUpdate" : false
-                })
-            })
+                });
+            });
         });
     }, {
         staleTime : Infinity,
@@ -53,14 +53,14 @@ function Tauri_Updater(){
                     status : "success",
                     title : "No update required",
                     isClosable : true
-                })
+                });
             }else{
                 addToast({
                     status : "success",
                     title : "Update Available",
                     isClosable : true,
                     description : (<></>)
-                })
+                });
             }
         },
         onError(err) {
@@ -69,7 +69,7 @@ function Tauri_Updater(){
                 title : "Error on checking for updates",
                 isClosable : true,
                 description : err
-            })
+            });
         },
     });
     return (
@@ -77,12 +77,12 @@ function Tauri_Updater(){
             colorScheme={"facebook"}
             isLoading={updater_query.isLoading}
             onClick={() => {
-                updater_query.refetch()
+                updater_query.refetch();
             }}
         >
             Check for updates
         </Button>
-    )
+    );
 }
 
 
@@ -96,4 +96,4 @@ root.render(
             <Tauri_Updater/>
         </QueryClientProvider>
     </ChakraProvider>
-)
+);

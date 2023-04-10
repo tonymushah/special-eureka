@@ -4,24 +4,24 @@
  * Copyright 2022 Fonticons, Inc.
  */
 (function () {
-  'use strict';
+  "use strict";
 
   var _WINDOW = {};
   var _DOCUMENT = {};
 
   try {
-    if (typeof window !== 'undefined') _WINDOW = window;
-    if (typeof document !== 'undefined') _DOCUMENT = document;
+    if (typeof window !== "undefined") _WINDOW = window;
+    if (typeof document !== "undefined") _DOCUMENT = document;
   } catch (e) {}
 
   var _ref = _WINDOW.navigator || {},
       _ref$userAgent = _ref.userAgent,
-      userAgent = _ref$userAgent === void 0 ? '' : _ref$userAgent;
+      userAgent = _ref$userAgent === void 0 ? "" : _ref$userAgent;
   var WINDOW = _WINDOW;
   var DOCUMENT = _DOCUMENT;
   var IS_BROWSER = !!WINDOW.document;
-  var IS_DOM = !!DOCUMENT.documentElement && !!DOCUMENT.head && typeof DOCUMENT.addEventListener === 'function' && typeof DOCUMENT.createElement === 'function';
-  var IS_IE = ~userAgent.indexOf('MSIE') || ~userAgent.indexOf('Trident/');
+  var IS_DOM = !!DOCUMENT.documentElement && !!DOCUMENT.head && typeof DOCUMENT.addEventListener === "function" && typeof DOCUMENT.createElement === "function";
+  var IS_IE = ~userAgent.indexOf("MSIE") || ~userAgent.indexOf("Trident/");
 
   function ownKeys(object, enumerableOnly) {
     var keys = Object.keys(object);
@@ -97,32 +97,32 @@
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  var NAMESPACE_IDENTIFIER = '___FONT_AWESOME___';
+  var NAMESPACE_IDENTIFIER = "___FONT_AWESOME___";
   var PRODUCTION = function () {
     try {
-      return "production" === 'production';
+      return "production" === "production";
     } catch (e) {
       return false;
     }
   }();
   var STYLE_TO_PREFIX = {
-    'solid': 'fas',
-    'regular': 'far',
-    'light': 'fal',
-    'thin': 'fat',
-    'duotone': 'fad',
-    'brands': 'fab',
-    'kit': 'fak'
+    "solid": "fas",
+    "regular": "far",
+    "light": "fal",
+    "thin": "fat",
+    "duotone": "fad",
+    "brands": "fab",
+    "kit": "fak"
   };
   var oneToTen = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   var oneToTwenty = oneToTen.concat([11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
   var DUOTONE_CLASSES = {
-    GROUP: 'duotone-group',
-    SWAP_OPACITY: 'swap-opacity',
-    PRIMARY: 'primary',
-    SECONDARY: 'secondary'
+    GROUP: "duotone-group",
+    SWAP_OPACITY: "swap-opacity",
+    PRIMARY: "primary",
+    SECONDARY: "secondary"
   };
-  var RESERVED_CLASSES = [].concat(_toConsumableArray(Object.keys(STYLE_TO_PREFIX)), ['2xs', 'xs', 'sm', 'lg', 'xl', '2xl', 'beat', 'border', 'fade', 'beat-fade', 'bounce', 'flip-both', 'flip-horizontal', 'flip-vertical', 'flip', 'fw', 'inverse', 'layers-counter', 'layers-text', 'layers', 'li', 'pull-left', 'pull-right', 'pulse', 'rotate-180', 'rotate-270', 'rotate-90', 'rotate-by', 'shake', 'spin-pulse', 'spin-reverse', 'spin', 'stack-1x', 'stack-2x', 'stack', 'ul', DUOTONE_CLASSES.GROUP, DUOTONE_CLASSES.SWAP_OPACITY, DUOTONE_CLASSES.PRIMARY, DUOTONE_CLASSES.SECONDARY]).concat(oneToTen.map(function (n) {
+  var RESERVED_CLASSES = [].concat(_toConsumableArray(Object.keys(STYLE_TO_PREFIX)), ["2xs", "xs", "sm", "lg", "xl", "2xl", "beat", "border", "fade", "beat-fade", "bounce", "flip-both", "flip-horizontal", "flip-vertical", "flip", "fw", "inverse", "layers-counter", "layers-text", "layers", "li", "pull-left", "pull-right", "pulse", "rotate-180", "rotate-270", "rotate-90", "rotate-by", "shake", "spin-pulse", "spin-reverse", "spin", "stack-1x", "stack-2x", "stack", "ul", DUOTONE_CLASSES.GROUP, DUOTONE_CLASSES.SWAP_OPACITY, DUOTONE_CLASSES.PRIMARY, DUOTONE_CLASSES.SECONDARY]).concat(oneToTen.map(function (n) {
     return "".concat(n, "x");
   })).concat(oneToTwenty.map(function (n) {
     return "w-".concat(n);
@@ -170,7 +170,7 @@
         skipHooks = _params$skipHooks === void 0 ? false : _params$skipHooks;
     var normalized = normalizeIcons(icons);
 
-    if (typeof namespace.hooks.addPack === 'function' && !skipHooks) {
+    if (typeof namespace.hooks.addPack === "function" && !skipHooks) {
       namespace.hooks.addPack(prefix, normalizeIcons(icons));
     } else {
       namespace.styles[prefix] = _objectSpread2(_objectSpread2({}, namespace.styles[prefix] || {}), normalized);
@@ -183,8 +183,8 @@
      */
 
 
-    if (prefix === 'fas') {
-      defineIcons('fa', icons);
+    if (prefix === "fas") {
+      defineIcons("fa", icons);
     }
   }
 
@@ -657,8 +657,8 @@
   };
 
   bunker(function () {
-    defineIcons('fab', icons);
-    defineIcons('fa-brands', icons);
+    defineIcons("fab", icons);
+    defineIcons("fa-brands", icons);
   });
 
 }());

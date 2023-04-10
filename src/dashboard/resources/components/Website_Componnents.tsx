@@ -35,5 +35,5 @@ export default function Website_Componnent(props: {
                 </Text>
             </VStack>
         </LinkBox>
-    )
+    );
 }

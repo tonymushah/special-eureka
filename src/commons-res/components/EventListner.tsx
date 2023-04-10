@@ -10,12 +10,12 @@ export default function EventListener_<T = unknown>(props: React.PropsWithChildr
         id: props.event_id
     }];
     const query = useQuery(queryKey, () => {
-        return listen(props.event_id, props.callback_fn)
+        return listen(props.event_id, props.callback_fn);
     }, {
         staleTime: Infinity
-    })
+    });
     return {
         query,
         queryKey
-    }
+    };
 }
