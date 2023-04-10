@@ -1,5 +1,5 @@
 import { checkUpdate, installUpdate, UpdateResult } from "@tauri-apps/api/updater";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useDashboardToast } from "./DashBoardToasts";
 
 
@@ -8,7 +8,7 @@ export function TauriCheckUpdateQuery(props : {
 }){
     const { addToast } = useDashboardToast();
 
-    const queryKey = "special-eureka-updater";
+    const queryKey = ["special-eureka", "updater"];
     const updater_query = useQuery<UpdateResult, string>(queryKey, () => {
         return new Promise<UpdateResult>((resolve) => {
             checkUpdate().then((value) => {
@@ -18,8 +18,8 @@ export function TauriCheckUpdateQuery(props : {
                 console.error(reason);
                 resolve({
                     "shouldUpdate" : false
-                })
-            })
+                });
+            });
         });
     }, {
         staleTime : Infinity,
@@ -30,7 +30,7 @@ export function TauriCheckUpdateQuery(props : {
                         status : "success",
                         title : "No update required",
                         isClosable : true
-                    })
+                    });
                 }
                 
             }else{
@@ -40,7 +40,7 @@ export function TauriCheckUpdateQuery(props : {
                         title : "Update Available",
                         isClosable : true,
                         description : (<></>)
-                    })
+                    });
                 }
             }
         },
@@ -50,14 +50,13 @@ export function TauriCheckUpdateQuery(props : {
                 title : "Error on checking for updates",
                 isClosable : true,
                 description : err
-            })
-        },
-        enabled: false
+            });
+        }
     });
     return {
         queryKey,
         query: updater_query
-    }
+    };
 }
 
 export function useTauriInstallUpdate(props: {
@@ -65,13 +64,13 @@ export function useTauriInstallUpdate(props: {
     notify?: boolean
 }){
     const { addToast , updateToast } = useDashboardToast();
-    const queryKey = "special-eureka-install-update";
+    const queryKey = ["special-eureka", "update", "install"];
     const query = useQuery(queryKey, async () => {
         addToast({
             "title" : "Installing the update",
             "description" : "You can do something else but don't close the application",
             "status" : "loading"
-        })
+        });
         return await installUpdate();
     }, {
         staleTime: Infinity,
@@ -87,7 +86,7 @@ export function useTauriInstallUpdate(props: {
                     duration: 9000,
                     isClosable: true,
                     status: "success"
-                })
+                });
             }
         },
         onError(err) {
@@ -99,7 +98,7 @@ export function useTauriInstallUpdate(props: {
                         duration: 9000,
                         isClosable: true,
                         status: "error"
-                    })
+                    });
                 }else{
                     updateToast({
                         title: "Update Error",
@@ -107,13 +106,13 @@ export function useTauriInstallUpdate(props: {
                         duration: 9000,
                         isClosable: true,
                         status: "error"
-                    })
+                    });
                 }
             }
         },
-    })
+    });
     return {
         queryKey,
         query
-    }
+    };
 }

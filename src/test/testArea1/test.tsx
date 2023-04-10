@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Api_Request, Api_RequestERROR } from "../../mangadex/api/internal/Api_Request"
+import { Api_Request, Api_RequestERROR } from "../../mangadex/api/internal/Api_Request";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../mangadex/api/structures/Manga";
@@ -20,19 +20,19 @@ test_area.render(
             <Spinner animation="border"></Spinner>
         </Card.Body>
     </Card>
-)
+);
 
 try {
-    var manga_to_use: Manga = await Manga.getMangaByID("e83c326b-921b-45ff-bc0c-d667bbfe64cc");
-    let manga_cover: Cover = await manga_to_use.get_cover_art();
-    let authors : Array<Author> = await manga_to_use.get_author();
-    let artists : Array<Author> = await manga_to_use.get_artist();
-    let para: Array<React.ReactNode> = [];
+    const manga_to_use: Manga = await Manga.getMangaByID("e83c326b-921b-45ff-bc0c-d667bbfe64cc");
+    const manga_cover: Cover = await manga_to_use.get_cover_art();
+    const authors : Array<Author> = await manga_to_use.get_author();
+    const artists : Array<Author> = await manga_to_use.get_artist();
+    const para: Array<React.ReactNode> = [];
     (new Author_Artists(authors, artists)).filtred.forEach(azo => {
-        para.push(<span>{azo.get_Name()}</span>)
-    })
+        para.push(<span>{azo.get_Name()}</span>);
+    });
     para.sort();
-    let alt_title: string = (new Alt_title(manga_to_use.get_alt_title())).get_lang("en")![0];
+    const alt_title: string = (new Alt_title(manga_to_use.get_alt_title())).get_lang("en")![0];
     test_area.render(
         <Container>
             <Row>
@@ -61,7 +61,7 @@ try {
                 </Col>
             </Row>
         </Container>
-    )
+    );
 } catch (error) {
     test_area.render(
         <Card>
@@ -79,5 +79,5 @@ try {
                 </Accordion>
             </Card.Body>
         </Card>
-    )
+    );
 }

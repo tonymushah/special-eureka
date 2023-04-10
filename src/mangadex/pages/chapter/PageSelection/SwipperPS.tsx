@@ -13,20 +13,20 @@ export default function SwipperPS(props: {
         const changeIndex = (index: number) => {
             swipper.query.data?.current?.swiper.slideTo(index);
             setCurrentPage(index);
-        }
+        };
         const generate_menu_item = (limit: number) => {
-            let array = new Array<React.ReactNode>(limit);
+            const array = new Array<React.ReactNode>(limit);
             for(let index = 0; index < limit; index++){
                 array[index] = (
                     <MenuItem
                         onClick={() => {
-                            changeIndex(index)
+                            changeIndex(index);
                         }}
                     >{index + 1}</MenuItem>
-                )
+                );
             }
             return array;
-        }
+        };
         return (
             <HStack
                 spacing={"5px"}
@@ -56,9 +56,9 @@ export default function SwipperPS(props: {
                     }}
                 />
             </HStack>
-        )
+        );
     }
     return (
         <Text>Loading...</Text>
-    )
+    );
 }

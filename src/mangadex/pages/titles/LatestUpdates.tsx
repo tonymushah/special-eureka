@@ -20,7 +20,7 @@ export default function LatestUpdates() {
     const offset_limit = new Offset_limits();
     offset_limit.set_limits(25);
     const client = useHTTPClient();
-    const queryKey = "mdx-latest-updates";
+    const queryKey = ["mdx", "latest-updates"];
     const userOption = useUserOption();
     appWindow.setTitle("Latest Updates | Mangadex");
     return (

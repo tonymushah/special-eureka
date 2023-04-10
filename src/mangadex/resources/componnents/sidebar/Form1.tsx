@@ -7,16 +7,16 @@ export default class Form1 extends React.Component {
     modalState: boolean;
     constructor(props: {} | Readonly<{}>) {
         super(props);
-        this.state = { value: '' };
+        this.state = { value: "" };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.modalState = false
+        this.modalState = false;
     }
     showModal() {
         if (this.modalState == false) {
             this.modalState = true;
         } else {
-            this.modalState = false
+            this.modalState = false;
         }
         this.forceUpdate();
     }

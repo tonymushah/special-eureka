@@ -27,7 +27,7 @@ export default class MangaCollection extends Collection<Manga>{
     public next(): Promise<Collection<Manga>> {
         return new Promise((resolve, reject) => {
             try {
-                let current_offset_limits = this.next_offset_limit();
+                const current_offset_limits = this.next_offset_limit();
                 this.$prev_search_type.offset_Limits = current_offset_limits;
                 resolve(Manga.search(this.prev_search_type));
             } catch (error) {
@@ -39,7 +39,7 @@ export default class MangaCollection extends Collection<Manga>{
     public previous(): Promise<Collection<Manga>> {
         return new Promise((resolve, reject) => {
             try {
-                let current_offset_limits = this.previous_offset_limit();
+                const current_offset_limits = this.previous_offset_limit();
                 this.$prev_search_type.offset_Limits = current_offset_limits;
                 resolve(Manga.search(this.prev_search_type));
             } catch (error) {
@@ -49,7 +49,7 @@ export default class MangaCollection extends Collection<Manga>{
         
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Manga>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_Limits = current_offset_limits;
         return (Manga.search(this.prev_search_type));
     }

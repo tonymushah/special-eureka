@@ -9,13 +9,13 @@ import {
     ModalBody,
     ModalCloseButton,
     Text
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 import Consumer from "../../../../commons-res/components/Consumer";
 import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
 import { useChapterDownloadMutation } from "../../hooks/ChapterStateHooks";
 import IsPingable from "../IsPingable";
 import IsPingable_defaultError from "../IsPingable_defaultError";
-import { UseMutationResult } from "react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 export default function Download_Chapter_Modal(props: {
     chap_id: string,
     children: (data : {onOpen: () => void, dowload_query : UseMutationResult<string[], Error, void>}) => React.ReactNode
@@ -117,5 +117,5 @@ export default function Download_Chapter_Modal(props: {
                 }
             </Consumer>
         </>
-    )
+    );
 }

@@ -17,7 +17,7 @@ export function Volume_(props: Volume_Props) {
             {({ isExpanded, isDisabled }) => (
                 <React.Fragment>
                     <h2>
-                        <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
+                        <Chakra.AccordionButton _expanded={{ bg: "#ff6740", color: "white" }}>
                             <Chakra.Box flex='1' textAlign='left'>
                                 Volume {props.src.get_name()}
                             </Chakra.Box>
@@ -61,7 +61,7 @@ export function Volume__reverse(props: Volume_Props) {
             {({ isExpanded , isDisabled }) => (
                 <React.Fragment>
                     <h2>
-                        <Chakra.AccordionButton _expanded={{ bg: '#ff6740', color: 'white' }}>
+                        <Chakra.AccordionButton _expanded={{ bg: "#ff6740", color: "white" }}>
                             <Chakra.Box flex='1' textAlign='left'>
                                 Volume {props.src.get_name()}
                             </Chakra.Box>

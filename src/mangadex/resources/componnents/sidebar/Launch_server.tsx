@@ -13,7 +13,7 @@ export default function Launch_server(props : {
         title: "Starting server ...",
         status: "loading",
         position: "bottom-right"
-    })!
+    })!;
 
     return (
         <React.Suspense>
@@ -35,5 +35,5 @@ export default function Launch_server(props : {
                 }}
             </Await>
         </React.Suspense>
-    )
+    );
 }

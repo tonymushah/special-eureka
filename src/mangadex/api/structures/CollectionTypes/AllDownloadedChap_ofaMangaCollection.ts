@@ -45,6 +45,6 @@ export default class AllDownloadedChap_Of_aMangaCollection extends Collection<st
         this.$manga_id = manga_id;
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<string>> {
-        return Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, offset_limits, this.client)
+        return Manga.getAllDownloadedChapters_ofAManga(this.$manga_id, offset_limits, this.client);
     }
 }

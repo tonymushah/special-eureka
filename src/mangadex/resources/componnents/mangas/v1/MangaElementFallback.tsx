@@ -1,5 +1,5 @@
-import React from "react"
-import * as Chakra from "@chakra-ui/react"
+import React from "react";
+import * as Chakra from "@chakra-ui/react";
 
 export default function MangaElementFallback() {
     return (
@@ -102,5 +102,5 @@ export default function MangaElementFallback() {
                 </Chakra.Skeleton>
             </Chakra.Center >
         </Chakra.Box >
-    )
+    );
 }

@@ -5,7 +5,7 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import { FaUsers } from "react-icons/fa";
-import { useQuery, UseQueryOptions } from "react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Await, Link, Outlet } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -65,7 +65,7 @@ export default function Chapter_Page_Success(props: {
             appWindow.setTitle(`Chapter ${props.data.get_chapter()} - ${title} | Mangadex`).then();
         });
     }
-    const chapter_data_images_queryKey = "mdx-chapter:" + props.data.get_id() + "-data";
+    const chapter_data_images_queryKey = ["mdx", "chapter", props.data.get_id(), "data"];
     const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
         return props.data.get_dataImages(client);
     }, {
@@ -199,7 +199,7 @@ export default function Chapter_Page_Success(props: {
                         <ChapterFullScreen chapter={props.data}>
                             <>
                                 {
-                                    chapter_data_images_query.isLoading || chapter_data_images_query.isIdle ? (
+                                    chapter_data_images_query.isLoading || chapter_data_images_query.isPaused ? (
                                         <Chakra.AbsoluteCenter>
                                             <Chakra.Box>
                                                 <Chakra.Spinner

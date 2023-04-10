@@ -1,9 +1,9 @@
 import { Lang } from "@mangadex/api/internal/Utils";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
 
 export default function useLanguageUserOption(){
-    const queryKey = "mdx-user-option:selectedLanguages";
+    const queryKey = ["mdx", "user-option", "selectedLanguages"];
     const userCachedOption = useUserOption();
     const query = useQuery<Array<Lang>, Error>(queryKey, async () => {
         return await userCachedOption.getLanguages();
@@ -12,42 +12,43 @@ export default function useLanguageUserOption(){
         refetchOnMount : false
     });
     const changeOptionMutation = useMutation({
+        mutationKey: queryKey.concat("mutation"),
         mutationFn : async (new_ : Array<Lang>) => {
             await userCachedOption.setLanguages(new_);
         },
         onSuccess() {
-            query.refetch()
+            query.refetch();
         },
-    })
+    });
     const changeOption = changeOptionMutation.mutate;
     const isIn = (input : Lang) => {
         if(query.isSuccess == true){
             return query.data.map((data) => data.get_two_letter()).includes(input.get_two_letter());
         }
         return undefined;
-    }
+    };
     const add = (input: Lang) => {
         if(query.isSuccess == true){
-            let data = query.data;
+            const data = query.data;
             data.push(input);
             changeOption(data);
         }
-    }
+    };
     const remove = (input : Lang) => {
         if(query.isSuccess == true){
             changeOption(query.data.filter(item => item.get_two_letter() !== input.get_two_letter()));
         }
-    }
+    };
     const handleInput = (input : Lang) => {
         if(isIn(input)){
-            remove(input)
+            remove(input);
         }else{
             add(input);
         }
-    }
+    };
     const clear = () => {
         changeOption([]);
-    }
+    };
     return {
         queryKey,
         query,
@@ -55,5 +56,5 @@ export default function useLanguageUserOption(){
         handleInput,
         isIn,
         clear
-    }
+    };
 }

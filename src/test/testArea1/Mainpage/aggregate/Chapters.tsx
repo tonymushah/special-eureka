@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Viewer from 'react-viewer';
+import React, { useState } from "react";
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
 import { Accordion, Alert, Col, Collapse, Container, Row, Spinner } from "react-bootstrap";
-import { Chapter, Chapters, Chapter_withAllIncludes } from '../../../../mangadex/api/structures/Chapter';
-import { Chapter_, Chapter_includes } from '../../../../mangadex/resources/componnents/chapters/Chapter_';
-import { Await } from 'react-router-dom';
+import { Chapter, Chapters, Chapter_withAllIncludes } from "../../../../mangadex/api/structures/Chapter";
+import { Chapter_, Chapter_includes } from "../../../../mangadex/resources/componnents/chapters/Chapter_";
+import { Await } from "react-router-dom";
 
 type Chapters_ElementProps = {
     headersTitle: string
@@ -14,7 +14,7 @@ type Chapters_ElementProps = {
 
 function Chapters_Element(props: Chapters_ElementProps) {
     const [open, setOpen] = useState(true);
-    var rand = Math.floor(Math.random() * 1000) + 1;
+    const rand = Math.floor(Math.random() * 1000) + 1;
     return (
         <Container>
             <Row>
@@ -46,10 +46,10 @@ export class ChaptersComp extends React.Component<ChaptersProps>{
     state: boolean;
     private toUse: Chapters;
     public constructor(props: ChaptersProps){
-        super(props)
+        super(props);
     //    this.initializer();
         this.setState(true);
-        this.toUse = this.props.src
+        this.toUse = this.props.src;
     }
     public setState(state: boolean){
         this.state = state;

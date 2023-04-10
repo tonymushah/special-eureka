@@ -11,5 +11,5 @@ export default function Consumer<T>(props: {
                 props.children
             }
         </context.Consumer>
-    )
+    );
 }

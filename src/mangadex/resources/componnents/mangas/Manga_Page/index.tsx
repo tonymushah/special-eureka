@@ -6,7 +6,7 @@ import React from "react";
 import { Button, Col, Container, Placeholder, Row } from "react-bootstrap";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -16,14 +16,14 @@ import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "@mangadex/resources/hooks/MangaStateHooks";
-import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
-import ErrorEL1 from "../error/ErrorEL1";
-import { Cover_Image_ } from "./Mainpage/Image_";
-import Statis from "./Statistics/Statis";
-import MangaTitle from "./v1/MangaTitle";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import { Cover_Image_ } from "@mangadex/resources/componnents/mangas/Mainpage/Image_";
+import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
+import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 
-const IsPingable = React.lazy(() => import("../IsPingable"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
 //const Statis = React.lazy(() => import());
 
@@ -42,7 +42,7 @@ const ExtLink = React.lazy(async () => {
 
 function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     const client = useHTTPClient();
-    const manga_statistics = useQuery<Statistics_Manga, Error>("mdx-manga:" + props.src.get_id() + "-statistics", () => {
+    const manga_statistics = useQuery<Statistics_Manga, Error>(["mdx", "manga", props.src.get_id(), "statistics"], () => {
         return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {
         staleTime: Infinity
@@ -250,13 +250,13 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!
                                         )} fallbackElement={Mangadex_placeHolder} />
                                 </Col>
-                                <Col xs="9" className="overflow-hidden">
+                                <Col xs="9">
                                     <Chakra.Box>
                                         <Chakra.Center
                                             display={"block"}
                                         >
                                             <Chakra.Heading
-                                                noOfLines={1}
+                                                noOfLines={0}
                                                 fontFamily={"inherit"}
                                                 size={{
                                                     base: "md",

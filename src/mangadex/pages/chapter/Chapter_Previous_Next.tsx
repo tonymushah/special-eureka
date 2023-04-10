@@ -20,7 +20,7 @@ export default function Chapter_Previous_Next(props: {
             staleTime: 1000 * 60 * 30
         }
     });
-    const chapter_aggregate_query = query
+    const chapter_aggregate_query = query;
     return (
         <React.Fragment>
             {
@@ -89,5 +89,5 @@ export default function Chapter_Previous_Next(props: {
                 )
             }
         </React.Fragment>
-    )
+    );
 }

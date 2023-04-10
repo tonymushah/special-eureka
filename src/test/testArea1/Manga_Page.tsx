@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
-import { Api_Request, Api_RequestERROR } from "../../mangadex/api/internal/Api_Request"
+import { Api_Request, Api_RequestERROR } from "../../mangadex/api/internal/Api_Request";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../mangadex/api/structures/Manga";
@@ -20,7 +20,7 @@ import { Tag } from "../../mangadex/api/structures/Tag";
 import { AuthorCol } from "./Mainpage/boutons/author_boutons";
 import { Top_Chaps } from "./Mainpage/Top_chap";
 import { Covers_Manga } from "./Mainpage/Covers_";
-import * as Chakra from '@chakra-ui/react'
+import * as Chakra from "@chakra-ui/react";
 
 type MangaPageProps = {
     src: Manga
@@ -38,25 +38,25 @@ export class Manga_Page extends React.Component<MangaPageProps>{
         this.key = key;
     }
     public async authors_artists(): Promise<Array<React.ReactNode>>{
-        let returns: Author_Artists = new Author_Artists(await this.to_use.get_author(), await this.to_use.get_artist());
-        let returns2 : Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
+        const returns: Author_Artists = new Author_Artists(await this.to_use.get_author(), await this.to_use.get_artist());
+        const returns2 : Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
         for (let index = 0; index < returns.filtred.length; index++) {
             const element = returns.filtred[index];
             if(index == (returns.filtred.length - 1)){
                 returns2[index] = (
                     <span>{element.get_Name()}</span>
-                )
+                );
             }else{
                 returns2[index] = (
                     <span>{element.get_Name()},</span>
-                )
+                );
             }
         }
         return returns2;
     }
     public async build_themes_manga(): Promise<Array<React.ReactNode>>{
         let index = 0;
-        let returns : Array<React.ReactNode> = [];
+        const returns : Array<React.ReactNode> = [];
         if(this.to_use.get_ranting() != ContentRating.safe()){
             if(this.to_use.get_ranting() == ContentRating.suggestive()){
                 returns[index] = (<Button className="mgP-top-theme d-inline-flex" variant="success" size="sm">{make_first_UpperCare(this.to_use.get_ranting())}</Button>);
@@ -67,23 +67,23 @@ export class Manga_Page extends React.Component<MangaPageProps>{
         }
         for (let index1 = 0; index1 < this.to_use.get_tags().length; index1++) {
             const element = this.to_use.get_tags()[index1];
-            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>)
+            returns[index + index1] = (<Button className="mgP-top-theme d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
         }
         return returns;
     }
     public get_status_color(): React.ReactNode{
         switch (this.to_use.get_status()) {
             case Status.ongoing():
-                return (<Button size="sm" variant="success" disabled> </Button>)
+                return (<Button size="sm" variant="success" disabled> </Button>);
                 break;
             case Status.completed():
-                return (<Button size="sm" variant="info" disabled> </Button>)
+                return (<Button size="sm" variant="info" disabled> </Button>);
                 break;
             case Status.hiatus():
-                return (<Button size="sm" variant="warning" disabled> </Button>)
+                return (<Button size="sm" variant="warning" disabled> </Button>);
                 break;
             case Status.cancelled():
-                return (<Button size="sm" variant="danger" disabled> </Button>)
+                return (<Button size="sm" variant="danger" disabled> </Button>);
                 break;
             default:
                 return (<></>);
@@ -92,10 +92,10 @@ export class Manga_Page extends React.Component<MangaPageProps>{
     }
     public render(): React.ReactNode{
         
-        let manga_cover: string = "/mangadex/resources/imgs/cover-not-found.jpg";
-        let placeholder: string = "/mangadex/resources/imgs/cover-placeholder.png";
+        const manga_cover = "/mangadex/resources/imgs/cover-not-found.jpg";
+        const placeholder = "/mangadex/resources/imgs/cover-placeholder.png";
         //let manga_cover: string = "..";
-        let title: string = "";
+        let title = "";
         //let desc: string = "";
         if (this.to_use.get_title().en == null) {
             title = new Alt_title(this.to_use.get_alt_title()).get_quicklang()!;
@@ -122,7 +122,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                     <div id="mg-container-cover">
                                         <img src={getted.get_CoverImage()} id="cover-big"/>
                                     </div>
-                                )
+                                );
                             }}
                         />
                     </React.Suspense>
@@ -142,7 +142,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                         children={(getted: Cover) => {
                                             return (
                                                 <Cover_Image_ id="top-cover" state={false} src={getted.get_CoverImage()}/>
-                                            )
+                                            );
                                         }}
                                     />
                                 </React.Suspense>
@@ -195,7 +195,7 @@ export class Manga_Page extends React.Component<MangaPageProps>{
                                                             <>
                                                                 {getted}
                                                             </>
-                                                        )
+                                                        );
                                                     }}
                                                 />
                                             </React.Suspense>

@@ -11,20 +11,20 @@ export default function Long_Wide_StripPS(props: {
         const changeIndex = (index: number) => {
             document.getElementById(`mdx-chapter-${props.chapter.get_id()}-${index}`)?.scrollIntoView();
             setCurrentPage(index);
-        }
+        };
         const generate_menu_item = (limit: number) => {
-            let array = new Array<React.ReactNode>(limit);
+            const array = new Array<React.ReactNode>(limit);
             for(let index = 0; index < limit; index++){
                 array[index] = (
                     <MenuItem
                         onClick={() => {
-                            changeIndex(index + 1)
+                            changeIndex(index + 1);
                         }}
                     >{index + 1}</MenuItem>
-                )
+                );
             }
             return array;
-        }
+        };
         return (
             <HStack
                 spacing={"5px"}
@@ -54,9 +54,9 @@ export default function Long_Wide_StripPS(props: {
                     }}
                 />
             </HStack>
-        )
+        );
     }
     return (
         <Text>Loading...</Text>
-    )
+    );
 }

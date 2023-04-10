@@ -1,5 +1,5 @@
 import React from "react";
-import { UseQueryResult } from "react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import IsPingable from "./IsPingable";
 import IsPingable_defaultError from "./IsPingable_defaultError";
@@ -21,5 +21,5 @@ export default function IsPingable_default_client(props : {
             client={client}
             onLoading={props.onLoading}
         />
-    )
+    );
 }

@@ -2,9 +2,9 @@ import { Box, Button, Center, Heading, Link, Skeleton, Text } from "@chakra-ui/r
 import React from "react";
 import { Container } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
-import { ExtLink } from "../../../commons-res/components/ExtLink";
-import Tauri_Updater from "../../resources/components/Tauri_updater_button";
-import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "../../resources/hooks/UpdaterQuery";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
+import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "@dashboard/resources/hooks/UpdaterQuery";
 import { appWindow } from "@tauri-apps/api/window";
 
 export default function InstallUpdate() {
@@ -13,11 +13,11 @@ export default function InstallUpdate() {
     });
     const installUpdate = useTauriInstallUpdate({
         withoutToast: true
-    })
-    appWindow.setTitle("Checking updates... | Dashboard").then()
+    });
+    appWindow.setTitle("Checking updates... | Dashboard").then();
     if (shouldUpdate.query.isSuccess) {
         if (shouldUpdate.query.data.shouldUpdate == false) {
-            appWindow.setTitle("No update required | Dashboard").then()
+            appWindow.setTitle("No update required | Dashboard").then();
             return (
                 <Box>
                     <Container>
@@ -27,7 +27,7 @@ export default function InstallUpdate() {
                 </Box>
             );
         } else {
-            appWindow.setTitle(`Special Eureka ${shouldUpdate.query.data.manifest?.version} is available | Dashboard`).then()
+            appWindow.setTitle(`Special Eureka ${shouldUpdate.query.data.manifest?.version} is available | Dashboard`).then();
             return (
                 <Box>
                     <Container>
@@ -35,7 +35,6 @@ export default function InstallUpdate() {
                         <Text textAlign={"center"}>Version : {shouldUpdate.query.data.manifest?.version}</Text>
                         <Text textAlign={"center"}>Date : {shouldUpdate.query.data.manifest?.date}</Text>
                         <ReactMarkdown
-                            children={shouldUpdate.query.data.manifest ? shouldUpdate.query.data.manifest.body : ""}
                             components={{
                                 a(node) {
                                     return (
@@ -52,23 +51,25 @@ export default function InstallUpdate() {
                                                 )
                                             }
                                         </React.Suspense>
-                                    )
+                                    );
                                 }
                             }}
-                        />
+                        >
+                            {shouldUpdate.query.data.manifest ? shouldUpdate.query.data.manifest.body : ""}
+                        </ReactMarkdown>
                         <Center>
                             <Center>
                                 <Button colorScheme={"red"}
                                     isLoading={installUpdate.query.isLoading || installUpdate.query.isFetching}
                                     isDisabled={installUpdate.query.isError}
                                     onClick={() => {
-                                        installUpdate.query.refetch()
+                                        installUpdate.query.refetch();
                                     }}>Update</Button>
                             </Center>
                         </Center>
                     </Container>
                 </Box>
-            )
+            );
         }
     } else {
         return (
@@ -80,6 +81,6 @@ export default function InstallUpdate() {
                     </Center>
                 </Container>
             </Box>
-        )
+        );
     }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { Chapter } from "../../../api/structures/Chapter";
 import { Manga } from "../../../api/structures/Manga";
 import { Group } from "../../../api/structures/Group";
-import { User } from "../../../api/structures/User"
+import { User } from "../../../api/structures/User";
 import { Container, Row, Col } from "react-bootstrap";
 import * as Chakra from "@chakra-ui/react";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,22 +12,22 @@ import { At_Home } from "../../../api/structures/At_home";
 import "swiper/css";
 import "swiper/css/scrollbar";
 import "swiper/css/pagination";
-import { LazyLoadImage, LazyLoadComponent } from 'react-lazy-load-image-component';
+import { LazyLoadImage, LazyLoadComponent } from "react-lazy-load-image-component";
 import { Alt_title } from "../../../api/internal/Utils";
 import * as ChakraIcons from "@chakra-ui/icons";
-import * as FaReactIcons from "react-icons/fa"
+import * as FaReactIcons from "react-icons/fa";
 import { Aggregate } from "../../../api/structures/Aggregate";
 import { getMangaDexPath } from "../../..";
 const MangaDexPath = getMangaDexPath();
 function ErrorEL(props){
-    let error : any = useAsyncError();
+    const error : any = useAsyncError();
     return(
         <Chakra.Alert status="error">
             <Chakra.AlertIcon></Chakra.AlertIcon>
             <Chakra.AlertTitle>We caught some error</Chakra.AlertTitle>
             <Chakra.AlertDescription>{error.message}</Chakra.AlertDescription>
         </Chakra.Alert>
-    )
+    );
 }
 
 type Chapter_pageProps = {
@@ -37,7 +37,7 @@ type Chapter_pageProps = {
 
 
 function Chap_page_menu(props: React.PropsWithChildren){
-    const { isOpen, onOpen, onClose } = Chakra.useDisclosure()
+    const { isOpen, onOpen, onClose } = Chakra.useDisclosure();
     return(
         <>
         <Chakra.Center 
@@ -57,7 +57,7 @@ function Chap_page_menu(props: React.PropsWithChildren){
                 </Chakra.DrawerContent>
             </Chakra.Drawer>
         </>
-    )
+    );
 }
 
 function Page_list(props: React.ComponentPropsWithRef<any>){
@@ -65,7 +65,7 @@ function Page_list(props: React.ComponentPropsWithRef<any>){
         <Chakra.Menu>
             <></>
         </Chakra.Menu>
-    )
+    );
 }
 export class Chapter_page extends React.Component<Chapter_pageProps>{
     private Chapter_toUse: Chapter;
@@ -112,25 +112,25 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
 	}
     public toggleOpen(){
         if(this.$is_menu_open == false || this.$is_menu_open == undefined){
-            this.$is_menu_open = true
+            this.$is_menu_open = true;
         }else{
-            this.$is_menu_open = false
+            this.$is_menu_open = false;
         }
     }
     public set_Chapter_toUse(Chapter_toUse: Chapter){
-        this.Chapter_toUse = Chapter_toUse
+        this.Chapter_toUse = Chapter_toUse;
     }
     public set_Manga_rel(Manga_rel: Manga){
-        this.Manga_rel = Manga_rel
+        this.Manga_rel = Manga_rel;
     }
     public set_Group_uploader(Group_uploader: Group){
-        this.Group_uploader = Group_uploader
+        this.Group_uploader = Group_uploader;
     }
     public set_uploader(uploader: User){
-        this.uploader = uploader
+        this.uploader = uploader;
     }
     public set_imgs(imgs: Array<string>){
-        this.imgs = imgs
+        this.imgs = imgs;
     }
 
     /**
@@ -184,15 +184,15 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
         try{
             return (
                 <>{this.current_page_ref.current!.innerText}</>
-            )
+            );
         }catch(e){
             return(
                 <>{this.$current_page}</>
-            )
+            );
         }
     }
     public makelist_Page(): Array<React.ReactNode>{
-        let returns: Array<React.ReactNode> = [];
+        const returns: Array<React.ReactNode> = [];
         for(let index = 0; index < this.Chapter_toUse.get_pages(); index++){
             returns[index] = (
                 <Chakra.MenuList
@@ -204,12 +204,12 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                         }catch(e){
 
                         }
-                        document.getElementById("atHome_pages")!.scrollIntoView()
+                        document.getElementById("atHome_pages")!.scrollIntoView();
                     }}
                 >
                     {index + 1}
                 </Chakra.MenuList>
-            )
+            );
         }
         return returns;
     }
@@ -230,7 +230,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
 	}
 
     render(): React.ReactNode {
-        this.$current_page = 0
+        this.$current_page = 0;
         return (
             <Chakra.Box>
                 <Container>
@@ -256,7 +256,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                         <ErrorEL/>
                                     }
                                     children={(getted: Manga) => {
-                                        let title: string = "";
+                                        let title = "";
                                         if (getted.get_title().en == null) {
                                             title = new Alt_title(getted.get_alt_title()).get_quicklang()!;
                                         }else{
@@ -289,7 +289,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                             {(getted : string) => {
                                                 return (
                                                     <Chakra.Text>{getted}</Chakra.Text>
-                                                )
+                                                );
                                             }}
                                         </Await>
                                     </React.Suspense>
@@ -322,7 +322,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                 <ErrorEL/>
                                                             }
                                                             children={(getted: Manga) => {
-                                                                let title: string = "";
+                                                                let title = "";
                                                                 if (getted.get_title().en == null) {
                                                                     title = new Alt_title(getted.get_alt_title()).get_quicklang()!;
                                                                 }else{
@@ -392,7 +392,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                                 {(getted : string) => {
                                                                                     return (
                                                                                         <Chakra.Text>{getted}</Chakra.Text>
-                                                                                    )
+                                                                                    );
                                                                                 }}
                                                                             </Await>
                                                                         </React.Suspense>
@@ -406,7 +406,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                         errorElement={<ErrorEL></ErrorEL>}
                                                                     >
                                                                         {(getted : Aggregate) => {
-                                                                            let returns : Array<React.ReactNode> = [];
+                                                                            const returns : Array<React.ReactNode> = [];
                                                                             let topIndex = 0;
                                                                             for (let index = 0; index < getted.get_volumes().length; index++) {
                                                                                 const volume = getted.get_volumes()[index];
@@ -431,7 +431,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                                 <>{
                                                                                     returns
                                                                                 }</>
-                                                                            )
+                                                                            );
                                                                         }}
                                                                     </Await>
                                                                 </React.Suspense>
@@ -487,7 +487,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                         &nbsp;
                                                                         {getted.get_username()}
                                                                     </Chakra.Text>
-                                                                )
+                                                                );
                                                             }}
                                                         </Await>
                                                     </React.Suspense>
@@ -508,7 +508,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                             }
                                                         >
                                                             {(getted : Group[]) => {
-                                                                let to_show : Array<React.ReactNode> = [];
+                                                                const to_show : Array<React.ReactNode> = [];
                                                                 for (let index = 0; index < getted.length; index++) {
                                                                     const group = getted[index];
                                                                     if(index == getted.length - 1){
@@ -516,13 +516,13 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                             <>{
                                                                                 group.get_name()
                                                                             }</>
-                                                                        )
+                                                                        );
                                                                     }else{
                                                                         to_show[index] = (
                                                                             <>{
                                                                                 group.get_name()
                                                                             } | </>
-                                                                        )
+                                                                        );
                                                                     }
                                                                 }
                                                                 return (
@@ -535,7 +535,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                                             to_show
                                                                         }
                                                                     </Chakra.Text>
-                                                                )
+                                                                );
                                                             }}
                                                         </Await>
                                                     </React.Suspense>
@@ -564,7 +564,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                 }
                             >
                                 {(getted : At_Home) => {
-                                        let imgs : Array<string> = getted.get_data_ImgURL();
+                                        const imgs : Array<string> = getted.get_data_ImgURL();
                                         this.$nb_page = imgs.length;
                                         return (
                                             <Swiper
@@ -592,7 +592,7 @@ export class Chapter_page extends React.Component<Chapter_pageProps>{
                                                         this.current_page_ref2.current!.innerText = "" + (this.$current_page + 1);
                                                     }catch(e){
                                                     }   
-                                                    document.getElementById("atHome_pages")!.scrollIntoView()
+                                                    document.getElementById("atHome_pages")!.scrollIntoView();
                                                 }}
                                                 navigation={true}
                                             >

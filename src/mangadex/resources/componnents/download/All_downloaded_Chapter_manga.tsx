@@ -12,7 +12,7 @@ export default function All_downloaded_Chapter_manga(props: {
     onLoading? : React.ReactNode
 }){
     const client = useHTTPClient();
-    const query_key = "mdx-manga-" + props.mangaID + "-offline-chapters";
+    const query_key = ["mdx", "manga", props.mangaID, "offline-chapters"];
     return (
         <CollectionComponnent_WithQuery<string>
             fn={() => {
@@ -35,5 +35,5 @@ export default function All_downloaded_Chapter_manga(props: {
                 )
             }
         </CollectionComponnent_WithQuery>
-    )
+    );
 }

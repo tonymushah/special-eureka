@@ -2,13 +2,13 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { User } from "@mangadex/api/structures/User";
-import { useQuery } from "react-query";
+import { QueryKey, useQuery } from "@tanstack/react-query";
 
 
 export function getUserFeedQueryKey(props: {
     user_id: string
-}) {
-    return `mdx-user:${props.user_id}-feed`;
+}) : QueryKey {
+    return ["mdx", "user", props.user_id, "feed"];
 }
 
 export function getUserFeedQuery(props: {
@@ -32,7 +32,7 @@ export function getUserFeedQuery(props: {
 export function getUserByIDQueryKey(props: {
     user_id : string
 }){
-    return `mdx-user:${props.user_id}`;
+    return ["mdx", "user", props.user_id];
 }
 
 export function getUserByIDQuery(props : {

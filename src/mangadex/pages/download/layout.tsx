@@ -1,5 +1,5 @@
 import React from "react";
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 import { Container } from "react-bootstrap";
 import { Outlet } from "react-router-dom";
 

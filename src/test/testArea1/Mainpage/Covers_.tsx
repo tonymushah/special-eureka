@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
-import { Api_Request, Api_RequestERROR } from "../../../mangadex/api/internal/Api_Request"
+import { Api_Request, Api_RequestERROR } from "../../../mangadex/api/internal/Api_Request";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../../mangadex/api/structures/Manga";
@@ -30,8 +30,8 @@ export class Covers_Manga extends React.Component<MangaPageProps>{
         this.to_use = this.props.src;
     }
     public async build_covers(): Promise<Array<React.ReactNode>>{
-        var covers : Array<Cover> = await this.to_use.get_allCover();
-        let returns: Array<React.ReactNode> = new Array<React.ReactNode>(covers.length);
+        const covers : Array<Cover> = await this.to_use.get_allCover();
+        const returns: Array<React.ReactNode> = new Array<React.ReactNode>(covers.length);
         for (let index = 0; index < covers.length; index++) {
             const element = covers[index];
             returns[index] = (

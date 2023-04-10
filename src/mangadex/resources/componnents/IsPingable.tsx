@@ -1,8 +1,7 @@
-import { useQuery, UseQueryResult } from "react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { Api_Request } from "../../api/internal/Api_Request";
-import { useToast } from "@chakra-ui/react";
+import { Api_Request } from "@mangadex/api/internal/Api_Request";
 
 export default function IsPingable(props: {
     client: Client,
@@ -10,16 +9,12 @@ export default function IsPingable(props: {
     onError: (query: UseQueryResult<boolean, Error>) => React.ReactNode
     onLoading: React.ReactNode
 }) {
-    const query_key = "mdx-ping";
+    const query_key = ["mdx", "ping"];
     const query = useQuery<boolean, Error>(query_key, () => {
         return Api_Request.ping(props.client);
     }, {
         staleTime : 0,
         refetchOnMount : false
-    });
-    const toast = useToast({
-        "duration" : 9000,
-        "position" : "bottom-right"
     });
     const context = React.createContext(query);
     if (query.isSuccess == true) {
@@ -42,11 +37,6 @@ export default function IsPingable(props: {
         }
     }
     if (query.isLoading == true) {
-        toast({
-            "title" : "Pinging the Mangadex API",
-            "status" : "loading",
-            isClosable : true
-        });
         return (
             <React.Fragment>
                 {
@@ -56,11 +46,6 @@ export default function IsPingable(props: {
         );
     }
     if (query.isRefetching == true) {
-        toast({
-            "title" : "Pinging the Mangadex API",
-            "status" : "loading",
-            isClosable : true
-        });
         return (
             <React.Fragment>
                 {

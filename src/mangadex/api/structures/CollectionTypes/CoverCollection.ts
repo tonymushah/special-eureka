@@ -25,7 +25,7 @@ export default class CoverCollection extends Collection<Cover>{
         this.$prev_search_type = previous_search_type;
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Cover>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_Limits = current_offset_limits;
         return (Cover.search(this.prev_search_type));
     }

@@ -1,7 +1,7 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { UseMutationResult } from "react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import { get_ChapterbyId, useChapterDownloadMutation, ChapterDeleteMutation_data, useChapterDeleteMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
 import React from "react";
 export default function ChapterDownloadButton(props: {
@@ -20,7 +20,7 @@ export default function ChapterDownloadButton(props: {
             toInvalidate: [
                 queryKey
             ]
-        })
+        });
     }
     if (deleteMutation == undefined) {
         deleteMutation = useChapterDeleteMutation({
@@ -28,7 +28,7 @@ export default function ChapterDownloadButton(props: {
             toInvalidate: [
                 queryKey
             ]
-        })
+        });
     }
     if (downloadMutation?.isLoading) {
         return (<Chakra.Spinner size={"md"} />);
@@ -46,7 +46,7 @@ export default function ChapterDownloadButton(props: {
                                     color: "orange.500"
                                 }}
                                 onClick={() => {
-                                    downloadMutation?.mutate()
+                                    downloadMutation?.mutate();
                                 }}
                             />
                         </Chakra.Tooltip>
@@ -59,7 +59,7 @@ export default function ChapterDownloadButton(props: {
                                     color: "red"
                                 }}
                                 onClick={() => {
-                                    deleteMutation?.mutate()
+                                    deleteMutation?.mutate();
                                 }}
                             />
                         </Chakra.Tooltip>
@@ -77,7 +77,7 @@ export default function ChapterDownloadButton(props: {
                                         color: "green"
                                     }}
                                     onClick={() => {
-                                        downloadMutation?.mutate()
+                                        downloadMutation?.mutate();
                                     }}
                                 />
                             </Chakra.Tooltip>
@@ -90,7 +90,7 @@ export default function ChapterDownloadButton(props: {
                                         color: "red"
                                     }}
                                     onClick={() => {
-                                        deleteMutation?.mutate()
+                                        deleteMutation?.mutate();
                                     }}
                                 />
                             </Chakra.Tooltip>
@@ -102,14 +102,14 @@ export default function ChapterDownloadButton(props: {
                     <ChakraIcon.DownloadIcon _hover={{
                         color: "blue"
                     }} onClick={() => {
-                        downloadMutation?.mutate()
+                        downloadMutation?.mutate();
                     }} />
-                )
+                );
             }
         } else if (query.isLoading) {
             return (
                 <Chakra.Spinner size={"md"} />
-            )
+            );
         }else{
             return (
                 <Chakra.Spinner size={"md"} />

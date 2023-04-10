@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from "react-query";
+import { QueryKey, useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Cover } from "@mangadex/api/structures/Cover";
 
@@ -6,7 +6,7 @@ export default function get_cover_art_byId(props : {
     coverID : string
 }){
     const client = useHTTPClient();
-    const cover_key = "mdx-cover-" + props.coverID;
+    const cover_key = ["mdx", "cover", props.coverID];
     const coverQuery = useQuery(cover_key, () => {
         return Cover.getById(props.coverID, client);
     }, {
@@ -25,11 +25,11 @@ export function get_cover_art_image(props : {
     query_options?: Omit<UseQueryOptions<string, Error>, "queryKey" | "queryFn">
 }){
     const client = useHTTPClient();
-    const cover_image_querykey = props.isThumbail == undefined || props.isThumbail == false ? 
-        "mdx-cover-" + props.src.get_id() + "-image" : 
+    const cover_image_querykey : QueryKey = props.isThumbail == undefined || props.isThumbail == false ? 
+        ["mdx", "cover", props.src.get_id(), "image"] : 
         props.size != undefined? 
-            "mdx-cover-" + props.src.get_id() + "-image-" + props.size : 
-            "mdx-cover-" + props.src.get_id() + "-image-" + 256 
+            ["mdx", "cover", props.src.get_id(), "image", props.size] : 
+            ["mdx", "cover", props.src.get_id(), "image", 256]
             ;
     const cover_image_query = useQuery(cover_image_querykey, () => {
         if(props.isThumbail == undefined || props.isThumbail == false){

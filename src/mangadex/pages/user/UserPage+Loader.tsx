@@ -1,7 +1,7 @@
 import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex";
 import { getUserByIDQuery, getUserByIDQueryKey } from "@mangadex/resources/hooks/UserPageHooks";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
 const UserPageSuccess = React.lazy(() => import("./index"));
@@ -13,8 +13,10 @@ export default function UserPage_w_Loader(){
     });
     const queryClient = useQueryClient();
     React.useMemo<void>(() => {
-        queryClient.removeQueries(queryKey);
-    }, [user_id]);
+        queryClient.removeQueries(queryKey, {
+            exact : true
+        });
+    }, []);
     const { query } = getUserByIDQuery({
         user_id : user_id!
     });

@@ -1,8 +1,8 @@
 import { invoke } from "..";
 
 export async function download_chapter(chapterID: string) {
-    let response = await invoke<string>("download_chapter", { chapterId: chapterID });
-    let response_Json: {
+    const response = await invoke<string>("download_chapter", { chapterId: chapterID });
+    const response_Json: {
         result: string,
         dir: string,
         downloaded: Array<string>
@@ -11,8 +11,8 @@ export async function download_chapter(chapterID: string) {
 }
 
 export async function download_chapter_data_saver(chapterID: string) {
-    let response = await invoke<string>("download_chapter_data_saver_mode", { chapterId: chapterID });
-    let response_Json: {
+    const response = await invoke<string>("download_chapter_data_saver_mode", { chapterId: chapterID });
+    const response_Json: {
         result: string,
         dir: string,
         downloaded: Array<string>
@@ -21,8 +21,8 @@ export async function download_chapter_data_saver(chapterID: string) {
 }
 
 export async function download_manga(mangaID: string) {
-    let response = await invoke<string>("download_manga", { mangaId: mangaID });
-    let response_Json: {
+    const response = await invoke<string>("download_manga", { mangaId: mangaID });
+    const response_Json: {
         result: string,
         type: string,
         id: string
@@ -31,8 +31,8 @@ export async function download_manga(mangaID: string) {
 }
 
 export async function download_all_manga_covers(mangaID: string) {
-    let response = await invoke<string>("download_manga_covers", { mangaId: mangaID });
-    let response_Json: {
+    const response = await invoke<string>("download_manga_covers", { mangaId: mangaID });
+    const response_Json: {
         result: string,
         type: string,
         id: string,
@@ -42,8 +42,8 @@ export async function download_all_manga_covers(mangaID: string) {
 }
 
 export async function download_manga_cover(mangaID: string) {
-    let response = await invoke<string>("download_manga_cover", { mangaId: mangaID });
-    let response_Json: {
+    const response = await invoke<string>("download_manga_cover", { mangaId: mangaID });
+    const response_Json: {
         result: string,
         type: string,
         id: string,
@@ -53,8 +53,8 @@ export async function download_manga_cover(mangaID: string) {
 }
 
 export async function patch_all_manga_cover() {
-    let response = await invoke<string>("patch_all_manga_cover");
-    let response_Json: {
+    const response = await invoke<string>("patch_all_manga_cover");
+    const response_Json: {
         "result": "ok",
         "tasks": "patched",
         "type": "collection",
@@ -64,8 +64,8 @@ export async function patch_all_manga_cover() {
 }
 
 export async function refetch_all_manga() {
-    let response = await invoke<string>("refetch_all_manga");
-    let response_Json: {
+    const response = await invoke<string>("refetch_all_manga");
+    const response_Json: {
         "result": "ok",
         "tasks": "patched",
         "type": "collection",

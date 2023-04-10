@@ -6,7 +6,7 @@ export default function Side_bar_error_el(props: {
     toastId: Chakra.ToastId,
     callAfter: () => void
 }) {
-    let error = useAsyncError();
+    const error = useAsyncError();
     const toast = Chakra.useToast();
     toast.update(props.toastId, {
         title: "Error",

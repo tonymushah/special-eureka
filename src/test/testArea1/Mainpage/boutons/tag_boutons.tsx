@@ -20,14 +20,14 @@ export class TagRow extends React.Component<TagRowProps>{
         this.title = this.props.title;
     }
     public build_TagButtons(): Array<React.ReactNode>{
-        var returns : Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
+        const returns : Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
         for (let index = 0; index < this.to_use.length; index++) {
             returns[index] = (<TagButton src={this.to_use[index]}/>);
         }
         return returns;
     }
     render(): React.ReactNode {
-        var tagButtons : Array<React.ReactNode> = this.build_TagButtons()
+        const tagButtons : Array<React.ReactNode> = this.build_TagButtons();
         if(tagButtons.length != 0){
             return (
                 <Row>
@@ -36,7 +36,7 @@ export class TagRow extends React.Component<TagRowProps>{
                         {tagButtons}
                     </div>
                 </Row>
-            )
+            );
         }else{
             return (<></>);
         }

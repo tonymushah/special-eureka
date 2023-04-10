@@ -2,7 +2,7 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
 import { Offset_limits } from "../../../api/internal/Utils";
-import { useFormik } from "formik"
+import { useFormik } from "formik";
 import { Group } from "../../../api/structures/Group";
 import { Collection } from "../../../api/structures/Collection";
 import GroupFallBackElement from "./GroupFallBackElement";
@@ -11,11 +11,11 @@ import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProv
 
 const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 const CollectionComponnent_WithQuery = React.lazy(async () =>{
-    let res = await import("../Collection/Collection");
+    const res = await import("../Collection/Collection");
     return {
         default : res.CollectionComponnent_WithQuery<Attribute>
-    }
-})
+    };
+});
 
 export default function Group_Search(props : {
     offset_limits : Offset_limits
@@ -27,7 +27,7 @@ export default function Group_Search(props : {
             name : ""
         },
         onSubmit(values) {
-            let random = Math.random() * 100;
+            const random = Math.random() * 100;
             setResult(
                 <React.Suspense fallback={
                     <Chakra.Box>
@@ -42,9 +42,9 @@ export default function Group_Search(props : {
                                 offset_Limits : props.offset_limits,
                                 name : values.name,
                                 client : client
-                            })
+                            });
                         }}
-                        queryKey={"mdx-group-search-"+random}
+                        queryKey={["mdx", "group", "search", random]}
                     >
                         {
                             (value : Collection<Attribute>) => (
@@ -73,18 +73,18 @@ export default function Group_Search(props : {
                         }
                     </CollectionComponnent_WithQuery>
                 </React.Suspense>
-            )
+            );
         },
         validate(values) {
-            let error :{
+            const error :{
                 name? : string
-            } = {}
+            } = {};
             if(values.name === ""){
-                error.name = "Invalid name"
+                error.name = "Invalid name";
             }
             return error;
         }
-    })
+    });
     return (
         <Chakra.Stack>
             <form
@@ -120,5 +120,5 @@ export default function Group_Search(props : {
         </Chakra.Box>
         </Chakra.Stack>
         
-    )
+    );
 }

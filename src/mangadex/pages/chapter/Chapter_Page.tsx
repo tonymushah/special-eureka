@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
 import { get_ChapterbyId, get_chapter_queryKey } from "../../resources/hooks/ChapterStateHooks";
@@ -15,8 +15,10 @@ export default function Chapter_Page() {
     });
     const queryClient = useQueryClient();
     React.useMemo(() => {
-        queryClient.removeQueries(queryKey);
-    }, [queryClient, id]);
+        queryClient.removeQueries(queryKey, {
+            exact : true
+        });
+    }, []);
     const { query } = get_ChapterbyId({
         id: id!
     });

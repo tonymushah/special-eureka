@@ -1,7 +1,7 @@
 import React from "react";
-import { useQuery } from "react-query";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import { Group } from "../../../api/structures/Group";
+import { useQuery } from "@tanstack/react-query";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Group } from "@mangadex/api/structures/Group";
 import ErrorEL1 from "../error/ErrorEL1";
 import GroupFallBackElement from "./GroupFallBackElement";
 
@@ -11,14 +11,14 @@ export default function Group_Simple_Element_ByID(props: {
     id: string
 }) {
     const client = useHTTPClient();
-    const query_key = "mdx-groups-" + props.id;
+    const query_key = ["mdx", "groups", props.id];
     const query = useQuery<Group, Error>(query_key, () => {
         return Group.get_groupById(props.id);
     });
     if (query.isLoading) {
         return (
             <GroupFallBackElement />
-        )
+        );
     }
     if (query.isError) {
         return (

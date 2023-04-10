@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import * as Chakra from "@chakra-ui/react";
 import Mangadex_cover_place_holder from "../../../imgs/cover-placeholder.png";
 import Viewer from "react-viewer";
@@ -21,5 +21,5 @@ export default function Cover_Plus_Zoom(props : {
                 images={[{src: props.data}]}
             />
         </Chakra.Box>
-    )
+    );
 }

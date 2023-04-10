@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
 import { Alert, Col, Container, Placeholder, Row } from "react-bootstrap";
 //import { Chapter } from "../../../api/structures/Chapter";
-import ReactTimeAgo from 'react-time-ago'
+import ReactTimeAgo from "react-time-ago";
 import { Await } from "react-router-dom";
 
 export class Chapter_ extends React.Component{

@@ -3,7 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { FaUsers } from "react-icons/fa";
 import {
     useQuery
-} from "react-query";
+} from "@tanstack/react-query";
 import { Group } from "@mangadex/api/structures/Group";
 import TryCatch from "@commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ export default function Group_Simple_Element(props: {
 }) {
     const client = useHTTPClient();
     try {
-        const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
+        const leader_queryKey = ["mdx", "user", props.src.getLeaderID()];
         const leader_query = useQuery(leader_queryKey, () => {
             return props.src.getLeader(client);
         }, {

@@ -51,5 +51,5 @@ export default function MangaContextMenu(props: {
                 props.children
             }
         </ReactContextMenu>
-    )
+    );
 }

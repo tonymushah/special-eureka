@@ -1,6 +1,6 @@
-import React from "react"
-import ReactHotkeys from "react-hot-keys"
-import Download_Manga_Modal from "./Dowload_Manga_Modal"
+import React from "react";
+import ReactHotkeys from "react-hot-keys";
+import Download_Manga_Modal from "./Dowload_Manga_Modal";
 
 export default function Download_Manga_withHotkeys(props: React.PropsWithChildren<{
     mangaID: string
@@ -20,5 +20,5 @@ export default function Download_Manga_withHotkeys(props: React.PropsWithChildre
                 </ReactHotkeys>
             )}
         </Download_Manga_Modal>
-    )
+    );
 }

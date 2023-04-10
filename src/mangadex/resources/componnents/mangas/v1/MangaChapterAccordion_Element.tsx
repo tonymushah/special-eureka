@@ -1,7 +1,7 @@
 import MangaChapter_Accordion from "@mangadex/api/internal/utils/MangaChapter_Accordion";
 import { useToast } from "@chakra-ui/react";
 import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Manga } from "@mangadex/api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFallback2 from "./MangaElement2Fallback";

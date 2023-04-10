@@ -1,15 +1,15 @@
 import { Client } from "@tauri-apps/api/http";
-import { QueryKey, useQuery } from "react-query";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Offset_limits } from "../../api/internal/Utils";
-import { Author } from "../../api/structures/Author";
-import { Collection } from "../../api/structures/Collection";
-import { Manga } from "../../api/structures/Manga";
+import { QueryKey, useQuery } from "@tanstack/react-query";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
+import { Author } from "@mangadex/api/structures/Author";
+import { Collection } from "@mangadex/api/structures/Collection";
+import { Manga } from "@mangadex/api/structures/Manga";
 
 export function get_author_queryKey_byID(props: {
     author_id: string
 }) : QueryKey{
-    return "mdx-author:" + props.author_id;
+    return ["mdx", "author", props.author_id];
 }
 
 export function get_author_byID(props : { 
@@ -47,7 +47,7 @@ export function get_author_works_promise(props: {
 export function get_author_works_query_key_byAuthor_ID(props: {
     author_id: string
 }){
-    return "mdx-author:" + props.author_id + "-works";
+    return ["mdx", "author", props.author_id, "works"];
 }
 
 export function get_author_works_byAuthor_ID(props: {

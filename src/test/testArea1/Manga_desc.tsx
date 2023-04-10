@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Api_Request, Api_RequestERROR } from "../../mangadex/api/internal/Api_Request"
+import { Api_Request, Api_RequestERROR } from "../../mangadex/api/internal/Api_Request";
 import AccordionBody from "react-bootstrap/esm/AccordionBody";
 import { Body } from "@tauri-apps/api/http";
 import { Manga } from "../../mangadex/api/structures/Manga";

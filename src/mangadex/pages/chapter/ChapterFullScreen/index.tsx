@@ -14,7 +14,7 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
         <ReactHotkeys
             keyName="ctrl+f"
             onKeyDown={() => {
-                FullscreenHandle.enter()
+                FullscreenHandle.enter();
             }}
         >
             <Fullscreen.FullScreen
@@ -24,7 +24,7 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
                     height={"100vh"}
                     overflow={"scroll"}
                     onDoubleClick={() => {
-                        FullscreenHandle.enter()
+                        FullscreenHandle.enter();
                     }}
                 >
                     <FullScreenOptionsProvider>
@@ -40,5 +40,5 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
                 </Chakra.Box>
             </Fullscreen.FullScreen>
         </ReactHotkeys>
-    )
+    );
 }

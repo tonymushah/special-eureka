@@ -6,8 +6,8 @@ import UserPage from "@mangadex/pages/user";
 import { getClient } from "@tauri-apps/api/http";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "swiper/css/bundle";
 import monka from "./test-data/user/63849d8f-2eb3-457f-bb90-0e1f7d43588b.json";
 

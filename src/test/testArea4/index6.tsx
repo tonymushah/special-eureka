@@ -1,13 +1,13 @@
-import React, { Suspense, useCallback } from "react"
-import ReactDOM from 'react-dom/client';
-import { appDir, BaseDirectory } from '@tauri-apps/api/path';
+import React, { Suspense, useCallback } from "react";
+import ReactDOM from "react-dom/client";
+import { appDir, BaseDirectory } from "@tauri-apps/api/path";
 import { Await } from "react-router-dom";
 import { readTextFile } from "@tauri-apps/api/fs";
 import { Client, getClient } from "@tauri-apps/api/http";
 import { Languages, Lang, Lang_and_Data } from "../../mangadex/api/internal/Utils";
 
 //const client: Client = await getClient();
-const root = ReactDOM.createRoot(document.getElementById("root")!)
+const root = ReactDOM.createRoot(document.getElementById("root")!);
 const tests = [
 					{
 						"pt-br": "Confissões E Namoradas"
@@ -43,8 +43,8 @@ const tests = [
 						"th": "จะคนไหนก็แฟนสาว"
 					}
                 ];
-let Alt_titles: Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(tests);
-let en = Lang_and_Data.find_data_by_lang2l("en", Alt_titles)!;
+const Alt_titles: Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(tests);
+const en = Lang_and_Data.find_data_by_lang2l("en", Alt_titles)!;
 root.render(
     <>
         <ul>

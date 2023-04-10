@@ -1,11 +1,11 @@
-import * as Chakra from '@chakra-ui/react';
+import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 
 export default function CollapseHeight(props: React.PropsWithChildren) {
-    const [show, setShow] = React.useState(false)
+    const [show, setShow] = React.useState(false);
 
-    const handleToggle = () => setShow(!show)
+    const handleToggle = () => setShow(!show);
 
     return (
         <>
@@ -37,8 +37,8 @@ export default function CollapseHeight(props: React.PropsWithChildren) {
                 base: "inherit",
                 md: "none"
             }} size='sm' onClick={handleToggle} mt='1rem'>
-                Show {show ? 'Less' : 'More'}
+                Show {show ? "Less" : "More"}
             </Chakra.Button>
         </>
-    )
+    );
 }
