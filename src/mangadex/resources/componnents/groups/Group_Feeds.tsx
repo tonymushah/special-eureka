@@ -9,7 +9,7 @@ import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaEleme
 
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
 
@@ -23,7 +23,7 @@ export default function Group_Feeds(props: {
     const queryClient = useQueryClient();
     return (
         <CollectionComponnent_WithQuery<Chapter>
-            queryKey={"mdx-group_feeds-" + props.id}
+            queryKey={["mdx", "group_feeds", props.id]}
             fn={async () => {
                 const offset_Limits = new Offset_limits();
                 offset_Limits.set_limits(25);

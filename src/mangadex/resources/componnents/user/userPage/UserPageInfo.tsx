@@ -5,7 +5,7 @@ import { ExtLink } from "@commons-res/components/ExtLink";
 import { User } from "@mangadex/api/structures/User";
 import UserGroups from "@mangadex/resources/componnents/user/userPage/UserGroups";
 import UserUploadsNumber from "@mangadex/resources/componnents/user/userPage/UserUploadsNumber";
-import { hashQueryKey } from "react-query";
+import { hashQueryKey } from "@tanstack/react-query";
 
 export default function UserPageInfo(props: {
     user: User

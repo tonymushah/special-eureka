@@ -6,7 +6,7 @@ import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/intern
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 

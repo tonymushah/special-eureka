@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Container, Nav } from "react-bootstrap";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";

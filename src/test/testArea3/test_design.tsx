@@ -12,8 +12,8 @@ import {
 
     QueryClientProvider,
     useQuery
-} from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/free-mode";

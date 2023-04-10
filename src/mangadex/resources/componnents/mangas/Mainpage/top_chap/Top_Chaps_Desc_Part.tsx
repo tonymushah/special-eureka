@@ -1,14 +1,14 @@
 import React from "react";
 import { Accordion, Placeholder } from "react-bootstrap";
-import { useQuery } from "react-query";
-import { Lang_and_Data } from "../../../../../api/internal/Utils";
-import { Manga } from "../../../../../api/structures/Manga";
+import { useQuery } from "@tanstack/react-query";
+import { Lang_and_Data } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
 import { LAD_Tabs } from "../tabs/Lang_data_tabs";
 
 export default function Top_Chaps_Desc_Part(props: {
     src: Manga
 }) {
-    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
+    const manga_description_querykey = ["mdx", "manga", props.src.get_id(), "description"];
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     });

@@ -1,7 +1,7 @@
 import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
 import { Cover } from "@mangadex/api/structures/Cover";
 import React from "react";
-import { useQueryClient, useQuery, useMutation, UseQueryOptions, useQueries } from "react-query";
+import { useQueryClient, useQuery, useMutation, UseQueryOptions, useQueries, QueryKey } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Alt_title, Lang_and_Data } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
@@ -17,7 +17,7 @@ export function useMangaDownload(props: {
         duration: 9000
     });
     const queryClient = useQueryClient();
-    const key = "mdx-manga:" + props.mangaID;
+    const key = ["mdx", "manga", props.mangaID];
     const download_ = useMutation({
         mutationFn: () => {
             toast({
@@ -74,7 +74,7 @@ export function useMangaDelete(props: {
         }
     }
     const queryClient = useQueryClient();
-    const key = "mdx-manga:" + props.mangaID;
+    const key = ["mdx", "manga", props.mangaID];
     const delete_ = useMutation({
         mutationFn: () => {
             addToast({
@@ -120,8 +120,8 @@ export function useMangaDownload_Delete(props: {
 
 export function get_mangaQueryKey_byID(props : {
     mangaID : string
-}){
-    return "mdx-manga:" + props.mangaID;
+}) : QueryKey{
+    return ["mdx", "manga", props.mangaID];
 }
 
 export function get_manga_byId(props: {
@@ -148,11 +148,11 @@ export function get_manga_byId(props: {
 
 export function get_manga_page_cover(props: MangaPageProps) {
     const client = useHTTPClient();
-    let cover_key_ = "";
+    let cover_key_ = [""];
     try{
-        cover_key_ = "mdx-cover-" + props.src.get_cover_art_id();
+        cover_key_ = ["mdx", "cover", props.src.get_cover_art_id()];
     }catch{
-        cover_key_ = "mdx-manga:" + props.src.get_id() + "-cover";
+        cover_key_ = ["mdx", "manga", props.src.get_id(), "cover"];
     }
     const cover_key = cover_key_;
     const coverQuery = useQuery(cover_key, () => {
@@ -167,7 +167,7 @@ export function get_manga_page_cover(props: MangaPageProps) {
 }
 
 export function get_manga_page_titles(props: MangaPageProps) {
-    const title_query_key = "mdx-manga:" + props.src.get_id() + "-title";
+    const title_query_key = ["mdx", "manga" , props.src.get_id() , "title"];
     const title_query = useQuery<Array<Lang_and_Data>, Error>(title_query_key, () => {
         return Lang_and_Data.initializeArrayByAltTitle_obj(props.src.get_alt_title());
     }, {
@@ -181,32 +181,34 @@ export function get_manga_page_titles(props: MangaPageProps) {
 
 export function get_manga_page_authors(props: MangaPageProps) {
     const client = useHTTPClient();
-    const authors = useQueries(
-        props.src.get_authors_id().map(author_id => {
-            return {
-                queryKey: "mdx-author:" + author_id,
-                queryFn: () => {
-                    return props.src.get_author_byID(author_id, client);
-                },
-                staleTime: Infinity
-            };
-        })
+    const authors = useQueries({
+        queries : props.src.get_authors_id().map(author_id => {
+                return {
+                    queryKey: ["mdx", "author", author_id],
+                    queryFn: () => {
+                        return props.src.get_author_byID(author_id, client);
+                    },
+                    staleTime: Infinity
+                };
+            })
+        }
     );
     return authors;
 }
 
 export function get_manga_page_artists(props: MangaPageProps) {
     const client = useHTTPClient();
-    const artistists = useQueries(
-        props.src.get_artists_id().map(author_id => {
+    const artistists = useQueries({
+        queries : props.src.get_artists_id().map(author_id => {
             return {
-                queryKey: "mdx-author:" + author_id,
+                queryKey: ["mdx", "author" , author_id],
                 queryFn: () => {
                     return props.src.get_artist_byID(author_id, client);
                 },
                 staleTime: Infinity
             };
         })
+        }
     );
     return artistists;
 }
@@ -255,7 +257,7 @@ export function get_cover_art(props: {
 export function get_manga_description(props: {
     src: Manga
 }) {
-    const manga_description_querykey = "mdx-manga:" + props.src.get_id() + "-description";
+    const manga_description_querykey = ["mdx", "manga", props.src.get_id(), "description"];
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     });
@@ -271,32 +273,32 @@ export function get_manga_page_cover_art_image(props: {
     scale? : 256 | 512
 }) {
     const client = useHTTPClient();
-    const query_key = "mdx-manga:" + props.src.get_id() + "-cover-art-image";
+    const query_key = ["mdx", "manga", props.src.get_id(), "cover-art", "image"];
     const queryClient = useQueryClient();
     const query = useQuery<string>(query_key, async () => {
         let data : Cover | undefined = undefined;
         try {
             const cover_id = props.src.get_cover_art_id();
-            const cover_query_key = `mdx-cover-${cover_id}`;
+            const cover_query_key = ["mdx", "cover", cover_id];
             const queryData = queryClient.getQueryData<Cover>(cover_query_key);
             if(queryData == undefined){
                 data = (await props.src.get_cover_art(client));
-                data = queryClient.setQueryData(`mdx-cover-${data.get_id()}`, data);
+                data = queryClient.setQueryData(cover_query_key, data);
             }else{
                 data = queryData;
             }
         } catch (error) {
             data = (await props.src.get_cover_art(client));
-            data = queryClient.setQueryData(`mdx-cover-${data.get_id()}`, data);
+            data = queryClient.setQueryData(["mdx", "cover", data.get_id()], data);
         }
         if(props.isThumbail == true) {
             if(props.scale == 512) {
-                return await data.get_CoverImage_thumbnail_promise(512, client);
+                return await data!.get_CoverImage_thumbnail_promise(512, client);
             }else{
-                return await data.get_CoverImage_thumbnail_promise(256, client);
+                return await data!.get_CoverImage_thumbnail_promise(256, client);
             }
         }else{
-            return await data.get_CoverImage_promise(client);
+            return await data!.get_CoverImage_promise(client);
         }
     });
     return {

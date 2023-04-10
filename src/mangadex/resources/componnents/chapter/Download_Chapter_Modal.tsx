@@ -15,7 +15,7 @@ import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProv
 import { useChapterDownloadMutation } from "../../hooks/ChapterStateHooks";
 import IsPingable from "../IsPingable";
 import IsPingable_defaultError from "../IsPingable_defaultError";
-import { UseMutationResult } from "react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 export default function Download_Chapter_Modal(props: {
     chap_id: string,
     children: (data : {onOpen: () => void, dowload_query : UseMutationResult<string[], Error, void>}) => React.ReactNode

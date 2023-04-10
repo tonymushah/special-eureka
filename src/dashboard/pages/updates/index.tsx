@@ -2,9 +2,9 @@ import { Box, Button, Center, Heading, Link, Skeleton, Text } from "@chakra-ui/r
 import React from "react";
 import { Container } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
-import { ExtLink } from "../../../commons-res/components/ExtLink";
-import Tauri_Updater from "../../resources/components/Tauri_updater_button";
-import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "../../resources/hooks/UpdaterQuery";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
+import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "@dashboard/resources/hooks/UpdaterQuery";
 import { appWindow } from "@tauri-apps/api/window";
 
 export default function InstallUpdate() {
@@ -35,7 +35,6 @@ export default function InstallUpdate() {
                         <Text textAlign={"center"}>Version : {shouldUpdate.query.data.manifest?.version}</Text>
                         <Text textAlign={"center"}>Date : {shouldUpdate.query.data.manifest?.date}</Text>
                         <ReactMarkdown
-                            children={shouldUpdate.query.data.manifest ? shouldUpdate.query.data.manifest.body : ""}
                             components={{
                                 a(node) {
                                     return (
@@ -55,7 +54,9 @@ export default function InstallUpdate() {
                                     );
                                 }
                             }}
-                        />
+                        >
+                            {shouldUpdate.query.data.manifest ? shouldUpdate.query.data.manifest.body : ""}
+                        </ReactMarkdown>
                         <Center>
                             <Center>
                                 <Button colorScheme={"red"}

@@ -5,7 +5,7 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { HotkeysProvider } from "react-hotkeys-hook";
 import { FaUsers } from "react-icons/fa";
-import { useQuery, UseQueryOptions } from "react-query";
+import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Await, Link, Outlet } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";

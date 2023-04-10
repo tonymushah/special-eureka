@@ -1,7 +1,7 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { UseMutationResult } from "react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import { get_ChapterbyId, useChapterDownloadMutation, ChapterDeleteMutation_data, useChapterDeleteMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
 import React from "react";
 export default function ChapterDownloadButton(props: {

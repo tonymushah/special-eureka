@@ -1,9 +1,9 @@
 import { Lang } from "@mangadex/api/internal/Utils";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
 
 export default function useLanguageUserOption(){
-    const queryKey = "mdx-user-option:selectedLanguages";
+    const queryKey = ["mdx", "user-option", "selectedLanguages"];
     const userCachedOption = useUserOption();
     const query = useQuery<Array<Lang>, Error>(queryKey, async () => {
         return await userCachedOption.getLanguages();

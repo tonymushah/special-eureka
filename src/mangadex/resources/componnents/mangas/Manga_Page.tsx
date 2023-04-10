@@ -6,7 +6,7 @@ import React from "react";
 import { Button, Col, Container, Placeholder, Row } from "react-bootstrap";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -42,7 +42,7 @@ const ExtLink = React.lazy(async () => {
 
 function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     const client = useHTTPClient();
-    const manga_statistics = useQuery<Statistics_Manga, Error>("mdx-manga:" + props.src.get_id() + "-statistics", () => {
+    const manga_statistics = useQuery<Statistics_Manga, Error>(["mdx", "manga", props.src.get_id(), "statistics"], () => {
         return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {
         staleTime: Infinity

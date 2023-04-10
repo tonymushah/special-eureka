@@ -1,5 +1,5 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export type ChapterPages = {
     current : number, 

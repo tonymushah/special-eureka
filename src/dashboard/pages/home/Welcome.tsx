@@ -4,7 +4,7 @@ import { getVersion } from "@tauri-apps/api/app";
 import Tauri_Updater from "../../resources/components/Tauri_updater_button";
 import { Container } from "react-bootstrap";
 import { FaGithub } from "react-icons/fa";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ExtLink } from "../../../commons-res/components/ExtLink";
 
 export default function Welcome() {

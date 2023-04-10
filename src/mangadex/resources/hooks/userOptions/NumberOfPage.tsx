@@ -1,7 +1,7 @@
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function useElementPerPage(){
-    const queryKey = "mdx-user-option:element-per-page";
+    const queryKey = ["mdx", "user-option", "element-per-page"];
     const queryClient = useQueryClient();
     const query = useQuery<number>(queryKey, async () => {
         return 10;

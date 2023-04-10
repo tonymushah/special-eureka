@@ -5,7 +5,7 @@ import React from "react";
 import { Mangadex_suspense } from "@mangadex";
 import ServerAutoStartLoader from "@mangadex/resources/componnents/loaders/ServerAutoStart";
 import UserOptionProvider from "../resources/componnents/userOption/UserOptionProvider";
-import { QueryClient } from "react-query";
+import { QueryClient } from "@tanstack/react-query";
 
 const Content = React.lazy(() => import("@mangadex/resources/componnents/SideBar"));
 

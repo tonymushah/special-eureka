@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import DesktopApi from "@mangadex/api/offline/DeskApiRequest";
 import { launch_server, stop_server } from "@mangadex/api/offline/plugin";
@@ -7,7 +7,7 @@ import { launch_server, stop_server } from "@mangadex/api/offline/plugin";
 export default function MangaManagerState(){
     const queryClient = useQueryClient();
     const client = useHTTPClient();
-    const key= "mdx-offline_server";
+    const key= ["mdx", "offline_server"];
     const toast = useToast({
         position: "bottom-right",
         duration: 9000
@@ -19,6 +19,7 @@ export default function MangaManagerState(){
         "staleTime" : 0
     });
     const switch_server_state = useMutation({
+        mutationKey : key.concat("mutation"),
         "mutationFn" : () => {
             return query.data == false ? launch_server() : stop_server();
         },

@@ -4,7 +4,7 @@ import { Client } from "@tauri-apps/api/http";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Row } from "react-bootstrap";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { loader as latest, queryKey as latest_QueryKey } from "./Latest_Update";
 import { loader as popular, queryKey as popular_QueryKey } from "./PopularTitles";

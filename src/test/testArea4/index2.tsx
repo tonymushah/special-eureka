@@ -7,8 +7,8 @@ import { launch_server } from "../../mangadex/api/offline/plugin";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import { Manga_with_allRelationship } from "../../mangadex/api/structures/Manga";
 import { Button, ChakraProvider, ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider, useQuery } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { checkUpdate, UpdateResult } from "@tauri-apps/api/updater";
 
 const root = ReactDOM.createRoot(document.getElementById("root")!);

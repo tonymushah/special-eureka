@@ -4,7 +4,7 @@ import {
     Text, VStack
 } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { WebSite } from "../../../websites";
+import { WebSite } from "@/websites";
 export default function Website_Componnent(props: {
     to_use: WebSite
 }){

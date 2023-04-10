@@ -3,7 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -26,7 +26,7 @@ function MangaElementDef2_Stats(props: {
     src: Manga
 }) {
     const client = useHTTPClient();
-    const manga_statistic_queryKey = "mdx-manga:" + props.src.get_id() + "-statistics";
+    const manga_statistic_queryKey = ["mdx", "manga", props.src.get_id(), "statistics"];
     const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
         return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {
@@ -110,7 +110,7 @@ export default function MangaElementDef2(props: {
     refetch?: () => void
 }) {
 
-    const client = useHTTPClient();
+    const client = useHTTPClient();"mdx-manga:" + props.src.get_id() + "-statistics"
     const {
         manga_description_query
     } = get_manga_description({

@@ -1,7 +1,7 @@
-import { Box, Center, Heading, Kbd, Text, Wrap, WrapItem } from "@chakra-ui/react";
-import Website_Componnent from "../../resources/components/Website_Componnents";
+import websites from "@/websites";
+import { Box, Heading, Kbd, Text, Wrap, WrapItem } from "@chakra-ui/react";
+import Website_Componnent from "@dashboard/resources/components/Website_Componnents";
 import { Container, Row } from "react-bootstrap";
-import websites from "../../../websites";
 
 export default function CurrentlySupportedWebsites() {
     return (

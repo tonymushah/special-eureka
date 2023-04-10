@@ -4,7 +4,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Keyboard, Navigation } from "swiper";
 import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";

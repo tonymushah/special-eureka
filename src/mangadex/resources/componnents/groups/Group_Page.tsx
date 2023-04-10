@@ -3,7 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import { Container, Stack } from "react-bootstrap";
 import {
     useQuery
-} from "react-query";
+} from "@tanstack/react-query";
 import { Group } from "@mangadex/api/structures/Group";
 import WaveHaikei from "./wave-haikei-1.svg";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -38,7 +38,7 @@ function Leader_query_for_GroupPage(props: {
     src: Group,
     client: Client
 }) {
-    const leader_queryKey = "mdx-user:" + props.src.getLeaderID();
+    const leader_queryKey = ["mdx", "user", props.src.getLeaderID()];
     const leader_query = useQuery(leader_queryKey, () => {
         return props.src.getLeader(props.client);
     }, {

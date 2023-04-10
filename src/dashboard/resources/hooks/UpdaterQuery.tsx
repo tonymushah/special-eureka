@@ -1,5 +1,5 @@
 import { checkUpdate, installUpdate, UpdateResult } from "@tauri-apps/api/updater";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useDashboardToast } from "./DashBoardToasts";
 
 
@@ -8,7 +8,7 @@ export function TauriCheckUpdateQuery(props : {
 }){
     const { addToast } = useDashboardToast();
 
-    const queryKey = "special-eureka-updater";
+    const queryKey = ["special-eureka", "updater"];
     const updater_query = useQuery<UpdateResult, string>(queryKey, () => {
         return new Promise<UpdateResult>((resolve) => {
             checkUpdate().then((value) => {
@@ -65,7 +65,7 @@ export function useTauriInstallUpdate(props: {
     notify?: boolean
 }){
     const { addToast , updateToast } = useDashboardToast();
-    const queryKey = "special-eureka-install-update";
+    const queryKey = ["special-eureka", "update", "install"];
     const query = useQuery(queryKey, async () => {
         addToast({
             "title" : "Installing the update",

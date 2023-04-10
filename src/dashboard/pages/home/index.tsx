@@ -1,16 +1,16 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import haikei_red from "../../resources/haikei/layered-waves-haikei-red.svg";
-import haikei_blue from "../../resources/haikei/layered-waves-haikei-blue.svg";
-import haikei_violet from "../../resources/haikei/layered-waves-haikei-violet.svg";
-import haikei_yellow from "../../resources/haikei/layered-waves-haikei-yellow.svg";
-import Welcome from "./Welcome";
+import { VStack } from "@chakra-ui/react";
+import haikei_blue from "@dashboard/resources/haikei/layered-waves-haikei-blue.svg";
+import haikei_red from "@dashboard/resources/haikei/layered-waves-haikei-red.svg";
+import haikei_violet from "@dashboard/resources/haikei/layered-waves-haikei-violet.svg";
+import haikei_yellow from "@dashboard/resources/haikei/layered-waves-haikei-yellow.svg";
+import { appWindow } from "@tauri-apps/api/window";
+import React from "react";
+import Contacts from "./Contacts";
 import CurrentlySupportedWebsites from "./CurrentlySupportedWebsite";
 import DevNotes from "./DevNotes";
-import Contacts from "./Contacts";
 import PoweredBy from "./PoweredBy";
-import { Stack, VStack } from "@chakra-ui/react";
-import { appWindow } from "@tauri-apps/api/window";
+import Welcome from "./Welcome";
 
 export default function Home() {
     appWindow.setTitle("Welcome to Special-Eureka | Dashboard").then();

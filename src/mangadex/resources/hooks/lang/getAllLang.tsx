@@ -1,8 +1,8 @@
 import { Lang, Languages } from "@mangadex/api/internal/Utils";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export function getLanguages(){
-    const queryKey = "mdx-languages";
+    const queryKey = ["mdx", "languages"];
     const query = useQuery<Languages>(queryKey, async () =>{
         return await Languages.initialize();
     }, {
@@ -16,7 +16,7 @@ export function getLanguages(){
 
 export function getAllLang(){
     const required_query = getLanguages().query;
-    const queryKey = "mdx-all-langs";
+    const queryKey = ["mdx", "all-langs"];
     const query = useQuery<Array<Lang>>(queryKey, async () => {
         if(required_query.isSuccess){
             return required_query.data?.get_langs();

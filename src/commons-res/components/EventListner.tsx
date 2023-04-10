@@ -1,6 +1,6 @@
 import { EventCallback, listen } from "@tauri-apps/api/event";
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export default function EventListener_<T = unknown>(props: React.PropsWithChildren<{
     event_id: string,

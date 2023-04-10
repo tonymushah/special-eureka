@@ -1,6 +1,6 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { SwiperRef } from "swiper/react";
 
 export function getUseSwipperModeRef_QueryKey(props : {

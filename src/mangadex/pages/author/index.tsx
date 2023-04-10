@@ -1,6 +1,6 @@
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Mangadex_suspense, Mangadex_suspense__ } from "../..";
 import { get_author_byID, get_author_queryKey_byID } from "../../resources/hooks/AuthorState";

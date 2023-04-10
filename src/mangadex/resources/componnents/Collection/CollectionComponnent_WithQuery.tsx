@@ -1,8 +1,8 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import { Box, Button, ButtonGroup, Center, Spinner, Text, ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
 import React from "react";
-import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "react-query";
-import { Collection } from "../../../api/structures/Collection";
+import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { Collection } from "@mangadex/api/structures/Collection";
 import ErrorEL1 from "../error/ErrorEL1";
 import UseCollection from "./UseCollection";
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import * as Chakra from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Group } from "../../api/structures/Group";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 import { appWindow } from "@tauri-apps/api/window";

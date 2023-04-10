@@ -3,7 +3,7 @@ import {
     ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure
 } from "@chakra-ui/react";
 import React from "react";
-import { UseMutationResult } from "react-query";
+import { UseMutationResult } from "@tanstack/react-query";
 import Consumer from "../../../../../commons-res/components/Consumer";
 import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
 import { Manga } from "../../../../api/structures/Manga";

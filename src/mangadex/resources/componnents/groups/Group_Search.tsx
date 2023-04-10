@@ -44,7 +44,7 @@ export default function Group_Search(props : {
                                 client : client
                             });
                         }}
-                        queryKey={"mdx-group-search-"+random}
+                        queryKey={["mdx", "group", "search", random]}
                     >
                         {
                             (value : Collection<Attribute>) => (

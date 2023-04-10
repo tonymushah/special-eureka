@@ -23,7 +23,8 @@ module.exports = {
 	},
 	"plugins": [
 		"react",
-		"@typescript-eslint"
+		"@typescript-eslint",
+        "@tanstack/query"
 	],
 	"rules": {
 		"indent": [

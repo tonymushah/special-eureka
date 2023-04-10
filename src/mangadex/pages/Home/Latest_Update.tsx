@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
