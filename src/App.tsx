@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import TryCatch from "./commons-res/components/TryCatch";
+import TryCatch from "@commons-res/components/TryCatch";
 
 const Close_splashscreen = React.lazy(() => import("./splashscreen/Close_splashscreen"));
 //const Navigator = React.lazy(() => import("./commons-res/components/Navigator_Default"));

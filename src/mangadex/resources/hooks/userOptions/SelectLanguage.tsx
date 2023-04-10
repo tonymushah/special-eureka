@@ -12,6 +12,7 @@ export default function useLanguageUserOption(){
         refetchOnMount : false
     });
     const changeOptionMutation = useMutation({
+        mutationKey: queryKey.concat("mutation"),
         mutationFn : async (new_ : Array<Lang>) => {
             await userCachedOption.setLanguages(new_);
         },

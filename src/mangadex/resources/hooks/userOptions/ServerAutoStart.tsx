@@ -8,6 +8,7 @@ export default function useServerAutoStart(query_options? : Omit<UseQueryOptions
         return userCachedOption.getServerAutoStart();
     }, query_options);
     const changeOptionMutation = useMutation({
+        mutationKey : queryKey.concat("mutation"),
         mutationFn : async (new_ : boolean) => {
             await userCachedOption.setServerAutoStart(new_);
         },
