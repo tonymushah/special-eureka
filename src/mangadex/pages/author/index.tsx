@@ -15,8 +15,10 @@ export default function Author_Page_index(){
     });
     const queryClient = useQueryClient();
     React.useMemo(() => {
-        queryClient.removeQueries(query_key);
-    },[queryClient, query_key]);
+        queryClient.removeQueries(query_key, {
+            "exact" : true
+        });
+    },[]);
     const { query } = get_author_byID({
         author_id : id!
     });

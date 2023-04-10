@@ -16,14 +16,14 @@ import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "@mangadex/resources/hooks/MangaStateHooks";
-import Mangadex_cover_not_found from "../../imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "../../imgs/cover-placeholder.png";
-import ErrorEL1 from "../error/ErrorEL1";
-import { Cover_Image_ } from "./Mainpage/Image_";
-import Statis from "./Statistics/Statis";
-import MangaTitle from "./v1/MangaTitle";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import { Cover_Image_ } from "@mangadex/resources/componnents/mangas/Mainpage/Image_";
+import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
+import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 
-const IsPingable = React.lazy(() => import("../IsPingable"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
 //const Statis = React.lazy(() => import());
 
@@ -250,13 +250,13 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             coverQuery.isError ? Mangadex_cover_not_found : coverQuery.data!
                                         )} fallbackElement={Mangadex_placeHolder} />
                                 </Col>
-                                <Col xs="9" className="overflow-hidden">
+                                <Col xs="9">
                                     <Chakra.Box>
                                         <Chakra.Center
                                             display={"block"}
                                         >
                                             <Chakra.Heading
-                                                noOfLines={1}
+                                                noOfLines={0}
                                                 fontFamily={"inherit"}
                                                 size={{
                                                     base: "md",

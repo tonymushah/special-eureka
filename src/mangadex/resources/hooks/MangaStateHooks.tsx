@@ -19,6 +19,7 @@ export function useMangaDownload(props: {
     const queryClient = useQueryClient();
     const key = ["mdx", "manga", props.mangaID];
     const download_ = useMutation({
+        mutationKey: key.concat("mutation", "download"),
         mutationFn: () => {
             toast({
                 title: "Downloading manga...",
@@ -76,6 +77,7 @@ export function useMangaDelete(props: {
     const queryClient = useQueryClient();
     const key = ["mdx", "manga", props.mangaID];
     const delete_ = useMutation({
+        mutationKey: key.concat("mutation", "delete"),
         mutationFn: () => {
             addToast({
                 title: "Deleting manga...",
@@ -91,7 +93,8 @@ export function useMangaDelete(props: {
                 isClosable: true
             });
             queryClient.removeQueries({
-                queryKey: key
+                queryKey: key,
+                exact : true
             });
         },
         onError(error: any) {

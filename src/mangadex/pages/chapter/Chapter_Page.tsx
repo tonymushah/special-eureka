@@ -15,8 +15,10 @@ export default function Chapter_Page() {
     });
     const queryClient = useQueryClient();
     React.useMemo(() => {
-        queryClient.removeQueries(queryKey);
-    }, [queryClient, id]);
+        queryClient.removeQueries(queryKey, {
+            exact : true
+        });
+    }, []);
     const { query } = get_ChapterbyId({
         id: id!
     });

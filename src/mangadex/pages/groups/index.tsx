@@ -36,7 +36,9 @@ export default function Group_Page_(){
         const queryClient = useQueryClient();
         const query_key = ["mdx", "group", id];
         useMemo(() => {
-            queryClient.removeQueries(query_key);
+            queryClient.removeQueries(query_key, {
+                exact : true
+            });
         },[]);
         const query = useQuery<Group, Error>(query_key, () => {
             return Group.get_groupById(id, client);

@@ -24,13 +24,75 @@ export default function MangaPage() {
     const { id } = useParams();
     const query_key = ["mdx", "manga", id];
     React.useMemo<void>(() => {
-        queryClient.removeQueries(query_key);
-    }, [queryClient, query_key]);
+        queryClient.removeQueries(query_key, {
+            "exact": true
+        });
+    }, []);
     const query = useQuery<Manga, Error>(query_key, () => {
         return Manga.getMangaByID(id!, client);
     }, {
-        "staleTime": Infinity
+        "staleTime": Infinity,
     });
+    if (query.isSuccess) {
+        return (
+
+            <React.Fragment>
+                <Download_Manga_withHotkeys
+                    mangaID={id!}
+                />
+                <Manga_Page
+                    src={query.data}
+                >
+                    <Chakra.Box>
+                        <Container>
+                            <Nav
+                                variant="tabs"
+                                as={Chakra.Box}
+                            >
+                                <Nav.Item>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="."
+                                        eventKey="chapters"
+                                    >
+                                        Chapters
+                                    </Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link
+                                        as={Link}
+                                        to="covers"
+                                        eventKey="covers"
+                                    >
+                                        Covers
+                                    </Nav.Link>
+                                </Nav.Item>
+                                {
+                                    query.data!.get_some_relationshipLength("manga") == 0 ? (<></>) : (
+                                        <Nav.Item>
+                                            <Nav.Link
+                                                as={Link}
+                                                to="related"
+                                                eventKey="related"
+                                            >
+                                                Related
+                                            </Nav.Link>
+                                        </Nav.Item>
+                                    )
+                                }
+                            </Nav>
+                        </Container>
+                    </Chakra.Box>
+                    <Chakra.Box>
+                        <Container>
+                            <Outlet context={{ toUse: query.data! }} />
+                        </Container>
+                    </Chakra.Box>
+                </Manga_Page>
+            </React.Fragment>
+
+        );
+    }
     if (query.isLoading) {
         appWindow.setTitle("Loading... | Mangadex");
         return (
@@ -43,62 +105,6 @@ export default function MangaPage() {
         appWindow.setTitle(`Error on loading title ${id!} | Mangadex`);
         throw query.error;
     }
-    return (
-        
-        <React.Fragment>
-            <Download_Manga_withHotkeys
-                mangaID={id!}
-            />
-            <Manga_Page
-                src={query.data!}
-            >
-                <Chakra.Box>
-                    <Container>
-                        <Nav
-                            variant="tabs"
-                            as={Chakra.Box}
-                        >
-                            <Nav.Item>
-                                <Nav.Link
-                                    as={Link}
-                                    to="."
-                                    eventKey="chapters"
-                                >
-                                    Chapters
-                                </Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                                <Nav.Link
-                                    as={Link}
-                                    to="covers"
-                                    eventKey="covers"
-                                >
-                                    Covers
-                                </Nav.Link>
-                            </Nav.Item>
-                            {
-                                query.data!.get_some_relationshipLength("manga") == 0 ? (<></>) : (
-                                    <Nav.Item>
-                                        <Nav.Link
-                                            as={Link}
-                                            to="related"
-                                            eventKey="related"
-                                        >
-                                            Related
-                                        </Nav.Link>
-                                    </Nav.Item>
-                                )
-                            }
-                        </Nav>
-                    </Container>
-                </Chakra.Box>
-                <Chakra.Box>
-                    <Container>
-                        <Outlet context={{ toUse: query.data! }} />
-                    </Container>
-                </Chakra.Box>
-            </Manga_Page>
-        </React.Fragment>
 
-    );
+    return (<></>);
 }

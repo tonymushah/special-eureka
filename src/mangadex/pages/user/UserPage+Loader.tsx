@@ -13,8 +13,10 @@ export default function UserPage_w_Loader(){
     });
     const queryClient = useQueryClient();
     React.useMemo<void>(() => {
-        queryClient.removeQueries(queryKey);
-    }, [user_id]);
+        queryClient.removeQueries(queryKey, {
+            exact : true
+        });
+    }, []);
     const { query } = getUserByIDQuery({
         user_id : user_id!
     });
