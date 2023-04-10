@@ -28,6 +28,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     const queryClient = useQueryClient();
 
     const previous = useMutation({
+        mutationKey : props.queryKey + "-previous",
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
                 addToast({
@@ -64,6 +65,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
         },
     });
     const next = useMutation({
+        mutationKey : props.queryKey + "-next",
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
                 addToast({
@@ -100,6 +102,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
         },
     });
     const first_page = useMutation({
+        mutationKey : props.queryKey + "-first_page",
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
                 addToast({
@@ -136,6 +139,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
         },
     });
     const last_page = useMutation({
+        mutationKey : props.queryKey + "-last_page",
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
                 addToast({
