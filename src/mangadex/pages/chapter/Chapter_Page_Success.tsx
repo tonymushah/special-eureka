@@ -18,7 +18,6 @@ import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
 import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
 import Download_Chapter_withHotkeys from "./Download_Chapter_withHotkeys";
-import useChapterReadingModeOption from "./ChapterReadingMode/useChapterReadingModeOption";
 
 const ReadingOptions = React.lazy(() => import("./ReadingOption"));
 
@@ -30,7 +29,7 @@ const MangaDexPath = getMangaDexPath();
 
 function getMangaByID__(props: {
     manga_id: string,
-    options?: Omit<UseQueryOptions<Manga, Error>, 'queryKey' | 'queryFn'>
+    options?: Omit<UseQueryOptions<Manga, Error>, "queryKey" | "queryFn">
 }) {
     const { query } = get_manga_byId({
         mangaID: props.manga_id,
@@ -42,7 +41,7 @@ function getMangaByID__(props: {
 export default function Chapter_Page_Success(props: {
     data: Chapter
 }) {
-    const history = new Chapter_history()
+    const history = new Chapter_history();
     const client = useHTTPClient();
     const mangaQuery = getMangaByID__({
         manga_id: props.data!.get_manga_id(),
@@ -64,11 +63,11 @@ export default function Chapter_Page_Success(props: {
             appWindow.setTitle(`${lang.get_name()} Chapter ${props.data.get_chapter()} - ${title} | Mangadex`).then();
         }).catch(() => {
             appWindow.setTitle(`Chapter ${props.data.get_chapter()} - ${title} | Mangadex`).then();
-        })
+        });
     }
     const chapter_data_images_queryKey = "mdx-chapter:" + props.data.get_id() + "-data";
     const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
-        return props.data.get_dataImages(client)
+        return props.data.get_dataImages(client);
     }, {
         staleTime: Infinity,
         enabled: !!props.data
@@ -77,8 +76,8 @@ export default function Chapter_Page_Success(props: {
         chapter: props.data
     });
     React.useEffect(() => {
-        history.addChapter(props.data!.get_id())
-    }, [props.data])
+        history.addChapter(props.data!.get_id());
+    }, [props.data]);
     return (
         <React.Fragment>
             <HotkeysProvider>
@@ -121,11 +120,11 @@ export default function Chapter_Page_Success(props: {
                             <Chakra.HStack>
                                 <FaUsers/>
                                 {
-                                    chapter_groups.map((query) => (
-                                        <React.Fragment>
+                                    chapter_groups.map((query, index) => (
+                                        <React.Fragment key={`mdx-chapter-success-${props.data.get_id()}-${index}`}>
                                             {
                                                 query.isSuccess ? (
-                                                    <Chakra.Link as={Link} to={`${MangaDexPath}/groups/${query.data.get_id()}`}>
+                                                    <Chakra.Link as={Link} to={`${MangaDexPath}/group/${query.data.get_id()}`}>
                                                         {
                                                             query.data.get_name()
                                                         }

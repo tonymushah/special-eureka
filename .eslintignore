@@ -1,1 +1,6 @@
 node_modules
+commons-res/bootstrap.bundle.js
+commons-res/bootstrap.bundle.js.map
+commons-res/flags-color-font
+commons-res/fontawesome-free-6.1.2-desktop
+commons-res/fontawesome-free-6.1.2-web

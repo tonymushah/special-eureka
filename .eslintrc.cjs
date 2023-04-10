@@ -13,8 +13,6 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"plugin:react/jsx-runtime"
 	],
-	"overrides": [
-	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
 		"ecmaVersion": "latest",
@@ -44,6 +42,6 @@ module.exports = {
 			"warn",
 			"always"
 		],
-		"react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx", ".mdx"] }]
-	},
+		"react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx", ".ts", ".tsx", ".mdx"] }],
+	}
 };

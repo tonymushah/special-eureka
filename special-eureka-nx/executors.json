@@ -5,6 +5,11 @@
       "implementation": "./src/executors/build/executor",
       "schema": "./src/executors/build/schema.json",
       "description": "build executor"
+    },
+    "check-lint": {
+      "implementation": "./src/executors/check-lint/executor",
+      "schema": "./src/executors/check-lint/schema.json",
+      "description": "check-lint executor"
     }
   }
 }

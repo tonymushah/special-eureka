@@ -2,8 +2,8 @@ name: "Dev Builds"
 on: 
   push: 
     branches:
-      - dev
-      - nx-importation
+      - dev-0.1.5
+      - dev-0.1.6
 
 jobs:
   test-tauri:
@@ -37,8 +37,7 @@ jobs:
         uses: josStorer/get-current-time@v2
         id: current-time
         with:
-          format: YYYY-MM-DD
-          utcOffset: "+08:00"
+          format: YYYYMMDD-HH
       - name: build the actual app with tauri action
         uses: tauri-apps/tauri-action@v0
         env:
