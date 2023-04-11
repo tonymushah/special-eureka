@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import * as Chakra from "@chakra-ui/react";
 import { Client, getClient } from "@tauri-apps/api/http";
+import { trackEvent } from "@aptabase/tauri";
 
 const HTTPClientProvider_Client = React.lazy(() => import("@commons-res/components/HTTPClientProvider_Query"));
 
@@ -55,7 +56,24 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                         return true;
                     }
                 },
-            }
+                onError(e){
+                    if(typeof e == "string"){
+                        trackEvent("special-eureka-query-error", {
+                            location : location.href,
+                            error : e
+                        });
+                    }else if(typeof e == "object"){
+                        if(e instanceof Error){
+                            trackEvent("special-eureka-query-error", {
+                                location : location.href,
+                                "error-message" : e.message,
+                                "error-name" : e.name
+                            });
+                        }
+                    }
+                    
+                }
+            },
         }
     });
     React.useEffect(() => {

@@ -51,7 +51,7 @@ export default function HomeAfterPing() {
     const queryKey = ["mdx", "home", "page", "loader"];
     const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {
-        (await Promise.allSettled([
+        return (await Promise.allSettled([
             latest_loader(client, queryClient),
             popular_loader(client, queryClient),
             recentlyAdded_loader(client, queryClient),

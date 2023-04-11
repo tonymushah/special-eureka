@@ -8,6 +8,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";
 import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
+import { useTrackEvent } from "@mangadex";
 
 type MangaPage_OutletContex = {
     toUse: Manga
@@ -20,6 +21,7 @@ export function useManga() {
 
 export default function MangaPage() {
     const client = useHTTPClient();
+    
     const queryClient = useQueryClient();
     const { id } = useParams();
     const query_key = ["mdx", "manga", id];
@@ -28,6 +30,9 @@ export default function MangaPage() {
             "exact": true
         });
     }, []);
+    useTrackEvent("mangadex-manga-page-entrance", {
+        "manga-id" : id!
+    });
     const query = useQuery<Manga, Error>(query_key, () => {
         return Manga.getMangaByID(id!, client);
     }, {

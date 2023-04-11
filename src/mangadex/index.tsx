@@ -7,6 +7,7 @@ import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBoun
 import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import "@mangadex/resources/Poppins/Poppins.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 
 const MangaDexPath = "/mangadex";
 
@@ -83,6 +84,23 @@ export function Mangadex_suspense__() {
             </Chakra.Center>
         </Chakra.Box>
     );
+}
+export function useTrackEvent(name : string, payload?:{
+    [key : string] : string | number
+}){
+    React.useEffect(() => {
+        trackEvent(name, payload);
+    }, []);
+}
+
+export function trackEvent(name : string, payload?: {
+    [key : string] : string | number
+}){
+    aptabaseTrackEvent(name, {
+        "website" : "mangadex",
+        "location" : window.location.href,
+        ...payload
+    });
 }
 
 export function Mangadex_suspense(props: React.PropsWithChildren) {

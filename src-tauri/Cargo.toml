@@ -37,7 +37,8 @@ path = "../src/mangadex/plugin/tauri-plugin"
 git = "https://github.com/tauri-apps/tauri-plugin-log"
 branch = "dev"
 
-
+[profile.dev]
+opt-level = 3
 
 [features]
 # by default Tauri runs in production mode
