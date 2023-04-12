@@ -1,15 +1,15 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import { getMangaDexPath } from "@mangadex";
+import "@mangadex/resources/css/sidebar.css";
+import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import React from "react";
 import { FaBookmark, FaBookOpen, FaCog, FaComments, FaHome, FaUser } from "react-icons/fa";
+import { RiGroupFill, RiSearchEyeFill } from "react-icons/ri";
 import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
-import { ExtLink } from "@commons-res/components/ExtLink";
 import SideBarUserOption from "./useroption";
-import { RiGroupLine } from "react-icons/ri";
-import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import "@mangadex/resources/css/sidebar.css";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
@@ -28,6 +28,8 @@ export default function Side_bar() {
                     color: "#f2f2f2"
                 }
             }}
+            backgroundColor="#2c2c2c"
+            defaultCollapsed
         >
             <Menu
                 rootStyles={{
@@ -202,7 +204,35 @@ export default function Side_bar() {
                         </MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<RiGroupLine onClick={() => collapseSidebar()}/>} label={"Community"}>
+                <SubMenu
+                    icon={
+                        <RiSearchEyeFill/>
+                    }
+                    label="Search"
+                >
+                    <Menu
+                        menuItemStyles={{
+                            button: {
+                                backgroundColor: "#2c2c2c",
+                                ":hover": {
+                                    backgroundColor: "#2c2c2c"
+                                }
+                            }
+                        }}
+                    >
+                        <MenuItem>Manga</MenuItem>
+                        <MenuItem>Author</MenuItem>
+                        <MenuItem 
+                            component={
+                                <Link to={MangaDexPath + "group/search"} />
+                            }
+                        >
+                            Groups
+                        </MenuItem>
+                        <MenuItem>Chapter</MenuItem>
+                    </Menu>
+                </SubMenu>
+                <SubMenu defaultOpen={false} icon={<RiGroupFill onClick={() => collapseSidebar()}/>} label={"Community"}>
                     <Menu
                         menuItemStyles={{
                             button: {
@@ -221,13 +251,6 @@ export default function Side_bar() {
                                 Forums
                             </MenuItem>
                         </ExtLink>
-                        <MenuItem
-                            component={
-                                <Link to={MangaDexPath + "group/search"} />
-                            }
-                        >
-                            Groups
-                        </MenuItem>
                     </Menu>
                 </SubMenu>
                 <SubMenu defaultOpen={false} icon={

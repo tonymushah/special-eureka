@@ -44,7 +44,7 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
     client? : () => Promise<Client>,
     queryClient? : QueryClient
 }>) {
-    const HTTPClient = props.client != undefined ? props.client() : getClient();
+    const HTTPClient = props.client ?? getClient;
     const queryClient = props.queryClient ?? new QueryClient({
         "defaultOptions": {
             "queries": {
@@ -71,9 +71,12 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                             });
                         }
                     }
-                    
-                }
+                },
+                "networkMode": "always"
             },
+            "mutations": {
+                "networkMode": "always"
+            }
         }
     });
     React.useEffect(() => {

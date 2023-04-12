@@ -178,11 +178,13 @@ export class Asc_Desc{
 export class Offset_limits{
     private limits: number; 
     private offset: number;
-    public set_limits(limits: number){
+    public set_limits(limits: number) : Offset_limits{
         this.limits = limits;
+        return this;
     }
-    public set_offset(offset: number){
+    public set_offset(offset: number): Offset_limits{
         this.offset = offset;
+        return this;
     }
     public get_limits(): number{
         return this.limits;

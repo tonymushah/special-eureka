@@ -36,8 +36,11 @@ export default function MangadexLayout() {
                             });
                         }
                     }
-                    
-                }
+                },
+                "networkMode": "always"
+            },
+            "mutations" : {
+                "networkMode": "always"
             }
         }
     });

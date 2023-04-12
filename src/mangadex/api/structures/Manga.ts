@@ -18,6 +18,7 @@ import AllDownloadedCover_Of_aMangaCollection from "./CollectionTypes/AllDownloa
 import MangaSearch_withAllIncludes from "./SearchType/MangaSearch_withAllIncludes";
 import Manga_withAllIncludes_Collection from "./CollectionTypes/Manga_withAllIncludes_Collection";
 import { download_all_manga_covers, download_manga, download_manga_cover, patch_all_manga_cover, refetch_all_manga } from "@mangadex/plugin";
+import MangaStatus from "../enums/MangaStatus";
 
 
 export class Manga extends Attribute{
@@ -68,6 +69,19 @@ export class Manga extends Attribute{
     }
     public get_state(): string | null{
         return this.state;
+    }
+    public get_status_enum() : MangaStatus{
+        if(this.get_status() == MangaStatus.cancelled){
+            return MangaStatus.cancelled;
+        }else if (this.get_status() == MangaStatus.completed){
+            return MangaStatus.completed;
+        }else if (this.get_status() == MangaStatus.hiatus){
+            return MangaStatus.hiatus;
+        }else if (this.get_status() == MangaStatus.ongoing){
+            return MangaStatus.ongoing;
+        }else {
+            return MangaStatus.other;
+        }
     }
     public set_links(links: any){
         this.links = links;

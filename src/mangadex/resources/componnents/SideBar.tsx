@@ -2,8 +2,6 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import MyErrorBounderies from "./error/MyErrorBounderies";
 
-import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 
 export default function Content(props: React.PropsWithChildren) {

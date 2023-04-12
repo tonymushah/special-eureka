@@ -3,12 +3,13 @@ import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { Await } from "react-router-dom";
-import { Lang_and_Data, make_first_UpperCare, MangaLinksData } from "../../../../api/internal/Utils";
-import { Manga } from "../../../../api/structures/Manga";
-import { Tag } from "../../../../api/structures/Tag";
+import { Lang_and_Data, make_first_UpperCare, MangaLinksData } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { Tag } from "@mangadex/api/structures/Tag";
 import { TagRow } from "../Mainpage/boutons/tag_boutons";
 import { MangaPageProps } from "../Manga_Page";
 import { LinksRow } from "./boutons/links_boutons";
+import MangaStatus from "@mangadex/api/enums/MangaStatus";
 
 
 const Offline_Chapters = React.lazy(() => import("./top_chap/Offline_Chapters"));
@@ -206,7 +207,20 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                     </React.Suspense>
                                 </Row>
                                 <Row>
-                                    
+                                    {
+                                        this.props.src.get_status_enum() == MangaStatus.completed ? (
+                                            <React.Fragment>
+                                                <Chakra.Text fontWeight={"bold"}>Latest Chapter : Volume {
+                                                        this.props.src.get_last_volume() ?? "none"
+                                                    } Chapter {
+                                                        this.props.src.get_last_chapter() ?? "none"
+                                                    }
+                                                </Chakra.Text>
+                                            </React.Fragment>
+                                        ) : (
+                                            <></>
+                                        )
+                                    }
                                 </Row>
                             </Col>
                         </CollapseHeight>

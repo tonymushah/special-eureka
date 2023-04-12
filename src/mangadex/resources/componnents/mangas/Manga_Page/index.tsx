@@ -239,7 +239,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                     backdropBrightness={"1.1"}
                 >
                     <Chakra.Box
-                        paddingTop={"10px"}
+                        padding={5}
                         background={"rgba(255, 255,255, 0.2)"}
                     >
                         <Container>
@@ -256,7 +256,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             display={"block"}
                                         >
                                             <Chakra.Heading
-                                                noOfLines={0}
+                                                noOfLines={2}
                                                 fontFamily={"inherit"}
                                                 size={{
                                                     base: "md",
@@ -270,7 +270,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 }
                                             </Chakra.Heading>
                                             <Chakra.Heading
-                                                noOfLines={0}
+                                                noOfLines={2}
                                                 fontFamily={"inherit"}
                                                 size={{
                                                     base: "sm",

@@ -20,29 +20,17 @@ const MangaVerticalElement = React.lazy(() => import("../MangaVerticalElement"))
 export default function MangaList(props: {
     src: Array<Manga>
 }) {
-    const { data , updateListOption } = useMangaListOption({});
+    const { data , updateListOption } = useMangaListOption();
     return (
-        <Chakra.Tabs align="end" isLazy index={data}>
+        <Chakra.Tabs align="end" isLazy index={data} onChange={updateListOption}>
             <Chakra.TabList>
-                <Chakra.Tab
-                    onClick={() => {
-                        updateListOption(0);
-                    }}
-                >
+                <Chakra.Tab>
                     <FontAwesome.FaThList />
                 </Chakra.Tab>
-                <Chakra.Tab
-                    onClick={() => {
-                        updateListOption(1);
-                    }}
-                >
+                <Chakra.Tab>
                     <FontAwesome.FaThLarge />
                 </Chakra.Tab>
-                <Chakra.Tab
-                    onClick={() => {
-                        updateListOption(2);
-                    }}
-                >
+                <Chakra.Tab>
                     <FontAwesome.FaTh />
                 </Chakra.Tab>
             </Chakra.TabList>

@@ -3,7 +3,8 @@ import { Lang, Languages } from "../Utils";
 
 export enum UserOptionsKeys{
     languages = "languages",
-    serverAutoStart = "serv-auto-start"
+    serverAutoStart = "serv-auto-start",
+    mangalistOption = "mangaList-option"
 }
 
 export default class UserOptions extends Store{
@@ -33,5 +34,14 @@ export default class UserOptions extends Store{
     }
     public async getServerAutoStart() : Promise<boolean>{
         return (await this.get<boolean>(UserOptionsKeys.serverAutoStart)) ?? false;
+    }
+    public async setMangaListOption(input: number, save? : boolean){
+        await this.set(UserOptionsKeys.mangalistOption, input);
+        if(save == undefined || save == true){
+            await this.save();
+        }
+    }
+    public async getMangaListOption() : Promise<number>{
+        return (await this.get<number>(UserOptionsKeys.mangalistOption)) ?? 0;
     }
 }

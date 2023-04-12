@@ -1,30 +1,30 @@
 /*eslint-env broswer*/
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Offset_limits } from "../../../api/internal/Utils";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { useFormik } from "formik";
-import { Group } from "../../../api/structures/Group";
-import { Collection } from "../../../api/structures/Collection";
+import { Group } from "@mangadex/api/structures/Group";
+import { Collection } from "@mangadex/api/structures/Collection";
 import GroupFallBackElement from "./GroupFallBackElement";
-import { Attribute } from "../../../api/structures/Attributes";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import { Attribute } from "@mangadex/api/structures/Attributes";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 
 const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
-const CollectionComponnent_WithQuery = React.lazy(async () =>{
+const CollectionComponnent_WithQuery = React.lazy(async () => {
     const res = await import("../Collection/Collection");
     return {
-        default : res.CollectionComponnent_WithQuery<Attribute>
+        default: res.CollectionComponnent_WithQuery<Attribute>
     };
 });
 
-export default function Group_Search(props : {
-    offset_limits : Offset_limits
-}){
+export default function Group_Search(props: {
+    offset_limits: Offset_limits
+}) {
     const [result, setResult] = React.useState(<></>);
     const client = useHTTPClient();
     const formik = useFormik({
-        initialValues : {
-            name : ""
+        initialValues: {
+            name: ""
         },
         onSubmit(values) {
             const random = Math.random() * 100;
@@ -32,34 +32,34 @@ export default function Group_Search(props : {
                 <React.Suspense fallback={
                     <Chakra.Box>
                         <Chakra.Center>
-                            <Chakra.Spinner/>
+                            <Chakra.Spinner />
                         </Chakra.Center>
                     </Chakra.Box>
                 }>
-                    <CollectionComponnent_WithQuery 
+                    <CollectionComponnent_WithQuery
                         fn={() => {
                             return Group.search({
-                                offset_Limits : props.offset_limits,
-                                name : values.name,
-                                client : client
+                                offset_Limits: props.offset_limits,
+                                name: values.name,
+                                client: client
                             });
                         }}
                         queryKey={["mdx", "group", "search", random]}
                     >
                         {
-                            (value : Collection<Attribute>) => (
+                            (value: Collection<Attribute>) => (
                                 <Chakra.Wrap>
                                     {
                                         value.get_data().map((group) => (
                                             <Chakra.WrapItem key={group.get_id()}>
                                                 <React.Suspense
                                                     fallback={
-                                                        <GroupFallBackElement/>
+                                                        <GroupFallBackElement />
                                                     }
                                                 >
                                                     {
-                                                        group instanceof Group? (
-                                                            <Group_Simple_Element src={group}/>
+                                                        group instanceof Group ? (
+                                                            <Group_Simple_Element src={group} />
                                                         ) : (
                                                             <></>
                                                         )
@@ -76,10 +76,10 @@ export default function Group_Search(props : {
             );
         },
         validate(values) {
-            const error :{
-                name? : string
+            const error: {
+                name?: string
             } = {};
-            if(values.name === ""){
+            if (values.name === "") {
                 error.name = "Invalid name";
             }
             return error;
@@ -87,6 +87,7 @@ export default function Group_Search(props : {
     });
     return (
         <Chakra.Stack>
+            <Chakra.Heading fontFamily={"inherit"}>Search Group</Chakra.Heading>
             <form
                 onSubmit={formik.handleSubmit}
             >
@@ -94,8 +95,8 @@ export default function Group_Search(props : {
                     <Chakra.FormLabel>
                         Group name
                     </Chakra.FormLabel>
-                    <Chakra.Input 
-                        type={"search"} 
+                    <Chakra.Input
+                        type={"search"}
                         name={"name"}
                         onChange={formik.handleChange}
                         value={formik.values.name}
@@ -113,12 +114,12 @@ export default function Group_Search(props : {
                     }
                 </Chakra.FormControl>
             </form>
-        <Chakra.Box>
-            {
-                result
-            }
-        </Chakra.Box>
+            <Chakra.Box>
+                {
+                    result
+                }
+            </Chakra.Box>
         </Chakra.Stack>
-        
+
     );
 }
