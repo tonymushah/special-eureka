@@ -4,6 +4,11 @@ import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Manga, Manga_2, Manga_with_allRelationship } from "./Manga";
 import { User } from "./User";
+
+type Seasonal = {
+    id : string
+}
+
 export class List extends Attribute{
     private name!: string;
     private visibility!: string;
@@ -117,5 +122,9 @@ export class List extends Attribute{
             returns[index] = mangas_relationships[index].get_id();
         }
         return returns;
+    }
+    public static async get_seasonal_id(client : Client) : Promise<string>{
+        const res = await client.get<Seasonal>("https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/mangadex/json/seasonal.json");
+        return res.data.id;
     }
 }

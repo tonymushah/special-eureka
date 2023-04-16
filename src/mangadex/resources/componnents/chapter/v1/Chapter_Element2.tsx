@@ -54,7 +54,7 @@ export default function Chapter_Element2(props: {
                 </Chakra.Box>
             }
         >
-            <Chakra.LinkBox>
+            <Chakra.Box>
                 <Row>
                     <Col xs={2}>
                         <Chakra.Center>
@@ -85,15 +85,15 @@ export default function Chapter_Element2(props: {
                         <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                             <TryCatch
                                 catch={() => (
-                                    <Chakra.LinkOverlay
+                                    <Chakra.Link
                                     >
                                         Chapter {props.chapter.get_chapter()} {
                                             props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
                                         }
-                                    </Chakra.LinkOverlay>
+                                    </Chakra.Link>
                                 )}
                             >
-                                <Chakra.LinkOverlay
+                                <Chakra.Link
                                     as={Link}
                                     to={MangaDexPath +"/chapter/" + props.chapter.get_id()}
                                     color={"black"}
@@ -106,7 +106,7 @@ export default function Chapter_Element2(props: {
                                     Chapter {props.chapter.get_chapter()} {
                                         props.chapter.get_title() == null || props.chapter.get_title() == "" ? (<></>) : (<> - {props.chapter.get_title()}</>)
                                     }
-                                </Chakra.LinkOverlay>
+                                </Chakra.Link>
                             </TryCatch>
 
                         </Chakra.Heading>
@@ -136,7 +136,7 @@ export default function Chapter_Element2(props: {
                         </Chakra.Text>
                     </Col>
                 </Row>
-            </Chakra.LinkBox>
+            </Chakra.Box>
         </Chakra.Tooltip>
     );
 }

@@ -16,7 +16,8 @@ export default function MangaManagerState(){
         const getted = await DesktopApi.ping(client);
         return getted;
     }, {
-        "staleTime" : 0
+        "staleTime" : 0,
+        "refetchOnWindowFocus" : true
     });
     const switch_server_state = useMutation({
         mutationKey : key.concat("mutation"),
@@ -24,9 +25,7 @@ export default function MangaManagerState(){
             return query.data == false ? launch_server() : stop_server();
         },
         onSuccess: () => {
-            queryClient.refetchQueries({
-                "queryKey" : key
-            });
+            query.refetch();
         }, 
         onError(error) {
             if(typeof error == "string"){

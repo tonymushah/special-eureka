@@ -157,9 +157,9 @@ export function useChapterDownloadMutation(props: {
         position: "bottom-right",
         duration: 9000,
     });
-    const download_query = useMutation<ChapterDeleteMutation_data, Error>({
-        mutationKey: ["mdx", "mutation", "chapter", props.chapID, "download"],
-        mutationFn: async () => {
+    const download_query = useQuery<ChapterDeleteMutation_data, Error>({
+        queryKey: ["mdx", "mutation", "chapter", props.chapID, "download"],
+        queryFn: async () => {
             toast({
                 status: "loading",
                 title: "Downloading chapter"
@@ -231,6 +231,8 @@ export function useChapterDownloadMutation(props: {
                 });
             });
         },
+        enabled : false,
+        "networkMode" : "online"
     });
     return download_query;
 }
@@ -245,9 +247,9 @@ export function useChapterDataSaverDownloadMutation(props: {
         position: "bottom-right",
         duration: 9000,
     });
-    const download_query = useMutation({
-        mutationKey: ["mdx", "mutation", "chapter",  props.chapID, "data", "saver", "download"],
-        mutationFn: async () => {
+    const download_query = useQuery({
+        queryKey: ["mdx", "mutation", "chapter",  props.chapID, "data", "saver", "download"],
+        queryFn: async () => {
             toast({
                 status: "loading",
                 title: "Downloading chapter"
@@ -314,6 +316,8 @@ export function useChapterDataSaverDownloadMutation(props: {
                 });
             });
         },
+        enabled : false,
+        "networkMode" : "online"
     });
     return download_query;
 }
@@ -331,12 +335,17 @@ export function useChapterDeleteMutation(props: {
         duration: 9000,
     });
     const toastID = React.useRef<ToastId>();
-    const delete_mutation = useMutation<ChapterDeleteMutation_data, Error>({
-        mutationKey: ["mdx", "mutation", props.chapID, "chapter", "delete"],
-        mutationFn: async () => {
+    const delete_mutation = useQuery<ChapterDeleteMutation_data, Error>({
+        queryKey: ["mdx", "mutation", props.chapID, "chapter", "delete"],
+        queryFn: async () => {
             const chap = await Chapter.get_ChapterbyId(props.chapID, client);
             const manga = await chap.data.get_manga();
             await chap.data.delete(client);
+            toastID.current = toast({
+                status: "loading",
+                title: "Deleting Chapter",
+                description: "It will be quick..."
+            });
             return {
                 chapter: chap.data,
                 manga: manga
@@ -348,13 +357,6 @@ export function useChapterDeleteMutation(props: {
                 isClosable: true,
                 title: "Error on deleting",
                 description: error.message
-            });
-        },
-        onMutate() {
-            toastID.current = toast({
-                status: "loading",
-                title: "Deleting Chapter",
-                description: "It will be quick..."
             });
         },
         onSuccess(data) {
@@ -409,7 +411,8 @@ export function useChapterDeleteMutation(props: {
                     queryKey: value
                 });
             });
-        }
+        },
+        enabled : false
     });
     return delete_mutation;
 }
@@ -429,7 +432,7 @@ export function get_manga_of_chapter(props : {
             if(queryData == undefined) {
                 //Manga_with_allRelationship.getMangaByID(manga_id);
                 const manga = await props.chapter.get_manga();
-                return queryClient.setQueryData(mangaQueryKey, manga);
+                return queryClient.setQueryData(mangaQueryKey, manga) ?? manga;
             }else{
                 return queryData;
             }
@@ -439,7 +442,7 @@ export function get_manga_of_chapter(props : {
             const mangaQueryKey = get_mangaQueryKey_byID({
                 mangaID : manga_id
             });
-            return queryClient.setQueryData(mangaQueryKey, manga);
+            return queryClient.setQueryData(mangaQueryKey, manga) ?? manga;
         }
     });
     return {
