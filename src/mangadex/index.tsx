@@ -69,6 +69,8 @@ const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"
 
 const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
 
+const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -85,6 +87,7 @@ export function Mangadex_suspense__() {
         </Chakra.Box>
     );
 }
+
 export function useTrackEvent(name : string, payload?:{
     [key : string] : string | number
 }){
@@ -325,11 +328,21 @@ function useMangadexRouter(): RouteObject {
                             </Mangadex_suspense>
                         )
                     },
+                    // Recently Popular
                     {
                         path: "recently-popular",
                         element: (
                             <Mangadex_suspense>
                                 <RecentlyPopularPage />
+                            </Mangadex_suspense>
+                        )
+                    },
+                    // Manga Search
+                    {
+                        path : "search",
+                        element : (
+                            <Mangadex_suspense>
+                                <Manga_Search/>
                             </Mangadex_suspense>
                         )
                     }

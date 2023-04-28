@@ -231,6 +231,7 @@ export function useChapterDownloadMutation(props: {
                 });
             });
         },
+        retry : 0,
         enabled : false,
         "networkMode" : "online"
     });
@@ -316,6 +317,7 @@ export function useChapterDataSaverDownloadMutation(props: {
                 });
             });
         },
+        retry : 0,
         enabled : false,
         "networkMode" : "online"
     });
@@ -412,6 +414,7 @@ export function useChapterDeleteMutation(props: {
                 });
             });
         },
+        retry : 0,
         enabled : false
     });
     return delete_mutation;

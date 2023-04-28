@@ -17,7 +17,7 @@ function Lang_Comp({ lang }: {
             }}
         >
             <Chakra.HStack spacing={"5px"}>
-                <Chakra.Checkbox isChecked={isIn(lang)} />
+                <Chakra.Checkbox isChecked={isIn(lang)} isDisabled/>
                 {
                     lang.get_flag_icon() !== undefined ? (
                         <Flag_icons locale={lang.get_flag_icon()} />
