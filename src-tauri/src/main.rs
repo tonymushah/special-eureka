@@ -33,7 +33,7 @@ async fn main() {
     match tauri::Builder::default()
         .system_tray(tray)
         .invoke_handler(tauri::generate_handler![close_splashscreen])
-        .plugin(tauri_plugin_store::PluginBuilder::default().build())
+        .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::init("A-US-1128883538".into()))
         .plugin(tauri_plugin_speu_mangadex::init())
         .setup(|app|{

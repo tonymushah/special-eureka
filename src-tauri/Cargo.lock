@@ -20,29 +20,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "actix-files"
-version = "0.6.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d832782fac6ca7369a70c9ee9a20554623c5e51c76e190ad151780ebea1cf689"
-dependencies = [
- "actix-http",
- "actix-service",
- "actix-utils",
- "actix-web",
- "askama_escape",
- "bitflags",
- "bytes",
- "derive_more",
- "futures-core",
- "http-range",
- "log",
- "mime",
- "mime_guess",
- "percent-encoding",
- "pin-project-lite",
-]
-
-[[package]]
 name = "actix-http"
 version = "3.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -252,12 +229,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "216261ddc8289130e551ddcd5ce8a064710c0d064a4d2895c67151c92b5443f6"
 
 [[package]]
-name = "askama_escape"
-version = "0.10.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "619743e34b5ba4e9703bba34deac3427c72507c7159f5fd030aea8cac0cfe341"
-
-[[package]]
 name = "atk"
 version = "0.15.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -314,6 +285,12 @@ name = "base64"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4a4ddaa51a5bc52a6948f74c06d20aaaddb71924eab79b8c97a8c556e942d6a"
+
+[[package]]
+name = "binary_search_tree"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba1e4579698a162f2256fabdb07bb88bf360622342c40375468e91bb107e9e4c"
 
 [[package]]
 name = "bitflags"
@@ -1698,12 +1675,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "json"
-version = "0.12.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "078e285eafdfb6c4b434e0d31e8cfcb5115b651496faca5749b88fafd4f23bfd"
-
-[[package]]
 name = "json-patch"
 version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1878,10 +1849,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "mangadex-api-rust"
-version = "2.0.0-rc.1"
+name = "mangadex-api"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b82e97d737b5718715eef7f2e4c78ac3e09f479349b85c5df9984f31257970e"
+checksum = "6012c57aedc0dd38d6716cfdf6b78610854e91e46bfca7906e368d25c5321029"
 dependencies = [
  "derive_builder",
  "futures",
@@ -1898,9 +1869,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api-schema-rust"
-version = "0.1.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ea7428a2f45ffda38df65a662e0fd1f9217f932bf16af9457aa12fee962bb73f"
+checksum = "ee037df3b66ab648a03c3355663a0e2e4833e6e0e5d7968fb4d41e53ce1cc334"
 dependencies = [
  "mangadex-api-types-rust",
  "reqwest",
@@ -1913,9 +1884,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api-types-rust"
-version = "0.1.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "272fd27f4a90751b86bd733be31558ae2010aeaaaaa019f86d1f8f1562f29be9"
+checksum = "20d7990e082965caa6dc0fb8c27add0c3878135b4ae8ec617e835371d64f54c2"
 dependencies = [
  "anyhow",
  "derive_builder",
@@ -1929,19 +1900,17 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.1.6"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7bf3cb773edb4deefb829ad9069dff8eaa3e6474aba0186e509b2284adebf009"
+checksum = "da34c2cef50b5844b623be8c5a49436b0982f30b51313399ade66da547f83ecd"
 dependencies = [
- "actix-files",
  "actix-web",
  "anyhow",
+ "binary_search_tree",
  "derive_builder",
- "derive_more",
  "fern",
- "json",
  "log",
- "mangadex-api-rust",
+ "mangadex-api",
  "mangadex-api-schema-rust",
  "mangadex-api-types-rust",
  "once_cell",
@@ -1950,7 +1919,6 @@ dependencies = [
  "serde_json",
  "serde_qs",
  "thiserror",
- "time",
  "tokio",
  "url",
  "uuid 1.2.1",
@@ -3632,8 +3600,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-store"
-version = "0.0.0"
-source = "git+https://github.com/tauri-apps/tauri-plugin-store#9bd993aa67766596638bbfd91e79a1bf8f632014"
+version = "0.1.0"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=dev#eb55671f2717e2261f9f13c9ba345d383daf1a20"
 dependencies = [
  "log",
  "serde",

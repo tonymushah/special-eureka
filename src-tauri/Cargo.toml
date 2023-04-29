@@ -24,9 +24,10 @@ tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspac
 tauri-plugin-aptabase = "0.1"
 
 [dependencies.tauri-plugin-store]
-git = "https://github.com/tauri-apps/tauri-plugin-store"
+git = "https://github.com/tauri-apps/plugins-workspace"
 #tag = "v0.1.0"
-#branch = "main"
+branch = "dev"
+
 [dependencies.tauri-plugin-speu-bilibili-comics]
 path = "../src/bilibili-comics/plugin/tauri-plugin"
 
