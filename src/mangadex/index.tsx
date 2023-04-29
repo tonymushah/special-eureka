@@ -69,6 +69,8 @@ const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"
 
 const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
 
+const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -355,6 +357,14 @@ function useMangadexRouter(): RouteObject {
                                         </Mangadex_suspense>
                                     )}
                                 />
+                            </Mangadex_suspense>
+                        )
+                    },
+                    {
+                        path : "search",
+                        element: (
+                            <Mangadex_suspense>
+                                <AuthorSearch/>
                             </Mangadex_suspense>
                         )
                     }

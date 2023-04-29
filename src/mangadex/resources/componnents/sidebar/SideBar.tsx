@@ -221,7 +221,13 @@ export default function Side_bar() {
                         }}
                     >
                         <MenuItem>Manga</MenuItem>
-                        <MenuItem>Author</MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "author/search"}/>
+                            }
+                        >
+                            Author
+                        </MenuItem>
                         <MenuItem 
                             component={
                                 <Link to={MangaDexPath + "group/search"} />

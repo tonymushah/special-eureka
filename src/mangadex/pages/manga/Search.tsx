@@ -7,10 +7,10 @@ import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Coll
 import { Formik } from "formik";
 import React from "react";
 
-const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"))
+const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 
 export default function Manga_Search(){
-    const [ result, setResult ] = React.useState(<React.Fragment></React.Fragment>)
+    const [ result, setResult ] = React.useState(<React.Fragment></React.Fragment>);
     return (
         <Box>
             
@@ -49,5 +49,5 @@ export default function Manga_Search(){
                 result
             }
         </Box>
-    )
+    );
 }
