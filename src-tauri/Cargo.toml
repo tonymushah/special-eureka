@@ -12,12 +12,12 @@ rust-version = "1.57"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.2.1", features = [] }
+tauri-build = { version = "1.3.0", features = [] }
 
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.2.4", features = ["clipboard-write-text", "dialog-message", "fs-all", "http-all", "notification-all", "path-all", "process-exit", "reqwest-client", "shell-open", "system-tray", "updater", "window-set-icon", "window-set-title"] }
+tauri = { version = "1.3.0", features = ["clipboard-write-text", "dialog-message", "fs-all", "http-all", "notification-all", "path-all", "process-exit", "reqwest-client", "shell-open", "system-tray", "updater", "window-set-fullscreen", "window-set-icon", "window-set-title"] }
 tokio = "1.27.0"
 tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }

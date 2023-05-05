@@ -1,28 +1,44 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import MyErrorBounderies from "./error/MyErrorBounderies";
+import useRTLSidebar from "../hooks/userOptions/RtlSidebar";
+import { Mangadex_suspense__ } from "@mangadex";
 
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 
-export default function Content(props: React.PropsWithChildren) {
-    return (
-
-        <div className='w-100 d-inline-flex'>
-            <React.Suspense
-                fallback={
-                    <Chakra.Box
-                        width={"80px"}
-                        height={"100vh"}
-                    >
-                        <Chakra.Center>
-                            <Chakra.Spinner />
-                        </Chakra.Center>
-                    </Chakra.Box>
-                }
+const SideBar = () => (
+    <React.Suspense
+        fallback={
+            <Chakra.Box
+                width={"80px"}
+                height={"100vh"}
             >
-                <Side_bar />
-            </React.Suspense>
+                <Chakra.Center>
+                    <Chakra.Spinner />
+                </Chakra.Center>
+            </Chakra.Box>
+        }
+    >
+        <Side_bar />
+    </React.Suspense>
+);
 
+export default function Content(props: React.PropsWithChildren) {
+    const { query } = useRTLSidebar();
+    if (query.isLoading) {
+        return (
+            <Mangadex_suspense__ />
+        );
+    }
+    return (
+        <div className='w-100 d-inline-flex'>
+            {
+                query.data != true ? (
+                    <SideBar/>
+                ) : (
+                    <></>
+                )
+            }
             <Chakra.Box
                 width={"100%"}
                 height={"100vh"}
@@ -37,6 +53,13 @@ export default function Content(props: React.PropsWithChildren) {
                     </Chakra.Box>
                 </Chakra.Box>
             </Chakra.Box>
+            {
+                query.data == true ? (
+                    <SideBar/>
+                ) : (
+                    <></>
+                )
+            }
         </div>
     );
 }

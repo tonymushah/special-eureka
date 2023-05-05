@@ -4,7 +4,8 @@ import { Lang, Languages } from "../Utils";
 export enum UserOptionsKeys{
     languages = "languages",
     serverAutoStart = "serv-auto-start",
-    mangalistOption = "mangaList-option"
+    mangalistOption = "mangaList-option",
+    rtlSidebar = "rtlSidebar"
 }
 
 export default class UserOptions extends Store{
@@ -43,5 +44,14 @@ export default class UserOptions extends Store{
     }
     public async getMangaListOption() : Promise<number>{
         return (await this.get<number>(UserOptionsKeys.mangalistOption)) ?? 0;
+    }
+    public async setRtlSidebar(input: boolean, save? : boolean){
+        await this.set(UserOptionsKeys.rtlSidebar, input);
+        if(save == undefined || save == true){
+            await this.save();
+        }
+    }
+    public async getRtlSidebar() : Promise<boolean>{
+        return (await this.get<boolean>(UserOptionsKeys.rtlSidebar)) ?? false;
     }
 }

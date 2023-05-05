@@ -10,6 +10,9 @@ import { RiGroupFill, RiSearchEyeFill } from "react-icons/ri";
 import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import SideBarUserOption from "./useroption";
+import Hotkeys from "react-hot-keys";
+import { useChapterFullscreen } from "../chapter/fullscreen/Context";
+import useRTLSidebar from "@mangadex/resources/hooks/userOptions/RtlSidebar";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
@@ -17,11 +20,12 @@ const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Bad
 
 const MangaDexPath: string = getMangaDexPath() + "/";
 
-export default function Side_bar() {
+function ActualSidebar() {
     const { collapseSidebar } = useProSidebar();
+    const { query } = useRTLSidebar();
     return (
         <Sidebar
-            breakPoint="md"
+            rtl={query.data}
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
                     backgroundColor: "#2c2c2c",
@@ -206,7 +210,7 @@ export default function Side_bar() {
                 </SubMenu>
                 <SubMenu
                     icon={
-                        <RiSearchEyeFill/>
+                        <RiSearchEyeFill />
                     }
                     label="Search"
                 >
@@ -223,12 +227,12 @@ export default function Side_bar() {
                         <MenuItem>Manga</MenuItem>
                         <MenuItem
                             component={
-                                <Link to={MangaDexPath + "author/search"}/>
+                                <Link to={MangaDexPath + "author/search"} />
                             }
                         >
                             Author
                         </MenuItem>
-                        <MenuItem 
+                        <MenuItem
                             component={
                                 <Link to={MangaDexPath + "group/search"} />
                             }
@@ -238,7 +242,7 @@ export default function Side_bar() {
                         <MenuItem>Chapter</MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<RiGroupFill onClick={() => collapseSidebar()}/>} label={"Community"}>
+                <SubMenu defaultOpen={false} icon={<RiGroupFill onClick={() => collapseSidebar()} />} label={"Community"}>
                     <Menu
                         menuItemStyles={{
                             button: {
@@ -320,5 +324,32 @@ export default function Side_bar() {
                 </SideBarUserOption>
             </Menu>
         </Sidebar>
+    );
+}
+
+export default function Side_bar() {
+    const { toggleSidebar } = useProSidebar();
+    const { toggle } = useRTLSidebar();
+    //const { query, toggle } = useChapterFullscreen();
+    return (
+        <React.Fragment>
+            <Hotkeys
+                keyName="ctrl+p"
+                onKeyDown={() => {
+                    toggleSidebar();
+                    console.log("ctrl+p");
+                }}
+            />
+            <Hotkeys
+                keyName="ctrl+r"
+                onKeyDown={() => {
+                    toggle();
+                    console.log("ctrl+r");
+                }}
+            />
+            <Chakra.Box>
+                <ActualSidebar />
+            </Chakra.Box>
+        </React.Fragment>
     );
 }

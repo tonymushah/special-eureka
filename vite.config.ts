@@ -7,7 +7,6 @@ import { resolve } from "path";
 import { ViteAliases } from "vite-aliases";
 //import VitePluginLegacy from "@vitejs/plugin-legacy";
 //import ReactInspector from 'vite-plugin-react-inspector'
-import eslintPlugin from "@nabla/vite-plugin-eslint";
 //import eslintRollup from "@rollup/plugin-eslint";
 /*function getPathSrc(){
   const path = `${process.cwd()}/src`;
@@ -34,8 +33,6 @@ export default defineConfig({
         }),
         remarkRehypePlugin({
         }),
-        eslintPlugin({})
-        //splitVendorChunkPlugin()
     ],
     envPrefix: ["VITE_", "TAURI_"],
     server: {

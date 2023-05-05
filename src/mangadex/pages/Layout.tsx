@@ -11,6 +11,8 @@ const Content = React.lazy(() => import("@mangadex/resources/componnents/SideBar
 
 const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components/BasicWebsitesRessources"));
 
+const ChapterFullScreenModeIniter = React.lazy(() => import("@mangadex/resources/componnents/chapter/fullscreen/Context"));
+
 export default function MangadexLayout() {
     const queryClient = new QueryClient({
         "defaultOptions" : {
@@ -50,6 +52,7 @@ export default function MangadexLayout() {
             <Mangadex_suspense>
                 <BasicWebsitesRessources queryClient={queryClient}>
                     <ServerAutoStartLoader />
+                    <ChapterFullScreenModeIniter/>
                     <UserOptionProvider>
                         <ProSidebarProvider>
                             <Mangadex_suspense>
