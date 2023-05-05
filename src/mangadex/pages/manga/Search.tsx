@@ -13,6 +13,7 @@ import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
+const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 
 export default function Manga_Search() {
     const client = useHTTPClient();
@@ -165,5 +166,6 @@ export default function Manga_Search() {
                 result
             }
         </Box>
+    );
     );
 }
