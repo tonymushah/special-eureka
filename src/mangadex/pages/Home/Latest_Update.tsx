@@ -70,7 +70,7 @@ export default function Latest_Updates() {
             queryClient
         });
     }, {
-        staleTime: Infinity
+        staleTime: Infinity,
     });
     if (query.isLoading) {
         return (

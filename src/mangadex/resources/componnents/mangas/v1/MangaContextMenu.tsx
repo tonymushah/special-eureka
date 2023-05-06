@@ -23,21 +23,21 @@ export default function MangaContextMenu(props: {
                             onClick={() => props.refetch!()}
                         >Refresh</Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => download_.mutate()}
+                            onClick={() => download_.refetch()}
                             textColor={"green"}
                             icon={<ChakraIcons.DownloadIcon />}
                         >
                             Download
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => download_.mutate()}
+                            onClick={() => download_.refetch()}
                             textColor={"blue"}
                             icon={<ChakraIcons.RepeatIcon />}
                         >
                             Update
                         </Chakra.MenuItem>
                         <Chakra.MenuItem
-                            onClick={() => delete_.mutate()}
+                            onClick={() => delete_.refetch()}
                             textColor={"red"}
                             icon={<ChakraIcons.DeleteIcon />}
                         >

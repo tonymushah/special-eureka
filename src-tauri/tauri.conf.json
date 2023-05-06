@@ -22,7 +22,8 @@
                     "http://localhost:9305/*",
                     "https://jumpg-webapi.tokyo-cdn.com/api/**",
                     "http://localhost:8090/**",
-                    "http://localhost:8145/**"
+                    "http://localhost:8145/**",
+                    "https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/**"
                 ]
             },
             "clipboard": {
@@ -124,7 +125,7 @@
                 "icons/icon.icns",
                 "icons/icon.ico"
             ],
-            "identifier": "com.tonymushah.dev",
+            "identifier": "mg.tonymushah.special-eureka",
             "longDescription": "",
             "macOS": {
                 "entitlements": null,

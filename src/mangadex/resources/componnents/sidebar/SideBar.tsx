@@ -224,7 +224,13 @@ function ActualSidebar() {
                             }
                         }}
                     >
-                        <MenuItem>Manga</MenuItem>
+                        <MenuItem 
+                            component={
+                                <Link to={MangaDexPath + "titles/search"}/>
+                            }
+                        >
+                            Manga
+                        </MenuItem>
                         <MenuItem
                             component={
                                 <Link to={MangaDexPath + "author/search"} />
