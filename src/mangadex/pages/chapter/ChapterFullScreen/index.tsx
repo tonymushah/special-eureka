@@ -7,7 +7,7 @@ import FullScreenOptionsProvider from "./FullScreenOptionsProvider";
 import FullScreenOptions from "./FullScreenOptions";
 
 export default function ChapterFullScreen(props: React.PropsWithChildren<{
-    chapter : Chapter
+    chapter: Chapter
 }>) {
     const FullscreenHandle = Fullscreen.useFullScreenHandle();
     return (
@@ -34,8 +34,8 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
                             onCloseButtonClick={FullscreenHandle.exit}
                         />
                         {
-                                props.children
-                            }
+                            props.children
+                        }
                     </FullScreenOptionsProvider>
                 </Chakra.Box>
             </Fullscreen.FullScreen>

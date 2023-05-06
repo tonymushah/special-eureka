@@ -90,20 +90,20 @@ export function Mangadex_suspense__() {
     );
 }
 
-export function useTrackEvent(name : string, payload?:{
-    [key : string] : string | number
-}){
+export function useTrackEvent(name: string, payload?: {
+    [key: string]: string | number
+}) {
     React.useEffect(() => {
         trackEvent(name, payload);
     }, []);
 }
 
-export function trackEvent(name : string, payload?: {
-    [key : string] : string | number
-}){
+export function trackEvent(name: string, payload?: {
+    [key: string]: string | number
+}) {
     aptabaseTrackEvent(name, {
-        "website" : "mangadex",
-        "location" : window.location.href,
+        "website": "mangadex",
+        "location": window.location.href,
         ...payload
     });
 }
@@ -341,10 +341,10 @@ function useMangadexRouter(): RouteObject {
                     },
                     // Manga Search
                     {
-                        path : "search",
-                        element : (
+                        path: "search",
+                        element: (
                             <Mangadex_suspense>
-                                <Manga_Search/>
+                                <Manga_Search />
                             </Mangadex_suspense>
                         )
                     }
@@ -374,10 +374,10 @@ function useMangadexRouter(): RouteObject {
                         )
                     },
                     {
-                        path : "search",
+                        path: "search",
                         element: (
                             <Mangadex_suspense>
-                                <AuthorSearch/>
+                                <AuthorSearch />
                             </Mangadex_suspense>
                         )
                     }
@@ -385,37 +385,37 @@ function useMangadexRouter(): RouteObject {
             },
             // User 
             {
-                path : "user",
-                errorElement : (
-                    <ErrorELRouter/>
+                path: "user",
+                errorElement: (
+                    <ErrorELRouter />
                 ),
-                children : [
+                children: [
                     {
-                        path : ":user_id",
-                        errorElement : (<ErrorELRouter/>),
-                        element : (
+                        path: ":user_id",
+                        errorElement: (<ErrorELRouter />),
+                        element: (
                             <Mangadex_suspense>
-                                <UserPage/>
+                                <UserPage />
                             </Mangadex_suspense>
                         ),
-                        children : [
+                        children: [
                             {
-                                index : true,
-                                errorElement : (<ErrorELRouter/>),
-                                element : (
+                                index: true,
+                                errorElement: (<ErrorELRouter />),
+                                element: (
                                     <Mangadex_suspense>
-                                        <UserPageInfo/>
+                                        <UserPageInfo />
                                     </Mangadex_suspense>
                                 )
                             },
                             {
-                                path : "feed",
-                                errorElement : (
-                                    <ErrorELRouter/>
+                                path: "feed",
+                                errorElement: (
+                                    <ErrorELRouter />
                                 ),
-                                element : (
+                                element: (
                                     <Mangadex_suspense>
-                                        <UserPageFeed/>
+                                        <UserPageFeed />
                                     </Mangadex_suspense>
                                 )
                             }

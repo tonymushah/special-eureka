@@ -23,8 +23,10 @@ const MangaDexPath: string = getMangaDexPath() + "/";
 function ActualSidebar() {
     const { collapseSidebar } = useProSidebar();
     const { query } = useRTLSidebar();
+    const fullscreen = useChapterFullscreen();
     return (
         <Sidebar
+            breakPoint={fullscreen.query.data == true ? "always" : "md"}
             rtl={query.data}
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
