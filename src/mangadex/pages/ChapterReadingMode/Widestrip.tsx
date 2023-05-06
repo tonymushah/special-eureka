@@ -14,6 +14,7 @@ export default function Widestrip() {
                 {
                     data.images.map((value, index) => (
                         <Chakra.Image
+                            key={index}
                             onMouseOver={() => {
                                 reading_state.setCurrentPage(index + 1);
                             }}

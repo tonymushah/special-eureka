@@ -23,10 +23,9 @@ const MangaDexPath: string = getMangaDexPath() + "/";
 function ActualSidebar() {
     const { collapseSidebar } = useProSidebar();
     const { query } = useRTLSidebar();
-    const fullscreen = useChapterFullscreen();
     return (
         <Sidebar
-            breakPoint={fullscreen.query.data == true ? "always" : "md"}
+            breakPoint={"md"}
             rtl={query.data}
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
@@ -179,11 +178,6 @@ function ActualSidebar() {
                         >
                             Offline Library
                         </MenuItem>
-                        <Chakra.Tooltip placement="right" hasArrow label={"Will available in the next update"}>
-                            <MenuItem>
-                                <s>Advanced Search</s>
-                            </MenuItem>
-                        </Chakra.Tooltip>
                         <MenuItem
                             component={
                                 <Link to={MangaDexPath + "titles/recently-added"} />
@@ -226,9 +220,9 @@ function ActualSidebar() {
                             }
                         }}
                     >
-                        <MenuItem 
+                        <MenuItem
                             component={
-                                <Link to={MangaDexPath + "titles/search"}/>
+                                <Link to={MangaDexPath + "titles/search"} />
                             }
                         >
                             Manga
@@ -338,7 +332,7 @@ function ActualSidebar() {
 export default function Side_bar() {
     const { toggleSidebar } = useProSidebar();
     const { toggle } = useRTLSidebar();
-    //const { query, toggle } = useChapterFullscreen();
+    const { query } = useChapterFullscreen();
     return (
         <React.Fragment>
             <Hotkeys
@@ -355,9 +349,15 @@ export default function Side_bar() {
                     console.log("ctrl+r");
                 }}
             />
-            <Chakra.Box>
-                <ActualSidebar />
-            </Chakra.Box>
+            {
+                query.data == true ? (
+                    <></>
+                ) : (
+                    <Chakra.Box>
+                        <ActualSidebar />
+                    </Chakra.Box>
+                )
+            }
         </React.Fragment>
     );
 }
