@@ -195,7 +195,7 @@ export default function MangaPopularElement(props: {
                         }
                     </Chakra.Text>
                     {
-                        manga_description_query.isLoading || manga_description_query.fetchStatus == "idle" ? (
+                        manga_description_query.isLoading && manga_description_query.fetchStatus == "fetching" ? (
                             <Chakra.SkeletonText
                                 height={"20px"}
                                 //borderTopLeftRadius={"10px"}
