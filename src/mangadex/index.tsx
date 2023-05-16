@@ -41,10 +41,6 @@ const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
 
 const Longstrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Longstrip"));
 
-const Widestrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Widestrip"));
-
-const SinglePage = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/SwipperMode"));
-
 const Group_Page_ = React.lazy(() => import("@mangadex/pages/groups/index"));
 
 const Group_Search = React.lazy(() => import("@mangadex/pages/groups/search"));
@@ -230,28 +226,6 @@ function useMangadexRouter(): RouteObject {
                                     </Mangadex_suspense>
                                 )
                             },
-                            // SinglePage
-                            {
-                                path: "swipper",
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Chakra.Box>
-                                            <SinglePage />
-                                        </Chakra.Box>
-                                    </Mangadex_suspense>
-                                )
-                            },
-                            // Widestrip
-                            {
-                                path: "widestrip",
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Chakra.Box>
-                                            <Widestrip />
-                                        </Chakra.Box>
-                                    </Mangadex_suspense>
-                                )
-                            }
                         ]
                     }
                 ]

@@ -5,7 +5,8 @@ export enum UserOptionsKeys{
     languages = "languages",
     serverAutoStart = "serv-auto-start",
     mangalistOption = "mangaList-option",
-    rtlSidebar = "rtlSidebar"
+    rtlSidebar = "rtlSidebar",
+    readingMode = "readingMode"
 }
 
 export default class UserOptions extends Store{
