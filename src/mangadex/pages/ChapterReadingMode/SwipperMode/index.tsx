@@ -1,7 +1,7 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
 import { Keyboard, Zoom } from "swiper";
-import useChapterPageOutletContext from "../../chapter/UseChapterOutletContext";
+import { ChapterPage_outlet_context } from "../../chapter/UseChapterOutletContext";
 import "swiper/css";
 import "swiper/css/zoom";
 import { SwiperSlide, Swiper, SwiperRef } from "swiper/react";
@@ -10,8 +10,9 @@ import { Container } from "react-bootstrap";
 import useChapterPages from "../../chapter/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
 
-export default function SinglePage() {
-    const data = useChapterPageOutletContext();
+export default function SinglePage({ data } : {
+    data : ChapterPage_outlet_context
+}) {
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
         chapter : data.chapter

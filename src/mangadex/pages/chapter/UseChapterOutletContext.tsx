@@ -1,7 +1,7 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { useOutletContext } from "react-router-dom";
 
-type ChapterPage_outlet_context = {
+export type ChapterPage_outlet_context = {
     images: Array<string>
     chapter : Chapter
 }

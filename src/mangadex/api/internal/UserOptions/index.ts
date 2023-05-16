@@ -1,5 +1,6 @@
 import { Store } from "tauri-plugin-store-api";
 import { Lang, Languages } from "../Utils";
+import { ReadingMode } from "./ReadingMode";
 
 export enum UserOptionsKeys{
     languages = "languages",
@@ -57,5 +58,14 @@ export default class UserOptions extends Store{
     }
     public async getRtlSidebar() : Promise<boolean>{
         return (await this.get<boolean>(UserOptionsKeys.rtlSidebar)) ?? false;
+    }
+    public async setReadingMode(input: ReadingMode, save? : boolean){
+        await this.set(UserOptionsKeys.readingMode, input);
+        if(save == undefined || save == true){
+            await this.save();
+        }
+    }
+    public async getReadingMode() : Promise<ReadingMode>{
+        return (await this.get<ReadingMode>(UserOptionsKeys.readingMode)) ?? ReadingMode.LongStrip;
     }
 }

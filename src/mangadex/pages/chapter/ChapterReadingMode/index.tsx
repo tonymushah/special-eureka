@@ -1,17 +1,9 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
-import { getMangaDexPath } from "../../..";
-import useChapterReadingModeOption, { ReadingMode } from "./useChapterReadingModeOption";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
+import useChapterReadingModeOption from "./useChapterReadingModeOption";
 
-const MangaDexPath = getMangaDexPath();
-
-export default function Chapter_Reading_mode(props: {
-    chapterID: string
-}) {
+export default function Chapter_Reading_mode() {
     const { query, setReadingMode } = useChapterReadingModeOption();
-    const navigate = useNavigate();
     if (query.isSuccess) {
         return (
             <Chakra.Menu>
@@ -22,16 +14,13 @@ export default function Chapter_Reading_mode(props: {
                 </Chakra.MenuButton>
                 <Chakra.MenuList zIndex={"banner"}>
                     <Chakra.MenuItem onClick={() => {
-                        setReadingMode(ReadingMode.Longstrip);
-                        navigate(MangaDexPath + "/chapter/" + props.chapterID);
+                        setReadingMode(ReadingMode.LongStrip);
                     }}>Longstrip</Chakra.MenuItem>
                     <Chakra.MenuItem onClick={() => {
-                        setReadingMode(ReadingMode.Swipper);
-                        navigate(`${ReadingMode.Swipper}`.toLowerCase());
-                    }}>Swipper</Chakra.MenuItem>
+                        setReadingMode(ReadingMode.SinglePage);
+                    }}>SinglePage</Chakra.MenuItem>
                     <Chakra.MenuItem onClick={() => {
                         setReadingMode(ReadingMode.WideStrip);
-                        navigate(`${ReadingMode.WideStrip}`.toLowerCase());
                     }}>Widestrip</Chakra.MenuItem>
                 </Chakra.MenuList>
             </Chakra.Menu>
