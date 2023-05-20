@@ -1,10 +1,10 @@
 import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 export class Attribute{
-    private id: string;
-    private type: string;
-    private relationships: Array<Attribute> | null;
-    private related: string | null;
+    private id!: string;
+    private type!: string;
+    private relationships!: Array<Attribute> | null;
+    private related!: string | null;
     // [x] set args
     public set_id(id:string){
         this.id = id;

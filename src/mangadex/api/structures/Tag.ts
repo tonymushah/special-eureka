@@ -7,8 +7,8 @@ import { Response } from "@tauri-apps/api/http";
 
 export class Tag extends Attribute {
     private name: any;
-    private description: Array<any> | null;
-    private group: string;
+    private description!: Array<any> | null;
+    private group!: string;
     // [x] set for all args
     public set_name(name: any) {
         this.name = name;
