@@ -20,6 +20,9 @@ export default function Chapter_Reading_mode() {
                         setReadingMode(ReadingMode.SinglePage);
                     }}>SinglePage</Chakra.MenuItem>
                     <Chakra.MenuItem onClick={() => {
+                        setReadingMode(ReadingMode.DoublePage);
+                    }}>DoublePage</Chakra.MenuItem>
+                    <Chakra.MenuItem onClick={() => {
                         setReadingMode(ReadingMode.WideStrip);
                     }}>Widestrip</Chakra.MenuItem>
                 </Chakra.MenuList>

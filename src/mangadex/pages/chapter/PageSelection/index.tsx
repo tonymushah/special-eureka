@@ -1,7 +1,9 @@
 import { Text } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
-import useChapterReadingModeOption, { ReadingMode } from "../ChapterReadingMode/useChapterReadingModeOption";
+import useChapterReadingModeOption from "../ChapterReadingMode/useChapterReadingModeOption";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
+
 
 const Long_Wide_StripPS = React.lazy(() => import("./Long_Wide_StripPS"));
 
@@ -12,7 +14,7 @@ export default function PageSelection(props : {
 }){
     const current_reading_mode = useChapterReadingModeOption();
     if(current_reading_mode.query.isSuccess) {
-        if(current_reading_mode.query.data == ReadingMode.Swipper){
+        if(current_reading_mode.query.data == ReadingMode.DoublePage || current_reading_mode.query.data == ReadingMode.SinglePage){
             return (
                 <React.Suspense
                     fallback={

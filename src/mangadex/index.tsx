@@ -39,7 +39,7 @@ const Chapter_Page = React.lazy(() => import("@mangadex/pages/chapter/Chapter_Pa
 
 const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
 
-const Longstrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Longstrip"));
+const Chapter_Reading = React.lazy(() => import("@mangadex/pages/ChapterReadingMode"));
 
 const Group_Page_ = React.lazy(() => import("@mangadex/pages/groups/index"));
 
@@ -64,6 +64,7 @@ const UserPage = React.lazy(() => import("@mangadex/pages/user/UserPage+Loader")
 const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"));
 
 const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
+
 const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
 
 const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
@@ -221,7 +222,7 @@ function useMangadexRouter(): RouteObject {
                                 element: (
                                     <Mangadex_suspense>
                                         <Chakra.Box>
-                                            <Longstrip />
+                                            <Chapter_Reading/>
                                         </Chakra.Box>
                                     </Mangadex_suspense>
                                 )

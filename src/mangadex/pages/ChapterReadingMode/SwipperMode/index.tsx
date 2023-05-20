@@ -1,17 +1,16 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Keyboard, Zoom } from "swiper";
 import { ChapterPage_outlet_context } from "../../chapter/UseChapterOutletContext";
 import "swiper/css";
-import "swiper/css/zoom";
-import { SwiperSlide, Swiper, SwiperRef } from "swiper/react";
+import { SwiperSlide, Swiper, SwiperRef, SwiperProps } from "swiper/react";
 import { useFullScreenOptions_Query } from "../../chapter/ChapterFullScreen/FullScreenOptionsProvider";
 import { Container } from "react-bootstrap";
 import useChapterPages from "../../chapter/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
 
-export default function SinglePage({ data } : {
-    data : ChapterPage_outlet_context
+export default function SwipperMode({ data, swipper_option } : {
+    data : ChapterPage_outlet_context,
+    swipper_option?: SwiperProps
 }) {
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
@@ -35,14 +34,9 @@ export default function SinglePage({ data } : {
         >
             <Chakra.Box id="top-chap-view">
                 <Swiper
-                    slidesPerView={1}
-                    zoom={true}
-                    centeredSlides={true}
-                    modules={[Zoom, Keyboard]}
                     onSlideChange={() => {
                         document.getElementById("top-chap-view")?.scrollIntoView();
                     }}
-                    keyboard={true}
                     ref={swipperRef}
                     onKeyDown={(e) => {
                         if(e.key == "ArrowLeft"){
@@ -52,6 +46,7 @@ export default function SinglePage({ data } : {
                             swipperRef.current?.swiper.slideNext();
                         }
                     }}
+                    {...swipper_option}
                 >
                     {
                         data.images.map((value, index) => (

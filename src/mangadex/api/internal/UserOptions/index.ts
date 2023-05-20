@@ -7,7 +7,8 @@ export enum UserOptionsKeys{
     serverAutoStart = "serv-auto-start",
     mangalistOption = "mangaList-option",
     rtlSidebar = "rtlSidebar",
-    readingMode = "readingMode"
+    readingMode = "readingMode",
+    rtlSwipperMode = "rtlSwipperMode"
 }
 
 export default class UserOptions extends Store{
@@ -67,5 +68,14 @@ export default class UserOptions extends Store{
     }
     public async getReadingMode() : Promise<ReadingMode>{
         return (await this.get<ReadingMode>(UserOptionsKeys.readingMode)) ?? ReadingMode.LongStrip;
+    }
+    public async setRtlSwipperMode(input: boolean, save? : boolean){
+        await this.set(UserOptionsKeys.rtlSwipperMode, input);
+        if(save == undefined || save == true){
+            await this.save();
+        }
+    }
+    public async getRtlSwipperMode() : Promise<boolean>{
+        return (await this.get<boolean>(UserOptionsKeys.rtlSwipperMode)) ?? false;
     }
 }
