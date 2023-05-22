@@ -4,22 +4,21 @@ import { ChapterPage_outlet_context } from "../../chapter/UseChapterOutletContex
 import "swiper/css";
 import { SwiperSlide, Swiper, SwiperRef, SwiperProps } from "swiper/react";
 import { useFullScreenOptions_Query } from "../../chapter/ChapterFullScreen/FullScreenOptionsProvider";
-import { Container } from "react-bootstrap";
 import useChapterPages from "../../chapter/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
 
-export default function SwipperMode({ data, swipper_option } : {
-    data : ChapterPage_outlet_context,
+export default function SwipperMode({ data, swipper_option }: {
+    data: ChapterPage_outlet_context,
     swipper_option?: SwiperProps
 }) {
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
-        chapter : data.chapter
+        chapter: data.chapter
     });
     const swipperRef = React.createRef<SwiperRef>();
     useSwipperModeRef({
-        chapter : data.chapter,
-        swipper : swipperRef
+        chapter: data.chapter,
+        swipper: swipperRef
     });
     return (
         <React.Suspense
@@ -39,10 +38,10 @@ export default function SwipperMode({ data, swipper_option } : {
                     }}
                     ref={swipperRef}
                     onKeyDown={(e) => {
-                        if(e.key == "ArrowLeft"){
+                        if (e.key == "ArrowLeft") {
                             swipperRef.current?.swiper.slidePrev();
                         }
-                        if(e.key == "ArrowRight"){
+                        if (e.key == "ArrowRight") {
                             swipperRef.current?.swiper.slideNext();
                         }
                     }}
@@ -53,26 +52,22 @@ export default function SwipperMode({ data, swipper_option } : {
                             <SwiperSlide onMouseOver={() => {
                                 reading_state.setCurrentPage(index + 1);
                             }} key={`${data.chapter.get_id()}-${index}`}>
-                                <Container>
-                                    <Chakra.Center>
-                                        <Chakra.Image
-                                            fallback={
-                                                <Chakra.Box width={"full"}>
-                                                    <Chakra.Center>
-                                                        <Chakra.Spinner
-                                                            size={"xl"}
-                                                            color={"orange"}
-                                                            thickness={"10px"}
-                                                        />
-                                                    </Chakra.Center>
-                                                </Chakra.Box>
-                                            }
-                                            width={fullScreenOptions.query.data != undefined ? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
-                                            src={value}
-                                            id={`mdx-chapter-${data.chapter.get_id()}-${index+1}`}
-                                        />
-                                    </Chakra.Center>
-                                </Container>
+                                <Chakra.Image
+                                    fallback={
+                                        <Chakra.Box width={"full"}>
+                                            <Chakra.Center>
+                                                <Chakra.Spinner
+                                                    size={"xl"}
+                                                    color={"orange"}
+                                                    thickness={"10px"}
+                                                />
+                                            </Chakra.Center>
+                                        </Chakra.Box>
+                                    }
+                                    width={fullScreenOptions.query.data != undefined ? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
+                                    src={value}
+                                    id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
+                                />
                             </SwiperSlide>
                         ))
                     }

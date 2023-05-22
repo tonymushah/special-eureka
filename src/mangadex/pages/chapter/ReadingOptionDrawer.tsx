@@ -3,12 +3,16 @@ import { Chapter } from "@mangadex/api/structures/Chapter";
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import useChapterReadingDrawer from "@mangadex/resources/hooks/fullscreenOption";
+import useChapterReadingModeOption from "./ChapterReadingMode/useChapterReadingModeOption";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
+
+const DirectionSelection = React.lazy(() => import("./DirectionSelection"));
 
 const Chapter_Reading_mode = React.lazy(() => import("./ChapterReadingMode"));
 
-const ChapterNavigationModal = React.lazy(() => import("../../resources/componnents/chapter/ChapterNavigationModal"));
+const ChapterNavigationModal = React.lazy(() => import("@mangadex/resources/componnents/chapter/ChapterNavigationModal"));
 
-const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
 const Chapter_Previous_Next = React.lazy(() => import("./Chapter_Previous_Next"));
 
@@ -131,6 +135,23 @@ export default function ReadingDrawer(props: {
             </React.Fragment>
         );
     }
+    function Direction(){
+        const reading_mode = useChapterReadingModeOption();
+        if(reading_mode.query.data != ReadingMode.LongStrip ){
+            return (
+                <Chakra.HStack>
+                    <Chakra.Text>Direction : </Chakra.Text>
+                    <React.Suspense>
+                        <DirectionSelection/>
+                    </React.Suspense>
+                </Chakra.HStack>
+            );
+        }else{
+            return (
+                <React.Fragment/>
+            );
+        }
+    }
     return (
         <React.Fragment>
             <Chakra.Drawer
@@ -159,6 +180,7 @@ export default function ReadingDrawer(props: {
                         <OptionOverlay />
                         <ImageWidthController />
                         <ChapterReadingModeOption />
+                        <Direction/>
                         <NavigationModal />
                         <PageSelection/>
                     </Chakra.DrawerBody>
