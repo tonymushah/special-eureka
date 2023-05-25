@@ -116,9 +116,8 @@ export class Aggregate {
                 } else {
                     return result!;
                 }
-            } catch (error) {
-
-            }
+            // eslint-disable-next-line no-empty
+            } catch (error) {}
         }
         throw Error("this chapter " + id + " has no next chapter");
     }
@@ -137,9 +136,8 @@ export class Aggregate {
                 } else {
                     return result!;
                 }
-            } catch (error) {
-
-            }
+            // eslint-disable-next-line no-empty
+            } catch (error) {}
         }
         throw Error("this chapter " + id + " has no previous chapter");
     }
@@ -148,9 +146,8 @@ export class Aggregate {
             const volume = this.volumes[index];
             try {
                 return volume.getCurrent(id);
-            } catch (error) {
-
-            }
+            // eslint-disable-next-line no-empty
+            } catch (error) {}
         }
         throw Error("this chapter " + id + " isn't in this manga");
     }

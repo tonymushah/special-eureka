@@ -100,7 +100,11 @@ export class At_Home{
             const getted: Response<any> = await request;
             return At_Home.build_wAny(getted.data);
         }catch(e){
-            throw new Error(e);
+            if(typeof e == "string"){
+                throw new Error(e);
+            }else{ 
+                throw new Error(JSON.stringify(e));
+            }
         }
     }
 }
