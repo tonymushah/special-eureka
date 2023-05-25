@@ -21,4 +21,4 @@ once_cell = "1.17.0"
 #event-listener = "2.5.3"
 
 [dependencies.mangadex-desktop-api2]
-version = "0.2.0"
+version = "0.2.1"

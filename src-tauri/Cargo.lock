@@ -2204,9 +2204,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da34c2cef50b5844b623be8c5a49436b0982f30b51313399ade66da547f83ecd"
+checksum = "b9c364b85f72f5632df10ab18206eeaaaa6d5fad068939dde70ed5a3217d1799"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -3793,52 +3793,6 @@ dependencies = [
 
 [[package]]
 name = "tao"
-version = "0.15.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "42c460173627564bde252ca5ebf346ba5b37c5cee1a445782bacc8e9b8d38b5e"
-dependencies = [
- "bitflags",
- "cairo-rs",
- "cc",
- "cocoa",
- "core-foundation",
- "core-graphics",
- "crossbeam-channel",
- "dispatch",
- "gdk",
- "gdk-pixbuf",
- "gdk-sys",
- "gdkx11-sys",
- "gio",
- "glib",
- "glib-sys",
- "gtk",
- "image",
- "instant",
- "jni",
- "lazy_static",
- "libc",
- "log",
- "ndk",
- "ndk-context",
- "ndk-sys",
- "objc",
- "once_cell",
- "parking_lot",
- "paste",
- "png",
- "raw-window-handle",
- "scopeguard",
- "serde",
- "unicode-segmentation",
- "uuid",
- "windows 0.39.0",
- "windows-implement",
- "x11-dl",
-]
-
-[[package]]
-name = "tao"
 version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "704522803dda895767f69198af8351b0a3f4fe2e293c3ca54cce0ecba05a97f2"
@@ -4037,7 +3991,7 @@ dependencies = [
  "thiserror",
  "time",
  "uuid",
- "wry 0.23.4",
+ "wry",
 ]
 
 [[package]]
@@ -4163,7 +4117,7 @@ dependencies = [
  "webkit2gtk",
  "webview2-com",
  "windows 0.39.0",
- "wry 0.24.1",
+ "wry",
 ]
 
 [[package]]
@@ -5362,44 +5316,6 @@ dependencies = [
 
 [[package]]
 name = "wry"
-version = "0.23.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c1ad8e2424f554cc5bdebe8aa374ef5b433feff817aebabca0389961fc7ef98"
-dependencies = [
- "base64 0.13.1",
- "block",
- "cocoa",
- "core-graphics",
- "crossbeam-channel",
- "dunce",
- "gdk",
- "gio",
- "glib",
- "gtk",
- "html5ever",
- "http",
- "kuchiki",
- "libc",
- "log",
- "objc",
- "objc_id",
- "once_cell",
- "serde",
- "serde_json",
- "sha2",
- "soup2",
- "tao 0.15.3",
- "thiserror",
- "url",
- "webkit2gtk",
- "webkit2gtk-sys",
- "webview2-com",
- "windows 0.39.0",
- "windows-implement",
-]
-
-[[package]]
-name = "wry"
 version = "0.24.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1c846dc4dda988e959869dd0802cd27417c9696e584593e49178aeee28890d25"
@@ -5426,7 +5342,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "soup2",
- "tao 0.16.0",
+ "tao",
  "thiserror",
  "url",
  "webkit2gtk",

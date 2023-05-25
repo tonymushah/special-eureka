@@ -1,7 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { List } from "@mangadex/api/structures/List";
 import { Client } from "@tauri-apps/api/http";
-import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Row } from "react-bootstrap";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -60,7 +59,6 @@ export default function HomeAfterPing() {
         ]));
     });
     if (query.isSuccess) {
-        appWindow.setTitle("High Quality Image, no ads | Mangadex");
         return (
             <React.Fragment>
                 <Row className='d-block'>
