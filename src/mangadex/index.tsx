@@ -68,6 +68,7 @@ const UserPage = React.lazy(() => import("@mangadex/pages/user/UserPage+Loader")
 const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"));
 
 const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
+
 const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
 
 const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));

@@ -1,7 +1,8 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { Api_Request } from "@mangadex/api/internal/Api_Request";
+import usePingQuery from "../hooks/Ping";
+
 
 export default function IsPingable(props: {
     client: Client,
@@ -9,12 +10,8 @@ export default function IsPingable(props: {
     onError: (query: UseQueryResult<boolean, Error>) => React.ReactNode
     onLoading: React.ReactNode
 }) {
-    const query_key = ["mdx", "ping"];
-    const query = useQuery<boolean, Error>(query_key, () => {
-        return Api_Request.ping(props.client);
-    }, {
-        staleTime : 0,
-        refetchOnMount : false
+    const { query } = usePingQuery({
+        client : props.client
     });
     const context = React.createContext(query);
     if (query.isSuccess == true) {

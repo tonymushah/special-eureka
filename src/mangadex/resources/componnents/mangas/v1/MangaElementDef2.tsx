@@ -137,7 +137,7 @@ export default function MangaElementDef2(props: {
             mangaId={props.src.get_id()}
             refetch={props.refetch}
         >
-            <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"}>
+            <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"} border={"1px"} borderColor={"#cccccc"}>
                 <CoverImageByCoverID coverID={props.src.get_cover_art_id()} isThumbail size={512} image_props={{
                     maxHeight: card_maxHeight,
                     "objectFit": "contain"

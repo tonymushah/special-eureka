@@ -1,14 +1,11 @@
 import React from "react";
-import { Chapter } from "../../api/structures/Chapter";
+import { Chapter } from "@mangadex/api/structures/Chapter";
 import * as Chakra from "@chakra-ui/react";
-import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import useChapterReadingDrawer from "@mangadex/resources/hooks/fullscreenOption";
 
 const Chapter_Reading_mode = React.lazy(() => import("./ChapterReadingMode"));
 
-const ChapterNavigationModal = React.lazy(() => import("../../resources/componnents/chapter/ChapterNavigationModal"));
-
-const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
+const ChapterNavigationModal = React.lazy(() => import("@mangadex/resources/componnents/chapter/ChapterNavigationModal"));
 
 const Chapter_Previous_Next = React.lazy(() => import("./Chapter_Previous_Next"));
 
@@ -21,7 +18,6 @@ export default function ReadingDrawer(props: {
 }) {
     const { query, changeOption } = useChapterReadingDrawer();
     const [isOverlay, state] = Chakra.useBoolean(true);
-    const client = useHTTPClient();
     return (
         <React.Fragment>
             <Chakra.Drawer
@@ -47,37 +43,17 @@ export default function ReadingDrawer(props: {
                     </Chakra.DrawerHeader>
                     <Chakra.DrawerBody>
                         <Chakra.Box>
-                            Navigation (Online) :
+                            Navigation :
                             &nbsp;
                             <React.Suspense
-                                fallback={<Chakra.Spinner />}
-                            >
-                                <IsPingable
-                                    client={client}
-                                    onError={(query) => (
-                                        <Chakra.Button
-                                            colorScheme={"orange"}
-                                            onClick={() => query.refetch()}
-                                        >
-                                            Refresh
-                                        </Chakra.Button>
-                                    )}
-                                    onLoading={
+                                fallback={
+                                    <Chakra.Center>
                                         <Chakra.Spinner />
-                                    }
-                                    onSuccess={() => (
-                                        <React.Suspense
-                                            fallback={
-                                                <Chakra.Center>
-                                                    <Chakra.Spinner />
-                                                </Chakra.Center>
-                                            }
-                                        >
-                                            <Chapter_Previous_Next
-                                                src={props.chapter}
-                                            />
-                                        </React.Suspense>
-                                    )}
+                                    </Chakra.Center>
+                                }
+                            >
+                                <Chapter_Previous_Next
+                                    src={props.chapter}
                                 />
                             </React.Suspense>
                         </Chakra.Box>
@@ -99,7 +75,7 @@ export default function ReadingDrawer(props: {
                             direction="column"
                         >
                             <React.Suspense>
-                                <ImageWidthSlider/>
+                                <ImageWidthSlider />
                             </React.Suspense>
                         </Chakra.Stack>
                         <Chakra.Box
@@ -127,7 +103,7 @@ export default function ReadingDrawer(props: {
                         <React.Suspense
                             fallback={<Chakra.Spinner></Chakra.Spinner>}
                         >
-                            <PageSelection chapter={props.chapter}/>
+                            <PageSelection chapter={props.chapter} />
                         </React.Suspense>
                     </Chakra.DrawerBody>
                 </Chakra.DrawerContent>
