@@ -2,20 +2,18 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
-import { ViteAliases } from "vite-aliases";
-import mdx from "@mdx-js/rollup";
+//import { ViteAliases } from "vite-aliases";
 
 export default defineConfig({
     clearScreen: false,
     plugins: [
-        mdx(),
         //ReactInspector(),
         //progress(),
-        ViteAliases({
+        /*ViteAliases({
             "dir": "src",
             useConfig: true,
             useTypescript: true
-        }),
+        }),*/
         react({
             "tsDecorators": true
         }),
