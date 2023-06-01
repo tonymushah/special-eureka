@@ -83,6 +83,12 @@
             ],
             "@template/*": [
                 "src/template/*"
+            ],
+            "@node_modules/*": [
+                "src/node_modules/*"
+            ],
+            "@.vite/*": [
+                "src/node_modules/.vite/*"
             ]
         }
     },

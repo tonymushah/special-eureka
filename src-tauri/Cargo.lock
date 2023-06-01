@@ -3977,9 +3977,9 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-aptabase"
-version = "0.1.4"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b31520a7c0c899202e1cb026a7ffff5a7edf1c5ceb15ca8ab9389e9e0549fb01"
+checksum = "8f5119715f95eb986412fca799364c138c8ba2dda3e9b01d8100f67d3cb03578"
 dependencies = [
  "log",
  "os_info",
