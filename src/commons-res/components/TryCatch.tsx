@@ -1,5 +1,5 @@
+import { trackEvent } from "@aptabase/tauri";
 import React from "react";
-import { isFunctionLike } from "typescript";
 
 function ErrorProvider(props: {
     error: Error,
@@ -34,8 +34,12 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
     static getDerivedStateFromError(error: Error) {
         return { hasError: true, error: error };
     }
-    componentDidCatch(error: Error) {
-
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+        trackEvent("special-eureka-error", {
+            "location": window.location.href,
+            "error-message": error.message,
+            "error-name": error.name
+        });
     }
     render(): React.ReactNode {
         if (this.state.hasError == true) {
@@ -48,12 +52,12 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
                             }
                         </ErrorProvider>
                     );
-                }else{
+                } else {
                     return (
                         <></>
                     );
                 }
-            }else{
+            } else {
                 if (this.props.catch != undefined) {
                     return (
                         <ErrorProvider error={new Error()}>
@@ -62,7 +66,7 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
                             }
                         </ErrorProvider>
                     );
-                }else{
+                } else {
                     return (
                         <></>
                     );

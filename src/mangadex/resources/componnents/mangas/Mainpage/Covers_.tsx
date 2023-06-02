@@ -6,6 +6,7 @@ import { Cover } from "@mangadex/api/structures/Cover";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
 import CoverImage from "../../covers/v1/CoverImage";
+import MangaPage_Cover from "./covers";
 
 //const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
 
@@ -50,26 +51,7 @@ export function Covers_Manga(props: MangaPageProps) {
         >
             {(getted_collection) => (
                 <Chakra.Wrap>
-                    {
-                        getted_collection.get_data().map((value) => (
-                            <Chakra.WrapItem
-                                key={value.get_id()}
-                                padding={"10px"}
-                                width={"10em"}
-                            >
-                                <Chakra.Card
-                                    border={"1px"}
-                                    borderColor={"black"}
-                                >
-                                    <CoverImage
-                                        isThumbail={true}
-                                        size={256}
-                                        src={value}
-                                    />
-                                </Chakra.Card>
-                            </Chakra.WrapItem>
-                        ))
-                    }
+                    <MangaPage_Cover covers={getted_collection.get_data()}/>
                 </Chakra.Wrap>
             )}
         </CollectionComponnent_WithQuery>

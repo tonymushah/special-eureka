@@ -32,12 +32,16 @@ export class Api_Request{
     public static get_url() : string {
         return Api_Request.url;
     }
-    public static async get_methods(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
+    public static async get_methods<T = any>(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<T>>{
+        let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
+            is_client_initialized = true;
         }
-        const getted = client.get(Api_Request.url + to_use, options);
-        const result : any = await getted;
+        const result = await client.get<T>(Api_Request.url + to_use, options);
+        if(is_client_initialized){
+            client.drop();
+        }
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -45,11 +49,16 @@ export class Api_Request{
         }
     }
     public static async put_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined, client? : Client): Promise<Response<any>>{
+        let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
+            is_client_initialized = true;
         }
         const getted = client.put(Api_Request.url + to_use, body,options);
         const result: any = await getted;
+        if(is_client_initialized){
+            client.drop();
+        }
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -57,11 +66,16 @@ export class Api_Request{
         }
     }
     public static async post_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
+        let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
+            is_client_initialized = true;
         }
         const getted = client.post(Api_Request.url + to_use, body, options);
         const result: any = await getted;
+        if(is_client_initialized){
+            client.drop();
+        }
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -69,11 +83,16 @@ export class Api_Request{
         }
     }
     public static async patch_methods(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
+        let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
+            is_client_initialized = true;
         }
         const getted = client.patch(Api_Request.url + to_use, options);
         const result: any = await getted;
+        if(is_client_initialized){
+            client.drop();
+        }
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -81,11 +100,16 @@ export class Api_Request{
         }
     }
     public static async delete_methods(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
+        let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
+            is_client_initialized = true;
         }
         const getted = client.delete(Api_Request.url + to_use, options);
         const result: any = await getted;
+        if(is_client_initialized){
+            client.drop();
+        }
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
@@ -93,12 +117,16 @@ export class Api_Request{
         }
     }
     public static async request_methods(httpOptions: HttpOptions, client? : Client): Promise<Response<any>>{
+        let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
+            is_client_initialized = true;
         }
         const getted = client.request(httpOptions);
-        let request_res : Response<any>;
-        request_res = await getted;
+        const request_res : Response<any> = await getted;
+        if(is_client_initialized){
+            client.drop();
+        }
         return request_res;
     }
     public static async ping(client? : Client): Promise<boolean>{

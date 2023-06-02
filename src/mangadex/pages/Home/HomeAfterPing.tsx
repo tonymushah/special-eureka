@@ -1,7 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { List } from "@mangadex/api/structures/List";
 import { Client } from "@tauri-apps/api/http";
-import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Row } from "react-bootstrap";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -39,7 +38,8 @@ async function recentlyAdded_loader(client: Client, queryClient: QueryClient) {
 }
 
 async function seasonal_loader(client: Client, queryClient: QueryClient) {
-    const seasonal_id = getSeasonalId();
+    const seasonal_id = await getSeasonalId(client);
+    queryClient.setQueryData(["mdx", "seasonal", "id"], seasonal_id);
     const data = await List.getListByID_includes_manga(seasonal_id, client);
     const key = ["mdx", "custom_list", seasonal_id];
     queryClient.setQueryData(key, data);
@@ -51,7 +51,7 @@ export default function HomeAfterPing() {
     const queryKey = ["mdx", "home", "page", "loader"];
     const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {
-        (await Promise.allSettled([
+        return (await Promise.allSettled([
             latest_loader(client, queryClient),
             popular_loader(client, queryClient),
             recentlyAdded_loader(client, queryClient),
@@ -59,7 +59,6 @@ export default function HomeAfterPing() {
         ]));
     });
     if (query.isSuccess) {
-        appWindow.setTitle("High Quality Image, no ads | Mangadex");
         return (
             <React.Fragment>
                 <Row className='d-block'>

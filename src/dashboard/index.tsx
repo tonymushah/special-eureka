@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, RouteObject } from "react-router";
 import * as Chakra from "@chakra-ui/react";
 import Dashboard_logo from "@commons-res/common-icon/eureka-logo6.svg";
+import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 
 import "bootstrap/dist/css/bootstrap-grid.min.css";
 
@@ -15,6 +16,16 @@ const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components
 
 const Updates = React.lazy(() => import("./pages/updates/index"));
 
+export function trackEvent(name : string, payload?: {
+    [key : string] : string | number
+}){
+    aptabaseTrackEvent(name, {
+        "website" : "dashboard",
+        "location" : window.location.href,
+        ...payload
+    });
+}
+
 export function getDashboardPath() {
     return "/dashboard";
 }
@@ -25,6 +36,14 @@ export function getLogo() {
 
 export function getProjectPath(){
     return getDashboardPath();
+}
+
+export function useTrackEvent(name : string, payload?:{
+    [key : string] : string | number
+}){
+    React.useEffect(() => {
+        trackEvent(name, payload);
+    }, []);
 }
 
 

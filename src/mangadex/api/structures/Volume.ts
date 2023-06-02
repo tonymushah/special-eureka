@@ -1,11 +1,9 @@
-import { Api_Request } from "../internal/Api_Request";
-import { Response } from "@tauri-apps/api/http";
 import { Chapters } from "./Chapter";
 
 export class Volume{
-    private name: string;
-    private count: number;
-    private chapters: Array<Chapters>;
+    private name!: string;
+    private count!: number;
+    private chapters!: Array<Chapters>;
     public set_name(name: string){
         this.name = name;
     }

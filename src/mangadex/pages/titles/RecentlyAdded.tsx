@@ -1,16 +1,16 @@
 import React from "react";
-import { Asc_Desc, Offset_limits, Order } from "../../api/internal/Utils";
+import { Asc_Desc, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import * as Chakra from "@chakra-ui/react";
-import { CollectionComponnent_WithQuery } from "../../resources/componnents/Collection/Collection";
-import { Manga } from "../../api/structures/Manga";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense } from "../..";
+import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex";
 import { Container } from "react-bootstrap";
 import { appWindow } from "@tauri-apps/api/window";
 
-const MangaList = React.lazy(() => import("../../resources/componnents/mangas/v1/MangaList"));
-const IsPingable = React.lazy(() => import("../../resources/componnents/IsPingable"));
-const IsPingable_defaultError = React.lazy(() => import("../../resources/componnents/IsPingable_defaultError"));
+const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
+const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
 
 export default function RecentlyAdded() {
     const offset_limit = new Offset_limits();
@@ -18,6 +18,7 @@ export default function RecentlyAdded() {
     const client = useHTTPClient();
     const queryKey = ["mdx", "recently-added"];
     appWindow.setTitle("Recently Added | Mangadex");
+    useTrackEvent("mangadex-recently-added-entrance");
     return (
         <Mangadex_suspense>
             <IsPingable

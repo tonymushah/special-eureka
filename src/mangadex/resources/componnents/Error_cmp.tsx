@@ -1,4 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
+import { trackEvent } from "@mangadex";
 import { useAsyncError, useRouteError } from "react-router";
 
 export function ErrorELAsync1(){
@@ -83,6 +84,9 @@ export function ErrorELAsync(){
 }
 export function ErrorELRouter(){
     const error : any = useRouteError();
+    trackEvent("mangadex-router-error", {
+        error : JSON.stringify(error)
+    });
     return(
         <Chakra.Alert 
             status="error"

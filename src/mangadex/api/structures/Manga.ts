@@ -18,6 +18,7 @@ import AllDownloadedCover_Of_aMangaCollection from "./CollectionTypes/AllDownloa
 import MangaSearch_withAllIncludes from "./SearchType/MangaSearch_withAllIncludes";
 import Manga_withAllIncludes_Collection from "./CollectionTypes/Manga_withAllIncludes_Collection";
 import { download_all_manga_covers, download_manga, download_manga_cover, patch_all_manga_cover, refetch_all_manga } from "@mangadex/plugin";
+import MangaStatus from "../enums/MangaStatus";
 
 
 export class Manga extends Attribute{
@@ -25,21 +26,21 @@ export class Manga extends Attribute{
     private title: any;
     private alt_title: any;
     private description: any;
-    private status: string;
-    private last_volume: string | null;
-    private last_chapter: string | null;
-    private created_at: string;
-    private updated_at: string;
-    private tags: Array<Tag>;
-    private demographic: string | null;
-    private year : number | null;
+    private status!: string;
+    private last_volume!: string | null;
+    private last_chapter!: string | null;
+    private created_at!: string;
+    private updated_at!: string;
+    private tags!: Array<Tag>;
+    private demographic!: string | null;
+    private year!: number | null;
     private links: any;
-    private content_rating: string;
-    private avaible_language: Array<string>;
-    private aggregate: Aggregate;
-    private state : string | null;
-    private originalLanguage: string;
-    private latestUploadedChapter : string;
+    private content_rating!: string;
+    private avaible_language!: Array<string>;
+    private aggregate!: Aggregate;
+    private state!: string | null;
+    private originalLanguage!: string;
+    private latestUploadedChapter!: string;
 
     /**
      * Getter $latestUploadedChapter
@@ -68,6 +69,19 @@ export class Manga extends Attribute{
     }
     public get_state(): string | null{
         return this.state;
+    }
+    public get_status_enum() : MangaStatus{
+        if(this.get_status() == MangaStatus.cancelled){
+            return MangaStatus.cancelled;
+        }else if (this.get_status() == MangaStatus.completed){
+            return MangaStatus.completed;
+        }else if (this.get_status() == MangaStatus.hiatus){
+            return MangaStatus.hiatus;
+        }else if (this.get_status() == MangaStatus.ongoing){
+            return MangaStatus.ongoing;
+        }else {
+            return MangaStatus.other;
+        }
     }
     public set_links(links: any){
         this.links = links;
@@ -1143,10 +1157,10 @@ export class Manga_2 extends Manga{
 }
 
 export class Manga_with_allRelationship extends Manga {
-    private authors : Array<Author>;
-    private artists : Array<Author>;
-    private cover : Cover;
-    private related_manga : Array<Manga>;
+    private authors! : Array<Author>;
+    private artists! : Array<Author>;
+    private cover! : Cover;
+    private related_manga! : Array<Manga>;
 
     /**
      * Getter $authors

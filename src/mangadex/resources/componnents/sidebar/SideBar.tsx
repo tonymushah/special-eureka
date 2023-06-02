@@ -1,15 +1,18 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import { getMangaDexPath } from "@mangadex";
+import "@mangadex/resources/css/sidebar.css";
+import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import React from "react";
 import { FaBookmark, FaBookOpen, FaCog, FaComments, FaHome, FaUser } from "react-icons/fa";
+import { RiGroupFill, RiSearchEyeFill } from "react-icons/ri";
 import { Menu, MenuItem, Sidebar, sidebarClasses, SubMenu, useProSidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
-import { ExtLink } from "@commons-res/components/ExtLink";
 import SideBarUserOption from "./useroption";
-import { RiGroupLine } from "react-icons/ri";
-import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import "@mangadex/resources/css/sidebar.css";
+import Hotkeys from "react-hot-keys";
+import { useChapterFullscreen } from "../chapter/fullscreen/Context";
+import useRTLSidebar from "@mangadex/resources/hooks/userOptions/RtlSidebar";
 
 const Downloads_badge_ = React.lazy(() => import("./Download_badge"));
 
@@ -17,17 +20,22 @@ const Downloads_badge_With_Server_Icon = React.lazy(() => import("./Download_Bad
 
 const MangaDexPath: string = getMangaDexPath() + "/";
 
-export default function Side_bar() {
+function ActualSidebar() {
     const { collapseSidebar } = useProSidebar();
+    const { query } = useRTLSidebar();
     return (
         <Sidebar
-            breakPoint="md"
+            breakPoint={"md"}
+            rtl={query.data}
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
                     backgroundColor: "#2c2c2c",
-                    color: "#f2f2f2"
-                }
+                    color: "#f2f2f2",
+                },
+                height: "100vh",
             }}
+            backgroundColor="#2c2c2c"
+            defaultCollapsed
         >
             <Menu
                 rootStyles={{
@@ -37,9 +45,9 @@ export default function Side_bar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: "#2c2c2c"
-                        }
-                    }
+                            backgroundColor: "#525252"
+                        },
+                    },
                 }}
             >
                 <MenuItem
@@ -61,17 +69,46 @@ export default function Side_bar() {
                 </MenuItem>
             </Menu>
             <Menu
+                rootStyles={{
+                    marginBottom: "20px",
+                    marginTop: "20px"
+                }}
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: "#2c2c2c"
+                            backgroundColor: "#525252"
+                        }
+                    }
+                }}
+            >
+                <SideBarUserOption>
+                    <MenuItem
+                        icon={
+                            <FaUser />
+                        }
+                        suffix={
+                            <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>
+                                <Chakra.Button
+                                    colorScheme={"facebook"}
+                                >
+                                    <s>Login</s>
+                                </Chakra.Button>
+                            </Chakra.Tooltip>
+                        }
+                    >
+                        Guest
+                    </MenuItem>
+                </SideBarUserOption>
+            </Menu>
+            <Menu
+                menuItemStyles={{
+                    button: {
+                        ":hover": {
+                            backgroundColor: "#525252"
                         }
                     }
                 }}
                 rootStyles={{
-                    maxHeight: "80vh",
-                    height: "80vh",
-                    overflowY: "scroll",
                     overflowX: "hidden"
                 }}
             >
@@ -100,7 +137,7 @@ export default function Side_bar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -157,7 +194,7 @@ export default function Side_bar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -171,11 +208,6 @@ export default function Side_bar() {
                         >
                             Offline Library
                         </MenuItem>
-                        <Chakra.Tooltip placement="right" hasArrow label={"Will available in the next update"}>
-                            <MenuItem>
-                                <s>Advanced Search</s>
-                            </MenuItem>
-                        </Chakra.Tooltip>
                         <MenuItem
                             component={
                                 <Link to={MangaDexPath + "titles/recently-added"} />
@@ -202,13 +234,53 @@ export default function Side_bar() {
                         </MenuItem>
                     </Menu>
                 </SubMenu>
-                <SubMenu defaultOpen={false} icon={<RiGroupLine onClick={() => collapseSidebar()}/>} label={"Community"}>
+                <SubMenu
+                    icon={
+                        <RiSearchEyeFill />
+                    }
+                    label="Search"
+                >
                     <Menu
                         menuItemStyles={{
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
+                                }
+                            }
+                        }}
+                    >
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "titles/search"} />
+                            }
+                        >
+                            Manga
+                        </MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "author/search"} />
+                            }
+                        >
+                            Author
+                        </MenuItem>
+                        <MenuItem
+                            component={
+                                <Link to={MangaDexPath + "group/search"} />
+                            }
+                        >
+                            Groups
+                        </MenuItem>
+                        <MenuItem>Chapter</MenuItem>
+                    </Menu>
+                </SubMenu>
+                <SubMenu defaultOpen={false} icon={<RiGroupFill onClick={() => collapseSidebar()} />} label={"Community"}>
+                    <Menu
+                        menuItemStyles={{
+                            button: {
+                                backgroundColor: "#2c2c2c",
+                                ":hover": {
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -221,13 +293,6 @@ export default function Side_bar() {
                                 Forums
                             </MenuItem>
                         </ExtLink>
-                        <MenuItem
-                            component={
-                                <Link to={MangaDexPath + "group/search"} />
-                            }
-                        >
-                            Groups
-                        </MenuItem>
                     </Menu>
                 </SubMenu>
                 <SubMenu defaultOpen={false} icon={
@@ -242,7 +307,7 @@ export default function Side_bar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -259,37 +324,39 @@ export default function Side_bar() {
                 </SubMenu>
 
             </Menu>
-            <Menu
-                rootStyles={{
-
-                }}
-                menuItemStyles={{
-                    button: {
-                        ":hover": {
-                            backgroundColor: "#2c2c2c"
-                        }
-                    }
-                }}
-            >
-                <SideBarUserOption>
-                    <MenuItem
-                        icon={
-                            <FaUser />
-                        }
-                        suffix={
-                            <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>
-                                <Chakra.Button
-                                    colorScheme={"facebook"}
-                                >
-                                    <s>Login</s>
-                                </Chakra.Button>
-                            </Chakra.Tooltip>
-                        }
-                    >
-                        Guest
-                    </MenuItem>
-                </SideBarUserOption>
-            </Menu>
         </Sidebar>
+    );
+}
+
+export default function Side_bar() {
+    const { toggleSidebar } = useProSidebar();
+    const { toggle } = useRTLSidebar();
+    const { query } = useChapterFullscreen();
+    return (
+        <React.Fragment>
+            <Hotkeys
+                keyName="ctrl+p"
+                onKeyDown={() => {
+                    toggleSidebar();
+                    console.log("ctrl+p");
+                }}
+            />
+            <Hotkeys
+                keyName="ctrl+r"
+                onKeyDown={() => {
+                    toggle();
+                    console.log("ctrl+r");
+                }}
+            />
+            {
+                query.data == true ? (
+                    <></>
+                ) : (
+                    <Chakra.Box>
+                        <ActualSidebar />
+                    </Chakra.Box>
+                )
+            }
+        </React.Fragment>
     );
 }

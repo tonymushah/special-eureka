@@ -5,23 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 const HTTPClientProvider = React.lazy(() => import("./HTTPClientProvider"));
 
 export default function HTTPClientProvider_Query(props: React.PropsWithChildren<{
-    value: Promise<Client>,
+    value: () => Promise<Client>,
     onLoading: React.ReactNode,
     onError: (error: Error) => React.ReactNode
 }>) {
     const queryKey = ["tauri", "http_client"];
-    const query = useQuery<Client, Error>(queryKey, () => {
-        return props.value;
-    }, {
-        staleTime: Infinity,
-        cacheTime: 0,
-        retry(failureCount) {
-            if (failureCount >= 3) {
-                return false;
-            } else {
-                return true;
-            }
-        },
+    const query = useQuery<Client, Error>(queryKey, props.value, {
+        staleTime: Infinity
     });
     React.useEffect(() => {
         return () => {
@@ -29,7 +19,7 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
                 query.data.drop();
             }
         };
-    }, [query.data]);
+    }, []);
     if (query.isSuccess == true) {
         if (props.children == undefined) {
             return (<></>);

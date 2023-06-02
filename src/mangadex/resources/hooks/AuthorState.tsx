@@ -28,20 +28,18 @@ export function get_author_byID(props : {
     };
 }
 
-export function get_author_works_promise(props: {
+export async function get_author_works_promise(props: {
     author_id: string,
     client: Client
 }) {
-    return Manga.search({
-        offset_Limits: new Offset_limits(),
-        authors: [
-            props.author_id
-        ],
-        artists: [
-            props.author_id
-        ],
-        client: props.client
-    });
+    const author = (await Author.getAuthorById(props.author_id, props.client));
+    await author.build_Works(props.client);
+    const works = author.get_works();
+    if(works){
+        return works;
+    }else{
+        throw new Error("this author has no work");
+    }
 }
 
 export function get_author_works_query_key_byAuthor_ID(props: {

@@ -1,18 +1,15 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
+import useChapterReadingDrawer from "@mangadex/resources/hooks/fullscreenOption";
 import React from "react";
-
-const FullScreenReadingOption = React.lazy(() => import("./FullScreenReadingOption"));
 
 export default function FullScreenOptions(props: React.PropsWithChildren<{
     isShow: boolean,
     chapter: Chapter,
     onCloseButtonClick: () => void
 }>) {
-    const { getButtonProps, getDisclosureProps, isOpen } = useDisclosure();
-    const [hidden, setHidden] = React.useState(!isOpen);
+    const { changeOption } = useChapterReadingDrawer();
     if (props.isShow == true) {
         return (
             <React.Fragment>
@@ -42,17 +39,12 @@ export default function FullScreenOptions(props: React.PropsWithChildren<{
                         float={"right"}
                         _hover={{
                             opacity: "1"
-                        }} {...getButtonProps()} />
-                </Chakra.Box>
-                <React.Suspense>
-                    <FullScreenReadingOption
-                        isOpen={isOpen}
-                        getDisclosureProps={getDisclosureProps}
-                        hidden={hidden}
-                        setHidden={setHidden}
-                        chapter={props.chapter}
+                        }}
+                        onClick={() => {
+                            changeOption(true);
+                        }}
                     />
-                </React.Suspense>
+                </Chakra.Box>
             </React.Fragment>
         );
     }

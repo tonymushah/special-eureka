@@ -1,9 +1,10 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-
 import { Container } from "react-bootstrap";
-import { Author } from "../../../api/structures/Author";
+import { Author } from "@mangadex/api/structures/Author";
 import waveHaikei from "./imgs/wave-haikei-1.svg";
+import { useTrackEvent } from "@mangadex";
+import { appWindow } from "@tauri-apps/api/window";
 
 const Author_Page_Biography = React.lazy(() => import("./Author_Page_Biography"));
 const Author_Page_Socials = React.lazy(() => import("./Author_Page_Socials"));
@@ -28,6 +29,11 @@ function Author_Page_Suspense(props: React.PropsWithChildren){
 export default function Author_Page(props: {
     src: Author
 }) {
+    useTrackEvent("mangadex-author-entrance", {
+        type : "author",
+        id : props.src.get_id()
+    });
+    appWindow.setTitle(`${props.src.get_Name()} | Mangadex`);
     return (
         <Chakra.Box>
             <Chakra.Box

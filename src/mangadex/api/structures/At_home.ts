@@ -1,13 +1,12 @@
 import { Client, Response } from "@tauri-apps/api/http";
-import { forEachChild } from "typescript";
 import { Api_Request } from "../internal/Api_Request";
 import { Chapter } from "./Chapter";
 export class At_Home{
-    private chapter: Chapter;
-    private baseUrl: string;
-    private hash: string;
-    private data: Array<string>;
-    private dataSaver: Array<string>;
+    private chapter!: Chapter;
+    private baseUrl!: string;
+    private hash!: string;
+    private data!: Array<string>;
+    private dataSaver!: Array<string>;
     public set_chapter(chapter: Chapter){
         this.chapter = chapter;
     }
@@ -101,7 +100,11 @@ export class At_Home{
             const getted: Response<any> = await request;
             return At_Home.build_wAny(getted.data);
         }catch(e){
-            throw new Error(e);
+            if(typeof e == "string"){
+                throw new Error(e);
+            }else{ 
+                throw new Error(JSON.stringify(e));
+            }
         }
     }
 }

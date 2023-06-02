@@ -11,9 +11,11 @@ import CurrentlySupportedWebsites from "./CurrentlySupportedWebsite";
 import DevNotes from "./DevNotes";
 import PoweredBy from "./PoweredBy";
 import Welcome from "./Welcome";
+import { useTrackEvent } from "@dashboard";
 
 export default function Home() {
     appWindow.setTitle("Welcome to Special-Eureka | Dashboard").then();
+    useTrackEvent("dashboard-entrance");
     return (
         <React.Fragment>
             <Chakra.Box

@@ -2,11 +2,11 @@ import React, { useMemo } from "react";
 import * as Chakra from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Group } from "../../api/structures/Group";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
+import { Group } from "@mangadex/api/structures/Group";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { appWindow } from "@tauri-apps/api/window";
 
-const Group_Page = React.lazy(() => import("../../resources/componnents/groups/Group_Page"));
+const Group_Page = React.lazy(() => import("@mangadex/resources/componnents/groups/Group_Page"));
 
 function Group_Page_Suspense(props : React.PropsWithChildren){
     return (

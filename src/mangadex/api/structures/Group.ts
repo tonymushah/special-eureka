@@ -18,25 +18,25 @@ import Group_WithAllRelationShip_Collection from "./CollectionTypes/Group_WithAl
 
 export class Group extends Attribute {
     protected static group_r = "group/";
-    private name: string;
+    private name!: string;
     private altNames: any;
-    private website: string;
-    private ircServer: string;
-    private ircChannel: string;
-    private discord: string;
-    private contactEmail: string;
-    private description: string;
-    private twitter: string;
-    private mangaUpdates: string;
-    private focusedLanguage: Array<string>;
-    private locked: boolean;
-    private official: boolean;
-    private inactive: boolean;
-    private publishDelay: string;
-    private version: number;
-    private createdAt: string;
-    private updatedAt: string;
-    private verified: boolean;
+    private website!: string;
+    private ircServer!: string;
+    private ircChannel!: string;
+    private discord!: string;
+    private contactEmail!: string;
+    private description!: string;
+    private twitter!: string;
+    private mangaUpdates!: string;
+    private focusedLanguage!: Array<string>;
+    private locked!: boolean;
+    private official!: boolean;
+    private inactive!: boolean;
+    private publishDelay!: string;
+    private version!: number;
+    private createdAt!: string;
+    private updatedAt!: string;
+    private verified!: boolean;
     public static get_group_a(): string {
         return Group.group_r;
     }

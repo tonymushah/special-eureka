@@ -22,17 +22,17 @@ import { download_chapter, download_chapter_data_saver } from "@mangadex/plugin"
 import IsDownloadedResult from "./additonal_types/IsDownloadedResult";
 
 export class Chapter extends Attribute {
-    private title: string;
-    private volume: string;
-    private pages: number;
-    private translatedLanguage: string;
-    private externalUrl: string;
-    private version: number;
-    private createdAt: string;
-    private updateAt: string;
-    private publishAt: string;
-    private readableAt: string;
-    private chapNo: number;
+    private title!: string;
+    private volume!: string;
+    private pages!: number;
+    private translatedLanguage!: string;
+    private externalUrl!: string;
+    private version!: number;
+    private createdAt!: string;
+    private updateAt!: string;
+    private publishAt!: string;
+    private readableAt!: string;
+    private chapNo!: number;
     public set_title(title: string) {
         this.title = title;
     }
@@ -506,10 +506,10 @@ export class Chapter extends Attribute {
     }
 }
 export class Chapters {
-    private name: string;
-    private ids: Array<string>;
-    private count: number;
-    private chapters: Array<Chapter_withAllIncludes>;
+    private name!: string;
+    private ids!: Array<string>;
+    private count!: number;
+    private chapters!: Array<Chapter_withAllIncludes>;
     public set_name(name: string) {
         this.name = name;
     }
@@ -579,9 +579,9 @@ export class Chapters {
 }
 
 export class Chapter_withAllIncludes extends Chapter {
-    private groups: Array<Group>;
-    private uploader: User;
-    private manga: Manga;
+    private groups!: Array<Group>;
+    private uploader!: User;
+    private manga!: Manga;
     public set_groups(groups: Array<Group>) {
         this.groups = groups;
     }

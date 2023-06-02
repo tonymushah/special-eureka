@@ -17,7 +17,7 @@ jobs:
       - name: install pnpm 
         uses: pnpm/action-setup@v2
         with:
-          version: 7
+          version: 8
           run_install: false
       - name: install Rust stable
         uses: actions-rs/toolchain@v1

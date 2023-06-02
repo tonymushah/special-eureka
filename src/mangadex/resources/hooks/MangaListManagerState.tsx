@@ -1,22 +1,26 @@
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUserOption } from "../componnents/userOption/UserOptionProvider";
 
-type Index = 0 | 1 | 2
-
-export function useMangaListOption(props: {
-    index?: Index
-}){
-    const queryClient = useQueryClient();
+export function useMangaListOption(){
+    const useroption = useUserOption();
     const query_key = ["mdx", "manga", "list", "option"];
-    if(queryClient.getQueryData<Index>(query_key) == undefined){
-        queryClient.setQueryData<Index>(query_key, props.index? props.index : 0);
-    }
-    const data = queryClient.getQueryData<Index>(query_key);
-    const updateListOption = (index: Index) => {
-        queryClient.setQueryData<Index>(query_key, index);
-    };
+    const query = useQuery(query_key, () => {
+        return useroption.getMangaListOption();
+    });
+    const mutation = useMutation({
+        mutationKey : query_key.concat("mutation"),
+        mutationFn: async (input : number) => {
+            await useroption.setMangaListOption(input);
+            return await useroption.getMangaListOption();
+        },
+        onSuccess() {
+            query.refetch();
+        },
+    });
     return {
         query_key,
-        data,
-        updateListOption
+        ...query,
+        updateListOption : mutation.mutate,
+        mutation
     };
 }

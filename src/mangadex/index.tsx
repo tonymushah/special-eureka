@@ -7,6 +7,7 @@ import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBoun
 import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import "@mangadex/resources/Poppins/Poppins.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 
 const MangaDexPath = "/mangadex";
 
@@ -68,6 +69,11 @@ const UserPageInfo = React.lazy(() => import("@mangadex/pages/user/UserPageInfo"
 
 const UserPageFeed = React.lazy(() => import("@mangadex/pages/user/UserPageFeed"));
 
+const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
+
+const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
+
+
 export function Mangadex_suspense__() {
     return (
         <Chakra.Box
@@ -83,6 +89,25 @@ export function Mangadex_suspense__() {
             </Chakra.Center>
         </Chakra.Box>
     );
+}
+
+export function useTrackEvent(name: string, payload?: {
+    [key: string]: string | number
+}) {
+    React.useMemo(() => {
+        trackEvent(name, payload);
+    }, []);
+}
+
+export function trackEvent(name: string, payload?: {
+    [key: string]: string | number
+}) {
+    aptabaseTrackEvent(name, {
+        "website": "mangadex",
+        "location": window.location.href,
+        "date" : new Date().toISOString(),
+        ...payload
+    });
 }
 
 export function Mangadex_suspense(props: React.PropsWithChildren) {
@@ -307,11 +332,21 @@ function useMangadexRouter(): RouteObject {
                             </Mangadex_suspense>
                         )
                     },
+                    // Recently Popular
                     {
                         path: "recently-popular",
                         element: (
                             <Mangadex_suspense>
                                 <RecentlyPopularPage />
+                            </Mangadex_suspense>
+                        )
+                    },
+                    // Manga Search
+                    {
+                        path: "search",
+                        element: (
+                            <Mangadex_suspense>
+                                <Manga_Search />
                             </Mangadex_suspense>
                         )
                     }
@@ -339,42 +374,50 @@ function useMangadexRouter(): RouteObject {
                                 />
                             </Mangadex_suspense>
                         )
+                    },
+                    {
+                        path: "search",
+                        element: (
+                            <Mangadex_suspense>
+                                <AuthorSearch />
+                            </Mangadex_suspense>
+                        )
                     }
                 ]
             },
             // User 
             {
-                path : "user",
-                errorElement : (
-                    <ErrorELRouter/>
+                path: "user",
+                errorElement: (
+                    <ErrorELRouter />
                 ),
-                children : [
+                children: [
                     {
-                        path : ":user_id",
-                        errorElement : (<ErrorELRouter/>),
-                        element : (
+                        path: ":user_id",
+                        errorElement: (<ErrorELRouter />),
+                        element: (
                             <Mangadex_suspense>
-                                <UserPage/>
+                                <UserPage />
                             </Mangadex_suspense>
                         ),
-                        children : [
+                        children: [
                             {
-                                index : true,
-                                errorElement : (<ErrorELRouter/>),
-                                element : (
+                                index: true,
+                                errorElement: (<ErrorELRouter />),
+                                element: (
                                     <Mangadex_suspense>
-                                        <UserPageInfo/>
+                                        <UserPageInfo />
                                     </Mangadex_suspense>
                                 )
                             },
                             {
-                                path : "feed",
-                                errorElement : (
-                                    <ErrorELRouter/>
+                                path: "feed",
+                                errorElement: (
+                                    <ErrorELRouter />
                                 ),
-                                element : (
+                                element: (
                                     <Mangadex_suspense>
-                                        <UserPageFeed/>
+                                        <UserPageFeed />
                                     </Mangadex_suspense>
                                 )
                             }

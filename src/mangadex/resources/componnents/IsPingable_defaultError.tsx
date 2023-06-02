@@ -24,6 +24,7 @@ export default function IsPingable_defaultError(props: {
                     <Button
                         colorScheme={"orange"}
                         onClick={() => query.refetch()}
+                        isLoading={query.fetchStatus == "fetching"}
                     >
                         Refresh
                     </Button>

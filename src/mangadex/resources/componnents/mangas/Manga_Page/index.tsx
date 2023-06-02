@@ -170,16 +170,16 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     function get_status_color(): React.ReactNode {
         switch (props.src.get_status()) {
             case Status.ongoing():
-                return (<Button size="sm" variant="success" disabled> </Button>);
+                return (<Chakra.Tag colorScheme="green"> {make_first_UpperCare(props.src.get_status())} </Chakra.Tag>);
                 break;
             case Status.completed():
-                return (<Button size="sm" variant="info" disabled> </Button>);
+                return (<Chakra.Tag colorScheme="teal"> {make_first_UpperCare(props.src.get_status())} </Chakra.Tag>);
                 break;
             case Status.hiatus():
-                return (<Button size="sm" variant="warning" disabled> </Button>);
+                return (<Chakra.Tag colorScheme="purple"> {make_first_UpperCare(props.src.get_status())} </Chakra.Tag>);
                 break;
             case Status.cancelled():
-                return (<Button size="sm" variant="danger" disabled> </Button>);
+                return (<Chakra.Tag colorScheme="red"> {make_first_UpperCare(props.src.get_status())} </Chakra.Tag>);
                 break;
             default:
                 return (<></>);
@@ -239,7 +239,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                     backdropBrightness={"1.1"}
                 >
                     <Chakra.Box
-                        paddingTop={"10px"}
+                        padding={5}
                         background={"rgba(255, 255,255, 0.2)"}
                     >
                         <Container>
@@ -256,7 +256,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             display={"block"}
                                         >
                                             <Chakra.Heading
-                                                noOfLines={0}
+                                                noOfLines={2}
                                                 fontFamily={"inherit"}
                                                 size={{
                                                     base: "md",
@@ -270,7 +270,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 }
                                             </Chakra.Heading>
                                             <Chakra.Heading
-                                                noOfLines={0}
+                                                noOfLines={2}
                                                 fontFamily={"inherit"}
                                                 size={{
                                                     base: "sm",
@@ -326,12 +326,13 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                         Publication :
                                                         &nbsp;
                                                         {
-                                                            get_status_color()
+                                                            props.src.get_year() ?? ""
                                                         }
                                                         &nbsp;
                                                         {
-                                                            make_first_UpperCare(props.src.get_status())
+                                                            get_status_color()
                                                         }
+                                                        &nbsp;
                                                     </Chakra.Center>
                                                 </Chakra.Text>
                                                 <Chakra.Text

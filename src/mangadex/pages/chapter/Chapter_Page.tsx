@@ -3,8 +3,9 @@ import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
-import { get_ChapterbyId, get_chapter_queryKey } from "../../resources/hooks/ChapterStateHooks";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import { get_ChapterbyId, get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { trackEvent } from "@mangadex";
 
 const Chapter_Page_Success = React.lazy(() => import("./Chapter_Page_Success"));
 
@@ -29,6 +30,12 @@ export default function Chapter_Page() {
             <ErrorEL1 error={query.error} />
         );
     }
+    React.useEffect(() => {
+        trackEvent("mangadex-chapter-page-entrance", {
+            type : "chapter",
+            id : id!
+        });
+    }, []);
     if (query.isSuccess) {
         return (
             <React.Suspense
