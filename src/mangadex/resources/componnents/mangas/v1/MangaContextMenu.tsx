@@ -16,13 +16,23 @@ export default function MangaContextMenu(props: {
         const { refetch } = props;
         if (refetch != undefined) {
             return (
-                <Chakra.HStack spacing={"2"}
-                    onClick={() => {
-                        refetch();
+                <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
+                    _hover={{
+                        backgroundColor: "gray.100"
                     }}
+                    borderTopRadius={"10px"}
                 >
-                    Refresh
-                </Chakra.HStack>
+                    <Chakra.HStack spacing={"2"}
+                        _hover={{
+                            backgroundColor: "gray.100"
+                        }}
+                        onClick={() => {
+                            refetch();
+                        }}
+                    >
+                        Refresh
+                    </Chakra.HStack>
+                </Chakra.Box>
             );
         } else {
             return (
@@ -32,59 +42,80 @@ export default function MangaContextMenu(props: {
     }
     function Download() {
         return (
-            <Chakra.HStack
-                spacing={"2"}
-                textColor={download_.isLoading && download_.fetchStatus == "fetching" ? "gray" : "green"}
-                onClick={() => {
-                    if (!(download_.isLoading) && download_.fetchStatus != "fetching") {
-                        download_.refetch();
-                    }
+            <Chakra.Box
+                _hover={{
+                    backgroundColor: "gray.100"
                 }}
-                as={ContextMenu.ContextMenuItem}
-            >
-                <ChakraIcons.DownloadIcon />
-                <Chakra.Text as="span">
-                    Download
-                </Chakra.Text>
-            </Chakra.HStack>
+                borderTopRadius={"10px"}
+                paddingRight={"2"} paddingLeft={"2"}>
+                <Chakra.HStack
+                    spacing={"2"}
+                    textColor={download_.isLoading && download_.fetchStatus == "fetching" ? "gray" : "green"}
+                    onClick={() => {
+                        if (!(download_.isLoading) && download_.fetchStatus != "fetching") {
+                            download_.refetch();
+                        }
+                    }}
+                    as={ContextMenu.ContextMenuItem}
+                    _hover={{
+                        backgroundColor: "gray.100"
+                    }}
+                >
+                    <ChakraIcons.DownloadIcon />
+                    <Chakra.Text as="span">
+                        Download
+                    </Chakra.Text>
+                </Chakra.HStack>
+            </Chakra.Box>
         );
     }
-    function Update(){
+    function Update() {
         return (
-            <Chakra.HStack
-                spacing={"2"}
-                textColor={download_.isLoading && download_.fetchStatus == "fetching" ? "gray" : "blue"}
-                onClick={() => {
-                    if (!(download_.isLoading) && download_.fetchStatus != "fetching") {
-                        download_.refetch();
-                    }
+            <Chakra.Box
+                _hover={{
+                    backgroundColor: "gray.100"
                 }}
-                as={ContextMenu.ContextMenuItem}
-            >
-                <ChakraIcons.ReactIcon />
-                <Chakra.Text as="span">
-                    Update
-                </Chakra.Text>
-            </Chakra.HStack>
+                paddingRight={"2"} paddingLeft={"2"}>
+                <Chakra.HStack
+                    spacing={"2"}
+                    textColor={download_.isLoading && download_.fetchStatus == "fetching" ? "gray" : "blue"}
+                    onClick={() => {
+                        if (!(download_.isLoading) && download_.fetchStatus != "fetching") {
+                            download_.refetch();
+                        }
+                    }}
+                    as={ContextMenu.ContextMenuItem}
+                >
+                    <ChakraIcons.ReactIcon />
+                    <Chakra.Text as="span">
+                        Update
+                    </Chakra.Text>
+                </Chakra.HStack>
+            </Chakra.Box>
         );
     }
-    function Delete(){
+    function Delete() {
         return (
-            <Chakra.HStack
-                spacing={"2"}
-                textColor={delete_.isLoading && delete_.fetchStatus == "fetching" ? "gray" : "red"}
-                onClick={() => {
-                    if (!(download_.isLoading) && download_.fetchStatus != "fetching") {
-                        delete_.refetch();
-                    }
-                }}
-                as={ContextMenu.ContextMenuItem}
-            >
-                <ChakraIcons.DeleteIcon />
-                <Chakra.Text as="span">
-                    Delete
-                </Chakra.Text>
-            </Chakra.HStack>
+            <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
+                _hover={{
+                    backgroundColor: "gray.100"
+                }}>
+                <Chakra.HStack
+                    spacing={"2"}
+                    textColor={delete_.isLoading && delete_.fetchStatus == "fetching" ? "gray" : "red"}
+                    onClick={() => {
+                        if (!(download_.isLoading) && download_.fetchStatus != "fetching") {
+                            delete_.refetch();
+                        }
+                    }}
+                    as={ContextMenu.ContextMenuItem}
+                >
+                    <ChakraIcons.DeleteIcon />
+                    <Chakra.Text as="span">
+                        Delete
+                    </Chakra.Text>
+                </Chakra.HStack>
+            </Chakra.Box>
         );
     }
     return (
@@ -94,17 +125,18 @@ export default function MangaContextMenu(props: {
             }</ContextMenu.Trigger>
             <ContextMenu.Portal>
                 <Chakra.Box
+                    zIndex={"dropdown"}
                     backgroundColor={"white"}
                     borderColor={"#cccccc"}
-                    borderRadius={"15px"}
                     boxShadow={"md"}
+                    borderRadius={"10px"}
                     as={ContextMenu.Content}
                 >
-                    <Chakra.VStack>
+                    <Chakra.VStack spacing={"3"}>
                         <Refresh />
-                        <Download/>
-                        <Update/>
-                        <Delete/>
+                        <Download />
+                        <Update />
+                        <Delete />
                     </Chakra.VStack>
                 </Chakra.Box>
             </ContextMenu.Portal>

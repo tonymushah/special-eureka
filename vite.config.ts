@@ -26,7 +26,7 @@ export default defineConfig({
     server: {
         port: 9305,
         strictPort: true,
-        open: false,
+        open: false
     },
     build: {
         // Tauri supports es2021

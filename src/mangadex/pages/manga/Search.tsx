@@ -1,7 +1,7 @@
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Box, Container, FormControl, FormErrorMessage, FormLabel, HStack, Heading, Input, Tag, TagLabel, TagLeftIcon, Wrap, WrapItem, Switch, CheckboxGroup, Select, RadioGroup, Radio } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense__ } from "@mangadex";
+import { Mangadex_suspense__, trackEvent, useTrackEvent } from "@mangadex";
 import { And_Or, Offset_limits } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
@@ -51,6 +51,7 @@ export default function Manga_Search() {
     React.useEffect(() => {
         appWindow.setTitle("Manga Search | Mangadex");
     }, []);
+    useTrackEvent("mangadex-manga-search");
     return (
         <Box>
             <Container maxW={{
@@ -66,6 +67,23 @@ export default function Manga_Search() {
                         client
                     }}
                     onSubmit={(values) => {
+                        const { includedTags, excludedTags } = values;
+                        const ex : {
+                            [key : string] : string
+                        } = {};
+                        const in_ : {
+                            [key : string] : string
+                        } = {};
+                        excludedTags?.forEach((d, i) => {
+                            ex[`ex-${i}`] = d;
+                        });
+                        includedTags?.forEach((d, i) => {
+                            in_[`in-${i}`] = d;
+                        });
+                        trackEvent("mangadex-search-input", {
+                            ...ex,
+                            ...in_
+                        });
                         setResult(
                             <MyErrorBounderies>
                                 <CollectionComponnent_WithQuery<Manga>

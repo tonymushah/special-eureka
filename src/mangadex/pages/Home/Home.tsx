@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense } from "@mangadex";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 
@@ -11,6 +11,7 @@ const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/com
 function Home() {
     const client = useHTTPClient();
     appWindow.setTitle("High Quality Image, no ads | Mangadex");
+    useTrackEvent("mangadex-index-page-entrance");
     return (
         <Chakra.Box
             margin={2}

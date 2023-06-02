@@ -148,8 +148,8 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
     }
     return (
         <Chakra.Box
-            boxShadow={"md"}
-            marginBottom={10}
+            boxShadow={"sm"}
+            marginBottom={1}
             width={"fit-content"}
             backgroundColor={props.isRefetching == undefined ? "gray.100" : (props.isRefetching ? "orange.100" : "gray.100")}
             borderRadius={"10px"}
