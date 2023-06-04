@@ -1,26 +1,14 @@
 import { defineConfig } from "vite";
-//import react from '@vitejs/plugin-react'
 import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
-//import progress from "vite-plugin-progress";
 import { resolve } from "path";
 import { ViteAliases } from "vite-aliases";
-//import VitePluginLegacy from "@vitejs/plugin-legacy";
-//import ReactInspector from 'vite-plugin-react-inspector'
-//import eslintRollup from "@rollup/plugin-eslint";
-/*function getPathSrc(){
-  const path = `${process.cwd()}/src`;
-  console.log(path);
-  return path;
-}*/
 import mdx from "@mdx-js/rollup";
-
 
 export default defineConfig({
     clearScreen: false,
     plugins: [
-        mdx()
-        ,
+        mdx(),
         //ReactInspector(),
         //progress(),
         ViteAliases({
@@ -38,7 +26,7 @@ export default defineConfig({
     server: {
         port: 9305,
         strictPort: true,
-        open: false,
+        open: false
     },
     build: {
         // Tauri supports es2021

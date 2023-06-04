@@ -60,7 +60,7 @@ export default function Download_Manga_Modal(props: {
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button
-                                        isLoading={download_query.isLoading}
+                                        isLoading={download_query.fetchStatus == "fetching"}
                                         onClick={() => {
                                             onClose();
                                             download_query.refetch();

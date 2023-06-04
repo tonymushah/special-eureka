@@ -26,21 +26,21 @@ export class Manga extends Attribute{
     private title: any;
     private alt_title: any;
     private description: any;
-    private status: string;
-    private last_volume: string | null;
-    private last_chapter: string | null;
-    private created_at: string;
-    private updated_at: string;
-    private tags: Array<Tag>;
-    private demographic: string | null;
-    private year : number | null;
+    private status!: string;
+    private last_volume!: string | null;
+    private last_chapter!: string | null;
+    private created_at!: string;
+    private updated_at!: string;
+    private tags!: Array<Tag>;
+    private demographic!: string | null;
+    private year!: number | null;
     private links: any;
-    private content_rating: string;
-    private avaible_language: Array<string>;
-    private aggregate: Aggregate;
-    private state : string | null;
-    private originalLanguage: string;
-    private latestUploadedChapter : string;
+    private content_rating!: string;
+    private avaible_language!: Array<string>;
+    private aggregate!: Aggregate;
+    private state!: string | null;
+    private originalLanguage!: string;
+    private latestUploadedChapter!: string;
 
     /**
      * Getter $latestUploadedChapter
@@ -1157,10 +1157,10 @@ export class Manga_2 extends Manga{
 }
 
 export class Manga_with_allRelationship extends Manga {
-    private authors : Array<Author>;
-    private artists : Array<Author>;
-    private cover : Cover;
-    private related_manga : Array<Manga>;
+    private authors! : Array<Author>;
+    private artists! : Array<Author>;
+    private cover! : Cover;
+    private related_manga! : Array<Manga>;
 
     /**
      * Getter $authors

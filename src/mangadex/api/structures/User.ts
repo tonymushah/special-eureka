@@ -8,9 +8,9 @@ import UserCollectionWToken from "./CollectionTypes/UserCollectionWToken";
 import UserSearchType from "./SearchType/User";
 
 export class User extends Attribute{
-    private username: string;
-    private roles: Array<string>;
-    private version: number;
+    private username!: string;
+    private roles!: Array<string>;
+    private version!: number;
     public set_username(username: string){
         this.username = username;
     }

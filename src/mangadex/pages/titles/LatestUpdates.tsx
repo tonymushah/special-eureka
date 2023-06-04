@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
-import { Mangadex_suspense } from "@mangadex";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
@@ -23,6 +23,7 @@ export default function LatestUpdates() {
     const queryKey = ["mdx", "latest-updates"];
     const userOption = useUserOption();
     appWindow.setTitle("Latest Updates | Mangadex");
+    useTrackEvent("mangadex-latest-update-entrance");
     return (
         <Container>
             <Mangadex_suspense>

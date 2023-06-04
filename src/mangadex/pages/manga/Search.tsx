@@ -1,8 +1,8 @@
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
-import { Box, Container, FormControl, FormErrorMessage, FormLabel, HStack, Heading, Input, Tag, TagLabel, TagLeftIcon, Wrap, WrapItem } from "@chakra-ui/react";
+import { Box, Container, FormControl, FormErrorMessage, FormLabel, HStack, Heading, Input, Tag, TagLabel, TagLeftIcon, Wrap, WrapItem, Switch, CheckboxGroup, Select, RadioGroup, Radio } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense__ } from "@mangadex";
-import { Offset_limits } from "@mangadex/api/internal/Utils";
+import { Mangadex_suspense__, trackEvent, useTrackEvent } from "@mangadex";
+import { And_Or, Offset_limits } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
@@ -51,6 +51,7 @@ export default function Manga_Search() {
     React.useEffect(() => {
         appWindow.setTitle("Manga Search | Mangadex");
     }, []);
+    useTrackEvent("mangadex-manga-search");
     return (
         <Box>
             <Container maxW={{
@@ -66,6 +67,23 @@ export default function Manga_Search() {
                         client
                     }}
                     onSubmit={(values) => {
+                        const { includedTags, excludedTags } = values;
+                        const ex : {
+                            [key : string] : string
+                        } = {};
+                        const in_ : {
+                            [key : string] : string
+                        } = {};
+                        excludedTags?.forEach((d, i) => {
+                            ex[`ex-${i}`] = d;
+                        });
+                        includedTags?.forEach((d, i) => {
+                            in_[`in-${i}`] = d;
+                        });
+                        trackEvent("mangadex-search-input", {
+                            ...ex,
+                            ...in_
+                        });
                         setResult(
                             <MyErrorBounderies>
                                 <CollectionComponnent_WithQuery<Manga>
@@ -104,7 +122,7 @@ export default function Manga_Search() {
                                     />
                                     <FormErrorMessage>{props_.errors.title}</FormErrorMessage>
                                 </FormControl>
-                                <HStack>
+                                <Box>
                                     <FormControl
                                         isInvalid={(props_.errors.includedTags ? true : false) && props_.touched.includedTags}
                                     >
@@ -152,10 +170,79 @@ export default function Manga_Search() {
                                         </FieldArray>
                                     </FormControl>
                                     <FormControl>
-                                        
+                                        <HStack>
+                                            <FormLabel>
+                                                Included Tags Mode
+                                            </FormLabel>
+                                            <Tag></Tag>
+                                        </HStack>
+                                        <RadioGroup name="includedTagsMode">
+                                            <HStack>
+                                                <Radio value={And_Or.and()}>And</Radio>
+                                                <Radio value={And_Or.or()}>Or</Radio>
+                                            </HStack>
+                                        </RadioGroup>
                                     </FormControl>
-                                </HStack>
-
+                                </Box>
+                                <Box>
+                                    <FormControl
+                                        isInvalid={(props_.errors.excludedTags ? true : false) && props_.touched.excludedTags}
+                                    >
+                                        <FormLabel>
+                                            Excluded Tags
+                                        </FormLabel>
+                                        <FieldArray
+                                            name="excludedTags"
+                                        >
+                                            {arrayhelper => (
+                                                <React.Fragment>
+                                                    <AllTagConsumer>
+                                                        {(tags) => (
+                                                            <Wrap>
+                                                                {
+                                                                    tags.map((tag) => (
+                                                                        <WrapItem key={tag.get_id()} >
+                                                                            <Tag 
+                                                                                colorScheme={props_.values.excludedTags?.includes(tag.get_id()) ? "orange" : "gray"}
+                                                                                onClick={() => {
+                                                                                    if(props_.values.excludedTags?.includes(tag.get_id())){
+                                                                                        arrayhelper.remove(get_tag_index(props_.values.excludedTags, tag.get_id()));
+                                                                                    }else{
+                                                                                        arrayhelper.push(tag.get_id());
+                                                                                    }
+                                                                                }}
+                                                                            >
+                                                                                {
+                                                                                    props_.values.excludedTags?.includes(tag.get_id()) ? (
+                                                                                        <TagLeftIcon as={MinusIcon}/>
+                                                                                    ) : (
+                                                                                        <TagLeftIcon as={AddIcon}/>
+                                                                                    )
+                                                                                }
+                                                                                <TagLabel>{tag.get_name().en}</TagLabel>
+                                                                            </Tag>
+                                                                        </WrapItem>
+                                                                    ))
+                                                                }
+                                                            </Wrap>
+                                                        )}
+                                                    </AllTagConsumer>
+                                                </React.Fragment>
+                                            )}
+                                        </FieldArray>
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel>
+                                            Excluded Tags Mode
+                                        </FormLabel>
+                                        <RadioGroup name="excludedTagsMode">
+                                            <HStack>
+                                                <Radio value={And_Or.and()}>And</Radio>
+                                                <Radio value={And_Or.or()}>Or</Radio>
+                                            </HStack>
+                                        </RadioGroup>
+                                    </FormControl>
+                                </Box>
                             </Form>
                         )
                     }

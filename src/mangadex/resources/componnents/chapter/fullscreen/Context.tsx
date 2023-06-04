@@ -5,7 +5,9 @@ export function useChapterFullscreen(){
     const queryKey : readonly string[] = ["mdx", "chapter", "fullscreen-mode"];
     const query = useQuery(queryKey, {
         "initialData" : false,
-        queryFn: async () => false
+        queryFn: async () => {
+            return false;
+        },
     });
     const mutationKey : MutationKey = queryKey.concat("mutation");
     const update_mutation = useMutation({

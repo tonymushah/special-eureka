@@ -21,8 +21,8 @@ export default function MangaManagerState(){
     });
     const switch_server_state = useMutation({
         mutationKey : key.concat("mutation"),
-        "mutationFn" : () => {
-            return query.data == false ? launch_server() : stop_server();
+        "mutationFn" : async () => {
+            return query.data == false ? await launch_server() : await stop_server();
         },
         onSuccess: () => {
             query.refetch();

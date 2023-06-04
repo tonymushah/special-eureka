@@ -39,6 +39,9 @@
                 "open": false,
                 "save": false
             },
+            "globalShortcut": {
+                "all": true
+            },
             "notification": {
                 "all": true
             },

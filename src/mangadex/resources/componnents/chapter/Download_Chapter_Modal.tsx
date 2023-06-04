@@ -10,15 +10,16 @@ import {
     ModalCloseButton,
     Text
 } from "@chakra-ui/react";
-import Consumer from "../../../../commons-res/components/Consumer";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
+import Consumer from "@commons-res/components/Consumer";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { useChapterDownloadMutation } from "../../hooks/ChapterStateHooks";
 import IsPingable from "../IsPingable";
 import IsPingable_defaultError from "../IsPingable_defaultError";
-import { UseMutationResult } from "@tanstack/react-query";
+import { UseQueryResult } from "@tanstack/react-query";
+import { ChapterDeleteMutation_data } from "../../hooks/ChapterStateHooks";
 export default function Download_Chapter_Modal(props: {
     chap_id: string,
-    children: (data : {onOpen: () => void, dowload_query : UseMutationResult<string[], Error, void>}) => React.ReactNode
+    children: (data : {onOpen: () => void, dowload_query : UseQueryResult<ChapterDeleteMutation_data, Error>}) => React.ReactNode
 }) {
     const client = useHTTPClient();
     const download_query = useChapterDownloadMutation({
@@ -57,7 +58,7 @@ export default function Download_Chapter_Modal(props: {
                                 </ModalFooter>
                             </React.Fragment>
                         )}
-                        onSuccess={(query) => (
+                        onSuccess={() => (
                             <React.Fragment>
                                 <ModalBody>
                                     <Text>
@@ -66,10 +67,10 @@ export default function Download_Chapter_Modal(props: {
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button
-                                        isLoading={download_query.isLoading}
+                                        isLoading={download_query.isLoading && download_query.fetchStatus == "fetching"}
                                         onClick={() => {
                                             onClose();
-                                            download_query.mutate();
+                                            download_query.refetch();
                                         }}
                                     >
                                         Download

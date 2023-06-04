@@ -90,7 +90,7 @@ export function Mangadex_suspense__() {
 export function useTrackEvent(name: string, payload?: {
     [key: string]: string | number
 }) {
-    React.useEffect(() => {
+    React.useMemo(() => {
         trackEvent(name, payload);
     }, []);
 }
@@ -101,6 +101,7 @@ export function trackEvent(name: string, payload?: {
     aptabaseTrackEvent(name, {
         "website": "mangadex",
         "location": window.location.href,
+        "date" : new Date().toISOString(),
         ...payload
     });
 }

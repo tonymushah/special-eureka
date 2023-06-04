@@ -1,15 +1,28 @@
 import * as Chakra from "@chakra-ui/react";
-import { Chapter } from "../../../api/structures/Chapter";
+import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
 import ReactHotkeys from "react-hot-keys";
 import FullScreenOptionsProvider from "./FullScreenOptionsProvider";
 import FullScreenOptions from "./FullScreenOptions";
 import { useChapterFullscreen } from "@mangadex/resources/componnents/chapter/fullscreen/Context";
+import { appWindow } from "@tauri-apps/api/window";
 
 export default function ChapterFullScreen(props: React.PropsWithChildren<{
     chapter: Chapter
 }>) {
     const fullscreen = useChapterFullscreen();
+    React.useEffect(() => {
+        async function t(){
+            if((await appWindow.isFullscreen()) == false){
+                if (fullscreen.query.data == true) {
+                    appWindow.setFullscreen(true);
+                } else {
+                    appWindow.setFullscreen(false);
+                }
+            }
+        }
+        t().then();
+    }, [fullscreen.query.data]);
     return (
         <React.Fragment>
             <ReactHotkeys

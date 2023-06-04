@@ -6,14 +6,15 @@ import { useFormik } from "formik";
 import { Group } from "@mangadex/api/structures/Group";
 import { Collection } from "@mangadex/api/structures/Collection";
 import GroupFallBackElement from "./GroupFallBackElement";
-import { Attribute } from "@mangadex/api/structures/Attributes";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { trackEvent } from "@mangadex";
 
 const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 const CollectionComponnent_WithQuery = React.lazy(async () => {
     const res = await import("../Collection/Collection");
+    const d = res.CollectionComponnent_WithQuery<Group>;
     return {
-        default: res.CollectionComponnent_WithQuery<Attribute>
+        default: d
     };
 });
 
@@ -21,6 +22,9 @@ export default function Group_Search(props: {
     offset_limits: Offset_limits
 }) {
     const [result, setResult] = React.useState(<></>);
+    React.useEffect(() => {
+        trackEvent("mangadex-group-search");
+    }, []);
     const client = useHTTPClient();
     const formik = useFormik({
         initialValues: {
@@ -45,9 +49,20 @@ export default function Group_Search(props: {
                             });
                         }}
                         queryKey={["mdx", "group", "search", random]}
+                        query_options={{
+                            onSuccess(data){
+                                const to_use : Record<string, string> = {};
+                                data.get_data().forEach((d, i) => {
+                                    to_use[`i-${i}`] = d.get_id();
+                                });
+                                trackEvent("mangadex-search-result", {
+                                    ...to_use
+                                });
+                            }
+                        }}
                     >
                         {
-                            (value: Collection<Attribute>) => (
+                            (value: Collection<Group>) => (
                                 <Chakra.Wrap>
                                     {
                                         value.get_data().map((group) => (

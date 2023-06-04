@@ -2,11 +2,11 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { Await, Link } from "react-router-dom";
-import { getMangaDexPath } from "../..";
-import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
-import { Chapter } from "../../api/structures/Chapter";
-import ErrorEL1 from "../../resources/componnents/error/ErrorEL1";
-import { get_aggregate_query } from "../../resources/hooks/AgreggateStateHooks";
+import { getMangaDexPath } from "@mangadex";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Chapter } from "@mangadex/api/structures/Chapter";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -24,7 +24,7 @@ export default function Chapter_Previous_Next(props: {
     return (
         <React.Fragment>
             {
-                chapter_aggregate_query.isLoading || chapter_aggregate_query.isIdle ? (
+                chapter_aggregate_query.isLoading || chapter_aggregate_query.fetchStatus == "fetching" ? (
                     <Chakra.ButtonGroup
                         colorScheme={"orange"}
                     >

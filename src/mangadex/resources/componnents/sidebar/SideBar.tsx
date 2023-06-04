@@ -30,8 +30,9 @@ function ActualSidebar() {
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
                     backgroundColor: "#2c2c2c",
-                    color: "#f2f2f2"
-                }
+                    color: "#f2f2f2",
+                },
+                height: "100vh",
             }}
             backgroundColor="#2c2c2c"
             defaultCollapsed
@@ -44,9 +45,9 @@ function ActualSidebar() {
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: "#2c2c2c"
-                        }
-                    }
+                            backgroundColor: "#525252"
+                        },
+                    },
                 }}
             >
                 <MenuItem
@@ -68,17 +69,46 @@ function ActualSidebar() {
                 </MenuItem>
             </Menu>
             <Menu
+                rootStyles={{
+                    marginBottom: "20px",
+                    marginTop: "20px"
+                }}
                 menuItemStyles={{
                     button: {
                         ":hover": {
-                            backgroundColor: "#2c2c2c"
+                            backgroundColor: "#525252"
+                        }
+                    }
+                }}
+            >
+                <SideBarUserOption>
+                    <MenuItem
+                        icon={
+                            <FaUser />
+                        }
+                        suffix={
+                            <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>
+                                <Chakra.Button
+                                    colorScheme={"facebook"}
+                                >
+                                    <s>Login</s>
+                                </Chakra.Button>
+                            </Chakra.Tooltip>
+                        }
+                    >
+                        Guest
+                    </MenuItem>
+                </SideBarUserOption>
+            </Menu>
+            <Menu
+                menuItemStyles={{
+                    button: {
+                        ":hover": {
+                            backgroundColor: "#525252"
                         }
                     }
                 }}
                 rootStyles={{
-                    maxHeight: "80vh",
-                    height: "80vh",
-                    overflowY: "scroll",
                     overflowX: "hidden"
                 }}
             >
@@ -107,7 +137,7 @@ function ActualSidebar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -164,7 +194,7 @@ function ActualSidebar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -215,7 +245,7 @@ function ActualSidebar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -250,7 +280,7 @@ function ActualSidebar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -277,7 +307,7 @@ function ActualSidebar() {
                             button: {
                                 backgroundColor: "#2c2c2c",
                                 ":hover": {
-                                    backgroundColor: "#2c2c2c"
+                                    backgroundColor: "#525252"
                                 }
                             }
                         }}
@@ -293,37 +323,6 @@ function ActualSidebar() {
                     </Menu>
                 </SubMenu>
 
-            </Menu>
-            <Menu
-                rootStyles={{
-
-                }}
-                menuItemStyles={{
-                    button: {
-                        ":hover": {
-                            backgroundColor: "#2c2c2c"
-                        }
-                    }
-                }}
-            >
-                <SideBarUserOption>
-                    <MenuItem
-                        icon={
-                            <FaUser />
-                        }
-                        suffix={
-                            <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>
-                                <Chakra.Button
-                                    colorScheme={"facebook"}
-                                >
-                                    <s>Login</s>
-                                </Chakra.Button>
-                            </Chakra.Tooltip>
-                        }
-                    >
-                        Guest
-                    </MenuItem>
-                </SideBarUserOption>
             </Menu>
         </Sidebar>
     );

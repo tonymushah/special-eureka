@@ -7,6 +7,7 @@ import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Mang
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTrackEvent } from "@mangadex";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
@@ -21,6 +22,7 @@ export default function RecentlyPopularPage() {
     const touse_date = formatDate(touse_date_);
     const queryKey = ["mdx", "popular-recent-titles"];
     const queryClient = useQueryClient();
+    useTrackEvent("mangadex-latest-update-entrance");
     return (
         <React.Fragment>
             <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
