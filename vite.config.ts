@@ -26,7 +26,10 @@ export default defineConfig({
     server: {
         port: 9305,
         strictPort: true,
-        open: false
+        open: false,
+        fs : {
+            allow : ["../node_modules/.pnpm/flag-icons@6.6.6", "."]
+        }
     },
     build: {
         // Tauri supports es2021

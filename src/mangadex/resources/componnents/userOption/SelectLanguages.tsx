@@ -25,7 +25,7 @@ function Lang_Comp({ lang }: {
                         <></>
                     )
                 }
-                <Chakra.Text>{
+                <Chakra.Text as={"span"} fontFamily={"inherit"}>{
                     lang.get_name()
                 }</Chakra.Text>
             </Chakra.HStack>
