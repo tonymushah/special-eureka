@@ -70,7 +70,7 @@ dependencies:
     version: 2.3.0(react@18.2.0)
   '@mdx-js/rollup':
     specifier: ^2.3.0
-    version: 2.3.0(rollup@3.23.0)
+    version: 2.3.0(rollup@3.23.1)
   '@mui/material':
     specifier: ^5.11.8
     version: 5.11.8(@emotion/react@11.10.5)(@emotion/styled@11.10.5)(@types/react@18.0.28)(react-dom@18.2.0)(react@18.2.0)
@@ -238,7 +238,7 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-store/f4ef29684e4a32eddf51befaae98a5e498df8574
   tauri-plugin-upload-api:
     specifier: github:tauri-apps/tauri-plugin-upload
-    version: github.com/tauri-apps/tauri-plugin-upload/8fbea0cf983ef9aaf623ee0d8fcc1ccc8c07af3c
+    version: github.com/tauri-apps/tauri-plugin-upload/8ecf985ba94e683d73ae9f4edfeb4a9aa2410311
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
     version: github.com/tauri-apps/tauri-plugin-websocket/c77fa23243388bdeff6ca1b09f78b71b62ef01da
@@ -270,7 +270,7 @@ devDependencies:
     version: 5.0.1(typescript@5.0.4)
   '@rollup/plugin-eslint':
     specifier: ^9.0.3
-    version: 9.0.3(rollup@3.23.0)
+    version: 9.0.3(rollup@3.23.1)
   '@storybook/addon-essentials':
     specifier: 7.0.18
     version: 7.0.18(react-dom@18.2.0)(react@18.2.0)
@@ -393,7 +393,7 @@ devDependencies:
     version: 0.0.6(vite@4.3.9)
   vite-plugin-svgr:
     specifier: ^2.4.0
-    version: 2.4.0(rollup@3.23.0)(vite@4.3.9)
+    version: 2.4.0(rollup@3.23.1)(vite@4.3.9)
   vite-plugin-tauri:
     specifier: ^3.1.0
     version: 3.1.0(@tauri-apps/cli@1.3.0)(vite@4.3.9)
@@ -5163,14 +5163,14 @@ packages:
       '@types/react': 18.0.28
       react: 18.2.0
 
-  /@mdx-js/rollup@2.3.0(rollup@3.23.0):
+  /@mdx-js/rollup@2.3.0(rollup@3.23.1):
     resolution: {integrity: sha512-wLvRfJS/M4UmdqTd+WoaySEE7q4BIejYf1xAHXYvtT1du/1Tl/z2450Gg2+Hu7fh05KwRRiehiTP9Yc/Dtn0fA==}
     peerDependencies:
       rollup: '>=2'
     dependencies:
       '@mdx-js/mdx': 2.3.0
-      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
-      rollup: 3.23.0
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.1)
+      rollup: 3.23.1
       source-map: 0.7.4
       vfile: 5.3.7
     transitivePeerDependencies:
@@ -6295,7 +6295,7 @@ packages:
       warning: 4.0.3
     dev: false
 
-  /@rollup/plugin-eslint@9.0.3(rollup@3.23.0):
+  /@rollup/plugin-eslint@9.0.3(rollup@3.23.1):
     resolution: {integrity: sha512-iV2m9BhPdsjQzmRVe3Nzovrjxbdq5Slva8bvUSzbM4gSBUaGXAFnFXcHcvO4N4tSuirZoY61mkn8KtV3G6o0iQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -6304,9 +6304,9 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.1)
       eslint: 8.36.0
-      rollup: 3.23.0
+      rollup: 3.23.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -6319,7 +6319,7 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /@rollup/pluginutils@5.0.2(rollup@3.23.0):
+  /@rollup/pluginutils@5.0.2(rollup@3.23.1):
     resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -6331,7 +6331,7 @@ packages:
       '@types/estree': 1.0.0
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 3.23.0
+      rollup: 3.23.1
 
   /@sinclair/typebox@0.25.24:
     resolution: {integrity: sha512-XJfwUVUKDHF5ugKwIcxEgc9k8b7HbznCp6eUfWgu710hMPNIO4aw4/zB5RogDQz8nd6gyCDpU9O/m6qYEWY6yQ==}
@@ -15273,6 +15273,13 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
 
+  /rollup@3.23.1:
+    resolution: {integrity: sha512-ybRdFVHOoljGEFILHLd2g/qateqUdjE6YS41WXq4p3C/WwD3xtWxV4FYWETA1u9TeXQc5K8L8zHE5d/scOvrOQ==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+
   /run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
     dependencies:
@@ -16821,12 +16828,12 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-svgr@2.4.0(rollup@3.23.0)(vite@4.3.9):
+  /vite-plugin-svgr@2.4.0(rollup@3.23.1)(vite@4.3.9):
     resolution: {integrity: sha512-q+mJJol6ThvqkkJvvVFEndI4EaKIjSI0I3jNFgSoC9fXAz1M7kYTVUin8fhUsFojFDKZ9VHKtX6NXNaOLpbsHA==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4
     dependencies:
-      '@rollup/pluginutils': 5.0.2(rollup@3.23.0)
+      '@rollup/pluginutils': 5.0.2(rollup@3.23.1)
       '@svgr/core': 6.5.1
       vite: 4.3.9(@types/node@18.13.0)(sass@1.58.0)(terser@5.16.6)
     transitivePeerDependencies:
@@ -17353,8 +17360,8 @@ packages:
       '@tauri-apps/api': 1.3.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-upload/8fbea0cf983ef9aaf623ee0d8fcc1ccc8c07af3c:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-upload/tar.gz/8fbea0cf983ef9aaf623ee0d8fcc1ccc8c07af3c}
+  github.com/tauri-apps/tauri-plugin-upload/8ecf985ba94e683d73ae9f4edfeb4a9aa2410311:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-upload/tar.gz/8ecf985ba94e683d73ae9f4edfeb4a9aa2410311}
     name: tauri-plugin-upload-api
     version: 0.0.0
     dependencies:
