@@ -1,4 +1,5 @@
 import { MutationKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { appWindow } from "@tauri-apps/api/window";
 
 export function useChapterFullscreen(){
     const queryClient = useQueryClient();
@@ -26,6 +27,15 @@ export function useChapterFullscreen(){
                 update_mutation.mutate(!(query.data));
             }
         }
+    };
+}
+
+export function useAppFullscreenQuery(){
+    const queryKey : readonly string[] = ["mdx", "is", "initially", "fullscreen"];
+    const query = useQuery(queryKey, () => appWindow.isFullscreen());
+    return {
+        query,
+        queryKey
     };
 }
 

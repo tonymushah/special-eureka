@@ -12,13 +12,11 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
 }>) {
     const fullscreen = useChapterFullscreen();
     React.useEffect(() => {
-        async function t(){
-            if((await appWindow.isFullscreen()) == false){
-                if (fullscreen.query.data == true) {
-                    appWindow.setFullscreen(true);
-                } else {
-                    appWindow.setFullscreen(false);
-                }
+        async function t() {
+            if (fullscreen.query.data == true) {
+                appWindow.setFullscreen(true);
+            } else {
+                appWindow.setFullscreen(false);
             }
         }
         t().then();
