@@ -1,12 +1,12 @@
 use std::io::Result;
 
 #[derive(Clone)]
-pub struct Download_Entry<T: Clone + PartialEq>{
+pub struct DownloadEntry<T: Clone + PartialEq>{
     queue : Vec<T>,
     success : Vec<T>,
     failed : Vec<T>
 }
-impl<T: Clone + PartialEq> Download_Entry<T>{
+impl<T: Clone + PartialEq> DownloadEntry<T>{
     pub fn new() -> Self{
         return Self { 
             queue: Vec::new(), 

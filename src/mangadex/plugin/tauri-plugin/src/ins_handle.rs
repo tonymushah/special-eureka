@@ -1,12 +1,12 @@
 use once_cell::sync::OnceCell;
 use std::{thread::JoinHandle};
-use crate::intelligent_notification_system::Download_Entry;
+use crate::intelligent_notification_system::DownloadEntry;
 use tauri::api::notification::Notification;
 use crate::utils::{get_indentifier};
 use crate::Error;
 use crate::Result;
 
-static mut INS_CHAPTER: OnceCell<Download_Entry<String>> = OnceCell::new();
+static mut INS_CHAPTER: OnceCell<DownloadEntry<String>> = OnceCell::new();
 
 static mut INS_CHAPTER_CHECKER: OnceCell<JoinHandle<()>> = OnceCell::new();
 
@@ -56,7 +56,7 @@ pub fn get_ins_checker_handle() -> Result<&'static JoinHandle<()>> {
 pub fn init_ins_chapter_handle() -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {
         unsafe {
-            match INS_CHAPTER.set(Download_Entry::new()) {
+            match INS_CHAPTER.set(DownloadEntry::new()) {
                 Ok(_) => return Ok(()),
                 Err(_) => Err(Error::Io(std::io::Error::new(
                     std::io::ErrorKind::AlreadyExists,
@@ -75,8 +75,8 @@ pub fn init_ins_chapter_handle() -> Result<()> {
     }
 }
 
-pub fn get_ins_handle() -> Result<&'static Download_Entry<String>> {
-    let data_: &'static Download_Entry<String>;
+pub fn get_ins_handle() -> Result<&'static DownloadEntry<String>> {
+    let data_: &'static DownloadEntry<String>;
     unsafe {
         match INS_CHAPTER.get() {
             None => {
@@ -93,8 +93,8 @@ pub fn get_ins_handle() -> Result<&'static Download_Entry<String>> {
     Ok(data_)
 }
 
-pub fn get_ins_handle_mut() -> Result<&'static mut Download_Entry<String>> {
-    let data_: &'static mut Download_Entry<String>;
+pub fn get_ins_handle_mut() -> Result<&'static mut DownloadEntry<String>> {
+    let data_: &'static mut DownloadEntry<String>;
     unsafe {
         match INS_CHAPTER.get_mut() {
             None => {
