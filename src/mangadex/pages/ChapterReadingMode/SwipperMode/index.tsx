@@ -7,9 +7,16 @@ import { useFullScreenOptions_Query } from "../../chapter/ChapterFullScreen/Full
 import useChapterPages from "../../chapter/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
 
-export default function SwipperMode({ data, swipper_option }: {
+export default function SwipperMode({ data, swipper_option, children }: {
     data: ChapterPage_outlet_context,
-    swipper_option?: SwiperProps
+    swipper_option?: SwiperProps,
+    children? : (props : 
+        {
+            images : string[], 
+            reading_state : ReturnType<typeof useChapterPages>,
+            fullScreenOptions : ReturnType<typeof useFullScreenOptions_Query>
+        }
+        ) => React.ReactNode
 }) {
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
@@ -48,7 +55,7 @@ export default function SwipperMode({ data, swipper_option }: {
                     {...swipper_option}
                 >
                     {
-                        data.images.map((value, index) => (
+                        children == undefined ? (data.images.map((value, index) => (
                             <SwiperSlide onMouseOver={() => {
                                 reading_state.setCurrentPage(index + 1);
                             }} key={`${data.chapter.get_id()}-${index}`}>
@@ -69,7 +76,12 @@ export default function SwipperMode({ data, swipper_option }: {
                                     id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
                                 />
                             </SwiperSlide>
-                        ))
+                        ))) : 
+                        children({
+                            images : data.images,
+                            fullScreenOptions,
+                            reading_state
+                        })
                     }
                 </Swiper>
             </Chakra.Box>
