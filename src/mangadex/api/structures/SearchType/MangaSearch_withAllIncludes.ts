@@ -23,5 +23,6 @@ export default interface MangaSearch_withAllIncludes {
   hasAvailableChapters?: boolean;
   latestUploadedChapter?: boolean;
   group?: string;
+  contentRating? : Array<string>;
   client? : Client;
 }

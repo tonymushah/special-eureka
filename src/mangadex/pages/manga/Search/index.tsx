@@ -2,7 +2,7 @@ import { AddIcon, SearchIcon } from "@chakra-ui/icons";
 import { Box, Card, CardBody, CardHeader, Tag, TagLeftIcon, TagLabel, Collapse, Container, FormControl, FormErrorMessage, FormLabel, HStack, Heading, IconButton, Input, StackDivider, VStack, Wrap, WrapItem, useDisclosure } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense__, useTrackEvent } from "@mangadex";
-import { Offset_limits, Status, make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { ContentRating, Offset_limits, Status, make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
@@ -17,6 +17,7 @@ import { RiFilterFill } from "react-icons/ri";
 import { TagInsertion, TagInsertionMode } from "./TagInsertion";
 import { Tag_Insertion_ } from "./Tag_Insertion_";
 import { Status_include } from "./Status_publ";
+import { CttRtg_include } from "./Content_Rating";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 
@@ -25,6 +26,7 @@ export type MangaSearchOption = {
     title?: string,
     tags: TagInsertion[],
     status: Array<Status_include>,
+    content_rating: Array<CttRtg_include>
     client: Client
 };
 
@@ -51,6 +53,16 @@ function Manga_Search_Result(props: MangaSearch_withAllIncludes) {
     );
 }
 
+function ReallySimpleCard({ children }: React.PropsWithChildren) {
+    return (
+        <Card>
+            <CardBody>
+                {children}
+            </CardBody>
+        </Card>
+    );
+}
+
 export default function Manga_Search() {
     const client = useHTTPClient();
     const { isOpen, onToggle, onClose } = useDisclosure();
@@ -68,13 +80,18 @@ export default function Manga_Search() {
                 name: d,
                 include: false
             })),
+            content_rating: ContentRating.array().map((d) => ({
+                name: d,
+                include: false
+            })),
             client: client
         },
         onSubmit(values) {
             onClose();
             const excludedTags: string[] = [];
             const includedTags: string[] = [];
-            const status : Array<string> = [];
+            const status: Array<string> = [];
+            const content_rating: Array<string> = [];
             values.tags?.forEach((d) => {
                 if (d.mode == TagInsertionMode.Exclude) {
                     excludedTags.push(d.id);
@@ -83,8 +100,13 @@ export default function Manga_Search() {
                 }
             });
             values.status.forEach((d) => {
-                if(d.include){
+                if (d.include) {
                     status.push(d.name);
+                }
+            });
+            values.content_rating.forEach((d) => {
+                if (d.include) {
+                    content_rating.push(d.name);
                 }
             });
             setResult(
@@ -94,6 +116,7 @@ export default function Manga_Search() {
                     title={values.title}
                     excludedTags={excludedTags}
                     includedTags={includedTags}
+                    contentRating={content_rating}
                     status={status}
                 />
             );
@@ -134,22 +157,24 @@ export default function Manga_Search() {
     }
     function TagsComp() {
         return (
-            <FormControl
-                isInvalid={(formik.errors.tags ? true : false)}
-            >
-                <FormLabel>
-                    <Heading size={"lg"} fontFamily={"inherit"}>
-                        Tags
-                    </Heading>
-                </FormLabel>
-                <Tags />
-                <FormErrorMessage>{JSON.stringify(formik.errors.tags)}</FormErrorMessage>
-            </FormControl>
+            <ReallySimpleCard>
+                <FormControl
+                    isInvalid={(formik.errors.tags ? true : false)}
+                >
+                    <FormLabel>
+                        <Heading size={"lg"} fontFamily={"inherit"}>
+                            Tags
+                        </Heading>
+                    </FormLabel>
+                    <Tags />
+                    <FormErrorMessage>{JSON.stringify(formik.errors.tags)}</FormErrorMessage>
+                </FormControl>
+            </ReallySimpleCard>
         );
     }
     function StatusComp() {
         return (
-            <React.Fragment>
+            <ReallySimpleCard>
                 <FormControl
                     isInvalid={(formik.errors.status ? true : false)}
                 >
@@ -163,7 +188,7 @@ export default function Manga_Search() {
                             const array = arr;
                             return (
                                 <WrapItem key={`status${index}`}>
-                                    <Tag colorScheme={value.include ?  "orange" : undefined} size={"lg"} onClick={() => {
+                                    <Tag colorScheme={value.include ? "orange" : undefined} variant={value.include ? "solid" : undefined} size={"lg"} onClick={() => {
                                         array[index].include = !(array[index].include);
                                         formik.setFieldValue("status", array);
                                     }}>
@@ -175,18 +200,55 @@ export default function Manga_Search() {
                         })}
                     </Wrap>
                 </FormControl>
-            </React.Fragment>
+            </ReallySimpleCard>
+        );
+    }
+    function CttRtgComp() {
+        return (
+            <ReallySimpleCard>
+                <FormControl
+                    isInvalid={(formik.errors.content_rating ? true : false)}
+                >
+                    <FormLabel>
+                        <Heading size={"lg"} fontFamily={"inherit"}>
+                            Content Rating
+                        </Heading>
+                    </FormLabel>
+                    <Wrap>
+                        {formik.values.content_rating.map((value, index, arr) => {
+                            const array = arr;
+                            return (
+                                <WrapItem key={`content_rating${index}`}>
+                                    <Tag colorScheme={value.include ? "orange" : undefined} variant={value.include ? "solid" : undefined} size={"lg"} onClick={() => {
+                                        array[index].include = !(array[index].include);
+                                        formik.setFieldValue("content_rating", array);
+                                    }}>
+                                        <TagLeftIcon boxSize={"12px"} as={value.include ? AddIcon : undefined} />
+                                        <TagLabel>{make_first_UpperCare(value.name)}</TagLabel>
+                                    </Tag>
+                                </WrapItem>
+                            );
+                        })}
+                    </Wrap>
+                </FormControl>
+            </ReallySimpleCard>
         );
     }
     function FilterCollapse() {
         return (
             <React.Fragment>
-                <StatusComp />
+                <Wrap spacing={"25px"}>
+                    <WrapItem>
+                        <CttRtgComp />
+                    </WrapItem>
+                    <WrapItem>
+                        <StatusComp />
+                    </WrapItem>
+                </Wrap>
                 <TagsComp />
             </React.Fragment>
         );
     }
-
     React.useEffect(() => {
         appWindow.setTitle("Manga Search | Mangadex");
     }, []);

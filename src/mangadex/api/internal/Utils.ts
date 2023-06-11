@@ -176,8 +176,8 @@ export class Asc_Desc{
 }
 
 export class Offset_limits{
-    private limits: number; 
-    private offset: number;
+    private limits!: number; 
+    private offset!: number;
     public set_limits(limits: number) : Offset_limits{
         this.limits = limits;
         return this;
@@ -207,7 +207,7 @@ export class Offset_limits{
 export class Author_Artists{
     private authors: Array<Author>;
     private artists: Array<Author>;
-    public filtred: Array<Author>;
+    public filtred!: Array<Author>;
     public is_filtred_have_this(object: Author): boolean{
         if(this.filtred == null || this.filtred.length == 0){
             return false;
@@ -245,16 +245,16 @@ export class Author_Artists{
 }
 
 export class Order{
-    private title: string;
-    private createdAt: string;
-    private updatedAt: string;
-    private publishAt: string;
-    private readableAt: string;
-    private volume: string;
-    private chapter: string;
-    private latestUploadedChapter: string;
-    private followedCount : string;
-    private relevance : string;
+    private title!: string;
+    private createdAt!: string;
+    private updatedAt!: string;
+    private publishAt!: string;
+    private readableAt!: string;
+    private volume!: string;
+    private chapter!: string;
+    private latestUploadedChapter!: string;
+    private followedCount!: string;
+    private relevance!: string;
     public set_createdAt(createdAt: string){
         this.createdAt = createdAt;
         return this;
@@ -366,18 +366,18 @@ export class RelationshipsTypes{
 }
 
 export class MangaLinksData{
-    private al: string;
-    private ap: string;
-    private bw: string;
-    private mu: string;
-    private nu: string;
-    private kt: string;
-    private amz: string;
-    private ebj: string;
-    private mal: string;
-    private cdj: string;
-    private raw: string;
-    private engtl: string;
+    private al!: string;
+    private ap!: string;
+    private bw!: string;
+    private mu!: string;
+    private nu!: string;
+    private kt!: string;
+    private amz!: string;
+    private ebj!: string;
+    private mal!: string;
+    private cdj!: string;
+    private raw!: string;
+    private engtl!: string;
     public set_al(al: string){
         this.al = al;
     }
@@ -687,10 +687,10 @@ export class Reading_status{
 }
 
 export class Lang{
-    private name: string;
-    private two_letter: string;
-    private three_letter: string;
-    private flag_icon : string;
+    private name!: string;
+    private two_letter!: string;
+    private three_letter!: string;
+    private flag_icon!: string;
     public set_flag_icon(flag_icon : string){
         this.flag_icon = flag_icon;
     }
@@ -724,7 +724,7 @@ export class Lang{
     }
 }
 export class Languages{
-    private langs : Array<Lang>;
+    private langs!: Array<Lang>;
     private set_langs(langs: Array<Lang>){
         this.langs = langs;
     }
@@ -778,7 +778,7 @@ export class Languages{
 }
 
 export class Alt_title{
-    public to_use: Array<any>;
+    public to_use!: Array<any>;
     public set_to_use(to_use: Array<any>){
         this.to_use = to_use;
     }
@@ -816,8 +816,8 @@ export class Alt_title{
 }
 
 export class Lang_and_Data{
-    private language: Lang;
-    private data: string;
+    private language!: Lang;
+    private data!: string;
     public set_language(language: Lang){
         this.language = language;
     }
@@ -887,7 +887,7 @@ export class Lang_and_Data{
 }
 
 export class MGDate{
-    private to_use: Date;
+    private to_use!: Date;
     public set_To_use(MGDat: Date){
         this.to_use = MGDat;
     }
@@ -910,8 +910,8 @@ export function make_first_UpperCare(input: string): string{
 }
 
 export class Querry_list_builder<T>{
-    private name: string;
-    private array: Array<T>;
+    private name!: string;
+    private array!: Array<T>;
 
     /**
      * Setter $name

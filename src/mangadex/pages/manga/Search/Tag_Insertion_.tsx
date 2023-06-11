@@ -11,15 +11,16 @@ export function Tag_Insertion_(props: {
     const b_value = props.tag;
     const tags = props.array;
     const mode = get_mode_tag_insertion(b_value, tags);
-    const colorScheme = mode != undefined ? (mode == TagInsertionMode.Include ? "green" : "red") : undefined;
+    const colorScheme = mode != undefined ? "orange" : undefined;
     const as_ = mode != undefined ? (mode == TagInsertionMode.Include ? AddIcon : MinusIcon) : undefined;
     const label = mode != undefined ? (mode == TagInsertionMode.Include ? "This tag is included" : "This tag is excluded") : "This tag is not included or excluded";
+    const variant = mode != undefined ? (mode == TagInsertionMode.Include ? "solid" : "outline") : undefined;
     return (
         <WrapItem key={b_value.get_id()}>
             <Tooltip label={label} hasArrow>
                 <Tag
                     size={"lg"}
-                    variant={"solid"}
+                    variant={variant}
                     colorScheme={colorScheme}
                     onClick={() => {
                         toggle_tag_insertion(b_value.get_id(), tags);
