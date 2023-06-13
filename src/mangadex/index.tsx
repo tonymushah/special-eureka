@@ -39,11 +39,7 @@ const Chapter_Page = React.lazy(() => import("@mangadex/pages/chapter/Chapter_Pa
 
 const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
 
-const Longstrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Longstrip"));
-
-const Widestrip = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/Widestrip"));
-
-const SinglePage = React.lazy(() => import("@mangadex/pages/ChapterReadingMode/SwipperMode"));
+const Chapter_Reading = React.lazy(() => import("@mangadex/pages/ChapterReadingMode"));
 
 const Group_Page_ = React.lazy(() => import("@mangadex/pages/groups/index"));
 
@@ -227,33 +223,11 @@ function useMangadexRouter(): RouteObject {
                                 element: (
                                     <Mangadex_suspense>
                                         <Chakra.Box>
-                                            <Longstrip />
+                                            <Chapter_Reading/>
                                         </Chakra.Box>
                                     </Mangadex_suspense>
                                 )
                             },
-                            // SinglePage
-                            {
-                                path: "swipper",
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Chakra.Box>
-                                            <SinglePage />
-                                        </Chakra.Box>
-                                    </Mangadex_suspense>
-                                )
-                            },
-                            // Widestrip
-                            {
-                                path: "widestrip",
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Chakra.Box>
-                                            <Widestrip />
-                                        </Chakra.Box>
-                                    </Mangadex_suspense>
-                                )
-                            }
                         ]
                     }
                 ]

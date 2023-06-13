@@ -1,26 +1,26 @@
-import * as Chakra from "@chakra-ui/react";
-import { ChapterPage_outlet_context } from "../chapter/UseChapterOutletContext";
-import SwipperMode from "./SwipperMode";
-import { FreeMode, Keyboard } from "swiper";
-import React from "react";
+import { ChapterPage_outlet_context } from "@mangadex/pages/chapter/UseChapterOutletContext";
+import SwipperMode from ".";
+import { Keyboard } from "swiper";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
+import React from "react";
 import { SwiperSlide } from "swiper/react";
-import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
+import * as Chakra from "@chakra-ui/react";
+import { Mangadex_suspense__ } from "@mangadex";
 
-
-export default function Widestrip({ data } : {
-    data : ChapterPage_outlet_context
+export default function SinglePage({ data }: {
+    data: ChapterPage_outlet_context
 }) {
-    const fullScreenOptions = useFullScreenOptions_Query();
     const { query } = useRTLSwipperMode();
-    return (
-        <SwipperMode
+    if (query.isSuccess) {
+        return (
+
+            <SwipperMode
                 data={data}
                 swipper_option={{
-                    slidesPerView : 2,
-                    modules: [FreeMode, Keyboard],
+                    slidesPerView: 1,
+                    centeredSlides: true,
+                    modules: [Keyboard],
                     keyboard: true,
-                    freeMode: true,
                     dir: query.data ? "rtl" : undefined,
                 }}
             >
@@ -45,7 +45,6 @@ export default function Widestrip({ data } : {
                                                 </Chakra.Box>
                                             }
                                             src={value}
-                                            width={fullScreenOptions.query.data != undefined? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
                                             id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
                                         />
                                     </Chakra.Container>
@@ -55,6 +54,8 @@ export default function Widestrip({ data } : {
                     </React.Fragment>
                 )}
             </SwipperMode>
-            
-    );
+        );
+    } else {
+        return (<Mangadex_suspense__ />);
+    }
 }

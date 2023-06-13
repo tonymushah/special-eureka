@@ -30,7 +30,8 @@
     "dev": "tauri dev",
     "build": "tauri build",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "tauri-storybook" : "cd src-tauri && cargo run --package special-eureka --example storybook"
   },
   "devDependencies": {
     "@chakra-ui/storybook-addon": "^4.0.16",

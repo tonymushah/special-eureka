@@ -1,10 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
 import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
-import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
+import { ChapterPage_outlet_context } from "../chapter/UseChapterOutletContext";
 import useChapterPages from "../chapter/useChapterPages";
 
-export default function Lonstrip() {
-    const data = useChapterPageOutletContext();
+export default function Lonstrip({ data } : {
+    data : ChapterPage_outlet_context
+}) {
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
         chapter : data.chapter
