@@ -56,7 +56,7 @@ export default function ReadingDrawer(props: {
     }
     function ImageWidthController() {
         const reading_mode = useChapterReadingModeOption();
-        if (reading_mode.query.data == ReadingMode.LongStrip) {
+        if (reading_mode.query.data == ReadingMode.LongStrip || reading_mode.query.data == ReadingMode.WideStrip) {
             return (
                 <Chakra.HStack
                     mt={3}

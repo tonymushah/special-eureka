@@ -49,32 +49,26 @@ function ChapterNavigationModal_Online_Chapters(props: {
     if (query.isSuccess) {
         return (
             <React.Fragment>
-                <Chakra.VStack width={"full"}>
+                <Chakra.VStack divider={<Chakra.StackDivider />} width={"full"}>
                     {
                         query.data.get_volumes().map((volume) => (
-                            <>
-                                {
-                                    volume.get_chapters().map((chapters) => (
-                                        <>
-                                            {
-                                                chapters.get_ids().map((chapter) => (
-                                                    <Chakra.Box width={"full"} key={chapter}>
-                                                        <Chakra.Text>
-                                                            Volume {
-                                                                volume.get_name()
-                                                            } Chapter {
-                                                                chapters.get_name()
-                                                            }
-                                                            <br />
+                            <React.Fragment key={volume.get_name()}>
+                                <Chakra.VStack divider={<Chakra.StackDivider />} width={"full"}>
+                                    {
+                                        volume.get_chapters().map((chapters) => (
+                                            <React.Fragment key={`${volume.get_name()}-${chapters.get_name()}`}>
+                                                {
+                                                    chapters.get_ids().map((chapter) => (
+                                                        <Chakra.Box width={"full"} key={chapter}>
                                                             <Chapter_Element1_byChapID id={chapter} />
-                                                        </Chakra.Text>
-                                                    </Chakra.Box>
-                                                ))
-                                            }
-                                        </>
-                                    ))
-                                }
-                            </>
+                                                        </Chakra.Box>
+                                                    ))
+                                                }
+                                            </React.Fragment>
+                                        ))
+                                    }
+                                </Chakra.VStack>
+                            </React.Fragment>
                         ))
                     }
                 </Chakra.VStack>
@@ -143,9 +137,14 @@ export default function ChapterNavigationModal(props: {
                     <Chakra.ModalHeader>Relative Chapters</Chakra.ModalHeader>
                     <Chakra.ModalCloseButton />
                     <Chakra.ModalBody>
-                        <ChapterNavigationModal_Online_Chapters
-                            chapter={props.chapter}
-                        />
+                        <Chakra.Container
+                            height={"md"}
+                            overflow={"scroll"}
+                        >
+                            <ChapterNavigationModal_Online_Chapters
+                                chapter={props.chapter}
+                            />
+                        </Chakra.Container>
                     </Chakra.ModalBody>
                     <Chakra.ModalFooter>
                         <Chakra.Text>To open this modal, use <Chakra.Kbd
@@ -158,7 +157,8 @@ export default function ChapterNavigationModal(props: {
                             <Chakra.Kbd
                                 color={"InfoText"}
                             //background={"inherit"}
-                            >m</Chakra.Kbd></Chakra.Text>
+                            >m</Chakra.Kbd>
+                        </Chakra.Text>
                     </Chakra.ModalFooter>
                 </Chakra.ModalContent>
             </Chakra.Modal>

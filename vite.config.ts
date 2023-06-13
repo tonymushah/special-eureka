@@ -28,7 +28,7 @@ export default defineConfig({
         strictPort: true,
         open: false,
         fs : {
-            allow : ["../node_modules/.pnpm/flag-icons@6.6.6", "."]
+            allow : ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/*"]
         }
     },
     build: {
