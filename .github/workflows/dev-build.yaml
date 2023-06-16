@@ -5,7 +5,8 @@ on:
       - dev-0.1.5
       - dev-0.1.6
       - 53-fix-the-tauri-action-problem
-      
+    paths-ignore:
+      - 'src-tauri/examples/**'
 jobs:
   test-tauri:
     strategy:
