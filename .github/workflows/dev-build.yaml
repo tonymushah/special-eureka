@@ -4,7 +4,8 @@ on:
     branches:
       - dev-0.1.5
       - dev-0.1.6
-
+      - 53-fix-the-tauri-action-problem
+      
 jobs:
   test-tauri:
     strategy:
