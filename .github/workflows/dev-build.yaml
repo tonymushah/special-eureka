@@ -41,7 +41,7 @@ jobs:
         with:
           format: YYYYMMDD-HH
       - name: build the actual app with tauri action
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@custom-search
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
