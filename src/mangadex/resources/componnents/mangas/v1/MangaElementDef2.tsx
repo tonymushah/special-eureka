@@ -103,7 +103,7 @@ export default function MangaElementDef2(props: {
     refetch?: () => void
 }) {
 
-    const client = useHTTPClient();"mdx-manga:" + props.src.get_id() + "-statistics"
+    const client = useHTTPClient();"mdx-manga:" + props.src.get_id() + "-statistics";
     const {
         manga_description_query
     } = get_manga_description({
