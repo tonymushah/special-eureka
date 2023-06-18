@@ -10,7 +10,7 @@ import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 import { get_manga_description, get_manga_page_authors_artists, get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
 import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import React from "react";
-import { Button, Placeholder } from "react-bootstrap";
+import { Placeholder } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 const MangaDexPath = getMangaDexPath();
@@ -113,27 +113,28 @@ export default function MangaPopularElement(props: {
         const returns: Array<React.ReactNode> = [];
         if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
             if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Button style={{
-                    fontWeight: 700,
-                    margin: "1px",
-                    padding: "2px"
-                }} className="d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+                returns[index] = (
+                    <Chakra.Tag colorScheme="green" size="sm">
+                        {make_first_UpperCare(props.src.get_ranting())}
+                    </Chakra.Tag>);
             } else {
-                returns[index] = (<Button style={{
-                    fontWeight: 700,
-                    margin: "1px",
-                    padding: "2px"
-                }} className="d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
+                returns[index] = (
+                    <Chakra.Tag colorScheme="red" size="sm">
+                        <Chakra.TagLabel>{make_first_UpperCare(props.src.get_ranting())}</Chakra.TagLabel>
+                    </Chakra.Tag>
+                );
             }
             index = index + 1;
         }
         for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
             const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Button style={{
-                fontWeight: 700,
-                margin: "1px",
-                padding: "2px"
-            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
+            returns[index + index1] = (
+                <Chakra.Tag colorScheme={"gray"} size="sm">
+                    <Chakra.TagLabel>
+                        {element.get_name().en}
+                    </Chakra.TagLabel>
+                </Chakra.Tag>
+            );
         }
         return returns;
     }
@@ -190,9 +191,13 @@ export default function MangaPopularElement(props: {
                         padding={0}
                         margin={0}
                     >
-                        {
-                            build_themes_manga().map((value) => value)
-                        }
+                        <Chakra.Wrap>
+                            {
+                            build_themes_manga().map((value) => (
+                                <Chakra.WrapItem key={`${Math.random()}`}>{value}</Chakra.WrapItem>
+                            ))
+                            }
+                        </Chakra.Wrap>
                     </Chakra.Text>
                     {
                         manga_description_query.isLoading && manga_description_query.fetchStatus == "fetching" ? (

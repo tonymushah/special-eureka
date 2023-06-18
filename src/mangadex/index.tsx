@@ -101,7 +101,7 @@ export function trackEvent(name: string, payload?: {
     aptabaseTrackEvent(name, {
         "website": "mangadex",
         "location": window.location.href,
-        "date" : new Date().toISOString(),
+        "date": new Date().toISOString(),
         ...payload
     });
 }
@@ -319,9 +319,11 @@ function useMangadexRouter(): RouteObject {
                     {
                         path: "search",
                         element: (
-                            <Mangadex_suspense>
-                                <Manga_Search />
-                            </Mangadex_suspense>
+                            <MyErrorBounderies>
+                                <Mangadex_suspense>
+                                    <Manga_Search />
+                                </Mangadex_suspense>
+                            </MyErrorBounderies>
                         )
                     }
                 ]

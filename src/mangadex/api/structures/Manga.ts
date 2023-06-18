@@ -1413,6 +1413,7 @@ export class Manga_with_allRelationship extends Manga {
             hasAvailableChapters,
             latestUploadedChapter,
             group,
+            contentRating,
             client
         } : MangaSearch_withAllIncludes): Promise<Collection<Manga_with_allRelationship>>{
         const querys: any = {
@@ -1439,12 +1440,14 @@ export class Manga_with_allRelationship extends Manga {
             serialize((new Querry_list_builder("excludedOriginalLanguage", excludedOriginalLanguage!)).build()) + "&" + 
             serialize((new Querry_list_builder("availableTranslatedLanguage", availableTranslatedLanguage!)).build()) + "&" + 
             serialize((new Querry_list_builder("publicationDemographic", publicationDemographic!)).build()) + "&" + 
-            serialize((new Querry_list_builder("ids", mangaIDs!)).build()) + "&" + serialize({
+            serialize((new Querry_list_builder("ids", mangaIDs!)).build()) + "&" + 
+            serialize({
                 "includes[0]": "manga",
                 "includes[1]": RelationshipsTypes.artist(),
                 "includes[2]": RelationshipsTypes.cover_art(),
                 "includes[3]": RelationshipsTypes.author()
-            })
+            }) + "&" + 
+            serialize(new Querry_list_builder("contentRating", contentRating!).build())
         , {
             query: querys
         }, client);

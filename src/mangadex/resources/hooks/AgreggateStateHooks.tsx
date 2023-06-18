@@ -20,7 +20,8 @@ export function get_aggregate_query(props : {
             return Aggregate.get_aggregate_offline(props.aggregate_options);
         }
     }, props.queryOption == undefined? {
-        staleTime: Infinity
+        staleTime: Infinity,
+        enabled : !!usePingQueryRes.query.data
     } : props.queryOption);
     return {
         queryKey,
