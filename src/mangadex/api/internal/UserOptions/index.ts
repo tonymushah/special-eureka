@@ -1,11 +1,14 @@
 import { Store } from "tauri-plugin-store-api";
 import { Lang, Languages } from "../Utils";
+import { ReadingMode } from "./ReadingMode";
 
 export enum UserOptionsKeys{
     languages = "languages",
     serverAutoStart = "serv-auto-start",
     mangalistOption = "mangaList-option",
-    rtlSidebar = "rtlSidebar"
+    rtlSidebar = "rtlSidebar",
+    readingMode = "readingMode",
+    rtlSwipperMode = "rtlSwipperMode"
 }
 
 export default class UserOptions extends Store{
@@ -56,5 +59,23 @@ export default class UserOptions extends Store{
     }
     public async getRtlSidebar() : Promise<boolean>{
         return (await this.get<boolean>(UserOptionsKeys.rtlSidebar)) ?? false;
+    }
+    public async setReadingMode(input: ReadingMode, save? : boolean){
+        await this.set(UserOptionsKeys.readingMode, input);
+        if(save == undefined || save == true){
+            await this.save();
+        }
+    }
+    public async getReadingMode() : Promise<ReadingMode>{
+        return (await this.get<ReadingMode>(UserOptionsKeys.readingMode)) ?? ReadingMode.LongStrip;
+    }
+    public async setRtlSwipperMode(input: boolean, save? : boolean){
+        await this.set(UserOptionsKeys.rtlSwipperMode, input);
+        if(save == undefined || save == true){
+            await this.save();
+        }
+    }
+    public async getRtlSwipperMode() : Promise<boolean>{
+        return (await this.get<boolean>(UserOptionsKeys.rtlSwipperMode)) ?? false;
     }
 }

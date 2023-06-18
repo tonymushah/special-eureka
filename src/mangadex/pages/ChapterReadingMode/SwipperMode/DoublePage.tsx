@@ -1,27 +1,26 @@
-import * as Chakra from "@chakra-ui/react";
-import { ChapterPage_outlet_context } from "../chapter/UseChapterOutletContext";
-import SwipperMode from "./SwipperMode";
-import { FreeMode, Keyboard } from "swiper";
-import React from "react";
+import { ChapterPage_outlet_context } from "@mangadex/pages/chapter/UseChapterOutletContext";
+import SwipperMode from ".";
+import { Controller, Keyboard } from "swiper";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
+import * as Chakra from "@chakra-ui/react";
+import React from "react";
 import { SwiperSlide } from "swiper/react";
-import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
 
-
-export default function Widestrip({ data } : {
+export default function DoublePage({data} : {
     data : ChapterPage_outlet_context
-}) {
-    const fullScreenOptions = useFullScreenOptions_Query();
+}){
     const { query } = useRTLSwipperMode();
-    return (
-        <SwipperMode
+    if(query.isSuccess){
+        return (
+            <SwipperMode
                 data={data}
                 swipper_option={{
+                    dir : query.data == true ? "rtl" : undefined,
+                    slidesPerGroup : 2,
                     slidesPerView : 2,
-                    modules: [FreeMode, Keyboard],
-                    keyboard: true,
-                    freeMode: true,
-                    dir: query.data ? "rtl" : undefined,
+                    modules : [Controller, Keyboard],
+                    keyboard : true,
+                    spaceBetween : 0,
                 }}
             >
                 {({ images, reading_state }) => (
@@ -31,7 +30,7 @@ export default function Widestrip({ data } : {
                                 <SwiperSlide onMouseOver={() => {
                                     reading_state.setCurrentPage(index + 1);
                                 }} key={`${data.chapter.get_id()}-${index}`}>
-                                    <Chakra.Container height={"100vh"}>
+                                    <Chakra.Container height={"100vh"} overflow={"scroll"}>
                                         <Chakra.Image
                                             fallback={
                                                 <Chakra.Box width={"full"}>
@@ -45,7 +44,6 @@ export default function Widestrip({ data } : {
                                                 </Chakra.Box>
                                             }
                                             src={value}
-                                            width={fullScreenOptions.query.data != undefined? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
                                             id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
                                         />
                                     </Chakra.Container>
@@ -55,6 +53,7 @@ export default function Widestrip({ data } : {
                     </React.Fragment>
                 )}
             </SwipperMode>
-            
-    );
+        );
+    }
+    return (<></>);
 }
