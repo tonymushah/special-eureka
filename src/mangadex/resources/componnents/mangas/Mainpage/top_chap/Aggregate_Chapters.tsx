@@ -1,11 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { Container, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
-import IsPingable from "../../../IsPingable";
+import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import { MangaPageProps } from "../../Manga_Page";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const Online_Chapter_Lang_Chooser = React.lazy(() => import("./Online_Chapter_Lang_Chooser"));
 
@@ -16,7 +17,7 @@ const Manga_Page_Aggregate_Offline = React.lazy(() => import("./Manga_Page_Aggre
 export default function Online_Chapter(props: MangaPageProps) {
     const client = useHTTPClient();
     return (
-        <Container>
+        <ChakraContainer>
             <IsPingable
                 client={client}
                 onError={(query) => (
@@ -87,6 +88,6 @@ export default function Online_Chapter(props: MangaPageProps) {
                     </Chakra.Box>
                 }
             />
-        </Container>
+        </ChakraContainer>
     );
 }

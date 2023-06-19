@@ -1,23 +1,24 @@
-import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks";
 import * as Chakra from "@chakra-ui/react";
-import { appWindow } from "@tauri-apps/api/window";
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { FaUsers } from "react-icons/fa";
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { Await, Link, Outlet } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import Chapter_history from "@mangadex/api/history/Chapter.history";
 import { Alt_title, Lang } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { Manga } from "@mangadex/api/structures/Manga";
-import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import { getMangaDexPath } from "@mangadex/index";
 import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
-import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
-import Download_Chapter_withHotkeys from "./Download_Chapter_withHotkeys";
 import { useChapterFullscreen } from "@mangadex/resources/componnents/chapter/fullscreen/Context";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
+import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
+import { UseQueryOptions, useQuery } from "@tanstack/react-query";
+import { appWindow } from "@tauri-apps/api/window";
+import React from "react";
+import { Col, Row } from "react-bootstrap";
+import { FaUsers } from "react-icons/fa";
+import { Await, Link, Outlet } from "react-router-dom";
+import Download_Chapter_withHotkeys from "./Download_Chapter_withHotkeys";
 
 const ReadingOptions = React.lazy(() => import("./ReadingOption"));
 
@@ -90,7 +91,7 @@ export default function Chapter_Page_Success(props: {
     function Chapter_on_non_FullScreen() {
         return (
             <Chakra.Box
-                as={Container}
+                as={ChakraContainer}
             >
                 <Row>
                     <Chakra.Heading

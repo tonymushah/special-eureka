@@ -1,10 +1,10 @@
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { Container } from "react-bootstrap";
-import { Mangadex_suspense } from "../..";
-import { Offset_limits } from "../../api/internal/Utils";
+import { Mangadex_suspense } from "@mangadex/index";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
-const Group_Search = React.lazy(() => import("../../resources/componnents/groups/Group_Search"));
+const Group_Search = React.lazy(() => import("@mangadex/resources/componnents/groups/Group_Search"));
 
 export default function Group_Search_default(){
     const offset_Limits = new Offset_limits();
@@ -12,9 +12,9 @@ export default function Group_Search_default(){
     appWindow.setTitle("Groups | Mangadex");
     return (
         <Mangadex_suspense>
-            <Container>
+            <ChakraContainer>
                 <Group_Search offset_limits={offset_Limits} />
-            </Container>
+            </ChakraContainer>
         </Mangadex_suspense>
     );
 }

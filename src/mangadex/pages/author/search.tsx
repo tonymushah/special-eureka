@@ -1,10 +1,11 @@
-import { Box, Container, FormControl, FormErrorMessage, FormLabel, Heading, Input, Wrap, WrapItem } from "@chakra-ui/react";
+import { Box, FormControl, FormErrorMessage, FormLabel, Heading, Input, Wrap, WrapItem } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { Author } from "@mangadex/api/structures/Author";
 import AuthorSearchType from "@mangadex/api/structures/SearchType/Author";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
 import AuthorElement from "@mangadex/resources/componnents/authors/AuthorElement";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import { Form, Formik } from "formik";
 import React from "react";
 
@@ -12,14 +13,7 @@ export default function Author_Search() {
     const client = useHTTPClient();
     const [result, setResult] = React.useState(<></>);
     return (
-        <Container
-            maxW={{
-                sm : "container.sm",
-                md : "container.md",
-                lg : "container.lg",
-                xl : "container.xl"
-            }}
-        >
+        <ChakraContainer>
             <Heading fontFamily={"inherit"}>Author search</Heading>
             <Formik<AuthorSearchType>
                 initialValues={{
@@ -72,6 +66,6 @@ export default function Author_Search() {
                     result
                 }
             </Box>
-        </Container>
+        </Ch>
     );
 }

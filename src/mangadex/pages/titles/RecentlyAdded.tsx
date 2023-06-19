@@ -5,8 +5,8 @@ import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/
 import { Manga } from "@mangadex/api/structures/Manga";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex";
-import { Container } from "react-bootstrap";
 import { appWindow } from "@tauri-apps/api/window";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
@@ -45,7 +45,7 @@ export default function RecentlyAdded() {
                     </Mangadex_suspense>
                 )}
                 onSuccess={() => (
-                    <Container>
+                    <ChakraContainer>
                         <Chakra.Box>
                             <Chakra.Heading
                                 fontFamily={"inherit"}
@@ -75,7 +75,7 @@ export default function RecentlyAdded() {
                                 </CollectionComponnent_WithQuery>
                             </Chakra.Box>
                         </Chakra.Box>
-                    </Container>
+                    </ChakraContainer>
                 )}
             />
         </Mangadex_suspense>

@@ -5,7 +5,7 @@ import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
 import { ContentRating, make_first_UpperCare } from "@mangadex/api/internal/Utils";
@@ -50,7 +50,7 @@ function MangaElementDef2_Stats(props: {
                                                 base: "none",
                                                 xl: "inherit"
                                             }}>
-                                                <Chakra.HStack spacing={"5px"}>
+                                                <Chakra.HStack spacing={"4px"}>
                                                     <Chakra.HStack spacing={"4px"}>
                                                         <ChakraIcons.StarIcon />
                                                         <Chakra.Text as={"span"}>{getted.get_average()}</Chakra.Text>
@@ -64,8 +64,8 @@ function MangaElementDef2_Stats(props: {
                                                         {
                                                             getted.get_comments() !== undefined && getted.get_comments() !== null ? (
                                                                 <Chakra.Text as={"span"}>{
-                                                                    getted.get_comments()!.repliesCount !== null && getted.get_comments()!.repliesCount !== undefined ? (
-                                                                        <>{getted.get_comments()!.repliesCount}</>
+                                                                    getted.get_comments()?.repliesCount !== null && getted.get_comments()?.repliesCount !== undefined ? (
+                                                                        <>{getted.get_comments()?.repliesCount}</>
                                                                     ) : (
                                                                         <>0</>
                                                                     )
