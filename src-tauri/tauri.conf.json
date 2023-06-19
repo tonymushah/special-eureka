@@ -79,13 +79,13 @@
             },
             "window": {
                 "all": false,
-                "center": false,
-                "close": false,
-                "create": false,
-                "hide": false,
-                "maximize": false,
+                "center": true,
+                "close": true,
+                "create": true,
+                "hide": true,
+                "maximize": true,
                 "minimize": false,
-                "print": false,
+                "print": true,
                 "requestUserAttention": false,
                 "setAlwaysOnTop": false,
                 "setCursorGrab": false,
@@ -104,10 +104,10 @@
                 "setSize": false,
                 "setSkipTaskbar": false,
                 "setTitle": true,
-                "show": false,
-                "startDragging": false,
-                "unmaximize": false,
-                "unminimize": false
+                "show": true,
+                "startDragging": true,
+                "unmaximize": true,
+                "unminimize": true
             }
         },
         "bundle": {
@@ -171,7 +171,8 @@
                 "theme": "Light",
                 "label": "main",
                 "url": "index.html",
-                "visible": false
+                "visible": false,
+                "decorations": true
             },
             {
                 "width": 600,
