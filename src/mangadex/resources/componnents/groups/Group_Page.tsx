@@ -1,6 +1,5 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Container, Stack } from "react-bootstrap";
 import {
     useQuery
 } from "@tanstack/react-query";
@@ -10,14 +9,13 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Client } from "@tauri-apps/api/http";
 import TryCatch from "@commons-res/components/TryCatch";
 import { appWindow } from "@tauri-apps/api/window";
-import { trackEvent } from "@mangadex";
+import { getMangaDexPath, trackEvent } from "@mangadex/index";
+import { Link } from "react-router-dom";
+import ChakraContainer from "../layout/Container";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
-const Group_Details = React.lazy(() => import("./Group_Details"));
-const Group_Feeds = React.lazy(() => import("./Group_Feeds"));
-const Group_Titles = React.lazy(() => import("./Group_Titles"));
 
-function Group_Page_Suspense(props: React.PropsWithChildren) {
+export function Group_Page_Suspense(props: React.PropsWithChildren) {
     return (
         <React.Suspense
             fallback={
@@ -46,26 +44,27 @@ function Leader_query_for_GroupPage(props: {
         staleTime: Infinity
     });
     return (
-        <>
+        <React.Fragment>
             {
                 leader_query.isSuccess ? (
                     <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
                 ) : (
-                    <></>
+                    <React.Fragment />
                 )
-            }</>
+            }</React.Fragment>
     );
 }
 
 export default function Group_Page(props: React.PropsWithChildren<{
     src: Group
 }>) {
+    const MangaDexPath = getMangaDexPath();
     const client = useHTTPClient();
     React.useEffect(() => {
         appWindow.setTitle(`${props.src.get_name()} | Mangadex`).then();
         trackEvent("mangadex-group-page", {
-            type : "group",
-            id : props.src.get_id()
+            type: "group",
+            id: props.src.get_id()
         });
     }, []);
     return (
@@ -89,9 +88,9 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                 onLoading={
                                     <Chakra.Text>Loading...</Chakra.Text>
                                 }
-                                onSuccess={(query) => (
+                                onSuccess={() => (
                                     <TryCatch
-                                        catch={(error) => (
+                                        catch={() => (
                                             <Chakra.Heading fontSize={"lg"} fontFamily={"inherit"}>Leader : None</Chakra.Heading>
                                         )}
                                     >
@@ -106,6 +105,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                         <Chakra.Button
                                             onClick={() => query.refetch()}
                                             colorScheme={"orange"}
+                                            isLoading={query.isLoading}
                                         >
                                             Refretch
                                         </Chakra.Button>
@@ -118,71 +118,60 @@ export default function Group_Page(props: React.PropsWithChildren<{
                 </Chakra.Center>
             </Chakra.Box>
             <Chakra.Box
+                minH={"full"}
                 background={"gray.200"}
             >
-                <Container>
+                <ChakraContainer>
                     <Chakra.Tabs isLazy>
                         <Chakra.TabList>
-                            <Chakra.Tab>Group Details</Chakra.Tab>
-                            <Chakra.Tab>Titles</Chakra.Tab>
-                            <Chakra.Tab>Feed</Chakra.Tab>
+                            <Chakra.Tab >
+                                <Chakra.Link
+                                    as={Link}
+                                    to={`${MangaDexPath}/group/${props.src.get_id()}`}
+                                >
+                                    Group Details
+                                </Chakra.Link>
+                            </Chakra.Tab>
+                            <Chakra.Tab>
+                                <Chakra.Link
+                                    as={Link}
+                                    to={`${MangaDexPath}/group/${props.src.get_id()}/titles`}
+                                >
+                                    Titles
+                                </Chakra.Link>
+                            </Chakra.Tab>
+                            <Chakra.Tab>
+                                <Chakra.Link
+                                    as={Link}
+                                    to={`${MangaDexPath}/group/${props.src.get_id()}/feeds`}
+                                >
+                                    Feed
+                                </Chakra.Link>
+                            </Chakra.Tab>
                         </Chakra.TabList>
                         <Chakra.TabPanels>
                             <Chakra.TabPanel>
-                                <Group_Page_Suspense>
-                                    <Group_Details src={props.src} />
-                                </Group_Page_Suspense>
+                                {
+                                    props.children
+                                }
                             </Chakra.TabPanel>
                             <Chakra.TabPanel>
-                                <TryCatch
-                                    catch={(error) => (
-                                        <Chakra.Alert
-                                            status="error"
-                                            flexDirection='column'
-                                            alignItems='center'
-                                            justifyContent='center'
-                                            textAlign='center'
-                                            height={"max-content"}
-                                        >
-                                            <Chakra.AlertIcon />
-                                            <Chakra.AlertTitle>
-                                                {
-                                                    error.name
-                                                }
-                                            </Chakra.AlertTitle>
-                                            <Chakra.AlertDescription>
-                                                <Stack
-                                                >
-                                                    <Chakra.Text>{
-                                                        error.message
-                                                    }</Chakra.Text>
-                                                    <Chakra.Box>
-                                                        {
-                                                            error.stack
-                                                        }
-                                                    </Chakra.Box>
-                                                </Stack>
-                                            </Chakra.AlertDescription>
-                                        </Chakra.Alert>
-                                    )}
-                                >
-                                    <Group_Page_Suspense>
-                                        <Group_Titles id={props.src.get_id()} />
-                                    </Group_Page_Suspense>
-                                </TryCatch>
-
+                                {
+                                    props.children
+                                }
                             </Chakra.TabPanel>
                             <Chakra.TabPanel>
-                                <Group_Page_Suspense>
-                                    <Group_Feeds id={props.src.get_id()} />
-                                </Group_Page_Suspense>
+                                {
+                                    props.children
+                                }
                             </Chakra.TabPanel>
                         </Chakra.TabPanels>
                     </Chakra.Tabs>
-                </Container>
+                </ChakraContainer>
             </Chakra.Box>
         </Chakra.Box>
     );
 
 
 }
+

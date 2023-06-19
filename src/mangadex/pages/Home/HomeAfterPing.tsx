@@ -135,7 +135,7 @@ export default function HomeAfterPing() {
                     <Chakra.Spinner
                         size={"lg"}
                     />
-                    <Chakra.Text>
+                    <Chakra.Text as={"span"} >
                         Fetching all home page data...
                     </Chakra.Text>
                 </Chakra.HStack>

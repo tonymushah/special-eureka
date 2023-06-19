@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import * as Chakra from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { Outlet, useOutletContext, useParams } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Group } from "@mangadex/api/structures/Group";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -26,6 +26,14 @@ function Group_Page_Suspense(props : React.PropsWithChildren){
             }
         </React.Suspense>
     );
+}
+
+export type GroupRouteOutletContext = {
+    group : Group
+}
+
+export function useGroupRouteOutletContext() : GroupRouteOutletContext{
+    return useOutletContext<GroupRouteOutletContext>();
 }
 
 export default function Group_Page_(){
@@ -60,7 +68,11 @@ export default function Group_Page_(){
         if(query.isSuccess){
             return (
                 <Group_Page_Suspense>
-                    <Group_Page src={query.data}/>
+                    <Group_Page src={query.data}>
+                        <Outlet context={{
+                            group : query.data
+                        }}/>
+                    </Group_Page>
                 </Group_Page_Suspense>
             );
         }
