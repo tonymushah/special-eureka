@@ -7,11 +7,11 @@ import ErrorEL1 from "../../../error/ErrorEL1";
 
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
 const ExtLink = React.lazy(async () => {
-    let res = await import("../../../../../../commons-res/components/ExtLink");
+    const res = await import("../../../../../../commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };
-})
+});
 
 type LAD_TabsProps = {
     src: Array<Lang_and_Data>
@@ -20,7 +20,7 @@ type LAD_TabsProps = {
 }
 
 export class LAD_Tabs extends React.Component<LAD_TabsProps>{
-    private to_use: Array<Lang_and_Data>
+    private to_use: Array<Lang_and_Data>;
     constructor(props: LAD_TabsProps) {
         super(props);
         this.to_use = this.props.src;
@@ -86,7 +86,7 @@ export class LAD_Tabs extends React.Component<LAD_TabsProps>{
                                                                         )
                                                                     }
                                                                 </React.Suspense>
-                                                            )
+                                                            );
                                                         }
                                                     }}
                                                 />
@@ -99,6 +99,6 @@ export class LAD_Tabs extends React.Component<LAD_TabsProps>{
                     </Col>
                 </Row>
             </Tab.Container>
-        )
+        );
     }
 }

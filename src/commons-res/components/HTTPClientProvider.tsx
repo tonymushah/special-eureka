@@ -10,13 +10,13 @@ export default function HTTPClientProvider(props: React.PropsWithChildren<{
         <context.Provider value={props.value}>{
             props.children
         }</context.Provider>
-    )
+    );
 }
 
 export function useHTTPClient() : Client{
-    let _context__ = React.useContext(context);
+    const _context__ = React.useContext(context);
     if (_context__ == undefined) {
-        throw new Error("Can't find the HTTPClient Context")
+        throw new Error("Can't find the HTTPClient Context");
     } else {
         return _context__;
     }

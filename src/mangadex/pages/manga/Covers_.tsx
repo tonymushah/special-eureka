@@ -8,7 +8,7 @@ import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
 
 export default function Covers_() {
-    let toUse: Manga = useManga().toUse;
+    const toUse: Manga = useManga().toUse;
     const client = useHTTPClient();
     return (
         <IsPingable
@@ -39,5 +39,5 @@ export default function Covers_() {
             )}
         />
 
-    )
+    );
 }

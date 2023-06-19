@@ -1,12 +1,12 @@
 import React from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
 import { Accordion, Alert, Col, Container, Row } from "react-bootstrap";
 import { Aggregate } from "../../../../mangadex/api/structures/Aggregate";
 import { Volume_ } from "./Volume";
 import { Volume } from "../../../../mangadex/api/structures/Volume";
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 type Aggregate_boxProps = {
     src: Aggregate
     separator: number
@@ -24,7 +24,7 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps>{
         this.separator = this.props.separator;
         this.Chapters_parts = [];
         this.set_parts();
-        this.sliceAll()
+        this.sliceAll();
     }
     set_parts(){
         if(this.toUse.get_count() % this.separator != 0){

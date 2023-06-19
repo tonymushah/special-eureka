@@ -10,7 +10,7 @@ export default function Chapter_Element1_byChapID(props: {
     const { query } = get_ChapterbyId({
         id : props.id,
         with_all_includes : props.with_all_includes
-    })
+    });
     if (query.isLoading) {
         return (
             <Chakra.Box width={"full"}>
@@ -33,7 +33,7 @@ export default function Chapter_Element1_byChapID(props: {
             >
                 <ErrorEL1 error={query.error} />
             </React.Suspense>
-        )
+        );
     }
     return (
         <React.Suspense

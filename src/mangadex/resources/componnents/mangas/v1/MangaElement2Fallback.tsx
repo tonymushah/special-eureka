@@ -5,7 +5,7 @@ import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
 export default function MangaFallback2() {
     const card_maxHeight: Chakra.ResponsiveValue<any> = {
         base: "10em"
-    }
+    };
     return (
         <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"}>
             <Chakra.Image
@@ -29,5 +29,5 @@ export default function MangaFallback2() {
 
             </Chakra.CardBody>
         </Chakra.Card>
-    )
+    );
 }

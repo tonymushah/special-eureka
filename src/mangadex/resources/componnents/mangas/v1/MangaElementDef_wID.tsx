@@ -14,12 +14,12 @@ export default function MangaElementDef_wID(props: {
     if (query.isLoading) {
         return(
             <MangaElementFallback/>
-        )
+        );
     }
     if(query.isError){
         return(
             <ErrorEL1 error={query.error}/>
-        )
+        );
     }
     return (
         <React.Suspense
@@ -33,5 +33,5 @@ export default function MangaElementDef_wID(props: {
                 refetch={query.refetch}
             />
         </React.Suspense>
-    )
+    );
 }

@@ -8,19 +8,17 @@ rust-version = "1.59"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 
 [dependencies]
-tauri = { version = "1.2.4" }
+tauri = { version = "1.4.0" }
 serde = "1.0"
-thiserror = "1.0"
-mangadex-api = { package = "mangadex-api-rust", version = "2.0.0-rc.1", features = ["multi-thread"] }
-tokio = "1.20.1"
-anyhow = "1.0.58"
+tokio = "1.27.0"
+thiserror = "1"
+#anyhow = "1.0.58"
 reqwest = "0.11.14"
-lazy_static = "1.4.0"
 log = "^0.4"
 actix-web = "4"
 fern = "0.6"
 once_cell = "1.17.0"
-event-listener = "2.5.3"
+#event-listener = "2.5.3"
 
 [dependencies.mangadex-desktop-api2]
-version = "0.1.6"
+version = "0.2.3"

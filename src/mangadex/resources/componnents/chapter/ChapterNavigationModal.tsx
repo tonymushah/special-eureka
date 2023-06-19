@@ -1,23 +1,20 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
 import Hotkeys from "react-hot-keys";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { get_aggregate_query } from "../../hooks/AgreggateStateHooks";
 import ErrorEL1 from "../error/ErrorEL1";
-import IsPingable from "../IsPingable";
 import Chapter_Element1_byChapID from "./v1/Chapter_Element1_byChapID";
-
-const All_downloaded_Chapter_manga = React.lazy(() => import("../download/All_downloaded_Chapter_manga"));
+import React from "react";
 
 function ChapterNavigationModal_Online_Chapters(props: {
     chapter: Chapter
 }) {
     const client = useHTTPClient();
     const { query } = get_aggregate_query({
-        aggregate_options : props.chapter.getAggregateList_options(client),
-        queryOption : {
-            staleTime : 1000 * 60 * 30
+        aggregate_options: props.chapter.getAggregateList_options(client),
+        queryOption: {
+            staleTime: 1000 * 60 * 30
         }
     });
     if (query.isRefetching == true) {
@@ -51,38 +48,31 @@ function ChapterNavigationModal_Online_Chapters(props: {
     }
     if (query.isSuccess) {
         return (
-            <>
-
-                <Chakra.VStack width={"full"}>
+            <React.Fragment>
+                <Chakra.VStack divider={<Chakra.StackDivider />} width={"full"}>
                     {
                         query.data.get_volumes().map((volume) => (
-                            <>
-                                {
-                                    volume.get_chapters().map((chapters) => (
-                                        <>
-                                            {
-                                                chapters.get_ids().map((chapter) => (
-                                                    <Chakra.Box width={"full"} key={chapter}>
-                                                        <Chakra.Text>
-                                                            Volume {
-                                                                volume.get_name()
-                                                            } Chapter {
-                                                                chapters.get_name()
-                                                            }
-                                                            <br />
+                            <React.Fragment key={volume.get_name()}>
+                                <Chakra.VStack divider={<Chakra.StackDivider />} width={"full"}>
+                                    {
+                                        volume.get_chapters().map((chapters) => (
+                                            <React.Fragment key={`${volume.get_name()}-${chapters.get_name()}`}>
+                                                {
+                                                    chapters.get_ids().map((chapter) => (
+                                                        <Chakra.Box width={"full"} key={chapter}>
                                                             <Chapter_Element1_byChapID id={chapter} />
-                                                        </Chakra.Text>
-                                                    </Chakra.Box>
-                                                ))
-                                            }
-                                        </>
-                                    ))
-                                }
-                            </>
+                                                        </Chakra.Box>
+                                                    ))
+                                                }
+                                            </React.Fragment>
+                                        ))
+                                    }
+                                </Chakra.VStack>
+                            </React.Fragment>
                         ))
                     }
                 </Chakra.VStack>
-            </>
+            </React.Fragment>
         );
     }
     return (
@@ -99,7 +89,6 @@ function ChapterNavigationModal_Online_Chapters(props: {
 export default function ChapterNavigationModal(props: {
     chapter: Chapter
 }) {
-    const client = useHTTPClient();
     const { isOpen, onOpen, onClose } = Chakra.useDisclosure();
     return (
         <Hotkeys
@@ -144,98 +133,18 @@ export default function ChapterNavigationModal(props: {
                 size={"xl"}
             >
                 <Chakra.ModalOverlay />
-                <Chakra.ModalContent
-
-                >
+                <Chakra.ModalContent>
                     <Chakra.ModalHeader>Relative Chapters</Chakra.ModalHeader>
                     <Chakra.ModalCloseButton />
-                    <Chakra.ModalBody
-
-                    >
-                        <Chakra.Tabs isLazy>
-                            <Chakra.TabList>
-                                <Chakra.Tab>
-                                    Online
-                                </Chakra.Tab>
-                                <Chakra.Tab>
-                                    Offline
-                                </Chakra.Tab>
-                            </Chakra.TabList>
-                            <Chakra.TabPanels
-                                height={"sm"}
-                                overflow={"scroll"}
-                            >
-                                <Chakra.TabPanel>
-                                    <IsPingable
-                                        client={client}
-                                        onLoading={
-                                            <Chakra.Center>
-                                                <Chakra.Spinner
-                                                    color={"orange"}
-                                                    size={"xl"}
-                                                    thickness={"10px"}
-                                                />
-                                            </Chakra.Center>
-                                        }
-                                        onError={(query) => (
-                                            <Chakra.Alert
-                                                status="error"
-                                            >
-                                                <Chakra.AlertIcon />
-                                                <Chakra.AlertTitle>Can&apos;t ping the Mangadex API</Chakra.AlertTitle>
-                                                <Chakra.AlertDescription>
-                                                    <Chakra.Button
-                                                        colorScheme={"orange"}
-                                                        onClick={() => query.refetch()}
-                                                    >
-                                                        Refresh
-                                                    </Chakra.Button>
-                                                </Chakra.AlertDescription>
-                                            </Chakra.Alert>
-                                        )}
-                                        onSuccess={() => (
-                                            <ChapterNavigationModal_Online_Chapters
-                                                chapter={props.chapter}
-                                            />
-                                        )}
-                                    />
-
-                                </Chakra.TabPanel>
-                                <Chakra.TabPanel
-                                >
-                                    <React.Suspense
-                                        fallback={
-                                            <Chakra.Center>
-                                                <Chakra.Spinner
-                                                    color={"orange"}
-                                                    size={"xl"}
-                                                    thickness={"10px"}
-                                                />
-                                            </Chakra.Center>
-                                        }
-                                    >
-                                        <All_downloaded_Chapter_manga
-                                            mangaID={props.chapter.get_manga_id()}
-                                        >
-                                            {(getted: Array<string>) => (
-                                                <Chakra.VStack>
-                                                    {
-                                                        getted.map((value) => (
-                                                            <Chakra.Box
-                                                                width={"full"}
-                                                                key={value}
-                                                            >
-                                                                <Chapter_Element1_byChapID id={value} />
-                                                            </Chakra.Box>
-                                                        ))
-                                                    }
-                                                </Chakra.VStack>
-                                            )}
-                                        </All_downloaded_Chapter_manga>
-                                    </React.Suspense>
-                                </Chakra.TabPanel>
-                            </Chakra.TabPanels>
-                        </Chakra.Tabs>
+                    <Chakra.ModalBody>
+                        <Chakra.Container
+                            height={"md"}
+                            overflow={"scroll"}
+                        >
+                            <ChapterNavigationModal_Online_Chapters
+                                chapter={props.chapter}
+                            />
+                        </Chakra.Container>
                     </Chakra.ModalBody>
                     <Chakra.ModalFooter>
                         <Chakra.Text>To open this modal, use <Chakra.Kbd
@@ -248,7 +157,8 @@ export default function ChapterNavigationModal(props: {
                             <Chakra.Kbd
                                 color={"InfoText"}
                             //background={"inherit"}
-                            >m</Chakra.Kbd></Chakra.Text>
+                            >m</Chakra.Kbd>
+                        </Chakra.Text>
                     </Chakra.ModalFooter>
                 </Chakra.ModalContent>
             </Chakra.Modal>

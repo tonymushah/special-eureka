@@ -9,9 +9,10 @@ import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaEleme
 
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
+import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectLanguage";
 
 const MangaChapterAccordion_Element = React.lazy(() => import("../mangas/v1/MangaChapterAccordion_Element"));
 
@@ -21,9 +22,10 @@ export default function Group_Feeds(props: {
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
+    const languages = useLanguageUserOption();
     return (
         <CollectionComponnent_WithQuery<Chapter>
-            queryKey={"mdx-group_feeds-" + props.id}
+            queryKey={["mdx", "group_feeds", props.id]}
             fn={async () => {
                 const offset_Limits = new Offset_limits();
                 offset_Limits.set_limits(25);
@@ -33,6 +35,7 @@ export default function Group_Feeds(props: {
                         props.id
                     ],
                     order: new Order(Asc_Desc.desc()),
+                    translatedLanguage: languages.query.data?.map((value) => value.get_two_letter()),
                     client: client
                 });
                 search_result.get_data().forEach((chapter) => {
@@ -50,7 +53,8 @@ export default function Group_Feeds(props: {
                 return search_result;
             }}
             query_options={{
-                staleTime: Infinity
+                staleTime: Infinity,
+                enabled : !!languages.query.data
             }}
         >
             {

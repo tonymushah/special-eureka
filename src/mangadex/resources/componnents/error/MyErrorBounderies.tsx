@@ -1,32 +1,40 @@
-import { AbsoluteCenter, Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, Text } from "@chakra-ui/react";
-import React from "react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Heading, Text } from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
+import React from "react";
 
 export default function MyErrorBounderies(props: React.PropsWithChildren) {
     return (
         <TryCatch
-            catch={(error: Error) => (
-                <Box
-                    width={"full"}
-                    height={"100vh"}
+            catch={(e: Error) => (
+                <Alert
+                    status="error"
+                    variant='subtle'
+                    flexDirection='column'
+                    alignItems='center'
+                    justifyContent='center'
+                    textAlign='center'
                 >
-                    <AbsoluteCenter>
-                        <Box textAlign={"center"}>
-                            <Heading fontFamily={"inherit"}>Error on loading the app</Heading>
-                            <Text>Error Details</Text>
-                            <Alert status="error">
-                                <AlertIcon />
-                                <AlertTitle>{error.name}</AlertTitle>
-                                <AlertDescription>{error.message}</AlertDescription>
-                            </Alert>
-                        </Box>
-                    </AbsoluteCenter>
-                </Box>
+                    <AlertIcon boxSize='40px' mr={0} />
+                    <AlertTitle mt={4} mb={1} fontSize='lg'>
+                        {
+                            e.name
+                        }
+                    </AlertTitle>
+                    <AlertDescription maxWidth='sm'>
+                        <Text>
+                            {e.message}
+                        </Text>
+                        <Heading size={"md"} fontFamily={"inherit"}>Stack trace</Heading>
+                        <Text>
+                            {e.stack}
+                        </Text>
+                    </AlertDescription>
+                </Alert>
             )}
         >
             {
                 props.children
             }
         </TryCatch>
-    )
+    );
 }

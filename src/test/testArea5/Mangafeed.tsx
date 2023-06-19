@@ -9,7 +9,7 @@ import { Cover } from "../../mangadex/api/structures/Cover";
 import { Alt_title, Asc_Desc, Offset_limits, Order } from "../../mangadex/api/internal/Utils";
 import { Response } from "@tauri-apps/api/http";
 import { Chapter, Chapter_withAllIncludes } from "../../mangadex/api/structures/Chapter";
-import * as Chakra from "@chakra-ui/react"
+import * as Chakra from "@chakra-ui/react";
 import { ErrorELAsync } from "../../mangadex/resources/componnents/Error_cmp";
 type MangafeedProps = {
     src: Manga
@@ -22,13 +22,13 @@ export class Mangafeed extends React.Component<MangafeedProps>{
     }
     render(): React.ReactNode {
         //let manga_cover: string = "./imgs/cover_image1.jpg";
-        let title: string = "";
+        let title = "";
         if (this.MangaToUse.get_title().en == null) {
             title = new Alt_title(this.MangaToUse.get_alt_title()).get_quicklang()!;
         } else {
             title = this.MangaToUse.get_title().en;
         }
-        let offset_limits_1: Offset_limits = new Offset_limits();
+        const offset_limits_1: Offset_limits = new Offset_limits();
         offset_limits_1.set_limits(2);
         return (
             <Container {...this.props}>
@@ -41,7 +41,7 @@ export class Mangafeed extends React.Component<MangafeedProps>{
                                 children={(getted: Cover) => {
                                     return (
                                         <Cover_Image_ id="top-image" src={getted} />
-                                    )
+                                    );
                                 }}
                             />
                         </React.Suspense>
@@ -90,7 +90,7 @@ export class Manga_WithLatest_Chap_0 extends React.Component<MangafeedProps>{
     }
     render(): React.ReactNode {
         //let manga_cover: string = "./imgs/cover_image1.jpg";
-        let title: string = "";
+        let title = "";
         if (this.MangaToUse.get_title().en == null) {
             title = new Alt_title(this.MangaToUse.get_alt_title()).get_quicklang()!;
         } else {
@@ -107,7 +107,7 @@ export class Manga_WithLatest_Chap_0 extends React.Component<MangafeedProps>{
                                 children={(getted: Cover) => {
                                     return (
                                         <Cover_Image_ id="top-image" src={getted} />
-                                    )
+                                    );
                                 }}
                             />
                         </React.Suspense>
@@ -156,13 +156,13 @@ export class Manga_WithLatest_Chap_1 extends React.Component<MangafeedProps>{
     }
     render(): React.ReactNode {
         //let manga_cover: string = "./imgs/cover_image1.jpg";
-        let title: string = "";
+        let title = "";
         if (this.MangaToUse.get_title().en == null) {
             title = new Alt_title(this.MangaToUse.get_alt_title()).get_quicklang()!;
         } else {
             title = this.MangaToUse.get_title().en;
         }
-        let offset_limits_1: Offset_limits = new Offset_limits();
+        const offset_limits_1: Offset_limits = new Offset_limits();
         offset_limits_1.set_limits(1);
         return (
             <Container {...this.props}>
@@ -175,7 +175,7 @@ export class Manga_WithLatest_Chap_1 extends React.Component<MangafeedProps>{
                                 children={(getted: Cover) => {
                                     return (
                                         <Cover_Image_ id="top-image" src={getted} />
-                                    )
+                                    );
                                 }}
                             />
                         </React.Suspense>
@@ -225,7 +225,7 @@ export class Manga_WithLatest_Chap_01 extends React.Component<MangafeedProps>{
     }
     render(): React.ReactNode {
         //let manga_cover: string = "./imgs/cover_image1.jpg";
-        let title: string = "";
+        let title = "";
         if (this.MangaToUse.get_title().en == null) {
             title = new Alt_title(this.MangaToUse.get_alt_title()).get_quicklang()!;
         } else {
@@ -242,7 +242,7 @@ export class Manga_WithLatest_Chap_01 extends React.Component<MangafeedProps>{
                                 children={(getted: Cover) => {
                                     return (
                                         <Cover_Image_ id="top-image" src={getted} />
-                                    )
+                                    );
                                 }}
                             />
                         </React.Suspense>
@@ -291,13 +291,13 @@ export class Manga_WithLatest_Chap_11 extends React.Component<MangafeedProps>{
     }
     render(): React.ReactNode {
         //let manga_cover: string = "./imgs/cover_image1.jpg";
-        let title: string = "";
+        let title = "";
         if (this.MangaToUse.get_title().en == null) {
             title = new Alt_title(this.MangaToUse.get_alt_title()).get_quicklang()!;
         } else {
             title = this.MangaToUse.get_title().en;
         }
-        let offset_limits_1: Offset_limits = new Offset_limits();
+        const offset_limits_1: Offset_limits = new Offset_limits();
         offset_limits_1.set_limits(1);
         return (
             <Container {...this.props}>
@@ -310,7 +310,7 @@ export class Manga_WithLatest_Chap_11 extends React.Component<MangafeedProps>{
                                 children={(getted: Cover) => {
                                     return (
                                         <Cover_Image_ id="top-image" src={getted} />
-                                    )
+                                    );
                                 }}
                             />
                         </React.Suspense>

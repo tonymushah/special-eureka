@@ -1,19 +1,19 @@
-import { message } from '@tauri-apps/api/dialog';
+import { message } from "@tauri-apps/api/dialog";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Manga_swipper2 } from "../../mangadex/resources/componnents/mangas/Manga_State2"
-import { ChakraProvider, AbsoluteCenter, Spinner, Box, Text, Heading } from '@chakra-ui/react';
-import { Await, createBrowserRouter, createRoutesFromElements, Link, Outlet, Route, RouterProvider } from 'react-router-dom';
-import { Manga } from '../../mangadex/api/structures/Manga';
-import { Asc_Desc, Offset_limits, Order } from '../../mangadex/api/internal/Utils';
-import { Response, ResponseType } from '@tauri-apps/api/http';
-import { ErrorELAsync, ErrorELRouter } from '../../mangadex/resources/componnents/Error_cmp';
-import About from "./About/About"
-import Overview from "./About/index"
-import Me from "./About/Me"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Manga_swipper2 } from "../../mangadex/resources/componnents/mangas/Manga_State2";
+import { ChakraProvider, AbsoluteCenter, Spinner, Box, Text, Heading } from "@chakra-ui/react";
+import { Await, createBrowserRouter, createRoutesFromElements, Link, Outlet, Route, RouterProvider } from "react-router-dom";
+import { Manga } from "../../mangadex/api/structures/Manga";
+import { Asc_Desc, Offset_limits, Order } from "../../mangadex/api/internal/Utils";
+import { Response, ResponseType } from "@tauri-apps/api/http";
+import { ErrorELAsync, ErrorELRouter } from "../../mangadex/resources/componnents/Error_cmp";
+import About from "./About/About";
+import Overview from "./About/index";
+import Me from "./About/Me";
 
-const test2Path : string = "/test/testArea2";
+const test2Path  = "/test/testArea2";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -83,7 +83,7 @@ const router = createBrowserRouter(
 
     </Route>
   )
-)
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <ChakraProvider>

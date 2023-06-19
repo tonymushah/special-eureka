@@ -1,16 +1,15 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { UseMutationResult } from "react-query";
-import { get_ChapterbyId, useChapterDownloadMutation, ChapterDeleteMutation_data, useChapterDeleteMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
-import React from "react";
+import { ChapterDeleteMutation_data, get_ChapterbyId, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { UseQueryResult } from "@tanstack/react-query";
 export default function ChapterDownloadButton(props: {
     chapter: Chapter,
-    downloadMutation?: UseMutationResult<ChapterDeleteMutation_data, unknown, void>,
-    deleteMutation?: UseMutationResult<ChapterDeleteMutation_data, unknown, void>
+    downloadMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>,
+    deleteMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>
 }) {
-    let downloadMutation: UseMutationResult<ChapterDeleteMutation_data, unknown, void> | undefined = props.downloadMutation;
-    let deleteMutation: UseMutationResult<ChapterDeleteMutation_data, unknown, void> | undefined = props.deleteMutation;
+    let downloadMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> | undefined = props.downloadMutation;
+    let deleteMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> | undefined = props.deleteMutation;
     const { queryKey, query } = get_ChapterbyId({
         id: props.chapter.get_id()
     });
@@ -20,7 +19,7 @@ export default function ChapterDownloadButton(props: {
             toInvalidate: [
                 queryKey
             ]
-        })
+        });
     }
     if (deleteMutation == undefined) {
         deleteMutation = useChapterDeleteMutation({
@@ -28,9 +27,11 @@ export default function ChapterDownloadButton(props: {
             toInvalidate: [
                 queryKey
             ]
-        })
+        });
     }
-    if (downloadMutation?.isLoading) {
+    if (downloadMutation?.isRefetching ) {
+        return (<Chakra.Spinner size={"md"} />);
+    } else if ((downloadMutation.isLoading && downloadMutation.fetchStatus == "fetching")) {
         return (<Chakra.Spinner size={"md"} />);
     } else {
         if (query.isSuccess) {
@@ -46,7 +47,7 @@ export default function ChapterDownloadButton(props: {
                                     color: "orange.500"
                                 }}
                                 onClick={() => {
-                                    downloadMutation?.mutate()
+                                    downloadMutation?.refetch();
                                 }}
                             />
                         </Chakra.Tooltip>
@@ -59,7 +60,7 @@ export default function ChapterDownloadButton(props: {
                                     color: "red"
                                 }}
                                 onClick={() => {
-                                    deleteMutation?.mutate()
+                                    deleteMutation?.refetch();
                                 }}
                             />
                         </Chakra.Tooltip>
@@ -77,7 +78,7 @@ export default function ChapterDownloadButton(props: {
                                         color: "green"
                                     }}
                                     onClick={() => {
-                                        downloadMutation?.mutate()
+                                        downloadMutation?.refetch();
                                     }}
                                 />
                             </Chakra.Tooltip>
@@ -90,7 +91,7 @@ export default function ChapterDownloadButton(props: {
                                         color: "red"
                                     }}
                                     onClick={() => {
-                                        deleteMutation?.mutate()
+                                        deleteMutation?.refetch();
                                     }}
                                 />
                             </Chakra.Tooltip>
@@ -102,14 +103,14 @@ export default function ChapterDownloadButton(props: {
                     <ChakraIcon.DownloadIcon _hover={{
                         color: "blue"
                     }} onClick={() => {
-                        downloadMutation?.mutate()
+                        downloadMutation?.refetch();
                     }} />
-                )
+                );
             }
         } else if (query.isLoading) {
             return (
                 <Chakra.Spinner size={"md"} />
-            )
+            );
         }else{
             return (
                 <Chakra.Spinner size={"md"} />

@@ -5,9 +5,8 @@ import TryCatch from "@commons-res/components/TryCatch";
 import { Manga } from "@mangadex/api/structures/Manga";
 import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import MangaTitle from "./MangaTitle";
-import ReactContextMenu from "react-jsx-context-menu";
-import * as ChakraIcons from "@chakra-ui/icons";
-import { getMangaDexPath } from "../../../..";
+import { getMangaDexPath } from "@mangadex";
+import MangaContextMenu from "./MangaContextMenu";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -27,45 +26,15 @@ export default function MangaElementDef2_withChildren(props: React.PropsWithChil
     };
     return (
         <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"} boxShadow={"md"}>
-            <ReactContextMenu
-                menu={
-                    <Chakra.Menu
-                        isOpen
-                    >
-                        <Chakra.MenuList>
-                            <Chakra.MenuItem
-                                onClick={() => props.refetch!()}
-                            >Refresh</Chakra.MenuItem>
-                            <Chakra.MenuItem
-                                onClick={() => props.download!()}
-                                textColor={"green"}
-                                icon={<ChakraIcons.DownloadIcon />}
-                            >
-                                Download
-                            </Chakra.MenuItem>
-                            <Chakra.MenuItem
-                                onClick={() => props.update!()}
-                                textColor={"blue"}
-                                icon={<ChakraIcons.RepeatIcon />}
-                            >
-                                Update
-                            </Chakra.MenuItem>
-                            <Chakra.MenuItem
-                                onClick={() => props.delete!()}
-                                textColor={"red"}
-                                icon={<ChakraIcons.DeleteIcon />}
-                            >
-                                Delete
-                            </Chakra.MenuItem>
-                        </Chakra.MenuList>
-                    </Chakra.Menu>
-                }
+            <MangaContextMenu
+                mangaId={props.src.get_id()}
+                refetch={props.refetch}
             >
                 <CoverImageByCoverID coverID={props.src.get_cover_art_id()} isThumbail size={256} image_props={{
                     maxHeight: card_maxHeight,
                     "objectFit": "contain"
                 }} />
-            </ReactContextMenu>
+            </MangaContextMenu>
             <Chakra.Stack spacing={"0px"} width={"full"}>
                 <Chakra.CardBody marginTop={"0px"}>
                     <Chakra.Box>

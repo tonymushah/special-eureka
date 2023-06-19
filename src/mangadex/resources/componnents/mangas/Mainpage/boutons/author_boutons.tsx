@@ -5,7 +5,7 @@ import { getMangaDexPath } from "../../../../..";
 import { make_first_UpperCare } from "../../../../../api/internal/Utils";
 import { Author } from "../../../../../api/structures/Author";
 
-const MangaDexPath = getMangaDexPath()
+const MangaDexPath = getMangaDexPath();
 
 export function AuthorButton(props: {
     src: Author
@@ -21,7 +21,7 @@ export function AuthorButton(props: {
             </Link>
         );
     } else {
-        return (<></>)
+        return (<></>);
     }
 
 }
@@ -38,14 +38,14 @@ export class AuthorCol extends React.Component<AuthorColProps>{
         this.title = this.props.title;
     }
     public build_AuthorButtons(): Array<React.ReactNode> {
-        let returns: Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
+        const returns: Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
         for (let index = 0; index < this.to_use.length; index++) {
             returns[index] = (<AuthorButton src={this.to_use[index]} />);
         }
         return returns;
     }
     render(): React.ReactNode {
-        let tagButtons: Array<React.ReactNode> = this.build_AuthorButtons()
+        const tagButtons: Array<React.ReactNode> = this.build_AuthorButtons();
         if (tagButtons.length > 0) {
             return (
                 <Col>
@@ -54,7 +54,7 @@ export class AuthorCol extends React.Component<AuthorColProps>{
                         {tagButtons}
                     </div>
                 </Col>
-            )
+            );
         } else {
             return (<></>);
         }

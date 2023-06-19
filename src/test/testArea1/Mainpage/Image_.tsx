@@ -1,10 +1,10 @@
-import * as React from 'react';
-import Viewer from 'react-viewer';
+import * as React from "react";
+import Viewer from "react-viewer";
 import { Accordion, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse, Overlay, OverlayTrigger } from "react-bootstrap";
-import Zoom from 'react-medium-image-zoom'
-import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import Zoom from "react-medium-image-zoom";
+import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Cover } from '../../../mangadex/api/structures/Cover';
+import { Cover } from "../../../mangadex/api/structures/Cover";
 
 export function Cover_Image_(props){
     const [ visible, setVisible ] = React.useState(false);
@@ -13,7 +13,7 @@ export function Cover_Image_(props){
             <Viewer
                 visible={visible}
                 onClose={() => { setVisible(false); } }
-                images={[{src: props.src, alt: ''}]}
+                images={[{src: props.src, alt: ""}]}
                 noFooter={true}
                 zoomSpeed={1}
             />
@@ -25,7 +25,7 @@ export function Cover_Image_2(props){
     const [ visible, setVisible ] = React.useState(false);
     const [show, setShow] = React.useState(true);
     const target = React.useRef(null);
-    let to_use: Cover = props.src;
+    const to_use: Cover = props.src;
     return (
         <Card id={props.id} className={props.className} >
             <Viewer

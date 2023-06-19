@@ -8,7 +8,7 @@ export default function MangaFeedElement_byChapID(props: {
 }) {
     const {query} = get_ChapterbyId({
         id : props.id
-    })
+    });
     if(query.isLoading){
         return (
             <Chakra.Box>
@@ -19,7 +19,7 @@ export default function MangaFeedElement_byChapID(props: {
     if(query.isError){
         return (
             <ErrorEL1 error={query.error}/>
-        )
+        );
     }
     return (
         <MangaFeedElement

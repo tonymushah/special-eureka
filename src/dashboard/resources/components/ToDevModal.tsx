@@ -53,5 +53,5 @@ export default function ToDevModal() {
                 </ModalContent>
             </Modal>
         </React.Fragment>
-    )
+    );
 }

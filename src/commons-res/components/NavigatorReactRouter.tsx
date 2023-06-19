@@ -11,7 +11,7 @@ import {
     Button,
     Kbd,
     Image
-} from '@chakra-ui/react'
+} from "@chakra-ui/react";
 
 import websites from "../../websites";
 import ReactHotkeys from "react-hot-keys";
@@ -65,5 +65,5 @@ export default function NavigatorReactRouter_(props: React.PropsWithChildren) {
             {
                 props.children
             }</React.Fragment>
-    )
+    );
 }

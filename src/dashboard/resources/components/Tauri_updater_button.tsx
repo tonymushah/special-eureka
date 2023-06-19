@@ -19,17 +19,17 @@ export default function Tauri_Updater(props: {
         >
             Update avalaible
         </Button>
-        )
+        );
     }
     return (
         <Button
             colorScheme={"facebook"}
             isLoading={query.isLoading}
             onClick={() => {
-                query.refetch()
+                query.refetch();
             }}
         >
             Check for updates
         </Button>
-    )
+    );
 }

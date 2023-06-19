@@ -3,17 +3,15 @@ import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Button, Col, Row, Spinner } from "react-bootstrap";
 import { Await } from "react-router-dom";
-import { Lang_and_Data, make_first_UpperCare, MangaLinksData } from "../../../../api/internal/Utils";
-import { Manga } from "../../../../api/structures/Manga";
-import { Tag } from "../../../../api/structures/Tag";
+import { Lang_and_Data, make_first_UpperCare, MangaLinksData } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { Tag } from "@mangadex/api/structures/Tag";
 import { TagRow } from "../Mainpage/boutons/tag_boutons";
 import { MangaPageProps } from "../Manga_Page";
 import { LinksRow } from "./boutons/links_boutons";
+import MangaStatus from "@mangadex/api/enums/MangaStatus";
 
-
-const Offline_Chapters = React.lazy(() => import("./top_chap/Offline_Chapters"));
-
-const Online_Chapter = React.lazy(() => import("./top_chap/Online_Chapter"));
+const Aggregate_Chapters = React.lazy(() => import("./top_chap/Aggregate_Chapters"));
 
 const CollapseHeight = React.lazy(() => import("./top_chap/CollapseHeight"));
 
@@ -51,8 +49,7 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
         let links: MangaLinksData | null = null;
         try {
             links = MangaLinksData.build_wAny(this.to_use.get_links());
-        } catch (error) {
-        }
+        } catch (error) { }
 
         return (
             <div>
@@ -206,27 +203,35 @@ export class Top_Chaps extends React.Component<MangaPageProps>{
                                     </React.Suspense>
                                 </Row>
                                 <Row>
-                                    
+                                    {
+                                        this.props.src.get_status_enum() == MangaStatus.completed ? (
+                                            <React.Fragment>
+                                                <Chakra.Text fontWeight={"bold"}>Latest Chapter : Volume {
+                                                    this.props.src.get_last_volume() ?? "none"
+                                                } Chapter {
+                                                        this.props.src.get_last_chapter() ?? "none"
+                                                    }
+                                                </Chakra.Text>
+                                            </React.Fragment>
+                                        ) : (
+                                            <></>
+                                        )
+                                    }
                                 </Row>
                             </Col>
                         </CollapseHeight>
                     </React.Suspense>
                     <Col xs="12" sm="12" md="8" lg="8" className="d-sm-block">
-                        <Chakra.Tabs isLazy>
-                            <Chakra.TabList>
-                                <Chakra.Tab>Online</Chakra.Tab>
-                                <Chakra.Tab>Offline</Chakra.Tab>
-                            </Chakra.TabList>
-                            <Chakra.TabPanels>
-                                <Online_Chapter
-                                    src={this.to_use}
-                                />
-                                <Offline_Chapters
-                                    src={this.to_use}
-                                />
-                            </Chakra.TabPanels>
-                        </Chakra.Tabs>
-
+                        <React.Suspense
+                            fallback={
+                                <Chakra.Alert status="loading">
+                                    <Chakra.AlertIcon />
+                                    <Chakra.AlertTitle>Loading...</Chakra.AlertTitle>
+                                </Chakra.Alert>
+                            }
+                        >
+                            <Aggregate_Chapters src={this.props.src} />
+                        </React.Suspense>
                     </Col>
                 </Row>
             </div>

@@ -1,13 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
+//import React from "react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { Cover } from "@mangadex/api/structures/Cover";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
 import CoverImage from "../../covers/v1/CoverImage";
+import MangaPage_Cover from "./covers";
 
-const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
+//const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
 
 type MangaPageProps = {
     src: Manga
@@ -16,7 +17,7 @@ type MangaPageProps = {
 export function Covers_Manga(props: MangaPageProps) {
     const client = useHTTPClient();
     const offset_limits = new Offset_limits();
-    const queryKey = "mdx-manga:" + props.src.get_id() + "-covers";
+    const queryKey = ["mdx", "manga", props.src.get_id(), "-covers"];
     offset_limits.set_limits(25);
     return (
         <CollectionComponnent_WithQuery<Cover>
@@ -27,7 +28,7 @@ export function Covers_Manga(props: MangaPageProps) {
                         props.src.get_id()
                     ],
                     client: client
-                })
+                });
             }}
             queryKey={queryKey}
             query_options={{
@@ -50,27 +51,9 @@ export function Covers_Manga(props: MangaPageProps) {
         >
             {(getted_collection) => (
                 <Chakra.Wrap>
-                    {
-                        getted_collection.get_data().map((value) => (
-                            <Chakra.WrapItem
-                                padding={"10px"}
-                                width={"10em"}
-                            >
-                                <Chakra.Card
-                                    border={"1px"}
-                                    borderColor={"black"}
-                                >
-                                    <CoverImage
-                                        isThumbail={true}
-                                        size={256}
-                                        src={value}
-                                    />
-                                </Chakra.Card>
-                            </Chakra.WrapItem>
-                        ))
-                    }
+                    <MangaPage_Cover covers={getted_collection.get_data()}/>
                 </Chakra.Wrap>
             )}
         </CollectionComponnent_WithQuery>
-    )
+    );
 }

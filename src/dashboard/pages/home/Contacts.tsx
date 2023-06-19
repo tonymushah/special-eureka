@@ -1,8 +1,8 @@
 import { Button, Box, Heading, Text, Wrap, WrapItem, Image, Tooltip } from "@chakra-ui/react";
-import { ExtLink } from "../../../commons-res/components/ExtLink";
+import { ExtLink } from "@commons-res/components/ExtLink";
 import { Container, Row } from "react-bootstrap";
 import { FaDiscord, FaGithub } from "react-icons/fa";
-import mangadex_logo from "../../../mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 export default function Contacts(){
     return(
         <Container id="tony-mushah-links">
@@ -80,5 +80,5 @@ export default function Contacts(){
                 </Box>
             </Row>
         </Container>
-    )
+    );
 }

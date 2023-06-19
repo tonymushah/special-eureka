@@ -46,15 +46,15 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate
                 <Chakra.Tabs isLazy>
                     <Chakra.TabPanels>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volumes) => (
-                                <Chakra.TabPanel>
+                            this.Chapters_parts.map<React.ReactNode>((volumes, index) => (
+                                <Chakra.TabPanel key={`tab-panel-${index}`}>
                                     <Chakra.Accordion
                                         allowMultiple={true}
                                         defaultIndex={[0]}
                                     >
                                         {
-                                            volumes.map<React.ReactNode>(volume => (
-                                                <Volume_ src={volume} open={true}></Volume_>
+                                            volumes.map<React.ReactNode>((volume, index_) => (
+                                                <Volume_ key={`volume-${index_}`} src={volume} open={true}/>
                                             ))
                                         } 
                                     </Chakra.Accordion>
@@ -64,9 +64,9 @@ export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate
                     </Chakra.TabPanels>
                     <Chakra.TabList>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volume, index) => (
-                                <Chakra.Tab>
-                                    {index}
+                            this.Chapters_parts.map<React.ReactNode>((_, index__) => (
+                                <Chakra.Tab key={`tab-${index__}`}>
+                                    {index__}
                                 </Chakra.Tab>
                             ))
                         }
@@ -98,7 +98,7 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
         }
     }
     sliceAll() {
-        let to_use_volume: Array<Volume> = this.toUse.get_volumes().reverse();
+        const to_use_volume: Array<Volume> = this.toUse.get_volumes().reverse();
         for (let index = 0; index < this.parts; index++) {
             this.Chapters_parts[index] = (to_use_volume.slice(index * this.separator, (index + 1) * this.separator));
         }
@@ -109,15 +109,15 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
                 <Chakra.Tabs isLazy>
                     <Chakra.TabPanels>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volumes) => (
-                                <Chakra.TabPanel>
+                            this.Chapters_parts.map<React.ReactNode>((volumes, index) => (
+                                <Chakra.TabPanel key={`tab-panel-${index}`}>
                                     <Chakra.Accordion
                                         allowMultiple={true}
                                         defaultIndex={[0]}
                                     >
                                         {
-                                            volumes.map<React.ReactNode>(volume => (
-                                                <Volume__reverse src={volume} open={true}></Volume__reverse>
+                                            volumes.map<React.ReactNode>((volume, index_) => (
+                                                <Volume__reverse key={`volume-${index_}`} src={volume} open={true}/>
                                             ))
                                         } 
                                     </Chakra.Accordion>
@@ -127,8 +127,8 @@ export class Aggregate_box_reverse extends React.Component<Aggregate_boxProps, A
                     </Chakra.TabPanels>
                     <Chakra.TabList>
                         {
-                            this.Chapters_parts.map<React.ReactNode>((volume, index) => (
-                                <Chakra.Tab>
+                            this.Chapters_parts.map<React.ReactNode>((_, index) => (
+                                <Chakra.Tab key={`tab-${index}`}>
                                     {index}
                                 </Chakra.Tab>
                             ))

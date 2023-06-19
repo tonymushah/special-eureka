@@ -1,38 +1,21 @@
 import * as Chakra from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import React from "react";
-import { useMutation, useQueryClient, UseQueryOptions } from "react-query";
-import Consumer from "../../../../commons-res/components/Consumer";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import { Collection } from "../../../api/structures/Collection";
-import { Manga } from "../../../api/structures/Manga";
+import { useMutation, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import Consumer from "@commons-res/components/Consumer";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Collection } from "@mangadex/api/structures/Collection";
+import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
-
-
-function This_Suspense(props: React.PropsWithChildren){
-    return (
-        <React.Suspense
-            fallback={
-                <Chakra.Center>
-                        <Chakra.Spinner />
-                    </Chakra.Center>
-            }
-        >
-            {
-                props.children
-            }
-        </React.Suspense>
-    )
-}
 
 export default function AllDownlaodedMangaConsumer(props : {
     children : (value : Array<string>) => React.ReactNode,
-    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, 'queryKey' | 'queryFn'>,
+    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
 }) {
     const queryClient = useQueryClient();
     const client = useHTTPClient();
     const toast = useToast();
-    const query_key = "mdx-dowloaded_manga";
+    const query_key = ["mdx", "dowloaded_manga"];
     const patch_all_manga = useMutation({
         mutationFn : () => {
             toast({
@@ -55,9 +38,9 @@ export default function AllDownlaodedMangaConsumer(props : {
             });
             queryClient.refetchQueries({
                 queryKey : query_key
-            })
+            });
         },
-        onError(error : Error, variables, context) {
+        onError(error : Error) {
             toast({
                 position : "bottom-right",
                 title : "Error on patching",
@@ -67,8 +50,9 @@ export default function AllDownlaodedMangaConsumer(props : {
                 "isClosable" : true
             });
         },
-    })
+    });
     const refetch = useMutation({
+        mutationKey : query_key.concat("refetch"),
         mutationFn : () => {
             toast({
                 position : "bottom-right",
@@ -89,9 +73,9 @@ export default function AllDownlaodedMangaConsumer(props : {
             });
             queryClient.refetchQueries({
                 queryKey : query_key
-            })
+            });
         },
-        onError(error : Error, variables, context) {
+        onError(error : Error) {
             toast({
                 position : "bottom-right",
                 title : "Error on patching",
@@ -101,7 +85,7 @@ export default function AllDownlaodedMangaConsumer(props : {
                 "isClosable" : true
             });
         },
-    })
+    });
     return(
         <Chakra.Box>
             <Chakra.Button

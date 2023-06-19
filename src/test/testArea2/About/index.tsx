@@ -8,5 +8,5 @@ export default function Overview(){
             <Text>Part2</Text>
             <Text>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio, illum, praesentium molestias temporibus voluptatem quae architecto quas autem accusantium esse nesciunt libero quo possimus deserunt. Odio suscipit quibusdam expedita magnam.</Text>
         </>
-    )
+    );
 }

@@ -1,16 +1,25 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import TryCatch from "./commons-res/components/TryCatch";
+import TryCatch from "@commons-res/components/TryCatch";
 
 const Close_splashscreen = React.lazy(() => import("./splashscreen/Close_splashscreen"));
 //const Navigator = React.lazy(() => import("./commons-res/components/Navigator_Default"));
 const Router = React.lazy(() => import("./router"));
+
+const FullscreenF11_ = React.lazy(() => import("@commons-res/components/FullscreenF11"));
+
+const FullscreenF11 = () => (
+    <React.Suspense>
+        <FullscreenF11_/>
+    </React.Suspense>
+);
 
 export default function App() {
     return (
         <Chakra.Box
             fontFamily="Poppins"
         >
+            <FullscreenF11/>
             <TryCatch
                 catch={(error: Error) => (
                     <Chakra.Box

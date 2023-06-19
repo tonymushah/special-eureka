@@ -74,11 +74,27 @@
             ],
             "@/*": [
                 "src/*"
+            ],
+            "@_codux/*": [
+                "src/_codux/*"
+            ],
+            "@stories/*": [
+                "src/stories/*"
+            ],
+            "@template/*": [
+                "src/template/*"
+            ],
+            "@node_modules/*": [
+                "src/node_modules/*"
+            ],
+            "@.vite/*": [
+                "src/node_modules/.vite/*"
             ]
         }
     },
     "exclude": [
         "./dist",
-        "./vite.config.ts"
+        "./vite.config.ts",
+        "vite.storybook.config.ts"
     ]
 }

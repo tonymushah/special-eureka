@@ -16,7 +16,7 @@ export default function CoverImageByCoverID(props: {
         coverQuery
     } = get_cover_art_byId({
         coverID : props.coverID
-    })
+    });
     if (coverQuery.isSuccess) {
         return (
             <React.Suspense
@@ -34,7 +34,7 @@ export default function CoverImageByCoverID(props: {
                     image_props={props.image_props}
                 />
             </React.Suspense>
-        )
+        );
     }
     if (coverQuery.isError) {
         return (
@@ -42,12 +42,12 @@ export default function CoverImageByCoverID(props: {
                 src={Mangadex_cover_not_found}
                 {...props.image_props}
             />
-        )
+        );
     }
     return (
         <Chakra.Image
             src={Mangadex_placeHolder}
             {...props.image_props}
         />
-    )
+    );
 }

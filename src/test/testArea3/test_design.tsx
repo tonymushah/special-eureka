@@ -12,12 +12,12 @@ import {
 
     QueryClientProvider,
     useQuery
-} from 'react-query';
-import { ReactQueryDevtools } from "react-query/devtools";
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/free-mode';
-import 'swiper/css/pagination';
+} from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import "swiper/css";
+import "swiper/css/autoplay";
+import "swiper/css/free-mode";
+import "swiper/css/pagination";
 import { Group_WithAllRelationShip } from "../../mangadex/api/structures/Group";
 
 import { Lang_and_Data, Offset_limits } from "../../mangadex/api/internal/Utils";
@@ -38,7 +38,7 @@ import skeb_logo from "./authors_brands_logo/skeb_logo.svg";
 import fantia_logo from "./authors_brands_logo/fantia_logo.svg";
 import tumblr_logo from "./authors_brands_logo/tumblr_logo.svg";
 import weibo_logo from "./authors_brands_logo/weibo_logo.ico";
-import naver_logo from "./authors_brands_logo/naver_logo.ico"
+import naver_logo from "./authors_brands_logo/naver_logo.ico";
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { get_author_works, get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "../../mangadex/resources/hooks/AuthorState";
 import ErrorEL1 from "../../mangadex/resources/componnents/error/ErrorEL1";
@@ -49,17 +49,17 @@ import IsPingable from "../../mangadex/resources/componnents/IsPingable";
 import { useHTTPClient } from "../../commons-res/components/HTTPClientProvider";
 import IsPingable_defaultError from "../../mangadex/resources/componnents/IsPingable_defaultError";
 import { getClient } from "@tauri-apps/api/http";
-import HTTPClientProvider_Query from "../../commons-res/components/HTTPClientProvider_Query"
+import HTTPClientProvider_Query from "../../commons-res/components/HTTPClientProvider_Query";
 import MangaFeedElement from "../../mangadex/resources/componnents/chapter/v1/MangaFeedElement";
 import { Chapter_withAllIncludes } from "../../mangadex/api/structures/Chapter";
 
 
 const ExtLink = React.lazy(async () => {
-    let res = await import("../../commons-res/components/ExtLink");
+    const res = await import("../../commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };
-})
+});
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
 
 const queryClient = new QueryClient();
@@ -74,26 +74,26 @@ function Author_Page_Biography(props: {
 }) {
     const query_key = "mdx-author:" + props.src.get_id() + "-biography";
     const query = useQuery<Array<Lang_and_Data>>(query_key, () => {
-        return Lang_and_Data.initializeByDesc(props.src.get_biography())
-    })
+        return Lang_and_Data.initializeByDesc(props.src.get_biography());
+    });
     if (query.isSuccess) {
         if (query.data.length == 0) {
             return (
-                <Chakra.Text as={'i'}>No biography</Chakra.Text>
-            )
+                <Chakra.Text as={"i"}>No biography</Chakra.Text>
+            );
         } else {
             return (
                 <LAD_Tabs
                     src={query.data}
                 />
-            )
+            );
         }
     }
     return (
         <Chakra.Text>
             Loading biography
         </Chakra.Text>
-    )
+    );
 }
 function Author_Page_Socials(props: {
     src: Author
@@ -470,7 +470,7 @@ function Author_Page_Socials(props: {
                 ) : (<></>)
             }
         </Chakra.Wrap>
-    )
+    );
 }
 function Author_works(props: {
     src: Author
@@ -524,7 +524,7 @@ function Author_works(props: {
             />
 
         </Chakra.Box>
-    )
+    );
 
 }
 
@@ -581,7 +581,7 @@ function Author_Page(props: {
                 </Chakra.Box>
             </Chakra.Box>
         </Chakra.Box>
-    )
+    );
 }
 
 ReactDOM.hydrateRoot(document.getElementById("test_area")!, (
@@ -674,7 +674,7 @@ ReactDOM.hydrateRoot(document.getElementById("test_area")!, (
             </HTTPClientProvider_Query>
         </QueryClientProvider>
     </Chakra.ChakraProvider>
-))
+));
 
 /*test_area.render(
 

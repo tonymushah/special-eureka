@@ -1,26 +1,26 @@
-import React, { Suspense, useCallback } from "react"
+import React, { Suspense, useCallback } from "react";
 import { Carousel, Row, Spinner } from "react-bootstrap";
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom/client";
 import { Await } from "react-router-dom";
 import { Asc_Desc, Offset_limits, Order } from "../../mangadex/api/internal/Utils";
 import { Manga } from "../../mangadex/api/structures/Manga";
 import { Cards_list, Cards_list2} from "../../mangadex/resources/componnents/MangaLists";
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-import ru from 'javascript-time-ago/locale/ru.json'
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+import ru from "javascript-time-ago/locale/ru.json";
 import { Chapter } from "../../mangadex/api/structures/Chapter";
 import { Chapter_ } from "../../mangadex/resources/componnents/chapters/Chapter_";
 
 TimeAgo.addLocale(en);
 
 function Chaps(props): React.ReactNode{
-    let arrayChap: Array<Chapter> = props.to_use;
-    var arrayNode: Array<React.ReactNode> = new Array<React.ReactNode>(arrayChap.length);
+    const arrayChap: Array<Chapter> = props.to_use;
+    const arrayNode: Array<React.ReactNode> = new Array<React.ReactNode>(arrayChap.length);
     for (let index = 0; index < arrayNode.length; index++) {
         const element = arrayChap[index];
         arrayNode[index] = (<Chapter_ chapter={element}/>);
     }
-    return (<>{arrayNode}</>)
+    return (<>{arrayNode}</>);
 }
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

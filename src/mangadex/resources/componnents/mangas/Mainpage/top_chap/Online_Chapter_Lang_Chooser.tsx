@@ -1,5 +1,5 @@
-import useLanguageUserOption from '@mangadex/resources/hooks/userOptions/SelectLanguage';
-import * as Chakra from '@chakra-ui/react';
+import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectLanguage";
+import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Spinner } from "react-bootstrap";
@@ -9,7 +9,7 @@ import { MangaPageProps } from "../../Manga_Page";
 const Manga_Page_Aggregate = React.lazy(() => import("./Manga_Page_Aggregate"));
 
 export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
-    const { query } = useLanguageUserOption()
+    const { query } = useLanguageUserOption();
     if (query.isLoading == true && query.isRefetching) {
         return (
             <Chakra.Box m={2} bg="inherit">
@@ -21,14 +21,14 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
                     <p>Loading chapters ...</p>
                 </div>
             </Chakra.Box>
-        )
+        );
     }
     if (query.isError) {
         return (
             <ErrorEL1
                 error={query.error}
             />
-        )
+        );
     }
     if (query.isSuccess) {
         return (
@@ -52,7 +52,7 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
                     />
                 </React.Suspense>
             </Chakra.Box>
-        )
+        );
     }
     return (
         <Chakra.Box m={2} bg="inherit">
@@ -64,5 +64,5 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
                 <p>Loading chapters ...</p>
             </div>
         </Chakra.Box>
-    )
+    );
 }

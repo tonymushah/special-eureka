@@ -24,5 +24,5 @@ export default function Download_Chapter_withHotkeys(props: React.PropsWithChild
                 )}
             </Download_Chapter_Modal>
         </Mangadex_suspense>
-    )
+    );
 }

@@ -3,17 +3,17 @@ import {
     ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure
 } from "@chakra-ui/react";
 import React from "react";
-import { UseMutationResult } from "react-query";
-import Consumer from "../../../../../commons-res/components/Consumer";
-import { useHTTPClient } from "../../../../../commons-res/components/HTTPClientProvider";
-import { Manga } from "../../../../api/structures/Manga";
+import { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import Consumer from "@commons-res/components/Consumer";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Manga } from "@mangadex/api/structures/Manga";
 import { useMangaDownload } from "../../../hooks/MangaStateHooks";
 import IsPingable from "../../IsPingable";
 import IsPingable_defaultError from "../../IsPingable_defaultError";
 
 export default function Download_Manga_Modal(props: {
     manga_id: string,
-    children: (data : {onOpen: () => void, download_query: UseMutationResult<Manga, any, void, unknown>}) => React.ReactNode
+    children: (data : {onOpen: () => void, download_query: UseQueryResult<Manga, unknown>}) => React.ReactNode
 }) {
     const client = useHTTPClient();
     const download_query = useMangaDownload({
@@ -60,10 +60,10 @@ export default function Download_Manga_Modal(props: {
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button
-                                        isLoading={download_query.isLoading}
+                                        isLoading={download_query.fetchStatus == "fetching"}
                                         onClick={() => {
                                             onClose();
-                                            download_query.mutate();
+                                            download_query.refetch();
                                         }}
                                     >
                                         Download
@@ -111,5 +111,5 @@ export default function Download_Manga_Modal(props: {
                 }
             </Consumer>
         </>
-    )
+    );
 }

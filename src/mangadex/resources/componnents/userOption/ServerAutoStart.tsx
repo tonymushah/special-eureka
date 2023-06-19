@@ -10,16 +10,16 @@ export default function ServerAutoStart(){
         return(
             <Box
                 onClick={() => {
-                    toggle()
+                    toggle();
                 }}
             >
                 <Switch
                     isChecked={query.data}
                 />
             </Box>
-        )
+        );
     }
     return (
         <>Loading...</>
-    )
+    );
 }

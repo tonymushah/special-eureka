@@ -1,12 +1,12 @@
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Mangadex_suspense, Mangadex_suspense__ } from "../..";
-import { get_author_byID, get_author_queryKey_byID } from "../../resources/hooks/AuthorState";
+import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex";
+import { get_author_byID, get_author_queryKey_byID } from "@mangadex/resources/hooks/AuthorState";
 
-const ErrorEL1 = React.lazy(() => import("../../resources/componnents/error/ErrorEL1"));
-const Author_Page = React.lazy(() => import("../../resources/componnents/authors/Author_Page"))
+const ErrorEL1 = React.lazy(() => import("@mangadex/resources/componnents/error/ErrorEL1"));
+const Author_Page = React.lazy(() => import("@mangadex/resources/componnents/authors/Author_Page"));
 
 export default function Author_Page_index(){
     const { id } = useParams();
@@ -15,12 +15,14 @@ export default function Author_Page_index(){
     });
     const queryClient = useQueryClient();
     React.useMemo(() => {
-        queryClient.removeQueries(query_key);
-    },[queryClient, query_key]);
+        queryClient.removeQueries(query_key, {
+            "exact" : true
+        });
+    },[]);
     const { query } = get_author_byID({
         author_id : id!
     });
-    appWindow.setTitle(`Loading... | Mangadex`).then()
+    appWindow.setTitle("Loading... | Mangadex").then();
     if(query.isSuccess) {
         return (
             <Mangadex_suspense>
@@ -28,19 +30,19 @@ export default function Author_Page_index(){
                     src={query.data}
                 />
             </Mangadex_suspense>
-        )
+        );
     }
     if(query.isError){
-        appWindow.setTitle(`Error on loading author ${id!} | Mangadex`).then()
+        appWindow.setTitle(`Error on loading author ${id!} | Mangadex`).then();
         return (
             <Mangadex_suspense>
                 <ErrorEL1
                     error={query.error}
                 />
             </Mangadex_suspense>
-        )
+        );
     }
     return(
         <Mangadex_suspense__/>
-    )
+    );
 }

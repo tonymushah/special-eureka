@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { QueryClient, useQuery, useQueryClient } from "react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
@@ -58,7 +58,7 @@ export async function loader({
     return search_result;
 }
 
-export const queryKey = "mdx-home_page-latest_update";
+export const queryKey = ["mdx", "home_page", "latest_update"];
 
 export default function Latest_Updates() {
     const client = useHTTPClient();
@@ -70,7 +70,7 @@ export default function Latest_Updates() {
             queryClient
         });
     }, {
-        staleTime: Infinity
+        staleTime: Infinity,
     });
     if (query.isLoading) {
         return (

@@ -1,5 +1,5 @@
+import { trackEvent } from "@aptabase/tauri";
 import React from "react";
-import { isFunctionLike } from "typescript";
 
 function ErrorProvider(props: {
     error: Error,
@@ -12,7 +12,7 @@ function ErrorProvider(props: {
                 props.children
             }
         </context.Consumer>
-    )
+    );
 }
 
 type TryCatchProps = {
@@ -29,13 +29,17 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
         super(props);
         this.state = {
             hasError: false
-        }
+        };
     }
     static getDerivedStateFromError(error: Error) {
         return { hasError: true, error: error };
     }
-    componentDidCatch(error: Error) {
-
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+        trackEvent("special-eureka-error", {
+            "location": window.location.href,
+            "error-message": error.message,
+            "error-name": error.name
+        });
     }
     render(): React.ReactNode {
         if (this.state.hasError == true) {
@@ -47,13 +51,13 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
                                 this.props.catch
                             }
                         </ErrorProvider>
-                    )
-                }else{
+                    );
+                } else {
                     return (
                         <></>
-                    )
+                    );
                 }
-            }else{
+            } else {
                 if (this.props.catch != undefined) {
                     return (
                         <ErrorProvider error={new Error()}>
@@ -61,11 +65,11 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
                                 this.props.catch
                             }
                         </ErrorProvider>
-                    )
-                }else{
+                    );
+                } else {
                     return (
                         <></>
-                    )
+                    );
                 }
             }
         }

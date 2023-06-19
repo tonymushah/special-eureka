@@ -1,5 +1,5 @@
-import { AbsoluteCenter, Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Stack } from "@chakra-ui/react"
-import React from "react"
+import { AbsoluteCenter, Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Stack } from "@chakra-ui/react";
+import React from "react";
 
 export default function NotFound404() {
     const location_ = location;
@@ -45,5 +45,5 @@ export default function NotFound404() {
                 </Alert>
             </AbsoluteCenter>
         </Box>
-    )
+    );
 }

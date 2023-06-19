@@ -1,16 +1,16 @@
 import React from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
 import { Alert, Col, Row } from "react-bootstrap";
 
 export class Chapter_{
     public render(): React.ReactNode{
-        var country: string = "jp";
-        var ch_number: number = 0;
-        var title: string = "Some title";
-        var group: string = "some group";
-        var uploader: string = "random uploader";
+        const country = "jp";
+        const ch_number = 0;
+        const title = "Some title";
+        const group = "some group";
+        const uploader = "random uploader";
         return (
             <Row>
                 <Alert variant="secondary">

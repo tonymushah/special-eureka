@@ -1,24 +1,28 @@
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
 
-export enum ReadingMode{
-    Longstrip = "LongStrip",
-    Swipper = "Swipper",
-    WideStrip = "WideStrip"
-}
 export default function useChapterReadingModeOption(){
-    const query_key = "mdx-chapter-reading-mode";
-    const queryClient = useQueryClient();
+    const query_key = ["mdx", "chapter", "reading-mode"];
+    const userOption = useUserOption();
     const query = useQuery<ReadingMode>(query_key, async () => {
-        return ReadingMode.Longstrip;
+        return await userOption.getReadingMode();
     }, {
         staleTime: Infinity
-    })
-    const setReadingMode = (mode : ReadingMode) => {
-        queryClient.setQueryData<ReadingMode>(query_key, mode);
-    }
+    });
+    const mutation = useMutation({
+        mutationKey : query_key.concat("mutation"),
+        mutationFn : async (input : ReadingMode) => {
+            await userOption.setReadingMode(input);
+        },
+        onSuccess() {
+            query.refetch();
+        },
+    });
     return {
         query_key,
         query,
-        setReadingMode
-    }
+        setReadingMode : mutation.mutate,
+        mutation
+    };
 }

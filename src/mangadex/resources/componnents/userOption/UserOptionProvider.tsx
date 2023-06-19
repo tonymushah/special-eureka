@@ -15,7 +15,7 @@ export default function UserOptionProvider(props : React.PropsWithChildren){
                 props.children
             }
         </context.Provider>
-    )
+    );
 }
 
 export function UserOptionConsumer(props : {
@@ -25,7 +25,7 @@ export function UserOptionConsumer(props : {
         <context.Consumer>
             {props.children}
         </context.Consumer>
-    )
+    );
 }
 
 export function useUserOption(){

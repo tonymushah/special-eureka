@@ -1,8 +1,9 @@
 enum MangaStatus{
-    ongoing,
-    completed,
-    hiatus,
-    cancelled
+    ongoing = "ongoing",
+    completed = "completed",
+    hiatus = "hiatus",
+    cancelled = "cancelled",
+    other = "other"
 }
 
 export default MangaStatus;

@@ -20,7 +20,7 @@ export class Statistics_Manga{
         "2" : number,
         "1" : number
     };
-    public comments? : Comments
+    public comments? : Comments;
 
     public static distr_length: Array<number> = [1, 10];
     public set_mangaID(mangaID: string){
@@ -55,7 +55,7 @@ export class Statistics_Manga{
         return this.baeysian;
     }
     public get_distribution(): any{
-        return this.distribution
+        return this.distribution;
     }
     public get_comments(): Comments | undefined{
         return this.comments;
@@ -74,10 +74,10 @@ export class Statistics_Manga{
         this.set_distribution(distribution);
     }
     public static async get_statsBy_MangaID(id: string, client?: Client): Promise<Statistics_Manga>{
-        let responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id, undefined, client);
-        let stats_not_TS: any = (responses.data.statistics)[id];
-        let rating: any = stats_not_TS.rating;
-        let instance = new Statistics_Manga(
+        const responses: Response<any> = await Api_Request.get_methods("statistics/manga/" + id, undefined, client);
+        const stats_not_TS: any = (responses.data.statistics)[id];
+        const rating: any = stats_not_TS.rating;
+        const instance = new Statistics_Manga(
             id,
             stats_not_TS.follows,
             rating.average,
@@ -88,12 +88,12 @@ export class Statistics_Manga{
         return instance;
     }
     public static async get_quick_statsBy_MangaID(id: Array<string>, client?: Client): Promise<Array<Statistics_Manga>>{
-        let responses: Response<any> = await Api_Request.get_methods("statistics/manga/?" + serialize((new Querry_list_builder<string>("manga", id)).build()), {
+        const responses: Response<any> = await Api_Request.get_methods("statistics/manga/?" + serialize((new Querry_list_builder<string>("manga", id)).build()), {
         }, client);
-        let to_return : Array<Statistics_Manga> = new Array<Statistics_Manga>(id.length);
+        const to_return : Array<Statistics_Manga> = new Array<Statistics_Manga>(id.length);
         for (let index = 0; index < to_return.length; index++) {
-            let stats_not_TS: any = (responses.data.statistics)[id[index]];
-            let rating: any = stats_not_TS.rating;
+            const stats_not_TS: any = (responses.data.statistics)[id[index]];
+            const rating: any = stats_not_TS.rating;
             to_return[index] = new Statistics_Manga(
                 id[index],
                 stats_not_TS.follows,

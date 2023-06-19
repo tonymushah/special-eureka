@@ -1,5 +1,5 @@
 import { Client } from "@tauri-apps/api/http";
-import { Offset_limits, Order } from "../../internal/Utils";
+import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 
 export default interface MangaSearch_withAllIncludes {
   offset_Limits: Offset_limits;
@@ -23,5 +23,6 @@ export default interface MangaSearch_withAllIncludes {
   hasAvailableChapters?: boolean;
   latestUploadedChapter?: boolean;
   group?: string;
+  contentRating? : Array<string>;
   client? : Client;
 }

@@ -1,43 +1,116 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
-import { getMangaDexPath } from "../../..";
-import useChapterReadingModeOption, { ReadingMode } from "./useChapterReadingModeOption";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
+import useChapterReadingModeOption from "./useChapterReadingModeOption";
+import { ImPageBreak } from "react-icons/im";
+import { FiBookOpen } from "react-icons/fi";
+import { BsFileEarmark } from "react-icons/bs";
+import React from "react";
 
-const MangaDexPath = getMangaDexPath();
+function LongStripHStack(){
+    return (
+        <Chakra.HStack>
+            <ImPageBreak/>
+            <Chakra.Text as="span">LongStrip</Chakra.Text>
+        </Chakra.HStack>
+    );
+}
 
-export default function Chapter_Reading_mode(props: {
-    chapterID: string
-}) {
+function DoublePageHStack(){
+    return (
+        <Chakra.HStack>
+            <FiBookOpen/>
+            <Chakra.Text as="span">Double Page</Chakra.Text>
+        </Chakra.HStack>
+    );
+}
+
+function SinglePageHStack(){
+    return (
+        <Chakra.HStack>
+            <BsFileEarmark/>
+            <Chakra.Text as="span">Single Page</Chakra.Text>
+        </Chakra.HStack>
+    );
+}
+
+function WideStripHStack(){
+    return (
+        <Chakra.HStack>
+            <Chakra.Icon as={ImPageBreak} transform={"rotate(90deg)"}/>
+            <Chakra.Text as="span">WideStrip</Chakra.Text>
+        </Chakra.HStack>
+    );
+}
+
+function MenuButtonHStack({ value } : {
+    value : ReadingMode
+}){
+    switch (value) {
+        case ReadingMode.LongStrip:
+            return (
+                <LongStripHStack/>
+            );
+            break;
+        case ReadingMode.DoublePage:
+            return (
+                <DoublePageHStack/>
+            );
+            break;
+        case ReadingMode.SinglePage:
+            return (
+                <SinglePageHStack/>
+            );
+            break;
+        case ReadingMode.WideStrip:
+            return (
+                <WideStripHStack/>
+            );
+            break;
+        
+        default:
+            return (
+                <React.Fragment/>
+            );
+            break;
+    }
+}
+
+export default function Chapter_Reading_mode() {
     const { query, setReadingMode } = useChapterReadingModeOption();
-    const navigate = useNavigate();
     if (query.isSuccess) {
         return (
             <Chakra.Menu>
-                <Chakra.MenuButton width={"100%"} padding={1} borderRadius={"base"} textAlign="left" _hover={{
+                <Chakra.MenuButton width={"10em"} padding={1} borderRadius={"base"} textAlign="left" _hover={{
                     backgroundColor: "gray.100"
                 }}>
-                    {query.data}
+                    <MenuButtonHStack value={query.data}/>
                 </Chakra.MenuButton>
                 <Chakra.MenuList zIndex={"banner"}>
                     <Chakra.MenuItem onClick={() => {
-                        setReadingMode(ReadingMode.Longstrip);
-                        navigate(MangaDexPath + "/chapter/" + props.chapterID);
-                    }}>Longstrip</Chakra.MenuItem>
+                        setReadingMode(ReadingMode.LongStrip);
+                    }}>
+                        <LongStripHStack/>
+                    </Chakra.MenuItem>
                     <Chakra.MenuItem onClick={() => {
-                        setReadingMode(ReadingMode.Swipper);
-                        navigate(`${ReadingMode.Swipper}`.toLowerCase());
-                    }}>Swipper</Chakra.MenuItem>
+                        setReadingMode(ReadingMode.SinglePage);
+                    }}>
+                        <SinglePageHStack/>
+                    </Chakra.MenuItem>
+                    <Chakra.MenuItem onClick={() => {
+                        setReadingMode(ReadingMode.DoublePage);
+                    }}>
+                        <DoublePageHStack/>
+                    </Chakra.MenuItem>
                     <Chakra.MenuItem onClick={() => {
                         setReadingMode(ReadingMode.WideStrip);
-                        navigate(`${ReadingMode.WideStrip}`.toLowerCase());
-                    }}>Widestrip</Chakra.MenuItem>
+                    }}>
+                        <WideStripHStack/>
+                    </Chakra.MenuItem>
                 </Chakra.MenuList>
             </Chakra.Menu>
-        )
+        );
     }
     return (
         <Chakra.Skeleton />
-    )
+    );
 }

@@ -9,16 +9,16 @@ export default function MangaElementDef2_withID(props: {
 }) {
     const { query } = get_manga_byId({
         mangaID : props.mangaID
-    });;
+    });
     if (query.isLoading) {
         return (
             <MangaFallback2 />
-        )
+        );
     }
     if (query.isError) {
         return (
             <ErrorEL1 error={query.error} />
-        )
+        );
     }
     return (
         <React.Suspense fallback={
@@ -31,5 +31,5 @@ export default function MangaElementDef2_withID(props: {
             />
         </React.Suspense>
 
-    )
+    );
 }

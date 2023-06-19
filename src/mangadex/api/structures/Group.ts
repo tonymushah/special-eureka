@@ -17,26 +17,26 @@ import GroupCollection from "./CollectionTypes/GroupCollection";
 import Group_WithAllRelationShip_Collection from "./CollectionTypes/Group_WithAllRelationShip_Collection";
 
 export class Group extends Attribute {
-    protected static group_r: string = "group/";
-    private name: string;
+    protected static group_r = "group/";
+    private name!: string;
     private altNames: any;
-    private website: string;
-    private ircServer: string;
-    private ircChannel: string;
-    private discord: string;
-    private contactEmail: string;
-    private description: string;
-    private twitter: string;
-    private mangaUpdates: string;
-    private focusedLanguage: Array<string>;
-    private locked: boolean;
-    private official: boolean;
-    private inactive: boolean;
-    private publishDelay: string;
-    private version: number;
-    private createdAt: string;
-    private updatedAt: string;
-    private verified: boolean;
+    private website!: string;
+    private ircServer!: string;
+    private ircChannel!: string;
+    private discord!: string;
+    private contactEmail!: string;
+    private description!: string;
+    private twitter!: string;
+    private mangaUpdates!: string;
+    private focusedLanguage!: Array<string>;
+    private locked!: boolean;
+    private official!: boolean;
+    private inactive!: boolean;
+    private publishDelay!: string;
+    private version!: number;
+    private createdAt!: string;
+    private updatedAt!: string;
+    private verified!: boolean;
     public static get_group_a(): string {
         return Group.group_r;
     }
@@ -198,9 +198,9 @@ export class Group extends Attribute {
         this.set_version(version);
     }
     public static build_wANY(object: any): Group {
-        let attributes: any = object.attributes;
-        let relationships: any = object.relationships;
-        let instance: Group = new Group(
+        const attributes: any = object.attributes;
+        const relationships: any = object.relationships;
+        const instance: Group = new Group(
             object.id,
             attributes.name,
             attributes.altNames,
@@ -229,10 +229,10 @@ export class Group extends Attribute {
     }
     public static async get_groupById(id: string, client?: Client): Promise<Group> {
         try {
-            let getted: Promise<Response<any>> = Api_Request.get_methods(
+            const getted: Promise<Response<any>> = Api_Request.get_methods(
                 Group.get_group_a() + id
             , undefined, client);
-            let to_use = await getted;
+            const to_use = await getted;
             return Group.build_wANY(to_use.data.data);
         } catch (error) {
             throw new Error(error);
@@ -247,14 +247,14 @@ export class Group extends Attribute {
         order,
         client
     }: GroupSearchType): Promise<Collection<Group>> {
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             name: name,
             "includes[]": includes,
             ...order?.render(),
         };
-        let getted: Response<any> = await Api_Request.get_methods(
+        const getted: Response<any> = await Api_Request.get_methods(
             "group" +
             "?" +
             serialize(new Querry_list_builder("ids", ids!).build()) +
@@ -267,8 +267,8 @@ export class Group extends Attribute {
             },
             client
         );
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<Group> = new Array<Group>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<Group> = new Array<Group>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Group.build_wANY(data[index]);
         }
@@ -305,8 +305,8 @@ export class Group extends Attribute {
         );
     }
     public async getMembers(client?: Client): Promise<Array<User>> {
-        let members = this.get_some_relationship("member");
-        let members_ = new Array<User>(members.length);
+        const members = this.get_some_relationship("member");
+        const members_ = new Array<User>(members.length);
         for (let index = 0; index < members.length; index++) {
             const element = members[index];
             members_.push(await User.getUserById(element.get_id(), client));
@@ -314,7 +314,7 @@ export class Group extends Attribute {
         return members_;
     }
     public async getMemberById(id: string, client?: Client): Promise<User> {
-        let members = this.get_some_relationship("member");
+        const members = this.get_some_relationship("member");
         for (let index = 0; index < members.length; index++) {
             const element = members[index];
             if (element.get_id() == id) {
@@ -327,17 +327,17 @@ export class Group extends Attribute {
     }
     public async getTitle(offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<Manga>>{
         if(offset_Limits == undefined){
-            offset_Limits = new Offset_limits()
+            offset_Limits = new Offset_limits();
         }
         return Manga.search({
             offset_Limits : offset_Limits,
             group : this.get_id(),
             client : client
-        })
+        });
     }
     public async getFeed(offset_Limits?: Offset_limits, client?: Client) : Promise<Collection<Chapter>>{
         if(offset_Limits == undefined){
-            offset_Limits = new Offset_limits()
+            offset_Limits = new Offset_limits();
         }
         return Chapter.search({
             offset_limits: offset_Limits,
@@ -345,7 +345,7 @@ export class Group extends Attribute {
                 this.get_id()
             ],
             client: client
-        })
+        });
     }
 }
 
@@ -429,9 +429,9 @@ export class Group_WithAllRelationShip extends Group {
         );
     }
     public static build_wANY(object: any): Group_WithAllRelationShip {
-        let attributes: any = object.attributes;
-        let relationships: any = object.relationships;
-        let instance: Group_WithAllRelationShip = new Group_WithAllRelationShip(
+        const attributes: any = object.attributes;
+        const relationships: any = object.relationships;
+        const instance: Group_WithAllRelationShip = new Group_WithAllRelationShip(
             object.id,
             attributes.name,
             attributes.altNames,
@@ -456,12 +456,12 @@ export class Group_WithAllRelationShip extends Group {
             instance.set_relationships_Wany(relationships);
         } catch (e) { }
         try {
-            let leader = Attribute.get_some_relationship(relationships, "leader");
+            const leader = Attribute.get_some_relationship(relationships, "leader");
             instance.$leader = User.build_wANY(leader[0]);
         } catch (e) { }
         try {
-            let members_: Array<User> = [];
-            let all_member: Array<any> = Attribute.get_some_relationship(
+            const members_: Array<User> = [];
+            const all_member: Array<any> = Attribute.get_some_relationship(
                 relationships,
                 "member"
             );
@@ -478,7 +478,7 @@ export class Group_WithAllRelationShip extends Group {
     }
     public static async get_groupById(id: string, client? : Client): Promise<Group_WithAllRelationShip> {
         try {
-            let getted: Promise<Response<any>> = Api_Request.get_methods(
+            const getted: Promise<Response<any>> = Api_Request.get_methods(
                 Group.get_group_a() + id + "?" + 
                 serialize(
                     new Querry_list_builder("includes", [
@@ -489,7 +489,7 @@ export class Group_WithAllRelationShip extends Group {
                 undefined,
                 client
             );
-            let to_use = await getted;
+            const to_use = await getted;
             return Group_WithAllRelationShip.build_wANY(to_use.data.data);
         } catch (error) {
             throw new Error(error);
@@ -503,13 +503,13 @@ export class Group_WithAllRelationShip extends Group {
         order,
         client
     }: Group_WithAllRelationShip_SearchType): Promise<Collection<Group_WithAllRelationShip>> {
-        let querys: any = {
+        const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
             offset: JSON.stringify(offset_Limits.get_offset()),
             name: name,
             ...order?.render(),
         };
-        let getted: Response<any> = await Api_Request.get_methods(
+        const getted: Response<any> = await Api_Request.get_methods(
             "group" +
             "?" +
             serialize(new Querry_list_builder("ids", ids!).build()) +
@@ -528,8 +528,8 @@ export class Group_WithAllRelationShip extends Group {
             },
             client
         );
-        let data: Array<any> = getted.data.data;
-        let mangaArray: Array<Group_WithAllRelationShip> = new Array<Group_WithAllRelationShip>(data.length);
+        const data: Array<any> = getted.data.data;
+        const mangaArray: Array<Group_WithAllRelationShip> = new Array<Group_WithAllRelationShip>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Group_WithAllRelationShip.build_wANY(data[index]);
         }

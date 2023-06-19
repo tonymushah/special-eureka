@@ -1,15 +1,15 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import { Author } from "../../../api/structures/Author";
-import { Collection } from "../../../api/structures/Collection";
-import { Manga } from "../../../api/structures/Manga";
-import { CollectionComponnent_WithQuery } from "../../../resources/componnents/Collection/Collection";
-import IsPingable from "../../../resources/componnents/IsPingable";
-import IsPingable_defaultError from "../../../resources/componnents/IsPingable_defaultError";
-import MangaList from "../../../resources/componnents/mangas/v1/MangaList";
-import { get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "../../../resources/hooks/AuthorState";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Author } from "@mangadex/api/structures/Author";
+import { Collection } from "@mangadex/api/structures/Collection";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
+import IsPingable from "@mangadex/resources/componnents/IsPingable";
+import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
+import MangaList from "@mangadex/resources/componnents/mangas/v1/MangaList";
+import { get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "@mangadex/resources/hooks/AuthorState";
 
 
 export default function Author_works(props: {
@@ -64,6 +64,6 @@ export default function Author_works(props: {
             />
 
         </Chakra.Box>
-    )
+    );
 
 }

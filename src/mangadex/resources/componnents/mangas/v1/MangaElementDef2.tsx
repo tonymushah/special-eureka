@@ -3,7 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
@@ -26,7 +26,7 @@ function MangaElementDef2_Stats(props: {
     src: Manga
 }) {
     const client = useHTTPClient();
-    const manga_statistic_queryKey = "mdx-manga:" + props.src.get_id() + "-statistics";
+    const manga_statistic_queryKey = ["mdx", "manga", props.src.get_id(), "statistics"];
     const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
         return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {
@@ -46,43 +46,36 @@ function MangaElementDef2_Stats(props: {
                                 {
                                     (getted: Statistics_Manga) => (
                                         <Chakra.Box>
-                                            <Chakra.Box display={{
+                                            <Chakra.HStack display={{
                                                 base: "none",
                                                 xl: "inherit"
                                             }}>
-                                                <Chakra.Box display={"flex"} width={"fit-content"}>
-                                                    <Chakra.Text textAlign={"center"}>
+                                                <Chakra.HStack spacing={"5px"}>
+                                                    <Chakra.HStack spacing={"4px"}>
                                                         <ChakraIcons.StarIcon />
-                                                        &nbsp;
-                                                        {getted.get_average()}
-                                                    </Chakra.Text>
-                                                    &nbsp;
-                                                    &nbsp;
-                                                    <Chakra.Text textAlign={"center"}>
+                                                        <Chakra.Text as={"span"}>{getted.get_average()}</Chakra.Text>
+                                                    </Chakra.HStack>
+                                                    <Chakra.HStack spacing={"4px"}>
                                                         <Chakra.Icon as={FaBookmark} />
-                                                        &nbsp;
                                                         <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
-                                                    </Chakra.Text>
-                                                    &nbsp;
-                                                    &nbsp;
-                                                    <Chakra.Text textAlign={"center"}>
+                                                    </Chakra.HStack>
+                                                    <Chakra.HStack spacing={"4px"}>
                                                         <ChakraIcons.ChatIcon />
-                                                        &nbsp;
                                                         {
                                                             getted.get_comments() !== undefined && getted.get_comments() !== null ? (
-                                                                <>{
+                                                                <Chakra.Text as={"span"}>{
                                                                     getted.get_comments()!.repliesCount !== null && getted.get_comments()!.repliesCount !== undefined ? (
                                                                         <>{getted.get_comments()!.repliesCount}</>
                                                                     ) : (
                                                                         <>0</>
                                                                     )
-                                                                }</>
+                                                                }</Chakra.Text>
                                                             ) :
-                                                                <>0</>
+                                                                <Chakra.Text as={"span"}>0</Chakra.Text>
                                                         }
-                                                    </Chakra.Text>
-                                                </Chakra.Box>
-                                            </Chakra.Box>
+                                                    </Chakra.HStack>
+                                                </Chakra.HStack>
+                                            </Chakra.HStack>
                                             <Chakra.Box display={{
                                                 base: "inherit",
                                                 xl: "none"
@@ -110,7 +103,7 @@ export default function MangaElementDef2(props: {
     refetch?: () => void
 }) {
 
-    const client = useHTTPClient();
+    const client = useHTTPClient();"mdx-manga:" + props.src.get_id() + "-statistics"
     const {
         manga_description_query
     } = get_manga_description({
@@ -144,7 +137,7 @@ export default function MangaElementDef2(props: {
             mangaId={props.src.get_id()}
             refetch={props.refetch}
         >
-            <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"}>
+            <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"} border={"1px"} borderColor={"#cccccc"}>
                 <CoverImageByCoverID coverID={props.src.get_cover_art_id()} isThumbail size={512} image_props={{
                     maxHeight: card_maxHeight,
                     "objectFit": "contain"
@@ -185,7 +178,7 @@ export default function MangaElementDef2(props: {
                                 margin={0}
                                 fontSize={"xs"}
                             >
-                                <Chakra.Center
+                                <Chakra.HStack
                                     display={{
                                         base: "none",
                                         xl: "inline"
@@ -193,7 +186,7 @@ export default function MangaElementDef2(props: {
                                 >
                                     Publication :
                                     &nbsp;
-                                </Chakra.Center>
+                                </Chakra.HStack>
                                 <Chakra.Tag
                                     fontSize={"xs"}
                                     colorScheme={
@@ -219,7 +212,7 @@ export default function MangaElementDef2(props: {
                             </Chakra.Box>
 
                             {
-                                manga_description_query.isLoading || manga_description_query.isIdle ? (
+                                manga_description_query.isLoading ? (
                                     <Chakra.Skeleton
                                         height={"full"}
                                         width={"full"}

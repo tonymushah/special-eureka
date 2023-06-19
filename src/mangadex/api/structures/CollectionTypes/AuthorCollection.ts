@@ -24,8 +24,8 @@ export default class AuthorCollection extends Collection<Author>{
         this.$prev_search_type = previous_search_type;
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Author>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_Limits = current_offset_limits;
-        return Author.searchAuthor(this.prev_search_type)
+        return Author.searchAuthor(this.prev_search_type);
     }
 }

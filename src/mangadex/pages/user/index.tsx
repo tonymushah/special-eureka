@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath, trackEvent } from "@mangadex";
 import { User } from "@mangadex/api/structures/User";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
@@ -40,6 +40,10 @@ export default function UserPage(props: React.PropsWithChildren<{
     ];
     React.useEffect(() => {
         appWindow.setTitle(`${props.user.get_username()} | Mangadex`);
+        trackEvent("mangadex-user-page", {
+            type : "user",
+            id : props.user.get_id()
+        });
     }, [
         props.user
     ]);

@@ -11,23 +11,25 @@ export default function CoverImage(props: {
     isThumbail?: boolean,
     size?: 256 | 512,
     image_props?: Chakra.ImageProps
-    other_comp? : (data : string) => React.ReactNode
-}){
+    other_comp?: (data: string) => React.ReactNode
+}) {
     const { cover_image_query } = get_cover_art_image({
-        src : props.src,
-        isThumbail : props.isThumbail,
-        size : props.size
+        src: props.src,
+        isThumbail: props.isThumbail,
+        size: props.size
     });
-    
-    if(cover_image_query.isSuccess){
-        if(props.other_comp !== undefined){
-            <Consumer to_consume={cover_image_query.data}>
-                {
-                    props.other_comp
-                }
-            </Consumer>;
-        }else{
-            return(
+
+    if (cover_image_query.isSuccess) {
+        if (props.other_comp !== undefined) {
+            return (
+                <Consumer to_consume={cover_image_query.data}>
+                    {
+                        props.other_comp
+                    }
+                </Consumer>
+            );
+        } else {
+            return (
                 <Chakra.Image
                     src={cover_image_query.data}
                     fallbackSrc={Mangadex_placeHolder}
@@ -35,20 +37,41 @@ export default function CoverImage(props: {
                 />
             );
         }
-        
+
     }
-    if(cover_image_query.isError){
-        return(
+    if (cover_image_query.isError) {
+        if (props.other_comp !== undefined) {
+            return (
+                <Consumer to_consume={Mangadex_cover_not_found}>
+                    {
+                        props.other_comp
+                    }
+                </Consumer>
+            );
+        } else {
+            return (
+                <Chakra.Image
+                    src={Mangadex_cover_not_found}
+                    {...props.image_props}
+                />
+            );
+        }
+    }
+    if (props.other_comp !== undefined) {
+        return (
+            <Consumer to_consume={Mangadex_cover_not_found}>
+                {
+                    props.other_comp
+                }
+            </Consumer>
+        );
+    } else {
+        return (
             <Chakra.Image
-                src={Mangadex_cover_not_found}
+                src={Mangadex_placeHolder}
                 {...props.image_props}
             />
         );
     }
-    return(
-        <Chakra.Image
-            src={Mangadex_placeHolder}
-            {...props.image_props}
-        />
-    );
+
 }

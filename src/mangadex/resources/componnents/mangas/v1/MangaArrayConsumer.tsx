@@ -13,10 +13,10 @@ export default function MangaArrayConsumer(props : {
                     props.children
                 }
             </context.Consumer>
-        )
+        );
     }else{
         return (
             <></>
-        )
+        );
     }
 }

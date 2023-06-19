@@ -1,14 +1,14 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button, Center, Heading, Skeleton, Stack } from "@chakra-ui/react";
 import { getVersion } from "@tauri-apps/api/app";
-import Tauri_Updater from "../../resources/components/Tauri_updater_button";
+import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
 import { Container } from "react-bootstrap";
 import { FaGithub } from "react-icons/fa";
-import { useQuery } from "react-query";
-import { ExtLink } from "../../../commons-res/components/ExtLink";
+import { useQuery } from "@tanstack/react-query";
+import { ExtLink } from "@commons-res/components/ExtLink";
 
 export default function Welcome() {
-    const app_version_query = useQuery("special-eureka-version", () => {
+    const app_version_query = useQuery(["special-eureka", "version"], () => {
         return getVersion();
     }, {
         staleTime: Infinity

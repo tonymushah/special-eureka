@@ -1,12 +1,12 @@
 import React, { Suspense } from "react";
-import Viewer from 'react-viewer';
+import Viewer from "react-viewer";
 import ReactDOM from "react-dom/client";
 import "flag-icons/css/flag-icons.min.css";
 import { Alert, Col, Container, Placeholder, Row } from "react-bootstrap";
 import { Chapter, Chapter_withAllIncludes } from "../../../api/structures/Chapter";
 import { Await, Link } from "react-router-dom";
-import TimeAgo from 'react-timeago'
-import * as Chakra from '@chakra-ui/react'
+import TimeAgo from "react-timeago";
+import * as Chakra from "@chakra-ui/react";
 import { getMangaDexPath } from "../../..";
 
 const MangaDexPath = getMangaDexPath();
@@ -89,7 +89,7 @@ export class Chapter_ extends React.Component<Chapter_Props>{
                                                 }else if(getted.length == 1){
                                                     return (<span>{getted[0].get_name()}</span>);
                                                 }else{
-                                                    let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
+                                                    const span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
                                                     for (let index = 0; index < getted.length; index++) {
                                                         const element = getted[index];
                                                         if(index < (getted.length - 1)){
@@ -116,7 +116,7 @@ export class Chapter_ extends React.Component<Chapter_Props>{
                                         resolve={this.chapter_to_use.get_userUploader()}
                                         errorElement={<p>Errors loading user...</p>}
                                         children={(getted) =>{
-                                            return (<span>{getted.get_username()}</span>)
+                                            return (<span>{getted.get_username()}</span>);
                                         }}
                                     />
                                 </Suspense>
@@ -202,7 +202,7 @@ export class Chapter_2 extends React.Component<Chapter_Props>{
                                                 }else if(getted.length == 1){
                                                     return (<span>{getted[0].get_name()}</span>);
                                                 }else{
-                                                    let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
+                                                    const span_group: Array<React.ReactNode> = new Array<React.ReactNode>(getted.length);
                                                     for (let index = 0; index < getted.length; index++) {
                                                         const element = getted[index];
                                                         if(index < (getted.length - 1)){
@@ -229,7 +229,7 @@ export class Chapter_2 extends React.Component<Chapter_Props>{
                                         resolve={this.chapter_to_use.get_userUploader()}
                                         errorElement={<p>Errors loading user...</p>}
                                         children={(getted) =>{
-                                            return (<span>{getted.get_username()}</span>)
+                                            return (<span>{getted.get_username()}</span>);
                                         }}
                                     />
                                 </Suspense>
@@ -259,7 +259,7 @@ export class Chapter_includes extends React.Component<Chapter_includes_Props>{
         }else if(this.chapter_to_use.get_groups().length == 1){
             return (<span>{this.chapter_to_use.get_groups()[0].get_name()}</span>);
         }else{
-            let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
+            const span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
             for (let index = 0; index < this.chapter_to_use.get_groups().length; index++) {
                 const element = this.chapter_to_use.get_groups()[index];
                 if(index < (this.chapter_to_use.get_groups().length - 1)){
@@ -268,7 +268,7 @@ export class Chapter_includes extends React.Component<Chapter_includes_Props>{
                     span_group[index] = (<span>{element.get_name()}</span>);
                 }
             }
-            return (<span>{span_group}</span>)
+            return (<span>{span_group}</span>);
         }
     }
     public render(): React.ReactNode{
@@ -323,7 +323,7 @@ export class Chapter_includes2 extends React.Component<Chapter_includes_Props>{
         }else if(this.chapter_to_use.get_groups().length == 1){
             return (<span>{this.chapter_to_use.get_groups()[0].get_name()}</span>);
         }else{
-            let span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
+            const span_group: Array<React.ReactNode> = new Array<React.ReactNode>(this.chapter_to_use.get_groups().length);
             for (let index = 0; index < this.chapter_to_use.get_groups().length; index++) {
                 const element = this.chapter_to_use.get_groups()[index];
                 if(index < (this.chapter_to_use.get_groups().length - 1)){
@@ -332,7 +332,7 @@ export class Chapter_includes2 extends React.Component<Chapter_includes_Props>{
                     span_group[index] = (<span>{element.get_name()}</span>);
                 }
             }
-            return (<span>{span_group}</span>)
+            return (<span>{span_group}</span>);
         }
     }
     public render(): React.ReactNode{

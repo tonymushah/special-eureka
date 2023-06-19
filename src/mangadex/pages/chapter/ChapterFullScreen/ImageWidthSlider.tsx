@@ -17,7 +17,7 @@ export default function ImageWidthSlider() {
                 max={100}
                 colorScheme='teal'
                 onChange={(v) => {
-                    let new_option: FullScreenOptions_Context = query.data == undefined ? {
+                    const new_option: FullScreenOptions_Context = query.data == undefined ? {
                         image_width: 0
                     } : query.data;
                     new_option.image_width = v;
@@ -50,5 +50,5 @@ export default function ImageWidthSlider() {
                 </Chakra.Tooltip>
             </Chakra.Slider>
         </React.Fragment>
-    )
+    );
 }

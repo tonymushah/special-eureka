@@ -2,7 +2,7 @@
     "$schema": "../node_modules/@tauri-apps/cli/schema.json",
     "build": {
         "beforeBuildCommand": "pnpm run vite:build",
-        "beforeDevCommand": "pnpm run vite:preview",
+        "beforeDevCommand": "pnpm run vite:dev",
         "devPath": "http://localhost:9305",
         "distDir": "../dist",
         "withGlobalTauri": true
@@ -22,7 +22,8 @@
                     "http://localhost:9305/*",
                     "https://jumpg-webapi.tokyo-cdn.com/api/**",
                     "http://localhost:8090/**",
-                    "http://localhost:8145/**"
+                    "http://localhost:8145/**",
+                    "https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/**"
                 ]
             },
             "clipboard": {
@@ -37,6 +38,9 @@
                 "message": true,
                 "open": false,
                 "save": false
+            },
+            "globalShortcut": {
+                "all": true
             },
             "notification": {
                 "all": true
@@ -90,7 +94,7 @@
                 "setCursorVisible": false,
                 "setDecorations": false,
                 "setFocus": false,
-                "setFullscreen": false,
+                "setFullscreen": true,
                 "setIcon": true,
                 "setIgnoreCursorEvents": false,
                 "setMaxSize": false,
@@ -124,7 +128,7 @@
                 "icons/icon.icns",
                 "icons/icon.ico"
             ],
-            "identifier": "com.tonymushah.dev",
+            "identifier": "mg.tonymushah.special-eureka",
             "longDescription": "",
             "macOS": {
                 "entitlements": null,

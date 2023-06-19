@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import React from "react";
 
 //const Chapter_Reading_mode = React.lazy(() => import("../ChapterReadingMode"));
@@ -34,12 +34,12 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                 style={{
                     background: "#d8d8d8",
                     borderColor: "black",
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    position: 'absolute',
-                    right: '0',
-                    height: '100vh',
-                    top: '0',
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    position: "absolute",
+                    right: "0",
+                    height: "100vh",
+                    top: "0",
                     padding: "15px"
                 }}
             >
@@ -120,5 +120,5 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
             </motion.div>
 
         </div>
-    )
+    );
 }

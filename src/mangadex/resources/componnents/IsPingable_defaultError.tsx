@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button } from "@chakra-ui/react";
-import { UseQueryResult } from "react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 
 export default function IsPingable_defaultError(props: {
     query: UseQueryResult<boolean, Error>
@@ -24,6 +24,7 @@ export default function IsPingable_defaultError(props: {
                     <Button
                         colorScheme={"orange"}
                         onClick={() => query.refetch()}
+                        isLoading={query.fetchStatus == "fetching"}
                     >
                         Refresh
                     </Button>

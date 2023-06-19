@@ -32,7 +32,7 @@ function RouterSuspense(props: React.PropsWithChildren) {
                 props.children
             }
         </React.Suspense>
-    )
+    );
 }
 
 export default function Router() {
@@ -56,7 +56,7 @@ export default function Router() {
                 )
             }
         ]
-    }
+    };
     const notFoundRoute: RouteObject = {
         path: "*",
         element: (
@@ -76,7 +76,7 @@ export default function Router() {
                 )
             }
         ]
-    }
+    };
     return (
         <React.Suspense
             fallback={
@@ -101,5 +101,5 @@ export default function Router() {
                 ]}
             />
         </React.Suspense>
-    )
+    );
 }

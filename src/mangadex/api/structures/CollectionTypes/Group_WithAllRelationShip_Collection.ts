@@ -26,7 +26,7 @@ export default class Group_WithAllRelationShip_Collection extends Collection<Gro
         this.$prev_search_type = previous_search_type;
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<Group_WithAllRelationShip>> {
-        let current_offset_limits = offset_limits;
+        const current_offset_limits = offset_limits;
         this.$prev_search_type.offset_Limits = current_offset_limits;
         return Group_WithAllRelationShip.search(this.prev_search_type);
     }

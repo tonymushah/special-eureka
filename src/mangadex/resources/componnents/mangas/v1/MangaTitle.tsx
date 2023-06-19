@@ -13,5 +13,5 @@ export default function MangaTitle(props: {
     }
     return (
         <>{title}</>
-    )
+    );
 }

@@ -6,21 +6,23 @@ import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/intern
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import React from "react";
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTrackEvent } from "@mangadex";
 
-const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"))
+const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
 export default function RecentlyPopularPage() {
     const client = useHTTPClient();
     const offset_limits = new Offset_limits();
-    offset_limits.set_limits(10)
+    offset_limits.set_limits(10);
     const order = new Order();
     order.set_followedCount(Asc_Desc.desc());
     const touse_date_ = new Date();
     touse_date_.setMonth(touse_date_.getMonth() - 1);
     const touse_date = formatDate(touse_date_);
-    const queryKey = "mdx-popular-recent-titles";
+    const queryKey = ["mdx", "popular-recent-titles"];
     const queryClient = useQueryClient();
+    useTrackEvent("mangadex-latest-update-entrance");
     return (
         <React.Fragment>
             <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
@@ -33,7 +35,7 @@ export default function RecentlyPopularPage() {
                         client,
                         createdAtSince: touse_date,
                         hasAvailableChapters: true
-                    })
+                    });
                 }}
                 query_options={{
                     staleTime: Infinity
@@ -45,9 +47,9 @@ export default function RecentlyPopularPage() {
                             <Chakra.Divider />
                         }>
                             {data.get_data().map((value, index) => {
-                                queryClient.setQueryData("mdx-manga:" + value.get_id(), value);
+                                queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
                                 return (
-                                    <Chakra.Card>
+                                    <Chakra.Card key={value.get_id()}>
                                         {
                                             data.get_offset() + index == 0 ? (
                                                 <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{data.get_offset() + index + 1}</Heading>
@@ -63,7 +65,7 @@ export default function RecentlyPopularPage() {
                                             <MangaPopularElement src={value} />
                                         </React.Suspense>
                                     </Chakra.Card>
-                                )
+                                );
                             })}
                         </Chakra.VStack>
                     </Chakra.Box>
@@ -71,5 +73,5 @@ export default function RecentlyPopularPage() {
             </CollectionComponnent_WithQuery>
 
         </React.Fragment>
-    )
+    );
 }
