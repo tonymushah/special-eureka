@@ -105,7 +105,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                         <Chakra.Button
                                             onClick={() => query.refetch()}
                                             colorScheme={"orange"}
-                                            isLoading={query.fetchStatus == "loading"}
+                                            isLoading={query.fetchStatus === "fetching"}
                                         >
                                             Refretch
                                         </Chakra.Button>
