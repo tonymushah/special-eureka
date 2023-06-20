@@ -122,51 +122,39 @@ export default function Group_Page(props: React.PropsWithChildren<{
                 background={"gray.200"}
             >
                 <ChakraContainer>
-                    <Chakra.Tabs isLazy>
-                        <Chakra.TabList>
-                            <Chakra.Tab >
+                    <Chakra.VStack>
+                        <Chakra.Wrap spacing={"5"}>
+                            <Chakra.WrapItem>
                                 <Chakra.Link
                                     as={Link}
                                     to={`${MangaDexPath}/group/${props.src.get_id()}`}
                                 >
                                     Group Details
                                 </Chakra.Link>
-                            </Chakra.Tab>
-                            <Chakra.Tab>
+                            </Chakra.WrapItem>
+                            <Chakra.WrapItem>
                                 <Chakra.Link
                                     as={Link}
                                     to={`${MangaDexPath}/group/${props.src.get_id()}/titles`}
                                 >
                                     Titles
                                 </Chakra.Link>
-                            </Chakra.Tab>
-                            <Chakra.Tab>
+                            </Chakra.WrapItem>
+                            <Chakra.WrapItem>
                                 <Chakra.Link
                                     as={Link}
                                     to={`${MangaDexPath}/group/${props.src.get_id()}/feeds`}
                                 >
                                     Feed
                                 </Chakra.Link>
-                            </Chakra.Tab>
-                        </Chakra.TabList>
-                        <Chakra.TabPanels>
-                            <Chakra.TabPanel>
-                                {
-                                    props.children
-                                }
-                            </Chakra.TabPanel>
-                            <Chakra.TabPanel>
-                                {
-                                    props.children
-                                }
-                            </Chakra.TabPanel>
-                            <Chakra.TabPanel>
-                                {
-                                    props.children
-                                }
-                            </Chakra.TabPanel>
-                        </Chakra.TabPanels>
-                    </Chakra.Tabs>
+                            </Chakra.WrapItem>
+                        </Chakra.Wrap>
+                        <Chakra.Box>
+                            {
+                                props.children
+                            }
+                        </Chakra.Box>
+                    </Chakra.VStack>
                 </ChakraContainer>
             </Chakra.Box>
         </Chakra.Box>

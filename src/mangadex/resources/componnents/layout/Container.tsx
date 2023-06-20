@@ -4,12 +4,13 @@ import React from "react";
 export default function ChakraContainer(props: React.PropsWithChildren) {
     return (
         <Container
-            width={{
+            maxWidth={{
                 sm: "container.sm",
                 md: "container.md",
                 lg: "container.lg",
                 xl: "container.xl"
             }}
+            margin={2}
         >
             {
                 props.children

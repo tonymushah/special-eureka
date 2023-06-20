@@ -22,6 +22,8 @@ import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { Link } from "react-router-dom";
 import ChakraContainer from "../../layout/Container";
+import MangaTags from "../tags";
+import { v4 } from "uuid";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
@@ -186,23 +188,6 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 break;
         }
     }
-    function build_themes_manga(): Array<React.ReactNode> {
-        let index = 0;
-        const returns: Array<React.ReactNode> = [];
-        if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
-            if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Chakra.Tag colorScheme={"green"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
-            } else {
-                returns[index] = (<Chakra.Tag colorScheme={"red"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
-            }
-            index = index + 1;
-        }
-        for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
-            const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Chakra.Tag colorScheme={"gray"}>{element.get_name().en}</Chakra.Tag>);
-        }
-        return returns;
-    }
     return (
         <Chakra.Box>
             <Chakra.Box
@@ -328,9 +313,23 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                     padding={0}
                                                     margin={0}
                                                 >
-                                                    {
-                                                        build_themes_manga().map((value) => value)
-                                                    }
+                                                    <MangaTags src={props.src}>
+                                                        {
+                                                            (nodes) => (
+                                                                <Chakra.Wrap>
+                                                                    {
+                                                                        nodes.map((value) => (
+                                                                            <Chakra.WrapItem key={`${v4()}`}>
+                                                                                {
+                                                                                    value
+                                                                                }
+                                                                            </Chakra.WrapItem>
+                                                                        ))
+                                                                    }
+                                                                </Chakra.Wrap>
+                                                            )
+                                                        }
+                                                    </MangaTags>
                                                 </Chakra.Text>
                                                 <Chakra.Box>
                                                     <React.Suspense
@@ -428,9 +427,23 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             padding={0}
                                             margin={0}
                                         >
-                                            {
-                                                build_themes_manga().map((value) => value)
-                                            }
+                                            <MangaTags src={props.src}>
+                                                {
+                                                    (nodes) => (
+                                                        <Chakra.Wrap>
+                                                            {
+                                                                nodes.map((value) => (
+                                                                    <Chakra.WrapItem key={`${v4()}`}>
+                                                                        {
+                                                                            value
+                                                                        }
+                                                                    </Chakra.WrapItem>
+                                                                ))
+                                                            }
+                                                        </Chakra.Wrap>
+                                                    )
+                                                }
+                                            </MangaTags>
                                         </Chakra.Text>
                                         <Chakra.Box>
                                             <React.Suspense

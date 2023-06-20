@@ -66,6 +66,6 @@ export default function Author_Search() {
                     result
                 }
             </Box>
-        </Ch>
+        </ChakraContainer>
     );
 }
