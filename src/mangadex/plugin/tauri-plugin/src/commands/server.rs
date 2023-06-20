@@ -1,4 +1,3 @@
-use crate::handle_error;
 use crate::Error;
 use crate::Result;
 use actix_web::dev::{Server, ServerHandle};
@@ -23,7 +22,7 @@ impl Default for MangadexDesktopApiHandle {
 
 #[tauri::command]
 pub async fn is_server_started(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<bool> {
-  Ok(state.server.clone().lock().await.is_some())
+    Ok(state.server.clone().lock().await.is_some())
 }
 
 #[tauri::command]
@@ -35,16 +34,12 @@ pub async fn launch_server<R: Runtime>(
     mangadex_desktop_api2::verify_all_fs()?;
     let server: Server = mangadex_desktop_api2::launch_async_server_default()?;
     let handle: ServerHandle = server.handle();
-    let ee = handle_error!(tauri::async_runtime::spawn(server).await);
-    match ee {
-        Ok(_) => (),
-        Err(e) => return Err(Error::Io(e))
-    }
+    tauri::async_runtime::spawn(server);
     let mut inner_sirv = state.server.clone().lock_owned().await;
     if inner_sirv.is_none() {
-        match inner_sirv.replace(handle){
+        match inner_sirv.replace(handle) {
             Some(_) => (),
-            None => ()
+            None => (),
         };
     } else {
         return Err(Error::Io(std::io::Error::new(
