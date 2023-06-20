@@ -105,7 +105,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                                         <Chakra.Button
                                             onClick={() => query.refetch()}
                                             colorScheme={"orange"}
-                                            isLoading={query.isLoading}
+                                            isLoading={query.fetchStatus == "loading"}
                                         >
                                             Refretch
                                         </Chakra.Button>
@@ -123,37 +123,39 @@ export default function Group_Page(props: React.PropsWithChildren<{
             >
                 <ChakraContainer>
                     <Chakra.VStack>
-                        <Chakra.Wrap spacing={"5"}>
-                            <Chakra.WrapItem>
-                                <Chakra.Link
-                                    as={Link}
-                                    to={`${MangaDexPath}/group/${props.src.get_id()}`}
-                                >
-                                    Group Details
-                                </Chakra.Link>
-                            </Chakra.WrapItem>
-                            <Chakra.WrapItem>
-                                <Chakra.Link
-                                    as={Link}
-                                    to={`${MangaDexPath}/group/${props.src.get_id()}/titles`}
-                                >
-                                    Titles
-                                </Chakra.Link>
-                            </Chakra.WrapItem>
-                            <Chakra.WrapItem>
-                                <Chakra.Link
-                                    as={Link}
-                                    to={`${MangaDexPath}/group/${props.src.get_id()}/feeds`}
-                                >
-                                    Feed
-                                </Chakra.Link>
-                            </Chakra.WrapItem>
-                        </Chakra.Wrap>
-                        <Chakra.Box>
+                        <ChakraContainer>
+                            <Chakra.Wrap spacing={"5"}>
+                                <Chakra.WrapItem>
+                                    <Chakra.Link
+                                        as={Link}
+                                        to={`${MangaDexPath}/group/${props.src.get_id()}/`}
+                                    >
+                                        Group Details
+                                    </Chakra.Link>
+                                </Chakra.WrapItem>
+                                <Chakra.WrapItem>
+                                    <Chakra.Link
+                                        as={Link}
+                                        to={`${MangaDexPath}/group/${props.src.get_id()}/titles`}
+                                    >
+                                        Titles
+                                    </Chakra.Link>
+                                </Chakra.WrapItem>
+                                <Chakra.WrapItem>
+                                    <Chakra.Link
+                                        as={Link}
+                                        to={`${MangaDexPath}/group/${props.src.get_id()}/feeds/`}
+                                    >
+                                        Feed
+                                    </Chakra.Link>
+                                </Chakra.WrapItem>
+                            </Chakra.Wrap>
+                        </ChakraContainer>
+                        <ChakraContainer>
                             {
                                 props.children
                             }
-                        </Chakra.Box>
+                        </ChakraContainer>
                     </Chakra.VStack>
                 </ChakraContainer>
             </Chakra.Box>

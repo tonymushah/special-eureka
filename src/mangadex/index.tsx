@@ -48,7 +48,7 @@ const Group_Page_Details = React.lazy(() => import("@mangadex/pages/groups/page/
 
 const Group_Page_Titles = React.lazy(() => import("@mangadex/pages/groups/page/Titles"));
 
-const Group_Page_Feeds = React.lazy(() => import("@mangadex/pages/groups/page/"));
+const Group_Page_Feeds = React.lazy(() => import("@mangadex/pages/groups/page/Feeds"));
 
 const Group_Search = React.lazy(() => import("@mangadex/pages/groups/search"));
 
