@@ -68,7 +68,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
         });
     }, []);
     return (
-        <Chakra.Box>
+        <Chakra.Box minHeight={"100vh"} >
             <Chakra.Box
                 height={"sm"}
                 backgroundImage={WaveHaikei}
@@ -118,7 +118,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                 </Chakra.Center>
             </Chakra.Box>
             <Chakra.Box
-                minH={"full"}
+                minH={"100%"}
                 background={"gray.200"}
             >
                 <ChakraContainer>

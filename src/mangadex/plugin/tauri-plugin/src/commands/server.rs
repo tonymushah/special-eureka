@@ -1,26 +1,29 @@
-use actix_web::dev::{Server, ServerHandle};
-use mangadex_desktop_api2;
-use tauri::{
-    AppHandle, Runtime, State, Window,
-};
+use crate::handle_error;
 use crate::Error;
 use crate::Result;
-use crate::handle_error;
+use actix_web::dev::{Server, ServerHandle};
+use mangadex_desktop_api2;
+use tauri::{AppHandle, Runtime, State, Window};
 
-use std::{collections::HashMap, sync::Mutex};
+use tokio::sync::Mutex;
+
+use std::sync::Arc;
+
 pub struct MangadexDesktopApiHandle {
-    key: Mutex<String>,
-    def: Mutex<HashMap<String, ServerHandle>>,
+    server: Arc<Mutex<Option<ServerHandle>>>,
 }
 
 impl Default for MangadexDesktopApiHandle {
     fn default() -> Self {
-        let hash_maps: HashMap<String, ServerHandle> = HashMap::new();
         MangadexDesktopApiHandle {
-            def: Mutex::new(hash_maps),
-            key: Mutex::new("default".to_string()),
+            server: Arc::new(Mutex::new(None)),
         }
     }
+}
+
+#[tauri::command]
+pub async fn is_server_started(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<bool> {
+  Ok(state.server.clone().lock().await.is_some())
 }
 
 #[tauri::command]
@@ -32,25 +35,36 @@ pub async fn launch_server<R: Runtime>(
     mangadex_desktop_api2::verify_all_fs()?;
     let server: Server = mangadex_desktop_api2::launch_async_server_default()?;
     let handle: ServerHandle = server.handle();
-    tauri::async_runtime::spawn(server);
-    handle_error!(state.def.lock()).insert(handle_error!(state.key.lock()).to_string(), handle);
-    Ok("server launched".to_string())
+    let ee = handle_error!(tauri::async_runtime::spawn(server).await);
+    match ee {
+        Ok(_) => (),
+        Err(e) => return Err(Error::Io(e))
+    }
+    let mut inner_sirv = state.server.clone().lock_owned().await;
+    if inner_sirv.is_none() {
+        match inner_sirv.replace(handle){
+            Some(_) => (),
+            None => ()
+        };
+    } else {
+        return Err(Error::Io(std::io::Error::new(
+            std::io::ErrorKind::AlreadyExists,
+            "The server handle already exist",
+        )));
+    }
+    Ok("Server launched".to_string())
 }
 
 #[tauri::command]
 pub async fn stop_server(state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
-    let key = handle_error!(state.key.lock()).to_string();
-    let mut start = handle_error!(state.def.lock());
-    let handle_base = match start.get_mut(&(key)) {
-        Some(data) => data,
-        None => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Can't find the server handle".to_string(),
-            )))
-        }
-    };
-    let handle = handle_base.stop(true);
-    tauri::async_runtime::spawn(handle);
-    Ok("stopped server".to_string())
+    let mut server_handle = state.server.clone().lock_owned().await;
+    if let Some(handle) = server_handle.take() {
+        handle.stop(true).await;
+        return Ok("stopped server".to_string());
+    } else {
+        return Err(Error::Io(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "Can't find the server handle".to_string(),
+        )));
+    }
 }
