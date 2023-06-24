@@ -2,7 +2,8 @@ import { Button, Center, Heading, Image, Tooltip, Wrap, WrapItem } from "@chakra
 import vite_logo from "@commons-res/common-icon/favicon.svg";
 import chakra_ui_logo from "@commons-res/common-icon/icons8-chakra-ui-480.svg";
 import react_logo from "@commons-res/common-icon/React-icon.svg";
-import tauri_logo from "@commons-res/common-icon/Square30x30Logo.png";
+import tauri_logo from "@commons-res/common-icon/tauri.svg";
+import aptabase_logo from "@commons-res/common-icon/aptabase-logo.svg";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import { Container, Row } from "react-bootstrap";
 
@@ -15,7 +16,7 @@ export default function PoweredBy() {
                     <Wrap>
                         <WrapItem>
                             <ExtLink href="https://tauri.app">
-                                <Tooltip label="Providing this desktop application">
+                                <Tooltip hasArrow label="Providing this desktop application">
                                     <Button
                                         colorScheme={"blackAlpha"}
                                         leftIcon={
@@ -33,6 +34,7 @@ export default function PoweredBy() {
                         <WrapItem>
                             <ExtLink href="https://vitejs.dev">
                                 <Tooltip
+                                    hasArrow
                                     label="Providing a nice bundle and dev environment"
                                 >
                                     <Button
@@ -51,7 +53,7 @@ export default function PoweredBy() {
                         </WrapItem>
                         <WrapItem>
                             <ExtLink href="https://reactjs.org">
-                                <Tooltip label="The frontend tool">
+                                <Tooltip hasArrow label="The frontend tool">
                                     <Button
                                         colorScheme={"blackAlpha"}
                                         leftIcon={
@@ -68,7 +70,7 @@ export default function PoweredBy() {
                         </WrapItem>
                         <WrapItem>
                             <ExtLink href="https://chakra-ui.com">
-                                <Tooltip label={"Providing a nice UI library to work with"}>
+                                <Tooltip hasArrow label={"Providing a nice UI library to work with"}>
                                     <Button
                                         colorScheme={"blackAlpha"}
                                         leftIcon={
@@ -79,6 +81,23 @@ export default function PoweredBy() {
                                         }
                                     >
                                         Chakra UI
+                                    </Button>
+                                </Tooltip>
+                            </ExtLink>
+                        </WrapItem>
+                        <WrapItem>
+                            <ExtLink href="https://aptabase.com/">
+                                <Tooltip hasArrow label={"Providing a basic analytics system"}>
+                                    <Button
+                                        colorScheme={"blackAlpha"}
+                                        leftIcon={
+                                            <Image
+                                                src={aptabase_logo}
+                                                width={"30px"}
+                                            />
+                                        }
+                                    >
+                                        Aptabase
                                     </Button>
                                 </Tooltip>
                             </ExtLink>

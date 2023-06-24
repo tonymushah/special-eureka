@@ -1,9 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Container } from "react-bootstrap";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import { Author } from "@mangadex/api/structures/Author";
 import waveHaikei from "./imgs/wave-haikei-1.svg";
-import { useTrackEvent } from "@mangadex";
+import { useTrackEvent } from "@mangadex/index";
 import { appWindow } from "@tauri-apps/api/window";
 
 const Author_Page_Biography = React.lazy(() => import("./Author_Page_Biography"));
@@ -49,7 +49,7 @@ export default function Author_Page(props: {
                 marginTop={"0px"}
                 backgroundColor={"#e2e8f0"}
             >
-                <Chakra.Box paddingTop={"25px"} as={Container}>
+                <Chakra.Box paddingTop={"25px"} as={ChakraContainer}>
                     <Chakra.Box>
                         <Chakra.Heading size={"md"} fontFamily={"inherit"}>
                             Biography

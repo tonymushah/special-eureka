@@ -8,6 +8,7 @@ import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import "@mangadex/resources/Poppins/Poppins.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
+import { Group_Page_Suspense } from "./resources/componnents/groups/Group_Page";
 
 const MangaDexPath = "/mangadex";
 
@@ -41,7 +42,13 @@ const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
 
 const Chapter_Reading = React.lazy(() => import("@mangadex/pages/ChapterReadingMode"));
 
-const Group_Page_ = React.lazy(() => import("@mangadex/pages/groups/index"));
+const Group_Page_ = React.lazy(() => import("@mangadex/pages/groups/page/index"));
+
+const Group_Page_Details = React.lazy(() => import("@mangadex/pages/groups/page/Details"));
+
+const Group_Page_Titles = React.lazy(() => import("@mangadex/pages/groups/page/Titles"));
+
+const Group_Page_Feeds = React.lazy(() => import("@mangadex/pages/groups/page/Feeds"));
 
 const Group_Search = React.lazy(() => import("@mangadex/pages/groups/search"));
 
@@ -223,7 +230,7 @@ function useMangadexRouter(): RouteObject {
                                 element: (
                                     <Mangadex_suspense>
                                         <Chakra.Box>
-                                            <Chapter_Reading/>
+                                            <Chapter_Reading />
                                         </Chakra.Box>
                                     </Mangadex_suspense>
                                 )
@@ -270,7 +277,33 @@ function useMangadexRouter(): RouteObject {
                             <Mangadex_suspense>
                                 <Group_Page_ />
                             </Mangadex_suspense>
-                        )
+                        ),
+                        children: [
+                            {
+                                index: true,
+                                element: (
+                                <Group_Page_Suspense>
+                                    <Group_Page_Details/>
+                                </Group_Page_Suspense>
+                                )
+                            },
+                            {
+                                path: "titles",
+                                element : (
+                                    <Group_Page_Suspense>
+                                        <Group_Page_Titles/>
+                                    </Group_Page_Suspense>
+                                )
+                            },
+                            {
+                                path: "feeds",
+                                element : (
+                                    <Group_Page_Suspense>
+                                        <Group_Page_Feeds/>
+                                    </Group_Page_Suspense>
+                                )
+                            }
+                        ]
                     },
                     // Search
                     {

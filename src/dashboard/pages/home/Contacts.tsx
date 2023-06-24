@@ -64,7 +64,7 @@ export default function Contacts(){
                             <ExtLink
                                 href={"https://discordapp.com/users/541995759310995466"}
                             >
-                                <Tooltip label="Note: I'm not often connected to Discord so it's not recommended to ping me">
+                                <Tooltip hasArrow label="Note: I'm not often connected to Discord so it's not recommended to ping me">
                                     <Button
                                         colorScheme={"linkedin"}
                                         leftIcon={

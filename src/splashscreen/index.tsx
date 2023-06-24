@@ -1,34 +1,54 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { Box, Center, ChakraProvider, Heading, Image } from "@chakra-ui/react";
-import viteIco from "../commons-res/common-icon/favicon.svg";
-import tauriIco from "../commons-res/common-icon/tauri.svg";
+import { Box, Center, ChakraProvider, Heading, Image, Tooltip } from "@chakra-ui/react";
+import viteIco from "@commons-res/common-icon/favicon.svg";
+import tauriIco from "@commons-res/common-icon/tauri.svg";
+import appIcon from "@commons-res/common-icon/eureka-logo6.svg";
+import reactIcon from "@commons-res/common-icon/React-icon.svg";
 
 ReactDOM.hydrateRoot(document.getElementById("root")!, (
-    <ChakraProvider
-    >
-        <Box
-        >
-            <Box margin={2}>
-                <Box>
-                    <Heading>Special Eureka</Heading>
+    <ChakraProvider>
+        <Box width={"100%"} height={"100vh"} backdropFilter={"auto"} backdropBlur={"10px"}>
+            <Box>
+                <Box >
+                    <Center>
+                        <Image
+                            src={appIcon}
+                            width={"250px"}
+                            height={"250px"}
+                        />
+                    </Center>
                 </Box>
                 <Box>
+                    <Center>
+                        <Heading size={"2xl"}>Special Eureka</Heading>
+                    </Center>
                 </Box>
                 <Box>
                     <Box>
-                        <Heading textAlign={"center"}>Powered with</Heading>
-                        <Center>
-                            <Image
-                                src={viteIco}
-                                width={"50px"}
-                                height={"50px"}
-                            />
-                            <Image
-                                src={tauriIco}
-                                width={"50px"}
-                                height={"50px"}
-                            />
+                        <Heading size="lg" textAlign={"center"}>Powered with</Heading>
+                        <Center margin={2}>
+                            <Tooltip hasArrow placement="bottom" label="Vite">
+                                <Image
+                                    src={viteIco}
+                                    width={"40px"}
+                                    height={"40px"}
+                                />
+                            </Tooltip>
+                            <Tooltip hasArrow placement="bottom" label="Tauri">
+                                <Image
+                                    src={tauriIco}
+                                    width={"40px"}
+                                    height={"40px"}
+                                />
+                            </Tooltip>
+                            <Tooltip hasArrow placement="bottom" label="React">
+                                <Image
+                                    src={reactIcon}
+                                    width={"40px"}
+                                    height={"40px"}
+                                />
+                            </Tooltip>
                         </Center>
                     </Box>
                 </Box>

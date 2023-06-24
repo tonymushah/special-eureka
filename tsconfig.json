@@ -24,33 +24,10 @@
         "forceConsistentCasingInFileNames": true,
         "types": [
             "vite-plugin-remark-rehype/types",
-            "@types/mdx"
+            "@types/mdx",
+            "vite/client"
         ],
         "paths": {
-            "@bilibili-comics": [
-                "src/bilibili-comics"
-            ],
-            "@commons-res": [
-                "src/commons-res"
-            ],
-            "@dashboard": [
-                "src/dashboard"
-            ],
-            "@mangadex": [
-                "src/mangadex"
-            ],
-            "@router": [
-                "src/router"
-            ],
-            "@splashscreen": [
-                "src/splashscreen"
-            ],
-            "@test": [
-                "src/test"
-            ],
-            "@": [
-                "src"
-            ],
             "@bilibili-comics/*": [
                 "src/bilibili-comics/*"
             ],
@@ -86,9 +63,6 @@
             ],
             "@node_modules/*": [
                 "src/node_modules/*"
-            ],
-            "@.vite/*": [
-                "src/node_modules/.vite/*"
             ]
         }
     },

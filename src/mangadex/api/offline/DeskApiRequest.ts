@@ -1,5 +1,6 @@
 import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Response } from "@tauri-apps/api/http";
 import { Api_RequestERROR } from "../internal/Api_Request";
+import { is_server_started } from "./plugin";
 
 export default class Api_Request{
     private static url = "http://localhost:8145/";
@@ -74,13 +75,11 @@ export default class Api_Request{
             client = await Api_Request.client();
         }
         const getted = client.request(httpOptions);
-        let request_res : Response<any>;
-        request_res = await getted;
-        return request_res;
+        return await getted;
     }
     public static async ping(client? : Client): Promise<boolean>{
         try{
-            return (await Api_Request.get_methods("", undefined, client)).ok;
+            return is_server_started();
         }catch(e){
             return false;
         }
