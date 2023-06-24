@@ -1,10 +1,11 @@
 import * as React from "react";
-import Viewer from "react-viewer";
-import { Accordion, Spinner, Button, ButtonGroup, Card, CardGroup, Container, ProgressBar, Row, Col, Collapse } from "react-bootstrap";
-import Zoom from "react-medium-image-zoom";
+import { Card } from "react-bootstrap";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-export function Cover_Image_(props){
+import Viewer from "react-viewer";
+export function Cover_Image_(props : {
+    id : string,
+    src : string
+}){
     const [ visible, setVisible ] = React.useState(false);
     return (
         <Card id={props.id}>

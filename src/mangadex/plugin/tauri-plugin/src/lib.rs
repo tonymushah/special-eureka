@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use tauri::{
     plugin::{Builder, TauriPlugin},
     AppHandle, Manager, Runtime
@@ -93,48 +95,44 @@ impl Serialize for Error {
 // remember to call `.manage(MyState::default())`
 
 fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
+    let app_handle = Arc::new(app_handle);
     fern::Output::call(move |record| {
         let app = &app_handle;
         if record.level() == log::LevelFilter::Info {
-            app.emit_all(
+            let _ = app.emit_all(
                 "mangadesk_api_info",
                 ExportPayload {
                     message: record.args().to_string(),
                 },
-            )
-            .unwrap();
+            );
         } else if record.level() == log::LevelFilter::Warn {
-            app.emit_all(
+            let _ = app.emit_all(
                 "mangadesk_api_warn",
                 ExportPayload {
                     message: record.args().to_string(),
                 },
-            )
-            .unwrap();
+            );
         } else if record.level() == log::LevelFilter::Debug {
-            app.emit_all(
+            let _ = app.emit_all(
                 "mangadesk_api_debug",
                 ExportPayload {
                     message: record.args().to_string(),
                 },
-            )
-            .unwrap();
+            );
         } else if record.level() == log::LevelFilter::Error {
-            app.emit_all(
+            let _ = app.emit_all(
                 "mangadex_api_error",
                 ExportPayload {
                     message: record.args().to_string(),
                 },
-            )
-            .unwrap();
+            );
         } else if record.level() == log::LevelFilter::Trace {
-            app.emit_all(
+            let _ = app.emit_all(
                 "mangadesk_api_trace",
                 ExportPayload {
                     message: record.args().to_string(),
                 },
-            )
-            .unwrap();
+            );
         }
         println!(" log : {}", record.args().to_string());
     })
@@ -168,6 +166,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
         .invoke_handler(tauri::generate_handler![
             server::launch_server,
             server::stop_server,
+            server::is_server_started,
             download::refetch_all_manga,
             download::patch_all_manga_cover,
             download::download_manga_covers,

@@ -1,19 +1,20 @@
 import "flag-icons/css/flag-icons.min.css";
 import React, { useState } from "react";
-import { Alert, Col, Collapse, Container, Row, Spinner } from "react-bootstrap";
+import { Alert, Col, Collapse, Row, Spinner } from "react-bootstrap";
 import { Chapters } from "@mangadex/api/structures/Chapter";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 type Chapters_ElementProps = {
     headersTitle: string
-    children: any
+    children: React.ReactNode
 }
 
 function Chapters_Element(props: Chapters_ElementProps) {
     const [open, setOpen] = useState(true);
     const rand = Math.floor(Math.random() * 1000) + 1;
     return (
-        <Container>
+        <ChakraContainer>
             <Row>
                 <Col >
                     <Alert.Link
@@ -31,7 +32,7 @@ function Chapters_Element(props: Chapters_ElementProps) {
                     </div>
                 </Collapse>
             </Row>
-        </Container>
+        </ChakraContainer>
     );
 }
 
@@ -39,21 +40,8 @@ type ChaptersProps = {
     src: Chapters
 }
 
-export class ChaptersComp extends React.Component<ChaptersProps>{
-    declare state: boolean;
-    private toUse: Chapters;
-    public constructor(props: ChaptersProps) {
-        super(props);
-        //    this.initializer();
-        this.setState(true);
-        this.toUse = this.props.src;
-    }
-    public setState(state: boolean) {
-        this.state = state;
-    }
-
-    render(): React.ReactNode {
-        if (this.toUse.get_count() == 1) {
+export function ChaptersComp(props : React.PropsWithChildren<ChaptersProps>){
+    if (props.src.get_count() == 1) {
             return (
                 <React.Suspense fallback={
                     <div className="text-center">
@@ -64,8 +52,8 @@ export class ChaptersComp extends React.Component<ChaptersProps>{
                     </div>
                 }>
                     {
-                        this.toUse.get_ids().map((value) => (
-                            <Chapter_Element1_byChapID id={value} />
+                        props.src.get_ids().map((value, id) => (
+                            <Chapter_Element1_byChapID key={`----${id}----`} id={value} />
                         ))
                     }
                 </React.Suspense>
@@ -80,16 +68,14 @@ export class ChaptersComp extends React.Component<ChaptersProps>{
                         <span>Initializing chapters ...</span>
                     </div>
                 }>
-                    <Chapters_Element headersTitle={"Chapter " + this.toUse.get_name()}>
+                    <Chapters_Element headersTitle={"Chapter " + props.src.get_name()}>
                         {
-                            this.toUse.get_ids().map((value) => (
-                                <Chapter_Element1_byChapID id={value} with_all_includes/>
+                            props.src.get_ids().map((value, id) => (
+                                <Chapter_Element1_byChapID id={value} key={`--------${id}-------`} with_all_includes/>
                             ))
                         }
                     </Chapters_Element>
                 </React.Suspense>
             );
         }
-
-    }
 }

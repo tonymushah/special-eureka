@@ -1,60 +1,73 @@
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { Button, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
 import { open } from "@tauri-apps/api/shell";
 import React from "react";
-import { Button, Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
+
 
 type ExtLinkProps = {
     href: string;
     a_id?: string;
     children?: React.ReactNode
 }
-export class ExtLink extends React.Component<ExtLinkProps>{
-    private href : string;
-    modalState: boolean;
-    public constructor(props: ExtLinkProps){
-        super(props);
-        this.modalState = false;
-        this.href = this.props.href;
-        this.showModal = this.showModal.bind(this);
-        this.open = this.open.bind(this);
-    }
-    showModal(){
-        if(this.modalState == false){
-            this.modalState = true;
-        }else{
-            this.modalState = false;
-        }
-        this.forceUpdate();
-    }
-    open(){
-        (open(this.href)).finally(() => {
-            this.showModal();
+export function ExtLink(props: ExtLinkProps) {
+    const { onOpen, onClose, isOpen } = useDisclosure();
+    const [isTransition, startTransition] = React.useTransition();
+    const toast = useToast({
+        "duration": 9000,
+        "isClosable": true,
+        "position": "bottom-right",
+        "status": "error",
+        "title": "Error on opening the link"
+    });
+    const openLink = () => startTransition(() => {
+        open(props.href).catch((e) => {
+            if (typeof e == "string") {
+                toast({
+                    description: e
+                });
+            } else if (typeof e == "object") {
+                if (e instanceof Error) {
+                    toast({
+                        description: e.message,
+                        title: e.name
+                    });
+                }
+            }
+        }).finally(() => {
+            onClose();
         });
-    }
-    public render(): React.ReactNode {
-        return (
-            <>
-                <span id={this.props.a_id!} onClick={this.showModal}>{this.props.children}</span>
-                <Modal show={this.modalState} onHide={this.showModal}>
-                    <Modal.Header closeButton>
-                        <h2>You are quiting the app</h2>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>The app will open the link or the path to :</p>
-                        <br/>
-                        <OverlayTrigger
-                            delay={{ show: 250, hide: 400 }}
-                            placement="bottom"
-                            overlay={<Tooltip>{this.href}</Tooltip>}
-                        >
-                            <h2 style={{"width": "100%"}} className=" d-inline-flex overflow-scroll">{this.href}</h2>
-                        </OverlayTrigger>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="danger" onClick={this.open}>I know what am I doing</Button>
-                        <Button variant="black" onClick={this.showModal}>I want to go safe</Button>
-                    </Modal.Footer>
-                </Modal>
-            </>
-        );
-    }
+    });
+    return (
+        <React.Fragment>
+            <span id={props.a_id} onClick={onOpen}>{props.children}</span>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>
+                        You are opening an external link
+                    </ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Heading>
+                            {
+                                props.href
+                            }
+                        </Heading>
+                    </ModalBody>
+                    <ModalFooter>
+                        <HStack>
+                            <Button onClick={openLink} isLoading={isTransition} leftIcon={
+                                <ExternalLinkIcon />
+                            } colorScheme="gray" variant={"solid"}>
+                                I know what i do
+                            </Button>
+                            <Button onClick={onClose} variant="outline" colorScheme="gray">
+                                I want to go safe
+                            </Button>
+                        </HStack>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </React.Fragment>
+    );
 }

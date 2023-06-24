@@ -1,27 +1,29 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { appWindow } from "@tauri-apps/api/window";
-import "flag-icons/css/flag-icons.min.css";
-import React from "react";
-import { Button, Col, Container, Placeholder, Row } from "react-bootstrap";
-import * as FontAwesome from "react-icons/fa";
-import { NumericFormat } from "react-number-format";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
-import { Alt_title, Author_Artists, ContentRating, Lang_and_Data, make_first_UpperCare, Status } from "@mangadex/api/internal/Utils";
+import { Alt_title, Author_Artists, ContentRating, Status, make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
-import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "@mangadex/resources/hooks/MangaStateHooks";
-import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import { getMangaDexPath } from "@mangadex/index";
 import { Cover_Image_ } from "@mangadex/resources/componnents/mangas/Mainpage/Image_";
 import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
 import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
+import { get_manga_page_authors_artists, get_manga_page_cover_art_image, get_manga_page_titles } from "@mangadex/resources/hooks/MangaStateHooks";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
+import { useQuery } from "@tanstack/react-query";
+import { appWindow } from "@tauri-apps/api/window";
+import "flag-icons/css/flag-icons.min.css";
+import React from "react";
+import { Col, Placeholder, Row } from "react-bootstrap";
+import * as FontAwesome from "react-icons/fa";
+import { NumericFormat } from "react-number-format";
+import { Link } from "react-router-dom";
+import ChakraContainer from "../../layout/Container";
+import MangaTags from "../tags";
+import { v4 } from "uuid";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
@@ -186,35 +188,6 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                 break;
         }
     }
-    function build_themes_manga(): Array<React.ReactNode> {
-        let index = 0;
-        const returns: Array<React.ReactNode> = [];
-        if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
-            if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Button style={{
-                    fontWeight: 700,
-                    margin: "1px",
-                    padding: "2px"
-                }} className="d-inline-flex" variant="success" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
-            } else {
-                returns[index] = (<Button style={{
-                    fontWeight: 700,
-                    margin: "1px",
-                    padding: "2px"
-                }} className=" d-inline-flex" variant="danger" size="sm">{make_first_UpperCare(props.src.get_ranting())}</Button>);
-            }
-            index = index + 1;
-        }
-        for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
-            const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Button style={{
-                fontWeight: 700,
-                margin: "1px",
-                padding: "2px"
-            }} className="d-inline-flex" variant="dark" size="sm">{element.get_name().en}</Button>);
-        }
-        return returns;
-    }
     return (
         <Chakra.Box>
             <Chakra.Box
@@ -242,7 +215,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                         padding={5}
                         background={"rgba(255, 255,255, 0.2)"}
                     >
-                        <Container>
+                        <ChakraContainer>
                             <Row>
                                 <Col xs="3">
                                     <Cover_Image_ src={coverQuery.isLoading ?
@@ -340,9 +313,23 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                     padding={0}
                                                     margin={0}
                                                 >
-                                                    {
-                                                        build_themes_manga().map((value) => value)
-                                                    }
+                                                    <MangaTags src={props.src}>
+                                                        {
+                                                            (nodes) => (
+                                                                <Chakra.Wrap>
+                                                                    {
+                                                                        nodes.map((value) => (
+                                                                            <Chakra.WrapItem key={`${v4()}`}>
+                                                                                {
+                                                                                    value
+                                                                                }
+                                                                            </Chakra.WrapItem>
+                                                                        ))
+                                                                    }
+                                                                </Chakra.Wrap>
+                                                            )
+                                                        }
+                                                    </MangaTags>
                                                 </Chakra.Text>
                                                 <Chakra.Box>
                                                     <React.Suspense
@@ -440,9 +427,23 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                             padding={0}
                                             margin={0}
                                         >
-                                            {
-                                                build_themes_manga().map((value) => value)
-                                            }
+                                            <MangaTags src={props.src}>
+                                                {
+                                                    (nodes) => (
+                                                        <Chakra.Wrap>
+                                                            {
+                                                                nodes.map((value) => (
+                                                                    <Chakra.WrapItem key={`${v4()}`}>
+                                                                        {
+                                                                            value
+                                                                        }
+                                                                    </Chakra.WrapItem>
+                                                                ))
+                                                            }
+                                                        </Chakra.Wrap>
+                                                    )
+                                                }
+                                            </MangaTags>
                                         </Chakra.Text>
                                         <Chakra.Box>
                                             <React.Suspense
@@ -469,7 +470,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                     </Row>
                                 </>
                             </Chakra.Box>
-                        </Container>
+                        </ChakraContainer>
                     </Chakra.Box>
                 </Chakra.Box>
             </Chakra.Box>

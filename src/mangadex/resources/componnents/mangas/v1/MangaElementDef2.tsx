@@ -5,7 +5,7 @@ import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
 import { ContentRating, make_first_UpperCare } from "@mangadex/api/internal/Utils";
@@ -17,6 +17,8 @@ import ErrorEL1 from "../../error/ErrorEL1";
 import IsPingable from "../../IsPingable";
 import MangaContextMenu from "./MangaContextMenu";
 import MangaTitle from "./MangaTitle";
+import MangaTags from "../tags";
+import { v4 } from "uuid";
 
 const Statis = React.lazy(() => import("../Statistics/Statis"));
 
@@ -50,7 +52,7 @@ function MangaElementDef2_Stats(props: {
                                                 base: "none",
                                                 xl: "inherit"
                                             }}>
-                                                <Chakra.HStack spacing={"5px"}>
+                                                <Chakra.HStack spacing={"4px"}>
                                                     <Chakra.HStack spacing={"4px"}>
                                                         <ChakraIcons.StarIcon />
                                                         <Chakra.Text as={"span"}>{getted.get_average()}</Chakra.Text>
@@ -64,8 +66,8 @@ function MangaElementDef2_Stats(props: {
                                                         {
                                                             getted.get_comments() !== undefined && getted.get_comments() !== null ? (
                                                                 <Chakra.Text as={"span"}>{
-                                                                    getted.get_comments()!.repliesCount !== null && getted.get_comments()!.repliesCount !== undefined ? (
-                                                                        <>{getted.get_comments()!.repliesCount}</>
+                                                                    getted.get_comments()?.repliesCount !== null && getted.get_comments()?.repliesCount !== undefined ? (
+                                                                        <>{getted.get_comments()?.repliesCount}</>
                                                                     ) : (
                                                                         <>0</>
                                                                     )
@@ -103,7 +105,7 @@ export default function MangaElementDef2(props: {
     refetch?: () => void
 }) {
 
-    const client = useHTTPClient();"mdx-manga:" + props.src.get_id() + "-statistics";
+    const client = useHTTPClient();
     const {
         manga_description_query
     } = get_manga_description({
@@ -115,23 +117,6 @@ export default function MangaElementDef2(props: {
     const card_minHeight: Chakra.ResponsiveValue<any> = {
         base: ""
     };
-    function build_themes_manga(): Array<React.ReactNode> {
-        let index = 0;
-        const returns: Array<React.ReactNode> = [];
-        if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
-            if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (<Chakra.Tag colorScheme={"green"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
-            } else {
-                returns[index] = (<Chakra.Tag colorScheme={"red"}>{make_first_UpperCare(props.src.get_ranting())}</Chakra.Tag>);
-            }
-            index = index + 1;
-        }
-        for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
-            const element = props.src.get_tags()[index1];
-            returns[index + index1] = (<Chakra.Tag colorScheme={"gray"}>{element.get_name().en}</Chakra.Tag>);
-        }
-        return returns;
-    }
     return (
         <MangaContextMenu
             mangaId={props.src.get_id()}
@@ -150,7 +135,7 @@ export default function MangaElementDef2(props: {
                                     <Chakra.Heading fontFamily={"inherit"} marginBottom={"0px"} size={"md"} noOfLines={1}><MangaTitle src={props.src} /></Chakra.Heading>
                                 )}
                             >
-                                <Chakra.Link 
+                                <Chakra.Link
                                     as={Link}
                                     to={MangaDexPath + "/manga/" + props.src.get_id()}
                                     color={"black"}
@@ -206,9 +191,23 @@ export default function MangaElementDef2(props: {
                         </Chakra.HStack>
                         <Chakra.Box textAlign={"start"}>
                             <Chakra.Box noOfLines={1}>
-                                {
-                                    build_themes_manga()
-                                }
+                                <MangaTags src={props.src}>
+                                    {
+                                        (nodes) => (
+                                            <Chakra.HStack margin={0} spacing={"2px"} marginBottom={0}>
+                                                {
+                                                    nodes.map((value) => (
+                                                        <Chakra.Box key={`${v4()}`}>
+                                                            {
+                                                                value
+                                                            }
+                                                        </Chakra.Box>
+                                                    ))
+                                                }
+                                            </Chakra.HStack>
+                                        )
+                                    }
+                                </MangaTags>
                             </Chakra.Box>
 
                             {

@@ -4,8 +4,8 @@ import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import TryCatch from "../../../../../commons-res/components/TryCatch";
-import { Statistics_Manga } from "../../../../api/structures/Statistics";
+import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
+import { v4 } from "uuid";
 
 export default function Statis(props: {
     src: Statistics_Manga,
@@ -21,7 +21,7 @@ export default function Statis(props: {
             <Chakra.PopoverTrigger>
                 {
                     props.children !== undefined ? (
-                        <Chakra.Box>
+                        <Chakra.Box zIndex={"dropdown"}>
                             <context.Consumer>
                                 {
                                     props.children
@@ -29,7 +29,7 @@ export default function Statis(props: {
                             </context.Consumer>
                         </Chakra.Box>
                     ) : (
-                        <Chakra.Box display={"flex"} width={"fit-content"}>
+                        <Chakra.Box display={"flex"} width={"fit-content"} zIndex={"dropdown"}>
                             <Chakra.Text textAlign={"center"}>
                                 <ChakraIcons.StarIcon />
                                 &nbsp;
@@ -49,15 +49,15 @@ export default function Statis(props: {
                                 &nbsp;
                                 {
                                     getted.comments !== undefined && getted.comments !== null ? (
-                                        <>{
-                                            getted.get_comments()!.repliesCount !== null && getted.get_comments()!.repliesCount !== undefined ? (
-                                                <>{getted.get_comments()!.repliesCount}</>
+                                        <React.Fragment>{
+                                            getted.get_comments()?.repliesCount !== null && getted.get_comments()?.repliesCount !== undefined ? (
+                                                <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
                                             ) : (
-                                                <>0</>
+                                                <React.Fragment>0</React.Fragment>
                                             )
-                                        }</>
+                                        }</React.Fragment>
                                     ) : (
-                                        <>0</>
+                                        <React.Fragment>0</React.Fragment>
                                     )
                                 }
                             </Chakra.Text>
@@ -87,15 +87,15 @@ export default function Statis(props: {
                             &nbsp;
                             {
                                 getted.comments !== undefined && getted.comments !== null ? (
-                                    <>{
-                                        getted.get_comments()!.repliesCount !== null || getted.get_comments()!.repliesCount !== undefined ? (
-                                            <>{getted.get_comments()!.repliesCount}</>
+                                    <React.Fragment>{
+                                        getted.get_comments()?.repliesCount !== null || getted.get_comments()?.repliesCount !== undefined ? (
+                                            <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
                                         ) : (
-                                            <>0</>
+                                            <React.Fragment>0</React.Fragment>
                                         )
-                                    }</>
+                                    }</React.Fragment>
                                 ) : (
-                                    <>0</>
+                                    <React.Fragment>0</React.Fragment>
                                 )
                             }
                         </Chakra.Text>
@@ -103,10 +103,10 @@ export default function Statis(props: {
                     </Chakra.PopoverHeader>
                     <Chakra.PopoverBody height={"xs"} overflowY={"scroll"}>
                         {
-                            Array.from({ length: props.src.get_distribution_length() }, (_, i) => i + 1).reverse().map((value) => {
+                            Array.from({ length: props.src.get_distribution_length() }, (_, i) => i + 1).reverse().map((value, index) => {
                                 const purcent = (getted.get_distribution()[value] / getted.get_distribution_sum()) * 100;
                                 return (
-                                    <Chakra.Tooltip label={purcent + "%"}>
+                                    <Chakra.Tooltip label={purcent + "%"} key={`${v4()}-${index}`}>
                                         <Chakra.HStack>
                                             <Chakra.Text>{value}</Chakra.Text>
                                             <Chakra.Progress minW={"70%"} value={purcent} />

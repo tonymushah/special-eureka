@@ -1,7 +1,7 @@
 import { AddIcon, SearchIcon } from "@chakra-ui/icons";
 import { Box, Card, CardBody, CardHeader, Tag, TagLeftIcon, TagLabel, Collapse, Container, FormControl, FormErrorMessage, FormLabel, HStack, Heading, IconButton, Input, StackDivider, VStack, Wrap, WrapItem, useDisclosure } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense__, useTrackEvent } from "@mangadex";
+import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
 import { ContentRating, Offset_limits, Status, make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
@@ -18,6 +18,7 @@ import { TagInsertion, TagInsertionMode } from "./TagInsertion";
 import { Tag_Insertion_ } from "./Tag_Insertion_";
 import { Status_include } from "./Status_publ";
 import { CttRtg_include } from "./Content_Rating";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 
@@ -257,12 +258,7 @@ export default function Manga_Search() {
         <Card>
             <CardHeader>
                 <Heading fontFamily={"inherit"}>Advanced Search</Heading>
-                <Container maxW={{
-                    sm: "container.sm",
-                    md: "container.md",
-                    lg: "container.lg",
-                    xl: "container.xl"
-                }}>
+                <ChakraContainer>
                     <form onSubmit={formik.handleSubmit}>
                         <VStack divider={<StackDivider />}>
                             <FormControl
@@ -291,7 +287,7 @@ export default function Manga_Search() {
                             </Collapse>
                         </VStack>
                     </form>
-                </Container>
+                </ChakraContainer>
             </CardHeader>
             <CardBody>
                 {

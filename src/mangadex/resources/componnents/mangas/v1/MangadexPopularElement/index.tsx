@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import TryCatch from "@commons-res/components/TryCatch";
-import { getMangaDexPath } from "@mangadex";
-import { Author_Artists, ContentRating, make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { getMangaDexPath } from "@mangadex/index";
+import { Author_Artists } from "@mangadex/api/internal/Utils";
 import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
@@ -12,6 +12,8 @@ import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import React from "react";
 import { Placeholder } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { v4 } from "uuid";
+import MangaTags from "../../tags";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -108,36 +110,6 @@ export default function MangaPopularElement(props: {
         }
         return returns2;
     }
-    function build_themes_manga(): Array<React.ReactNode> {
-        let index = 0;
-        const returns: Array<React.ReactNode> = [];
-        if (props.src.get_ranting() != undefined && props.src.get_ranting() != ContentRating.safe()) {
-            if (props.src.get_ranting() == ContentRating.suggestive()) {
-                returns[index] = (
-                    <Chakra.Tag colorScheme="green" size="sm">
-                        {make_first_UpperCare(props.src.get_ranting())}
-                    </Chakra.Tag>);
-            } else {
-                returns[index] = (
-                    <Chakra.Tag colorScheme="red" size="sm">
-                        <Chakra.TagLabel>{make_first_UpperCare(props.src.get_ranting())}</Chakra.TagLabel>
-                    </Chakra.Tag>
-                );
-            }
-            index = index + 1;
-        }
-        for (let index1 = 0; index1 < props.src.get_tags().length; index1++) {
-            const element = props.src.get_tags()[index1];
-            returns[index + index1] = (
-                <Chakra.Tag colorScheme={"gray"} size="sm">
-                    <Chakra.TagLabel>
-                        {element.get_name().en}
-                    </Chakra.TagLabel>
-                </Chakra.Tag>
-            );
-        }
-        return returns;
-    }
     return (
         <Chakra.Card
             backgroundImage={{ base: "none", lg: coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder }}
@@ -191,13 +163,23 @@ export default function MangaPopularElement(props: {
                         padding={0}
                         margin={0}
                     >
-                        <Chakra.Wrap>
+                        <MangaTags src={props.src}>
                             {
-                            build_themes_manga().map((value) => (
-                                <Chakra.WrapItem key={`${Math.random()}`}>{value}</Chakra.WrapItem>
-                            ))
+                                (nodes) => (
+                                    <Chakra.Wrap>
+                                        {
+                                            nodes.map((value) => (
+                                                <Chakra.WrapItem key={`${v4()}`}>
+                                                    {
+                                                        value
+                                                    }
+                                                </Chakra.WrapItem>
+                                            ))
+                                        }
+                                    </Chakra.Wrap>
+                                )
                             }
-                        </Chakra.Wrap>
+                        </MangaTags>
                     </Chakra.Text>
                     {
                         manga_description_query.isLoading && manga_description_query.fetchStatus == "fetching" ? (

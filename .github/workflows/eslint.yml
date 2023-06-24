@@ -43,7 +43,7 @@ jobs:
               uses: josStorer/get-current-time@v2
               id: current-time
               with:
-                format: YYYYMMDD-HH
+                  format: YYYYMMDD-HH
 
             - name: Create a new GitHub Discussion
               id: create-discussion
@@ -51,7 +51,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                  title: ESLint checkout from ${{ github.ref }} 
+                  title: ESLint checkout from ${{ github.ref }}
                   body-filepath: eslint-results.md
                   repository-id: "special-eureka"
                   category-id: "eslint-checks"

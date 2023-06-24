@@ -2,15 +2,15 @@ import * as Chakra from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
-import { Mangadex_suspense, useTrackEvent } from "@mangadex";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
-import { Container } from "react-bootstrap";
 import { appWindow } from "@tauri-apps/api/window";
 import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
@@ -25,7 +25,7 @@ export default function LatestUpdates() {
     appWindow.setTitle("Latest Updates | Mangadex");
     useTrackEvent("mangadex-latest-update-entrance");
     return (
-        <Container>
+        <ChakraContainer>
             <Mangadex_suspense>
                 <IsPingable
                     onLoading={
@@ -102,6 +102,6 @@ export default function LatestUpdates() {
                     )}
                 />
             </Mangadex_suspense>
-        </Container>
+        </ChakraContainer>
     );
 }

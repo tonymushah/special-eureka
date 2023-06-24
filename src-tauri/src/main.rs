@@ -34,7 +34,7 @@ async fn main() {
         .system_tray(tray)
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_aptabase::Builder::new("A-US-1128883538").build())
+        .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(tauri_plugin_speu_mangadex::init())
         .setup(|app|{
             app.track_event("app_launched", None);
