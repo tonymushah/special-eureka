@@ -29,7 +29,7 @@
     "check-src-tauri": "cd src-tauri && cargo check",
     "dev": "tauri dev",
     "build": "tauri build",
-    "storybook": "storybook dev -p 6006",
+    "storybook-dev": "storybook dev -p 6239 --no-open",
     "build-storybook": "storybook build",
     "tauri-storybook": "cd src-tauri && cargo run --package special-eureka --example storybook"
   },
@@ -118,6 +118,7 @@
     "@types/mdx": "^2.0.4",
     "@types/node": "^18.13.0",
     "@types/react-inner-image-zoom": "^3.0.0",
+    "@types/uuid": "^9.0.2",
     "@vitejs/plugin-react": "^3.1.0",
     "axios": "^1.3.2",
     "axios-tauri-adapter": "^0.2.0",
@@ -160,6 +161,7 @@
     "react-zoom-pan-pinch": "^2.6.1",
     "remotion": "^3.3.43",
     "sass": "^1.58.0",
+    "storybook-addon-react-router-v6": "^1.0.2",
     "swiper": "^9.0.4",
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
@@ -168,6 +170,7 @@
     "tauri-settings": "^0.1.2",
     "tsconfig-paths": "^3.14.2",
     "tslib": "^2.5.0",
+    "uuid": "^9.0.0",
     "vite-plugin-remark-rehype": "^0.1.0"
   },
   "nx": {

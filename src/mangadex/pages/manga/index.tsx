@@ -1,14 +1,15 @@
 import * as Chakra from "@chakra-ui/react";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { Container, Nav } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";
 import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
-import { useTrackEvent } from "@mangadex";
+import { useTrackEvent } from "@mangadex/";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 type MangaPage_OutletContex = {
     toUse: Manga
@@ -49,7 +50,7 @@ export default function MangaPage() {
                     src={query.data}
                 >
                     <Chakra.Box>
-                        <Container>
+                        <ChakraContainer>
                             <Nav
                                 variant="tabs"
                                 as={Chakra.Box}
@@ -86,12 +87,12 @@ export default function MangaPage() {
                                     )
                                 }
                             </Nav>
-                        </Container>
+                        </ChakraContainer>
                     </Chakra.Box>
                     <Chakra.Box>
-                        <Container>
+                        <ChakraContainer>
                             <Outlet context={{ toUse: query.data! }} />
-                        </Container>
+                        </ChakraContainer>
                     </Chakra.Box>
                 </Manga_Page>
             </React.Fragment>

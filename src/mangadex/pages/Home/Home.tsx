@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense, useTrackEvent } from "@mangadex";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 
@@ -41,7 +41,7 @@ function Home() {
                                     <Chakra.Spinner
                                         size={"lg"}
                                     />
-                                    <Chakra.Text>
+                                    <Chakra.Text as="span">
                                         Pinging the Mangadex API
                                     </Chakra.Text>
                                 </Chakra.HStack>
@@ -57,7 +57,7 @@ function Home() {
                                             <Chakra.Spinner
                                                 size={"lg"}
                                             />
-                                            <Chakra.Text>
+                                            <Chakra.Text as="span">
                                                 Pinging the Mangadex API
                                             </Chakra.Text>
                                         </Chakra.HStack>

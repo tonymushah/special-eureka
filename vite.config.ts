@@ -8,7 +8,7 @@ import mdx from "@mdx-js/rollup";
 export default defineConfig({
     clearScreen: false,
     plugins: [
-        mdx(),
+        { enforce: "pre", ...mdx() },
         //ReactInspector(),
         //progress(),
         ViteAliases({
@@ -27,8 +27,8 @@ export default defineConfig({
         port: 9305,
         strictPort: true,
         open: false,
-        fs : {
-            allow : ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/*"]
+        fs: {
+            allow: ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/bootstrap@5.2.3_@popperjs+core@2.11.6/node_modules/bootstrap/dist/css/", "../"]
         }
     },
     build: {
@@ -45,7 +45,7 @@ export default defineConfig({
                 splashscreen: resolve(__dirname, "src/splashscreen.html")
             },
         },
-        "emptyOutDir": true
+        "emptyOutDir": true,
     },
     root: "./src",
     publicDir: "./public"

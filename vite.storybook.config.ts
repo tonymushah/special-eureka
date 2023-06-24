@@ -43,5 +43,6 @@ export default defineConfig({
         "emptyOutDir": true
     },
     root: "./src",
-    publicDir: "./public"
+    publicDir: "./public",
+    appType : "spa",
 });

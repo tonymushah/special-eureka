@@ -9,6 +9,7 @@ import { loader as latest, queryKey as latest_QueryKey } from "./Latest_Update";
 import { loader as popular, queryKey as popular_QueryKey } from "./PopularTitles";
 import { loader as recentlyAdded, queryKey as recentlyAdded_QueryKey } from "./RecentlyAdded";
 import { getSeasonalId } from "./Seasonal";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const Seasonal = React.lazy(() => import("./Seasonal"));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
@@ -121,11 +122,11 @@ export default function HomeAfterPing() {
     }
     if(query.isError){
         return (
-            <Chakra.Container>
+            <ChakraContainer>
                 <Chakra.Heading fontFamily={"inherit"}>
                     Error on loading the home page
                 </Chakra.Heading>
-            </Chakra.Container>
+            </ChakraContainer>
         );
     }
     return (
@@ -135,7 +136,7 @@ export default function HomeAfterPing() {
                     <Chakra.Spinner
                         size={"lg"}
                     />
-                    <Chakra.Text>
+                    <Chakra.Text as={"span"} >
                         Fetching all home page data...
                     </Chakra.Text>
                 </Chakra.HStack>
