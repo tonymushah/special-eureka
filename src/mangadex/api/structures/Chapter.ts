@@ -384,7 +384,7 @@ export class Chapter extends Attribute {
         return this.get_some_relationship("manga")[0].get_id();
     }
     public async get_manga(client?: Client): Promise<Manga> {
-        return Manga.getMangaByID(this.get_manga_id(), client);
+        return (await Manga.getMangaByID(this.get_manga_id(), client)).manga;
     }
     public get_user_id(): string {
         return this.get_some_relationship("user")[0].get_id();
@@ -408,11 +408,7 @@ export class Chapter extends Attribute {
         throw new Error("can't find your scanlation group attribute");
     }
     public async get_scanlation_group_byID(id: string, client?: Client): Promise<Group> {
-        try {
-            return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id(), client);
-        } catch (error) {
-            throw error;
-        }
+        return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id(), client);
     }
     public async get_offlineDataImages(client?: Client): Promise<Array<string>> {
         const data = await Chapter.getAOfflineChapter_Data(this.get_id(), client);

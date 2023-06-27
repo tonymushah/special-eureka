@@ -17,7 +17,7 @@ export default function MangaVerticalElement_wID(props: {
                 <MangaVerticalElementFallback />
             }>
                 <MangaVerticalElement
-                    src={query.data}
+                    src={query.data.manga}
                     isRefetching={query.isRefetching}
                     refetch={query.refetch}
                 />

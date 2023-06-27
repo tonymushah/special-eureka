@@ -3,7 +3,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import Chapter_history from "@mangadex/api/history/Chapter.history";
 import { Alt_title, Lang } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
 import { getMangaDexPath } from "@mangadex/index";
 import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
 import { useChapterFullscreen } from "@mangadex/resources/componnents/chapter/fullscreen/Context";
@@ -32,7 +32,7 @@ const MangaDexPath = getMangaDexPath();
 
 function getMangaByID__(props: {
     manga_id: string,
-    options?: Omit<UseQueryOptions<Manga, Error>, "queryKey" | "queryFn">
+    options?: Omit<UseQueryOptions<GetMangaByIDResponse, Error>, "queryKey" | "queryFn">
 }) {
     const { query } = get_manga_byId({
         mangaID: props.manga_id,
@@ -56,7 +56,7 @@ export default function Chapter_Page_Success(props: {
     });
 
     if (mangaQuery.isSuccess) {
-        const { data } = mangaQuery;
+        const data = mangaQuery.data.manga;
         let title: string;
         if (data.get_title().en == null) {
             title = new Alt_title(data.get_alt_title()).get_quicklang()!;
@@ -112,9 +112,9 @@ export default function Chapter_Page_Success(props: {
                             ) : (
                                 <Chakra.Link
                                     as={Link}
-                                    to={MangaDexPath + "/manga/" + mangaQuery.data?.get_id()}
+                                    to={MangaDexPath + "/manga/" + mangaQuery.data?.manga.get_id()}
                                 >
-                                    <MangaTitle src={mangaQuery.data!} />
+                                    <MangaTitle src={mangaQuery.data.manga!} />
                                 </Chakra.Link>
                             )
                             )

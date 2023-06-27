@@ -5,10 +5,10 @@ import { Nav } from "react-bootstrap";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, Outlet, useOutletContext, useParams } from "react-router-dom";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
 import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
-import { useTrackEvent } from "@mangadex/";
+import { useTrackEvent } from "@mangadex/index";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 type MangaPage_OutletContex = {
@@ -34,8 +34,8 @@ export default function MangaPage() {
     useTrackEvent("mangadex-manga-page-entrance", {
         "manga-id" : id!
     });
-    const query = useQuery<Manga, Error>(query_key, () => {
-        return Manga.getMangaByID(id!, client);
+    const query = useQuery<GetMangaByIDResponse, Error>(query_key, async () => {
+        return await Manga.getMangaByID(id!, client);
     }, {
         "staleTime": Infinity,
     });
@@ -47,7 +47,7 @@ export default function MangaPage() {
                     mangaID={id!}
                 />
                 <Manga_Page
-                    src={query.data}
+                    src={query.data.manga}
                 >
                     <Chakra.Box>
                         <ChakraContainer>
@@ -74,7 +74,7 @@ export default function MangaPage() {
                                     </Nav.Link>
                                 </Nav.Item>
                                 {
-                                    query.data!.get_some_relationshipLength("manga") == 0 ? (<></>) : (
+                                    query.data!.manga.get_some_relationshipLength("manga") == 0 ? (<></>) : (
                                         <Nav.Item>
                                             <Nav.Link
                                                 as={Link}

@@ -28,7 +28,7 @@ export default function MangaElementDef_wID(props: {
             }
         >
             <MangaElementDef 
-                src={query.data!} 
+                src={query.data!.manga} 
                 isRefetching={query.isRefetching} 
                 refetch={query.refetch}
             />

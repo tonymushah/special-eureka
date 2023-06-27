@@ -4,7 +4,7 @@ import React from "react";
 import { useQueryClient, useQuery, useMutation, UseQueryOptions, useQueries, QueryKey } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Alt_title, Lang_and_Data } from "@mangadex/api/internal/Utils";
-import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { MangaPageProps } from "@mangadex/resources/componnents/mangas/Manga_Page";
 
 
@@ -17,8 +17,8 @@ export function useMangaDownload(props: {
         duration: 9000
     });
     const queryClient = useQueryClient();
-    const key = ["mdx", "manga", props.mangaID];
-    const query = useQuery(key.concat("mutation", "download"), () => {
+    const key = ["mdx", "manga", props.mangaID, "mutation", "download"];
+    const query = useQuery(key, () => {
         toast({
             title: "Downloading manga...",
             status: "loading",
@@ -75,8 +75,8 @@ export function useMangaDelete(props: {
         }
     }
     const queryClient = useQueryClient();
-    const key = ["mdx", "manga", props.mangaID];
-    const query = useQuery(key.concat("mutation", "delete"), () => {
+    const key = ["mdx", "manga", props.mangaID, "mutation", "delete"];
+    const query = useQuery(key, () => {
         addToast({
             title: "Deleting manga...",
             status: "loading",
@@ -129,11 +129,11 @@ export function get_mangaQueryKey_byID(props: {
 export function get_manga_byId(props: {
     mangaID: string,
     with_all_includes?: boolean,
-    options?: Omit<UseQueryOptions<Manga, Error>, "queryKey" | "queryFn">
+    options?: Omit<UseQueryOptions<GetMangaByIDResponse, Error>, "queryKey" | "queryFn">
 }) {
     const client = useHTTPClient();
     const key = get_mangaQueryKey_byID(props);
-    const query = useQuery<Manga, Error>(key, () => {
+    const query = useQuery<GetMangaByIDResponse, Error>(key, () => {
         if (props.with_all_includes == true) {
             return Manga_with_allRelationship.getMangaByID(props.mangaID, client);
         } else {

@@ -194,17 +194,17 @@ export default function MangaElementDef2(props: {
                                 <MangaTags src={props.src}>
                                     {
                                         (nodes) => (
-                                            <Chakra.HStack margin={0} spacing={"2px"} marginBottom={0}>
+                                            <Chakra.Wrap margin={0} spacing={"2px"} marginBottom={0}>
                                                 {
                                                     nodes.map((value) => (
-                                                        <Chakra.Box key={`${v4()}`}>
+                                                        <Chakra.WrapItem key={`${v4()}`}>
                                                             {
                                                                 value
                                                             }
-                                                        </Chakra.Box>
+                                                        </Chakra.WrapItem>
                                                     ))
                                                 }
-                                            </Chakra.HStack>
+                                            </Chakra.Wrap>
                                         )
                                     }
                                 </MangaTags>

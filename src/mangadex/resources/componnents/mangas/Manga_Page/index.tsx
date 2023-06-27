@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import ChakraContainer from "../../layout/Container";
 import MangaTags from "../tags";
 import { v4 } from "uuid";
+import { Author_Artists_Cmp_via_manga } from "./Author_Artists_Cmp";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
@@ -130,20 +131,13 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
 }
 
 export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
-    let title = "";
     const client = useHTTPClient();
-    const { title_query } = get_manga_page_titles(props);
     const {
         authors,
         artistists,
         is_Author_artists_finished
     } = get_manga_page_authors_artists(props);
     const coverQuery = get_manga_page_cover_art_image(props).query;
-    if (props.src.get_title().en == null) {
-        title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
-    } else {
-        title = props.src.get_title().en;
-    }
     appWindow.setTitle(`${title} | Mangadex`).then();
     function authors_artists(): Array<React.ReactNode> {
         const returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
@@ -256,13 +250,25 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 />
                                             </Chakra.Heading>
                                             <Chakra.Text>
-                                                {
-                                                    !is_Author_artists_finished() ? (
-                                                        <Placeholder md={6}></Placeholder>
-                                                    ) : (
-                                                        authors_artists()
-                                                    )
-                                                }
+                                                <Author_Artists_Cmp_via_manga manga={props.src}>
+                                                    {
+                                                        (authors_artists) => (authors_artists.map((value, index, array) => {
+                                                            const element = value;
+                                                            if (index == (array.length - 1)) {
+                                                                return (
+                                                                    <Chakra.Link key={`${props.src.get_id()}-author_artist-${index}`} as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
+                                                                );
+                                                            } else {
+                                                                return (
+                                                                    <React.Fragment key={`${props.src.get_id()}-author_artist-${index}`}>
+                                                                        <Chakra.Link as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
+                                                                        ,&nbsp;
+                                                                    </React.Fragment>
+                                                                );
+                                                            }
+                                                        }))
+                                                    }
+                                                </Author_Artists_Cmp_via_manga>
                                                 {/* <React.Suspense fallback={<Placeholder md={6}></Placeholder>}>
                                                 <Await
                                                     resolve={authors_artists()}
@@ -445,28 +451,31 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 }
                                             </MangaTags>
                                         </Chakra.Text>
-                                        <Chakra.Box>
-                                            <React.Suspense
-                                                fallback={
-                                                    <Chakra.Button
-                                                        isLoading
-                                                        colorScheme={"orange"}
-                                                        loadingText={"Loading..."}
-                                                    />
-                                                }
-                                            >
-                                                <ExtLink
-                                                    href={"https://mangadex.org/title/" + props.src.get_id()}
+                                        <Chakra.Wrap>
+                                            <Chakra.WrapItem>
+                                                <React.Suspense
+                                                    fallback={
+                                                        <Chakra.Button
+                                                            isLoading
+                                                            colorScheme={"orange"}
+                                                            loadingText={"Loading..."}
+                                                        />
+                                                    }
                                                 >
-                                                    <Chakra.Button
-                                                        colorScheme={"orange"}
-                                                        rightIcon={<ChakraIcons.ExternalLinkIcon />}
+                                                    <ExtLink
+                                                        href={"https://mangadex.org/title/" + props.src.get_id()}
                                                     >
-                                                        Open to Mangadex
-                                                    </Chakra.Button>
-                                                </ExtLink>
-                                            </React.Suspense>
-                                        </Chakra.Box>
+                                                        <Chakra.Button
+                                                            colorScheme={"orange"}
+                                                            rightIcon={<ChakraIcons.ExternalLinkIcon />}
+                                                        >
+                                                            Open to Mangadex
+                                                        </Chakra.Button>
+                                                    </ExtLink>
+                                                </React.Suspense>
+                                            </Chakra.WrapItem>
+
+                                        </Chakra.Wrap>
                                     </Row>
                                 </>
                             </Chakra.Box>
