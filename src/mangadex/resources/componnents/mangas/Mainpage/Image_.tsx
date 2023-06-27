@@ -1,9 +1,7 @@
+import { Card, Image } from "@chakra-ui/react";
 import * as React from "react";
-import { Card } from "react-bootstrap";
 import "react-inner-image-zoom/lib/InnerImageZoom/styles.css";
 import Viewer from "react-viewer";
-import { Cover } from "../../../../api/structures/Cover";
-import { Image } from "@chakra-ui/react";
 
 type Cover_Image_Props = {
     src: string,
@@ -24,29 +22,7 @@ export function Cover_Image_(props : Cover_Image_Props){
                 noFooter={true}
                 zoomSpeed={1}
             />
-            <Image as={Card.Img} fallbackSrc={props.fallbackImage} onClick={() => { setVisible(true); } } src={props.src}/>
-        </Card>
-    );
-}
-export function Cover_Image_2(props){
-    const [ visible, setVisible ] = React.useState(false);
-    const [show, setShow] = React.useState(true);
-    const target = React.useRef(null);
-    const to_use: Cover = props.src;
-    return (
-        <Card id={props.id} className={props.className} >
-            <Viewer
-                visible={visible}
-                onClose={() => { setVisible(false); } }
-                images={[{src: to_use.get_Cover_image(), alt: "Volume " + to_use.get_volume()}]}
-                noFooter={true}
-                zoomSpeed={1}
-            />
-            <Card.ImgOverlay className="cover-volume" onClick={() => { setVisible(true); } } onMouseOver={() => {setShow(false);}} onMouseLeave={() => {setShow(true);}}>
-                <Card.Title className="cover-volumeT cover-volume" hidden={show}>{"Volume " + to_use.get_volume()}</Card.Title>
-            </Card.ImgOverlay>
-            <Card.Img className='cover-volume-img' onClick={() => { setVisible(true); } } alt={"Volume " + to_use.get_volume()} src={to_use.get_Cover_image()}/>
-            
+            <Image fallbackSrc={props.fallbackImage} onClick={() => { setVisible(true); } } src={props.src}/>
         </Card>
     );
 }

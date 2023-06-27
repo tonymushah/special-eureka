@@ -1,9 +1,9 @@
-import "flag-icons/css/flag-icons.min.css";
-import React, { useState } from "react";
-import { Alert, Col, Collapse, Row, Spinner } from "react-bootstrap";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Spinner } from "@chakra-ui/react";
 import { Chapters } from "@mangadex/api/structures/Chapter";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import "flag-icons/css/flag-icons.min.css";
+import React from "react";
 
 type Chapters_ElementProps = {
     headersTitle: string
@@ -11,27 +11,27 @@ type Chapters_ElementProps = {
 }
 
 function Chapters_Element(props: Chapters_ElementProps) {
-    const [open, setOpen] = useState(true);
-    const rand = Math.floor(Math.random() * 1000) + 1;
     return (
         <ChakraContainer>
-            <Row>
-                <Col >
-                    <Alert.Link
-                        className="mgdx-colors-hover"
-                        onClick={() => setOpen(!open)}
-                        aria-controls={"ch-" + rand}
-                        aria-expanded={open}
-                    >
-                        {props.headersTitle}
-                    </Alert.Link>
-                </Col>
-                <Collapse in={open} unmountOnExit>
-                    <div id={"ch-" + rand}>
+            <Accordion defaultIndex={[0]} allowMultiple>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box>
+                                {props.headersTitle}
+                            </Box>
+                            <AccordionIcon/>
+                        </AccordionButton>
+                    </h2>
+                </AccordionItem>
+                <AccordionPanel motionProps={{
+                    unmountOnExit : true
+                }}>
+                    <React.Fragment>
                         {props.children}
-                    </div>
-                </Collapse>
-            </Row>
+                    </React.Fragment>
+                </AccordionPanel>
+            </Accordion>
         </ChakraContainer>
     );
 }
@@ -45,8 +45,7 @@ export function ChaptersComp(props : React.PropsWithChildren<ChaptersProps>){
             return (
                 <React.Suspense fallback={
                     <div className="text-center">
-                        <Spinner animation="border">
-                        </Spinner>
+                        <Spinner animation="border"/>
                         <br />
                         <span>Initializing chapters ...</span>
                     </div>
@@ -62,8 +61,7 @@ export function ChaptersComp(props : React.PropsWithChildren<ChaptersProps>){
             return (
                 <React.Suspense fallback={
                     <div className="text-center">
-                        <Spinner animation="border">
-                        </Spinner>
+                        <Spinner animation="border"/>
                         <br />
                         <span>Initializing chapters ...</span>
                     </div>

@@ -1,17 +1,17 @@
-import { Button, Center, Heading, Image, Tooltip, Wrap, WrapItem } from "@chakra-ui/react";
+import { Box, Button, Center, Heading, Image, Tooltip, Wrap, WrapItem } from "@chakra-ui/react";
 import vite_logo from "@commons-res/common-icon/favicon.svg";
 import chakra_ui_logo from "@commons-res/common-icon/icons8-chakra-ui-480.svg";
 import react_logo from "@commons-res/common-icon/React-icon.svg";
 import tauri_logo from "@commons-res/common-icon/tauri.svg";
 import aptabase_logo from "@commons-res/common-icon/aptabase-logo.svg";
 import { ExtLink } from "@commons-res/components/ExtLink";
-import { Container, Row } from "react-bootstrap";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 export default function PoweredBy() {
     return (
-        <Container>
+        <ChakraContainer>
             <Heading textAlign={"center"} textColor={"white"}>Powered by</Heading>
-            <Row>
+            <Box>
                 <Center>
                     <Wrap>
                         <WrapItem>
@@ -104,7 +104,7 @@ export default function PoweredBy() {
                         </WrapItem>
                     </Wrap>
                 </Center>
-            </Row>
-        </Container>
+            </Box>
+        </ChakraContainer>
     );
 }

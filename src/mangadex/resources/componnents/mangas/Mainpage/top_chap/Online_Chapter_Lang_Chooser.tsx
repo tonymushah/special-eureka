@@ -2,7 +2,6 @@ import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectL
 import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { Spinner } from "react-bootstrap";
 import ErrorEL1 from "../../../error/ErrorEL1";
 import { MangaPageProps } from "../../Manga_Page";
 
@@ -14,9 +13,9 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
         return (
             <Chakra.Box m={2} bg="inherit">
                 <div className=" text-center">
-                    <Spinner
+                    <Chakra.Spinner
                         animation="border"
-                    ></Spinner>
+                    />
                     <br />
                     <p>Loading chapters ...</p>
                 </div>
@@ -37,9 +36,9 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
                     fallback={
                         <Chakra.Box m={2} bg="inherit">
                             <div className=" text-center">
-                                <Spinner
+                                <Chakra.Spinner
                                     animation="border"
-                                ></Spinner>
+                                />
                                 <br />
                                 <p>Loading chapters ...</p>
                             </div>
@@ -57,9 +56,9 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
     return (
         <Chakra.Box m={2} bg="inherit">
             <div className=" text-center">
-                <Spinner
+                <Chakra.Spinner
                     animation="border"
-                ></Spinner>
+                />
                 <br />
                 <p>Loading chapters ...</p>
             </div>

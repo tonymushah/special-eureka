@@ -150,16 +150,16 @@ export class Manga extends Attribute {
         this.tags = tags;
     }
     // [x] get for all args
-    public get_title(): any {
+    public get_title(): LocalizedString {
         return this.title;
     }
-    public get_description(): any {
+    public get_description(): LocalizedString {
         return this.description;
     }
     public get_status(): string {
         return this.status;
     }
-    public get_alt_title(): any {
+    public get_alt_title(): LocalizedString[] {
         return this.alt_title;
     }
     public get_last_volume(): string | null {

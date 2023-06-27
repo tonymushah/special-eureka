@@ -4,8 +4,6 @@ import * as Chakra from "@chakra-ui/react";
 import Dashboard_logo from "@commons-res/common-icon/eureka-logo6.svg";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 
-import "bootstrap/dist/css/bootstrap-grid.min.css";
-
 const DashboardNavBar = React.lazy(() => import("./resources/components/DashBoardNavBar"));
 
 const Home = React.lazy(() => import("./pages/home/index"));

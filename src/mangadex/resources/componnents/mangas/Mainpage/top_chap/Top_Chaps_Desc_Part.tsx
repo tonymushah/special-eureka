@@ -1,5 +1,5 @@
 import React from "react";
-import { Accordion, Placeholder } from "react-bootstrap";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Skeleton } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Lang_and_Data } from "@mangadex/api/internal/Utils";
 import { Manga } from "@mangadex/api/structures/Manga";
@@ -12,14 +12,14 @@ export default function Top_Chaps_Desc_Part(props: {
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     });
-    if (manga_description_query.isIdle || manga_description_query.isLoading) {
+    if (manga_description_query.fetchStatus == "fetching" || manga_description_query.isLoading) {
         return (
-            <Placeholder lg={12}></Placeholder>
+            <Skeleton/>
         );
     }
     if (manga_description_query.isError) {
         return (
-            <></>
+            <React.Fragment/>
         );
     }
     if (manga_description_query.isSuccess) {
@@ -27,13 +27,21 @@ export default function Top_Chaps_Desc_Part(props: {
             return (<></>);
         }
         return (
-            <Accordion>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header> {"Manga descriptions"} </Accordion.Header>
-                    <Accordion.Body>
+            <Accordion allowMultiple>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton> 
+                            <Box as="span" flex='1' textAlign='left'>
+                                Manga descriptions
+                            </Box>
+                            <AccordionIcon/>
+                        </AccordionButton>
+                    </h2>
+                    
+                    <AccordionPanel>
                         <LAD_Tabs src={manga_description_query.data} />
-                    </Accordion.Body>
-                </Accordion.Item>
+                    </AccordionPanel>
+                </AccordionItem>
             </Accordion>
         );
     }

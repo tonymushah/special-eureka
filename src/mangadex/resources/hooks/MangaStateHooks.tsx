@@ -1,7 +1,7 @@
 import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
 import { Cover } from "@mangadex/api/structures/Cover";
 import React from "react";
-import { useQueryClient, useQuery, useMutation, UseQueryOptions, useQueries, QueryKey } from "@tanstack/react-query";
+import { useQueryClient, useQuery, UseQueryOptions, useQueries, QueryKey } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Alt_title, Lang_and_Data } from "@mangadex/api/internal/Utils";
 import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";

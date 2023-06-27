@@ -2,10 +2,10 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button, Center, Heading, Skeleton, Stack } from "@chakra-ui/react";
 import { getVersion } from "@tauri-apps/api/app";
 import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
-import { Container } from "react-bootstrap";
 import { FaGithub } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ExtLink } from "@commons-res/components/ExtLink";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 export default function Welcome() {
     const app_version_query = useQuery(["special-eureka", "version"], () => {
@@ -14,7 +14,7 @@ export default function Welcome() {
         staleTime: Infinity
     });
     return (
-        <Container>
+        <ChakraContainer>
             <Heading size={"2xl"} textAlign={"center"} marginTop={"100px"}>
                 Welcome to Special Eureka
             </Heading>
@@ -45,6 +45,6 @@ export default function Welcome() {
                     </Button>
                 </Stack>
             </Center>
-        </Container>
+        </ChakraContainer>
     );
 }

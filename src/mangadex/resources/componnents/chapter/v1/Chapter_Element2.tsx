@@ -1,10 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Col, Row } from "react-bootstrap";
 import { FaQuestionCircle, FaUser, FaUsers } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Timeago from "react-timeago";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import TryCatch from "@commons-res/components/TryCatch";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { get_chapter_groups, get_chapter_user_uploader, get_this_chapter_lang } from "@mangadex/resources/hooks/ChapterStateHooks";
@@ -55,8 +54,8 @@ export default function Chapter_Element2(props: {
             }
         >
             <Chakra.Box>
-                <Row>
-                    <Col xs={2}>
+                <Chakra.Grid templateColumns={"repeat(5, 1fr)"}>
+                    <Chakra.GridItem colSpan={2}>
                         <Chakra.Center>
                             {
                                 this_chapter_lang_query.isSuccess ? (
@@ -80,8 +79,8 @@ export default function Chapter_Element2(props: {
                                 )
                             }
                         </Chakra.Center>
-                    </Col>
-                    <Col xs={10}>
+                    </Chakra.GridItem>
+                    <Chakra.GridItem colSpan={10}>
                         <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                             <TryCatch
                                 catch={() => (
@@ -110,10 +109,10 @@ export default function Chapter_Element2(props: {
                             </TryCatch>
 
                         </Chakra.Heading>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col xs={2}>
+                    </Chakra.GridItem>
+                </Chakra.Grid>
+                <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
+                    <Chakra.GridItem colSpan={2}>
                         <Chakra.Center>
                             <React.Suspense
                                 fallback={
@@ -123,8 +122,8 @@ export default function Chapter_Element2(props: {
                                 <ChapterDownloadButton chapter={props.chapter}/>
                             </React.Suspense>
                         </Chakra.Center>
-                    </Col>
-                    <Col xs={10}>
+                    </Chakra.GridItem>
+                    <Chakra.GridItem colSpan={10}>
                         <Chakra.Text
                             fontSize={{
                                 base: 15
@@ -134,8 +133,8 @@ export default function Chapter_Element2(props: {
                         >
                             <Timeago date={new Date(props.chapter.get_createdAt())}></Timeago>
                         </Chakra.Text>
-                    </Col>
-                </Row>
+                    </Chakra.GridItem>
+                </Chakra.Grid>
             </Chakra.Box>
         </Chakra.Tooltip>
     );

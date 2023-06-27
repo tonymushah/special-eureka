@@ -1,7 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { Spinner } from "react-bootstrap";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { AggregateListOptions } from "@mangadex/api/structures/SearchType/AggregateListOptions";
@@ -28,9 +27,9 @@ export default function Manga_Page_Aggregate_Offline(props: {
         return (
             <Chakra.Box m={2} bg="inherit">
                 <div className=" text-center">
-                    <Spinner
+                    <Chakra.Spinner
                         animation="border"
-                    ></Spinner>
+                    />
                     <br />
                     <p>Loading chapters ...</p>
                 </div>
@@ -43,9 +42,9 @@ export default function Manga_Page_Aggregate_Offline(props: {
                 fallback={
                     <Chakra.Box m={2} bg="inherit">
                         <div className=" text-center">
-                            <Spinner
+                            <Chakra.Spinner
                                 animation="border"
-                            ></Spinner>
+                            />
                             <br />
                             <p>Loading chapters ...</p>
                         </div>
@@ -68,9 +67,9 @@ export default function Manga_Page_Aggregate_Offline(props: {
     return (
         <Chakra.Box m={2} bg="inherit">
             <div className=" text-center">
-                <Spinner
+                <Chakra.Spinner
                     animation="border"
-                ></Spinner>
+                />
                 <br />
                 <p>Loading chapters ...</p>
             </div>

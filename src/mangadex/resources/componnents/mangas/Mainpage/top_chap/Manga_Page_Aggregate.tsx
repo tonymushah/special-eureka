@@ -1,12 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { Spinner } from "react-bootstrap";
-import { useHTTPClient } from "../../../../../../commons-res/components/HTTPClientProvider";
-import { Manga } from "../../../../../api/structures/Manga";
-import { AggregateListOptions } from "../../../../../api/structures/SearchType/AggregateListOptions";
-import { get_aggregate_query } from "../../../../hooks/AgreggateStateHooks";
-import ErrorEL1 from "../../../error/ErrorEL1";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { AggregateListOptions } from "@mangadex/api/structures/SearchType/AggregateListOptions";
+import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 
 const Aggregate_part = React.lazy(() => import("./Aggregate_part"));
 
@@ -28,9 +27,9 @@ export default function Manga_Page_Aggregate(props: {
         return (
             <Chakra.Box m={2} bg="inherit">
                 <div className=" text-center">
-                    <Spinner
+                    <Chakra.Spinner
                         animation="border"
-                    ></Spinner>
+                    ></Chakra.Spinner>
                     <br />
                     <p>Loading chapters ...</p>
                 </div>
@@ -43,9 +42,9 @@ export default function Manga_Page_Aggregate(props: {
                 fallback={
                     <Chakra.Box m={2} bg="inherit">
                         <div className=" text-center">
-                            <Spinner
+                            <Chakra.Spinner
                                 animation="border"
-                            ></Spinner>
+                            ></Chakra.Spinner>
                             <br />
                             <p>Loading chapters ...</p>
                         </div>
@@ -68,9 +67,9 @@ export default function Manga_Page_Aggregate(props: {
     return (
         <Chakra.Box m={2} bg="inherit">
             <div className=" text-center">
-                <Spinner
+                <Chakra.Spinner
                     animation="border"
-                ></Spinner>
+                ></Chakra.Spinner>
                 <br />
                 <p>Loading chapters ...</p>
             </div>

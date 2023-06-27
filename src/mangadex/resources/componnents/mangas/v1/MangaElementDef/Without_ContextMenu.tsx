@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import TryCatch from "@commons-res/components/TryCatch";
-import { Alt_title, make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { get_manga_description, get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
@@ -10,6 +10,7 @@ import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png
 import ErrorEL1 from "../../../error/ErrorEL1";
 import { useProSidebar } from "react-pro-sidebar";
 import React from "react";
+import { useMangaTitle } from "../MangaTitle";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -18,7 +19,9 @@ export default function MangaElementDef_without_Context_Menu(props: {
     isRefetching?: boolean
 }) {
     const { collapsed, broken } = useProSidebar();
-    let title = "";
+    const title = useMangaTitle({
+        src : props.src
+    });
     const coverQuery = get_manga_page_cover_art_image({
         src: props.src,
         isThumbail: true
@@ -28,12 +31,6 @@ export default function MangaElementDef_without_Context_Menu(props: {
     } = get_manga_description({
         src: props.src
     });
-    //let desc: string = "";
-    if (props.src.get_title().en == null) {
-        title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
-    } else {
-        title = props.src.get_title().en;
-    }
     function Laoyut({ children }: React.PropsWithChildren) {
         return (
             <Chakra.Box

@@ -1,8 +1,3 @@
-
-import { Author } from "../structures/Author";
-import { Chapter } from "../structures/Chapter";
-import MangaChapter_Accordion from "./utils/MangaChapter_Accordion";
-
 export * from "./utils/And_Or";
 export * from "./utils/Status";
 export * from "./utils/Demographics";
@@ -22,4 +17,4 @@ export * from "./utils/Alt_Titles";
 export * from "./utils/MgDate";
 export * from "./utils/Query_List_builder";
 export * from "./utils/functions/index";
-
+export * from "./utils/Lang_Data";

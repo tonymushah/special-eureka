@@ -1,19 +1,17 @@
 import * as Chakra from "@chakra-ui/react";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import TryCatch from "@commons-res/components/TryCatch";
-import { getMangaDexPath } from "@mangadex/index";
-import { Author_Artists } from "@mangadex/api/internal/Utils";
-import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
+import { getMangaDexPath } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MangaTitle from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
-import { get_manga_description, get_manga_page_authors_artists, get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_manga_description, get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
 import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import React from "react";
-import { Placeholder } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { v4 } from "uuid";
 import MangaTags from "../../tags";
+import { Author_Artists_Cmp_via_manga } from "../../Manga_Page/Author_Artists_Cmp";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -29,87 +27,6 @@ export default function MangaPopularElement(props: {
     const {
         manga_description_query
     } = get_manga_description(props);
-    const {
-        authors,
-        artistists,
-        is_Author_artists_finished
-    } = get_manga_page_authors_artists(props);
-    function authors_artists(): Array<React.ReactNode> {
-        const returns: Author_Artists = new Author_Artists(authors.map<Author>((value) => {
-            return value.data!;
-        }), artistists.map<Author>((value) => {
-            return value.data!;
-        }));
-        const returns2: Array<React.ReactNode> = new Array<React.ReactNode>(returns.filtred.length);
-        for (let index = 0; index < returns.filtred.length; index++) {
-            const element = returns.filtred[index];
-            if (index == (returns.filtred.length - 1)) {
-                returns2[index] = (
-                    <TryCatch
-                        catch={() => (
-                            <Chakra.Link
-                                color={"black"}
-                                textDecoration={"none"}
-                                _hover={{
-                                    color: "orange",
-                                    textDecoration: "none"
-                                }}
-                            //as={Link} 
-                            //to={MangaDexPath + "/author/" + element.get_id()}
-                            >
-                                {element.get_Name()}
-                            </Chakra.Link>
-                        )}
-                    >
-                        <Chakra.Link
-                            color={"black"}
-                            textDecoration={"none"}
-                            _hover={{
-                                color: "orange",
-                                textDecoration: "none"
-                            }}
-                            as={Link}
-                            to={MangaDexPath + "/author/" + element.get_id()}
-                        >{element.get_Name()}</Chakra.Link>
-                    </TryCatch>
-                );
-            } else {
-                returns2[index] = (
-                    <>
-                        <TryCatch
-                            catch={() => (
-                                <Chakra.Link
-                                    //as={Link} 
-                                    //to={MangaDexPath + "/author/" + element.get_id()}
-                                    color={"black"}
-                                    textDecoration={"none"}
-                                    _hover={{
-                                        color: "orange",
-                                        textDecoration: "none"
-                                    }}
-                                >
-                                    {element.get_Name()}
-                                </Chakra.Link>
-                            )}
-                        >
-                            <Chakra.Link
-                                as={Link}
-                                to={MangaDexPath + "/author/" + element.get_id()}
-                                color={"black"}
-                                textDecoration={"none"}
-                                _hover={{
-                                    color: "orange",
-                                    textDecoration: "none"
-                                }}
-                            >{element.get_Name()}</Chakra.Link>
-                        </TryCatch>
-                        ,&nbsp;
-                    </>
-                );
-            }
-        }
-        return returns2;
-    }
     return (
         <Chakra.Card
             backgroundImage={{ base: "none", lg: coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder }}
@@ -241,13 +158,39 @@ export default function MangaPopularElement(props: {
                         )
                     }
                     <Chakra.Heading fontFamily={"inherit"} size={"md"} marginTop={5}>
-                        {
-                            !is_Author_artists_finished() ? (
-                                <Placeholder md={6}></Placeholder>
-                            ) : (
-                                authors_artists()
-                            )
-                        }
+                        <Author_Artists_Cmp_via_manga manga={props.src}
+                            onLoading={
+                                <Chakra.SkeletonText skeletonHeight='2'/>
+                            }
+                        >
+                            {
+                                (authors_artists) => (authors_artists.map((value, index, array) => {
+                                    const element = value;
+                                    if (index == (array.length - 1)) {
+                                        return (
+                                            <Chakra.Link color={"black"}
+                                                textDecoration={"none"}
+                                                _hover={{
+                                                    color: "orange",
+                                                    textDecoration: "none"
+                                                }} key={`${props.src.get_id()}-author_artist-${index}`} as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
+                                        );
+                                    } else {
+                                        return (
+                                            <React.Fragment key={`${props.src.get_id()}-author_artist-${index}`}>
+                                                <Chakra.Link color={"black"}
+                                                    textDecoration={"none"}
+                                                    _hover={{
+                                                        color: "orange",
+                                                        textDecoration: "none"
+                                                    }} as={Link} to={MangaDexPath + "/author/" + element.get_id()}>{element.get_Name()}</Chakra.Link>
+                                                ,&nbsp;
+                                            </React.Fragment>
+                                        );
+                                    }
+                                }))
+                            }
+                        </Author_Artists_Cmp_via_manga>
                     </Chakra.Heading>
                 </Chakra.CardBody>
             </Chakra.Card>

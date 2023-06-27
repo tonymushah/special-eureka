@@ -1,14 +1,14 @@
 import React from "react";
-import { Button, Row } from "react-bootstrap";
 import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Tag } from "@mangadex/api/structures/Tag";
+import { VStack, Button, Wrap, WrapItem } from "@chakra-ui/react";
 export function TagButton(props : {
     src : Tag
 }){
     const tag_toUse: Tag = props.src;
     return (<Button style={{
         fontWeight : "800"
-    }} className="m-1" variant="dark" size="sm">{tag_toUse.get_name().en}</Button>);
+    }} colorScheme={"blackAlpha"} variant={"solid"} size="sm">{tag_toUse.get_name().en}</Button>);
 }
 type TagRowProps = {
     src : Array<Tag>,
@@ -33,15 +33,17 @@ export class TagRow extends React.Component<TagRowProps>{
         const tagButtons : Array<React.ReactNode> = this.build_TagButtons();
         if(tagButtons.length != 0){
             return (
-                <Row>
+                <VStack>
                     <h5>{make_first_UpperCare(this.title)}</h5>
-                    <div className="d-md-inline">
-                        {tagButtons}
-                    </div>
-                </Row>
+                    <Wrap className="d-md-inline">
+                        {tagButtons.map((iteme, index) => (
+                            <WrapItem key={`${this.title}-${index}`}>{iteme}</WrapItem>
+                        ))}
+                    </Wrap>
+                </VStack>
             );
         }else{
-            return (<></>);
+            return (<React.Fragment/>);
         }
     }
 }

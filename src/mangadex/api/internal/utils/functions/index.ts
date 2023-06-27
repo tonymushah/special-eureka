@@ -1,5 +1,6 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import MangaChapter_Accordion from "../MangaChapter_Accordion";
+export * from "./localized_string";
 
 export const serialize = function (obj: Record<string, string>): string {
     const str = [];

@@ -1,9 +1,9 @@
 import React from "react";
-import { Button, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "../../../../..";
-import { make_first_UpperCare } from "../../../../../api/internal/Utils";
-import { Author } from "../../../../../api/structures/Author";
+import { getMangaDexPath } from "@mangadex/index";
+import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { Author } from "@mangadex/api/structures/Author";
+import { Button, VStack, Wrap, WrapItem } from "@chakra-ui/react";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -14,14 +14,14 @@ export function AuthorButton(props: {
         return (
             <Link to={MangaDexPath + "/author/" + props.src.get_id()}>
                 <Button style={{
-                    fontWeight: "800"
-                }} className="m-1" variant="dark" size="sm">
+                fontWeight: "800"
+            }} colorScheme={"blackAlpha"} variant={"solid"} size="sm" >
                     {props.src.get_Name()}
                 </Button>
             </Link>
         );
     } else {
-        return (<></>);
+        return (<React.Fragment/>);
     }
 
 }
@@ -48,15 +48,19 @@ export class AuthorCol extends React.Component<AuthorColProps>{
         const tagButtons: Array<React.ReactNode> = this.build_AuthorButtons();
         if (tagButtons.length > 0) {
             return (
-                <Col>
+                <VStack>
                     <h5>{make_first_UpperCare(this.title)}</h5>
-                    <div className="d-md-inline">
-                        {tagButtons}
-                    </div>
-                </Col>
+                    <Wrap>
+                        {tagButtons.map((element, index) => (
+                            <WrapItem key={`${this.title}-${index}`}>{
+                                element
+                            }</WrapItem>
+                        ))}
+                    </Wrap>
+                </VStack>
             );
         } else {
-            return (<></>);
+            return (<React.Fragment/>);
         }
     }
 }

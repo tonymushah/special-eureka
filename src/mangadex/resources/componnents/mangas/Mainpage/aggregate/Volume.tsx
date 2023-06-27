@@ -1,8 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { Row } from "react-bootstrap";
-import { Volume } from "../../../../../api/structures/Volume";
+import { Volume } from "@mangadex/api/structures/Volume";
 import { ChaptersComp } from "./Chapters";
 
 type Volume_Props = {
@@ -31,19 +30,15 @@ export function Volume_(props: Volume_Props) {
                     >
                         {
                             isExpanded == true && isDisabled == false ? (
-                                <>
-                                    <Row>
-                                        <>
-                                            {
-                                                props.src.get_chapters().map(getted => (
-                                                    <ChaptersComp src={getted}></ChaptersComp>
-                                                ))
-                                            }
-                                        </>
-                                    </Row>
-                                </>
+                                <React.Fragment>
+                                    {
+                                        props.src.get_chapters().map((getted, index) => (
+                                            <ChaptersComp key={`${props.src.get_name()}-${index}`} src={getted}></ChaptersComp>
+                                        ))
+                                    }
+                                </React.Fragment>
                             ) : (
-                                <></>
+                                <React.Fragment />
                             )
                         }
                     </Chakra.AccordionPanel>
@@ -58,7 +53,7 @@ export function Volume__reverse(props: Volume_Props) {
     return (
         <Chakra.AccordionItem
         >
-            {({ isExpanded , isDisabled }) => (
+            {({ isExpanded, isDisabled }) => (
                 <React.Fragment>
                     <h2>
                         <Chakra.AccordionButton _expanded={{ bg: "#ff6740", color: "white" }}>
@@ -75,17 +70,13 @@ export function Volume__reverse(props: Volume_Props) {
                     >
                         {
                             isExpanded == true && isDisabled == false ? (
-                                <>
-                                    <Row>
-                                        <>
-                                            {
-                                                props.src.get_chapters().reverse().map(getted => (
-                                                    <ChaptersComp src={getted}></ChaptersComp>
-                                                ))
-                                            }
-                                        </>
-                                    </Row>
-                                </>
+                                <React.Fragment>
+                                    {
+                                        props.src.get_chapters().reverse().map((getted, index) => (
+                                            <ChaptersComp key={`${props.src.get_name()}-${index}`} src={getted}></ChaptersComp>
+                                        ))
+                                    }
+                                </React.Fragment>
                             ) : (
                                 <></>
                             )

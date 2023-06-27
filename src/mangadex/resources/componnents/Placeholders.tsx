@@ -1,10 +1,8 @@
-import React, { Suspense, useState } from "react";
-import { Card, Placeholder } from "react-bootstrap";
-import ReactDOM from "react-dom/client";
+import { CardHeader, Skeleton  } from "@chakra-ui/react";
 
-export function CardPlaceHolders(props): React.ReactNode{
-    return (<Card.Header><Placeholder size="lg" xs={12} animation="glow"></Placeholder></Card.Header>);
+export function CardPlaceHolders(){
+    return (<CardHeader><Skeleton size="lg" animation="glow"/></CardHeader>);
 }
-export function Caroussel_PlaceHolders(props): React.ReactNode{
-    return (<div><Placeholder size="lg" xs={12} animation="glow"></Placeholder></div>);
+export function Caroussel_PlaceHolders(){
+    return (<div><Skeleton size="lg" animation="glow"/></div>);
 }

@@ -3,7 +3,7 @@ import {
     ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure
 } from "@chakra-ui/react";
 import React from "react";
-import { UseMutationResult, UseQueryResult } from "@tanstack/react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import Consumer from "@commons-res/components/Consumer";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";
@@ -21,7 +21,7 @@ export default function Download_Manga_Modal(props: {
     });
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
-        <>
+        <React.Fragment>
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -51,7 +51,7 @@ export default function Download_Manga_Modal(props: {
                                 </ModalFooter>
                             </React.Fragment>
                         )}
-                        onSuccess={(query) => (
+                        onSuccess={() => (
                             <React.Fragment>
                                 <ModalBody>
                                     <Text>
@@ -110,6 +110,6 @@ export default function Download_Manga_Modal(props: {
                     props.children
                 }
             </Consumer>
-        </>
+        </React.Fragment>
     );
 }
