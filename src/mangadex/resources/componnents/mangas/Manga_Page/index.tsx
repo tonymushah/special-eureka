@@ -250,7 +250,11 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 />
                                             </Chakra.Heading>
                                             <Chakra.Text>
-                                                <Author_Artists_Cmp_via_manga manga={props.src}>
+                                                <Author_Artists_Cmp_via_manga manga={props.src}
+                                                    onLoading={
+                                                        <Chakra.SkeletonText  />
+                                                    }
+                                                >
                                                     {
                                                         (authors_artists) => (authors_artists.map((value, index, array) => {
                                                             const element = value;

@@ -2,7 +2,8 @@ import { download_all_manga_covers, download_manga, download_manga_cover, patch_
 import { Client, getClient, Response } from "@tauri-apps/api/http";
 import MangaStatus from "../enums/MangaStatus";
 import { Api_Request } from "../internal/Api_Request";
-import { Asc_Desc, Author_Artists, Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
+import { Author_Artists, Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
+import { Asc_Desc } from "../internal/Utils";
 import DeskApiRequest from "../offline/DeskApiRequest";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
@@ -18,6 +19,7 @@ import { Cover } from "./Cover";
 import MangaSearchType from "./SearchType/Manga";
 import MangaSearch_withAllIncludes from "./SearchType/MangaSearch_withAllIncludes";
 import { Tag } from "./Tag";
+import { LocalizedString } from "../sta/data-contracts";
 
 export type GetMangaByIDResponse = {
     manga: Manga,
@@ -26,9 +28,9 @@ export type GetMangaByIDResponse = {
 
 export class Manga extends Attribute {
     protected static request_a = "manga/";
-    private title: any;
-    private alt_title: any;
-    private description: any;
+    private title!: LocalizedString;
+    private alt_title!: LocalizedString[];
+    private description!: LocalizedString;
     private status!: string;
     private last_volume!: string | null;
     private last_chapter!: string | null;
@@ -37,7 +39,7 @@ export class Manga extends Attribute {
     private tags!: Array<Tag>;
     private demographic!: string | null;
     private year!: number | null;
-    private links: any;
+    private links!: Record<string, string>;
     private content_rating!: string;
     private avaible_language!: Array<string>;
     private aggregate!: Aggregate;
@@ -86,10 +88,10 @@ export class Manga extends Attribute {
             return MangaStatus.other;
         }
     }
-    public set_links(links: any) {
+    public set_links(links: Record<string, string>) {
         this.links = links;
     }
-    public get_links(): any {
+    public get_links(): Record<string, string> {
         return this.links;
     }
     public set_ranting(content_rating: string) {
@@ -114,7 +116,7 @@ export class Manga extends Attribute {
         return Manga.request_a;
     }
     // [x] set for all args
-    public set_title(title: any) {
+    public set_title(title: LocalizedString) {
         this.title = title;
     }
     public set_demographic(demographic: string | null) {

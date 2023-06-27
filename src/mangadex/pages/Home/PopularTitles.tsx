@@ -1,7 +1,8 @@
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";

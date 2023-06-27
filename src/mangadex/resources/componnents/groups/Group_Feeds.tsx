@@ -2,7 +2,8 @@ import React from "react";
 import * as Chakra from "@chakra-ui/react";
 
 import TryCatch from "@commons-res/components/TryCatch";
-import { Asc_Desc, get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Collection } from "@mangadex/api/structures/Collection";
 import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";

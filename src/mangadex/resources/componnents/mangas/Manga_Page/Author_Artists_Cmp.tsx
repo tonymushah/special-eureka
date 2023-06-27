@@ -26,7 +26,13 @@ export function Author_Artists_Cmp_via_manga(props : {
             </Author_Artists_Cmp>
         );
     }else{
-        return props.onLoading;
+        return (
+            <React.Fragment>
+                {
+                    props.onLoading
+                }
+            </React.Fragment>
+        );
     }
 }
 
