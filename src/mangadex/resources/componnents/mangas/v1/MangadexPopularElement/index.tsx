@@ -46,7 +46,7 @@ export default function MangaPopularElement(props: {
             >
                 <Chakra.Image
                     src={coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder}
-                    objectFit={"contain"}
+                    objectFit={"cover"}
                     maxW={"200px"}
                     margin={"10px"}
                     boxShadow={"lg"}
@@ -75,8 +75,8 @@ export default function MangaPopularElement(props: {
                             <MangaTitle src={props.src} />
                         </Chakra.Heading>
                     </TryCatch>
-                    <Chakra.Text
-                        noOfLines={0}
+                    <Chakra.Box
+                        noOfLines={1}
                         padding={0}
                         margin={0}
                     >
@@ -97,7 +97,7 @@ export default function MangaPopularElement(props: {
                                 )
                             }
                         </MangaTags>
-                    </Chakra.Text>
+                    </Chakra.Box>
                     {
                         manga_description_query.isLoading && manga_description_query.fetchStatus == "fetching" ? (
                             <Chakra.SkeletonText
@@ -111,8 +111,7 @@ export default function MangaPopularElement(props: {
                                     <></>
                                 ) : (
                                     <Chakra.Box
-                                        maxH={"200px"}
-                                        overflowY={"clip"}
+                                        noOfLines={3}
                                     >
                                         <TryCatch
                                             catch={(e) => (

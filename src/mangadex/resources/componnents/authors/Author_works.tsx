@@ -10,6 +10,7 @@ import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
 import MangaList from "@mangadex/resources/componnents/mangas/v1/MangaList";
 import { get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "@mangadex/resources/hooks/AuthorState";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 export default function Author_works(props: {
@@ -19,10 +20,19 @@ export default function Author_works(props: {
     const query_key = get_author_works_query_key_byAuthor_ID({
         author_id: props.src.get_id()
     });
+    const queryClient = useQueryClient();
+    const works = React.useMemo(() => {
+        const query_data = queryClient.getQueryData<Collection<Manga>>(query_key);
+        if(query_data !== undefined){
+            return `${query_data.get_total()}`; 
+        }else{
+            return "Loading...";
+        }
+    }, [queryClient.getQueryData<Collection<Manga>>(query_key)]);
     return (
         <Chakra.Box
         >
-            <Chakra.Text>Works : {props.src.get_some_relationshipLength("manga")}</Chakra.Text>
+            <Chakra.Text>Works : {works}</Chakra.Text>
             <IsPingable
                 client={client}
                 onError={(query) => (

@@ -336,7 +336,8 @@ export class Manga extends Attribute {
         hasAvailableChapters,
         latestUploadedChapter,
         group,
-        client
+        client,
+        authorOrArtist
     }: MangaSearchType): Promise<Collection<Manga>> {
         const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -351,7 +352,8 @@ export class Manga extends Attribute {
             hasAvailableChapters: JSON.stringify(hasAvailableChapters),
             latestUploadedChapter: JSON.stringify(latestUploadedChapter),
             group: (group),
-            ...order?.render()
+            ...order?.render(),
+            authorOrArtist
         };
         const getted: Response<any> = await Api_Request.get_methods("manga" + "?" +
             serialize((new Querry_list_builder("authors", authors!)).build()) + "&" +
@@ -711,7 +713,7 @@ export class Manga extends Attribute {
         const to_use = this.get_format();
         return new Promise<Array<Tag>>((resolve, reject) => {
             if (to_use.length == 0) {
-                reject();
+                resolve([]);
             } else {
                 resolve(to_use);
             }
@@ -1437,7 +1439,8 @@ export class Manga_with_allRelationship extends Manga {
         latestUploadedChapter,
         group,
         contentRating,
-        client
+        client,
+        authorOrArtist
     }: MangaSearch_withAllIncludes): Promise<Collection<Manga_with_allRelationship>> {
         const querys: any = {
             limit: JSON.stringify(offset_Limits.get_limits()),
@@ -1451,7 +1454,8 @@ export class Manga_with_allRelationship extends Manga {
             hasAvailableChapters: JSON.stringify(hasAvailableChapters),
             latestUploadedChapter: JSON.stringify(latestUploadedChapter),
             group: (group),
-            ...order?.render()
+            ...order?.render(),
+            authorOrArtist
         };
         const getted: Response<any> = await Api_Request.get_methods("manga" + "?" +
             serialize((new Querry_list_builder("authors", authors!)).build()) + "&" +

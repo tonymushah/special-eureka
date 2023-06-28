@@ -3,7 +3,6 @@ import React from "react";
 import MyErrorBounderies from "./error/MyErrorBounderies";
 import useRTLSidebar from "../hooks/userOptions/RtlSidebar";
 import { Mangadex_suspense__ } from "@mangadex/index";
-
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 
 const SideBar = () => (
@@ -31,7 +30,7 @@ export default function Content(props: React.PropsWithChildren) {
         );
     }
     return (
-        <Chakra.Box display={"inline-flex"} width={"100% !important"}>
+        <Chakra.Box width={"100% !important"} display={"inline-flex"}>
             {
                 query.data != true ? (
                     <SideBar/>

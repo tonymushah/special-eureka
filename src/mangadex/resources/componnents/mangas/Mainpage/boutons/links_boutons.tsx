@@ -1,7 +1,7 @@
 import React from "react";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
-import { Button, VStack, Wrap, WrapItem } from "@chakra-ui/react";
+import { Button, VStack, Wrap, WrapItem, Heading } from "@chakra-ui/react";
 type LinkButtonProps = {
     title: string,
     href: string
@@ -15,6 +15,7 @@ export function LinkButton(props: LinkButtonProps) {
         </ExtLink>
     );
 }
+
 
 type LinksRowProps = {
     src: any,
@@ -48,9 +49,9 @@ export class LinksRow extends React.Component<LinksRowProps>{
         const LinksButtons: Array<React.ReactNode> = this.build_LinkButtons();
         if (LinksButtons.length != 0) {
             return (
-                <VStack>
-                    <h5>{make_first_UpperCare(this.title)}</h5>
-                    <Wrap className="d-md-inline">
+                <VStack display={"block"}>
+                    <Heading size={"md"} fontFamily={"inherit"}>{make_first_UpperCare(this.title)}</Heading>
+                    <Wrap>
                         {LinksButtons.map((item, index) => (
                             <WrapItem key={`${this.title}-${index}`}>{
                                 item

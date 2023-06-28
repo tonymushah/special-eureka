@@ -15,6 +15,7 @@ export function Cover_Image_(props : Cover_Image_Props){
     const [ visible, setVisible ] = React.useState(false);
     return (
         <Card id={props.id}>
+            <Image objectFit={"cover"} fallbackSrc={props.fallbackImage} borderRadius={15} onClick={() => { setVisible(true); } } src={props.src}/>
             <Viewer
                 visible={visible}
                 onClose={() => { setVisible(false); } }
@@ -22,7 +23,6 @@ export function Cover_Image_(props : Cover_Image_Props){
                 noFooter={true}
                 zoomSpeed={1}
             />
-            <Image fallbackSrc={props.fallbackImage} onClick={() => { setVisible(true); } } src={props.src}/>
         </Card>
     );
 }

@@ -58,7 +58,7 @@ export function ExtLink(props: ExtLinkProps) {
                         <HStack>
                             <Button onClick={openLink} isLoading={isTransition} leftIcon={
                                 <ExternalLinkIcon />
-                            } colorScheme="gray" variant={"solid"}>
+                            } colorScheme="red" variant={"solid"}>
                                 I know what i do
                             </Button>
                             <Button onClick={onClose} variant="outline" colorScheme="gray">

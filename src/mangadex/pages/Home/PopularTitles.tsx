@@ -7,7 +7,7 @@ import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Keyboard, Navigation } from "swiper";
-import "swiper/css";
+import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Heading } from "@chakra-ui/react";
 import { Client } from "@tauri-apps/api/http";
@@ -47,46 +47,45 @@ export default function RecentlyPopular() {
     const queryClient = useQueryClient();
     if (query.isSuccess == true) {
         return (
-            <Chakra.VStack>
+            <Chakra.Box width={"100%"}>
                 <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
                 <Chakra.Box>
                     {query.isSuccess == true ? (
                         <Swiper
-                            slidesPerView={1}
                             navigation={true}
                             keyboard={true}
                             modules={[Navigation, Keyboard]}
                         >
-                            {query.data.get_data().map((value, index) => {
-                                queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
-                                return (
-                                    <SwiperSlide
-                                        key={value.get_id()}
-                                    >
-                                        {
-                                            index == 0 ? (
-                                                <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{index + 1}</Heading>
-                                            ) : (
-                                                <Heading m={2} fontFamily={"inherit"} size={"sm"}>No.{index + 1}</Heading>
-                                            )
-                                        }
-
-                                        <React.Suspense
-                                            fallback={
-                                                <MangaFallback2 />
-                                            }
+                            {
+                                query.data.get_data().map((value, index) => {
+                                    queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
+                                    return (
+                                        <SwiperSlide
+                                            key={value.get_id()}
                                         >
-                                            <MangaPopularElement src={value} />
-                                        </React.Suspense>
-                                    </SwiperSlide>
-                                );
-                            })}
+                                            {
+                                                index == 0 ? (
+                                                    <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{index + 1}</Heading>
+                                                ) : (
+                                                    <Heading m={2} fontFamily={"inherit"} size={"sm"}>No.{index + 1}</Heading>
+                                                )
+                                            }
+                                            <React.Suspense
+                                                fallback={
+                                                    <MangaFallback2 />
+                                                }
+                                            >
+                                                <MangaPopularElement src={value}/>
+                                            </React.Suspense>
+                                        </SwiperSlide>
+                                    );
+                                })}
                         </Swiper>
                     ) : (
                         <></>
                     )}
                 </Chakra.Box>
-            </Chakra.VStack>
+            </Chakra.Box>
         );
     }
     return (

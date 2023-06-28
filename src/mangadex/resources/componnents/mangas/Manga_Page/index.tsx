@@ -8,7 +8,7 @@ import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import { getMangaDexPath } from "@mangadex/index";
 import { Cover_Image_ } from "@mangadex/resources/componnents/mangas/Mainpage/Image_";
 import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
-import MangaTitle, { useMangaTitle } from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
+import MangaTitle, { useMangaAltTitle, useMangaTitle } from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
@@ -133,10 +133,13 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     const title = useMangaTitle({
         src: props.src
     });
+    const altTitle = useMangaAltTitle({
+        src : props.src
+    });
     const client = useHTTPClient();
     const coverQuery = get_manga_page_cover_art_image(props).query;
     appWindow.setTitle(`${title} | Mangadex`).then();
-    
+
     return (
         <Chakra.Box>
             <Chakra.Box
@@ -165,7 +168,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                         background={"rgba(255, 255,255, 0.2)"}
                     >
                         <ChakraContainer>
-                            <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
+                            <Chakra.Grid templateColumns={"repeat(12, 1fr)"} gap={5}>
                                 <Chakra.GridItem colSpan={3}>
                                     <Cover_Image_ src={coverQuery.isLoading ?
                                         Mangadex_placeHolder : (
@@ -174,36 +177,39 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                 </Chakra.GridItem>
                                 <Chakra.GridItem colSpan={9}>
                                     <Chakra.Box>
-                                        <Chakra.Center
-                                            display={"block"}
-                                        >
-                                            <Chakra.Heading
-                                                noOfLines={2}
-                                                fontFamily={"inherit"}
-                                                size={{
-                                                    base: "md",
-                                                    sm: "lg",
-                                                    md: "2xl",
-                                                    lg: "3xl"
-                                                }}
-                                            >
-                                                {
-                                                    title
-                                                }
-                                            </Chakra.Heading>
-                                            <Chakra.Heading
-                                                noOfLines={2}
-                                                fontFamily={"inherit"}
-                                                size={{
-                                                    base: "sm",
-                                                    sm: "md",
-                                                    md: "lg"
-                                                }}
-                                            >
-                                                <MangaTitle
-                                                    src={props.src}
-                                                />
-                                            </Chakra.Heading>
+                                        <Chakra.VStack spacing={5} alignItems={"start"}>
+                                            <Chakra.Box display={"block"}>
+                                                <Chakra.Heading
+                                                    noOfLines={2}
+                                                    fontFamily={"inherit"}
+                                                    size={{
+                                                        base: "md",
+                                                        sm: "lg",
+                                                        md: "2xl",
+                                                        lg: "3xl"
+                                                    }}
+                                                >
+                                                    <MangaTitle
+                                                        src={props.src}
+                                                    />
+                                                </Chakra.Heading>
+                                            </Chakra.Box>
+                                            <Chakra.Box display={"block"}>
+                                                <Chakra.Heading
+                                                    noOfLines={2}
+                                                    fontFamily={"inherit"}
+                                                    size={{
+                                                        base: "sm",
+                                                        sm: "md",
+                                                        md: "lg"
+                                                    }}
+                                                >
+                                                    {
+                                                        altTitle
+                                                    }
+                                                </Chakra.Heading>
+                                            </Chakra.Box>
+
                                             <Chakra.Text noOfLines={3}>
                                                 <Author_Artists_Cmp_via_manga manga={props.src}
                                                     onLoading={
@@ -240,7 +246,8 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 </Author_Artists_Cmp_via_manga>
                                             </Chakra.Text>
 
-                                            <Chakra.Box
+                                            <Chakra.VStack
+                                                alignItems={"start"}
                                                 display={{
                                                     base: "none",
                                                     lg: "inherit"
@@ -261,7 +268,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                         }
                                                         &nbsp;
                                                         {
-                                                            <Get_status_color {...props}/>
+                                                            <Get_status_color {...props} />
                                                         }
                                                         &nbsp;
                                                     </Chakra.Center>
@@ -348,8 +355,8 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                         />
                                                     </React.Suspense>
                                                 </Chakra.Box>
-                                            </Chakra.Box>
-                                        </Chakra.Center>
+                                            </Chakra.VStack>
+                                        </Chakra.VStack>
                                     </Chakra.Box>
                                 </Chakra.GridItem>
                             </Chakra.Grid>
@@ -360,7 +367,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                 }}
                             >
                                 <React.Fragment>
-                                    <Chakra.VStack>
+                                    <Chakra.VStack display={"block"}>
                                         <Chakra.Text
                                             fontWeight={"bold"}
                                             padding={0}
@@ -372,7 +379,7 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                 Publication :
                                                 &nbsp;
                                                 {
-                                                    <Get_status_color {...props}/>
+                                                    <Get_status_color {...props} />
                                                 }
                                                 &nbsp;
                                                 {

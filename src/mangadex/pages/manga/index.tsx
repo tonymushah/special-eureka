@@ -54,7 +54,7 @@ export default function MangaPage() {
                             <Chakra.HStack>
 
                             </Chakra.HStack>
-                            <Chakra.ButtonGroup colorScheme="orange">
+                            <Chakra.ButtonGroup isAttached colorScheme="orange">
                                 <Chakra.Button onClick={() => navigate(".")} >
                                     Chapters
                                 </Chakra.Button>
@@ -73,7 +73,7 @@ export default function MangaPage() {
                     </Chakra.Box>
                     <Chakra.Box>
                         <ChakraContainer>
-                            <Outlet context={{ toUse: query.data! }} />
+                            <Outlet context={{ toUse: query.data!.manga }} />
                         </ChakraContainer>
                     </Chakra.Box>
                 </Manga_Page>

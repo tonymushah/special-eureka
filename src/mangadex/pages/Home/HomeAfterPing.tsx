@@ -61,6 +61,7 @@ export default function HomeAfterPing() {
     if (query.isSuccess) {
         return (
             <Chakra.VStack
+                display={"block"}
                 divider={<Chakra.StackDivider/>}
             >
                 <Chakra.Box display={"block"}>
