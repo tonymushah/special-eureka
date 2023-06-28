@@ -47,7 +47,7 @@ export default function RecentlyPopular() {
     const queryClient = useQueryClient();
     if (query.isSuccess == true) {
         return (
-            <React.Fragment>
+            <Chakra.VStack>
                 <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
                 <Chakra.Box>
                     {query.isSuccess == true ? (
@@ -85,7 +85,7 @@ export default function RecentlyPopular() {
                         <></>
                     )}
                 </Chakra.Box>
-            </React.Fragment>
+            </Chakra.VStack>
         );
     }
     return (

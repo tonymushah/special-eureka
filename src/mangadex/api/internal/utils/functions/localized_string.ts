@@ -1,6 +1,8 @@
 import { LocalizedString } from "@mangadex/api/sta/data-contracts";
 import { Lang } from "../Lang";
-import { randomInt } from "crypto";
+import randomInteger from "random-int";
+
+const randomInt = randomInteger;
 
 export function extract_available_lang(to_use : LocalizedString) : Array<string>{
     const langs : Array<string> = [];

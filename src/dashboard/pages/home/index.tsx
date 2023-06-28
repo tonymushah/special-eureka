@@ -5,19 +5,18 @@ import haikei_red from "@dashboard/resources/haikei/layered-waves-haikei-red.svg
 import haikei_violet from "@dashboard/resources/haikei/layered-waves-haikei-violet.svg";
 import haikei_yellow from "@dashboard/resources/haikei/layered-waves-haikei-yellow.svg";
 import { appWindow } from "@tauri-apps/api/window";
-import React from "react";
 import Contacts from "./Contacts";
 import CurrentlySupportedWebsites from "./CurrentlySupportedWebsite";
 import DevNotes from "./DevNotes";
 import PoweredBy from "./PoweredBy";
 import Welcome from "./Welcome";
-import { useTrackEvent } from "@dashboard";
+import { useTrackEvent } from "@dashboard/index";
 
 export default function Home() {
     appWindow.setTitle("Welcome to Special-Eureka | Dashboard").then();
     useTrackEvent("dashboard-entrance");
     return (
-        <React.Fragment>
+        <Chakra.Box>
             <Chakra.Box
                 backgroundImage={haikei_red}
                 backgroundPosition={"bottom"}
@@ -73,6 +72,6 @@ export default function Home() {
                     </VStack>
                 </Chakra.Box>
             </Chakra.Box>
-        </React.Fragment>
+        </Chakra.Box>
     );
 }

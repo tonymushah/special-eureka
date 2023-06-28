@@ -9,7 +9,8 @@ export default function ChakraContainer(props: ContainerProps) {
                 lg: "container.lg",
                 xl: "container.xl"
             }}
-            margin={2}
+            paddingLeft={20}
+            paddingRight={20}
             {...props}
         >
             {

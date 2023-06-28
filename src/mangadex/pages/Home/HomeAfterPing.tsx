@@ -60,7 +60,9 @@ export default function HomeAfterPing() {
     });
     if (query.isSuccess) {
         return (
-            <Chakra.VStack>
+            <Chakra.VStack
+                divider={<Chakra.StackDivider/>}
+            >
                 <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={<Chakra.Box >
@@ -73,6 +75,9 @@ export default function HomeAfterPing() {
                     >
                         <PopularRecently />
                     </React.Suspense>
+                    
+                </Chakra.Box>
+                <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={<Chakra.Box >
                             <Chakra.Center>
@@ -85,7 +90,6 @@ export default function HomeAfterPing() {
                         <Seasonal />
                     </React.Suspense>
                 </Chakra.Box>
-                <Chakra.Divider />
                 <Chakra.Box
                     display={"block"}
                 >

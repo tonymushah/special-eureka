@@ -1,7 +1,7 @@
-import { Box, Container, Heading, Link, Skeleton } from "@chakra-ui/react";
+import { Box, Heading, Link, Skeleton, Text } from "@chakra-ui/react";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import React from "react";
 import DevnoteMdx from "./devnotes.mdx";
-import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const ExtLink = React.lazy(async () => {
     const res = await import("@commons-res/components/ExtLink");
@@ -55,9 +55,24 @@ export default function DevNotes() {
                                 },
                                 h1(node) {
                                     return (
-                                        <Heading size={"lg"}>{node.children}</Heading>
+                                        <Heading size={"xl"} fontFamily={"inherit"}>{node.children}</Heading>
                                     );
-                                }
+                                },
+                                p(node) {
+                                    return (
+                                        <Text size={"sm"} fontFamily={"inherit"}>{node.children}</Text>
+                                    );
+                                },
+                                h2(node) {
+                                    return (
+                                        <Heading size={"lg"} fontFamily={"inherit"}>{node.children}</Heading>
+                                    );
+                                },
+                                h3(node) {
+                                    return (
+                                        <Heading size={"md"} fontFamily={"inherit"}>{node.children}</Heading>
+                                    );
+                                },
                             }
                         }
                     />

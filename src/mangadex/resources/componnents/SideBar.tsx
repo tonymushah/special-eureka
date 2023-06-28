@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import MyErrorBounderies from "./error/MyErrorBounderies";
 import useRTLSidebar from "../hooks/userOptions/RtlSidebar";
-import { Mangadex_suspense__ } from "@mangadex";
+import { Mangadex_suspense__ } from "@mangadex/index";
 
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 
@@ -31,7 +31,7 @@ export default function Content(props: React.PropsWithChildren) {
         );
     }
     return (
-        <div className='w-100 d-inline-flex'>
+        <Chakra.Box display={"inline-flex"} width={"100% !important"}>
             {
                 query.data != true ? (
                     <SideBar/>
@@ -46,7 +46,7 @@ export default function Content(props: React.PropsWithChildren) {
                 overflowY={"scroll"}
             >
                 <Chakra.Box id="top-content">
-                    <Chakra.Box id="content">
+                    <Chakra.Box id="content" >
                         <MyErrorBounderies>
                             {props.children}
                         </MyErrorBounderies>
@@ -60,7 +60,7 @@ export default function Content(props: React.PropsWithChildren) {
                     <></>
                 )
             }
-        </div>
+        </Chakra.Box>
     );
 }
 
