@@ -54,7 +54,7 @@ export default function Chapter_Element2(props: {
             }
         >
             <Chakra.Box>
-                <Chakra.Grid templateColumns={"repeat(5, 1fr)"}>
+                <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
                     <Chakra.GridItem colSpan={2}>
                         <Chakra.Center>
                             {

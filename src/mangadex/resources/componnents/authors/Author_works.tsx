@@ -21,12 +21,13 @@ export default function Author_works(props: {
         author_id: props.src.get_id()
     });
     const queryClient = useQueryClient();
-    const works = React.useMemo(() => {
+    const [works, setWorks] = React.useState("Loading");
+    React.useEffect(() => {
         const query_data = queryClient.getQueryData<Collection<Manga>>(query_key);
         if(query_data !== undefined){
-            return `${query_data.get_total()}`; 
+            setWorks(`${query_data.get_total()}`); 
         }else{
-            return "Loading...";
+            setWorks("Loading...");
         }
     }, [queryClient.getQueryData<Collection<Manga>>(query_key)]);
     return (
@@ -40,7 +41,7 @@ export default function Author_works(props: {
                         query={query}
                     />
                 )}
-                onSuccess={(query) => (
+                onSuccess={() => (
                     <Chakra.Box>
                         <CollectionComponnent_WithQuery<Manga>
                             fn={() => {
