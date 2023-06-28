@@ -5,9 +5,9 @@ import { formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Keyboard, Navigation } from "swiper";
-import "swiper/css/bundle";
+import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Heading } from "@chakra-ui/react";
 import { Client } from "@tauri-apps/api/http";
@@ -52,6 +52,7 @@ export default function RecentlyPopular() {
                 <Chakra.Box>
                     {query.isSuccess == true ? (
                         <Swiper
+                            slidesPerView={1}
                             navigation={true}
                             keyboard={true}
                             modules={[Navigation, Keyboard]}

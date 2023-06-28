@@ -36,7 +36,7 @@ export default function MangaPopularElement(props: {
             minW={"md"}
             margin={5}
         >
-            <Chakra.Box
+            <Chakra.Card
                 background={"rgba(255, 255,255, 0.5)"}
                 backdropFilter='auto'
                 backdropBlur={"20px"}
@@ -193,7 +193,7 @@ export default function MangaPopularElement(props: {
                         </Author_Artists_Cmp_via_manga>
                     </Chakra.Heading>
                 </Chakra.CardBody>
-            </Chakra.Box>
+            </Chakra.Card>
         </Chakra.Card>
     );
 }
