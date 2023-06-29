@@ -27,6 +27,6 @@ export default function MangaTitle(props: {
 }){
     const title = useMangaTitle(props);
     return (
-        <>{title}</>
+        <React.Fragment>{title}</React.Fragment>
     );
 }

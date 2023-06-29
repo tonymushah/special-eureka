@@ -6,13 +6,15 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Alt_title, Lang_and_Data } from "@mangadex/api/internal/Utils";
 import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { MangaPageProps } from "@mangadex/resources/componnents/mangas/Manga_Page";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 
 export function useMangaDownload(props: {
     mangaID: string
 }) {
     const client = useHTTPClient();
-    const toast = useToast({
+    const toast = useChakraToast({
+        id : `manga-download-${props.mangaID}`,
         position: "bottom-right",
         duration: 9000
     });
@@ -62,6 +64,7 @@ export function useMangaDelete(props: {
 }) {
     const client = useHTTPClient();
     const toast = useToast({
+        id : `mdx-mutation-manga-${props.mangaID}-delete`,
         position: "bottom-right",
         duration: 9000
     });

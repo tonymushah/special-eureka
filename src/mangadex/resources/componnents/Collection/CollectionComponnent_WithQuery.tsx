@@ -1,8 +1,9 @@
 import * as ChakraIcon from "@chakra-ui/icons";
-import { Box, Button, ButtonGroup, Center, Spinner, Text, ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
-import React from "react";
-import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { Box, Button, ButtonGroup, Center, Spinner, Text } from "@chakra-ui/react";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { Collection } from "@mangadex/api/structures/Collection";
+import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import React from "react";
 import ErrorEL1 from "../error/ErrorEL1";
 import UseCollection from "./UseCollection";
 
@@ -14,24 +15,17 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     onLoading?: React.ReactNode,
     withoutNavigation?: boolean
 }) {
-    const toast = useToast();
-    const toastID = React.useRef<ToastId>();
-    function addToast(props?: UseToastOptions) {
-        toastID.current = toast(props);
-    }
-    function updateToast(props?: UseToastOptions) {
-        if (toastID.current != undefined && props != undefined) {
-            toast.update(toastID.current, props);
-        }
-    }
+    const toast = useChakraToast({
+        id: JSON.stringify(props.queryKey)
+    });
     const search_query = useQuery<Collection<T>, Error>(props.queryKey, props.fn, props.query_options);
     const queryClient = useQueryClient();
 
     const previous = useMutation({
-        mutationKey : props.queryKey.concat("previous"),
+        mutationKey: props.queryKey.concat("previous"),
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
-                addToast({
+                toast({
                     status: "loading",
                     "title": "Loading to previous page",
                     isClosable: false,
@@ -45,7 +39,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onSuccess(data) {
-            updateToast({
+            toast({
                 status: "success",
                 "title": "Previous page Loaded",
                 isClosable: true,
@@ -55,7 +49,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onError(error: Error) {
-            updateToast({
+            toast({
                 status: "error",
                 "title": "Error on Loading previous page",
                 isClosable: true,
@@ -65,10 +59,10 @@ export default function CollectionComponnent_WithQuery<T>(props: {
         },
     });
     const next = useMutation({
-        mutationKey : props.queryKey.concat("next"),
+        mutationKey: props.queryKey.concat("next"),
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
-                addToast({
+                toast({
                     status: "loading",
                     "title": "Loading to next page",
                     isClosable: false,
@@ -82,7 +76,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onSuccess(data) {
-            updateToast({
+            toast({
                 status: "success",
                 "title": "Next page Loaded",
                 isClosable: true,
@@ -92,7 +86,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onError(error: Error) {
-            updateToast({
+            toast({
                 status: "error",
                 "title": "Error on Loading next page",
                 isClosable: true,
@@ -102,10 +96,10 @@ export default function CollectionComponnent_WithQuery<T>(props: {
         },
     });
     const first_page = useMutation({
-        mutationKey : props.queryKey.concat("first_page"),
+        mutationKey: props.queryKey.concat("first_page"),
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
-                addToast({
+                toast({
                     status: "loading",
                     "title": "Loading to first page",
                     isClosable: false,
@@ -119,7 +113,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onSuccess(data) {
-            updateToast({
+            toast({
                 status: "success",
                 "title": "First page Loaded",
                 isClosable: true,
@@ -129,7 +123,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onError(error: Error) {
-            updateToast({
+            toast({
                 status: "error",
                 "title": "Error on Loading first page",
                 isClosable: true,
@@ -139,10 +133,10 @@ export default function CollectionComponnent_WithQuery<T>(props: {
         },
     });
     const last_page = useMutation({
-        mutationKey : props.queryKey.concat("last_page"),
+        mutationKey: props.queryKey.concat("last_page"),
         mutationFn: () => {
             return new Promise<Collection<T>>((resolve, reject) => {
-                addToast({
+                toast({
                     status: "loading",
                     "title": "Loading to last page",
                     isClosable: false,
@@ -156,7 +150,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onSuccess(data) {
-            updateToast({
+            toast({
                 status: "success",
                 "title": "Last page Loaded",
                 isClosable: true,
@@ -166,7 +160,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             });
         },
         onError(error: Error) {
-            updateToast({
+            toast({
                 status: "error",
                 "title": "Error on LastK first page",
                 isClosable: true,

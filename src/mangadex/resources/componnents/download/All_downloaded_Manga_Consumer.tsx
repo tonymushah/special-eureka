@@ -1,5 +1,4 @@
 import * as Chakra from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/react";
 import React from "react";
 import { useMutation, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import Consumer from "@commons-res/components/Consumer";
@@ -7,6 +6,8 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Collection } from "@mangadex/api/structures/Collection";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
+import { BeatLoader } from "react-spinners";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 export default function AllDownlaodedMangaConsumer(props : {
     children : (value : Array<string>) => React.ReactNode,
@@ -14,8 +15,10 @@ export default function AllDownlaodedMangaConsumer(props : {
 }) {
     const queryClient = useQueryClient();
     const client = useHTTPClient();
-    const toast = useToast();
     const query_key = ["mdx", "dowloaded_manga"];
+    const toast = useChakraToast({
+        id : JSON.stringify(query_key)
+    });
     const patch_all_manga = useMutation({
         mutationFn : () => {
             toast({
@@ -89,17 +92,22 @@ export default function AllDownlaodedMangaConsumer(props : {
     return(
         <Chakra.Box>
             <Chakra.Button
+                isLoading={queryClient.isFetching(query_key) != 0}
+                spinner={<BeatLoader size={8}/>}
                 onClick={() => {
                     queryClient.resetQueries(query_key);
                 }}
             >Refresh</Chakra.Button>
             &nbsp;
             <Chakra.Button
+                isLoading={patch_all_manga.isLoading}
+                spinner={<BeatLoader size={8}/>}
                 colorScheme={"facebook"}
                 onClick={() => patch_all_manga.mutate()}
             >Patch all manga cover</Chakra.Button>
             &nbsp;
             <Chakra.Button
+                isLoading={refetch.isLoading}
                 colorScheme={"orange"}
                 onClick={() => refetch.mutate()}
             >Refetch all manga</Chakra.Button>

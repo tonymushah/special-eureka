@@ -1,22 +1,15 @@
+import { ChapterDowloadResult } from "@mangadex/api/structures/Chapter";
 import { invoke } from "..";
 
 export async function download_chapter(chapterID: string) {
     const response = await invoke<string>("download_chapter", { chapterId: chapterID });
-    const response_Json: {
-        result: string,
-        dir: string,
-        downloaded: Array<string>
-    } = JSON.parse(response);
+    const response_Json: ChapterDowloadResult = JSON.parse(response);
     return response_Json;
 }
 
 export async function download_chapter_data_saver(chapterID: string) {
     const response = await invoke<string>("download_chapter_data_saver_mode", { chapterId: chapterID });
-    const response_Json: {
-        result: string,
-        dir: string,
-        downloaded: Array<string>
-    } = JSON.parse(response);
+    const response_Json: ChapterDowloadResult = JSON.parse(response);
     return response_Json;
 }
 

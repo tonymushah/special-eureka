@@ -9,6 +9,7 @@ export default function MangaManagerState(){
     const client = useHTTPClient();
     const key= ["mdx", "offline_server"];
     const toast = useToast({
+        id : "offline-server",
         position: "bottom-right",
         duration: 9000
     });

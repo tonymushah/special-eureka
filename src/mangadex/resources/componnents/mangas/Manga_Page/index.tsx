@@ -9,7 +9,7 @@ import { getMangaDexPath } from "@mangadex/index";
 import { Cover_Image_ } from "@mangadex/resources/componnents/mangas/Mainpage/Image_";
 import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
 import MangaTitle, { useMangaAltTitle, useMangaTitle } from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
-import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_manga_byId, get_manga_page_cover_art_image, useMangaDownload } from "@mangadex/resources/hooks/MangaStateHooks";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import { useQuery } from "@tanstack/react-query";
@@ -24,6 +24,8 @@ import ChakraContainer from "../../layout/Container";
 import MangaTags from "../tags";
 import { Get_status_color } from "../v1/MangaStatus";
 import { Author_Artists_Cmp_via_manga } from "./Author_Artists_Cmp";
+import { FiSave, FiRefreshCcw } from "react-icons/fi";
+import { BeatLoader } from "react-spinners";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
@@ -129,12 +131,40 @@ function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     );
 }
 
+function Manga__Download_Update_Button(props: {
+    manga_id: string
+}) {
+    const { query } = get_manga_byId({
+        mangaID: props.manga_id
+    });
+    const download_query = useMangaDownload({
+        mangaID: props.manga_id
+    });
+    return (
+        <Chakra.IconButton
+            backgroundColor={"orange.400"}
+            color={"white"}
+            _hover={{
+                backgroundColor : "orange.600"
+            }}
+            boxShadow={"md"}
+            isLoading={query.isLoading || download_query.isFetching}
+            spinner={<BeatLoader
+                size={8} color='black'
+            />}
+            aria-label={query.data?.isOffline ? "Update" : "Download"}
+            icon={query.data?.isOffline ? <FiRefreshCcw /> : <FiSave />}
+            onClick={() => download_query.refetch()}
+        />
+    );
+}
+
 export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
     const title = useMangaTitle({
         src: props.src
     });
     const altTitle = useMangaAltTitle({
-        src : props.src
+        src: props.src
     });
     const client = useHTTPClient();
     const coverQuery = get_manga_page_cover_art_image(props).query;
@@ -297,26 +327,29 @@ export function Manga_Page(props: React.PropsWithChildren<MangaPageProps>) {
                                                     </MangaTags>
                                                 </Chakra.Text>
                                                 <Chakra.Box>
-                                                    <React.Suspense
-                                                        fallback={
-                                                            <Chakra.Button
-                                                                isLoading
-                                                                colorScheme={"orange"}
-                                                                loadingText={"Loading..."}
-                                                            />
-                                                        }
-                                                    >
-                                                        <ExtLink
-                                                            href={"https://mangadex.org/title/" + props.src.get_id()}
+                                                    <Chakra.ButtonGroup>
+                                                        <React.Suspense
+                                                            fallback={
+                                                                <Chakra.Button
+                                                                    isLoading
+                                                                    colorScheme={"orange"}
+                                                                    loadingText={"Loading..."}
+                                                                />
+                                                            }
                                                         >
-                                                            <Chakra.Button
-                                                                colorScheme={"orange"}
-                                                                rightIcon={<ChakraIcons.ExternalLinkIcon />}
+                                                            <ExtLink
+                                                                href={"https://mangadex.org/title/" + props.src.get_id()}
                                                             >
-                                                                Open to Mangadex
-                                                            </Chakra.Button>
-                                                        </ExtLink>
-                                                    </React.Suspense>
+                                                                <Chakra.Button
+                                                                    colorScheme={"orange"}
+                                                                    rightIcon={<ChakraIcons.ExternalLinkIcon />}
+                                                                >
+                                                                    Open to Mangadex
+                                                                </Chakra.Button>
+                                                            </ExtLink>
+                                                        </React.Suspense>
+                                                        <Manga__Download_Update_Button manga_id={props.src.get_id()}/>
+                                                    </Chakra.ButtonGroup>
                                                 </Chakra.Box>
                                                 <Chakra.Box>
                                                     <React.Suspense

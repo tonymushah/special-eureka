@@ -9,6 +9,7 @@ import { Group } from "@mangadex/api/structures/Group";
 import { writeText } from "@tauri-apps/api/clipboard";
 import * as FontAwesome from "react-icons/fa";
 import ChakraContainer from "../layout/Container";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 const ExtLink = React.lazy(async () => {
     const res = await import("@commons-res/components/ExtLink");
@@ -22,7 +23,7 @@ const ReactMarkDown = React.lazy(() => import("react-markdown"));
 export default function Group_Details(props: {
     src: Group
 }) {
-    const toast = Chakra.useToast({
+    const toast = useChakraToast({
         position: "bottom-right",
         duration: 9000,
         isClosable: true
