@@ -163,7 +163,7 @@ export default function Chapter_Page_Success(props: {
                                     &nbsp;
                                     {
                                         props.data.get_volume() != null ? (
-                                            <>Volume {props.data.get_volume()}</>
+                                            <React.Fragment>Volume {props.data.get_volume()}</React.Fragment>
                                         ) : (<React.Fragment />)
                                     }
                                     &nbsp;
@@ -171,7 +171,6 @@ export default function Chapter_Page_Success(props: {
                                         props.data.get_title() == null || props.data.get_title() == "" ? (<></>) : (<> - {props.data.get_title()}</>)
                                     }
                                 </Chakra.Text>
-
                             </Chakra.HStack>
                         </Chakra.GridItem>
                         <Chakra.GridItem>
