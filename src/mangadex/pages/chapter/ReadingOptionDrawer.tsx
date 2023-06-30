@@ -141,11 +141,13 @@ export default function ReadingDrawer(props: {
                             zIndex={"100"}
                         />
                     ) : (
-                        <>
-                        </>
+                        <React.Fragment/>
                     )
                 }
-                <Chakra.DrawerContent zIndex={"100"}>
+                <Chakra.DrawerContent 
+                    zIndex={"100"}
+                    fontFamily={"inherit"}
+                >
                     <Chakra.DrawerCloseButton />
                     <Chakra.DrawerHeader>
                         Reading Option

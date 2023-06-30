@@ -1,5 +1,6 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Button, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure, useToast } from "@chakra-ui/react";
+import { Button, HStack, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from "@chakra-ui/react";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { open } from "@tauri-apps/api/shell";
 import React from "react";
 
@@ -12,7 +13,7 @@ type ExtLinkProps = {
 export function ExtLink(props: ExtLinkProps) {
     const { onOpen, onClose, isOpen } = useDisclosure();
     const [isTransition, startTransition] = React.useTransition();
-    const toast = useToast({
+    const toast = useChakraToast({
         "duration": 9000,
         "isClosable": true,
         "position": "bottom-right",

@@ -92,7 +92,7 @@ export default function Chapter_Page_Success(props: {
             <Chakra.Box
                 as={ChakraContainer}
             >
-                <Chakra.VStack>
+                <Chakra.VStack display={"block"}>
                     <React.Fragment>
                         <Chakra.Heading
                             size={{
@@ -143,9 +143,9 @@ export default function Chapter_Page_Success(props: {
                             }
                         </Chakra.HStack>
                     </React.Fragment>
-                    <Chakra.HStack>
-                        <React.Fragment>
-                            <Chakra.Center>
+                    <Chakra.Grid templateColumns={"repeat(3, 1fr)"}>
+                        <Chakra.GridItem>
+                            <Chakra.HStack alignItems={"center"}>
                                 <React.Suspense>
                                     <Await
                                         resolve={props.data.get_translated_Lang()}
@@ -159,19 +159,22 @@ export default function Chapter_Page_Success(props: {
                                         }
                                     </Await>
                                 </React.Suspense>
-                                &nbsp;
-                                {
-                                    props.data.get_volume() != null ? (
-                                        <>Volume {props.data.get_volume()}</>
-                                    ) : (<></>)
-                                }
-                                &nbsp;
-                                Chapter {props.data.get_chapter()} {
-                                    props.data.get_title() == null || props.data.get_title() == "" ? (<></>) : (<> - {props.data.get_title()}</>)
-                                }
-                            </Chakra.Center>
-                        </React.Fragment>
-                        <React.Fragment>
+                                <Chakra.Text as={"span"} noOfLines={1}>
+                                    &nbsp;
+                                    {
+                                        props.data.get_volume() != null ? (
+                                            <>Volume {props.data.get_volume()}</>
+                                        ) : (<React.Fragment />)
+                                    }
+                                    &nbsp;
+                                    Chapter {props.data.get_chapter()} {
+                                        props.data.get_title() == null || props.data.get_title() == "" ? (<></>) : (<> - {props.data.get_title()}</>)
+                                    }
+                                </Chakra.Text>
+
+                            </Chakra.HStack>
+                        </Chakra.GridItem>
+                        <Chakra.GridItem>
                             <React.Suspense
                                 fallback={
                                     <Chakra.Skeleton
@@ -182,15 +185,15 @@ export default function Chapter_Page_Success(props: {
                             >
                                 <ChapterReadingState chapter={props.data} />
                             </React.Suspense>
-                        </React.Fragment>
-                        <React.Fragment>
+                        </Chakra.GridItem>
+                        <Chakra.GridItem>
                             <React.Suspense
                                 fallback={<Chakra.Spinner></Chakra.Spinner>}
                             >
                                 <ReadingOptions />
                             </React.Suspense>
-                        </React.Fragment>
-                    </Chakra.HStack>
+                        </Chakra.GridItem>
+                    </Chakra.Grid>
                 </Chakra.VStack>
 
             </Chakra.Box>

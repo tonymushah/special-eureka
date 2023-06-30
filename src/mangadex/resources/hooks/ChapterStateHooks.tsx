@@ -1,16 +1,16 @@
-import { ToastId, useToast } from "@chakra-ui/react";
+import { ToastId } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { reset_queue } from "@mangadex/api/offline/plugin";
-import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
 import { Group } from "@mangadex/api/structures/Group";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { User } from "@mangadex/api/structures/User";
+import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
+import { QueryKey, UseQueryOptions, UseQueryResult, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { QueryKey, useMutation, useQueries, useQuery, useQueryClient, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import MangaTitle from "../componnents/mangas/v1/MangaTitle";
 import { get_mangaQueryKey_byID } from "./MangaStateHooks";
-import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 
 export type ChapterDeleteMutation_data = {
@@ -250,7 +250,7 @@ export function useChapterDataSaverDownloadMutation(props: {
 
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const toast = useToast({
+    const toast = useChakraToast({
         id : `mdx-mutation-chapter-${props.chapID}-download-data-saver`,
         position: "bottom-right",
         duration: 9000,
@@ -339,7 +339,7 @@ export function useChapterDeleteMutation(props: {
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const toast = useToast({
+    const toast = useChakraToast({
         id : `mdx-mutation-chapter-${props.chapID}-delete`,
         position: "bottom-right",
         duration: 9000,
@@ -351,7 +351,7 @@ export function useChapterDeleteMutation(props: {
             const chap = await Chapter.get_ChapterbyId(props.chapID, client);
             const manga = await chap.data.get_manga();
             await chap.data.delete(client);
-            toastID.current = toast({
+            toast({
                 status: "loading",
                 title: "Deleting Chapter",
                 description: "It will be quick..."
@@ -372,7 +372,7 @@ export function useChapterDeleteMutation(props: {
         onSuccess(data) {
             const title = (<MangaTitle src={data.manga} />);
             if (toastID.current != undefined) {
-                toast.update(toastID.current, {
+                toast({
                     status: "success",
                     isClosable: true,
                     title: "Deleted chapter",

@@ -1,13 +1,12 @@
 import { checkUpdate, installUpdate, UpdateResult } from "@tauri-apps/api/updater";
 import { useQuery } from "@tanstack/react-query";
-import { useDashboardToast } from "./DashBoardToasts";
-import { useToast } from "@chakra-ui/react";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 
 export function TauriCheckUpdateQuery(props : {
     withoutToast?: boolean
 }){
-    const toast = useToast({
+    const toast = useChakraToast({
         "position" : "bottom-right",
         "isClosable" : false,
         "duration" : 9000,
@@ -69,7 +68,7 @@ export function useTauriInstallUpdate(props: {
     withoutToast?: boolean,
     notify?: boolean
 }){
-    const toast = useToast({
+    const toast = useChakraToast({
         "position" : "bottom-right",
         "isClosable" : false,
         "duration" : 9000,

@@ -11,6 +11,7 @@ import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Heading } from "@chakra-ui/react";
 import { Client } from "@tauri-apps/api/http";
+import randomInteger from "random-int";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
@@ -52,6 +53,7 @@ export default function RecentlyPopular() {
                 <Chakra.Box>
                     {query.isSuccess == true ? (
                         <Swiper
+                            tabIndex={randomInteger(0, query.data.get_data().length - 1)}
                             navigation={true}
                             keyboard={true}
                             modules={[Navigation, Keyboard]}

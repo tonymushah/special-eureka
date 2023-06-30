@@ -1,12 +1,10 @@
-import { ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
-import { Cover } from "@mangadex/api/structures/Cover";
-import React from "react";
-import { useQueryClient, useQuery, UseQueryOptions, useQueries, QueryKey } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { Alt_title, Lang_and_Data } from "@mangadex/api/internal/Utils";
+import { Cover } from "@mangadex/api/structures/Cover";
 import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { MangaPageProps } from "@mangadex/resources/componnents/mangas/Manga_Page";
-import { useChakraToast } from "@commons-res/hooks/useChakraToast";
+import { QueryKey, useQueries, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 
 
 export function useMangaDownload(props: {
@@ -18,7 +16,9 @@ export function useMangaDownload(props: {
         position: "bottom-right",
         duration: 9000
     });
-    const queryClient = useQueryClient();
+    const manga_query = get_manga_byId({
+        mangaID : props.mangaID
+    });
     const key = ["mdx", "manga", props.mangaID, "mutation", "download"];
     const query = useQuery(key, () => {
         toast({
@@ -41,9 +41,7 @@ export function useMangaDownload(props: {
                 description: title,
                 isClosable: true
             });
-            queryClient.refetchQueries({
-                queryKey: key
-            });
+            manga_query.query.refetch();
         },
         onError(error) {
             toast({
@@ -63,24 +61,17 @@ export function useMangaDelete(props: {
     mangaID: string
 }) {
     const client = useHTTPClient();
-    const toast = useToast({
+    const toast = useChakraToast({
         id : `mdx-mutation-manga-${props.mangaID}-delete`,
         position: "bottom-right",
         duration: 9000
     });
-    const toastID = React.useRef<ToastId>();
-    function addToast(props?: UseToastOptions) {
-        toastID.current = toast(props);
-    }
-    function updateToast(props?: UseToastOptions) {
-        if (toastID.current != undefined && props != undefined) {
-            toast.update(toastID.current, props);
-        }
-    }
-    const queryClient = useQueryClient();
+    const manga_query = get_manga_byId({
+        mangaID : props.mangaID
+    });
     const key = ["mdx", "manga", props.mangaID, "mutation", "delete"];
     const query = useQuery(key, () => {
-        addToast({
+        toast({
             title: "Deleting manga...",
             status: "loading",
             isClosable: true
@@ -88,18 +79,15 @@ export function useMangaDelete(props: {
         return Manga.delete_aDownloaded_manga(props.mangaID, client);
     }, {
         onSuccess: () => {
-            updateToast({
+            toast({
                 title: "Deleted manga",
                 status: "success",
                 isClosable: true
             });
-            queryClient.removeQueries({
-                queryKey: key,
-                exact: true
-            });
+            manga_query.query.refetch();
         },
         onError(error: any) {
-            updateToast({
+            toast({
                 title: "Error on deleting manga",
                 status: "error",
                 description: JSON.stringify(error),

@@ -6,6 +6,7 @@ import { User } from "@mangadex/api/structures/User";
 import UserGroups from "@mangadex/resources/componnents/user/userPage/UserGroups";
 import UserUploadsNumber from "@mangadex/resources/componnents/user/userPage/UserUploadsNumber";
 import { hashQueryKey } from "@tanstack/react-query";
+import RoleTag from "../roleTag";
 
 export default function UserPageInfo(props: {
     user: User
@@ -28,7 +29,7 @@ export default function UserPageInfo(props: {
                     <Heading fontFamily={"inherit"} size={"md"}>Roles : </Heading>
                     {
                         props.user.get_roles().map((value) => (
-                            <Chakra.Tag key={hashQueryKey(value)}>{value}</Chakra.Tag>
+                            <RoleTag key={hashQueryKey([value])} role={value}/>
                         ))
                     }
                 </Chakra.HStack>

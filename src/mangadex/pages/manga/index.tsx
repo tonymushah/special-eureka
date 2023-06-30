@@ -8,7 +8,7 @@ import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { Outlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
 
 type MangaPage_OutletContex = {
     toUse: Manga
@@ -18,6 +18,13 @@ export function useManga() {
     return useOutletContext<MangaPage_OutletContex>();
 }
 
+function Outlet(props : {
+    context : MangaPage_OutletContex
+}){
+    return(
+        <ReactRouterOutlet context={props.context}/>
+    );
+}
 
 export default function MangaPage() {
     const client = useHTTPClient();
