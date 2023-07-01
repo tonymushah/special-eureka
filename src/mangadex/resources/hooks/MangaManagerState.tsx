@@ -1,4 +1,3 @@
-import { useToast } from "@chakra-ui/react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import DesktopApi from "@mangadex/api/offline/DeskApiRequest";
@@ -19,13 +18,19 @@ export default function MangaManagerState(){
         return getted;
     }, {
         "staleTime" : 0,
-        "refetchOnWindowFocus" : true
+        "refetchOnWindowFocus" : true,
+        retry: 0
     });
     const switch_server_state = useMutation({
         mutationKey : key.concat("mutation"),
         "mutationFn" : async () => {
-            return query.data == false ? await launch_server() : await stop_server();
+            if(query.data == true){
+                return await launch_server();
+            }else{
+                return await stop_server();
+            }
         },
+        "retry" : 0,
         onSuccess: () => {
             query.refetch();
         }, 

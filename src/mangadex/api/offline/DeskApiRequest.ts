@@ -79,7 +79,7 @@ export default class Api_Request{
     }
     public static async ping(client? : Client): Promise<boolean>{
         try{
-            return is_server_started();
+            return await is_server_started();
         }catch(e){
             return false;
         }
