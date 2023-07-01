@@ -30,13 +30,13 @@ export function Volume_(props: Volume_Props) {
                     >
                         {
                             isExpanded == true && isDisabled == false ? (
-                                <React.Fragment>
+                                <Chakra.Accordion allowMultiple>
                                     {
                                         props.src.get_chapters().map((getted, index) => (
                                             <ChaptersComp key={`${props.src.get_name()}-${index}`} src={getted}></ChaptersComp>
                                         ))
                                     }
-                                </React.Fragment>
+                                </Chakra.Accordion>
                             ) : (
                                 <React.Fragment />
                             )

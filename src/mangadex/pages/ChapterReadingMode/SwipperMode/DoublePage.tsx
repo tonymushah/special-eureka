@@ -6,26 +6,6 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
 
-const context = React.createContext<Array<string>>([]);
-
-function DoublePageDataProvider(props : React.PropsWithChildren<{
-    value : Array<string>
-}>){
-    return (
-        <context.Provider value={props.value}>
-            {props.children}
-        </context.Provider>
-    );
-}
-
-function useDoublePageData(){
-    return React.useContext(context);
-}
-
-function DoublePageSlide(){
-    
-}
-
 export default function DoublePage({data} : {
     data : ChapterPage_outlet_context
 }){

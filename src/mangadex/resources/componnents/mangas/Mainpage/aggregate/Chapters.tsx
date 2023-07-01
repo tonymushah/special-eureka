@@ -13,25 +13,19 @@ type Chapters_ElementProps = {
 function Chapters_Element(props: Chapters_ElementProps) {
     return (
         <ChakraContainer>
-            <Accordion defaultIndex={[0]} allowMultiple>
-                <AccordionItem>
-                    <h2>
-                        <AccordionButton>
-                            <Box>
-                                {props.headersTitle}
-                            </Box>
-                            <AccordionIcon/>
-                        </AccordionButton>
-                    </h2>
-                </AccordionItem>
-                <AccordionPanel motionProps={{
-                    unmountOnExit : true
-                }}>
-                    <React.Fragment>
-                        {props.children}
-                    </React.Fragment>
+            <AccordionItem>
+                <h2>
+                    <AccordionButton>
+                        <Box flex='1' textAlign='left'>
+                            {props.headersTitle}
+                        </Box>
+                        <AccordionIcon />
+                    </AccordionButton>
+                </h2>
+                <AccordionPanel>
+                    {props.children}
                 </AccordionPanel>
-            </Accordion>
+            </AccordionItem>
         </ChakraContainer>
     );
 }
@@ -40,40 +34,40 @@ type ChaptersProps = {
     src: Chapters
 }
 
-export function ChaptersComp(props : React.PropsWithChildren<ChaptersProps>){
+export function ChaptersComp(props: React.PropsWithChildren<ChaptersProps>) {
     if (props.src.get_count() == 1) {
-            return (
-                <React.Suspense fallback={
-                    <div className="text-center">
-                        <Spinner animation="border"/>
-                        <br />
-                        <span>Initializing chapters ...</span>
-                    </div>
-                }>
+        return (
+            <React.Suspense fallback={
+                <div className="text-center">
+                    <Spinner animation="border" />
+                    <br />
+                    <span>Initializing chapters ...</span>
+                </div>
+            }>
+                {
+                    props.src.get_ids().map((value, id) => (
+                        <Chapter_Element1_byChapID key={`----${id}----`} id={value} />
+                    ))
+                }
+            </React.Suspense>
+        );
+    } else {
+        return (
+            <React.Suspense fallback={
+                <div className="text-center">
+                    <Spinner animation="border" />
+                    <br />
+                    <span>Initializing chapters ...</span>
+                </div>
+            }>
+                <Chapters_Element headersTitle={"Chapter " + props.src.get_name()}>
                     {
                         props.src.get_ids().map((value, id) => (
-                            <Chapter_Element1_byChapID key={`----${id}----`} id={value} />
+                            <Chapter_Element1_byChapID id={value} key={`--------${id}-------`} with_all_includes />
                         ))
                     }
-                </React.Suspense>
-            );
-        } else {
-            return (
-                <React.Suspense fallback={
-                    <div className="text-center">
-                        <Spinner animation="border"/>
-                        <br />
-                        <span>Initializing chapters ...</span>
-                    </div>
-                }>
-                    <Chapters_Element headersTitle={"Chapter " + props.src.get_name()}>
-                        {
-                            props.src.get_ids().map((value, id) => (
-                                <Chapter_Element1_byChapID id={value} key={`--------${id}-------`} with_all_includes/>
-                            ))
-                        }
-                    </Chapters_Element>
-                </React.Suspense>
-            );
-        }
+                </Chapters_Element>
+            </React.Suspense>
+        );
+    }
 }
