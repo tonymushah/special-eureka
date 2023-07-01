@@ -24,7 +24,7 @@ export default function MangaManagerState(){
     const switch_server_state = useMutation({
         mutationKey : key.concat("mutation"),
         "mutationFn" : async () => {
-            if(query.data == true){
+            if(query.data == false){
                 return await launch_server();
             }else{
                 return await stop_server();
