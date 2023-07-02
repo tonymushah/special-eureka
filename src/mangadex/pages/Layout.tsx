@@ -2,7 +2,7 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import { Outlet } from "react-router-dom";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
 import React from "react";
-import { Mangadex_suspense, trackEvent } from "@mangadex";
+import { Mangadex_suspense, trackEvent } from "@mangadex/index";
 import ServerAutoStartLoader from "@mangadex/resources/componnents/loaders/ServerAutoStart";
 import UserOptionProvider from "../resources/componnents/userOption/UserOptionProvider";
 import { QueryClient } from "@tanstack/react-query";

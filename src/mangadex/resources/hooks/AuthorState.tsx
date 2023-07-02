@@ -1,10 +1,10 @@
 import { Client } from "@tauri-apps/api/http";
 import { QueryKey, useQuery } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { Author } from "@mangadex/api/structures/Author";
 import { Collection } from "@mangadex/api/structures/Collection";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
 
 export function get_author_queryKey_byID(props: {
     author_id: string
@@ -32,14 +32,10 @@ export async function get_author_works_promise(props: {
     author_id: string,
     client: Client
 }) {
-    const author = (await Author.getAuthorById(props.author_id, props.client));
-    await author.build_Works(props.client);
-    const works = author.get_works();
-    if(works){
-        return works;
-    }else{
-        throw new Error("this author has no work");
-    }
+    return await Manga_with_allRelationship.search({
+        offset_Limits: new Offset_limits(),
+        authorOrArtist : props.author_id
+    });
 }
 
 export function get_author_works_query_key_byAuthor_ID(props: {

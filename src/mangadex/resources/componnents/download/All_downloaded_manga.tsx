@@ -8,7 +8,7 @@ export default function AllDownlaodedMangaList() {
         <AllDownlaodedMangaConsumer>
             {
                 (value) => (
-                    <>
+                    <React.Fragment>
                         {
                             value.map((value: string, index: number) => (
                                 <Chakra.WrapItem key={`allDownloaded${index}`}>
@@ -16,7 +16,7 @@ export default function AllDownlaodedMangaList() {
                                 </Chakra.WrapItem>
                             ))
                         }
-                    </>
+                    </React.Fragment>
                 )
             }
         </AllDownlaodedMangaConsumer>

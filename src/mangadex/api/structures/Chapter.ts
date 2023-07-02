@@ -21,6 +21,13 @@ import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
 import { download_chapter, download_chapter_data_saver } from "@mangadex/plugin";
 import IsDownloadedResult from "./additonal_types/IsDownloadedResult";
 
+export type ChapterDowloadResult = {
+    result : string,
+    dir : string,
+    downloaded : Array<string>,
+    errors : Array<string>
+}
+
 export class Chapter extends Attribute {
     private title!: string;
     private volume!: string;
@@ -384,7 +391,7 @@ export class Chapter extends Attribute {
         return this.get_some_relationship("manga")[0].get_id();
     }
     public async get_manga(client?: Client): Promise<Manga> {
-        return Manga.getMangaByID(this.get_manga_id(), client);
+        return (await Manga.getMangaByID(this.get_manga_id(), client)).manga;
     }
     public get_user_id(): string {
         return this.get_some_relationship("user")[0].get_id();
@@ -408,11 +415,7 @@ export class Chapter extends Attribute {
         throw new Error("can't find your scanlation group attribute");
     }
     public async get_scanlation_group_byID(id: string, client?: Client): Promise<Group> {
-        try {
-            return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id(), client);
-        } catch (error) {
-            throw error;
-        }
+        return Group.get_groupById(this.get_scanlation_group_attr_byID(id).get_id(), client);
     }
     public async get_offlineDataImages(client?: Client): Promise<Array<string>> {
         const data = await Chapter.getAOfflineChapter_Data(this.get_id(), client);
@@ -455,26 +458,24 @@ export class Chapter extends Attribute {
             return await this.get_onlineDataSaverImages(client);
         }
     }
-    public static async download(chapterID: string, client?: Client): Promise<Array<string>> {
+    public static async download(chapterID: string, client?: Client): Promise<ChapterDowloadResult> {
         if (await DeskApiRequest.ping(client) == true) {
-            const response_Json = await download_chapter(chapterID);
-            return response_Json.downloaded;
+            return await download_chapter(chapterID);
         } else {
             throw new Error("The offline server isn't started");
         }
     }
-    public static async download_data_saver(chapterID: string, client?: Client): Promise<Array<string>> {
+    public static async download_data_saver(chapterID: string, client?: Client): Promise<ChapterDowloadResult> {
         if (await DeskApiRequest.ping(client) == true) {
-            const response_Json = await download_chapter_data_saver(chapterID);
-            return response_Json.downloaded;
+            return await download_chapter_data_saver(chapterID);
         } else {
             throw new Error("The offline server isn't started");
         }
     }
-    public async download_this(client?: Client): Promise<Array<string>> {
+    public async download_this(client?: Client): Promise<ChapterDowloadResult> {
         return await Chapter.download(this.get_id(), client);
     }
-    public async download_this_data_saver(client?: Client): Promise<Array<string>> {
+    public async download_this_data_saver(client?: Client): Promise<ChapterDowloadResult> {
         return await Chapter.download_data_saver(this.get_id(), client);
     }
     public static async delete_a_downloaded_chapter(id: string, client?: Client){

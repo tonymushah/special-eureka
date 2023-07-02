@@ -25,4 +25,5 @@ export default interface MangaSearchType {
   latestUploadedChapter?: boolean;
   group?: string;
   client? : Client;
+  authorOrArtist?: string
 }

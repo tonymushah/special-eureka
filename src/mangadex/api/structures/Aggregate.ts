@@ -151,4 +151,9 @@ export class Aggregate {
         }
         throw Error("this chapter " + id + " isn't in this manga");
     }
+    public sortVolumesChapters() {
+        this.volumes.forEach((v) => {
+            v.sort_volume();
+        });
+    }
 }

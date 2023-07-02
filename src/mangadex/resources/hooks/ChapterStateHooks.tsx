@@ -1,13 +1,14 @@
-import { ToastId, useToast } from "@chakra-ui/react";
+import { ToastId } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { reset_queue } from "@mangadex/api/offline/plugin";
-import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
 import { Group } from "@mangadex/api/structures/Group";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { User } from "@mangadex/api/structures/User";
+import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
+import { QueryKey, UseQueryOptions, UseQueryResult, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { QueryKey, useMutation, useQueries, useQuery, useQueryClient, UseQueryOptions, UseQueryResult } from "@tanstack/react-query";
 import MangaTitle from "../componnents/mangas/v1/MangaTitle";
 import { get_mangaQueryKey_byID } from "./MangaStateHooks";
 
@@ -24,7 +25,8 @@ export function get_chapter_queryKey(props: {
 }
 
 export function reset_queue_mutation() {
-    const toast = useToast({
+    const toast = useChakraToast({
+        id : "mdx-reset-queue",
         position: "bottom-right",
         duration: 9000,
     });
@@ -153,23 +155,27 @@ export function useChapterDownloadMutation(props: {
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const toast = useToast({
+    const toast = useChakraToast({
+        id : `mdx-mutation-chapter-${props.chapID}-download`,
         position: "bottom-right",
         duration: 9000,
     });
-    const download_query = useQuery<ChapterDeleteMutation_data, Error>({
+    const download_query = useQuery<ChapterDeleteMutation_data & {
+        hasFailed : boolean
+    }, Error>({
         queryKey: ["mdx", "mutation", "chapter", props.chapID, "download"],
         queryFn: async () => {
             toast({
                 status: "loading",
                 title: "Downloading chapter"
             });
-            await Chapter.download(props.chapID, client);
+            const res = await Chapter.download(props.chapID, client);
             const chapter = (await Chapter.get_ChapterbyId(props.chapID, client)).data;
             const manga = await chapter.get_manga(client);
             return {
                 chapter: chapter,
-                manga: manga
+                manga: manga,
+                hasFailed : res.errors.length != 0
             };
         },
         onError(error) {
@@ -205,19 +211,19 @@ export function useChapterDownloadMutation(props: {
         onSuccess(data) {
             const title = (<MangaTitle src={data.manga} />);
             toast({
-                status: "success",
+                status: data.hasFailed? "warning" : "success",
                 isClosable: true,
                 title: "Downloaded chapter",
                 description: (
                     <React.Fragment>
                         &nbsp;
-                        <>
+                        <React.Fragment>
                             Vol. {data.chapter.get_volume()} -
-                        </>
+                        </React.Fragment>
                         &nbsp;
-                        <>
+                        <React.Fragment>
                             Chap {data.chapter.get_chapter()}
-                        </>
+                        </React.Fragment>
                         &nbsp;
                         {
                             title
@@ -244,7 +250,8 @@ export function useChapterDataSaverDownloadMutation(props: {
 
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const toast = useToast({
+    const toast = useChakraToast({
+        id : `mdx-mutation-chapter-${props.chapID}-download-data-saver`,
         position: "bottom-right",
         duration: 9000,
     });
@@ -332,7 +339,8 @@ export function useChapterDeleteMutation(props: {
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const toast = useToast({
+    const toast = useChakraToast({
+        id : `mdx-mutation-chapter-${props.chapID}-delete`,
         position: "bottom-right",
         duration: 9000,
     });
@@ -343,7 +351,7 @@ export function useChapterDeleteMutation(props: {
             const chap = await Chapter.get_ChapterbyId(props.chapID, client);
             const manga = await chap.data.get_manga();
             await chap.data.delete(client);
-            toastID.current = toast({
+            toast({
                 status: "loading",
                 title: "Deleting Chapter",
                 description: "It will be quick..."
@@ -364,7 +372,7 @@ export function useChapterDeleteMutation(props: {
         onSuccess(data) {
             const title = (<MangaTitle src={data.manga} />);
             if (toastID.current != undefined) {
-                toast.update(toastID.current, {
+                toast({
                     status: "success",
                     isClosable: true,
                     title: "Deleted chapter",

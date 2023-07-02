@@ -1,25 +1,20 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import { Box, Button, Center, ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
 import React from "react";
-import { Attribute } from "../../../api/structures/Attributes";
-import { Collection } from "../../../api/structures/Collection";
+import { Attribute } from "@mangadex/api/structures/Attributes";
+import { Collection } from "@mangadex/api/structures/Collection";
 import UseCollection from "./UseCollection";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 export default function CollectionComponnent<T extends Attribute>(props: {
     src: Collection<T>,
-    children: (value: Collection<T>) => React.ReactNode
+    children: (value: Collection<T>) => React.ReactNode,
+    id? : ToastId
 }) {
-    const toast = useToast();
-    const toastID = React.useRef<ToastId>();
+    const toast = useChakraToast({
+        id : props.id
+    });
     const [collection, setCollection] = React.useState<Collection<T>>(props.src);
-    function addToast(props?: UseToastOptions) {
-        toastID.current = toast(props);
-    }
-    function updateToast(props?: UseToastOptions) {
-        if (toastID.current != undefined && props != undefined) {
-            toast.update(toastID.current, props);
-        }
-    }
     return (
         <Box>
             <Box>
@@ -31,14 +26,14 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                 <Center>
                     <Button
                         onClick={() => {
-                            addToast({
+                            toast({
                                 status: "loading",
                                 "title": "Loading to previous page",
                                 isClosable: false,
                                 "position": "bottom-right"
                             });
                             collection.previous().then((value: Collection<T>) => {
-                                updateToast({
+                                toast({
                                     status: "success",
                                     "title": "Previous page Loaded",
                                     isClosable: true,
@@ -46,7 +41,7 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                 });
                                 setCollection(value);
                             }).catch(reason => {
-                                updateToast({
+                                toast({
                                     status: "error",
                                     "title": "Error on Loading Previous page",
                                     isClosable: true,
@@ -59,14 +54,14 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                     </Button>
                     <Button
                         onClick={() => {
-                            addToast({
+                            toast({
                                 status: "loading",
                                 "title": "Loading next page",
                                 "position": "bottom-right",
                                 isClosable: false
                             });
                             collection.next().then((value: Collection<T>) => {
-                                updateToast({
+                                toast({
                                     status: "success",
                                     "title": "Next page Loaded",
                                     isClosable: true,
@@ -74,7 +69,7 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                 });
                                 setCollection(value);
                             }).catch(reason => {
-                                updateToast({
+                                toast({
                                     status: "error",
                                     "title": "Error on Loading next page",
                                     isClosable: true,

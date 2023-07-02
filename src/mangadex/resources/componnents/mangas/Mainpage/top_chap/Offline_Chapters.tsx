@@ -1,12 +1,10 @@
 import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { Spinner } from "react-bootstrap";
-import { useHTTPClient } from "../../../../../../commons-res/components/HTTPClientProvider";
-import Chapter_Element1_byChapID from "../../../chapter/v1/Chapter_Element1_byChapID";
+import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import { MangaPageProps } from "../../Manga_Page";
 
-const All_downloaded_Chapter_manga = React.lazy(() => import("../../../download/All_downloaded_Chapter_manga"));
+const All_downloaded_Chapter_manga = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_Chapter_manga"));
 
 export default function Offline_Chapters(props: MangaPageProps) {
     return (
@@ -16,9 +14,9 @@ export default function Offline_Chapters(props: MangaPageProps) {
                 fallback={
                     <Chakra.Box m={2} bg="inherit">
                         <div className=" text-center">
-                            <Spinner
+                            <Chakra.Spinner
                                 animation="border"
-                            ></Spinner>
+                            />
                             <br />
                             <p>Loading chapters ...</p>
                         </div>
@@ -32,7 +30,7 @@ export default function Offline_Chapters(props: MangaPageProps) {
                         <Chakra.VStack>
                             {
                                 getted.map((value: string) => (
-                                    <Chapter_Element1_byChapID id={value} />
+                                    <Chapter_Element1_byChapID key={value} id={value} />
                                 ))
                             }
                         </Chakra.VStack>

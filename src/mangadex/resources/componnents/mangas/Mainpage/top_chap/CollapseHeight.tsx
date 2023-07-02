@@ -8,7 +8,7 @@ export default function CollapseHeight(props: React.PropsWithChildren) {
     const handleToggle = () => setShow(!show);
 
     return (
-        <>
+        <React.Fragment>
             <Chakra.Box
                 display={{
                     base: "none",
@@ -25,6 +25,7 @@ export default function CollapseHeight(props: React.PropsWithChildren) {
                     base: "inherit",
                     md: "none"
                 }}
+                width={"100%"}
             >
                 <Chakra.Collapse startingHeight={20} in={show}
                 >
@@ -33,12 +34,14 @@ export default function CollapseHeight(props: React.PropsWithChildren) {
                     }
                 </Chakra.Collapse>
             </Chakra.Box>
-            <Chakra.Button display={{
-                base: "inherit",
-                md: "none"
-            }} size='sm' onClick={handleToggle} mt='1rem'>
-                Show {show ? "Less" : "More"}
-            </Chakra.Button>
-        </>
+            <Chakra.Center>
+                <Chakra.Button display={{
+                    base: "inherit",
+                    md: "none"
+                }} size='sm' onClick={handleToggle} mt='1rem'>
+                    Show {show ? "Less" : "More"}
+                </Chakra.Button>
+            </Chakra.Center>
+        </React.Fragment>
     );
 }

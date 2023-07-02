@@ -1,11 +1,11 @@
 import { Box, Button, Center, Heading, Link, Skeleton, Text } from "@chakra-ui/react";
 import React from "react";
-import { Container } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
 import { TauriCheckUpdateQuery, useTauriInstallUpdate } from "@dashboard/resources/hooks/UpdaterQuery";
 import { appWindow } from "@tauri-apps/api/window";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 export default function InstallUpdate() {
     const shouldUpdate = TauriCheckUpdateQuery({
@@ -20,17 +20,17 @@ export default function InstallUpdate() {
             appWindow.setTitle("No update required | Dashboard").then();
             return (
                 <Box>
-                    <Container>
+                    <ChakraContainer>
                         <Heading textAlign={"center"}>There is no need to update</Heading>
                         <Text textAlign={"center"}>Your application version is up to date</Text>
-                    </Container>
+                    </ChakraContainer>
                 </Box>
             );
         } else {
             appWindow.setTitle(`Special Eureka ${shouldUpdate.query.data.manifest?.version} is available | Dashboard`).then();
             return (
                 <Box>
-                    <Container>
+                    <ChakraContainer>
                         <Heading textAlign={"center"}>An update is available</Heading>
                         <Text textAlign={"center"}>Version : {shouldUpdate.query.data.manifest?.version}</Text>
                         <Text textAlign={"center"}>Date : {shouldUpdate.query.data.manifest?.date}</Text>
@@ -67,19 +67,19 @@ export default function InstallUpdate() {
                                     }}>Update</Button>
                             </Center>
                         </Center>
-                    </Container>
+                    </ChakraContainer>
                 </Box>
             );
         }
     } else {
         return (
             <Box>
-                <Container>
+                <ChakraContainer>
                     <Heading textAlign={"center"}>Please check if there is some update first</Heading>
                     <Center>
                         <Tauri_Updater />
                     </Center>
-                </Container>
+                </ChakraContainer>
             </Box>
         );
     }

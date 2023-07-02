@@ -1,8 +1,7 @@
-import React from "react";
-import { Placeholder, Row } from "react-bootstrap";
-import { Author } from "../../../../../api/structures/Author";
-import { Manga } from "../../../../../api/structures/Manga";
-import { get_manga_page_authors_artists } from "../../../../hooks/MangaStateHooks";
+import { Skeleton, Wrap, WrapItem } from "@chakra-ui/react";
+import { Author } from "@mangadex/api/structures/Author";
+import { Manga } from "@mangadex/api/structures/Manga";
+import { get_manga_page_authors_artists } from "@mangadex/resources/hooks/MangaStateHooks";
 import { AuthorCol } from "../boutons/author_boutons";
 
 export default function Author_Artists(props: {
@@ -17,24 +16,24 @@ export default function Author_Artists(props: {
     
     if (is_Artists_finished() == false && is_Authors_finished() == false) {
         return (
-            <Placeholder lg={10}></Placeholder>
+            <Skeleton height={"10"} width={"200px"}/>
         );
     } else {
         return (
-            <Row>
-                <>
+            <Wrap>
+                <WrapItem>
 
                     <AuthorCol title="Authors" src={authors.map<Author>((value) => {
                         return value.data!;
                     })} />
 
-                </>
-                <>
+                </WrapItem>
+                <WrapItem>
                     <AuthorCol title="Artistists" src={artistists.map<Author>((value) => {
                         return value.data!;
                     })} />
-                </>
-            </Row>
+                </WrapItem>
+            </Wrap>
         );
     }
 }

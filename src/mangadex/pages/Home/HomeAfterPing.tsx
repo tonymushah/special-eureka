@@ -1,15 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { List } from "@mangadex/api/structures/List";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { Row } from "react-bootstrap";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { loader as latest, queryKey as latest_QueryKey } from "./Latest_Update";
 import { loader as popular, queryKey as popular_QueryKey } from "./PopularTitles";
 import { loader as recentlyAdded, queryKey as recentlyAdded_QueryKey } from "./RecentlyAdded";
 import { getSeasonalId } from "./Seasonal";
-import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 const Seasonal = React.lazy(() => import("./Seasonal"));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
@@ -61,8 +60,11 @@ export default function HomeAfterPing() {
     });
     if (query.isSuccess) {
         return (
-            <React.Fragment>
-                <Row className='d-block'>
+            <Chakra.VStack
+                display={"block"}
+                divider={<Chakra.StackDivider/>}
+            >
+                <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={<Chakra.Box >
                             <Chakra.Center>
@@ -74,6 +76,9 @@ export default function HomeAfterPing() {
                     >
                         <PopularRecently />
                     </React.Suspense>
+                    
+                </Chakra.Box>
+                <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={<Chakra.Box >
                             <Chakra.Center>
@@ -85,10 +90,9 @@ export default function HomeAfterPing() {
                     >
                         <Seasonal />
                     </React.Suspense>
-                </Row>
-                <Chakra.Divider />
-                <Row
-                    className='d-block'
+                </Chakra.Box>
+                <Chakra.Box
+                    display={"block"}
                 >
                     <React.Suspense
                         fallback={<Chakra.Box >
@@ -101,9 +105,9 @@ export default function HomeAfterPing() {
                     >
                         <Latest_Updates />
                     </React.Suspense>
-                </Row>
-                <Row
-                    className='d-block'
+                </Chakra.Box>
+                <Chakra.Box
+                    display={"block"}
                 >
                     <React.Suspense
                         fallback={<Chakra.Box >
@@ -116,8 +120,8 @@ export default function HomeAfterPing() {
                     >
                         <RecentlyAdded />
                     </React.Suspense>
-                </Row>
-            </React.Fragment>
+                </Chakra.Box>
+            </Chakra.VStack>
         );
     }
     if(query.isError){

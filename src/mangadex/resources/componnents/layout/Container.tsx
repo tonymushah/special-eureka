@@ -1,7 +1,6 @@
-import { Container } from "@chakra-ui/react";
-import React from "react";
+import { Container, ContainerProps } from "@chakra-ui/react";
 
-export default function ChakraContainer(props: React.PropsWithChildren) {
+export default function ChakraContainer(props: ContainerProps) {
     return (
         <Container
             maxWidth={{
@@ -10,7 +9,7 @@ export default function ChakraContainer(props: React.PropsWithChildren) {
                 lg: "container.lg",
                 xl: "container.xl"
             }}
-            margin={2}
+            {...props}
         >
             {
                 props.children

@@ -329,6 +329,28 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-stream"
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cd56dd203fef61ac097dd65721a419ddccb106b2d2b70ba60a6b529f03961a51"
+dependencies = [
+ "async-stream-impl",
+ "futures-core",
+ "pin-project-lite",
+]
+
+[[package]]
+name = "async-stream-impl"
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "16e62a023e7c117e27523144c5d2459f4397fcc3cab0085af8e2224f643a0193"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.18",
+]
+
+[[package]]
 name = "async-task"
 version = "4.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -386,12 +408,6 @@ name = "base64"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4a4ddaa51a5bc52a6948f74c06d20aaaddb71924eab79b8c97a8c556e942d6a"
-
-[[package]]
-name = "binary_search_tree"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba1e4579698a162f2256fabdb07bb88bf360622342c40375468e91bb107e9e4c"
 
 [[package]]
 name = "bitflags"
@@ -1954,6 +1970,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "itertools"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1c173a5686ce8bfa551b3563d0c2170bf24ca44da99c7ca4bfdab5418c3fe57"
+dependencies = [
+ "either",
+]
+
+[[package]]
 name = "itoa"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2215,11 +2240,12 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api"
-version = "2.1.1"
+version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e85e014f89d09331f86071c4db575e234e6b6d1271561193cab6c3539d76b1f4"
+checksum = "bbce88d2fc18375e2ab4b0ce245bab9412b2f4d84a8fbec27876c4cf0f51e3d0"
 dependencies = [
  "anyhow",
+ "async-stream",
  "bytes",
  "derive_builder",
  "futures",
@@ -2231,6 +2257,7 @@ dependencies = [
  "thiserror",
  "time",
  "tokio",
+ "tokio-stream",
  "url",
  "uuid",
 ]
@@ -2269,16 +2296,17 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.2.3"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ecca1ed727a3e03458f856751c8a9698da2fe6c5ab8860370bf9a3c817e7bf9a"
+checksum = "7a83f470828fa1f95b1f9f001319abacaab651234e2ead8cebd70fd5f07c6173"
 dependencies = [
  "actix-web",
  "anyhow",
- "binary_search_tree",
- "derive_builder",
+ "async-stream",
+ "bytes",
  "fern",
  "futures",
+ "itertools 0.11.0",
  "log",
  "mangadex-api",
  "mangadex-api-schema-rust",
@@ -2289,6 +2317,7 @@ dependencies = [
  "serde_json",
  "thiserror",
  "tokio",
+ "tokio-stream",
  "url",
  "uuid",
 ]
@@ -3742,7 +3771,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6252ed50d005e1dc2b77ed140f1c230299e0566492470eba40ba34e18cbcfa10"
 dependencies = [
  "Inflector",
- "itertools",
+ "itertools 0.10.5",
  "proc-macro2",
  "quote",
  "syn 1.0.109",
@@ -4123,6 +4152,7 @@ dependencies = [
  "once_cell",
  "reqwest",
  "serde",
+ "serde_json",
  "tauri",
  "thiserror",
  "tokio",
@@ -4416,6 +4446,17 @@ dependencies = [
  "rustls",
  "tokio",
  "webpki",
+]
+
+[[package]]
+name = "tokio-stream"
+version = "0.1.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "397c988d37662c7dda6d2208364a706264bf3d6138b11d436cbac0ad38832842"
+dependencies = [
+ "futures-core",
+ "pin-project-lite",
+ "tokio",
 ]
 
 [[package]]

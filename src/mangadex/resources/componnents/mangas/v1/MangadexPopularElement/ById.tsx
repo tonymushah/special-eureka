@@ -17,7 +17,7 @@ export default function MangaPopularElementByMangaId(props: {
                     <MangaFallback2/>
                 }
             >
-                <MangaPopularElement src={query.data} />
+                <MangaPopularElement src={query.data.manga} />
             </React.Suspense>
         );
     } else {

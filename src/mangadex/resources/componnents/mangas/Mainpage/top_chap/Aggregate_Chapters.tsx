@@ -1,7 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { Spinner } from "react-bootstrap";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
 import IsPingable from "@mangadex/resources/componnents/IsPingable";
@@ -33,9 +32,9 @@ export default function Online_Chapter(props: MangaPageProps) {
                             fallback={
                                 <Chakra.Box m={2} bg="inherit">
                                     <div className=" text-center">
-                                        <Spinner
+                                        <Chakra.Spinner
                                             animation="border"
-                                        ></Spinner>
+                                        />
                                         <br />
                                         <p>Loading chapters ...</p>
                                     </div>
@@ -60,9 +59,9 @@ export default function Online_Chapter(props: MangaPageProps) {
                             fallback={
                                 <Chakra.Box m={2} bg="inherit">
                                     <div className=" text-center">
-                                        <Spinner
+                                        <Chakra.Spinner
                                             animation="border"
-                                        ></Spinner>
+                                        />
                                         <br />
                                         <p>Loading chapters ...</p>
                                     </div>
@@ -79,9 +78,9 @@ export default function Online_Chapter(props: MangaPageProps) {
                 onLoading={
                     <Chakra.Box m={2} bg="inherit">
                         <div className=" text-center">
-                            <Spinner
+                            <Chakra.Spinner
                                 animation="border"
-                            ></Spinner>
+                            />
                             <br />
                             <p>Loading chapters ...</p>
                         </div>
