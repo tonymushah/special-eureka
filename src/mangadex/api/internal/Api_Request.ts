@@ -1,3 +1,5 @@
+/// TODO Make request type safe 
+
 import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Response, ResponseType } from "@tauri-apps/api/http";
 export class Api_RequestERROR extends Error{
     protected id: string;
@@ -32,7 +34,7 @@ export class Api_Request{
     public static get_url() : string {
         return Api_Request.url;
     }
-    public static async get_methods<T = any>(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<T>>{
+    public static async get_methods<T = unknown>(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<T>>{
         let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();
@@ -48,7 +50,7 @@ export class Api_Request{
             throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
         }
     }
-    public static async put_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined, client? : Client): Promise<Response<any>>{
+    public static async put_methods<T = unknown>(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined, client? : Client): Promise<Response<any>>{
         let is_client_initialized = false;
         if(client == undefined){
             client = await Api_Request.client();

@@ -15,11 +15,11 @@ export default class Api_Request{
             client = await Api_Request.client();
         }
         const getted = client.get(Api_Request.url + to_use, options);
-        const result: any = await getted;
+        const result: Response<any> = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
+            throw new Error(result.data.message);
         }
     }
     public static async put_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined, client? : Client): Promise<Response<any>>{
@@ -27,11 +27,11 @@ export default class Api_Request{
             client = await Api_Request.client();
         }
         const getted = client.put(Api_Request.url + to_use, body,options);
-        const result: any = await getted;
+        const result: Response<any> = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
+            throw new Error(result.data.message);
         }
     }
     public static async post_methods(to_use:string, body?: Body | undefined, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
@@ -39,11 +39,11 @@ export default class Api_Request{
             client = await Api_Request.client();
         }
         const getted = client.post(Api_Request.url + to_use, body, options);
-        const result: any = await getted;
+        const result: Response<any> = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
+            throw new Error(result.data.message);
         }
     }
     public static async patch_methods(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
@@ -51,11 +51,11 @@ export default class Api_Request{
             client = await Api_Request.client();
         }
         const getted = client.patch(Api_Request.url + to_use, options);
-        const result: any = await getted;
+        const result: Response<any> = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
+            throw new Error(result.data.message);
         }
     }
     public static async delete_methods(to_use:string, options?: RequestOptions | undefined, client?: Client): Promise<Response<any>>{
@@ -63,11 +63,11 @@ export default class Api_Request{
             client = await Api_Request.client();
         }
         const getted = client.delete(Api_Request.url + to_use, options);
-        const result: any = await getted;
+        const result: Response<any> = await getted;
         if(result.status >= 200 && result.status < 400 && result.ok == true){
             return result;
         }else{
-            throw new Api_RequestERROR(result.data.errors[0].id, result.status, result.data.errors[0].title, result.data.errors[0].detail);
+            throw new Error(result.data.message);
         }
     }
     public static async request_methods(httpOptions: HttpOptions, client? : Client): Promise<Response<any>>{
@@ -79,7 +79,7 @@ export default class Api_Request{
     }
     public static async ping(client? : Client): Promise<boolean>{
         try{
-            return is_server_started();
+            return await is_server_started();
         }catch(e){
             return false;
         }

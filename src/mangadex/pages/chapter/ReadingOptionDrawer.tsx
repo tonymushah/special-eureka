@@ -56,7 +56,7 @@ export default function ReadingDrawer(props: {
     }
     function ImageWidthController() {
         const reading_mode = useChapterReadingModeOption();
-        if (reading_mode.query.data == ReadingMode.LongStrip || reading_mode.query.data == ReadingMode.WideStrip) {
+        if (reading_mode.query.data == ReadingMode.LongStrip || reading_mode.query.data == ReadingMode.WideStrip || reading_mode.query.data == ReadingMode.SinglePage) {
             return (
                 <Chakra.HStack
                     mt={3}
@@ -141,11 +141,13 @@ export default function ReadingDrawer(props: {
                             zIndex={"100"}
                         />
                     ) : (
-                        <>
-                        </>
+                        <React.Fragment/>
                     )
                 }
-                <Chakra.DrawerContent zIndex={"100"}>
+                <Chakra.DrawerContent 
+                    zIndex={"100"}
+                    fontFamily={"inherit"}
+                >
                     <Chakra.DrawerCloseButton />
                     <Chakra.DrawerHeader>
                         Reading Option

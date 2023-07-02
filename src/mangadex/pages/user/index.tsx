@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { getMangaDexPath, trackEvent } from "@mangadex";
+import { getMangaDexPath, trackEvent } from "@mangadex/index";
 import { User } from "@mangadex/api/structures/User";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";

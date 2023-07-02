@@ -1,13 +1,9 @@
+import * as Chakra from "@chakra-ui/react";
 import MangaChapter_Accordion from "@mangadex/api/internal/utils/MangaChapter_Accordion";
-import { useToast } from "@chakra-ui/react";
 import React from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFallback2 from "./MangaElement2Fallback";
-import * as Chakra from "@chakra-ui/react";
-import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
 const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"));
@@ -41,11 +37,11 @@ export default function MangaChapterAccordion_Element(props: {
             <MangaFallback2 />
         }>
             <MangaElementDef2_withChildren
-                src={query.data!}
+                src={query.data!.manga}
                 isRefetching={query.isRefetching}
                 refetch={query.refetch}
-                download={download_.mutate}
-                delete={delete_.mutate}
+                download={download_.refetch}
+                delete={delete_.refetch}
             >
                 <Chakra.Box width={"full"}>
                     <Chakra.Stack>

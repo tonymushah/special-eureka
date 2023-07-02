@@ -3,13 +3,13 @@ import React from "react";
 //import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { Col, Container, Row } from "react-bootstrap";
 import { FaDiscord } from "react-icons/fa";
-
 import { Group } from "@mangadex/api/structures/Group";
 
 import { writeText } from "@tauri-apps/api/clipboard";
 import * as FontAwesome from "react-icons/fa";
+import ChakraContainer from "../layout/Container";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 const ExtLink = React.lazy(async () => {
     const res = await import("@commons-res/components/ExtLink");
@@ -23,16 +23,16 @@ const ReactMarkDown = React.lazy(() => import("react-markdown"));
 export default function Group_Details(props: {
     src: Group
 }) {
-    const toast = Chakra.useToast({
+    const toast = useChakraToast({
         position: "bottom-right",
         duration: 9000,
         isClosable: true
     });
     return (
         <Chakra.Box>
-            <Container>
-                <Row>
-                    <Col xs={3}>
+            <ChakraContainer>
+                <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
+                    <Chakra.GridItem colSpan={3}>
                         <Chakra.Box>
                             <Chakra.Text>
                                 {
@@ -80,8 +80,8 @@ export default function Group_Details(props: {
                                 Inactive
                             </Chakra.Text>
                         </Chakra.Box>
-                    </Col>
-                    <Col xs={9}>
+                    </Chakra.GridItem>
+                    <Chakra.GridItem colSpan={9}>
                         <Chakra.Box>
                             <Chakra.Heading fontFamily={"inherit"} size={"md"}>Where to find</Chakra.Heading>
                             <React.Suspense>
@@ -226,9 +226,9 @@ export default function Group_Details(props: {
                                 )
                             }
                         </Chakra.Box>
-                    </Col>
-                </Row>
-            </Container>
+                    </Chakra.GridItem>
+                </Chakra.Grid>
+            </ChakraContainer>
         </Chakra.Box>
     );
 }

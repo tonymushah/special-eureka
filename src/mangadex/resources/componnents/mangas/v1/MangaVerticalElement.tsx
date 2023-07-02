@@ -1,13 +1,13 @@
 import * as Chakra from "@chakra-ui/react";
 import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
 import { Link } from "react-router-dom";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import TryCatch from "@commons-res/components/TryCatch";
-import { Alt_title } from "@mangadex/api/internal/Utils";
 import { Manga } from "@mangadex/api/structures/Manga";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import MangaContextMenu from "./MangaContextMenu";
+import { useMangaTitle } from "./MangaTitle";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -16,17 +16,13 @@ export default function MangaVerticalElement(props: {
     isRefetching?: boolean,
     refetch?: () => void
 }) {
-    let title = "";
+    const title = useMangaTitle({
+        src : props.src
+    });
     const coverQuery = get_manga_page_cover_art_image({
         src: props.src,
         isThumbail: true
     }).query;
-    //let desc: string = "";
-    if (props.src.get_title().en == null) {
-        title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
-    } else {
-        title = props.src.get_title().en;
-    }
     return (
         <MangaContextMenu
             mangaId={props.src.get_id()}

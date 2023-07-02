@@ -1,10 +1,11 @@
 import React from "react";
-import { Asc_Desc, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import * as Chakra from "@chakra-ui/react";
 import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense, useTrackEvent } from "@mangadex";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { appWindow } from "@tauri-apps/api/window";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 

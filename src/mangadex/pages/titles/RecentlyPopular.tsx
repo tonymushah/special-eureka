@@ -2,12 +2,13 @@ import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Coll
 import * as Chakra from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useTrackEvent } from "@mangadex";
+import { useTrackEvent } from "@mangadex/index";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 

@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Asc_Desc, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
 import { Client } from "@tauri-apps/api/http";

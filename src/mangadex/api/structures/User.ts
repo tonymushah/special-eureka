@@ -7,14 +7,39 @@ import UserCollection from "./CollectionTypes/UserCollection";
 import UserCollectionWToken from "./CollectionTypes/UserCollectionWToken";
 import UserSearchType from "./SearchType/User";
 
+/**
+ * [User Role Enum](https://api.mangadex.org/docs/static-data/#user-roles-enum)
+ * 
+ */
+export enum UserRole {
+    Admin = "ROLE_ADMIN",
+    Banned = "ROLE_BANNED",
+    Contributor = "ROLE_CONTRIBUTOR",
+    Designer = "ROLE_DESIGNER",
+    Developer = "ROLE_DEVELOPER",
+    Forum_Moderator = "ROLE_FORUM_MODERATOR",
+    Global_Moderator = "ROLE_GLOBAL_MODERATOR",
+    Group_Leader = "ROLE_GROUP_LEADER",
+    Group_Member = "ROLE_GROUP_MEMBER",
+    Guest = "ROLE_GUEST",
+    Member = "ROLE_MEMBER",
+    Md_At_Home = "ROLE_MD_AT_HOME",
+    Power_Uploader = "ROLE_POWER_UPLOADER",
+    Public_Relations = "ROLE_PUBLIC_RELATIONS",
+    Staff = "ROLE_STAFF",
+    Unverified = "ROLE_UNVERIFIED",
+    User = "ROLE_USER",
+    VIP = "ROLE_VIP"
+}
+
 export class User extends Attribute{
     private username!: string;
-    private roles!: Array<string>;
+    private roles!: Array<UserRole>;
     private version!: number;
     public set_username(username: string){
         this.username = username;
     }
-    public set_roles(roles: Array<string>){
+    public set_roles(roles: Array<UserRole>){
         this.roles = roles;
     }
     public set_version(version: number){
@@ -23,13 +48,13 @@ export class User extends Attribute{
     public get_username(): string{
         return this.username;
     }
-    public get_roles(): Array<string>{
+    public get_roles(): Array<UserRole>{
         return this.roles;
     }
     public get_version(): number{
         return this.version;
     }
-    public constructor(id: string, username: string, roles: Array<string>, version: number){
+    public constructor(id: string, username: string, roles: Array<UserRole>, version: number){
         super(id, "user");
         this.set_username(username);
         this.set_roles(roles);

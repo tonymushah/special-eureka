@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, Row } from "react-bootstrap";
-import { ExtLink } from "../../../../../../commons-res/components/ExtLink";
-import { make_first_UpperCare } from "../../../../../api/internal/Utils";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { Button, VStack, Wrap, WrapItem, Heading } from "@chakra-ui/react";
 type LinkButtonProps = {
     title: string,
     href: string
@@ -11,10 +11,11 @@ export function LinkButton(props: LinkButtonProps) {
         <ExtLink href={props.href}>
             <Button style={{
                 fontWeight: "800"
-            }} className="m-1" variant="dark" size="sm">{props.title}</Button>
+            }} colorScheme={"blackAlpha"} variant={"solid"} size="sm" >{props.title}</Button>
         </ExtLink>
     );
 }
+
 
 type LinksRowProps = {
     src: any,
@@ -48,15 +49,19 @@ export class LinksRow extends React.Component<LinksRowProps>{
         const LinksButtons: Array<React.ReactNode> = this.build_LinkButtons();
         if (LinksButtons.length != 0) {
             return (
-                <Row>
-                    <h5>{make_first_UpperCare(this.title)}</h5>
-                    <div className="d-md-inline">
-                        {LinksButtons}
-                    </div>
-                </Row>
+                <VStack display={"block"}>
+                    <Heading size={"md"} fontFamily={"inherit"}>{make_first_UpperCare(this.title)}</Heading>
+                    <Wrap>
+                        {LinksButtons.map((item, index) => (
+                            <WrapItem key={`${this.title}-${index}`}>{
+                                item
+                            }</WrapItem>
+                        ))}
+                    </Wrap>
+                </VStack>
             );
         } else {
-            return (<></>);
+            return (<React.Fragment/>);
         }
     }
 }

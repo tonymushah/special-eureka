@@ -2,7 +2,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex";
+import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex/index";
 import { get_author_byID, get_author_queryKey_byID } from "@mangadex/resources/hooks/AuthorState";
 
 const ErrorEL1 = React.lazy(() => import("@mangadex/resources/componnents/error/ErrorEL1"));

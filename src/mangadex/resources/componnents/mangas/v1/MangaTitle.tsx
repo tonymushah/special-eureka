@@ -2,16 +2,31 @@ import React from "react";
 import { Alt_title } from "@mangadex/api/internal/Utils";
 import { Manga } from "@mangadex/api/structures/Manga";
 
+export function useMangaAltTitle({src} : {
+    src : Manga
+}){
+    return React.useMemo(() => {
+        return new Alt_title(src.get_alt_title()).get_random_lang();
+    }, [src]);
+}
+
+export function useMangaTitle({src} : {
+    src : Manga
+}) {
+    return React.useMemo(() => {
+        if (src.get_title().en == null) {
+            return new Alt_title(src.get_alt_title()).get_quicklang()!;
+        } else {
+            return src.get_title().en;
+        }
+    }, [src]);
+}
+
 export default function MangaTitle(props: {
     src : Manga
 }){
-    let title : string;
-    if (props.src.get_title().en == null) {
-        title = new Alt_title(props.src.get_alt_title()).get_quicklang()!;
-    } else {
-        title = props.src.get_title().en;
-    }
+    const title = useMangaTitle(props);
     return (
-        <>{title}</>
+        <React.Fragment>{title}</React.Fragment>
     );
 }

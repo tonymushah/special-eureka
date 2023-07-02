@@ -5,20 +5,21 @@ import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperM
 import React from "react";
 import { SwiperSlide } from "swiper/react";
 import * as Chakra from "@chakra-ui/react";
-import { Mangadex_suspense__ } from "@mangadex";
+import { Mangadex_suspense__ } from "@mangadex/index";
+import { useFullScreenOptions_Query } from "@mangadex/pages/chapter/ChapterFullScreen/FullScreenOptionsProvider";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 export default function SinglePage({ data }: {
     data: ChapterPage_outlet_context
 }) {
+    const fullScreenOptions = useFullScreenOptions_Query();
     const { query } = useRTLSwipperMode();
     if (query.isSuccess) {
         return (
-
             <SwipperMode
                 data={data}
                 swipper_option={{
                     slidesPerView: 1,
-                    centeredSlides: true,
                     modules: [Keyboard],
                     keyboard: true,
                     dir: query.data ? "rtl" : undefined,
@@ -31,7 +32,7 @@ export default function SinglePage({ data }: {
                                 <SwiperSlide onMouseOver={() => {
                                     reading_state.setCurrentPage(index + 1);
                                 }} key={`${data.chapter.get_id()}-${index}`}>
-                                    <Chakra.Container height={"100vh"}>
+                                    <ChakraContainer>
                                         <Chakra.Image
                                             fallback={
                                                 <Chakra.Box width={"full"}>
@@ -44,10 +45,11 @@ export default function SinglePage({ data }: {
                                                     </Chakra.Center>
                                                 </Chakra.Box>
                                             }
+                                            width={fullScreenOptions.query.data != undefined? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
                                             src={value}
                                             id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
                                         />
-                                    </Chakra.Container>
+                                    </ChakraContainer>
                                 </SwiperSlide>
                             ))
                         }

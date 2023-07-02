@@ -1,13 +1,13 @@
 import { Button, Box, Heading, Text, Wrap, WrapItem, Image, Tooltip } from "@chakra-ui/react";
 import { ExtLink } from "@commons-res/components/ExtLink";
-import { Container, Row } from "react-bootstrap";
 import { FaDiscord, FaGithub } from "react-icons/fa";
 import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 export default function Contacts(){
     return(
-        <Container id="tony-mushah-links">
+        <ChakraContainer id="tony-mushah-links">
             <Heading size={"xl"} textAlign={"center"} color={"white"}>Contacts</Heading>
-            <Row>
+            <Box>
                 <Box textColor={"white"}>
                     <Text m={0}>If you need some help, advices, or giving feedbacks,</Text>
                     <Text m={0}>contact me via : </Text>
@@ -78,7 +78,7 @@ export default function Contacts(){
                         </WrapItem>
                     </Wrap>
                 </Box>
-            </Row>
-        </Container>
+            </Box>
+        </ChakraContainer>
     );
 }

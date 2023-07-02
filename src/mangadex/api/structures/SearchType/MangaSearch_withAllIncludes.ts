@@ -25,4 +25,5 @@ export default interface MangaSearch_withAllIncludes {
   group?: string;
   contentRating? : Array<string>;
   client? : Client;
+  authorOrArtist?: string
 }

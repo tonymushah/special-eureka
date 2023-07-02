@@ -3,7 +3,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import Chapter_history from "@mangadex/api/history/Chapter.history";
 import { Alt_title, Lang } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
 import { getMangaDexPath } from "@mangadex/index";
 import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
 import { useChapterFullscreen } from "@mangadex/resources/componnents/chapter/fullscreen/Context";
@@ -15,7 +15,6 @@ import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
 import { UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { Col, Row } from "react-bootstrap";
 import { FaUsers } from "react-icons/fa";
 import { Await, Link, Outlet } from "react-router-dom";
 import Download_Chapter_withHotkeys from "./Download_Chapter_withHotkeys";
@@ -32,7 +31,7 @@ const MangaDexPath = getMangaDexPath();
 
 function getMangaByID__(props: {
     manga_id: string,
-    options?: Omit<UseQueryOptions<Manga, Error>, "queryKey" | "queryFn">
+    options?: Omit<UseQueryOptions<GetMangaByIDResponse, Error>, "queryKey" | "queryFn">
 }) {
     const { query } = get_manga_byId({
         mangaID: props.manga_id,
@@ -56,7 +55,7 @@ export default function Chapter_Page_Success(props: {
     });
 
     if (mangaQuery.isSuccess) {
-        const { data } = mangaQuery;
+        const data = mangaQuery.data.manga;
         let title: string;
         if (data.get_title().en == null) {
             title = new Alt_title(data.get_alt_title()).get_quicklang()!;
@@ -93,104 +92,109 @@ export default function Chapter_Page_Success(props: {
             <Chakra.Box
                 as={ChakraContainer}
             >
-                <Row>
-                    <Chakra.Heading
-                        size={{
-                            base: "sm",
-                            md: "md"
-                        }}
-                        noOfLines={1}
-                        fontFamily={"inherit"}
-                    >
-                        {
-                            mangaQuery.isLoading ? (
-                                <Chakra.Skeleton
-                                    height={10}
-                                />
-                            ) : (mangaQuery.isError ? (
-                                <ErrorEL1 error={mangaQuery.error} />
-                            ) : (
-                                <Chakra.Link
-                                    as={Link}
-                                    to={MangaDexPath + "/manga/" + mangaQuery.data?.get_id()}
-                                >
-                                    <MangaTitle src={mangaQuery.data!} />
-                                </Chakra.Link>
-                            )
-                            )
-                        }
-                    </Chakra.Heading>
-                </Row>
-                <Row>
-                    <Chakra.HStack>
-                        <FaUsers />
-                        {
-                            chapter_groups.map((query, index) => (
-                                <React.Fragment key={`mdx-chapter-success-${props.data.get_id()}-${index}`}>
-                                    {
-                                        query.isSuccess ? (
-                                            <Chakra.Link as={Link} to={`${MangaDexPath}/group/${query.data.get_id()}`}>
-                                                {
-                                                    query.data.get_name()
-                                                }
-                                            </Chakra.Link>
-                                        ) : (
-                                            <></>
-                                        )
-                                    }
-                                </React.Fragment>
-                            ))
-                        }
-                    </Chakra.HStack>
-                </Row>
-                <Row>
-                    <Col>
-                        <Chakra.Center>
-                            <React.Suspense>
-                                <Await
-                                    resolve={props.data.get_translated_Lang()}
-                                >
-                                    {
-                                        (getted: Lang) => (
-                                            <Flag_icons
-                                                locale={getted.get_flag_icon()}
-                                            />
-                                        )
-                                    }
-                                </Await>
-                            </React.Suspense>
-                            &nbsp;
+                <Chakra.VStack display={"block"}>
+                    <React.Fragment>
+                        <Chakra.Heading
+                            size={{
+                                base: "sm",
+                                md: "md"
+                            }}
+                            noOfLines={1}
+                            fontFamily={"inherit"}
+                        >
                             {
-                                props.data.get_volume() != null ? (
-                                    <>Volume {props.data.get_volume()}</>
-                                ) : (<></>)
+                                mangaQuery.isLoading ? (
+                                    <Chakra.Skeleton
+                                        height={10}
+                                    />
+                                ) : (mangaQuery.isError ? (
+                                    <ErrorEL1 error={mangaQuery.error} />
+                                ) : (
+                                    <Chakra.Link
+                                        as={Link}
+                                        to={MangaDexPath + "/manga/" + mangaQuery.data?.manga.get_id()}
+                                    >
+                                        <MangaTitle src={mangaQuery.data.manga!} />
+                                    </Chakra.Link>
+                                )
+                                )
                             }
-                            &nbsp;
-                            Chapter {props.data.get_chapter()} {
-                                props.data.get_title() == null || props.data.get_title() == "" ? (<></>) : (<> - {props.data.get_title()}</>)
+                        </Chakra.Heading>
+                    </React.Fragment>
+                    <React.Fragment>
+                        <Chakra.HStack>
+                            <FaUsers />
+                            {
+                                chapter_groups.map((query, index) => (
+                                    <React.Fragment key={`mdx-chapter-success-${props.data.get_id()}-${index}`}>
+                                        {
+                                            query.isSuccess ? (
+                                                <Chakra.Link as={Link} to={`${MangaDexPath}/group/${query.data.get_id()}`}>
+                                                    {
+                                                        query.data.get_name()
+                                                    }
+                                                </Chakra.Link>
+                                            ) : (
+                                                <></>
+                                            )
+                                        }
+                                    </React.Fragment>
+                                ))
                             }
-                        </Chakra.Center>
-                    </Col>
-                    <Col>
-                        <React.Suspense
-                            fallback={
-                                <Chakra.Skeleton
-                                    width={"100%"}
-                                    height={"10px"}
-                                />
-                            }
-                        >
-                            <ChapterReadingState chapter={props.data} />
-                        </React.Suspense>
-                    </Col>
-                    <Col>
-                        <React.Suspense
-                            fallback={<Chakra.Spinner></Chakra.Spinner>}
-                        >
-                            <ReadingOptions />
-                        </React.Suspense>
-                    </Col>
-                </Row>
+                        </Chakra.HStack>
+                    </React.Fragment>
+                    <Chakra.Grid templateColumns={"repeat(3, 1fr)"}>
+                        <Chakra.GridItem>
+                            <Chakra.HStack alignItems={"center"}>
+                                <React.Suspense>
+                                    <Await
+                                        resolve={props.data.get_translated_Lang()}
+                                    >
+                                        {
+                                            (getted: Lang) => (
+                                                <Flag_icons
+                                                    locale={getted.get_flag_icon()}
+                                                />
+                                            )
+                                        }
+                                    </Await>
+                                </React.Suspense>
+                                <Chakra.Text as={"span"} noOfLines={1}>
+                                    &nbsp;
+                                    {
+                                        props.data.get_volume() != null ? (
+                                            <React.Fragment>Volume {props.data.get_volume()}</React.Fragment>
+                                        ) : (<React.Fragment />)
+                                    }
+                                    &nbsp;
+                                    Chapter {props.data.get_chapter()} {
+                                        props.data.get_title() == null || props.data.get_title() == "" ? (<></>) : (<> - {props.data.get_title()}</>)
+                                    }
+                                </Chakra.Text>
+                            </Chakra.HStack>
+                        </Chakra.GridItem>
+                        <Chakra.GridItem>
+                            <React.Suspense
+                                fallback={
+                                    <Chakra.Skeleton
+                                        width={"100%"}
+                                        height={"10px"}
+                                    />
+                                }
+                            >
+                                <ChapterReadingState chapter={props.data} />
+                            </React.Suspense>
+                        </Chakra.GridItem>
+                        <Chakra.GridItem>
+                            <React.Suspense
+                                fallback={<Chakra.Spinner></Chakra.Spinner>}
+                            >
+                                <ReadingOptions />
+                            </React.Suspense>
+                        </Chakra.GridItem>
+                    </Chakra.Grid>
+                </Chakra.VStack>
+
             </Chakra.Box>
         );
     }

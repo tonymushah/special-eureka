@@ -1,9 +1,5 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import "swiper/css";
-import "swiper/css/autoplay";
-import "swiper/css/free-mode";
-import "swiper/css/pagination";
 
 import * as FontAwesome from "react-icons/fa";
 import { Manga } from "@mangadex/api/structures/Manga";
