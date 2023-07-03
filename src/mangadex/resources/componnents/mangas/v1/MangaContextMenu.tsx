@@ -273,32 +273,6 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             </Chakra.Box>
         );
     }
-    function Details() {
-        return (
-            <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
-                as={ContextMenu.ContextMenuItem}
-                pl={2}
-                pr={2}
-                paddingTop={2}
-                paddingBottom={2}
-            >
-                <Chakra.HStack
-                    spacing={"2"}
-                >
-                    <Chakra.Icon as={FiBook} />
-                    <Chakra.Text as="span">
-                        Manga {query.isSuccess ? (
-                            <MangaTitle src={query.data.manga}/>
-                        ) : (
-                            <React.Fragment>
-                                {props.mangaId}
-                            </React.Fragment>
-                        )}
-                    </Chakra.Text>
-                </Chakra.HStack>
-            </Chakra.Box>
-        );
-    }
     return (
         <ContextMenu.Root>
             <ContextMenu.Trigger>{
@@ -317,7 +291,6 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     borderColor={"#cccccc"}
                 >
                     <Chakra.VStack display={"block"} spacing={0} fontSize={"lg"}>
-                        <Details/>
                         <Goto />
                         <OpenToMangadex />
                         <Refresh />

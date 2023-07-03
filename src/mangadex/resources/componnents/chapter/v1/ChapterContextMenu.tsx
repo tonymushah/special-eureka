@@ -9,7 +9,6 @@ import { useNavigate } from "react-router";
 import { getMangaDexPath } from "@mangadex/index";
 import { open } from "@tauri-apps/api/shell";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
-import {FiFile} from "react-icons/fi";
 const mangadex_path = getMangaDexPath();
 
 export default function ChapterContextMenu({ id, children }: React.PropsWithChildren<{
@@ -67,7 +66,7 @@ export default function ChapterContextMenu({ id, children }: React.PropsWithChil
             "title": "Error on opening the link"
         });
         const openLink = () => startTransition(() => {
-            open(`${mangadex_path}/chapter/${id}`).catch((e) => {
+            open(`https://managadex.org/chapter/${id}`).catch((e) => {
                 if (typeof e == "string") {
                     toast({
                         description: e
@@ -220,26 +219,6 @@ export default function ChapterContextMenu({ id, children }: React.PropsWithChil
             </Chakra.Box>
         );
     }
-    function Details() {
-        return (
-            <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
-                as={ContextMenu.ContextMenuItem}
-                pl={2}
-                pr={2}
-                paddingTop={2}
-                paddingBottom={2}
-            >
-                <Chakra.HStack
-                    spacing={"2"}
-                >
-                    <Chakra.Icon as={FiFile} />
-                    <Chakra.Text as="span">
-                        Chapter {id}
-                    </Chakra.Text>
-                </Chakra.HStack>
-            </Chakra.Box>
-        );
-    }
     return (
         <ContextMenu.Root>
             <ContextMenu.Trigger>{
@@ -247,6 +226,7 @@ export default function ChapterContextMenu({ id, children }: React.PropsWithChil
             }</ContextMenu.Trigger>
             <ContextMenu.Portal>
                 <Chakra.Box
+                    fontFamily={"Poppins"}
                     zIndex={"dropdown"}
                     backgroundColor={"white"}
                     boxShadow={"md"}
@@ -258,7 +238,6 @@ export default function ChapterContextMenu({ id, children }: React.PropsWithChil
                     borderColor={"#cccccc"}
                 >
                     <Chakra.VStack display={"block"} spacing={0} fontSize={"lg"}>
-                        <Details/>
                         <Goto />
                         <OpenToMangadex />
                         {
