@@ -91,7 +91,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                         spacing={"2"}
                     >
                         {
-                            isTransition ? <BeatLoader/> : <Chakra.Icon as={ChakraIcons.ExternalLinkIcon} /> 
+                            isTransition ? <BeatLoader size={7}/> : <Chakra.Icon as={ChakraIcons.ExternalLinkIcon} /> 
                         }
                         <Chakra.Text as="span">
                             Open to Mangadex
@@ -168,7 +168,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             <Chakra.Box
                 textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "green"}
                 onClick={() => {
-                    if (download_.fetchStatus == "fetching" && delete_.fetchStatus == "fetching") {
+                    if (download_.fetchStatus != "fetching" && delete_.fetchStatus != "fetching") {
                         download_.refetch();
                     }
                 }}
@@ -184,7 +184,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     spacing={"2"}
                 >
                     {
-                        download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? <BeatLoader /> : <Chakra.Icon as={FiSave} />
+                        download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? <BeatLoader size={7}/> : <Chakra.Icon as={FiSave} />
                     }
                     <Chakra.Text as="span">
                         Download
@@ -215,7 +215,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     spacing={"2"}
                 >
                     {
-                        download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? <BeatLoader /> : <ChakraIcons.ReactIcon />
+                        download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? <BeatLoader size={7} /> : <ChakraIcons.ReactIcon />
                     }
                     <Chakra.Text as="span">
                         Update
@@ -246,7 +246,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     spacing={"2"}
                 >
                     {
-                        download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? <BeatLoader /> : <ChakraIcons.DeleteIcon />
+                        download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? <BeatLoader size={7} /> : <ChakraIcons.DeleteIcon />
                     }
                     <Chakra.Text as="span">
                         Delete
@@ -267,7 +267,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                 <Chakra.HStack
                     spacing={"2"}
                 >
-                    <BeatLoader />
+                    <BeatLoader size={7} />
                     <Chakra.Text as="span">
                         Loading...
                     </Chakra.Text>
