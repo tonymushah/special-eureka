@@ -33,6 +33,9 @@ export default function MangaVerticalElement(props: {
                 width={"fit-content"}
                 backgroundColor={props.isRefetching == undefined ? "gray.100" : (props.isRefetching ? "orange.100" : "gray.100")}
                 borderRadius={"10px"}
+                border={"1px"}
+                borderColor={"gray.200"}
+                shadow={"md"}
             >
                 <Chakra.Center>
                     <Chakra.Box

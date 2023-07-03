@@ -10,7 +10,9 @@ export default function usePingQuery(props : {
         return Api_Request.ping(props.client);
     }, {
         staleTime : 0,
-        refetchOnMount : false
+        refetchOnMount : false,
+        refetchOnReconnect : true,
+        refetchOnWindowFocus : true
     });
     return {
         query,
