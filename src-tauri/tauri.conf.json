@@ -84,7 +84,7 @@
                 "create": true,
                 "hide": true,
                 "maximize": true,
-                "minimize": false,
+                "minimize": true,
                 "print": true,
                 "requestUserAttention": false,
                 "setAlwaysOnTop": false,

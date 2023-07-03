@@ -11,8 +11,8 @@ const queryClient = new QueryClient();
 export default function BoxDecoration() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Box position={"fixed"} display={"flex"} zIndex={"banner"} justifyContent={"flex-end"} top={0} left={0} right={0}>
-                <Box data-tauri-drag-region pt={1} pb={1} pr={3} pl={3} background={"gray.50"} borderBottomLeftRadius={"10px"}>
+            <Box position={"fixed"} display={"flex"} data-tauri-drag-region zIndex={"banner"} justifyContent={"flex-end"} background={"gray.50"} top={0} left={0} right={0}>
+                <Box borderBottomLeftRadius={"10px"}>
                     <ButtonGroup isAttached variant='outline'>
                         <MinMaxButton />
                         <CloseButton />
