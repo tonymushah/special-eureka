@@ -1,34 +1,42 @@
+import { get_ChapterbyId, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import React from "react";
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
-import React from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
-import { FiSave, FiRefreshCcw } from "react-icons/fi";
+import { FiSave } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
 import { useNavigate } from "react-router";
 import { getMangaDexPath } from "@mangadex/index";
 import { open } from "@tauri-apps/api/shell";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
-import { FiBook } from "react-icons/fi";
-import MangaTitle from "./MangaTitle";
+import {FiFile} from "react-icons/fi";
+const mangadex_path = getMangaDexPath();
 
-export default function MangaContextMenu(props: React.PropsWithChildren<{
-    mangaId: string,
-    refetch?: () => void,
+export default function ChapterContextMenu({ id, children }: React.PropsWithChildren<{
+    id: string,
 }>) {
-    const { query } = get_manga_byId({
-        mangaID: props.mangaId
+    const { query } = get_ChapterbyId({
+        id
     });
-    const { delete_, download_ } = useMangaDownload_Delete({
-        mangaID: props.mangaId
+    const download_ = useChapterDownloadMutation({
+        chapID: id,
+        onSuccess() {
+            query.refetch();
+        }
+    });
+    const delete_ = useChapterDeleteMutation({
+        chapID: id,
+        onSuccess() {
+            query.refetch();
+        }
     });
     function Goto() {
-        const mangadex_path = getMangaDexPath();
+
         const navigate = useNavigate();
         return (
             <Chakra.Box
                 onClick={() => {
-                    navigate(`${mangadex_path}/manga/${props.mangaId}`);
+                    navigate(`${mangadex_path}/chapter/${id}`);
                 }}
                 paddingTop={1}
                 paddingBottom={1}
@@ -59,7 +67,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             "title": "Error on opening the link"
         });
         const openLink = () => startTransition(() => {
-            open(`https://mangadex.org/title/${props.mangaId}`).catch((e) => {
+            open(`${mangadex_path}/chapter/${id}`).catch((e) => {
                 if (typeof e == "string") {
                     toast({
                         description: e
@@ -100,66 +108,25 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             </Chakra.Box>
         );
     }
-    function Refresh() {
-        const [isRefreshing, startRefresh] = React.useTransition();
-        const { refetch } = props;
-        if (refetch != undefined) {
-            return (
-                <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
-                    _hover={{
-                        backgroundColor: "gray.100"
-                    }}
-                    as={ContextMenu.ContextMenuItem}
-                    onClick={() => {
-                        if (isRefreshing == false) {
-                            startRefresh(() => {
-                                refetch();
-                            });
-                        }
-                    }}
-                    paddingTop={1}
-                    paddingBottom={1}
-                    pl={2}
-                    pr={2}
+    function Loading() {
+        return (
+            <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
+                as={ContextMenu.ContextMenuItem}
+                pl={2}
+                pr={2}
+                paddingTop={2}
+                paddingBottom={2}
+            >
+                <Chakra.HStack
+                    spacing={"2"}
                 >
-                    <Chakra.HStack
-                        spacing={"2"}
-                    >
-                        <Chakra.Icon as={FiRefreshCcw} />
-                        <Chakra.Text as="span">
-                            Refresh
-                        </Chakra.Text>
-                    </Chakra.HStack>
-                </Chakra.Box>
-            );
-        } else {
-            return (
-                <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
-                    _hover={{
-                        backgroundColor: "gray.100"
-                    }}
-                    as={ContextMenu.ContextMenuItem}
-                    onClick={() => {
-                        if (!query.isFetching) {
-                            query.refetch();
-                        }
-                    }}
-                    paddingTop={1}
-                    paddingBottom={1}
-                    pl={2}
-                    pr={2}
-                >
-                    <Chakra.HStack
-                        spacing={"2"}
-                    >
-                        <Chakra.Icon as={FiRefreshCcw} />
-                        <Chakra.Text as="span">
-                            Refresh
-                        </Chakra.Text>
-                    </Chakra.HStack>
-                </Chakra.Box>
-            );
-        }
+                    <BeatLoader size={7} />
+                    <Chakra.Text as="span">
+                        Loading...
+                    </Chakra.Text>
+                </Chakra.HStack>
+            </Chakra.Box>
+        );
     }
     function Download() {
         return (
@@ -253,26 +220,6 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             </Chakra.Box>
         );
     }
-    function Loading() {
-        return (
-            <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
-                as={ContextMenu.ContextMenuItem}
-                pl={2}
-                pr={2}
-                paddingTop={2}
-                paddingBottom={2}
-            >
-                <Chakra.HStack
-                    spacing={"2"}
-                >
-                    <BeatLoader size={7} />
-                    <Chakra.Text as="span">
-                        Loading...
-                    </Chakra.Text>
-                </Chakra.HStack>
-            </Chakra.Box>
-        );
-    }
     function Details() {
         return (
             <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
@@ -285,15 +232,9 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                 <Chakra.HStack
                     spacing={"2"}
                 >
-                    <Chakra.Icon as={FiBook} />
+                    <Chakra.Icon as={FiFile} />
                     <Chakra.Text as="span">
-                        Manga {query.isSuccess ? (
-                            <MangaTitle src={query.data.manga}/>
-                        ) : (
-                            <React.Fragment>
-                                {props.mangaId}
-                            </React.Fragment>
-                        )}
+                        Chapter {id}
                     </Chakra.Text>
                 </Chakra.HStack>
             </Chakra.Box>
@@ -302,7 +243,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
     return (
         <ContextMenu.Root>
             <ContextMenu.Trigger>{
-                props.children
+                children
             }</ContextMenu.Trigger>
             <ContextMenu.Portal>
                 <Chakra.Box
@@ -320,12 +261,11 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                         <Details/>
                         <Goto />
                         <OpenToMangadex />
-                        <Refresh />
                         {
                             query.isSuccess ? (
                                 <React.Fragment>
                                     {
-                                        query.data.isOffline ? (
+                                        query.data.isDownloaded ? (
                                             <React.Fragment>
                                                 <Update />
                                                 <Delete />

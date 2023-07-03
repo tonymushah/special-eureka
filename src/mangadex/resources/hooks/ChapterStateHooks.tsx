@@ -151,7 +151,10 @@ export function get_this_chapter_lang(props: {
 
 export function useChapterDownloadMutation(props: {
     chapID: string,
-    toInvalidate: Array<QueryKey>
+    toInvalidate?: Array<QueryKey>,
+    onSuccess?: (data : ChapterDeleteMutation_data & {
+        hasFailed : boolean
+    }) => void
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
@@ -202,7 +205,7 @@ export function useChapterDownloadMutation(props: {
                 });
             }
             
-            props.toInvalidate.map((value) => {
+            props.toInvalidate?.map((value) => {
                 queryClient.refetchQueries({
                     queryKey: value
                 });
@@ -231,9 +234,11 @@ export function useChapterDownloadMutation(props: {
                     </React.Fragment>
                 )
             });
-            props.toInvalidate.map((value) => {
+            if(props.onSuccess != undefined) props.onSuccess(data);
+            props.toInvalidate?.map((value) => {
                 queryClient.refetchQueries({
-                    queryKey: value
+                    queryKey: value,
+                    exact : true
                 });
             });
         },
@@ -245,7 +250,10 @@ export function useChapterDownloadMutation(props: {
 }
 export function useChapterDataSaverDownloadMutation(props: {
     chapID: string,
-    toInvalidate: Array<QueryKey>
+    toInvalidate?: Array<QueryKey>,
+    onSuccess?: (data : ChapterDeleteMutation_data & {
+        hasFailed : boolean
+    }) => void
 }) {
 
     const client = useHTTPClient();
@@ -255,19 +263,22 @@ export function useChapterDataSaverDownloadMutation(props: {
         position: "bottom-right",
         duration: 9000,
     });
-    const download_query = useQuery({
+    const download_query = useQuery<ChapterDeleteMutation_data & {
+        hasFailed : boolean
+    }, Error>({
         queryKey: ["mdx", "mutation", "chapter",  props.chapID, "data", "saver", "download"],
         queryFn: async () => {
             toast({
                 status: "loading",
                 title: "Downloading chapter"
             });
-            await Chapter.download_data_saver(props.chapID, client);
+            const res = await Chapter.download_data_saver(props.chapID, client);
             const chapter = (await Chapter.get_ChapterbyId(props.chapID, client)).data;
             const manga = await chapter.get_manga(client);
             return {
                 chapter: chapter,
-                manga: manga
+                manga: manga,
+                hasFailed : res.errors.length != 0
             };
         },
         onError(error) {
@@ -318,7 +329,8 @@ export function useChapterDataSaverDownloadMutation(props: {
                     </React.Fragment>
                 )
             });
-            props.toInvalidate.map((value) => {
+            if(props.onSuccess != undefined) props.onSuccess(data);
+            props.toInvalidate?.map((value) => {
                 queryClient.refetchQueries({
                     queryKey: value
                 });
@@ -335,7 +347,8 @@ export function useChapterDataSaverDownloadMutation(props: {
 
 export function useChapterDeleteMutation(props: {
     chapID: string,
-    toInvalidate: Array<QueryKey>
+    toInvalidate?: Array<QueryKey>,
+    onSuccess?: (data : ChapterDeleteMutation_data) => void
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
@@ -416,7 +429,8 @@ export function useChapterDeleteMutation(props: {
                     )
                 });
             }
-            props.toInvalidate.map((value) => {
+            if(props.onSuccess != undefined) props.onSuccess(data);
+            props.toInvalidate?.map((value) => {
                 queryClient.refetchQueries({
                     queryKey: value
                 });

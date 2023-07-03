@@ -9,6 +9,7 @@ import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.j
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import { useProSidebar } from "react-pro-sidebar";
 import { useMangaTitle } from "./MangaTitle";
+import MangaContextMenu from "./MangaContextMenu";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -150,7 +151,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
             backgroundColor={props.isRefetching == undefined ? "gray.100" : (props.isRefetching ? "orange.100" : "gray.100")}
             borderRadius={"10px"}
         >
-            <>
+            <MangaContextMenu mangaId={props.src.get_id()}>
                 <Laoyut>
                     <Chakra.Center
                     >
@@ -214,7 +215,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                         </Chakra.Box>
                     </Chakra.Center>
                 </Laoyut>
-            </>
+            </MangaContextMenu>
         </Chakra.Box>
     );
 }
