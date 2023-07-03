@@ -5,7 +5,7 @@ import TryCatch from "@commons-res/components/TryCatch";
 import { Manga } from "@mangadex/api/structures/Manga";
 import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
 import MangaTitle from "./MangaTitle";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import MangaContextMenu from "./MangaContextMenu";
 
 const MangaDexPath = getMangaDexPath();

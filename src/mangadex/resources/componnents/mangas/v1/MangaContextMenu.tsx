@@ -5,6 +5,11 @@ import React from "react";
 import * as ContextMenu from "@radix-ui/react-context-menu";
 import { FiSave, FiRefreshCcw } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
+import { useNavigate } from "react-router";
+import { getMangaDexPath } from "@mangadex/index";
+import { ExtLink } from "@commons-res/components/ExtLink";
+import { open } from "@tauri-apps/api/shell";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 export default function MangaContextMenu(props: React.PropsWithChildren<{
     mangaId: string,
@@ -16,6 +21,87 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
     const { delete_, download_ } = useMangaDownload_Delete({
         mangaID: props.mangaId
     });
+    function Goto() {
+        const mangadex_path = getMangaDexPath();
+        const navigate = useNavigate();
+        return (
+            <Chakra.Box
+                onClick={() => {
+                    navigate(`${mangadex_path}/manga/${props.mangaId}`);
+                }}
+                paddingTop={1}
+                paddingBottom={1}
+                pl={2}
+                pr={2}
+                as={ContextMenu.ContextMenuItem}
+                _hover={{
+                    backgroundColor: "gray.100"
+                }}>
+                <Chakra.HStack
+                    spacing={"2"}
+                >
+                    <Chakra.Icon as={ChakraIcons.LinkIcon} />
+                    <Chakra.Text as="span">
+                        Open
+                    </Chakra.Text>
+                </Chakra.HStack>
+            </Chakra.Box>
+        );
+    }
+    function OpenToMangadex() {
+        const [isTransition, startTransition] = React.useTransition();
+        const toast = useChakraToast({
+            "duration": 9000,
+            "isClosable": true,
+            "position": "bottom-right",
+            "status": "error",
+            "title": "Error on opening the link"
+        });
+        const openLink = () => startTransition(() => {
+            open(`https://mangadex.org/title/${props.mangaId}`).catch((e) => {
+                if (typeof e == "string") {
+                    toast({
+                        description: e
+                    });
+                } else if (typeof e == "object") {
+                    if (e instanceof Error) {
+                        toast({
+                            description: e.message,
+                            title: e.name
+                        });
+                    }
+                }
+            });
+        });
+        return (
+            <ExtLink href={`https://mangadex.org/title/${props.mangaId}`}>
+                <Chakra.Box
+                    onClick={() => openLink()}
+                    paddingTop={1}
+                    paddingBottom={1}
+                    pl={2}
+                    pr={2}
+                    as={ContextMenu.ContextMenuItem}
+                    _hover={{
+                        backgroundColor: "gray.100"
+                    }}
+                    color={isTransition ? "gray" : "orange.500"}
+                >
+                    <Chakra.HStack
+                        spacing={"2"}
+                    >
+                        {
+                            isTransition ? <BeatLoader/> : <Chakra.Icon as={ChakraIcons.ExternalLinkIcon} /> 
+                        }
+                        <Chakra.Text as="span">
+                            Open to Mangadex
+                        </Chakra.Text>
+                    </Chakra.HStack>
+                </Chakra.Box>
+            </ExtLink>
+
+        );
+    }
     function Refresh() {
         const [isRefreshing, startRefresh] = React.useTransition();
         const { refetch } = props;
@@ -25,7 +111,6 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     _hover={{
                         backgroundColor: "gray.100"
                     }}
-                    borderTopRadius={"10px"}
                     as={ContextMenu.ContextMenuItem}
                     onClick={() => {
                         if (isRefreshing == false) {
@@ -34,7 +119,8 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                             });
                         }
                     }}
-                    paddingTop={2}
+                    paddingTop={1}
+                    paddingBottom={1}
                     pl={2}
                     pr={2}
                 >
@@ -54,14 +140,14 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     _hover={{
                         backgroundColor: "gray.100"
                     }}
-                    borderTopRadius={"10px"}
                     as={ContextMenu.ContextMenuItem}
                     onClick={() => {
                         if (!query.isFetching) {
                             query.refetch();
                         }
                     }}
-                    paddingTop={2}
+                    paddingTop={1}
+                    paddingBottom={1}
                     pl={2}
                     pr={2}
                 >
@@ -82,11 +168,12 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             <Chakra.Box
                 textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "green"}
                 onClick={() => {
-                    if (download_.fetchStatus == "fetching" && delete_.fetchStatus == "fetching" ) {
+                    if (download_.fetchStatus == "fetching" && delete_.fetchStatus == "fetching") {
                         download_.refetch();
                     }
                 }}
-                paddingTop={2}
+                paddingTop={1}
+                paddingBottom={1}
                 pl={2}
                 pr={2}
                 as={ContextMenu.ContextMenuItem}
@@ -118,7 +205,8 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                         download_.refetch();
                     }
                 }}
-                paddingTop={2}
+                paddingTop={1}
+                paddingBottom={1}
                 pl={2}
                 pr={2}
                 as={ContextMenu.ContextMenuItem}
@@ -145,14 +233,14 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                 as={ContextMenu.ContextMenuItem}
                 textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "red"}
                 onClick={() => {
-                    if (download_.fetchStatus != "fetching" && delete_.fetchStatus != "fetching" ) {
+                    if (download_.fetchStatus != "fetching" && delete_.fetchStatus != "fetching") {
                         delete_.refetch();
                     }
                 }}
                 pl={2}
                 pr={2}
-                paddingTop={2}
-                paddingBottom={2}
+                paddingTop={1}
+                paddingBottom={1}
             >
                 <Chakra.HStack
                     spacing={"2"}
@@ -167,7 +255,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
             </Chakra.Box>
         );
     }
-    function Loading(){
+    function Loading() {
         return (
             <Chakra.Box paddingRight={"2"} paddingLeft={"2"}
                 as={ContextMenu.ContextMenuItem}
@@ -179,7 +267,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                 <Chakra.HStack
                     spacing={"2"}
                 >
-                    <BeatLoader/>
+                    <BeatLoader />
                     <Chakra.Text as="span">
                         Loading...
                     </Chakra.Text>
@@ -205,6 +293,8 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                     borderColor={"#cccccc"}
                 >
                     <Chakra.VStack display={"block"} spacing={0} fontSize={"lg"}>
+                        <Goto />
+                        <OpenToMangadex />
                         <Refresh />
                         {
                             query.isSuccess ? (
@@ -224,7 +314,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<{
                                 </React.Fragment>
                             ) : (
                                 <React.Fragment>
-                                    <Loading/>
+                                    <Loading />
                                 </React.Fragment>
                             )
                         }
