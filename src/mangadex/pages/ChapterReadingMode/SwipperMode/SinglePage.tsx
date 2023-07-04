@@ -23,6 +23,7 @@ export default function SinglePage({ data }: {
                     modules: [Keyboard],
                     keyboard: true,
                     dir: query.data ? "rtl" : undefined,
+                    centeredSlides : true
                 }}
             >
                 {({ images, reading_state }) => (
