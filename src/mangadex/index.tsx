@@ -96,9 +96,9 @@ export function Mangadex_suspense__() {
 export function useTrackEvent(name: string, payload?: {
     [key: string]: string | number
 }) {
-    React.useMemo(() => {
+    React.useEffect(() => {
         trackEvent(name, payload);
-    }, []);
+    }, [name, payload]);
 }
 
 export function trackEvent(name: string, payload?: {
