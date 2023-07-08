@@ -57,7 +57,7 @@ export function Top_Chaps(props: MangaPageProps) {
                             <Chakra.Box m={2} bg="inherit">
                                 <div className=" text-center">
                                     <Chakra.Spinner
-                                        animation="border"
+                                         
                                     />
                                     <br />
                                     <p>Loading Description...</p>
@@ -94,7 +94,7 @@ export function Top_Chaps(props: MangaPageProps) {
                                             <Chakra.Box m={2} bg="inherit">
                                                 <div className=" text-center">
                                                     <Chakra.Spinner
-                                                        animation="border"
+                                                         
                                                     />
                                                     <br />
                                                     <p>Loading Authors ...</p>
@@ -210,7 +210,7 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <Chakra.Box>
                                         <Chakra.Heading fontFamily={"inherit"} size={"md"}>Atlernative Titles</Chakra.Heading>
                                         <React.Suspense fallback={
-                                            <Chakra.Spinner animation="border" />
+                                            <Chakra.Spinner   />
                                         }>
                                             <Await
                                                 resolve={build_altTitle()}

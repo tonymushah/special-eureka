@@ -15,7 +15,7 @@ export default function Offline_Chapters(props: MangaPageProps) {
                     <Chakra.Box m={2} bg="inherit">
                         <div className=" text-center">
                             <Chakra.Spinner
-                                animation="border"
+                                 
                             />
                             <br />
                             <p>Loading chapters ...</p>

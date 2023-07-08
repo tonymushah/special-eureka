@@ -14,7 +14,7 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
             <Chakra.Box m={2} bg="inherit">
                 <div className=" text-center">
                     <Chakra.Spinner
-                        animation="border"
+                         
                     />
                     <br />
                     <p>Loading chapters ...</p>
@@ -37,7 +37,6 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
                         <Chakra.Box m={2} bg="inherit">
                             <div className=" text-center">
                                 <Chakra.Spinner
-                                    animation="border"
                                 />
                                 <br />
                                 <p>Loading chapters ...</p>
@@ -57,7 +56,7 @@ export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
         <Chakra.Box m={2} bg="inherit">
             <div className=" text-center">
                 <Chakra.Spinner
-                    animation="border"
+                     
                 />
                 <br />
                 <p>Loading chapters ...</p>

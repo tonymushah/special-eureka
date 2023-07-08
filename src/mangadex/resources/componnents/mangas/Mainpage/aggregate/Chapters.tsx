@@ -39,7 +39,7 @@ export function ChaptersComp(props: React.PropsWithChildren<ChaptersProps>) {
         return (
             <React.Suspense fallback={
                 <div className="text-center">
-                    <Spinner animation="border" />
+                    <Spinner   />
                     <br />
                     <span>Initializing chapters ...</span>
                 </div>
@@ -55,7 +55,7 @@ export function ChaptersComp(props: React.PropsWithChildren<ChaptersProps>) {
         return (
             <React.Suspense fallback={
                 <div className="text-center">
-                    <Spinner animation="border" />
+                    <Spinner   />
                     <br />
                     <span>Initializing chapters ...</span>
                 </div>

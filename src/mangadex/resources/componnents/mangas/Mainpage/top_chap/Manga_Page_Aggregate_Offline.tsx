@@ -28,7 +28,7 @@ export default function Manga_Page_Aggregate_Offline(props: {
             <Chakra.Box m={2} bg="inherit">
                 <div className=" text-center">
                     <Chakra.Spinner
-                        animation="border"
+                         
                     />
                     <br />
                     <p>Loading chapters ...</p>
@@ -43,7 +43,7 @@ export default function Manga_Page_Aggregate_Offline(props: {
                     <Chakra.Box m={2} bg="inherit">
                         <div className=" text-center">
                             <Chakra.Spinner
-                                animation="border"
+                                 
                             />
                             <br />
                             <p>Loading chapters ...</p>
@@ -68,7 +68,7 @@ export default function Manga_Page_Aggregate_Offline(props: {
         <Chakra.Box m={2} bg="inherit">
             <div className=" text-center">
                 <Chakra.Spinner
-                    animation="border"
+                     
                 />
                 <br />
                 <p>Loading chapters ...</p>
