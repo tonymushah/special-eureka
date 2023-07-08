@@ -140,9 +140,9 @@ export default function HomeAfterPing() {
                     <Chakra.Spinner
                         size={"lg"}
                     />
-                    <Chakra.Text as={"span"} >
+                    <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                         Fetching all home page data...
-                    </Chakra.Text>
+                    </Chakra.Heading>
                 </Chakra.HStack>
             </Chakra.Box>
         </Chakra.AbsoluteCenter>

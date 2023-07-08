@@ -7,7 +7,7 @@ import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Await, useNavigate } from "react-router-dom";
-import { Mangadex_suspense, getMangaDexPath, useTrackEvent } from "@mangadex";
+import { Mangadex_suspense, getMangaDexPath, useTrackEvent } from "@mangadex/index";
 
 const MangaDexPath = getMangaDexPath();
 

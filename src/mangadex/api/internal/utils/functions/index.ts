@@ -1,5 +1,6 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import MangaChapter_Accordion from "../MangaChapter_Accordion";
+import { Volume } from "@mangadex/api/structures/Volume";
 export * from "./localized_string";
 
 export const serialize = function (obj: Record<string, string>): string {
@@ -43,5 +44,13 @@ export function make_first_UpperCare(input: string): string {
     } catch (e) {
         return input;
     }
+}
+
+export function sort_volumes(volumes : Array<Volume>) : Array<Volume>{
+    return volumes.sort((a, b) => {
+        const a_num = Number(a.get_name());
+        const b_num = Number(b.get_name());
+        return a_num - b_num;
+    });
 }
 

@@ -41,9 +41,9 @@ function Home() {
                                     <Chakra.Spinner
                                         size={"lg"}
                                     />
-                                    <Chakra.Text as="span">
+                                    <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                                         Pinging the Mangadex API
-                                    </Chakra.Text>
+                                    </Chakra.Heading>
                                 </Chakra.HStack>
                             </Chakra.Box>
                         </Chakra.AbsoluteCenter>
@@ -57,9 +57,9 @@ function Home() {
                                             <Chakra.Spinner
                                                 size={"lg"}
                                             />
-                                            <Chakra.Text as="span">
+                                            <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                                                 Pinging the Mangadex API
-                                            </Chakra.Text>
+                                            </Chakra.Heading>
                                         </Chakra.HStack>
                                     </Chakra.Box>
                                 </Chakra.AbsoluteCenter>

@@ -1,6 +1,6 @@
 import { Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
-import { Querry_list_builder, serialize } from "../internal/Utils";
+import { Querry_list_builder, serialize, sort_volumes } from "../internal/Utils";
 import { Manga } from "./Manga";
 import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import { Volume } from "./Volume";
@@ -23,7 +23,7 @@ export class Aggregate {
     }
     public constructor(count: number, volumes: Array<Volume>) {
         this.set_count(count);
-        this.set_volumes(volumes);
+        this.set_volumes(sort_volumes(volumes));
     }
     public static build_wANY(object: any): Aggregate {
         let volumes_length = 0;

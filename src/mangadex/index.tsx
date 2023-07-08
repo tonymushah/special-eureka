@@ -144,7 +144,7 @@ function useMangadexRouter(): RouteObject {
                         <Home />
                     </Mangadex_suspense>
                 ),
-                errorElement: (<ErrorELRouter />)
+                errorElement: (<ErrorELRouter />),
             },
             // Manga
             {
@@ -336,7 +336,7 @@ function useMangadexRouter(): RouteObject {
                             <Mangadex_suspense>
                                 <LatestUpdates />
                             </Mangadex_suspense>
-                        )
+                        ),
                     },
                     // Recently Popular
                     {

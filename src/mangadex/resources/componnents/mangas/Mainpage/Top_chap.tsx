@@ -9,6 +9,7 @@ import { TagRow } from "../Mainpage/boutons/tag_boutons";
 import { MangaPageProps } from "../Manga_Page";
 import { LinksRow } from "./boutons/links_boutons";
 import { Manga } from "@mangadex/api/structures/Manga";
+import Loading from "./loading";
 
 const Aggregate_Chapters = React.lazy(() => import("./top_chap/Aggregate_Chapters"));
 
@@ -55,13 +56,7 @@ export function Top_Chaps(props: MangaPageProps) {
                     <React.Suspense
                         fallback={
                             <Chakra.Box m={2} bg="inherit">
-                                <div className=" text-center">
-                                    <Chakra.Spinner
-                                         
-                                    />
-                                    <br />
-                                    <p>Loading Description...</p>
-                                </div>
+                                <Loading />
                             </Chakra.Box>
                         }
                     >
@@ -86,19 +81,16 @@ export function Top_Chaps(props: MangaPageProps) {
                     >
                         <CollapseHeight>
                             <Chakra.Wrap spacingX={{
-                                lg : 2
+                                lg: 2
                             }}>
                                 <Chakra.WrapItem>
                                     <React.Suspense
                                         fallback={
                                             <Chakra.Box m={2} bg="inherit">
-                                                <div className=" text-center">
-                                                    <Chakra.Spinner
-                                                         
-                                                    />
-                                                    <br />
-                                                    <p>Loading Authors ...</p>
-                                                </div>
+                                                <Chakra.Alert status="loading" variant="left-accent">
+                                                    <Chakra.AlertIcon />
+                                                    <Chakra.AlertTitle>Loading Author and Artists...</Chakra.AlertTitle>
+                                                </Chakra.Alert>
                                             </Chakra.Box>
                                         }
                                     >
@@ -108,8 +100,10 @@ export function Top_Chaps(props: MangaPageProps) {
                                 <Chakra.WrapItem>
                                     <React.Fragment>
                                         <React.Suspense fallback={
-                                            <Chakra.Box>
-                                            </Chakra.Box>
+                                            <Chakra.Alert status="loading" variant="left-accent">
+                                                    <Chakra.AlertIcon />
+                                                    <Chakra.AlertTitle>Loading Genre...</Chakra.AlertTitle>
+                                                </Chakra.Alert>
                                         }>
                                             {
                                                 <TagRow title="Genre" src={props.src.get_genre()} />
@@ -120,8 +114,10 @@ export function Top_Chaps(props: MangaPageProps) {
                                 <Chakra.WrapItem>
                                     <React.Fragment>
                                         <React.Suspense fallback={
-                                            <Chakra.Box>
-                                            </Chakra.Box>
+                                            <Chakra.Alert status="loading" variant="left-accent">
+                                                    <Chakra.AlertIcon />
+                                                    <Chakra.AlertTitle>Loading Theme...</Chakra.AlertTitle>
+                                                </Chakra.Alert>
                                         }>
                                             <Await
                                                 resolve={props.src.get_async_theme()}
@@ -141,8 +137,10 @@ export function Top_Chaps(props: MangaPageProps) {
                                 <Chakra.WrapItem>
                                     <React.Fragment>
                                         <React.Suspense fallback={
-                                            <Chakra.Box>
-                                            </Chakra.Box>
+                                            <Chakra.Alert status="loading" variant="left-accent">
+                                                    <Chakra.AlertIcon />
+                                                    <Chakra.AlertTitle>Loading format...</Chakra.AlertTitle>
+                                                </Chakra.Alert>
                                         }>
                                             <Await
                                                 resolve={props.src.get_async_format()}
@@ -158,8 +156,10 @@ export function Top_Chaps(props: MangaPageProps) {
                                 <Chakra.WrapItem>
                                     <React.Fragment>
                                         <React.Suspense fallback={
-                                            <Chakra.Box>
-                                            </Chakra.Box>
+                                            <Chakra.Alert status="loading" variant="left-accent">
+                                                    <Chakra.AlertIcon />
+                                                    <Chakra.AlertTitle>Loading Content...</Chakra.AlertTitle>
+                                                </Chakra.Alert>
                                         }>
                                             <Await
                                                 resolve={props.src.get_async_content}
@@ -210,7 +210,7 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <Chakra.Box>
                                         <Chakra.Heading fontFamily={"inherit"} size={"md"}>Atlernative Titles</Chakra.Heading>
                                         <React.Suspense fallback={
-                                            <Chakra.Spinner   />
+                                            <Chakra.Spinner />
                                         }>
                                             <Await
                                                 resolve={build_altTitle()}
@@ -240,7 +240,7 @@ export function Top_Chaps(props: MangaPageProps) {
                                                     </Chakra.Text>
                                                 </React.Fragment>
                                             ) : (
-                                                <React.Fragment/>
+                                                <React.Fragment />
                                             )
                                         }
                                     </Chakra.Box>

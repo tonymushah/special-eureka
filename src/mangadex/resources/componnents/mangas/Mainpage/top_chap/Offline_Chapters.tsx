@@ -3,6 +3,7 @@ import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import { MangaPageProps } from "../../Manga_Page";
+import Loading from "../loading";
 
 const All_downloaded_Chapter_manga = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_Chapter_manga"));
 
@@ -13,13 +14,7 @@ export default function Offline_Chapters(props: MangaPageProps) {
             <React.Suspense
                 fallback={
                     <Chakra.Box m={2} bg="inherit">
-                        <div className=" text-center">
-                            <Chakra.Spinner
-                                 
-                            />
-                            <br />
-                            <p>Loading chapters ...</p>
-                        </div>
+                        <Loading/>
                     </Chakra.Box>
                 }
             >
