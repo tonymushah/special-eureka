@@ -3,6 +3,7 @@ import { Manga } from "@mangadex/api/structures/Manga";
 import MangaElementDef_without_Context_Menu from "./Without_ContextMenu";
 
 import MangaContextMenu from "../MangaContextMenu";
+import ErrorBoundary from "./error";
 
 
 export default function MangaElementDef(props: {
@@ -15,15 +16,17 @@ export default function MangaElementDef(props: {
             display={"flex"}
             width={"min-content"}
         >
-            <MangaContextMenu
-                mangaId={props.src.get_id()}
-                refetch={props.refetch}
-            >
-                <MangaElementDef_without_Context_Menu
-                    src={props.src}
-                    isRefetching={props.isRefetching}
-                />
-            </MangaContextMenu>
+            <ErrorBoundary>
+                <MangaContextMenu
+                    mangaId={props.src.get_id()}
+                    refetch={props.refetch}
+                >
+                    <MangaElementDef_without_Context_Menu
+                        src={props.src}
+                        isRefetching={props.isRefetching}
+                    />
+                </MangaContextMenu>
+            </ErrorBoundary>
         </Chakra.Box>
     );
 }

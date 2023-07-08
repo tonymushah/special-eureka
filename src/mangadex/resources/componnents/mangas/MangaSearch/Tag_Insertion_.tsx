@@ -1,7 +1,8 @@
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Tag, TagLabel, TagLeftIcon, Tooltip, WrapItem } from "@chakra-ui/react";
 import { Tag as MangadexTag } from "@mangadex/api/structures/Tag";
-import { TagInsertion, TagInsertionMode, get_mode_tag_insertion, toggle_tag_insertion } from "./TagInsertion";
+import { get_mode_tag_insertion, toggle_tag_insertion } from "./TagInsertion";
+import { TagInsertion, TagInsertionMode } from "./types";
 
 export function Tag_Insertion_(props: {
     tag: MangadexTag,

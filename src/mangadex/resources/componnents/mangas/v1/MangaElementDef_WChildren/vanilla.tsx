@@ -8,8 +8,8 @@ import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaS
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import { useProSidebar } from "react-pro-sidebar";
-import { useMangaTitle } from "./MangaTitle";
-import MangaContextMenu from "./MangaContextMenu";
+import { useMangaTitle } from "../MangaTitle";
+import MangaContextMenu from "../MangaContextMenu";
 
 const MangaDexPath = getMangaDexPath();
 

@@ -8,19 +8,19 @@ import { Link } from "react-router-dom";
 import { getMangaDexPath } from "@mangadex/index";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
-import { ContentRating, make_first_UpperCare } from "@mangadex/api/internal/Utils";
+import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import { get_manga_description } from "@mangadex/resources/hooks/MangaStateHooks";
-import CoverImageByCoverID from "../../covers/v1/CoverImageByCoverID";
-import ErrorEL1 from "../../error/ErrorEL1";
-import IsPingable from "../../IsPingable";
-import MangaContextMenu from "./MangaContextMenu";
-import MangaTitle from "./MangaTitle";
-import MangaTags from "../tags";
+import CoverImageByCoverID from "../../../covers/v1/CoverImageByCoverID";
+import ErrorEL1 from "../../../error/ErrorEL1";
+import IsPingable from "../../../IsPingable";
+import MangaContextMenu from "../MangaContextMenu";
+import MangaTitle from "../MangaTitle";
+import MangaTags from "../../tags";
 import { v4 } from "uuid";
 
-const Statis = React.lazy(() => import("../Statistics/Statis"));
+const Statis = React.lazy(() => import("../../Statistics/Statis"));
 
 const MangaDexPath = getMangaDexPath();
 

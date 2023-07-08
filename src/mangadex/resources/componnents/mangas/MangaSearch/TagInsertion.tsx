@@ -1,14 +1,6 @@
 import { Tag as MangadexTag } from "@mangadex/api/structures/Tag";
+import { TagInsertion, TagInsertionMode } from "./types";
 
-export enum TagInsertionMode {
-    Include,
-    Exclude,
-}
-
-export type TagInsertion = {
-    id: string,
-    mode: TagInsertionMode
-}
 
 export function is_in_tag_insertion(tag: string | MangadexTag, to_use: Array<TagInsertion>): boolean {
     return (find_in_tag_insertion(tag, to_use) != undefined);

@@ -6,8 +6,8 @@ import TryCatch from "@commons-res/components/TryCatch";
 import { Manga } from "@mangadex/api/structures/Manga";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-import MangaContextMenu from "./MangaContextMenu";
-import { useMangaTitle } from "./MangaTitle";
+import MangaContextMenu from "../MangaContextMenu";
+import { useMangaTitle } from "../MangaTitle";
 
 const MangaDexPath = getMangaDexPath();
 
