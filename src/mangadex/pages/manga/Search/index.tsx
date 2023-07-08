@@ -64,6 +64,7 @@ function ReallySimpleCard({ children }: React.PropsWithChildren) {
     );
 }
 
+
 export default function Manga_Search() {
     const client = useHTTPClient();
     const { isOpen, onToggle, onClose } = useDisclosure();
@@ -85,6 +86,7 @@ export default function Manga_Search() {
                 name: d,
                 include: false
             })),
+            title : "",
             client: client
         },
         onSubmit(values) {
@@ -127,129 +129,175 @@ export default function Manga_Search() {
             values.client = client;
         },
     });
-    function Tags() {
-        return (
-            <AllTagConsumer>
-                {(d) => (
-                    <TagGroupSplitterProvider tags={d} >
+    const Tags = React.useMemo(() => {
+        function Comp() {
+            return (
+                <AllTagConsumer>
+                    {(d) => (
+                        <TagGroupSplitterProvider tags={d} >
+                            <Wrap>
+                                <EachTagGroupConsumer>
+                                    {(tag) => (
+                                        <WrapItem>
+                                            <Box>
+                                                <Heading size="md" fontFamily={"inherit"}>{make_first_UpperCare(tag.key)}</Heading>
+                                                <Wrap>
+                                                    {tag.data.map((b_value) => <Tag_Insertion_
+                                                        tag={b_value}
+                                                        array={formik.values.tags}
+                                                        key={b_value.get_id()}
+                                                        onClick={(d) => formik.setFieldValue("tags", d)}
+                                                    />)}
+                                                </Wrap>
+                                            </Box>
+                                        </WrapItem>
+                                    )}
+                                </EachTagGroupConsumer>
+                            </Wrap>
+                        </TagGroupSplitterProvider>
+                    )}
+                </AllTagConsumer>
+            );
+        }
+        return Comp;
+    }, [formik.values.tags]);
+    const TagsComp = React.useMemo(() => {
+        function TagsComp_() {
+            return (
+                <ReallySimpleCard>
+                    <FormControl
+                        isInvalid={(formik.errors.tags ? true : false)}
+                    >
+                        <FormLabel>
+                            <Heading size={"lg"} fontFamily={"inherit"}>
+                                Tags
+                            </Heading>
+                        </FormLabel>
+                        <Tags />
+                        <FormErrorMessage>{JSON.stringify(formik.errors.tags)}</FormErrorMessage>
+                    </FormControl>
+                </ReallySimpleCard>
+            );
+        }
+        return TagsComp_;
+    }, [formik.values.tags, formik.errors.tags]);
+    const StatusComp = React.useMemo(() => {
+        function StatusComp_() {
+            return (
+                <ReallySimpleCard>
+                    <FormControl
+                        isInvalid={(formik.errors.status ? true : false)}
+                    >
+                        <FormLabel>
+                            <Heading size={"lg"} fontFamily={"inherit"}>
+                                Publication Status
+                            </Heading>
+                        </FormLabel>
                         <Wrap>
-                            <EachTagGroupConsumer>
-                                {(tag) => (
-                                    <WrapItem>
-                                        <Box>
-                                            <Heading size="md" fontFamily={"inherit"}>{make_first_UpperCare(tag.key)}</Heading>
-                                            <Wrap>
-                                                {tag.data.map((b_value) => <Tag_Insertion_
-                                                    tag={b_value}
-                                                    array={formik.values.tags}
-                                                    key={b_value.get_id()}
-                                                    onClick={(d) => formik.setFieldValue("tags", d)}
-                                                />)}
-                                            </Wrap>
-                                        </Box>
+                            {formik.values.status.map((value, index, arr) => {
+                                const array = arr;
+                                return (
+                                    <WrapItem key={`status${index}`}>
+                                        <Tag colorScheme={value.include ? "orange" : undefined} variant={value.include ? "solid" : undefined} size={"lg"} onClick={() => {
+                                            array[index].include = !(array[index].include);
+                                            formik.setFieldValue("status", array);
+                                        }}>
+                                            <TagLeftIcon boxSize={"12px"} as={value.include ? AddIcon : undefined} />
+                                            <TagLabel>{make_first_UpperCare(value.name)}</TagLabel>
+                                        </Tag>
                                     </WrapItem>
-                                )}
-                            </EachTagGroupConsumer>
+                                );
+                            })}
                         </Wrap>
-                    </TagGroupSplitterProvider>
-                )}
-            </AllTagConsumer>
-        );
-    }
-    function TagsComp() {
-        return (
-            <ReallySimpleCard>
-                <FormControl
-                    isInvalid={(formik.errors.tags ? true : false)}
-                >
-                    <FormLabel>
-                        <Heading size={"lg"} fontFamily={"inherit"}>
-                            Tags
-                        </Heading>
-                    </FormLabel>
-                    <Tags />
-                    <FormErrorMessage>{JSON.stringify(formik.errors.tags)}</FormErrorMessage>
-                </FormControl>
-            </ReallySimpleCard>
-        );
-    }
-    function StatusComp() {
-        return (
-            <ReallySimpleCard>
-                <FormControl
-                    isInvalid={(formik.errors.status ? true : false)}
-                >
-                    <FormLabel>
-                        <Heading size={"lg"} fontFamily={"inherit"}>
-                            Publication Status
-                        </Heading>
-                    </FormLabel>
-                    <Wrap>
-                        {formik.values.status.map((value, index, arr) => {
-                            const array = arr;
-                            return (
-                                <WrapItem key={`status${index}`}>
-                                    <Tag colorScheme={value.include ? "orange" : undefined} variant={value.include ? "solid" : undefined} size={"lg"} onClick={() => {
-                                        array[index].include = !(array[index].include);
-                                        formik.setFieldValue("status", array);
-                                    }}>
-                                        <TagLeftIcon boxSize={"12px"} as={value.include ? AddIcon : undefined} />
-                                        <TagLabel>{make_first_UpperCare(value.name)}</TagLabel>
-                                    </Tag>
-                                </WrapItem>
-                            );
-                        })}
+                    </FormControl>
+                </ReallySimpleCard>
+            );
+        }
+        return StatusComp_;
+    }, [formik.values.status, formik.values.status]);
+    const CttRtgComp = React.useMemo(() => {
+        function CttRtgComp_() {
+            return (
+                <ReallySimpleCard>
+                    <FormControl
+                        isInvalid={(formik.errors.content_rating ? true : false)}
+                    >
+                        <FormLabel>
+                            <Heading size={"lg"} fontFamily={"inherit"}>
+                                Content Rating
+                            </Heading>
+                        </FormLabel>
+                        <Wrap>
+                            {formik.values.content_rating.map((value, index, arr) => {
+                                const array = arr;
+                                return (
+                                    <WrapItem key={`content_rating${index}`}>
+                                        <Tag colorScheme={value.include ? "orange" : undefined} variant={value.include ? "solid" : undefined} size={"lg"} onClick={() => {
+                                            array[index].include = !(array[index].include);
+                                            formik.setFieldValue("content_rating", array);
+                                        }}>
+                                            <TagLeftIcon boxSize={"12px"} as={value.include ? AddIcon : undefined} />
+                                            <TagLabel>{make_first_UpperCare(value.name)}</TagLabel>
+                                        </Tag>
+                                    </WrapItem>
+                                );
+                            })}
+                        </Wrap>
+                    </FormControl>
+                </ReallySimpleCard>
+            );
+        }
+        return CttRtgComp_;
+    }, [formik.values.content_rating, formik.errors.content_rating]);
+    const FilterCollapse = React.useMemo(() => {
+        function FilterCollapse_() {
+            return (
+                <React.Fragment>
+                    <Wrap spacing={"25px"}>
+                        <WrapItem>
+                            <CttRtgComp />
+                        </WrapItem>
+                        <WrapItem>
+                            <StatusComp />
+                        </WrapItem>
                     </Wrap>
-                </FormControl>
-            </ReallySimpleCard>
-        );
-    }
-    function CttRtgComp() {
-        return (
-            <ReallySimpleCard>
+                    <TagsComp />
+                </React.Fragment>
+            );
+        }
+        return FilterCollapse_;
+    }, []);
+    const Title = React.useMemo(() => {
+        function Title_() {
+            return (
                 <FormControl
-                    isInvalid={(formik.errors.content_rating ? true : false)}
+                    isInvalid={(formik.errors.title ? true : false) && formik.touched.title}
                 >
                     <FormLabel>
                         <Heading size={"lg"} fontFamily={"inherit"}>
-                            Content Rating
+                            Title
                         </Heading>
                     </FormLabel>
-                    <Wrap>
-                        {formik.values.content_rating.map((value, index, arr) => {
-                            const array = arr;
-                            return (
-                                <WrapItem key={`content_rating${index}`}>
-                                    <Tag colorScheme={value.include ? "orange" : undefined} variant={value.include ? "solid" : undefined} size={"lg"} onClick={() => {
-                                        array[index].include = !(array[index].include);
-                                        formik.setFieldValue("content_rating", array);
-                                    }}>
-                                        <TagLeftIcon boxSize={"12px"} as={value.include ? AddIcon : undefined} />
-                                        <TagLabel>{make_first_UpperCare(value.name)}</TagLabel>
-                                    </Tag>
-                                </WrapItem>
-                            );
-                        })}
-                    </Wrap>
+                    <HStack>
+                        <Input
+                            name={"title"}
+                            onChange={(e) => {
+                                formik.setFieldValue("title", e.target.value);
+                            }}
+                            value={formik.values.title}
+                            type="search"
+                        />
+                        <IconButton colorScheme="orange" aria-label="Search" type="submit" icon={<SearchIcon />} />
+                        <IconButton background={"gray.200"} _hover={{
+                            background: "gray.400"
+                        }} aria-label="Filter" onClick={onToggle} icon={<RiFilterFill />} />
+                    </HStack>
+                    <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
                 </FormControl>
-            </ReallySimpleCard>
-        );
-    }
-    function FilterCollapse() {
-        return (
-            <React.Fragment>
-                <Wrap spacing={"25px"}>
-                    <WrapItem>
-                        <CttRtgComp />
-                    </WrapItem>
-                    <WrapItem>
-                        <StatusComp />
-                    </WrapItem>
-                </Wrap>
-                <TagsComp />
-            </React.Fragment>
-        );
-    }
+            );
+        }
+        return Title_;
+    }, [formik.errors.title, formik.touched.title, formik.values.title]);
     React.useEffect(() => {
         appWindow.setTitle("Manga Search | Mangadex");
     }, []);
@@ -261,27 +309,7 @@ export default function Manga_Search() {
                 <ChakraContainer>
                     <form onSubmit={formik.handleSubmit}>
                         <VStack divider={<StackDivider />}>
-                            <FormControl
-                                isInvalid={(formik.errors.title ? true : false) && formik.touched.title}
-                            >
-                                <FormLabel>
-                                    <Heading size={"lg"} fontFamily={"inherit"}>
-                                        Title
-                                    </Heading>
-                                </FormLabel>
-                                <HStack>
-                                    <Input
-                                        name={"title"}
-                                        onChange={formik.handleChange}
-                                        type="search"
-                                    />
-                                    <IconButton colorScheme="orange" aria-label="Search" type="submit" icon={<SearchIcon />} />
-                                    <IconButton background={"gray.200"} _hover={{
-                                        background: "gray.400"
-                                    }} aria-label="Filter" onClick={onToggle} icon={<RiFilterFill />} />
-                                </HStack>
-                                <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
-                            </FormControl>
+                            <Title/>
                             <Collapse in={isOpen} animateOpacity>
                                 <FilterCollapse />
                             </Collapse>
