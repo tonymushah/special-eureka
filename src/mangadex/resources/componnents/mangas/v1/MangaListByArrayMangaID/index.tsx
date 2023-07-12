@@ -33,7 +33,7 @@ export default function MangaListByArrayMangaID(props: {
                     <FontAwesome.FaTh />
                 </Chakra.Tab>
             </Chakra.TabList>
-            <Chakra.TabPanels>
+            <Chakra.TabPanels padding={"2px"}>
                 <Chakra.TabPanel>
                     <MyErrorBounderies>
                         <Chakra.Stack>
@@ -52,7 +52,7 @@ export default function MangaListByArrayMangaID(props: {
                         </Chakra.Stack>
                     </MyErrorBounderies>
                 </Chakra.TabPanel>
-                <Chakra.TabPanel>
+                <Chakra.TabPanel padding={"5px"}>
                     <MyErrorBounderies>
                         <Chakra.Wrap>
                             {

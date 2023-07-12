@@ -1,26 +1,14 @@
-import { UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { atom, useAtom } from "jotai";
 
-export default function useUserOptionModal(query_options? : Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">){
-    const queryClient = useQueryClient();
-    const queryKey = ["mdx", "client", "user-option-modal"];
-    const query = useQuery(queryKey, async () => {
-        return false;
-    }, query_options);
-    const changeOptionMutation = useMutation({
-        mutationKey : queryKey.concat("mutation"),
-        mutationFn : async (new_ : boolean) => {
-            queryClient.setQueryData(queryKey, new_);
-        }
-    });
-    const changeOption = changeOptionMutation.mutate;
+const modalAtom = atom(false);
+
+export default function useUserOptionModal(){
+    const [ state, changeOption ] = useAtom(modalAtom);
     const toggle = () => {
-        if(query.isSuccess){
-            changeOption(!query.data);
-        }
+        changeOption(!state);
     };
     return {
-        query,
-        queryKey,
+        state,
         changeOption,
         toggle
     };

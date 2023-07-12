@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import TryCatch from "@commons-res/components/TryCatch";
+import TryCatch, { useCatch } from "@commons-res/components/TryCatch";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
@@ -15,6 +15,13 @@ import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
 const MangaChapterAccordion_Element = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaChapterAccordion_Element"));
+
+function Error_(){
+    const error = useCatch();
+    return (
+        <ErrorEL1 error={error}/>
+    );
+}
 
 export default function LatestUpdates() {
     const offset_limit = new Offset_limits();
@@ -59,9 +66,7 @@ export default function LatestUpdates() {
                             </Chakra.Heading>
                             <Chakra.Box>
                                 <TryCatch
-                                    catch={(error) => (
-                                        <ErrorEL1 error={error} />
-                                    )}
+                                    catch={<Error_/>}
                                 >
                                     <CollectionComponnent_WithQuery<Chapter>
                                         fn={async () => {

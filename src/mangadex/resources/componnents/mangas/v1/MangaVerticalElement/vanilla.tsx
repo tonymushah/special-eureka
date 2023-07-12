@@ -75,9 +75,9 @@ export default function MangaVerticalElement(props: {
                         <Chakra.Center>
                             <Chakra.Heading
                                 //textAlign={"center"}
-                                size={"md"}
+                                size={"sm"}
                                 noOfLines={2}
-                                margin={"15px"}
+                                margin={"10px"}
                                 fontFamily={"inherit"}
                             >
                                 <TryCatch catch={() => (
@@ -94,6 +94,7 @@ export default function MangaVerticalElement(props: {
                                             color : "orange",
                                             textDecoration : "none"
                                         }}
+                                        transition={"color 0.2s"}
                                     >
                                         {title}
                                     </Chakra.LinkOverlay>

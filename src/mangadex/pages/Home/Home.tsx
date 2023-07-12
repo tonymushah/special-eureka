@@ -40,6 +40,7 @@ function Home() {
                                 <Chakra.HStack>
                                     <Chakra.Spinner
                                         size={"lg"}
+                                        thickness={"5px"}
                                     />
                                     <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                                         Pinging the Mangadex API
@@ -56,6 +57,7 @@ function Home() {
                                         <Chakra.HStack>
                                             <Chakra.Spinner
                                                 size={"lg"}
+                                                thickness="5px"
                                             />
                                             <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                                                 Pinging the Mangadex API

@@ -151,7 +151,7 @@ export default function MangaElementDef2(props: {
                             <IsPingable
                                 client={client}
                                 onError={() => (
-                                    <></>
+                                    <React.Fragment/>
                                 )}
                                 onSuccess={() => (
                                     <MangaElementDef2_Stats src={props.src} />
@@ -233,7 +233,7 @@ export default function MangaElementDef2(props: {
                                         manga_description_query.isError ? (
                                             <ErrorEL1 error={manga_description_query.error} />
                                         ) : (
-                                            <></>
+                                            <React.Fragment/>
                                         )
                                     )
                                 )

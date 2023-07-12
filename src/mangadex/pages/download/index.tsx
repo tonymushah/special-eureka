@@ -11,13 +11,15 @@ export default function Download_Index_Page() {
 
     return (
         <Chakra.Box>
-            <Chakra.Tabs isFitted isLazy variant={"enclosed-colored"}>
+            <Chakra.Tabs isFitted isLazy variant={"enclosed-colored"} padding={"0px"}>
                 <Chakra.TabList>
                     <Chakra.Tab>Manga</Chakra.Tab>
                     <Chakra.Tab>Chapters</Chakra.Tab>
                 </Chakra.TabList>
-                <Chakra.TabPanels>
-                    <Chakra.TabPanel>
+                <Chakra.TabPanels margin={0}
+                    padding={"5px"}
+                >
+                    <Chakra.TabPanel padding={"1px"}>
                         <React.Suspense
                             fallback={
                                 <Chakra.Box>

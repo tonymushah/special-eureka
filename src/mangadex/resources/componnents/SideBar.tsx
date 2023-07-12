@@ -22,6 +22,26 @@ const SideBar = () => (
     </React.Suspense>
 );
 
+function LTRSideBar() {
+    const { query } = useRTLSidebar();
+    if (query.data != true) {
+        return (
+            <SideBar />
+        );
+    } else {
+        return (<React.Fragment />);
+    }
+}
+
+function RTLSidebar(){
+    const { query } = useRTLSidebar();
+    if(query.data == true){
+        return (<SideBar/>);
+    }else{
+        return (<React.Fragment/>);
+    }
+}
+
 export default function Content(props: React.PropsWithChildren) {
     const { query } = useRTLSidebar();
     if (query.isLoading) {
@@ -31,13 +51,7 @@ export default function Content(props: React.PropsWithChildren) {
     }
     return (
         <Chakra.Box width={"100% !important"} display={"inline-flex"}>
-            {
-                query.data != true ? (
-                    <SideBar/>
-                ) : (
-                    <></>
-                )
-            }
+            <LTRSideBar />
             <Chakra.Box
                 width={"100%"}
                 height={"100vh"}
@@ -52,13 +66,7 @@ export default function Content(props: React.PropsWithChildren) {
                     </Chakra.Box>
                 </Chakra.Box>
             </Chakra.Box>
-            {
-                query.data == true ? (
-                    <SideBar/>
-                ) : (
-                    <></>
-                )
-            }
+            <RTLSidebar/>
         </Chakra.Box>
     );
 }

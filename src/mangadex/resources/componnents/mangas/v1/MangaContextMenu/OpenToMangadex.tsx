@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Box, Icon, Stack, Text } from "@chakra-ui/react";
+import { Box, Icon, HStack, Text } from "@chakra-ui/react";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { open } from "@tauri-apps/api/shell";
@@ -46,7 +46,7 @@ export default function OpenToMangadex() {
             }}
             color={isTransition ? "gray" : "orange.500"}
         >
-            <Stack
+            <HStack
                 spacing={"2"}
             >
                 {
@@ -55,7 +55,7 @@ export default function OpenToMangadex() {
                 <Text as="span">
                     Open to Mangadex
                 </Text>
-            </Stack>
+            </HStack>
         </Box>
     );
 }

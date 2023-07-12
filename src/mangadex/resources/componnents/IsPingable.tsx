@@ -11,7 +11,7 @@ export default function IsPingable(props: {
     onLoading: React.ReactNode
 }) {
     const { query } = usePingQuery({
-        client : props.client
+        client: props.client
     });
     const context = React.createContext(query);
     if (query.isSuccess == true) {
@@ -32,8 +32,7 @@ export default function IsPingable(props: {
                 </context.Consumer>
             );
         }
-    }
-    if (query.isLoading == true) {
+    } else if (query.isLoading == true) {
         return (
             <React.Fragment>
                 {
@@ -41,8 +40,7 @@ export default function IsPingable(props: {
                 }
             </React.Fragment>
         );
-    }
-    if (query.isRefetching == true) {
+    } else if (query.isRefetching == true) {
         return (
             <React.Fragment>
                 {
@@ -50,9 +48,7 @@ export default function IsPingable(props: {
                 }
             </React.Fragment>
         );
-    }
-    
-    if (query.isError == true) {
+    } else if (query.isError == true) {
         return (
             <context.Consumer>
                 {
@@ -60,12 +56,14 @@ export default function IsPingable(props: {
                 }
             </context.Consumer>
         );
+    } else {
+        return (
+            <React.Fragment>
+                {
+                    props.onLoading
+                }
+            </React.Fragment>
+        );
     }
-    return (
-        <React.Fragment>
-            {
-                props.onLoading
-            }
-        </React.Fragment>
-    );
+
 }

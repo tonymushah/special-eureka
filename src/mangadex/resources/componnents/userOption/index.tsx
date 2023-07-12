@@ -12,7 +12,7 @@ const RtlSidebarOption = React.lazy(() => import("@mangadex/resources/componnent
 
 
 export default function UserOptionModal() {
-    const { query, changeOption, toggle } = useUserOptionModal();
+    const { state, changeOption, toggle } = useUserOptionModal();
     return (
         <React.Fragment>
             <ReactHotkeys
@@ -21,7 +21,7 @@ export default function UserOptionModal() {
                     toggle();
                 }}
             />
-            <Chakra.Modal isOpen={query.data ?? false} onClose={() => changeOption(false)}>
+            <Chakra.Modal isOpen={state} onClose={() => changeOption(false)}>
                 <Chakra.ModalOverlay />
                 <Chakra.ModalContent>
                     <Chakra.ModalHeader>

@@ -108,10 +108,10 @@ export default function MangaPopularElement(props: {
                         ) : (
                             manga_description_query.isSuccess ? (
                                 manga_description_query.data.length == 0 ? (
-                                    <></>
+                                    <React.Fragment/>
                                 ) : (
                                     <Chakra.Box
-                                        noOfLines={3}
+                                        noOfLines={5}
                                     >
                                         <TryCatch
                                             catch={(e) => (
@@ -138,7 +138,10 @@ export default function MangaPopularElement(props: {
                                                         );
                                                     },
                                                     p(node) {
-                                                        return (<Chakra.Text m={0}>{node.children}</Chakra.Text>);
+                                                        return (<React.Fragment>
+                                                            <Chakra.Text m={0} as={"span"}>{node.children}</Chakra.Text>
+                                                            <br/>
+                                                        </React.Fragment> );
                                                     }
                                                 }}
                                             >

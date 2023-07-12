@@ -75,7 +75,7 @@ const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
 
 const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
 
-export function useMangaDexPath(){
+export function useMangaDexPath() {
     return React.useMemo(() => getMangaDexPath(), []);
 }
 
@@ -246,13 +246,9 @@ function useMangadexRouter(): RouteObject {
                 path: "download",
                 errorElement: (<ErrorELRouter />),
                 element: (
-                    <Chakra.Box
-                        margin={10}
-                    >
-                        <Mangadex_suspense>
-                            <DownloadsLaoyut />
-                        </Mangadex_suspense>
-                    </Chakra.Box>
+                    <Mangadex_suspense>
+                        <DownloadsLaoyut />
+                    </Mangadex_suspense>
                 ),
                 children: [
                     // index
@@ -284,24 +280,24 @@ function useMangadexRouter(): RouteObject {
                             {
                                 index: true,
                                 element: (
-                                <Group_Page_Suspense>
-                                    <Group_Page_Details/>
-                                </Group_Page_Suspense>
+                                    <Group_Page_Suspense>
+                                        <Group_Page_Details />
+                                    </Group_Page_Suspense>
                                 )
                             },
                             {
                                 path: "titles",
-                                element : (
+                                element: (
                                     <Group_Page_Suspense>
-                                        <Group_Page_Titles/>
+                                        <Group_Page_Titles />
                                     </Group_Page_Suspense>
                                 )
                             },
                             {
                                 path: "feeds",
-                                element : (
+                                element: (
                                     <Group_Page_Suspense>
-                                        <Group_Page_Feeds/>
+                                        <Group_Page_Feeds />
                                     </Group_Page_Suspense>
                                 )
                             }

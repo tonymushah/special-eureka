@@ -22,7 +22,7 @@ export type Props = {
 
 const Context = React.createContext<Props | undefined>(undefined);
 
-function PropsProvider({ value, children } : React.PropsWithChildren<{
+export function PropsProvider({ value, children } : React.PropsWithChildren<{
     value : Props
 }>){
     return (
@@ -81,7 +81,14 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                                     rowSpan={2}
                                     colSpan={4}
                                 >
-                                    <Image/>
+                                    <Chakra.Card
+                                        overflow={"hidden"}
+                                        variant={"outline"}
+                                        borderRadius={"10px"}
+                                        maxHeight={"130px"}
+                                    >
+                                        <Image/>
+                                    </Chakra.Card>
                                 </Chakra.GridItem>
                                 <Chakra.GridItem
                                     rowSpan={1}
