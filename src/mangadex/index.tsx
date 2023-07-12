@@ -75,6 +75,9 @@ const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
 
 const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
 
+export function useMangaDexPath(){
+    return React.useMemo(() => getMangaDexPath(), []);
+}
 
 export function Mangadex_suspense__() {
     return (

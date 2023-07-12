@@ -1,13 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
 import MangaChapter_Accordion from "@mangadex/api/internal/utils/MangaChapter_Accordion";
 import React from "react";
-import { get_manga_byId, useMangaDownload_Delete } from "../../../hooks/MangaStateHooks";
+import { get_manga_byId, useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFallback2 from "./MangaElement2Fallback";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
 const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"));
-
 
 export default function MangaChapterAccordion_Element(props: {
     src: MangaChapter_Accordion

@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { Manga } from "@mangadex/api/structures/Manga";
-import MangaElementDef_without_Context_Menu from "./Without_ContextMenu";
+import Vanilla from "./vanilla";
 
 import MangaContextMenu from "../MangaContextMenu";
 import ErrorBoundary from "./error";
@@ -21,7 +21,7 @@ export default function MangaElementDef(props: {
                     mangaId={props.src.get_id()}
                     refetch={props.refetch}
                 >
-                    <MangaElementDef_without_Context_Menu
+                    <Vanilla
                         src={props.src}
                         isRefetching={props.isRefetching}
                     />
