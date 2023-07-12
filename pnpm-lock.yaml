@@ -38,6 +38,12 @@ dependencies:
   '@emotion/styled':
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.14)(react@18.2.0)
+  '@fontsource-variable/josefin-sans':
+    specifier: ^5.0.6
+    version: 5.0.6
+  '@fontsource/poppins':
+    specifier: ^5.0.5
+    version: 5.0.5
   '@fortawesome/fontawesome-free':
     specifier: ^6.4.0
     version: 6.4.0
@@ -4666,6 +4672,14 @@ packages:
       '@floating-ui/dom': 1.4.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@fontsource-variable/josefin-sans@5.0.6:
+    resolution: {integrity: sha512-olxH6x9JPHXhqe17+H8h9t8ClJpvRgguDeJsiMe1vntdqsWMz7K9/pZtuqNQ+4VAI29J6wGSFh98UETMMSnOxw==}
+    dev: false
+
+  /@fontsource/poppins@5.0.5:
+    resolution: {integrity: sha512-Y/AGmD6iavfobRb7f2l49q0dQSyisvRrUfJ7F0AWOlTNFty8bbnPBbg+5Qsq5EN6xWaIAn++50aLfOCEe7zu3w==}
     dev: false
 
   /@fortawesome/fontawesome-common-types@6.4.0:
