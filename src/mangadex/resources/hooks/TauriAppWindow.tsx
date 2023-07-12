@@ -1,8 +1,12 @@
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 
-export function useAppWindowTitle(title : string){
-    React.useEffect(() => {
-        appWindow.setTitle(title);
-    }, []);
+export function useAppWindowTitle() {
+    const [, setTitle_] = React.useTransition();
+    function fn(title: string) {
+        setTitle_(() => {
+            appWindow.setTitle(title);
+        });
+    }
+    return fn;
 }

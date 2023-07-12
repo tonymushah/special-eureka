@@ -9,7 +9,10 @@ const Group_Search = React.lazy(() => import("@mangadex/resources/componnents/gr
 export default function Group_Search_default(){
     const offset_Limits = new Offset_limits();
     offset_Limits.set_limits(25);
-    useAppWindowTitle("Groups | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Groups | Mangadex");
+    }, []);
     return (
         <Mangadex_suspense>
             <ChakraContainer>

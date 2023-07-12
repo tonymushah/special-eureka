@@ -70,7 +70,8 @@ export default function MangadexLayout() {
                         }
                     }
                 },
-                "networkMode": "always"
+                "networkMode": "always",
+                cacheTime : 1000 * 60 * 3
             },
             "mutations": {
                 "networkMode": "always"

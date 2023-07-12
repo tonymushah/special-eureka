@@ -47,7 +47,10 @@ function Success() {
 
 function Error_() {
     const { query, id } = useLoader();
-    useAppWindowTitle(`Error on loading author ${id!} | Mangadex`);
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle(`Error on loading author ${id!} | Mangadex`);
+    }, []);
     if (query.isError) {
         return (
             <Mangadex_suspense>
@@ -65,7 +68,10 @@ function Error_() {
 
 export default function Author_Page_index() {
     const { query } = useLoader();
-    useAppWindowTitle("Loading... | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Loading... | Mangadex");
+    }, []);
     if (query.isSuccess) {
         return (
             <Success />

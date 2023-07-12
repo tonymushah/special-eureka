@@ -1,17 +1,8 @@
-import "@fontsource/poppins/100.css";
-import "@fontsource/poppins/200.css";
-import "@fontsource/poppins/300.css";
-import "@fontsource/poppins/400.css";
-import "@fontsource/poppins/500.css";
-import "@fontsource/poppins/600.css";
-import "@fontsource/poppins/700.css";
-import "@fontsource/poppins/800.css";
-import "@fontsource/poppins/900.css";
-import "@fontsource-variable/josefin-sans";
-
+import "@commons-res/fonts";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider, Box, Spinner, AbsoluteCenter } from "@chakra-ui/react";
+import theme from "./theme";
 
 // TODO Add custom window decoration 
 // import BoxDecoration from "@commons-res/components/BoxDecoration";
@@ -23,7 +14,7 @@ const app = ReactDOM.createRoot(document.getElementById("app")!);
 
 app.render(
     <React.StrictMode>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
             <Box>
                 <React.Suspense
                     fallback={

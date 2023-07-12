@@ -14,11 +14,13 @@ export default function Chapter_Page() {
     const queryKey = get_chapter_queryKey({
         id: id!
     });
+    const setTitle = useAppWindowTitle();
     const queryClient = useQueryClient();
-    React.useMemo(() => {
+    React.useEffect(() => {
         queryClient.removeQueries(queryKey, {
             exact: true
         });
+        setTitle("Loading... | Mangadex");
     }, []);
     const { query } = get_ChapterbyId({
         id: id!
@@ -27,9 +29,9 @@ export default function Chapter_Page() {
         type: "chapter",
         id: id!
     });
-    useAppWindowTitle("Loading... | Mangadex");
+    
     if (query.isError) {
-        useAppWindowTitle(`Error on loading chapter ${id!} | Mangadex`);
+        setTitle(`Error on loading chapter ${id!} | Mangadex`);
         return (
             <ErrorEL1 error={query.error} />
         );

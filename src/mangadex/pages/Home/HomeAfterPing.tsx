@@ -9,7 +9,6 @@ import { loader as latest, queryKey as latest_QueryKey } from "./Latest_Update";
 import { loader as popular, queryKey as popular_QueryKey } from "./PopularTitles";
 import { loader as recentlyAdded, queryKey as recentlyAdded_QueryKey } from "./RecentlyAdded";
 import { getSeasonalId } from "./Seasonal";
-import MangaPopularElement from "@mangadex/resources/componnents/mangas/v1/MangadexPopularElement/vanilla";
 
 const Seasonal = React.lazy(() => import("./Seasonal"));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
@@ -44,18 +43,6 @@ async function seasonal_loader(client: Client, queryClient: QueryClient) {
     const data = await List.getListByID_includes_manga(seasonal_id, client);
     const key = ["mdx", "custom_list", seasonal_id];
     queryClient.setQueryData(key, data);
-}
-
-function PopularRecentlyFallback() {
-    return (
-        <React.Fragment>
-            <Chakra.Skeleton
-                width={"2em"}
-                height={"1em"}
-            />
-
-        </React.Fragment>
-    );
 }
 
 export default function HomeAfterPing() {
