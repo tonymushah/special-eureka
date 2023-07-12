@@ -2,6 +2,7 @@ import React from "react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import * as Chakra from "@chakra-ui/react";
 import useChapterReadingDrawer from "@mangadex/resources/hooks/fullscreenOption";
+import Overlay from "./Overlay";
 
 const PageSelection = React.lazy(() => import("./PageSelection"));
 const ChapterReadingModeOption = React.lazy(() => import("./Chapter_Reading_Mode"));
@@ -45,6 +46,7 @@ export default function ReadingDrawer(props: {
                     changeOption(false);
                 }}
             >
+                <Overlay/>
                 <Chakra.DrawerContent
                     zIndex={"100"}
                     fontFamily={"inherit"}

@@ -28,7 +28,7 @@ export async function loader({
     const search_result = await Chapter_withAllIncludes.search({
         offset_limits: offset_limits_2,
         order: new Order("desc"),
-        translatedLanguage : (await new UserOptions().getLanguages()).map((value) => value.get_two_letter()),
+        translatedLanguage: (await new UserOptions().getLanguages()).map((value) => value.get_two_letter()),
         client: client
     });
     search_result.get_data().forEach((chapter) => {
@@ -72,32 +72,6 @@ export default function Latest_Updates() {
     }, {
         staleTime: Infinity,
     });
-    if (query.isLoading) {
-        return (
-            <Chakra.Box>
-                <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
-                <Chakra.Button
-                    colorScheme={"orange"}
-                    onClick={() => query.refetch()}
-                    isLoading={query.isLoading}
-                >
-                    Refetch
-                </Chakra.Button>
-                <Chakra.Box
-                    marginTop={"25px"}
-                    marginBottom={"25px"}
-                >
-                    <Chakra.Center>
-                        <Chakra.Spinner
-                            size="xl"
-                            color='orange.500'
-                            thickness='4px'
-                        />
-                    </Chakra.Center>
-                </Chakra.Box>
-            </Chakra.Box>
-        );
-    }
     if (query.isError) {
         return (
             <Chakra.Box>
@@ -113,29 +87,55 @@ export default function Latest_Updates() {
             </Chakra.Box>
         );
     }
+    if (query.isSuccess) {
+        return (
+            <Chakra.Box>
+                <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
+                <Chakra.Button
+                    colorScheme={"orange"}
+                    onClick={() => query.refetch()}
+                    isLoading={query.isLoading || query.isRefetching}
+                >
+                    Refetch
+                </Chakra.Button>
+                <Chakra.Wrap>
+                    {query.data.get_data().map((value: Chapter) => (
+                        <Chakra.WrapItem key={value.get_id()}>
+                            <React.Suspense
+                                fallback={
+                                    <MangaElementFallback />
+                                }
+                            >
+                                <MangaFeedElement src={value} />
+                            </React.Suspense>
+                        </Chakra.WrapItem>
+                    ))}
+                </Chakra.Wrap>
+            </Chakra.Box>
+        );
+    }
     return (
         <Chakra.Box>
             <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
             <Chakra.Button
                 colorScheme={"orange"}
                 onClick={() => query.refetch()}
-                isLoading={query.isLoading || query.isRefetching}
+                isLoading={query.isLoading}
             >
                 Refetch
             </Chakra.Button>
-            <Chakra.Wrap>
-                {query.data!.get_data().map((value: Chapter) => (
-                    <Chakra.WrapItem key={value.get_id()}>
-                        <React.Suspense
-                            fallback={
-                                <MangaElementFallback />
-                            }
-                        >
-                            <MangaFeedElement src={value} />
-                        </React.Suspense>
-                    </Chakra.WrapItem>
-                ))}
-            </Chakra.Wrap>
+            <Chakra.Box
+                marginTop={"25px"}
+                marginBottom={"25px"}
+            >
+                <Chakra.Center>
+                    <Chakra.Spinner
+                        size="xl"
+                        color='orange.500'
+                        thickness='4px'
+                    />
+                </Chakra.Center>
+            </Chakra.Box>
         </Chakra.Box>
     );
 }

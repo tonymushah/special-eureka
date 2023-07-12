@@ -4,7 +4,7 @@ import { List } from "@mangadex/api/structures/List";
 import { Client } from "@tauri-apps/api/http";
 import { useQuery } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Mangadex_suspense__ } from "@mangadex";
+import { Mangadex_suspense__ } from "@mangadex/index";
 
 const CustomListSwiper = React.lazy(() => import("@mangadex/resources/componnents/lists/v1/CustomListSwiper"));
 

@@ -1,4 +1,3 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 

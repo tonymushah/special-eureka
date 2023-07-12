@@ -5,17 +5,15 @@ import { DrawerOverlay } from "@chakra-ui/react";
 
 export default function Overlay() {
     const [ isOverlay ] = useAtom(OptionOverlayAtom);
-    return (
-        <React.Fragment>
-            {
-                isOverlay == true ? (
-                    <DrawerOverlay
+    if(isOverlay){
+        return (
+            <DrawerOverlay
                         zIndex={"100"}
                     />
-                ) : (
-                    <React.Fragment />
-                )
-            }
-        </React.Fragment>
-    );
+        );
+    }else{
+        return (
+            <React.Fragment/>
+        );
+    }
 }
