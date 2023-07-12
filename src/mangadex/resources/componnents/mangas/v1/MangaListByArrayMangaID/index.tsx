@@ -34,7 +34,7 @@ export default function MangaListByArrayMangaID(props: {
                 </Chakra.Tab>
             </Chakra.TabList>
             <Chakra.TabPanels padding={"2px"}>
-                <Chakra.TabPanel>
+                <Chakra.TabPanel padding={"5px"}>
                     <MyErrorBounderies>
                         <Chakra.Stack>
                             {
@@ -71,7 +71,7 @@ export default function MangaListByArrayMangaID(props: {
                         </Chakra.Wrap>
                     </MyErrorBounderies>
                 </Chakra.TabPanel>
-                <Chakra.TabPanel textAlign={"center"}>
+                <Chakra.TabPanel padding={"5px"} textAlign={"center"}>
                     <MyErrorBounderies>
                         <Chakra.Wrap>
                             {

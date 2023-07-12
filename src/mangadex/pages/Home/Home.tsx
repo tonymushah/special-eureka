@@ -10,7 +10,10 @@ const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/com
 
 function Home() {
     const client = useHTTPClient();
-    useAppWindowTitle("High Quality Image, no ads | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("High Quality Image, no ads | Mangadex");
+    },[]);
     useTrackEvent("mangadex-index-page-entrance");
     return (
         <Chakra.Box

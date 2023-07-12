@@ -100,7 +100,7 @@ export function useTrackEvent(name: string, payload?: {
 }) {
     React.useEffect(() => {
         trackEvent(name, payload);
-    }, [name, payload]);
+    }, []);
 }
 
 export function trackEvent(name: string, payload?: {

@@ -13,7 +13,10 @@ const MangaDexPath = getMangaDexPath();
 
 export default function Random_Manga() {
     const client = useHTTPClient();
-    useAppWindowTitle("Loading a Random Manga | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Loading a Random Manga | Mangadex");
+    }, []);
     useTrackEvent("mangadex-random-manga");
     return (
         <IsPingable
@@ -26,7 +29,7 @@ export default function Random_Manga() {
                 </AbsoluteCenter>
             }
             onError={(query) => {
-                useAppWindowTitle("Error on loading a Random Manga | Mangadex");
+                setTitle("Error on loading a Random Manga | Mangadex");
                 return (
                     <IsPingable_defaultError
                         query={query}

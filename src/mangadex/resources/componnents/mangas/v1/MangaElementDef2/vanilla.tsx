@@ -151,7 +151,7 @@ export default function MangaElementDef2(props: {
                             <IsPingable
                                 client={client}
                                 onError={() => (
-                                    <React.Fragment/>
+                                    <React.Fragment />
                                 )}
                                 onSuccess={() => (
                                     <MangaElementDef2_Stats src={props.src} />
@@ -196,12 +196,25 @@ export default function MangaElementDef2(props: {
                                         (nodes) => (
                                             <Chakra.Wrap margin={0} spacing={"2px"} marginBottom={0}>
                                                 {
-                                                    nodes.map((value) => (
-                                                        <Chakra.WrapItem key={`${v4()}`}>
+                                                    nodes.map((value, index, array) => (
+                                                        <React.Fragment key={`${v4()}`}>
                                                             {
-                                                                value
+                                                                index < 15 ? (
+                                                                    <Chakra.WrapItem >
+                                                                        {
+                                                                            value
+                                                                        }
+                                                                    </Chakra.WrapItem>
+                                                                ) : (
+                                                                    index == 15 ? (
+                                                                        <Chakra.Tag>{array.length - index} more...</Chakra.Tag>
+                                                                    ) : (
+                                                                        <React.Fragment/>
+                                                                    )
+                                                                )
                                                             }
-                                                        </Chakra.WrapItem>
+                                                        </React.Fragment>
+
                                                     ))
                                                 }
                                             </Chakra.Wrap>
@@ -233,7 +246,7 @@ export default function MangaElementDef2(props: {
                                         manga_description_query.isError ? (
                                             <ErrorEL1 error={manga_description_query.error} />
                                         ) : (
-                                            <React.Fragment/>
+                                            <React.Fragment />
                                         )
                                     )
                                 )

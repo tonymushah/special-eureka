@@ -24,12 +24,21 @@ function Error_(){
 }
 
 export default function LatestUpdates() {
-    const offset_limit = new Offset_limits();
-    offset_limit.set_limits(25);
+    const { offset_limit, queryKey } = React.useMemo(() => {
+        const offset_limit = new Offset_limits();
+        offset_limit.set_limits(25);
+        const queryKey = ["mdx", "latest-updates"];
+        return {
+            offset_limit,
+            queryKey
+        };
+    }, []); 
     const client = useHTTPClient();
-    const queryKey = ["mdx", "latest-updates"];
     const userOption = useUserOption();
-    useAppWindowTitle("Latest Updates | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Latest Updates | Mangadex");
+    }, []);
     useTrackEvent("mangadex-latest-update-entrance");
     return (
         <ChakraContainer>

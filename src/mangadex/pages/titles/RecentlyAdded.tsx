@@ -14,11 +14,20 @@ const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPi
 const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
 
 export default function RecentlyAdded() {
-    const offset_limit = new Offset_limits();
-    offset_limit.set_limits(25);
+    const { offset_limit, queryKey } = React.useMemo(() => {
+        const offset_limit = new Offset_limits();
+        offset_limit.set_limits(25);
+        const queryKey = ["mdx", "recently-added"];
+        return {
+            offset_limit,
+            queryKey
+        };
+    }, []);
     const client = useHTTPClient();
-    const queryKey = ["mdx", "recently-added"];
-    useAppWindowTitle("Recently Added | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Recently Added | Mangadex");
+    });
     useTrackEvent("mangadex-recently-added-entrance");
     return (
         <Mangadex_suspense>

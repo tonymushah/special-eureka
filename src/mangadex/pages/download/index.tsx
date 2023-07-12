@@ -7,8 +7,10 @@ const MangaListByArrayMangaID = React.lazy(() => import("@mangadex/resources/com
 const All_downloaded_chapter = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_chapter"));
 
 export default function Download_Index_Page() {
-    useAppWindowTitle("Offline Library | Mangadex");
-
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Offline Library | Mangadex");
+    },[]);
     return (
         <Chakra.Box>
             <Chakra.Tabs isFitted isLazy variant={"enclosed-colored"} padding={"0px"}>

@@ -9,9 +9,10 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Client } from "@tauri-apps/api/http";
 import TryCatch from "@commons-res/components/TryCatch";
 import { appWindow } from "@tauri-apps/api/window";
-import { getMangaDexPath, trackEvent } from "@mangadex/index";
+import { getMangaDexPath, trackEvent, useMangaDexPath } from "@mangadex/index";
 import { Link } from "react-router-dom";
 import ChakraContainer from "../layout/Container";
+import { Link as ReactRouterLink } from "react-router-dom";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
 
@@ -43,15 +44,17 @@ function Leader_query_for_GroupPage(props: {
     }, {
         staleTime: Infinity
     });
+    const MangaDexPath = useMangaDexPath();
     return (
         <React.Fragment>
             {
                 leader_query.isSuccess ? (
-                    <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
+                    <Chakra.Heading fontSize={"lg"}>Leader : <Chakra.Link as={ReactRouterLink} to={`${MangaDexPath}/user/${leader_query.data.get_id()}`}>{leader_query.data.get_username()}</Chakra.Link></Chakra.Heading>
                 ) : (
                     <React.Fragment />
                 )
-            }</React.Fragment>
+            }
+        </React.Fragment>
     );
 }
 

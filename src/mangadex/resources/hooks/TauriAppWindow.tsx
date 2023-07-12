@@ -3,10 +3,9 @@ import React from "react";
 
 export function useAppWindowTitle() {
     const [, setTitle_] = React.useTransition();
-    function fn(title: string) {
+    return React.useCallback((title: string) => {
         setTitle_(() => {
             appWindow.setTitle(title);
         });
-    }
-    return fn;
+    }, []);
 }

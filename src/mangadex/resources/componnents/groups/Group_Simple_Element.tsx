@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { RiGroupFill } from "react-icons/ri";
 import { Link as RouterLink } from "react-router-dom";
+import React from "react";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -58,7 +59,7 @@ export default function Group_Simple_Element(props: {
                             textAlign={"center"}
                             borderRadius={"5px"}
                         >
-                            <>Leader : &nbsp;</>
+                            <React.Fragment>Leader : &nbsp;</React.Fragment>
                             {
                                 leader_query.isLoading ? (
                                     <Skeleton height={"10px"} />

@@ -33,7 +33,9 @@ export default function Author_Page(props: {
         type : "author",
         id : props.src.get_id()
     });
-    appWindow.setTitle(`${props.src.get_Name()} | Mangadex`);
+    React.useEffect(() => {
+        appWindow.setTitle(`${props.src.get_Name()} | Mangadex`);
+    }, []);
     return (
         <Chakra.Box>
             <Chakra.Box

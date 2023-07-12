@@ -7,28 +7,37 @@ import FilterCollapse from "./FilterCollapse";
 import MangaResult from "./Result";
 import Title from "./Title";
 
-export default function Manga_Search() {
+function Title_P_Collapse() {
     const { isOpen, onToggle } = useDisclosure();
+    return (
+        <React.Fragment>
+            <Title onToggle={onToggle} />
+            <Collapse in={isOpen} animateOpacity>
+                <FilterCollapse />
+            </Collapse>
+        </React.Fragment>
+    );
+}
+
+export default function Manga_Search() {
+
 
     React.useEffect(() => {
         appWindow.setTitle("Manga Search | Mangadex");
     }, []);
     useTrackEvent("mangadex-manga-search");
     return (
-        <Card>
+        <Card padding={"10px"}>
             <CardHeader>
                 <Heading fontFamily={"inherit"}>Advanced Search</Heading>
                 <ChakraContainer>
                     <VStack divider={<StackDivider />}>
-                        <Title onToggle={onToggle} />
-                        <Collapse in={isOpen} animateOpacity>
-                            <FilterCollapse />
-                        </Collapse>
+                        <Title_P_Collapse/>
                     </VStack>
                 </ChakraContainer>
             </CardHeader>
-            <CardBody>
-                <MangaResult/>
+            <CardBody padding={"3px"}>
+                <MangaResult />
             </CardBody>
         </Card>
     );

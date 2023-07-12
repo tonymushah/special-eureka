@@ -31,7 +31,7 @@ export default function MangaList(props: {
                 </Chakra.Tab>
             </Chakra.TabList>
             <Chakra.TabPanels textAlign={"start"}>
-                <Chakra.TabPanel>
+                <Chakra.TabPanel padding={"5px"} >
                     <Chakra.Stack>
                         {
                             props.src.map((value) => (
@@ -47,7 +47,7 @@ export default function MangaList(props: {
                         }
                     </Chakra.Stack>
                 </Chakra.TabPanel>
-                <Chakra.TabPanel>
+                <Chakra.TabPanel padding={"5px"}>
                     <Chakra.Wrap>
                         {
                             props.src.map((value) => (
@@ -66,7 +66,7 @@ export default function MangaList(props: {
                         }
                     </Chakra.Wrap>
                 </Chakra.TabPanel>
-                <Chakra.TabPanel>
+                <Chakra.TabPanel padding={"5px"}>
                     <Chakra.Wrap>
                         {
                             props.src.map((value) => (
