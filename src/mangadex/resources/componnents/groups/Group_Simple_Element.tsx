@@ -1,7 +1,7 @@
 import { HStack, Icon, Link, LinkBox, LinkOverlay, Skeleton, Tooltip } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import { Group } from "@mangadex/api/structures/Group";
 import {
     useQuery

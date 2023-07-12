@@ -1,23 +1,23 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
-import { Cover } from "../../../../api/structures/Cover";
-import { get_cover_art_image } from "../../../hooks/CoverStateHooks";
-import Mangadex_cover_not_found from "../../../imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "../../../imgs/cover-placeholder.png";
+import { Cover } from "@mangadex/api/structures/Cover";
+import { get_cover_art_image } from "@mangadex/resources/hooks/CoverStateHooks";
+import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
+import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 
 export default function CoverElementVertical(props: {
     src: Cover
-    isThumbail? : boolean
+    isThumbail?: boolean
 }) {
     const { cover_image_query } = get_cover_art_image({
         src: props.src,
         isThumbail: props.isThumbail
     });
-    if (cover_image_query.isLoading) {
+    if (cover_image_query.isSuccess) {
         return (
-            <Chakra.Skeleton
+            <Chakra.Image
+                src={cover_image_query.data}
+                fallbackSrc={Mangadex_placeHolder}
                 borderTopRadius={"10px"}
-                height={"150px"}
             />
         );
     }
@@ -29,10 +29,9 @@ export default function CoverElementVertical(props: {
         />);
     }
     return (
-        <Chakra.Image
-            src={cover_image_query.data!}
-            fallbackSrc={Mangadex_placeHolder}
+        <Chakra.Skeleton
             borderTopRadius={"10px"}
+            height={"150px"}
         />
     );
 }

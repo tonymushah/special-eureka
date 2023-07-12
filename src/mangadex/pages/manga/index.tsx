@@ -1,10 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
-import { useTrackEvent } from "@mangadex/index";
+import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
@@ -80,7 +81,7 @@ export default function MangaPage() {
                     </Chakra.Box>
                     <Chakra.Box>
                         <ChakraContainer>
-                            <Outlet context={{ toUse: query.data!.manga }} />
+                            <Outlet context={{ toUse: query.data.manga }} />
                         </ChakraContainer>
                     </Chakra.Box>
                 </Manga_Page>
@@ -89,15 +90,13 @@ export default function MangaPage() {
         );
     }
     if (query.isLoading) {
-        appWindow.setTitle("Loading... | Mangadex");
+        useAppWindowTitle("Loading... | Mangadex");
         return (
-            <Chakra.AbsoluteCenter>
-                <Chakra.Spinner />
-            </Chakra.AbsoluteCenter>
+            <Mangadex_suspense__/>
         );
     }
     if (query.isError) {
-        appWindow.setTitle(`Error on loading title ${id!} | Mangadex`);
+        useAppWindowTitle(`Error on loading title ${id!} | Mangadex`);
         throw query.error;
     }
 

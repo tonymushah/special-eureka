@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
-import { appWindow } from "@tauri-apps/api/window";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
 
 const HomePageAfterPing = React.lazy(() => import("@mangadex/pages/Home/HomeAfterPing"));
@@ -10,7 +10,7 @@ const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/com
 
 function Home() {
     const client = useHTTPClient();
-    appWindow.setTitle("High Quality Image, no ads | Mangadex");
+    useAppWindowTitle("High Quality Image, no ads | Mangadex");
     useTrackEvent("mangadex-index-page-entrance");
     return (
         <Chakra.Box

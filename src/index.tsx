@@ -1,6 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider, Box, Spinner, AbsoluteCenter } from "@chakra-ui/react";
+
+import "@mangadex/resources/Poppins/Poppins.css";
+
+document.querySelectorAll("body")[0].style.fontFamily = "Poppins";
+
 // TODO Add custom window decoration 
 // import BoxDecoration from "@commons-res/components/BoxDecoration";
 
@@ -11,7 +16,7 @@ const app = ReactDOM.createRoot(document.getElementById("app")!);
 
 app.render(
     <React.StrictMode>
-        <ChakraProvider >
+        <ChakraProvider>
                 <Box>
                     <React.Suspense
                         fallback={

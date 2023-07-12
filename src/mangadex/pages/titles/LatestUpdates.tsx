@@ -1,16 +1,16 @@
 import * as Chakra from "@chakra-ui/react";
-import TryCatch, { useCatch } from "@commons-res/components/TryCatch";
-import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
-import React from "react";
-import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { get_MangaChapter_Accordions_byChapterArray, Offset_limits, Order } from "@mangadex/api/internal/Utils";
+import TryCatch, { useCatch } from "@commons-res/components/TryCatch";
+import { Offset_limits, Order, get_MangaChapter_Accordions_byChapterArray } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
+import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
-import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
-import { appWindow } from "@tauri-apps/api/window";
-import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
+import React from "react";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
@@ -29,7 +29,7 @@ export default function LatestUpdates() {
     const client = useHTTPClient();
     const queryKey = ["mdx", "latest-updates"];
     const userOption = useUserOption();
-    appWindow.setTitle("Latest Updates | Mangadex");
+    useAppWindowTitle("Latest Updates | Mangadex");
     useTrackEvent("mangadex-latest-update-entrance");
     return (
         <ChakraContainer>

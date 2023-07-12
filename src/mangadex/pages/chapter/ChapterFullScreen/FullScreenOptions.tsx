@@ -49,6 +49,6 @@ export default function FullScreenOptions(props: React.PropsWithChildren<{
         );
     }
     return (
-        <React.Fragment></React.Fragment>
+        <React.Fragment/>
     );
 }

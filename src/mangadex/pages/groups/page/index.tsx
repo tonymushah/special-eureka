@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Group } from "@mangadex/api/structures/Group";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { appWindow } from "@tauri-apps/api/window";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 const Group_Page = React.lazy(() => import("@mangadex/resources/componnents/groups/Group_Page"));
 
@@ -38,12 +39,12 @@ export function useGroupRouteOutletContext() : GroupRouteOutletContext{
 
 export default function Group_Page_(){
     const { id } = useParams();
-    appWindow.setTitle("Loading... | Mangadex").then();
+    useAppWindowTitle("Loading... | Mangadex");
     if(id != undefined){
         const client = useHTTPClient();
         const queryClient = useQueryClient();
         const query_key = ["mdx", "group", id];
-        useMemo(() => {
+        React.useEffect(() => {
             queryClient.removeQueries(query_key, {
                 exact : true
             });
@@ -54,7 +55,7 @@ export default function Group_Page_(){
             staleTime : Infinity
         });
         if(query.isLoading || query.isRefetching){
-            appWindow.setTitle("Loading... | Mangadex").then();
+            useAppWindowTitle("Loading... | Mangadex");
             return (
                 <Chakra.AbsoluteCenter>
                     <Chakra.Box>
@@ -86,7 +87,7 @@ export default function Group_Page_(){
                 </Chakra.AbsoluteCenter>
         );
     }else{
-        appWindow.setTitle("Error on loading the group page | Mangadex").then();
+        useAppWindowTitle("Error on loading the group page | Mangadex");
         return (
             <Chakra.Alert status="error">
                 <Chakra.AlertIcon/>

@@ -5,7 +5,6 @@ import React from "react";
 import { RouteObject } from "react-router-dom";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
 import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
-import "@mangadex/resources/Poppins/Poppins.css";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 import { Group_Page_Suspense } from "./resources/componnents/groups/Group_Page";
 

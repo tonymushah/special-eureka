@@ -14,7 +14,7 @@ import tumblr_logo from "./authors_brands_logo/tumblr_logo.svg";
 import weibo_logo from "./authors_brands_logo/weibo_logo.ico";
 
 const ExtLink = React.lazy(async () => {
-    const res = await import("../../../../commons-res/components/ExtLink");
+    const res = await import("@commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };

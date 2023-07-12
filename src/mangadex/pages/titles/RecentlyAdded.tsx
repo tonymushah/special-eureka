@@ -6,8 +6,8 @@ import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/
 import { Manga } from "@mangadex/api/structures/Manga";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
-import { appWindow } from "@tauri-apps/api/window";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
@@ -18,7 +18,7 @@ export default function RecentlyAdded() {
     offset_limit.set_limits(25);
     const client = useHTTPClient();
     const queryKey = ["mdx", "recently-added"];
-    appWindow.setTitle("Recently Added | Mangadex");
+    useAppWindowTitle("Recently Added | Mangadex");
     useTrackEvent("mangadex-recently-added-entrance");
     return (
         <Mangadex_suspense>
