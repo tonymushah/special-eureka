@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
-import { appWindow } from "@tauri-apps/api/window";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
 
 const HomePageAfterPing = React.lazy(() => import("@mangadex/pages/Home/HomeAfterPing"));
@@ -10,7 +10,10 @@ const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/com
 
 function Home() {
     const client = useHTTPClient();
-    appWindow.setTitle("High Quality Image, no ads | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("High Quality Image, no ads | Mangadex");
+    },[]);
     useTrackEvent("mangadex-index-page-entrance");
     return (
         <Chakra.Box
@@ -40,10 +43,11 @@ function Home() {
                                 <Chakra.HStack>
                                     <Chakra.Spinner
                                         size={"lg"}
+                                        thickness={"5px"}
                                     />
-                                    <Chakra.Text as="span">
+                                    <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                                         Pinging the Mangadex API
-                                    </Chakra.Text>
+                                    </Chakra.Heading>
                                 </Chakra.HStack>
                             </Chakra.Box>
                         </Chakra.AbsoluteCenter>
@@ -56,10 +60,11 @@ function Home() {
                                         <Chakra.HStack>
                                             <Chakra.Spinner
                                                 size={"lg"}
+                                                thickness="5px"
                                             />
-                                            <Chakra.Text as="span">
+                                            <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                                                 Pinging the Mangadex API
-                                            </Chakra.Text>
+                                            </Chakra.Heading>
                                         </Chakra.HStack>
                                     </Chakra.Box>
                                 </Chakra.AbsoluteCenter>

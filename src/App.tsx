@@ -17,7 +17,6 @@ const FullscreenF11 = () => (
 export default function App() {
     return (
         <Chakra.Box
-            fontFamily="Poppins"
         >
             <FullscreenF11/>
             <TryCatch

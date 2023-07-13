@@ -1,12 +1,12 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import formatNumber from "@commons-res/functions/formatNumber";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import * as FontAwesome from "react-icons/fa";
-import { NumericFormat } from "react-number-format";
 import { MangaPageProps } from ".";
 
 export function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
@@ -17,12 +17,7 @@ export function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>
         staleTime: Infinity
     });
     return (
-        <Chakra.Box
-            display={{
-                base: "inherit",
-                lg: "none"
-            }}
-        >
+        <Chakra.Box>
             {manga_statistics.isLoading ? (
                 <Chakra.Skeleton
                     height={"20px"}
@@ -44,31 +39,30 @@ export function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>
                                             base: "none",
                                             xl: "block"
                                         }}>
-                                            <Chakra.Box display={"flex"} width={"fit-content"}>
-                                                <Chakra.Text textAlign={"center"}>
+                                            <Chakra.HStack>
+                                                <Chakra.HStack >
                                                     <ChakraIcons.StarIcon />
-                                                    &nbsp;
-                                                    {getted.get_average()}
-                                                </Chakra.Text>
-                                                &nbsp;
-                                                &nbsp;
-                                                <Chakra.Text textAlign={"center"}>
+                                                    <Chakra.Text as="span">{getted.get_average()}</Chakra.Text>
+                                                </Chakra.HStack>
+                                                <Chakra.HStack>
                                                     <Chakra.Icon as={FontAwesome.FaBookmark} />
-                                                    &nbsp;
-                                                    <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
-                                                </Chakra.Text>
-                                                &nbsp;
-                                                &nbsp;
-                                                <Chakra.Text textAlign={"center"}>
+                                                    <Chakra.Text as={"span"}>
+                                                        {
+                                                            formatNumber(getted.get_follows())
+                                                        }
+                                                    </Chakra.Text>
+                                                </Chakra.HStack>
+                                                <Chakra.HStack>
                                                     <ChakraIcons.ChatIcon />
-                                                    &nbsp;
-                                                    {getted.comments !== undefined && getted.comments !== null ? (
-                                                        <>{getted.comments.repliesCount}</>
-                                                    ) : (
-                                                        <>0</>
-                                                    )}
-                                                </Chakra.Text>
-                                            </Chakra.Box>
+                                                    <Chakra.Text>
+                                                        {getted.comments !== undefined && getted.comments !== null ? (
+                                                            <React.Fragment>{getted.comments.repliesCount}</React.Fragment>
+                                                        ) : (
+                                                            <React.Fragment>0</React.Fragment>
+                                                        )}
+                                                    </Chakra.Text>
+                                                </Chakra.HStack>
+                                            </Chakra.HStack>
                                         </Chakra.Box>
                                         <Chakra.Box display={{
                                             base: "block",
@@ -81,7 +75,7 @@ export function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>
                             </Statis>
                         </React.Fragment>
                     ) : (
-                        <React.Fragment/>
+                        <React.Fragment />
                     )
                 )
             )}

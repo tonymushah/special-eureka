@@ -6,6 +6,7 @@ import { Manga } from "@mangadex/api/structures/Manga";
 import { AggregateListOptions } from "@mangadex/api/structures/SearchType/AggregateListOptions";
 import { get_aggregate_query_offline as get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
 import ErrorEL1 from "../../../error/ErrorEL1";
+import Loading from "../loading";
 
 const Aggregate_part = React.lazy(() => import("./Aggregate_part"));
 
@@ -26,13 +27,7 @@ export default function Manga_Page_Aggregate_Offline(props: {
     if (query.isRefetching == true && query.isLoading) {
         return (
             <Chakra.Box m={2} bg="inherit">
-                <div className=" text-center">
-                    <Chakra.Spinner
-                        animation="border"
-                    />
-                    <br />
-                    <p>Loading chapters ...</p>
-                </div>
+                <Loading/>
             </Chakra.Box>
         );
     }
@@ -41,13 +36,7 @@ export default function Manga_Page_Aggregate_Offline(props: {
             <React.Suspense
                 fallback={
                     <Chakra.Box m={2} bg="inherit">
-                        <div className=" text-center">
-                            <Chakra.Spinner
-                                animation="border"
-                            />
-                            <br />
-                            <p>Loading chapters ...</p>
-                        </div>
+                        <Loading/>
                     </Chakra.Box>
                 }
             >
@@ -66,13 +55,7 @@ export default function Manga_Page_Aggregate_Offline(props: {
     }
     return (
         <Chakra.Box m={2} bg="inherit">
-            <div className=" text-center">
-                <Chakra.Spinner
-                    animation="border"
-                />
-                <br />
-                <p>Loading chapters ...</p>
-            </div>
+            <Loading/>
         </Chakra.Box>
     );
 }

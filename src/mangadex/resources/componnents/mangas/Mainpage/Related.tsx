@@ -58,7 +58,7 @@ export default function Related({ src }: RelatedProps) {
     const to_use = src;
     return (
         <Chakra.VStack
-            width={"container.lg"}
+            display={"block"}
             divider={<React.Fragment />}
         >
             <MangaRelated_Section

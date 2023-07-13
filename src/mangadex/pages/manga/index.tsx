@@ -1,12 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
-import { useTrackEvent } from "@mangadex/index";
+import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
+import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
 
@@ -18,11 +20,34 @@ export function useManga() {
     return useOutletContext<MangaPage_OutletContex>();
 }
 
-function Outlet(props : {
-    context : MangaPage_OutletContex
-}){
-    return(
-        <ReactRouterOutlet context={props.context}/>
+function Outlet(props: {
+    context: MangaPage_OutletContex
+}) {
+    return (
+        <ReactRouterOutlet context={props.context} />
+    );
+}
+
+function Loading() {
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Loading... | Mangadex");
+    }, []);
+    return (
+        <Mangadex_suspense__ />
+    );
+}
+
+function ThrowError({ error, id }: {
+    error: Error,
+    id?: string
+}) {
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle(`Error on loading title ${id!} | Mangadex`);
+    });
+    return (
+        <ErrorEL1 error={error} />
     );
 }
 
@@ -32,11 +57,12 @@ export default function MangaPage() {
     const queryClient = useQueryClient();
     const { id } = useParams();
     const query_key = ["mdx", "manga", id];
-    React.useMemo<void>(() => {
+    React.useMemo(() => {
         queryClient.removeQueries(query_key, {
             "exact": true
         });
     }, []);
+
     useTrackEvent("mangadex-manga-page-entrance", {
         "manga-id": id!
     });
@@ -48,8 +74,7 @@ export default function MangaPage() {
     const navigate = useNavigate();
     if (query.isSuccess) {
         return (
-
-            <React.Fragment>
+            <MyErrorBounderies>
                 <Download_Manga_withHotkeys
                     mangaID={id!}
                 />
@@ -59,7 +84,6 @@ export default function MangaPage() {
                     <Chakra.Box>
                         <ChakraContainer>
                             <Chakra.HStack>
-
                             </Chakra.HStack>
                             <Chakra.ButtonGroup isAttached colorScheme="orange">
                                 <Chakra.Button onClick={() => navigate(".")} >
@@ -69,7 +93,7 @@ export default function MangaPage() {
                                     Covers
                                 </Chakra.Button>
                                 {
-                                    query.data?.manga.get_some_relationshipLength("manga") == 0 ? (<React.Fragment />) : (
+                                    query.data.manga.get_some_relationshipLength("manga") == 0 ? (<React.Fragment />) : (
                                         <Chakra.Button onClick={() => navigate("related")}>
                                             Related
                                         </Chakra.Button>
@@ -80,25 +104,24 @@ export default function MangaPage() {
                     </Chakra.Box>
                     <Chakra.Box>
                         <ChakraContainer>
-                            <Outlet context={{ toUse: query.data!.manga }} />
+                            <Outlet context={{ toUse: query.data.manga }} />
                         </ChakraContainer>
                     </Chakra.Box>
                 </Manga_Page>
-            </React.Fragment>
-
+            </MyErrorBounderies>
         );
     }
     if (query.isLoading) {
-        appWindow.setTitle("Loading... | Mangadex");
+
         return (
-            <Chakra.AbsoluteCenter>
-                <Chakra.Spinner />
-            </Chakra.AbsoluteCenter>
+            <Loading />
         );
     }
     if (query.isError) {
-        appWindow.setTitle(`Error on loading title ${id!} | Mangadex`);
-        throw query.error;
+
+        return (
+            <ThrowError error={query.error} id={id} />
+        );
     }
 
     return (<React.Fragment />);

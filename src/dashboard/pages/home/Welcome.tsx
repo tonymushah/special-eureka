@@ -1,11 +1,12 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Button, Center, Heading, Skeleton, Stack } from "@chakra-ui/react";
+import { Button, Center, HStack, Heading, Image, Skeleton, Stack, Text } from "@chakra-ui/react";
 import { getVersion } from "@tauri-apps/api/app";
 import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
 import { FaGithub } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import React from "react";
 
 export default function Welcome() {
     const app_version_query = useQuery(["special-eureka", "version"], () => {
@@ -20,7 +21,7 @@ export default function Welcome() {
             </Heading>
             <Heading textAlign={"center"} blendMode={"darken"}>You&apos;re currently to version {
                 app_version_query.isSuccess ? (
-                    <>{app_version_query.data}</>
+                    <React.Fragment>{app_version_query.data}</React.Fragment>
                 ) : (
                     <Skeleton><i>please wait a bit...</i></Skeleton>
                 )
@@ -41,7 +42,14 @@ export default function Welcome() {
                     <Tauri_Updater />
                     <Button
                         colorScheme={"blackAlpha"}>
-                        <img src="https://img.shields.io/github/stars/tonymushah/special-eureka?style=social" alt="stars - special-eureka" />
+                        <Image fallback={
+                            <HStack>
+                                <FaGithub/>
+                                <Text as={"span"}>
+                                    Loading github Stars...
+                                </Text>
+                            </HStack>
+                        } src="https://img.shields.io/github/stars/tonymushah/special-eureka?style=social" alt="stars - special-eureka" />
                     </Button>
                 </Stack>
             </Center>

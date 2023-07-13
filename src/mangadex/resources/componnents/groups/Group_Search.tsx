@@ -7,7 +7,7 @@ import { Group } from "@mangadex/api/structures/Group";
 import { Collection } from "@mangadex/api/structures/Collection";
 import GroupFallBackElement from "./GroupFallBackElement";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { trackEvent } from "@mangadex";
+import { trackEvent } from "@mangadex/index";
 
 const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 const CollectionComponnent_WithQuery = React.lazy(async () => {

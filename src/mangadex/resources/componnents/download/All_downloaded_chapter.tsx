@@ -33,7 +33,7 @@ export default function All_downloaded_chapter(props: {
                 query_options={props.query_options}
             >
                 {
-                    (value) => (<Chakra.VStack>
+                    (value) => (<Chakra.VStack display={"block"}>
                         {
                             value.get_data().map((value) => (
                                 <React.Suspense

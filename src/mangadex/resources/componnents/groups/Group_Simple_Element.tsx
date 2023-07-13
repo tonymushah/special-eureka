@@ -1,13 +1,14 @@
 import { HStack, Icon, Link, LinkBox, LinkOverlay, Skeleton, Tooltip } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import { Group } from "@mangadex/api/structures/Group";
 import {
     useQuery
 } from "@tanstack/react-query";
 import { RiGroupFill } from "react-icons/ri";
 import { Link as RouterLink } from "react-router-dom";
+import React from "react";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -58,7 +59,7 @@ export default function Group_Simple_Element(props: {
                             textAlign={"center"}
                             borderRadius={"5px"}
                         >
-                            <>Leader : &nbsp;</>
+                            <React.Fragment>Leader : &nbsp;</React.Fragment>
                             {
                                 leader_query.isLoading ? (
                                     <Skeleton height={"10px"} />

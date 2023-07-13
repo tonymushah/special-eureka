@@ -1,11 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
-import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import { get_ChapterbyId, get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
-import { trackEvent } from "@mangadex/index";
+import { trackEvent, useTrackEvent } from "@mangadex/index";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 const Chapter_Page_Success = React.lazy(() => import("./Chapter_Page_Success"));
 
@@ -14,28 +14,28 @@ export default function Chapter_Page() {
     const queryKey = get_chapter_queryKey({
         id: id!
     });
+    const setTitle = useAppWindowTitle();
     const queryClient = useQueryClient();
-    React.useMemo(() => {
+    React.useEffect(() => {
         queryClient.removeQueries(queryKey, {
-            exact : true
+            exact: true
         });
+        setTitle("Loading... | Mangadex");
     }, []);
     const { query } = get_ChapterbyId({
         id: id!
     });
-    appWindow.setTitle("Loading... | Mangadex").then();
+    useTrackEvent("mangadex-chapter-page-entrance", {
+        type: "chapter",
+        id: id!
+    });
+    
     if (query.isError) {
-        appWindow.setTitle(`Error on loading chapter ${id!} | Mangadex`).then();
+        setTitle(`Error on loading chapter ${id!} | Mangadex`);
         return (
             <ErrorEL1 error={query.error} />
         );
     }
-    React.useEffect(() => {
-        trackEvent("mangadex-chapter-page-entrance", {
-            type : "chapter",
-            id : id!
-        });
-    }, []);
     if (query.isSuccess) {
         return (
             <React.Suspense

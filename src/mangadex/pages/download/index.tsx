@@ -1,23 +1,27 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { appWindow } from "@tauri-apps/api/window";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 const AllDownlaodedMangaConsumer = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer"));
 const MangaListByArrayMangaID = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaListByArrayMangaID"));
 const All_downloaded_chapter = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_chapter"));
 
 export default function Download_Index_Page() {
-    appWindow.setTitle("Offline Library | Mangadex").then();
-
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Offline Library | Mangadex");
+    },[]);
     return (
         <Chakra.Box>
-            <Chakra.Tabs isFitted isLazy variant={"enclosed-colored"}>
+            <Chakra.Tabs isFitted isLazy variant={"enclosed-colored"} padding={"0px"}>
                 <Chakra.TabList>
                     <Chakra.Tab>Manga</Chakra.Tab>
                     <Chakra.Tab>Chapters</Chakra.Tab>
                 </Chakra.TabList>
-                <Chakra.TabPanels>
-                    <Chakra.TabPanel>
+                <Chakra.TabPanels margin={0}
+                    padding={"5px"}
+                >
+                    <Chakra.TabPanel padding={"1px"}>
                         <React.Suspense
                             fallback={
                                 <Chakra.Box>
@@ -50,7 +54,6 @@ export default function Download_Index_Page() {
                                 }
                             </AllDownlaodedMangaConsumer>
                         </React.Suspense>
-
                     </Chakra.TabPanel>
                     <Chakra.TabPanel>
                         <React.Suspense

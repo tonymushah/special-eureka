@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Spinner } from "@chakra-ui/react";
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertIcon, AlertTitle, Box, Spinner } from "@chakra-ui/react";
 import { Chapters } from "@mangadex/api/structures/Chapter";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
@@ -38,11 +38,10 @@ export function ChaptersComp(props: React.PropsWithChildren<ChaptersProps>) {
     if (props.src.get_count() == 1) {
         return (
             <React.Suspense fallback={
-                <div className="text-center">
-                    <Spinner animation="border" />
-                    <br />
-                    <span>Initializing chapters ...</span>
-                </div>
+                <Alert status="loading" variant={"left-accent"}>
+                    <AlertIcon/>
+                    <AlertTitle>Initializing chapters...</AlertTitle>
+                </Alert>
             }>
                 {
                     props.src.get_ids().map((value, id) => (
@@ -54,11 +53,10 @@ export function ChaptersComp(props: React.PropsWithChildren<ChaptersProps>) {
     } else {
         return (
             <React.Suspense fallback={
-                <div className="text-center">
-                    <Spinner animation="border" />
-                    <br />
-                    <span>Initializing chapters ...</span>
-                </div>
+                <Alert status="loading" variant={"left-accent"}>
+                    <AlertIcon/>
+                    <AlertTitle>Initializing chapters...</AlertTitle>
+                </Alert>
             }>
                 <Chapters_Element headersTitle={"Chapter " + props.src.get_name()}>
                     {

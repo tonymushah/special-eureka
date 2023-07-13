@@ -6,6 +6,7 @@ import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import { v4 } from "uuid";
+import formatNumber from "@commons-res/functions/formatNumber";
 
 export default function Statis(props: {
     src: Statistics_Manga,
@@ -21,7 +22,7 @@ export default function Statis(props: {
             <Chakra.PopoverTrigger>
                 {
                     props.children !== undefined ? (
-                        <Chakra.Box zIndex={"dropdown"}>
+                        <Chakra.Box>
                             <context.Consumer>
                                 {
                                     props.children
@@ -29,28 +30,70 @@ export default function Statis(props: {
                             </context.Consumer>
                         </Chakra.Box>
                     ) : (
-                        <Chakra.Box display={"flex"} width={"fit-content"} zIndex={"dropdown"}>
-                            <Chakra.Text textAlign={"center"}>
+                        <Chakra.HStack>
+                            <Chakra.HStack>
                                 <ChakraIcons.StarIcon />
-                                &nbsp;
-                                {getted.get_average()}
-                            </Chakra.Text>
-                            &nbsp;
-                            &nbsp;
-                            <Chakra.Text textAlign={"center"}>
+                                <Chakra.Text as={"span"}>
+                                    {
+                                        getted.get_average()
+                                    }
+                                </Chakra.Text>
+                            </Chakra.HStack>
+                            <Chakra.HStack>
                                 <Chakra.Icon as={FontAwesome.FaBookmark} />
-                                &nbsp;
-                                <NumericFormat valueIsNumericString={true} value={getted.get_follows()} displayType={"text"} />
-                            </Chakra.Text>
-                            &nbsp;
-                            &nbsp;
-                            <Chakra.Text textAlign={"center"}>
+                                <Chakra.Text as={"span"}>
+                                    {
+                                        formatNumber(getted.get_follows())
+                                    }
+                                </Chakra.Text>
+                            </Chakra.HStack>
+                            <Chakra.HStack textAlign={"center"}>
                                 <ChakraIcons.ChatIcon />
-                                &nbsp;
+                                <Chakra.Text as={"span"}>
+                                    {
+                                        getted.comments !== undefined && getted.comments !== null ? (
+                                            <React.Fragment>{
+                                                getted.get_comments()?.repliesCount !== null && getted.get_comments()?.repliesCount !== undefined ? (
+                                                    <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
+                                                ) : (
+                                                    <React.Fragment>0</React.Fragment>
+                                                )
+                                            }</React.Fragment>
+                                        ) : (
+                                            <React.Fragment>0</React.Fragment>
+                                        )
+                                    }
+                                </Chakra.Text>
+                            </Chakra.HStack>
+                        </Chakra.HStack>
+                    )
+                }
+
+            </Chakra.PopoverTrigger>
+            <Chakra.Portal>
+                <Chakra.PopoverContent>
+                    <Chakra.PopoverHeader>
+                        <Chakra.HStack>
+                            <ChakraIcons.StarIcon />
+                            <Chakra.Text as="span">
+                                {getted.get_average()}
+                                {
+                                    getted.get_baeysian() != undefined ? (<React.Fragment> ~ {getted.get_baeysian()}</React.Fragment>) : (<React.Fragment />)
+                                }
+                            </Chakra.Text>
+                        </Chakra.HStack>
+                        <Chakra.HStack>
+                            <Chakra.Icon as={FontAwesome.FaBookmark} />
+                            &nbsp;
+                            <NumericFormat displayType={"text"} valueIsNumericString={true} value={getted.get_follows()} />
+                        </Chakra.HStack>
+                        <Chakra.HStack>
+                            <ChakraIcons.ChatIcon />
+                            <React.Fragment>
                                 {
                                     getted.comments !== undefined && getted.comments !== null ? (
                                         <React.Fragment>{
-                                            getted.get_comments()?.repliesCount !== null && getted.get_comments()?.repliesCount !== undefined ? (
+                                            getted.get_comments()?.repliesCount !== null || getted.get_comments()?.repliesCount !== undefined ? (
                                                 <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
                                             ) : (
                                                 <React.Fragment>0</React.Fragment>
@@ -60,48 +103,11 @@ export default function Statis(props: {
                                         <React.Fragment>0</React.Fragment>
                                     )
                                 }
-                            </Chakra.Text>
-                        </Chakra.Box>
-                    )
-                }
-
-            </Chakra.PopoverTrigger>
-            <Chakra.Portal>
-                <Chakra.PopoverContent>
-                    <Chakra.PopoverHeader>
-                        <Chakra.Text>
-                            <ChakraIcons.StarIcon />
-                            &nbsp;
-                            {getted.get_average()}
-                            {
-                                getted.get_baeysian() != undefined ? (<> ~ {getted.get_baeysian()}</>) : (<></>)
-                            }
-                        </Chakra.Text>
-                        <Chakra.Text>
-                            <Chakra.Icon as={FontAwesome.FaBookmark} />
-                            &nbsp;
-                            <NumericFormat displayType={"text"} valueIsNumericString={true} value={getted.get_follows()} />
-                        </Chakra.Text>
-                        <Chakra.Text>
-                            <ChakraIcons.ChatIcon />
-                            &nbsp;
-                            {
-                                getted.comments !== undefined && getted.comments !== null ? (
-                                    <React.Fragment>{
-                                        getted.get_comments()?.repliesCount !== null || getted.get_comments()?.repliesCount !== undefined ? (
-                                            <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
-                                        ) : (
-                                            <React.Fragment>0</React.Fragment>
-                                        )
-                                    }</React.Fragment>
-                                ) : (
-                                    <React.Fragment>0</React.Fragment>
-                                )
-                            }
-                        </Chakra.Text>
+                            </React.Fragment>
+                        </Chakra.HStack>
                         <Chakra.PopoverCloseButton />
                     </Chakra.PopoverHeader>
-                    <Chakra.PopoverBody height={"xs"} overflowY={"scroll"}>
+                    <Chakra.PopoverBody overflowY={"scroll"}>
                         {
                             Array.from({ length: props.src.get_distribution_length() }, (_, i) => i + 1).reverse().map((value, index) => {
                                 const purcent = (getted.get_distribution()[value] / getted.get_distribution_sum()) * 100;
@@ -113,10 +119,8 @@ export default function Statis(props: {
                                             <Chakra.Text>
                                                 &#40; {getted.get_distribution()[value]} &#41;
                                             </Chakra.Text>
-
                                         </Chakra.HStack>
                                     </Chakra.Tooltip>
-
                                 );
                             }
                             )

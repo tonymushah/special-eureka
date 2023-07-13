@@ -3,7 +3,7 @@ import React from "react";
 import { FaTwitter, FaYoutube } from "react-icons/fa";
 import { Author } from "../../../api/structures/Author";
 import booth_logo from "./authors_brands_logo/booth.ico";
-import fanbox_logo from "./authors_brands_logo/fanbox.ico";
+import fanbox_logo from "./authors_brands_logo/fanbox.svg";
 import fantia_logo from "./authors_brands_logo/fantia_logo.svg";
 import melonBooks_logo from "./authors_brands_logo/Melonbooks_logo.svg";
 import naver_logo from "./authors_brands_logo/naver_logo.ico";
@@ -14,7 +14,7 @@ import tumblr_logo from "./authors_brands_logo/tumblr_logo.svg";
 import weibo_logo from "./authors_brands_logo/weibo_logo.ico";
 
 const ExtLink = React.lazy(async () => {
-    const res = await import("../../../../commons-res/components/ExtLink");
+    const res = await import("@commons-res/components/ExtLink");
     return {
         default: res.ExtLink
     };

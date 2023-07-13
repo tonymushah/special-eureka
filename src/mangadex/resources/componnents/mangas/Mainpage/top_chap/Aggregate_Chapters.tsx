@@ -6,6 +6,7 @@ import TryCatch from "@commons-res/components/TryCatch";
 import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import { MangaPageProps } from "../../Manga_Page";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import Loading from "../loading";
 
 const Online_Chapter_Lang_Chooser = React.lazy(() => import("./Online_Chapter_Lang_Chooser"));
 
@@ -31,13 +32,7 @@ export default function Online_Chapter(props: MangaPageProps) {
                         <React.Suspense
                             fallback={
                                 <Chakra.Box m={2} bg="inherit">
-                                    <div className=" text-center">
-                                        <Chakra.Spinner
-                                            animation="border"
-                                        />
-                                        <br />
-                                        <p>Loading chapters ...</p>
-                                    </div>
+                                    <Loading/>
                                 </Chakra.Box>
                             }
                         >
@@ -58,13 +53,7 @@ export default function Online_Chapter(props: MangaPageProps) {
                         <React.Suspense
                             fallback={
                                 <Chakra.Box m={2} bg="inherit">
-                                    <div className=" text-center">
-                                        <Chakra.Spinner
-                                            animation="border"
-                                        />
-                                        <br />
-                                        <p>Loading chapters ...</p>
-                                    </div>
+                                    <Loading/>
                                 </Chakra.Box>
                             }
                         >
@@ -77,13 +66,7 @@ export default function Online_Chapter(props: MangaPageProps) {
                 )}
                 onLoading={
                     <Chakra.Box m={2} bg="inherit">
-                        <div className=" text-center">
-                            <Chakra.Spinner
-                                animation="border"
-                            />
-                            <br />
-                            <p>Loading chapters ...</p>
-                        </div>
+                        <Loading/>
                     </Chakra.Box>
                 }
             />

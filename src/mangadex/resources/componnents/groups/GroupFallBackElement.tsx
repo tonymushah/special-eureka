@@ -1,6 +1,3 @@
-import React from "react";
-//import MangaList from "../../mangadex/api/tsx/MangaList";
-//import El_Manga_simple2 from "../../mangadex/api/tsx/Manga2";
 import * as Chakra from "@chakra-ui/react";
 
 export default function GroupFallBackElement() {

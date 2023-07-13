@@ -6,25 +6,24 @@ import MangaFeedElement from "./MangaFeedElement";
 export default function MangaFeedElement_byChapID(props: {
     id: string
 }) {
-    const {query} = get_ChapterbyId({
-        id : props.id
+    const { query } = get_ChapterbyId({
+        id: props.id
     });
-    if(query.isLoading){
+    if (query.isError) {
         return (
-            <Chakra.Box>
-                <Chakra.Spinner/>
-            </Chakra.Box>
+            <ErrorEL1 error={query.error} />
         );
     }
-    if(query.isError){
+    if (query.isSuccess) {
         return (
-            <ErrorEL1 error={query.error}/>
+            <MangaFeedElement
+                src={query.data.data}
+            />
         );
     }
     return (
-        <MangaFeedElement
-            src={query.data!.data}
-        />
+        <Chakra.Box>
+            <Chakra.Spinner />
+        </Chakra.Box>
     );
-    
 }

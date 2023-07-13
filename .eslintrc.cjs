@@ -24,6 +24,7 @@ module.exports = {
     "semi": ["warn", "always"],
     "react/jsx-filename-extension": ["error", {
       "extensions": [".js", ".jsx", ".ts", ".tsx", ".mdx"]
-    }]
+    }],
+    "react/no-unstable-nested-components" : ["warn"]
   }
 };

@@ -47,7 +47,7 @@ async function seasonal_loader(client: Client, queryClient: QueryClient) {
 
 export default function HomeAfterPing() {
     const client = useHTTPClient();
-    
+
     const queryKey = ["mdx", "home", "page", "loader"];
     const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {
@@ -60,71 +60,51 @@ export default function HomeAfterPing() {
     });
     if (query.isSuccess) {
         return (
-            <Chakra.VStack
-                display={"block"}
-                divider={<Chakra.StackDivider/>}
-            >
-                <Chakra.Box display={"block"}>
-                    <React.Suspense
-                        fallback={<Chakra.Box >
-                            <Chakra.Center>
-                                <Chakra.Spinner
-                                    size={"xl"}
-                                />
-                            </Chakra.Center>
-                        </Chakra.Box>}
-                    >
+            <React.Suspense fallback={
+                <Chakra.AbsoluteCenter>
+                    <Chakra.Box>
+                        <Chakra.HStack>
+                            <Chakra.Spinner
+                                size={"lg"}
+                                thickness="5px"
+                            />
+                            <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
+                                Fetching all home page data...
+                            </Chakra.Heading>
+                        </Chakra.HStack>
+                    </Chakra.Box>
+                </Chakra.AbsoluteCenter>
+            }>
+                <Chakra.VStack
+                    display={"block"}
+                    divider={<Chakra.StackDivider />}
+                >
+                    <Chakra.Box display={"block"}>
+
                         <PopularRecently />
-                    </React.Suspense>
-                    
-                </Chakra.Box>
-                <Chakra.Box display={"block"}>
-                    <React.Suspense
-                        fallback={<Chakra.Box >
-                            <Chakra.Center>
-                                <Chakra.Spinner
-                                    size={"xl"}
-                                />
-                            </Chakra.Center>
-                        </Chakra.Box>}
-                    >
+
+                    </Chakra.Box>
+                    <Chakra.Box display={"block"}>
+
                         <Seasonal />
-                    </React.Suspense>
-                </Chakra.Box>
-                <Chakra.Box
-                    display={"block"}
-                >
-                    <React.Suspense
-                        fallback={<Chakra.Box >
-                            <Chakra.Center>
-                                <Chakra.Spinner
-                                    size={"xl"}
-                                />
-                            </Chakra.Center>
-                        </Chakra.Box>}
+                    </Chakra.Box>
+                    <Chakra.Box
+                        display={"block"}
                     >
+
                         <Latest_Updates />
-                    </React.Suspense>
-                </Chakra.Box>
-                <Chakra.Box
-                    display={"block"}
-                >
-                    <React.Suspense
-                        fallback={<Chakra.Box >
-                            <Chakra.Center>
-                                <Chakra.Spinner
-                                    size={"xl"}
-                                />
-                            </Chakra.Center>
-                        </Chakra.Box>}
+                    </Chakra.Box>
+                    <Chakra.Box
+                        display={"block"}
                     >
+
                         <RecentlyAdded />
-                    </React.Suspense>
-                </Chakra.Box>
-            </Chakra.VStack>
+                    </Chakra.Box>
+                </Chakra.VStack>
+            </React.Suspense>
         );
     }
-    if(query.isError){
+    if (query.isError) {
         return (
             <ChakraContainer>
                 <Chakra.Heading fontFamily={"inherit"}>
@@ -139,10 +119,11 @@ export default function HomeAfterPing() {
                 <Chakra.HStack>
                     <Chakra.Spinner
                         size={"lg"}
+                        thickness="5px"
                     />
-                    <Chakra.Text as={"span"} >
+                    <Chakra.Heading size={"lg"} fontFamily={"inherit"} >
                         Fetching all home page data...
-                    </Chakra.Text>
+                    </Chakra.Heading>
                 </Chakra.HStack>
             </Chakra.Box>
         </Chakra.AbsoluteCenter>

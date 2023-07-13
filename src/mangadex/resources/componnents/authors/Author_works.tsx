@@ -10,26 +10,33 @@ import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
 import MangaList from "@mangadex/resources/componnents/mangas/v1/MangaList";
 import { get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "@mangadex/resources/hooks/AuthorState";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 export default function Author_works(props: {
     src: Author
 }) {
     const client = useHTTPClient();
-    const query_key = get_author_works_query_key_byAuthor_ID({
+    const query_key = React.useMemo(() => get_author_works_query_key_byAuthor_ID({
         author_id: props.src.get_id()
+    }), [props.src]);
+    const query = useQuery(query_key, () => {
+        return get_author_works_promise({
+            author_id: props.src.get_id(),
+            client: client
+        });
+    }, {
+        staleTime: Infinity
     });
-    const queryClient = useQueryClient();
     const [works, setWorks] = React.useState("Loading");
     React.useEffect(() => {
-        const query_data = queryClient.getQueryData<Collection<Manga>>(query_key);
-        if(query_data !== undefined){
-            setWorks(`${query_data.get_total()}`); 
-        }else{
+        const query_data = query.data;
+        if (query_data !== undefined) {
+            setWorks(`${query_data.get_total()}`);
+        } else {
             setWorks("Loading...");
         }
-    }, [queryClient.getQueryData<Collection<Manga>>(query_key)]);
+    }, [query.data]);
     return (
         <Chakra.Box
         >

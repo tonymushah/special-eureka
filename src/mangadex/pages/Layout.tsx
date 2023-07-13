@@ -6,6 +6,7 @@ import { Mangadex_suspense, trackEvent } from "@mangadex/index";
 import ServerAutoStartLoader from "@mangadex/resources/componnents/loaders/ServerAutoStart";
 import UserOptionProvider from "../resources/componnents/userOption/UserOptionProvider";
 import { QueryClient } from "@tanstack/react-query";
+import { AnimatePresence } from "framer-motion";
 
 const Content = React.lazy(() => import("@mangadex/resources/componnents/SideBar"));
 
@@ -15,10 +16,38 @@ const ChapterFullScreenModeIniter = React.lazy(() => import("@mangadex/resources
 
 const UserOptionModal = React.lazy(() => import("@mangadex/resources/componnents/userOption/index"));
 
+function Loader() {
+    return (
+        <React.Fragment>
+            <ServerAutoStartLoader />
+            <ChapterFullScreenModeIniter />
+            <UserOptionModal />
+        </React.Fragment>
+    );
+}
+
+function Providers({ children }: React.PropsWithChildren) {
+    return (
+        <UserOptionProvider>
+            <ProSidebarProvider>
+                <Mangadex_suspense>
+                    <Content>
+                        <AnimatePresence>
+                            {
+                                children
+                            }
+                        </AnimatePresence>
+                    </Content>
+                </Mangadex_suspense>
+            </ProSidebarProvider>
+        </UserOptionProvider>
+    );
+}
+
 export default function MangadexLayout() {
     const queryClient = new QueryClient({
-        "defaultOptions" : {
-            "queries" : {
+        "defaultOptions": {
+            "queries": {
                 retry(failureCount) {
                     if (failureCount >= 3) {
                         return false;
@@ -26,24 +55,25 @@ export default function MangadexLayout() {
                         return true;
                     }
                 },
-                staleTime : Infinity,
-                onError(e){
-                    if(typeof e == "string"){
+                staleTime: Infinity,
+                onError(e) {
+                    if (typeof e == "string") {
                         trackEvent("special-eureka-mangadex-query-error", {
-                            error : e
+                            error: e
                         });
-                    }else if(typeof e == "object"){
-                        if(e instanceof Error){
+                    } else if (typeof e == "object") {
+                        if (e instanceof Error) {
                             trackEvent("special-eureka-mangadex-query-error", {
-                                "error-message" : e.message,
-                                "error-name" : e.name
+                                "error-message": e.message,
+                                "error-name": e.name
                             });
                         }
                     }
                 },
-                "networkMode": "always"
+                "networkMode": "always",
+                cacheTime : 1000 * 60 * 3
             },
-            "mutations" : {
+            "mutations": {
                 "networkMode": "always"
             }
         }
@@ -53,20 +83,13 @@ export default function MangadexLayout() {
         <MyErrorBounderies>
             <Mangadex_suspense>
                 <BasicWebsitesRessources queryClient={queryClient}>
-                    <ServerAutoStartLoader />
-                    <ChapterFullScreenModeIniter/>
-                    <UserOptionModal/>
-                    <UserOptionProvider>
-                        <ProSidebarProvider>
-                            <Mangadex_suspense>
-                                <Content>
-                                    <Outlet />
-                                </Content>
-                            </Mangadex_suspense>
-                        </ProSidebarProvider>
-                    </UserOptionProvider>
+                    <Loader />
+                    <Providers>
+                        <Outlet />
+                    </Providers>
                 </BasicWebsitesRessources>
             </Mangadex_suspense>
-        </MyErrorBounderies>
+        </MyErrorBounderies >
     );
 }
+

@@ -22,14 +22,14 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
     }, []);
     if (query.isSuccess == true) {
         if (props.children == undefined) {
-            return (<></>);
+            return (<React.Fragment/>);
         } else {
             return (
                 <React.Suspense
                     fallback={
-                        <>
+                        <React.Fragment>
                             {props.onLoading}
-                        </>
+                        </React.Fragment>
                     }
                 >
                     <HTTPClientProvider
@@ -54,10 +54,10 @@ export default function HTTPClientProvider_Query(props: React.PropsWithChildren<
         );
     }
     return (
-        <>
+        <React.Fragment>
             {
                 props.onLoading
             }
-        </>
+        </React.Fragment>
     );
 }

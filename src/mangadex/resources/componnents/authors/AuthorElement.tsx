@@ -1,6 +1,6 @@
 import { HStack, LinkBox, LinkOverlay } from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
-import { getMangaDexPath } from "@mangadex";
+import { getMangaDexPath } from "@mangadex/index";
 import { Author } from "@mangadex/api/structures/Author";
 import { RiUser6Line } from "react-icons/ri";
 import { Link as ReactRouterLink } from "react-router-dom";

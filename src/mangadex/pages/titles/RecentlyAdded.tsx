@@ -6,19 +6,28 @@ import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/
 import { Manga } from "@mangadex/api/structures/Manga";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
-import { appWindow } from "@tauri-apps/api/window";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 const IsPingable_defaultError = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_defaultError"));
 
 export default function RecentlyAdded() {
-    const offset_limit = new Offset_limits();
-    offset_limit.set_limits(25);
+    const { offset_limit, queryKey } = React.useMemo(() => {
+        const offset_limit = new Offset_limits();
+        offset_limit.set_limits(25);
+        const queryKey = ["mdx", "recently-added"];
+        return {
+            offset_limit,
+            queryKey
+        };
+    }, []);
     const client = useHTTPClient();
-    const queryKey = ["mdx", "recently-added"];
-    appWindow.setTitle("Recently Added | Mangadex");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Recently Added | Mangadex");
+    });
     useTrackEvent("mangadex-recently-added-entrance");
     return (
         <Mangadex_suspense>

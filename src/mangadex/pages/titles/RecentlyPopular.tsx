@@ -44,7 +44,7 @@ export default function RecentlyPopularPage() {
             >
                 {(data) => (
                     <Chakra.Box>
-                        <Chakra.VStack divider={
+                        <Chakra.VStack display={"block"} divider={
                             <Chakra.Divider />
                         }>
                             {data.get_data().map((value, index) => {

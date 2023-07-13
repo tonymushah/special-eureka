@@ -3,6 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import useUserOptionModal from "@mangadex/resources/hooks/userOptions/ModalContext";
 import React from "react";
 import ReactHotkeys from "react-hot-keys";
+import ActivateKuru from "../kuru_kuru/ActivateKuru";
 
 const SelectLanguages = React.lazy(() => import("@mangadex/resources/componnents/userOption/SelectLanguages"));
 
@@ -12,7 +13,7 @@ const RtlSidebarOption = React.lazy(() => import("@mangadex/resources/componnent
 
 
 export default function UserOptionModal() {
-    const { query, changeOption, toggle } = useUserOptionModal();
+    const { state, changeOption, toggle } = useUserOptionModal();
     return (
         <React.Fragment>
             <ReactHotkeys
@@ -21,7 +22,7 @@ export default function UserOptionModal() {
                     toggle();
                 }}
             />
-            <Chakra.Modal isOpen={query.data ?? false} onClose={() => changeOption(false)}>
+            <Chakra.Modal isOpen={state} onClose={() => changeOption(false)}>
                 <Chakra.ModalOverlay />
                 <Chakra.ModalContent>
                     <Chakra.ModalHeader>
@@ -68,6 +69,9 @@ export default function UserOptionModal() {
                             </Chakra.Box>
                         </Chakra.VStack>
                     </Chakra.ModalBody>
+                    <Chakra.ModalFooter>
+                        <ActivateKuru/>
+                    </Chakra.ModalFooter>
                 </Chakra.ModalContent>
             </Chakra.Modal>
         </React.Fragment>
