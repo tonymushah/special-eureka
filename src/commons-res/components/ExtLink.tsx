@@ -49,7 +49,7 @@ export function ExtLink(props: ExtLinkProps) {
                     </ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Heading>
+                        <Heading size={"md"}>
                             {
                                 props.href
                             }
