@@ -38,8 +38,8 @@ export function Mangadex_suspense__() {
 
     return (
         <Chakra.Box
-            width={"container.lg"}
-            height={"container.lg"}
+            width={"100%"}
+            height={"100vh"}
         >
             <Chakra.Center>
                 <SuS_Spinner />

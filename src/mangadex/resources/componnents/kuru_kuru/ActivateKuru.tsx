@@ -4,6 +4,8 @@ import { useAtom } from "jotai";
 import { isActiveAtom } from "./atom";
 import invokeHerta, { getRandomGif } from "./invocation";
 import React from "react";
+import { useNavigate } from "react-router";
+import { useMangaDexPath } from "@mangadex/index";
 
 export default function ActivateKuru(){
     const [isActive, setIsActive] = useAtom(isActiveAtom);
@@ -11,12 +13,17 @@ export default function ActivateKuru(){
     const activate = React.useCallback(() => start(() => {
         setIsActive(!isActive);
         invokeHerta();
-    }), []);
-    
+    }), [isActive]);
+    const navigate = useNavigate();
+    const MangadexPath = useMangaDexPath();
     return (
         <Button
             isLoading={isLoading}
             onClick={() => activate()}
+            onContextMenu={(e) => {
+                e.preventDefault();
+                navigate(`${MangadexPath}/kuru`);
+            }}
         >
             {
                 isActive ? (

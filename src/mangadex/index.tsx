@@ -77,6 +77,8 @@ const AuthorSearch = React.lazy(() => import("@mangadex/pages/author/search"));
 
 const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
 
+const Kuru_Credits = React.lazy(() => import("@mangadex/resources/componnents/kuru_kuru/index"));
+
 export function useMangaDexPath() {
     return React.useMemo(() => getMangaDexPath(), []);
 }
@@ -114,313 +116,319 @@ export function Mangadex_suspense(props: React.PropsWithChildren) {
     );
 }
 
-function useMangadexRouter(): RouteObject {
-    const Router: RouteObject = {
-        path: MangaDexPath,
-        element: (
-            <Mangadex_suspense>
-                <MangadexLayout />
-            </Mangadex_suspense>
-        ),
-        errorElement: (<ErrorELRouter />),
-        children: [
-            // Home
-            {
-                index: true,
-                element: (
-                    <Mangadex_suspense>
-                        <Home />
-                    </Mangadex_suspense>
-                ),
-                errorElement: (<ErrorELRouter />),
-            },
-            // Manga
-            {
-                path: "manga",
-                errorElement: (<ErrorELRouter />),
-                children: [
-                    // Manga by ID
-                    {
-                        path: ":id",
-                        errorElement: (<ErrorELRouter />),
-                        element: (
-                            <MyErrorBounderies>
-                                <Mangadex_suspense>
-                                    <MangaPage />
-                                </Mangadex_suspense>
-                            </MyErrorBounderies>
-                        ),
-                        children: [
-                            // Top Chap
-                            {
-                                index: true,
-                                element: (
-                                    <MyErrorBounderies>
-                                        <Mangadex_suspense>
-                                            <Chapters_ />
-                                        </Mangadex_suspense>
-                                    </MyErrorBounderies>
-                                )
-                            },
-                            // Covers
-                            {
-                                path: "covers",
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Covers_ />
-                                    </Mangadex_suspense>
-                                )
-                            },
-                            // Related
-                            {
-                                path: "related",
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Related_ />
-                                    </Mangadex_suspense>
-                                )
-                            }
-                        ]
-                    },
-                    // Random
-                    {
-                        path: "random",
-                        errorElement: (<ErrorELRouter />),
-                        element: (
-                            <Mangadex_suspense>
-                                <Random_Manga />
-                            </Mangadex_suspense>
-                        )
-                    }
-                ]
-            },
-            // Chapter
-            {
-                path: "chapter",
-                errorElement: (<ErrorELRouter />),
-                children: [
-                    // Chapter by ID
-                    {
-                        path: ":id",
-                        errorElement: (<ErrorELRouter />),
-                        element: (
-                            <MyErrorBounderies>
-                                <Mangadex_suspense>
-                                    <Chapter_Page />
-                                </Mangadex_suspense>
-                            </MyErrorBounderies>
-                        ),
-                        children: [
-                            // Longstrip
-                            {
-                                index: true,
-                                element: (
-                                    <Mangadex_suspense>
-                                        <Chakra.Box>
-                                            <Chapter_Reading />
-                                        </Chakra.Box>
-                                    </Mangadex_suspense>
-                                )
-                            },
-                        ]
-                    }
-                ]
-            },
-            // Download
-            {
-                path: "download",
-                errorElement: (<ErrorELRouter />),
-                element: (
-                    <Mangadex_suspense>
-                        <DownloadsLaoyut />
-                    </Mangadex_suspense>
-                ),
-                children: [
-                    // index
-                    {
-                        index: true,
-                        element: (
-                            <Mangadex_suspense>
-                                <Chakra.Box>
-                                    <Download_Index_Page />
-                                </Chakra.Box>
-                            </Mangadex_suspense>
-                        )
-                    }
-                ]
-            },
-            // Group
-            {
-                path: "group",
-                children: [
-                    // Group by ID
-                    {
-                        path: ":id",
-                        element: (
-                            <Mangadex_suspense>
-                                <Group_Page_ />
-                            </Mangadex_suspense>
-                        ),
-                        children: [
-                            {
-                                index: true,
-                                element: (
-                                    <Group_Page_Suspense>
-                                        <Group_Page_Details />
-                                    </Group_Page_Suspense>
-                                )
-                            },
-                            {
-                                path: "titles",
-                                element: (
-                                    <Group_Page_Suspense>
-                                        <Group_Page_Titles />
-                                    </Group_Page_Suspense>
-                                )
-                            },
-                            {
-                                path: "feeds",
-                                element: (
-                                    <Group_Page_Suspense>
-                                        <Group_Page_Feeds />
-                                    </Group_Page_Suspense>
-                                )
-                            }
-                        ]
-                    },
-                    // Search
-                    {
-                        path: "search",
-                        element: (
-                            <Mangadex_suspense>
-                                <Group_Search />
-                            </Mangadex_suspense>
-                        )
 
-                    }
-                ]
-            },
-            // Titles
-            {
-                path: "titles",
-                children: [
-                    // Recently Added
-                    {
-                        path: "recently-added",
-                        element: (
+const useMangadexRouter: RouteObject = {
+    path: MangaDexPath,
+    element: (
+        <Mangadex_suspense>
+            <MangadexLayout />
+        </Mangadex_suspense>
+    ),
+    errorElement: (<ErrorELRouter />),
+    children: [
+        // Home
+        {
+            index: true,
+            element: (
+                <Mangadex_suspense>
+                    <Home />
+                </Mangadex_suspense>
+            ),
+            errorElement: (<ErrorELRouter />),
+        },
+        // Manga
+        {
+            path: "manga",
+            errorElement: (<ErrorELRouter />),
+            children: [
+                // Manga by ID
+                {
+                    path: ":id",
+                    errorElement: (<ErrorELRouter />),
+                    element: (
+                        <MyErrorBounderies>
                             <Mangadex_suspense>
-                                <RecentlyAdded />
+                                <MangaPage />
                             </Mangadex_suspense>
-                        )
-                    },
-                    // Latest Updates
-                    {
-                        path: "latest-updates",
-                        element: (
-                            <Mangadex_suspense>
-                                <LatestUpdates />
-                            </Mangadex_suspense>
-                        ),
-                    },
-                    // Recently Popular
-                    {
-                        path: "recently-popular",
-                        element: (
-                            <Mangadex_suspense>
-                                <RecentlyPopularPage />
-                            </Mangadex_suspense>
-                        )
-                    },
-                    // Manga Search
-                    {
-                        path: "search",
-                        element: (
-                            <MyErrorBounderies>
+                        </MyErrorBounderies>
+                    ),
+                    children: [
+                        // Top Chap
+                        {
+                            index: true,
+                            element: (
+                                <MyErrorBounderies>
+                                    <Mangadex_suspense>
+                                        <Chapters_ />
+                                    </Mangadex_suspense>
+                                </MyErrorBounderies>
+                            )
+                        },
+                        // Covers
+                        {
+                            path: "covers",
+                            element: (
                                 <Mangadex_suspense>
-                                    <Manga_Search />
+                                    <Covers_ />
                                 </Mangadex_suspense>
-                            </MyErrorBounderies>
-                        )
-                    }
-                ]
-            },
-            // Author
-            {
-                path: "author",
-                errorElement: (<ErrorELRouter />),
-                children: [
-                    {
-                        path: ":id",
-                        errorElement: (<ErrorELRouter />),
-                        element: (
+                            )
+                        },
+                        // Related
+                        {
+                            path: "related",
+                            element: (
+                                <Mangadex_suspense>
+                                    <Related_ />
+                                </Mangadex_suspense>
+                            )
+                        }
+                    ]
+                },
+                // Random
+                {
+                    path: "random",
+                    errorElement: (<ErrorELRouter />),
+                    element: (
+                        <Mangadex_suspense>
+                            <Random_Manga />
+                        </Mangadex_suspense>
+                    )
+                }
+            ]
+        },
+        // Chapter
+        {
+            path: "chapter",
+            errorElement: (<ErrorELRouter />),
+            children: [
+                // Chapter by ID
+                {
+                    path: ":id",
+                    errorElement: (<ErrorELRouter />),
+                    element: (
+                        <MyErrorBounderies>
                             <Mangadex_suspense>
-                                <IsPingable_default_client
-                                    onLoading={
-                                        <Mangadex_suspense__ />
-                                    }
-                                    onSuccess={() => (
-                                        <Mangadex_suspense>
-                                            <Author_Page_index />
-                                        </Mangadex_suspense>
-                                    )}
-                                />
+                                <Chapter_Page />
                             </Mangadex_suspense>
-                        )
-                    },
-                    {
-                        path: "search",
-                        element: (
-                            <Mangadex_suspense>
-                                <AuthorSearch />
-                            </Mangadex_suspense>
-                        )
-                    }
-                ]
-            },
-            // User 
-            {
-                path: "user",
-                errorElement: (
-                    <ErrorELRouter />
-                ),
-                children: [
-                    {
-                        path: ":user_id",
-                        errorElement: (<ErrorELRouter />),
-                        element: (
-                            <Mangadex_suspense>
-                                <UserPage />
-                            </Mangadex_suspense>
-                        ),
-                        children: [
-                            {
-                                index: true,
-                                errorElement: (<ErrorELRouter />),
-                                element: (
-                                    <Mangadex_suspense>
-                                        <UserPageInfo />
-                                    </Mangadex_suspense>
-                                )
-                            },
-                            {
-                                path: "feed",
-                                errorElement: (
-                                    <ErrorELRouter />
-                                ),
-                                element: (
-                                    <Mangadex_suspense>
-                                        <UserPageFeed />
-                                    </Mangadex_suspense>
-                                )
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
+                        </MyErrorBounderies>
+                    ),
+                    children: [
+                        // Longstrip
+                        {
+                            index: true,
+                            element: (
+                                <Mangadex_suspense>
+                                    <Chakra.Box>
+                                        <Chapter_Reading />
+                                    </Chakra.Box>
+                                </Mangadex_suspense>
+                            )
+                        },
+                    ]
+                }
+            ]
+        },
+        // Download
+        {
+            path: "download",
+            errorElement: (<ErrorELRouter />),
+            element: (
+                <Mangadex_suspense>
+                    <DownloadsLaoyut />
+                </Mangadex_suspense>
+            ),
+            children: [
+                // index
+                {
+                    index: true,
+                    element: (
+                        <Mangadex_suspense>
+                            <Chakra.Box>
+                                <Download_Index_Page />
+                            </Chakra.Box>
+                        </Mangadex_suspense>
+                    )
+                }
+            ]
+        },
+        // Group
+        {
+            path: "group",
+            children: [
+                // Group by ID
+                {
+                    path: ":id",
+                    element: (
+                        <Mangadex_suspense>
+                            <Group_Page_ />
+                        </Mangadex_suspense>
+                    ),
+                    children: [
+                        {
+                            index: true,
+                            element: (
+                                <Group_Page_Suspense>
+                                    <Group_Page_Details />
+                                </Group_Page_Suspense>
+                            )
+                        },
+                        {
+                            path: "titles",
+                            element: (
+                                <Group_Page_Suspense>
+                                    <Group_Page_Titles />
+                                </Group_Page_Suspense>
+                            )
+                        },
+                        {
+                            path: "feeds",
+                            element: (
+                                <Group_Page_Suspense>
+                                    <Group_Page_Feeds />
+                                </Group_Page_Suspense>
+                            )
+                        }
+                    ]
+                },
+                // Search
+                {
+                    path: "search",
+                    element: (
+                        <Mangadex_suspense>
+                            <Group_Search />
+                        </Mangadex_suspense>
+                    )
 
-    return Router;
-}
+                }
+            ]
+        },
+        // Titles
+        {
+            path: "titles",
+            children: [
+                // Recently Added
+                {
+                    path: "recently-added",
+                    element: (
+                        <Mangadex_suspense>
+                            <RecentlyAdded />
+                        </Mangadex_suspense>
+                    )
+                },
+                // Latest Updates
+                {
+                    path: "latest-updates",
+                    element: (
+                        <Mangadex_suspense>
+                            <LatestUpdates />
+                        </Mangadex_suspense>
+                    ),
+                },
+                // Recently Popular
+                {
+                    path: "recently-popular",
+                    element: (
+                        <Mangadex_suspense>
+                            <RecentlyPopularPage />
+                        </Mangadex_suspense>
+                    )
+                },
+                // Manga Search
+                {
+                    path: "search",
+                    element: (
+                        <MyErrorBounderies>
+                            <Mangadex_suspense>
+                                <Manga_Search />
+                            </Mangadex_suspense>
+                        </MyErrorBounderies>
+                    )
+                }
+            ]
+        },
+        // Author
+        {
+            path: "author",
+            errorElement: (<ErrorELRouter />),
+            children: [
+                {
+                    path: ":id",
+                    errorElement: (<ErrorELRouter />),
+                    element: (
+                        <Mangadex_suspense>
+                            <IsPingable_default_client
+                                onLoading={
+                                    <Mangadex_SUS />
+                                }
+                                onSuccess={() => (
+                                    <Mangadex_suspense>
+                                        <Author_Page_index />
+                                    </Mangadex_suspense>
+                                )}
+                            />
+                        </Mangadex_suspense>
+                    )
+                },
+                {
+                    path: "search",
+                    element: (
+                        <Mangadex_suspense>
+                            <AuthorSearch />
+                        </Mangadex_suspense>
+                    )
+                }
+            ]
+        },
+        // User 
+        {
+            path: "user",
+            errorElement: (
+                <ErrorELRouter />
+            ),
+            children: [
+                {
+                    path: ":user_id",
+                    errorElement: (<ErrorELRouter />),
+                    element: (
+                        <Mangadex_suspense>
+                            <UserPage />
+                        </Mangadex_suspense>
+                    ),
+                    children: [
+                        {
+                            index: true,
+                            errorElement: (<ErrorELRouter />),
+                            element: (
+                                <Mangadex_suspense>
+                                    <UserPageInfo />
+                                </Mangadex_suspense>
+                            )
+                        },
+                        {
+                            path: "feed",
+                            errorElement: (
+                                <ErrorELRouter />
+                            ),
+                            element: (
+                                <Mangadex_suspense>
+                                    <UserPageFeed />
+                                </Mangadex_suspense>
+                            )
+                        }
+                    ]
+                }
+            ]
+        },
+        // Kuru
+        {
+            path : "kuru",
+            element : (
+                <Mangadex_suspense>
+                    <Kuru_Credits/>
+                </Mangadex_suspense>
+            )
+        }
+    ]
+};
 
-export default useMangadexRouter();
+export default useMangadexRouter;

@@ -28,7 +28,7 @@ export function animateHerta() {
     elem.src = getRandomGif();
     elem.style.position = "absolute";
     elem.style.right = "-500px";
-    elem.style.top = scrollY - 430 + "px";
+    elem.style.top = window.innerHeight - 500 + "px";
     elem.style.zIndex = "5";
     document.body.appendChild(elem);
 
