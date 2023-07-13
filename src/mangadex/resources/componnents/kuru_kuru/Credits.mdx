@@ -1,0 +1,23 @@
+import { favicon } from "./data";
+import { Image, Text, HStack } from "@chakra-ui/react"
+import Sqwish from "./Sqwish_button.tsx";
+import Count from "./Count.tsx"
+import { FaGitHub } from "react-icons/fa";
+import { ExtLink } from "@commons-res/components/ExtLink";
+
+# Welcome to herta kuru <Image width={"20px"} src={favicon}/>
+
+The website for Herta, the ~~annoying~~ cutest genius Honkai: Star Rail character out there.
+
+The kuru~ has been squished for <Count/>
+
+<Sqwish/>
+
+Credits : <ExtLink href="https://github.com/duiqt/herta_kuru">
+    <HStack>
+        <FaGitHub/>
+        <Text>
+            duiqt/herta_kuru
+        </Text>
+    </HStack>
+</ExtLink>

@@ -543,7 +543,8 @@ export class Chapters {
     public async initialize_chapters(client?: Client) {
         const to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
         for (let index = 0; index < to_input.length; index++) {
-            to_input[index] = await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index], client);
+            const element = (await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index], client)).data;
+            if(element instanceof Chapter_withAllIncludes) to_input[index] = element;
         }
         this.set_chapters(to_input);
     }

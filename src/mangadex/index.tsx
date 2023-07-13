@@ -7,6 +7,9 @@ import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBoun
 import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 import { Group_Page_Suspense } from "./resources/componnents/groups/Group_Page";
+export { Mangadex_suspense__ } from "./resources/componnents/suspense";
+
+import { Mangadex_suspense__ as Mangadex_SUS } from "./resources/componnents/suspense";
 
 const MangaDexPath = "/mangadex";
 
@@ -78,23 +81,6 @@ export function useMangaDexPath() {
     return React.useMemo(() => getMangaDexPath(), []);
 }
 
-export function Mangadex_suspense__() {
-    return (
-        <Chakra.Box
-            width={"full"}
-            height={"100vh"}
-        >
-            <Chakra.Center>
-                <Chakra.Spinner
-                    size={"lg"}
-                    thickness={"2px"}
-                    color={"orange"}
-                />
-            </Chakra.Center>
-        </Chakra.Box>
-    );
-}
-
 export function useTrackEvent(name: string, payload?: {
     [key: string]: string | number
 }) {
@@ -118,7 +104,7 @@ export function Mangadex_suspense(props: React.PropsWithChildren) {
     return (
         <React.Suspense
             fallback={
-                <Mangadex_suspense__ />
+                <Mangadex_SUS />
             }
         >
             {

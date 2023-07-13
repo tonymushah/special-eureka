@@ -8,7 +8,6 @@ import { Await } from "react-router-dom";
 import { TagRow } from "../Mainpage/boutons/tag_boutons";
 import { MangaPageProps } from "../Manga_Page";
 import { LinksRow } from "./boutons/links_boutons";
-import { Manga } from "@mangadex/api/structures/Manga";
 import Loading from "./loading";
 
 const Aggregate_Chapters = React.lazy(() => import("./top_chap/Aggregate_Chapters"));
@@ -20,7 +19,7 @@ const Author_Artists = React.lazy(() => import("./top_chap/Author_Artists"));
 const Top_Chaps_Desc_Part = React.lazy(() => import("./top_chap/Top_Chaps_Desc_Part"));
 
 export function Top_Chaps(props: MangaPageProps) {
-    async function build_altTitle(): Promise<Array<React.ReactNode>> {
+    const build_altTitle = React.useCallback(async () => {
         const altTitle_inLang: Array<Lang_and_Data> = await Lang_and_Data.initializeArrayByAltTitle_obj(props.src.get_alt_title());
         const returns: Array<React.ReactNode> = Array<React.ReactNode>(altTitle_inLang.length);
         for (let index = 0; index < altTitle_inLang.length; index++) {
@@ -38,7 +37,7 @@ export function Top_Chaps(props: MangaPageProps) {
                 </Chakra.Box>);
         }
         return returns;
-    }
+    }, [props.src]);
     const links = React.useMemo(() => {
         try {
             return MangaLinksData.build_wAny(props.src.get_links());
@@ -101,9 +100,9 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <React.Fragment>
                                         <React.Suspense fallback={
                                             <Chakra.Alert status="loading" variant="left-accent">
-                                                    <Chakra.AlertIcon />
-                                                    <Chakra.AlertTitle>Loading Genre...</Chakra.AlertTitle>
-                                                </Chakra.Alert>
+                                                <Chakra.AlertIcon />
+                                                <Chakra.AlertTitle>Loading Genre...</Chakra.AlertTitle>
+                                            </Chakra.Alert>
                                         }>
                                             {
                                                 <TagRow title="Genre" src={props.src.get_genre()} />
@@ -115,15 +114,14 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <React.Fragment>
                                         <React.Suspense fallback={
                                             <Chakra.Alert status="loading" variant="left-accent">
-                                                    <Chakra.AlertIcon />
-                                                    <Chakra.AlertTitle>Loading Theme...</Chakra.AlertTitle>
-                                                </Chakra.Alert>
+                                                <Chakra.AlertIcon />
+                                                <Chakra.AlertTitle>Loading Theme...</Chakra.AlertTitle>
+                                            </Chakra.Alert>
                                         }>
                                             <Await
                                                 resolve={props.src.get_async_theme()}
                                                 errorElement={
                                                     <React.Fragment>
-                                                        <div> </div>
                                                     </React.Fragment>
                                                 }
                                             >
@@ -138,9 +136,9 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <React.Fragment>
                                         <React.Suspense fallback={
                                             <Chakra.Alert status="loading" variant="left-accent">
-                                                    <Chakra.AlertIcon />
-                                                    <Chakra.AlertTitle>Loading format...</Chakra.AlertTitle>
-                                                </Chakra.Alert>
+                                                <Chakra.AlertIcon />
+                                                <Chakra.AlertTitle>Loading format...</Chakra.AlertTitle>
+                                            </Chakra.Alert>
                                         }>
                                             <Await
                                                 resolve={props.src.get_async_format()}
@@ -157,9 +155,9 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <React.Fragment>
                                         <React.Suspense fallback={
                                             <Chakra.Alert status="loading" variant="left-accent">
-                                                    <Chakra.AlertIcon />
-                                                    <Chakra.AlertTitle>Loading Content...</Chakra.AlertTitle>
-                                                </Chakra.Alert>
+                                                <Chakra.AlertIcon />
+                                                <Chakra.AlertTitle>Loading Content...</Chakra.AlertTitle>
+                                            </Chakra.Alert>
                                         }>
                                             <Await
                                                 resolve={props.src.get_async_content}

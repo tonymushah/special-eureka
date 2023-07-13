@@ -16,14 +16,14 @@ export default function Tags() {
                                 nodes.map((value, index, array) => (
                                     <React.Fragment key={`${v4()}`}>
                                         {
-                                            index < 15 ? (
+                                            index < 10 ? (
                                                 <Chakra.WrapItem >
                                                     {
                                                         value
                                                     }
                                                 </Chakra.WrapItem>
                                             ) : (
-                                                index == 15 ? (
+                                                index == 10 ? (
                                                     <Chakra.Tag>{array.length - index} more...</Chakra.Tag>
                                                 ) : (
                                                     <React.Fragment />

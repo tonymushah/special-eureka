@@ -3,6 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import useUserOptionModal from "@mangadex/resources/hooks/userOptions/ModalContext";
 import React from "react";
 import ReactHotkeys from "react-hot-keys";
+import ActivateKuru from "../kuru_kuru/ActivateKuru";
 
 const SelectLanguages = React.lazy(() => import("@mangadex/resources/componnents/userOption/SelectLanguages"));
 
@@ -68,6 +69,9 @@ export default function UserOptionModal() {
                             </Chakra.Box>
                         </Chakra.VStack>
                     </Chakra.ModalBody>
+                    <Chakra.ModalFooter>
+                        <ActivateKuru/>
+                    </Chakra.ModalFooter>
                 </Chakra.ModalContent>
             </Chakra.Modal>
         </React.Fragment>

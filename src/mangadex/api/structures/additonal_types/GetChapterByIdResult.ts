@@ -1,7 +1,7 @@
-import { Chapter } from "../Chapter";
+import { Chapter, Chapter_withAllIncludes } from "../Chapter";
 
 export default interface GetChapterByIdResult{
     isDownloaded: boolean,
     hasFailed: boolean,
-    data: Chapter
+    data: Chapter | Chapter_withAllIncludes
 }

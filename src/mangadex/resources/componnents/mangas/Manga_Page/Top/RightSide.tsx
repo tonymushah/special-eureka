@@ -41,18 +41,20 @@ export default function RightSide() {
                 <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={
-                            <Chakra.Heading
-                                noOfLines={2}
-                                fontFamily={"inherit"}
-                                size={{
-                                    base: "md",
-                                    sm: "lg",
-                                    md: "2xl",
-                                    lg: "3xl"
-                                }}
-                            >
-                                I&apos;m loading the title, nee-san
-                            </Chakra.Heading>
+                            <Chakra.Skeleton>
+                                <Chakra.Heading
+                                    noOfLines={2}
+                                    fontFamily={"inherit"}
+                                    size={{
+                                        base: "md",
+                                        sm: "lg",
+                                        md: "2xl",
+                                        lg: "3xl"
+                                    }}
+                                >
+                                    I&apos;m loading the title, nee-san
+                                </Chakra.Heading>
+                            </Chakra.Skeleton>
                         }
                     >
                         <Chakra.Heading

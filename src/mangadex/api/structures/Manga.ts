@@ -1,10 +1,10 @@
 import { download_all_manga_covers, download_manga, download_manga_cover, patch_all_manga_cover, refetch_all_manga } from "@mangadex/plugin";
-import { Client, getClient, Response } from "@tauri-apps/api/http";
+import { Client, Response, getClient } from "@tauri-apps/api/http";
 import MangaStatus from "../enums/MangaStatus";
 import { Api_Request } from "../internal/Api_Request";
-import { Author_Artists, Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
-import { Asc_Desc } from "../internal/Utils";
+import { Asc_Desc, Author_Artists, Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
 import DeskApiRequest from "../offline/DeskApiRequest";
+import { LocalizedString } from "../sta/data-contracts";
 import { Aggregate } from "./Aggregate";
 import { Attribute } from "./Attributes";
 import { Author } from "./Author";
@@ -13,13 +13,13 @@ import { Collection } from "./Collection";
 import AllDownloadedChap_Of_aMangaCollection from "./CollectionTypes/AllDownloadedChap_ofaMangaCollection";
 import AllDownloadedCover_Of_aMangaCollection from "./CollectionTypes/AllDownloadedCover_Of_aMangaCollection";
 import AllDownloadedMangaCollection from "./CollectionTypes/AllDownloadedMangaCollection";
-import Manga_withAllIncludes_Collection from "./CollectionTypes/Manga_withAllIncludes_Collection";
 import MangaCollection from "./CollectionTypes/MangaCollection";
+import Manga_withAllIncludes_Collection from "./CollectionTypes/Manga_withAllIncludes_Collection";
 import { Cover } from "./Cover";
 import MangaSearchType from "./SearchType/Manga";
 import MangaSearch_withAllIncludes from "./SearchType/MangaSearch_withAllIncludes";
 import { Tag } from "./Tag";
-import { LocalizedString } from "../sta/data-contracts";
+import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
 
 export type GetMangaByIDResponse = {
     manga: Manga,
@@ -689,13 +689,11 @@ export class Manga extends Attribute {
     }
     public async get_async_theme(): Promise<Array<Tag>> {
         const to_use = this.get_theme();
-        return new Promise<Array<Tag>>((resolve, reject) => {
-            if (to_use.length == 0) {
-                reject();
-            } else {
-                resolve(to_use);
-            }
-        });
+        if(to_use.length == 0){
+            return [];
+        }else{
+            return to_use;
+        }
     }
     public get_format(): Array<Tag> {
         const returns: Array<Tag> = [];
@@ -756,10 +754,10 @@ export class Manga extends Attribute {
         );
         return res;
     }
-    public async get_latestUploadedChapter(client?: Client): Promise<Chapter> {
+    public async get_latestUploadedChapter(client?: Client): Promise<GetChapterByIdResult> {
         return Chapter.get_ChapterbyId(this.$latestUploadedChapter, client);
     }
-    public async get_latestUploadedChapter_all(client?: Client): Promise<Chapter_withAllIncludes> {
+    public async get_latestUploadedChapter_all(client?: Client): Promise<GetChapterByIdResult> {
         return Chapter_withAllIncludes.get_ChapterbyId(this.$latestUploadedChapter, client);
     }
     public async get_all_related_manga(client?: Client): Promise<Array<Manga>> {
@@ -768,7 +766,7 @@ export class Manga extends Attribute {
         const related = this.get_some_relationship("manga");
         for (let index = 0; index < related.length; index++) {
             const element = related[index];
-            returns[index] = await Manga.getMangaByID(element.get_id(), client);
+            returns[index] = (await Manga.getMangaByID(element.get_id(), client)).manga;
         }
         return returns;
     }
@@ -790,7 +788,7 @@ export class Manga extends Attribute {
         for (let index = 0; index < related.length; index++) {
             const element = related[index];
             if (element.get_related()! == manga_relation_enum) {
-                returns[index1] = await Manga.getMangaByID(element.get_id(), client);
+                returns[index1] = (await Manga.getMangaByID(element.get_id(), client)).manga;
             }
         }
         return returns;
@@ -967,7 +965,7 @@ export class Manga extends Attribute {
         for (let index = 0; index < to_use.length; index++) {
             const element = to_use[index];
             if (element.get_id() == mangaID) {
-                return Manga.getMangaByID(element.get_id());
+                return (await Manga.getMangaByID(element.get_id())).manga;
             }
         }
         throw new Error("The manga " + mangaID + " is not related to " + this.get_id());
