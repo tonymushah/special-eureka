@@ -37,7 +37,7 @@ function Suspense({ children }: React.PropsWithChildren) {
 export default function RightSide() {
     return (
         <Chakra.Box>
-            <Chakra.VStack spacing={5} display={"block"} alignItems={"start"}>
+            <Chakra.VStack spacing={5} alignItems={"start"}>
                 <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={

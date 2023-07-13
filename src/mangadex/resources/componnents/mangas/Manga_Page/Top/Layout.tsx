@@ -42,7 +42,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
             >
                 <Box
                     padding={5}
-                    background={"rgba(255, 255,255, 0.2)"}
+                    bgGradient={"linear(to-b,rgba(255, 255,255, 0.2) 0%, rgba(255,255,255, 0.5) 50%, rgba(255,255,255, 1) 100%)"}
                 >
                     {children}
                 </Box>
