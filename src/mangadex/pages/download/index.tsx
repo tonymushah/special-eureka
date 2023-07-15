@@ -1,6 +1,7 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
+import React from "react";
 
 const AllDownlaodedMangaConsumer = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer"));
 const MangaListByArrayMangaID = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaListByArrayMangaID"));
@@ -40,7 +41,7 @@ export default function Download_Index_Page() {
                                             fallback={
                                                 <Chakra.Center>
                                                     <Chakra.Box textAlign={"center"}>
-                                                        <Chakra.Spinner
+                                                        <MangadexSpinner
                                                             size={"md"}
                                                         />
                                                         <Chakra.Text>Loading componnent...</Chakra.Text>

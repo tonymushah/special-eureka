@@ -1,11 +1,12 @@
 import * as ChakraIcon from "@chakra-ui/icons";
-import { Box, Button, ButtonGroup, Center, Spinner, Text } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Center, Text } from "@chakra-ui/react";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { Collection } from "@mangadex/api/structures/Collection";
 import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import React from "react";
 import ErrorEL1 from "../error/ErrorEL1";
 import UseCollection from "./UseCollection";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 export default function CollectionComponnent_WithQuery<T>(props: {
     fn: () => Promise<Collection<T>>,
@@ -179,14 +180,14 @@ export default function CollectionComponnent_WithQuery<T>(props: {
                             next.isLoading ? (
                                 <Text>Loading next page ...</Text>
                             ) : (
-                                <></>
+                                <React.Fragment/>
                             )
                         }
                         {
                             previous.isLoading ? (
                                 <Text>Loading previous page...</Text>
                             ) : (
-                                <></>
+                                <React.Fragment/>
                             )
                         }
                     </Center>
@@ -196,16 +197,16 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     }
     if (search_query.isLoading || search_query.isRefetching) {
         if (props.onLoading != undefined) {
-            return (<>
+            return (<React.Fragment>
                 {
                     props.onLoading
                 }
-            </>);
+            </React.Fragment>);
         } else {
             return (
                 <Box>
                     <Center>
-                        <Spinner />
+                        <MangadexSpinner />
                     </Center>
                 </Box>
             );
@@ -229,7 +230,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
             </Box>
             {
                 props.withoutNavigation == true ? (
-                    <></>
+                    <React.Fragment/>
                 ) : (
                     <Box>
                         <Center>

@@ -3,8 +3,8 @@
     "build": {
         "beforeBuildCommand": "pnpm run vite:build",
         "beforeDevCommand": "pnpm storybook",
-        "devPath": "http://localhost:6006",
-        "distDir": "http://localhost:6006",
+        "devPath": "http://localhost:6239/",
+        "distDir": "http://localhost:6239/",
         "withGlobalTauri": true
     },
     "package": {

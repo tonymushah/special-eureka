@@ -3,6 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { ChapterDeleteMutation_data, get_ChapterbyId, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
 import { UseQueryResult } from "@tanstack/react-query";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 export default function ChapterDownloadButton(props: {
     chapter: Chapter,
     downloadMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>,
@@ -30,9 +31,9 @@ export default function ChapterDownloadButton(props: {
         });
     }
     if (downloadMutation?.isRefetching ) {
-        return (<Chakra.Spinner size={"md"} />);
+        return (<MangadexSpinner size={"md"} />);
     } else if ((downloadMutation.isLoading && downloadMutation.fetchStatus == "fetching")) {
-        return (<Chakra.Spinner size={"md"} />);
+        return (<MangadexSpinner size={"md"} />);
     } else {
         if (query.isSuccess) {
             if (query.data.isDownloaded == true) {
@@ -109,11 +110,11 @@ export default function ChapterDownloadButton(props: {
             }
         } else if (query.isLoading) {
             return (
-                <Chakra.Spinner size={"md"} />
+                <MangadexSpinner size={"md"} />
             );
         }else{
             return (
-                <Chakra.Spinner size={"md"} />
+                <MangadexSpinner size={"md"} />
             );
         }
     }

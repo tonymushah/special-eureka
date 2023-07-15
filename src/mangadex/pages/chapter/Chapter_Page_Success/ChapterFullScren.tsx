@@ -1,7 +1,8 @@
-import { usePropsChapter } from "@mangadex/resources/componnents/chapter/v1/PropsContext";
 import * as Chakra from "@chakra-ui/react";
-import Images from "./Images";
+import { usePropsChapter } from "@mangadex/resources/componnents/chapter/v1/PropsContext";
 import React from "react";
+import Images from "./Images";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const ChapterFullScreen_ = React.lazy(() => import("../ChapterFullScreen"));
 
@@ -12,7 +13,7 @@ export default function ChapterFullScreen() {
         <React.Suspense
             fallback={
                 <Chakra.AbsoluteCenter>
-                    <Chakra.Spinner />
+                    <MangadexSpinner />
                 </Chakra.AbsoluteCenter>
             }
         >

@@ -1,4 +1,4 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertIcon, AlertTitle, Box, Spinner } from "@chakra-ui/react";
+import { AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Alert, AlertIcon, AlertTitle, Box } from "@chakra-ui/react";
 import { Chapters } from "@mangadex/api/structures/Chapter";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";

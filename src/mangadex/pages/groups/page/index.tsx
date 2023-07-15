@@ -1,11 +1,11 @@
-import React, { useMemo } from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Outlet, useOutletContext, useParams } from "react-router-dom";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Group } from "@mangadex/api/structures/Group";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { appWindow } from "@tauri-apps/api/window";
+import { Group } from "@mangadex/api/structures/Group";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { Outlet, useOutletContext, useParams } from "react-router-dom";
 
 const Group_Page = React.lazy(() => import("@mangadex/resources/componnents/groups/Group_Page"));
 
@@ -15,7 +15,7 @@ function Group_Page_Suspense(props: React.PropsWithChildren) {
             fallback={
                 <Chakra.AbsoluteCenter>
                     <Chakra.Box>
-                        <Chakra.Spinner
+                        <MangadexSpinner
                             size={"lg"}
                         />
                     </Chakra.Box>
@@ -60,7 +60,7 @@ function Success({ id }: {
         return (
             <Chakra.AbsoluteCenter>
                 <Chakra.Box>
-                    <Chakra.Spinner
+                    <MangadexSpinner
                         size={"lg"}
                     />
                 </Chakra.Box>
@@ -81,7 +81,7 @@ function Success({ id }: {
     return (
         <Chakra.AbsoluteCenter>
             <Chakra.Box>
-                <Chakra.Spinner
+                <MangadexSpinner
                     size={"lg"}
                 />
             </Chakra.Box>

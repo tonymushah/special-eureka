@@ -1,6 +1,7 @@
-import { HStack, Spinner, Text } from "@chakra-ui/react";
+import { HStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { useReadingDraweContext } from ".";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const PageSelection_ = React.lazy(() => import("../PageSelection"));
 
@@ -12,7 +13,7 @@ export default function PageSelection() {
                 Select a page :
             </Text>
             <React.Suspense
-                fallback={<Spinner></Spinner>}
+                fallback={<MangadexSpinner/>}
             >
                 <PageSelection_ chapter={chapter} />
             </React.Suspense>

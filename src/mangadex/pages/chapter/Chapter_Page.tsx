@@ -1,11 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useTrackEvent } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { get_ChapterbyId, get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
-import { trackEvent, useTrackEvent } from "@mangadex/index";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
+import { useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useParams } from "react-router-dom";
 
 const Chapter_Page_Success = React.lazy(() => import("./Chapter_Page_Success"));
 
@@ -29,7 +30,7 @@ export default function Chapter_Page() {
         type: "chapter",
         id: id!
     });
-    
+
     if (query.isError) {
         setTitle(`Error on loading chapter ${id!} | Mangadex`);
         return (
@@ -44,7 +45,7 @@ export default function Chapter_Page() {
                         display={"block"}
                     >
                         <Chakra.AbsoluteCenter>
-                            <Chakra.Spinner
+                            <MangadexSpinner
                                 size="xl"
                                 color='orange.500'
                                 thickness='4px'
@@ -64,7 +65,7 @@ export default function Chapter_Page() {
             display={"block"}
         >
             <Chakra.AbsoluteCenter>
-                <Chakra.Spinner
+                <MangadexSpinner
                     size="xl"
                     color='orange.500'
                     thickness='4px'

@@ -3,6 +3,7 @@ import { useAtom } from "jotai";
 import { isActiveAtom } from "../kuru_kuru/atom";
 import invokeHerta, { getRandomGif } from "../kuru_kuru/invocation";
 import React from "react";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 function OnHertaActive() {
     const invokeKuru = React.useCallback(() => {
@@ -25,7 +26,7 @@ function SuS_Spinner() {
         );
     } else {
         return (
-            <Chakra.Spinner
+            <MangadexSpinner
                 size={"lg"}
                 thickness={"2px"}
                 color={"orange"}

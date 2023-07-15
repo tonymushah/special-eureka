@@ -5,22 +5,23 @@ import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperM
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
-export default function DoublePage({data} : {
-    data : ChapterPage_outlet_context
-}){
+export default function DoublePage({ data }: {
+    data: ChapterPage_outlet_context
+}) {
     const { query } = useRTLSwipperMode();
-    if(query.isSuccess){
+    if (query.isSuccess) {
         return (
             <SwipperMode
                 data={data}
                 swipper_option={{
-                    dir : query.data == true ? "rtl" : undefined,
-                    slidesPerGroup : 2,
-                    slidesPerView : 2,
-                    modules : [Controller, Keyboard],
-                    keyboard : true,
-                    spaceBetween : 0,
+                    dir: query.data == true ? "rtl" : undefined,
+                    slidesPerGroup: 2,
+                    slidesPerView: 2,
+                    modules: [Controller, Keyboard],
+                    keyboard: true,
+                    spaceBetween: 0,
                 }}
             >
                 {({ images, reading_state }) => (
@@ -35,7 +36,7 @@ export default function DoublePage({data} : {
                                             fallback={
                                                 <Chakra.Box width={"full"}>
                                                     <Chakra.Center>
-                                                        <Chakra.Spinner
+                                                        <MangadexSpinner
                                                             size={"xl"}
                                                             color={"orange"}
                                                             thickness={"10px"}

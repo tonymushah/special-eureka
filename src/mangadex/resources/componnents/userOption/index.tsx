@@ -26,7 +26,22 @@ export default function UserOptionModal() {
                 <Chakra.ModalOverlay />
                 <Chakra.ModalContent>
                     <Chakra.ModalHeader>
-                        Mangadex Options
+                        <Chakra.Tooltip
+                            hasArrow
+                            label={
+                                <Chakra.HStack>
+                                    <Chakra.Text>
+                                        you can open this with
+                                    </Chakra.Text>
+                                    <React.Fragment>
+                                        <Chakra.Kbd color="slateblue">ctrl</Chakra.Kbd> +
+                                        <Chakra.Kbd color="slateblue">O</Chakra.Kbd>
+                                    </React.Fragment>
+                                </Chakra.HStack>
+                            }
+                        >
+                            Mangadex Options
+                        </Chakra.Tooltip>
                     </Chakra.ModalHeader>
                     <Chakra.ModalCloseButton />
                     <Chakra.ModalBody>
@@ -70,7 +85,7 @@ export default function UserOptionModal() {
                         </Chakra.VStack>
                     </Chakra.ModalBody>
                     <Chakra.ModalFooter>
-                        <ActivateKuru/>
+                        <ActivateKuru />
                     </Chakra.ModalFooter>
                 </Chakra.ModalContent>
             </Chakra.Modal>

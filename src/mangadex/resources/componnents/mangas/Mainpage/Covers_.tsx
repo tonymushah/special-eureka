@@ -7,6 +7,7 @@ import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
 import CoverImage from "../../covers/v1/CoverImage";
 import MangaPage_Cover from "./covers";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 //const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
 
@@ -40,7 +41,7 @@ export function Covers_Manga(props: MangaPageProps) {
                     height={"100vh"}
                 >
                     <Chakra.Center>
-                        <Chakra.Spinner
+                        <MangadexSpinner
                             size={"lg"}
                             thickness={"2px"}
                             color={"orange"}

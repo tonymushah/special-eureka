@@ -9,6 +9,7 @@ import { loader as latest, queryKey as latest_QueryKey } from "./Latest_Update";
 import { loader as popular, queryKey as popular_QueryKey } from "./PopularTitles";
 import { loader as recentlyAdded, queryKey as recentlyAdded_QueryKey } from "./RecentlyAdded";
 import { getSeasonalId } from "./Seasonal";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const Seasonal = React.lazy(() => import("./Seasonal"));
 const Latest_Updates = React.lazy(() => import("./Latest_Update"));
@@ -64,7 +65,7 @@ export default function HomeAfterPing() {
                 <Chakra.AbsoluteCenter>
                     <Chakra.Box>
                         <Chakra.HStack>
-                            <Chakra.Spinner
+                            <MangadexSpinner
                                 size={"lg"}
                                 thickness="5px"
                             />
@@ -117,7 +118,7 @@ export default function HomeAfterPing() {
         <Chakra.AbsoluteCenter>
             <Chakra.Box>
                 <Chakra.HStack>
-                    <Chakra.Spinner
+                    <MangadexSpinner
                         size={"lg"}
                         thickness="5px"
                     />

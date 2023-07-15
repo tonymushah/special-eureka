@@ -6,6 +6,7 @@ import { Covers_Manga } from "../../resources/componnents/mangas/Mainpage/Covers
 
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "../../../commons-res/components/HTTPClientProvider";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 export default function Covers_() {
     const toUse: Manga = useManga().toUse;
@@ -29,7 +30,7 @@ export default function Covers_() {
             )}
             onLoading={
                 <Chakra.AbsoluteCenter>
-                    <Chakra.Spinner
+                    <MangadexSpinner
                         size={"lg"}
                     />
                 </Chakra.AbsoluteCenter>

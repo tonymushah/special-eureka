@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { motion } from "framer-motion";
 import React from "react";
 
@@ -53,7 +54,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                         Navigation (Online) :
                         &nbsp;
                         <React.Suspense
-                            fallback={<Chakra.Spinner />}
+                            fallback={<MangadexSpinner />}
                         >
                             <IsPingable
                                 client={client}
@@ -66,13 +67,13 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                                     </Chakra.Button>
                                 )}
                                 onLoading={
-                                    <Chakra.Spinner />
+                                    <MangadexSpinner />
                                 }
                                 onSuccess={() => (
                                     <React.Suspense
                                         fallback={
                                             <Chakra.Center>
-                                                <Chakra.Spinner />
+                                                <MangadexSpinner />
                                             </Chakra.Center>
                                         }
                                     >
@@ -90,7 +91,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                         direction="column"
                     >
                         <React.Suspense>
-                            <ImageWidthSlider/>
+                            <ImageWidthSlider />
                         </React.Suspense>
                     </Chakra.Stack>
                     {/*<Chakra.Box
@@ -100,7 +101,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                         <React.Suspense
                             fallback={
                                 <Chakra.Center>
-                                    <Chakra.Spinner />
+                                    <MangadexSpinner />
                                 </Chakra.Center>
                             }
                         >
@@ -112,7 +113,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                         Select a page
                     </Chakra.Text>
                     <React.Suspense
-                        fallback={<Chakra.Spinner></Chakra.Spinner>}
+                        fallback={<MangadexSpinner/>}
                     >
                         <PageSelection chapter={chapter} />
                     </React.Suspense>

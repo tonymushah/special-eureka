@@ -1,8 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
 import MangaChapter_Accordion from "@mangadex/api/internal/utils/MangaChapter_Accordion";
-import React from "react";
 import { get_manga_byId, useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks";
+import React from "react";
 import ErrorEL1 from "../../error/ErrorEL1";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 import MangaFallback2 from "./MangaElement2Fallback";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
@@ -41,7 +42,7 @@ export default function MangaChapterAccordion_Element(props: {
                                         fallback={
                                             <Chakra.Box width={"full"}>
                                                 <Chakra.Center>
-                                                    <Chakra.Spinner />
+                                                    <MangadexSpinner />
                                                 </Chakra.Center>
                                             </Chakra.Box>
                                         }

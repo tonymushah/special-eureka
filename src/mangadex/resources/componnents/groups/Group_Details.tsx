@@ -10,6 +10,7 @@ import { writeText } from "@tauri-apps/api/clipboard";
 import * as FontAwesome from "react-icons/fa";
 import ChakraContainer from "../layout/Container";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 const ExtLink = React.lazy(async () => {
     const res = await import("@commons-res/components/ExtLink");
@@ -132,7 +133,7 @@ export default function Group_Details(props: {
                                     )
                                 }
                                 {
-                                    props.src.get_twitter() != undefined &&props.src.get_twitter() != null ? (
+                                    props.src.get_twitter() != undefined && props.src.get_twitter() != null ? (
                                         <ExtLink href={props.src.get_twitter()}>
                                             <Chakra.Button leftIcon={<FontAwesome.FaTwitter />} colorScheme={"twitter"} >Twitter</Chakra.Button>
                                         </ExtLink>
@@ -175,7 +176,7 @@ export default function Group_Details(props: {
                                             });
                                         }}>IrcServer</Chakra.Button>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                             </React.Suspense>
@@ -183,7 +184,7 @@ export default function Group_Details(props: {
                         <Chakra.Box>
                             {
                                 props.src.get_description() == null || props.src.get_description() == undefined ? (
-                                    <></>
+                                    <React.Fragment />
                                 ) : (
                                     <Chakra.Box>
                                         <Chakra.Heading fontFamily={"inherit"} size={"md"}>Group description</Chakra.Heading>
@@ -193,7 +194,7 @@ export default function Group_Details(props: {
                                                     width={"full"}
                                                 >
                                                     <Chakra.Center>
-                                                        <Chakra.Spinner />
+                                                        <MangadexSpinner />
                                                     </Chakra.Center>
                                                 </Chakra.Box>}
                                             >

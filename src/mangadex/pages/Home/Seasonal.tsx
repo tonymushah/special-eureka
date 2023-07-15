@@ -1,10 +1,11 @@
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { List } from "@mangadex/api/structures/List";
-import { Client } from "@tauri-apps/api/http";
-import { useQuery } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { List } from "@mangadex/api/structures/List";
 import { Mangadex_suspense__ } from "@mangadex/index";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import { useQuery } from "@tanstack/react-query";
+import { Client } from "@tauri-apps/api/http";
+import React from "react";
 
 const CustomListSwiper = React.lazy(() => import("@mangadex/resources/componnents/lists/v1/CustomListSwiper"));
 
@@ -26,7 +27,7 @@ export default function Seasonal() {
                 <React.Suspense
                     fallback={<Chakra.Box >
                         <Chakra.Center>
-                            <Chakra.Spinner
+                            <MangadexSpinner
                                 size={"xl"}
                             />
                         </Chakra.Center>

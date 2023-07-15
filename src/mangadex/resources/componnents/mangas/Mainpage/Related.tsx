@@ -5,6 +5,7 @@ import { make_first_UpperCare, Manga_related } from "../../../../api/internal/Ut
 import { Manga } from "../../../../api/structures/Manga";
 import { ErrorELAsync1 } from "../../Error_cmp";
 import MangaElementDef from "../v1/MangaElementDef";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 type RelatedProps = {
     src: Manga
@@ -16,7 +17,7 @@ export function MangaRelated_Section(props: {
 }) {
     const length = props.src.get_related_manga_byEnum_length(props.enum);
     if (length == 0) {
-        return (<></>);
+        return (<React.Fragment/>);
     } else {
         return (
             <Chakra.Box>
@@ -26,7 +27,7 @@ export function MangaRelated_Section(props: {
                         fallback={
                             <Chakra.Box>
                                 <Chakra.Center>
-                                    <Chakra.Spinner />
+                                    <MangadexSpinner />
                                 </Chakra.Center>
                             </Chakra.Box>
                         }

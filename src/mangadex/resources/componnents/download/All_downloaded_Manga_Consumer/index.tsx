@@ -6,6 +6,7 @@ import { Manga } from "@mangadex/api/structures/Manga";
 import { UseQueryOptions } from "@tanstack/react-query";
 import React from "react";
 import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 const RefreshButton = React.lazy(() => import("./RefreshButton"));
 const RefetchButton = React.lazy(() => import("./RefetchButton"));
@@ -25,18 +26,18 @@ export default function AllDownlaodedMangaConsumer(props: {
                 }
             >
                 <Chakra.Wrap>
-                <Chakra.WrapItem>
-                    <RefreshButton query_key={query_key} query_options={props.query_options} />
-                </Chakra.WrapItem>
-                <Chakra.WrapItem>
-                    <PatchButton query_key={query_key} />
-                </Chakra.WrapItem>
-                <Chakra.WrapItem>
-                    <RefetchButton query_key={query_key} />
-                </Chakra.WrapItem>
-            </Chakra.Wrap>
+                    <Chakra.WrapItem>
+                        <RefreshButton query_key={query_key} query_options={props.query_options} />
+                    </Chakra.WrapItem>
+                    <Chakra.WrapItem>
+                        <PatchButton query_key={query_key} />
+                    </Chakra.WrapItem>
+                    <Chakra.WrapItem>
+                        <RefetchButton query_key={query_key} />
+                    </Chakra.WrapItem>
+                </Chakra.Wrap>
             </React.Suspense>
-            
+
             <CollectionComponnent_WithQuery<string>
                 fn={() => {
                     return Manga.getAllDownloadedMangaID(undefined, client);
@@ -44,7 +45,7 @@ export default function AllDownlaodedMangaConsumer(props: {
                 queryKey={query_key}
                 onLoading={
                     <Chakra.Center>
-                        <Chakra.Spinner />
+                        <MangadexSpinner />
                     </Chakra.Center>
                 }
                 query_options={props.query_options}

@@ -16,9 +16,12 @@ const ChapterFullScreenModeIniter = React.lazy(() => import("@mangadex/resources
 
 const UserOptionModal = React.lazy(() => import("@mangadex/resources/componnents/userOption/index"));
 
+const RegisterHertaHotKeys = React.lazy(() => import("@mangadex/resources/componnents/kuru_kuru/HotKeys"));
+
 function Loader() {
     return (
         <React.Fragment>
+            <RegisterHertaHotKeys/>
             <ServerAutoStartLoader />
             <ChapterFullScreenModeIniter />
             <UserOptionModal />

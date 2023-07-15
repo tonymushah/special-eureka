@@ -3,6 +3,7 @@ import React from "react";
 import MyErrorBounderies from "./error/MyErrorBounderies";
 import useRTLSidebar from "../hooks/userOptions/RtlSidebar";
 import { Mangadex_suspense__ } from "@mangadex/index";
+import MangadexSpinner from "./kuru_kuru/MangadexSpinner";
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 
 const SideBar = () => (
@@ -13,7 +14,7 @@ const SideBar = () => (
                 height={"100vh"}
             >
                 <Chakra.Center>
-                    <Chakra.Spinner />
+                    <MangadexSpinner />
                 </Chakra.Center>
             </Chakra.Box>
         }

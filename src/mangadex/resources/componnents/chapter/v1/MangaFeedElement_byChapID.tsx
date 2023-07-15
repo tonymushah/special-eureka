@@ -2,6 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import { get_ChapterbyId } from "../../../hooks/ChapterStateHooks";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFeedElement from "./MangaFeedElement";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 export default function MangaFeedElement_byChapID(props: {
     id: string
@@ -23,7 +24,7 @@ export default function MangaFeedElement_byChapID(props: {
     }
     return (
         <Chakra.Box>
-            <Chakra.Spinner />
+            <MangadexSpinner />
         </Chakra.Box>
     );
 }
