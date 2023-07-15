@@ -3,6 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { ChapterDeleteMutation_data, get_ChapterbyId, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
 import { UseQueryResult } from "@tanstack/react-query";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 export default function ChapterDownloadButton(props: {
     chapter: Chapter,
     downloadMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>,
