@@ -1,4 +1,5 @@
-import { HStack, Center, Spinner, Text } from "@chakra-ui/react";
+import { Center, HStack, Text } from "@chakra-ui/react";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import React from "react";
 import { useReadingDraweContext } from ".";
 
@@ -14,7 +15,7 @@ export default function Navigation() {
             <React.Suspense
                 fallback={
                     <Center>
-                        <Spinner />
+                        <MangadexSpinner />
                     </Center>
                 }
             >

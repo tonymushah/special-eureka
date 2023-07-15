@@ -9,6 +9,7 @@ import { TagRow } from "../Mainpage/boutons/tag_boutons";
 import { MangaPageProps } from "../Manga_Page";
 import { LinksRow } from "./boutons/links_boutons";
 import Loading from "./loading";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 const Aggregate_Chapters = React.lazy(() => import("./top_chap/Aggregate_Chapters"));
 
@@ -208,7 +209,7 @@ export function Top_Chaps(props: MangaPageProps) {
                                     <Chakra.Box>
                                         <Chakra.Heading fontFamily={"inherit"} size={"md"}>Atlernative Titles</Chakra.Heading>
                                         <React.Suspense fallback={
-                                            <Chakra.Spinner />
+                                            <MangadexSpinner />
                                         }>
                                             <Await
                                                 resolve={build_altTitle()}

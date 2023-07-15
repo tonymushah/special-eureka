@@ -4,6 +4,7 @@ import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
 
@@ -41,7 +42,7 @@ export default function RecentlyAdded() {
                         fallback={
                             <Chakra.Box>
                                 <Chakra.Center>
-                                    <Chakra.Spinner
+                                    <MangadexSpinner
                                         size={"xl"}
                                     />
                                 </Chakra.Center>

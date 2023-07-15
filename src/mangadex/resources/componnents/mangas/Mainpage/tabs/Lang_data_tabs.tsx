@@ -1,8 +1,9 @@
-import { Box, Center, Link, Skeleton, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Box, Center, Link, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import React from "react";
 import TryCatch from "@commons-res/components/TryCatch";
 import { Lang_and_Data } from "@mangadex/api/internal/Utils";
 import ErrorEL1 from "../../../error/ErrorEL1";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
 const ExtLink = React.lazy(async () => {
@@ -39,7 +40,7 @@ export function LAD_Tabs(props: LAD_TabsProps) {
                                     width={"full"}
                                 >
                                     <Center>
-                                        <Spinner />
+                                        <MangadexSpinner />
                                     </Center>
                                 </Box>}
                             >

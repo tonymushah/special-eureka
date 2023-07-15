@@ -6,6 +6,7 @@ import { Chapter } from "@mangadex/api/structures/Chapter";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
@@ -50,7 +51,7 @@ export default function LatestUpdates() {
                             height={"100vh"}
                         >
                             <Chakra.Center>
-                                <Chakra.Spinner
+                                <MangadexSpinner
                                     size={"lg"}
                                     thickness={"2px"}
                                     color={"orange"}

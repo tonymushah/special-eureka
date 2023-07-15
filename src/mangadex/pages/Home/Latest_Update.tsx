@@ -13,6 +13,7 @@ import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks";
 import { Client } from "@tauri-apps/api/http";
 import UserOptions from "@mangadex/api/internal/UserOptions";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const MangaFeedElement = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/MangaFeedElement"));
 
@@ -129,7 +130,7 @@ export default function Latest_Updates() {
                 marginBottom={"25px"}
             >
                 <Chakra.Center>
-                    <Chakra.Spinner
+                    <MangadexSpinner
                         size="xl"
                         color='orange.500'
                         thickness='4px'

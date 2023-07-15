@@ -13,6 +13,7 @@ import { getMangaDexPath, trackEvent, useMangaDexPath } from "@mangadex/index";
 import { Link } from "react-router-dom";
 import ChakraContainer from "../layout/Container";
 import { Link as ReactRouterLink } from "react-router-dom";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 const IsPingable = React.lazy(() => import("../IsPingable"));
 
@@ -22,7 +23,7 @@ export function Group_Page_Suspense(props: React.PropsWithChildren) {
             fallback={
                 <Chakra.Box>
                     <Chakra.Center>
-                        <Chakra.Spinner />
+                        <MangadexSpinner />
                     </Chakra.Center>
                 </Chakra.Box>
             }

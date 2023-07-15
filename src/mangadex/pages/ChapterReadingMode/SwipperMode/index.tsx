@@ -6,6 +6,7 @@ import { SwiperSlide, Swiper, SwiperRef, SwiperProps } from "swiper/react";
 import { useFullScreenOptions_Query } from "../../chapter/ChapterFullScreen/FullScreenOptionsProvider";
 import useChapterPages from "../../chapter/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 export default function SwipperMode({ data, swipper_option, children }: {
     data: ChapterPage_outlet_context,
@@ -31,7 +32,7 @@ export default function SwipperMode({ data, swipper_option, children }: {
         <React.Suspense
             fallback={
                 <Chakra.AbsoluteCenter>
-                    <Chakra.Spinner
+                    <MangadexSpinner
                         size={"xl"}
                         color={"orange.500"}
                     />
@@ -63,7 +64,7 @@ export default function SwipperMode({ data, swipper_option, children }: {
                                     fallback={
                                         <Chakra.Box width={"full"}>
                                             <Chakra.Center>
-                                                <Chakra.Spinner
+                                                <MangadexSpinner
                                                     size={"xl"}
                                                     color={"orange"}
                                                     thickness={"10px"}

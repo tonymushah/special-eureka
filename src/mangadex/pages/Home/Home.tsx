@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
 
@@ -22,7 +23,7 @@ function Home() {
             <React.Suspense
                 fallback={
                     <Chakra.AbsoluteCenter>
-                        <Chakra.Spinner
+                        <MangadexSpinner
                             size={"lg"}
                         />
                     </Chakra.AbsoluteCenter>
@@ -41,7 +42,7 @@ function Home() {
                         <Chakra.AbsoluteCenter>
                             <Chakra.Box>
                                 <Chakra.HStack>
-                                    <Chakra.Spinner
+                                    <MangadexSpinner
                                         size={"lg"}
                                         thickness={"5px"}
                                     />
@@ -58,7 +59,7 @@ function Home() {
                                 <Chakra.AbsoluteCenter>
                                     <Chakra.Box>
                                         <Chakra.HStack>
-                                            <Chakra.Spinner
+                                            <MangadexSpinner
                                                 size={"lg"}
                                                 thickness="5px"
                                             />

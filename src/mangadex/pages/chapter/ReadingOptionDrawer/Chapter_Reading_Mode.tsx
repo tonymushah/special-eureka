@@ -1,4 +1,5 @@
-import { HStack, Center, Text, Spinner } from "@chakra-ui/react";
+import { Center, HStack, Text } from "@chakra-ui/react";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import React from "react";
 
 const Chapter_Reading_mode = React.lazy(() => import("../ChapterReadingMode"));
@@ -11,7 +12,7 @@ export default function ChapterReadingModeOption() {
                 <React.Suspense
                     fallback={
                         <Center>
-                            <Spinner />
+                            <MangadexSpinner />
                         </Center>
                     }
                 >

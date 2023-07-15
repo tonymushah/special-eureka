@@ -8,6 +8,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
@@ -38,7 +39,7 @@ export default function RecentlyAdded() {
                         height={"100vh"}
                     >
                         <Chakra.Center>
-                            <Chakra.Spinner
+                            <MangadexSpinner
                                 size={"lg"}
                                 thickness={"2px"}
                                 color={"orange"}

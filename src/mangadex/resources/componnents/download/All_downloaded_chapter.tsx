@@ -6,6 +6,7 @@ import { Chapter } from "../../../api/structures/Chapter";
 import { Collection } from "../../../api/structures/Collection";
 import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 export default function All_downloaded_chapter(props: {
     query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
@@ -22,7 +23,7 @@ export default function All_downloaded_chapter(props: {
                 onLoading={
                     <Chakra.AbsoluteCenter>
                         <Chakra.Box>
-                            <Chakra.Spinner
+                            <MangadexSpinner
                                 color={"orange"}
                                 thickness={"10px"}
                                 size={"xl"}
@@ -41,7 +42,7 @@ export default function All_downloaded_chapter(props: {
                                     fallback={
                                         <Chakra.Box width={"full"}>
                                             <Chakra.Center>
-                                                <Chakra.Spinner />
+                                                <MangadexSpinner />
                                             </Chakra.Center>
                                         </Chakra.Box>
                                     }

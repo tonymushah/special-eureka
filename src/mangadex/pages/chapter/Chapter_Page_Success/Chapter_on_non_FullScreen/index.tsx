@@ -10,6 +10,7 @@ import Groups from "./Groups";
 import LangIcon from "./LangIcon";
 import ReadingState from "./ReadingState";
 import Title from "./Title";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 const ReadingOptions = React.lazy(() => import("../../ReadingOption"));
 
@@ -40,28 +41,28 @@ export default function Chapter_on_non_FullScreen() {
                         noOfLines={1}
                         fontFamily={"inherit"}
                     >
-                        <ChapterMangaTitle/>
+                        <ChapterMangaTitle />
                     </Chakra.Heading>
                 </React.Fragment>
                 <React.Fragment>
                     <Chakra.HStack>
                         <FaUsers />
-                        <Groups/>
+                        <Groups />
                     </Chakra.HStack>
                 </React.Fragment>
                 <Chakra.Grid templateColumns={"repeat(3, 1fr)"}>
                     <Chakra.GridItem>
                         <Chakra.HStack alignItems={"center"}>
-                            <LangIcon/>
-                            <Title/>
+                            <LangIcon />
+                            <Title />
                         </Chakra.HStack>
                     </Chakra.GridItem>
                     <Chakra.GridItem>
-                        <ReadingState/>
+                        <ReadingState />
                     </Chakra.GridItem>
                     <Chakra.GridItem>
                         <React.Suspense
-                            fallback={<Chakra.Spinner></Chakra.Spinner>}
+                            fallback={<MangadexSpinner/>}
                         >
                             <ReadingOptions />
                         </React.Suspense>

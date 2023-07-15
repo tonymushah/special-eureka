@@ -1,13 +1,14 @@
 /*eslint-env broswer*/
-import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { Offset_limits } from "@mangadex/api/internal/Utils";
-import { useFormik } from "formik";
-import { Group } from "@mangadex/api/structures/Group";
-import { Collection } from "@mangadex/api/structures/Collection";
-import GroupFallBackElement from "./GroupFallBackElement";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
+import { Collection } from "@mangadex/api/structures/Collection";
+import { Group } from "@mangadex/api/structures/Group";
 import { trackEvent } from "@mangadex/index";
+import { useFormik } from "formik";
+import React from "react";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
+import GroupFallBackElement from "./GroupFallBackElement";
 
 const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 const CollectionComponnent_WithQuery = React.lazy(async () => {
@@ -21,7 +22,7 @@ const CollectionComponnent_WithQuery = React.lazy(async () => {
 export default function Group_Search(props: {
     offset_limits: Offset_limits
 }) {
-    const [result, setResult] = React.useState(<></>);
+    const [result, setResult] = React.useState(<React.Fragment/>);
     React.useEffect(() => {
         trackEvent("mangadex-group-search");
     }, []);
@@ -36,7 +37,7 @@ export default function Group_Search(props: {
                 <React.Suspense fallback={
                     <Chakra.Box>
                         <Chakra.Center>
-                            <Chakra.Spinner />
+                            <MangadexSpinner />
                         </Chakra.Center>
                     </Chakra.Box>
                 }>

@@ -5,6 +5,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { usePropsChapter } from "@mangadex/resources/componnents/chapter/v1/PropsContext";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 export default function Images() {
     const client = useHTTPClient();
@@ -20,7 +21,7 @@ export default function Images() {
         return (
             <Chakra.AbsoluteCenter>
                 <Chakra.Box>
-                    <Chakra.Spinner
+                    <MangadexSpinner
                         color={"orange"}
                         thickness={"2px"}
                     />

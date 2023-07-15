@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { get_ChapterbyId } from "../../../hooks/ChapterStateHooks";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 const ErrorEL1 = React.lazy(() => import("../../error/ErrorEL1"));
 const Chapter_Element1 = React.lazy(() => import("./Chapter_Element1"));
 export default function Chapter_Element1_byChapID(props: {
@@ -15,7 +16,7 @@ export default function Chapter_Element1_byChapID(props: {
         return (
             <Chakra.Box width={"full"}>
                 <Chakra.Center>
-                    <Chakra.Spinner />
+                    <MangadexSpinner />
                 </Chakra.Center>
             </Chakra.Box>
         );
@@ -26,7 +27,7 @@ export default function Chapter_Element1_byChapID(props: {
                 fallback={
                     <Chakra.Box width={"full"}>
                         <Chakra.Center>
-                            <Chakra.Spinner />
+                            <MangadexSpinner />
                         </Chakra.Center>
                     </Chakra.Box>
                 }
@@ -40,7 +41,7 @@ export default function Chapter_Element1_byChapID(props: {
             fallback={
                 <Chakra.Box width={"full"}>
                     <Chakra.Center>
-                        <Chakra.Spinner />
+                        <MangadexSpinner />
                     </Chakra.Center>
                 </Chakra.Box>
             }

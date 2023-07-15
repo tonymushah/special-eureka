@@ -1,19 +1,23 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
-//import { ViteAliases } from "vite-aliases";
+import { AliasOptions, defineConfig } from "vite";
+import remarkRehypePlugin from "vite-plugin-remark-rehype";
+import tsConfig from "./tsconfig.json";
+
+function generateAliases(): AliasOptions{
+    const returns : AliasOptions = {};
+    const tsPaths = tsConfig.compilerOptions.paths;
+    for(const key in tsPaths){
+        returns[key.replace("/*", "")] = tsPaths[key][0].replace("/*", "");
+    }
+    return returns;
+}
 
 export default defineConfig({
     clearScreen: false,
     plugins: [
         //ReactInspector(),
         //progress(),
-        /*ViteAliases({
-            "dir": "src",
-            useConfig: true,
-            useTypescript: true
-        }),*/
         react({
             "tsDecorators": true
         }),
@@ -25,6 +29,9 @@ export default defineConfig({
         port: 9305,
         strictPort: true,
         open: false,
+    },
+    resolve : {
+        alias : generateAliases()
     },
     build: {
         // Tauri supports es2021
@@ -42,7 +49,6 @@ export default defineConfig({
         },
         "emptyOutDir": true
     },
-    root: "./src",
     publicDir: "./public",
     appType : "spa",
 });

@@ -1,11 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
-import Hotkeys from "react-hot-keys";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
+import React from "react";
+import Hotkeys from "react-hot-keys";
 import { get_aggregate_query } from "../../hooks/AgreggateStateHooks";
 import ErrorEL1 from "../error/ErrorEL1";
 import Chapter_Element1_byChapID from "./v1/Chapter_Element1_byChapID";
-import React from "react";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 function ChapterNavigationModal_Online_Chapters(props: {
     chapter: Chapter
@@ -20,7 +21,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
     if (query.isRefetching == true) {
         return (
             <Chakra.Center>
-                <Chakra.Spinner
+                <MangadexSpinner
                     color={"orange"}
                     size={"xl"}
                     thickness={"10px"}
@@ -31,7 +32,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
     if (query.isLoading == true) {
         return (
             <Chakra.Center>
-                <Chakra.Spinner
+                <MangadexSpinner
                     color={"orange"}
                     size={"xl"}
                     thickness={"10px"}
@@ -77,7 +78,7 @@ function ChapterNavigationModal_Online_Chapters(props: {
     }
     return (
         <Chakra.Center>
-            <Chakra.Spinner
+            <MangadexSpinner
                 color={"orange"}
                 size={"xl"}
                 thickness={"10px"}

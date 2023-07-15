@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { List } from "@mangadex/api/structures/List";
 import ErrorEL1 from "../../error/ErrorEL1";
+import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 const MangaSwipperWithMangaObjects = React.lazy(() => import("../../mangas/v1/MangaSwipperWithMangaObjects"));
 
@@ -26,7 +27,7 @@ export default function CustomListSwiper(props: {
                 fallback={
                     <Chakra.Box>
                         <Chakra.Center>
-                            <Chakra.Spinner
+                            <MangadexSpinner
                                 size={"xl"}
                             />
                         </Chakra.Center>
@@ -49,7 +50,7 @@ export default function CustomListSwiper(props: {
                     fallback={
                         <Chakra.Box>
                             <Chakra.Center>
-                                <Chakra.Spinner
+                                <MangadexSpinner
                                     size={"xl"}
                                 />
                             </Chakra.Center>

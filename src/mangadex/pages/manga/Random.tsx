@@ -1,13 +1,14 @@
-import { AbsoluteCenter, Spinner } from "@chakra-ui/react";
+import { AbsoluteCenter } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";
+import { Mangadex_suspense, getMangaDexPath, useTrackEvent } from "@mangadex/index";
 import { ErrorELAsync1 } from "@mangadex/resources/componnents/Error_cmp";
 import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
+import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
 import { Await, useNavigate } from "react-router-dom";
-import { Mangadex_suspense, getMangaDexPath, useTrackEvent } from "@mangadex/index";
-import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 const MangaDexPath = getMangaDexPath();
 
@@ -22,7 +23,7 @@ export default function Random_Manga() {
         <IsPingable
             onLoading={
                 <AbsoluteCenter>
-                    <Spinner
+                    <MangadexSpinner
                         size={"xl"}
                         colorScheme={"orange"}
                     />

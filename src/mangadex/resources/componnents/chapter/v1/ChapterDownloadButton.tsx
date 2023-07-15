@@ -30,9 +30,9 @@ export default function ChapterDownloadButton(props: {
         });
     }
     if (downloadMutation?.isRefetching ) {
-        return (<Chakra.Spinner size={"md"} />);
+        return (<MangadexSpinner size={"md"} />);
     } else if ((downloadMutation.isLoading && downloadMutation.fetchStatus == "fetching")) {
-        return (<Chakra.Spinner size={"md"} />);
+        return (<MangadexSpinner size={"md"} />);
     } else {
         if (query.isSuccess) {
             if (query.data.isDownloaded == true) {
@@ -109,11 +109,11 @@ export default function ChapterDownloadButton(props: {
             }
         } else if (query.isLoading) {
             return (
-                <Chakra.Spinner size={"md"} />
+                <MangadexSpinner size={"md"} />
             );
         }else{
             return (
-                <Chakra.Spinner size={"md"} />
+                <MangadexSpinner size={"md"} />
             );
         }
     }

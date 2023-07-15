@@ -1,6 +1,4 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
-
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Author } from "@mangadex/api/structures/Author";
 import { Collection } from "@mangadex/api/structures/Collection";
@@ -10,7 +8,9 @@ import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
 import MangaList from "@mangadex/resources/componnents/mangas/v1/MangaList";
 import { get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "@mangadex/resources/hooks/AuthorState";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
 
 export default function Author_works(props: {
@@ -75,7 +75,7 @@ export default function Author_works(props: {
                 onLoading={
                     <Chakra.Box>
                         <Chakra.Center>
-                            <Chakra.Spinner />
+                            <MangadexSpinner />
                         </Chakra.Center>
                     </Chakra.Box>
                 }
