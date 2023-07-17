@@ -25,7 +25,7 @@ export default function ChapterDownloadButton(props: {
         } else {
             return props.downloadMutation;
         }
-    }, [props.downloadMutation, queryKey]);
+    }, [props.chapter, props.downloadMutation, queryKey]);
     const deleteMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = React.useMemo<UseQueryResult<ChapterDeleteMutation_data, unknown>>(() => {
         if (props.deleteMutation == undefined) {
             return useChapterDeleteMutation({
@@ -37,7 +37,7 @@ export default function ChapterDownloadButton(props: {
         } else {
             return props.deleteMutation;
         }
-    }, [props.deleteMutation, queryKey]);
+    }, [props.chapter, props.deleteMutation, queryKey]);
     
     if (downloadMutation?.isRefetching) {
         return (<MangadexSpinner size={"md"} />);

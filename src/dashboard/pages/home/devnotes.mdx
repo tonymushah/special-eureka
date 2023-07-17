@@ -1,41 +1,50 @@
+import { Kbd } from "@chakra-ui/react";
+import MangaPageComp from "./devnotes/MangaPage";
+import SideBarComp from "./devnotes/Sidebar";
+
 # Thank you for downloading this application
 
 i'm [Tony Mushah](#tony-mushah-links) the developper behind this app
 
-I'm glad that you dowload this application.
+Sorry for not giving updates during these 3 months, but now the `0.1.5` is now out.
 
-First, big thanks for [anotherducking](https://github.com/anotherduckling) for bug reporting.
-[There](https://github.com/tonymushah/special-eureka/discussions/36) is the discussion by the way
+I made a lot of testing and features, some are cool, (un)stable,... 
 
-You can also discuss and report to the [Special Eureka Discussions](https://github.com/tonymushah/special-eureka/discussions)
+Anyway, it's for you to discover all of these new features, 
+Because i forgot most of them during these 3 months.
 
-For Mangadex related question, please use the [Mangadex Special-Eureka Q/A Discussions](https://github.com/tonymushah/special-eureka/discussions/categories/mangadex-special-eureka-q-a)
+Now the changelog : 
 
-Okay, let me now introduce you the notes :
+__Note : i mostly forgot them. If you can make a comparaison, please make it in the [Github Discussion](https://github.com/tonymushah/special-eureka/discussions)__
 
-## For Mangadex
+## For Mangadex : 
 
-### 1 - Added
+### Added : 
 
-- The Recently popular added on the Home page
-- The user page
-- The Recently popular page
-- A delete icon is now added of chapter component (You can now delete your favorite/or not chapter)
-- Offline Server AutoStarting
-- Chapter Reading Options
-- Translated language option
+- Right to Left and Left to Right sidebar in User Sidebar Option (you can do it with <Kbd>Ctrl</Kbd> + <Kbd>R</Kbd> but this will also reload the app window in Windows)
+- Advanced Research for Manga (there is still some improvement to do but it's okay for now) 
+- Simple search for authors/artistists by name
+- Simple search for Groups by name
+- Right click menu for chapter and manga componnents (except Manga Popular Element on the Home page and the Popular Manga Page)
+- Double Page reading style (Awesome but still bad...)
+- An herta easter egg... (Push : <Kbd>Ctrl</Kbd> + <Kbd>H</Kbd> on any Mangadex Page for some __kuru__)
+- Analytics provided by [Aptabase](https://aptabase.com/) (just some basics,... if you have some suspisions, please check the code source)
+- Error handling for every page, Manga and Chapter componnents.
 
-### 2 - Changed
+### Changed : 
 
-- Removed language chooser on Manga Page
-- Most of the links color are change
-- Mangadex home page loading stategry improved (it still slow if you have a slow connection)
+- MangaPage Layout changed 
 
-### 3 - Excepted Bug
+<MangaPageComp/>
 
-- The mangadex random page sometime crash because of the titles
-- The Statistics doesn't appear in the Mangapage
-- The ServerAutoStart will sometimes popup an error `Can't find server handle`
-- The translated language not sync with the recently added on the home page
+- Mangadex Home Page Changed too (a bit...)
+- Mangadex Sidebar 
 
-### Note : the Guide, Annoucements and Versions on the navbar will be added in a future version
+<SideBarComp/>
+
+- Chapter Page
+- Author Page
+- User links
+- Manga componnents sizes
+- Perfomance (good this time...)
+- Error handling ...
