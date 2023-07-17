@@ -20,30 +20,32 @@ export default function Chapter_Element2(props: {
                 <Tooltip>
                     <Chakra.Box>
                         <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
-                            <Chakra.GridItem colSpan={2}>
+                            <Chakra.GridItem colSpan={3}>
                                 <Chakra.Center>
                                     <ChapterLang />
                                 </Chakra.Center>
                             </Chakra.GridItem>
-                            <Chakra.GridItem colSpan={10}>
+                            <Chakra.GridItem colSpan={9}>
                                 <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
                                     <Title />
                                 </Chakra.Heading>
                             </Chakra.GridItem>
                         </Chakra.Grid>
                         <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
-                            <Chakra.GridItem colSpan={2}>
+                            <Chakra.GridItem colSpan={3}>
                                 <Chakra.Center>
                                     <React.Suspense
                                         fallback={
                                             <MangadexSpinner size={"md"} />
                                         }
                                     >
-                                        <ChapterDownloadButton chapter={props.chapter} />
+                                        <ChapterDownloadButton hstackProps={{
+                                            spacing : "2px"
+                                        }} chapter={props.chapter} />
                                     </React.Suspense>
                                 </Chakra.Center>
                             </Chakra.GridItem>
-                            <Chakra.GridItem colSpan={10}>
+                            <Chakra.GridItem colSpan={9}>
                                 <Chakra.Text
                                     fontSize={{
                                         base: 15

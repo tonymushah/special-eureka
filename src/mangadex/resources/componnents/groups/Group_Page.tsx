@@ -125,7 +125,10 @@ export default function Group_Page(props: React.PropsWithChildren<{
                 minH={"100%"}
                 background={"gray.200"}
             >
-                <ChakraContainer>
+                <ChakraContainer
+                    paddingLeft={"5px"}
+                    paddingRight={"5px"}
+                >
                     <Chakra.VStack>
                         <ChakraContainer>
                             <Chakra.Wrap spacing={"5"}>

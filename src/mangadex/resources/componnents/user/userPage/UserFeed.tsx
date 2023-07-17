@@ -19,11 +19,12 @@ export default function UserFeed(props : {
                 fn={() => {
                     const offset_limits = new Offset_limits();
                     offset_limits.set_limits(25);
+                    const order : Order = new Order().set_readableAt(Asc_Desc.desc());
                     return Chapter_withAllIncludes.search({
                         client: client,
                         "uploader": props.user_id,
                         offset_limits: offset_limits,
-                        order : new Order().set_createdAt(Asc_Desc.desc())
+                        order
                     });
                 }}
                 queryKey={queryKey}

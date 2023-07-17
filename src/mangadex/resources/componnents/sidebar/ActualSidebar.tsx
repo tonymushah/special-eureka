@@ -10,12 +10,13 @@ export default function ActualSidebar() {
     return (
         <Sidebar
             breakPoint={"md"}
-            collapsedWidth="70px"
+            collapsedWidth="65px"
             rtl={query.data}
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
                     backgroundColor: "#2c2c2c",
                     color: "#f2f2f2",
+                    alignItems : "center"
                 },
                 height: "100vh",
             }}

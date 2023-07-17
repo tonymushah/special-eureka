@@ -222,7 +222,7 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     return (
         <Box>
             <Box>
-                <UseCollection<T> src={search_query.data!}>
+                <UseCollection<T> src={search_query.data}>
                     {
                         props.children
                     }

@@ -18,7 +18,7 @@ export default function MangaList(props: {
 }) {
     const { data , updateListOption } = useMangaListOption();
     return (
-        <Chakra.Tabs align="end" isLazy index={data} onChange={updateListOption}>
+        <Chakra.Tabs padding={"5px"} align="end" isLazy index={data} onChange={updateListOption}>
             <Chakra.TabList>
                 <Chakra.Tab>
                     <FontAwesome.FaThList />
