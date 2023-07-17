@@ -1,4 +1,4 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
@@ -280,7 +280,7 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-upload/6db7f623b4ba1cd6d25cf7dddb3ec8c442c349c8
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/96431c05c32581970427c15387a39f1442435e70
+    version: github.com/tauri-apps/tauri-plugin-websocket/81f3e26114fb20d2952212ed98c8b63ab18dc52c
   tauri-settings:
     specifier: ^0.1.2
     version: 0.1.2
@@ -17681,8 +17681,8 @@ packages:
       '@tauri-apps/api': 1.4.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/96431c05c32581970427c15387a39f1442435e70:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/96431c05c32581970427c15387a39f1442435e70}
+  github.com/tauri-apps/tauri-plugin-websocket/81f3e26114fb20d2952212ed98c8b63ab18dc52c:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/81f3e26114fb20d2952212ed98c8b63ab18dc52c}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:

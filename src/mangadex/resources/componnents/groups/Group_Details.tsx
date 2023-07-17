@@ -92,7 +92,7 @@ export default function Group_Details(props: {
                                             <Chakra.Button leftIcon={<ChakraIcon.ExternalLinkIcon />} colorScheme={"gray"} >Website</Chakra.Button>
                                         </ExtLink>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                                 {
@@ -101,7 +101,7 @@ export default function Group_Details(props: {
                                             <Chakra.Button leftIcon={<Chakra.Icon as={FaDiscord} />} colorScheme={"facebook"} >Discord</Chakra.Button>
                                         </ExtLink>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                                 {
@@ -120,7 +120,7 @@ export default function Group_Details(props: {
                                             });
                                         }} leftIcon={<ChakraIcon.EmailIcon />}>Email</Chakra.Button>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                                 {
@@ -129,7 +129,7 @@ export default function Group_Details(props: {
                                             <Chakra.Button leftIcon={<ChakraIcon.ExternalLinkIcon />} colorScheme={"orange"} >MangaUpdates</Chakra.Button>
                                         </ExtLink>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                                 {
@@ -138,7 +138,7 @@ export default function Group_Details(props: {
                                             <Chakra.Button leftIcon={<FontAwesome.FaTwitter />} colorScheme={"twitter"} >Twitter</Chakra.Button>
                                         </ExtLink>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                                 {
@@ -157,7 +157,7 @@ export default function Group_Details(props: {
                                             });
                                         }}>IrcChannel</Chakra.Button>
                                     ) : (
-                                        <></>
+                                        <React.Fragment />
                                     )
                                 }
                                 {

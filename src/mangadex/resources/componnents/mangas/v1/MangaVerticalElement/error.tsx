@@ -40,7 +40,7 @@ export function ErrorBoundaryComp({ error }: {
                         {error.name}
                     </AlertTitle>
                     <AlertDescription noOfLines={1}>
-                        {error.name}
+                        {error.message}
                     </AlertDescription>
                 </Alert>
             </Laoyut>

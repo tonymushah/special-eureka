@@ -7,6 +7,7 @@ import { NumericFormat } from "react-number-format";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import { v4 } from "uuid";
 import formatNumber from "@commons-res/functions/formatNumber";
+import { ExtLink } from "@commons-res/components/ExtLink";
 
 export default function Statis(props: {
     src: Statistics_Manga,
@@ -87,24 +88,31 @@ export default function Statis(props: {
                             &nbsp;
                             <NumericFormat displayType={"text"} valueIsNumericString={true} value={getted.get_follows()} />
                         </Chakra.HStack>
-                        <Chakra.HStack>
-                            <ChakraIcons.ChatIcon />
-                            <React.Fragment>
-                                {
-                                    getted.comments !== undefined && getted.comments !== null ? (
-                                        <React.Fragment>{
-                                            getted.get_comments()?.repliesCount !== null || getted.get_comments()?.repliesCount !== undefined ? (
-                                                <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
-                                            ) : (
-                                                <React.Fragment>0</React.Fragment>
-                                            )
-                                        }</React.Fragment>
-                                    ) : (
-                                        <React.Fragment>0</React.Fragment>
-                                    )
-                                }
-                            </React.Fragment>
-                        </Chakra.HStack>
+                        <ExtLink href={`https://forums.mangadex.org/threads/${getted.comments?.threadId ?? "1123744"}`}>
+                            <Chakra.HStack>
+                                <ChakraIcons.ChatIcon />
+                                <React.Fragment>
+                                    {
+                                        getted.comments !== undefined && getted.comments !== null ? (
+                                            <React.Fragment>{
+                                                getted.get_comments()?.repliesCount !== null || getted.get_comments()?.repliesCount !== undefined ? (
+                                                    <React.Fragment>{getted.get_comments()?.repliesCount}</React.Fragment>
+                                                ) : (
+                                                    <React.Fragment>0</React.Fragment>
+                                                )
+                                            }</React.Fragment>
+                                        ) : (
+                                            <React.Fragment>0</React.Fragment>
+                                        )
+                                    }
+                                </React.Fragment>
+                                <Chakra.Tooltip hasArrow label={"Yes there is a thread for this one... Maybe..."}>
+                                    <ChakraIcons.ExternalLinkIcon/>
+                                </Chakra.Tooltip>
+                                
+                            </Chakra.HStack>
+                        </ExtLink>
+
                         <Chakra.PopoverCloseButton />
                     </Chakra.PopoverHeader>
                     <Chakra.PopoverBody overflowY={"scroll"}>
@@ -117,7 +125,7 @@ export default function Statis(props: {
                                             <Chakra.Text>{value}</Chakra.Text>
                                             <Chakra.Progress minW={"70%"} value={purcent} />
                                             <Chakra.Text>
-                                                &#40; {getted.get_distribution()[value]} &#41;
+                                                &#40;{getted.get_distribution()[value]}&#41;
                                             </Chakra.Text>
                                         </Chakra.HStack>
                                     </Chakra.Tooltip>

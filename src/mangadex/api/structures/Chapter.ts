@@ -730,17 +730,17 @@ export class Chapter_withAllIncludes extends Chapter {
     public static async search(props:
         Chapter_withAllIncludes_SearchType
     ): Promise<Collection<Chapter_withAllIncludes>> {
-        const querys: any = {
+        const querys = {
             limit: JSON.stringify(props.offset_limits.get_limits()),
             offset: JSON.stringify(props.offset_limits.get_offset()),
-            title: (props.title!),
-            uploader: (props.uploader!),
-            manga: (props.manga!),
-            volume: JSON.stringify(props.volume!),
-            includeFutureUpdates: (props.includeFutureUpdates!),
-            createdAtSince: (props.createdAtSince!),
-            updatedAtSince: (props.updatedAtSince!),
-            publishAtSince: (props.publishAtSince!),
+            title: (props.title),
+            uploader: (props.uploader),
+            manga: (props.manga),
+            volume: JSON.stringify(props.volume),
+            includeFutureUpdates: (props.includeFutureUpdates),
+            createdAtSince: (props.createdAtSince),
+            updatedAtSince: (props.updatedAtSince),
+            publishAtSince: (props.publishAtSince),
             includeExternalUrl : "0",
             includeEmptyPages : "0",
             ...props.order?.render()
