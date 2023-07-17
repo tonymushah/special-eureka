@@ -10,6 +10,7 @@ export default function ActualSidebar() {
     return (
         <Sidebar
             breakPoint={"md"}
+            collapsedWidth="70px"
             rtl={query.data}
             rootStyles={{
                 [`.${sidebarClasses.container}`]: {
