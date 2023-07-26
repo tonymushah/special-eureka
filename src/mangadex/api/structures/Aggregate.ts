@@ -5,6 +5,7 @@ import { Manga } from "./Manga";
 import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import { Volume } from "./Volume";
 import Desktop_Api_Request from "../offline/DeskApiRequest";
+import { GetMangaAggregateData, VolumesAggregateData } from "../sta/data-contracts";
 
 export class Aggregate {
     private count!: number;
@@ -25,7 +26,7 @@ export class Aggregate {
         this.set_count(count);
         this.set_volumes(sort_volumes(volumes));
     }
-    public static build_wANY(object: any): Aggregate {
+    public static build_wANY(object: VolumesAggregateData): Aggregate {
         let volumes_length = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -36,14 +37,14 @@ export class Aggregate {
         let index = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
-                volumes_[index] = Volume.build_wANY(object[key]);
+                volumes_[index] = Volume.build_ANY(object[key]);
                 index = index + 1;
             }
         }
         const instance: Aggregate = new Aggregate(volumes_length, volumes_);
         return instance;
     }
-    public static async build_wANY2(object: any): Promise<Aggregate> {
+    public static async build_wANY2(object: VolumesAggregateData): Promise<Aggregate> {
         let volumes_length = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -69,7 +70,7 @@ export class Aggregate {
                 groups,
                 client
             } = props;
-            const getted: Response<any> = await Api_Request.get_methods(
+            const getted = await Api_Request.get_methods<GetMangaAggregateData>(
                 Manga.get_request_a() + mangaID + "/aggregate?" +
                 serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) +
                 "&" +

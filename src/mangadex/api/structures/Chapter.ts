@@ -552,7 +552,7 @@ export class Chapters {
         await this.initialize_chapters(client);
         return this.get_chapters();
     }
-    public static build_wANY(object: any): Chapters {
+    public static build_wANY(object: anyi): Chapters {
         const ids: Array<string> = [object.id];
         const others: Array<any> = object.others;
         for (let index = 0; index < others.length; index++) {
