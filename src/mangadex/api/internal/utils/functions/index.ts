@@ -3,13 +3,6 @@ import MangaChapter_Accordion from "../MangaChapter_Accordion";
 import { Volume } from "@mangadex/api/structures/Volume";
 export * from "./localized_string";
 
-export const serialize = function (obj: Record<string, string>): string {
-    const str = [];
-    for (const p in obj)
-        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-    return str.join("&");
-};
-
 export function get_manga_listBy_chapter_array(to_use: Array<Chapter>): Array<string> {
     const returns: Array<string> = new Array<string>();
     to_use.forEach(element => {

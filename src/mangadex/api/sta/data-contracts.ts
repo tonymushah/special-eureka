@@ -51,17 +51,17 @@ export interface MangaResponse {
 
 /** ChapterResponse */
 export interface ChapterResponse {
-    result?: "ok" | "error";
+    result: "ok" | "error";
     /** @default "entity" */
-    response?: string;
-    data?: Chapter;
+    response: string;
+    data: Chapter;
 }
 
 /** Relationship */
 export interface Relationship {
     /** @format uuid */
-    id?: string;
-    type?: string;
+    id: string;
+    type: string;
     /** Related Manga type, only present if you are on a Manga entity and a Manga relationship */
     related?:
     | "monochrome"
@@ -87,19 +87,19 @@ export interface Relationship {
 /** Chapter */
 export interface Chapter {
     /** @format uuid */
-    id?: string;
-    type?: "chapter";
-    attributes?: ChapterAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "chapter";
+    attributes: ChapterAttributes;
+    relationships: Relationship[];
 }
 
 /** Manga */
 export interface Manga {
     /** @format uuid */
-    id?: string;
-    type?: "manga";
-    attributes?: MangaAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "manga";
+    attributes: MangaAttributes;
+    relationships: Relationship[];
 }
 
 /** ErrorResponse */
@@ -120,28 +120,28 @@ export interface Error {
 /** ChapterAttributes */
 export interface ChapterAttributes {
     /** @maxLength 255 */
-    title?: string | null;
-    volume?: string | null;
+    title: string | null;
+    volume: string | null;
     /** @maxLength 8 */
-    chapter?: string | null;
+    chapter: string | null;
     /** Count of readable images for this chapter */
-    pages?: number;
+    pages: number;
     /** @pattern ^[a-z]{2}(-[a-z]{2})?$ */
-    translatedLanguage?: string;
+    translatedLanguage: string;
     /** @format uuid */
-    uploader?: string;
+    uploader: string;
     /**
      * Denotes a chapter that links to an external source.
      * @maxLength 512
      * @pattern ^https?://
      */
-    externalUrl?: string | null;
+    externalUrl: string | null;
     /** @min 1 */
-    version?: number;
-    createdAt?: string;
-    updatedAt?: string;
-    publishAt?: string;
-    readableAt?: string;
+    version: number;
+    createdAt: string;
+    updatedAt: string;
+    publishAt: string;
+    readableAt: string;
 }
 
 /** MangaAttributes */
@@ -429,31 +429,31 @@ export interface CustomListAttributes {
 
 /** CoverResponse */
 export interface CoverResponse {
-    result?: string;
+    result: string;
     /** @default "entity" */
-    response?: string;
-    data?: Cover;
+    response: string;
+    data: Cover;
 }
 
 /** Cover */
 export interface Cover {
     /** @format uuid */
-    id?: string;
-    type?: "cover_art";
-    attributes?: CoverAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "cover_art";
+    attributes: CoverAttributes;
+    relationships: Relationship[];
 }
 
 /** CoverAttributes */
 export interface CoverAttributes {
-    volume?: string | null;
-    fileName?: string;
-    description?: string | null;
-    locale?: string | null;
+    volume: string | null;
+    fileName: string;
+    description: string | null;
+    locale: string | null;
     /** @min 1 */
-    version?: number;
-    createdAt?: string;
-    updatedAt?: string;
+    version: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 /** CoverEdit */
@@ -476,95 +476,95 @@ export interface CoverEdit {
 
 /** AuthorResponse */
 export interface AuthorResponse {
-    result?: string;
+    result: string;
     /** @default "entity" */
-    response?: string;
-    data?: Author;
+    response: string;
+    data: Author;
 }
 
 /** Author */
 export interface Author {
     /** @format uuid */
-    id?: string;
-    type?: "author";
-    attributes?: AuthorAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "author";
+    attributes: AuthorAttributes;
+    relationships: Relationship[];
 }
 
 /** AuthorAttributes */
 export interface AuthorAttributes {
-    name?: string;
-    imageUrl?: string;
-    biography?: LocalizedString;
+    name: string;
+    imageUrl: string;
+    biography: LocalizedString;
     /**
      * @format uri
      * @pattern ^https?://twitter\.com(/|$)
      */
-    twitter?: string | null;
+    twitter: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?pixiv\.net(/|$)
      */
-    pixiv?: string | null;
+    pixiv: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?melonbooks\.co\.jp(/|$)
      */
-    melonBook?: string | null;
+    melonBook: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?fanbox\.cc(/|$)
      */
-    fanBox?: string | null;
+    fanBox: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?booth\.pm(/|$)
      */
-    booth?: string | null;
+    booth: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?nicovideo\.jp(/|$)
      */
-    nicoVideo?: string | null;
+    nicoVideo: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?skeb\.jp(/|$)
      */
-    skeb?: string | null;
+    skeb: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?fantia\.jp(/|$)
      */
-    fantia?: string | null;
+    fantia: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?tumblr\.com(/|$)
      */
-    tumblr?: string | null;
+    tumblr: string | null;
     /**
      * @format uri
      * @pattern ^https?://www\.youtube\.com(/|$)
      */
-    youtube?: string | null;
+    youtube: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?weibo\.(cn|com)(/|$)
      */
-    weibo?: string | null;
+    weibo: string | null;
     /**
      * @format uri
      * @pattern ^https?://([\w-]+\.)?naver\.com(/|$)
      */
-    naver?: string | null;
+    naver: string | null;
     /**
      * @format uri
      * @pattern ^https?://
      */
-    website?: string | null;
+    website: string | null;
     /** @min 1 */
-    version?: number;
-    createdAt?: string;
-    updatedAt?: string;
+    version: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 /** AuthorEdit */
@@ -884,13 +884,13 @@ export interface CoverList {
 /** AuthorList */
 export interface AuthorList {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: Author[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: Author[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 /** ApiClientList */
@@ -908,13 +908,13 @@ export interface ApiClientList {
 /** ChapterList */
 export interface ChapterList {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: Chapter[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: Chapter[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 /** ScanlationGroupList */
@@ -2024,17 +2024,19 @@ export interface GetAtHomeServerChapterIdParams {
 /** @example {"result":"ok","baseUrl":"https://abcdef.xyz123.mangadex.network:12345/some-temporary-access-token","chapter":{"hash":"d9786b687bc5f3fe1d4ae05ff05e0eb5","data":["x1-b765e86d5ecbc932cf3f517a8604f6ac6d8a7f379b0277a117dc7c09c53d041e.png","x2-fc7c198880083b053bf4e8aebfc0eec1adbe52878a6c5ff08d25544a1d5502ef.png","x3-90f15bc8b91deb0dc88473b532e42a99f93ee9e2c8073795c81b01fff428af80.png"],"dataSaver":["x1-ab2b7c8f30c843aa3a53c29bc8c0e204fba4ab3e75985d761921eb6a52ff6159.jpg","x2-3e057d937e01696adce2ac2865f62f6f6a15f03cef43d929b88e99a4b8482e03.jpg","x3-128742088f99806b022bbc8006554456f2a20d0d176d7f3264a65ff9a549d0dd.jpg"]}} */
 export interface GetAtHomeServerChapterIdData {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /**
      * The base URL to construct final image URLs from.
      * The URL returned is valid for the requested chapter only, and for a duration of 15 minutes from the time of the response.
      */
-    baseUrl?: string;
-    chapter?: {
-        hash?: string;
-        data?: string[];
-        dataSaver?: string[];
-    };
+    baseUrl: string;
+    chapter: GetAtHomeServerChapterIdDataChapter;
+}
+
+export interface GetAtHomeServerChapterIdDataChapter {
+    hash: string;
+    data: string[];
+    dataSaver: string[];
 }
 
 export type GetMangaTagData = TagResponse;

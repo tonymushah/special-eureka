@@ -113,6 +113,9 @@ dependencies:
   '@types/node':
     specifier: ^18.16.18
     version: 18.16.18
+  '@types/qs':
+    specifier: ^6.9.7
+    version: 6.9.7
   '@types/react-inner-image-zoom':
     specifier: ^3.0.0
     version: 3.0.0
@@ -280,10 +283,10 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-store/f4ef29684e4a32eddf51befaae98a5e498df8574
   tauri-plugin-upload-api:
     specifier: github:tauri-apps/tauri-plugin-upload
-    version: github.com/tauri-apps/tauri-plugin-upload/0323acf546ecb4121ff54dfccf6153c7715741a8
+    version: github.com/tauri-apps/tauri-plugin-upload/b53ebc6c2e716d95fd94b64d3b4b87cd57ae4feb
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/32760d77aae3c5f9a5aa3744c749318a1d357942
+    version: github.com/tauri-apps/tauri-plugin-websocket/e48252f388a26c75ace0bdca5ab303254e12eab7
   tauri-settings:
     specifier: ^0.1.2
     version: 0.1.2
@@ -17676,16 +17679,16 @@ packages:
       '@tauri-apps/api': 1.4.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-upload/0323acf546ecb4121ff54dfccf6153c7715741a8:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-upload/tar.gz/0323acf546ecb4121ff54dfccf6153c7715741a8}
+  github.com/tauri-apps/tauri-plugin-upload/b53ebc6c2e716d95fd94b64d3b4b87cd57ae4feb:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-upload/tar.gz/b53ebc6c2e716d95fd94b64d3b4b87cd57ae4feb}
     name: tauri-plugin-upload-api
     version: 0.0.0
     dependencies:
       '@tauri-apps/api': 1.4.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/32760d77aae3c5f9a5aa3744c749318a1d357942:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/32760d77aae3c5f9a5aa3744c749318a1d357942}
+  github.com/tauri-apps/tauri-plugin-websocket/e48252f388a26c75ace0bdca5ab303254e12eab7:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/e48252f388a26c75ace0bdca5ab303254e12eab7}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:

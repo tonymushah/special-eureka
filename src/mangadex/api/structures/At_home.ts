@@ -1,5 +1,6 @@
-import { Client, Response } from "@tauri-apps/api/http";
+import { Client } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
+import { GetAtHomeServerChapterIdData, GetAtHomeServerChapterIdDataChapter } from "../sta/data-contracts";
 import { Chapter } from "./Chapter";
 export class At_Home{
     private chapter!: Chapter;
@@ -65,8 +66,8 @@ export class At_Home{
         instance.set_chapter(chapter);
         return instance;
     }
-    public static build_wAny(object: any): At_Home{
-        const chapter: any = object.chapter;
+    public static build_wAny(object: GetAtHomeServerChapterIdData): At_Home{
+        const chapter: GetAtHomeServerChapterIdDataChapter = object.chapter;
         const instance: At_Home = new At_Home(
             object.baseUrl, 
             chapter.hash, 
@@ -90,14 +91,13 @@ export class At_Home{
         return instance;
     }
     public static async getAt_Home_wChID(id: string, forcePort443?: boolean, client?: Client): Promise<At_Home>{
-        const querys: any = {
+        const querys = {
             forcePort443: (forcePort443)
         };
         try{
-            const request: Promise<Response<any>> = Api_Request.get_methods("at-home/server/" + id, {
+            const getted = await Api_Request.get_methods<GetAtHomeServerChapterIdData>("at-home/server/" + id, {
                 query: querys
             }, client);
-            const getted: Response<any> = await request;
             return At_Home.build_wAny(getted.data);
         }catch(e){
             if(typeof e == "string"){

@@ -61,16 +61,16 @@ export class Order{
         relevance? : string,
         title?: string
     ){
-        this.set_createdAt(createdAt!);
-        this.set_updatedAt(updatedAt!);
-        this.set_publishAt(publishAt!);
-        this.set_readableAt(readableAt!);
-        this.set_volume(volume!);
-        this.set_chapter(chapter!);
-        this.set_latestUploadedChapter(latestUploadedChapter!);
-        this.set_followedCount(followedCount!);
-        this.set_relevance(relevance!);
-        this.set_title(title!);
+        if(createdAt != undefined) this.set_createdAt(createdAt);
+        if(updatedAt != undefined) this.set_updatedAt(updatedAt);
+        if(publishAt != undefined) this.set_publishAt(publishAt);
+        if(readableAt != undefined) this.set_readableAt(readableAt);
+        if(volume != undefined) this.set_volume(volume);
+        if(chapter != undefined) this.set_chapter(chapter);
+        if(latestUploadedChapter != undefined) this.set_latestUploadedChapter(latestUploadedChapter);
+        if(followedCount != undefined) this.set_followedCount(followedCount);
+        if(relevance != undefined) this.set_relevance(relevance);
+        if(title != undefined) this.set_title(title);
     }
     public render(): Record<string, string>{
         return ({

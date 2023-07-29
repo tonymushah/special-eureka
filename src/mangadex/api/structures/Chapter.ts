@@ -1,13 +1,19 @@
+import { download_chapter, download_chapter_data_saver } from "@mangadex/plugin";
 import { emit } from "@tauri-apps/api/event";
-import { Client, getClient, Response, ResponseType } from "@tauri-apps/api/http";
-import { invoke } from "@tauri-apps/api/tauri";
+import { Client, getClient, Response } from "@tauri-apps/api/http";
+import { stringify } from "qs";
 import { Api_Request } from "../internal/Api_Request";
-import { Offset_limits, Order, RelationshipsTypes, Querry_list_builder, serialize, Lang, Languages } from "../internal/Utils";
+import { Lang, Languages, Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import DeskApiRequest from "../offline/DeskApiRequest";
+import { ChapterAttributes, ChapterVolumeAggregateData, GetChapterData, GetChapterIdData, Relationship, Chapter as StaChapter } from "../sta/data-contracts";
+import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
+import IsDownloadedResult from "./additonal_types/IsDownloadedResult";
 import { Aggregate } from "./Aggregate";
-import { Attribute } from "./Attributes";
 import { At_Home } from "./At_home";
+import { Attribute } from "./Attributes";
 import { Collection } from "./Collection";
+import AllDownloadedChapterCollection from "./CollectionTypes/AllDownloadedChapterCollection";
+import Chapter_WAllIncludesCollection from "./CollectionTypes/Chapter_WAllIncludesCollection";
 import ChapterCollection from "./CollectionTypes/ChapterCollection";
 import { Group } from "./Group";
 import { Manga, Manga_2 } from "./Manga";
@@ -15,17 +21,12 @@ import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import ChapterSearchType from "./SearchType/Chapter";
 import Chapter_withAllIncludes_SearchType from "./SearchType/Chapter_WAllIncludes";
 import { User } from "./User";
-import AllDownloadedChapterCollection from "./CollectionTypes/AllDownloadedChapterCollection";
-import Chapter_WAllIncludesCollection from "./CollectionTypes/Chapter_WAllIncludesCollection";
-import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
-import { download_chapter, download_chapter_data_saver } from "@mangadex/plugin";
-import IsDownloadedResult from "./additonal_types/IsDownloadedResult";
 
 export type ChapterDowloadResult = {
-    result : string,
-    dir : string,
-    downloaded : Array<string>,
-    errors : Array<string>
+    result: string,
+    dir: string,
+    downloaded: Array<string>,
+    errors: Array<string>
 }
 
 export class Chapter extends Attribute {
@@ -124,25 +125,26 @@ export class Chapter extends Attribute {
         this.set_updateAt(updatedAt);
         this.set_publishAt(publishAt);
     }
-    public static build_W_Any(object: any): Chapter {
-        const attributes: any = object.attributes;
-        const relationships: any = object.relationships;
+    public static build_W_Any(object: StaChapter): Chapter {
+        const attributes: ChapterAttributes = object.attributes;
+        const relationships: Relationship[] = object.relationships;
         const instance: Chapter = new Chapter(
             object.id,
-            attributes.title,
+            attributes.title ?? "No title",
             attributes.pages,
-            attributes.chapter,
+            Number.parseInt(attributes.chapter ?? "-1") ?? -1,
             attributes.createdAt,
             attributes.updatedAt,
             attributes.publishAt
         );
-        instance.set_externalUrl(attributes.externalUrl);
+        instance.set_externalUrl(attributes.externalUrl ?? "");
         instance.set_translatedLanguage(attributes.translatedLanguage);
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);
-        instance.set_volume(attributes.volume);
+        instance.set_volume(attributes.volume ?? "");
         try {
             instance.set_relationships_Wany(relationships);
+            // eslint-disable-next-line no-empty
         } catch (error) {
 
         }
@@ -150,7 +152,7 @@ export class Chapter extends Attribute {
         return instance;
     }
     public static async get_OnlineChapterbyId(id: string, client?: Client): Promise<Chapter> {
-        const getted: Response<any> = await Api_Request.get_methods("chapter/" + id, undefined, client);
+        const getted = await Api_Request.get_methods<GetChapterIdData>("chapter/" + id, undefined, client);
         const instance: Chapter = Chapter.build_W_Any(getted.data.data);
         return instance;
     }
@@ -183,42 +185,33 @@ export class Chapter extends Attribute {
     public static async search(props:
         ChapterSearchType
     ): Promise<Collection<Chapter>> {
-        const querys: any = {
-            limit: JSON.stringify(props.offset_limits.get_limits()),
-            offset: JSON.stringify(props.offset_limits.get_offset()),
-            title: (props.title!),
-            uploader: (props.uploader!),
-            manga: (props.manga!),
-            volume: JSON.stringify(props.volume!),
-            includeFutureUpdates: (props.includeFutureUpdates!),
-            createdAtSince: (props.createdAtSince!),
-            updatedAtSince: (props.updatedAtSince!),
-            publishAtSince: (props.publishAtSince!),
-            ...props.order?.render(),
-            "includes[]": (props.includes!),
-            includeExternalUrl : "0",
-            includeEmptyPages : "0"
+        const querys = {
+            limit: props.offset_limits.get_limits(),
+            offset: props.offset_limits.get_offset(),
+            title: props.title,
+            uploader: props.uploader,
+            manga: props.manga,
+            volume: props.volume,
+            includeFutureUpdates: props.includeFutureUpdates,
+            createdAtSince: props.createdAtSince,
+            updatedAtSince: props.updatedAtSince,
+            publishAtSince: props.publishAtSince,
+            order: props.order,
+            includes: props.includes,
+            includeExternalUrl: "0",
+            includeEmptyPages: "0",
+            ids: props.ids,
+            "groups[]": props.group,
+            translatedLanguage: props.translatedLanguage,
+            originalLanguage: props.originalLanguage,
+            excludedOriginalLanguage: props.excludedOriginalLanguage,
+            contentRating: props.content_rating,
+            excludedGroup: props.excludedGroup,
+            excludedUploaders: props.excludedUploaders
         };
-        const getted: Response<any> = await Api_Request.get_methods("chapter?" +
-            serialize((new Querry_list_builder<string>("ids", props.ids!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("groups", props.group!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("contentRating", props.content_rating!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build())
-            , {
-                query: querys
-            }, props.client);
-        const data: Array<any> = getted.data.data;
+        const getted = await Api_Request.get_methods<GetChapterData>("chapter?" +
+            stringify(querys), undefined, props.client);
+        const data = getted.data.data;
         const mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter.build_W_Any(data[index]);
@@ -287,7 +280,7 @@ export class Chapter extends Attribute {
     }
     public static async getAOfflineChapter(chapterID: string, client?: Client): Promise<{ data: Chapter_withAllIncludes, hasFailed: boolean }> {
         if (await DeskApiRequest.ping(client) == true) {
-            const response: Response<any> = await DeskApiRequest.get_methods(`chapter/${chapterID}`, undefined, client);
+            const response: Response<GetChapterIdData> = await DeskApiRequest.get_methods(`chapter/${chapterID}`, undefined, client);
             const hasFailed: boolean = JSON.parse(response.headers["x-download-failed"]);
             return {
                 data: Chapter_withAllIncludes.build_W_Any(response.data.data),
@@ -478,30 +471,30 @@ export class Chapter extends Attribute {
     public async download_this_data_saver(client?: Client): Promise<ChapterDowloadResult> {
         return await Chapter.download_data_saver(this.get_id(), client);
     }
-    public static async delete_a_downloaded_chapter(id: string, client?: Client){
-        if(await DeskApiRequest.ping(client) == true){
+    public static async delete_a_downloaded_chapter(id: string, client?: Client) {
+        if (await DeskApiRequest.ping(client) == true) {
             await DeskApiRequest.delete_methods(`chapter/${id}`, {
-                
+
             }, client);
-        }else{
+        } else {
             throw new Error("Can't ping the offline server");
-            
+
         }
     }
-    public async delete(client? : Client){
+    public async delete(client?: Client) {
         await Chapter.delete_a_downloaded_chapter(this.get_id(), client);
     }
-    public static async downloaded(chap_id : string, client? : Client) : Promise<IsDownloadedResult>{
+    public static async downloaded(chap_id: string, client?: Client): Promise<IsDownloadedResult> {
         try {
             const data = await Chapter_withAllIncludes.getAOfflineChapter(chap_id, client);
             return {
-                isDownloaded : true,
-                hasFailed : data.hasFailed
+                isDownloaded: true,
+                hasFailed: data.hasFailed
             };
         } catch (error) {
             return {
-                isDownloaded : false,
-                hasFailed : false
+                isDownloaded: false,
+                hasFailed: false
             };
         }
     }
@@ -544,7 +537,7 @@ export class Chapters {
         const to_input: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(this.count);
         for (let index = 0; index < to_input.length; index++) {
             const element = (await Chapter_withAllIncludes.get_ChapterbyId(this.ids[index], client)).data;
-            if(element instanceof Chapter_withAllIncludes) to_input[index] = element;
+            if (element instanceof Chapter_withAllIncludes) to_input[index] = element;
         }
         this.set_chapters(to_input);
     }
@@ -552,16 +545,16 @@ export class Chapters {
         await this.initialize_chapters(client);
         return this.get_chapters();
     }
-    public static build_wANY(object: anyi): Chapters {
+    public static build_wANY(object: ChapterVolumeAggregateData): Chapters {
         const ids: Array<string> = [object.id];
-        const others: Array<any> = object.others;
+        const others: Array<string> = object.others;
         for (let index = 0; index < others.length; index++) {
             ids.push(others[index]);
         }
         const instance: Chapters = new Chapters(object.chapter, ids, object.count);
         return instance;
     }
-    public static async build_wANY2(object: any): Promise<Chapters> {
+    public static async build_wANY2(object: ChapterVolumeAggregateData): Promise<Chapters> {
         const instance: Chapters = Chapters.build_wANY(object);
         await instance.initialize_chapters();
         return instance;
@@ -645,28 +638,23 @@ export class Chapter_withAllIncludes extends Chapter {
             publishAt
         );
     }
-    public static build_W_Any(object: any): Chapter_withAllIncludes {
-        const attributes: any = object.attributes;
-        const relationships: any = object.relationships;
+    public static build_W_Any(object: StaChapter): Chapter_withAllIncludes {
+        const attributes: ChapterAttributes = object.attributes;
+        const relationships: Relationship[] = object.relationships;
         const instance: Chapter_withAllIncludes = new Chapter_withAllIncludes(
             object.id,
-            attributes.title,
+            attributes.title ?? "No title",
             attributes.pages,
-            attributes.chapter,
+            Number.parseInt(attributes.chapter ?? "-1") ?? -1,
             attributes.createdAt,
             attributes.updatedAt,
             attributes.publishAt
         );
-        instance.set_externalUrl(attributes.externalUrl);
+        instance.set_externalUrl(attributes.externalUrl ?? "");
         instance.set_translatedLanguage(attributes.translatedLanguage);
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);
-        instance.set_volume(attributes.volume);
-        try {
-            instance.set_relationships_Wany(relationships);
-        } catch (error) {
-
-        }
+        instance.set_volume(attributes.volume ?? "");
 
         //        console.log("relationship builded")
         try {
@@ -676,17 +664,20 @@ export class Chapter_withAllIncludes extends Chapter {
                 groups[index] = Group.build_wANY(groups_any[index]);
             }
             instance.set_groups(groups);
+            // eslint-disable-next-line no-empty
         } catch (error) {
 
         }
         //        console.log("group builded")
         try {
             instance.set_manga(Manga_2.build_any(Attribute.get_some_relationship(relationships, "manga")[0]));
+            // eslint-disable-next-line no-empty
         } catch (error) {
 
         }
         try {
             instance.set_uploader(User.build_wANY(Attribute.get_some_relationship(relationships, "user")[0]));
+            // eslint-disable-next-line no-empty
         } catch (error) {
 
         }
@@ -696,10 +687,8 @@ export class Chapter_withAllIncludes extends Chapter {
         return instance;
     }
     public static async get_OnlineChapterbyId(id: string, client?: Client | undefined): Promise<Chapter_withAllIncludes> {
-        const getted: Response<any> = await Api_Request.get_methods("chapter/" + id + "?" + serialize({
-            "includes[0]": "manga",
-            "includes[1]": "user",
-            "includes[2]": "scanlation_group"
+        const getted: Response<GetChapterIdData> = await Api_Request.get_methods("chapter/" + id + "?" + stringify({
+            includes: ["manga", "user", "scanlation_group"]
         }), {
         }, client);
         const instance: Chapter_withAllIncludes = Chapter_withAllIncludes.build_W_Any(getted.data.data);
@@ -731,46 +720,37 @@ export class Chapter_withAllIncludes extends Chapter {
         Chapter_withAllIncludes_SearchType
     ): Promise<Collection<Chapter_withAllIncludes>> {
         const querys = {
-            limit: JSON.stringify(props.offset_limits.get_limits()),
-            offset: JSON.stringify(props.offset_limits.get_offset()),
-            title: (props.title),
-            uploader: (props.uploader),
-            manga: (props.manga),
-            volume: JSON.stringify(props.volume),
-            includeFutureUpdates: (props.includeFutureUpdates),
-            createdAtSince: (props.createdAtSince),
-            updatedAtSince: (props.updatedAtSince),
-            publishAtSince: (props.publishAtSince),
-            includeExternalUrl : "0",
-            includeEmptyPages : "0",
-            ...props.order?.render()
-        };
-        const getted: Response<any> = await Api_Request.get_methods("chapter?" +
-            serialize(new Querry_list_builder<string>("includes", [
+            limit: props.offset_limits.get_limits(),
+            offset: props.offset_limits.get_offset(),
+            title: props.title,
+            uploader: props.uploader,
+            manga: props.manga,
+            volume: props.volume,
+            includeFutureUpdates: props.includeFutureUpdates,
+            createdAtSince: props.createdAtSince,
+            updatedAtSince: props.updatedAtSince,
+            publishAtSince: props.publishAtSince,
+            order: props.order,
+            includes: [
                 "manga",
                 "user",
                 "scanlation_group"
-            ]).build()) +
-            "&" + serialize((new Querry_list_builder<string>("ids", props.ids!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("groups", props.group!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("translatedLanguage", props.translatedLanguage!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("originalLanguage", props.originalLanguage!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("excludedOriginalLanguage", props.excludedOriginalLanguage!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("contentRating", props.content_rating!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("excludedGroup", props.excludedGroup!)).build()) +
-            "&" +
-            serialize((new Querry_list_builder<string>("excludedUploaders", props.excludedUploaders!)).build())
-
-            , {
-                query: querys
-            }, props.client);
-        const data: Array<any> = getted.data.data;
+            ],
+            includeExternalUrl: "0",
+            includeEmptyPages: "0",
+            ids: props.ids,
+            "groups[]": props.group,
+            translatedLanguage: props.translatedLanguage,
+            originalLanguage: props.originalLanguage,
+            excludedOriginalLanguage: props.excludedOriginalLanguage,
+            contentRating: props.content_rating,
+            excludedGroup: props.excludedGroup,
+            excludedUploaders: props.excludedUploaders
+        };
+        const getted: Response<GetChapterData> = await Api_Request.get_methods("chapter?" +
+            stringify(querys)
+            , undefined, props.client);
+        const data = getted.data.data;
         const mangaArray: Array<Chapter_withAllIncludes> = new Array<Chapter_withAllIncludes>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Chapter_withAllIncludes.build_W_Any(data[index]);
