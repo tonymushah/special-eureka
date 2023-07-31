@@ -1,7 +1,8 @@
 /// TODO Make request type safe 
 
 import { ErrorResponse } from "../sta/data-contracts";
-
+import { getName, getTauriVersion, getVersion } from "@tauri-apps/api/app";
+import { platform } from "@tauri-apps/api/os";
 import { Body, Client, ClientOptions, getClient, HttpOptions, RequestOptions, Response, ResponseType } from "@tauri-apps/api/http";
 export class Api_RequestERROR extends Error{
     protected id: string;
@@ -42,7 +43,11 @@ export class Api_Request{
             client = await Api_Request.client();
             is_client_initialized = true;
         }
-        const result = await client.get<never>(Api_Request.url + to_use, options);
+        const options_ : RequestOptions = options ?? {};
+        const headers = options_.headers ?? {};
+        headers["User-Agent"] = `${await getName()}/${await getVersion()} (Tauri; ${await getTauriVersion()}) (platform; ${await platform()})`;
+        options_.headers = headers;
+        const result = await client.get<never>(Api_Request.url + to_use, options_);
         if(is_client_initialized){
             await client.drop();
         }
@@ -59,7 +64,11 @@ export class Api_Request{
             client = await Api_Request.client();
             is_client_initialized = true;
         }
-        const result = await client.put<never>(Api_Request.url + to_use, body,options);
+        const options_ : RequestOptions = options ?? {};
+        const headers = options_.headers ?? {};
+        headers["User-Agent"] = `${await getName()}/${await getVersion()} (Tauri; ${await getTauriVersion()}) (platform; ${await platform()})`;
+        options_.headers = headers;
+        const result = await client.put<never>(Api_Request.url + to_use, body, options_);
         if(is_client_initialized){
             await client.drop();
         }
@@ -76,7 +85,11 @@ export class Api_Request{
             client = await Api_Request.client();
             is_client_initialized = true;
         }
-        const result = await client.post<never>(Api_Request.url + to_use, body, options);
+        const options_ : RequestOptions = options ?? {};
+        const headers = options_.headers ?? {};
+        headers["User-Agent"] = `${await getName()}/${await getVersion()} (Tauri; ${await getTauriVersion()}) (platform; ${await platform()})`;
+        options_.headers = headers;
+        const result = await client.post<never>(Api_Request.url + to_use, body, options_);
         if(is_client_initialized){
             await client.drop();
         }
@@ -93,7 +106,11 @@ export class Api_Request{
             client = await Api_Request.client();
             is_client_initialized = true;
         }
-        const result = await client.patch<never>(Api_Request.url + to_use, options);
+        const options_ : RequestOptions = options ?? {};
+        const headers = options_.headers ?? {};
+        headers["User-Agent"] = `${await getName()}/${await getVersion()} (Tauri; ${await getTauriVersion()}) (platform; ${await platform()})`;
+        options_.headers = headers;
+        const result = await client.patch<never>(Api_Request.url + to_use, options_);
         if(is_client_initialized){
             await client.drop();
         }
@@ -110,7 +127,11 @@ export class Api_Request{
             client = await Api_Request.client();
             is_client_initialized = true;
         }
-        const result = await client.delete<never>(Api_Request.url + to_use, options);
+        const options_ : RequestOptions = options ?? {};
+        const headers = options_.headers ?? {};
+        headers["User-Agent"] = `${await getName()}/${await getVersion()} (Tauri; ${await getTauriVersion()}) (platform; ${await platform()})`;
+        options_.headers = headers;
+        const result = await client.delete<never>(Api_Request.url + to_use, options_);
         if(is_client_initialized){
             await client.drop();
         }

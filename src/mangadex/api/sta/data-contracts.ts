@@ -43,10 +43,10 @@ export type LocalizedString = Record<string, string>;
 
 /** MangaResponse */
 export interface MangaResponse {
-    result?: "ok" | "error";
+    result: "ok" | "error";
     /** @default "entity" */
-    response?: string;
-    data?: Manga;
+    response: string;
+    data: Manga;
 }
 
 /** ChapterResponse */
@@ -99,6 +99,24 @@ export interface Manga {
     id: string;
     type: "manga";
     attributes: MangaAttributes;
+    /** Related Manga type, only present if you are on a Manga entity and a Manga relationship */
+    related?:
+    | "monochrome"
+    | "main_story"
+    | "adapted_from"
+    | "based_on"
+    | "prequel"
+    | "side_story"
+    | "doujinshi"
+    | "same_franchise"
+    | "shared_universe"
+    | "sequel"
+    | "spin_off"
+    | "alternate_story"
+    | "alternate_version"
+    | "preserialization"
+    | "colored"
+    | "serialization";
     relationships: Relationship[];
 }
 
@@ -146,29 +164,29 @@ export interface ChapterAttributes {
 
 /** MangaAttributes */
 export interface MangaAttributes {
-    title?: LocalizedString;
-    altTitles?: LocalizedString[];
-    description?: LocalizedString;
-    isLocked?: boolean;
-    links?: Record<string, string>;
-    originalLanguage?: string;
-    lastVolume?: string | null;
-    lastChapter?: string | null;
-    publicationDemographic?: "shounen" | "shoujo" | "josei" | "seinen" | null;
-    status?: "completed" | "ongoing" | "cancelled" | "hiatus";
+    title: LocalizedString;
+    altTitles: LocalizedString[];
+    description: LocalizedString;
+    isLocked: boolean;
+    links: Record<string, string>;
+    originalLanguage: string;
+    lastVolume: string | null;
+    lastChapter: string | null;
+    publicationDemographic: "shounen" | "shoujo" | "josei" | "seinen" | null;
+    status: "completed" | "ongoing" | "cancelled" | "hiatus";
     /** Year of release */
-    year?: number | null;
-    contentRating?: "safe" | "suggestive" | "erotica" | "pornographic";
-    chapterNumbersResetOnNewVolume?: boolean;
-    availableTranslatedLanguages?: any[];
+    year: number | null;
+    contentRating: "safe" | "suggestive" | "erotica" | "pornographic";
+    chapterNumbersResetOnNewVolume: boolean;
+    availableTranslatedLanguages: any[];
     /** @format uuid */
-    latestUploadedChapter?: string;
-    tags?: Tag[];
-    state?: "draft" | "submitted" | "published" | "rejected";
+    latestUploadedChapter: string;
+    tags: Tag[];
+    state: "draft" | "submitted" | "published" | "rejected";
     /** @min 1 */
-    version?: number;
-    createdAt?: string;
-    updatedAt?: string;
+    version: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export type MangaCreate = MangaRequest;
@@ -259,74 +277,75 @@ export interface CreateAccount {
 
 /** ScanlationGroupResponse */
 export interface ScanlationGroupResponse {
-    result?: "ok";
+    result: "ok";
     /** @default "entity" */
-    response?: string;
-    data?: ScanlationGroup;
+    response: string;
+    data: ScanlationGroup;
 }
 
 /** ScanlationGroup */
 export interface ScanlationGroup {
     /** @format uuid */
-    id?: string;
-    type?: "scanlation_group";
-    attributes?: ScanlationGroupAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "scanlation_group";
+    attributes: ScanlationGroupAttributes;
+    relationships: Relationship[];
 }
 
 /** ScanlationGroupAttributes */
 export interface ScanlationGroupAttributes {
-    name?: string;
-    altNames?: LocalizedString[];
-    website?: string | null;
-    ircServer?: string | null;
-    ircChannel?: string | null;
-    discord?: string | null;
-    contactEmail?: string | null;
-    description?: string | null;
+    name: string;
+    altNames: LocalizedString[];
+    website: string | null;
+    ircServer: string | null;
+    ircChannel: string | null;
+    discord: string | null;
+    contactEmail: string | null;
+    description: string | null;
     /**
      * @format uri
      * @pattern ^https?://
      */
-    twitter?: string | null;
+    twitter: string | null;
     /**
      * @format uri
      * @maxLength 128
      * @pattern ^https:\/\/www\.mangaupdates\.com\/(group|publisher)(s\.html\?id=\d+|\/[\w-]+\/?([\w-]+)?(\/)?)$
      */
-    mangaUpdates?: string | null;
-    focusedLanguage?: string[] | null;
-    locked?: boolean;
-    official?: boolean;
-    inactive?: boolean;
-    exLicensed?: boolean;
+    mangaUpdates: string | null;
+    focusedLanguage: string[] | null;
+    locked: boolean;
+    official: boolean;
+    verified : boolean;
+    inactive: boolean;
+    exLicensed: boolean;
     /**
      * Should respected ISO 8601 duration specification: https://en.wikipedia.org/wiki/ISO_8601#Durations
      * @pattern ^(P([1-9]|[1-9][0-9])D)?(P?([1-9])W)?(P?T(([1-9]|1[0-9]|2[0-4])H)?(([1-9]|[1-5][0-9]|60)M)?(([1-9]|[1-5][0-9]|60)S)?)?$
      * @example "P4D"
      */
-    publishDelay?: string;
+    publishDelay: string;
     /** @min 1 */
-    version?: number;
-    createdAt?: string;
-    updatedAt?: string;
+    version: number;
+    createdAt: string;
+    updatedAt: string;
 }
 
 /** User */
 export interface User {
     /** @format uuid */
-    id?: string;
-    type?: "user";
-    attributes?: UserAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "user";
+    attributes: UserAttributes;
+    relationships: Relationship[];
 }
 
 /** UserAttributes */
 export interface UserAttributes {
-    username?: string;
-    roles?: string[];
+    username: string;
+    roles: string[];
     /** @min 1 */
-    version?: number;
+    version: number;
 }
 
 /** CreateScanlationGroup */
@@ -404,27 +423,27 @@ export interface CustomListEdit {
 
 /** CustomListResponse */
 export interface CustomListResponse {
-    result?: "ok" | "error";
+    result: "ok" | "error";
     /** @default "entity" */
-    response?: string;
-    data?: CustomList;
+    response: string;
+    data: CustomList;
 }
 
 /** CustomList */
 export interface CustomList {
     /** @format uuid */
-    id?: string;
-    type?: "custom_list";
-    attributes?: CustomListAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "custom_list";
+    attributes: CustomListAttributes;
+    relationships: Relationship[];
 }
 
 /** CustomListAttributes */
 export interface CustomListAttributes {
-    name?: string;
-    visibility?: "private" | "public";
+    name: string;
+    visibility: "private" | "public";
     /** @min 1 */
-    version?: number;
+    version: number;
 }
 
 /** CoverResponse */
@@ -799,39 +818,39 @@ export interface MappingIdAttributes {
 /** TagResponse */
 export interface TagResponse {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: Tag[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: Tag[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 /** Tag */
 export interface Tag {
     /** @format uuid */
-    id?: string;
-    type?: "tag";
-    attributes?: TagAttributes;
-    relationships?: Relationship[];
+    id: string;
+    type: "tag";
+    attributes: TagAttributes;
+    relationships: Relationship[];
 }
 
 /** TagAttributes */
 export interface TagAttributes {
-    name?: LocalizedString;
-    description?: LocalizedString;
-    group?: "content" | "format" | "genre" | "theme";
+    name: LocalizedString;
+    description: LocalizedString;
+    group: "content" | "format" | "genre" | "theme";
     /** @min 1 */
-    version?: number;
+    version: number;
 }
 
 /** UserResponse */
 export interface UserResponse {
-    result?: "ok";
+    result: "ok";
     /** @default "entity" */
-    response?: string;
-    data?: User;
+    response: string;
+    data: User;
 }
 
 /** SendAccountActivationCode */
@@ -872,13 +891,13 @@ export interface ChapterRequest {
 /** CoverList */
 export interface CoverList {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: Cover[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: Cover[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 /** AuthorList */
@@ -920,13 +939,13 @@ export interface ChapterList {
 /** ScanlationGroupList */
 export interface ScanlationGroupList {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: ScanlationGroup[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: ScanlationGroup[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 export type MangaRelationCreate = MangaRelationRequest;
@@ -1009,13 +1028,13 @@ export interface MangaRelationAttributes {
 /** MangaList */
 export interface MangaList {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: Manga[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: Manga[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 /** CustomListList */
@@ -1033,13 +1052,13 @@ export interface CustomListList {
 /** UserList */
 export interface UserList {
     /** @default "ok" */
-    result?: string;
+    result: string;
     /** @default "collection" */
-    response?: string;
-    data?: User[];
-    limit?: number;
-    offset?: number;
-    total?: number;
+    response: string;
+    data: User[];
+    limit: number;
+    offset: number;
+    total: number;
 }
 
 /** UploadSession */
@@ -1243,12 +1262,12 @@ export type StatisticsDetailsComments = {
      * The id of the thread backing the comments for that entity on the MangaDex Forums.
      * @min 1
      */
-    threadId?: number;
+    threadId: number;
     /**
      * The number of replies on the MangaDex Forums thread backing this entity's comments. This excludes the initial comment that opens the thread, which is created by our systems.
      * @min 0
      */
-    repliesCount?: number;
+    repliesCount: number;
 } | null;
 
 /** @default "pong" */
@@ -2401,34 +2420,34 @@ export interface GetStatisticsGroupsData {
 /** @example {"result":"ok","statistics":{"f9c33607-9180-4ba6-b85c-e4b5faee7192":{"comments":{"threadId":4756728,"repliesCount":12},"rating":{"average":7.5,"bayesian":6.47,"distribution":{"1":0,"2":0,"3":0,"4":0,"5":0,"6":0,"7":2,"8":2,"9":0,"10":0}},"follows":3}}} */
 export interface GetStatisticsMangaUuidData {
     /** @default "ok" */
-    result?: string;
-    statistics?: Record<
+    result: string;
+    statistics: Record<
         string,
         {
             /**
              * Comments-related statistics of an entity.
              * If it is `null`, the entity doesn't have a backing comments thread, and therefore has no comments yet.
              */
-            comments?: StatisticsDetailsComments;
-            rating?: {
+            comments: StatisticsDetailsComments;
+            rating: {
                 /** Will be nullable if no ratings has been given */
-                average?: number | null;
+                average: number | null;
                 /** Average weighted on all the Manga population */
-                bayesian?: number;
-                distribution?: {
-                    "1"?: number;
-                    "2"?: number;
-                    "3"?: number;
-                    "4"?: number;
-                    "5"?: number;
-                    "6"?: number;
-                    "7"?: number;
-                    "8"?: number;
-                    "9"?: number;
-                    "10"?: number;
+                bayesian: number;
+                distribution: {
+                    "1": number;
+                    "2": number;
+                    "3": number;
+                    "4": number;
+                    "5": number;
+                    "6": number;
+                    "7": number;
+                    "8": number;
+                    "9": number;
+                    "10": number;
                 };
             };
-            follows?: number;
+            follows: number;
         }
     >;
 }
@@ -2440,22 +2459,22 @@ export interface GetStatisticsMangaParams {
 /** @example {"result":"ok","statistics":{"f9c33607-9180-4ba6-b85c-e4b5faee7192":{"comments":{"threadId":4756728,"repliesCount":12},"rating":{"average":7.5,"bayesian":6.47},"follows":3}}} */
 export interface GetStatisticsMangaData {
     /** @default "ok" */
-    result?: string;
-    statistics?: Record<
+    result: string;
+    statistics: Record<
         string,
         {
             /**
              * Comments-related statistics of an entity.
              * If it is `null`, the entity doesn't have a backing comments thread, and therefore has no comments yet.
              */
-            comments?: StatisticsDetailsComments;
-            rating?: {
+            comments: StatisticsDetailsComments;
+            rating: {
                 /** Will be nullable if no ratings has been done */
-                average?: number | null;
+                average: number | null;
                 /** Average weighted on all the Manga population */
-                bayesian?: number;
+                bayesian: number;
             };
-            follows?: number;
+            follows: number;
         }
     >;
 }

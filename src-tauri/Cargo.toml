@@ -21,7 +21,7 @@ tauri = { version = "1.4.1", features = [ "window-minimize", "window-hide", "win
 tokio = "1.27.0"
 tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
-tauri-plugin-aptabase = "0.2"
+tauri-plugin-aptabase = "0"
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"

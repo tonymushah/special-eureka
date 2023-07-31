@@ -1,14 +1,15 @@
 import { Client, Response, ResponseType } from "@tauri-apps/api/http";
+import { stringify } from "qs";
 import { Api_Request } from "../internal/Api_Request";
 import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
+import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import { default as DeskApiRequest, default as DesktopApi } from "../offline/DeskApiRequest";
+import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "../sta/data-contracts";
 import { Attribute } from "./Attributes";
 import { Collection } from "./Collection";
 import CoverCollection from "./CollectionTypes/CoverCollection";
 import { GetMangaByIDResponse, Manga } from "./Manga";
 import CoverSearchType from "./SearchType/Cover";
-import { CoverResponse, Relationship, Cover as StaCover } from "../sta/data-contracts";
 export class Cover extends Attribute {
     private description!: string;
     private volume!: number;
@@ -165,9 +166,9 @@ export class Cover extends Attribute {
     public async get_manga_relative(client?: Client): Promise<GetMangaByIDResponse> {
         try {
             const relationships = this.get_relationships();
-            if (this.get_relationships() != undefined) {
-                for (let index = 0; index < this.get_relationships().length; index++) {
-                    const lol = this.get_relationships()[index];
+            if (relationships != undefined) {
+                for (let index = 0; index < relationships.length; index++) {
+                    const lol = relationships[index];
                     if (lol.get_type() == "manga") {
                         return await Manga.getMangaByID(lol.get_id(), client);
                     }
@@ -177,17 +178,35 @@ export class Cover extends Attribute {
                 throw new Error("this cover has no relationships");
             }
         } catch (error) {
-            
+            if(typeof error == "string"){
+                throw new Error(error);
+            }else{
+                throw new Error("Unknown error", {
+                    cause : error
+                });
+            }
         }
     }
     // [ ] get the cover path 
     // [ ] {256, 512}
     public get_CoverImageOnline_thumbnail(size: 256 | 512): string {
-        return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")[0].get_id() + "/" + this.get_file_name() + "." + size + ".jpg");
+        const manga_relative = this.get_some_relationship("manga");
+        if(manga_relative.length > 0){
+            const manga = manga_relative[0];
+            return Upload.make_upload_url("covers/" + manga.get_id() + "/" + this.get_file_name() + "." + size + ".jpg");
+        }else{
+            throw new Error("No manga relative have been found");
+        }
     }
     // [ ] original
     public get_CoverImageOnline(): string {
-        return Upload.make_upload_url("covers/" + this.get_some_relationship("manga")![0].get_id() + "/" + this.get_file_name());
+        const manga_relative = this.get_some_relationship("manga");
+        if(manga_relative.length > 0){
+            const manga = manga_relative[0];
+            return Upload.make_upload_url("covers/" + manga.get_id() + "/" + this.get_file_name());
+        }else{
+            throw new Error("No manga relative have been found");
+        }
     }
     public async get_CoverImage_thumbnail_promise(size: 256 | 512, client?: Client): Promise<string> {
         try {
@@ -225,21 +244,20 @@ export class Cover extends Attribute {
             client
         }: CoverSearchType
     ): Promise<Collection<Cover>> {
-        const querys: any = {
-            limit: JSON.stringify(offset_Limits.get_limits()),
-            offset: JSON.stringify(offset_Limits.get_offset()),
-            "includes[]": (includes),
-            ...order?.render()
+        const querys = {
+            limit: offset_Limits.get_limits(),
+            offset: offset_Limits.get_offset(),
+            "includes[]": includes,
+            order,
+            ids,
+            uploaders,
+            manga : mangaIDs,
+            locales
         };
-        const getted: Response<any> = await Api_Request.get_methods("cover" + "?" +
-            serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" +
-            serialize((new Querry_list_builder<string>("uploaders", uploaders!)).build()) + "&" +
-            serialize((new Querry_list_builder<string>("manga", mangaIDs!)).build()) + "&" +
-            serialize(((new Querry_list_builder<string>("locales", locales!)).build()))
-            , {
-                query: querys
-            }, client);
-        const data: Array<any> = getted.data.data;
+        const getted: Response<GetCoverData> = await Api_Request.get_methods("cover" + "?" +
+            stringify(querys)
+        ,undefined, client);
+        const data: Array<StaCover> = getted.data.data;
         const mangaArray: Array<Cover> = new Array<Cover>(data.length);
         for (let index = 0; index < data.length; index++) {
             mangaArray[index] = Cover.build_withAny(data[index]);
@@ -256,7 +274,7 @@ export class Cover extends Attribute {
     }
     public static async getAOfflineCover(coverId: string, client?: Client): Promise<Cover> {
         if (await DesktopApi.ping(client) == true) {
-            const response: Response<any> = await DesktopApi.get_methods(`cover/${coverId}`, undefined, client);
+            const response: Response<CoverResponse> = await DesktopApi.get_methods(`cover/${coverId}`, undefined, client);
             return Cover.build_withAny(response.data.data);
         } else {
             throw new Error("The offline server isn't started");

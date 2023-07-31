@@ -5,7 +5,7 @@ import { stringify } from "qs";
 import { Api_Request } from "../internal/Api_Request";
 import { Lang, Languages, Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import DeskApiRequest from "../offline/DeskApiRequest";
-import { ChapterAttributes, ChapterVolumeAggregateData, GetChapterData, GetChapterIdData, Relationship, Chapter as StaChapter } from "../sta/data-contracts";
+import { ChapterAttributes, ChapterVolumeAggregateData, GetChapterData, GetChapterIdData, Relationship, ScanlationGroup, Chapter as StaChapter } from "../sta/data-contracts";
 import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
 import IsDownloadedResult from "./additonal_types/IsDownloadedResult";
 import { Aggregate } from "./Aggregate";
@@ -315,7 +315,7 @@ export class Chapter extends Attribute {
         }
     }
     public static async is_chapter_downloaded(chapterID: string, client?: Client): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             Chapter.getAOfflineChapter(chapterID, client).then(() => {
                 resolve(true);
             }).catch(() => {
@@ -658,7 +658,7 @@ export class Chapter_withAllIncludes extends Chapter {
 
         //        console.log("relationship builded")
         try {
-            const groups_any: Array<any> = Attribute.get_some_relationship(relationships, "scanlation_group");
+            const groups_any: Array<ScanlationGroup> = Attribute.get_some_relationship(relationships, "scanlation_group");
             const groups: Array<Group> = [];
             for (let index = 0; index < groups_any.length; index++) {
                 groups[index] = Group.build_wANY(groups_any[index]);

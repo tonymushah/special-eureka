@@ -2,8 +2,9 @@ import { Client, Response } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
-import { Manga, Manga_2, Manga_with_allRelationship } from "./Manga";
+import { Manga, Manga_with_allRelationship } from "./Manga";
 import { User } from "./User";
+import { CustomList, CustomListAttributes, CustomListResponse, Relationship } from "../sta/data-contracts";
 
 type Seasonal = {
     id : string
@@ -50,9 +51,9 @@ export class List extends Attribute{
         this.set_version(version);
         this.set_visibility(visibility);
     }
-    public static build_w_any(object: any): List{
-        const attributes : any = object.attributes;
-        const relationships: any = object.relationships;
+    public static build_w_any(object: CustomList): List{
+        const attributes : CustomListAttributes = object.attributes;
+        const relationships: Relationship[] = object.relationships;
         const instance : List = new List(
             object.id,
             attributes.name,
@@ -67,7 +68,7 @@ export class List extends Attribute{
         const manga_array: Array<Manga> = new Array<Manga>(manga_attributes.length);
         for (let index = 0; index < manga_attributes.length; index++) {
             const choosed = manga_attributes[index];
-            manga_array[index] = await Manga.getMangaByID(choosed.get_id(), client);
+            manga_array[index] = (await Manga.getMangaByID(choosed.get_id(), client)).manga;
         }
         this.set_manga_array(manga_array);
     }
@@ -91,11 +92,11 @@ export class List extends Attribute{
         return RelationshipsTypes.custom_list();
     }
     public static async getListByID(id: string, client?: Client): Promise<List>{
-        const response: Response<any> = await Api_Request.get_methods("list/" + id, undefined, client);
+        const response: Response<CustomListResponse> = await Api_Request.get_methods("list/" + id, undefined, client);
         return List.build_w_any(response.data.data);
     }
     public static async getListByID_includes_manga(id: string, client?: Client): Promise<List>{
-        const response: Response<any> = await Api_Request.get_methods("list/" + id, undefined, client);
+        const response: Response<CustomListResponse> = await Api_Request.get_methods("list/" + id, undefined, client);
         const list = List.build_w_any(response.data.data);
         const manga_ids = list.getMangaIDList();
         const newMangaOffset = new Offset_limits();
@@ -108,7 +109,7 @@ export class List extends Attribute{
         return list;
     }
 
-    public static async RgetListByID_includes_manga(id: string, client?: Client): Promise<Response<any>>{
+    public static async RgetListByID_includes_manga(id: string, client?: Client): Promise<Response<CustomListResponse>>{
         return await Api_Request.get_methods("list/" + id, {
             query : {
                 "includes[]" : "manga"
