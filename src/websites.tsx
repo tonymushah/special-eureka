@@ -5,7 +5,7 @@ import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f1071
 export interface WebSite {
     name: string,
     route: To,
-    icon: any,
+    icon: string,
     label: string,
     button_colorScheme? : ThemeTypings["colorSchemes"]
 }

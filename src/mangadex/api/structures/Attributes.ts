@@ -129,12 +129,12 @@ export class Attribute {
         return length;
     }
     public get_some_relationship(name: string): Array<Attribute> {
-        const returns: Array<Attribute> = new Array<Attribute>(this.get_some_relationshipLength(name));
+        const returns: Array<Attribute> = [];
         if (this.relationships != undefined) {
             for (let index = 0; index < this.relationships.length; index++) {
                 const to_use = this.relationships[index];
                 if (to_use.get_type().localeCompare(name) == 0) {
-                    returns[length] = to_use;
+                    returns.push(to_use);
                 }
             }
         }

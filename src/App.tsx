@@ -10,46 +10,50 @@ const FullscreenF11_ = React.lazy(() => import("@commons-res/components/Fullscre
 
 const FullscreenF11 = () => (
     <React.Suspense>
-        <FullscreenF11_/>
+        <FullscreenF11_ />
     </React.Suspense>
 );
+
+function OnError(error: Error) {
+    return (
+        <Chakra.Box
+            height="100vh"
+            width="full"
+        >
+            <Chakra.AbsoluteCenter>
+                <Chakra.Box textAlign="center">
+                    <Chakra.Heading>
+                        Error on loading the app
+                    </Chakra.Heading>
+
+                    <Chakra.Text>
+                        Error Details
+                    </Chakra.Text>
+
+                    <Chakra.Alert status="error">
+                        <Chakra.AlertIcon />
+
+                        <Chakra.AlertTitle>
+                            {error.name}
+                        </Chakra.AlertTitle>
+
+                        <Chakra.AlertDescription>
+                            {error.message}
+                        </Chakra.AlertDescription>
+                    </Chakra.Alert>
+                </Chakra.Box>
+            </Chakra.AbsoluteCenter>
+        </Chakra.Box>
+    );
+}
 
 export default function App() {
     return (
         <Chakra.Box
         >
-            <FullscreenF11/>
+            <FullscreenF11 />
             <TryCatch
-                catch={(error: Error) => (
-                    <Chakra.Box
-                        height="100vh"
-                        width="full"
-                    >
-                        <Chakra.AbsoluteCenter>
-                            <Chakra.Box textAlign="center">
-                                <Chakra.Heading>
-                                    Error on loading the app
-                                </Chakra.Heading>
-
-                                <Chakra.Text>
-                                    Error Details
-                                </Chakra.Text>
-
-                                <Chakra.Alert status="error">
-                                    <Chakra.AlertIcon />
-
-                                    <Chakra.AlertTitle>
-                                        {error.name}
-                                    </Chakra.AlertTitle>
-
-                                    <Chakra.AlertDescription>
-                                        {error.message}
-                                    </Chakra.AlertDescription>
-                                </Chakra.Alert>
-                            </Chakra.Box>
-                        </Chakra.AbsoluteCenter>
-                    </Chakra.Box>
-                )}
+                catch={OnError}
             >
 
                 <React.Suspense

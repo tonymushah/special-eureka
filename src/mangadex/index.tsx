@@ -25,13 +25,13 @@ export function getLogo() {
     return MangadexLogo;
 }
 
-const MangaPage = React.lazy(() => import("@mangadex/pages/manga/index"));
+//const MangaPage = React.lazy(() => import("@mangadex/pages/manga/index"));
 
-const Chapters_ = React.lazy(() => import("@mangadex/pages/manga/Chapters_"));
+//const Chapters_ = React.lazy(() => import("@mangadex/pages/manga/Chapters_"));
 
-const Covers_ = React.lazy(() => import("@mangadex/pages/manga/Covers_"));
+//const Covers_ = React.lazy(() => import("@mangadex/pages/manga/Covers_"));
 
-const Related_ = React.lazy(() => import("@mangadex/pages/manga/Related_"));
+//const Related_ = React.lazy(() => import("@mangadex/pages/manga/Related_"));
 
 const DownloadsLaoyut = React.lazy(() => import("@mangadex/pages/download/layout"));
 
@@ -39,7 +39,7 @@ const Download_Index_Page = React.lazy(() => import("@mangadex/pages/download"))
 
 const Chapter_Page = React.lazy(() => import("@mangadex/pages/chapter/Chapter_Page"));
 
-const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
+//const Home = React.lazy(() => import("@mangadex/pages/Home/Home"));
 
 const Chapter_Reading = React.lazy(() => import("@mangadex/pages/ChapterReadingMode"));
 
@@ -53,7 +53,7 @@ const Group_Page_Feeds = React.lazy(() => import("@mangadex/pages/groups/page/Fe
 
 const Group_Search = React.lazy(() => import("@mangadex/pages/groups/search"));
 
-const Random_Manga = React.lazy(() => import("@mangadex/pages/manga/Random"));
+//const Random_Manga = React.lazy(() => import("@mangadex/pages/manga/Random"));
 
 const RecentlyAdded = React.lazy(() => import("@mangadex/pages/titles/RecentlyAdded"));
 
@@ -65,7 +65,7 @@ const LatestUpdates = React.lazy(() => import("@mangadex/pages/titles/LatestUpda
 
 const RecentlyPopularPage = React.lazy(() => import("@mangadex/pages/titles/RecentlyPopular"));
 
-const MangadexLayout = React.lazy(() => import("@mangadex/pages/Layout"));
+//const MangadexLayout = React.lazy(() => import("@mangadex/pages/Layout"));
 
 const UserPage = React.lazy(() => import("@mangadex/pages/user/UserPage+Loader"));
 
@@ -119,21 +119,32 @@ export function Mangadex_suspense(props: React.PropsWithChildren) {
 
 const useMangadexRouter: RouteObject = {
     path: MangaDexPath,
-    element: (
-        <Mangadex_suspense>
-            <MangadexLayout />
-        </Mangadex_suspense>
-    ),
-    errorElement: (<ErrorELRouter />),
+    lazy: async () => {
+        const Layout = await import("@mangadex/pages/Layout");
+        return {
+            Component: Layout.default,
+            ErrorBoundary : MyErrorBounderies,
+            hasErrorBoundary : true  
+        };
+    },
     children: [
         // Home
         {
             index: true,
+            lazy: async () => {
+                const Home = await import("@mangadex/pages/Home/Home");
+                return {
+                    Component: Home.default,
+                    ErrorBoundary : MyErrorBounderies
+                };
+            },
+            /*
             element: (
                 <Mangadex_suspense>
                     <Home />
                 </Mangadex_suspense>
             ),
+            */
             errorElement: (<ErrorELRouter />),
         },
         // Manga
@@ -145,6 +156,14 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     errorElement: (<ErrorELRouter />),
+                    async lazy(){
+                        const MangaPage = await import("@mangadex/pages/manga/index");
+                        return {
+                            Component : MangaPage.default,
+                            ErrorBoundary : MyErrorBounderies,
+                        };
+                    },
+                    /*
                     element: (
                         <MyErrorBounderies>
                             <Mangadex_suspense>
@@ -152,54 +171,95 @@ const useMangadexRouter: RouteObject = {
                             </Mangadex_suspense>
                         </MyErrorBounderies>
                     ),
+                    */
                     children: [
                         // Top Chap
                         {
                             index: true,
+                            async lazy(){
+                                const Chapters_ = await import("@mangadex/pages/manga/Chapters_");
+                                return {
+                                    Component: Chapters_.default,
+                                    ErrorBoundary : MyErrorBounderies,
+                                    hasErrorBoundary : true  
+                                };
+                            },
+                            /*
                             element: (
                                 <MyErrorBounderies>
                                     <Mangadex_suspense>
                                         <Chapters_ />
                                     </Mangadex_suspense>
                                 </MyErrorBounderies>
-                            )
+                            ),*/
+                            
                         },
                         // Covers
                         {
                             path: "covers",
+                            async lazy(){
+                                const Covers_ = await import("@mangadex/pages/manga/Covers_");
+                                return {
+                                    Component : Covers_.default,
+                                    hasErrorBoundary : true,
+                                    ErrorBoundary : MyErrorBounderies
+                                };
+                            },
+                            /*
                             element: (
                                 <Mangadex_suspense>
                                     <Covers_ />
                                 </Mangadex_suspense>
                             )
+                            */
                         },
                         // Related
                         {
                             path: "related",
+                            async lazy(){
+                                const Related_ = await import("@mangadex/pages/manga/Related_");
+                                return {
+                                    Component : Related_.default,
+                                    hasErrorBoundary : true,
+                                    ErrorBoundary : MyErrorBounderies
+                                };
+                            },
+                            /*
                             element: (
                                 <Mangadex_suspense>
                                     <Related_ />
                                 </Mangadex_suspense>
                             )
+                            */
                         }
                     ]
                 },
                 // Random
                 {
                     path: "random",
-                    errorElement: (<ErrorELRouter />),
+                    async lazy() {
+                        const Random_Manga = await import("@mangadex/pages/manga/Random");
+                        return {
+                            hasErrorBoundary: true,
+                            Component : Random_Manga.default,
+                            ErrorBoundary : MyErrorBounderies
+                        };
+                    },
+                    /* 
                     element: (
                         <Mangadex_suspense>
                             <Random_Manga />
                         </Mangadex_suspense>
                     )
+                    */
                 }
             ]
         },
         // Chapter
         {
             path: "chapter",
-            errorElement: (<ErrorELRouter />),
+            hasErrorBoundary : true,
+            ErrorBoundary : MyErrorBounderies,
             children: [
                 // Chapter by ID
                 {
@@ -213,7 +273,6 @@ const useMangadexRouter: RouteObject = {
                         </MyErrorBounderies>
                     ),
                     children: [
-                        // Longstrip
                         {
                             index: true,
                             element: (
@@ -421,10 +480,10 @@ const useMangadexRouter: RouteObject = {
         },
         // Kuru
         {
-            path : "kuru",
-            element : (
+            path: "kuru",
+            element: (
                 <Mangadex_suspense>
-                    <Kuru_Credits/>
+                    <Kuru_Credits />
                 </Mangadex_suspense>
             )
         }

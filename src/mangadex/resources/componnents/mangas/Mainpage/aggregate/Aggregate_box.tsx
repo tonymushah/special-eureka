@@ -5,14 +5,51 @@ import { Aggregate } from "@mangadex/api/structures/Aggregate";
 import { Volume } from "@mangadex/api/structures/Volume";
 import { Volume_, Volume__reverse } from "./Volume";
 type Aggregate_boxProps = {
-    src: Aggregate
-    separator: number
+    src: Aggregate,
+    isReverse?: boolean,
+    separator: number,
     selected?: number
 }
 
 type Aggregate_boxState = {
     selected?: number,
     Chapters_parts: Array<Array<Volume>>
+}
+
+export function useSplitAggreateIntoPartsNumber({ src, separator } : {
+    src : Aggregate,
+    separator : number
+}){
+    return React.useMemo(() => {
+        if (src.get_count() % separator != 0) {
+            return Math.floor(src.get_count() / separator) + 1;
+        } else {
+            return Math.floor(src.get_count() / separator);
+        }
+    }, []);
+}
+export function useSpliceAggregate({ src, separator } : {
+    src : Aggregate,
+    separator : number
+}){
+    const parts = useSplitAggreateIntoPartsNumber({
+        src,
+        separator
+    });
+    return React.useMemo(() => {
+        const returns = [];
+        for (let index = 0; index < parts; index++) {
+            returns.push(src.get_volumes().slice(index * separator, (index + 1) * separator));
+        }        
+        return returns;
+    }, []);
+}
+
+export function Aggregate_box(props : Aggregate_boxProps){
+    const
+    const slices = React.useMemo(() => {} ,[
+
+    ]);
 }
 
 export class Aggregate_box extends React.Component<Aggregate_boxProps, Aggregate_boxState>{

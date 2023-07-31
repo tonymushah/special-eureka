@@ -1,12 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
 import { Aggregate } from "@mangadex/api/structures/Aggregate";
 import { Aggregate_box, Aggregate_box_reverse } from "../aggregate/Aggregate_box";
+import { atom, useAtom } from "jotai";
+
+const orderAtom = atom(true);
 
 export default function Aggregate_part(props: {
     src: Aggregate
 }) {
-    const [order, setOrder] = React.useState<boolean>(true);
+    const [order, setOrder] = useAtom(orderAtom);
     return (
         <Chakra.Box>
             <Chakra.Menu isLazy>

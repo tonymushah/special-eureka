@@ -4,6 +4,7 @@ import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
 import { ViteAliases } from "vite-aliases";
 import mdx from "@mdx-js/rollup";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
     clearScreen: false,
@@ -21,6 +22,7 @@ export default defineConfig({
         }),
         remarkRehypePlugin({
         }),
+        ViteImageOptimizer()
     ],
     envPrefix: ["VITE_", "TAURI_"],
     server: {

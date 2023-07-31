@@ -9,7 +9,7 @@
     },
     "package": {
         "productName": "Special-Eureka",
-        "version": "0.1.5"
+        "version": "0.1.6"
     },
     "tauri": {
         "allowlist": {
@@ -68,7 +68,7 @@
                 "all": true
             },
             "os": {
-                "all": false
+                "all": true
             },
             "shell": {
                 "all": false,

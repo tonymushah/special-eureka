@@ -156,10 +156,11 @@ export class Api_Request{
     }
     public static async ping(client? : Client): Promise<boolean>{
         try{
-            return (await Api_Request.get_methods("ping", {
+            return (await Api_Request.get_methods<"pong">("ping", {
                 "responseType" : ResponseType.Text
             }, client)).ok;
         }catch(e){
+            console.log(e);
             return false;
         }
     }

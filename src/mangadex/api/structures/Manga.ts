@@ -437,19 +437,17 @@ export class Manga extends Attribute {
             });
     }
     public async get_author(client?: Client): Promise<Array<Author>> {
-        const authors_length: number = this.get_some_relationshipLength("author");
-        const authors_: Array<Author> = new Array<Author>(authors_length);
         const authors_attributes: Array<Attribute> = this.get_some_relationship("author");
-        for (let index = 0; index < authors_length; index++) {
+        const authors_: Array<Author> = new Array<Author>(authors_attributes.length);
+        for (let index = 0; index < authors_attributes.length; index++) {
             authors_[index] = await Author.getAuthorById(authors_attributes[index].get_id(), client);
         }
         return authors_;
     }
     public async get_artist(client?: Client): Promise<Array<Author>> {
-        const authors_length: number = this.get_some_relationshipLength("artist");
-        const authors_: Array<Author> = new Array<Author>(authors_length);
         const authors_attributes: Array<Attribute> = this.get_some_relationship("artist");
-        for (let index = 0; index < authors_length; index++) {
+        const authors_: Array<Author> = new Array<Author>(authors_attributes.length);
+        for (let index = 0; index < authors_attributes.length; index++) {
             authors_[index] = await Author.getAuthorById(authors_attributes[index].get_id(), client);
         }
         return authors_;
@@ -1078,22 +1076,10 @@ export class Manga extends Attribute {
         }
     }
     public get_authors_id(): Array<string> {
-        const authors_length: number = this.get_some_relationshipLength("author");
-        const authors_: Array<string> = new Array<string>(authors_length);
-        const authors_attributes: Array<Attribute> = this.get_some_relationship("author");
-        for (let index = 0; index < authors_length; index++) {
-            authors_[index] = (authors_attributes[index].get_id());
-        }
-        return authors_;
+        return this.get_some_relationship("author").map((data) => data.get_id());
     }
     public get_artists_id(): Array<string> {
-        const authors_length: number = this.get_some_relationshipLength("artist");
-        const authors_: Array<string> = new Array<string>(authors_length);
-        const authors_attributes: Array<Attribute> = this.get_some_relationship("artist");
-        for (let index = 0; index < authors_length; index++) {
-            authors_[index] = (authors_attributes[index].get_id());
-        }
-        return authors_;
+        return this.get_some_relationship("artist").map((data) => data.get_id());
     }
     public async get_author_byID(author_id: string, client?: Client): Promise<Author> {
         const authors_ids = this.get_authors_id();

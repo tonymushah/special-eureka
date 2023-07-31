@@ -378,7 +378,7 @@ export class Chapter extends Attribute {
         }
     }
     public async get_translated_Lang(): Promise<Lang> {
-        return await (await Languages.initialize()).getLang_byTwo_letter(this.get_translatedLanguage());
+        return (await Languages.initialize()).getLang_byTwo_letter(this.get_translatedLanguage());
     }
     public get_manga_id(): string {
         return this.get_some_relationship("manga")[0].get_id();
@@ -765,5 +765,8 @@ export class Chapter_withAllIncludes extends Chapter {
             }
         }
         throw new Error("can't find your scanlation group in this chapter");
+    }
+    public get_manga_id(): string {
+        return this.manga.get_id();
     }
 }

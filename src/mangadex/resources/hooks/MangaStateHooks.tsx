@@ -213,22 +213,18 @@ export function get_manga_page_authors_artists(props: MangaPageProps) {
         const all_isSuccess_Artists = artistists.map<boolean>((value) => {
             return value.isSuccess;
         });
-        const is_allArtists_Success = all_isSuccess_Artists.includes(false) ? false : true;
+        const is_allArtists_Success = !all_isSuccess_Artists.includes(false);
         return is_allArtists_Success;
     }
     function is_Authors_finished(): boolean {
         const all_isSuccess_Authors = authors.map<boolean>((value) => {
             return value.isSuccess;
         });
-        const is_allAuthors_Success = all_isSuccess_Authors.includes(false) ? false : true;
+        const is_allAuthors_Success = !all_isSuccess_Authors.includes(false);
         return is_allAuthors_Success;
     }
     function is_Author_artists_finished(): boolean {
-        if (is_Authors_finished() == true && is_Artists_finished() == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return (is_Authors_finished() == true && is_Artists_finished() == true);
     }
     return {
         authors,
