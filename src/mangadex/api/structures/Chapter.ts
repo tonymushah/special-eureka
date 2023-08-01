@@ -30,7 +30,7 @@ export type ChapterDowloadResult = {
 }
 
 export class Chapter extends Attribute {
-    private title!: string;
+    private title?: string;
     private volume!: string;
     private pages!: number;
     private translatedLanguage!: string;
@@ -41,7 +41,7 @@ export class Chapter extends Attribute {
     private publishAt!: string;
     private readableAt!: string;
     private chapNo!: number;
-    public set_title(title: string) {
+    public set_title(title?: string) {
         this.title = title;
     }
     public set_volume(volume: string) {
@@ -78,7 +78,7 @@ export class Chapter extends Attribute {
     public get_chapter(): number {
         return this.chapNo;
     }
-    public get_title(): string {
+    public get_title(): string | undefined {
         return this.title;
     }
     public get_volume(): string {
@@ -110,7 +110,7 @@ export class Chapter extends Attribute {
     }
     public constructor(
         id: string,
-        title: string,
+        title: string | undefined,
         pages: number,
         chapter: number,
         createdAt: string,
@@ -130,7 +130,7 @@ export class Chapter extends Attribute {
         const relationships: Relationship[] = object.relationships;
         const instance: Chapter = new Chapter(
             object.id,
-            attributes.title ?? "No title",
+            attributes.title ?? undefined,
             attributes.pages,
             Number.parseInt(attributes.chapter ?? "-1") ?? -1,
             attributes.createdAt,
@@ -621,7 +621,7 @@ export class Chapter_withAllIncludes extends Chapter {
     }
     public constructor(
         id: string,
-        title: string,
+        title: string | undefined,
         pages: number,
         chapter: number,
         createdAt: string,
@@ -643,7 +643,7 @@ export class Chapter_withAllIncludes extends Chapter {
         const relationships: Relationship[] = object.relationships;
         const instance: Chapter_withAllIncludes = new Chapter_withAllIncludes(
             object.id,
-            attributes.title ?? "No title",
+            attributes.title ?? undefined,
             attributes.pages,
             Number.parseInt(attributes.chapter ?? "-1") ?? -1,
             attributes.createdAt,
@@ -655,7 +655,12 @@ export class Chapter_withAllIncludes extends Chapter {
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);
         instance.set_volume(attributes.volume ?? "");
+        try {
+            instance.set_relationships_Wany(relationships);
+            // eslint-disable-next-line no-empty
+        } catch (error) {
 
+        }
         //        console.log("relationship builded")
         try {
             const groups_any: Array<ScanlationGroup> = Attribute.get_some_relationship(relationships, "scanlation_group");
@@ -768,5 +773,8 @@ export class Chapter_withAllIncludes extends Chapter {
     }
     public get_manga_id(): string {
         return this.manga.get_id();
+    }
+    public get_user_id(): string {
+        return this.uploader.get_id();
     }
 }

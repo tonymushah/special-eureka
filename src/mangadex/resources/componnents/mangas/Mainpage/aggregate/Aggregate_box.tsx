@@ -20,7 +20,7 @@ export function useSplitAggreateIntoPartsNumber({ src, separator } : {
         } else {
             return Math.floor(src.get_count() / separator);
         }
-    }, []);
+    }, [src, separator]);
 }
 export function useSpliceAggregate({ src, separator } : {
     src : Aggregate,
@@ -36,7 +36,7 @@ export function useSpliceAggregate({ src, separator } : {
             returns.push(src.get_volumes().slice(index * separator, (index + 1) * separator));
         }        
         return returns;
-    }, []);
+    }, [src, separator]);
 }
 
 export function Aggregate_box(props : Aggregate_boxProps){

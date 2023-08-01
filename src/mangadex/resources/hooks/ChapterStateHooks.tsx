@@ -108,7 +108,8 @@ export function get_chapter_user_uploader(props: {
     const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader(client);
     }, {
-        staleTime: Infinity
+        staleTime: Infinity,
+        retry : 1
     });
     return {
         user_query_key,

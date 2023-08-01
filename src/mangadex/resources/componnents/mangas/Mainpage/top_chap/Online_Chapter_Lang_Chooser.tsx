@@ -10,7 +10,7 @@ const Manga_Page_Aggregate = React.lazy(() => import("./Manga_Page_Aggregate"));
 
 export default function Online_Chapter_Lang_Chooser(props: MangaPageProps) {
     const { query } = useLanguageUserOption();
-    if (query.isLoading == true && query.isRefetching) {
+    if (query.isLoading) {
         return (
             <Chakra.Box m={2} bg="inherit">
                 <Loading/>

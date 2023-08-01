@@ -14,53 +14,44 @@ export function AuthorButton(props: {
         return (
             <Link to={MangaDexPath + "/author/" + props.src.get_id()}>
                 <Button style={{
-                fontWeight: "800"
-            }} colorScheme={"blackAlpha"} variant={"solid"} size="sm" >
+                    fontWeight: "800"
+                }} colorScheme={"blackAlpha"} variant={"solid"} size="sm" >
                     {props.src.get_Name()}
                 </Button>
             </Link>
         );
     } else {
-        return (<React.Fragment/>);
+        return (<React.Fragment />);
     }
 
 }
 type AuthorColProps = {
-    src: Array<Author>,
+    src?: Array<Author | undefined>,
     title: "Authors" | "Artistists";
 }
-export class AuthorCol extends React.Component<AuthorColProps>{
-    private to_use: Array<Author>;
-    private title: string;
-    constructor(props: AuthorColProps) {
-        super(props);
-        this.to_use = this.props.src;
-        this.title = this.props.title;
-    }
-    public build_AuthorButtons(): Array<React.ReactNode> {
-        const returns: Array<React.ReactNode> = new Array<React.ReactNode>(this.to_use.length);
-        for (let index = 0; index < this.to_use.length; index++) {
-            returns[index] = (<AuthorButton src={this.to_use[index]} />);
-        }
-        return returns;
-    }
-    render(): React.ReactNode {
-        const tagButtons: Array<React.ReactNode> = this.build_AuthorButtons();
-        if (tagButtons.length > 0) {
-            return (
-                <VStack display={"block"} >
-                    <Heading size={"md"} fontFamily={"inherit"}>{make_first_UpperCare(this.title)}</Heading>
-                    <Wrap>
-                        {tagButtons.map((element, index) => (
-                            <WrapItem key={`${this.title}-${index}`}>{
-                                element
-                            }</WrapItem>
-                        ))}
-                    </Wrap>
-                </VStack>
-            );
-        } else {
-            return (<React.Fragment/>);
-        }
+
+export function AuthorCol(props: AuthorColProps) {
+    if ((props.src ?? [] ).length > 0) {
+        return (
+            <VStack display={"block"} >
+                <Heading size={"md"} fontFamily={"inherit"}>{make_first_UpperCare(props.title)}</Heading>
+                <Wrap>
+                    {(props.src ?? []).map((element, index) => (
+                        
+                        <WrapItem key={`${props.title}-${index}`}>
+                            {
+                                element ? (
+                                    <AuthorButton src={element} />
+                                ) : (
+                                    <React.Fragment/>
+                                )
+                            }
+                        </WrapItem>
+                    ))}
+                </Wrap>
+            </VStack>
+        );
+    } else {
+        return (<React.Fragment />);
     }
 }

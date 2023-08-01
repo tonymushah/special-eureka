@@ -5,13 +5,13 @@ import { getMangaDexPath } from "@mangadex/index";
 import { Link } from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
 
-function TitleError(){
+function TitleError() {
     const { chapter } = usePropsChapter();
     return (
         <React.Fragment>
-                    Chapter {chapter.get_chapter()} {
-                        chapter.get_title() == null || chapter.get_title() == "" ? (<React.Fragment/>) : (<> - {chapter.get_title()}</>)
-                    }</React.Fragment>
+            Chapter {chapter.get_chapter()} {
+                chapter.get_title() == null || chapter.get_title() == undefined || chapter.get_title() == "" ? (<React.Fragment />) : (<React.Fragment> - {chapter.get_title()}</React.Fragment>)
+            }</React.Fragment>
     );
 }
 
@@ -27,7 +27,7 @@ export default function Title() {
                 to={MangaDexPath + "/chapter/" + chapter.get_id()}
             >
                 Chapter {chapter.get_chapter()} {
-                    chapter.get_title() == null || chapter.get_title() == "" ? (<React.Fragment/>) : (<React.Fragment> - {chapter.get_title()}</React.Fragment>)
+                    chapter.get_title() == null || chapter.get_title() == undefined || chapter.get_title() == "" ? (<React.Fragment />) : (<React.Fragment> - {chapter.get_title()}</React.Fragment>)
                 }
             </Link>
         </TryCatch>

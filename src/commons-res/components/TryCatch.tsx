@@ -43,6 +43,7 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
         return { hasError: true, error: error };
     }
     componentDidCatch(error: Error, _errorInfo: React.ErrorInfo): void {
+        console.error(error, _errorInfo);
         trackEvent("special-eureka-error", {
             "location": window.location.href,
             "error-message": error.message,

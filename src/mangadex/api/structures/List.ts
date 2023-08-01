@@ -118,7 +118,6 @@ export class List extends Attribute {
     }
     public getMangaIDList(): Array<string> {
         const mangas_relationships: Array<Attribute> = this.get_some_relationship("manga");
-        console.log(mangas_relationships);
         const returns: Array<string> = [];
         if (mangas_relationships.length != 0) {
             for (let index = 0; index < mangas_relationships.length; index++) {

@@ -1,9 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import { Aggregate } from "@mangadex/api/structures/Aggregate";
 import { Aggregate_box } from "../aggregate/Aggregate_box";
-import { atom, useAtom } from "jotai";
-
-const orderAtom = atom(true);
+import { useAtom, useAtomValue } from "jotai";
+import { orderAtom } from "./order.atom";
 
 function AggregateOptions() {
     const [order, setOrder] = useAtom(orderAtom);
@@ -35,7 +34,7 @@ function AggregateOptions() {
 export default function Aggregate_part(props: {
     src: Aggregate
 }) {
-    const [order,] = useAtom(orderAtom);
+    const order = useAtomValue(orderAtom);
     return (
         <Chakra.Box>
             <AggregateOptions/>
