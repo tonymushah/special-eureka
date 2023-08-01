@@ -40,14 +40,6 @@ export default function IsPingable(props: {
                 }
             </React.Fragment>
         );
-    } else if (query.isRefetching == true) {
-        return (
-            <React.Fragment>
-                {
-                    props.onLoading
-                }
-            </React.Fragment>
-        );
     } else if (query.isError == true) {
         return (
             <context.Consumer>
