@@ -9,6 +9,9 @@ export async function toggleFullscreen() {
 }
 
 async function initF11ShortCut() {
+    if(await globalShortcut.isRegistered(FullScreenKey)){
+        await globalShortcut.unregister(FullScreenKey);
+    }
     await globalShortcut.register(FullScreenKey, () => {
         toggleFullscreen().catch((e) => {
             console.error(e);

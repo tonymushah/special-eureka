@@ -26,3 +26,6 @@ data
 settings
 .eslintcache
 eslint-results.md
+
+# Sentry Auth Token
+.env.sentry-build-plugin

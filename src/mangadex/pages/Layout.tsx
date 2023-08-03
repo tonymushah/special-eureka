@@ -1,12 +1,12 @@
 import { ProSidebarProvider } from "react-pro-sidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
 import React from "react";
 import { Mangadex_suspense, trackEvent } from "@mangadex/index";
 import ServerAutoStartLoader from "@mangadex/resources/componnents/loaders/ServerAutoStart";
 import UserOptionProvider from "../resources/componnents/userOption/UserOptionProvider";
 import { QueryClient } from "@tanstack/react-query";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, Transition, Variants, motion } from "framer-motion";
 
 const Content = React.lazy(() => import("@mangadex/resources/componnents/SideBar"));
 
@@ -21,13 +21,30 @@ const RegisterHertaHotKeys = React.lazy(() => import("@mangadex/resources/compon
 function Loader() {
     return (
         <React.Fragment>
-            <RegisterHertaHotKeys/>
+            <RegisterHertaHotKeys />
             <ServerAutoStartLoader />
             <ChapterFullScreenModeIniter />
             <UserOptionModal />
         </React.Fragment>
     );
 }
+const pageVariants : Variants = {
+    initial: {
+        opacity: 0
+    },
+    in: {
+        opacity: 1
+    },
+    out: {
+        opacity: 0
+    }
+};
+
+const pageTransition : Transition = {
+    type: "tween",
+    ease: "easeInOut",
+    duration: 0.3
+};
 
 function Providers({ children }: React.PropsWithChildren) {
     return (
@@ -44,6 +61,24 @@ function Providers({ children }: React.PropsWithChildren) {
                 </Mangadex_suspense>
             </ProSidebarProvider>
         </UserOptionProvider>
+    );
+}
+
+function AnimationLayout() {
+    const { pathname } = useLocation();
+    return (
+        <motion.div
+            key={pathname}
+            initial="initial"
+            animate={"in"}
+            exit={"out"}
+            variants={pageVariants}
+            transition={pageTransition}
+        >
+            <Mangadex_suspense>
+                <Outlet/>
+            </Mangadex_suspense>
+        </motion.div>
     );
 }
 
@@ -74,7 +109,7 @@ export default function MangadexLayout() {
                     }
                 },
                 "networkMode": "always",
-                cacheTime : 1000 * 60 * 3
+                cacheTime: 1000 * 60 * 3
             },
             "mutations": {
                 "networkMode": "always"
@@ -88,7 +123,7 @@ export default function MangadexLayout() {
                 <BasicWebsitesRessources queryClient={queryClient}>
                     <Loader />
                     <Providers>
-                        <Outlet />
+                        <AnimationLayout/>
                     </Providers>
                 </BasicWebsitesRessources>
             </Mangadex_suspense>

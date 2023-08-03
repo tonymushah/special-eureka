@@ -1,16 +1,18 @@
+import { Client } from "@tauri-apps/api/http";
+import { stringify } from "qs";
 import { Api_Request } from "../internal/Api_Request";
+import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
+import { AuthorAttributes, AuthorResponse, GetAuthorData, LocalizedString, Relationship, Author as StaAuthor } from "../sta/data-contracts";
 import { Attribute } from "./Attributes";
-import { Manga } from "./Manga";
-import { Client, Response } from "@tauri-apps/api/http";
-import { Offset_limits, Order, Querry_list_builder, RelationshipsTypes, serialize } from "../internal/Utils";
 import { Collection } from "./Collection";
-import AuthorSearchType from "./SearchType/Author";
 import AuthorCollection from "./CollectionTypes/AuthorCollection";
+import { Manga } from "./Manga";
+import AuthorSearchType from "./SearchType/Author";
 
 export class Author extends Attribute {
     private name!: string;
     private imageUrl!: string | null;
-    private biography: any;
+    private biography!: LocalizedString;
     twitter!: string | null;
     pixiv!: string | null;
     melonBook!: string | null;
@@ -28,7 +30,7 @@ export class Author extends Attribute {
     public set_Name(name: string) {
         this.name = name;
     }
-    public set_biography(biography: any) {
+    public set_biography(biography: LocalizedString) {
         this.biography = biography;
     }
     public set_imageUrl(imageUrl: string | null) {
@@ -37,7 +39,7 @@ export class Author extends Attribute {
     public set_works(works: Collection<Manga>) {
         this.works = works;
     }
-    public get_biography(): any {
+    public get_biography(): LocalizedString {
         return this.biography;
     }
     public get_Name(): string {
@@ -65,9 +67,9 @@ export class Author extends Attribute {
         this.set_Name(name);
         this.set_imageUrl(imageUrl);
     }
-    public static build_wANY(object: any): Author {
-        const attributes: any = object.attributes;
-        const relationships: any = object.relationships;
+    public static build_wANY(object: StaAuthor): Author {
+        const attributes: AuthorAttributes = object.attributes;
+        const relationships: Relationship[] = object.relationships;
         const instance: Author = new Author(
             object.id,
             attributes.name,
@@ -89,6 +91,7 @@ export class Author extends Attribute {
         instance.set_biography(attributes.biography);
         try {
             instance.set_relationships_Wany(relationships);
+        // eslint-disable-next-line no-empty
         } catch (error) {
         }
         return instance;
@@ -189,11 +192,17 @@ export class Author extends Attribute {
     }
     public static async getAuthorById(id: string, client?: Client): Promise<Author> {
         try {
-            const getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + id, undefined, client);
+            const getted = await Api_Request.get_methods<AuthorResponse>(Author.get_request_a() + id, undefined, client);
             const instance: Author = Author.build_wANY(getted.data.data);
             return instance;
         } catch (error) {
+            if(typeof error == "string"){
             throw new Error(error);
+            }else{
+                throw new Error("Unknown Error ;(", {
+                    cause : error
+                });
+            }
         }
     }
     public static async searchAuthor(
@@ -206,19 +215,18 @@ export class Author extends Attribute {
             client
         }: AuthorSearchType
     ): Promise<Collection<Author>> {
-        const querys: any = {
-            limit: JSON.stringify(offset_Limits.get_limits()),
-            offset: JSON.stringify(offset_Limits.get_offset()),
-            name: (name),
-            ...order?.render(),
+        const querys = {
+            limit: offset_Limits.get_limits(),
+            offset: offset_Limits.get_offset(),
+            name: name,
+            order,
+            ids,
+            includes
         };
-        const getted: Response<any> = await Api_Request.get_methods(Author.get_request_a() + "?" +
-            serialize((new Querry_list_builder<string>("ids", ids!)).build()) + "&" +
-            serialize((new Querry_list_builder<string>("includes", includes!)).build())
-            , {
-                query: querys
-            }, client);
-        const data: Array<any> = getted.data.data;
+        const getted = await Api_Request.get_methods<GetAuthorData>(Author.get_request_a() + "?" +
+            stringify(querys)
+        , undefined, client);
+        const data = getted.data.data;
         const authorArray: Array<Author> = new Array<Author>(data.length);
         for (let index = 0; index < data.length; index++) {
             authorArray[index] = Author.build_wANY(data[index]);

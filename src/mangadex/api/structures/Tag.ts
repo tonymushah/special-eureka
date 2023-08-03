@@ -3,41 +3,42 @@ import { RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
 import { Api_Request } from "../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
+import { GetMangaTagData, LocalizedString, Tag as StaTag } from "../sta/data-contracts";
 
 
 export class Tag extends Attribute {
-    private name: any;
-    private description!: Array<any> | null;
+    private name!: LocalizedString;
+    private description!: LocalizedString;
     private group!: string;
     // [x] set for all args
-    public set_name(name: any) {
+    public set_name(name: LocalizedString) {
         this.name = name;
     }
-    public set_description(description: Array<any> | null) {
+    public set_description(description: LocalizedString) {
         this.description = description;
     }
     public set_group(group: string) {
         this.group = group;
     }
     // [x] set for all args
-    public get_name(): any {
+    public get_name(): LocalizedString {
         return this.name;
     }
-    public get_description(): Array<any> | null {
+    public get_description(): LocalizedString {
         return this.description;
     }
     public get_group(): string {
         return this.group;
     }
     // [x] default constructor
-    public constructor(id: string, name: any, description: Array<any>, group: string) {
+    public constructor(id: string, name: LocalizedString, description: LocalizedString, group: string) {
         super(id, "tag");
         this.set_name(name);
         this.set_group(group);
         this.set_description(description);
     }
     // [ ] constructor with the object id and type
-    public static build_withAny(object: any): Tag {
+    public static build_withAny(object: StaTag): Tag {
         const attributes = object.attributes;
         const relationship = object.relationships;
         const instance: Tag = new Tag(object.id, attributes.name, attributes.description, attributes.group);
@@ -53,9 +54,9 @@ export class Tag extends Attribute {
         return RelationshipsTypes.tag();
     }
     public static async get_all_tag(client: Client): Promise<Array<Tag>> {
-        const result: Response<any> = (await Api_Request.get_methods("manga/tag", undefined, client));
+        const result: Response<GetMangaTagData> = (await Api_Request.get_methods("manga/tag", undefined, client));
         const data: Array<Tag> = [];
-        const result_data: Array<any> = result.data.data;
+        const result_data: Array<StaTag> = result.data.data;
         result_data.forEach(element => {
             data.push(Tag.build_withAny(element));
         });

@@ -12,12 +12,12 @@ export function useMangaDownload(props: {
 }) {
     const client = useHTTPClient();
     const toast = useChakraToast({
-        id : `manga-download-${props.mangaID}`,
+        id: `manga-download-${props.mangaID}`,
         position: "bottom-right",
         duration: 9000
     });
     const manga_query = get_manga_byId({
-        mangaID : props.mangaID
+        mangaID: props.mangaID
     });
     const key = ["mdx", "manga", props.mangaID, "mutation", "download"];
     const query = useQuery(key, () => {
@@ -31,7 +31,7 @@ export function useMangaDownload(props: {
         onSuccess: (manga) => {
             let title = "";
             if (manga.get_title().en == null) {
-                title = new Alt_title(manga.get_alt_title()).get_quicklang()!;
+                title = new Alt_title(manga.get_alt_title()).get_quicklang() ?? manga.get_id();
             } else {
                 title = manga.get_title().en;
             }
@@ -62,12 +62,12 @@ export function useMangaDelete(props: {
 }) {
     const client = useHTTPClient();
     const toast = useChakraToast({
-        id : `mdx-mutation-manga-${props.mangaID}-delete`,
+        id: `mdx-mutation-manga-${props.mangaID}-delete`,
         position: "bottom-right",
         duration: 9000
     });
     const manga_query = get_manga_byId({
-        mangaID : props.mangaID
+        mangaID: props.mangaID
     });
     const key = ["mdx", "manga", props.mangaID, "mutation", "delete"];
     const query = useQuery(key, () => {
@@ -86,7 +86,7 @@ export function useMangaDelete(props: {
             });
             manga_query.query.refetch();
         },
-        onError(error: any) {
+        onError(error) {
             toast({
                 title: "Error on deleting manga",
                 status: "error",
@@ -213,22 +213,18 @@ export function get_manga_page_authors_artists(props: MangaPageProps) {
         const all_isSuccess_Artists = artistists.map<boolean>((value) => {
             return value.isSuccess;
         });
-        const is_allArtists_Success = all_isSuccess_Artists.includes(false) ? false : true;
+        const is_allArtists_Success = !all_isSuccess_Artists.includes(false);
         return is_allArtists_Success;
     }
     function is_Authors_finished(): boolean {
         const all_isSuccess_Authors = authors.map<boolean>((value) => {
             return value.isSuccess;
         });
-        const is_allAuthors_Success = all_isSuccess_Authors.includes(false) ? false : true;
+        const is_allAuthors_Success = !all_isSuccess_Authors.includes(false);
         return is_allAuthors_Success;
     }
     function is_Author_artists_finished(): boolean {
-        if (is_Authors_finished() == true && is_Artists_finished() == true) {
-            return true;
-        } else {
-            return false;
-        }
+        return (is_Authors_finished() == true && is_Artists_finished() == true);
     }
     return {
         authors,
@@ -268,7 +264,7 @@ export function get_manga_page_cover_art_image(props: {
     const client = useHTTPClient();
     const query_key = ["mdx", "manga", props.src.get_id(), "cover-art", "image"];
     const queryClient = useQueryClient();
-    const query = useQuery<string>(query_key, async () => {
+    const query = useQuery<string | undefined>(query_key, async () => {
         let data: Cover | undefined = undefined;
         try {
             const cover_id = props.src.get_cover_art_id();
@@ -286,12 +282,12 @@ export function get_manga_page_cover_art_image(props: {
         }
         if (props.isThumbail == true) {
             if (props.scale == 512) {
-                return await data!.get_CoverImage_thumbnail_promise(512, client);
+                return await data?.get_CoverImage_thumbnail_promise(512, client);
             } else {
-                return await data!.get_CoverImage_thumbnail_promise(256, client);
+                return await data?.get_CoverImage_thumbnail_promise(256, client);
             }
         } else {
-            return await data!.get_CoverImage_promise(client);
+            return await data?.get_CoverImage_promise(client);
         }
     });
     return {

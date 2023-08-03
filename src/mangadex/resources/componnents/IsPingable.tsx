@@ -2,6 +2,7 @@ import { UseQueryResult } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
 import usePingQuery from "../hooks/Ping";
+import { globalShortcut } from "@tauri-apps/api";
 
 
 export default function IsPingable(props: {
@@ -13,6 +14,23 @@ export default function IsPingable(props: {
     const { query } = usePingQuery({
         client: props.client
     });
+    const register = React.useCallback(async () => {
+        if(await globalShortcut.isRegistered("F5")){
+            await globalShortcut.unregister("F5");
+        }
+        await globalShortcut.register("F5", () => {
+            query.refetch();
+        });
+    }, []);
+    const unregister = React.useCallback(async () => {
+        await globalShortcut.unregister("F5");
+    }, []);
+    React.useEffect(() => {
+        register();
+        return () => {
+            unregister();
+        };
+    }, []);
     const context = React.createContext(query);
     if (query.isSuccess == true) {
         if (query.data == true) {
@@ -33,14 +51,6 @@ export default function IsPingable(props: {
             );
         }
     } else if (query.isLoading == true) {
-        return (
-            <React.Fragment>
-                {
-                    props.onLoading
-                }
-            </React.Fragment>
-        );
-    } else if (query.isRefetching == true) {
         return (
             <React.Fragment>
                 {

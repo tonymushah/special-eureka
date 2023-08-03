@@ -15,6 +15,5 @@ export * from "./utils/Lang";
 export * from "./utils/Languages";
 export * from "./utils/Alt_Titles";
 export * from "./utils/MgDate";
-export * from "./utils/Query_List_builder";
 export * from "./utils/functions/index";
 export * from "./utils/Lang_Data";

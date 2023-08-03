@@ -2,11 +2,9 @@ import { Alert, AlertDescription, AlertIcon, AlertTitle, Heading, Text } from "@
 import TryCatch from "@commons-res/components/TryCatch";
 import React from "react";
 
-export default function MyErrorBounderies(props: React.PropsWithChildren) {
+function OnError(e : Error){
     return (
-        <TryCatch
-            catch={(e: Error) => (
-                <Alert
+        <Alert
                     status="error"
                     variant='subtle'
                     flexDirection='column'
@@ -30,7 +28,13 @@ export default function MyErrorBounderies(props: React.PropsWithChildren) {
                         </Text>
                     </AlertDescription>
                 </Alert>
-            )}
+    );
+}
+
+export default function MyErrorBounderies(props: React.PropsWithChildren) {
+    return (
+        <TryCatch
+            catch={OnError}
         >
             {
                 props.children

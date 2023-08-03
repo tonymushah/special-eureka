@@ -1,27 +1,28 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
 import { ViteAliases } from "vite-aliases";
 import mdx from "@mdx-js/rollup";
+import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
     clearScreen: false,
-    plugins: [
-        { enforce: "pre", ...mdx() },
-        //ReactInspector(),
-        //progress(),
-        ViteAliases({
-            "dir": "src",
-            useConfig: true,
-            useTypescript: true
-        }),
-        react({
-            "tsDecorators": true
-        }),
-        remarkRehypePlugin({
-        }),
-    ],
+    plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
+    //progress(),
+    ViteAliases({
+        "dir": "src",
+        useConfig: true,
+        useTypescript: true
+    }), react({
+        "tsDecorators": true
+    }), remarkRehypePlugin({
+    }), ViteImageOptimizer(),
+    sentryVitePlugin({
+        org: "tony-mushah",
+        project: "special-eureka"
+    })],
     envPrefix: ["VITE_", "TAURI_"],
     server: {
         port: 9305,

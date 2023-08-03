@@ -31,6 +31,7 @@ export default function CoverImage(props: {
         } else {
             return (
                 <Chakra.Image
+                    key={props.src.get_id()}
                     src={cover_image_query.data}
                     fallbackSrc={Mangadex_placeHolder}
                     {...props.image_props}
@@ -51,6 +52,7 @@ export default function CoverImage(props: {
         } else {
             return (
                 <Chakra.Image
+                    key={props.src.get_id()}
                     src={Mangadex_cover_not_found}
                     {...props.image_props}
                 />
@@ -68,6 +70,7 @@ export default function CoverImage(props: {
     } else {
         return (
             <Chakra.Image
+                key={props.src.get_id()}
                 src={Mangadex_placeHolder}
                 {...props.image_props}
             />

@@ -24,7 +24,7 @@ export default function Manga_Page_Aggregate(props: {
     const { query } = get_aggregate_query({
         aggregate_options: aggregate_list_option
     });
-    if (query.isRefetching == true && query.isLoading) {
+    if (query.isRefetching && query.isLoading) {
         return (
             <Chakra.Box m={2} bg="inherit">
                 <Loading/>
