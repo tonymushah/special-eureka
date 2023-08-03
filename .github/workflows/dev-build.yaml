@@ -6,6 +6,8 @@ on:
             - dev-0.1.6
         paths-ignore:
             - "src-tauri/examples/**"
+env:
+    SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 jobs:
     test-tauri:
         strategy:

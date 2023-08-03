@@ -43,7 +43,7 @@ export function sendBreadcrumbToRust(
  */
 export const defaultOptions: BrowserOptions = {
   // We don't send from the browser but a DSN is required for the SDK to start
-  dsn: "https://123456@dummy.dsn/0",
+  dsn: "https://9ded544d4e5945459c62371ec4177585@o4505556825473024.ingest.sentry.io/4505556830322688",
   // We want to track app sessions rather than browser sessions
   autoSessionTracking: false,
   beforeSend: sendEventToRust,

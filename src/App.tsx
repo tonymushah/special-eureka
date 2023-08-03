@@ -73,13 +73,10 @@ export default function App() {
                     }
                 >
                     <Router />
+                    <Close_splashscreen />
                 </React.Suspense>
 
             </TryCatch>
-
-            <React.Suspense>
-                <Close_splashscreen />
-            </React.Suspense>
         </Chakra.Box>
     );
 }

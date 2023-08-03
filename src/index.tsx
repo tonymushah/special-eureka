@@ -1,9 +1,11 @@
 import "@commons-res/fonts";
-import "@commons-res/sentry/inject";
+import { init_sentry } from "@commons-res/sentry/inject";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider, Box, Spinner, AbsoluteCenter } from "@chakra-ui/react";
 import theme from "./theme";
+
+init_sentry();
 
 // TODO Add custom window decoration 
 // import BoxDecoration from "@commons-res/components/BoxDecoration";

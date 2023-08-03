@@ -122,6 +122,7 @@
     "@sentry/browser": "^7.61.0",
     "@sentry/react": "^7.61.0",
     "@sentry/types": "^7.61.0",
+    "@sentry/vite-plugin": "^2.5.0",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.29.19",
     "@tauri-apps/api": "^1.4.0",
