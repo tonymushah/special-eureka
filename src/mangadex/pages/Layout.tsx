@@ -6,7 +6,7 @@ import { Mangadex_suspense, trackEvent } from "@mangadex/index";
 import ServerAutoStartLoader from "@mangadex/resources/componnents/loaders/ServerAutoStart";
 import UserOptionProvider from "../resources/componnents/userOption/UserOptionProvider";
 import { QueryClient } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, Transition, Variants, motion } from "framer-motion";
 
 const Content = React.lazy(() => import("@mangadex/resources/componnents/SideBar"));
 
@@ -28,7 +28,7 @@ function Loader() {
         </React.Fragment>
     );
 }
-const pageVariants = {
+const pageVariants : Variants = {
     initial: {
         opacity: 0
     },
@@ -40,10 +40,10 @@ const pageVariants = {
     }
 };
 
-const pageTransition = {
+const pageTransition : Transition = {
     type: "tween",
-    ease: "linear",
-    duration: 0.5
+    ease: "easeInOut",
+    duration: 0.3
 };
 
 function Providers({ children }: React.PropsWithChildren) {
@@ -70,11 +70,14 @@ function AnimationLayout() {
         <motion.div
             key={pathname}
             initial="initial"
-            animate="in"
+            animate={"in"}
+            exit={"out"}
             variants={pageVariants}
             transition={pageTransition}
         >
-            <Outlet/>
+            <Mangadex_suspense>
+                <Outlet/>
+            </Mangadex_suspense>
         </motion.div>
     );
 }

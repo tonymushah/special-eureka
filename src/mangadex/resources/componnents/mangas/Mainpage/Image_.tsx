@@ -9,14 +9,15 @@ type Cover_Image_Props = {
     id? : string,
     alt?: string,
     fallbackElement? : string,
-    fallbackImage? : string
+    fallbackImage? : string,
+    key? : string
 }
 
 export function Cover_Image_(props : Cover_Image_Props){
     const [ visible, setVisible ] = React.useState(false);
     return (
         <Card id={props.id}>
-            <Image objectFit={"cover"} fallbackSrc={props.fallbackImage} borderRadius={15} onClick={() => { setVisible(true); } } src={props.src}/>
+            <Image key={props.key} objectFit={"cover"} fallbackSrc={props.fallbackImage} borderRadius={15} onClick={() => { setVisible(true); } } src={props.src}/>
             <Viewer
                 visible={visible}
                 onClose={() => { setVisible(false); } }

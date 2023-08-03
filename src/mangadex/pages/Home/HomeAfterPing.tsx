@@ -48,7 +48,6 @@ async function seasonal_loader(client: Client, queryClient: QueryClient) {
 
 export default function HomeAfterPing() {
     const client = useHTTPClient();
-
     const queryKey = ["mdx", "home", "page", "loader"];
     const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {

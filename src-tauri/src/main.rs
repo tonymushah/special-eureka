@@ -48,6 +48,7 @@ async fn main() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(tauri_plugin_speu_mangadex::init())
+        .plugin(sentry_tauri::plugin())
         .setup(|app|{
             app.track_event("app_launched", None);
             Ok(())

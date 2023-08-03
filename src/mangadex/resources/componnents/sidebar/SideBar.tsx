@@ -21,7 +21,8 @@ export default function Side_bar() {
             />
             <Hotkeys
                 keyName="ctrl+r"
-                onKeyDown={() => {
+                onKeyDown={(_s, e) => {
+                    e.preventDefault();
                     toggle();
                 }}
             />
