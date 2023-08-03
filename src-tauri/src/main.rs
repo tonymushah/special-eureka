@@ -22,6 +22,18 @@ async fn close_splashscreen(window: tauri::Window) {
 
 #[tokio::main]
 async fn main() {
+    let client = sentry_tauri::sentry::init((
+        "https://9ded544d4e5945459c62371ec4177585@o4505556825473024.ingest.sentry.io/4505556830322688",
+        sentry_tauri::sentry::ClientOptions {
+            release: sentry_tauri::sentry::release_name!(),
+            ..Default::default()
+        },
+    ));
+
+    // Everything before here runs in both app and crash reporter processes
+    let _guard = sentry_tauri::minidump::init(&client);
+    // Everything after here runs in only the app process
+
     let context = tauri::generate_context!();
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");

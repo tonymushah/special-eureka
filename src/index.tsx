@@ -1,4 +1,5 @@
 import "@commons-res/fonts";
+import "@commons-res/sentry/inject";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ChakraProvider, Box, Spinner, AbsoluteCenter } from "@chakra-ui/react";

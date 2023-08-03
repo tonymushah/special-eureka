@@ -22,6 +22,7 @@ tokio = "1.27.0"
 tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-aptabase = "0"
+sentry-tauri = "0.2"
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"
