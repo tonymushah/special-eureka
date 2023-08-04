@@ -156,7 +156,7 @@
             "endpoints": [
                 "https://raw.githubusercontent.com/tonymushah/special-eureka/master/.tauri/update.json"
             ],
-            "dialog": false,
+            "dialog": true,
             "windows": {
                 "installMode": "basicUi"
             }
