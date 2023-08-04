@@ -21,7 +21,8 @@ export default defineConfig({
     }), ViteImageOptimizer(),
     sentryVitePlugin({
         org: "tony-mushah",
-        project: "special-eureka"
+        project: "special-eureka",
+        telemetry : false
     })],
     envPrefix: ["VITE_", "TAURI_"],
     server: {

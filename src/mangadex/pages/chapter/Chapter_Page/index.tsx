@@ -8,7 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useParams } from "react-router-dom";
 
-const Chapter_Page_Success = React.lazy(() => import("./Chapter_Page_Success"));
+const Chapter_Page_Success = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/Chapter_Page/Chapter_Page_Success"));
 
 export default function Chapter_Page() {
     const { id } = useParams();

@@ -1,8 +1,8 @@
 import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
-import useChapterReadingModeOption from "../chapter/ChapterReadingMode/useChapterReadingModeOption";
-import useChapterPageOutletContext from "../chapter/UseChapterOutletContext";
+import useChapterReadingModeOption from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterReadingMode/useChapterReadingModeOption";
+import useChapterPageOutletContext from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
-import { Mangadex_suspense__ } from "@mangadex";
+import { Mangadex_suspense__ } from "@mangadex/index";
 
 const LongStrip = React.lazy(() => import("./Longstrip"));
 
@@ -59,5 +59,5 @@ export default function ChapterReadingMode(){
                 );
         }
     }
-    return (<></>);
+    return (<React.Fragment/>);
 }

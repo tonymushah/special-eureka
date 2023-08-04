@@ -1,8 +1,8 @@
-import { Mangadex_suspense } from "../../index";
+import { Mangadex_suspense } from "@mangadex/index";
 import React from "react";
 import ReactHotkeys from "react-hot-keys";
 
-const Download_Chapter_Modal = React.lazy(() => import("../../resources/componnents/chapter/Download_Chapter_Modal"));
+const Download_Chapter_Modal = React.lazy(() => import("@mangadex/resources/componnents/chapter/Download_Chapter_Modal"));
 
 export default function Download_Chapter_withHotkeys(props: React.PropsWithChildren<{
     chap_id: string

@@ -132,7 +132,10 @@ export function get_manga_byId(props: {
         }
     }, props.options == undefined ? {
         "staleTime": Infinity
-    } : props.options);
+    } : {
+        ...props.options,
+        "staleTime" : Infinity
+    });
     return {
         key,
         query

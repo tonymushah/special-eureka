@@ -7,7 +7,7 @@ import React from "react";
 
 //const Chapter_Reading_mode = React.lazy(() => import("../ChapterReadingMode"));
 
-const IsPingable = React.lazy(() => import("../../../resources/componnents/IsPingable"));
+const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
 
 const Chapter_Previous_Next = React.lazy(() => import("../Chapter_Previous_Next"));
 
@@ -51,7 +51,7 @@ export default function FullScreenReadingOption({ isOpen, getDisclosureProps, hi
                 </Chakra.Heading>
                 <Chakra.Box>
                     <Chakra.Box>
-                        Navigation (Online) :
+                        Navigation :
                         &nbsp;
                         <React.Suspense
                             fallback={<MangadexSpinner />}
