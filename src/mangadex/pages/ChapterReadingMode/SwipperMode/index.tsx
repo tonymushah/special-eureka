@@ -1,10 +1,10 @@
 import React from "react";
 import * as Chakra from "@chakra-ui/react";
-import { ChapterPage_outlet_context } from "../../chapter/UseChapterOutletContext";
+import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import "swiper/css";
 import { SwiperSlide, Swiper, SwiperRef, SwiperProps } from "swiper/react";
-import { useFullScreenOptions_Query } from "../../chapter/ChapterFullScreen/FullScreenOptionsProvider";
-import useChapterPages from "../../chapter/useChapterPages";
+import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
+import useChapterPages from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/useChapterPages";
 import useSwipperModeRef from "./useSwipperModeRef";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 

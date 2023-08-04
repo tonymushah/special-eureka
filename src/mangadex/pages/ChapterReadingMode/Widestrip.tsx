@@ -3,8 +3,8 @@ import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperM
 import React from "react";
 import { FreeMode, Keyboard } from "swiper";
 import { SwiperSlide } from "swiper/react";
-import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
-import { ChapterPage_outlet_context } from "../chapter/UseChapterOutletContext";
+import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
+import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import SwipperMode from "./SwipperMode";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 

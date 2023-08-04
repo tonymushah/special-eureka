@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
-import { useFullScreenOptions_Query } from "../chapter/ChapterFullScreen/FullScreenOptionsProvider";
-import { ChapterPage_outlet_context } from "../chapter/UseChapterOutletContext";
-import useChapterPages from "../chapter/useChapterPages";
+import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
+import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
+import useChapterPages from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/useChapterPages";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
 export default function Lonstrip({ data }: {

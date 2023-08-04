@@ -1,4 +1,4 @@
-import { ChapterPage_outlet_context } from "@mangadex/pages/chapter/UseChapterOutletContext";
+import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import SwipperMode from ".";
 import { Keyboard } from "swiper";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
@@ -6,7 +6,7 @@ import React from "react";
 import { SwiperSlide } from "swiper/react";
 import * as Chakra from "@chakra-ui/react";
 import { Mangadex_suspense__ } from "@mangadex/index";
-import { useFullScreenOptions_Query } from "@mangadex/pages/chapter/ChapterFullScreen/FullScreenOptionsProvider";
+import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
