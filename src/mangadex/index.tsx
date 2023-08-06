@@ -230,7 +230,7 @@ const useMangadexRouter: RouteObject = {
                         {
                             index: true,
                             async lazy() {
-                                const ChapterReadingMode = await import("@mangadex/pages/ChapterReadingMode");
+                                const ChapterReadingMode = await import("@mangadex/pages/chapter/ReadingMode");
                                 return {
                                     Component: ChapterReadingMode.default,
                                     ErrorBoundary: MyErrorBounderies

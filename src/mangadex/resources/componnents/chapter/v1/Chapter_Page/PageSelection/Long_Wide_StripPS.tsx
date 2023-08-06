@@ -14,7 +14,7 @@ export default function Long_Wide_StripPS(props: {
         };
         const generate_menu_item = (limit: number) => {
             const array = new Array<React.ReactNode>(limit);
-            for(let index = 0; index < limit; index++){
+            for (let index = 0; index < limit; index++) {
                 array[index] = (
                     <MenuItem
                         onClick={() => {
@@ -36,16 +36,16 @@ export default function Long_Wide_StripPS(props: {
                         changeIndex(query.data.current - 1);
                     }}
                 />
-                    <Menu>
-                        <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                            {query.data.current}
-                        </MenuButton>
-                        <MenuList maxH={"200px"} overflow={"scroll"}>
-                            {
-                                generate_menu_item(query.data.limit)
-                            }
-                        </MenuList>
-                    </Menu>
+                <Menu>
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                        {query.data.current}
+                    </MenuButton>
+                    <MenuList maxH={"200px"} overflow={"scroll"}>
+                        {
+                            generate_menu_item(query.data.limit)
+                        }
+                    </MenuList>
+                </Menu>
                 <IconButton
                     aria-label="Next page"
                     icon={<ChevronRightIcon />}

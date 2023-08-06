@@ -1,27 +1,30 @@
-import { ChapterPage_outlet_context } from "@mangadex/pages/chapter/UseChapterOutletContext";
-import SwipperMode from ".";
-import { Controller, Keyboard } from "swiper";
+import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
+import SwipperMode from "../SwipperMode";
+import { Keyboard } from "swiper";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
-import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { SwiperSlide } from "swiper/react";
+import * as Chakra from "@chakra-ui/react";
+import { Mangadex_suspense__ } from "@mangadex/index";
+import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
-export default function DoublePage({ data }: {
+export default function SinglePage({ data }: {
     data: ChapterPage_outlet_context
 }) {
+    const fullScreenOptions = useFullScreenOptions_Query();
     const { query } = useRTLSwipperMode();
     if (query.isSuccess) {
         return (
             <SwipperMode
                 data={data}
                 swipper_option={{
-                    dir: query.data == true ? "rtl" : undefined,
-                    slidesPerGroup: 2,
-                    slidesPerView: 2,
-                    modules: [Controller, Keyboard],
+                    slidesPerView: 1,
+                    modules: [Keyboard],
                     keyboard: true,
-                    spaceBetween: 0,
+                    dir: query.data ? "rtl" : undefined,
+                    centeredSlides: true
                 }}
             >
                 {({ images, reading_state }) => (
@@ -31,7 +34,7 @@ export default function DoublePage({ data }: {
                                 <SwiperSlide onMouseOver={() => {
                                     reading_state.setCurrentPage(index + 1);
                                 }} key={`${data.chapter.get_id()}-${index}`}>
-                                    <Chakra.Container height={"100vh"} overflow={"scroll"}>
+                                    <ChakraContainer>
                                         <Chakra.Image
                                             fallback={
                                                 <Chakra.Box width={"full"}>
@@ -44,10 +47,11 @@ export default function DoublePage({ data }: {
                                                     </Chakra.Center>
                                                 </Chakra.Box>
                                             }
+                                            width={fullScreenOptions.query.data != undefined ? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
                                             src={value}
                                             id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
                                         />
-                                    </Chakra.Container>
+                                    </ChakraContainer>
                                 </SwiperSlide>
                             ))
                         }
@@ -55,6 +59,7 @@ export default function DoublePage({ data }: {
                 )}
             </SwipperMode>
         );
+    } else {
+        return (<Mangadex_suspense__ />);
     }
-    return (<></>);
 }

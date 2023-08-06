@@ -32,7 +32,6 @@ export default function MangaList(props: {
             </Chakra.TabList>
             <AnimatePresence>
                 <Chakra.TabPanels textAlign={"start"}>
-
                     <Chakra.TabPanel
                         as={motion.div}
                         initial={{

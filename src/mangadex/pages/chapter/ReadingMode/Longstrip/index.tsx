@@ -4,7 +4,7 @@ import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chap
 import useChapterPages from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/useChapterPages";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
-export default function Lonstrip({ data }: {
+export default function Longstrip({ data }: {
     data: ChapterPage_outlet_context
 }) {
     const fullScreenOptions = useFullScreenOptions_Query();

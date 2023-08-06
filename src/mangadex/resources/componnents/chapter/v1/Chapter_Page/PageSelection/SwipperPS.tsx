@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Button, HStack, IconButton, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { useSwipperModeRefData } from "@mangadex/pages/ChapterReadingMode/SwipperMode/useSwipperModeRef";
+import { useSwipperModeRefData } from "@mangadex/pages/chapter/ReadingMode/SwipperMode/useSwipperModeRef";
 import useChapterPages from "../useChapterPages";
 
 export default function SwipperPS(props: {

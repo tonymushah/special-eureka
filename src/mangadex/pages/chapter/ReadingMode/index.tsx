@@ -3,14 +3,15 @@ import useChapterReadingModeOption from "@mangadex/resources/componnents/chapter
 import useChapterPageOutletContext from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
 import { Mangadex_suspense__ } from "@mangadex/index";
+import { LoaderFunction } from "react-router";
 
 const LongStrip = React.lazy(() => import("./Longstrip"));
 
 const WideStrip = React.lazy(() => import("./Widestrip"));
 
-const SinglePage = React.lazy(() => import("./SwipperMode/SinglePage"));
+const SinglePage = React.lazy(() => import("./SinglePage"));
 
-const DoublePage = React.lazy(() => import("./SwipperMode/DoublePage"));
+const DoublePage = React.lazy(() => import("./DoublePage"));
 
 export default function ChapterReadingMode(){
     const outlet_data = useChapterPageOutletContext();
