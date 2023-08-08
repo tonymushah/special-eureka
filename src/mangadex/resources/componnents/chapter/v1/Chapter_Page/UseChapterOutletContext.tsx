@@ -16,8 +16,8 @@ function getLastInURL(my_url: string) {
 export default function useChapterPageOutletContext(): ChapterPage_outlet_context {
     const data = useOutletContext<ChapterPage_outlet_context>();
     const images = data.images.sort((a_: string, b_: string) => {
-        const a = parseInt(getLastInURL(a_).match(/\d+/)![0]);
-        const b = parseInt(getLastInURL(b_).match(/\d+/)![0]);
+        const a = parseInt(getLastInURL(a_).match(/\d+/)?.[0] ?? "0");
+        const b = parseInt(getLastInURL(b_).match(/\d+/)?.[0] ?? "0");
         if (a > b) return 1;
         if (a < b) return -1;
         return 0;
