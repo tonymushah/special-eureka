@@ -17,9 +17,7 @@ export default function NavigationAnimation({ children } : React.PropsWithChildr
     const navigation = useNavigation();
     return (
         <motion.div
-            animate={(
-                navigation.state === "loading" &&
-                navigation.formData == null) ? "isNormalLoad" : undefined}
+            animate={navigation.state === "loading" ? "isNormalLoad" : undefined}
             transition={transition}
             variants={variants}
         >
