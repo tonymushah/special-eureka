@@ -1,16 +1,17 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export type ChapterPages = {
     current: number,
-    limit: number
+    limit: number,
+    shouldChange?: boolean
 }
 
 export default function useChapterPages(props: {
     chapter: Chapter
 }) {
     const queryClient = useQueryClient();
-    const queryKey = ["mdx", "current-chapter", props.chapter.get_id(), "reading-state"];
+    const queryKey: readonly string[] = ["mdx", "current-chapter", props.chapter.get_id(), "reading-state"];
     const query = useQuery<ChapterPages>(queryKey, async () => {
         return {
             current: 0,
@@ -25,17 +26,23 @@ export default function useChapterPages(props: {
         },
         staleTime: Infinity
     });
-    const setCurrentPage = (index: number) => {
-        if (0 <= index && index <= (props.chapter.get_pages() - 1)) {
-            queryClient.setQueryData<ChapterPages>(queryKey, {
-                current: index,
-                limit: props.chapter.get_pages()
-            });
+    const mutation = useMutation({
+        mutationKey: queryKey.concat("mutation"),
+        async mutationFn(index: number, shouldChange? : boolean) {
+            if (0 <= index && index <= (props.chapter.get_pages() - 1)) {
+                queryClient.setQueryData<ChapterPages>(queryKey, {
+                    current: index,
+                    limit: props.chapter.get_pages(),
+                    shouldChange
+                });
+            }
         }
-    };
+    });
+    const setCurrentPage = mutation.mutate ;
     return {
         queryKey,
         query,
-        setCurrentPage
+        setCurrentPage,
+        mutation
     };
 }

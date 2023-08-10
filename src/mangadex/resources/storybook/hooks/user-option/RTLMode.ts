@@ -1,19 +1,15 @@
-import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
-import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import { UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export default function useRTLSwipperMode(query_options?: Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">) {
+export function useStoryBookRTLSwipperMode(query_options?: Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">) {
     const queryKey = ["mdx", "server", "rtlSwipperMode"];
-    const userCachedOption = useUserOption();
+    const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {
-        return userCachedOption.getRtlSwipperMode();
+        return false;
     }, query_options);
     const changeOptionMutation = useMutation({
         mutationKey: queryKey.concat("mutation"),
         mutationFn: async (new_: boolean) => {
-            await userCachedOption.setRtlSwipperMode(new_);
-        },
-        onSuccess() {
-            query.refetch();
+            queryClient.setQueryData(queryKey, new_);
         }
     });
     const changeOption = changeOptionMutation.mutate;
@@ -29,4 +25,3 @@ export default function useRTLSwipperMode(query_options?: Omit<UseQueryOptions<b
         toggle
     };
 }
-
