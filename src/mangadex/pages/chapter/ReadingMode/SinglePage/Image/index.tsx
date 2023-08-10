@@ -1,11 +1,10 @@
-import { Box, Center, Icon, Image } from "@chakra-ui/react";
+import { Box, Center, Image } from "@chakra-ui/react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import { Property } from "csstype";
 import React from "react";
 import { HotkeyCallback, useHotkeys } from "react-hotkeys-hook";
 import { ReactZoomPanPinchRef, TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "./NextPreviousHotKeys";
-import { useChakraToast } from "@commons-res/hooks/useChakraToast";
-import { TbZoomCancel, TbZoomCheck } from "react-icons/tb";
 
 export default function ChapterImage({ src, onNext, onPrevious }: {
     src: string,
@@ -13,33 +12,28 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
     onPrevious?: HotkeyCallback
 }) {
     const [isDisabled, setIsDisabled] = React.useState(true);
-    const toast = useChakraToast({
-        id : "zoom-toast",
-        position : "top",
-        duration : 5000,
-        isClosable : true
-    });
+    const [isPanning, setIsPanning] = React.useState(false);
+    const [isZooming, setIsZooming] = React.useState(false);
+    const [, startTranstion] = React.useTransition();
     const transformWarperRef = React.createRef<ReactZoomPanPinchRef>();
     useHotkeys("x", () => {
         transformWarperRef.current?.resetTransform();
     });
+    const cursor = React.useMemo<Property.Cursor>(() => {
+        if (isDisabled) {
+            return "not-allowed";
+        } else {
+            if (isPanning == true) {
+                return "grabbing";
+            } else if (isZooming == true) {
+                return "zoom-in";
+            } else {
+                return "grab";
+            }
+        }
+    }, [isDisabled, isPanning, isZooming]);
     useHotkeys("ctrl", () => {
         setIsDisabled(!isDisabled);
-    }, [isDisabled]);
-    React.useEffect(() => {
-        if(isDisabled){
-            toast({
-                icon : (<Icon as={TbZoomCancel}/>),
-                title : "The zoom is now disabled",
-                status : "warning",
-            });
-        }else{
-            toast({
-                icon : (<Icon as={TbZoomCheck}/>),
-                title : "The zoom is now enabled",
-                status : "success"
-            });
-        }
     }, [isDisabled]);
     return (
         <React.Fragment>
@@ -47,14 +41,14 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
                 isDisabled ? (
                     <NextPreviousHotKeys onNext={onNext} onPrevious={onPrevious} />
                 ) : (
-                    <React.Fragment/>
+                    <React.Fragment />
                 )
             }
             <Box
                 key={src}
                 backgroundImage={src}
             >
-                <Box backdropFilter={"auto"} backdropBlur={"50px"}>
+                <Box backdropFilter={"auto"} backdropBlur={"50px"} cursor={cursor}>
                     <TransformWrapper
                         initialScale={1}
                         centerOnInit
@@ -62,7 +56,27 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
                         ref={transformWarperRef}
                         disabled={isDisabled}
                         panning={{
-                            disabled : isDisabled
+                            disabled: isDisabled
+                        }}
+                        onPanningStart={() => {
+                            startTranstion(() => {
+                                setIsPanning(true);
+                            });
+                        }}
+                        onPanningStop={() => {
+                            startTranstion(() => {
+                                setIsPanning(false);
+                            });
+                        }}
+                        onZoomStart={() => {
+                            startTranstion(() => {
+                                setIsZooming(true);
+                            });
+                        }}
+                        onZoomStop={() => {
+                            startTranstion(() => {
+                                setIsZooming(false);
+                            });
                         }}
                     >
                         <TransformComponent
