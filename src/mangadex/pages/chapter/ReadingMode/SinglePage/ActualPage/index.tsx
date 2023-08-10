@@ -12,19 +12,28 @@ const transition : Transition = {
     duration: 0.5
 };
 
-export default function zzActualPage({ data }: {
-    data: ChapterPage_outlet_context
+export default function ActualPage({ data }: {
+    data: ChapterPage_outlet_context,
 }) {
-    const [page, _setPage] = React.useState(0);
-    const setPage = React.useCallback((input: number) => {
-        _setPage(input);
-    }, [page]);
-    /*const { query } = useChapterPages({
+    const { query, setCurrentPage } = useChapterPages({
         chapter: data.chapter
-    });*/
+    });
+
+    const page = React.useMemo(() => {
+        return query.data.current;
+    }, [query.data.current]);
+    /*
+        React.useEffect(() => {
+            console.log(page);
+        }, [page]);
+    */
+    const setPage = React.useCallback((input: number) => {
+        setCurrentPage(input);
+    }, [page]);
+    
     const onNext = React.useCallback<HotkeyCallback>(() => {
         if(page >= 0 && page < (data.images.length - 1)){
-            setPage((page + 1));
+            setPage(page + 1);
         }
     }, [page]);
     const onPrevious = React.useCallback<HotkeyCallback>(() => {

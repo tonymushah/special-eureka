@@ -1,5 +1,5 @@
-import { ChakraProvider } from "@chakra-ui/react";
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
+import Providers from "@mangadex/resources/storybook/Providers";
 import { Meta, StoryObj } from "@storybook/react";
 import chapter, { images } from "../tests/images/250f091f-4166-4831-9f45-89ff54bf433b";
 import ActualPage from "./index";
@@ -19,11 +19,11 @@ export const Default: Story = {
             images
         };
         return (
-            <ChakraProvider>
+            <Providers>
                 <ActualPage
                     data={data}
                 />
-            </ChakraProvider>
+            </Providers>
         );
     }
 };
