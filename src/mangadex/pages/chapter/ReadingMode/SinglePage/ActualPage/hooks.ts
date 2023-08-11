@@ -1,16 +1,18 @@
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import useChapterPages from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/useChapterPages";
-import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
-/*import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";*/
+//import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
+import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
 import React from "react";
 import { HotkeyCallback } from "react-hotkeys-hook";
 
-export function useSinglePageReadingHooks({ data }: {
+export function useSinglePageReadingHooks({ data, startPage }: {
     data: ChapterPage_outlet_context
+    startPage?: number
 }) {
     const { query, setCurrentPage } = useChapterPages({
         chapter: data.chapter
     });
+
 
     const page = React.useMemo(() => {
         return query.data.current;
@@ -24,7 +26,7 @@ export function useSinglePageReadingHooks({ data }: {
         setCurrentPage(input);
     }, [page]);
     // const rtl = useRTLSwipperMode();
-    const rtl = useStoryBookRTLSwipperMode();
+    const rtl = useRTLSwipperMode();
     const onNext = React.useCallback<HotkeyCallback>(() => {
         if (page >= 0 && page < (data.images.length - 1)) {
             setPage(page + 1);
@@ -35,13 +37,17 @@ export function useSinglePageReadingHooks({ data }: {
             setPage(page - 1);
         }
     }, [page]);
-
+    React.useEffect(() => {
+        if (startPage != undefined) {
+            setCurrentPage(startPage);
+        }
+    }, [startPage]);
     return React.useMemo(() => {
         return ({
             page,
             setPage,
-            onNext : rtl.query.data == true ? onPrevious : onNext,
-            onPrevious : rtl.query.data == true ? onNext : onPrevious
+            onNext: rtl.query.data == true ? onPrevious : onNext,
+            onPrevious: rtl.query.data == true ? onNext : onPrevious
         });
     }, [page, rtl.query.data]);
 }

@@ -4,7 +4,7 @@ import { AnimatePresence, Transition, motion } from "framer-motion";
 import ChapterImage from "../Image";
 import { useSinglePageReadingHooks } from "./hooks";
 
-const transition : Transition = {
+const transition: Transition = {
     type: "tween",
     ease: "easeInOut",
     duration: 0.5
@@ -12,23 +12,24 @@ const transition : Transition = {
 
 export default function ActualPage({ data }: {
     data: ChapterPage_outlet_context,
+    startPage? : number
 }) {
-    const { page, onNext, onPrevious } = useSinglePageReadingHooks({data});
+    const { page, onNext, onPrevious } = useSinglePageReadingHooks({ data });
     return (
         <AnimatePresence>
             {data.images.map((url, index) => {
                 if (page == index) {
                     return (
-                        <motion.div 
-                            key={url} 
+                        <motion.div
+                            key={url}
                             initial={{
-                                opacity : 0
+                                opacity: 0
                             }}
                             animate={{
-                                opacity : 1
+                                opacity: 1
                             }}
                             exit={{
-                                opacity : 0
+                                opacity: 0
                             }}
                             transition={transition}
                         >
@@ -41,12 +42,12 @@ export default function ActualPage({ data }: {
                     );
                 } else {
                     return (
-                            <Image
-                                key={url}
-                                alt={url}
-                                src={url}
-                                display={"none"}
-                            />
+                        <Image
+                            key={url}
+                            alt={url}
+                            src={url}
+                            display={"none"}
+                        />
                     );
                 }
             })}

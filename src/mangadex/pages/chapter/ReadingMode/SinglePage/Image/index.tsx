@@ -1,43 +1,17 @@
 import { Box, Center, Image } from "@chakra-ui/react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
-import { Property } from "csstype";
 import React from "react";
-import { HotkeyCallback, useHotkeys } from "react-hotkeys-hook";
-import { ReactZoomPanPinchRef, TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { HotkeyCallback } from "react-hotkeys-hook";
+import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "./NextPreviousHotKeys";
+import { useImageState } from "./hooks";
 
 export default function ChapterImage({ src, onNext, onPrevious }: {
     src: string,
     onNext?: HotkeyCallback,
     onPrevious?: HotkeyCallback
 }) {
-    const [isDisabled, setIsDisabled] = React.useState(true);
-    const [isPanning, setIsPanning] = React.useState(false);
-    const [isZooming, setIsZooming] = React.useState(false);
-    const [isDeZooming, setIsDeZooming] = React.useState(false);
-    const [, startTranstion] = React.useTransition();
-    const transformWarperRef = React.createRef<ReactZoomPanPinchRef>();
-    useHotkeys("x", () => {
-        transformWarperRef.current?.resetTransform();
-    });
-    const cursor = React.useMemo<Property.Cursor>(() => {
-        if (isDisabled) {
-            return "not-allowed";
-        } else {
-            if (isPanning) {
-                return "grabbing";
-            } else if (isZooming) {
-                return "zoom-in";
-            } else if(isDeZooming){
-                return "zoom-out";
-            } else {
-                return "grab";
-            }
-        }
-    }, [isDisabled, isPanning, isZooming, isDeZooming]);
-    useHotkeys("ctrl", () => {
-        setIsDisabled(!isDisabled);
-    }, [isDisabled]);
+    const { isDisabled, setIsDeZooming, setIsPanning, startTransition, setIsZooming, cursor, transformWarperRef} = useImageState();
     return (
         <React.Fragment>
             {
@@ -62,17 +36,17 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
                             disabled: isDisabled
                         }}
                         onPanningStart={() => {
-                            startTranstion(() => {
+                            startTransition(() => {
                                 setIsPanning(true);
                             });
                         }}
                         onPanningStop={() => {
-                            startTranstion(() => {
+                            startTransition(() => {
                                 setIsPanning(false);
                             });
                         }}
                         onZoom={(e) => {
-                            startTranstion(() => {
+                            startTransition(() => {
                                 const scale = e.state.scale;
                                 const previousScale = e.state.previousScale;
                                 if(previousScale < scale){
@@ -85,7 +59,7 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
                             });
                         }}
                         onZoomStop={() => {
-                            startTranstion(() => {
+                            startTransition(() => {
                                 setIsZooming(false);
                                 setIsDeZooming(false);
                             });
