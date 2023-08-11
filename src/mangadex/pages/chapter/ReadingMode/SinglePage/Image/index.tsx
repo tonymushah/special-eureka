@@ -5,6 +5,7 @@ import React from "react";
 import { HotkeyCallback, useHotkeys } from "react-hotkeys-hook";
 import { ReactZoomPanPinchRef, TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "./NextPreviousHotKeys";
+import ZoomFilled from "@commons-res/common-icon/zoom-filled.png";
 
 export default function ChapterImage({ src, onNext, onPrevious }: {
     src: string,
@@ -23,10 +24,10 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
         if (isDisabled) {
             return "not-allowed";
         } else {
-            if (isPanning == true) {
+            if (isPanning) {
                 return "grabbing";
-            } else if (isZooming == true) {
-                return "zoom-in";
+            } else if (isZooming) {
+                return `url(${ZoomFilled}) 0 0, zoom-in`;
             } else {
                 return "grab";
             }
