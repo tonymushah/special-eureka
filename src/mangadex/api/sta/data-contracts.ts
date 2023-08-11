@@ -88,7 +88,7 @@ export interface Relationship {
 export interface Chapter {
     /** @format uuid */
     id: string;
-    type: "chapter";
+    type: "chapter" | string;
     attributes: ChapterAttributes;
     relationships: Relationship[];
 }
@@ -147,7 +147,7 @@ export interface ChapterAttributes {
     /** @pattern ^[a-z]{2}(-[a-z]{2})?$ */
     translatedLanguage: string;
     /** @format uuid */
-    uploader: string;
+    uploader?: string;
     /**
      * Denotes a chapter that links to an external source.
      * @maxLength 512

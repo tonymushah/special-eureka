@@ -8,7 +8,7 @@ function generateAliases(): AliasOptions{
     const returns : AliasOptions = {};
     const tsPaths = tsConfig.compilerOptions.paths;
     for(const key in tsPaths){
-        returns[key.replace("/*", "")] = tsPaths[key][0].replace("/*", "");
+        returns[key.replace("/*", "")] = resolve(__dirname, tsPaths[key][0].replace("/*", ""));
     }
     return returns;
 }
