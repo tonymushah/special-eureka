@@ -1,6 +1,7 @@
 import { Box, Center } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import useChapterPages from "./useChapterPages";
+import React from "react";
 
 export default function ChapterReading_State(props : {
     chapter : Chapter
@@ -10,12 +11,12 @@ export default function ChapterReading_State(props : {
         return (
             <Box>
                 <Center>
-                    {query.data.current} / {query.data.limit}
+                    {query.data.current + 1} / {query.data.limit}
                 </Center>
             </Box>
         );
     }
     return (
-        <></>
+        <React.Fragment/>
     );
 }
