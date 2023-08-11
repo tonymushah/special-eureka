@@ -13,51 +13,6 @@ export default function SinglePage({ data }: {
     if (query.isSuccess) {
         return (
             <React.Fragment>
-                {
-                    /*
-                        <SwipperMode
-                            data={data}
-                            swipper_option={{
-                                slidesPerView: 1,
-                                modules: [Keyboard],
-                                keyboard: true,
-                                dir: query.data ? "rtl" : undefined,
-                                centeredSlides: true
-                            }}
-                        >
-                            {({ images, reading_state }) => (
-                                <React.Fragment>
-                                    {
-                                        images.map((value, index) => (
-                                            <SwiperSlide onMouseOver={() => {
-                                                reading_state.setCurrentPage(index + 1);
-                                            }} key={`${data.chapter.get_id()}-${index}`}>
-                                                <ChakraContainer>
-                                                    <Chakra.Image
-                                                        fallback={
-                                                            <Chakra.Box width={"full"}>
-                                                                <Chakra.Center>
-                                                                    <MangadexSpinner
-                                                                        size={"xl"}
-                                                                        color={"orange"}
-                                                                        thickness={"10px"}
-                                                                    />
-                                                                </Chakra.Center>
-                                                            </Chakra.Box>
-                                                        }
-                                                        width={fullScreenOptions.query.data != undefined ? (fullScreenOptions.query.data.image_width != 0 ? `${fullScreenOptions.query.data.image_width}%` : "initial") : "initial"}
-                                                        src={value}
-                                                        id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
-                                                    />
-                                                </ChakraContainer>
-                                            </SwiperSlide>
-                                        ))
-                                    }
-                                </React.Fragment>
-                            )}
-                        </SwipperMode>
-                     */
-                }
                 <ActualPage data={data}/>
             </React.Fragment>
         );
