@@ -5,7 +5,6 @@ import React from "react";
 import { HotkeyCallback, useHotkeys } from "react-hotkeys-hook";
 import { ReactZoomPanPinchRef, TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "./NextPreviousHotKeys";
-import ZoomFilled from "@commons-res/common-icon/zoom-filled.png";
 
 export default function ChapterImage({ src, onNext, onPrevious }: {
     src: string,
@@ -15,6 +14,7 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
     const [isDisabled, setIsDisabled] = React.useState(true);
     const [isPanning, setIsPanning] = React.useState(false);
     const [isZooming, setIsZooming] = React.useState(false);
+    const [isDeZooming, setIsDeZooming] = React.useState(false);
     const [, startTranstion] = React.useTransition();
     const transformWarperRef = React.createRef<ReactZoomPanPinchRef>();
     useHotkeys("x", () => {
@@ -27,12 +27,14 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
             if (isPanning) {
                 return "grabbing";
             } else if (isZooming) {
-                return `url(${ZoomFilled}) 0 0, zoom-in`;
+                return "zoom-in";
+            } else if(isDeZooming){
+                return "zoom-out";
             } else {
                 return "grab";
             }
         }
-    }, [isDisabled, isPanning, isZooming]);
+    }, [isDisabled, isPanning, isZooming, isDeZooming]);
     useHotkeys("ctrl", () => {
         setIsDisabled(!isDisabled);
     }, [isDisabled]);
@@ -69,14 +71,23 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
                                 setIsPanning(false);
                             });
                         }}
-                        onZoomStart={() => {
+                        onZoom={(e) => {
                             startTranstion(() => {
-                                setIsZooming(true);
+                                const scale = e.state.scale;
+                                const previousScale = e.state.previousScale;
+                                if(previousScale < scale){
+                                    setIsZooming(true);
+                                    setIsDeZooming(false);
+                                }else if(previousScale > scale){
+                                    setIsZooming(false);
+                                    setIsDeZooming(true);
+                                }
                             });
                         }}
                         onZoomStop={() => {
                             startTranstion(() => {
                                 setIsZooming(false);
+                                setIsDeZooming(false);
                             });
                         }}
                     >
