@@ -9,29 +9,41 @@ const Long_Wide_StripPS = React.lazy(() => import("./Long_Wide_StripPS"));
 
 const SwipperPS = React.lazy(() => import("./SwipperPS"));
 
-export default function PageSelection(props : {
-    chapter : Chapter
-}){
+const SinglePage = React.lazy(() => import("@mangadex/pages/chapter/ReadingMode/SinglePage/PageSelection"));
+
+export default function PageSelection(props: {
+    chapter: Chapter
+}) {
     const current_reading_mode = useChapterReadingModeOption();
-    if(current_reading_mode.query.isSuccess) {
-        if(current_reading_mode.query.data == ReadingMode.DoublePage || current_reading_mode.query.data == ReadingMode.SinglePage){
+    if (current_reading_mode.query.isSuccess) {
+        if (current_reading_mode.query.data == ReadingMode.SinglePage) {
             return (
                 <React.Suspense
                     fallback={
                         <Text>Loading...</Text>
                     }
                 >
-                    <SwipperPS {...props}/>
+                    <SinglePage {...props} />
                 </React.Suspense>
             );
-        }else{
+        } else if (current_reading_mode.query.data == ReadingMode.DoublePage) {
             return (
                 <React.Suspense
                     fallback={
                         <Text>Loading...</Text>
                     }
                 >
-                    <Long_Wide_StripPS {...props}/>
+                    <SwipperPS {...props} />
+                </React.Suspense>
+            );
+        } else {
+            return (
+                <React.Suspense
+                    fallback={
+                        <Text>Loading...</Text>
+                    }
+                >
+                    <Long_Wide_StripPS {...props} />
                 </React.Suspense>
             );
         }

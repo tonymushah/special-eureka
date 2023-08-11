@@ -6,11 +6,13 @@ import { resolve } from "path";
 import { ViteAliases } from "vite-aliases";
 import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+import million from "million/compiler";
 
 export default defineConfig({
     clearScreen: false,
     plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
     //progress(),
+    million.vite(),
     ViteAliases({
         "dir": "src",
         useConfig: true,

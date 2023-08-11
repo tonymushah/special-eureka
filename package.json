@@ -156,6 +156,7 @@
     "jotai": "^2.2.2",
     "jotai-optics": "^0.3.0",
     "kute.js": "^2.2.4",
+    "million": "^2.5.11",
     "minidenticons": "^2.0.2",
     "optics-ts": "^2.4.0",
     "prop-types": "^15.8.1",
