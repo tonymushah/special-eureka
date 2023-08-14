@@ -11,6 +11,11 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
     onPrevious?: HotkeyCallback,
     onNext?: HotkeyCallback
 }) {
+    React.useEffect(() => {
+        if(src.length > 2){
+            throw new Error("The length of the input array should be <= 2");
+        }
+    }, []);
     const { isDisabled, setIsDeZooming, setIsPanning, startTransition, setIsZooming, cursor, transformWarperRef } = useImageState();
     return (
         <React.Fragment>
@@ -24,7 +29,11 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
             <HStack>
 
             </HStack>
-            <Box>
+            <Box
+                backgroundImage={`none, url(${src[0]}), url(${src[1]})`}
+                backgroundPosition={"left, right"}
+                backgroundSize={"contain, contain"}
+            >
                 <Box backdropFilter={"auto"} backdropBlur={"50px"} cursor={cursor}>
                     <TransformWrapper
                         initialScale={1}
@@ -97,7 +106,7 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
                                                     src={image}
                                                     alt={image}
                                                     height={"100vh"}
-                                                    key={image}
+                                                    key={`${index}-${image}`}
                                                 />
                                             );
                                         } else {

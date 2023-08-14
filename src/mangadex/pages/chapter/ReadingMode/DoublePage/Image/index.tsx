@@ -1,10 +1,21 @@
-import { HotkeyCallback } from "react-hotkeys-hook"
-import { useImageState } from "../../SinglePage/Image/hooks";
+import { HotkeyCallback } from "react-hotkeys-hook";
+import SinglePageImage_ from "../../SinglePage/Image";
+import DoublePageImage_ from "../Image/RealDoublePage";
 
-export default function DoublePageImage({ src , onPrevious, onNext} : {
-    src: string | Array<string>,
-    onPrevious?: HotkeyCallback,
-    onNext?: HotkeyCallback
-}){
-    
+type DoublePageImageProps = {
+    src: string | Array<string>;
+    onPrevious?: HotkeyCallback;
+    onNext?: HotkeyCallback;
+};
+
+export default function DoublePageImage({ src , onPrevious, onNext} : DoublePageImageProps){
+    if(typeof src == "string"){
+        return (
+            <SinglePageImage_ src={src} onPrevious={onPrevious} onNext={onNext}/>
+        );
+    }else{
+        return (
+            <DoublePageImage_ src={src} onPrevious={onPrevious} onNext={onNext}/>
+        );
+    }
 }
