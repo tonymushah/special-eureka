@@ -243,8 +243,8 @@ dependencies:
     specifier: ^4.10.1
     version: 4.10.1(react@18.2.0)
   react-image-size:
-    specifier: ^1.0.6
-    version: 1.0.6
+    specifier: ^2.0.2
+    version: 2.0.2(react-dom@18.2.0)(react@18.2.0)
   react-inner-image-zoom:
     specifier: ^3.0.2
     version: 3.0.2(prop-types@15.8.1)(react@18.2.0)
@@ -15717,8 +15717,14 @@ packages:
       react: 18.2.0
     dev: false
 
-  /react-image-size@1.0.6:
-    resolution: {integrity: sha512-jpCktrUdsUiBbdJQ/VOexAYPm3f5fTqDpQsiLvfSXApamdXMTw497BD7G1CVeeyGptVXzcNOkxBy1ywvGe40gQ==}
+  /react-image-size@2.0.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-j2ZhFsY5n8HAU43ZrhvDOkGBhAY0IJX2DjajmwF+TdXuZ/lGHuhmqj5/88o1M+yL8Un5oNSLjBRH5XikWiiHlA==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-inner-image-zoom@3.0.2(prop-types@15.8.1)(react@18.2.0):
