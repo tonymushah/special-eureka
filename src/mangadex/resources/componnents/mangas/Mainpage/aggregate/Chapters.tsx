@@ -2,7 +2,7 @@ import { AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Alert, A
 import { Chapters } from "@mangadex/api/structures/Chapter";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 
 type Chapters_ElementProps = {

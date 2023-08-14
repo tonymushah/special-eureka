@@ -16,7 +16,7 @@ export default function ChapterReadingOption({ data } : {
     }, [chapter_pages.query.data.current]);
     const setPage = chapter_pages.setCurrentPage;
     const rtl_mode = useStoryBookRTLSwipperMode({
-        initialData : false
+        initialData: false
     });
     const onNext = React.useCallback(() => {
         if (page >= 0 && page < (data.images.length - 1)) {
@@ -55,10 +55,7 @@ export default function ChapterReadingOption({ data } : {
                 </Menu>
                 <IconButton aria-label="Next" icon={<Icon as={ChevronRightIcon}/>} onClick={rtl_mode.query.data == false ? onNext : onPrevious}/>
             </ButtonGroup>
-            <HStack spacing={1}>
-                <Button isDisabled={rtl_mode.query.data == false} onClick={rtl_mode.toggle}>Left To Right</Button>
-                <Button isDisabled={rtl_mode.query.data == true} onClick={rtl_mode.toggle}>Right to Left</Button>
-            </HStack>
+            
         </HStack>
     );
 }

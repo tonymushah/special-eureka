@@ -1,43 +1,73 @@
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
-import SwipperMode from "../SwipperMode";
-import { Controller, Keyboard } from "swiper";
-import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
-import * as Chakra from "@chakra-ui/react";
+import { QueryKey, useQuery } from "@tanstack/react-query";
 import React from "react";
-import { SwiperSlide } from "swiper/react";
-import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
-import { useQuery } from "@tanstack/react-query";
 import { getImageSize } from "react-image-size";
+import Actual from "./ActualDoublePage";
+import { useDoublePageReadingState } from "./ActualDoublePage/hooks";
+import { DoublePagePropsProvider } from "./Provider";
 
 export type DoublePageImageInput = [string, string] | string;
 
-export default function DoublePage({ data }: {
-    data: ChapterPage_outlet_context
-}) {
-    const [, startTranstion] = React.useTransition();
-    const query = useQuery<DoublePageImageInput[]>(["mdx", "chapter", data.chapter.get_id(), "images", "size"], async () => {
-        const images: Array<DoublePageImageInput> = [];
-        for (let index = 1; index < data.images.length; index++) {
-            const currentElement = data.images[index];
-            const previousCurrentElement: string | undefined = (index - 1) >= 0 ? data.images[index - 1] : undefined;
-            const lastElement: DoublePageImageInput | undefined = (images.length != 0) ? data.images[data.images.length - 1] : undefined;
-            if (lastElement != undefined) {
-                if (previousCurrentElement != undefined && !lastElement.includes(previousCurrentElement)) {
-                    const currentElementSize = await getImageSize(currentElement);
-                    const previousElementSize = await getImageSize(previousCurrentElement);
-                    const currentElementRatio = currentElementSize.width / currentElementSize.height;
-                    const previousElementRatio = previousElementSize.width / previousElementSize.height;
-                    if (currentElementRatio >= 1) {
-                        images.push(currentElement);
-                    } else if (currentElementRatio < 1 && previousElementRatio < 1) {
-                        images.push([currentElement, previousCurrentElement]);
-                    }
-                }
+type DoublePageProps = {
+    data: ChapterPage_outlet_context;
+};
+
+export async function queryFn({ data }: DoublePageProps) {
+    const images: Array<DoublePageImageInput> = [];
+    for (let index = 1; index < data.images.length; index++) {
+        const currentElement = data.images[index];
+        const previousCurrentElement: string | undefined = (index - 1) >= 0 ? data.images[index - 1] : undefined;
+
+        const lastElement: DoublePageImageInput | undefined = (images.length != 0) ? images[images.length - 1] : undefined;
+
+        if (previousCurrentElement != undefined && lastElement?.includes(previousCurrentElement) != true) {
+            const currentElementSize = await getImageSize(currentElement);
+            const previousElementSize = await getImageSize(previousCurrentElement);
+            const currentElementRatio = currentElementSize.width / currentElementSize.height;
+            const previousElementRatio = previousElementSize.width / previousElementSize.height;
+            if (previousElementRatio >= 1) {
+                images.push(previousCurrentElement);
+            } else if (currentElementRatio >= 1) {
+                images.push(currentElement);
+            } else if (currentElementRatio < 1 && previousElementRatio < 1) {
+                images.push([previousCurrentElement, currentElement]);
             }
         }
-        return images;
+
+    }
+    return images;
+
+}
+
+export function queryKey(props: DoublePageProps): QueryKey {
+    return ["mdx", "chapter", props.data.chapter.get_id(), "images", "size"];
+}
+
+export function useDoublePageImageQuery(props: DoublePageProps) {
+    return useQuery<DoublePageImageInput[]>(queryKey(props), async () => {
+        return queryFn(props);
     });
-    if(query.isLoading)
+}
+
+export default function DoublePage({ data }: DoublePageProps) {
+    React.useEffect(() => {
+        console.log(data);
+    }, []);
+    const query = useDoublePageImageQuery({
+        data
+    });
+    const query2 = useDoublePageReadingState({
+        data
+    });
+    if (query.isSuccess && query2.isSuccess) {
+        return (
+            <DoublePagePropsProvider
+                value={data}
+            >
+                <Actual images={query.data} />
+            </DoublePagePropsProvider>
+        );
+    }
     return (
         <React.Fragment />
     );

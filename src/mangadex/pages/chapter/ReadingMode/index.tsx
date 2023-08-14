@@ -3,7 +3,6 @@ import useChapterReadingModeOption from "@mangadex/resources/componnents/chapter
 import useChapterPageOutletContext from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
 import { Mangadex_suspense__ } from "@mangadex/index";
-import { LoaderFunction } from "react-router";
 
 const LongStrip = React.lazy(() => import("./Longstrip"));
 

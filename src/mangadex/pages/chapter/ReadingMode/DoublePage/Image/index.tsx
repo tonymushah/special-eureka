@@ -3,7 +3,7 @@ import SinglePageImage_ from "../../SinglePage/Image";
 import DoublePageImage_ from "../Image/RealDoublePage";
 
 type DoublePageImageProps = {
-    src: string | Array<string>;
+    src: string | [string, string];
     onPrevious?: HotkeyCallback;
     onNext?: HotkeyCallback;
 };

@@ -1,9 +1,8 @@
-import React from "react";
+import { Box } from "@chakra-ui/react";
+import { AnimatePresence, Transition, motion } from "framer-motion";
 import { DoublePageImageInput } from "..";
-import { motion, AnimatePresence, Transition } from "framer-motion";
 import DoublePageImage from "../Image";
-import { Hide } from "@chakra-ui/react";
-import { HotkeyCallback } from "react-hotkeys-hook";
+import useState from "./hooks";
 
 const transition: Transition = {
     type: "tween",
@@ -11,20 +10,14 @@ const transition: Transition = {
     duration: 0.5
 };
 
-export default function ActualDoublePage({ images }: {
-    images: DoublePageImageInput[]
-}) {
-    const [page, setPage] = React.useState(0);
-    const onNext = React.useCallback<HotkeyCallback>(() => {
-        if (page >= 0 && page < (images.length - 1)) {
-            setPage(page + 1);
-        }
-    }, [page]);
-    const onPrevious = React.useCallback<HotkeyCallback>(() => {
-        if (page > 0 && page < images.length) {
-            setPage(page - 1);
-        }
-    }, [page]);
+export type ActualDoublePageProps = {
+    images: DoublePageImageInput[];
+};
+
+export default function ActualDoublePage({ images }: ActualDoublePageProps) {
+    const { page, onNext, onPrevious } = useState({
+        images
+    });
     return (
         <AnimatePresence>
             {
@@ -42,27 +35,14 @@ export default function ActualDoublePage({ images }: {
                                 }}
                                 transition={transition} key={JSON.stringify(image)}
                             >
-                                <DoublePageImage src={image} onNext={onNext} onPrevious={onPrevious}/>
+                                <DoublePageImage src={image} onNext={onNext} onPrevious={onPrevious} />
                             </motion.div>
                         );
                     } else {
                         return (
-                            <motion.div
-                                initial={{
-                                    opacity: 0
-                                }}
-                                animate={{
-                                    opacity: 1
-                                }}
-                                exit={{
-                                    opacity: 0
-                                }}
-                                transition={transition} key={JSON.stringify(image)}
-                            >
-                                <Hide>
-                                    <DoublePageImage src={image} onNext={onNext} onPrevious={onPrevious}/>
-                                </Hide>
-                            </motion.div>
+                            <Box display={"none"} key={JSON.stringify(image)}>
+                                <DoublePageImage src={image} onNext={onNext} onPrevious={onPrevious} />
+                            </Box>
                         );
                     }
                 })

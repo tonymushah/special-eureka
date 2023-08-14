@@ -1,16 +1,19 @@
-import { Box, Center, HStack, Image } from "@chakra-ui/react";
+import { Box, Center, Image } from "@chakra-ui/react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import React from "react";
 import { HotkeyCallback } from "react-hotkeys-hook";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
-import { useImageState } from "../../../SinglePage/Image/hooks";
 import NextPreviousHotKeys from "../../../SinglePage/Image/NextPreviousHotKeys";
+import { useImageState } from "../../../SinglePage/Image/hooks";
 
 export default function RealDoublePage({ src, onPrevious, onNext }: {
-    src: Array<string>,
+    src: [string, string],
     onPrevious?: HotkeyCallback,
     onNext?: HotkeyCallback
 }) {
+    const src_ = React.useMemo(() => {
+        return src;
+    }, []);
     React.useEffect(() => {
         if(src.length > 2){
             throw new Error("The length of the input array should be <= 2");
@@ -26,9 +29,6 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
                     <React.Fragment />
                 )
             }
-            <HStack>
-
-            </HStack>
             <Box
                 backgroundImage={`none, url(${src[0]}), url(${src[1]})`}
                 backgroundPosition={"left, right"}
@@ -88,7 +88,7 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
                         >
                             <Center>
                                 {
-                                    src.map((image, index) => {
+                                    src_.map((image, index) => {
                                         if (index < 2) {
                                             return (
                                                 <Image
