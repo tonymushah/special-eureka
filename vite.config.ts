@@ -35,6 +35,7 @@ export default defineConfig({
             allow: ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/bootstrap@5.2.3_@popperjs+core@2.11.6/node_modules/bootstrap/dist/css/", "../"]
         }
     },
+    appType : "spa",
     build: {
         // Tauri supports es2021
         target: ["es2021", "chrome100", "safari13"],
@@ -47,7 +48,7 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, "src/index.html"),
                 splashscreen: resolve(__dirname, "src/splashscreen.html")
-            },
+            }
         },
         "emptyOutDir": true,
     },

@@ -1,12 +1,13 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { QueryKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDoublePageImageQuery } from "..";
+import { useDoublePageImageQuery } from "../hooks/useDoublePageImageQuery";
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
 import { ActualDoublePageProps } from ".";
 import { useDoublePageProps } from "../Provider";
 import { HotkeyCallback } from "react-hotkeys-hook";
 import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
+import { queryKey as ImageQueryKey, QueryData as ImagesQueryData } from "../hooks/useDoublePageImageQuery";
 
 export type DoublePageImageQueryData = {
     current: number,
@@ -51,7 +52,8 @@ export function useDoublePageReadingStateMutation(chapter: Chapter) {
                 });
             }
         },
-        mutationKey: query_key(chapter).concat("mutation")
+        mutationKey: query_key(chapter).concat("mutation"),
+        networkMode: "offlineFirst"
     });
 }
 
@@ -89,5 +91,28 @@ export default function useState({ images }: ActualDoublePageProps) {
         page,
         onNext: (rtlMode.query.data == true ? onPrevious : onNext),
         onPrevious: (rtlMode.query.data == true ? onNext : onPrevious)
+    };
+}
+
+export function useDoublePageChapter_ReadingStateData(chapter: Chapter) {
+    const queryClient = useQueryClient();
+    const { state, images } = React.useMemo<{
+        state: QueryKey
+        images: QueryKey
+    }>(() => {
+        return {
+            state: query_key(chapter),
+            images: ImageQueryKey(chapter)
+        };
+    }, []);
+    const state_queryData = React.useMemo(() => {
+        return queryClient.getQueryData<DoublePageImageQueryData>(state);
+    }, [queryClient.getQueryData(state)]);
+    const images_queryData = React.useMemo(() => {
+        return queryClient.getQueryData<ImagesQueryData>(images);
+    }, [queryClient.getQueryData(images)]);
+    return {
+        state: state_queryData,
+        images: images_queryData
     };
 }

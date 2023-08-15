@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { AnimatePresence, Transition, motion } from "framer-motion";
-import { DoublePageImageInput } from "..";
+import { DoublePageImageInput } from "../hooks/useDoublePageImageQuery";
 import DoublePageImage from "../Image";
 import useState from "./hooks";
 
