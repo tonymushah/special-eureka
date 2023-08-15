@@ -1,11 +1,12 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
-import { useDoublePageChapter_ReadingStateData, useDoublePageReadingStateMutation } from "../ActualDoublePage/hooks";
+import { useDoublePageReadingStateMutation } from "../ActualDoublePage/hooks";
+import useDoublePageChapter_ReadingStateData from "../ActualDoublePage/useDoublePageChapter_ReadingStateData";
 import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 import { _getLastInURL_ } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import { Skeleton } from "@chakra-ui/react";
 
-export default function useState(chapter: Chapter){
+export default function useState(chapter: Chapter) {
     const [isTranstion_, startTransition] = React.useTransition();
     const { state, images } = useDoublePageChapter_ReadingStateData(chapter);
 

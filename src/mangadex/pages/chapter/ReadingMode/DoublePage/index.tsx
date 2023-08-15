@@ -1,7 +1,7 @@
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
 import Actual from "./ActualDoublePage";
-import { useDoublePageReadingState } from "./ActualDoublePage/hooks";
+import useDoublePageReadingState from "./ActualDoublePage/useDoublePageReadingState";
 import { DoublePagePropsProvider } from "./Provider";
 import { useDoublePageImageQuery } from "./hooks/useDoublePageImageQuery";
 

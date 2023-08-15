@@ -1,13 +1,11 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { QueryKey, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useDoublePageImageQuery } from "../hooks/useDoublePageImageQuery";
-import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
+import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { ActualDoublePageProps } from ".";
 import { useDoublePageProps } from "../Provider";
 import { HotkeyCallback } from "react-hotkeys-hook";
 import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
-import { queryKey as ImageQueryKey, QueryData as ImagesQueryData } from "../hooks/useDoublePageImageQuery";
+import useDoublePageReadingState from "./useDoublePageReadingState";
 
 export type DoublePageImageQueryData = {
     current: number,
@@ -16,26 +14,6 @@ export type DoublePageImageQueryData = {
 
 export function query_key(chapter: Chapter): QueryKey {
     return ["mdx", "chapter", chapter.get_id(), "reading-state", "double-page"];
-}
-
-export function useDoublePageReadingState({ data }: {
-    data: ChapterPage_outlet_context
-}) {
-    const imageSizeQuery = useDoublePageImageQuery({
-        data
-    });
-    const query = useQuery<DoublePageImageQueryData>(query_key(data.chapter), async () => {
-        return {
-            current: 0,
-            limit: imageSizeQuery.data?.length
-        };
-    }, {
-        initialData: {
-            current: 0
-        },
-        enabled: !!imageSizeQuery.data
-    });
-    return query;
 }
 
 export function useDoublePageReadingStateMutation(chapter: Chapter) {
@@ -94,36 +72,3 @@ export default function useState({ images }: ActualDoublePageProps) {
     };
 }
 
-export function useDoublePageChapter_ReadingStateData(chapter: Chapter) {
-    const queryClient = useQueryClient();
-    const { state, images } = React.useMemo<{
-        state: QueryKey
-        images: QueryKey
-    }>(() => {
-        return {
-            state: query_key(chapter),
-            images: ImageQueryKey(chapter)
-        };
-    }, []);
-    const state_queryData = useQuery<DoublePageImageQueryData>(state, {
-        enabled : false
-    });
-    const images_queryData = useQuery<ImagesQueryData>(images, {
-        enabled: false
-    });
-
-    const isStateFetching = queryClient.isFetching({
-        queryKey : state,
-        exact : true
-    });
-    const isImageFetching = queryClient.isFetching({
-        queryKey : images,
-        exact : true
-    });
-    return {
-        state: state_queryData,
-        images: images_queryData,
-        isStateFetching,
-        isImageFetching
-    };
-}
