@@ -16,7 +16,12 @@ export function getLastInURL(my_url: string) {
 
 export function _getLastInURL_(my_url?: string) : string | undefined{
     if(my_url != undefined){
-        return getLastInURL(my_url);
+        try{
+            return getLastInURL(my_url);
+        }catch(e){
+            const new_url = `local://${my_url}`;
+            return getLastInURL(new_url);
+        }
     }else{
         return undefined;
     }

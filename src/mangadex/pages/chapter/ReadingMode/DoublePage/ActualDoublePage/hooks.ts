@@ -105,14 +105,25 @@ export function useDoublePageChapter_ReadingStateData(chapter: Chapter) {
             images: ImageQueryKey(chapter)
         };
     }, []);
-    const state_queryData = React.useMemo(() => {
-        return queryClient.getQueryData<DoublePageImageQueryData>(state);
-    }, [queryClient.getQueryData(state)]);
-    const images_queryData = React.useMemo(() => {
-        return queryClient.getQueryData<ImagesQueryData>(images);
-    }, [queryClient.getQueryData(images)]);
+    const state_queryData = useQuery<DoublePageImageQueryData>(state, {
+        enabled : false
+    });
+    const images_queryData = useQuery<ImagesQueryData>(images, {
+        enabled: false
+    });
+
+    const isStateFetching = queryClient.isFetching({
+        queryKey : state,
+        exact : true
+    });
+    const isImageFetching = queryClient.isFetching({
+        queryKey : images,
+        exact : true
+    });
     return {
         state: state_queryData,
-        images: images_queryData
+        images: images_queryData,
+        isStateFetching,
+        isImageFetching
     };
 }
