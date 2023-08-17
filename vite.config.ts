@@ -33,7 +33,7 @@ export default defineConfig({
         open: false,
         fs: {
             allow: ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/bootstrap@5.2.3_@popperjs+core@2.11.6/node_modules/bootstrap/dist/css/", "../"]
-        }
+        },
     },
     appType : "spa",
     build: {

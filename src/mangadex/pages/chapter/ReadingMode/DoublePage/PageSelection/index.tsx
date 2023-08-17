@@ -4,6 +4,7 @@ import { Chapter } from "@mangadex/api/structures/Chapter";
 import { _getLastInURL_ } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
 import useState from "./hooks";
+import OutDoublePageInput from "../ReadingState/OutDoublePageInput";
 
 export default function PageSelection({ chapter }: {
     chapter: Chapter
@@ -48,41 +49,18 @@ export default function PageSelection({ chapter }: {
                 </MenuButton>
                 <MenuList height={"sm"} overflow={"scroll"}>
                     {
-                        images.data?.map((value, index) => {
-                            if (typeof value == "string") {
-                                return (
-                                    <MenuItem
-                                        key={`${JSON.stringify(value)}--__--__--${index}`}
-                                        onClick={() => {
-                                            startTransition(() => {
-                                                setPage(index);
-                                            });
-                                        }}
-                                    >
-                                        {
-                                            parseInt(_getLastInURL_(value)?.match(/\d+/)?.[0] ?? "0")
-                                        }
-                                    </MenuItem>
-                                );
-                            } else {
-                                return (
-                                    <MenuItem
-                                        key={`${JSON.stringify(value)}--__--__--${index}`}
-                                        onClick={() => {
-                                            startTransition(() => {
-                                                setPage(index);
-                                            });
-                                        }}
-                                    >
-                                        {
-                                            parseInt(_getLastInURL_(value[0])?.match(/\d+/)?.[0] ?? "0")
-                                        } - {
-                                            parseInt(_getLastInURL_(value[1])?.match(/\d+/)?.[0] ?? "0")
-                                        }
-                                    </MenuItem>
-                                );
-                            }
-                        }) ?? (
+                        images.data?.map((value, index) => (
+                            <MenuItem
+                                key={`${JSON.stringify(value)}--__--__--${index}`}
+                                onClick={() => {
+                                    startTransition(() => {
+                                        setPage(index);
+                                    });
+                                }}
+                            >
+                                <OutDoublePageInput value={value} />
+                            </MenuItem>
+                        )) ?? (
                             <React.Fragment />
                         )
                     }

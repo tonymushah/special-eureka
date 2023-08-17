@@ -1,13 +1,7 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import useDoublePageChapter_ReadingStateData from "../ActualDoublePage/useDoublePageChapter_ReadingStateData";
 import React from "react";
-import { DoublePageImageInput } from "../hooks/useDoublePageImageQuery";
-
-export function OutDoublePageInput({ value } : {
-    value : DoublePageImageInput
-}){
-    
-}
+import OutDoublePageInput from "./OutDoublePageInput";
 
 export default function ReadingState({
     chapter
@@ -17,13 +11,7 @@ export default function ReadingState({
     const { state, images } = useDoublePageChapter_ReadingStateData(chapter);
     if(state.isSuccess && images.isSuccess){
         return (
-            <React.Fragment>
-                {
-                    ((typeof (images.data.at(state.data.current))) == "string") ? (
-                        ()
-                    ) : ()
-                }
-            </React.Fragment>
+            <OutDoublePageInput value={images.data[state.data.current]}/>
         );
     }else{
         return (

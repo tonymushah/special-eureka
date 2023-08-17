@@ -5,15 +5,21 @@ import { HotkeyCallback } from "react-hotkeys-hook";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "../../../SinglePage/Image/NextPreviousHotKeys";
 import { useImageState } from "../../../SinglePage/Image/hooks";
+import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 
 export default function RealDoublePage({ src, onPrevious, onNext }: {
     src: [string, string],
     onPrevious?: HotkeyCallback,
     onNext?: HotkeyCallback
 }) {
-    const src_ = React.useMemo(() => {
-        return src;
-    }, []);
+    const rtlMode = useStoryBookRTLSwipperMode();
+    const src_ = React.useMemo<[string, string]>(() => {
+        if(rtlMode.query.data == true){
+            return [src[1], src[0]];
+        }else{
+            return src;
+        }
+    }, [rtlMode.query.data]);
     React.useEffect(() => {
         if(src.length > 2){
             throw new Error("The length of the input array should be <= 2");
