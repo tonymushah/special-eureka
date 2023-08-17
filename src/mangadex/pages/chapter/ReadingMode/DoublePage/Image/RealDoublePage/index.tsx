@@ -5,14 +5,16 @@ import { HotkeyCallback } from "react-hotkeys-hook";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "../../../SinglePage/Image/NextPreviousHotKeys";
 import { useImageState } from "../../../SinglePage/Image/hooks";
-import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
+//import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
+import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
 
 export default function RealDoublePage({ src, onPrevious, onNext }: {
     src: [string, string],
     onPrevious?: HotkeyCallback,
     onNext?: HotkeyCallback
 }) {
-    const rtlMode = useStoryBookRTLSwipperMode();
+    // const rtlMode = useStoryBookRTLSwipperMode();
+    const rtlMode = useRTLSwipperMode();
     const src_ = React.useMemo<[string, string]>(() => {
         if(rtlMode.query.data == true){
             return [src[1], src[0]];

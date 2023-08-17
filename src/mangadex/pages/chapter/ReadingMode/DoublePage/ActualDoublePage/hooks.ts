@@ -4,8 +4,9 @@ import React from "react";
 import { ActualDoublePageProps } from ".";
 import { useDoublePageProps } from "../Provider";
 import { HotkeyCallback } from "react-hotkeys-hook";
-import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
+// import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 import useDoublePageReadingState from "./useDoublePageReadingState";
+import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
 
 export type DoublePageImageQueryData = {
     current: number,
@@ -41,7 +42,8 @@ export default function useState({ images }: ActualDoublePageProps) {
     const pageQuery = useDoublePageReadingState({
         data
     });
-    const rtlMode = useStoryBookRTLSwipperMode();
+    // const rtlMode = useStoryBookRTLSwipperMode();
+    const rtlMode = useRTLSwipperMode();
     const page = React.useMemo(() => {
         return pageQuery.data.current;
     }, [pageQuery.data]);

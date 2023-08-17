@@ -1,15 +1,14 @@
 import { Text } from "@chakra-ui/react";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
 import useChapterReadingModeOption from "../ChapterReadingMode/useChapterReadingModeOption";
-import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
-
 
 const Long_Wide_StripPS = React.lazy(() => import("./Long_Wide_StripPS"));
 
-const SwipperPS = React.lazy(() => import("./SwipperPS"));
-
 const SinglePage = React.lazy(() => import("@mangadex/pages/chapter/ReadingMode/SinglePage/PageSelection"));
+
+const DoublePage = React.lazy(() => import("@mangadex/pages/chapter/ReadingMode/DoublePage/PageSelection"));
 
 export default function PageSelection(props: {
     chapter: Chapter
@@ -33,7 +32,7 @@ export default function PageSelection(props: {
                         <Text>Loading...</Text>
                     }
                 >
-                    <SwipperPS {...props} />
+                    <DoublePage {...props} />
                 </React.Suspense>
             );
         } else {
