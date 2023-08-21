@@ -5,6 +5,7 @@ import useDoublePageChapter_ReadingStateData from "../ActualDoublePage/useDouble
 import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 import { _getLastInURL_ } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import { Skeleton } from "@chakra-ui/react";
+import OutDoublePageInput from "../ReadingState/OutDoublePageInput";
 
 export default function useState(chapter: Chapter) {
     const [isTranstion_, startTransition] = React.useTransition();
@@ -55,25 +56,9 @@ export default function useState(chapter: Chapter) {
     const current = React.useMemo(() => {
         const current_index = images.data?.at(page ?? 0);
         if (current_index != undefined) {
-            if (typeof current_index == "string") {
-                return (
-                    <React.Fragment>
-                        {
-                            parseInt(_getLastInURL_(current_index)?.match(/\d+/)?.[0] ?? "0")
-                        }
-                    </React.Fragment>
-                );
-            } else {
-                return (
-                    <React.Fragment>
-                        {
-                            parseInt(_getLastInURL_(current_index[0])?.match(/\d+/)?.[0] ?? "0")
-                        } - {
-                            parseInt(_getLastInURL_(current_index[1])?.match(/\d+/)?.[0] ?? "0")
-                        }
-                    </React.Fragment>
-                );
-            }
+            return (
+                <OutDoublePageInput value={current_index} />
+            );
         } else {
             return (
                 <Skeleton />
@@ -96,6 +81,30 @@ export default function useState(chapter: Chapter) {
             return undefined;
         }
     }, [page, limit]);
+
+    const limit_comp = React.useMemo(() => {
+        const value = images.data?.at(((limit ?? 1) - 1) ?? 0);
+        if (value != undefined) {
+            if (typeof value == "string") {
+                return (
+                    <React.Fragment>
+                        {parseInt(_getLastInURL_(value)?.match(/\d+/)?.[0] ?? "0")}
+                    </React.Fragment>
+                );
+            } else {
+                return (
+                    <React.Fragment>
+                        {parseInt(_getLastInURL_(value[1])?.match(/\d+/)?.[0] ?? "0")}
+                    </React.Fragment>
+                );
+            }
+        } else {
+            return (
+                <Skeleton />
+            );
+        }
+
+    }, [limit, images.data]);
     return {
         isTranstion,
         isNextDisabled,
@@ -108,6 +117,7 @@ export default function useState(chapter: Chapter) {
         images,
         state,
         setPage,
-        limit
+        limit,
+        limit_comp
     };
 }

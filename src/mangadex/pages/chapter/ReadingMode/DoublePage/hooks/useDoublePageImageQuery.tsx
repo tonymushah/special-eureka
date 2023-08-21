@@ -1,13 +1,33 @@
 import { QueryKey, useQuery } from "@tanstack/react-query";
-import { getImageSize } from "react-image-size";
+import { ResponseType, fetch } from "@tauri-apps/api/http";
+import { getImageSize as getReactImageSize } from "react-image-size";
 import { DoublePageProps } from "..";
 import { Chapter } from "@mangadex/api/structures/Chapter";
+import { toBase64 } from "@commons-res/components/TauriImage";
+import fileExtension from "@commons-res/functions/file-extension";
+import { queryClient } from "@mangadex/resources/query.client";
 
 export type DoublePageImageInput = [string, string] | string;
 
 export async function queryFn({ data }: DoublePageProps) {
     const images: Array<DoublePageImageInput> = [];
+    const getImageSize = async (url : string) => {
+        const file_ext = fileExtension(url);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if(window.__TAURI__ != undefined){
+            
+            const res = await queryClient.fetchQuery([url], () => fetch<Buffer>(url, {
+                "responseType": ResponseType.Binary,
+                method: "GET"
+            }));
+            return queryClient.fetchQuery([url, "dimension"], () => getReactImageSize(`data:image/${file_ext};base64,${toBase64(res.data)}`));
+        }else{
+            return queryClient.fetchQuery([url, "dimension"], () => getReactImageSize(url));
+        }
+    };
     for (let index = 1; index < data.images.length; index++) {
+
         const currentElement = data.images[index];
         const previousCurrentElement: string | undefined = (index - 1) >= 0 ? data.images[index - 1] : undefined;
 

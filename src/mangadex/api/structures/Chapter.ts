@@ -349,7 +349,15 @@ export class Chapter extends Attribute {
     public async getOfflineChapter_Data_Image(filename: string, client?: Client): Promise<string> {
         return Chapter.getAOfflineChapter_Data_Image(this.get_id(), filename, client);
     }
-    public static async getAll_downloaded_chap(offset_limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
+    public static async getAll_downloaded_chap({
+        offset_limits,
+        include_fails,
+        only_fails
+    }: {
+        offset_limits?: Offset_limits,
+        include_fails?: boolean,
+        only_fails?: boolean
+    }, client?: Client): Promise<Collection<string>> {
         if (offset_limits == undefined) {
             offset_limits = new Offset_limits();
         }
@@ -366,13 +374,20 @@ export class Chapter extends Attribute {
                     limit: number,
                     total: number
                 }
-            }> = await DeskApiRequest.get_methods("chapter", {
-                query: {
-                    offset: JSON.stringify(offset_limits.get_offset()),
-                    limit: JSON.stringify(offset_limits.get_limits())
+            }> = await DeskApiRequest.get_methods(`chapter?${stringify({
+                offset: JSON.stringify(offset_limits.get_offset()),
+                limit: JSON.stringify(offset_limits.get_limits()),
+                include_fails,
+                only_fails
+            })}`, {
+            }, client);
+            return new AllDownloadedChapterCollection({
+                ...response.data.data,
+                _params: {
+                    include_fails,
+                    only_fails
                 }
             }, client);
-            return new AllDownloadedChapterCollection(response.data.data, client);
         } else {
             throw new Error("The offline server isn't started");
         }

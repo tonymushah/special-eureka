@@ -20,7 +20,7 @@ export default function PageSelection({ chapter }: {
         startTransition,
         images,
         setPage,
-        limit
+        limit_comp
     } = useState(chapter);
     return (
         <ButtonGroup
@@ -43,9 +43,7 @@ export default function PageSelection({ chapter }: {
                 >
                     {(
                         current
-                    )} / {parseInt(_getLastInURL_(images.data?.at((limit ?? 1) - 1)?.[1])?.match(/\d+/)?.[0] ?? "0") ?? (
-                        <Skeleton />
-                    )}
+                    )} / {limit_comp}
                 </MenuButton>
                 <MenuList height={"sm"} overflow={"scroll"}>
                     {

@@ -29,6 +29,9 @@ export default function ChapterImage({ src, onNext, onPrevious }: SinglePageProp
             >
                 <Box backdropFilter={"auto"} backdropBlur={"50px"} cursor={cursor}>
                     <TransformWrapper
+                        doubleClick={{
+                            disabled : true
+                        }}
                         initialScale={1}
                         centerOnInit
                         disablePadding={false}
@@ -60,6 +63,7 @@ export default function ChapterImage({ src, onNext, onPrevious }: SinglePageProp
                                 }
                             });
                         }}
+                        
                         onZoomStop={() => {
                             startTransition(() => {
                                 setIsZooming(false);

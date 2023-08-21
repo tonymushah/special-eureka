@@ -2,11 +2,17 @@ import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/i
 import { Button, ButtonGroup, HStack, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import usePageSelectionState from "./usePageSelectionState";
+import React from "react";
 
 export default function ChapterReadingOption({ chapter }: {
     chapter: Chapter
 }) {
-    const { isTranstion, rtl_mode, isPreviousDisabled, isNextDisabled, onPrevious, onNext, page, setPage } = usePageSelectionState(chapter);
+    const { isTranstion, rtl_mode, isPreviousDisabled, isNextDisabled, onPrevious, onNext, page, setPage, } = usePageSelectionState(chapter);
+    const indexs = React.useMemo(() => {
+        const c = [];
+        for(let i = 0; i < chapter.get_pages(); i++) c.push(i);
+        return c;
+    }, [chapter]);
     return (
         <HStack spacing={2}>
             <ButtonGroup isAttached>
@@ -27,9 +33,9 @@ export default function ChapterReadingOption({ chapter }: {
                             page + 1
                         }
                     </MenuButton>
-                    <MenuList height={"sm"} overflow={"scroll"}>
+                    <MenuList height={"xs"} overflow={"scroll"}>
                         {
-                            (new Array(chapter.get_pages())).map((_, index) => (
+                            indexs.map((_, index) => (
                                 <MenuItem
                                     key={`${chapter.get_id()}~~__~~${index}`}
                                     onClick={() => {
@@ -44,7 +50,7 @@ export default function ChapterReadingOption({ chapter }: {
                 </Menu>
                 <IconButton 
                     isLoading={isTranstion} 
-                    isDisabled={rtl_mode.query.data == false ? isNextDisabled : isNextDisabled} 
+                    isDisabled={rtl_mode.query.data == false ? isNextDisabled : isPreviousDisabled} 
                     aria-label="Next" 
                     icon={<Icon as={ChevronRightIcon} />} 
                     onClick={rtl_mode.query.data == false ? onNext : onPrevious} 
