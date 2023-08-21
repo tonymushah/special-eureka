@@ -2,7 +2,6 @@ import { Mangadex_suspense } from "@mangadex/index";
 import { Transition, Variants, motion } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import NavigationAnimation from "./Navigation";
-import { defaultTransition } from "@mangadex/resources/constants/animation";
 
 const pageVariants: Variants = {
     initial: {
@@ -16,7 +15,11 @@ const pageVariants: Variants = {
     }
 };
 
-const pageTransition: Transition = defaultTransition;
+const pageTransition: Transition = {
+    type: "tween",
+    ease: "easeInOut",
+    duration: 0.3
+};
 
 export default function AnimationLayout() {
     const { pathname } = useLocation();

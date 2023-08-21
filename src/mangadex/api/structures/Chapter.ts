@@ -132,7 +132,7 @@ export class Chapter extends Attribute {
             object.id,
             attributes.title ?? undefined,
             attributes.pages,
-            Number.parseInt(attributes.chapter ?? "-1") ?? -1,
+            Number.parseFloat(attributes.chapter ?? "-1") ?? -1,
             attributes.createdAt,
             attributes.updatedAt,
             attributes.publishAt
@@ -201,7 +201,7 @@ export class Chapter extends Attribute {
             includeExternalUrl: "0",
             includeEmptyPages: "0",
             ids: props.ids,
-            "groups[]": props.group,
+            groups: props.group,
             translatedLanguage: props.translatedLanguage,
             originalLanguage: props.originalLanguage,
             excludedOriginalLanguage: props.excludedOriginalLanguage,
@@ -645,7 +645,7 @@ export class Chapter_withAllIncludes extends Chapter {
             object.id,
             attributes.title ?? undefined,
             attributes.pages,
-            Number.parseInt(attributes.chapter ?? "-1") ?? -1,
+            Number.parseFloat(attributes.chapter ?? "-1") ?? -1,
             attributes.createdAt,
             attributes.updatedAt,
             attributes.publishAt
