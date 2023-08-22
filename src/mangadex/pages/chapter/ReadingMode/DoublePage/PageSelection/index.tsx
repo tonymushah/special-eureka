@@ -1,10 +1,9 @@
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { Button, ButtonGroup, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Skeleton } from "@chakra-ui/react";
+import { Button, ButtonGroup, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { _getLastInURL_ } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import React from "react";
-import useState from "./hooks";
 import OutDoublePageInput from "../ReadingState/OutDoublePageInput";
+import useState from "./hooks";
 
 export default function PageSelection({ chapter }: {
     chapter: Chapter

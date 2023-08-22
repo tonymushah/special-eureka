@@ -62,6 +62,9 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
                                 setIsPanning(false);
                             });
                         }}
+                        doubleClick={{
+                            disabled : true
+                        }}
                         onZoom={(e) => {
                             startTransition(() => {
                                 const scale = e.state.scale;

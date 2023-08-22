@@ -60,6 +60,8 @@ export function queryKey(chapter : Chapter): QueryKey {
 
 export function useDoublePageImageQuery(props: DoublePageProps) {
     return useQuery<QueryData>(queryKey(props.data.chapter), async () => {
-        return queryFn(props);
+        return await queryFn(props);
+    }, {
+        enabled : true
     });
 }
