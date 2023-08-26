@@ -6,6 +6,7 @@ export default function get_cover_art_byId(props : {
     coverID : string
 }){
     const client = useHTTPClient();
+    // [ ] Refactor `queryKey` into a new file
     const cover_key = ["mdx", "cover", props.coverID];
     const coverQuery = useQuery(cover_key, () => {
         return Cover.getById(props.coverID, client);
@@ -25,6 +26,7 @@ export function get_cover_art_image(props : {
     query_options?: Omit<UseQueryOptions<string, Error>, "queryKey" | "queryFn">
 }){
     const client = useHTTPClient();
+    // [ ] Refactor this into a new file 
     const cover_image_querykey : QueryKey = props.isThumbail == undefined || props.isThumbail == false ? 
         ["mdx", "cover", props.src.get_id(), "image"] : 
         props.size != undefined? 

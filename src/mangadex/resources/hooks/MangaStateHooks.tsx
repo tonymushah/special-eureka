@@ -19,6 +19,7 @@ export function useMangaDownload(props: {
     const manga_query = get_manga_byId({
         mangaID: props.mangaID
     });
+    // [ ] Refactor query into a new function 
     const key = ["mdx", "manga", props.mangaID, "mutation", "download"];
     const query = useQuery(key, async () => {
         toast({
@@ -69,6 +70,7 @@ export function useMangaDelete(props: {
     const manga_query = get_manga_byId({
         mangaID: props.mangaID
     });
+    // [ ] Refactor query key into a new function
     const key = ["mdx", "manga", props.mangaID, "mutation", "delete"];
     const query = useQuery(key, () => {
         toast({
@@ -123,6 +125,7 @@ export function get_manga_byId(props: {
     options?: Omit<UseQueryOptions<GetMangaByIDResponse, Error>, "queryKey" | "queryFn">
 }) {
     const client = useHTTPClient();
+    // [ ] use `React.useMemo()` for optimization
     const key = get_mangaQueryKey_byID(props);
     const query = useQuery<GetMangaByIDResponse, Error>(key, () => {
         if (props.with_all_includes == true) {
@@ -145,6 +148,7 @@ export function get_manga_byId(props: {
 export function get_manga_page_cover(props: MangaPageProps) {
     const client = useHTTPClient();
     let cover_key_ = [""];
+    // [ ] Refaction this queryKey into a function
     try {
         cover_key_ = ["mdx", "cover", props.src.get_cover_art_id()];
     } catch {
@@ -163,6 +167,7 @@ export function get_manga_page_cover(props: MangaPageProps) {
 }
 
 export function get_manga_page_titles(props: MangaPageProps) {
+    // [ ] Refactor this `queryKey` into a function
     const title_query_key = ["mdx", "manga", props.src.get_id(), "title"];
     const title_query = useQuery<Array<Lang_and_Data>, Error>(title_query_key, () => {
         return Lang_and_Data.initializeArrayByAltTitle_obj(props.src.get_alt_title());
@@ -180,6 +185,7 @@ export function get_manga_page_authors(props: MangaPageProps) {
     const authors = useQueries({
         queries: props.src.get_authors_id().map(author_id => {
             return {
+                // [ ] Refactor this query key into a function
                 queryKey: ["mdx", "author", author_id],
                 queryFn: () => {
                     return props.src.get_author_byID(author_id, client);
@@ -197,6 +203,7 @@ export function get_manga_page_artists(props: MangaPageProps) {
     const artistists = useQueries({
         queries: props.src.get_artists_id().map(author_id => {
             return {
+                // [ ] Refactor this query key into a function
                 queryKey: ["mdx", "author", author_id],
                 queryFn: () => {
                     return props.src.get_artist_byID(author_id, client);
@@ -249,6 +256,7 @@ export function get_cover_art(props: {
 export function get_manga_description(props: {
     src: Manga
 }) {
+    // [ ] Refactor this query key into a function
     const manga_description_querykey = ["mdx", "manga", props.src.get_id(), "description"];
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
@@ -265,12 +273,15 @@ export function get_manga_page_cover_art_image(props: {
     scale?: 256 | 512
 }) {
     const client = useHTTPClient();
+    // [ ] Refactor this query key into a function
+    // [ ] use `React.useMemo()` for optimization
     const query_key = ["mdx", "manga", props.src.get_id(), "cover-art", "image"];
     const queryClient = useQueryClient();
     const query = useQuery<string | undefined>(query_key, async () => {
         let data: Cover | undefined = undefined;
         try {
             const cover_id = props.src.get_cover_art_id();
+            // [ ] Refactor this query key into a function
             const cover_query_key = ["mdx", "cover", cover_id];
             const queryData = queryClient.getQueryData<Cover>(cover_query_key);
             if (queryData == undefined) {
@@ -281,6 +292,7 @@ export function get_manga_page_cover_art_image(props: {
             }
         } catch (error) {
             data = (await props.src.get_cover_art(client));
+            // [ ] Refactor this query key into a function
             data = queryClient.setQueryData(["mdx", "cover", data.get_id()], data);
         }
         if (props.isThumbail == true) {

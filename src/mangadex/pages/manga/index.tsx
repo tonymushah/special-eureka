@@ -56,6 +56,7 @@ export default function MangaPage() {
 
     const queryClient = useQueryClient();
     const { id } = useParams();
+    /// [ ] Refactor into a function
     const query_key = ["mdx", "manga", id];
     React.useMemo(() => {
         queryClient.removeQueries(query_key, {

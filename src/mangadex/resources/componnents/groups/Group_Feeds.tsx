@@ -26,6 +26,7 @@ export default function Group_Feeds(props: {
     const languages = useLanguageUserOption();
     return (
         <CollectionComponnent_WithQuery<Chapter>
+            // [ ] Refactor into a function
             queryKey={["mdx", "group_feeds", props.id]}
             fn={async () => {
                 const offset_Limits = new Offset_limits();

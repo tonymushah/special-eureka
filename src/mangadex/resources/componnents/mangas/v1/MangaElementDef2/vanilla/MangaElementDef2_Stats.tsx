@@ -15,6 +15,7 @@ const Statis = React.lazy(() => import("../../../Statistics/Statis"));
 export default function MangaElementDef2_Stats() {
     const { src } = useProps();
     const client = useHTTPClient();
+    // [ ] Refactor into a function
     const manga_statistic_queryKey = ["mdx", "manga", src.get_id(), "statistics"];
     const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
         return Statistics_Manga.get_statsBy_MangaID(src.get_id(), client);

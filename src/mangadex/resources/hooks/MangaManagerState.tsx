@@ -7,6 +7,7 @@ import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 export default function MangaManagerState(){
     const queryClient = useQueryClient();
     const client = useHTTPClient();
+    // [ ] Refactor this into a new function
     const key= ["mdx", "offline_server"];
     const toast = useChakraToast({
         id : "offline-server",

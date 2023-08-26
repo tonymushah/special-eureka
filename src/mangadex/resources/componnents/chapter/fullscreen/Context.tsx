@@ -3,6 +3,7 @@ import { appWindow } from "@tauri-apps/api/window";
 
 export function useChapterFullscreen(){
     const queryClient = useQueryClient();
+    // [ ] Refactor into a function
     const queryKey : readonly string[] = ["mdx", "chapter", "fullscreen-mode"];
     const query = useQuery(queryKey, {
         "initialData" : false,
@@ -31,6 +32,7 @@ export function useChapterFullscreen(){
 }
 
 export function useAppFullscreenQuery(){
+    // [ ] Refactor into a function
     const queryKey : readonly string[] = ["mdx", "is", "initially", "fullscreen"];
     const query = useQuery(queryKey, () => appWindow.isFullscreen());
     return {

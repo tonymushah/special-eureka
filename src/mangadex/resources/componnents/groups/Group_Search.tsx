@@ -49,6 +49,7 @@ export default function Group_Search(props: {
                                 client: client
                             });
                         }}
+                        // [ ] Refactor into a function
                         queryKey={["mdx", "group", "search", random]}
                         query_options={{
                             onSuccess(data){

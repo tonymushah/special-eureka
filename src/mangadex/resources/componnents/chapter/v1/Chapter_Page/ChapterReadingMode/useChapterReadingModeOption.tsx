@@ -3,6 +3,7 @@ import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
 import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
 
 export default function useChapterReadingModeOption(){
+    // [ ] Reactor into a function
     const query_key = ["mdx", "chapter", "reading-mode"];
     const userOption = useUserOption();
     const query = useQuery<ReadingMode>(query_key, async () => {

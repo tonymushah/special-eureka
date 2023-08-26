@@ -12,6 +12,7 @@ export function get_aggregate_query(props : {
     const usePingQueryRes = usePingQuery({
         client : client
     });
+    // [ ] Refactor query key into a new function
     const queryKey = ["mdx", "aggregate", props.aggregate_options];
     const query = useQuery<Aggregate, Error>(queryKey, () => {
         if(usePingQueryRes.query.data == true){
@@ -33,6 +34,7 @@ export function get_aggregate_query_offline(props : {
     aggregate_options: AggregateListOptions,
     queryOption? : Omit<UseQueryOptions<Aggregate, Error>, "queryKey" | "queryFn">
 }){
+    // [ ] Refactor query key into a new funtion
     const queryKey = ["mdx", "aggregate", props.aggregate_options, "offline"];
     const query = useQuery<Aggregate, Error>(queryKey, () => {
         return Aggregate.get_aggregate_offline(props.aggregate_options);

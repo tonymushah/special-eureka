@@ -11,6 +11,7 @@ import { LAD_Tabs } from "@mangadex/resources/componnents/mangas/Mainpage/tabs/L
 export default function Author_Page_Biography(props: {
     src: Author
 }) {
+    /// [ ] Refactor into a function
     const query_key = ["mdx", "author", props.src.get_id(), "biography"];
     const query = useQuery<Array<Lang_and_Data>>(query_key, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_biography());

@@ -18,6 +18,7 @@ export default function RecentlyAdded() {
     const { offset_limit, queryKey } = React.useMemo(() => {
         const offset_limit = new Offset_limits();
         offset_limit.set_limits(25);
+        /// [ ] Refactor into a fucntion
         const queryKey = ["mdx", "recently-added"];
         return {
             offset_limit,

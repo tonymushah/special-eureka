@@ -11,6 +11,7 @@ import { MangaPageProps } from ".";
 
 export function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
     const client = useHTTPClient();
+    /// [ ] Split into a new file and refactor query key into a new file
     const manga_statistics = useQuery<Statistics_Manga, Error>(["mdx", "manga", props.src.get_id(), "statistics"], () => {
         return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
     }, {

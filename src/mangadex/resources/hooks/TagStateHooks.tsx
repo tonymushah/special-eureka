@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function get_all_tag(){
     const client = useHTTPClient();
+    // [ ] Refactor this query key into a function
     const queryKey = ["mdx", "tags"];
     const query = useQuery(queryKey, () => {
         return Tag.get_all_tag(client);

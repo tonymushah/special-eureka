@@ -9,6 +9,7 @@ const Group_Simple_Element = React.lazy(() => import("./Group_Simple_Element"));
 export default function Group_Simple_Element_ByID(props: {
     id: string
 }) {
+    // [ ] Refactor into a function
     const query_key = ["mdx", "groups", props.id];
     const query = useQuery<Group, Error>(query_key, () => {
         return Group.get_groupById(props.id);

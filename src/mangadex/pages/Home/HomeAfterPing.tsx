@@ -40,14 +40,17 @@ async function recentlyAdded_loader(client: Client, queryClient: QueryClient) {
 
 async function seasonal_loader(client: Client, queryClient: QueryClient) {
     const seasonal_id = await getSeasonalId(client);
+    /// [ ] Refactor Query Key into a function
     queryClient.setQueryData(["mdx", "seasonal", "id"], seasonal_id);
     const data = await List.getListByID_includes_manga(seasonal_id, client);
+    /// [ ] Refactor Query Key into a function
     const key = ["mdx", "custom_list", seasonal_id];
     queryClient.setQueryData(key, data);
 }
 
 export default function HomeAfterPing() {
     const client = useHTTPClient();
+    /// [ ] Refactor Query Key into a function
     const queryKey = ["mdx", "home", "page", "loader"];
     const queryClient = useQueryClient();
     const query = useQuery(queryKey, async () => {

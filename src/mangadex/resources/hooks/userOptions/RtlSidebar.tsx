@@ -2,6 +2,8 @@ import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOp
 import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
 
 export default function useRTLSidebar(query_options? : Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">){
+    // [ ] Refactor this query key into a function
+    // [ ] use `React.useMemo` for optimization
     const queryKey = ["mdx", "client", "rtl-sidebar"];
     const userCachedOption = useUserOption();
     const query = useQuery(queryKey, async () => {

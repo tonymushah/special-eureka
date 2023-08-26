@@ -8,6 +8,7 @@ export default function MangaElementDef_wRelated(props: {
     mangaID: string,
     promise: Promise<Manga>
 }) {
+    // [ ] use the predefine `get_manga_by_id` hooks
     const query = useQuery<Manga, Error>(["mdx", "manga", props.mangaID], () => {
         return props.promise;
     }, {

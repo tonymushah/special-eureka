@@ -10,6 +10,7 @@ import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexS
 export default function Images() {
     const client = useHTTPClient();
     const { chapter } = usePropsChapter();
+    /// [ ] Refactor into a function
     const chapter_data_images_queryKey = ["mdx", "chapter", chapter.get_id(), "data"];
     const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
         return chapter.get_dataImages(client);

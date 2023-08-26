@@ -14,6 +14,7 @@ export default function CustomListSwiper(props: {
     listID: string
 }) {
     const client = useHTTPClient();
+    // [ ] Refactor into a function
     const key = ["mdx", "custom_list", props.listID];
     const query = useQuery<List, Error>(key, () => {
         return List.getListByID_includes_manga(props.listID, client);

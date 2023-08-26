@@ -21,6 +21,7 @@ export default function RecentlyPopularPage() {
     const touse_date_ = new Date();
     touse_date_.setMonth(touse_date_.getMonth() - 1);
     const touse_date = formatDate(touse_date_);
+    /// [ ] Refactor into a function
     const queryKey = ["mdx", "popular-recent-titles"];
     const queryClient = useQueryClient();
     useTrackEvent("mangadex-latest-update-entrance");
@@ -48,6 +49,7 @@ export default function RecentlyPopularPage() {
                             <Chakra.Divider />
                         }>
                             {data.get_data().map((value, index) => {
+                                /// [ ] Refactor into a function
                                 queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
                                 return (
                                     <Chakra.Card key={value.get_id()}>

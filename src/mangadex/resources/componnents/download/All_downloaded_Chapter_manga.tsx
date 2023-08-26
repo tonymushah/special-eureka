@@ -1,8 +1,8 @@
 import React from "react";
-import Consumer from "../../../../commons-res/components/Consumer";
-import { useHTTPClient } from "../../../../commons-res/components/HTTPClientProvider";
-import { Offset_limits } from "../../../api/internal/Utils";
-import { Manga } from "../../../api/structures/Manga";
+import Consumer from "@commons-res/components/Consumer";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
+import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 
 export default function All_downloaded_Chapter_manga(props: {
@@ -12,6 +12,7 @@ export default function All_downloaded_Chapter_manga(props: {
     onLoading? : React.ReactNode
 }){
     const client = useHTTPClient();
+    // Refactor into a function
     const query_key = ["mdx", "manga", props.mangaID, "offline-chapters"];
     return (
         <CollectionComponnent_WithQuery<string>

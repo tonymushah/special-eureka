@@ -17,6 +17,7 @@ export default function AllDownlaodedMangaConsumer(props: {
     query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
 }) {
     const client = useHTTPClient();
+    // [ ] Refactor into a function
     const query_key = ["mdx", "dowloaded_manga"];
     return (
         <Chakra.Box>

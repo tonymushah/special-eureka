@@ -90,6 +90,7 @@ export function is_chapter_downloaded_with_ChapID(props: {
     id: string
 }) {
     const client = useHTTPClient();
+    // [ ] Refactor into a new file
     const is_downloaded_queryKey = ["mdx", "chapter", props.id, "is_downloaded"];
     const download_query = useQuery(is_downloaded_queryKey, () => {
         return Chapter.is_chapter_downloaded(props.id, client);
@@ -104,6 +105,7 @@ export function get_chapter_user_uploader(props: {
     chapter: Chapter
 }) {
     const client = useHTTPClient();
+    // [ ] Refactor query key into a new function
     const user_query_key = ["mdx", "user", props.chapter.get_user_id()];
     const user_query = useQuery<User, Error>(user_query_key, () => {
         return props.chapter.get_userUploader(client);
@@ -138,6 +140,7 @@ export function get_chapter_groups(props: {
 export function get_this_chapter_lang(props: {
     chapter: Chapter
 }) {
+    // [ ] Refactor query key into a new function
     const this_chapter_lang_querykey = ["mdx", "chapter", props.chapter.get_id(), "lang"];
     const this_chapter_lang_query = useQuery(this_chapter_lang_querykey, () => {
         return props.chapter.get_translated_Lang();
@@ -167,6 +170,7 @@ export function useChapterDownloadMutation(props: {
     const download_query = useQuery<ChapterDeleteMutation_data & {
         hasFailed : boolean
     }, Error>({
+        // [ ] Refactor query key into new function
         queryKey: ["mdx", "mutation", "chapter", props.chapID, "download"],
         queryFn: async () => {
             toast({
@@ -360,6 +364,7 @@ export function useChapterDeleteMutation(props: {
     });
     const toastID = React.useRef<ToastId>();
     const delete_mutation = useQuery<ChapterDeleteMutation_data, Error>({
+        // [ ] Refactor queryKey into a new function
         queryKey: ["mdx", "mutation", props.chapID, "chapter", "delete"],
         queryFn: async () => {
             const chap = await Chapter.get_ChapterbyId(props.chapID, client);
@@ -446,6 +451,7 @@ export function useChapterDeleteMutation(props: {
 export function get_manga_of_chapter(props : {
     chapter : Chapter
 }){
+    // [ ] Refactor `queryKey` into a function
     const queryKey = ["mdx", "chapter", props.chapter.get_id(), "manga"];
     const queryClient = useQueryClient();
     const query = useQuery<Manga, Error>(queryKey, async () => {

@@ -11,6 +11,7 @@ export default function Group_Titles(props: {
     const client = useHTTPClient();
     return (
         <CollectionComponnent_WithQuery<Manga>
+            // [ ] Refactor into a function
             queryKey={["mdx", "group_titles", props.id]}
             fn={() => {
                 return Manga.search({

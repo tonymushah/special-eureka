@@ -14,6 +14,7 @@ export function useAuthorMenuSearch({name} : {
     name : string
 }){
     const client = useHTTPClient();
+    /// [ ] Refactor into a function
     const queryKey = ["mdx", "manga", "search", "authors", {
         name : name
     }];
@@ -32,6 +33,7 @@ export function useAuthorMenuSearch({name} : {
 
 export function useAuthorMenuSearchData(){
     const queryClient = useQueryClient();
+    // [ ] Refactor into a function
     const queryKey = ["mdx", "manga", "search", "authors"];
     const query = useQuery<Array<Author>>(queryKey, () => {
         return [];

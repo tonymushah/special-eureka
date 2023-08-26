@@ -59,6 +59,7 @@ export async function loader({
     return search_result;
 }
 
+/// [ ] Refactor into a function
 export const queryKey = ["mdx", "home_page", "latest_update"];
 
 export default function Latest_Updates() {

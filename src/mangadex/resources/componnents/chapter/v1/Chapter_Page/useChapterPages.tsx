@@ -11,6 +11,7 @@ export default function useChapterPages(props: {
     chapter: Chapter
 }) {
     const queryClient = useQueryClient();
+    // [ ] Refactor into a function 
     const queryKey: readonly string[] = ["mdx", "current-chapter", props.chapter.get_id(), "reading-state"];
     const query = useQuery<ChapterPages>(queryKey, async () => {
         return {

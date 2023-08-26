@@ -16,7 +16,9 @@ export default function Group_Simple_Element(props: {
     src: Group
 }) {
     const client = useHTTPClient();
+    // [ ] split try catch in a componnent
     try {
+        // [ ] Refactor into a function
         const leader_queryKey = ["mdx", "user", props.src.getLeaderID()];
         const leader_query = useQuery(leader_queryKey, () => {
             return props.src.getLeader(client);

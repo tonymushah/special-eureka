@@ -15,6 +15,7 @@ export function getUserFeedQuery(props: {
     user_id: string
 }) {
     const client = useHTTPClient();
+    // [ ] use `React.useMemo` for optimization
     const queryKey = getUserFeedQueryKey(props);
     const query = useQuery(queryKey, () => {
         return Chapter.search({
@@ -39,6 +40,7 @@ export function getUserByIDQuery(props : {
     user_id : string
 }){
     const client = useHTTPClient();
+    // [ ] use `React.useMemo` for optimization
     const queryKey = getUserByIDQueryKey(props);
     const query = useQuery(queryKey, () => {
         return User.getUserById(props.user_id, client);

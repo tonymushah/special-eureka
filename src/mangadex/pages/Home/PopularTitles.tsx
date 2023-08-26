@@ -60,6 +60,7 @@ export default function RecentlyPopular() {
                         >
                             {
                                 query.data.get_data().map((value, index) => {
+                                    /// Refactor into a function
                                     queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
                                     return (
                                         <SwiperSlide

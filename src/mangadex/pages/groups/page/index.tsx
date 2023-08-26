@@ -42,6 +42,7 @@ function Success({ id }: {
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
+    /// [ ] Put this in a new function
     const query_key = ["mdx", "group", id];
     const setTitle = useAppWindowTitle();
     React.useEffect(() => {

@@ -2,6 +2,8 @@ import { UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstac
 
 export default function useChapterReadingDrawer(query_options? : Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">){
     const queryClient = useQueryClient();
+    // [ ] Refactor this query key into a function
+    // [ ] use `React.useMemo` for optimization
     const queryKey = ["mdx", "client", "fullscreen-drawer"];
     const query = useQuery(queryKey, async () => {
         return false;
