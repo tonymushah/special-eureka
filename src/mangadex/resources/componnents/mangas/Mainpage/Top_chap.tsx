@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import MangaStatus from "@mangadex/api/enums/MangaStatus";
 import { Lang_and_Data, MangaLinksData, make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Tag } from "@mangadex/api/structures/Tag";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import { Await } from "react-router-dom";
 import { TagRow } from "../Mainpage/boutons/tag_boutons";

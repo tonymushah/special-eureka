@@ -20,13 +20,13 @@ export function useMangaDownload(props: {
         mangaID: props.mangaID
     });
     const key = ["mdx", "manga", props.mangaID, "mutation", "download"];
-    const query = useQuery(key, () => {
+    const query = useQuery(key, async () => {
         toast({
             title: "Downloading manga...",
             status: "loading",
             duration: 9000
         });
-        return Manga.download_manga(props.mangaID, client);
+        return await Manga.download_manga(props.mangaID, client);
     }, {
         onSuccess: (manga) => {
             let title = "";

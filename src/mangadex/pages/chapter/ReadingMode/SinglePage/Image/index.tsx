@@ -6,11 +6,13 @@ import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import NextPreviousHotKeys from "./NextPreviousHotKeys";
 import { useImageState } from "./hooks";
 
-export default function ChapterImage({ src, onNext, onPrevious }: {
-    src: string,
-    onNext?: HotkeyCallback,
-    onPrevious?: HotkeyCallback
-}) {
+type SinglePageProps = {
+    src: string;
+    onNext?: HotkeyCallback;
+    onPrevious?: HotkeyCallback;
+};
+
+export default function ChapterImage({ src, onNext, onPrevious }: SinglePageProps) {
     const { isDisabled, setIsDeZooming, setIsPanning, startTransition, setIsZooming, cursor, transformWarperRef} = useImageState();
     return (
         <React.Fragment>
@@ -27,6 +29,9 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
             >
                 <Box backdropFilter={"auto"} backdropBlur={"50px"} cursor={cursor}>
                     <TransformWrapper
+                        doubleClick={{
+                            disabled : true
+                        }}
                         initialScale={1}
                         centerOnInit
                         disablePadding={false}
@@ -58,6 +63,7 @@ export default function ChapterImage({ src, onNext, onPrevious }: {
                                 }
                             });
                         }}
+                        
                         onZoomStop={() => {
                             startTransition(() => {
                                 setIsZooming(false);

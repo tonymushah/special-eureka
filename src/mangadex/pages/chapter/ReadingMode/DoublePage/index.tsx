@@ -1,60 +1,38 @@
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
-import SwipperMode from "../SwipperMode";
-import { Controller, Keyboard } from "swiper";
-import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
-import * as Chakra from "@chakra-ui/react";
-import React from "react";
-import { SwiperSlide } from "swiper/react";
+import Actual from "./ActualDoublePage";
+import useDoublePageReadingState from "./ActualDoublePage/useDoublePageReadingState";
+import { DoublePagePropsProvider } from "./Provider";
+import { useDoublePageImageQuery } from "./hooks/useDoublePageImageQuery";
+import { AbsoluteCenter, HStack, Text } from "@chakra-ui/react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
-export default function DoublePage({ data }: {
-    data: ChapterPage_outlet_context
-}) {
-    const { query } = useRTLSwipperMode();
-    if (query.isSuccess) {
+export type DoublePageProps = {
+    data: ChapterPage_outlet_context;
+};
+
+export default function DoublePage({ data }: DoublePageProps) {
+    const query = useDoublePageImageQuery({
+        data
+    });
+    const query2 = useDoublePageReadingState({
+        data
+    });
+    if (query.isSuccess && query2.isSuccess) {
         return (
-            <SwipperMode
-                data={data}
-                swipper_option={{
-                    dir: query.data == true ? "rtl" : undefined,
-                    slidesPerGroup: 2,
-                    slidesPerView: 2,
-                    modules: [Controller, Keyboard],
-                    keyboard: true,
-                    spaceBetween: 0,
-                }}
+            <DoublePagePropsProvider
+                value={data}
             >
-                {({ images, reading_state }) => (
-                    <React.Fragment>
-                        {
-                            images.map((value, index) => (
-                                <SwiperSlide onMouseOver={() => {
-                                    reading_state.setCurrentPage(index + 1);
-                                }} key={`${data.chapter.get_id()}-${index}`}>
-                                    <Chakra.Container height={"100vh"} overflow={"scroll"}>
-                                        <Chakra.Image
-                                            fallback={
-                                                <Chakra.Box width={"full"}>
-                                                    <Chakra.Center>
-                                                        <MangadexSpinner
-                                                            size={"xl"}
-                                                            color={"orange"}
-                                                            thickness={"10px"}
-                                                        />
-                                                    </Chakra.Center>
-                                                </Chakra.Box>
-                                            }
-                                            src={value}
-                                            id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
-                                        />
-                                    </Chakra.Container>
-                                </SwiperSlide>
-                            ))
-                        }
-                    </React.Fragment>
-                )}
-            </SwipperMode>
+                <Actual images={query.data} />
+            </DoublePagePropsProvider>
+        );
+    } else {
+        return (
+            <AbsoluteCenter>
+                <HStack>
+                    <MangadexSpinner size={"md"}/>
+                    <Text as={"span"}>Loading...</Text>
+                </HStack>
+            </AbsoluteCenter>
         );
     }
-    return (<></>);
 }

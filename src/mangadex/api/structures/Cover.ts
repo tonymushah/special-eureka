@@ -131,7 +131,7 @@ export class Cover extends Attribute {
         const instance = new Cover(
             object.id,
             attributes.description ?? "",
-            Number.parseInt(attributes.volume ?? "0") ?? 0,
+            Number.parseFloat(attributes.volume ?? "0") ?? 0,
             attributes.fileName,
             attributes.locale ?? "",
             attributes.createdAt,

@@ -1,6 +1,6 @@
 //import * as Chakra from "@chakra-ui/react";
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import { RouteObject } from "react-router-dom";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
