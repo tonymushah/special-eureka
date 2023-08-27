@@ -5,6 +5,7 @@ import { Cover } from "@mangadex/api/structures/Cover";
 import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { MangaPageProps } from "@mangadex/resources/componnents/mangas/Manga_Page";
 import { QueryKey, useQueries, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import React from "react";
 
 
 export function useMangaDownload(props: {
@@ -125,8 +126,8 @@ export function get_manga_byId(props: {
     options?: Omit<UseQueryOptions<GetMangaByIDResponse, Error>, "queryKey" | "queryFn">
 }) {
     const client = useHTTPClient();
-    // [ ] use `React.useMemo()` for optimization
-    const key = get_mangaQueryKey_byID(props);
+    // [x] use `React.useMemo()` for optimization
+    const key = React.useMemo(() => get_mangaQueryKey_byID(props), []);
     const query = useQuery<GetMangaByIDResponse, Error>(key, () => {
         if (props.with_all_includes == true) {
             return Manga_with_allRelationship.getMangaByID(props.mangaID, client);
