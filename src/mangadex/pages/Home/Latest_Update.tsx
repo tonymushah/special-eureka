@@ -59,13 +59,15 @@ export async function loader({
     return search_result;
 }
 
-/// [ ] Refactor into a function
-export const queryKey = ["mdx", "home_page", "latest_update"];
+/// [x] Refactor into a function
+export function queryKey() {
+    return ["mdx", "home_page", "latest_update"];
+}
 
 export default function Latest_Updates() {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const key = queryKey;
+    const key = React.useMemo(() => queryKey(), []);
     const query = useQuery<Collection<Chapter_withAllIncludes>, Error>(key, () => {
         return loader({
             client,

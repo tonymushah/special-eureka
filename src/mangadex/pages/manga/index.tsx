@@ -9,6 +9,7 @@ import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/M
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Client } from "@tauri-apps/api/http";
 import React from "react";
 import { Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
 
@@ -44,11 +45,15 @@ function ThrowError({ error, id }: {
 }) {
     const setTitle = useAppWindowTitle();
     React.useEffect(() => {
-        setTitle(`Error on loading title ${id!} | Mangadex`);
+        setTitle(`Error on loading title ${id ?? "undefined"} | Mangadex`);
     });
     return (
         <ErrorEL1 error={error} />
     );
+}
+
+export async function queryFn(id: string, client: Client) {
+    return await Manga.getMangaByID(id, client);
 }
 
 export default function MangaPage() {
@@ -56,28 +61,33 @@ export default function MangaPage() {
 
     const queryClient = useQueryClient();
     const { id } = useParams();
-    /// [ ] Refactor into a function
-    const query_key = ["mdx", "manga", id];
-    React.useMemo(() => {
+    /// [x] Refactor into a function
+    const query_key = React.useMemo(() => queryKey(id), []);
+    React.useEffect(() => {
         queryClient.removeQueries(query_key, {
             "exact": true
         });
     }, []);
 
     useTrackEvent("mangadex-manga-page-entrance", {
-        "manga-id": id!
+        "manga-id": id ?? ""
     });
     const query = useQuery<GetMangaByIDResponse, Error>(query_key, async () => {
-        return await Manga.getMangaByID(id!, client);
+        if(id != undefined){
+            return await queryFn(id, client);
+        }else{
+            throw new Error("the given manga id is undefined");
+        }
     }, {
         "staleTime": Infinity,
+        enabled: !!id
     });
     const navigate = useNavigate();
-    if (query.isSuccess) {
+    if (query.isSuccess && id != undefined) {
         return (
             <MyErrorBounderies>
                 <Download_Manga_withHotkeys
-                    mangaID={id!}
+                    mangaID={id}
                 />
                 <Manga_Page
                     src={query.data.manga}
@@ -126,4 +136,8 @@ export default function MangaPage() {
     }
 
     return (<React.Fragment />);
+}
+
+function queryKey(id: string | undefined) {
+    return ["mdx", "manga", id];
 }

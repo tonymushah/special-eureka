@@ -36,11 +36,12 @@ export async function loader({
     });
 }
 
-export const queryKey = ["mdx", "popular-recent-titles"];
+export const queryKey = () => ["mdx", "popular-recent-titles"];
 
 export default function RecentlyPopular() {
     const client = useHTTPClient();
-    const query = useQuery(queryKey, () => {
+    const key = React.useMemo(() => queryKey(), []);
+    const query = useQuery(key, () => {
         return loader({ client });
     }, {
         staleTime: Infinity
