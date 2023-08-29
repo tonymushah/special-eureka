@@ -5,6 +5,7 @@ import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexS
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { UseQueryResult } from "@tanstack/react-query";
 import React from "react";
+import { LoaderFunction } from "react-router";
 
 const HomePageAfterPing = React.lazy(() => import("@mangadex/pages/Home/HomeAfterPing"));
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
@@ -87,11 +88,11 @@ function Home() {
                 />
             </React.Suspense>
         </Chakra.Box>
-
     );
 }
 
-
-
 export default Home;
 
+export const loader : LoaderFunction = async function () {
+    return new Response();
+};

@@ -16,7 +16,7 @@ export function get_aggregate_query_offline(props: {
         return Aggregate.get_aggregate_offline(props.aggregate_options);
     }, props.queryOption == undefined ? {
         staleTime: Infinity,
-        enabled : !!server_query.query.data
+        enabled : server_query.query.data == true
     } : props.queryOption);
     return {
         queryKey : _queryKey_,

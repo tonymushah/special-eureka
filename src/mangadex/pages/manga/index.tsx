@@ -138,6 +138,6 @@ export default function MangaPage() {
     return (<React.Fragment />);
 }
 
-function queryKey(id: string | undefined) {
+export function queryKey(id: string | undefined) {
     return ["mdx", "manga", id];
 }

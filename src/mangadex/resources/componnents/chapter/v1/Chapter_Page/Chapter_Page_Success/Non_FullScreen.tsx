@@ -1,16 +1,14 @@
 import { useChapterFullscreen } from "../../../fullscreen/useChapterFullscreen";
-import React from "react";
 import Chapter_on_non_FullScreen from "./Chapter_on_non_FullScreen";
+import { Box } from "@chakra-ui/react";
 
 export default function Non_FullScreen(){
     const fullscreen = useChapterFullscreen();
-    if(fullscreen.query.data == false){
-        return (
+    return (
+        <Box
+            display={fullscreen.query.data == false ? "initial" : "none"}
+        >
             <Chapter_on_non_FullScreen />
-        );
-    }else{
-        return (
-            <React.Fragment/>
-        );
-    }
+        </Box>
+    );
 }
