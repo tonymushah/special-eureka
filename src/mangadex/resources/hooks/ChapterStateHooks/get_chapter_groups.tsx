@@ -3,7 +3,6 @@ import { Chapter } from "@mangadex/api/structures/Chapter";
 import { Group } from "@mangadex/api/structures/Group";
 import { UseQueryResult, useQueries } from "@tanstack/react-query";
 
-
 export function get_chapter_groups(props: {
     chapter: Chapter;
 }) {
@@ -11,7 +10,7 @@ export function get_chapter_groups(props: {
     const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries({
         queries: props.chapter.get_scanlations_groups_id().map((value: string) => {
             return {
-                queryKey: ["mdx", "group", value],
+                queryKey: queryKey(value),
                 queryFn: () => {
                     return props.chapter.get_scanlation_group_byID(value, client);
                 },
@@ -21,3 +20,8 @@ export function get_chapter_groups(props: {
     });
     return groups_query;
 }
+
+export function queryKey(value: string): string[] {
+    return ["mdx", "group", value];
+}
+

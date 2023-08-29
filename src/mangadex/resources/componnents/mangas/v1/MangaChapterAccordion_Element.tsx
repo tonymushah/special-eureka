@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import MangaChapter_Accordion from "@mangadex/api/internal/utils/MangaChapter_Accordion";
-import { get_manga_byId, useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import { useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload_Delete";
 import React from "react";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";

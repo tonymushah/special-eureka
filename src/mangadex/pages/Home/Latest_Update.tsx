@@ -10,7 +10,7 @@ import MangaElementFallback from "@mangadex/resources/componnents/mangas/v1/Mang
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
-import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID";
 import { Client } from "@tauri-apps/api/http";
 import UserOptions from "@mangadex/api/internal/UserOptions";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";

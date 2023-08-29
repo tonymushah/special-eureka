@@ -2,7 +2,7 @@ import Consumer from "@commons-res/components/Consumer";
 import { Author_Artists } from "@mangadex/api/internal/Utils";
 import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
-import { get_manga_page_authors_artists } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_manga_page_authors_artists } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_authors_artists";
 import React from "react";
 
 export function Author_Artists_Cmp_via_manga(props : {

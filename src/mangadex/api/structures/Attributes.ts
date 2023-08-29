@@ -11,8 +11,8 @@ export type IdTypeWRelated = IdType & {
 export class Attribute {
     private id!: string;
     private type!: string;
-    private relationships!: Array<Attribute> | undefined;
-    private related!: string | undefined;
+    private relationships?: Array<Attribute>;
+    private related?: string;
     // [x] set args
     public set_id(id: string) {
         this.id = id;

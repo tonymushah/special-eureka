@@ -1,10 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUserOption } from "../componnents/userOption/UserOptionProvider";
+import React from "react";
 
 export function useMangaListOption(){
     const useroption = useUserOption();
-    // [ ] Refactor `queryKey` into a new function
-    const query_key = ["mdx", "manga", "list", "option"];
+    // [x] Refactor `queryKey` into a new function
+    const query_key = React.useMemo(() => queryKey(), []);
     const query = useQuery(query_key, () => {
         return useroption.getMangaListOption();
     });
@@ -24,4 +25,8 @@ export function useMangaListOption(){
         updateListOption : mutation.mutate,
         mutation
     };
+}
+
+export function queryKey() {
+    return ["mdx", "manga", "list", "option"];
 }

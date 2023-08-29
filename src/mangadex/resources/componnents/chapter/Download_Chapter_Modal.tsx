@@ -12,11 +12,11 @@ import {
 } from "@chakra-ui/react";
 import Consumer from "@commons-res/components/Consumer";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { useChapterDownloadMutation } from "../../hooks/ChapterStateHooks";
+import { useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks/useChapterDownloadMutation";
 import IsPingable from "../IsPingable";
 import IsPingable_defaultError from "../IsPingable_defaultError";
 import { UseQueryResult } from "@tanstack/react-query";
-import { ChapterDeleteMutation_data } from "../../hooks/ChapterStateHooks";
+import { ChapterDeleteMutation_data } from "@mangadex/resources/hooks/ChapterStateHooks/ChapterDeleteMutation_data";
 export default function Download_Chapter_Modal(props: {
     chap_id: string,
     children: (data : {onOpen: () => void, dowload_query : UseQueryResult<ChapterDeleteMutation_data, Error>}) => React.ReactNode
