@@ -7,7 +7,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { BottomContent } from "./BottomContent";
 import OnSuccess from "./OnSuccess";
-import WaveHaikei from "./wave-haikei-1.svg";
+import WaveHaikei from "../wave-haikei-1.svg";
 
 const IsPingable = React.lazy(() => import("../../IsPingable"));
 
