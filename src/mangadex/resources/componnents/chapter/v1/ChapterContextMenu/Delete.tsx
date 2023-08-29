@@ -1,6 +1,7 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { get_ChapterbyId, useChapterDownloadMutation, useChapterDeleteMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { useChapterDownloadMutation, useChapterDeleteMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { BeatLoader } from "react-spinners";
 import { useContextMenuProps } from ".";

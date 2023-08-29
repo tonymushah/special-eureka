@@ -1,7 +1,8 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { ChapterDeleteMutation_data, get_ChapterbyId, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { ChapterDeleteMutation_data, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import { UseQueryResult } from "@tanstack/react-query";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 

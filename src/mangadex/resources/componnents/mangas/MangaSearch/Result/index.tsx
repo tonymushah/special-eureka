@@ -1,40 +1,12 @@
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
-import { Mangadex_suspense__ } from "@mangadex/index";
 import { useAtomValue } from "jotai";
 import React from "react";
-import CollectionComponnent_WithQuery from "../../Collection/CollectionComponnent_WithQuery";
-import MyErrorBounderies from "../../error/MyErrorBounderies";
-import { search_option_value } from "./atoms";
-import { TagInsertionMode } from "./types";
+import { search_option_value } from "../atoms";
+import { TagInsertionMode } from "../types";
+import { Manga_Search_Result } from "./Manga_Search_Result";
 
-const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
-
-
-function Manga_Search_Result(props: MangaSearch_withAllIncludes) {
-    return (
-        <MyErrorBounderies>
-            <CollectionComponnent_WithQuery<Manga>
-                // [ ] Refactor into a new file
-                queryKey={["mdx", "manga", "search", `${Math.random() * 100}`]}
-                fn={async () => {
-                    return await Manga_with_allRelationship.search(props);
-                }}
-            >
-                {
-                    (collec) => (
-                        <React.Suspense
-                            fallback={<Mangadex_suspense__ />}
-                        >
-                            <MangaList src={collec.get_data()} />
-                        </React.Suspense>
-                    )
-                }
-            </CollectionComponnent_WithQuery>
-        </MyErrorBounderies>
-    );
-}
+export const MangaList = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaList"));
 
 export default function MangaResult(){
     const search_option_atom_value = useAtomValue(search_option_value);

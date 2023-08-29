@@ -7,7 +7,7 @@ import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapt
 import { Collection } from "@mangadex/api/structures/Collection";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MangaElementFallback from "@mangadex/resources/componnents/mangas/v1/MangaElementFallback";
-import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks";

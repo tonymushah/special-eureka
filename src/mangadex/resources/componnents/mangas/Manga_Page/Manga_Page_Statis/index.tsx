@@ -1,22 +1,15 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import formatNumber from "@commons-res/functions/formatNumber";
 import { Statistics_Manga } from "@mangadex/api/structures/Statistics";
 import Statis from "@mangadex/resources/componnents/mangas/Statistics/Statis";
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import * as FontAwesome from "react-icons/fa";
-import { MangaPageProps } from ".";
+import { MangaPageProps } from "..";
+import { useState } from "./useState";
 
 export function Manga_Page_Statis(props: React.PropsWithChildren<MangaPageProps>) {
-    const client = useHTTPClient();
-    /// [ ] Split into a new file and refactor query key into a new file
-    const manga_statistics = useQuery<Statistics_Manga, Error>(["mdx", "manga", props.src.get_id(), "statistics"], () => {
-        return Statistics_Manga.get_statsBy_MangaID(props.src.get_id(), client);
-    }, {
-        staleTime: Infinity
-    });
+    const manga_statistics = useState(props);
     return (
         <Chakra.Box>
             {manga_statistics.isLoading ? (

@@ -1,27 +1,36 @@
 import { Manga } from "@mangadex/api/structures/Manga";
-import { useQuery } from "@tanstack/react-query";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementDef from "./MangaElementDef";
 import MangaElementFallback from "./MangaElementFallback";
+import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
+import { InitialDataFunction } from "@tanstack/react-query";
 
-export default function MangaElementDef_wRelated(props: {
+export default function MangaElementDef_wRelated({ mangaID, initialData }: {
     mangaID: string,
-    promise: Promise<Manga>
+    promise: Promise<Manga>,
+    initialData?: Manga | (() => Manga)
 }) {
-    // [ ] use the predefine `get_manga_by_id` hooks
-    const query = useQuery<Manga, Error>(["mdx", "manga", props.mangaID], () => {
-        return props.promise;
-    }, {
-        "staleTime": Infinity
+    // [x] use the predefine `get_manga_by_id` hooks
+    const { query } = get_manga_byId({
+        mangaID,
+        options: {
+            initialData: typeof initialData == "function" ? ({
+                isOffline: false,
+                manga: initialData()
+            }) : ((typeof initialData != "undefined" && typeof initialData == "object") ? {
+                isOffline: false,
+                manga: initialData
+            } : undefined)
+        }
     });
+    if (query.isSuccess) {
+        return (
+            <MangaElementDef src={query.data.manga} isRefetching={query.isRefetching} refetch={query.refetch} />
+        );
+    }
     if (query.isError) {
         return (
             <ErrorEL1 error={query.error} />
-        );
-    }
-    if (query.isSuccess) {
-        return (
-            <MangaElementDef src={query.data} isRefetching={query.isRefetching} refetch={query.refetch} />
         );
     }
     return (

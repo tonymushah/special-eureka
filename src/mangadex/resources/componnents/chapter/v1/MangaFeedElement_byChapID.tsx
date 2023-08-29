@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { get_ChapterbyId } from "../../../hooks/ChapterStateHooks";
+import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFeedElement from "./MangaFeedElement";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";

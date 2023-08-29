@@ -1,25 +1,21 @@
 import * as Chakra from "@chakra-ui/react";
-//import React from "react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { Cover } from "@mangadex/api/structures/Cover";
 import { Manga } from "@mangadex/api/structures/Manga";
-import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
-import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
-import MangaPage_Cover from "./covers";
+import { CollectionComponnent_WithQuery } from "../../../Collection/Collection";
+import MangadexSpinner from "../../../kuru_kuru/MangadexSpinner";
+import MangaPage_Cover from "../covers";
+import { useState } from "./useState";
 
 //const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
 
-type MangaPageProps = {
+export type MangaPageProps = {
     src: Manga
 }
 
 export function Covers_Manga(props: MangaPageProps) {
     const client = useHTTPClient();
-    const offset_limits = new Offset_limits();
-    // [ ] Refactor into a function
-    const queryKey = ["mdx", "manga", props.src.get_id(), "-covers"];
-    offset_limits.set_limits(25);
+    const { offset_limits, queryKey } = useState(props);
     return (
         <CollectionComponnent_WithQuery<Cover>
             fn={() => {
@@ -58,3 +54,5 @@ export function Covers_Manga(props: MangaPageProps) {
         </CollectionComponnent_WithQuery>
     );
 }
+
+

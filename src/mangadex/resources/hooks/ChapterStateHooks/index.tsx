@@ -1,157 +1,33 @@
 import { ToastId } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
-import { reset_queue } from "@mangadex/api/offline/plugin";
-import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
-import { Group } from "@mangadex/api/structures/Group";
+import { Chapter } from "@mangadex/api/structures/Chapter";
 import { Manga } from "@mangadex/api/structures/Manga";
-import { User } from "@mangadex/api/structures/User";
-import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
-import { QueryKey, UseQueryOptions, UseQueryResult, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import MangaTitle from "../componnents/mangas/v1/MangaTitle";
-import { get_mangaQueryKey_byID } from "./MangaStateHooks";
-
+import MangaTitle from "../../componnents/mangas/v1/MangaTitle";
+import { get_mangaQueryKey_byID } from "../MangaStateHooks";
 
 export type ChapterDeleteMutation_data = {
     chapter: Chapter,
     manga: Manga
 }
 
-export function get_chapter_queryKey(props: {
-    id: string
-}) : QueryKey {
-    return ["mdx", "chapter", props.id];
-}
+export { reset_queue_mutation } from "./reset_queue_mutation";
 
-export function reset_queue_mutation() {
-    const toast = useChakraToast({
-        id : "mdx-reset-queue",
-        position: "bottom-right",
-        duration: 9000,
-    });
-    const mutation = useMutation({
-        mutationKey: ["mdx", "queue_reset"],
-        mutationFn: () => {
-            return reset_queue();
-        },
-        onError(error: string) {
-            toast({
-                status: "error",
-                isClosable: true,
-                title: "Error on reset",
-                description: error
-            });
-        },
-        onSuccess() {
-            toast({
-                status: "success",
-                isClosable: true,
-                title: "Queue reinitilized"
-            });
-        },
-    });
-    return mutation;
-}
+export { get_chapter_queryKey } from "./get_chapter_queryKey";
 
-export function get_ChapterbyId(props: {
-    id: string,
-    with_all_includes?: boolean,
-    options?: Omit<UseQueryOptions<GetChapterByIdResult, Error>, "queryKey" | "queryFn">
-}) {
-    const client = useHTTPClient();
-    const key = get_chapter_queryKey({
-        id: props.id
-    });
-    const query = useQuery<GetChapterByIdResult, Error>(key, () => {
-        if (props.with_all_includes == true) {
-            return Chapter_withAllIncludes.get_ChapterbyId(props.id, client);
-        } else {
-            return Chapter.get_ChapterbyId(props.id, client);
-        }
-    }, props.options == undefined ? {
-        staleTime: Infinity,
-    } : props.options);
-    return {
-        queryKey: key,
-        query: query
-    };
-}
+export { get_ChapterbyId } from "./get_ChapterbyId";
 
-export function is_chapter_downloaded(props: {
-    chapter: Chapter
-}) {
-    return is_chapter_downloaded_with_ChapID({
-        id: props.chapter.get_id()
-    });
-}
+export { is_chapter_downloaded } from "./is_chapter_downloaded";
 
-export function is_chapter_downloaded_with_ChapID(props: {
-    id: string
-}) {
-    const client = useHTTPClient();
-    // [ ] Refactor into a new file
-    const is_downloaded_queryKey = ["mdx", "chapter", props.id, "is_downloaded"];
-    const download_query = useQuery(is_downloaded_queryKey, () => {
-        return Chapter.is_chapter_downloaded(props.id, client);
-    });
-    return {
-        is_downloaded_queryKey: is_downloaded_queryKey,
-        is_downloaded_query: download_query
-    };
-}
+export { is_chapter_downloaded_with_ChapID } from "./is_chapter_downloaded_with_ChapID";
 
-export function get_chapter_user_uploader(props: {
-    chapter: Chapter
-}) {
-    const client = useHTTPClient();
-    // [ ] Refactor query key into a new function
-    const user_query_key = ["mdx", "user", props.chapter.get_user_id()];
-    const user_query = useQuery<User, Error>(user_query_key, () => {
-        return props.chapter.get_userUploader(client);
-    }, {
-        staleTime: Infinity,
-        retry : 1
-    });
-    return {
-        user_query_key,
-        user_query
-    };
-}
+export { get_chapter_user_uploader } from "./get_chapter_user_uploader";
 
-export function get_chapter_groups(props: {
-    chapter: Chapter
-}) {
-    const client = useHTTPClient();
-    const groups_query: Array<UseQueryResult<Group, unknown>> = useQueries({
-        queries : props.chapter.get_scanlations_groups_id().map((value: string) => {
-            return {
-                queryKey: ["mdx","group", value],
-                queryFn: () => {
-                    return props.chapter.get_scanlation_group_byID(value, client);
-                },
-                staleTime: Infinity
-            };
-        })
-    });
-    return groups_query;
-}
+export { get_chapter_groups } from "./get_chapter_groups";
 
-export function get_this_chapter_lang(props: {
-    chapter: Chapter
-}) {
-    // [ ] Refactor query key into a new function
-    const this_chapter_lang_querykey = ["mdx", "chapter", props.chapter.get_id(), "lang"];
-    const this_chapter_lang_query = useQuery(this_chapter_lang_querykey, () => {
-        return props.chapter.get_translated_Lang();
-    }, {
-        cacheTime: 1000 * 60
-    });
-    return {
-        this_chapter_lang_query,
-        this_chapter_lang_querykey
-    };
-}
+export { get_this_chapter_lang } from "./get_this_chapter_lang";
 
 export function useChapterDownloadMutation(props: {
     chapID: string,
@@ -253,6 +129,7 @@ export function useChapterDownloadMutation(props: {
     });
     return download_query;
 }
+
 export function useChapterDataSaverDownloadMutation(props: {
     chapID: string,
     toInvalidate?: Array<QueryKey>,
@@ -347,8 +224,6 @@ export function useChapterDataSaverDownloadMutation(props: {
     });
     return download_query;
 }
-
-
 
 export function useChapterDeleteMutation(props: {
     chapID: string,

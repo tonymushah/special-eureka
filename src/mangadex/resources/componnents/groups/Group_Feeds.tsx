@@ -12,7 +12,7 @@ import { Chapter } from "@mangadex/api/structures/Chapter";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
-import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectLanguage";
 
 const MangaChapterAccordion_Element = React.lazy(() => import("../mangas/v1/MangaChapterAccordion_Element"));

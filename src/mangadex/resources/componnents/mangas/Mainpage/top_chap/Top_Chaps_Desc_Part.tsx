@@ -8,8 +8,8 @@ import { LAD_Tabs } from "../tabs/Lang_data_tabs";
 export default function Top_Chaps_Desc_Part(props: {
     src: Manga
 }) {
-    // [ ] Refactor into a function 
-    const manga_description_querykey = ["mdx", "manga", props.src.get_id(), "description"];
+    // [x] Refactor into a function 
+    const manga_description_querykey = React.useMemo(() => queryKey(props), []);
     const manga_description_query = useQuery<Array<Lang_and_Data>, Error>(manga_description_querykey, () => {
         return Lang_and_Data.initializeByDesc(props.src.get_description());
     });
@@ -25,7 +25,7 @@ export default function Top_Chaps_Desc_Part(props: {
     }
     if (manga_description_query.isSuccess) {
         if (manga_description_query.data.length == 0) {
-            return (<></>);
+            return (<React.Fragment/>);
         }
         return (
             <Accordion allowMultiple>
@@ -47,6 +47,11 @@ export default function Top_Chaps_Desc_Part(props: {
         );
     }
     return (
-        <></>
+        <React.Fragment/>
     );
 }
+
+export function queryKey(props: { src: Manga; }) {
+    return ["mdx", "manga", props.src.get_id(), "description"];
+}
+

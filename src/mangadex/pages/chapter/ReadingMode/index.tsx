@@ -5,7 +5,7 @@ import React from "react";
 import { Mangadex_suspense__ } from "@mangadex/index";
 import { useDoublePageImageQuery } from "./DoublePage/hooks/useDoublePageImageQuery";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
+import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks/get_aggregate_query";
 
 const LongStrip = React.lazy(() => import("./Longstrip"));
 
