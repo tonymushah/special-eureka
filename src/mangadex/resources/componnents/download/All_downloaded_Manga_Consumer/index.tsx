@@ -17,8 +17,8 @@ export default function AllDownlaodedMangaConsumer(props: {
     query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
 }) {
     const client = useHTTPClient();
-    // [ ] Refactor into a function
-    const query_key = ["mdx", "dowloaded_manga"];
+    // [x] Refactor into a function
+    const query_key = React.useMemo(queryKey, []);
     return (
         <Chakra.Box>
             <React.Suspense
@@ -61,4 +61,8 @@ export default function AllDownlaodedMangaConsumer(props: {
                 }</CollectionComponnent_WithQuery>
         </Chakra.Box>
     );
+}
+
+export function queryKey() {
+    return ["mdx", "dowloaded_manga"];
 }

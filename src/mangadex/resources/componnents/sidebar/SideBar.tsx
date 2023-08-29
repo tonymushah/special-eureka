@@ -3,7 +3,7 @@ import useRTLSidebar from "@mangadex/resources/hooks/userOptions/RtlSidebar";
 import React from "react";
 import Hotkeys from "react-hot-keys";
 import { useProSidebar } from "react-pro-sidebar";
-import { useChapterFullscreen } from "../chapter/fullscreen/Context";
+import { useChapterFullscreen } from "../chapter/fullscreen/useChapterFullscreen";
 import ActualSidebar from "./ActualSidebar";
 
 export default function Side_bar() {

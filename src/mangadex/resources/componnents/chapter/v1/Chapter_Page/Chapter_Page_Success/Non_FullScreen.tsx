@@ -1,4 +1,4 @@
-import { useChapterFullscreen } from "@mangadex/resources/componnents/chapter/fullscreen/Context";
+import { useChapterFullscreen } from "../../../fullscreen/useChapterFullscreen";
 import React from "react";
 import Chapter_on_non_FullScreen from "./Chapter_on_non_FullScreen";
 

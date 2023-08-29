@@ -18,16 +18,31 @@ import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectL
 const MangaChapterAccordion_Element = React.lazy(() => import("../mangas/v1/MangaChapterAccordion_Element"));
 
 
+function OnError(error: Error) {
+    return (
+        <Chakra.Alert status="error">
+            <Chakra.AlertIcon />
+            <Chakra.AlertTitle>
+                {error.name}
+            </Chakra.AlertTitle>
+            <Chakra.AlertDescription>
+                {error.message}
+            </Chakra.AlertDescription>
+        </Chakra.Alert>
+    );
+}
+
 export default function Group_Feeds(props: {
     id: string
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
     const languages = useLanguageUserOption();
+    const queryKey_ = React.useMemo(() => queryKey(props), []);
     return (
         <CollectionComponnent_WithQuery<Chapter>
-            // [ ] Refactor into a function
-            queryKey={["mdx", "group_feeds", props.id]}
+            // [x] Refactor into a function
+            queryKey={queryKey_}
             fn={async () => {
                 const offset_Limits = new Offset_limits();
                 offset_Limits.set_limits(25);
@@ -62,21 +77,7 @@ export default function Group_Feeds(props: {
             {
                 (value1: Collection<Chapter>) => (
                     <TryCatch
-                        catch={(error) => (
-                            <Chakra.Alert status="error">
-                                <Chakra.AlertIcon />
-                                <Chakra.AlertTitle>
-                                    {
-                                        error.name
-                                    }
-                                </Chakra.AlertTitle>
-                                <Chakra.AlertDescription>
-                                    {
-                                        error.message
-                                    }
-                                </Chakra.AlertDescription>
-                            </Chakra.Alert>
-                        )}
+                        catch={OnError}
                     >
                         <React.Suspense
                             fallback={<div>Loading...</div>}
@@ -102,3 +103,7 @@ export default function Group_Feeds(props: {
         </CollectionComponnent_WithQuery>
     );
 }
+export function queryKey(props: { id: string; }) {
+    return ["mdx", "group_feeds", props.id];
+}
+

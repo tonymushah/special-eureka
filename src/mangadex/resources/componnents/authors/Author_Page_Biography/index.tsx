@@ -1,21 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
-import {
-    useQuery
-} from "@tanstack/react-query";
 
-import { Lang_and_Data } from "@mangadex/api/internal/Utils";
 import { Author } from "@mangadex/api/structures/Author";
 import { LAD_Tabs } from "@mangadex/resources/componnents/mangas/Mainpage/tabs/Lang_data_tabs";
+import { useState } from "./useState";
 
 
 export default function Author_Page_Biography(props: {
     src: Author
 }) {
-    /// [ ] Refactor into a function
-    const query_key = ["mdx", "author", props.src.get_id(), "biography"];
-    const query = useQuery<Array<Lang_and_Data>>(query_key, () => {
-        return Lang_and_Data.initializeByDesc(props.src.get_biography());
-    });
+    const query = useState(props);
     if (query.isSuccess) {
         if (query.data.length == 0) {
             return (
@@ -35,3 +28,5 @@ export default function Author_Page_Biography(props: {
         </Chakra.Text>
     );
 }
+
+
