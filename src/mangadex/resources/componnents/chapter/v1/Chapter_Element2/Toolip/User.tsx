@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
-import { get_chapter_user_uploader } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_user_uploader } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_user_uploader";
 import { FaUser } from "react-icons/fa";
 import { usePropsChapter } from "../../PropsContext";
 import { useMangaDexPath } from "@mangadex/index";

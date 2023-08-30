@@ -248,6 +248,9 @@ dependencies:
   react-inner-image-zoom:
     specifier: ^3.0.2
     version: 3.0.2(prop-types@15.8.1)(react@18.2.0)
+  react-intersection-observer:
+    specifier: ^9.5.2
+    version: 9.5.2(react@18.2.0)
   react-lazy-load-image-component:
     specifier: ^1.6.0
     version: 1.6.0(react-dom@18.2.0)(react@18.2.0)
@@ -310,7 +313,7 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-upload/b53ebc6c2e716d95fd94b64d3b4b87cd57ae4feb
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/4350fdfd0446a9d384b7c00390ce441d69d10a58
+    version: github.com/tauri-apps/tauri-plugin-websocket/c085eb80347e66433570322b8c62028b804dfeef
   tauri-settings:
     specifier: ^0.1.2
     version: 0.1.2
@@ -15821,6 +15824,14 @@ packages:
     dependencies:
       react: 18.2.0
 
+  /react-intersection-observer@9.5.2(react@18.2.0):
+    resolution: {integrity: sha512-EmoV66/yvksJcGa1rdW0nDNc4I1RifDWkT50gXSFnPLYQ4xUptuDD4V7k+Rj1OgVAlww628KLGcxPXFlOkkU/Q==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -18982,8 +18993,8 @@ packages:
       '@tauri-apps/api': 1.4.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/4350fdfd0446a9d384b7c00390ce441d69d10a58:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/4350fdfd0446a9d384b7c00390ce441d69d10a58}
+  github.com/tauri-apps/tauri-plugin-websocket/c085eb80347e66433570322b8c62028b804dfeef:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/c085eb80347e66433570322b8c62028b804dfeef}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:

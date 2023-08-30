@@ -51,6 +51,6 @@ jobs:
                   tagName: "v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
                   releaseName: "Special Eureka v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
                   releaseBody: "This is a dev release of v__VERSION__ from branch ${{ github.ref }}. It's unstable and might break, so please see to the latest stable realeases"
-                  releaseDraft: false
+                  releaseDraft: true
                   prerelease: true
                   projectPath: src-tauri

@@ -1,10 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
+import { Collection } from "@mangadex/api/structures/Collection";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
 
 const AllDownlaodedMangaConsumer = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer"));
-const MangaListByArrayMangaID = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaListByArrayMangaID"));
+const MangaListByCollectionArrayMangaID = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaListByArrayMangaID/ViaCollectionArray"));
 const All_downloaded_chapter = React.lazy(() => import("@mangadex/resources/componnents/download/All_downloaded_chapter"));
 
 export default function Download_Index_Page() {
@@ -36,7 +37,7 @@ export default function Download_Index_Page() {
                                 }}
                             >
                                 {
-                                    (value: Array<string>) => (
+                                    (value: Collection<string>[]) => (
                                         <React.Suspense
                                             fallback={
                                                 <Chakra.Center>
@@ -49,7 +50,7 @@ export default function Download_Index_Page() {
                                                 </Chakra.Center>
                                             }
                                         >
-                                            <MangaListByArrayMangaID src={value} />
+                                            <MangaListByCollectionArrayMangaID src={value} />
                                         </React.Suspense>
                                     )
                                 }

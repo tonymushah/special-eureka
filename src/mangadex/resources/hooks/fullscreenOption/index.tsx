@@ -1,15 +1,18 @@
 import { UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React from "react";
 
 export default function useChapterReadingDrawer(query_options? : Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">){
     const queryClient = useQueryClient();
-    const queryKey = ["mdx", "client", "fullscreen-drawer"];
-    const query = useQuery(queryKey, async () => {
+    // [x] Refactor this query key into a function
+    // [x] use `React.useMemo` for optimization
+    const _queryKey_ = React.useMemo(() => queryKey(), []);
+    const query = useQuery(_queryKey_, async () => {
         return false;
     }, query_options);
     const changeOptionMutation = useMutation({
-        mutationKey : queryKey.concat("mutation"),
+        mutationKey : _queryKey_.concat("mutation"),
         mutationFn : async (new_ : boolean) => {
-            queryClient.setQueryData(queryKey, new_);
+            queryClient.setQueryData(_queryKey_, new_);
         }
     });
     const changeOption = changeOptionMutation.mutate;
@@ -20,9 +23,12 @@ export default function useChapterReadingDrawer(query_options? : Omit<UseQueryOp
     };
     return {
         query,
-        queryKey,
+        queryKey : _queryKey_,
         changeOption,
         toggle
     };
 }
 
+export function queryKey() {
+    return ["mdx", "client", "fullscreen-drawer"];
+}

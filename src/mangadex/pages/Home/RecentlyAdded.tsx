@@ -22,11 +22,11 @@ export async function loader({ client }: {
     });
 }
 
-export const queryKey = ["mdx", "recently-added"];
+export const queryKey = () => ["mdx", "recently-added"];
 
 export default function RecentlyAdded() {
     const client = useHTTPClient();
-
+    const key = React.useMemo(() => queryKey(), []);
     return (
         <React.Fragment>
             <Chakra.Heading fontFamily={"inherit"}>Recently Added</Chakra.Heading>
@@ -34,7 +34,7 @@ export default function RecentlyAdded() {
                 fn={() => {
                     return loader({ client });
                 }}
-                queryKey={queryKey}
+                queryKey={key}
                 withoutNavigation
             >
                 {(value) => (

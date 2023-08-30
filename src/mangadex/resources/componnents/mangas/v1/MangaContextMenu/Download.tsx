@@ -1,4 +1,4 @@
-import { useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks";
+import { useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload_Delete";
 import { useMangaContextMenu_Context } from ".";
 import { HStack, Box, Text, Icon } from "@chakra-ui/react";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";

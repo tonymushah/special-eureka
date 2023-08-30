@@ -2,7 +2,7 @@ import "@commons-res/fonts";
 import "@commons-res/sentry/inject";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { ChakraProvider, Box, Spinner, AbsoluteCenter } from "@chakra-ui/react";
+import { ChakraProvider, Box, Spinner, AbsoluteCenter, ColorModeScript } from "@chakra-ui/react";
 import theme from "./theme";
 import { defaultOptions } from "@commons-res/sentry";
 
@@ -21,6 +21,7 @@ if (appElement != undefined) {
     const app = ReactDOM.createRoot(appElement);
     app.render(
         <React.StrictMode>
+            <ColorModeScript type="localStorage"/>
             <ChakraProvider theme={theme}>
                 <Box>
                     <React.Suspense

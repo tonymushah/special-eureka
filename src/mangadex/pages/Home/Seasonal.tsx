@@ -15,9 +15,9 @@ export async function getSeasonalId(client: Client) {
 
 export default function Seasonal() {
     const client = useHTTPClient();
-    const query = useQuery([
-        "mdx", "seasonal", "id"
-    ], async () => {
+
+    const _queryKey_ = React.useMemo(() => queryKey(), []);
+    const query = useQuery(_queryKey_, async () => {
         return await getSeasonalId(client);
     });
     if (query.isSuccess) {
@@ -41,4 +41,10 @@ export default function Seasonal() {
     return (
         <Mangadex_suspense__ />
     );
+}
+
+export function queryKey() {
+    return [
+        "mdx", "seasonal", "id"
+    ];
 }

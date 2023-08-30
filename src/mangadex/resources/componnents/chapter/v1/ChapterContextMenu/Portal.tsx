@@ -1,6 +1,6 @@
 import { Portal as ContextMenuPortal, Content } from "@radix-ui/react-context-menu";
 import * as Chakra from "@chakra-ui/react";
-import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import React from "react";
 import { useContextMenuProps } from ".";
 import Delete from "./Delete";

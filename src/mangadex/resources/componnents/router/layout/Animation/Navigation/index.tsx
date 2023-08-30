@@ -4,7 +4,7 @@ import { useNavigation } from "react-router";
 
 const variants : Variants = {
     isNormalLoad : {
-        filter : "blur(4px)"
+        filter : "blur(4px)",
     }
 };
 const transition : Transition = {
@@ -17,9 +17,12 @@ export default function NavigationAnimation({ children } : React.PropsWithChildr
     const navigation = useNavigation();
     return (
         <motion.div
-            animate={navigation.state === "loading" ? "isNormalLoad" : undefined}
+            animate={navigation.state === "loading" ? "isNormalLoad" : "none"}
             transition={transition}
             variants={variants}
+            style={{
+                cursor : navigation.state === "loading" ? "wait" : "default"
+            }}
         >
             {children}
         </motion.div>

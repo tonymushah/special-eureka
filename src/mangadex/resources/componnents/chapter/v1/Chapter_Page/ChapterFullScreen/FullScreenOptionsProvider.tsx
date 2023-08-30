@@ -8,7 +8,8 @@ export type FullScreenOptions_Context = {
 const context = React.createContext<FullScreenOptions_Context | undefined>(undefined);
 
 export function useFullScreenOptions_Query(){
-    const query_key = ["mdx", "chapter-fullscreen", "option"];
+    // [x] Refactor query key into a function
+    const query_key = React.useMemo(queryKey, []);
     const query = useQuery<FullScreenOptions_Context | undefined>(query_key, () => {
         return new Promise((resolve) => {
             resolve(undefined);
@@ -25,6 +26,10 @@ export function useFullScreenOptions_Query(){
         query,
         updateOptions
     };
+}
+
+export function queryKey() {
+    return ["mdx", "chapter-fullscreen", "option"];
 }
 
 export default function FullScreenOptionsProvider(props : React.PropsWithChildren){

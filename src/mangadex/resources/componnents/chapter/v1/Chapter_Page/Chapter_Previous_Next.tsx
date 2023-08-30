@@ -6,7 +6,7 @@ import { getMangaDexPath } from "@mangadex/index";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
-import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
+import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks/get_aggregate_query";
 
 const MangaDexPath = getMangaDexPath();
 

@@ -4,7 +4,7 @@ import React from "react";
 import ReactHotkeys from "react-hot-keys";
 import FullScreenOptionsProvider from "./FullScreenOptionsProvider";
 import FullScreenOptions from "./FullScreenOptions";
-import { useChapterFullscreen } from "@mangadex/resources/componnents/chapter/fullscreen/Context";
+import { useChapterFullscreen } from "../../../fullscreen/useChapterFullscreen";
 import { appWindow } from "@tauri-apps/api/window";
 
 export default function ChapterFullScreen(props: React.PropsWithChildren<{

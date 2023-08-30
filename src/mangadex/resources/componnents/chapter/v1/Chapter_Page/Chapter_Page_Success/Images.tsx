@@ -6,11 +6,13 @@ import { usePropsChapter } from "@mangadex/resources/componnents/chapter/v1/Prop
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import { Chapter } from "@mangadex/api/structures/Chapter";
 
 export default function Images() {
     const client = useHTTPClient();
     const { chapter } = usePropsChapter();
-    const chapter_data_images_queryKey = ["mdx", "chapter", chapter.get_id(), "data"];
+    /// [x] Refactor into a function
+    const chapter_data_images_queryKey = React.useMemo(() => queryKey(chapter), [chapter]);
     const chapter_data_images_query = useQuery<Array<string>, Error>(chapter_data_images_queryKey, () => {
         return chapter.get_dataImages(client);
     }, {
@@ -30,20 +32,24 @@ export default function Images() {
                 </Chakra.Box>
             </Chakra.AbsoluteCenter>
         );
-    }else if (chapter_data_images_query.isSuccess){
+    } else if (chapter_data_images_query.isSuccess) {
         return (
             <Outlet context={{
-                    images: chapter_data_images_query.data,
-                    chapter
-                }} />
+                images: chapter_data_images_query.data,
+                chapter
+            }} />
         );
-    }else if (chapter_data_images_query.isError){
+    } else if (chapter_data_images_query.isError) {
         return (
             <ErrorEL1 error={chapter_data_images_query.error} />
         );
-    }else{
+    } else {
         return (
-            <React.Fragment/>
+            <React.Fragment />
         );
     }
+}
+
+export function queryKey(chapter: Chapter) {
+    return ["mdx", "chapter", chapter.get_id(), "data"];
 }

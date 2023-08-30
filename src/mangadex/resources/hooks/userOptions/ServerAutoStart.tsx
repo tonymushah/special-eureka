@@ -1,14 +1,17 @@
 import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
 import { useMutation, useQuery, UseQueryOptions } from "@tanstack/react-query";
+import React from "react";
 
 export default function useServerAutoStart(query_options? : Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">){
-    const queryKey = ["mdx", "server", "auto-start"];
+    // [x] Refactor this query key into a function
+    // [x] use `React.useMemo` for optimization
+    const _queryKey_ = React.useMemo(() => queryKey(), []);
     const userCachedOption = useUserOption();
-    const query = useQuery(queryKey, async () => {
+    const query = useQuery(_queryKey_, async () => {
         return userCachedOption.getServerAutoStart();
     }, query_options);
     const changeOptionMutation = useMutation({
-        mutationKey : queryKey.concat("mutation"),
+        mutationKey : _queryKey_.concat("mutation"),
         mutationFn : async (new_ : boolean) => {
             await userCachedOption.setServerAutoStart(new_);
         },
@@ -24,8 +27,12 @@ export default function useServerAutoStart(query_options? : Omit<UseQueryOptions
     };
     return {
         query,
-        queryKey,
+        queryKey: _queryKey_,
         changeOption,
         toggle
     };
+}
+
+function queryKey() {
+    return ["mdx", "server", "auto-start"];
 }

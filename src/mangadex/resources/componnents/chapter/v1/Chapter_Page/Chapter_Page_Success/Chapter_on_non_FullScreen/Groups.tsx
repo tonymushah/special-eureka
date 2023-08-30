@@ -1,6 +1,6 @@
 import { useMangaDexPath } from "@mangadex/index";
 import { usePropsChapter } from "@mangadex/resources/componnents/chapter/v1/PropsContext";
-import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_groups";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Link as ChakraLink } from "@chakra-ui/react";

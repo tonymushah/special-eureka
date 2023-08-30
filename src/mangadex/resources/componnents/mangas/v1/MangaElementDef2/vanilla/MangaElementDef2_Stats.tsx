@@ -8,14 +8,22 @@ import React from "react";
 import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useProps } from "../../MangaElementDef/vanilla";
+import { Manga } from "@mangadex/api/structures/Manga";
 
 const Statis = React.lazy(() => import("../../../Statistics/Statis"));
 
 
+function OnCatch(error: Error) {
+    return (
+        <Chakra.Tag>{error.message}</Chakra.Tag>
+    );
+}
+
 export default function MangaElementDef2_Stats() {
     const { src } = useProps();
     const client = useHTTPClient();
-    const manga_statistic_queryKey = ["mdx", "manga", src.get_id(), "statistics"];
+    // [x] Refactor into a function
+    const manga_statistic_queryKey = React.useMemo(() => queryKey(src), []);
     const manga_statistic_query = useQuery<Statistics_Manga, Error>(manga_statistic_queryKey, () => {
         return Statistics_Manga.get_statsBy_MangaID(src.get_id(), client);
     }, {
@@ -24,9 +32,7 @@ export default function MangaElementDef2_Stats() {
     if (manga_statistic_query.isSuccess) {
         return (
             <TryCatch
-                catch={(error: Error) => (
-                    <Chakra.Tag>{error.message}</Chakra.Tag>
-                )}
+                catch={OnCatch}
             >
                 <React.Suspense>
                     <Statis src={manga_statistic_query.data}>
@@ -57,8 +63,9 @@ export default function MangaElementDef2_Stats() {
                                                                 <>0</>
                                                             )
                                                         }</Chakra.Text>
-                                                    ) :
+                                                    ) : (
                                                         <Chakra.Text as={"span"}>0</Chakra.Text>
+                                                    )
                                                 }
                                             </Chakra.HStack>
                                         </Chakra.HStack>
@@ -81,4 +88,8 @@ export default function MangaElementDef2_Stats() {
             <Chakra.Skeleton height={"10px"} width={"20px"} />
         );
     }
+}
+
+export function queryKey(src: Manga) {
+    return ["mdx", "manga", src.get_id(), "statistics"];
 }

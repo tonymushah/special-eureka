@@ -1,4 +1,4 @@
-import { getUserFeedQuery } from "@mangadex/resources/hooks/UserPageHooks";
+import { getUserFeedQuery } from "@mangadex/resources/hooks/UserPageHooks/getUserFeedQuery";
 import React from "react";
 
 export default function UserUploadsNumber(props: {

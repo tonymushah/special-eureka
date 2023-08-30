@@ -1,5 +1,6 @@
 import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex/index";
-import { getUserByIDQuery, getUserByIDQueryKey } from "@mangadex/resources/hooks/UserPageHooks";
+import { getUserByIDQuery } from "@mangadex/resources/hooks/UserPageHooks/getUserByIDQuery";
+import { getUserByIDQueryKey } from "@mangadex/resources/hooks/UserPageHooks/getUserByIDQueryKey";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router";

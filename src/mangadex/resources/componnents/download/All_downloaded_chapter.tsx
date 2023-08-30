@@ -22,7 +22,10 @@ export default function All_downloaded_chapter(props: {
             only_fails
         }, client);
     }, [include_fails, only_fails]);
-    const query_key = React.useMemo<QueryKey>(() => ["mdx", "downloaded_chapter", {include_fails, only_fails}], [include_fails, only_fails]);
+    const query_key = React.useMemo<QueryKey>(() => 
+        // refactor into a function
+        ["mdx", "downloaded_chapter", { include_fails, only_fails }]
+    , [include_fails, only_fails]);
     return (
         <Chakra.Box>
             <Chakra.Box>

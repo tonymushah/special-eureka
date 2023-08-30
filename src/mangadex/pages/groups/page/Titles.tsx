@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Stack, Text } from "@chakra-ui/react";
 import TryCatch, { useCatch } from "@commons-res/components/TryCatch";
-import { Group_Page_Suspense } from "@mangadex/resources/componnents/groups/Group_Page";
+import { Group_Page_Suspense } from "@mangadex/resources/componnents/groups/Group_Page/Group_Page_Suspense";
 import React from "react";
 import { useGroupRouteOutletContext } from ".";
 

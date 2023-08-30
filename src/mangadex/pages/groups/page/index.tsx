@@ -4,6 +4,7 @@ import { Group } from "@mangadex/api/structures/Group";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Client } from "@tauri-apps/api/http";
 import React from "react";
 import { Outlet, useOutletContext, useParams } from "react-router-dom";
 
@@ -37,12 +38,17 @@ export function useGroupRouteOutletContext(): GroupRouteOutletContext {
     return useOutletContext<GroupRouteOutletContext>();
 }
 
+export function queryFn(id : string, client: Client): Promise<Group> {
+    return Group.get_groupById(id, client);
+}
+
 function Success({ id }: {
     id: string
 }) {
     const client = useHTTPClient();
     const queryClient = useQueryClient();
-    const query_key = ["mdx", "group", id];
+    /// [x] Put this in a new function
+    const query_key = queryKey(id);
     const setTitle = useAppWindowTitle();
     React.useEffect(() => {
         queryClient.removeQueries(query_key, {
@@ -50,9 +56,7 @@ function Success({ id }: {
         });
         setTitle("Loading... | Mangadex");
     }, []);
-    const query = useQuery<Group, Error>(query_key, () => {
-        return Group.get_groupById(id, client);
-    }, {
+    const query = useQuery<Group, Error>(query_key, () => queryFn(id, client) , {
         staleTime: Infinity
     });
     if (query.isLoading || query.isRefetching) {
@@ -87,6 +91,10 @@ function Success({ id }: {
             </Chakra.Box>
         </Chakra.AbsoluteCenter>
     );
+}
+
+export function queryKey(id: string) {
+    return ["mdx", "group", id];
 }
 
 export default function Group_Page_() {

@@ -1,15 +1,18 @@
 import { UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React from "react";
 
 export function useStoryBookRTLSwipperMode(query_options?: Omit<UseQueryOptions<boolean, unknown, boolean, string[]>, "queryFn" | "queryKey">) {
-    const queryKey = ["mdx", "server", "rtlSwipperMode"];
+    // [x] Refactor this query key into a function
+    // [x] use `React.useMemo` for optimization
+    const _queryKey_ = React.useMemo(() => queryKey(), []);
     const queryClient = useQueryClient();
-    const query = useQuery(queryKey, async () => {
+    const query = useQuery(_queryKey_, async () => {
         return false;
     }, query_options);
     const changeOptionMutation = useMutation({
-        mutationKey: queryKey.concat("mutation"),
+        mutationKey: _queryKey_.concat("mutation"),
         mutationFn: async (new_: boolean) => {
-            queryClient.setQueryData(queryKey, new_);
+            queryClient.setQueryData(_queryKey_, new_);
         }
     });
     const changeOption = changeOptionMutation.mutate;
@@ -20,8 +23,12 @@ export function useStoryBookRTLSwipperMode(query_options?: Omit<UseQueryOptions<
     };
     return {
         query,
-        queryKey,
+        queryKey: _queryKey_,
         changeOption,
         toggle
     };
+}
+
+export function queryKey() {
+    return ["mdx", "server", "rtlSwipperMode"];
 }

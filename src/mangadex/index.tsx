@@ -3,13 +3,13 @@ import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f1071
 import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import { RouteObject } from "react-router-dom";
-import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
 //import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 //import { Group_Page_Suspense } from "./resources/componnents/groups/Group_Page";
 export { Mangadex_suspense__ } from "./resources/componnents/suspense";
 
 import { Mangadex_suspense__ as Mangadex_SUS } from "./resources/componnents/suspense";
+import { RouteErrorBoundary as ErrorBoundary } from "./resources/componnents/router/error/Boundary";
 
 const MangaDexPath = "/mangadex";
 
@@ -127,7 +127,7 @@ const useMangadexRouter: RouteObject = {
         const Layout = await import("@mangadex/pages/Layout");
         return {
             Component: Layout.default,
-            ErrorBoundary: MyErrorBounderies,
+            ErrorBoundary,
             hasErrorBoundary: true
         };
     },
@@ -136,10 +136,11 @@ const useMangadexRouter: RouteObject = {
         {
             index: true,
             lazy: async () => {
-                const Home = await import("@mangadex/pages/Home/Home");
+                const { default : Component, loader } = await import("@mangadex/pages/Home/Home");
                 return {
-                    Component: Home.default,
-                    ErrorBoundary: MyErrorBounderies
+                    Component,
+                    ErrorBoundary,
+                    loader
                 };
             },
         },
@@ -151,10 +152,11 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const MangaPage = await import("@mangadex/pages/manga/index");
+                        const { default : Component, loader } = await import("@mangadex/pages/manga/index");
                         return {
-                            Component: MangaPage.default,
-                            ErrorBoundary: MyErrorBounderies,
+                            Component,
+                            ErrorBoundary,
+                            loader
                         };
                     },
                     children: [
@@ -165,7 +167,7 @@ const useMangadexRouter: RouteObject = {
                                 const Chapters_ = await import("@mangadex/pages/manga/Chapters_");
                                 return {
                                     Component: Chapters_.default,
-                                    ErrorBoundary: MyErrorBounderies,
+                                    ErrorBoundary,
                                     hasErrorBoundary: true
                                 };
                             },
@@ -178,7 +180,7 @@ const useMangadexRouter: RouteObject = {
                                 return {
                                     Component: Covers_.default,
                                     hasErrorBoundary: true,
-                                    ErrorBoundary: MyErrorBounderies
+                                    ErrorBoundary
                                 };
                             },
                         },
@@ -190,7 +192,7 @@ const useMangadexRouter: RouteObject = {
                                 return {
                                     Component: Related_.default,
                                     hasErrorBoundary: true,
-                                    ErrorBoundary: MyErrorBounderies
+                                    ErrorBoundary,
                                 };
                             },
                         }
@@ -204,7 +206,7 @@ const useMangadexRouter: RouteObject = {
                         return {
                             hasErrorBoundary: true,
                             Component: Random_Manga.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary,
                         };
                     },
                 }
@@ -214,7 +216,7 @@ const useMangadexRouter: RouteObject = {
         {
             path: "chapter",
             hasErrorBoundary: true,
-            ErrorBoundary: MyErrorBounderies,
+            ErrorBoundary,
             children: [
                 // Chapter by ID
                 {
@@ -223,7 +225,7 @@ const useMangadexRouter: RouteObject = {
                         const Chapter_Page = await import("@mangadex/pages/chapter/Chapter_Page");
                         return {
                             Component: Chapter_Page.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     },
                     children: [
@@ -233,7 +235,7 @@ const useMangadexRouter: RouteObject = {
                                 const ChapterReadingMode = await import("@mangadex/pages/chapter/ReadingMode");
                                 return {
                                     Component: ChapterReadingMode.default,
-                                    ErrorBoundary: MyErrorBounderies
+                                    ErrorBoundary
                                 };
                             }
                         },
@@ -248,7 +250,7 @@ const useMangadexRouter: RouteObject = {
                 const DownloadLayout = await import("@mangadex/pages/download/layout");
                 return {
                     Component: DownloadLayout.default,
-                    ErrorBoundary: MyErrorBounderies
+                    ErrorBoundary
                 };
             },
             children: [
@@ -259,7 +261,7 @@ const useMangadexRouter: RouteObject = {
                         const Download_Index_Page = await import("@mangadex/pages/download");
                         return {
                             Component: Download_Index_Page.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     }
                 }
@@ -276,7 +278,7 @@ const useMangadexRouter: RouteObject = {
                         const Group_Page_ = await import("@mangadex/pages/groups/page/index");
                         return {
                             Component: Group_Page_.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     },
                     children: [
@@ -286,7 +288,7 @@ const useMangadexRouter: RouteObject = {
                                 const Group_Page_Details = await import("@mangadex/pages/groups/page/Details");
                                 return {
                                     Component: Group_Page_Details.default,
-                                    ErrorBoundary: MyErrorBounderies,
+                                    ErrorBoundary,
                                     hasErrorBoundary: true
                                 };
                             },
@@ -297,7 +299,7 @@ const useMangadexRouter: RouteObject = {
                                 const Group_Page_Titles = await import("@mangadex/pages/groups/page/Titles");
                                 return {
                                     Component: Group_Page_Titles.default,
-                                    ErrorBoundary: MyErrorBounderies
+                                    ErrorBoundary
                                 };
                             }
                         },
@@ -307,7 +309,7 @@ const useMangadexRouter: RouteObject = {
                                 const Group_Page_Feeds = await import("@mangadex/pages/groups/page/Feeds");
                                 return {
                                     Component: Group_Page_Feeds.default,
-                                    ErrorBoundary: MyErrorBounderies
+                                    ErrorBoundary
                                 };
                             },
                         }
@@ -320,7 +322,7 @@ const useMangadexRouter: RouteObject = {
                         const Group_Search = await import("@mangadex/pages/groups/search");
                         return {
                             Component: Group_Search.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     }
                 }
@@ -329,7 +331,7 @@ const useMangadexRouter: RouteObject = {
         // Titles
         {
             path: "titles",
-            ErrorBoundary: MyErrorBounderies,
+            ErrorBoundary,
             children: [
                 // Recently Added
                 {
@@ -338,7 +340,7 @@ const useMangadexRouter: RouteObject = {
                         const RecentlyAdded = await import("@mangadex/pages/titles/RecentlyAdded");
                         return {
                             Component: RecentlyAdded.default,
-                            ErrorBoundary: MyErrorBounderies,
+                            ErrorBoundary,
                         };
                     }
                 },
@@ -349,7 +351,7 @@ const useMangadexRouter: RouteObject = {
                         const LatestUpdates = await import("@mangadex/pages/titles/LatestUpdates");
                         return {
                             Component: LatestUpdates.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     }
                 },
@@ -360,7 +362,7 @@ const useMangadexRouter: RouteObject = {
                         const RecentlyPopularPage = await import("@mangadex/pages/titles/RecentlyPopular");
                         return {
                             Component: RecentlyPopularPage.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     }
                 },
@@ -371,7 +373,7 @@ const useMangadexRouter: RouteObject = {
                         const Manga_Search = await import("@mangadex/pages/manga/Search");
                         return {
                             Component: Manga_Search.default,
-                            ErrorBoundary: MyErrorBounderies
+                            ErrorBoundary
                         };
                     }
                 }
@@ -380,7 +382,7 @@ const useMangadexRouter: RouteObject = {
         // Author
         {
             path: "author",
-            ErrorBoundary: MyErrorBounderies,
+            ErrorBoundary,
             children: [
                 {
                     path: ":id",
@@ -401,7 +403,7 @@ const useMangadexRouter: RouteObject = {
                                     />
                                 </Mangadex_suspense>
                             ),
-                            ErrorBoundary : MyErrorBounderies
+                            ErrorBoundary
                         };
                     },
                 },
@@ -411,7 +413,7 @@ const useMangadexRouter: RouteObject = {
                         const AuthorSearch = await import("@mangadex/pages/author/search");
                         return {
                             Component : AuthorSearch.default,
-                            ErrorBoundary : MyErrorBounderies
+                            ErrorBoundary
                         };
                     }
                 }
@@ -420,7 +422,7 @@ const useMangadexRouter: RouteObject = {
         // User 
         {
             path: "user",
-            ErrorBoundary : MyErrorBounderies,
+            ErrorBoundary,
             children: [
                 {
                     path: ":user_id",
@@ -428,7 +430,7 @@ const useMangadexRouter: RouteObject = {
                         const UserPage = await import("@mangadex/pages/user/UserPage+Loader");
                         return {
                             Component : UserPage.default,
-                            ErrorBoundary : MyErrorBounderies
+                            ErrorBoundary
                         };
                     },
                     children: [
@@ -438,7 +440,7 @@ const useMangadexRouter: RouteObject = {
                                 const UserPageInfo = await import("@mangadex/pages/user/UserPageInfo");
                                 return {
                                     Component : UserPageInfo.default,
-                                    ErrorBoundary : MyErrorBounderies
+                                    ErrorBoundary
                                 };
                             },
                         },
@@ -448,7 +450,7 @@ const useMangadexRouter: RouteObject = {
                                 const UserPageFeed = await import("@mangadex/pages/user/UserPageFeed");
                                 return {
                                     Component : UserPageFeed.default,
-                                    ErrorBoundary : MyErrorBounderies
+                                    ErrorBoundary
                                 };
                             }
                         }
@@ -463,7 +465,7 @@ const useMangadexRouter: RouteObject = {
                 const Kuru_Credits = await import("@mangadex/resources/componnents/kuru_kuru/index");
                 return {
                     Component : Kuru_Credits.default,
-                    ErrorBoundary : MyErrorBounderies
+                    ErrorBoundary
                 };
             }
         }
