@@ -1,3 +1,4 @@
+import { ChaptersVolumeAggregateData, VolumeAggregateData } from "../sta/data-contracts";
 import { Chapters } from "./Chapter";
 
 export class Volume {
@@ -27,8 +28,8 @@ export class Volume {
         this.set_count(count);
         this.set_chapters(chapters);
     }
-    public static build_wANY(object: any): Volume {
-        const chapters_getted: any = object.chapters;
+    public static build_wANY(object: VolumeAggregateData): Volume {
+        const chapters_getted: ChaptersVolumeAggregateData = object.chapters;
         let chapters_getted_length = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {
@@ -47,8 +48,8 @@ export class Volume {
         instance.sort_volume();
         return instance;
     }
-    public static async build_wANY2(object: any): Promise<Volume> {
-        const chapters_getted: any = object.chapters;
+    public static async build_wANY2(object: VolumeAggregateData): Promise<Volume> {
+        const chapters_getted: ChaptersVolumeAggregateData = object.chapters;
         let chapters_getted_length = 0;
         for (const key in chapters_getted) {
             if (Object.prototype.hasOwnProperty.call(chapters_getted, key)) {

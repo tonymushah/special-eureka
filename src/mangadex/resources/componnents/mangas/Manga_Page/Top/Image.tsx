@@ -1,7 +1,7 @@
-import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import { Cover_Image_ } from "../../Mainpage/Image_";
 import { useProps } from "../../v1/MangaElementDef/vanilla";

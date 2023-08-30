@@ -2,7 +2,6 @@ import { atom } from "jotai";
 import { MangaSearchOption } from "./types";
 import { ContentRating, Offset_limits, Status } from "@mangadex/api/internal/Utils";
 import { focusAtom } from "jotai-optics";
-import { splitAtom } from 'jotai/utils'
 export const search_option_value = atom<MangaSearchOption>({
     offset_limit: new Offset_limits(),
     tags: [],

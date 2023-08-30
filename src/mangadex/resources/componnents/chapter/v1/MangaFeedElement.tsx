@@ -1,5 +1,5 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { get_manga_of_chapter } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_manga_of_chapter } from "@mangadex/resources/hooks/ChapterStateHooks/get_manga_of_chapter";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementDef_WChildren from "../../mangas/v1/MangaElementDef_WChildren";
 import MangaElementFallback from "../../mangas/v1/MangaElementFallback";

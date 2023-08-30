@@ -3,7 +3,7 @@ import { usePropsChapter } from "../PropsContext";
 import { Skeleton } from "@chakra-ui/react";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import UserLink from "@mangadex/resources/componnents/user/UserLink";
-import { get_chapter_user_uploader } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_user_uploader } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_user_uploader";
 
 export default function User() {
     const { chapter } = usePropsChapter();

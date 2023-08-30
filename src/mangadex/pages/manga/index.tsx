@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
@@ -8,9 +8,10 @@ import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/Mainpage/Download_Manga_withHotKeys";
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
+import { Client, getClient } from "@tauri-apps/api/http";
 import React from "react";
-import { Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { LoaderFunction, Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
 
 type MangaPage_OutletContex = {
     toUse: Manga
@@ -44,39 +45,43 @@ function ThrowError({ error, id }: {
 }) {
     const setTitle = useAppWindowTitle();
     React.useEffect(() => {
-        setTitle(`Error on loading title ${id!} | Mangadex`);
+        setTitle(`Error on loading title ${id ?? "undefined"} | Mangadex`);
     });
     return (
         <ErrorEL1 error={error} />
     );
 }
 
+export async function queryFn(id: string, client: Client) {
+    return await Manga.getMangaByID(id, client);
+}
+
 export default function MangaPage() {
     const client = useHTTPClient();
 
-    const queryClient = useQueryClient();
     const { id } = useParams();
-    const query_key = ["mdx", "manga", id];
-    React.useMemo(() => {
-        queryClient.removeQueries(query_key, {
-            "exact": true
-        });
-    }, []);
+    /// [x] Refactor into a function
+    const query_key = React.useMemo(() => queryKey(id), []);
 
     useTrackEvent("mangadex-manga-page-entrance", {
-        "manga-id": id!
+        "manga-id": id ?? ""
     });
     const query = useQuery<GetMangaByIDResponse, Error>(query_key, async () => {
-        return await Manga.getMangaByID(id!, client);
+        if (id != undefined) {
+            return await queryFn(id, client);
+        } else {
+            throw new Error("the given manga id is undefined");
+        }
     }, {
         "staleTime": Infinity,
+        enabled: !!id
     });
     const navigate = useNavigate();
-    if (query.isSuccess) {
+    if ((query.isSuccess) && id != undefined) {
         return (
             <MyErrorBounderies>
                 <Download_Manga_withHotkeys
-                    mangaID={id!}
+                    mangaID={id}
                 />
                 <Manga_Page
                     src={query.data.manga}
@@ -126,3 +131,79 @@ export default function MangaPage() {
 
     return (<React.Fragment />);
 }
+
+export function queryKey(id: string | undefined) {
+    return ["mdx", "manga", id];
+}
+
+export const loader: LoaderFunction = async function ({ params }) {
+    const { id } = params;
+    if (id != undefined) {
+        const client = await getClient();
+        try {
+            const { queryClient } = await import("@mangadex/resources/query.client");
+            const _queryKey_ = queryKey(id);
+            const queryData = queryClient.getQueryData<GetMangaByIDResponse>(_queryKey_, {
+                exact: true
+            });
+            if (queryData != undefined) {
+                const { manga, isOffline } = queryData;
+                if (manga instanceof Manga_with_allRelationship) {
+                    if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
+                        queryClient.fetchQuery(_queryKey_, () => queryFn(id, client), {
+                            initialData: {
+                                manga,
+                                isOffline
+                            }
+                        });
+                        return new Response(null, {
+                            "status": 204,
+                            "statusText": "Loaded"
+                        });
+                    } else {
+                        await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                        return new Response(null, {
+                            "status": 204,
+                            "statusText": "Loaded"
+                        });
+                    }
+                } else {
+                    if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
+                        await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                        return new Response(null, {
+                            "status": 204,
+                            "statusText": "Loaded"
+                        });
+                    } else {
+                        return new Response(null, {
+                            "status": 204,
+                            "statusText": "Loaded"
+                        });
+                    }
+                }
+            } else {
+                await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                return new Response(null, {
+                    "status": 204,
+                    "statusText": "Loaded"
+                });
+            }
+        } catch (e) {
+            if (e instanceof Error) {
+                throw e;
+            } else {
+                throw new Response(JSON.stringify(e), {
+                    status: 500,
+                    statusText: "Internal Loader Error"
+                });
+            }
+        } finally {
+            await client.drop();
+        }
+    } else {
+        throw new Response(undefined, {
+            "status": 404,
+            "statusText": "MangaID Undefined"
+        });
+    }
+};

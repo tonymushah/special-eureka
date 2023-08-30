@@ -3,7 +3,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import React from "react";
 import Hotkeys from "react-hot-keys";
-import { get_aggregate_query } from "../../hooks/AgreggateStateHooks";
+import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks/get_aggregate_query";
 import ErrorEL1 from "../error/ErrorEL1";
 import Chapter_Element1_byChapID from "./v1/Chapter_Element1_byChapID";
 import MangadexSpinner from "../kuru_kuru/MangadexSpinner";

@@ -1,4 +1,4 @@
-import { trackEvent } from "@aptabase/tauri";
+//import { trackEvent } from "@aptabase/tauri";
 import React from "react";
 
 function ErrorProvider(props: {
@@ -42,12 +42,12 @@ export default class TryCatch extends React.Component<React.PropsWithChildren<Tr
     static getDerivedStateFromError(error: Error) {
         return { hasError: true, error: error };
     }
-    componentDidCatch(error: Error, _errorInfo: React.ErrorInfo): void {
-        trackEvent("special-eureka-error", {
-            "location": window.location.href,
-            "error-message": error.message,
-            "error-name": error.name
-        });
+    componentDidCatch(error: Error, { componentStack }: React.ErrorInfo): void {
+        window.Sentry.captureException(error, { contexts : {
+            react : {
+                componentStack
+            }
+        } });
     }
     render(): React.ReactNode {
         if (this.state.hasError == true) {

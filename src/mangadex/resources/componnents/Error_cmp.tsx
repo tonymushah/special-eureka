@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { trackEvent } from "@mangadex";
+import { trackEvent } from "@mangadex/index";
 import { useAsyncError, useRouteError } from "react-router";
 
 export function ErrorELAsync1(){

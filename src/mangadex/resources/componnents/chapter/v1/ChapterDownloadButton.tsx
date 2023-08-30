@@ -1,10 +1,13 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { ChapterDeleteMutation_data, get_ChapterbyId, useChapterDeleteMutation, useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { ChapterDeleteMutation_data } from "@mangadex/resources/hooks/ChapterStateHooks/ChapterDeleteMutation_data";
+import { useChapterDeleteMutation } from "@mangadex/resources/hooks/ChapterStateHooks/useChapterDeleteMutation";
+import { useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterStateHooks/useChapterDownloadMutation";
+import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import { UseQueryResult } from "@tanstack/react-query";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
-import React from "react";
+
 export default function ChapterDownloadButton(props: {
     chapter: Chapter,
     downloadMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>,
@@ -14,31 +17,19 @@ export default function ChapterDownloadButton(props: {
     const { queryKey, query } = get_ChapterbyId({
         id: props.chapter.get_id()
     });
-    const downloadMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = React.useMemo<UseQueryResult<ChapterDeleteMutation_data, unknown>>(() => {
-        if (props.downloadMutation == undefined) {
-            return useChapterDownloadMutation({
-                chapID: props.chapter.get_id(),
-                toInvalidate: [
-                    queryKey
-                ]
-            });
-        } else {
-            return props.downloadMutation;
-        }
-    }, [props.chapter, props.downloadMutation, queryKey]);
-    const deleteMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = React.useMemo<UseQueryResult<ChapterDeleteMutation_data, unknown>>(() => {
-        if (props.deleteMutation == undefined) {
-            return useChapterDeleteMutation({
-                chapID: props.chapter.get_id(),
-                toInvalidate: [
-                    queryKey
-                ]
-            });
-        } else {
-            return props.deleteMutation;
-        }
-    }, [props.chapter, props.deleteMutation, queryKey]);
-    
+    const downloadMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = props.downloadMutation ?? useChapterDownloadMutation({
+        chapID: props.chapter.get_id(),
+        toInvalidate: [
+            queryKey
+        ]
+    });
+    const deleteMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = props.deleteMutation ?? useChapterDeleteMutation({
+        chapID: props.chapter.get_id(),
+        toInvalidate: [
+            queryKey
+        ]
+    });
+
     if (downloadMutation?.isRefetching) {
         return (<MangadexSpinner size={"md"} />);
     } else if ((downloadMutation.isLoading && downloadMutation.fetchStatus == "fetching")) {

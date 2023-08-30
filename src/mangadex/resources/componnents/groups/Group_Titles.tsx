@@ -4,14 +4,17 @@ import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 import MangaList from "../mangas/v1/MangaList";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import React from "react";
 
 export default function Group_Titles(props: {
     id: string
 }) {
     const client = useHTTPClient();
+    const _queryKey_ = React.useMemo(() => queryKey(props), []);
     return (
         <CollectionComponnent_WithQuery<Manga>
-            queryKey={["mdx", "group_titles", props.id]}
+            // [x] Refactor into a function
+            queryKey={_queryKey_}
             fn={() => {
                 return Manga.search({
                     offset_Limits: new Offset_limits(),
@@ -33,3 +36,8 @@ export default function Group_Titles(props: {
         </CollectionComponnent_WithQuery>
     );
 }
+
+export function queryKey(props: { id: string; }) {
+    return ["mdx", "group_titles", props.id];
+}
+

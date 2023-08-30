@@ -3,7 +3,6 @@ import { Client } from "@tauri-apps/api/http";
 import React from "react";
 import usePingQuery from "../hooks/Ping";
 
-
 export default function IsPingable(props: {
     client: Client,
     onSuccess: (query: UseQueryResult<boolean, Error>) => React.ReactNode
@@ -33,14 +32,6 @@ export default function IsPingable(props: {
             );
         }
     } else if (query.isLoading == true) {
-        return (
-            <React.Fragment>
-                {
-                    props.onLoading
-                }
-            </React.Fragment>
-        );
-    } else if (query.isRefetching == true) {
         return (
             <React.Fragment>
                 {

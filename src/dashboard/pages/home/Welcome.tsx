@@ -1,7 +1,6 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Button, Center, HStack, Heading, Image, Skeleton, Stack, Text } from "@chakra-ui/react";
 import { getVersion } from "@tauri-apps/api/app";
-import Tauri_Updater from "@dashboard/resources/components/Tauri_updater_button";
 import { FaGithub } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { ExtLink } from "@commons-res/components/ExtLink";
@@ -39,7 +38,6 @@ export default function Welcome() {
                             rightIcon={<ExternalLinkIcon />}
                         >Star this project on Github</Button>
                     </ExtLink>
-                    <Tauri_Updater />
                     <Button
                         colorScheme={"blackAlpha"}>
                         <Image fallback={

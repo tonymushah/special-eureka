@@ -1,6 +1,6 @@
 import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import * as FontAwesome from "react-icons/fa";
 import { NumericFormat } from "react-number-format";

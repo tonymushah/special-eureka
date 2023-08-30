@@ -9,6 +9,7 @@ import ChapterLang from "./Lang";
 import Title from "./Title";
 import User from "./User";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import TryCatch from "@commons-res/components/TryCatch";
 
 const ChapterDownloadButton = React.lazy(() => import("../ChapterDownloadButton"));
 
@@ -111,7 +112,9 @@ export default function Chapter_Element1(props: {
                                 lg: 3
                             }}
                         >
-                            <User/>
+                            <TryCatch catch={() => (<Chakra.Text as={"i"}>No user, i guess</Chakra.Text>)}>
+                                <User/>
+                            </TryCatch>
                         </Chakra.GridItem>
                     </Chakra.Grid>
                 </Chakra.Box>

@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 
 export default function CollapseHeight(props: React.PropsWithChildren) {

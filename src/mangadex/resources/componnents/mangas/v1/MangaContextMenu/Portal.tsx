@@ -1,5 +1,5 @@
 import { VStack, Box } from "@chakra-ui/react";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks";
+import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import { Content, Portal as CttxPortal } from "@radix-ui/react-context-menu";
 import React from "react";
 import { MangaContextMenuProps, MangaContextMenuProvider } from ".";

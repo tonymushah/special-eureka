@@ -2,11 +2,11 @@ import * as ChakraIcon from "@chakra-ui/icons";
 import { Box, Button, ButtonGroup, Center, Text } from "@chakra-ui/react";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { Collection } from "@mangadex/api/structures/Collection";
-import { QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { QueryKey, UseQueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import ErrorEL1 from "../error/ErrorEL1";
-import UseCollection from "./UseCollection";
 import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
+import UseCollection from "./UseCollection";
 
 export default function CollectionComponnent_WithQuery<T>(props: {
     fn: () => Promise<Collection<T>>,
@@ -21,7 +21,6 @@ export default function CollectionComponnent_WithQuery<T>(props: {
     });
     const search_query = useQuery<Collection<T>, Error>(props.queryKey, props.fn, props.query_options);
     const queryClient = useQueryClient();
-
     const previous = useMutation({
         mutationKey: props.queryKey.concat("previous"),
         mutationFn: () => {

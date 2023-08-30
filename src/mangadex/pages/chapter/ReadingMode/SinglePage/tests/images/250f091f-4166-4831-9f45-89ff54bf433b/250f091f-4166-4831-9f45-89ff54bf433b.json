@@ -1,0 +1,29 @@
+{
+    "result": "ok",
+    "response": "entity",
+    "data": {
+        "id": "250f091f-4166-4831-9f45-89ff54bf433b",
+        "type": "chapter",
+        "attributes": {
+            "volume": "3",
+            "chapter": "13",
+            "title": null,
+            "translatedLanguage": "en",
+            "externalUrl": null,
+            "publishAt": "2023-06-19T05:21:42+00:00",
+            "readableAt": "2023-06-19T05:21:42+00:00",
+            "createdAt": "2023-06-19T05:21:41+00:00",
+            "updatedAt": "2023-06-19T05:21:59+00:00",
+            "pages": 38,
+            "version": 3
+        },
+        "relationships": [
+            {
+                "id": "ab24085f-b16c-4029-8c05-38fe16592a85",
+                "type": "scanlation_group"
+            },
+            { "id": "1c8f0358-d663-4d60-8590-b5e82890a1e3", "type": "manga" },
+            { "id": "68d62155-85fa-4851-94af-37402bf16252", "type": "user" }
+        ]
+    }
+}

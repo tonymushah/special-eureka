@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouteObject, RouterProvider } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
-import Mangadex from "@mangadex";
-import Dashboard from "@dashboard";
+import Mangadex from "@mangadex/index";
+import Dashboard from "@dashboard/index";
 
 export default function Route_Objects(props: {
     additional_routes?: RouteObject[]
@@ -35,6 +35,9 @@ export default function Route_Objects(props: {
                     </Chakra.AbsoluteCenter>
                 </Chakra.Box>
             }
+            future={{
+                "v7_startTransition" : true
+            }}
         />
     );
 

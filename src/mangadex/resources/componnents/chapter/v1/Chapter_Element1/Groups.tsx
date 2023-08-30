@@ -1,6 +1,6 @@
 import TryCatch from "@commons-res/components/TryCatch";
 import { getMangaDexPath } from "@mangadex/index";
-import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_groups";
 import React from "react";
 import { Link } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";

@@ -1,18 +1,18 @@
 import * as ChakraIcon from "@chakra-ui/icons";
-import { Box, Button, Center, ToastId, useToast, UseToastOptions } from "@chakra-ui/react";
-import React from "react";
+import { Box, Button, Center, ToastId } from "@chakra-ui/react";
+import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { Attribute } from "@mangadex/api/structures/Attributes";
 import { Collection } from "@mangadex/api/structures/Collection";
+import React from "react";
 import UseCollection from "./UseCollection";
-import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
 export default function CollectionComponnent<T extends Attribute>(props: {
     src: Collection<T>,
     children: (value: Collection<T>) => React.ReactNode,
-    id? : ToastId
+    id?: ToastId
 }) {
     const toast = useChakraToast({
-        id : props.id
+        id: props.id
     });
     const [collection, setCollection] = React.useState<Collection<T>>(props.src);
     return (
@@ -40,13 +40,32 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                     "duration": 9000
                                 });
                                 setCollection(value);
-                            }).catch(reason => {
-                                toast({
-                                    status: "error",
-                                    "title": "Error on Loading Previous page",
-                                    isClosable: true,
-                                    "duration": 9000
-                                });
+                            }).catch((reason) => {
+                                if (typeof reason == "string") {
+                                    toast({
+                                        status: "error",
+                                        "title": "Error on Loading Previous page",
+                                        description: reason,
+                                        isClosable: true,
+                                        "duration": 9000
+                                    });
+                                }else if(typeof reason == "object" && reason instanceof Error) {
+                                    toast({
+                                        status: "error",
+                                        "title": "Error on Loading Previous page",
+                                        description: reason.message,
+                                        isClosable: true,
+                                        "duration": 9000
+                                    });
+                                }else{
+                                    toast({
+                                        status: "error",
+                                        "title": "Error on Loading Previous page",
+                                        description: JSON.stringify(reason),
+                                        isClosable: true,
+                                        "duration": 9000
+                                    });
+                                }
                             });
                         }}
                     >
@@ -68,13 +87,32 @@ export default function CollectionComponnent<T extends Attribute>(props: {
                                     "duration": 9000
                                 });
                                 setCollection(value);
-                            }).catch(reason => {
-                                toast({
-                                    status: "error",
-                                    "title": "Error on Loading next page",
-                                    isClosable: true,
-                                    "duration": 9000
-                                });
+                            }).catch((reason) => {
+                                if (typeof reason == "string") {
+                                    toast({
+                                        status: "error",
+                                        "title": "Error on Loading Previous page",
+                                        description: reason,
+                                        isClosable: true,
+                                        "duration": 9000
+                                    });
+                                }else if(typeof reason == "object" && reason instanceof Error) {
+                                    toast({
+                                        status: "error",
+                                        "title": "Error on Loading Previous page",
+                                        description: reason.message,
+                                        isClosable: true,
+                                        "duration": 9000
+                                    });
+                                }else{
+                                    toast({
+                                        status: "error",
+                                        "title": "Error on Loading Previous page",
+                                        description: JSON.stringify(reason),
+                                        isClosable: true,
+                                        "duration": 9000
+                                    });
+                                }
                             });
                         }}
                     >

@@ -2,7 +2,7 @@ import React from "react";
 import { usePropsChapter } from "../PropsContext";
 import { Tooltip, Icon} from "@chakra-ui/react";
 import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
-import { get_this_chapter_lang } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_this_chapter_lang } from "@mangadex/resources/hooks/ChapterStateHooks/get_this_chapter_lang";
 import { FaQuestionCircle } from "react-icons/fa";
 
 export default function ChapterLang() {

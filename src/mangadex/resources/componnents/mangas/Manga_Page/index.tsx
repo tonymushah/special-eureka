@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { useMangaTitle } from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 import { appWindow } from "@tauri-apps/api/window";
-import "flag-icons/css/flag-icons.min.css";
+import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import { PropsProvider } from "../v1/MangaElementDef/vanilla";
 import TopInfo from "./Top";

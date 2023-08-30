@@ -4,7 +4,7 @@ import React from "react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { AggregateListOptions } from "@mangadex/api/structures/SearchType/AggregateListOptions";
-import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
+import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks/get_aggregate_query";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import Loading from "../loading";
 
@@ -24,7 +24,7 @@ export default function Manga_Page_Aggregate(props: {
     const { query } = get_aggregate_query({
         aggregate_options: aggregate_list_option
     });
-    if (query.isRefetching == true && query.isLoading) {
+    if (query.isRefetching && query.isLoading) {
         return (
             <Chakra.Box m={2} bg="inherit">
                 <Loading/>

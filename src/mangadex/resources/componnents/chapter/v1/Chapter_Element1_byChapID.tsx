@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { get_ChapterbyId } from "../../../hooks/ChapterStateHooks";
+import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 const ErrorEL1 = React.lazy(() => import("../../error/ErrorEL1"));
 const Chapter_Element1 = React.lazy(() => import("./Chapter_Element1"));

@@ -1,10 +1,11 @@
-import { Response } from "@tauri-apps/api/http";
+import { stringify } from "qs";
 import { Api_Request } from "../internal/Api_Request";
-import { Querry_list_builder, serialize, sort_volumes } from "../internal/Utils";
+import { sort_volumes } from "../internal/Utils";
+import Desktop_Api_Request from "../offline/DeskApiRequest";
+import { GetMangaAggregateData, VolumesAggregateData } from "../sta/data-contracts";
 import { Manga } from "./Manga";
 import { AggregateListOptions } from "./SearchType/AggregateListOptions";
 import { Volume } from "./Volume";
-import Desktop_Api_Request from "../offline/DeskApiRequest";
 
 export class Aggregate {
     private count!: number;
@@ -25,7 +26,7 @@ export class Aggregate {
         this.set_count(count);
         this.set_volumes(sort_volumes(volumes));
     }
-    public static build_wANY(object: any): Aggregate {
+    public static build_wANY(object: VolumesAggregateData): Aggregate {
         let volumes_length = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -43,7 +44,7 @@ export class Aggregate {
         const instance: Aggregate = new Aggregate(volumes_length, volumes_);
         return instance;
     }
-    public static async build_wANY2(object: any): Promise<Aggregate> {
+    public static async build_wANY2(object: VolumesAggregateData): Promise<Aggregate> {
         let volumes_length = 0;
         for (const key in object) {
             if (Object.prototype.hasOwnProperty.call(object, key)) {
@@ -69,11 +70,12 @@ export class Aggregate {
                 groups,
                 client
             } = props;
-            const getted: Response<any> = await Api_Request.get_methods(
-                Manga.get_request_a() + mangaID + "/aggregate?" +
-                serialize((new Querry_list_builder("translatedLanguage", translatedLanguage!)).build()) +
-                "&" +
-                serialize((new Querry_list_builder("groups", groups!)).build())
+            const getted = await Api_Request.get_methods<GetMangaAggregateData>(
+                Manga.get_request_a() + mangaID + "/aggregate?" + 
+                stringify({
+                    translatedLanguage,
+                    groups
+                })
                 , undefined, client);
             return Aggregate.build_wANY(getted.data.volumes);
         } catch (error) {
@@ -89,7 +91,7 @@ export class Aggregate {
         client
     }: AggregateListOptions): Promise<Aggregate> {
         try {
-            const getted: Response<any> = await Desktop_Api_Request.get_methods(
+            const getted = await Desktop_Api_Request.get_methods<GetMangaAggregateData>(
                 Manga.get_request_a() + mangaID + "/aggregate"
                 , undefined, client);
             return Aggregate.build_wANY(getted.data.volumes);
@@ -114,7 +116,7 @@ export class Aggregate {
                         return this.volumes[index + 1].get_chapters()[0].get_ids()[0];
                     }
                 } else {
-                    return result!;
+                    return result;
                 }
             // eslint-disable-next-line no-empty
             } catch (error) {}
@@ -134,7 +136,7 @@ export class Aggregate {
                         return this.volumes[index - 1].get_chapters()[0].get_ids()[0];
                     }
                 } else {
-                    return result!;
+                    return result;
                 }
             // eslint-disable-next-line no-empty
             } catch (error) {}

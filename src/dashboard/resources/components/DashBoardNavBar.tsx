@@ -9,7 +9,7 @@ import {
 import { Link as ReactRouterLink } from "react-router-dom";
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import special_eureka_logo from "@commons-res/common-icon/eureka-logo6.svg";
-import Tauri_Updater from "./Tauri_updater_button";
+
 export default function WithSubnavigation() {
 
     const { isOpen, onToggle } = useDisclosure();
@@ -54,14 +54,6 @@ export default function WithSubnavigation() {
                         <DesktopNav />
                     </Flex>
                 </Flex>
-
-                <Stack
-                    flex={{ base: 1, md: 0 }}
-                    justify={"flex-end"}
-                    direction={"row"}
-                    spacing={6}>
-                    <Tauri_Updater />
-                </Stack>
             </Flex>
 
             <Collapse in={isOpen} animateOpacity>

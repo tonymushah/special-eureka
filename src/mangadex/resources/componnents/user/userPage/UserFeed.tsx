@@ -6,7 +6,7 @@ import { Asc_Desc } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
 import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
 import MangaChapterAccordion_Element from "@mangadex/resources/componnents/mangas/v1/MangaChapterAccordion_Element";
-import { getUserFeedQueryKey } from "@mangadex/resources/hooks/UserPageHooks";
+import { getUserFeedQueryKey } from "@mangadex/resources/hooks/UserPageHooks/getUserFeedQueryKey";
 
 export default function UserFeed(props : {
     user_id : string

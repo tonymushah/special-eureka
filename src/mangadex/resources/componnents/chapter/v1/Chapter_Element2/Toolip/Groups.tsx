@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks";
+import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_groups";
 import randomInteger from "random-int";
 import React from "react";
 import { FaUsers } from "react-icons/fa";

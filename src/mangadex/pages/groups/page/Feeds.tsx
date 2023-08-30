@@ -1,4 +1,4 @@
-import { Group_Page_Suspense } from "@mangadex/resources/componnents/groups/Group_Page";
+import { Group_Page_Suspense } from "@mangadex/resources/componnents/groups/Group_Page/Group_Page_Suspense";
 import React from "react";
 import { useGroupRouteOutletContext } from ".";
 
