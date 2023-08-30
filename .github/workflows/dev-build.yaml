@@ -14,7 +14,6 @@ jobs:
             fail-fast: false
             matrix:
                 platform: [macos-latest, ubuntu-latest, windows-latest]
-
         runs-on: ${{ matrix.platform }}
         steps:
             - uses: actions/checkout@v3
@@ -51,6 +50,6 @@ jobs:
                   tagName: "v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
                   releaseName: "Special Eureka v__VERSION__-dev-${{ steps.current-time.outputs.formattedTime }}"
                   releaseBody: "This is a dev release of v__VERSION__ from branch ${{ github.ref }}. It's unstable and might break, so please see to the latest stable realeases"
-                  releaseDraft: true
+                  releaseDraft: false
                   prerelease: true
                   projectPath: src-tauri
