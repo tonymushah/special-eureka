@@ -5,10 +5,6 @@ import { useNavigation } from "react-router";
 const variants : Variants = {
     isNormalLoad : {
         filter : "blur(4px)",
-        cursor : "wait"
-    },
-    none : {
-        cursor : "default"
     }
 };
 const transition : Transition = {
@@ -24,6 +20,9 @@ export default function NavigationAnimation({ children } : React.PropsWithChildr
             animate={navigation.state === "loading" ? "isNormalLoad" : "none"}
             transition={transition}
             variants={variants}
+            style={{
+                cursor : navigation.state === "loading" ? "wait" : "default"
+            }}
         >
             {children}
         </motion.div>

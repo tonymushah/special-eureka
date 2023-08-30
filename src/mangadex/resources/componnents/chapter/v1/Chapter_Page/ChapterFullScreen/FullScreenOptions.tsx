@@ -13,42 +13,41 @@ export default function FullScreenOptions(props: React.PropsWithChildren<{
     if (props.isShow == true) {
         return (
             <React.Fragment>
-                <Chakra.Box
+                <Chakra.IconButton
                     position={"fixed"}
                     zIndex={"banner"}
-                    width={"100%"}
-                >
-                    <Chakra.IconButton
-                        aria-label="Exit FullScreen"
-                        colorScheme={"orange"}
-                        opacity={"0.2"}
-                        icon={<ChakraIcons.CloseIcon />}
-                        float={"left"}
-                        _hover={{
-                            opacity: "1"
-                        }}
-                        onClick={() => {
-                            props.onCloseButtonClick();
-                        }}
-                    />
-
-                    <Chakra.IconButton aria-label="Reading Option"
-                        colorScheme={"orange"}
-                        opacity={"0.2"}
-                        icon={<ChakraIcons.HamburgerIcon />}
-                        float={"right"}
-                        _hover={{
-                            opacity: "1"
-                        }}
-                        onClick={() => {
-                            changeOption(true);
-                        }}
-                    />
-                </Chakra.Box>
+                    aria-label="Exit FullScreen"
+                    colorScheme={"orange"}
+                    transition={"ease-in-out"}
+                    opacity={"0.2"}
+                    icon={<ChakraIcons.CloseIcon />}
+                    _hover={{
+                        opacity: "1"
+                    }}
+                    onClick={() => {
+                        props.onCloseButtonClick();
+                    }}
+                />
+                <Chakra.IconButton
+                    left={"97%"}
+                    position={"fixed"}
+                    zIndex={"banner"}
+                    aria-label="Reading Option"
+                    colorScheme={"orange"}
+                    opacity={"0.2"}
+                    icon={<ChakraIcons.HamburgerIcon />}
+                    _hover={{
+                        opacity: "1"
+                    }}
+                    transition={"ease-in-out"}
+                    onClick={() => {
+                        changeOption(true);
+                    }}
+                />
             </React.Fragment>
         );
     }
     return (
-        <React.Fragment/>
+        <React.Fragment />
     );
 }

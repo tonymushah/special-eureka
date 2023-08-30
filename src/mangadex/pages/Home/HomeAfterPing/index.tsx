@@ -4,10 +4,6 @@ import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
-import { latest_loader } from "./latest_loader";
-import { popular_loader } from "./popular_loader";
-import { recentlyAdded_loader } from "./recentlyAdded_loader";
-import { seasonal_loader } from "./seasonal_loader";
 import { Client } from "@tauri-apps/api/http";
 
 const Seasonal = React.lazy(() => import("../Seasonal"));
@@ -21,7 +17,11 @@ export function queryKey() {
 
 export function queryfn(client : Client, queryClient: QueryClient) {
     return async () => {
-        return (await Promise.allSettled([
+        const { latest_loader } = await import("./latest_loader");
+        const { popular_loader } = await import("./popular_loader");
+        const { recentlyAdded_loader } = await import("./recentlyAdded_loader");
+        const { seasonal_loader } = await import("./seasonal_loader");
+        return (await Promise.all([
             latest_loader(client, queryClient),
             popular_loader(client, queryClient),
             recentlyAdded_loader(client, queryClient),

@@ -2,13 +2,13 @@ import React from "react";
 import { Outlet, RouteObject } from "react-router-dom";
 import * as Chakra from "@chakra-ui/react";
 
-const NotFound404 = React.lazy(() => import("./commons-res/404NotFound"));
+const NotFound404 = React.lazy(() => import("@commons-res/404NotFound"));
 
-const Index_Page = React.lazy(() => import("./index_page"));
+const Index_Page = React.lazy(() => import("@/index_page"));
 
-const Route_Objects = React.lazy(() => import("./router/GetActiveRoutes"));
+const Route_Objects = React.lazy(() => import("./GetActiveRoutes"));
 
-const NavigatorReactRouter = React.lazy(() => import("./commons-res/components/NavigatorReactRouter"));
+const NavigatorReactRouter = React.lazy(() => import("@commons-res/components/NavigatorReactRouter"));
 
 function RouterSuspense(props: React.PropsWithChildren) {
     return (

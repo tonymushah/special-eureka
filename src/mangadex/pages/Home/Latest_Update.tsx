@@ -9,7 +9,7 @@ import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MangaElementFallback from "@mangadex/resources/componnents/mangas/v1/MangaElementFallback";
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
-import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID";
 import { Client } from "@tauri-apps/api/http";
 import UserOptions from "@mangadex/api/internal/UserOptions";
@@ -37,10 +37,14 @@ export async function loader({
             const queryKey = get_chapter_queryKey({
                 id: chapter.get_id()
             });
-            queryClient.setQueryData<GetChapterByIdResult>(queryKey, {
-                "data": chapter,
-                hasFailed: value.hasFailed,
-                "isDownloaded": value.isDownloaded
+            queryClient.fetchQuery<GetChapterByIdResult>(queryKey, async () => {
+                return await Chapter.get_ChapterbyId(chapter.get_id(), client);
+            }, {
+                initialData: {
+                    "data": chapter,
+                    hasFailed: value.hasFailed,
+                    "isDownloaded": value.isDownloaded
+                }
             });
         });
     });
@@ -54,7 +58,14 @@ export async function loader({
         const mangaQueryKey = get_mangaQueryKey_byID({
             mangaID: manga.get_id()
         });
-        queryClient.setQueryData(mangaQueryKey, manga);
+        queryClient.fetchQuery<GetMangaByIDResponse>(mangaQueryKey, async function(){
+            return await Manga_with_allRelationship.getMangaByID(manga.get_id());
+        }, {
+            initialData : {
+                isOffline : false,
+                manga : manga
+            }
+        });
     });
     return search_result;
 }

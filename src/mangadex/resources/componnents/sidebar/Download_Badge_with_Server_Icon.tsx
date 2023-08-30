@@ -9,6 +9,7 @@ export default function Downloads_badge_With_Server_Icon() {
             <Chakra.Icon
                 as={FaServer}
                 color={"blue.500"}
+                cursor={"wait"}
             />
         );
     }

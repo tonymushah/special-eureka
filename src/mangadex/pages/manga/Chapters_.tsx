@@ -1,7 +1,5 @@
-import React from "react";
 import { useManga } from ".";
-import { Manga } from "../../api/structures/Manga";
-import { Top_Chaps } from "../../resources/componnents/mangas/Mainpage/Top_chap";
+import { Top_Chaps } from "@mangadex/resources/componnents/mangas/Mainpage/Top_chap";
 
 export default function Chapters_() {
     const { toUse } = useManga();

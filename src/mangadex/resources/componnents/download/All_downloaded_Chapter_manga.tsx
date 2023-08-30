@@ -13,7 +13,7 @@ export default function All_downloaded_Chapter_manga(props: {
 }){
     const client = useHTTPClient();
     // Refactor into a function
-    const query_key = ["mdx", "manga", props.mangaID, "offline-chapters"];
+    const query_key = (queryKey(props.mangaID));
     return (
         <CollectionComponnent_WithQuery<string>
             fn={() => {
@@ -37,4 +37,8 @@ export default function All_downloaded_Chapter_manga(props: {
             }
         </CollectionComponnent_WithQuery>
     );
+}
+
+export function queryKey(mangaID: string) {
+    return ["mdx", "manga", mangaID, "offline-chapters"];
 }

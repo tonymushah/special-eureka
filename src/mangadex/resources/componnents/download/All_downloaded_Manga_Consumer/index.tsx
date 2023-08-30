@@ -1,20 +1,26 @@
 import * as Chakra from "@chakra-ui/react";
-import Consumer from "@commons-res/components/Consumer";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { Collection } from "@mangadex/api/structures/Collection";
 import { Manga } from "@mangadex/api/structures/Manga";
-import { UseQueryOptions } from "@tanstack/react-query";
+import { UseInfiniteQueryOptions, UseInfiniteQueryResult } from "@tanstack/react-query";
 import React from "react";
-import { CollectionComponnent_WithQuery } from "../../Collection/Collection";
-import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
+import CollectionComponnent_withInfiniteQuery from "../../Collection/CollectionComponnent_withInfiniteQuery";
+import { InfiniteQueryConsumer } from "../../Collection/InfiniteQueryConsumer";
 
 const RefreshButton = React.lazy(() => import("./RefreshButton"));
 const RefetchButton = React.lazy(() => import("./RefetchButton"));
 const PatchButton = React.lazy(() => import("./PatchButton"));
 
 export default function AllDownlaodedMangaConsumer(props: {
-    children: (value: Array<string>) => React.ReactNode,
-    query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
+    children: (value: Collection<string>[]) => React.ReactNode,
+    query_options?: Omit<
+        UseInfiniteQueryOptions<
+            Collection<string>,
+            unknown
+        >,
+        "queryKey"
+    >
 }) {
     const client = useHTTPClient();
     // [x] Refactor into a function
@@ -39,26 +45,22 @@ export default function AllDownlaodedMangaConsumer(props: {
                 </Chakra.Wrap>
             </React.Suspense>
 
-            <CollectionComponnent_WithQuery<string>
-                fn={() => {
-                    return Manga.getAllDownloadedMangaID(undefined, client);
+            <CollectionComponnent_withInfiniteQuery<string>
+                queryFn={async function ({ pageParam = new Offset_limits() }) {
+                    return await Manga.getAllDownloadedMangaID(pageParam, client);
                 }}
                 queryKey={query_key}
-                onLoading={
-                    <Chakra.Center>
-                        <MangadexSpinner />
-                    </Chakra.Center>
-                }
-                query_options={props.query_options}
+            //query_options={props.query_options}
             >{
-                    (value) => (
-                        <Consumer<Array<string>> to_consume={value.get_data()}>
+                    (query: UseInfiniteQueryResult<Collection<string>, unknown>) => (
+                        <InfiniteQueryConsumer<string> query={query}>
                             {
                                 props.children
                             }
-                        </Consumer>
+                        </InfiniteQueryConsumer>
                     )
-                }</CollectionComponnent_WithQuery>
+                }
+            </CollectionComponnent_withInfiniteQuery>
         </Chakra.Box>
     );
 }

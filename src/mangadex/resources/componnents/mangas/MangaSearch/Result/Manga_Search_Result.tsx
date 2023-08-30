@@ -1,29 +1,33 @@
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
-import { Mangadex_suspense__ } from "@mangadex/index";
+import CollectionComponnent_withInfiniteQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_withInfiniteQuery";
+import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collection/InfiniteQueryConsumer";
 import React from "react";
-import CollectionComponnent_WithQuery from "../../../Collection/CollectionComponnent_WithQuery";
 import MyErrorBounderies from "../../../error/MyErrorBounderies";
-import { MangaList } from ".";
+import MangaListWithCollectionArray from "../../v1/MangaList/ViaMangaCollectionArray";
 
 export function Manga_Search_Result(props: MangaSearch_withAllIncludes) {
+    const _queryKey_ = React.useMemo(() => queryKey(), []);
     return (
         <MyErrorBounderies>
-            <CollectionComponnent_WithQuery<Manga>
-                // [x] Refactor into a new file
-                queryKey={queryKey()}
-                fn={async () => {
-                    return await Manga_with_allRelationship.search(props);
+            <CollectionComponnent_withInfiniteQuery<Manga>
+                queryKey={_queryKey_}
+                queryFn={async function({ pageParam }){
+                    const offset_limit = structuredClone(props.offset_Limits);
+                    return await Manga_with_allRelationship.search({
+                        ...props,
+                        offset_Limits : pageParam ?? offset_limit
+                    });
                 }}
             >
-                {(collec) => (
-                    <React.Suspense
-                        fallback={<Mangadex_suspense__ />}
-                    >
-                        <MangaList src={collec.get_data()} />
-                    </React.Suspense>
+                {(query) => (
+                    <InfiniteQueryConsumer<Manga> query={query}>
+                        {(data) => (
+                            <MangaListWithCollectionArray src={data}/>
+                        )}
+                    </InfiniteQueryConsumer>
                 )}
-            </CollectionComponnent_WithQuery>
+            </CollectionComponnent_withInfiniteQuery>
         </MyErrorBounderies>
     );
 }
