@@ -1,11 +1,7 @@
 name: build-test
 on:
-    push:
-        branches:
-            - master
-            - realease/*
-        paths-ignore:
-            - "src-tauri/examples/**"
+    release : 
+        types : [published]
 env:
     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 jobs:

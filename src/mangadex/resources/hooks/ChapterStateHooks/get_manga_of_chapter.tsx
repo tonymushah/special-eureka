@@ -1,5 +1,5 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { Manga } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get_mangaQueryKey_byID } from "../MangaStateHooks/get_mangaQueryKey_byID";
 import React from "react";
@@ -17,13 +17,16 @@ export function get_manga_of_chapter(props: {
             const mangaQueryKey = get_mangaQueryKey_byID({
                 mangaID: manga_id
             });
-            const queryData = queryClient.getQueryData<Manga>(mangaQueryKey);
+            const queryData = queryClient.getQueryData<GetMangaByIDResponse>(mangaQueryKey);
             if (queryData == undefined) {
                 //Manga_with_allRelationship.getMangaByID(manga_id);
                 const manga = await props.chapter.get_manga();
-                return queryClient.setQueryData(mangaQueryKey, manga) ?? manga;
+                return queryClient.setQueryData<GetMangaByIDResponse>(mangaQueryKey, {
+                    isOffline : false,
+                    manga
+                })?.manga ?? manga;
             } else {
-                return queryData;
+                return queryData.manga;
             }
         } catch (error) {
             const manga = await props.chapter.get_manga();
@@ -31,7 +34,10 @@ export function get_manga_of_chapter(props: {
             const mangaQueryKey = get_mangaQueryKey_byID({
                 mangaID: manga_id
             });
-            return queryClient.setQueryData(mangaQueryKey, manga) ?? manga;
+            return queryClient.setQueryData<GetMangaByIDResponse>(mangaQueryKey, {
+                isOffline : false,
+                manga
+            })?.manga ?? manga;
         }
     });
     return {

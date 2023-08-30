@@ -13,7 +13,7 @@ export function Manga_Search_Result(props: MangaSearch_withAllIncludes) {
             <CollectionComponnent_withInfiniteQuery<Manga>
                 queryKey={_queryKey_}
                 queryFn={async function({ pageParam }){
-                    const offset_limit = structuredClone(props.offset_Limits);
+                    const offset_limit = props.offset_Limits;
                     return await Manga_with_allRelationship.search({
                         ...props,
                         offset_Limits : pageParam ?? offset_limit

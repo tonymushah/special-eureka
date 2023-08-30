@@ -20,8 +20,6 @@ function Title_P_Collapse() {
 }
 
 export default function Manga_Search() {
-
-
     React.useEffect(() => {
         appWindow.setTitle("Manga Search | Mangadex");
     }, []);

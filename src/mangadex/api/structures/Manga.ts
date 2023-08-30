@@ -1479,6 +1479,7 @@ export class Manga_with_allRelationship extends Manga {
         client,
         authorOrArtist
     }: MangaSearch_withAllIncludes): Promise<Collection<Manga_with_allRelationship>> {
+        console.log(offset_Limits);
         const querys = {
             limit: offset_Limits.get_limits(),
             offset: offset_Limits.get_offset(),

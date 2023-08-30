@@ -152,10 +152,11 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const MangaPage = await import("@mangadex/pages/manga/index");
+                        const { default : Component, loader } = await import("@mangadex/pages/manga/index");
                         return {
-                            Component: MangaPage.default,
+                            Component,
                             ErrorBoundary,
+                            loader
                         };
                     },
                     children: [
