@@ -1,12 +1,17 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router";
+import { isRouteErrorResponse, useLocation, useNavigate, useRouteError } from "react-router";
 import ChakraContainer from "../../layout/Container";
+import { appWindow } from "@tauri-apps/api/window";
 
 export function RouteErrorBoundary() {
     const error = useRouteError();
     const navigate = useNavigate();
     const [isTranstion, startTransition] = React.useTransition();
+    const location = useLocation();
+    React.useEffect(() => {
+        appWindow.setTitle(`Error on loading ${location.pathname}`);
+    }, []);
     if (isRouteErrorResponse(error)) {
         if (error.error != undefined) {
             return (
