@@ -75,11 +75,7 @@ export abstract class Collection<T>{
         return number_page;
     }
     public get_current_page(): number{
-        if(this.offset % this.limit != 0){
-            throw new Error("(offset % limit) should be 0");
-        }else{
-            return this.offset / this.limit;
-        }
+        return Math.floor(this.offset / this.limit);
     }
     public async get_offset_limit_by_number_page(page: number) : Promise<Offset_limits>{
         if(page < 0 || page > this.get_number_of_page()){

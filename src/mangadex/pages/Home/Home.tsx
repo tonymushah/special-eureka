@@ -42,7 +42,7 @@ export const loader: LoaderFunction = async function () {
     if(await Api_Request.ping()){
         const client = await getClient();
         try{
-            await queryClient.fetchQuery(queryKey(), () => queryFn(client, queryClient));
+            await queryClient.prefetchInfiniteQuery(queryKey(), () => queryFn(client, queryClient));
             return new Response(undefined, {
                 status : 204,
                 statusText : "Loaded"

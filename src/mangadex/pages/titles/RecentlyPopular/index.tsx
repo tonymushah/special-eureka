@@ -3,7 +3,8 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { useTrackEvent } from "@mangadex/index";
-import CollectionComponnent_WithQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_WithQuery";
+import CollectionComponnent_withInfiniteQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_withInfiniteQuery";
+import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collection/InfiniteQueryConsumer";
 import React from "react";
 import { MangaComponnent } from "./MangaComponnent";
 
@@ -18,9 +19,9 @@ export default function RecentlyPopularPage() {
     return (
         <React.Fragment>
             <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
-            <CollectionComponnent_WithQuery<Manga>
+            <CollectionComponnent_withInfiniteQuery<Manga>
                 queryKey={query_Key}
-                fn={() => {
+                queryFn={() => {
                     return Manga_with_allRelationship.search({
                         offset_Limits: offset_limits,
                         order: order,
@@ -29,22 +30,32 @@ export default function RecentlyPopularPage() {
                         hasAvailableChapters: true
                     });
                 }}
-                query_options={{
+                options={{
                     staleTime: Infinity
                 }}
             >
-                {(data) => (
-                    <Chakra.Box>
-                        <Chakra.VStack display={"block"} divider={
-                            <Chakra.Divider />
-                        }>
-                            {data.get_data().map((value, index) => (
-                                <MangaComponnent value={value} data={data} index={index} key={`recently-popular-${value.get_id()}`}/>
-                            ))}
-                        </Chakra.VStack>
-                    </Chakra.Box>
+                {(query) => (
+                    <InfiniteQueryConsumer<Manga> query={query}>
+                        {(collections) => (
+                            <React.Fragment>
+                                {
+                                    collections.map((data) => (
+                                        <Chakra.Box key={`${data.get_current_page()}-popular`}>
+                                            <Chakra.VStack display={"block"} divider={
+                                                <Chakra.Divider />
+                                            }>
+                                                {data.get_data().map((value, index) => (
+                                                    <MangaComponnent value={value} data={data} index={index} key={`recently-popular-${value.get_id()}`} />
+                                                ))}
+                                            </Chakra.VStack>
+                                        </Chakra.Box>
+                                    ))
+                                }
+                            </React.Fragment>
+                        )}
+                    </InfiniteQueryConsumer>
                 )}
-            </CollectionComponnent_WithQuery>
+            </CollectionComponnent_withInfiniteQuery>
 
         </React.Fragment>
     );

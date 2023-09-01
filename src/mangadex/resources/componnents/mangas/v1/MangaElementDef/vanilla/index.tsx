@@ -1,20 +1,18 @@
 import * as Chakra from "@chakra-ui/react";
-import TryCatch from "@commons-res/components/TryCatch";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { getMangaDexPath } from "@mangadex/index";
 import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import { get_manga_description } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
 import React from "react";
-import { Link } from "react-router-dom";
 import { useMangaTitle } from "../../MangaTitle";
 import Description from "./Description";
 import GridLayout from "./GridLayout";
 import Image from "./Image";
 import Laoyut from "./Layout";
 import Publication from "./Publication";
-import Title from "./Title";
+import { TryCatchTitle } from "./TryCatchTitle";
 
-const MangaDexPath = getMangaDexPath();
+export const MangaDexPath = getMangaDexPath();
 
 export type Props = {
     src: Manga,
@@ -23,9 +21,9 @@ export type Props = {
 
 const Context = React.createContext<Props | undefined>(undefined);
 
-export function PropsProvider({ value, children } : React.PropsWithChildren<{
-    value : Props
-}>){
+export function PropsProvider({ value, children }: React.PropsWithChildren<{
+    value: Props
+}>) {
     return (
         <Context.Provider value={value}>
             {children}
@@ -33,23 +31,23 @@ export function PropsProvider({ value, children } : React.PropsWithChildren<{
     );
 }
 
-export function useProps() : Props{
+export function useProps(): Props {
     const data = React.useContext(Context);
-    if(data == undefined){
+    if (data == undefined) {
         throw new Error("The Props provied is not implemented");
-    }else{
+    } else {
         return data;
     }
 }
 
-export function useProps_MangaTitle(){
+export function useProps_MangaTitle() {
     const props = useProps();
     return useMangaTitle({
-        src : props.src
+        src: props.src
     });
 }
 
-export function useProps_manga_page_cover_art_image(){
+export function useProps_manga_page_cover_art_image() {
     const props = useProps();
     return get_manga_page_cover_art_image({
         src: props.src,
@@ -57,7 +55,7 @@ export function useProps_manga_page_cover_art_image(){
     }).query;
 }
 
-export function useProps_manga_description(){
+export function useProps_manga_description() {
     const props = useProps();
     return get_manga_description({
         src: props.src
@@ -88,37 +86,14 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                                         borderRadius={"10px"}
                                         maxHeight={"130px"}
                                     >
-                                        <Image/>
+                                        <Image />
                                     </Chakra.Card>
                                 </Chakra.GridItem>
                                 <Chakra.GridItem
                                     rowSpan={1}
                                     colSpan={8}
                                 >
-                                    <TryCatch
-                                        catch={() => (
-                                            <Chakra.Link
-                                            //as={Link}
-                                            //to={MangaDexPath + "/manga/" + props.src.get_id()}
-                                            >
-                                                <Title />
-                                            </Chakra.Link>
-                                        )}
-                                    >
-                                        <Chakra.Link
-                                            as={Link}
-                                            to={MangaDexPath + "/manga/" + props.src.get_id()}
-                                            color={"black"}
-                                            textDecoration="none"
-                                            _hover={{
-                                                color: "orange",
-                                                textDecoration: "none"
-                                            }}
-                                            fontFamily={"inherit"}
-                                        >
-                                            <Title />
-                                        </Chakra.Link>
-                                    </TryCatch>
+                                    <TryCatchTitle />
                                 </Chakra.GridItem>
                                 <Chakra.GridItem
                                     rowSpan={1}
@@ -130,7 +105,7 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                                             margin={0}
                                             fontSize={"xs"}
                                         >
-                                            <Publication/>
+                                            <Publication />
                                         </Chakra.Text>
                                     </Chakra.Box>
                                     <Description />

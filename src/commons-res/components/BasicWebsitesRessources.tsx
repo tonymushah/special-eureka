@@ -41,8 +41,8 @@ function ThisSuspense(props: React.PropsWithChildren) {
 }
 
 export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
-    client? : () => Promise<Client>,
-    queryClient? : QueryClient
+    client?: () => Promise<Client>,
+    queryClient?: QueryClient
 }>) {
     const HTTPClient = props.client ?? getClient;
     const queryClient = props.queryClient ?? new QueryClient({
@@ -56,18 +56,18 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                         return true;
                     }
                 },
-                onError(e){
-                    if(typeof e == "string"){
+                onError(e) {
+                    if (typeof e == "string") {
                         trackEvent("special-eureka-query-error", {
-                            location : location.href,
-                            error : e
+                            location: location.href,
+                            error: e
                         });
-                    }else if(typeof e == "object"){
-                        if(e instanceof Error){
+                    } else if (typeof e == "object") {
+                        if (e instanceof Error) {
                             trackEvent("special-eureka-query-error", {
-                                location : location.href,
-                                "error-message" : e.message,
-                                "error-name" : e.name
+                                location: location.href,
+                                "error-message": e.message,
+                                "error-name": e.name
                             });
                         }
                     }
@@ -96,21 +96,7 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                     onLoading={
                         <ThisLoading />
                     }
-                    onError={() => (
-                        <Chakra.Box
-                            width={"100%"}
-                            height={"100vh"}
-                        >
-                            <Chakra.AbsoluteCenter>
-                                <Chakra.Box>
-                                    <Chakra.Alert>
-                                        <Chakra.AlertIcon />
-                                        <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
-                                    </Chakra.Alert>
-                                </Chakra.Box>
-                            </Chakra.AbsoluteCenter>
-                        </Chakra.Box>
-                    )}
+                    onError={OnHTTPClientLoadingError}
                 >
                     <NavigatorReactRouter>
                         {
@@ -120,5 +106,23 @@ export default function BasicWebsitesRessources(props: React.PropsWithChildren<{
                 </HTTPClientProvider_Client>
             </ThisSuspense>
         </QueryClientProvider>
+    );
+}
+
+function OnHTTPClientLoadingError() {
+    return (
+        <Chakra.Box
+            width={"100%"}
+            height={"100vh"}
+        >
+            <Chakra.AbsoluteCenter>
+                <Chakra.Box>
+                    <Chakra.Alert>
+                        <Chakra.AlertIcon />
+                        <Chakra.AlertTitle>Error on Loading HTTPClient</Chakra.AlertTitle>
+                    </Chakra.Alert>
+                </Chakra.Box>
+            </Chakra.AbsoluteCenter>
+        </Chakra.Box>
     );
 }

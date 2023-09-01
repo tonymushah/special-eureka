@@ -3,6 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 export default function MangaElementFallback() {
     return (
         <Chakra.Box
+            cursor={"wait"}
             width={"fit-content"}
             backgroundColor={"gray.100"}
             borderRadius={"10px"}

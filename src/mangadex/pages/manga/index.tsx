@@ -150,7 +150,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                 const { manga, isOffline } = queryData;
                 if (manga instanceof Manga_with_allRelationship) {
                     if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
-                        queryClient.fetchQuery(_queryKey_, () => queryFn(id, client), {
+                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id, client), {
                             initialData: {
                                 manga,
                                 isOffline
@@ -161,7 +161,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                             "statusText": "Loaded"
                         });
                     } else {
-                        await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id, client));
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -169,7 +169,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                     }
                 } else {
                     if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
-                        await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id, client));
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -182,7 +182,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                     }
                 }
             } else {
-                await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                await queryClient.prefetchQuery(_queryKey_, () => queryFn(id, client));
                 return new Response(null, {
                     "status": 204,
                     "statusText": "Loaded"

@@ -1,60 +1,46 @@
-import { AbsoluteCenter } from "@chakra-ui/react";
-import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Manga } from "@mangadex/api/structures/Manga";
-import { Mangadex_suspense, getMangaDexPath, useTrackEvent } from "@mangadex/index";
-import { ErrorELAsync1 } from "@mangadex/resources/componnents/Error_cmp";
-import IsPingable from "@mangadex/resources/componnents/IsPingable";
-import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
-import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
-import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
-import React from "react";
-import { Await, useNavigate } from "react-router-dom";
+import { LoaderFunction, json, redirect } from "react-router";
 
-const MangaDexPath = getMangaDexPath();
 
-export default function Random_Manga() {
-    const client = useHTTPClient();
-    const setTitle = useAppWindowTitle();
-    React.useEffect(() => {
-        setTitle("Loading a Random Manga | Mangadex");
-    }, []);
-    useTrackEvent("mangadex-random-manga");
-    return (
-        <IsPingable
-            onLoading={
-                <AbsoluteCenter>
-                    <MangadexSpinner
-                        size={"xl"}
-                        colorScheme={"orange"}
-                    />
-                </AbsoluteCenter>
-            }
-            onError={(query) => {
-                setTitle("Error on loading a Random Manga | Mangadex");
-                return (
-                    <IsPingable_defaultError
-                        query={query}
-                    />
-                );
-            }}
-            client={client}
-            onSuccess={() => (
-                <Mangadex_suspense>
-                    <Await
-                        resolve={Manga.getRandom(client)}
-                        errorElement={<ErrorELAsync1 />}
-                    >
-                        {(getted1: Manga) => {
-                            const navigate = useNavigate();
-                            React.useEffect(() => {
-                                navigate(MangaDexPath + "/manga/" + getted1.get_id());
-                            });
-                            return (<></>);
-                        }}
-                    </Await>
-                </Mangadex_suspense>
-            )}
-        />
-
-    );
-}
+export const loader : LoaderFunction = async function () {
+    const { Manga } = await import("@mangadex/api/structures/Manga");
+    const { getClient } = await import("@tauri-apps/api/http");
+    const { queryClient } = await import("@mangadex/resources/query.client");
+    const { Api_Request } = await import("@mangadex/api/internal/Api_Request");
+    const { get_mangaQueryKey_byID } = await import("@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID");
+    const client = await getClient();
+    const { getMangaDexPath } = await import("@mangadex/index");
+    const MangaDexPath = getMangaDexPath();
+    try {
+        if(await Api_Request.ping(client)){
+            const getted = await Manga.getRandom(client);
+            queryClient.prefetchQuery(get_mangaQueryKey_byID({
+                mangaID : getted.get_id()
+            }), async () => (await Manga.getMangaByID(getted.get_id(), client)), {
+                initialData : {
+                    isOffline : false,
+                    manga : getted
+                }
+            });
+            return redirect(`${MangaDexPath}/manga/${getted.get_id()}`);
+        }else{
+            // TODO Add Random manga for offline
+            throw json({
+                "message": "can't access to the mangadex api"
+            }, {
+                status : 503,
+                statusText : "MangaDex API Access Error"
+            });
+        }
+    } catch (error) {
+        if(error instanceof Response || error instanceof Error){
+            throw error;
+        }else{
+            throw new Response(JSON.stringify(error), {
+                "status" : 500,
+                "statusText" : "loader Loading Error"
+            });
+        }
+    }finally{
+        client.drop();
+    }
+};

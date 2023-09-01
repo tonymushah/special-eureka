@@ -9,6 +9,7 @@ import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 import MangadexSpinner from "../kuru_kuru/MangadexSpinner";
 
+// migrate to infinite query
 export default function All_downloaded_chapter(props: {
     query_options?: Omit<UseQueryOptions<Collection<string>, Error>, "queryKey" | "queryFn">,
 }) {

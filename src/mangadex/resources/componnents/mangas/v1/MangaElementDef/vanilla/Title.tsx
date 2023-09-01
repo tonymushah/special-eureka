@@ -13,11 +13,17 @@ export default function Title() {
             color={"black"}
             textDecoration="none"
             _hover={{
+                transitionProperty: "backgroundColor",
+                transitionDuration: "0.3s",
+                transitionTimingFunction: "ease-in-out",
                 color: "orange",
                 textDecoration: "none"
             }}
-        > 
-            {title} 
+            transitionProperty={"backgroundColor"}
+            transitionDuration={"0.3s"}
+            transitionTimingFunction={"ease-in-out"}
+        >
+            {title}
         </Heading>
     );
 }

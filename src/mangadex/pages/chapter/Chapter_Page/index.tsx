@@ -3,9 +3,7 @@ import { useTrackEvent } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
-import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
-import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { useParams } from "react-router-dom";
 
@@ -13,19 +11,15 @@ const Chapter_Page_Success = React.lazy(() => import("@mangadex/resources/compon
 
 export default function Chapter_Page() {
     const { id } = useParams();
-    const queryKey = get_chapter_queryKey({
-        id: id!
-    });
     const setTitle = useAppWindowTitle();
-    const queryClient = useQueryClient();
     React.useEffect(() => {
-        queryClient.removeQueries(queryKey, {
-            exact: true
-        });
         setTitle("Loading... | Mangadex");
     }, []);
     const { query } = get_ChapterbyId({
-        id: id!
+        id: id!,
+        options: {
+            enabled: !!id
+        }
     });
     useTrackEvent("mangadex-chapter-page-entrance", {
         type: "chapter",
@@ -76,3 +70,5 @@ export default function Chapter_Page() {
     );
 
 }
+
+export { loader } from "./loader";

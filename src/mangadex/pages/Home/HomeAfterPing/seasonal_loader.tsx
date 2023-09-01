@@ -4,13 +4,13 @@ import { Client } from "@tauri-apps/api/http";
 import { getSeasonalId } from "../Seasonal";
 
 export async function seasonal_loader(client: Client, queryClient: QueryClient) {
-    const seasonal_id = await getSeasonalId(client);
     /// [x] Refactor Query Key into a function
-    queryClient.setQueryData(queryKey(), seasonal_id);
-    const data = await List.getListByID_includes_manga(seasonal_id, client);
-    /// [x] Refactor Query Key into a function
-    const key = custom_list_queryKey(seasonal_id);
-    queryClient.setQueryData(key, data);
+    const seasonal_id = await queryClient.fetchQuery(queryKey(), async function () {
+        return await getSeasonalId(client);
+    });/// [x] Refactor Query Key into a function 
+    await queryClient.prefetchQuery(custom_list_queryKey(seasonal_id), async function(){
+        return await List.getListByID_includes_manga(seasonal_id, client);
+    });
 }
 
 function custom_list_queryKey(seasonal_id: string) {

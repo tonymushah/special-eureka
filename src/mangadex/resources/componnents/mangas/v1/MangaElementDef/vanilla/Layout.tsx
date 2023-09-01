@@ -50,9 +50,15 @@ export default function Laoyut({ children }: React.PropsWithChildren) {
                                 )
                             )
                         ))
-                    )
+                    ),
+                    transitionProperty : "backgroundColor",
+                    transitionDuration : "0.3s",
+                    transitionTimingFunction : "ease-in-out"
                 }}
                 boxShadow={"md"}
+                transitionProperty={"backgroundColor"}
+                transitionDuration={"0.3s"}
+                transitionTimingFunction={"ease-in-out"}
             >
                 {children}
             </Box>

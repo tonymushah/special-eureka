@@ -34,7 +34,7 @@ export class Chapter extends Attribute {
     private volume!: string;
     private pages!: number;
     private translatedLanguage!: string;
-    private externalUrl!: string;
+    private externalUrl?: string;
     private version!: number;
     private createdAt!: string;
     private updateAt!: string;
@@ -53,7 +53,7 @@ export class Chapter extends Attribute {
     public set_translatedLanguage(translatedLanguage: string) {
         this.translatedLanguage = translatedLanguage;
     }
-    public set_externalUrl(externalUrl: string) {
+    public set_externalUrl(externalUrl?: string) {
         this.externalUrl = externalUrl;
     }
     public set_version(version: number) {
@@ -90,7 +90,7 @@ export class Chapter extends Attribute {
     public get_translatedLanguage(): string {
         return this.translatedLanguage;
     }
-    public get_externalUrl(): string {
+    public get_externalUrl(): string | undefined {
         return this.externalUrl;
     }
     public get_version(): number {
@@ -137,7 +137,7 @@ export class Chapter extends Attribute {
             attributes.updatedAt,
             attributes.publishAt
         );
-        instance.set_externalUrl(attributes.externalUrl ?? "");
+        instance.set_externalUrl(attributes.externalUrl ?? undefined);
         instance.set_translatedLanguage(attributes.translatedLanguage);
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);

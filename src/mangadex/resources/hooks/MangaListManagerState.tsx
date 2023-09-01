@@ -9,6 +9,7 @@ export function useMangaListOption(){
     const query = useQuery(query_key, () => {
         return useroption.getMangaListOption();
     });
+    const [isTranstion, startTransition] = React.useTransition();
     const mutation = useMutation({
         mutationKey : query_key.concat("mutation"),
         mutationFn: async (input : number) => {
@@ -22,8 +23,9 @@ export function useMangaListOption(){
     return {
         query_key,
         ...query,
-        updateListOption : mutation.mutate,
-        mutation
+        updateListOption : (input : number) => startTransition(() => mutation.mutate(input)),
+        mutation,
+        isTranstion
     };
 }
 
