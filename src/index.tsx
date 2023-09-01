@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client";
 import { ChakraProvider, Box, Spinner, AbsoluteCenter, ColorModeScript } from "@chakra-ui/react";
 import theme from "./theme";
 import { defaultOptions } from "@commons-res/sentry";
+import {  } from "@tauri-apps/api/window";
 
 window.Sentry.init(
     defaultOptions

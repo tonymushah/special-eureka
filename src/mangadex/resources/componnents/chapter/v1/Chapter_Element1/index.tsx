@@ -13,9 +13,12 @@ import TryCatch from "@commons-res/components/TryCatch";
 
 const ChapterDownloadButton = React.lazy(() => import("../ChapterDownloadButton"));
 
+
+
 export default function Chapter_Element1(props: {
     chapter: Chapter,
 }) {
+    const onHover = Chakra.useColorModeValue("gray.100", "gray.700");
     return (
         <ChapterPropsProvider value={props}>
             <ChapterContextMenu
@@ -25,8 +28,9 @@ export default function Chapter_Element1(props: {
                     width={"full"}
                     padding={1}
                     _hover={{
-                        background: "gray.100"
+                        background: onHover
                     }}
+                    boxShadow={"md"}
                     borderRadius={10}
                 >
                     <Chakra.Grid

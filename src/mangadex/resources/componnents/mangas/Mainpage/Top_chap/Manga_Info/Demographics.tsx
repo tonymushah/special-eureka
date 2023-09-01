@@ -20,7 +20,7 @@ export function Demographics() {
                                 style={{
                                     fontWeight: "800"
                                 }}
-                                className="m-1" variant={"solid"} colorScheme={"blackAlpha"} size="sm">{make_first_UpperCare(demographics)}</Chakra.Button>
+                                className="m-1" variant={"solid"} colorScheme={"gray"} size="sm">{make_first_UpperCare(demographics)}</Chakra.Button>
                         </Chakra.WrapItem>
                     </Chakra.Wrap>
                 </Chakra.Box>

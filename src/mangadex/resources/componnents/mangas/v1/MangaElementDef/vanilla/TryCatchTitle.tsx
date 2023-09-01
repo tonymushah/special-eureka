@@ -16,6 +16,7 @@ function OnCatch(__error: Error) {
 
 export function TryCatchTitle() {
     const { src } = useProps();
+    const color = Chakra.useColorModeValue("black", "white");
     return (
         <TryCatch
             catch={OnCatch}
@@ -23,7 +24,7 @@ export function TryCatchTitle() {
             <Chakra.Link
                 as={Link}
                 to={MangaDexPath + "/manga/" + src.get_id()}
-                color={"black"}
+                color={color}
                 textDecoration="none"
                 _hover={{
                     color: "orange",

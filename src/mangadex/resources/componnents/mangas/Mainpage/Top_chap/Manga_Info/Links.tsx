@@ -4,9 +4,6 @@ import React from "react";
 import { LinksRow } from "../../boutons/links_boutons";
 import { useManga } from "@mangadex/pages/manga";
 
-
-
-
 export function Links() {
     const { toUse: src } = useManga();
     const links = React.useMemo(() => {

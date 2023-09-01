@@ -7,7 +7,7 @@ import MangadexSpinner from "./kuru_kuru/MangadexSpinner";
 
 const Side_bar = React.lazy(() => import("./sidebar/SideBar"));
 
-const SideBar = React.forwardRef(function TheSidebar () {
+const SideBar = React.forwardRef(function TheSidebar() {
     return (
         <React.Suspense
             fallback={<Chakra.Box
@@ -35,12 +35,12 @@ function LTRSideBar() {
     }
 }
 
-function RTLSidebar(){
+function RTLSidebar() {
     const { query } = useRTLSidebar();
-    if(query.data == true){
-        return (<SideBar/>);
-    }else{
-        return (<React.Fragment/>);
+    if (query.data == true) {
+        return (<SideBar />);
+    } else {
+        return (<React.Fragment />);
     }
 }
 
@@ -68,7 +68,7 @@ export default function Content(props: React.PropsWithChildren) {
                     </Chakra.Box>
                 </Chakra.Box>
             </Chakra.Box>
-            <RTLSidebar/>
+            <RTLSidebar />
         </Chakra.Box>
     );
 }

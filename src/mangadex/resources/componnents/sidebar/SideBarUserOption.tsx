@@ -1,10 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
 import "@mangadex/resources/css/sidebar.css";
-import { FaUser } from "react-icons/fa";
 import { Menu, MenuItem } from "react-pro-sidebar";
 import  SBOP_ from "./useroption";
+import { FiUser } from "react-icons/fi";
+import { useBackgroundColorHover } from "./ActualSidebar";
 
 export default function SideBarUserOption() {
+    const onHover = useBackgroundColorHover();
     return (
         <Menu
             rootStyles={{
@@ -14,7 +16,7 @@ export default function SideBarUserOption() {
             menuItemStyles={{
                 button: {
                     ":hover": {
-                        backgroundColor: "#525252"
+                        backgroundColor: onHover
                     }
                 }
             }}
@@ -22,7 +24,7 @@ export default function SideBarUserOption() {
             <SBOP_>
                 <MenuItem
                     icon={
-                        <FaUser />
+                        <FiUser fontSize={"20px"} />
                     }
                     suffix={
                         <Chakra.Tooltip placement="right" hasArrow label={"Available in a future update"}>

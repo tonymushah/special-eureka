@@ -15,7 +15,7 @@ export function AuthorButton(props: {
             <Link to={MangaDexPath + "/author/" + props.src.get_id()}>
                 <Button style={{
                     fontWeight: "800"
-                }} colorScheme={"blackAlpha"} variant={"solid"} size="sm" >
+                }} colorScheme={"gray"} variant={"solid"} size="sm" >
                     {props.src.get_Name()}
                 </Button>
             </Link>

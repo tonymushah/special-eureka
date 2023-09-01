@@ -892,9 +892,6 @@ export class Manga extends Attribute {
         if (offset_Limits == undefined) {
             offset_Limits = new Offset_limits();
         }
-        if (client == undefined) {
-            client = await getClient();
-        }
         if (await DeskApiRequest.ping(client) == true) {
             const response: Response<{
                 data: {

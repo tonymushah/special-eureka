@@ -8,7 +8,7 @@ export function TagButton(props: {
     const tag_toUse: Tag = props.src;
     return (<Button style={{
         fontWeight: "800"
-    }} colorScheme={"blackAlpha"} variant={"solid"} size="sm">{tag_toUse.get_name().en}</Button>);
+    }} colorScheme={"gray"} variant={"solid"} size="sm">{tag_toUse.get_name().en}</Button>);
 }
 type TagRowProps = {
     src: Array<Tag>,

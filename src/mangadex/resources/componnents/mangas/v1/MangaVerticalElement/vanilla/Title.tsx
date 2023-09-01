@@ -7,6 +7,7 @@ import MangaTitle from "../../MangaTitle";
 
 export default function Title() {
     const { src } = useProps();
+    const color = Chakra.useColorModeValue("black", "white");
     const MangaDexPath = useMangaDexPath();
     return (
         <Chakra.Box>
@@ -27,7 +28,7 @@ export default function Title() {
                     <Chakra.LinkOverlay
                         as={Link}
                         to={MangaDexPath + "/manga/" + src.get_id()}
-                        color={"black"}
+                        color={color}
                         textDecoration={"none"}
                         _hover={{
                             color: "orange",

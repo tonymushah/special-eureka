@@ -10,7 +10,6 @@ export default function Title() {
             fontSize={"md"}
             marginBottom={0}
             fontFamily={"inherit"}
-            color={"black"}
             textDecoration="none"
             _hover={{
                 transitionProperty: "backgroundColor",
