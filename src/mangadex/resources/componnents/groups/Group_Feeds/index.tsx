@@ -55,7 +55,7 @@ export function queryKey(props: { id: string; }) {
 export async function queryFn({ offset_Limits, id, client, queryClient }: {
     offset_Limits: Offset_limits,
     id: string,
-    client: Client,
+    client?: Client,
     queryClient: QueryClient
 }) {
     const userOptions = new UserOptions();

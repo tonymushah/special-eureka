@@ -9,7 +9,7 @@ import React from "react";
 
 const CustomListSwiper = React.lazy(() => import("@mangadex/resources/componnents/lists/v1/CustomListSwiper"));
 
-export async function getSeasonalId(client: Client) {
+export async function getSeasonalId(client?: Client) {
     return await List.get_seasonal_id(client);
 }
 

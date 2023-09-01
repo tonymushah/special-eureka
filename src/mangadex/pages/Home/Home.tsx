@@ -3,7 +3,6 @@ import { Api_Request } from "@mangadex/api/internal/Api_Request";
 import { useTrackEvent } from "@mangadex/index";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
-import { getClient } from "@tauri-apps/api/http";
 import React from "react";
 import { LoaderFunction, json } from "react-router";
 
@@ -40,9 +39,8 @@ export const loader: LoaderFunction = async function () {
     const { queryfn : queryFn, queryKey } = await import("./HomeAfterPing");
     const { queryClient } = await import("@mangadex/resources/query.client");
     if(await Api_Request.ping()){
-        const client = await getClient();
         try{
-            await queryClient.prefetchInfiniteQuery(queryKey(), () => queryFn(client, queryClient));
+            await queryClient.prefetchQuery(queryKey(), () => queryFn(undefined, queryClient));
             return new Response(undefined, {
                 status : 204,
                 statusText : "Loaded"
@@ -93,8 +91,6 @@ export const loader: LoaderFunction = async function () {
                         message : "undefined error"
                     }, 500);
             }
-        }finally{
-            await client.drop();
         }
     }else {
         throw json({

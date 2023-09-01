@@ -3,7 +3,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import { getSeasonalId } from "../Seasonal";
 
-export async function seasonal_loader(client: Client, queryClient: QueryClient) {
+export async function seasonal_loader(client: Client | undefined, queryClient: QueryClient) {
     /// [x] Refactor Query Key into a function
     const seasonal_id = await queryClient.fetchQuery(queryKey(), async function () {
         return await getSeasonalId(client);

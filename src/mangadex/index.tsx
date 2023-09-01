@@ -1,11 +1,8 @@
-//import * as Chakra from "@chakra-ui/react";
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
 import "@commons-res/flag-icons/less/flag-icons.less";
 import React from "react";
 import { RouteObject } from "react-router-dom";
-//import { ErrorELRouter } from "@mangadex/resources/componnents/Error_cmp";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
-//import { Group_Page_Suspense } from "./resources/componnents/groups/Group_Page";
 export { Mangadex_suspense__ } from "./resources/componnents/suspense";
 
 import { Mangadex_suspense__ as Mangadex_SUS } from "./resources/componnents/suspense";
@@ -80,8 +77,6 @@ const Manga_Search = React.lazy(() => import("@mangadex/pages/manga/Search"));
 const Kuru_Credits = React.lazy(() => import("@mangadex/resources/componnents/kuru_kuru/index"));
 
 */
-
-const IsPingable_default_client = React.lazy(() => import("@mangadex/resources/componnents/IsPingable_default_client"));
 
 export function useMangaDexPath() {
     return React.useMemo(() => getMangaDexPath(), []);
@@ -222,6 +217,7 @@ const useMangadexRouter: RouteObject = {
                     path: ":id",
                     async lazy() {
                         const { default : Component, loader } = await import("@mangadex/pages/chapter/Chapter_Page");
+                        const { default : ErrorBoundary } = await import("@mangadex/pages/chapter/Chapter_Page/ErrorBoundary");
                         return {
                             Component,
                             ErrorBoundary,

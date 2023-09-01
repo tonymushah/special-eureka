@@ -83,11 +83,9 @@ export const loader: LoaderFunction = async function () {
     const { Manga } = await import("@mangadex/api/structures/Manga");
     const { queryClient } = await import("@mangadex/resources/query.client");
     const { Offset_limits } = await import("@mangadex/api/internal/Utils");
-    const { getClient } = await import("@tauri-apps/api/http");
-    const client = await getClient();
     try {
         await queryClient.prefetchInfiniteQuery(queryKey(), async function ({ pageParam = new Offset_limits() }) {
-            return await Manga.getAllDownloadedMangaID(pageParam, client);
+            return await Manga.getAllDownloadedMangaID(pageParam);
         }, {
             getNextPageParam(lastPage) {
                 try{
@@ -110,7 +108,5 @@ export const loader: LoaderFunction = async function () {
         });
     } catch (error) {
         throw handleRouteError(error);
-    } finally {
-        client.drop();
     }
 };

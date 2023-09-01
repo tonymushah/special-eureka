@@ -4,8 +4,6 @@ import { LoaderFunction, json } from "react-router";
 
 export const loader: LoaderFunction = async function ({ params }) {
     const { get_chapter_queryKey } = await import("@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey");
-    const { getClient } = await import("@tauri-apps/api/http");
-    const client = await getClient();
     const { queryClient } = await import("@mangadex/resources/query.client");
     const { Chapter, Chapter_withAllIncludes } = await import("@mangadex/api/structures/Chapter");
     const { id } = params;
@@ -14,7 +12,7 @@ export const loader: LoaderFunction = async function ({ params }) {
             id
         });
         const load = async function () {
-            const data = await queryClient.fetchQuery(queryKey, () => Chapter.get_ChapterbyId(id, client));
+            const data = await queryClient.fetchQuery(queryKey, () => Chapter.get_ChapterbyId(id));
             const externalUrl = data.data.get_externalUrl();
             if (data.isDownloaded && data.hasFailed) {
                 throw json({
@@ -87,8 +85,6 @@ export const loader: LoaderFunction = async function ({ params }) {
                 });
             }
         }
-
-
     } else {
         throw new Response(null, {
             status: 404,

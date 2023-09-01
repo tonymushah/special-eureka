@@ -1,4 +1,4 @@
-import { Client, Response } from "@tauri-apps/api/http";
+import { Client, Response, getClient } from "@tauri-apps/api/http";
 import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import { Attribute } from "./Attributes";
@@ -129,8 +129,16 @@ export class List extends Attribute {
 
         return returns;
     }
-    public static async get_seasonal_id(client: Client): Promise<string> {
+    public static async get_seasonal_id(client?: Client): Promise<string> {
+        let isInternal = false;
+        if(client == undefined){
+            client = await getClient();
+            isInternal = true;
+        }
         const res = await client.get<Seasonal>("https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/mangadex/json/seasonal.json");
+        if(isInternal){
+            await client.drop();
+        }
         return res.data.id;
     }
 }

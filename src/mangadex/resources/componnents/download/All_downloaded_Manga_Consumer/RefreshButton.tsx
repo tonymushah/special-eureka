@@ -14,8 +14,7 @@ export default function RefreshButton({ query_key, query_options }: {
     >
 }) {
     const query = useInfiniteQuery<Collection<string>, unknown>(query_key, {
-        ...query_options,
-        enabled: false
+        ...query_options
     });
     //const query = useQuery(, query_options);
     return (

@@ -21,7 +21,7 @@ export async function loader({
     client,
     queryClient
 }: {
-    client: Client,
+    client: Client | undefined,
     queryClient: QueryClient
 }) {
     const offset_limits_2: Offset_limits = new Offset_limits();

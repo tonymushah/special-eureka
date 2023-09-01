@@ -37,7 +37,7 @@ export function useGroupRouteOutletContext(): GroupRouteOutletContext {
     return useOutletContext<GroupRouteOutletContext>();
 }
 
-export function queryFn(id : string, client: Client): Promise<Group> {
+export function queryFn(id : string, client?: Client): Promise<Group> {
     return Group.get_groupById(id, client);
 }
 

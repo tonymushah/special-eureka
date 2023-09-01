@@ -18,7 +18,7 @@ const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componn
 export async function loader({
     client
 }: {
-    client: Client
+    client?: Client
 }) {
     const offset_limits = new Offset_limits();
     offset_limits.set_limits(10);

@@ -43,7 +43,7 @@ export function queryKey() {
 
 export function queryFn({ offset_Limits, client }: {
     offset_Limits: Offset_limits,
-    client: Client,
+    client?: Client,
 }) {
     return Manga.search({
         offset_Limits,
@@ -55,15 +55,12 @@ export function queryFn({ offset_Limits, client }: {
 export const loader : LoaderFunction =async function () {
     const { Api_Request } = await import("@mangadex/api/internal/Api_Request");
     const { queryClient } = await import("@mangadex/resources/query.client");
-    const { getClient } = await import("@tauri-apps/api/http");
-    const client = await getClient();
     try {
         const startOffsetLimit = new Offset_limits(0, 25);
-        if(await Api_Request.ping(client)){
+        if(await Api_Request.ping()){
             await queryClient.prefetchInfiniteQuery(queryKey(), async function({ pageParam : offset_Limits = startOffsetLimit }) {
                 return await queryFn({
                     offset_Limits,
-                    client
                 });
             });
             return new Response(null, {
@@ -78,7 +75,5 @@ export const loader : LoaderFunction =async function () {
         }
     } catch (error) {
         throw handleRouteError(error);
-    }finally{
-        await client.drop();
     }
 };

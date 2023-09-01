@@ -54,7 +54,7 @@ export function queryKey(props: { id: string; }) {
 }
 
 export function queryFn({ client, id, offset_limit }: {
-    client: Client,
+    client?: Client,
     id: string,
     offset_limit: Offset_limits
 }) {

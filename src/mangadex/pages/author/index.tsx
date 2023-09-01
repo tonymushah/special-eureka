@@ -1,11 +1,9 @@
-import React from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { LoaderFunction, useParams } from "react-router-dom";
+import { Author } from "@mangadex/api/structures/Author";
 import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex/index";
 import { get_author_byID, get_author_queryKey_byID } from "@mangadex/resources/hooks/AuthorState";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
-import { getClient } from "@tauri-apps/api/http";
-import { Author } from "@mangadex/api/structures/Author";
+import React from "react";
+import { LoaderFunction, useParams } from "react-router-dom";
 
 const ErrorEL1 = React.lazy(() => import("@mangadex/resources/componnents/error/ErrorEL1"));
 const Author_Page = React.lazy(() => import("@mangadex/resources/componnents/authors/Author_Page"));
@@ -87,7 +85,6 @@ export default function Author_Page_index() {
 export const loader: LoaderFunction = async function ({ params }) {
     const { id } = params;
     if (id != undefined) {
-        const client = await getClient();
         try {
             const { queryClient } = await import("@mangadex/resources/query.client");
             const _queryKey_ = get_author_queryKey_byID({
@@ -98,7 +95,7 @@ export const loader: LoaderFunction = async function ({ params }) {
             });
             if (queryData != undefined) {
                     if (queryData.get_relationships() == undefined || queryData.get_relationships()?.length == 0) {
-                        await queryClient.prefetchQuery(_queryKey_, () => Author.getAuthorById(id, client));
+                        await queryClient.prefetchQuery(_queryKey_, () => Author.getAuthorById(id));
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -110,7 +107,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                         });
                     }
             } else {
-                await queryClient.prefetchQuery(_queryKey_, () => Author.getAuthorById(id, client));
+                await queryClient.prefetchQuery(_queryKey_, () => Author.getAuthorById(id));
                 return new Response(null, {
                     "status": 204,
                     "statusText": "Loaded"
@@ -125,8 +122,6 @@ export const loader: LoaderFunction = async function ({ params }) {
                     statusText: "Internal Loader Error"
                 });
             }
-        } finally {
-            await client.drop();
         }
     } else {
         throw new Response(undefined, {

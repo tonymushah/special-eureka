@@ -21,8 +21,6 @@ export const loader: LoaderFunction = async function ({ context: RealContext }) 
         const { group } = context;
         if (group != undefined) {
             const { queryKey, queryFn } = await import("@mangadex/resources/componnents/groups/Group_Feeds");
-            const { getClient } = await import("@tauri-apps/api/http");
-            const client = await getClient();
             const { queryClient } = await import("@mangadex/resources/query.client");
             const { Offset_limits } = await import("@mangadex/api/internal/Utils");
             try{
@@ -33,7 +31,6 @@ export const loader: LoaderFunction = async function ({ context: RealContext }) 
                     return await queryFn({
                         offset_Limits: pageParam,
                         id : group.get_id(),
-                        client,
                         queryClient
                     });
                 },{
@@ -58,10 +55,7 @@ export const loader: LoaderFunction = async function ({ context: RealContext }) 
                 });
             }catch(e){
                 throw handleRouteError(e);
-            }finally{
-                await client.drop();
             }
-            
         } else {
             throw new Response(null, {
                 status: 404,

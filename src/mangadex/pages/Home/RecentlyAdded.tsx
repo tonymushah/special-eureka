@@ -11,7 +11,7 @@ import React from "react";
 const MangaSwipperWithMangaObjects = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangaSwipperWithMangaObjects"));
 
 export async function loader({ client }: {
-    client: Client
+    client?: Client
 }) {
     const offset_limits = new Offset_limits();
     offset_limits.set_limits(25);
