@@ -27,6 +27,27 @@ export class Author extends Attribute {
     naver!: string | null;
     website!: string | null;
     private works: Collection<Manga> | undefined;
+    public has_socials(){
+        if(
+            this.twitter != null || 
+            this.pixiv != null || 
+            this.melonBook != null || 
+            this.fanbox != null || 
+            this.booth != null || 
+            this.nicoVideo != null ||
+            this.skeb != null ||
+            this.fantia != null ||
+            this.tumblr != null ||
+            this.youtube != null ||
+            this.weibo != null ||
+            this.naver != null ||
+            this.website != null
+        ){
+            return true;
+        }else{
+            return false;
+        }
+    }
     public set_Name(name: string) {
         this.name = name;
     }

@@ -16,7 +16,7 @@ export default function ChapterCollectionToAccordion({ value, fallback = <div>Lo
         <React.Suspense
             fallback={fallback}
         >
-            <Chakra.VStack>
+            <Chakra.VStack display={"block"} spacing={2} divider={<Chakra.StackDivider/>}> 
                 {data.map(value2 => (
                     <React.Suspense
                         fallback={<MangaFallback2 />}

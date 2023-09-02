@@ -7,10 +7,11 @@ import ChakraContainer from "../../layout/Container";
 
 export function BottomContent(props: React.PropsWithChildren<{ src: Group; }>) {
     const MangaDexPath = React.useMemo(getMangaDexPath, []);
+    const background = Chakra.useColorModeValue("gray.200", "gray.600");
     return (
         <Chakra.Box
             minH={"100%"}
-            background={"gray.200"}
+            background={background}
         >
             <ChakraContainer
                 paddingLeft={"5px"}

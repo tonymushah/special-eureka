@@ -8,16 +8,16 @@ import CollectionComponnent_withInfiniteQuery from "../../Collection/CollectionC
 import { InfiniteQueryConsumer } from "../../Collection/InfiniteQueryConsumer";
 import ChapterCollectionToAccordion from "../../mangas/v1/ChapterCollectionToAccordion";
 
-export default function UserFeed(props : {
-    user_id : string
-}){
+export default function UserFeed(props: {
+    user_id: string
+}) {
     const client = useHTTPClient();
-    const queryKey = getUserFeedQueryKey(props);
+    const queryKey = React.useMemo(() => getUserFeedQueryKey(props), []);
     return (
         <Box>
             <CollectionComponnent_withInfiniteQuery<Chapter>
-                queryFn={async ({ pageParam : offset_limits = new Offset_limits(0, 25) }) => {
-                    const order : Order = new Order().set_createdAt(Asc_Desc.desc());
+                queryFn={async ({ pageParam: offset_limits = new Offset_limits(0, 25) }) => {
+                    const order: Order = new Order().set_createdAt(Asc_Desc.desc());
                     return Chapter_withAllIncludes.search({
                         client: client,
                         "uploader": props.user_id,
@@ -29,15 +29,18 @@ export default function UserFeed(props : {
             >
                 {(query) => (
                     <InfiniteQueryConsumer<Chapter> query={query}>
-                        {(collections) => (
-                            <React.Fragment>
-                                {
-                                    collections.map((value) => (
-                                        <ChapterCollectionToAccordion value={value} key={`${value.get_current_page()}`} />
-                                    ))
-                                }
-                            </React.Fragment>
-                        )}
+                        {(collections) => {
+                            console.log(collections);
+                            return (
+                                <React.Fragment>
+                                    {
+                                        collections?.map((value) => (
+                                            <ChapterCollectionToAccordion value={value} key={`${value.get_current_page()}`} />
+                                        )) ?? <React.Fragment />
+                                    }
+                                </React.Fragment>
+                            );
+                        }}
                     </InfiniteQueryConsumer>
                 )}
             </CollectionComponnent_withInfiniteQuery>

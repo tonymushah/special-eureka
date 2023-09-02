@@ -21,16 +21,11 @@ export default function Group_Feeds(props: {
     const queryClient = useQueryClient();
     const languages = useLanguageUserOption();
     const queryKey_ = React.useMemo(() => queryKey(props), []);
-    const startOffsetLimit = React.useMemo(() => {
-        const to_return = new Offset_limits();
-        to_return.set_limits(25);
-        return to_return;
-    }, []);
     return (
         <React.Fragment>
             <CollectionComponnent_withInfiniteQuery<Chapter>
                 queryKey={queryKey_}
-                queryFn={async function ({ pageParam = startOffsetLimit }) {
+                queryFn={async function ({ pageParam = new Offset_limits(0, 25) }) {
                     return await queryFn({
                         offset_Limits: pageParam,
                         client,
@@ -40,7 +35,21 @@ export default function Group_Feeds(props: {
                 }}
                 options={{
                     staleTime: Infinity,
-                    enabled: !!languages.query.data
+                    enabled: !!languages.query.data,
+                    getNextPageParam(lastPage){
+                        try {
+                            return lastPage.next_offset_limit();
+                        } catch {
+                            return undefined;
+                        }
+                    },
+                    getPreviousPageParam(lastPage){
+                        try {
+                            return lastPage.previous_offset_limit();
+                        } catch {
+                            return undefined;
+                        }
+                    }
                 }}
             >
                 {(query) => <OnSuccess query={query} />}

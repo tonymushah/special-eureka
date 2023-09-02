@@ -16,6 +16,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
     src: Manga,
     isRefetching?: boolean
 }>) {
+    const color = Chakra.useColorModeValue("black", "white");
     return (
         <MangaContextMenu mangaId={props.src.get_id()}>
             <Chakra.Box
@@ -47,6 +48,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                                         rowSpan={1}
                                         colSpan={8}
                                     >
+                                        
                                         <TryCatch
                                             catch={() => (
                                                 <Chakra.Link
@@ -60,7 +62,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                                             <Chakra.Link
                                                 as={Link}
                                                 to={MangaDexPath + "/manga/" + props.src.get_id()}
-                                                color={"black"}
+                                                color={color}
                                                 textDecoration="none"
                                                 _hover={{
                                                     color: "orange",

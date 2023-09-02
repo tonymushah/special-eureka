@@ -5,9 +5,6 @@ import { Await } from "react-router-dom";
 import { TagRow } from "../../../Mainpage/boutons/tag_boutons";
 import { useManga } from "@mangadex/pages/manga";
 
-
-
-
 export function Content() {
     const { toUse: src } = useManga();
     return (
@@ -19,7 +16,7 @@ export function Content() {
                 </Chakra.Alert>}>
                     <Await
                         resolve={src.get_async_content()}
-                        errorElement={<div> </div>}
+                        errorElement={<React.Fragment/>}
                     >
                         {(getted: Array<Tag>) => {
                             return (<TagRow title="Content" src={getted} />);

@@ -3,7 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Asc_Desc } from "@mangadex/api/internal/Utils";
-import { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Keyboard, Navigation } from "swiper";
@@ -12,6 +12,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Heading } from "@chakra-ui/react";
 import { Client } from "@tauri-apps/api/http";
 import randomInteger from "random-int";
+import { Link } from "react-router-dom";
+import { useMangaDexPath } from "@mangadex/index";
+import { FiRefreshCw } from "react-icons/fi";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
@@ -47,10 +50,27 @@ export default function RecentlyPopular() {
         staleTime: Infinity
     });
     const queryClient = useQueryClient();
+    const MangaDexPath = useMangaDexPath();
+    const headingColor = Chakra.useColorModeValue("black", "white");
     if (query.isSuccess == true) {
         return (
             <Chakra.Box width={"100%"}>
-                <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
+                <Chakra.HStack m={2}>
+                    <Chakra.Link as={Link} to={`${MangaDexPath}/titles/recently-popular`} color={headingColor} textDecoration={"none"} _hover={{
+                        color: "orange.500",
+                        textDecoration: "underline"
+                    }}>
+                        <Chakra.Heading fontFamily={"inherit"}>Recently Popular Title</Chakra.Heading>
+                    </Chakra.Link>
+                    <Chakra.IconButton
+                        colorScheme={"orange"}
+                        variant={"outline"}
+                        onClick={() => query.refetch()}
+                        isLoading={query.isLoading || query.isRefetching}
+                        aria-label="Refresh"
+                        icon={<FiRefreshCw/>}
+                    />
+                </Chakra.HStack>
                 <Chakra.Box>
                     {query.isSuccess == true ? (
                         <Swiper
@@ -62,7 +82,10 @@ export default function RecentlyPopular() {
                             {
                                 query.data.get_data().map((value, index) => {
                                     /// Refactor into a function
-                                    queryClient.setQueryData(["mdx", "manga", value.get_id()], value);
+                                    queryClient.setQueryData<GetMangaByIDResponse>(["mdx", "manga", value.get_id()], {
+                                        isOffline : false,
+                                        manga : value
+                                    });
                                     return (
                                         <SwiperSlide
                                             key={value.get_id()}
@@ -79,7 +102,7 @@ export default function RecentlyPopular() {
                                                     <MangaFallback2 />
                                                 }
                                             >
-                                                <MangaPopularElement src={value}/>
+                                                <MangaPopularElement src={value} />
                                             </React.Suspense>
                                         </SwiperSlide>
                                     );

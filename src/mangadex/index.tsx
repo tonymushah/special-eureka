@@ -294,22 +294,20 @@ const useMangadexRouter: RouteObject = {
                         {
                             path: "titles",
                             async lazy() {
-                                const { default : Component, loader } = await import("@mangadex/pages/groups/page/Titles");
+                                const { default : Component } = await import("@mangadex/pages/groups/page/Titles");
                                 return {
                                     Component,
-                                    ErrorBoundary,
-                                    loader
+                                    ErrorBoundary
                                 };
                             }
                         },
                         {
                             path: "feeds",
                             async lazy() {
-                                const { default : Component, loader } = await import("@mangadex/pages/groups/page/Feeds");
+                                const { default : Component } = await import("@mangadex/pages/groups/page/Feeds");
                                 return {
                                     Component,
-                                    ErrorBoundary,
-                                    loader
+                                    ErrorBoundary
                                 };
                             },
                         }

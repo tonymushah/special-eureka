@@ -11,6 +11,8 @@ export default function Layout(props: React.PropsWithChildren) {
         src,
         isThumbail: true
     }).query;
+    const background = Chakra.useColorModeValue("rgba(255, 255,255, 0.5)", "rgba(26, 32, 44, 0.5)");
+    const backdropBrightness = Chakra.useColorModeValue("1.1", "0.9");
     return (
         <Chakra.Card
             backgroundImage={{ base: "none", lg: coverQuery.isSuccess == true ? coverQuery.data : CoverPlaceHolder }}
@@ -21,10 +23,10 @@ export default function Layout(props: React.PropsWithChildren) {
             margin={5}
         >
             <Chakra.Card
-                background={"rgba(255, 255,255, 0.5)"}
+                background={background}
                 backdropFilter='auto'
                 backdropBlur={"20px"}
-                backdropBrightness={"1.1"}
+                backdropBrightness={backdropBrightness}
                 direction={"row"}
                 variant={"outline"}
             >

@@ -112,7 +112,6 @@ export class Attribute {
                     cause: error
                 });
             }
-
         }
     }
     public get_some_relationshipLength(name: string): number {
@@ -125,7 +124,6 @@ export class Attribute {
                 }
             }
         }
-
         return length;
     }
     public get_some_relationship(name: string): Array<Attribute> {

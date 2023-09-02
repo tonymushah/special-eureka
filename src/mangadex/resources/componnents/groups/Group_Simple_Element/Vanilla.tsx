@@ -1,4 +1,4 @@
-import { HStack, Icon, Link, LinkBox, LinkOverlay, Skeleton, Tooltip } from "@chakra-ui/react";
+import { HStack, Icon, Link, LinkBox, LinkOverlay, Skeleton, Tag, Tooltip, useColorModeValue } from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
 import { getMangaDexPath } from "@mangadex/index";
 import { Group } from "@mangadex/api/structures/Group";
@@ -10,6 +10,7 @@ import { useLeaderQuery } from "./useLeaderQuery";
 
 export function Vanilla(props: { src: Group; }) {
     const leader_query = useLeaderQuery(props);
+    const backgroundColor = useColorModeValue("gray.100", "gray.600");
     return (
         <Tooltip
             label={`This group has ${props.src.getMembersID().length} members`}
@@ -20,7 +21,7 @@ export function Vanilla(props: { src: Group; }) {
                 borderColor={"black"}
                 p={1}
                 _hover={{
-                    backgroundColor: "gray.100"
+                    backgroundColor
                 }}
             >
                 <HStack>
@@ -35,10 +36,9 @@ export function Vanilla(props: { src: Group; }) {
                             {props.src.get_name()}
                         </LinkOverlay>
                     </TryCatch>
-                    <HStack
-                        bg={"gray.100"}
+                    <Tag
+                        colorScheme="gray"
                         textAlign={"center"}
-                        borderRadius={"5px"}
                     >
                         <React.Fragment>Leader : &nbsp;</React.Fragment>
                         {leader_query.isLoading ? (
@@ -53,7 +53,7 @@ export function Vanilla(props: { src: Group; }) {
                                 <React.Fragment />
                             )
                         )}
-                    </HStack>
+                    </Tag>
                 </HStack>
             </LinkBox>
         </Tooltip>

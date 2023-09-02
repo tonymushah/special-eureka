@@ -1,17 +1,18 @@
 import React from "react";
 import { ExtLink } from "@commons-res/components/ExtLink";
 import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
-import { Button, VStack, Wrap, WrapItem, Heading } from "@chakra-ui/react";
+import { Button, VStack, Wrap, WrapItem, Heading, useToken } from "@chakra-ui/react";
 type LinkButtonProps = {
     title: string,
     href: string
 };
 export function LinkButton(props: LinkButtonProps) {
+    const gray500 = useToken("colors", "gray.500");
     return (
         <ExtLink href={props.href}>
             <Button style={{
                 fontWeight: "800"
-            }} colorScheme={"gray"} variant={"solid"} size="sm" >{props.title}</Button>
+            }} boxShadow={`0px 0px 5px ${gray500}`} colorScheme={"gray"} variant={"solid"} size="sm" >{props.title}</Button>
         </ExtLink>
     );
 }

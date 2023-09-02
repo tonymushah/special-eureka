@@ -47,9 +47,10 @@ export default function UserPage(props: React.PropsWithChildren<{
     }, [
         props.user
     ]);
+    const bg = Chakra.useColorModeValue("gray.400", "gray.600");
     return (
         <Chakra.Box>
-            <Chakra.Box bg={"#d5d4d4"} p={4}>
+            <Chakra.Box bg={bg} p={4}>
                 <Chakra.Heading fontFamily={"inherit"}>{props.user.get_username()}</Chakra.Heading>
             </Chakra.Box>
             <Chakra.Box>

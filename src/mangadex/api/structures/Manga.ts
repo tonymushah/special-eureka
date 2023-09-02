@@ -756,10 +756,10 @@ export class Manga extends Attribute {
         return returns;
     }
     public async get_async_content(): Promise<Array<Tag>> {
-        const to_use = this.get_format();
+        const to_use = this.get_content();
         return new Promise<Array<Tag>>((resolve, reject) => {
             if (to_use.length == 0) {
-                reject();
+                reject(new Error("No Content ground found in tags"));
             } else {
                 resolve(to_use);
             }
