@@ -6,6 +6,7 @@ import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { BeatLoader } from "react-spinners";
 import { useContextMenuProps } from ".";
 import { ReactIcon } from "@chakra-ui/icons";
+import { useMenuItemsColorModeValue } from "@mangadex/resources/componnents/mangas/v1/MangaContextMenu/Portal";
 
 export default function Update() {
     const { id } = useContextMenuProps();
@@ -24,10 +25,11 @@ export default function Update() {
             query.refetch();
         }
     });
+    const { backgroundColor } = useMenuItemsColorModeValue();
     return (
         <Chakra.Box
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}
             textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "blue"}
             onClick={() => {

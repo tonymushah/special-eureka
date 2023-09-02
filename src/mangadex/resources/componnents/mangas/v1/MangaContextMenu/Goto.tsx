@@ -5,10 +5,12 @@ import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import React from "react";
 import { useNavigate } from "react-router";
 import { useMangaContextMenu_Context } from ".";
+import { useMenuItemsColorModeValue } from "./Portal";
 
 export default function Goto() {
     const mangadex_path = React.useMemo(() => getMangaDexPath(), []);
     const { mangaId } = useMangaContextMenu_Context();
+    const { backgroundColor } = useMenuItemsColorModeValue();
     const navigate = useNavigate();
     return (
         <Box
@@ -21,7 +23,7 @@ export default function Goto() {
             pr={2}
             as={ContextMenuItem}
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}>
             <HStack
                 spacing={"2"}

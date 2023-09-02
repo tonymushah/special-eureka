@@ -3,15 +3,17 @@ import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import React from "react";
 import { FiRefreshCcw } from "react-icons/fi";
 import { useMangaContextMenu_Context } from ".";
+import { useMenuItemsColorModeValue } from "./Portal";
 
 export default function Refresh() {
     const [isRefreshing, startRefresh] = React.useTransition();
     const { refetch, query } = useMangaContextMenu_Context();
+    const { backgroundColor } = useMenuItemsColorModeValue();
     if (refetch != undefined) {
         return (
             <Box paddingRight={"2"} paddingLeft={"2"}
                 _hover={{
-                    backgroundColor: "gray.100"
+                    backgroundColor
                 }}
                 as={ContextMenuItem}
                 onClick={() => {

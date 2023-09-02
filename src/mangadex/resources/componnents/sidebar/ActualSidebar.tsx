@@ -45,7 +45,7 @@ export function useColor() {
 }
 
 export function useBackgroundColor() {
-    const [light, dark] = useToken("colors", ["gray.300", "gray.800"]);
+    const [light, dark] = useToken("colors", ["gray.300", "gray.900"]);
     const backgroundColor = useColorModeValue(light, dark);
     return backgroundColor;
 }
@@ -57,7 +57,7 @@ export function useBackgroundColorHover() {
 }
 
 export function useBorderColor() {
-    const [light, dark] = useToken("colors", ["gray.400", "gray.600"]);
+    const [light, dark] = useToken("colors", ["gray.500", "gray.500"]);
     const backgroundColor = useColorModeValue(light, dark);
     return backgroundColor;
 }

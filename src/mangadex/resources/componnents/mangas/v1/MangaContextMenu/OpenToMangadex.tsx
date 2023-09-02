@@ -6,6 +6,7 @@ import { open } from "@tauri-apps/api/shell";
 import React from "react";
 import { BeatLoader } from "react-spinners";
 import { useMangaContextMenu_Context } from ".";
+import { useMenuItemsColorModeValue } from "./Portal";
 
 export default function OpenToMangadex() {
     const [isTransition, startTransition] = React.useTransition();
@@ -17,6 +18,7 @@ export default function OpenToMangadex() {
         "status": "error",
         "title": "Error on opening the link"
     });
+    const { backgroundColor } = useMenuItemsColorModeValue();
     const openLink = () => startTransition(() => {
         open(`https://mangadex.org/title/${mangaId}`).catch((e) => {
             if (typeof e == "string") {
@@ -42,7 +44,7 @@ export default function OpenToMangadex() {
             pr={2}
             as={ContextMenuItem}
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}
             color={isTransition ? "gray" : "orange.500"}
         >

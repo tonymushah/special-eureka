@@ -6,6 +6,7 @@ import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { FiSave } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
+import { useMenuItemsColorModeValue } from "@mangadex/resources/componnents/mangas/v1/MangaContextMenu/Portal";
 
 export default function Download() {
     const { id } = useContextMenuProps();
@@ -24,6 +25,7 @@ export default function Download() {
             query.refetch();
         }
     });
+    const { backgroundColor } = useMenuItemsColorModeValue();
     return (
         <Chakra.Box
             textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "green"}
@@ -38,7 +40,7 @@ export default function Download() {
             pr={2}
             as={ContextMenuItem}
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}>
             <Chakra.HStack
                 spacing={"2"}

@@ -137,7 +137,8 @@ export class Chapter extends Attribute {
             attributes.updatedAt,
             attributes.publishAt
         );
-        instance.set_externalUrl(attributes.externalUrl ?? undefined);
+        const externalUrl = attributes.externalUrl ?? "";
+        instance.set_externalUrl(externalUrl.length == 0 ? undefined : externalUrl);
         instance.set_translatedLanguage(attributes.translatedLanguage);
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);
@@ -665,7 +666,8 @@ export class Chapter_withAllIncludes extends Chapter {
             attributes.updatedAt,
             attributes.publishAt
         );
-        instance.set_externalUrl(attributes.externalUrl ?? "");
+        const externalUrl = attributes.externalUrl ?? "";
+        instance.set_externalUrl(externalUrl.length == 0 ? undefined : externalUrl);
         instance.set_translatedLanguage(attributes.translatedLanguage);
         instance.set_readableAt(attributes.readableAt);
         instance.set_version(attributes.version);

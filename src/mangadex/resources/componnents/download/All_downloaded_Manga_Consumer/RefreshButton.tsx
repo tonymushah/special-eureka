@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react";
 import { Collection } from "@mangadex/api/structures/Collection";
-import { QueryKey, UseInfiniteQueryOptions, useInfiniteQuery } from "@tanstack/react-query";
+import { QueryKey, UseInfiniteQueryOptions, useInfiniteQuery, useIsFetching } from "@tanstack/react-query";
 import { BeatLoader } from "react-spinners";
 
 export default function RefreshButton({ query_key, query_options }: {
@@ -14,7 +14,7 @@ export default function RefreshButton({ query_key, query_options }: {
     >
 }) {
     const query = useInfiniteQuery<Collection<string>, unknown>(query_key, {
-        ...query_options
+        enabled : false
     });
     //const query = useQuery(, query_options);
     return (

@@ -9,25 +9,27 @@ import Goto from "./Goto";
 import Loading from "./Loading";
 import OpenToMangadex from "./OpenToMangadex";
 import Update from "./Update";
+import { usePortalColorModeValue } from "@mangadex/resources/componnents/mangas/v1/MangaContextMenu/Portal";
 
 export default function Portal() {
     const { id } = useContextMenuProps();
     const { query } = get_ChapterbyId({
         id
     });
+    const { backgroundColor, borderColor } = usePortalColorModeValue();
     return (
         <ContextMenuPortal>
             <Chakra.Box
                 fontFamily={"Poppins"}
                 zIndex={"dropdown"}
-                backgroundColor={"white"}
+                backgroundColor={backgroundColor}
                 boxShadow={"md"}
                 borderRadius={"10px"}
                 as={Content}
                 border={"1px"}
                 overflow={"hidden"}
                 shadow={"0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);"}
-                borderColor={"#cccccc"}
+                borderColor={borderColor}
             >
                 <Chakra.VStack display={"block"} spacing={0} fontSize={"lg"}>
                     <Goto />

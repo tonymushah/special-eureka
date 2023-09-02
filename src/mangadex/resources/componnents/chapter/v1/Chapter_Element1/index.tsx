@@ -18,6 +18,7 @@ const ChapterDownloadButton = React.lazy(() => import("../ChapterDownloadButton"
 export default function Chapter_Element1(props: {
     chapter: Chapter,
 }) {
+    const gray500 = Chakra.useToken("colors", "gray.500");
     const onHover = Chakra.useColorModeValue("gray.100", "gray.700");
     return (
         <ChapterPropsProvider value={props}>
@@ -30,7 +31,8 @@ export default function Chapter_Element1(props: {
                     _hover={{
                         background: onHover
                     }}
-                    boxShadow={"md"}
+                    boxShadow={`0px 0px 5px ${gray500}`}
+                    m={1}
                     borderRadius={10}
                 >
                     <Chakra.Grid
