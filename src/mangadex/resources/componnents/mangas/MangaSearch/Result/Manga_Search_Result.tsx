@@ -7,7 +7,7 @@ import MyErrorBounderies from "../../../error/MyErrorBounderies";
 import MangaListWithCollectionArray from "../../v1/MangaList/ViaMangaCollectionArray";
 
 export function Manga_Search_Result(props: MangaSearch_withAllIncludes) {
-    const _queryKey_ = React.useMemo(() => queryKey(), []);
+    const _queryKey_ = React.useMemo(() => queryKey(), [props]);
     return (
         <MyErrorBounderies>
             <CollectionComponnent_withInfiniteQuery<Manga>

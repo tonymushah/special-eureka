@@ -23,6 +23,7 @@ tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace",
 tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-aptabase = "0"
 sentry-tauri = "0.2"
+tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"
@@ -34,10 +35,6 @@ path = "../src/bilibili-comics/plugin/tauri-plugin"
 
 [dependencies.tauri-plugin-speu-mangadex]
 path = "../src/mangadex/plugin/tauri-plugin"
-
-[dependencies.tauri-plugin-log]
-git = "https://github.com/tauri-apps/tauri-plugin-log"
-branch = "dev"
 
 [profile.dev]
 opt-level = 3
