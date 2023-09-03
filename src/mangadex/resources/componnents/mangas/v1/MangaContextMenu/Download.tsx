@@ -4,12 +4,14 @@ import { HStack, Box, Text, Icon } from "@chakra-ui/react";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { FiSave } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";
+import { useMenuItemsColorModeValue } from "./Portal";
 
 export default function Download() {
     const { mangaId } = useMangaContextMenu_Context();
     const { delete_, download_ } = useMangaDownload_Delete({
         mangaID: mangaId
     });
+    const { backgroundColor } = useMenuItemsColorModeValue();
         return (
             <Box
                 textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "green"}
@@ -24,7 +26,7 @@ export default function Download() {
                 pr={2}
                 as={ContextMenuItem}
                 _hover={{
-                    backgroundColor: "gray.100"
+                    backgroundColor
                 }}>
                 <HStack
                     spacing={"2"}

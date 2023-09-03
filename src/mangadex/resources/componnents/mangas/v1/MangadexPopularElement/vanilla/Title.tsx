@@ -18,6 +18,7 @@ function OnError() {
 
 export default function Title() {
     const { src } = useProps();
+    const color = Chakra.useColorModeValue("black", "white");
     return (
         <TryCatch
             catch={OnError}
@@ -28,7 +29,7 @@ export default function Title() {
                 as={Link}
                 to={MangaDexPath + "/manga/" + src.get_id()}
                 textDecoration={"none"}
-                color={"black"}
+                color={color}
                 _hover={{
                     color: "orange",
                     textDecoration: "none"

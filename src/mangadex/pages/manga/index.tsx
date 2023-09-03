@@ -9,7 +9,7 @@ import Download_Manga_withHotkeys from "@mangadex/resources/componnents/mangas/M
 import { Manga_Page } from "@mangadex/resources/componnents/mangas/Manga_Page";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery } from "@tanstack/react-query";
-import { Client, getClient } from "@tauri-apps/api/http";
+import { Client } from "@tauri-apps/api/http";
 import React from "react";
 import { LoaderFunction, Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
 
@@ -52,7 +52,7 @@ function ThrowError({ error, id }: {
     );
 }
 
-export async function queryFn(id: string, client: Client) {
+export async function queryFn(id: string, client?: Client) {
     return await Manga.getMangaByID(id, client);
 }
 
@@ -139,7 +139,6 @@ export function queryKey(id: string | undefined) {
 export const loader: LoaderFunction = async function ({ params }) {
     const { id } = params;
     if (id != undefined) {
-        const client = await getClient();
         try {
             const { queryClient } = await import("@mangadex/resources/query.client");
             const _queryKey_ = queryKey(id);
@@ -150,7 +149,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                 const { manga, isOffline } = queryData;
                 if (manga instanceof Manga_with_allRelationship) {
                     if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
-                        queryClient.fetchQuery(_queryKey_, () => queryFn(id, client), {
+                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
                             initialData: {
                                 manga,
                                 isOffline
@@ -161,7 +160,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                             "statusText": "Loaded"
                         });
                     } else {
-                        await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -169,7 +168,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                     }
                 } else {
                     if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
-                        await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -182,7 +181,8 @@ export const loader: LoaderFunction = async function ({ params }) {
                     }
                 }
             } else {
-                await queryClient.fetchQuery(_queryKey_, () => queryFn(id, client));
+                await queryClient.prefetchInfiniteQuery(_queryKey_, () => queryFn(id), {
+                });
                 return new Response(null, {
                     "status": 204,
                     "statusText": "Loaded"
@@ -197,9 +197,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                     statusText: "Internal Loader Error"
                 });
             }
-        } finally {
-            await client.drop();
-        }
+        } 
     } else {
         throw new Response(undefined, {
             "status": 404,

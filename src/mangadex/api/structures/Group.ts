@@ -351,6 +351,13 @@ export class Group extends Attribute {
             client: client
         });
     }
+    public hasLinks() : boolean{
+        if(this.contactEmail != undefined || this.discord != undefined || this.ircChannel != undefined || this.ircServer != undefined || this.mangaUpdates != undefined || this.twitter != undefined || this.website != undefined){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
 export class Group_WithAllRelationShip extends Group {

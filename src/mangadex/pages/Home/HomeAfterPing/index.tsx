@@ -15,7 +15,7 @@ export function queryKey() {
     return ["mdx", "home", "page", "loader"];
 }
 
-export function queryfn(client : Client, queryClient: QueryClient) {
+export function queryfn(client: Client | undefined, queryClient: QueryClient) {
     return async () => {
         const { latest_loader } = await import("./latest_loader");
         const { popular_loader } = await import("./popular_loader");

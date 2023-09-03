@@ -14,6 +14,9 @@ import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHook
 import { Client } from "@tauri-apps/api/http";
 import UserOptions from "@mangadex/api/internal/UserOptions";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import { Link } from "react-router-dom";
+import { useMangaDexPath } from "@mangadex/index";
+import { FiRefreshCw } from "react-icons/fi";
 
 const MangaFeedElement = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/MangaFeedElement"));
 
@@ -21,7 +24,7 @@ export async function loader({
     client,
     queryClient
 }: {
-    client: Client,
+    client: Client | undefined,
     queryClient: QueryClient
 }) {
     const offset_limits_2: Offset_limits = new Offset_limits();
@@ -58,12 +61,12 @@ export async function loader({
         const mangaQueryKey = get_mangaQueryKey_byID({
             mangaID: manga.get_id()
         });
-        queryClient.fetchQuery<GetMangaByIDResponse>(mangaQueryKey, async function(){
+        queryClient.fetchQuery<GetMangaByIDResponse>(mangaQueryKey, async function () {
             return await Manga_with_allRelationship.getMangaByID(manga.get_id());
         }, {
-            initialData : {
-                isOffline : false,
-                manga : manga
+            initialData: {
+                isOffline: false,
+                manga: manga
             }
         });
     });
@@ -87,17 +90,27 @@ export default function Latest_Updates() {
     }, {
         staleTime: Infinity,
     });
+    const MangaDexPath = useMangaDexPath();
+    const headingColor = Chakra.useColorModeValue("black", "white");
     if (query.isError) {
         return (
             <Chakra.Box>
-                <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
-                <Chakra.Button
-                    colorScheme={"orange"}
-                    onClick={() => query.refetch()}
-                    isLoading={query.isLoading || query.isRefetching}
-                >
-                    Refetch
-                </Chakra.Button>
+                <Chakra.HStack m={2}>
+                    <Chakra.Link as={Link} to={`${MangaDexPath}/titles/latest-updates`} color={headingColor} textDecoration={"none"} _hover={{
+                        color: "orange.500",
+                        textDecoration: "underline"
+                    }}>
+                        <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
+                    </Chakra.Link>
+                    <Chakra.IconButton
+                        variant={"outline"}
+                        colorScheme={"orange"}
+                        onClick={() => query.refetch()}
+                        isLoading={query.isLoading || query.isRefetching}
+                        aria-label="Refresh"
+                        icon={<FiRefreshCw />}
+                    />
+                </Chakra.HStack>
                 <ErrorEL1 error={query.error} />
             </Chakra.Box>
         );
@@ -105,14 +118,22 @@ export default function Latest_Updates() {
     if (query.isSuccess) {
         return (
             <Chakra.Box>
-                <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
-                <Chakra.Button
-                    colorScheme={"orange"}
-                    onClick={() => query.refetch()}
-                    isLoading={query.isLoading || query.isRefetching}
-                >
-                    Refetch
-                </Chakra.Button>
+                <Chakra.HStack m={2}>
+                    <Chakra.Link as={Link} to={`${MangaDexPath}/titles/latest-updates`} color={headingColor} textDecoration={"none"} _hover={{
+                        color: "orange.500",
+                        textDecoration: "underline"
+                    }}>
+                        <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
+                    </Chakra.Link>
+                    <Chakra.IconButton
+                        variant={"outline"}
+                        colorScheme={"orange"}
+                        onClick={() => query.refetch()}
+                        isLoading={query.isLoading || query.isRefetching}
+                        aria-label="Refresh"
+                        icon={<FiRefreshCw />}
+                    />
+                </Chakra.HStack>
                 <Chakra.Wrap>
                     {query.data.get_data().map((value: Chapter) => (
                         <Chakra.WrapItem key={value.get_id()}>
@@ -131,14 +152,22 @@ export default function Latest_Updates() {
     }
     return (
         <Chakra.Box>
-            <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
-            <Chakra.Button
-                colorScheme={"orange"}
-                onClick={() => query.refetch()}
-                isLoading={query.isLoading}
-            >
-                Refetch
-            </Chakra.Button>
+            <Chakra.HStack>
+                <Chakra.Link as={Link} to={`${MangaDexPath}/titles/latest-updates`} color={headingColor} textDecoration={"none"} _hover={{
+                    color: "orange.500",
+                    textDecoration: "underline"
+                }}>
+                    <Chakra.Heading fontFamily={"inherit"}>Latest Updates</Chakra.Heading>
+                </Chakra.Link>
+                <Chakra.IconButton
+                    variant={"outline"}
+                    colorScheme={"orange"}
+                    onClick={() => query.refetch()}
+                    isLoading={(query.isLoading)}
+                    aria-label="Refresh"
+                    icon={<FiRefreshCw />}
+                />
+            </Chakra.HStack>
             <Chakra.Box
                 marginTop={"25px"}
                 marginBottom={"25px"}

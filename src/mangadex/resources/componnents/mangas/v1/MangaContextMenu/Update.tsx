@@ -4,16 +4,18 @@ import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { BeatLoader } from "react-spinners";
 import { useMangaContextMenu_Context } from ".";
 import { ReactIcon } from "@chakra-ui/icons";
+import { useMenuItemsColorModeValue } from "./Portal";
 
 export default function Update() {
     const { mangaId } = useMangaContextMenu_Context();
     const { delete_, download_ } = useMangaDownload_Delete({
         mangaID: mangaId
     });
+    const { backgroundColor } = useMenuItemsColorModeValue();
     return (
         <Box
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}
             textColor={download_.fetchStatus == "fetching" || delete_.fetchStatus == "fetching" ? "gray" : "blue"}
             onClick={() => {

@@ -16,11 +16,11 @@ export default function Manga_Page_Aggregate(props: {
     to_use_groups?: Array<string>
 }) {
     const client: Client = useHTTPClient();
-    const aggregate_list_option: AggregateListOptions = {
+    const aggregate_list_option: AggregateListOptions = React.useMemo(() => ({
         mangaID: props.src.get_id(),
         translatedLanguage: props.to_see_lang,
         client: client
-    };
+    }), [client]);
     const { query } = get_aggregate_query({
         aggregate_options: aggregate_list_option
     });

@@ -9,6 +9,7 @@ const MangaDexPath = getMangaDexPath();
 
 export default function AuthorArtists() {
     const { src } = useProps();
+    const color = Chakra.useColorModeValue("black", "white");
     return (
         <Chakra.Heading fontFamily={"inherit"} size={"md"} marginTop={5}>
             <Author_Artists_Cmp_via_manga manga={src}
@@ -21,7 +22,7 @@ export default function AuthorArtists() {
                         const element = value;
                         if (index == (array.length - 1)) {
                             return (
-                                <Chakra.Link color={"black"}
+                                <Chakra.Link color={color}
                                     textDecoration={"none"}
                                     _hover={{
                                         color: "orange",
@@ -37,7 +38,7 @@ export default function AuthorArtists() {
                         } else {
                             return (
                                 <React.Fragment key={`${src.get_id()}-author_artist-${index}`}>
-                                    <Chakra.Link color={"black"}
+                                    <Chakra.Link color={color}
                                         textDecoration={"none"}
                                         _hover={{
                                             color: "orange",

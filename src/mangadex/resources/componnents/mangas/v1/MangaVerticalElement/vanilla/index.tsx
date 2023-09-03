@@ -10,6 +10,8 @@ export default function MangaVerticalElement(props: {
     isRefetching?: boolean,
     refetch?: () => void
 }) {
+    const backgroundColor = Chakra.useColorModeValue("gray.100", "gray.900");
+    const backgroundColorOnRefecthing = Chakra.useColorModeValue("orange.100", "orange.900");
     return (
         <MangaContextMenu
             mangaId={props.src.get_id()}
@@ -21,7 +23,7 @@ export default function MangaVerticalElement(props: {
                 <Chakra.LinkBox
                     marginBottom={10}
                     width={"fit-content"}
-                    backgroundColor={props.isRefetching == undefined ? "gray.100" : (props.isRefetching ? "orange.100" : "gray.100")}
+                    backgroundColor={props.isRefetching == undefined ? backgroundColor : (props.isRefetching ? backgroundColorOnRefecthing : backgroundColor)}
                     borderRadius={"10px"}
                     border={"1px"}
                     borderColor={"gray.200"}

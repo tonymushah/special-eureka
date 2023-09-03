@@ -11,7 +11,7 @@ export function getUserFeedQuery(props: {
 }) {
     const client = useHTTPClient();
     // [x] use `React.useMemo` for optimization
-    const queryKey = React.useMemo(() => getUserFeedQueryKey(props), []);
+    const queryKey = React.useMemo(() => getUserFeedQueryKey(props).concat(["speq"]), []);
     const query = useQuery(queryKey, () => {
         return Chapter.search({
             client: client,

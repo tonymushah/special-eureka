@@ -25,53 +25,55 @@ export default function Home() {
                 width={"100%"}
                 minHeight={"25em"}
             >
-                <Welcome/>
+                <Welcome />
             </Chakra.Box>
-            <Chakra.Box
-                backgroundColor={"#bb004d"}
-            >
+            <Chakra.LightMode>
                 <Chakra.Box
-                    backgroundImage={haikei_blue}
-                    backgroundPosition={"bottom"}
-                    backgroundSize={"cover"}
-                    backgroundRepeat={"no-repeat"}
-                    width={"100%"}
-                    minHeight={"25em"}
+                    backgroundColor={"#bb004d"}
                 >
-                    <CurrentlySupportedWebsites/>
+                    <Chakra.Box
+                        backgroundImage={haikei_blue}
+                        backgroundPosition={"bottom"}
+                        backgroundSize={"cover"}
+                        backgroundRepeat={"no-repeat"}
+                        width={"100%"}
+                        minHeight={"25em"}
+                    >
+                        <CurrentlySupportedWebsites />
+                    </Chakra.Box>
                 </Chakra.Box>
-            </Chakra.Box>
-            <Chakra.Box
-                backgroundColor={"#004cbb"}
-            >
                 <Chakra.Box
-                    backgroundImage={haikei_violet}
-                    backgroundPosition={"bottom"}
-                    backgroundSize={"cover"}
-                    backgroundRepeat={"no-repeat"}
-                    width={"100%"}
-                    minHeight={"25em"}
+                    backgroundColor={"#004cbb"}
                 >
-                    <DevNotes/>
+                    <Chakra.Box
+                        backgroundImage={haikei_violet}
+                        backgroundPosition={"bottom"}
+                        backgroundSize={"cover"}
+                        backgroundRepeat={"no-repeat"}
+                        width={"100%"}
+                        minHeight={"25em"}
+                    >
+                        <DevNotes />
+                    </Chakra.Box>
                 </Chakra.Box>
-            </Chakra.Box>
-            <Chakra.Box
-                backgroundColor={"#b500ba"}
-            >
                 <Chakra.Box
-                    backgroundImage={haikei_yellow}
-                    backgroundPosition={"bottom"}
-                    backgroundSize={"cover"}
-                    backgroundRepeat={"no-repeat"}
-                    width={"100%"}
-                    minHeight={"25em"}
+                    backgroundColor={"#b500ba"}
                 >
-                    <VStack spacing={"10"}>
-                        <Contacts/>
-                    <PoweredBy/>
-                    </VStack>
+                    <Chakra.Box
+                        backgroundImage={haikei_yellow}
+                        backgroundPosition={"bottom"}
+                        backgroundSize={"cover"}
+                        backgroundRepeat={"no-repeat"}
+                        width={"100%"}
+                        minHeight={"25em"}
+                    >
+                        <VStack spacing={"10"}>
+                            <Contacts />
+                            <PoweredBy />
+                        </VStack>
+                    </Chakra.Box>
                 </Chakra.Box>
-            </Chakra.Box>
+            </Chakra.LightMode>
         </Chakra.Box>
     );
 }

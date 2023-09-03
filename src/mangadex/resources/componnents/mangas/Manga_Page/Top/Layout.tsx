@@ -1,7 +1,7 @@
 import React from "react";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import { useProps } from "../../v1/MangaElementDef/vanilla";
 
@@ -21,6 +21,14 @@ export default function Layout({ children }: React.PropsWithChildren) {
     },[
         coverQuery.data
     ]);
+    const bgGradient = useColorModeValue(
+        "linear(to-b,rgba(255, 255,255, 0.2) 0%, rgba(255,255,255, 0.5) 50%, rgba(255,255,255, 1) 100%)", 
+        "linear(to-b,rgba(26, 32, 44, 0.2) 0%, rgba(26, 32, 44, 0.5)  50%, rgba(26, 32, 44, 1)  100%)"
+    );
+    const backdropBrightness = useColorModeValue(
+        "1.1",
+        "0.7"
+    );
     return (
         <Box
             backgroundImage={backgroundImage()}
@@ -38,11 +46,12 @@ export default function Layout({ children }: React.PropsWithChildren) {
             <Box
                 backdropFilter='auto'
                 backdropBlur={"20px"}
-                backdropBrightness={"1.1"}
+                backdropBrightness={backdropBrightness}
+                backdropContrast={"1.2"}
             >
                 <Box
                     padding={5}
-                    bgGradient={"linear(to-b,rgba(255, 255,255, 0.2) 0%, rgba(255,255,255, 0.5) 50%, rgba(255,255,255, 1) 100%)"}
+                    bgGradient={bgGradient}
                 >
                     {children}
                 </Box>

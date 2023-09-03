@@ -6,6 +6,7 @@ import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import React from "react";
 import { BeatLoader } from "react-spinners";
 import { useContextMenuProps } from ".";
+import { useMenuItemsColorModeValue } from "@mangadex/resources/componnents/mangas/v1/MangaContextMenu/Portal";
 
 export default function OpenToMangadex() {
     const { id } = useContextMenuProps();
@@ -17,6 +18,7 @@ export default function OpenToMangadex() {
         "status": "error",
         "title": "Error on opening the link"
     });
+    const { backgroundColor } = useMenuItemsColorModeValue();
     const openLink = () => startTransition(() => {
         open(`https://managadex.org/chapter/${id}`).catch((e) => {
             if (typeof e == "string") {
@@ -42,7 +44,7 @@ export default function OpenToMangadex() {
             pr={2}
             as={ContextMenuItem}
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}
             color={isTransition ? "gray" : "orange.500"}
         >

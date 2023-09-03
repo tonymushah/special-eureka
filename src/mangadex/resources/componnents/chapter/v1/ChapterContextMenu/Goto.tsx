@@ -4,11 +4,13 @@ import { useContextMenuProps } from ".";
 import { LinkIcon } from "@chakra-ui/icons";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { useNavigate } from "react-router";
+import { useMenuItemsColorModeValue } from "@mangadex/resources/componnents/mangas/v1/MangaContextMenu/Portal";
 
 export default function Goto() {
     const { id } = useContextMenuProps();
     const mangadex_path = useMangaDexPath();
     const navigate = useNavigate();
+    const { backgroundColor } = useMenuItemsColorModeValue();
     return (
         <Chakra.Box
             onClick={() => {
@@ -20,7 +22,7 @@ export default function Goto() {
             pr={2}
             as={ContextMenuItem}
             _hover={{
-                backgroundColor: "gray.100"
+                backgroundColor
             }}>
             <Chakra.HStack
                 spacing={"2"}

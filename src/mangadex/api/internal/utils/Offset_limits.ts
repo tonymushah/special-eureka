@@ -1,6 +1,6 @@
 export class Offset_limits{
-    private limits!: number; 
-    private offset!: number;
+    private limits = 0; 
+    private offset = 10;
     public set_limits(limits: number) : Offset_limits{
         this.limits = limits;
         return this;
@@ -15,9 +15,9 @@ export class Offset_limits{
     public get_offset(): number{
         return this.offset;
     }
-    public constructor(){
-        this.set_limits(10);
-        this.set_offset(0);
+    public constructor(offset? : number, limit?: number){
+        this.set_limits(limit ?? 10);
+        this.set_offset(offset ?? 0);
     }
     public static build(limits: number, offset: number): Offset_limits{
         const instance: Offset_limits = new Offset_limits();

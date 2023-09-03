@@ -7,7 +7,8 @@ import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { BottomContent } from "./BottomContent";
 import OnSuccess from "./OnSuccess";
-import WaveHaikei from "../wave-haikei-1.svg";
+import WaveHaikei_ from "../wave-haikei-1.svg";
+import WaveHaikeiDark_ from "../wave-haikei.svg";
 
 const IsPingable = React.lazy(() => import("../../IsPingable"));
 
@@ -46,6 +47,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
             id: props.src.get_id()
         });
     }, []);
+    const WaveHaikei = Chakra.useColorModeValue(WaveHaikei_, WaveHaikeiDark_);
     return (
         <group_page_context.Provider value={props.src}>
             <Chakra.Box minHeight={"100vh"} >

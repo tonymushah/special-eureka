@@ -35,6 +35,7 @@ type ChaptersProps = {
 }
 
 export function ChaptersComp(props: React.PropsWithChildren<ChaptersProps>) {
+    // NOTE Add isInView for performance
     if (props.src.get_count() == 1) {
         return (
             <React.Suspense fallback={

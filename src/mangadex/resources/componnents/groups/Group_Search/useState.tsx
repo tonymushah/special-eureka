@@ -1,18 +1,18 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
-import { Collection } from "@mangadex/api/structures/Collection";
 import { Group } from "@mangadex/api/structures/Group";
 import { trackEvent } from "@mangadex/index";
 import { useFormik } from "formik";
 import React from "react";
+import { InfiniteQueryConsumer } from "../../Collection/InfiniteQueryConsumer";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 import GroupFallBackElement from "../GroupFallBackElement";
 
 export const Group_Simple_Element = React.lazy(() => import("../Group_Simple_Element"));
 export const CollectionComponnent_WithQuery = React.lazy(async () => {
-    const res = await import("../../Collection/Collection");
-    const d = res.CollectionComponnent_WithQuery<Group>;
+    const res = await import("../../Collection/CollectionComponnent_withInfiniteQuery");
+    const d = res.default<Group>;
     return {
         default: d
     };
@@ -40,9 +40,9 @@ export function useState(props: {
                     </Chakra.Center>
                 </Chakra.Box>}>
                     <CollectionComponnent_WithQuery
-                        fn={() => {
+                        queryFn={async ({ pageParam = props.offset_limits }) => {
                             return Group.search({
-                                offset_Limits: props.offset_limits,
+                                offset_Limits: pageParam,
                                 name: values.name,
                                 client: client
                             });
@@ -50,23 +50,39 @@ export function useState(props: {
                         // [x] Refactor into a function
                         queryKey={queryKey(random)}
                     >
-                        {(value: Collection<Group>) => (
-                            <Chakra.Wrap>
-                                {value.get_data().map((group) => (
-                                    <Chakra.WrapItem key={group.get_id()}>
-                                        <React.Suspense
-                                            fallback={<GroupFallBackElement />}
-                                        >
-                                            {group instanceof Group ? (
-                                                <Group_Simple_Element src={group} />
-                                            ) : (
-                                                <React.Fragment/>
-                                            )}
-                                        </React.Suspense>
-                                    </Chakra.WrapItem>
-                                ))}
-                            </Chakra.Wrap>
-                        )}
+                        {
+                            (query) => (
+                                <InfiniteQueryConsumer<Group> query={query}>
+                                    {
+                                        (collections) => (
+                                            <Chakra.Wrap>
+                                                {
+                                                    collections.map((collection, index) => (
+                                                        <React.Fragment key={`${collection.get_current_page()}-${index}`}>
+                                                            {
+                                                                collection.get_data().map((group) => (
+                                                                    <Chakra.WrapItem key={group.get_id()}>
+                                                                        <React.Suspense
+                                                                            fallback={<GroupFallBackElement />}
+                                                                        >
+                                                                            {group instanceof Group ? (
+                                                                                <Group_Simple_Element src={group} />
+                                                                            ) : (
+                                                                                <React.Fragment />
+                                                                            )}
+                                                                        </React.Suspense>
+                                                                    </Chakra.WrapItem>
+                                                                ))
+                                                            }
+                                                        </React.Fragment>
+                                                    ))
+                                                }
+                                            </Chakra.Wrap>
+                                        )
+                                    }
+                                </InfiniteQueryConsumer>
+                            )
+                        }
                     </CollectionComponnent_WithQuery>
                 </React.Suspense>
             );

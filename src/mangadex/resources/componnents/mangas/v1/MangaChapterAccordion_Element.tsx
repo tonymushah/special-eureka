@@ -36,7 +36,7 @@ export default function MangaChapterAccordion_Element(props: {
                     delete={delete_.refetch}
                 >
                     <Chakra.Box width={"full"}>
-                        <Chakra.Stack>
+                        <Chakra.VStack spacing={1} display={"block"}>
                             {
                                 props.src.$chapters.map((value, index) => index < 3 ? (
                                     <React.Suspense
@@ -55,7 +55,7 @@ export default function MangaChapterAccordion_Element(props: {
                                     </React.Suspense>
                                 ) : (<React.Fragment key={value.get_id()}></React.Fragment>))
                             }
-                        </Chakra.Stack>
+                        </Chakra.VStack>
                     </Chakra.Box>
                 </MangaElementDef2_withChildren>
             </React.Suspense>

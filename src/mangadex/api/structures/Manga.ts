@@ -756,10 +756,10 @@ export class Manga extends Attribute {
         return returns;
     }
     public async get_async_content(): Promise<Array<Tag>> {
-        const to_use = this.get_format();
+        const to_use = this.get_content();
         return new Promise<Array<Tag>>((resolve, reject) => {
             if (to_use.length == 0) {
-                reject();
+                reject(new Error("No Content ground found in tags"));
             } else {
                 resolve(to_use);
             }
@@ -891,9 +891,6 @@ export class Manga extends Attribute {
     public static async getAllOfflineMangaID(offset_Limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
         if (offset_Limits == undefined) {
             offset_Limits = new Offset_limits();
-        }
-        if (client == undefined) {
-            client = await getClient();
         }
         if (await DeskApiRequest.ping(client) == true) {
             const response: Response<{

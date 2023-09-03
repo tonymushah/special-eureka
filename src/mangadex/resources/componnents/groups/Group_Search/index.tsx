@@ -2,6 +2,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { useState } from "./useState";
+import React from "react";
 
 export default function Group_Search(props: {
     offset_limits: Offset_limits
@@ -31,7 +32,7 @@ export default function Group_Search(props: {
                                 }
                             </Chakra.FormErrorMessage>
                         ) : (
-                            <></>
+                            <React.Fragment/>
                         )
                     }
                 </Chakra.FormControl>

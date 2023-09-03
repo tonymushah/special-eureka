@@ -17,9 +17,8 @@ export default function MangaElementDef2(props: {
     isRefetching?: boolean,
     refetch?: () => void
 }) {
-
+    const backgroundColor = Chakra.useColorModeValue("gray.200", "gray.900");
     const client = useHTTPClient();
-    
     const card_maxHeight: Chakra.ResponsiveValue<any> = {
         base: "10em"
     };
@@ -36,7 +35,7 @@ export default function MangaElementDef2(props: {
                     src: props.src
                 }}
             >
-                <Chakra.Card maxHeight={card_maxHeight} direction={"row"} overflowY={"hidden"} minWidth={"sm"} border={"1px"} borderColor={"#cccccc"}>
+                <Chakra.Card maxHeight={card_maxHeight} backgroundColor={backgroundColor} direction={"row"} overflowY={"hidden"} minWidth={"sm"} border={"1px"} borderColor={"#cccccc"}>
                     <CoverImageByCoverID coverID={props.src.get_cover_art_id()} isThumbail size={512} image_props={{
                         maxHeight: card_maxHeight,
                         "objectFit": "contain"

@@ -1,5 +1,5 @@
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { Button, Center, HStack, Heading, Image, Skeleton, Stack, Text } from "@chakra-ui/react";
+import { Button, Center, HStack, Heading, Image, Skeleton, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import { getVersion } from "@tauri-apps/api/app";
 import { FaGithub } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
@@ -13,12 +13,14 @@ export default function Welcome() {
     }, {
         staleTime: Infinity
     });
+    const blendMode = useColorModeValue("darken", undefined);
+    const buttonColorScheme = useColorModeValue("blackAlpha", "pink");
     return (
         <ChakraContainer>
             <Heading size={"2xl"} textAlign={"center"} marginTop={"100px"}>
                 Welcome to Special Eureka
             </Heading>
-            <Heading textAlign={"center"} blendMode={"darken"}>You&apos;re currently to version {
+            <Heading textAlign={"center"} blendMode={blendMode}>You&apos;re currently to version {
                 app_version_query.isSuccess ? (
                     <React.Fragment>{app_version_query.data}</React.Fragment>
                 ) : (
@@ -31,7 +33,7 @@ export default function Welcome() {
                         href={"https://github.com/tonymushah/special-eureka"}
                     >
                         <Button
-                            colorScheme={"blackAlpha"}
+                            colorScheme={buttonColorScheme}
                             leftIcon={
                                 <FaGithub />
                             }
@@ -39,7 +41,7 @@ export default function Welcome() {
                         >Star this project on Github</Button>
                     </ExtLink>
                     <Button
-                        colorScheme={"blackAlpha"}>
+                        colorScheme={buttonColorScheme}>
                         <Image fallback={
                             <HStack>
                                 <FaGithub/>
