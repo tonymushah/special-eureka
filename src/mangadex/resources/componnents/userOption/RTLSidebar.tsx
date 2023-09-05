@@ -1,5 +1,6 @@
-import { Box, Switch } from "@chakra-ui/react";
+import { Box, HStack, Switch, Text } from "@chakra-ui/react";
 import useServerAutoStart from "@mangadex/resources/hooks/userOptions/RtlSidebar";
+import React from "react";
 
 export default function RtlSidebarOption(){
     const {
@@ -8,18 +9,24 @@ export default function RtlSidebarOption(){
     } = useServerAutoStart();
     if(query.isSuccess){
         return(
-            <Box
+            <HStack
                 onClick={() => {
                     toggle();
                 }}
             >
+                <Text>
+                    Left
+                </Text>
                 <Switch
                     isChecked={query.data}
                 />
-            </Box>
+                <Text>
+                    Right
+                </Text>
+            </HStack>
         );
     }
     return (
-        <>Loading...</>
+        <React.Fragment>Loading...</React.Fragment>
     );
 }

@@ -42,10 +42,7 @@ export default function useLanguageUserOption() {
         }
     };
     const handleInput = (input: Lang) => {
-        console.log(input);
-        console.log("input-trigger");
         if (isIn(input) == true) {
-            console.log("removing element");
             remove(input);
         } else {
             console.log("adding element");
