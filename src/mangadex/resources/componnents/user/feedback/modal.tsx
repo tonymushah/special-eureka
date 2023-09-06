@@ -21,12 +21,11 @@ import {
 } from "@chakra-ui/react";
 import { ExtLink } from "@commons-res/components/ExtLink";
 
-export default function UserFeedBackModal({ event_id, disclosureProps }: {
-    event_id: string,
+export default function UserFeedBackModal({ error, disclosureProps }: {
+    error: Error,
     disclosureProps?: UseDisclosureProps
 }) {
     const { isOpen, onClose } = useDisclosure(disclosureProps);
-    const event = React.useMemo(() => event_id, [event_id]);
     const [comments, _set_comments] = React.useState("");
     const set_comments = React.useCallback((input: string) => {
         startTransition(() => {
@@ -48,6 +47,7 @@ export default function UserFeedBackModal({ event_id, disclosureProps }: {
     const [isTransition, startTransition] = React.useTransition();
     const sendFeedBack = React.useCallback(function () {
         startTransition(() => {
+            const event = window.Sentry.captureException(error);
             window.Sentry.captureUserFeedback({
                 event_id: event,
                 comments,

@@ -41,6 +41,12 @@ export async function queryFn({ data }: DoublePageProps) {
             if (previousElementRatio >= 1) {
                 images.push(previousCurrentElement);
             } else if (currentElementRatio >= 1) {
+                const lastElement = images[images.length - 1];
+                if(typeof lastElement == "string" && previousCurrentElement != lastElement){
+                    images.push(previousCurrentElement);
+                }else if(!lastElement.includes(previousCurrentElement)){
+                    images.push(previousCurrentElement);
+                }
                 images.push(currentElement);
             } else if (currentElementRatio < 1 && previousElementRatio < 1) {
                 images.push([previousCurrentElement, currentElement]);
