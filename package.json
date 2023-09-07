@@ -34,7 +34,7 @@
     "tauri-storybook": "cd src-tauri && cargo run --package special-eureka --example storybook"
   },
   "devDependencies": {
-    "@chakra-ui/storybook-addon": "^4.0.17",
+    "@chakra-ui/storybook-addon": "^5.0.0",
     "@microsoft/eslint-formatter-sarif": "^3.0.0",
     "@nabla/vite-plugin-eslint": "^1.5.0",
     "@phenomnomnominal/tsquery": "5.0.1",
