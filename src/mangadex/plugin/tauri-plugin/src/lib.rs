@@ -54,21 +54,6 @@ macro_rules! this_eureka_reqwest_result {
     };
 }
 
-#[macro_export]
-macro_rules! handle_error {
-    ($to_use:expr) => {
-        match $to_use {
-            Err(e) => {
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::Other,
-                    e.to_string().as_str(),
-                )))
-            }
-            Ok(f) => f,
-        }
-    };
-}
-
 #[derive(Clone, serde::Serialize)]
 struct ExportPayload {
     message: String,
@@ -76,8 +61,14 @@ struct ExportPayload {
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
-    #[error(transparent)]
+    #[error("an io error occured {0}")]
     Io(#[from] std::io::Error),
+    #[error("An internal manager error occures : {0}")]
+    InternalServerError(#[from] mangadex_desktop_api2::Error),
+    #[error("Internal Tauri Error : {0}")]
+    TauriError(#[from] tauri::Error),
+    #[error("Serde json serialization error : {0}")]
+    SerdeJsonError(#[from] serde_json::Error)
 }
 
 impl Serialize for Error {

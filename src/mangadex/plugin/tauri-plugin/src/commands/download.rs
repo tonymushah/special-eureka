@@ -4,20 +4,28 @@ use serde_json::Value;
 use crate::ins_handle::{add_in_chapter_failed, add_in_chapter_queue, add_in_chapter_success};
 use crate::ErrorPayload;
 use crate::Result;
-use crate::{handle_error, this_eureka_reqwest_result, Error};
+use crate::{this_eureka_reqwest_result, Error};
+
+use super::server::MangadexDesktopApiHandle;
 
 #[tauri::command]
-pub async fn download_manga(manga_id: String) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+pub async fn download_manga(
+    manga_id: String,
+    _state: tauri::State<'_, MangadexDesktopApiHandle>,
+) -> Result<String> {
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.put(format!(
         "http://{}:{}/manga/{}",
         server_option.hostname, server_option.port, manga_id
@@ -36,17 +44,20 @@ pub async fn download_manga(manga_id: String) -> Result<String> {
 }
 
 #[tauri::command]
-pub async fn update_cover_data(cover_id: String) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+pub async fn update_cover_data(cover_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.patch(format!(
         "http://{}:{}/cover/{}",
         server_option.hostname, server_option.port, cover_id
@@ -65,17 +76,20 @@ pub async fn update_cover_data(cover_id: String) -> Result<String> {
 }
 
 #[tauri::command]
-pub async fn download_cover(cover_id: String) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+pub async fn download_cover(cover_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.put(format!(
         "http://{}:{}/cover/{}",
         server_option.hostname, server_option.port, cover_id
@@ -94,17 +108,20 @@ pub async fn download_cover(cover_id: String) -> Result<String> {
 }
 
 #[tauri::command]
-pub async fn download_cover_with_quality(cover_id: String, quality: u32) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+pub async fn download_cover_with_quality(cover_id: String, quality: u32, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.patch(format!(
         "http://{}:{}/cover/{}/{}",
         server_option.hostname, server_option.port, cover_id, quality
@@ -122,17 +139,20 @@ pub async fn download_cover_with_quality(cover_id: String, quality: u32) -> Resu
     Ok(response_text)
 }
 
-pub async fn download_chapter_normal_func(chapter_id: String) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+pub async fn download_chapter_normal_func(chapter_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.put(format!(
         "http://{}:{}/chapter/{}/data",
         server_option.hostname, server_option.port, chapter_id
@@ -152,24 +172,24 @@ pub async fn download_chapter_normal_func(chapter_id: String) -> Result<String> 
 }
 
 #[tauri::command]
-pub async fn download_chapter(chapter_id: String) -> Result<String> {
-    Ok(download_chapter_normal_mode(chapter_id).await?)
+pub async fn download_chapter(chapter_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
+    Ok(download_chapter_normal_mode(chapter_id, _state).await?)
 }
 
 #[tauri::command]
-pub async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> {
+pub async fn download_chapter_normal_mode(chapter_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
     let chap_id_ = chapter_id.clone();
     let chap_id__ = chapter_id.clone();
     let chap_id___ = chapter_id.clone();
     add_in_chapter_queue(chap_id_)?;
-    let data = match download_chapter_normal_func(chapter_id).await {
+    let data = match download_chapter_normal_func(chapter_id, _state).await {
         Ok(data) => data,
         Err(err) => {
             add_in_chapter_failed(chap_id__)?;
             return Err(err);
         }
     };
-    let json_data: Value = handle_error!(serde_json::from_str(data.clone().as_str()));
+    let json_data: Value = serde_json::from_str(data.clone().as_str())?;
     if let Some(errors) = json_data.get("errors") {
         if let Some(errors_vec) = errors.as_array() {
             if errors_vec.is_empty() {
@@ -190,19 +210,22 @@ pub async fn download_chapter_normal_mode(chapter_id: String) -> Result<String> 
 }
 
 #[tauri::command]
-pub async fn download_chapter_data_saver_mode(chapter_id: String) -> Result<String> {
+pub async fn download_chapter_data_saver_mode(chapter_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
     let chap_id__ = chapter_id.clone();
     let chap_id___ = chapter_id.clone();
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.put(format!(
         "http://{}:{}/chapter/{}/data-saver",
         server_option.hostname, server_option.port, chapter_id
@@ -217,7 +240,7 @@ pub async fn download_chapter_data_saver_mode(chapter_id: String) -> Result<Stri
         }
         Ok(f) => f,
     };
-    let json_data: Value = handle_error!(serde_json::from_str(response_text.clone().as_str()));
+    let json_data: Value = serde_json::from_str(response_text.clone().as_str())?;
     if let Some(errors) = json_data.get("errors") {
         if let Some(errors_vec) = errors.as_array() {
             if errors_vec.is_empty() {
@@ -235,17 +258,20 @@ pub async fn download_chapter_data_saver_mode(chapter_id: String) -> Result<Stri
 }
 
 #[tauri::command]
-pub async fn download_manga_cover(manga_id: String) -> Result<String> {
-    let server_option = match ServerOptions::new() {
-        Err(e) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                e.to_string().as_str(),
-            )));
-        }
-        Ok(f) => f,
-    };
-    let client = reqwest::Client::new();
+pub async fn download_manga_cover(manga_id: String, _state: tauri::State<'_, MangadexDesktopApiHandle>) -> Result<String> {
+    let app_state = _state
+        .app_state
+        .lock()
+        .await
+        .clone()
+        .ok_or(std::io::Error::new(
+            std::io::ErrorKind::NotFound,
+            "The app state is not initialized",
+        ))?;
+    let server_option = app_state
+        .server_options
+        .clone();
+    let client = &app_state.http_client.lock().await.client;
     let request = client.put(format!(
         "http://{}:{}/manga/{}/cover",
         server_option.hostname, server_option.port, manga_id

@@ -2,6 +2,7 @@ use crate::Error;
 use crate::Result;
 use actix_web::dev::{Server, ServerHandle};
 use mangadex_desktop_api2;
+use mangadex_desktop_api2::server::AppState;
 use mangadex_desktop_api2::settings::server_options::ServerOptions;
 use tauri::api::http::HttpRequestBuilder;
 use tauri::async_runtime::JoinHandle;
@@ -12,8 +13,9 @@ use tokio::sync::Mutex;
 use std::sync::Arc;
 
 pub struct MangadexDesktopApiHandle {
-    server: Arc<Mutex<Option<ServerHandle>>>,
-    server_handle: Arc<Mutex<Option<JoinHandle<std::result::Result<(), std::io::Error>>>>>,
+    pub server: Arc<Mutex<Option<ServerHandle>>>,
+    pub server_handle: Arc<Mutex<Option<JoinHandle<std::result::Result<(), std::io::Error>>>>>,
+    pub app_state: Arc<Mutex<Option<AppState>>>
 }
 
 impl Default for MangadexDesktopApiHandle {
@@ -21,6 +23,7 @@ impl Default for MangadexDesktopApiHandle {
         MangadexDesktopApiHandle {
             server: Arc::new(Mutex::new(None)),
             server_handle: Arc::new(Mutex::new(None)),
+            app_state: Arc::new(Mutex::new(None)),
         }
     }
 }
@@ -50,14 +53,13 @@ pub async fn is_server_started(_state: tauri::State<'_, MangadexDesktopApiHandle
     }
 }
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 pub async fn launch_server<R: Runtime>(
     _app: AppHandle<R>,
     _window: Window<R>,
     state: State<'_, MangadexDesktopApiHandle>,
 ) -> Result<String> {
-    mangadex_desktop_api2::verify_all_fs()?;
-    let server: Server = mangadex_desktop_api2::launch_async_server_default()?;
+    let server: Server = mangadex_desktop_api2::launch_async_server_default().await?;
     let handle: ServerHandle = server.handle();
 
     state
