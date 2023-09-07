@@ -181,7 +181,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                     }
                 }
             } else {
-                await queryClient.prefetchInfiniteQuery(_queryKey_, () => queryFn(id), {
+                await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
                 });
                 return new Response(null, {
                     "status": 204,

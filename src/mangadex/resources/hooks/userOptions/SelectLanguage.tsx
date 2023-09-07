@@ -45,7 +45,6 @@ export default function useLanguageUserOption() {
         if (isIn(input) == true) {
             remove(input);
         } else {
-            console.log("adding element");
             add(input);
         }
     };

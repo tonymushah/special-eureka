@@ -19,7 +19,7 @@ export default function MangaListWithCollectionArray(props: {
 }) {
     const { data, updateListOption } = useMangaListOption();
     return (
-        <Chakra.Tabs padding={"5px"} align="end" isLazy index={data} onChange={updateListOption}>
+        <Chakra.Tabs paddingTop={"5px"} padding={0} align="end" isLazy index={data} onChange={updateListOption}>
             <Chakra.TabList>
                 <Chakra.Tab>
                     <FontAwesome.FaThList />

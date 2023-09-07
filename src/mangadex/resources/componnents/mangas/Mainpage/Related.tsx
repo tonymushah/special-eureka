@@ -55,8 +55,7 @@ export function MangaRelated_Section(props: {
     }
 }
 
-export default function Related({ src }: RelatedProps) {
-    const to_use = src;
+export default function Related({ src : to_use }: RelatedProps) {
     return (
         <Chakra.VStack
             display={"block"}

@@ -1294,7 +1294,7 @@ export class Manga_with_allRelationship extends Manga {
                 } catch (error) {
                 }
             }
-            instance.$related_manga = to_input_manga;
+            instance.$related_manga = to_input_manga.filter((value) => value != undefined || value != null);
         // eslint-disable-next-line no-empty
         } catch (error) {
         }
@@ -1318,8 +1318,6 @@ export class Manga_with_allRelationship extends Manga {
         } catch (error) { }
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
-            const manga_rel = new Attribute(instance.get_id(), "manga");
-            instance.$cover.set_relationships([manga_rel]);
         // eslint-disable-next-line no-empty
         } catch (error) { }
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
@@ -1476,7 +1474,6 @@ export class Manga_with_allRelationship extends Manga {
         client,
         authorOrArtist
     }: MangaSearch_withAllIncludes): Promise<Collection<Manga_with_allRelationship>> {
-        console.log(offset_Limits);
         const querys = {
             limit: offset_Limits.get_limits(),
             offset: offset_Limits.get_offset(),
