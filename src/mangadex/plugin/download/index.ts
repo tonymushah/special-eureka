@@ -1,38 +1,4 @@
-import { ChapterDowloadResult } from "@mangadex/api/structures/Chapter";
 import { invoke } from "..";
-
-export async function download_chapter(chapterID: string) {
-    const response = await invoke<string>("download_chapter", { chapterId: chapterID });
-    const response_Json: ChapterDowloadResult = JSON.parse(response);
-    return response_Json;
-}
-
-export async function download_chapter_data_saver(chapterID: string) {
-    const response = await invoke<string>("download_chapter_data_saver_mode", { chapterId: chapterID });
-    const response_Json: ChapterDowloadResult = JSON.parse(response);
-    return response_Json;
-}
-
-export async function download_manga(mangaID: string) {
-    const response = await invoke<string>("download_manga", { mangaId: mangaID });
-    const response_Json: {
-        result: string,
-        type: string,
-        id: string
-    } = JSON.parse(response);
-    return response_Json;
-}
-
-export async function download_all_manga_covers(mangaID: string) {
-    const response = await invoke<string>("download_manga_covers", { mangaId: mangaID });
-    const response_Json: {
-        result: string,
-        type: string,
-        id: string,
-        downloaded: Array<string>
-    } = JSON.parse(response);
-    return response_Json;
-}
 
 export async function download_manga_cover(mangaID: string) {
     const response = await invoke<string>("download_manga_cover", { mangaId: mangaID });
@@ -66,3 +32,8 @@ export async function refetch_all_manga() {
     } = JSON.parse(response);
     return response_Json;
 }
+
+export { default as download_chapter } from "./download_chapter";
+export { default as download_chapter_data_saver } from "./download_chapter_data_saver";
+export { default as download_manga } from "./download_manga";
+export { default as download_all_manga_covers } from "./download_all_manga_covers";

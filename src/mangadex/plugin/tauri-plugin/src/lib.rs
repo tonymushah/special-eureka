@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use reqwest::header::InvalidHeaderValue;
 use tauri::{
     plugin::{Builder, TauriPlugin},
     AppHandle, Manager, Runtime
@@ -7,7 +8,7 @@ use tauri::{
 pub mod utils;
 pub mod intelligent_notification_system;
 use ins_handle::{reset_ins_handle, set_ins_chapter_checker_handle, init_ins_chapter_handle, check_plus_notify};
-use utils::{set_indentifier};
+use utils::set_indentifier;
 use serde::{ser::Serializer, Deserialize, Serialize};
 use crate::commands::{download, server};
 pub mod ins_handle;
@@ -68,7 +69,11 @@ pub enum Error {
     #[error("Internal Tauri Error : {0}")]
     TauriError(#[from] tauri::Error),
     #[error("Serde json serialization error : {0}")]
-    SerdeJsonError(#[from] serde_json::Error)
+    SerdeJsonError(#[from] serde_json::Error),
+    #[error("reqwest crate error : {0}")]
+    ReqwestError(#[from] reqwest::Error),
+    #[error("invalid header value : {0}")]
+    InvalidHeaderValue(#[from] InvalidHeaderValue)
 }
 
 impl Serialize for Error {
@@ -170,7 +175,9 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             download::download_chapter_normal_mode,
             download::download_chapter_data_saver_mode,
             emit_events_to_webview,
-            reset_queue
+            reset_queue,
+            server::get_running_tasks,
+            server::get_tasks_limit
         ])
         .setup(move |app| {
             let identifier = app.config().tauri.bundle.identifier.clone();
