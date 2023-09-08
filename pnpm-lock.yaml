@@ -488,8 +488,8 @@ devDependencies:
     specifier: ^1.1.6
     version: 1.1.6(vite@4.4.2)
   vite-plugin-progress:
-    specifier: ^0.0.6
-    version: 0.0.6(vite@4.4.2)
+    specifier: ^0.0.7
+    version: 0.0.7(vite@4.4.2)
   vite-plugin-svgr:
     specifier: ^2.4.0
     version: 2.4.0(rollup@3.28.0)(vite@4.4.2)
@@ -18302,8 +18302,8 @@ packages:
       vite: 4.4.2(@types/node@18.16.18)(less@4.2.0)(sass@1.63.6)(terser@5.19.2)
     dev: true
 
-  /vite-plugin-progress@0.0.6(vite@4.4.2):
-    resolution: {integrity: sha512-pIK2TVEY4XFGrz10CQDdEufBBCDaV0geRHfXV3abGTBr+OF9O0Zmd3ZDrHJXDv4Rl3qAQP4BTCuPYQ3XqstmqA==}
+  /vite-plugin-progress@0.0.7(vite@4.4.2):
+    resolution: {integrity: sha512-zyvKdcc/X+6hnw3J1HVV1TKrlFKC4Rh8GnDnWG/2qhRXjqytTcM++xZ+SAPnoDsSyWl8O93ymK0wZRgHAoglEQ==}
     engines: {node: '>=14', pnpm: '>=7.0.0'}
     peerDependencies:
       vite: '>2.0.0-0'

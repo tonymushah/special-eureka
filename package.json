@@ -85,7 +85,7 @@
     "vite-aliases": "^0.10.0",
     "vite-plugin-checker": "^0.6.0",
     "vite-plugin-image-optimizer": "^1.1.6",
-    "vite-plugin-progress": "^0.0.6",
+    "vite-plugin-progress": "^0.0.7",
     "vite-plugin-svgr": "^2.4.0",
     "vite-plugin-tauri": "^3.3.0",
     "vitest": "^0.33.0"
