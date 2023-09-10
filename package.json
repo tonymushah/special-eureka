@@ -88,7 +88,7 @@
     "vite-plugin-progress": "^0.0.7",
     "vite-plugin-svgr": "^2.4.0",
     "vite-plugin-tauri": "^3.3.0",
-    "vitest": "^0.33.0"
+    "vitest": "^0.34.0"
   },
   "dependencies": {
     "@aptabase/tauri": "^0.4.0",
