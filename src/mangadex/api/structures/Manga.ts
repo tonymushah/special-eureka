@@ -1318,6 +1318,7 @@ export class Manga_with_allRelationship extends Manga {
         } catch (error) { }
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
+            instance.$cover.get_relationships().push(instance);
         // eslint-disable-next-line no-empty
         } catch (error) { }
         instance.set_avaible_language(attributes.availableTranslatedLanguages);

@@ -11,7 +11,7 @@ export type IdTypeWRelated = IdType & {
 export class Attribute {
     private id!: string;
     private type!: string;
-    private relationships?: Array<Attribute>;
+    private relationships: Array<Attribute> = [];
     private related?: string;
     // [x] set args
     public set_id(id: string) {
@@ -21,7 +21,7 @@ export class Attribute {
         this.type = type;
     }
     public set_relationships(relationships: Array<Attribute> | undefined) {
-        this.relationships = relationships;
+        this.relationships = relationships ?? [];
     }
     public set_relationships_Wany(relationships: Relationship[]) {
         const getted: Array<Attribute> = new Array<Attribute>(relationships.length);
@@ -40,7 +40,7 @@ export class Attribute {
     public get_type(): string {
         return this.type;
     }
-    public get_relationships(): Array<Attribute> | undefined {
+    public get_relationships(): Array<Attribute> {
         return this.relationships;
     }
     public get_related(): string | undefined {
