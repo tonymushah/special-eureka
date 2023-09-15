@@ -7,7 +7,7 @@ export default function ServerTasksInfo(){
     const limit = useTasksLimit();
     if(running.isSuccess && limit.isSuccess){
         return (
-            <Progress value={(running.data / limit.data)}/>
+            <Progress value={((running.data / limit.data) * 100)}/>
         );
     }else {
         return (
