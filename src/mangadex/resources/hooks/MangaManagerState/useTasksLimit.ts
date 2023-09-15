@@ -9,7 +9,9 @@ export default function useTasksLimit(){
     return useQuery(queryKey_, async function () {
         return await get_tasks_limit();
     }, {
-        enabled : serverStateQuery.data == true
+        enabled : serverStateQuery.data == true,
+        refetchOnMount : true,
+        refetchOnWindowFocus : true
     });
 }
 

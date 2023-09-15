@@ -9,7 +9,10 @@ export default function useRunningTasks(){
     return useQuery(queryKey_, async function () {
         return await get_running_tasks();
     }, {
-        enabled : serverStateQuery.data == true
+        enabled : serverStateQuery.data == true,
+        refetchOnMount : true,
+        refetchOnWindowFocus : true,
+        staleTime: 0
     });
 }
 

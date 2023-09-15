@@ -19,7 +19,7 @@ pub async fn download_manga(
             "The app state is not initialized",
         ))?;
     let server_option = app_state.server_options.clone();
-    let client = &app_state.http_client.lock().await.client;
+    let client = app_state.http_client.lock().await.client.clone();
     let request = client.put(format!(
         "http://{}:{}/manga/{}",
         server_option.hostname, server_option.port, manga_id

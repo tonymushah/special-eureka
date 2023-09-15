@@ -18,7 +18,7 @@ pub async fn download_chapter_normal_func(
             "The app state is not initialized",
         ))?;
     let server_option = app_state.server_options.clone();
-    let client = &app_state.http_client.lock().await.client;
+    let client = app_state.http_client.lock().await.client.clone();
     let request = client.put(format!(
         "http://{}:{}/chapter/{}/data",
         server_option.hostname, server_option.port, chapter_id

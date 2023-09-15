@@ -16,7 +16,7 @@ pub async fn patch_all_manga_cover(_state: tauri::State<'_, MangadexDesktopApiHa
             "The app state is not initialized",
         ))?;
     let server_option = app_state.server_options.clone();
-    let client = &app_state.http_client.lock().await.client;
+    let client = app_state.http_client.lock().await.client.clone();
     let request = client.patch(format!(
         "http://{}:{}/mangas/all/cover",
         server_option.hostname, server_option.port
