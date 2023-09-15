@@ -212,6 +212,9 @@ dependencies:
   optics-ts:
     specifier: ^2.4.0
     version: 2.4.0
+  preact:
+    specifier: ^10.17.1
+    version: 10.17.1
   prop-types:
     specifier: ^15.8.1
     version: 15.8.1
@@ -15311,6 +15314,10 @@ packages:
 
   /preact@10.12.1:
     resolution: {integrity: sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==}
+    dev: false
+
+  /preact@10.17.1:
+    resolution: {integrity: sha512-X9BODrvQ4Ekwv9GURm9AKAGaomqXmip7NQTZgY7gcNmr7XE83adOMJvd3N42id1tMFU7ojiynRsYnY6/BRFxLA==}
     dev: false
 
   /prebuild-install@7.1.1:

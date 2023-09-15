@@ -160,6 +160,7 @@
     "million": "^2.5.11",
     "minidenticons": "^2.0.2",
     "optics-ts": "^2.4.0",
+    "preact": "^10.17.1",
     "prop-types": "^15.8.1",
     "protobufjs": "^7.2.4",
     "qs": "^6.11.2",
