@@ -2424,9 +2424,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-desktop-api2"
-version = "0.5.3"
+version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d6c8ed45bdc891be6764a475a8ed9115f21805f1339d2995b259b1ac9ab7aa8d"
+checksum = "0ace6bb5584399605a07191037ede2ead90546bf7ba21ecd9ba65a8127a278e5"
 dependencies = [
  "actix-web",
  "anyhow",
@@ -3906,9 +3906,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.105"
+version = "1.0.107"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "693151e1ac27563d6dbcec9dee9fbd5da8539b20fa14ad3752b2e6d363ace360"
+checksum = "6b420ce6e3d8bd882e9b243c6eed35dbc9a6110c9769e74b584e0d68d1f20c65"
 dependencies = [
  "itoa 1.0.9",
  "ryu",
