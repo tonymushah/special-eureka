@@ -25,7 +25,11 @@
       "label": "ui:storybook",
       "type": "shell",
       "command": "pnpm",
-      "args": ["storybook-dev"]
+      "args": ["storybook-dev"],
+      // `dev` keeps running in the background
+      // ideally you should also configure a `problemMatcher`
+      // see https://code.visualstudio.com/docs/editor/tasks#_can-a-background-task-be-used-as-a-prelaunchtask-in-launchjson
+      "isBackground": true,
     }
   ]
 }

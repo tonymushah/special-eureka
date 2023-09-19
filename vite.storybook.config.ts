@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
 //import { ViteAliases } from "vite-aliases";
-import mdx from "@mdx-js/rollup";
+//import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import tsConfig from "./tsconfig.json";
 
@@ -18,18 +18,12 @@ function generateAliases(): AliasOptions {
 
 export default defineConfig({
     clearScreen: false,
-    plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
-    //progress(),
-    /*ViteAliases({
-        "dir": "src",
-        useConfig: true,
-        useTypescript: true,
-        "adjustDuplicates" : true,
-    }),*/ react({
-        "tsDecorators": true,
-        "jsxImportSource": "react"
-    }), remarkRehypePlugin({
-    }), ViteImageOptimizer()
+    plugins: [
+        react({
+            "tsDecorators": true,
+            "jsxImportSource": "react"
+        }), remarkRehypePlugin({
+        }), ViteImageOptimizer()
     ],
     envPrefix: ["VITE_", "TAURI_"],
     server: {

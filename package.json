@@ -31,7 +31,7 @@
     "build": "tauri build",
     "storybook-dev": "storybook dev -p 6239 --no-open",
     "build-storybook": "storybook build",
-    "tauri-storybook": "cd src-tauri && cargo run --package special-eureka --example storybook"
+    "tauri-storybook": "cargo run --manifest-path=./src-tauri/Cargo.toml --example=storybook"
   },
   "devDependencies": {
     "@chakra-ui/storybook-addon": "^4.0.17",

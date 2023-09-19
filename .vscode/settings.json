@@ -1,3 +1,6 @@
 {
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "material-icon-theme.files.associations": {
+        "vite.storybook.config.ts" : "storybook"
+    }
 }
