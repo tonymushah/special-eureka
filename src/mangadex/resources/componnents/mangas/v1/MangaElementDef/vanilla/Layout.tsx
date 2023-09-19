@@ -1,10 +1,9 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
 import { useProps } from ".";
+import React from "react";
 
 export default function Laoyut({ children }: React.PropsWithChildren) {
-    const props = useProps();
-    const { ongoing, completed, hiatus, cancelled, none, onRefetching } = useBackGroundColor();
-    const { ongoing: hover_ongoing, completed: hover_completed, hiatus: hover_hiatus, cancelled: hover_cancelled, none: hover_none, onRefetching: none_onRefetching } = useHoverBackGroundColor();
+    const { backgroundColor, _hover_background } = useLayoutBackGround();
     return (
         <Box
             marginBottom={2}
@@ -15,44 +14,10 @@ export default function Laoyut({ children }: React.PropsWithChildren) {
             borderStyle={"solid"}
             border={"1px"}
             borderColor={"#cacaca"}
-            backgroundColor={props.isRefetching == undefined ? (
-                props.src.get_status() == "ongoing" ? ongoing : (
-                    props.src.get_status() == "completed" ? completed : (
-                        props.src.get_status() == "hiatus" ? hiatus : (
-                            props.src.get_status() == "cancelled" ? cancelled : none
-                        )
-                    )
-                )
-            ) : (props.isRefetching ? onRefetching : (
-                props.src.get_status() == "ongoing" ? ongoing : (
-                    props.src.get_status() == "completed" ? completed : (
-                        props.src.get_status() == "hiatus" ? hiatus : (
-                            props.src.get_status() == "cancelled" ? cancelled : none
-                        )
-                    )
-                )
-            ))}
+            backgroundColor={backgroundColor}
             borderRadius={"10px"}
             _hover={{
-                backgroundColor: (
-                    props.isRefetching == undefined ? (
-                        props.src.get_status() == "ongoing" ? hover_ongoing : (
-                            props.src.get_status() == "completed" ? hover_completed : (
-                                props.src.get_status() == "hiatus" ? hover_hiatus : (
-                                    props.src.get_status() == "cancelled" ? hover_cancelled : hover_none
-                                )
-                            )
-                        )
-                    ) : (props.isRefetching ? none_onRefetching : (
-                        props.src.get_status() == "ongoing" ? hover_ongoing : (
-                            props.src.get_status() == "completed" ? hover_completed : (
-                                props.src.get_status() == "hiatus" ? hover_hiatus : (
-                                    props.src.get_status() == "cancelled" ? hover_cancelled : hover_none
-                                )
-                            )
-                        )
-                    ))
-                ),
+                backgroundColor: _hover_background,
                 transitionProperty: "backgroundColor",
                 transitionDuration: "0.3s",
                 transitionTimingFunction: "ease-in-out"
@@ -65,6 +30,78 @@ export default function Laoyut({ children }: React.PropsWithChildren) {
             {children}
         </Box>
     );
+}
+
+function useLayoutBackGround(){
+    const props = useProps();
+    const { ongoing, completed, hiatus, cancelled, none, onRefetching } = useBackGroundColor();
+    const { ongoing: hover_ongoing, completed: hover_completed, hiatus: hover_hiatus, cancelled: hover_cancelled, none: hover_none, onRefetching: none_onRefetching } = useHoverBackGroundColor();
+    const backgroundColor = React.useMemo(() => {
+        if (props.isRefetching == undefined) {
+            if (props.src.get_status() == "ongoing") {
+                return ongoing;
+            } else if (props.src.get_status() == "completed") {
+                return completed;
+            } else if (props.src.get_status() == "hiatus") {
+                return hiatus;
+            } else if (props.src.get_status() == "cancelled") {
+                return cancelled;
+            } else {
+                return none;
+            }
+        } else {
+            if (props.isRefetching) {
+                return onRefetching;
+            } else {
+                if (props.src.get_status() == "ongoing") {
+                    return ongoing;
+                } else if (props.src.get_status() == "completed") {
+                    return completed;
+                } else if (props.src.get_status() == "hiatus") {
+                    return hiatus;
+                } else if (props.src.get_status() == "cancelled") {
+                    return cancelled;
+                } else {
+                    return none;
+                }
+            }
+        }
+    }, [props]);
+    const _hover_background = React.useMemo(() => {
+        if (props.isRefetching == undefined) {
+            if (props.src.get_status() == "ongoing") {
+                return hover_ongoing;
+            } else if (props.src.get_status() == "completed") {
+                return hover_completed;
+            } else if (props.src.get_status() == "hiatus") {
+                return hover_hiatus;
+            } else if (props.src.get_status() == "cancelled") {
+                return hover_cancelled;
+            } else {
+                return hover_none;
+            }
+        } else {
+            if (props.isRefetching) {
+                return none_onRefetching;
+            } else {
+                if (props.src.get_status() == "ongoing") {
+                    return hover_ongoing;
+                } else if (props.src.get_status() == "completed") {
+                    return hover_completed;
+                } else if (props.src.get_status() == "hiatus") {
+                    return hover_hiatus;
+                } else if (props.src.get_status() == "cancelled") {
+                    return hover_cancelled;
+                } else {
+                    return hover_none;
+                }
+            }
+        }
+    }, [props]);
+    return {
+        backgroundColor,
+        _hover_background
+    };
 }
 
 function useBackGroundColor() {

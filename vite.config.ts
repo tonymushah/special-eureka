@@ -1,24 +1,34 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig } from "vite";
+import { AliasOptions, defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
-import { ViteAliases } from "vite-aliases";
+//import { ViteAliases } from "vite-aliases";
 import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-import million from "million/compiler";
+import tsConfig from "./tsconfig.json";
+
+function generateAliases(): AliasOptions {
+    const returns: AliasOptions = {};
+    const tsPaths = tsConfig.compilerOptions.paths;
+    for (const key in tsPaths) {
+        returns[key.replace("/*", "")] = resolve(__dirname, tsPaths[key][0].replace("/*", ""));
+    }
+    return returns;
+}
 
 export default defineConfig({
     clearScreen: false,
     plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
     //progress(),
-    million.vite(),
-    ViteAliases({
+    /*ViteAliases({
         "dir": "src",
         useConfig: true,
-        useTypescript: true
-    }), react({
-        "tsDecorators": true
+        useTypescript: true,
+        "adjustDuplicates" : true,
+    }),*/ react({
+        "tsDecorators": true,
+        "jsxImportSource" : "react"
     }), remarkRehypePlugin({
     }), ViteImageOptimizer(),
     sentryVitePlugin({
@@ -37,8 +47,7 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            react: "preact/compat",
-            "react-dom": "preact/compat"
+            ...generateAliases()
         }
     },
     appType: "spa",
