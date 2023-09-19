@@ -23,10 +23,29 @@
       "request": "launch",
       "name": "Tauri Production Debug",
       "cargo": {
-        "args": ["build", "--release", "--manifest-path=./src-tauri/Cargo.toml"]
+        "args": [
+          "build",
+          "--release",
+          "--manifest-path=./src-tauri/Cargo.toml"
+        ]
       },
       // task for the `beforeBuildCommand` if used, must be configured in `.vscode/tasks.json`
       "preLaunchTask": "ui:build"
+    },
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Launch Storybook",
+      "cargo": {
+        "args": [
+          "build",
+          "--manifest-path=./src-tauri/Cargo.toml",
+          "--no-default-features",
+          "--example=storybook"
+        ]
+      },
+      // task for the `beforeBuildCommand` if used, must be configured in `.vscode/tasks.json`
+      "preLaunchTask": "ui:storybook"
     }
   ]
 }

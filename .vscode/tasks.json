@@ -20,6 +20,12 @@
       // change this to your `beforeBuildCommand`:
       "command": "pnpm",
       "args": ["vite:build"]
+    },
+    {
+      "label": "ui:storybook",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["storybook-dev"]
     }
   ]
 }
