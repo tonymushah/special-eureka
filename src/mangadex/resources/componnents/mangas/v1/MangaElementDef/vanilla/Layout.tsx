@@ -1,6 +1,6 @@
 import { Box, useColorModeValue } from "@chakra-ui/react";
-import { useProps } from ".";
 import React from "react";
+import { useProps } from ".";
 
 export default function Laoyut({ children }: React.PropsWithChildren) {
     const { backgroundColor, _hover_background } = useLayoutBackGround();
@@ -16,6 +16,7 @@ export default function Laoyut({ children }: React.PropsWithChildren) {
             borderColor={"#cacaca"}
             backgroundColor={backgroundColor}
             borderRadius={"10px"}
+            overflow={"hidden"}
             _hover={{
                 backgroundColor: _hover_background,
                 transitionProperty: "backgroundColor",
@@ -32,11 +33,12 @@ export default function Laoyut({ children }: React.PropsWithChildren) {
     );
 }
 
-function useLayoutBackGround(){
+function useLayoutBackGround() {
     const props = useProps();
-    const { ongoing, completed, hiatus, cancelled, none, onRefetching } = useBackGroundColor();
-    const { ongoing: hover_ongoing, completed: hover_completed, hiatus: hover_hiatus, cancelled: hover_cancelled, none: hover_none, onRefetching: none_onRefetching } = useHoverBackGroundColor();
+    const non_hover = useBackGroundColor();
+    const on_hover = useHoverBackGroundColor();
     const backgroundColor = React.useMemo(() => {
+        const { ongoing, completed, hiatus, cancelled, none, onRefetching } = non_hover;
         if (props.isRefetching == undefined) {
             if (props.src.get_status() == "ongoing") {
                 return ongoing;
@@ -66,8 +68,9 @@ function useLayoutBackGround(){
                 }
             }
         }
-    }, [props]);
+    }, [props, non_hover]);
     const _hover_background = React.useMemo(() => {
+        const { ongoing: hover_ongoing, completed: hover_completed, hiatus: hover_hiatus, cancelled: hover_cancelled, none: hover_none, onRefetching: none_onRefetching } = on_hover;
         if (props.isRefetching == undefined) {
             if (props.src.get_status() == "ongoing") {
                 return hover_ongoing;
@@ -97,7 +100,7 @@ function useLayoutBackGround(){
                 }
             }
         }
-    }, [props]);
+    }, [props, on_hover]);
     return {
         backgroundColor,
         _hover_background

@@ -9,8 +9,8 @@ export default function Body() {
         <CardBody>
             <Title />
             <Tags />
-            <AuthorArtists />
             <Description/>
+            <AuthorArtists />
         </CardBody>
     );
 }

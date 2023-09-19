@@ -67,6 +67,7 @@ export default function Description() {
             return (
                 <Chakra.Box
                     noOfLines={5}
+                    marginTop={2}
                 >
                     <TryCatch
                         catch={OnCatch}
