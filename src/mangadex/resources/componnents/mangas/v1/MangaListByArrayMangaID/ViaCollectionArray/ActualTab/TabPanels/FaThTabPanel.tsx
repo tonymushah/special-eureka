@@ -1,9 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
-import MangaVerticalElementFallback from "../../MangaVerticalElementFallback";
+import MangaVerticalElementFallback from "../../../../MangaVerticalElementFallback";
 import React from "react";
-import { useMangaListByCollectionArrayMangaIDSrc } from ".";
+import { useMangaListByCollectionArrayMangaIDSrc } from "../..";
 
-const MangaVerticalElement_wID = React.lazy(() => import("../../MangaVerticalElement_wID"));
+const MangaVerticalElement_wID = React.lazy(() => import("../../../../MangaVerticalElement_wID"));
 
 export function FaThTabPanel() {
     const src = useMangaListByCollectionArrayMangaIDSrc();
