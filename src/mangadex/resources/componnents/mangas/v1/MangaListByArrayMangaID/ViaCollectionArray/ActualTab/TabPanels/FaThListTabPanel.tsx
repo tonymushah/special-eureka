@@ -9,8 +9,8 @@ export function FaThListTabPanel() {
     const src = useMangaListByCollectionArrayMangaIDSrc();
     return (
         <Chakra.Stack>
-            {src.map((value) => (
-                <React.Fragment key={`${JSON.stringify(value)}-1`}>
+            {src.map((value, index) => (
+                <React.Fragment key={`ThListTabPanel-${value.get_offset()}-${value.get_limit()}-${index}-1`}>
                     {value.get_data().map((id) => (
                         <React.Suspense
                             key={`${id}-1`}
