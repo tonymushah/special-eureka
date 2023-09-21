@@ -1,15 +1,14 @@
 use once_cell::sync::OnceCell;
-use std::{thread::JoinHandle};
+use std::thread::JoinHandle;
 use crate::intelligent_notification_system::DownloadEntry;
 use tauri::api::notification::Notification;
-use crate::utils::{get_indentifier};
+use crate::utils::get_indentifier;
 use crate::Error;
 use crate::Result;
 
 static mut INS_CHAPTER: OnceCell<DownloadEntry<String>> = OnceCell::new();
 
 static mut INS_CHAPTER_CHECKER: OnceCell<JoinHandle<()>> = OnceCell::new();
-
 
 pub fn set_ins_chapter_checker_handle(joinhandle: JoinHandle<()>) -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {

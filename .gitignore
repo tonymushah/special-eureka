@@ -11,7 +11,6 @@ dist-ssr
 node_modules
 
 # Editor directories and files
-.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -29,3 +28,12 @@ eslint-results.md
 
 # Sentry Auth Token
 .env.sentry-build-plugin
+src-tauri/e99b2531-8828-45f3-a4b9-0c8706c21aa0
+src-tauri/421df825-e7c9-4430-8a02-7338fa945c74
+src-tauri/0072fa01-57f3-40bf-82b5-bb04d696e2ff
+src-tauri/d6ea9c0a-a83d-42c5-8b77-5b913738f267
+src-tauri/de1c9e92-dca0-4785-b746-f06ae7e2773f
+src-tauri/c1b929da-fff1-4b5f-9f6a-ba200077c48b
+src-tauri/abd419b3-1af3-4473-a1b0-5883d537f041
+6df2682a-e46d-4f96-9e89-e1893eaa29d6
+src-tauri/89a34c92-129c-4975-8360-97629f203263

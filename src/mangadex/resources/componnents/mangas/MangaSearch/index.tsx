@@ -25,7 +25,7 @@ export default function Manga_Search() {
     }, []);
     useTrackEvent("mangadex-manga-search");
     return (
-        <Card padding={"10px"}>
+        <Card>
             <CardHeader>
                 <Heading fontFamily={"inherit"}>Advanced Search</Heading>
                 <ChakraContainer>

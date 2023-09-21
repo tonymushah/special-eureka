@@ -43,6 +43,7 @@ export function get_manga_page_cover_art_image(props: {
             // [x] Refactor this query key into a function
             data = queryClient.setQueryData(cover_queryKey(data.get_id()), data);
         }
+        
         if (data != undefined) {
             if (props.isThumbail == true) {
                 if (props.scale == 512) {

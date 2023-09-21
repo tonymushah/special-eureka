@@ -16,9 +16,6 @@ function Laoyut({ children }: React.PropsWithChildren) {
 export function ErrorBoundaryComp({ error }: {
     error: Error | string
 }) {
-    React.useEffect(() => {
-        console.error(error);
-    },[]);
     if (error instanceof Error) {
         return (
             <Laoyut>

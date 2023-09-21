@@ -1,30 +1,40 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig } from "vite";
+import { AliasOptions, defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
-import { ViteAliases } from "vite-aliases";
+//import { ViteAliases } from "vite-aliases";
 import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-import million from "million/compiler";
+import tsConfig from "./tsconfig.json";
+
+function generateAliases(): AliasOptions {
+    const returns: AliasOptions = {};
+    const tsPaths = tsConfig.compilerOptions.paths;
+    for (const key in tsPaths) {
+        returns[key.replace("/*", "")] = resolve(__dirname, tsPaths[key][0].replace("/*", ""));
+    }
+    return returns;
+}
 
 export default defineConfig({
     clearScreen: false,
     plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
     //progress(),
-    million.vite(),
-    ViteAliases({
+    /*ViteAliases({
         "dir": "src",
         useConfig: true,
-        useTypescript: true
-    }), react({
-        "tsDecorators": true
+        useTypescript: true,
+        "adjustDuplicates" : true,
+    }),*/ react({
+        "tsDecorators": true,
+        "jsxImportSource" : "react"
     }), remarkRehypePlugin({
     }), ViteImageOptimizer(),
     sentryVitePlugin({
         org: "tony-mushah",
         project: "special-eureka",
-        telemetry : false
+        telemetry: false
     })],
     envPrefix: ["VITE_", "TAURI_"],
     server: {
@@ -35,7 +45,12 @@ export default defineConfig({
             allow: ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/bootstrap@5.2.3_@popperjs+core@2.11.6/node_modules/bootstrap/dist/css/", "../"]
         },
     },
-    appType : "spa",
+    resolve: {
+        alias: {
+            ...generateAliases()
+        }
+    },
+    appType: "spa",
     build: {
         // Tauri supports es2021
         target: ["es2021", "chrome100", "safari13"],
@@ -48,10 +63,10 @@ export default defineConfig({
             input: {
                 main: resolve(__dirname, "src/index.html"),
                 splashscreen: resolve(__dirname, "src/splashscreen.html")
-            }
+            },
         },
         "emptyOutDir": true,
     },
     root: "./src",
-    publicDir: "./public"
+    publicDir: "./public",
 });

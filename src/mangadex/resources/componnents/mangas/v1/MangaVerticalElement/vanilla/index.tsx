@@ -1,17 +1,15 @@
-import * as Chakra from "@chakra-ui/react";
 import { Manga } from "@mangadex/api/structures/Manga";
 import MangaContextMenu from "../../MangaContextMenu";
 import { PropsProvider } from "../../MangaElementDef/vanilla";
 import Image from "./Image";
 import Title from "./Title";
+import Layout from "./Layout";
 
 export default function MangaVerticalElement(props: {
     src: Manga,
     isRefetching?: boolean,
     refetch?: () => void
 }) {
-    const backgroundColor = Chakra.useColorModeValue("gray.100", "gray.900");
-    const backgroundColorOnRefecthing = Chakra.useColorModeValue("orange.100", "orange.900");
     return (
         <MangaContextMenu
             mangaId={props.src.get_id()}
@@ -20,31 +18,11 @@ export default function MangaVerticalElement(props: {
             <PropsProvider value={{
                 src: props.src
             }}>
-                <Chakra.LinkBox
-                    marginBottom={10}
-                    width={"fit-content"}
-                    backgroundColor={props.isRefetching == undefined ? backgroundColor : (props.isRefetching ? backgroundColorOnRefecthing : backgroundColor)}
-                    borderRadius={"10px"}
-                    border={"1px"}
-                    borderColor={"gray.200"}
-                    shadow={"md"}
-                >
-                    <Chakra.Center>
-                        <Chakra.Box
-                            display={
-                                {
-                                    base: "inline-block"
-                                }
-                            }
-                            width={"150px"}
-                        >
-                            <Image/>
-                            <Title/>
-                        </Chakra.Box>
-                    </Chakra.Center>
-                </Chakra.LinkBox>
+                <Layout isRefetching={props.isRefetching}>
+                    <Image />
+                    <Title />
+                </Layout>
             </PropsProvider>
-
         </MangaContextMenu>
     );
 }

@@ -9,8 +9,6 @@ export default function Description() {
         return (
             <Skeleton
                 height={"full"}
-                //borderTopLeftRadius={"10px"}
-                borderBottomRightRadius={"10px"}
             />
         );
     } else {

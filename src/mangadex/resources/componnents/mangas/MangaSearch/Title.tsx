@@ -24,9 +24,7 @@ export default function Title({onToggle}: {
                     value={title}
                     type="search"
                 />
-                <IconButton background={"gray.200"} _hover={{
-                    background: "gray.400"
-                }} aria-label="Filter" onClick={onToggle} icon={<RiFilterFill />} />
+                <IconButton colorScheme="gray" aria-label="Filter" onClick={onToggle} icon={<RiFilterFill />} />
             </HStack>
         </FormControl>
     );

@@ -80,14 +80,7 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                                     rowSpan={2}
                                     colSpan={4}
                                 >
-                                    <Chakra.Card
-                                        overflow={"hidden"}
-                                        variant={"outline"}
-                                        borderRadius={"10px"}
-                                        maxHeight={"130px"}
-                                    >
-                                        <Image />
-                                    </Chakra.Card>
+                                    <Image />
                                 </Chakra.GridItem>
                                 <Chakra.GridItem
                                     rowSpan={1}
@@ -99,16 +92,12 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                                     rowSpan={1}
                                     colSpan={8}
                                 >
-                                    <Chakra.Box>
-                                        <Chakra.Text
-                                            padding={0}
-                                            margin={0}
-                                            fontSize={"xs"}
-                                        >
-                                            <Publication />
-                                        </Chakra.Text>
-                                    </Chakra.Box>
-                                    <Description />
+                                    <Chakra.VStack alignItems={"start"}
+                                        spacing={"0"}
+                                    >
+                                        <Publication />
+                                        <Description />
+                                    </Chakra.VStack>
                                 </Chakra.GridItem>
                             </GridLayout>
                         </Chakra.Box>

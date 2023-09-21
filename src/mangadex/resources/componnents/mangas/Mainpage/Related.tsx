@@ -15,13 +15,13 @@ export function MangaRelated_Section(props: {
     src: Manga,
     enum: string
 }) {
-    const length = props.src.get_related_manga_byEnum_length(props.enum);
+    const length = React.useMemo(() => props.src.get_related_manga_byEnum_length(props.enum), [props.src, props.enum]);
     if (length == 0) {
         return (<React.Fragment/>);
     } else {
         return (
             <Chakra.Box>
-                <Chakra.Heading fontFamily={"inherit"}>{make_first_UpperCare(props.enum)}</Chakra.Heading>
+                <Chakra.Heading fontFamily={"inherit"}>{make_first_UpperCare(props.enum).replace("_", " ")}</Chakra.Heading>
                 <Chakra.Box>
                     <React.Suspense
                         fallback={
@@ -55,8 +55,7 @@ export function MangaRelated_Section(props: {
     }
 }
 
-export default function Related({ src }: RelatedProps) {
-    const to_use = src;
+export default function Related({ src : to_use }: RelatedProps) {
     return (
         <Chakra.VStack
             display={"block"}

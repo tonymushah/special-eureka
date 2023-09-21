@@ -6,6 +6,8 @@ import FullScreenOptionsProvider from "./FullScreenOptionsProvider";
 import FullScreenOptions from "./FullScreenOptions";
 import { useChapterFullscreen } from "../../../fullscreen/useChapterFullscreen";
 import { appWindow } from "@tauri-apps/api/window";
+import useChapterReadingModeOption from "../ChapterReadingMode/useChapterReadingModeOption";
+import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
 
 export default function ChapterFullScreen(props: React.PropsWithChildren<{
     chapter: Chapter
@@ -21,6 +23,7 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
         }
         t().then();
     }, [fullscreen.query.data]);
+    const { query : mode } = useChapterReadingModeOption();
     return (
         <React.Fragment>
             <ReactHotkeys
@@ -37,7 +40,7 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
             />
             <Chakra.Box
                 height={"100vh"}
-                overflow={"scroll"}
+                overflow={mode.data == ReadingMode.DoublePage || mode.data == ReadingMode.SinglePage ? "overflow" : "auto"}
                 onDoubleClick={() => {
                     fullscreen.toggle();
                 }}

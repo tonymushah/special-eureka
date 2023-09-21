@@ -10,6 +10,7 @@ export default function CoverImage() {
             <Image
                 src={coverQuery.data}
                 fallbackSrc={Mangadex_placeHolder}
+                height={"full"}
                 objectFit={"cover"}
             />
         );
@@ -18,6 +19,7 @@ export default function CoverImage() {
             <Image
                 src={Mangadex_cover_not_found}
                 fallbackSrc={Mangadex_placeHolder}
+                height={"full"}
                 objectFit={"cover"}
             />
         );
@@ -26,6 +28,7 @@ export default function CoverImage() {
             <Image
                 src={Mangadex_placeHolder}
                 fallbackSrc={Mangadex_placeHolder}
+                height={"full"}
                 objectFit={"cover"}
             />
         );
@@ -40,6 +43,7 @@ export default function CoverImage() {
             <Image
                 src={Mangadex_placeHolder}
                 fallbackSrc={Mangadex_placeHolder}
+                height={"full"}
                 objectFit={"cover"}
             />
         );

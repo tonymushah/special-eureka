@@ -31,7 +31,7 @@
     "build": "tauri build",
     "storybook-dev": "storybook dev -p 6239 --no-open",
     "build-storybook": "storybook build",
-    "tauri-storybook": "cd src-tauri && cargo run --package special-eureka --example storybook"
+    "tauri-storybook": "cargo run --manifest-path=./src-tauri/Cargo.toml --example=storybook"
   },
   "devDependencies": {
     "@chakra-ui/storybook-addon": "^5.0.0",
@@ -127,6 +127,7 @@
     "@sentry/vite-plugin": "^2.5.0",
     "@tanstack/react-query": "^4.29.19",
     "@tanstack/react-query-devtools": "^4.29.19",
+    "@tanstack/react-virtual": "3.0.0-beta.60",
     "@tauri-apps/api": "^1.4.0",
     "@textea/json-viewer": "^2.17.2",
     "@types/mdx": "^2.0.5",
@@ -160,6 +161,7 @@
     "million": "^2.5.11",
     "minidenticons": "^2.0.2",
     "optics-ts": "^2.4.0",
+    "preact": "^10.17.1",
     "prop-types": "^15.8.1",
     "protobufjs": "^7.2.4",
     "qs": "^6.11.2",

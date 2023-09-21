@@ -30,7 +30,6 @@ export default function UserFeed(props: {
                 {(query) => (
                     <InfiniteQueryConsumer<Chapter> query={query}>
                         {(collections) => {
-                            console.log(collections);
                             return (
                                 <React.Fragment>
                                     {

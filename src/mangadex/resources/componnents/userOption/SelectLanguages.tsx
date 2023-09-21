@@ -16,19 +16,21 @@ function Lang_Comp({ lang }: {
                 handleInput(lang);
             }}
         >
-            <Chakra.HStack spacing={"5px"}>
-                <Chakra.Checkbox isChecked={isIn(lang)} isDisabled/>
-                {
+            <Chakra.Button
+                leftIcon={
                     lang.get_flag_icon() !== undefined ? (
                         <Flag_icons locale={lang.get_flag_icon()} />
                     ) : (
-                        <></>
+                        <React.Fragment />
                     )
                 }
-                <Chakra.Text as={"span"} fontFamily={"inherit"}>{
+                colorScheme={isIn(lang) ? "green" : "gray"}
+                variant={isIn(lang) ? "solid" : "outline"}
+            >
+                {
                     lang.get_name()
-                }</Chakra.Text>
-            </Chakra.HStack>
+                }
+            </Chakra.Button>
         </Chakra.WrapItem>
     );
 }
@@ -40,7 +42,7 @@ export default function SelectLanguages() {
         return (
             <React.Fragment>
                 <Chakra.Box width={"full"}>
-                    <Chakra.Box color={"black"} onClick={onToggle}>
+                    <Chakra.Box onClick={onToggle}>
                         {
                             query.data.length == 0 ? (
                                 <Chakra.Text as={"span"} fontFamily={"inherit"}>All Languages</Chakra.Text>
@@ -56,7 +58,7 @@ export default function SelectLanguages() {
                                                 icon={value.get_flag_icon() !== undefined ? (
                                                     <Flag_icons locale={value.get_flag_icon()} />
                                                 ) : (
-                                                    <></>
+                                                    <React.Fragment/>
                                                 )}
                                             />
                                         ))
@@ -68,17 +70,19 @@ export default function SelectLanguages() {
                     <LangConsumer>
                         {(all_language) => (
                             <Chakra.Collapse in={isOpen}>
-                                <Chakra.Wrap maxH={"sm"} overflow={"scroll"} color={"black"}>
+                                <Chakra.Wrap maxH={"sm"} overflow={"scroll"}>
+                                    <Chakra.WrapItem >
+                                        <Chakra.Button colorScheme="red" onClick={() => {
+                                            clear();
+                                        }}>
+                                            Clear All
+                                        </Chakra.Button>
+                                    </Chakra.WrapItem>
                                     {
                                         all_language.map((lang) => (
                                             <Lang_Comp lang={lang} key={JSON.stringify(lang)} />
                                         ))
                                     }
-                                    <Chakra.WrapItem onClick={() => {
-                                        clear();
-                                    }} color={"red"}>
-                                        Clear All
-                                    </Chakra.WrapItem>
                                 </Chakra.Wrap>
                             </Chakra.Collapse>
                         )}

@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import ChakraContainer from "../../layout/Container";
-import { RefreshAndBackButtons } from "./RefreshAndBackButtons";
+import { RefreshReportAndBackButtons } from "./RefreshAndBackButtons";
 
 export function ShowErrorDefault({ error }: {
     error: Error;
@@ -26,7 +26,7 @@ export function ShowErrorDefault({ error }: {
                             <Chakra.Text>{error.message}</Chakra.Text>
                         </Chakra.Box>
                         <Chakra.Box>
-                            <RefreshAndBackButtons />
+                            <RefreshReportAndBackButtons error={error} />
                         </Chakra.Box>
                     </Chakra.VStack>
                 </Chakra.AlertDescription>

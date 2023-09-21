@@ -28,7 +28,6 @@ export default function Side_bar() {
                 keyName="ctrl+p"
                 onKeyDown={() => {
                     toggleSidebar();
-                    console.log("ctrl+p");
                 }}
             />
             <Hotkeys
