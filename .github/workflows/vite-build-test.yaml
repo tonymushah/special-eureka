@@ -43,6 +43,8 @@ jobs:
               run: |
                   sudo apt-get update
                   sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+            - name : Create a fake dist dir
+              run : mkdir dist
             - name : Clippy checks
               run: |
                   cargo clippy --manifest-path=./src-tauri/Cargo.toml
