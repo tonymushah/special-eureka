@@ -6,6 +6,7 @@ import { CollectionComponnent_WithQuery } from "../../../Collection/Collection";
 import MangadexSpinner from "../../../kuru_kuru/MangadexSpinner";
 import MangaPage_Cover from "../covers";
 import { useState } from "./useState";
+import { Order } from "@mangadex/api/internal/Utils";
 
 //const Cover_Plus_Zoom = React.lazy(() => import("../../covers/utils/Cover_Plus_Zoom"));
 
@@ -24,6 +25,7 @@ export function Covers_Manga(props: MangaPageProps) {
                     mangaIDs: [
                         props.src.get_id()
                     ],
+                    order : new Order().set_volume("asc"),
                     client: client
                 });
             }}
@@ -47,9 +49,7 @@ export function Covers_Manga(props: MangaPageProps) {
             }
         >
             {(getted_collection) => (
-                <Chakra.Wrap>
-                    <MangaPage_Cover covers={getted_collection.get_data()}/>
-                </Chakra.Wrap>
+                <MangaPage_Cover covers={getted_collection.get_data()} />
             )}
         </CollectionComponnent_WithQuery>
     );

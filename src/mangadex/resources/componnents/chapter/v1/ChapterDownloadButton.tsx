@@ -10,20 +10,18 @@ import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 
 export default function ChapterDownloadButton(props: {
     chapter: Chapter,
-    downloadMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>,
-    deleteMutation?: UseQueryResult<ChapterDeleteMutation_data, unknown>,
     hstackProps?: Chakra.StackProps
 }) {
     const { queryKey, query } = get_ChapterbyId({
         id: props.chapter.get_id()
     });
-    const downloadMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = props.downloadMutation ?? useChapterDownloadMutation({
+    const downloadMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = useChapterDownloadMutation({
         chapID: props.chapter.get_id(),
         toInvalidate: [
             queryKey
         ]
     });
-    const deleteMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = props.deleteMutation ?? useChapterDeleteMutation({
+    const deleteMutation: UseQueryResult<ChapterDeleteMutation_data, unknown> = useChapterDeleteMutation({
         chapID: props.chapter.get_id(),
         toInvalidate: [
             queryKey

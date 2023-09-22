@@ -5,6 +5,7 @@ import { QueryKey, useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import MangaTitle from "../../componnents/mangas/v1/MangaTitle";
 import { ChapterDeleteMutation_data } from "./ChapterDeleteMutation_data";
+import {} from "./index";
 
 
 export function useChapterDownloadMutation(props: {
