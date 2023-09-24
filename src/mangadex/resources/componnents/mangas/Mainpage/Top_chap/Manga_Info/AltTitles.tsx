@@ -5,9 +5,6 @@ import { Await } from "react-router-dom";
 import MangadexSpinner from "../../../../kuru_kuru/MangadexSpinner";
 import { useManga } from "@mangadex/pages/manga";
 
-
-
-
 export function AltTitles() {
     const { toUse: src } = useManga();
     return (
@@ -22,7 +19,7 @@ export function AltTitles() {
                         return (
                             <React.Fragment>
                                 {getted.map((element) => (
-                                    <Chakra.Box key={element.get_data()}>
+                                    <Chakra.HStack key={element.get_data()}>
                                         <Chakra.Tooltip
                                             hasArrow
                                             label={element.get_language().get_name()}
@@ -30,8 +27,10 @@ export function AltTitles() {
                                             <span className={"fi fi-" + element.get_language().get_flag_icon().toLowerCase()}></span>
                                         </Chakra.Tooltip>
                                         &nbsp;
-                                        {element.get_data()}
-                                    </Chakra.Box>
+                                        <Chakra.Text>
+                                            {element.get_data()}
+                                        </Chakra.Text>
+                                    </Chakra.HStack>
                                 ))}
                             </React.Fragment>
                         );
