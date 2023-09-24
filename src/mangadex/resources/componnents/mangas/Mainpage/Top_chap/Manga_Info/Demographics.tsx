@@ -8,29 +8,31 @@ export function Demographics() {
     const demographics = React.useMemo(() => src.get_demographic(), [src]);
     const gray500 = Chakra.useToken("colors", "gray.500");
     return (
-        <Chakra.WrapItem>
+        <React.Fragment>
             {demographics != null ? (
-                <Chakra.Box>
-                    <Chakra.Heading fontFamily={"inherit"} size={"md"}>Demographics</Chakra.Heading>
-                    <Chakra.Wrap>
-                        <Chakra.WrapItem>
-                            <Chakra.Button
-                                style={{
-                                    fontWeight: "800"
-                                }}
-                                boxShadow={`0px 0px 5px ${gray500}`}
-                                variant={"solid"} 
-                                colorScheme={"gray"} 
-                                size="sm"
-                            >
-                                {make_first_UpperCare(demographics)}
-                            </Chakra.Button>
-                        </Chakra.WrapItem>
-                    </Chakra.Wrap>
-                </Chakra.Box>
+                <Chakra.WrapItem>
+                    <Chakra.Box>
+                        <Chakra.Heading fontFamily={"inherit"} size={"md"}>Demographics</Chakra.Heading>
+                        <Chakra.Wrap>
+                            <Chakra.WrapItem>
+                                <Chakra.Button
+                                    style={{
+                                        fontWeight: "800"
+                                    }}
+                                    boxShadow={`0px 0px 5px ${gray500}`}
+                                    variant={"solid"}
+                                    colorScheme={"gray"}
+                                    size="sm"
+                                >
+                                    {make_first_UpperCare(demographics)}
+                                </Chakra.Button>
+                            </Chakra.WrapItem>
+                        </Chakra.Wrap>
+                    </Chakra.Box>
+                </Chakra.WrapItem>
             ) : (
                 <React.Fragment />
             )}
-        </Chakra.WrapItem>
+        </React.Fragment>
     );
 }

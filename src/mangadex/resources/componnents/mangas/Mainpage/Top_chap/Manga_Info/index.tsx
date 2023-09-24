@@ -22,7 +22,7 @@ export default function Manga_Info() {
         >
             <CollapseHeight>
                 <Chakra.VStack alignItems={"start"}>
-                    <Chakra.Wrap>
+                    <Chakra.Wrap spacing={5}>
                         <Author_Artists />
                         <Genre />
                         <Theme />
