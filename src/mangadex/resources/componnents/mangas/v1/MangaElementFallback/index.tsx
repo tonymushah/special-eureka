@@ -10,6 +10,8 @@ export default function MangaElementFallback() {
             backgroundColor={backgroundColor}
             borderRadius={"10px"}
             height={"160px"}
+            borderColor={"#cacaca"}
+            border={"1px"}
         >
             <Chakra.Center>
                 <Chakra.Box

@@ -12,17 +12,15 @@ export function LatestChapter() {
     const last_volume = React.useMemo(() => src.get_last_volume(), [src]);
     const last_chapter = React.useMemo(() => src.get_last_chapter(), [src]);
     return (
-        <Chakra.WrapItem>
-            <Chakra.Box>
-                {status == MangaStatus.completed ? (
-                    <React.Fragment>
-                        <Chakra.Text fontWeight={"bold"}>Latest Chapter : Volume {last_volume ?? "none"} Chapter {last_chapter ?? "none"}
-                        </Chakra.Text>
-                    </React.Fragment>
-                ) : (
-                    <React.Fragment />
-                )}
-            </Chakra.Box>
-        </Chakra.WrapItem>
+        <Chakra.Box>
+            {status == MangaStatus.completed ? (
+                <React.Fragment>
+                    <Chakra.Text fontWeight={"bold"}>Latest Chapter : Volume {last_volume ?? "none"} Chapter {last_chapter ?? "none"}
+                    </Chakra.Text>
+                </React.Fragment>
+            ) : (
+                <React.Fragment />
+            )}
+        </Chakra.Box>
     );
 }

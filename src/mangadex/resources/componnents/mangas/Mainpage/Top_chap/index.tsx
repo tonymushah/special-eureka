@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import "@commons-res/flag-icons/less/flag-icons.less";
-import { Chapters } from "./Chapters";
-import { Description } from "./Description";
-import Manga_Info from "./Manga_Info";
+import { Description } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Description";
+import Manga_Info from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info";
+import { Chapters } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Chapters";
 
 export function Top_Chaps() {
     return (
@@ -13,19 +13,14 @@ export function Top_Chaps() {
             <Chakra.Grid templateColumns={"repeat(12, 1fr)"} className="mg-top-content">
                 <Chakra.GridItem
                     colSpan={{
-                        base: 12,
-                        md: 4,
-                        lg: 4
+                        base: 12
                     }}
                 >
                     <Manga_Info />
                 </Chakra.GridItem>
                 <Chakra.GridItem
                     colSpan={{
-                        base: 12,
-                        sm: 12,
-                        md: 8,
-                        lg: 8
+                        base: 12
                     }}
                     display={{
                         sm: "block"

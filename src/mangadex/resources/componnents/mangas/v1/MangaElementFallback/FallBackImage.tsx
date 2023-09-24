@@ -5,7 +5,7 @@ export function FallBackImage() {
         <Chakra.Skeleton
             borderTopLeftRadius={"10px"}
             borderBottomLeftRadius={"10px"}
-            height={"160px"} 
+            height={"158px"} 
             cursor={"wait"}
         />
     );

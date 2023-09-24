@@ -1,14 +1,14 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Author_Artists } from "./Author_Artists";
-import { Genre } from "./Genre";
-import { Theme } from "./Theme";
-import { Format } from "./Format";
-import { Content } from "./Content";
-import { Demographics } from "./Demographics";
-import { Links } from "./Links";
-import { AltTitles } from "./AltTitles";
-import { LatestChapter } from "./LatestChapter";
+import { Author_Artists } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Author_Artists";
+import { Genre } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Genre";
+import { Theme } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Theme";
+import { Format } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Format";
+import { Content } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Content";
+import { Demographics } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Demographics";
+import { Links } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/Links";
+import { AltTitles } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/AltTitles";
+import { LatestChapter } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info/LatestChapter";
 
 const CollapseHeight = React.lazy(() => import("../../top_chap/CollapseHeight"));
 
@@ -21,19 +21,21 @@ export default function Manga_Info() {
             </Chakra.Alert>}
         >
             <CollapseHeight>
-                <Chakra.Wrap spacingX={{
-                    lg: 2
-                }}>
-                    <Author_Artists />
-                    <Genre />
-                    <Theme />
-                    <Format />
-                    <Content />
-                    <Demographics />
-                    <Links />
+                <Chakra.VStack alignItems={"start"}>
+                    <Chakra.Wrap spacingX={{
+                        lg: 2
+                    }}>
+                        <Author_Artists />
+                        <Genre />
+                        <Theme />
+                        <Format />
+                        <Content />
+                        <Demographics />
+                        <Links />
+                    </Chakra.Wrap>
                     <AltTitles />
                     <LatestChapter />
-                </Chakra.Wrap>
+                </Chakra.VStack>
             </CollapseHeight>
         </React.Suspense>
     );

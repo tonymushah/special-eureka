@@ -1,11 +1,12 @@
 import * as Chakra from "@chakra-ui/react";
 
 export default function MangaVerticalElementFallback() {
+    const backgroundColor = Chakra.useColorModeValue("gray.100", "gray.800");
     return (
         <Chakra.Box
             cursor={"wait"}
             width={"fit-content"}
-            backgroundColor={"gray.100"}
+            backgroundColor={backgroundColor}
             borderRadius={"10px"}
             boxShadow={"md"}
         >

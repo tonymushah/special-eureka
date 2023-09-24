@@ -17,7 +17,7 @@ export default function MangaElementDef(props: {
                 scale: 1.04
             }}
             style={{
-                width : "fit-content"
+                width: "fit-content"
             }}
         >
             <ErrorBoundary>
