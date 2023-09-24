@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { getMangaDexPath } from "@mangadex/index";
-import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import { get_manga_description } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
+import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import React from "react";
 import { useMangaTitle } from "../../MangaTitle";
 import Description from "./Description";
@@ -64,6 +64,7 @@ export function useProps_manga_description() {
 
 export default function MangaElementDef_without_Context_Menu(props: Props) {
     return (
+
         <Chakra.Box
             display={"flex"}
             width={"min-content"}
@@ -77,7 +78,7 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                         >
                             <GridLayout>
                                 <Chakra.GridItem
-                                    rowSpan={2}
+                                    rowSpan={3}
                                     colSpan={4}
                                 >
                                     <Image />
@@ -92,12 +93,13 @@ export default function MangaElementDef_without_Context_Menu(props: Props) {
                                     rowSpan={1}
                                     colSpan={8}
                                 >
-                                    <Chakra.VStack alignItems={"start"}
-                                        spacing={"0"}
-                                    >
-                                        <Publication />
-                                        <Description />
-                                    </Chakra.VStack>
+                                    <Publication />
+                                </Chakra.GridItem>
+                                <Chakra.GridItem
+                                    rowSpan={1}
+                                    colSpan={8}
+                                >
+                                    <Description />
                                 </Chakra.GridItem>
                             </GridLayout>
                         </Chakra.Box>

@@ -1,7 +1,7 @@
-import * as Chakra from "@chakra-ui/react";
 import { Manga } from "@mangadex/api/structures/Manga";
 import Vanilla from "./vanilla";
 
+import { motion } from "framer-motion";
 import MangaContextMenu from "../MangaContextMenu";
 import ErrorBoundary from "./error";
 
@@ -12,9 +12,13 @@ export default function MangaElementDef(props: {
     refetch?: () => void
 }) {
     return (
-        <Chakra.Box
-            display={"flex"}
-            width={"min-content"}
+        <motion.div
+            whileHover={{
+                scale: 1.04
+            }}
+            style={{
+                width : "fit-content"
+            }}
         >
             <ErrorBoundary>
                 <MangaContextMenu
@@ -27,6 +31,6 @@ export default function MangaElementDef(props: {
                     />
                 </MangaContextMenu>
             </ErrorBoundary>
-        </Chakra.Box>
+        </motion.div >
     );
 }

@@ -9,7 +9,7 @@ export default function Laoyut({ children, isRefetching }: React.PropsWithChildr
     const backgroundColor_ = React.useMemo(() => isRefetching == undefined ? backgroundColor : (isRefetching ? backgroundColorOnRefecthing : backgroundColor), [isRefetching, backgroundColor, backgroundColorOnRefecthing]);
     return (
         <Chakra.LinkBox
-            marginBottom={10}
+            marginBottom={3}
             width={"fit-content"}
             backgroundColor={backgroundColor_}
             borderRadius={"10px"}

@@ -8,7 +8,7 @@ export default function Laoyut({ children }: React.PropsWithChildren) {
         <Box
             marginBottom={2}
             width={"min-content"}
-            height={"130px"}
+            height={"160px"}
             textAlign={"start"}
             boxSize={"min-content"}
             borderStyle={"solid"}

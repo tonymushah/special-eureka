@@ -10,7 +10,7 @@ export default function GridLayout({ children }: React.PropsWithChildren) {
             columnGap={3}
             rowGap={1}
             paddingRight={"10px"}
-            height={"130px"}
+            height={"160px"}
         >
             {
                 children

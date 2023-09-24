@@ -23,20 +23,22 @@ export default function Body() {
     const client = useHTTPClient();
     return (
         <Chakra.CardBody marginTop={"0px"}>
-            <Chakra.HStack spacing={"5px"}>
-                <Title />
-                <IsPingable
-                    client={client}
-                    onError={OnError}
-                    onSuccess={OnSuccess}
-                    onLoading={<Chakra.Skeleton height={"10px"} width={"20px"} />}
-                />
-                <Publication />
-            </Chakra.HStack>
-            <Chakra.Box textAlign={"start"}>
-                <Tags />
-                <Description />
-            </Chakra.Box>
+            <Chakra.VStack alignItems={"start"}>
+                <Chakra.HStack spacing={"5px"}>
+                    <Title />
+                    <IsPingable
+                        client={client}
+                        onError={OnError}
+                        onSuccess={OnSuccess}
+                        onLoading={<Chakra.Skeleton height={"10px"} width={"20px"} />}
+                    />
+                    <Publication />
+                </Chakra.HStack>
+                <Chakra.Box textAlign={"start"}>
+                    <Tags />
+                    <Description />
+                </Chakra.Box>
+            </Chakra.VStack>
         </Chakra.CardBody>
     );
 }
