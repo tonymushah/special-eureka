@@ -6,6 +6,7 @@ import randomInteger from "random-int";
 import { useHomeRecentlyPopular } from "..";
 import Title from "../Title";
 import { Slide } from "./Slide";
+import { SwiperSlide } from "swiper/react";
 
 export function OnSuccess() {
     const query = useHomeRecentlyPopular();
@@ -22,7 +23,10 @@ export function OnSuccess() {
                         loop
                         modules={[Navigation, Keyboard, Autoplay]}
                     >
-                        {query.data.get_data().map((value, index) => <Slide key={value.get_id()} value={value} index={index}/>)}
+                        {query.data.get_data().map((value, index) => 
+                        <SwiperSlide key={value.get_id()}>
+                            <Slide value={value} index={index}/>
+                        </SwiperSlide> )}
                     </Swiper>
                 </Chakra.Box>
             </Chakra.Box>

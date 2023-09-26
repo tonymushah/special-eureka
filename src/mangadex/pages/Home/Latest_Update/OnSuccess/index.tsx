@@ -3,7 +3,6 @@ import React from "react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { Title } from "../Title";
 import { useHomeLatest_Updates } from "..";
-import chapter from "@mangadex/pages/chapter/ReadingMode/SinglePage/tests/images/250f091f-4166-4831-9f45-89ff54bf433b";
 import { LatestUpdateFeedElement } from "./LatestUpdateFeedElement";
 
 export function OnSuccess() {
@@ -14,7 +13,7 @@ export function OnSuccess() {
                 <Title />
                 <Chakra.Wrap>
                     {query.data.get_data().map((value: Chapter) => (
-                        <LatestUpdateFeedElement value={chapter} key={value.get_id()}/>
+                        <LatestUpdateFeedElement value={value} key={value.get_id()}/>
                     ))}
                 </Chakra.Wrap>
             </Chakra.Box>

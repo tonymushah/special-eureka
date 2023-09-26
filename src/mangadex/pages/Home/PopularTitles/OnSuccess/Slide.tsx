@@ -2,7 +2,6 @@ import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaEleme
 import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { SwiperSlide } from "swiper/react";
 import { Heading } from "@chakra-ui/react";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
@@ -21,7 +20,7 @@ export function Slide({
         });
     }, []);
     return (
-        <SwiperSlide>
+        <React.Fragment>
             {index == 0 ? (
                 <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{index + 1}</Heading>
             ) : (
@@ -32,6 +31,6 @@ export function Slide({
             >
                 <MangaPopularElement src={value} />
             </React.Suspense>
-        </SwiperSlide>
+        </React.Fragment>
     );
 }
