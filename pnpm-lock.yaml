@@ -159,8 +159,8 @@ dependencies:
     specifier: ^4.2.0
     version: 4.2.0
   iso-639-1:
-    specifier: ^2.1.15
-    version: 2.1.15
+    specifier: ^3.0.0
+    version: 3.1.0
   javascript-time-ago:
     specifier: ^2.5.9
     version: 2.5.9
@@ -10916,8 +10916,8 @@ packages:
     resolution: {integrity: sha512-5G+RqnIYIbgQwNmL3bslEbG0apSPJqu4g3wTaQOOYx2VANv1m6I4PM1KtlvcG5OubW1QmDNpk6icwkS7B+lT1g==}
     dev: false
 
-  /iso-639-1@2.1.15:
-    resolution: {integrity: sha512-7c7mBznZu2ktfvyT582E2msM+Udc1EjOyhVRE/0ZsjD9LBtWSm23h3PtiRh2a35XoUsTQQjJXaJzuLjXsOdFDg==}
+  /iso-639-1@3.1.0:
+    resolution: {integrity: sha512-rWcHp9dcNbxa5C8jA/cxFlWNFNwy5Vup0KcFvgA8sPQs9ZeJHj/Eq0Y8Yz2eL8XlWYpxw4iwh9FfTeVxyqdRMw==}
     engines: {node: '>=6.0'}
     dev: false
 
