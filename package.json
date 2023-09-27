@@ -168,7 +168,7 @@
     "react-timeago": "^7.1.0",
     "react-use": "^17.4.0",
     "react-viewer": "^3.2.2",
-    "react-zoom-pan-pinch": "^2.6.1",
+    "react-zoom-pan-pinch": "^3.0.0",
     "sass": "^1.63.6",
     "storybook-addon-react-router-v6": "^1.0.2",
     "swiper": "^9.4.1",
