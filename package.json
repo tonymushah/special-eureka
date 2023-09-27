@@ -135,7 +135,7 @@
     "file-extension": "^4.0.5",
     "flag-icons": "^6.7.0",
     "formik": "^2.4.2",
-    "framer-motion": "^6.5.1",
+    "framer-motion": "^10.0.0",
     "iso-3166": "^4.2.0",
     "iso-639-1": "^2.1.15",
     "javascript-time-ago": "^2.5.9",
