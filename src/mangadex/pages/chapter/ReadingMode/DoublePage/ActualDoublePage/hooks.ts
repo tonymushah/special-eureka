@@ -7,6 +7,7 @@ import { HotkeyCallback } from "react-hotkeys-hook";
 // import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 import useDoublePageReadingState from "./useDoublePageReadingState";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
+import { useChapterNavigation } from "../../utils";
 
 export type DoublePageImageQueryData = {
     current: number,
@@ -19,6 +20,7 @@ export function query_key(chapter: Chapter): QueryKey {
 
 export function useDoublePageReadingStateMutation(chapter: Chapter) {
     const queryClient = useQueryClient();
+
     return useMutation({
         async mutationFn(input_: number) {
             const query_key_ = query_key(chapter);
@@ -37,40 +39,54 @@ export function useDoublePageReadingStateMutation(chapter: Chapter) {
 }
 
 export default function useState({ images }: ActualDoublePageProps) {
+
     const data = useDoublePageProps();
+
+    const { navigateToNext, navigateToPrevious } = useChapterNavigation(data.chapter);
+
     const [, startTransition] = React.useTransition();
+
     const pageQuery = useDoublePageReadingState({
         data
     });
-    // const rtlMode = useStoryBookRTLSwipperMode();
+
     const rtlMode = useRTLSwipperMode();
+
     const page = React.useMemo(() => {
         return pageQuery.data.current;
     }, [pageQuery.data]);
+
     const mutation = useDoublePageReadingStateMutation(data.chapter);
+
     const setPage = React.useCallback((input: number) => {
         startTransition(() => {
             mutation.mutate(input);
         });
     }, [page]);
+
     const onNext = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
             if (page >= 0 && page < (images.length - 1)) {
                 setPage(page + 1);
+            } else if (page >= data.images.length - 1) {
+                navigateToNext();
             }
         });
     }, [page]);
+
     const onPrevious = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
             if (page > 0 && page < images.length) {
                 setPage(page - 1);
+            } else if (page <= 0) {
+                navigateToPrevious();
             }
         });
     }, [page]);
+
     return {
         page,
         onNext: (rtlMode.query.data == true ? onPrevious : onNext),
         onPrevious: (rtlMode.query.data == true ? onNext : onPrevious)
     };
 }
-

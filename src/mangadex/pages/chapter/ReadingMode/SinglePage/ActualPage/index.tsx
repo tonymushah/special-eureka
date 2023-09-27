@@ -1,14 +1,8 @@
-import { Image } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
-import { AnimatePresence, Transition, motion } from "framer-motion";
+import React from "react";
 import ChapterImage from "../Image";
 import { useSinglePageReadingHooks } from "./hooks";
-
-const transition: Transition = {
-    type: "tween",
-    ease: "easeInOut",
-    duration: 0.5
-};
 
 export default function ActualPage({ data }: {
     data: ChapterPage_outlet_context,
@@ -16,29 +10,19 @@ export default function ActualPage({ data }: {
 }) {
     const { page, onNext, onPrevious } = useSinglePageReadingHooks({ data });
     return (
-        <AnimatePresence>
+        <React.Fragment>
             {data.images.map((url, index) => {
                 if (page == index) {
                     return (
-                        <motion.div
+                        <Box
                             key={url}
-                            initial={{
-                                opacity: 0
-                            }}
-                            animate={{
-                                opacity: 1
-                            }}
-                            exit={{
-                                opacity: 0
-                            }}
-                            transition={transition}
                         >
                             <ChapterImage
                                 src={url}
                                 onNext={onNext}
                                 onPrevious={onPrevious}
                             />
-                        </motion.div>
+                        </Box>
                     );
                 } else {
                     return (
@@ -51,6 +35,6 @@ export default function ActualPage({ data }: {
                     );
                 }
             })}
-        </AnimatePresence>
+        </React.Fragment>
     );
 }

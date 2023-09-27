@@ -1,7 +1,9 @@
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import { useProps_manga_page_cover_art_image } from ".";
-import { Skeleton, Image } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
+
+import { FallBackImage } from "../../MangaElementFallback/FallBackImage";
 
 export default function CoverImage() {
     const coverQuery = useProps_manga_page_cover_art_image();
@@ -9,7 +11,7 @@ export default function CoverImage() {
         return (
             <Image
                 src={coverQuery.data}
-                fallbackSrc={Mangadex_placeHolder}
+                fallback={<FallBackImage/>}
                 height={"full"}
                 objectFit={"cover"}
             />
@@ -18,7 +20,7 @@ export default function CoverImage() {
         return (
             <Image
                 src={Mangadex_cover_not_found}
-                fallbackSrc={Mangadex_placeHolder}
+                fallback={<FallBackImage/>}
                 height={"full"}
                 objectFit={"cover"}
             />
@@ -27,22 +29,20 @@ export default function CoverImage() {
         return (
             <Image
                 src={Mangadex_placeHolder}
-                fallbackSrc={Mangadex_placeHolder}
+                fallback={<FallBackImage/>}
                 height={"full"}
                 objectFit={"cover"}
             />
         );
     } else if (coverQuery.isLoading) {
         return (
-            <Skeleton
-                height={"full"}
-            />
+            <FallBackImage/>
         );
     } else {
         return (
             <Image
                 src={Mangadex_placeHolder}
-                fallbackSrc={Mangadex_placeHolder}
+                fallback={<FallBackImage/>}
                 height={"full"}
                 objectFit={"cover"}
             />

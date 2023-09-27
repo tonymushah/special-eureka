@@ -1,14 +1,8 @@
 import { Box } from "@chakra-ui/react";
-import { AnimatePresence, Transition, motion } from "framer-motion";
-import { DoublePageImageInput } from "../hooks/useDoublePageImageQuery";
+import React from "react";
 import DoublePageImage from "../Image";
+import { DoublePageImageInput } from "../hooks/useDoublePageImageQuery";
 import useState from "./hooks";
-
-const transition: Transition = {
-    type: "tween",
-    ease: "easeInOut",
-    duration: 0.5
-};
 
 export type ActualDoublePageProps = {
     images: DoublePageImageInput[];
@@ -19,34 +13,29 @@ export default function ActualDoublePage({ images }: ActualDoublePageProps) {
         images
     });
     return (
-        <AnimatePresence>
+        <React.Fragment>
             {
                 images.map((image, index) => {
                     if (index == page) {
                         return (
-                            <motion.div initial={{
-                                opacity: 0
-                            }}
-                                animate={{
-                                    opacity: 1
-                                }}
-                                exit={{
-                                    opacity: 0
-                                }}
-                                transition={transition} key={JSON.stringify(image)}
+                            <Box
+                                key={JSON.stringify(image)}
                             >
                                 <DoublePageImage src={image} onNext={onNext} onPrevious={onPrevious} />
-                            </motion.div>
+                            </Box>
                         );
                     } else {
                         return (
-                            <Box display={"none"} key={JSON.stringify(image)}>
+                            <Box
+                                display={"none"}
+                                key={JSON.stringify(image)}
+                            >
                                 <DoublePageImage src={image} onNext={onNext} onPrevious={onPrevious} />
                             </Box>
                         );
                     }
                 })
             }
-        </AnimatePresence>
+        </React.Fragment>
     );
 }

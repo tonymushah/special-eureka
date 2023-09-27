@@ -5,27 +5,30 @@ import { Await } from "react-router-dom";
 import { TagRow } from "../../../Mainpage/boutons/tag_boutons";
 import { useManga } from "@mangadex/pages/manga";
 
-
-
-
 export function Theme() {
     const { toUse: src } = useManga();
     return (
-        <Chakra.WrapItem>
-            <React.Fragment>
-                <React.Suspense fallback={<Chakra.Alert status="loading" variant="left-accent">
-                    <Chakra.AlertIcon />
-                    <Chakra.AlertTitle>Loading Theme...</Chakra.AlertTitle>
-                </Chakra.Alert>}>
-                    <Await
-                        resolve={src.get_async_theme()}
-                        errorElement={<React.Fragment>
-                        </React.Fragment>}
-                    >
-                        {(getted: Array<Tag>) => (<TagRow title="Theme" src={getted} />)}
-                    </Await>
-                </React.Suspense>
-            </React.Fragment>
-        </Chakra.WrapItem>
+        <React.Fragment>
+            <React.Suspense fallback={
+                <Chakra.WrapItem>
+                    <Chakra.Alert status="loading" variant="left-accent">
+                        <Chakra.AlertIcon />
+                        <Chakra.AlertTitle>Loading Theme...</Chakra.AlertTitle>
+                    </Chakra.Alert>
+                </Chakra.WrapItem>
+            }>
+                <Await
+                    resolve={src.get_async_theme()}
+                    errorElement={<React.Fragment/>}
+                >
+                    {(getted: Array<Tag>) => (
+                        <Chakra.WrapItem>
+                            <TagRow title="Theme" src={getted} />
+                        </Chakra.WrapItem>
+                    )}
+                </Await>
+            </React.Suspense>
+        </React.Fragment>
+        
     );
 }

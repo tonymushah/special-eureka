@@ -2,7 +2,7 @@ import { Alert, AlertIcon, AlertTitle, Skeleton, Wrap, WrapItem } from "@chakra-
 import { Author } from "@mangadex/api/structures/Author";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { get_manga_page_authors_artists } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_authors_artists";
-import { AuthorCol } from "../boutons/author_boutons";
+import { AuthorCol } from "../../boutons/author_boutons";
 
 function Authors(props : {
     src : Manga

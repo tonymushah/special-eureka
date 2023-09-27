@@ -16,16 +16,24 @@ export function Links() {
     }, [src]);
     return (
         <React.Fragment>
-            <Chakra.WrapItem>
-                <React.Fragment>
-                    {links == null ? (<React.Fragment />) : (<LinksRow src={links.read_or_buy()} title="Read or Buy" />)}
-                </React.Fragment>
-            </Chakra.WrapItem>
-            <Chakra.WrapItem>
-                <React.Fragment>
-                    {links == null ? (<React.Fragment />) : (<LinksRow src={links.track()} title="Track" />)}
-                </React.Fragment>
-            </Chakra.WrapItem>
+            <React.Fragment>
+                {links == null ? (
+                    <React.Fragment />
+                ) : (
+                    <Chakra.WrapItem>
+                        <LinksRow src={links.read_or_buy()} title="Read or Buy" />
+                    </Chakra.WrapItem>
+                )}
+            </React.Fragment>
+            <React.Fragment>
+                {links == null ? (
+                    <React.Fragment />
+                ) : (
+                    <Chakra.WrapItem>
+                        <LinksRow src={links.track()} title="Track" />
+                    </Chakra.WrapItem>
+                )}
+            </React.Fragment>
         </React.Fragment>
     );
 }

@@ -5,7 +5,7 @@ import CoverImageByCoverID from "@mangadex/resources/componnents/covers/v1/Cover
 export default function Cover() {
     const props_ = useProps();
     const card_maxHeight: ResponsiveValue<string> = {
-        base: "10em"
+        base: "11em"
     };
     return (
         <CoverImageByCoverID coverID={props_.src.get_cover_art_id()} isThumbail size={512} image_props={{
