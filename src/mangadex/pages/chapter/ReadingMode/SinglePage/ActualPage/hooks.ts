@@ -1,76 +1,59 @@
-import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { useMangaDexPath } from "@mangadex/index";
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import useChapterPages from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/useChapterPages";
-import { get_aggregate_query } from "@mangadex/resources/hooks/AgreggateStateHooks";
-//import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
-import React, { startTransition } from "react";
+import React from "react";
 import { HotkeyCallback } from "react-hotkeys-hook";
-import { useNavigate } from "react-router";
+import { useChapterNavigation } from "../../utils";
 
 export function useSinglePageReadingHooks({ data, startPage }: {
     data: ChapterPage_outlet_context
     startPage?: number
 }) {
+    const [, startTransition] = React.useTransition();
     const { query, setCurrentPage } = useChapterPages({
         chapter: data.chapter
-    }); 
-    const client = useHTTPClient();
-    const aggregate = get_aggregate_query({
-        aggregate_options: data.chapter.getAggregateList_options(client),
-        queryOption: {
-            staleTime: 1000 * 60 * 30
-        }
-    }).query;
-    const mangadexPath = useMangaDexPath();
-    const navigate = useNavigate();
+    });
+    
+    const { navigateToNext, navigateToPrevious } = useChapterNavigation(data.chapter);
+    
     const page = React.useMemo(() => {
         return query.data.current;
     }, [query.data.current]);
-    /*
-        React.useEffect(() => {
-            console.log(page);
-        }, [page]);
-    */
+    
     const setPage = React.useCallback((input: number) => {
         setCurrentPage(input);
     }, [page]);
-    // const rtl = useRTLSwipperMode();
-    const rtl = useRTLSwipperMode();
-    const navigateToNext = React.useCallback(async () => {
-        if(aggregate.isSuccess){
-            navigate(`${mangadexPath}/chapter/${await aggregate.data.getNext(data.chapter.get_id())}`);
-        }
-    }, []);
-    const navigateToPrevious = React.useCallback(async () => {
-        if(aggregate.isSuccess){
-            navigate(`${mangadexPath}/chapter/${await aggregate.data.getPrevious(data.chapter.get_id())}`);
-        }
-    }, []);
-    const onNext = React.useCallback<HotkeyCallback>(() => {
-        if (page >= 0 && page < (data.images.length - 1)) {
-            setPage(page + 1);
-        }else if(page >= data.images.length - 1){
-            startTransition(() => {
-                navigateToNext();
-            });
-        }
-    }, [page]);
-    const onPrevious = React.useCallback<HotkeyCallback>(() => {
-        if (page > 0 && page < data.images.length) {
-            setPage(page - 1);
-        }else if(page <= 0){
-            startTransition(() => {
-                navigateToPrevious();
-            });
-        }
-    }, [page]);
+
     React.useEffect(() => {
         if (startPage != undefined) {
             setCurrentPage(startPage);
         }
     }, [startPage]);
+
+    const rtl = useRTLSwipperMode();
+    
+    const onNext = React.useCallback<HotkeyCallback>(() => {
+        startTransition(() => {
+            if (page >= 0 && page < (data.images.length - 1)) {
+                setPage(page + 1);
+            } else if (page >= data.images.length - 1) {
+                navigateToNext();
+            }
+        });
+    }, [page]);
+    
+    const onPrevious = React.useCallback<HotkeyCallback>(() => {
+        startTransition(() => {
+            if (page > 0 && page < data.images.length) {
+                setPage(page - 1);
+            } else if (page <= 0) {
+                navigateToPrevious();
+            }
+        });
+    }, [page]);
+    
+    
+    
     return React.useMemo(() => {
         return ({
             page,
@@ -78,5 +61,5 @@ export function useSinglePageReadingHooks({ data, startPage }: {
             onNext: rtl.query.data == true ? onPrevious : onNext,
             onPrevious: rtl.query.data == true ? onNext : onPrevious
         });
-    }, [page, rtl.query.data]);
+    }, [page, rtl.query.data, onPrevious, onNext]);
 }

@@ -111,7 +111,7 @@ export class Aggregate {
                 if (typeof result == "boolean") {
                     const index_to_use = index + 1;
                     if (index_to_use >= this.get_volumes().length) {
-                        throw Error("this chapter has no next chapter");
+                        throw Error(`this chapter ${id} has no next chapter`);
                     } else {
                         return this.volumes[index + 1].get_chapters()[0].get_ids()[0];
                     }
@@ -121,7 +121,7 @@ export class Aggregate {
             // eslint-disable-next-line no-empty
             } catch (error) {}
         }
-        throw Error("this chapter " + id + " has no next chapter");
+        throw Error(`this chapter ${id} has no next chapter`);
     }
     public async getPrevious(id: string): Promise<string> {
         for (let index = 0; index < this.volumes.length; index++) {

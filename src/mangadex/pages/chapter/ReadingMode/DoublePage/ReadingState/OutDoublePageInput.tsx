@@ -11,11 +11,15 @@ export default function OutDoublePageInput({ value }: {
                 {parseInt(_getLastInURL_(value)?.match(/\d+/)?.[0] ?? "0")}
             </React.Fragment>
         );
-    } else {
+    } else if (Array.isArray(value)) {
         return (
             <React.Fragment>
                 {parseInt(_getLastInURL_(value[0])?.match(/\d+/)?.[0] ?? "0")} - {parseInt(_getLastInURL_(value[1])?.match(/\d+/)?.[0] ?? "0")}
             </React.Fragment>
+        );
+    }else{
+        return (
+            <React.Fragment/>
         );
     }
 }
