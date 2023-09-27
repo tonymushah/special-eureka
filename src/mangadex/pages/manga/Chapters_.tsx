@@ -1,4 +1,4 @@
-import { Top_Chaps } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap";
+import { Top_Chaps } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/index";
 
 export default function Chapters_() {
     return (
