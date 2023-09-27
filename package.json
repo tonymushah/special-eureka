@@ -170,7 +170,7 @@
     "react-viewer": "^3.2.2",
     "react-zoom-pan-pinch": "^3.0.0",
     "sass": "^1.63.6",
-    "storybook-addon-react-router-v6": "^1.0.2",
+    "storybook-addon-react-router-v6": "^2.0.0",
     "swiper": "^9.4.1",
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#dev",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
