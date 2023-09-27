@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import "@commons-res/flag-icons/less/flag-icons.less";
-import { Description } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Description";
-import Manga_Info from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Manga_Info";
-import { Chapters } from "@mangadex/resources/componnents/mangas/Mainpage/top_chap/Chapters";
+import { Description } from "@mangadex/resources/componnents/mangas/Mainpage/Top_chap/Description";
+import Manga_Info from "@mangadex/resources/componnents/mangas/Mainpage/Top_chap/Manga_Info";
+import { Chapters } from "@mangadex/resources/componnents/mangas/Mainpage/Top_chap/Chapters";
 
 export function Top_Chaps() {
     return (

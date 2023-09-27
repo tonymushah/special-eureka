@@ -3,7 +3,7 @@ import React from "react";
 import Loading from "../loading";
 import { useManga } from "@mangadex/pages/manga";
 
-const Top_Chaps_Desc_Part = React.lazy(() => import("../top_chap/Top_Chaps_Desc_Part"));
+const Top_Chaps_Desc_Part = React.lazy(() => import("../chapter_part/Top_Chaps_Desc_Part"));
 
 export function Description() {
     const { toUse: src } = useManga();

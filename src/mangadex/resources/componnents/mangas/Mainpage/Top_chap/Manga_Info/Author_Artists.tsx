@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { useManga } from "@mangadex/pages/manga";
 
-const Author_Artists_ = React.lazy(() => import("../../top_chap/Author_Artists"));
+const Author_Artists_ = React.lazy(() => import("../utils/Author_Artists"));
 
 export function Author_Artists() {
     const { toUse: src } = useManga();
