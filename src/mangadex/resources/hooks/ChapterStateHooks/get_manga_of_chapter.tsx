@@ -1,5 +1,5 @@
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { GetMangaByIDResponse, Manga } from "@mangadex/api/structures/Manga";
+import Manga, { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { get_mangaQueryKey_byID } from "../MangaStateHooks/get_mangaQueryKey_byID";
 import React from "react";

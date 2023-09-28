@@ -1,4 +1,4 @@
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import React from "react";
 import { FreeMode, Mousewheel, Pagination } from "swiper";
 import "swiper/css";

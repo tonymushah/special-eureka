@@ -6,7 +6,7 @@ import { AuthorAttributes, AuthorResponse, GetAuthorData, LocalizedString, Relat
 import Attribute from "../Attributes";
 import Collection from "../Collection";
 import AuthorCollection from "../CollectionTypes/AuthorCollection";
-import { Manga } from "../Manga";
+import Manga from "../Manga";
 import AuthorSearchType from "../SearchType/Author";
 
 export default class Author extends Attribute {

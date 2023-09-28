@@ -1,4 +1,4 @@
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import ErrorBoundary from "./error";
 import Vanilla from "./vanilla";
 

@@ -10,7 +10,7 @@ import Attribute from "../Attributes";
 import { Chapter } from "../Chapter";
 import Collection from "../Collection";
 import GroupCollection from "../CollectionTypes/GroupCollection";
-import { Manga } from "../Manga";
+import Manga from "../Manga";
 import GroupSearchType from "../SearchType/Group";
 import { User } from "../User";
 

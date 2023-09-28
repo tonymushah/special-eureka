@@ -1,7 +1,7 @@
 import { Client } from "@tauri-apps/api/http";
 import { RelationshipsTypes } from "../../internal/Utils";
 import { ChapterVolumeAggregateData } from "../../sta/data-contracts";
-import Chapter_withAllIncludes from "./Chapter_withAllIncludes";
+import { Chapter_withAllIncludes } from "./";
 
 export default class Chapters {
     private name!: string;

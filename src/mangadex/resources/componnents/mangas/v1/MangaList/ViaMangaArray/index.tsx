@@ -1,5 +1,5 @@
 import React from "react";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import ActualTab from "./ActualTab";
 
 const context = React.createContext<Array<Manga> | undefined>(undefined);

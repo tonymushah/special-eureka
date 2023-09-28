@@ -1,5 +1,5 @@
 import { Lang_and_Data } from "@mangadex/api/internal/Utils";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 

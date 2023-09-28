@@ -3,7 +3,7 @@ import { Api_Request } from "../../internal/Api_Request";
 import { sort_volumes } from "../../internal/Utils";
 import Desktop_Api_Request from "../../offline/DeskApiRequest";
 import { GetMangaAggregateData, VolumesAggregateData } from "../../sta/data-contracts";
-import { Manga } from "../Manga";
+import Manga from "../Manga";
 import { AggregateListOptions } from "../SearchType/AggregateListOptions";
 import { Volume } from "../Volume";
 

@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Asc_Desc, formatDate, Offset_limits, Order } from "@mangadex/api/internal/Utils";
-import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { useTrackEvent } from "@mangadex/index";
 import CollectionComponnent_withInfiniteQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_withInfiniteQuery";
 import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collection/InfiniteQueryConsumer";

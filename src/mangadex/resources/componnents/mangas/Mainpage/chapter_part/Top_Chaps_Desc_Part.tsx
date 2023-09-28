@@ -2,7 +2,7 @@ import React from "react";
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Skeleton } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { Lang_and_Data } from "@mangadex/api/internal/Utils";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { LAD_Tabs } from "../tabs/Lang_data_tabs";
 
 export default function Top_Chaps_Desc_Part(props: {

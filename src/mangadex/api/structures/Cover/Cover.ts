@@ -8,7 +8,7 @@ import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "..
 import Attribute from "../Attributes";
 import Collection from "../Collection";
 import CoverCollection from "../CollectionTypes/CoverCollection";
-import { GetMangaByIDResponse, Manga } from "../Manga";
+import Manga, { GetMangaByIDResponse } from "../Manga";
 import CoverSearchType from "../SearchType/Cover";
 import download_cover from "@mangadex/plugin/download/download_cover";
 

@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";

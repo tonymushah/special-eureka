@@ -1,4 +1,4 @@
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementDef from "./MangaElementDef";
 import MangaElementFallback from "./MangaElementFallback";

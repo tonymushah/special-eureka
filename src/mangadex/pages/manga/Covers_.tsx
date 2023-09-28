@@ -1,6 +1,6 @@
 import React from "react";
 import { useManga } from ".";
-import { Manga } from "../../api/structures/Manga";
+import Manga from "../../api/structures/Manga";
 import IsPingable from "../../resources/componnents/IsPingable";
 import { Covers_Manga } from "../../resources/componnents/mangas/Mainpage/Covers_";
 

@@ -1,6 +1,6 @@
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Asc_Desc, Offset_limits, Order } from "@mangadex/api/internal/Utils";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { Client } from "@tauri-apps/api/http";

@@ -1,7 +1,7 @@
 import { Button } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { QueryKey, useQueryClient, useMutation } from "@tanstack/react-query";
 import { BeatLoader } from "react-spinners";
 

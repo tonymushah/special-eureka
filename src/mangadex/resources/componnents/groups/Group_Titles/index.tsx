@@ -1,5 +1,5 @@
 import { Offset_limits } from "@mangadex/api/internal/Utils";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import React from "react";
 import { Client } from "@tauri-apps/api/http";

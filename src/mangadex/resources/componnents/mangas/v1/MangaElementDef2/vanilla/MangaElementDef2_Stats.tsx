@@ -8,7 +8,7 @@ import React from "react";
 import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
 import { useProps } from "../../MangaElementDef/vanilla";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 
 const Statis = React.lazy(() => import("../../../Statistics/Statis"));
 

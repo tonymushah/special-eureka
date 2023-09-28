@@ -6,7 +6,7 @@ import React from "react";
 import { UseQueryResult } from "@tanstack/react-query";
 import Consumer from "@commons-res/components/Consumer";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import { useMangaDownload } from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload";
 import IsPingable from "../../IsPingable";

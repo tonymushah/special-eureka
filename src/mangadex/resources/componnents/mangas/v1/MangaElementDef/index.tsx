@@ -1,4 +1,4 @@
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import Vanilla from "./vanilla";
 
 import { motion } from "framer-motion";

@@ -2,7 +2,7 @@ import { Client, Response, getClient } from "@tauri-apps/api/http";
 import { Api_Request } from "../../internal/Api_Request";
 import { Offset_limits, RelationshipsTypes } from "../../internal/Utils";
 import Attribute from "../Attributes";
-import { Manga, Manga_with_allRelationship } from "../Manga";
+import Manga, { Manga_with_allRelationship } from "../Manga";
 import { User } from "../User";
 import { CustomList, CustomListAttributes, CustomListResponse, Relationship } from "../../sta/data-contracts";
 
