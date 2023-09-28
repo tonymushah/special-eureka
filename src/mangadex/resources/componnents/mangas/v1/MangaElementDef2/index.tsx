@@ -13,9 +13,6 @@ export default function MangaElementDef2(props: {
             whileHover={{
                 scale: 1.006
             }}
-            style={{
-                width: "fit-content"
-            }}
         >
             <ErrorBoundary>
                 <MangaElementDef2_ {...props} />

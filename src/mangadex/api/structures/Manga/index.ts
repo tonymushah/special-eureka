@@ -51,6 +51,8 @@ import { Tag } from "../Tag";
 import GetChapterByIdResult from "../additonal_types/GetChapterByIdResult";
 import { GetMangaByIDResponse } from "./GetMangaByIDResponse";
 
+export type { GetMangaByIDResponse } from "./GetMangaByIDResponse";
+
 export default class Manga extends Attribute {
     protected static request_a = "manga/";
     private title!: LocalizedString;
@@ -896,32 +898,42 @@ export default class Manga extends Attribute {
         return await Manga.getAllOfflineMangaID(offset_Limits, client);
     }
     public static async getAllDownloadedCover_ofAManga(manga_id: string, offset_Limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
+        let isInnerClient = false;
         if (offset_Limits == undefined) {
             offset_Limits = new Offset_limits();
         }
         if (client == undefined) {
             client = await getClient();
+            isInnerClient = true;
         }
-        if (await DeskApiRequest.ping(client) == true) {
-            const response: Response<{
-                data: {
-                    data: Array<string>;
-                    offset: number;
-                    limit: number;
-                    total: number;
-                };
-                result: string;
-                type: string;
-            }> = await DeskApiRequest.get_methods(`manga/${manga_id}/chapters`, {
-                query: {
-                    offset: JSON.stringify(offset_Limits.get_offset()),
-                    limit: JSON.stringify(offset_Limits.get_limits())
-                }
-            }, client);
-            return new AllDownloadedCover_Of_aMangaCollection(response.data.data, manga_id, client);
-        } else {
-            throw new Error("The offline server isn't started");
+        try {
+            if (await DeskApiRequest.ping(client) == true) {
+                const response: Response<{
+                    data: {
+                        data: Array<string>;
+                        offset: number;
+                        limit: number;
+                        total: number;
+                    };
+                    result: string;
+                    type: string;
+                }> = await DeskApiRequest.get_methods(`manga/${manga_id}/covers`, {
+                    query: {
+                        offset: JSON.stringify(offset_Limits.get_offset()),
+                        limit: JSON.stringify(offset_Limits.get_limits())
+                    }
+                }, client);
+                return new AllDownloadedCover_Of_aMangaCollection(response.data.data, manga_id, client);
+            } else {
+                throw new Error("The offline server isn't started");
+            }
+        } finally {
+            if(isInnerClient){
+                client.drop();
+                client = undefined;
+            }
         }
+
     }
     public static async delete_aDownloaded_manga<T = unknown>(mangaID: string, client?: Client): Promise<T> {
         if (await DeskApiRequest.ping(client) == true) {
@@ -1134,7 +1146,6 @@ export class Manga_2 extends Manga {
         }
     }
 }
-
 
 export class Manga_with_allRelationship extends Manga {
     private authors!: Array<Author>;

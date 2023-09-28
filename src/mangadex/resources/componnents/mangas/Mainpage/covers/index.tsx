@@ -11,7 +11,9 @@ export default function MangaPage_Cover(props: { covers: Array<Cover> }) {
     const [selectedCover, _setSelectedCover] = React.useState<
         Cover | undefined
     >();
+
     const [, startTransition] = React.useTransition();
+    
     const setSelectedCover = React.useCallback(
         (input?: Cover) => {
             startTransition(() => {

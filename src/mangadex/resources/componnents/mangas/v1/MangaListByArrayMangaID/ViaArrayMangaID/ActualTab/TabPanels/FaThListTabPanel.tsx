@@ -14,7 +14,9 @@ export function FaThListTabPanel() {
                     key={value}
                     fallback={<MangaFallback2 />}
                 >
-                    <MangaElementDef2_withID mangaID={value} />
+                    <Chakra.Box width={"100%"}>
+                        <MangaElementDef2_withID mangaID={value} />
+                    </Chakra.Box>
                 </React.Suspense>
             ))}
         </Chakra.Stack>
