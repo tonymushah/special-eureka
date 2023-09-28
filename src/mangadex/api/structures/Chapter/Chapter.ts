@@ -10,7 +10,7 @@ import GetChapterByIdResult from ".././additonal_types/GetChapterByIdResult";
 import { Aggregate } from "../Aggregate";
 import { At_Home } from "../At_home";
 import Attribute from "../Attributes";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import AllDownloadedChapterCollection from "../CollectionTypes/AllDownloadedChapterCollection";
 import ChapterCollection from "../CollectionTypes/ChapterCollection";
 import { Group } from "../Group";

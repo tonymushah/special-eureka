@@ -1,5 +1,5 @@
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import ChapterSearchType from "../SearchType/Chapter";
 import { Chapter } from "../Chapter";
 export default class ChapterCollection extends Collection<Chapter> {

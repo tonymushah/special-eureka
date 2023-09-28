@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { get_MangaChapter_Accordions_byChapterArray } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import React from "react";
 

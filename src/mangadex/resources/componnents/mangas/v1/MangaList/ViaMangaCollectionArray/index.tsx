@@ -1,4 +1,4 @@
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { Manga } from "@mangadex/api/structures/Manga";
 import React from "react";
 import ActualTab from "./ActualTab";

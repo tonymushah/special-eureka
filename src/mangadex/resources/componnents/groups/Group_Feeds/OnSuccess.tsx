@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { UseInfiniteQueryResult } from "@tanstack/react-query";
 import { InfiniteQueryConsumer } from "../../Collection/InfiniteQueryConsumer";
 import ChapterCollectionToAccordion from "../../mangas/v1/ChapterCollectionToAccordion";

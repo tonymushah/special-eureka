@@ -6,7 +6,7 @@ import React from "react";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import "swiper/css/bundle";
 import { Client } from "@tauri-apps/api/http";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { OnSuccess } from "./OnSuccess";
 import { OnLoading } from "./OnLoading";
 

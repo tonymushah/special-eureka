@@ -1,4 +1,4 @@
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import React from "react";
 
 

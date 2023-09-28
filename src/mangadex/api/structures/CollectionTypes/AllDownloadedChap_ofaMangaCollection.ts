@@ -1,6 +1,6 @@
 import { Client } from "@tauri-apps/api/http";
 import { Offset_limits } from "mangadex/api/internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import { Manga } from "../Manga";
 
 export default class AllDownloadedChap_Of_aMangaCollection extends Collection<string>{

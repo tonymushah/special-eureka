@@ -1,5 +1,5 @@
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import {Chapter} from "../Chapter";
 import { Client } from "@tauri-apps/api/http";
 

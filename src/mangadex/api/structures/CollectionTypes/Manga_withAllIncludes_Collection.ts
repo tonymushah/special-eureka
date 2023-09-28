@@ -1,5 +1,5 @@
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import { Manga_with_allRelationship } from "../Manga";
 import MangaSearch_withAllIncludes from "../SearchType/MangaSearch_withAllIncludes";
 export default class Manga_withAllIncludes_Collection extends Collection<Manga_with_allRelationship>{

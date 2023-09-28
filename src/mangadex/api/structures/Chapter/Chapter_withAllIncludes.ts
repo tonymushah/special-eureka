@@ -5,7 +5,7 @@ import DeskApiRequest from "../../offline/DeskApiRequest";
 import { ChapterAttributes, GetChapterData, GetChapterIdData, Relationship, ScanlationGroup, Chapter as StaChapter } from "../../sta/data-contracts";
 import GetChapterByIdResult from ".././additonal_types/GetChapterByIdResult";
 import Attribute from "../Attributes";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import Chapter_WAllIncludesCollection from "../CollectionTypes/Chapter_WAllIncludesCollection";
 import { Group } from "../Group";
 import { Manga, Manga_2 } from "../Manga";

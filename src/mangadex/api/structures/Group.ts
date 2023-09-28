@@ -5,7 +5,7 @@ import {
     Offset_limits,
     RelationshipsTypes
 } from "../internal/Utils";
-import { Collection } from "./Collection";
+import Collection from "./Collection";
 import { User } from "./User";
 import GroupSearchType from "./SearchType/Group";
 import Group_WithAllRelationShip_SearchType from "./SearchType/GroupWAllIncludes";

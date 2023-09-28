@@ -4,7 +4,7 @@ import React from "react";
 import { QueryKey, UseQueryOptions } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Chapter } from "@mangadex/api/structures/Chapter";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import Chapter_Element1_byChapID from "../chapter/v1/Chapter_Element1_byChapID";
 import { CollectionComponnent_WithQuery } from "../Collection/Collection";
 import MangadexSpinner from "../kuru_kuru/MangadexSpinner";

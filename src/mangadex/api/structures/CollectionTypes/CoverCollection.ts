@@ -1,5 +1,5 @@
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import { Cover } from "../Cover";
 import CoverSearchType from "../SearchType/Cover";
 

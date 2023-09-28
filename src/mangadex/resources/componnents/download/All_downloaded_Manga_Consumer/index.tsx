@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { UseInfiniteQueryOptions, UseInfiniteQueryResult } from "@tanstack/react-query";
 import React from "react";

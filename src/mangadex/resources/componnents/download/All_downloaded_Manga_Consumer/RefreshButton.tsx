@@ -1,5 +1,5 @@
 import { Button } from "@chakra-ui/react";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { QueryKey, UseInfiniteQueryOptions, useInfiniteQuery, useIsFetching } from "@tanstack/react-query";
 import { BeatLoader } from "react-spinners";
 

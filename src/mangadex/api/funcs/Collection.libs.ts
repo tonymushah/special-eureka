@@ -1,5 +1,5 @@
 import { isArrayLiteralExpression } from "typescript";
-import { Collection } from "../structures/Collection";
+import Collection from "../structures/Collection";
 import { Manga } from "../structures/Manga";
 
 export function manga_collection(collection: Collection): Array<Manga> {

@@ -2,7 +2,7 @@ import { Client } from "@tauri-apps/api/http";
 import { QueryKey, UseQueryOptions, useQuery } from "@tanstack/react-query";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Author } from "@mangadex/api/structures/Author";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
 import React from "react";

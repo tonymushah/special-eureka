@@ -1,6 +1,6 @@
 import { Client } from "@tauri-apps/api/http";
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import { Manga } from "../Manga";
 export default class AllDownloadedCover_Of_aMangaCollection extends Collection<string>{
     

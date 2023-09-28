@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import Consumer from "@commons-res/components/Consumer";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { UseInfiniteQueryResult } from "@tanstack/react-query";
 import React from "react";
 import MangadexSpinner from "../kuru_kuru/MangadexSpinner";

@@ -1,5 +1,5 @@
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import UserSearchType from "../SearchType/User";
 import { User } from "../User";
 

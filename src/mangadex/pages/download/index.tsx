@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 import { ShowErrorDefault } from "@mangadex/resources/componnents/router/error/ShowErrorDefault";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";

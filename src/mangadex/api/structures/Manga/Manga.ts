@@ -35,7 +35,7 @@ import { Aggregate } from "../Aggregate";
 import Attribute from "../Attributes";
 import { Author } from "../Author";
 import { Chapter, Chapter_withAllIncludes } from "../Chapter";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import AllDownloadedChap_Of_aMangaCollection from "../CollectionTypes/AllDownloadedChap_ofaMangaCollection";
 import AllDownloadedCover_Of_aMangaCollection from "../CollectionTypes/AllDownloadedCover_Of_aMangaCollection";
 import AllDownloadedMangaCollection from "../CollectionTypes/AllDownloadedMangaCollection";

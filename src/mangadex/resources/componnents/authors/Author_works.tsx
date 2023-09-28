@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Author } from "@mangadex/api/structures/Author";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { Manga } from "@mangadex/api/structures/Manga";
 import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/Collection/Collection";
 import IsPingable from "@mangadex/resources/componnents/IsPingable";

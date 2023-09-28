@@ -1,6 +1,6 @@
 import { Offset_limits } from "../../internal/Utils";
 import { Author } from "../Author";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import AuthorSearchType from "../SearchType/Author";
 export default class AuthorCollection extends Collection<Author>{
     private prev_search_type! : AuthorSearchType;

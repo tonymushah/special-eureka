@@ -3,7 +3,7 @@ import { QueryClient, UseQueryResult, useQuery, useQueryClient } from "@tanstack
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
