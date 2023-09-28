@@ -1,23 +1,11 @@
 import { Client, Response } from "@tauri-apps/api/http";
 import { stringify } from "qs";
-import { Api_Request } from "../internal/Api_Request";
-import { GetStatisticsMangaData, GetStatisticsMangaUuidData } from "../sta/data-contracts";
-import Comments from "./Comments";
+import { Api_Request } from "../../internal/Api_Request";
+import { GetStatisticsMangaData, GetStatisticsMangaUuidData } from "../../sta/data-contracts";
+import Comments from "../Comments";
+import { MangaStats_Distribution } from "./MangaStats_Distribution";
 
-export type MangaStats_Distribution = {
-    "10": number,
-    "9": number,
-    "8": number,
-    "7": number,
-    "6": number,
-    "5": number,
-    "4": number,
-    "3": number,
-    "2": number,
-    "1": number
-}
-
-export class Statistics_Manga {
+export default class Statistics_Manga {
     private mangaID!: string;
     private follows!: number;
     private average!: number;
