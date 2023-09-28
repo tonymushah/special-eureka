@@ -176,7 +176,7 @@
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#dev",
     "tauri-plugin-upload-api": "github:tauri-apps/tauri-plugin-upload",
     "tauri-plugin-websocket-api": "github:tauri-apps/tauri-plugin-websocket",
-    "tauri-settings": "^0.1.2",
+    "tauri-settings": "^0.3.0",
     "tsconfig-paths": "^3.14.2",
     "tslib": "^2.6.0",
     "use-image": "^1.1.1",

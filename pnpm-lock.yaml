@@ -276,8 +276,8 @@ dependencies:
     specifier: github:tauri-apps/tauri-plugin-websocket
     version: github.com/tauri-apps/tauri-plugin-websocket/c085eb80347e66433570322b8c62028b804dfeef
   tauri-settings:
-    specifier: ^0.1.2
-    version: 0.1.2
+    specifier: ^0.3.0
+    version: 0.3.4
   tsconfig-paths:
     specifier: ^3.14.2
     version: 3.14.2
@@ -15349,8 +15349,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /tauri-settings@0.1.2:
-    resolution: {integrity: sha512-eIhf9CBE+GBcuvh8mNjYRvldtL0u7q0jZx0UON6ZE3iC3s2kgLrHgN2BU5lrYOUC3AWgbfNi6tMiWi8lCB0iqQ==}
+  /tauri-settings@0.3.4:
+    resolution: {integrity: sha512-ToFF+TFsCS4yp1Gijmb0dR+vlV4AK69itvNVDf+gTCw1eopjgOAU+AmjVbKxS3WQgCIdEF1QV03MFGdyL/lE/A==}
     dev: false
 
   /telejson@7.2.0:
