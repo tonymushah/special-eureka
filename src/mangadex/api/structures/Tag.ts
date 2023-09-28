@@ -5,7 +5,6 @@ import { Api_Request } from "../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
 import { GetMangaTagData, LocalizedString, Tag as StaTag } from "../sta/data-contracts";
 
-
 export class Tag extends Attribute {
     private name!: LocalizedString;
     private description!: LocalizedString;
