@@ -16,9 +16,9 @@ export function InfoCover({ isHovered }: {
         <Chakra.HStack>
             <motion.div
                 animate={isHovered ? {
-                    opacity: 0
-                } : {
                     opacity: 1
+                } : {
+                    opacity: 0.5
                 }}
             >
                 <Chakra.HStack>

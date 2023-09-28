@@ -28,7 +28,7 @@ export default defineConfig({
         "adjustDuplicates" : true,
     }),*/ react({
         "tsDecorators": true,
-        "jsxImportSource" : "react"
+        "jsxImportSource": "react"
     }), remarkRehypePlugin({
     }), ViteImageOptimizer(),
     sentryVitePlugin({

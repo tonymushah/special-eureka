@@ -29,7 +29,7 @@ function OnError(query: UseQueryResult<boolean, Error>) {
 function InnertOnSuccess(){
     const toUse: Manga = useManga().toUse;
     return (
-        <Covers_Manga src={toUse}></Covers_Manga>
+        <Covers_Manga src={toUse}/>
     );
 }
 
@@ -55,6 +55,5 @@ export default function Covers_() {
             }
             onSuccess={OnSuccess}
         />
-
     );
 }
