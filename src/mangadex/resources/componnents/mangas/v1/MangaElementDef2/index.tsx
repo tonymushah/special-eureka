@@ -1,4 +1,4 @@
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import ErrorBoundary from "./error";
 import MangaElementDef2_ from "./vanilla";
 import { motion } from "framer-motion";
@@ -12,9 +12,6 @@ export default function MangaElementDef2(props: {
         <motion.div
             whileHover={{
                 scale: 1.006
-            }}
-            style={{
-                width: "fit-content"
             }}
         >
             <ErrorBoundary>

@@ -1,87 +1,16 @@
 import { Client, Response } from "@tauri-apps/api/http";
 import { stringify } from "qs";
-import { Api_Request } from "../internal/Api_Request";
-import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
-import { User as StaUser, UserList, UserResponse } from "../sta/data-contracts";
-import { Attribute } from "./Attributes";
-import { Collection } from "./Collection";
-import UserCollection from "./CollectionTypes/UserCollection";
-import UserSearchType from "./SearchType/User";
+import { Api_Request } from "../../internal/Api_Request";
+import { Offset_limits, Order, RelationshipsTypes } from "../../internal/Utils";
+import { User as StaUser, UserList, UserResponse } from "../../sta/data-contracts";
+import Attribute from "../Attributes";
+import Collection from "../Collection";
+import UserCollection from "../CollectionTypes/UserCollection";
+import UserSearchType from "../SearchType/User";
+import { UserRole } from "./UserRole";
+import { parse_user_role_array } from "./parse_user_role_array";
 
-/**
- * [User Role Enum](https://api.mangadex.org/docs/static-data/#user-roles-enum)
- * 
- */
-export enum UserRole {
-    Admin = "ROLE_ADMIN",
-    Banned = "ROLE_BANNED",
-    Contributor = "ROLE_CONTRIBUTOR",
-    Designer = "ROLE_DESIGNER",
-    Developer = "ROLE_DEVELOPER",
-    Forum_Moderator = "ROLE_FORUM_MODERATOR",
-    Global_Moderator = "ROLE_GLOBAL_MODERATOR",
-    Group_Leader = "ROLE_GROUP_LEADER",
-    Group_Member = "ROLE_GROUP_MEMBER",
-    Guest = "ROLE_GUEST",
-    Member = "ROLE_MEMBER",
-    Md_At_Home = "ROLE_MD_AT_HOME",
-    Power_Uploader = "ROLE_POWER_UPLOADER",
-    Public_Relations = "ROLE_PUBLIC_RELATIONS",
-    Staff = "ROLE_STAFF",
-    Unverified = "ROLE_UNVERIFIED",
-    User = "ROLE_USER",
-    VIP = "ROLE_VIP",
-    Unknown = "ROLE_UNKNOWN"
-}
-
-export function parse_user_role(str: string): UserRole {
-    switch (str) {
-        case UserRole.Admin:
-            return UserRole.Admin;
-        case UserRole.Banned:
-            return UserRole.Banned;
-        case UserRole.Contributor:
-            return UserRole.Contributor;
-        case UserRole.Designer:
-            return UserRole.Designer;
-        case UserRole.Developer:
-            return UserRole.Developer;
-        case UserRole.Forum_Moderator:
-            return UserRole.Forum_Moderator;
-        case UserRole.Global_Moderator:
-            return UserRole.Global_Moderator;
-        case UserRole.Group_Leader:
-            return UserRole.Group_Leader;
-        case UserRole.Group_Member:
-            return UserRole.Group_Member;
-        case UserRole.Guest:
-            return UserRole.Guest;
-        case UserRole.Md_At_Home:
-            return UserRole.Md_At_Home;
-        case UserRole.Member:
-            return UserRole.Member;
-        case UserRole.Power_Uploader:
-            return UserRole.Power_Uploader;
-        case UserRole.Public_Relations:
-            return UserRole.Public_Relations;
-        case UserRole.Staff:
-            return UserRole.Staff;
-        case UserRole.Unverified:
-            return UserRole.Unverified;
-        case UserRole.User:
-            return UserRole.User;
-        case UserRole.VIP:
-            return UserRole.VIP;
-        default:
-            return UserRole.Unknown;
-    }
-}
-
-export function parse_user_role_array(array: Array<string>) : UserRole[]{
-    return array.map(parse_user_role);
-}
-
-export class User extends Attribute {
+export default class User extends Attribute {
     private username!: string;
     private roles!: Array<UserRole>;
     private version!: number;

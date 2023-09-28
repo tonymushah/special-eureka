@@ -1,6 +1,6 @@
 import { Offset_limits } from "../../internal/Utils";
 import { Chapter_withAllIncludes } from "../Chapter";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import Chapter_withAllIncludes_SearchType from "../SearchType/Chapter_WAllIncludes";
 
 export default class Chapter_WAllIncludesCollection extends Collection<Chapter_withAllIncludes>{

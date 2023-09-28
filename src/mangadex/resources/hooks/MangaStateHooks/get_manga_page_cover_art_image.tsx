@@ -1,6 +1,6 @@
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Cover } from "@mangadex/api/structures/Cover";
-import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import MangadexNotFound from "@mangadex/resources/imgs/cover-not-found.jpg";

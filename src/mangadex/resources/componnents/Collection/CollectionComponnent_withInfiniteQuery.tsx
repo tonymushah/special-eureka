@@ -1,6 +1,6 @@
 import Consumer from "@commons-res/components/Consumer";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { QueryFunction, QueryKey, UseInfiniteQueryOptions, UseInfiniteQueryResult, useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
 

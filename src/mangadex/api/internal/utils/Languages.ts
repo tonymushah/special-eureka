@@ -17,7 +17,7 @@ export class Languages{
         const res = langs;
         let index = 0;
         res.forEach(element => {
-            array[index] = new Lang(element.name, element.two_letter, element.three_letter, element.flag_icon!);
+            array[index] = new Lang(element.name, element.two_letter, element.three_letter, element.flag_icon ?? "");
             index = index + 1;
         });
         return new Languages(array);

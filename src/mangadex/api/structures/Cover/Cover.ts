@@ -1,16 +1,18 @@
 import { Client, Response, ResponseType } from "@tauri-apps/api/http";
 import { stringify } from "qs";
-import { Api_Request } from "../internal/Api_Request";
-import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
-import { default as DeskApiRequest, default as DesktopApi } from "../offline/DeskApiRequest";
-import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "../sta/data-contracts";
-import { Attribute } from "./Attributes";
-import { Collection } from "./Collection";
-import CoverCollection from "./CollectionTypes/CoverCollection";
-import { GetMangaByIDResponse, Manga } from "./Manga";
-import CoverSearchType from "./SearchType/Cover";
-export class Cover extends Attribute {
+import { Api_Request } from "../../internal/Api_Request";
+import { Upload } from "../../internal/Upload_Retrieve";
+import { Offset_limits, RelationshipsTypes } from "../../internal/Utils";
+import { default as DeskApiRequest, default as DesktopApi } from "../../offline/DeskApiRequest";
+import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "../../sta/data-contracts";
+import Attribute from "../Attributes";
+import Collection from "../Collection";
+import CoverCollection from "../CollectionTypes/CoverCollection";
+import Manga, { GetMangaByIDResponse } from "../Manga";
+import CoverSearchType from "../SearchType/Cover";
+import download_cover from "@mangadex/plugin/download/download_cover";
+
+export default class Cover extends Attribute {
     private description!: string;
     private volume!: number;
     private file_name!: string;
@@ -292,5 +294,12 @@ export class Cover extends Attribute {
     }
     public static getOfflineCoverImage_notasync(coverId: string): string {
         return DesktopApi.get_url() + "cover/" + coverId + "/image";
+    }
+    public static async downloadCover(cover_id : string): Promise<Cover>{
+        await download_cover(cover_id);
+        return Cover.getAOfflineCover(cover_id);
+    }
+    public async download_cover(): Promise<Cover>{
+        return await Cover.downloadCover(this.get_id());
     }
 }

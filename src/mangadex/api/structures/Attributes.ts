@@ -8,7 +8,7 @@ export type IdType = {
 export type IdTypeWRelated = IdType & {
     related: string
 }
-export class Attribute {
+export default class Attribute {
     private id!: string;
     private type!: string;
     private relationships: Array<Attribute> = [];

@@ -1,61 +1,59 @@
-import { 
-    download_all_manga_covers, 
-    download_manga, 
-    download_manga_cover, 
-    patch_all_manga_cover, 
-    refetch_all_manga 
+import {
+    download_all_manga_covers,
+    download_manga,
+    download_manga_cover,
+    patch_all_manga_cover,
+    refetch_all_manga
 } from "@mangadex/plugin";
-import { 
-    Client, 
-    Response, 
-    getClient 
+import {
+    Client,
+    Response,
+    getClient
 } from "@tauri-apps/api/http";
 import { stringify } from "qs";
-import MangaStatus from "../enums/MangaStatus";
-import { Api_Request } from "../internal/Api_Request";
-import { 
-    Asc_Desc, 
-    Author_Artists, 
-    Offset_limits, 
-    Order, 
-    RelationshipsTypes 
-} from "../internal/Utils";
-import DeskApiRequest from "../offline/DeskApiRequest";
+import MangaStatus from "../../enums/MangaStatus";
+import { Api_Request } from "../../internal/Api_Request";
+import {
+    Asc_Desc,
+    Author_Artists,
+    Offset_limits,
+    Order,
+    RelationshipsTypes
+} from "../../internal/Utils";
+import DeskApiRequest from "../../offline/DeskApiRequest";
 import {
     ChapterList,
+    CoverResponse,
     GetMangaAggregateData,
     LocalizedString,
     MangaAttributes,
-    MangaList, 
-    MangaResponse, 
-    Relationship, 
-    Manga as StaManga, 
-    Chapter as StaChapter, 
-    CoverResponse, 
-    Author as StaAuthor
-} from "../sta/data-contracts";
-import { Aggregate } from "./Aggregate";
-import { Attribute } from "./Attributes";
-import { Author } from "./Author";
-import { Chapter, Chapter_withAllIncludes } from "./Chapter";
-import { Collection } from "./Collection";
-import AllDownloadedChap_Of_aMangaCollection from "./CollectionTypes/AllDownloadedChap_ofaMangaCollection";
-import AllDownloadedCover_Of_aMangaCollection from "./CollectionTypes/AllDownloadedCover_Of_aMangaCollection";
-import AllDownloadedMangaCollection from "./CollectionTypes/AllDownloadedMangaCollection";
-import MangaCollection from "./CollectionTypes/MangaCollection";
-import Manga_withAllIncludes_Collection from "./CollectionTypes/Manga_withAllIncludes_Collection";
-import { Cover } from "./Cover";
-import MangaSearchType from "./SearchType/Manga";
-import MangaSearch_withAllIncludes from "./SearchType/MangaSearch_withAllIncludes";
-import { Tag } from "./Tag";
-import GetChapterByIdResult from "./additonal_types/GetChapterByIdResult";
+    MangaList,
+    MangaResponse,
+    Relationship,
+    Author as StaAuthor,
+    Chapter as StaChapter,
+    Manga as StaManga
+} from "../../sta/data-contracts";
+import { Aggregate } from "../Aggregate";
+import Attribute from "../Attributes";
+import { Author } from "../Author";
+import { Chapter, Chapter_withAllIncludes } from "../Chapter";
+import Collection from "../Collection";
+import AllDownloadedChap_Of_aMangaCollection from "../CollectionTypes/AllDownloadedChap_ofaMangaCollection";
+import AllDownloadedCover_Of_aMangaCollection from "../CollectionTypes/AllDownloadedCover_Of_aMangaCollection";
+import AllDownloadedMangaCollection from "../CollectionTypes/AllDownloadedMangaCollection";
+import MangaCollection from "../CollectionTypes/MangaCollection";
+import Manga_withAllIncludes_Collection from "../CollectionTypes/Manga_withAllIncludes_Collection";
+import { Cover } from "../Cover";
+import MangaSearchType from "../SearchType/Manga";
+import MangaSearch_withAllIncludes from "../SearchType/MangaSearch_withAllIncludes";
+import { Tag } from "../Tag";
+import GetChapterByIdResult from "../additonal_types/GetChapterByIdResult";
+import { GetMangaByIDResponse } from "./GetMangaByIDResponse";
 
-export type GetMangaByIDResponse = {
-    manga: Manga,
-    isOffline: boolean
-}
+export type { GetMangaByIDResponse } from "./GetMangaByIDResponse";
 
-export class Manga extends Attribute {
+export default class Manga extends Attribute {
     protected static request_a = "manga/";
     private title!: LocalizedString;
     private alt_title!: LocalizedString[];
@@ -223,7 +221,7 @@ export class Manga extends Attribute {
         last_volume: string | null,
         update_at: string,
         created_at: string,
-        tags: Array<Tag>,
+        tags: Array<Tag>
     ) {
         super(id, "manga");
         this.set_description(description);
@@ -238,7 +236,9 @@ export class Manga extends Attribute {
     }
     public static build_any(object: StaManga /*
     please only input the real data please
-    */): Manga {
+    */
+
+    ): Manga {
         const attributes: MangaAttributes = object.attributes;
         const relationships: Relationship[] = object.relationships;
         const tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
@@ -262,7 +262,6 @@ export class Manga extends Attribute {
             instance.set_relationships_Wany(relationships);
             // eslint-disable-next-line no-empty
         } catch (error) {
-
         }
 
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
@@ -276,7 +275,9 @@ export class Manga extends Attribute {
     }
     public static build_any2(object: StaManga /*
     please only input the real data please
-    */): Manga {
+    */
+
+    ): Manga {
         const attributes: MangaAttributes = object.attributes;
         //let relationships: any = object.relationships;
         const tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
@@ -350,30 +351,7 @@ export class Manga extends Attribute {
         return this.get_some_relationship("cover_art")[0].get_id();
     }
     public static async search({
-        offset_Limits = new Offset_limits(),
-        title,
-        authors,
-        artists,
-        year,
-        includedTags,
-        includedTagsMode,
-        excludedTags,
-        excludedTagsMode,
-        status,
-        originalLanguage,
-        excludedOriginalLanguage,
-        availableTranslatedLanguage,
-        publicationDemographic,
-        mangaIDs,
-        createdAtSince,
-        updatedAtSince,
-        order,
-        includes,
-        hasAvailableChapters,
-        latestUploadedChapter,
-        group,
-        client,
-        authorOrArtist
+        offset_Limits = new Offset_limits(), title, authors, artists, year, includedTags, includedTagsMode, excludedTags, excludedTagsMode, status, originalLanguage, excludedOriginalLanguage, availableTranslatedLanguage, publicationDemographic, mangaIDs, createdAtSince, updatedAtSince, order, includes, hasAvailableChapters, latestUploadedChapter, group, client, authorOrArtist
     }: MangaSearchType): Promise<Collection<Manga>> {
         const querys = {
             limit: offset_Limits.get_limits(),
@@ -402,8 +380,8 @@ export class Manga extends Attribute {
             ids: mangaIDs
         };
         const getted: Response<MangaList> = await Api_Request.get_methods("manga" + "?" +
-            stringify(querys)
-            , undefined, client);
+            stringify(querys),
+            undefined, client);
         const data: Array<StaManga> = getted.data.data;
         const mangaArray: Array<Manga> = new Array<Manga>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -506,42 +484,25 @@ export class Manga extends Attribute {
     }
     public async getFeed(
         {
-            offset_Limits = new Offset_limits(),
-            translatedLanguage,
-            originalLanguage,
-            excludedOriginalLanguage,
-            contentRating,
-            excludedGroups,
-            excludedUploaders,
-            includedFutureUpdate,
-            createdAtSince,
-            updatedAtSince,
-            order,
-            includes,
-            includeEmptyPages,
-            includeFuturePublishAt,
-            includeExternalUrl,
-            client
-        }
-            :
-            {
-                offset_Limits: Offset_limits,
-                translatedLanguage?: Array<string>,
-                originalLanguage?: Array<string>,
-                excludedOriginalLanguage?: Array<string>,
-                contentRating?: Array<string>,
-                excludedGroups?: Array<string>,
-                excludedUploaders?: Array<string>,
-                includedFutureUpdate?: number,
-                createdAtSince?: string,
-                updatedAtSince?: string,
-                order?: Order,
-                includes?: string,
-                includeEmptyPages?: boolean,
-                includeFuturePublishAt?: boolean,
-                includeExternalUrl?: boolean,
-                client?: Client
-            }): Promise<Array<Chapter>> {
+            offset_Limits = new Offset_limits(), translatedLanguage, originalLanguage, excludedOriginalLanguage, contentRating, excludedGroups, excludedUploaders, includedFutureUpdate, createdAtSince, updatedAtSince, order, includes, includeEmptyPages, includeFuturePublishAt, includeExternalUrl, client
+        }: {
+            offset_Limits: Offset_limits;
+            translatedLanguage?: Array<string>;
+            originalLanguage?: Array<string>;
+            excludedOriginalLanguage?: Array<string>;
+            contentRating?: Array<string>;
+            excludedGroups?: Array<string>;
+            excludedUploaders?: Array<string>;
+            includedFutureUpdate?: number;
+            createdAtSince?: string;
+            updatedAtSince?: string;
+            order?: Order;
+            includes?: string;
+            includeEmptyPages?: boolean;
+            includeFuturePublishAt?: boolean;
+            includeExternalUrl?: boolean;
+            client?: Client;
+        }): Promise<Array<Chapter>> {
         const querys = {
             limit: offset_Limits.get_limits(),
             offset: offset_Limits.get_offset(),
@@ -561,8 +522,8 @@ export class Manga extends Attribute {
             excludedUploaders
         };
         const getted: Response<ChapterList> = await Api_Request.get_methods("manga/" + this.get_id() + "/feed? " +
-            stringify(querys)
-            , undefined,
+            stringify(querys),
+            undefined,
             client
         );
         const data: Array<StaChapter> = getted.data.data;
@@ -574,40 +535,24 @@ export class Manga extends Attribute {
     }
     public async getFeed_All(
         {
-            offset_Limits = new Offset_limits(),
-            translatedLanguage,
-            originalLanguage,
-            excludedOriginalLanguage,
-            contentRating,
-            excludedGroups,
-            excludedUploaders,
-            includedFutureUpdate,
-            createdAtSince,
-            updatedAtSince,
-            order,
-            includeEmptyPages,
-            includeFuturePublishAt,
-            includeExternalUrl,
-            client
-        }
-            :
-            {
-                offset_Limits: Offset_limits,
-                translatedLanguage?: Array<string>,
-                originalLanguage?: Array<string>,
-                excludedOriginalLanguage?: Array<string>,
-                contentRating?: Array<string>,
-                excludedGroups?: Array<string>,
-                excludedUploaders?: Array<string>,
-                includedFutureUpdate?: boolean,
-                createdAtSince?: string,
-                updatedAtSince?: string,
-                order?: Order,
-                includeEmptyPages?: boolean,
-                includeFuturePublishAt?: boolean,
-                includeExternalUrl?: boolean,
-                client?: Client
-            }): Promise<Array<Chapter>> {
+            offset_Limits = new Offset_limits(), translatedLanguage, originalLanguage, excludedOriginalLanguage, contentRating, excludedGroups, excludedUploaders, includedFutureUpdate, createdAtSince, updatedAtSince, order, includeEmptyPages, includeFuturePublishAt, includeExternalUrl, client
+        }: {
+            offset_Limits: Offset_limits;
+            translatedLanguage?: Array<string>;
+            originalLanguage?: Array<string>;
+            excludedOriginalLanguage?: Array<string>;
+            contentRating?: Array<string>;
+            excludedGroups?: Array<string>;
+            excludedUploaders?: Array<string>;
+            includedFutureUpdate?: boolean;
+            createdAtSince?: string;
+            updatedAtSince?: string;
+            order?: Order;
+            includeEmptyPages?: boolean;
+            includeFuturePublishAt?: boolean;
+            includeExternalUrl?: boolean;
+            client?: Client;
+        }): Promise<Array<Chapter>> {
         const querys = {
             limit: offset_Limits.get_limits(),
             offset: offset_Limits.get_offset(),
@@ -631,8 +576,8 @@ export class Manga extends Attribute {
             excludedUploaders
         };
         const getted: Response<ChapterList> = await Api_Request.get_methods("manga/" + this.get_id() + "/feed?" +
-            stringify(querys)
-            , undefined, client);
+            stringify(querys),
+            undefined, client);
         const data: Array<StaChapter> = getted.data.data;
         const mangaArray: Array<Chapter> = new Array<Chapter>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -895,13 +840,13 @@ export class Manga extends Attribute {
         if (await DeskApiRequest.ping(client) == true) {
             const response: Response<{
                 data: {
-                    data: Array<string>,
-                    offset: number,
-                    limit: number,
-                    total: number
-                },
-                result: string,
-                type: string
+                    data: Array<string>;
+                    offset: number;
+                    limit: number;
+                    total: number;
+                };
+                result: string;
+                type: string;
             }> = await DeskApiRequest.get_methods("manga", {
                 query: {
                     offset: JSON.stringify(offset_Limits.get_offset()),
@@ -924,13 +869,13 @@ export class Manga extends Attribute {
         if (await DeskApiRequest.ping(client) == true) {
             const response: Response<{
                 data: {
-                    data: Array<string>,
-                    offset: number,
-                    limit: number,
-                    total: number
-                },
-                result: string,
-                type: string
+                    data: Array<string>;
+                    offset: number;
+                    limit: number;
+                    total: number;
+                };
+                result: string;
+                type: string;
             }> = await DeskApiRequest.get_methods(`manga/${mangaId}/chapters`, {
                 query: {
                     offset: JSON.stringify(offset_Limits.get_offset()),
@@ -953,40 +898,50 @@ export class Manga extends Attribute {
         return await Manga.getAllOfflineMangaID(offset_Limits, client);
     }
     public static async getAllDownloadedCover_ofAManga(manga_id: string, offset_Limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
+        let isInnerClient = false;
         if (offset_Limits == undefined) {
             offset_Limits = new Offset_limits();
         }
         if (client == undefined) {
             client = await getClient();
+            isInnerClient = true;
         }
-        if (await DeskApiRequest.ping(client) == true) {
-            const response: Response<{
-                data: {
-                    data: Array<string>,
-                    offset: number,
-                    limit: number,
-                    total: number
-                },
-                result: string,
-                type: string
-            }> = await DeskApiRequest.get_methods(`manga/${manga_id}/chapters`, {
-                query: {
-                    offset: JSON.stringify(offset_Limits.get_offset()),
-                    limit: JSON.stringify(offset_Limits.get_limits())
-                }
-            }, client);
-            return new AllDownloadedCover_Of_aMangaCollection(response.data.data, manga_id, client);
-        } else {
-            throw new Error("The offline server isn't started");
+        try {
+            if (await DeskApiRequest.ping(client) == true) {
+                const response: Response<{
+                    data: {
+                        data: Array<string>;
+                        offset: number;
+                        limit: number;
+                        total: number;
+                    };
+                    result: string;
+                    type: string;
+                }> = await DeskApiRequest.get_methods(`manga/${manga_id}/covers`, {
+                    query: {
+                        offset: JSON.stringify(offset_Limits.get_offset()),
+                        limit: JSON.stringify(offset_Limits.get_limits())
+                    }
+                }, client);
+                return new AllDownloadedCover_Of_aMangaCollection(response.data.data, manga_id, client);
+            } else {
+                throw new Error("The offline server isn't started");
+            }
+        } finally {
+            if(isInnerClient){
+                client.drop();
+                client = undefined;
+            }
         }
+
     }
     public static async delete_aDownloaded_manga<T = unknown>(mangaID: string, client?: Client): Promise<T> {
         if (await DeskApiRequest.ping(client) == true) {
             const response: Response<{
-                result: string,
-                type: string,
-                data: T,
-                message: string
+                result: string;
+                type: string;
+                data: T;
+                message: string;
             }> = await DeskApiRequest.delete_methods("manga/" + mangaID, undefined, client);
             return response.data.data;
         } else {
@@ -1030,9 +985,9 @@ export class Manga extends Attribute {
     public static async download_manga_cover_with_quality(mangaID: string, quality: number, client?: Client): Promise<Cover> {
         if (await DeskApiRequest.ping(client) == true) {
             const response: Response<{
-                result: string,
-                type: string
-                downloaded: string
+                result: string;
+                type: string;
+                downloaded: string;
             }> = await DeskApiRequest.put_methods("manga/" + mangaID + "/cover/" + quality, undefined, undefined, client);
             return Cover.getAOfflineCover(response.data.downloaded);
         } else {
@@ -1111,7 +1066,7 @@ export class Manga_2 extends Manga {
         last_volume: string | null,
         update_at: string,
         created_at: string,
-        tags: Array<Tag>,
+        tags: Array<Tag>
     ) {
         super(
             id,
@@ -1128,7 +1083,9 @@ export class Manga_2 extends Manga {
     }
     public static build_any(object: StaManga /*
     please only input the real data please
-    */): Manga_2 {
+    */
+
+    ): Manga_2 {
         const attributes: MangaAttributes = object.attributes;
         //let relationships: any = object.relationships;
         const tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
@@ -1148,7 +1105,6 @@ export class Manga_2 extends Manga {
             tags
         );
         //instance.set_relationships_Wany(relationships);
-
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
         instance.set_ranting(attributes.contentRating);
@@ -1264,7 +1220,9 @@ export class Manga_with_allRelationship extends Manga {
 
     public static build_any(object: StaManga /*
     please only input the real data please
-    */): Manga_with_allRelationship {
+    */
+
+    ): Manga_with_allRelationship {
         const attributes: MangaAttributes = object.attributes;
         const relationships: Relationship[] = object.relationships;
         const tags: Array<Tag> = new Array<Tag>(attributes.tags.length);
@@ -1290,12 +1248,12 @@ export class Manga_with_allRelationship extends Manga {
             for (let index = 0; index < all_manga.length; index++) {
                 try {
                     to_input_manga[index] = Manga_2.build_any(all_manga[index]);
-                // eslint-disable-next-line no-empty
+                    // eslint-disable-next-line no-empty
                 } catch (error) {
                 }
             }
             instance.$related_manga = to_input_manga.filter((value) => value != undefined || value != null);
-        // eslint-disable-next-line no-empty
+            // eslint-disable-next-line no-empty
         } catch (error) {
         }
         try {
@@ -1305,7 +1263,7 @@ export class Manga_with_allRelationship extends Manga {
                 to_input_author[index] = Author.build_wANY(all_author[index]);
             }
             instance.$authors = new Author_Artists(to_input_author, []).filtred;
-        // eslint-disable-next-line no-empty
+            // eslint-disable-next-line no-empty
         } catch (error) { }
         try {
             const to_input_artists: Array<Author> = [];
@@ -1314,12 +1272,12 @@ export class Manga_with_allRelationship extends Manga {
                 to_input_artists[index] = Author.build_wANY(all_artists[index]);
             }
             instance.$artists = to_input_artists;
-        // eslint-disable-next-line no-empty
+            // eslint-disable-next-line no-empty
         } catch (error) { }
         try {
             instance.$cover = Cover.build_withAny(Attribute.get_some_relationship(relationships, "cover_art")[0]);
             instance.$cover.get_relationships().push(instance);
-        // eslint-disable-next-line no-empty
+            // eslint-disable-next-line no-empty
         } catch (error) { }
         instance.set_avaible_language(attributes.availableTranslatedLanguages);
         instance.set_links(attributes.links);
@@ -1408,23 +1366,23 @@ export class Manga_with_allRelationship extends Manga {
     }
     public static async getOnlinebyID(id: string, client?: Client): Promise<Manga> {
         try {
-            const getted: Promise<Response<MangaResponse>> = Api_Request.get_methods(Manga.get_request_a() + id + "?" + 
-            stringify({
-                includes : [
-                    "manga",
-                    RelationshipsTypes.artist(),
-                    RelationshipsTypes.cover_art(),
-                    RelationshipsTypes.author()
-                ]
-            }) , undefined, client);
+            const getted: Promise<Response<MangaResponse>> = Api_Request.get_methods(Manga.get_request_a() + id + "?" +
+                stringify({
+                    includes: [
+                        "manga",
+                        RelationshipsTypes.artist(),
+                        RelationshipsTypes.cover_art(),
+                        RelationshipsTypes.author()
+                    ]
+                }), undefined, client);
             const to_use = await getted;
             return Manga_with_allRelationship.build_any(to_use.data.data);
         } catch (error) {
-            if(typeof error == "string"){
+            if (typeof error == "string") {
                 throw new Error(error);
-            }else{
+            } else {
                 throw new Error("Unknown error", {
-                    cause : error
+                    cause: error
                 });
             }
         }
@@ -1450,30 +1408,7 @@ export class Manga_with_allRelationship extends Manga {
         }
     }
     public static async search({
-        offset_Limits = new Offset_limits(),
-        title,
-        authors,
-        artists,
-        year,
-        includedTags,
-        includedTagsMode,
-        excludedTags,
-        excludedTagsMode,
-        status,
-        originalLanguage,
-        excludedOriginalLanguage,
-        availableTranslatedLanguage,
-        publicationDemographic,
-        mangaIDs,
-        createdAtSince,
-        updatedAtSince,
-        order,
-        hasAvailableChapters,
-        latestUploadedChapter,
-        group,
-        contentRating,
-        client,
-        authorOrArtist
+        offset_Limits = new Offset_limits(), title, authors, artists, year, includedTags, includedTagsMode, excludedTags, excludedTagsMode, status, originalLanguage, excludedOriginalLanguage, availableTranslatedLanguage, publicationDemographic, mangaIDs, createdAtSince, updatedAtSince, order, hasAvailableChapters, latestUploadedChapter, group, contentRating, client, authorOrArtist
     }: MangaSearch_withAllIncludes): Promise<Collection<Manga_with_allRelationship>> {
         const querys = {
             limit: offset_Limits.get_limits(),
@@ -1498,8 +1433,8 @@ export class Manga_with_allRelationship extends Manga {
             excludedOriginalLanguage,
             availableTranslatedLanguage,
             publicationDemographic,
-            ids : mangaIDs,
-            includes : [
+            ids: mangaIDs,
+            includes: [
                 "manga",
                 RelationshipsTypes.artist(),
                 RelationshipsTypes.cover_art(),

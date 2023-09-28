@@ -1,6 +1,6 @@
 import { isArrayLiteralExpression } from "typescript";
-import { Collection } from "../structures/Collection";
-import { Manga } from "../structures/Manga";
+import Collection from "../structures/Collection";
+import Manga from "../structures/Manga";
 
 export function manga_collection(collection: Collection): Array<Manga> {
     const array = new Array<Manga>(collection.get_limit());

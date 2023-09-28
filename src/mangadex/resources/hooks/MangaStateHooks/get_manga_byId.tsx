@@ -1,5 +1,5 @@
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import { GetMangaByIDResponse, Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import React from "react";
 import { get_mangaQueryKey_byID } from "./get_mangaQueryKey_byID";

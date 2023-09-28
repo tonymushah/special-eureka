@@ -1,4 +1,4 @@
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { PropsProvider } from "../../MangaElementDef/vanilla";
 import Body from "./Body";
 import CoverImage from "./CoverImage";

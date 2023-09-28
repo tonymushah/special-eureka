@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Manga } from "../../../../api/structures/Manga";
+import Manga from "../../../../api/structures/Manga";
 
 export default function MangaArrayConsumer(props : {
     src : Array<Manga>,

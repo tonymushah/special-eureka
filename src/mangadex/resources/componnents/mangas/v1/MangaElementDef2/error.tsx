@@ -43,12 +43,16 @@ export function ErrorBoundaryComp({error} : {
     }
 }
 
+function OnError(error : Error){
+    return(
+        <ErrorBoundaryComp error={error}/>
+    );
+}
+
 export default function ErrorBoundary({children} : React.PropsWithChildren){
     return (
         <TryCatch
-            catch={(error) => (
-                <ErrorBoundaryComp error={error}/>
-            )}
+            catch={OnError}
         >
             {children}
         </TryCatch>

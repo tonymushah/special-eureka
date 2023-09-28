@@ -1,12 +1,11 @@
 import { Client } from "@tauri-apps/api/http";
-import { RelationshipsTypes } from "../internal/Utils";
-import { Attribute } from "./Attributes";
-import { Api_Request } from "../internal/Api_Request";
+import { RelationshipsTypes } from "../../internal/Utils";
+import Attribute from "../Attributes";
+import { Api_Request } from "../../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
-import { GetMangaTagData, LocalizedString, Tag as StaTag } from "../sta/data-contracts";
+import { GetMangaTagData, LocalizedString, Tag as StaTag } from "../../sta/data-contracts";
 
-
-export class Tag extends Attribute {
+export default class Tag extends Attribute {
     private name!: LocalizedString;
     private description!: LocalizedString;
     private group!: string;

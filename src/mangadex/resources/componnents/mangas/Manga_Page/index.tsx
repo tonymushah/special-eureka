@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { useMangaTitle } from "@mangadex/resources/componnents/mangas/v1/MangaTitle";
 import { appWindow } from "@tauri-apps/api/window";
 import "@commons-res/flag-icons/less/flag-icons.less";

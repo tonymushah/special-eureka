@@ -1,5 +1,5 @@
 import Consumer from "@commons-res/components/Consumer";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import React from "react";
 import { useAggregateCollection } from "./useAggregateCollection";
 

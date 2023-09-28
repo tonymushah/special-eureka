@@ -12,7 +12,9 @@ export function ThListTabPanel() {
             key={"ThList"}
             padding={"5px"}
         >
-            <Chakra.Stack>
+            <Chakra.Stack
+                
+            >
                 {src.map((value, index) => (
                     <React.Fragment key={`ThListTabPanel-${value.get_offset()}-${value.get_limit()}-${index}-1`}>
                         {value.get_data().map((value, index) => (
@@ -20,7 +22,9 @@ export function ThListTabPanel() {
                                 fallback={<MangaFallback2 />}
                                 key={`${value.get_id()}-${index}-1`}
                             >
-                                <MangaElementDef2 src={value} />
+                                <Chakra.Box width={"100%"}>
+                                    <MangaElementDef2 src={value} />
+                                </Chakra.Box>
                             </React.Suspense>
                         ))}
                     </React.Fragment>

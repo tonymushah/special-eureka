@@ -1,5 +1,5 @@
 import React from "react";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Collection from "@mangadex/api/structures/Collection";
 import { ActualTab } from "./ActualTab";
 
 const context = React.createContext<Collection<string>[] | undefined>(undefined);

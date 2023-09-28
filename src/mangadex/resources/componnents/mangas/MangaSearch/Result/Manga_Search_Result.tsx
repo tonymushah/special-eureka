@@ -1,4 +1,4 @@
-import { Manga, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import MangaSearch_withAllIncludes from "@mangadex/api/structures/SearchType/MangaSearch_withAllIncludes";
 import CollectionComponnent_withInfiniteQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_withInfiniteQuery";
 import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collection/InfiniteQueryConsumer";

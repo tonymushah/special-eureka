@@ -1,6 +1,6 @@
 import { Offset_limits } from "../internal/Utils";
 
-export abstract class Collection<T>{
+export default abstract class Collection<T>{
     private data!: Array<T>;
     private limit!: number;
     private offset!: number;

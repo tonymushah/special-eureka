@@ -1,5 +1,5 @@
 import React from "react";
-import { Collection } from "../../../api/structures/Collection";
+import Collection from "../../../api/structures/Collection";
 
 export default function UseCollection<T>(props: {
     src: Collection<T>,

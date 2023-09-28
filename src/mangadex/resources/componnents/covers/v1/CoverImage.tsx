@@ -6,6 +6,29 @@ import { get_cover_art_image } from "@mangadex/resources/hooks/CoverStateHooks";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 
+const context = React.createContext<Cover | undefined>(undefined);
+
+export function useCoverImageCover() {
+    const src = React.useContext(context);
+    if (src) {
+        return src;
+    } else {
+        throw new Error("The Cover Image Element should be declared");
+    }
+}
+
+function CoverImageCoverProvider({ value, children }: React.PropsWithChildren<{
+    value: Cover
+}>) {
+    return (
+        <context.Provider value={value}>
+            {
+                children
+            }
+        </context.Provider>
+    );
+}
+
 export default function CoverImage(props: {
     src: Cover,
     isThumbail?: boolean,
@@ -22,11 +45,13 @@ export default function CoverImage(props: {
     if (cover_image_query.isSuccess) {
         if (props.other_comp !== undefined) {
             return (
-                <Consumer to_consume={cover_image_query.data}>
-                    {
-                        props.other_comp
-                    }
-                </Consumer>
+                <CoverImageCoverProvider value={props.src}>
+                    <Consumer to_consume={cover_image_query.data}>
+                        {
+                            props.other_comp
+                        }
+                    </Consumer>
+                </CoverImageCoverProvider>
             );
         } else {
             return (
@@ -43,11 +68,13 @@ export default function CoverImage(props: {
     if (cover_image_query.isError) {
         if (props.other_comp !== undefined) {
             return (
-                <Consumer to_consume={Mangadex_cover_not_found}>
-                    {
-                        props.other_comp
-                    }
-                </Consumer>
+                <CoverImageCoverProvider value={props.src}>
+                    <Consumer to_consume={Mangadex_cover_not_found}>
+                        {
+                            props.other_comp
+                        }
+                    </Consumer>
+                </CoverImageCoverProvider>
             );
         } else {
             return (
@@ -61,11 +88,13 @@ export default function CoverImage(props: {
     }
     if (props.other_comp !== undefined) {
         return (
-            <Consumer to_consume={Mangadex_cover_not_found}>
-                {
-                    props.other_comp
-                }
-            </Consumer>
+            <CoverImageCoverProvider value={props.src}>
+                <Consumer to_consume={Mangadex_cover_not_found}>
+                    {
+                        props.other_comp
+                    }
+                </Consumer>
+            </CoverImageCoverProvider>
         );
     } else {
         return (

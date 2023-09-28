@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { Offset_limits } from "@mangadex/api/internal/Utils";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import CollectionComponnent_withInfiniteQuery from "@mangadex/resources/componnents/Collection/CollectionComponnent_withInfiniteQuery";
 import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collection/InfiniteQueryConsumer";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";

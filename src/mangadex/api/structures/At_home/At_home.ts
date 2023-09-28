@@ -1,7 +1,7 @@
 import { Client } from "@tauri-apps/api/http";
-import { Api_Request } from "../internal/Api_Request";
-import { GetAtHomeServerChapterIdData, GetAtHomeServerChapterIdDataChapter } from "../sta/data-contracts";
-import { Chapter } from "./Chapter";
+import { Api_Request } from "../../internal/Api_Request";
+import { GetAtHomeServerChapterIdData, GetAtHomeServerChapterIdDataChapter } from "../../sta/data-contracts";
+import { Chapter } from "../Chapter";
 export class At_Home{
     private chapter!: Chapter;
     private baseUrl!: string;

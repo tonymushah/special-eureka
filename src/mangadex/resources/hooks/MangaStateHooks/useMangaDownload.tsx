@@ -1,7 +1,7 @@
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 import { Alt_title } from "@mangadex/api/internal/Utils";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { QueryKey, useQuery } from "@tanstack/react-query";
 import { get_manga_byId } from "./get_manga_byId";
 import React from "react";

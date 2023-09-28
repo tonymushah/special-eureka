@@ -1,8 +1,8 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import { Box, Button, Center, ToastId } from "@chakra-ui/react";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
-import { Attribute } from "@mangadex/api/structures/Attributes";
-import { Collection } from "@mangadex/api/structures/Collection";
+import Attribute from "@mangadex/api/structures/Attributes";
+import Collection from "@mangadex/api/structures/Collection";
 import React from "react";
 import UseCollection from "./UseCollection";
 

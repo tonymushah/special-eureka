@@ -1,5 +1,5 @@
 import { Offset_limits } from "../../internal/Utils";
-import { Collection } from "../Collection";
+import Collection from "../Collection";
 import { Group } from "../Group";
 import GroupSearchType from "../SearchType/Group";
 

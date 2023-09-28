@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import React from "react";
 import MangaContextMenu from "../../MangaContextMenu";
 import { PropsProvider } from "../../MangaElementDef/vanilla";

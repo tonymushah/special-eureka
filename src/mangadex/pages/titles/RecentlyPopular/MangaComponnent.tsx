@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { Heading } from "@chakra-ui/react";
-import { Collection } from "@mangadex/api/structures/Collection";
-import { Manga } from "@mangadex/api/structures/Manga";
+import Collection from "@mangadex/api/structures/Collection";
+import Manga from "@mangadex/api/structures/Manga";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import React from "react";
