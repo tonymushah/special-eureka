@@ -1,72 +1,10 @@
 import * as Chakra from "@chakra-ui/react";
 import { Cover } from "@mangadex/api/structures/Cover";
-import CoverImage from "@mangadex/resources/componnents/covers/v1/CoverImage";
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { v4 } from "uuid";
-
-function OtherComp(e: string) {
-    return (
-        <motion.img
-            src={e}
-            style={{
-                "borderRadius": "10px"
-            }}
-            whileHover={{
-                cursor : "pointer",
-                scale: 1.1
-            }}
-        />
-    );
-}
-
-function Image_Part_pHoverVolume(props: {
-    cover: Cover
-}) {
-    return (
-        <CoverImage
-            src={props.cover}
-            other_comp={OtherComp}
-        />
-    );
-}
-
-function MangaPage_CoverImage(props: {
-    cover: Cover
-    onClick?: MouseEventHandler<HTMLLIElement>
-}) {
-    return (
-        <motion.div layoutId={`cover-${props.cover.get_id()}`} >
-            <Image_Part_pHoverVolume cover={props.cover} />
-        </motion.div>
-    );
-}
-
-function CoverModal({
-    cover: selectedCover,
-    setSelectedCover
-}: {
-    cover: Cover,
-    setSelectedCover: (cover: Cover | undefined) => void
-}) {
-    return (
-        <Chakra.Center>
-            <motion.div layoutId={`cover-${selectedCover.get_id()}`} >
-                <Chakra.Card width={"md"} overflow={"hidden"}>
-                    <CoverImage
-                        src={selectedCover}
-                        image_props={{
-                            objectFit: "cover",
-                            onClick() {
-                                setSelectedCover(undefined);
-                            }
-                        }}
-                    />
-                </Chakra.Card>
-            </motion.div>
-        </Chakra.Center>
-    );
-}
+import { MangaPage_CoverImage } from "./MangaPage_CoverImage";
+import { CoverModal } from "./CoverModal";
 
 export default function MangaPage_Cover(props: {
     covers: Array<Cover>

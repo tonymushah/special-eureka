@@ -10,6 +10,7 @@ import { Collection } from "./Collection";
 import CoverCollection from "./CollectionTypes/CoverCollection";
 import { GetMangaByIDResponse, Manga } from "./Manga";
 import CoverSearchType from "./SearchType/Cover";
+import download_cover from "@mangadex/plugin/download/download_cover";
 export class Cover extends Attribute {
     private description!: string;
     private volume!: number;
@@ -292,5 +293,12 @@ export class Cover extends Attribute {
     }
     public static getOfflineCoverImage_notasync(coverId: string): string {
         return DesktopApi.get_url() + "cover/" + coverId + "/image";
+    }
+    public static async downloadCover(cover_id : string): Promise<Cover>{
+        await download_cover(cover_id);
+        return Cover.getAOfflineCover(cover_id);
+    }
+    public async download_cover(): Promise<Cover>{
+        return await Cover.downloadCover(this.get_id());
     }
 }
