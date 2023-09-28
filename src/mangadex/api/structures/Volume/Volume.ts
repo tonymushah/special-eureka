@@ -1,7 +1,7 @@
-import { ChaptersVolumeAggregateData, VolumeAggregateData } from "../sta/data-contracts";
-import { Chapters } from "./Chapter";
+import { ChaptersVolumeAggregateData, VolumeAggregateData } from "../../sta/data-contracts";
+import { Chapters } from "../Chapter";
 
-export class Volume {
+export default class Volume {
     private name!: string;
     private count!: number;
     private chapters!: Array<Chapters>;
