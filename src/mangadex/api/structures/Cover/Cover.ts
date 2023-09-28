@@ -1,17 +1,18 @@
 import { Client, Response, ResponseType } from "@tauri-apps/api/http";
 import { stringify } from "qs";
-import { Api_Request } from "../internal/Api_Request";
-import { Upload } from "../internal/Upload_Retrieve";
-import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
-import { default as DeskApiRequest, default as DesktopApi } from "../offline/DeskApiRequest";
-import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "../sta/data-contracts";
-import Attribute from "./Attributes";
-import Collection from "./Collection";
-import CoverCollection from "./CollectionTypes/CoverCollection";
-import { GetMangaByIDResponse, Manga } from "./Manga";
-import CoverSearchType from "./SearchType/Cover";
+import { Api_Request } from "../../internal/Api_Request";
+import { Upload } from "../../internal/Upload_Retrieve";
+import { Offset_limits, RelationshipsTypes } from "../../internal/Utils";
+import { default as DeskApiRequest, default as DesktopApi } from "../../offline/DeskApiRequest";
+import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "../../sta/data-contracts";
+import Attribute from "../Attributes";
+import Collection from "../Collection";
+import CoverCollection from "../CollectionTypes/CoverCollection";
+import { GetMangaByIDResponse, Manga } from "../Manga";
+import CoverSearchType from "../SearchType/Cover";
 import download_cover from "@mangadex/plugin/download/download_cover";
-export class Cover extends Attribute {
+
+export default class Cover extends Attribute {
     private description!: string;
     private volume!: number;
     private file_name!: string;
