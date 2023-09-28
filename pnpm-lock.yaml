@@ -15,8 +15,8 @@ dependencies:
     specifier: ^7.22.5
     version: 7.22.15
   '@builder.io/partytown':
-    specifier: ^0.7.6
-    version: 0.7.6
+    specifier: ^0.8.0
+    version: 0.8.0
   '@chakra-ui/icons':
     specifier: ^2.0.19
     version: 2.1.1(@chakra-ui/system@2.6.1)(react@18.2.0)
@@ -1770,8 +1770,8 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@builder.io/partytown@0.7.6:
-    resolution: {integrity: sha512-snXIGNiZpqjno3XYQN2lbBB+05hsQR/LSttbtIW1c0gmZ7Kh/DIo0YrxlDxCDulAMFPFM8J+4voLwvYepSj3sw==}
+  /@builder.io/partytown@0.8.0:
+    resolution: {integrity: sha512-M6H7nSMwW2dHd1/MQ+9J1Jqdw22uhl1nKv90kIiL9G7gjFVqqouQp4qSS1oZclmtW1XjAa4Q5UnbHB4iytmxZA==}
     hasBin: true
     dev: false
 
