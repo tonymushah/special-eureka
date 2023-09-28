@@ -1,15 +1,15 @@
 import { Client } from "@tauri-apps/api/http";
 import { stringify } from "qs";
-import { Api_Request } from "../internal/Api_Request";
-import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
-import { AuthorAttributes, AuthorResponse, GetAuthorData, LocalizedString, Relationship, Author as StaAuthor } from "../sta/data-contracts";
-import Attribute from "./Attributes";
-import { Collection } from "./Collection";
-import AuthorCollection from "./CollectionTypes/AuthorCollection";
-import { Manga } from "./Manga";
-import AuthorSearchType from "./SearchType/Author";
+import { Api_Request } from "../../internal/Api_Request";
+import { Offset_limits, RelationshipsTypes } from "../../internal/Utils";
+import { AuthorAttributes, AuthorResponse, GetAuthorData, LocalizedString, Relationship, Author as StaAuthor } from "../../sta/data-contracts";
+import Attribute from "../Attributes";
+import { Collection } from "../Collection";
+import AuthorCollection from "../CollectionTypes/AuthorCollection";
+import { Manga } from "../Manga";
+import AuthorSearchType from "../SearchType/Author";
 
-export class Author extends Attribute {
+export default class Author extends Attribute {
     private name!: string;
     private imageUrl!: string | null;
     private biography!: LocalizedString;
@@ -27,13 +27,13 @@ export class Author extends Attribute {
     naver!: string | null;
     website!: string | null;
     private works: Collection<Manga> | undefined;
-    public has_socials(){
-        if(
-            this.twitter != null || 
-            this.pixiv != null || 
-            this.melonBook != null || 
-            this.fanbox != null || 
-            this.booth != null || 
+    public has_socials() {
+        if (
+            this.twitter != null ||
+            this.pixiv != null ||
+            this.melonBook != null ||
+            this.fanbox != null ||
+            this.booth != null ||
             this.nicoVideo != null ||
             this.skeb != null ||
             this.fantia != null ||
@@ -42,9 +42,9 @@ export class Author extends Attribute {
             this.weibo != null ||
             this.naver != null ||
             this.website != null
-        ){
+        ) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -69,12 +69,12 @@ export class Author extends Attribute {
     public get_imageUrl(): string | null {
         return this.imageUrl;
     }
-    public get_works(): Collection<Manga> | undefined{
+    public get_works(): Collection<Manga> | undefined {
         return this.works;
     }
     public async build_Works(client?: Client) {
         const works_id = this.get_some_relationship("manga").map((d) => d.get_id());
-        if (works_id.length != 0){
+        if (works_id.length != 0) {
             this.set_works((await Manga.search({
                 offset_Limits: new Offset_limits(),
                 client: client,
@@ -112,7 +112,7 @@ export class Author extends Attribute {
         instance.set_biography(attributes.biography);
         try {
             instance.set_relationships_Wany(relationships);
-        // eslint-disable-next-line no-empty
+            // eslint-disable-next-line no-empty
         } catch (error) {
         }
         return instance;
@@ -217,11 +217,11 @@ export class Author extends Attribute {
             const instance: Author = Author.build_wANY(getted.data.data);
             return instance;
         } catch (error) {
-            if(typeof error == "string"){
-            throw new Error(error);
-            }else{
+            if (typeof error == "string") {
+                throw new Error(error);
+            } else {
                 throw new Error("Unknown Error ;(", {
-                    cause : error
+                    cause: error
                 });
             }
         }
@@ -246,7 +246,7 @@ export class Author extends Attribute {
         };
         const getted = await Api_Request.get_methods<GetAuthorData>(Author.get_request_a() + "?" +
             stringify(querys)
-        , undefined, client);
+            , undefined, client);
         const data = getted.data.data;
         const authorArray: Array<Author> = new Array<Author>(data.length);
         for (let index = 0; index < data.length; index++) {
