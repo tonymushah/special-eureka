@@ -181,7 +181,7 @@
     "tslib": "^2.6.0",
     "use-image": "^1.1.1",
     "uuid": "^9.0.0",
-    "vite-plugin-remark-rehype": "^0.1.0"
+    "vite-plugin-remark-rehype": "^1.0.0"
   },
   "nx": {
     "targets": {}
