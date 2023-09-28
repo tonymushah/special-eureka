@@ -32,7 +32,7 @@ import {
     CoverResponse
 } from "../../sta/data-contracts";
 import { Aggregate } from "../Aggregate";
-import { Attribute } from "../Attributes";
+import Attribute from "../Attributes";
 import { Author } from "../Author";
 import { Chapter, Chapter_withAllIncludes } from "../Chapter";
 import { Collection } from "../Collection";

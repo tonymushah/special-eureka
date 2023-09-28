@@ -3,7 +3,7 @@ import { stringify } from "qs";
 import { Api_Request } from "../internal/Api_Request";
 import { Offset_limits, Order, RelationshipsTypes } from "../internal/Utils";
 import { User as StaUser, UserList, UserResponse } from "../sta/data-contracts";
-import { Attribute } from "./Attributes";
+import Attribute from "./Attributes";
 import { Collection } from "./Collection";
 import UserCollection from "./CollectionTypes/UserCollection";
 import UserSearchType from "./SearchType/User";

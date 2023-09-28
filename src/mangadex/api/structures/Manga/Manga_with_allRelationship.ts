@@ -18,7 +18,7 @@ import {
     Manga as StaManga,
     Author as StaAuthor
 } from "../../sta/data-contracts";
-import { Attribute } from "../Attributes";
+import Attribute from "../Attributes";
 import { Author } from "../Author";
 import { Collection } from "../Collection";
 import Manga_withAllIncludes_Collection from "../CollectionTypes/Manga_withAllIncludes_Collection";

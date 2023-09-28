@@ -1,5 +1,5 @@
 import { Api_Request } from "../internal/Api_Request";
-import { Attribute } from "./Attributes";
+import Attribute from "./Attributes";
 import { Client, Response } from "@tauri-apps/api/http";
 import {
     Offset_limits,

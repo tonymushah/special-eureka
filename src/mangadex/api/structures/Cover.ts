@@ -5,7 +5,7 @@ import { Upload } from "../internal/Upload_Retrieve";
 import { Offset_limits, RelationshipsTypes } from "../internal/Utils";
 import { default as DeskApiRequest, default as DesktopApi } from "../offline/DeskApiRequest";
 import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "../sta/data-contracts";
-import { Attribute } from "./Attributes";
+import Attribute from "./Attributes";
 import { Collection } from "./Collection";
 import CoverCollection from "./CollectionTypes/CoverCollection";
 import { GetMangaByIDResponse, Manga } from "./Manga";

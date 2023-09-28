@@ -1,6 +1,6 @@
 import { Client } from "@tauri-apps/api/http";
 import { RelationshipsTypes } from "../internal/Utils";
-import { Attribute } from "./Attributes";
+import Attribute from "./Attributes";
 import { Api_Request } from "../internal/Api_Request";
 import { Response } from "@tauri-apps/api/http";
 import { GetMangaTagData, LocalizedString, Tag as StaTag } from "../sta/data-contracts";
