@@ -64,17 +64,17 @@ export default function RecentlyPopular() {
     }, {
         staleTime: Infinity
     });
-
     if (query.isSuccess) {
         return (
             <HomeRecentlyPopularProvider query={query}>
                 <OnSuccess />
             </HomeRecentlyPopularProvider>
         );
+    } else {
+        return (
+            <HomeRecentlyPopularProvider query={query}>
+                <OnLoading />
+            </HomeRecentlyPopularProvider>
+        );
     }
-    return (
-        <HomeRecentlyPopularProvider query={query}>
-            <OnLoading/>
-        </HomeRecentlyPopularProvider>
-    );
 }

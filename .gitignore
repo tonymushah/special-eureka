@@ -28,28 +28,6 @@ eslint-results.md
 
 # Sentry Auth Token
 .env.sentry-build-plugin
-src-tauri/e99b2531-8828-45f3-a4b9-0c8706c21aa0
-src-tauri/421df825-e7c9-4430-8a02-7338fa945c74
-src-tauri/0072fa01-57f3-40bf-82b5-bb04d696e2ff
-src-tauri/d6ea9c0a-a83d-42c5-8b77-5b913738f267
-src-tauri/de1c9e92-dca0-4785-b746-f06ae7e2773f
-src-tauri/c1b929da-fff1-4b5f-9f6a-ba200077c48b
-src-tauri/abd419b3-1af3-4473-a1b0-5883d537f041
-6df2682a-e46d-4f96-9e89-e1893eaa29d6
-src-tauri/89a34c92-129c-4975-8360-97629f203263
-src-tauri/329003a0-b3f3-42f3-9d4a-30e5306f5cb3
-src-tauri/35b01de0-31a3-4445-81c0-44f8341ae443
-src-tauri/5c0061a2-045e-49aa-a71e-469f69ad9567
-src-tauri/cf364cb2-6205-4eb3-b27b-5cb68e2221c1
-src-tauri/b75a6221-6f08-4f7c-bff8-8849b05aa492
-src-tauri/09bbd17d-d7f9-48dd-9e4a-f48196249421
-src-tauri/19c4451b-dd91-48df-84e7-52fce71236d2
-src-tauri/9650b420-e403-4d26-9442-e2112b0a4df1
+src-tauri/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$
 src-tauri/80eb53e6-0e02-4e57-b8a7-764e1567e029
-src-tauri/ceaa3474-0bae-4dcb-bda4-0c2594be7aee
-src-tauri/86882d97-664c-4116-b3dd-dd65caca6e2f
-src-tauri/965952d1-eb19-4c1a-a87d-21459c5a0785
-src-tauri/f4e97a68-2fdd-4f73-9ccc-f5b65ed81677
-src-tauri/9aa8d879-b8b8-4036-9e18-05a87ab50724
-src-tauri/88b86b6a-dbba-4005-a436-b7240a312123
-src-tauri/8cc08fa2-5ce4-4f7f-984d-3f79fdea6798
+src-tauri/15d96775-c228-4d2a-a070-62d009aa2d22

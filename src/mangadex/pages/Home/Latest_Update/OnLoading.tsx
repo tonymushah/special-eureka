@@ -10,7 +10,7 @@ function Fallback({ fallbacksNumber } : {
         const array: React.ReactNode[] = [];
         for (let index = 0; index < fallbacksNumber; index++) {
             array.push(
-                <Chakra.WrapItem>
+                <Chakra.WrapItem key={`LatestUpdateFallback${index}`}>
                     <MangaElementFallback />
                 </Chakra.WrapItem>
             );

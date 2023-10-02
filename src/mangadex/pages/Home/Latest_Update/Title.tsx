@@ -23,7 +23,8 @@ export function Title() {
                 onClick={() => query.refetch()}
                 isLoading={query.isLoading || query.isRefetching}
                 aria-label="Refresh"
-                icon={<FiRefreshCw />} />
+                icon={<FiRefreshCw />} 
+            />
         </Chakra.HStack>
     );
 }
