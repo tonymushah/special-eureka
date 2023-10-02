@@ -5,7 +5,7 @@ import { Cover } from "@mangadex/api/structures/Cover";
 import { get_cover_art_image } from "@mangadex/resources/hooks/CoverStateHooks";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-
+import { motion } from "framer-motion";
 const context = React.createContext<Cover | undefined>(undefined);
 
 export function useCoverImageCover() {
@@ -55,15 +55,15 @@ export default function CoverImage(props: {
             );
         } else {
             return (
-                <Chakra.Image
-                    key={props.src.get_id()}
-                    src={cover_image_query.data}
-                    fallbackSrc={Mangadex_placeHolder}
-                    {...props.image_props}
-                />
+                <motion.div layoutId={`cover-${props.src.get_id()}`} >
+                    <Chakra.Image
+                        src={cover_image_query.data}
+                        fallbackSrc={Mangadex_placeHolder}
+                        {...props.image_props}
+                    />
+                </motion.div>
             );
         }
-
     }
     if (cover_image_query.isError) {
         if (props.other_comp !== undefined) {
@@ -78,11 +78,13 @@ export default function CoverImage(props: {
             );
         } else {
             return (
-                <Chakra.Image
-                    key={props.src.get_id()}
-                    src={Mangadex_cover_not_found}
-                    {...props.image_props}
-                />
+                <motion.div layoutId={`cover-${props.src.get_id()}`} >
+                    <Chakra.Image
+                        key={props.src.get_id()}
+                        src={Mangadex_cover_not_found}
+                        {...props.image_props}
+                    />
+                </motion.div>
             );
         }
     }
@@ -98,11 +100,13 @@ export default function CoverImage(props: {
         );
     } else {
         return (
-            <Chakra.Image
-                key={props.src.get_id()}
-                src={Mangadex_placeHolder}
-                {...props.image_props}
-            />
+            <motion.div layoutId={`cover-${props.src.get_id()}`} >
+                <Chakra.Image
+                    key={props.src.get_id()}
+                    src={Mangadex_placeHolder}
+                    {...props.image_props}
+                />
+            </motion.div>
         );
     }
 
