@@ -11,7 +11,8 @@ import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { LoaderFunction, Outlet as ReactRouterOutlet, useNavigate, useOutletContext, useParams } from "react-router-dom";
+import { LoaderFunction, Outlet as ReactRouterOutlet, useOutletContext, useParams } from "react-router-dom";
+import ButtonsNavigation from "./ButtonsNavigation";
 
 type MangaPage_OutletContex = {
     toUse: Manga
@@ -76,7 +77,6 @@ export default function MangaPage() {
         "staleTime": Infinity,
         enabled: !!id
     });
-    const navigate = useNavigate();
     if ((query.isSuccess) && id != undefined) {
         return (
             <MyErrorBounderies>
@@ -86,27 +86,7 @@ export default function MangaPage() {
                 <Manga_Page
                     src={query.data.manga}
                 >
-                    <Chakra.Box>
-                        <ChakraContainer>
-                            <Chakra.HStack>
-                            </Chakra.HStack>
-                            <Chakra.ButtonGroup isAttached colorScheme="orange">
-                                <Chakra.Button onClick={() => navigate(".")} >
-                                    Chapters
-                                </Chakra.Button>
-                                <Chakra.Button onClick={() => navigate("covers")}>
-                                    Covers
-                                </Chakra.Button>
-                                {
-                                    query.data.manga.get_some_relationshipLength("manga") == 0 ? (<React.Fragment />) : (
-                                        <Chakra.Button onClick={() => navigate("related")}>
-                                            Related
-                                        </Chakra.Button>
-                                    )
-                                }
-                            </Chakra.ButtonGroup>
-                        </ChakraContainer>
-                    </Chakra.Box>
+                    <ButtonsNavigation/>
                     <Chakra.Box>
                         <ChakraContainer>
                             <Outlet context={{ toUse: query.data.manga }} />

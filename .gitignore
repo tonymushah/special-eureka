@@ -29,3 +29,4 @@ eslint-results.md
 # Sentry Auth Token
 .env.sentry-build-plugin
 src-tauri/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$
+src-tauri/80eb53e6-0e02-4e57-b8a7-764e1567e029
