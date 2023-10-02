@@ -30,3 +30,4 @@ eslint-results.md
 .env.sentry-build-plugin
 src-tauri/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$
 src-tauri/80eb53e6-0e02-4e57-b8a7-764e1567e029
+src-tauri/15d96775-c228-4d2a-a070-62d009aa2d22

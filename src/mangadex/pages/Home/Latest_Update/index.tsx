@@ -109,23 +109,23 @@ export default function Latest_Updates() {
     }, {
         staleTime: Infinity,
     });
-    if (query.isError) {
-        return (
-            <HomeLatest_UpdatesProvider query={query}>
-                <OnError />
-            </HomeLatest_UpdatesProvider>
-        );
-    }
     if (query.isSuccess) {
         return (
             <HomeLatest_UpdatesProvider query={query}>
                 <OnSuccess />
             </HomeLatest_UpdatesProvider>
         );
+    } else if (query.isError) {
+        return (
+            <HomeLatest_UpdatesProvider query={query}>
+                <OnError />
+            </HomeLatest_UpdatesProvider>
+        );
+    } else {
+        return (
+            <HomeLatest_UpdatesProvider query={query}>
+                <OnLoading fallbacksNumber={limit} />
+            </HomeLatest_UpdatesProvider>
+        );
     }
-    return (
-        <HomeLatest_UpdatesProvider query={query}>
-            <OnLoading fallbacksNumber={limit} />
-        </HomeLatest_UpdatesProvider>
-    );
 }
