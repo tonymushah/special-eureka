@@ -4,7 +4,7 @@ import { FiLayout } from "react-icons/fi";
 
 const RtlSidebarOption = React.lazy(() => import("@mangadex/resources/componnents/userOption/RTLSidebar"));
 
-const ColorMode = React.lazy(() => import("@mangadex/resources/componnents/userOption/ColorMode"));
+const ColorMode = React.lazy(() => import("@mangadex/resources/componnents/userOption/utils/ColorMode"));
 
 export function Layout_InterfaceTab() {
     return (

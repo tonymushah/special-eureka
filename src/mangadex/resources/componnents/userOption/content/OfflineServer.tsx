@@ -3,9 +3,9 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { FiServer } from "react-icons/fi";
 
-const ServerAutoStart = React.lazy(() => import("@mangadex/resources/componnents/userOption/ServerAutoStart"));
+const ServerAutoStart = React.lazy(() => import("@mangadex/resources/componnents/userOption/utils/ServerAutoStart"));
 
-const Tasks = React.lazy(() => import("@mangadex/resources/componnents/userOption/ServerTasksInfo"));
+const Tasks = React.lazy(() => import("@mangadex/resources/componnents/userOption/utils/ServerTasksInfo"));
 
 export function OfflineServerTab() {
     return (

@@ -1,6 +1,6 @@
 import { Lang } from "@mangadex/api/internal/Utils";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
 import React from "react";
 
 export default function useLanguageUserOption() {

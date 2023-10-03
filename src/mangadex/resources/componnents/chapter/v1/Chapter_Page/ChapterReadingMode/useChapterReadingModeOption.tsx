@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
-import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
 import React from "react";
 
 export default function useChapterReadingModeOption() {

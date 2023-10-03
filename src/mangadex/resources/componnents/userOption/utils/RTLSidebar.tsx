@@ -1,4 +1,4 @@
-import { Box, HStack, Switch, Text } from "@chakra-ui/react";
+import { HStack, Switch, Text } from "@chakra-ui/react";
 import useServerAutoStart from "@mangadex/resources/hooks/userOptions/RtlSidebar";
 import React from "react";
 
