@@ -7,7 +7,7 @@ import ToFeedButton from "./Buttons/Feed";
 export default function ButtonLinks(){
     return (
         <ChakraContainer>
-            <ButtonGroup colorScheme="orange">
+            <ButtonGroup isAttached colorScheme="orange">
                 <ToGroupDetailsButton/>
                 <ToTitlesButton/>
                 <ToFeedButton/>
