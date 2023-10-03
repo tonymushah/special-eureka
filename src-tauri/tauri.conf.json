@@ -130,7 +130,7 @@
                 "icons/icon.ico"
             ],
             "identifier": "mg.tonymushah.special-eureka",
-            "longDescription": "",
+            "longDescription": "This app is a desktop-mangareader built in Tauri and React, with ❤ and tears by Tony Mushah. Feel free to use it!",
             "macOS": {
                 "entitlements": null,
                 "exceptionDomain": "",
@@ -139,7 +139,7 @@
                 "signingIdentity": null
             },
             "resources": [],
-            "shortDescription": "A MangaReader based on the Mangadex website",
+            "shortDescription": "A desktop manga-reader made with ❤ by Tony Mushah",
             "targets": "all",
             "windows": {
                 "certificateThumbprint": null,
