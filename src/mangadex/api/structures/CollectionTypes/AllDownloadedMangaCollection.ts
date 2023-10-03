@@ -25,6 +25,6 @@ export default class AllDownloadedMangaCollection extends Collection<string>{
         this.$client = client;
     }
     public get_by_Offset_limit(offset_limits: Offset_limits): Promise<Collection<string>> {
-        return Manga.getAllOfflineMangaID(offset_limits, this.$client);
+        return Manga.getAllOfflineMangaID({ offset_Limits: offset_limits, client: this.$client });
     }
 }
