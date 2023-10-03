@@ -2,9 +2,9 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { FiLayout } from "react-icons/fi";
 
-const RtlSidebarOption = React.lazy(() => import("@mangadex/resources/componnents/userOption/RTLSidebar"));
+const RtlSidebarOption = React.lazy(() => import("@mangadex/resources/componnents/userOption/utils/RTLSidebar"));
 
-const ColorMode = React.lazy(() => import("@mangadex/resources/componnents/userOption/ColorMode"));
+const ColorMode = React.lazy(() => import("@mangadex/resources/componnents/userOption/utils/ColorMode"));
 
 export function Layout_InterfaceTab() {
     return (

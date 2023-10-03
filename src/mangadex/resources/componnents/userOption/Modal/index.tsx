@@ -3,10 +3,7 @@ import useUserOptionModal from "@mangadex/resources/hooks/userOptions/ModalConte
 import React from "react";
 import ReactHotkeys from "react-hot-keys";
 import ActivateKuru from "../../kuru_kuru/ActivateKuru";
-import ChapterLanguages, { ChapterLanguagesTab } from "./ChapterLanguages";
-import Layout_Interface, { Layout_InterfaceTab } from "./Layout_Interface";
-import OfflineServer, { OfflineServerTab } from "./OfflineServer";
-import UserFeedBack, { UserFeedBackTab } from "./UserFeedBack";
+import UserOptionContent from "../content";
 
 export default function UserOptionModal() {
     const { state, changeOption, toggle } = useUserOptionModal();
@@ -41,20 +38,7 @@ export default function UserOptionModal() {
                     </Chakra.ModalHeader>
                     <Chakra.ModalCloseButton />
                     <Chakra.ModalBody>
-                        <Chakra.Tabs orientation="vertical">
-                            <Chakra.TabList>
-                                <ChapterLanguagesTab/>
-                                <OfflineServerTab/>
-                                <Layout_InterfaceTab/>
-                                <UserFeedBackTab/>
-                            </Chakra.TabList>
-                            <Chakra.TabPanels>
-                                <ChapterLanguages/>
-                                <OfflineServer/>
-                                <Layout_Interface/>
-                                <UserFeedBack/>
-                            </Chakra.TabPanels>
-                        </Chakra.Tabs>
+                        <UserOptionContent/>
                     </Chakra.ModalBody>
                     <Chakra.ModalFooter>
                         <ActivateKuru />

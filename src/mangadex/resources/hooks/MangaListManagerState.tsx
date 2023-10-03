@@ -1,5 +1,5 @@
 import { QueryKey, useMutation, useQuery } from "@tanstack/react-query";
-import { useUserOption } from "../componnents/userOption/UserOptionProvider";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
 import React from "react";
 
 export function useMangaListOption(){

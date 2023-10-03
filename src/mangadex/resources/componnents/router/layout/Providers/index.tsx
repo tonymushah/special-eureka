@@ -1,5 +1,5 @@
 import { Mangadex_suspense } from "@mangadex/index";
-import UserOptionProvider from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import UserOptionProvider from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
 import { AnimatePresence } from "framer-motion";
 import React from "react";
 import { ProSidebarProvider } from "react-pro-sidebar";

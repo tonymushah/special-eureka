@@ -4,7 +4,7 @@ import { Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter } from "@mangadex/api/structures/Chapter";
 import { Mangadex_suspense, useTrackEvent } from "@mangadex/index";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
-import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import handleRouteError from "@mangadex/resources/hooks/handleRouteError";
 import { Client } from "@tauri-apps/api/http";

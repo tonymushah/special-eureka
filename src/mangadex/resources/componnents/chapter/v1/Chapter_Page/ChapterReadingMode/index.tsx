@@ -77,11 +77,12 @@ function MenuButtonHStack({ value } : {
 
 export default function Chapter_Reading_mode() {
     const { query, setReadingMode } = useChapterReadingModeOption();
+    const backgroundColor = Chakra.useColorModeValue("gray.100", "gray.600");
     if (query.isSuccess) {
         return (
             <Chakra.Menu>
                 <Chakra.MenuButton width={"10em"} padding={1} borderRadius={"base"} textAlign="left" _hover={{
-                    backgroundColor: "gray.100"
+                    backgroundColor
                 }}>
                     <MenuButtonHStack value={query.data}/>
                 </Chakra.MenuButton>

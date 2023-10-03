@@ -18,14 +18,16 @@ export function FanboxButton() {
                 <ExtLink
                     href={fanbox}
                 >
-                    <Chakra.Button
-                        backgroundColor={"#faf18a"}
-                        leftIcon={<Chakra.Image
-                            width={"30px"}
-                            src={fanbox_logo} />}
-                    >
-                        FanBox
-                    </Chakra.Button>
+                    <Chakra.LightMode>
+                        <Chakra.Button
+                            backgroundColor={"#faf18a"}
+                            leftIcon={<Chakra.Image
+                                width={"30px"}
+                                src={fanbox_logo} />}
+                        >
+                            FanBox
+                        </Chakra.Button>
+                    </Chakra.LightMode>
                 </ExtLink>
             </React.Suspense>
         );
