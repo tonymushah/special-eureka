@@ -24,29 +24,15 @@ export default function Links() {
                 <Chakra.Heading fontFamily={"inherit"} size={"md"}>Where to find</Chakra.Heading>
                 <React.Suspense
                 >
-                    <Chakra.Wrap>
-                        <Chakra.WrapItem>
-                            <Website />
-                        </Chakra.WrapItem>
-                        <Chakra.WrapItem>
-                            <Discord />
-                        </Chakra.WrapItem>
-                        <Chakra.WrapItem>
-                            <ContactEmail />
-                        </Chakra.WrapItem>
-                        <Chakra.WrapItem>
-                            <MangaUpdates />
-                        </Chakra.WrapItem>
-                        <Chakra.WrapItem>
-                            <Twitter />
-                        </Chakra.WrapItem>
-                        <Chakra.WrapItem>
-                            <IrcChannel />
-                        </Chakra.WrapItem>
-                        <Chakra.WrapItem>
-                            <IrcServer/>
-                        </Chakra.WrapItem>
-                    </Chakra.Wrap>
+                    <Chakra.ButtonGroup>
+                        <Website />
+                        <Discord />
+                        <ContactEmail />
+                        <MangaUpdates />
+                        <Twitter />
+                        <IrcChannel />
+                        <IrcServer />
+                    </Chakra.ButtonGroup>
                 </React.Suspense>
             </Chakra.Box>
         );

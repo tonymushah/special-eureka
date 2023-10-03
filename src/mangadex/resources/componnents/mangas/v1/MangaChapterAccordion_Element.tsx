@@ -6,6 +6,7 @@ import React from "react";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 import MangaFallback2 from "./MangaElement2Fallback";
+import CollapseHeight from "../Mainpage/Top_chap/utils/CollapseHeight";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
 const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"));
@@ -23,6 +24,16 @@ export default function MangaChapterAccordion_Element(props: {
     const { download_, delete_ } = useMangaDownload_Delete({
         mangaID: mangaID
     });
+    const [showed, inCollapse] = React.useMemo(() => {
+        const chapters = props.src.$chapters;
+        if (chapters.length > 3) {
+            const showed_ = chapters.splice(0, 3);
+            const inCollapse_ = chapters.splice(4);
+            return [showed_, inCollapse_];
+        } else {
+            return [chapters, undefined];
+        }
+    }, [props.src]);
     if (query.isSuccess) {
         return (
             <React.Suspense fallback={
@@ -38,7 +49,7 @@ export default function MangaChapterAccordion_Element(props: {
                     <Chakra.Box width={"full"}>
                         <Chakra.VStack spacing={1} display={"block"}>
                             {
-                                props.src.$chapters.map((value, index) => index < 3 ? (
+                                showed.map((value) => (
                                     <React.Suspense
                                         fallback={
                                             <Chakra.Box width={"full"}>
@@ -53,12 +64,40 @@ export default function MangaChapterAccordion_Element(props: {
                                             chapter={value}
                                         />
                                     </React.Suspense>
-                                ) : (<React.Fragment key={value.get_id()}></React.Fragment>))
+                                ))
                             }
                         </Chakra.VStack>
+                        {
+                            inCollapse != undefined ? (
+                                <CollapseHeight>
+                                    <Chakra.VStack spacing={1} display={"block"}>
+                                        {
+                                            inCollapse.map((value) => (
+                                                <React.Suspense
+                                                    fallback={
+                                                        <Chakra.Box width={"full"}>
+                                                            <Chakra.Center>
+                                                                <MangadexSpinner />
+                                                            </Chakra.Center>
+                                                        </Chakra.Box>
+                                                    }
+                                                    key={value.get_id()}
+                                                >
+                                                    <Chapter_Element1
+                                                        chapter={value}
+                                                    />
+                                                </React.Suspense>
+                                            ))
+                                        }
+                                    </Chakra.VStack>
+                                </CollapseHeight>
+                            ) : (
+                                <React.Fragment />
+                            )
+                        }
                     </Chakra.Box>
                 </MangaElementDef2_withChildren>
-            </React.Suspense>
+            </React.Suspense >
         );
     }
     if (query.isError) {

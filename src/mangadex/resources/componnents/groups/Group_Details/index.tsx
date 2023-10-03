@@ -18,7 +18,7 @@ export const ExtLink = React.lazy(async () => {
 export default function Group_Details() {
     
     return (
-        <Chakra.Box>
+        <Chakra.Box minHeight={"40vh"}>
             <ChakraContainer>
                 <Chakra.Grid templateColumns={"repeat(12, 1fr)"}>
                     <Chakra.GridItem colSpan={3}>

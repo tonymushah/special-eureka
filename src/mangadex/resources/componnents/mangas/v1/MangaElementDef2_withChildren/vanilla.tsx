@@ -51,7 +51,7 @@ export default function MangaElementDef2_withChildren(props: React.PropsWithChil
                                 </TryCatch>
                             </Chakra.HStack>
                         </Chakra.Box>
-                        <Chakra.Box width={"full"} textAlign={"start"} overflowY={"scroll"}>
+                        <Chakra.Box width={"full"} textAlign={"start"}>
                             {
                                 props.children
                             }

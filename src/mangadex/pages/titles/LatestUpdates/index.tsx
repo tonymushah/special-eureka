@@ -64,7 +64,7 @@ export const loader: LoaderFunction = async function () {
     try {
         const startOffsetLimit = new Offset_limits(0, 25);
         if (await Api_Request.ping()) {
-            await queryClient.prefetchInfiniteQuery(queryKey(), async function ({ pageParam: offset_Limits = startOffsetLimit }) {
+            await queryClient.prefetchQuery(queryKey(), async function ({ pageParam: offset_Limits = startOffsetLimit }) {
                 return await queryFn({
                     offset_Limits,
                     userOption

@@ -833,7 +833,7 @@ export default class Manga extends Attribute {
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllOfflineMangaID(offset_Limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
+    public static async getAllOfflineMangaID({ offset_Limits, client, title }: { offset_Limits?: Offset_limits; client?: Client; title? : string} = {}): Promise<Collection<string>> {
         if (offset_Limits == undefined) {
             offset_Limits = new Offset_limits();
         }
@@ -850,7 +850,8 @@ export default class Manga extends Attribute {
             }> = await DeskApiRequest.get_methods("manga", {
                 query: {
                     offset: JSON.stringify(offset_Limits.get_offset()),
-                    limit: JSON.stringify(offset_Limits.get_limits())
+                    limit: JSON.stringify(offset_Limits.get_limits()),
+                    title
                 }
             }, client);
             return new AllDownloadedMangaCollection(response.data.data, client);
@@ -894,8 +895,8 @@ export default class Manga extends Attribute {
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllDownloadedMangaID(offset_Limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
-        return await Manga.getAllOfflineMangaID(offset_Limits, client);
+    public static async getAllDownloadedMangaID({ offset_Limits, client, title }: { offset_Limits?: Offset_limits; client?: Client; title?: string } = {}): Promise<Collection<string>> {
+        return await Manga.getAllOfflineMangaID({ offset_Limits, client, title });
     }
     public static async getAllDownloadedCover_ofAManga(manga_id: string, offset_Limits?: Offset_limits, client?: Client): Promise<Collection<string>> {
         let isInnerClient = false;
@@ -928,7 +929,7 @@ export default class Manga extends Attribute {
                 throw new Error("The offline server isn't started");
             }
         } finally {
-            if(isInnerClient){
+            if (isInnerClient) {
                 client.drop();
                 client = undefined;
             }

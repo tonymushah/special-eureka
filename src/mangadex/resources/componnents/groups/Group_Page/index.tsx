@@ -5,7 +5,7 @@ import { trackEvent } from "@mangadex/index";
 import { UseQueryResult } from "@tanstack/react-query";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
-import { BottomContent } from "./BottomContent";
+import BottomContent from "./BottomContent";
 import OnSuccess from "./OnSuccess";
 import WaveHaikei_ from "../wave-haikei-1.svg";
 import WaveHaikeiDark_ from "../wave-haikei.svg";
@@ -78,7 +78,7 @@ export default function Group_Page(props: React.PropsWithChildren<{
                         </Chakra.Box>
                     </Chakra.Center>
                 </Chakra.Box>
-                <BottomContent src={props.src}>
+                <BottomContent>
                     {props.children}
                 </BottomContent>
             </Chakra.Box>
