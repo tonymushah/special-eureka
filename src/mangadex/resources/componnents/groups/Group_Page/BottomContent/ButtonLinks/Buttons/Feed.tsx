@@ -2,7 +2,7 @@ import { Button } from "@chakra-ui/react";
 import useState from "./useState";
 
 export default function ToFeedButton(){
-    const {navigate, isOnTo}  = useState("feed");
+    const {navigate, isOnTo}  = useState("feeds");
     return (
         <Button variant={isOnTo ? "solid" : "outline"} 
             onClick={() => navigate({
