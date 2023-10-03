@@ -1,4 +1,4 @@
-import { useUserOption } from "@mangadex/resources/componnents/userOption/UserOptionProvider";
+import { useUserOption } from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
 import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
 import React from "react";
 

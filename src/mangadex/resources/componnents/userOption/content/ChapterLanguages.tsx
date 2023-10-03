@@ -3,7 +3,7 @@ import * as ChakraIcons from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
 import { FiBook } from "react-icons/fi";
 
-const SelectLanguages = React.lazy(() => import("@mangadex/resources/componnents/userOption/SelectLanguages"));
+const SelectLanguages = React.lazy(() => import("@mangadex/resources/componnents/userOption/utils/SelectLanguages"));
 
 export default function ChapterLanguages() {
     return (
