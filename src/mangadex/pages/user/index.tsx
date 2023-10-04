@@ -5,6 +5,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 import { Outlet, useOutletContext } from "react-router";
 import ButtonsNavigation from "./ButtonsNavigation";
+import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 
 type UserPage_OutletContext = {
     user: User
@@ -32,12 +33,14 @@ export default function UserPage(props: React.PropsWithChildren<{
             <Chakra.Box bg={bg} p={4}>
                 <Chakra.Heading fontFamily={"inherit"}>{props.user.get_username()}</Chakra.Heading>
             </Chakra.Box>
-            <Chakra.Box>
+            <Chakra.VStack alignItems={"start"}>
                 <Chakra.Box>
                     <ButtonsNavigation />
                 </Chakra.Box>
-                <Outlet context={{ user: props.user }} />
-            </Chakra.Box>
+                <ChakraContainer>
+                    <Outlet context={{ user: props.user }} />
+                </ChakraContainer>
+            </Chakra.VStack>
         </Chakra.Box>
     );
 }
