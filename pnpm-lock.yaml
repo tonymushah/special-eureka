@@ -173,6 +173,9 @@ dependencies:
   kute.js:
     specifier: ^2.2.4
     version: 2.2.4
+  million:
+    specifier: ^2.6.4
+    version: 2.6.4
   minidenticons:
     specifier: ^2.0.2
     version: 2.0.2
@@ -274,7 +277,7 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-upload/5348082f7436b01f0b5c08d6ddfc4f760abbac7e
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/465da3443cd40585f8d7b8fdc1490632540aeb73
+    version: github.com/tauri-apps/tauri-plugin-websocket/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1
   tauri-settings:
     specifier: ^0.3.0
     version: 0.3.4
@@ -906,7 +909,6 @@ packages:
     dependencies:
       '@babel/core': 7.22.20
       '@babel/helper-plugin-utils': 7.22.5
-    dev: true
 
   /@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.22.20):
     resolution: {integrity: sha512-d8waShlpFDinQ5MtvGU9xDAOzKH47+FFoney2baFIoMr952hKOLp1HR7VszoZvOsV/4+RRszNY7D17ba0te0ig==}
@@ -990,7 +992,6 @@ packages:
     dependencies:
       '@babel/core': 7.22.20
       '@babel/helper-plugin-utils': 7.22.5
-    dev: true
 
   /@babel/plugin-syntax-unicode-sets-regex@7.18.6(@babel/core@7.22.20):
     resolution: {integrity: sha512-727YkEAPwSIQTv5im8QHz3upqp92JTWhidIC81Tdx4VJYIte/VndKf1qKrfnnhPLiPghStWfvC/iFaMCQu7Nqg==}
@@ -12677,6 +12678,22 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /million@2.6.4:
+    resolution: {integrity: sha512-voUkdd/jHWrG+7NS+mX49Pat+POKdgGW78V7pYMSrTaOjUitR6ySEcAci8hn17Rsx1IMI3+5w41dkADM1J1ZEg==}
+    hasBin: true
+    dependencies:
+      '@babel/core': 7.22.20
+      '@babel/generator': 7.22.15
+      '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.22.20)
+      '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.22.20)
+      '@babel/types': 7.22.19
+      kleur: 4.1.5
+      rollup: 3.29.4
+      unplugin: 1.5.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -16026,7 +16043,6 @@ packages:
       chokidar: 3.5.3
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.5.0
-    dev: true
 
   /untildify@4.0.0:
     resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}
@@ -16885,8 +16901,8 @@ packages:
       '@tauri-apps/api': 1.5.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/465da3443cd40585f8d7b8fdc1490632540aeb73:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/465da3443cd40585f8d7b8fdc1490632540aeb73}
+  github.com/tauri-apps/tauri-plugin-websocket/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:
