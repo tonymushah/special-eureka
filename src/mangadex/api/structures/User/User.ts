@@ -46,6 +46,7 @@ export default class User extends Attribute {
             instance.set_relationships_Wany(relationships);
             // eslint-disable-next-line no-empty
         } catch (e) {
+            console.error(e);
         }
 
         return instance;
