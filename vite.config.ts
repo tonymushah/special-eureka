@@ -1,4 +1,3 @@
-import million from 'million/compiler';
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { AliasOptions, defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
@@ -20,7 +19,7 @@ function generateAliases(): AliasOptions {
 
 export default defineConfig({
     clearScreen: false,
-    plugins: [million.vite({ auto: true }), { enforce: "pre", ...mdx() }, //ReactInspector(),
+    plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
     //progress(),
     /*ViteAliases({
         "dir": "src",
