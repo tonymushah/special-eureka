@@ -274,7 +274,7 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-upload/5348082f7436b01f0b5c08d6ddfc4f760abbac7e
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/465da3443cd40585f8d7b8fdc1490632540aeb73
+    version: github.com/tauri-apps/tauri-plugin-websocket/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1
   tauri-settings:
     specifier: ^0.3.0
     version: 0.3.4
@@ -16885,8 +16885,8 @@ packages:
       '@tauri-apps/api': 1.5.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/465da3443cd40585f8d7b8fdc1490632540aeb73:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/465da3443cd40585f8d7b8fdc1490632540aeb73}
+  github.com/tauri-apps/tauri-plugin-websocket/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:
