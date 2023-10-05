@@ -28,7 +28,7 @@ export default defineConfig({
         "adjustDuplicates" : true,
     }),*/ react({
         "tsDecorators": true,
-        "jsxImportSource": "react"
+        "jsxImportSource": "preact"
     }), remarkRehypePlugin({
     }), ViteImageOptimizer(),
     sentryVitePlugin({
@@ -47,7 +47,11 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            ...generateAliases()
+            ...generateAliases(),
+            "react": "preact/compat",
+            "react-dom/test-utils": "preact/test-utils",
+            "react-dom": "preact/compat",     // Must be below test-utils
+            "react/jsx-runtime": "preact/jsx-runtime"
         }
     },
     appType: "spa",

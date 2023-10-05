@@ -9,7 +9,7 @@ const Router = React.lazy(() => import("./router"));
 const FullscreenF11_ = React.lazy(() => import("@commons-res/components/FullscreenF11"));
 
 const FullscreenF11 = () => (
-    <React.Suspense>
+    <React.Suspense fallback={<React.Fragment/>}>
         <FullscreenF11_ />
     </React.Suspense>
 );
