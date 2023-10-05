@@ -15,13 +15,27 @@ const transition : Transition = {
 
 export default function NavigationAnimation({ children } : React.PropsWithChildren){
     const navigation = useNavigation();
+    const animate = React.useMemo(() => {
+        if(navigation.state == "loading" || navigation.state == "submitting" ){
+            return "isNormalLoad";
+        }else{
+            return "none";
+        }
+    }, [navigation]);
+    const cursor = React.useMemo(() => {
+        if(navigation.state == "loading" || navigation.state == "submitting"){
+            return "wait";
+        }else{
+            return "default";
+        }
+    }, [navigation]);
     return (
         <motion.div
-            animate={navigation.state === "loading" ? "isNormalLoad" : "none"}
+            animate={animate}
             transition={transition}
             variants={variants}
             style={{
-                cursor : navigation.state === "loading" ? "wait" : "default"
+                cursor
             }}
         >
             {children}
