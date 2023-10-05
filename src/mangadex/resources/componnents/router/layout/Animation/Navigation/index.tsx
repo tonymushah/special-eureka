@@ -15,20 +15,26 @@ const transition : Transition = {
 
 export default function NavigationAnimation({ children } : React.PropsWithChildren){
     const navigation = useNavigation();
+    const shouldTransit = React.useMemo(() => navigation.state == "loading" || navigation.state == "submitting", [navigation]);
     const animate = React.useMemo(() => {
-        if(navigation.state == "loading" || navigation.state == "submitting" ){
+        if(shouldTransit){
             return "isNormalLoad";
         }else{
             return "none";
         }
     }, [navigation]);
     const cursor = React.useMemo(() => {
-        if(navigation.state == "loading" || navigation.state == "submitting"){
+        if(shouldTransit){
             return "wait";
         }else{
             return "default";
         }
     }, [navigation]);
+    const onClickCapture = React.useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
+        if(shouldTransit){
+            e.preventDefault();
+        }
+    }, [shouldTransit]);
     return (
         <motion.div
             animate={animate}
@@ -37,6 +43,7 @@ export default function NavigationAnimation({ children } : React.PropsWithChildr
             style={{
                 cursor
             }}
+            onClickCapture={onClickCapture}
         >
             {children}
         </motion.div>
