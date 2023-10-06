@@ -142,7 +142,7 @@
     "jotai": "^2.2.2",
     "jotai-optics": "^0.3.0",
     "kute.js": "^2.2.4",
-    "minidenticons": "^2.0.2",
+    "minidenticons": "^4.0.0",
     "optics-ts": "^2.4.0",
     "preact": "^10.18.0",
     "prop-types": "^15.8.1",

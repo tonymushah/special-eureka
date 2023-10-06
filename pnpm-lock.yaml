@@ -174,8 +174,8 @@ dependencies:
     specifier: ^2.2.4
     version: 2.2.4
   minidenticons:
-    specifier: ^2.0.2
-    version: 2.0.2
+    specifier: ^4.0.0
+    version: 4.2.0
   optics-ts:
     specifier: ^2.4.0
     version: 2.4.1
@@ -12710,9 +12710,9 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /minidenticons@2.0.2:
-    resolution: {integrity: sha512-/dxtrg3MoFrozIM6PfUZbbGHjZDIrrWmf9Tl3JMxIAlFd/Bw3NxdD9TuW61EDqBaAkxNvVEzY6cSvFWB3M9RmQ==}
-    engines: {node: '>=14.0.0'}
+  /minidenticons@4.2.0:
+    resolution: {integrity: sha512-2T3VU1N30yI3kXMRbdLsJ5DgsBoGLi2+2hbm1xTOU2RQXWW5wwpmz9XQohVSsVlhymf4W69sMGj6s39t796PBA==}
+    engines: {node: '>=15.14.0'}
     dev: false
 
   /minifill@0.0.17:
