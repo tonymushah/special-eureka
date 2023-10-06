@@ -8,12 +8,12 @@ rust-version = "1.59"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 
 [dependencies]
-tauri = { version = "1.4.1" }
+tauri = { version = "1.5.1" }
 serde = "1.0"
 tokio = "1.32.0"
 thiserror = "1"
 #anyhow = "1.0.58"
-reqwest = "0.11.20"
+reqwest = "0.11.22"
 log = "^0.4.20"
 actix-web = "4"
 fern = "0.6"
