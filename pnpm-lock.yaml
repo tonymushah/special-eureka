@@ -265,16 +265,16 @@ dependencies:
     version: 9.4.1
   tauri-plugin-log-api:
     specifier: github:tauri-apps/tauri-plugin-log#dev
-    version: github.com/tauri-apps/tauri-plugin-log/be811332676ff73e1e891f31ce3de8d447fdf07e
+    version: git@github.com+tauri-apps/tauri-plugin-log/be811332676ff73e1e891f31ce3de8d447fdf07e
   tauri-plugin-store-api:
     specifier: github:tauri-apps/tauri-plugin-store#dev
-    version: github.com/tauri-apps/tauri-plugin-store/f4ef29684e4a32eddf51befaae98a5e498df8574
+    version: git@github.com+tauri-apps/tauri-plugin-store/f4ef29684e4a32eddf51befaae98a5e498df8574
   tauri-plugin-upload-api:
     specifier: github:tauri-apps/tauri-plugin-upload
-    version: github.com/tauri-apps/tauri-plugin-upload/5348082f7436b01f0b5c08d6ddfc4f760abbac7e
+    version: git@github.com+tauri-apps/tauri-plugin-upload/5348082f7436b01f0b5c08d6ddfc4f760abbac7e
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1
+    version: git@github.com+tauri-apps/tauri-plugin-websocket/15c723c6a488d7cf889aabbfb912a1a4cf3c5195
   tauri-settings:
     specifier: ^0.3.0
     version: 0.3.4
@@ -13444,8 +13444,8 @@ packages:
     resolution: {integrity: sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==}
     dev: false
 
-  /postcss@8.4.30:
-    resolution: {integrity: sha512-7ZEao1g4kd68l97aWG/etQKPKq07us0ieSZ2TnFDk11i0ZfDW2AwKHYU8qv4MZKqN2fdBfg+7q0ES06UA73C1g==}
+  /postcss@8.4.31:
+    resolution: {integrity: sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.6
@@ -16367,7 +16367,7 @@ packages:
       '@types/node': 18.17.18
       esbuild: 0.18.20
       less: 4.2.0
-      postcss: 8.4.30
+      postcss: 8.4.31
       rollup: 3.29.2
       sass: 1.68.0
       terser: 5.20.0
@@ -16853,32 +16853,32 @@ packages:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-log/be811332676ff73e1e891f31ce3de8d447fdf07e:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-log/tar.gz/be811332676ff73e1e891f31ce3de8d447fdf07e}
+  git@github.com+tauri-apps/tauri-plugin-log/be811332676ff73e1e891f31ce3de8d447fdf07e:
+    resolution: {commit: be811332676ff73e1e891f31ce3de8d447fdf07e, repo: git@github.com:tauri-apps/tauri-plugin-log.git, type: git}
     name: tauri-plugin-log-api
     version: 0.0.0
     dependencies:
       '@tauri-apps/api': 1.5.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-store/f4ef29684e4a32eddf51befaae98a5e498df8574:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-store/tar.gz/f4ef29684e4a32eddf51befaae98a5e498df8574}
+  git@github.com+tauri-apps/tauri-plugin-store/f4ef29684e4a32eddf51befaae98a5e498df8574:
+    resolution: {commit: f4ef29684e4a32eddf51befaae98a5e498df8574, repo: git@github.com:tauri-apps/tauri-plugin-store.git, type: git}
     name: tauri-plugin-store-api
     version: 0.0.0
     dependencies:
       '@tauri-apps/api': 1.5.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-upload/5348082f7436b01f0b5c08d6ddfc4f760abbac7e:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-upload/tar.gz/5348082f7436b01f0b5c08d6ddfc4f760abbac7e}
+  git@github.com+tauri-apps/tauri-plugin-upload/5348082f7436b01f0b5c08d6ddfc4f760abbac7e:
+    resolution: {commit: 5348082f7436b01f0b5c08d6ddfc4f760abbac7e, repo: git@github.com:tauri-apps/tauri-plugin-upload.git, type: git}
     name: tauri-plugin-upload-api
     version: 0.0.0
     dependencies:
       '@tauri-apps/api': 1.5.0
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/4d6a0c8028b4193c562bf5e0c27c862f3664a1b1}
+  git@github.com+tauri-apps/tauri-plugin-websocket/15c723c6a488d7cf889aabbfb912a1a4cf3c5195:
+    resolution: {commit: 15c723c6a488d7cf889aabbfb912a1a4cf3c5195, repo: git@github.com:tauri-apps/tauri-plugin-websocket.git, type: git}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:
