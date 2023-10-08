@@ -22,9 +22,9 @@ export class Aggregate {
     public get_volumes(): Array<Volume> {
         return this.volumes;
     }
-    public constructor(count: number, volumes: Array<Volume>) {
+    public constructor(count: number, volumes: Array<Volume>, isReverse?: boolean) {
         this.set_count(count);
-        this.set_volumes(sort_volumes(volumes));
+        this.set_volumes(sort_volumes(volumes, isReverse));
     }
     public static build_wANY(object: VolumesAggregateData): Aggregate {
         let volumes_length = 0;
@@ -71,7 +71,7 @@ export class Aggregate {
                 client
             } = props;
             const getted = await Api_Request.get_methods<GetMangaAggregateData>(
-                Manga.get_request_a() + mangaID + "/aggregate?" + 
+                Manga.get_request_a() + mangaID + "/aggregate?" +
                 stringify({
                     translatedLanguage,
                     groups
@@ -118,8 +118,8 @@ export class Aggregate {
                 } else {
                     return result;
                 }
-            // eslint-disable-next-line no-empty
-            } catch (error) {}
+                // eslint-disable-next-line no-empty
+            } catch (error) { }
         }
         throw Error(`this chapter ${id} has no next chapter`);
     }
@@ -138,8 +138,8 @@ export class Aggregate {
                 } else {
                     return result;
                 }
-            // eslint-disable-next-line no-empty
-            } catch (error) {}
+                // eslint-disable-next-line no-empty
+            } catch (error) { }
         }
         throw Error("this chapter " + id + " has no previous chapter");
     }
@@ -148,14 +148,21 @@ export class Aggregate {
             const volume = this.volumes[index];
             try {
                 return volume.getCurrent(id);
-            // eslint-disable-next-line no-empty
-            } catch (error) {}
+                // eslint-disable-next-line no-empty
+            } catch (error) { }
         }
         throw Error("this chapter " + id + " isn't in this manga");
     }
-    public sortVolumesChapters() {
-        this.volumes.forEach((v) => {
-            v.sort_volume();
-        });
+    public sortVolumesChapters(isReverse?: boolean) {
+        if (isReverse == true) {
+            this.set_volumes(this.volumes.reverse());
+            this.volumes.forEach((v) => {
+                v.sort_volume(true);
+            });
+        } else {
+            this.volumes.forEach((v) => {
+                v.sort_volume(false);
+            });
+        }
     }
 }
