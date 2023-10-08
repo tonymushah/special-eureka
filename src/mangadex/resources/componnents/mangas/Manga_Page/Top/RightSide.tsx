@@ -38,6 +38,7 @@ export default function RightSide() {
     return (
         <Chakra.Box>
             <Chakra.VStack spacing={5} alignItems={"start"}>
+
                 <Chakra.Box display={"block"}>
                     <React.Suspense
                         fallback={
@@ -71,26 +72,30 @@ export default function RightSide() {
                         </Chakra.Heading>
                     </React.Suspense>
                 </Chakra.Box>
-                <Suspense>
-                    <Chakra.Box display={"block"}>
-                        <Chakra.Heading
-                            noOfLines={2}
-                            fontFamily={"inherit"}
-                            size={{
-                                base: "sm",
-                                sm: "md",
-                                md: "lg"
-                            }}
-                        >
-                            <AltTitle />
-                        </Chakra.Heading>
-                    </Chakra.Box>
-                </Suspense>
-                <Suspense>
-                    <Chakra.Text noOfLines={3}>
-                        <Author_Artists__Comp />
-                    </Chakra.Text>
-                </Suspense>
+                <Chakra.Box>
+                    <Suspense>
+                        <Chakra.Box display={"block"}>
+                            <Chakra.Heading
+                                noOfLines={2}
+                                fontFamily={"inherit"}
+                                size={{
+                                    base: "sm",
+                                    sm: "md",
+                                    md: "lg"
+                                }}
+                            >
+                                <AltTitle />
+                            </Chakra.Heading>
+                        </Chakra.Box>
+                    </Suspense>
+                </Chakra.Box>
+                <Chakra.Box>
+                    <Suspense>
+                        <Chakra.Text noOfLines={3}>
+                            <Author_Artists__Comp />
+                        </Chakra.Text>
+                    </Suspense>
+                </Chakra.Box>
                 <Chakra.VStack
                     alignItems={"start"}
                     display={{
@@ -98,7 +103,7 @@ export default function RightSide() {
                         lg: "inherit"
                     }}
                 >
-                    <Chakra.Text
+                    <Chakra.Box
                         fontWeight={"bold"}
                         padding={0}
                         margin={0}
@@ -110,16 +115,18 @@ export default function RightSide() {
                                 <Publication />
                             </Chakra.Center>
                         </Suspense>
-                    </Chakra.Text>
-                    <Suspense>
-                        <Chakra.Text
-                            noOfLines={0}
-                            padding={0}
-                            margin={0}
-                        >
-                            <Tags />
-                        </Chakra.Text>
-                    </Suspense>
+                    </Chakra.Box>
+                    <Chakra.Box>
+                        <Suspense>
+                            <Chakra.Box
+                                noOfLines={0}
+                                padding={0}
+                                margin={0}
+                            >
+                                <Tags />
+                            </Chakra.Box>
+                        </Suspense>
+                    </Chakra.Box>
                     <Chakra.Box>
                         <Suspense>
                             <ButtonGroup__ />

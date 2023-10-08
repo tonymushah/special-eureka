@@ -11,7 +11,7 @@ export function get_manga_listBy_chapter_array(to_use: Array<Chapter>): Array<st
             if (manga_id != undefined && returns.includes(manga_id) == false) {
                 returns.push(manga_id);
             }
-        // eslint-disable-next-line no-empty
+            // eslint-disable-next-line no-empty
         } catch (error) {
         }
     });
@@ -39,11 +39,15 @@ export function make_first_UpperCare(input: string): string {
     }
 }
 
-export function sort_volumes(volumes : Array<Volume>) : Array<Volume>{
+export function sort_volumes(volumes: Array<Volume>, isReverse?: boolean): Array<Volume> {
     return volumes.sort((a, b) => {
         const a_num = Number(a.get_name());
         const b_num = Number(b.get_name());
-        return a_num - b_num;
+        if (isReverse == true) {
+            return b_num - a_num;
+        } else {
+            return a_num - b_num;
+        }
     });
 }
 

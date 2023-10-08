@@ -105,7 +105,7 @@ export default class Volume {
         }
         throw Error("This chapter" + id + " is not in this volume");
     }
-    public sort_volume() {
+    public sort_volume(isReverse?: boolean) {
         this.set_chapters(this.chapters.sort((a, b) => {
             const a_num = Number(a.get_name());
             if (Number.isNaN(a_num)) {
@@ -115,7 +115,12 @@ export default class Volume {
             if (Number.isNaN(b_num)) {
                 return 0;
             }
-            return a_num - b_num;
+            if(isReverse == true){
+                return b_num - a_num;
+            }else{
+                return a_num - b_num;
+            }
         }));
     }
+
 }
