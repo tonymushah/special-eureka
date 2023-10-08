@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { Aggregate_box } from "../aggregate/Aggregate_box";
 import { orderAtom } from "./order.atom";
 
+// TODO Get back the Aggregate options 
 function AggregateOptions() {
     const [order, setOrder] = useAtom(orderAtom);
     return (
@@ -34,10 +35,9 @@ function AggregateOptions() {
 function ReallAggregate({ src }: {
     src: Aggregate
 }) {
-    const [order,] = useAtom(orderAtom);
     return (
         <Chakra.Box>
-            <Aggregate_box selected={0} src={src} separator={3} isReverse={order} />
+            <Aggregate_box selected={0} src={src} separator={3} />
         </Chakra.Box>
     );
 }
@@ -47,7 +47,6 @@ export default function Aggregate_part({ src }: {
 }) {
     return (
         <Chakra.Box>
-            <AggregateOptions />
             <ReallAggregate src={src} />
         </Chakra.Box>
     );

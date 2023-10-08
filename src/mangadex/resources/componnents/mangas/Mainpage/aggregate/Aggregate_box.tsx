@@ -22,6 +22,7 @@ export function useSplitAggreateIntoPartsNumber({ src, separator }: {
         }
     }, [src, separator]);
 }
+
 export function useSpliceAggregate({ src, separator }: {
     src: Aggregate,
     separator: number
@@ -30,27 +31,30 @@ export function useSpliceAggregate({ src, separator }: {
         src,
         separator
     });
+    const volumes = React.useMemo(() => src.get_volumes(), [src]);
     return React.useMemo(() => {
         const returns = [];
         for (let index = 0; index < parts; index++) {
-            returns.push(src.get_volumes().slice(index * separator, (index + 1) * separator));
+            returns.push(volumes.slice(index * separator, (index + 1) * separator));
         }
         return returns;
-    }, [src, separator]);
+    }, [volumes, separator]);
 }
 
 export function Aggregate_box(props: Aggregate_boxProps) {
-    React.useEffect(() => {
+    const src = React.useMemo(() => {
         if (props.isReverse == true) {
             props.src.sortVolumesChapters(true);
+            return props.src;
         } else {
             props.src.sortVolumesChapters(false);
+            return props.src;
         }
     }, [props.isReverse, props.src]);
-    const slices = useSpliceAggregate({ src : props.src, separator: props.separator });
+    const slices = useSpliceAggregate({ src, separator: props.separator });
     return (
         <React.Fragment>
-            <Chakra.Tabs isLazy>
+            <Chakra.Tabs /*isLazy*/>
                 <Chakra.TabPanels>
                     {
                         slices.map<React.ReactNode>((volumes, index) => (
