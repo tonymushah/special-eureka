@@ -26,23 +26,25 @@ function Buttons({ query_key, query_options }: {
     >
 }) {
     return (
-        <React.Suspense
-            fallback={
-                <Chakra.Text>Loading buttons...</Chakra.Text>
-            }
-        >
-            <Chakra.Wrap>
-                <Chakra.WrapItem>
-                    <RefreshButton query_key={query_key} query_options={query_options} />
-                </Chakra.WrapItem>
-                <Chakra.WrapItem>
-                    <PatchButton query_key={query_key} />
-                </Chakra.WrapItem>
-                <Chakra.WrapItem>
-                    <RefetchButton query_key={query_key} />
-                </Chakra.WrapItem>
-            </Chakra.Wrap>
-        </React.Suspense>
+        <React.Fragment>
+            <React.Suspense
+                fallback={
+                    <Chakra.Text>Loading buttons...</Chakra.Text>
+                }
+            >
+                <Chakra.Wrap>
+                    <Chakra.WrapItem>
+                        <RefreshButton query_key={query_key} query_options={query_options} />
+                    </Chakra.WrapItem>
+                    <Chakra.WrapItem>
+                        <PatchButton query_key={query_key} />
+                    </Chakra.WrapItem>
+                    <Chakra.WrapItem>
+                        <RefetchButton query_key={query_key} />
+                    </Chakra.WrapItem>
+                </Chakra.Wrap>
+            </React.Suspense>
+        </React.Fragment>
     );
 }
 

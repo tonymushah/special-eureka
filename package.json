@@ -16,7 +16,7 @@
     "Other"
   ],
   "scripts": {
-    "vite:dev": "vite",
+    "vite:dev": "pnpm vite:preview",
     "vite:build_preview": "pnpm vite:build && pnpm vite:preview",
     "vite:build": "vite build --emptyOutDir",
     "lint": "eslint src && tsc",
@@ -144,7 +144,7 @@
     "kute.js": "^2.2.4",
     "minidenticons": "^2.0.2",
     "optics-ts": "^2.4.0",
-    "preact": "^10.18.0",
+    "preact": "^10.18.1",
     "prop-types": "^15.8.1",
     "qs": "^6.11.2",
     "query-string": "^8.0.0",

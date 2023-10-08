@@ -51,18 +51,6 @@
             ],
             "@/*": [
                 "src/*"
-            ],
-            "@_codux/*": [
-                "src/_codux/*"
-            ],
-            "@stories/*": [
-                "src/stories/*"
-            ],
-            "@template/*": [
-                "src/template/*"
-            ],
-            "@node_modules/*": [
-                "src/node_modules/*"
             ]
         }
     },
