@@ -117,7 +117,7 @@
         "@tanstack/react-query-devtools": "^4.36.1",
         "@tanstack/react-virtual": "3.0.0-beta.60",
         "@tauri-apps/api": "^1.5.0",
-        "@textea/json-viewer": "^2.17.2",
+        "@textea/json-viewer": "^3.0.0",
         "@types/mdx": "^2.0.8",
         "@types/node": "^18.18.4",
         "@types/qs": "^6.9.8",

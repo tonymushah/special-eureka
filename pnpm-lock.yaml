@@ -99,8 +99,8 @@ dependencies:
     specifier: ^1.5.0
     version: 1.5.0
   '@textea/json-viewer':
-    specifier: ^2.17.2
-    version: 2.17.2(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^3.0.0
+    version: 3.1.1(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.14.12)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
   '@types/mdx':
     specifier: ^2.0.8
     version: 2.0.8
@@ -6701,9 +6701,12 @@ packages:
       '@testing-library/dom': 9.3.3
     dev: true
 
-  /@textea/json-viewer@2.17.2(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-oD6U2z02xX64gJjZOVPtKW//fhzGyXy4te1Ed14EJTV34GahF+i14WMwsOqCd2RWNLJhhsqsmAzQXhEVUMAp5A==}
+  /@textea/json-viewer@3.1.1(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/material@5.14.12)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-eaYwufnvQhlbdeWdqhERdp4yOKp2bILiMOGKIRBFoFpg3ry6L06GcdNFffe15C8T+2F/vUUEtLVpZ9i5f8NUrw==}
     peerDependencies:
+      '@emotion/react': ^11
+      '@emotion/styled': ^11
+      '@mui/material': ^5
       react: ^17 || ^18
       react-dom: ^17 || ^18
     dependencies:
