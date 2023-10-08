@@ -126,8 +126,8 @@ dependencies:
     specifier: ^1.5.1
     version: 1.5.1
   axios-tauri-adapter:
-    specifier: ^0.2.0
-    version: 0.2.0
+    specifier: ^0.3.0
+    version: 0.3.0
   axios-tauri-api-adapter:
     specifier: ^0.2.0
     version: 0.2.0
@@ -7889,8 +7889,8 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /axios-tauri-adapter@0.2.0:
-    resolution: {integrity: sha512-Wpbvx0zC2SWY9oMkFK4kAOcHxnu3+RZyUPqfHvgQnZYZ2G8VLpl7xU4heHGVfTIcH7lNIZqzjpmfXklwcPlBMg==}
+  /axios-tauri-adapter@0.3.0:
+    resolution: {integrity: sha512-WLX2FMLRSCYeI131FwkrATjY7c3WUlriUnrrhNcoL+ceaHIOCCwxmfiaDPC2VpA0dMJz8fep0bcrBVF1lwSTvw==}
     dependencies:
       '@tauri-apps/api': 1.5.0
       axios: 0.27.2

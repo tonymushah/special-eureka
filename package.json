@@ -126,7 +126,7 @@
         "@types/uuid": "^9.0.5",
         "@vitejs/plugin-react": "^4.1.0",
         "axios": "^1.5.1",
-        "axios-tauri-adapter": "^0.2.0",
+        "axios-tauri-adapter": "^0.3.0",
         "axios-tauri-api-adapter": "^0.2.0",
         "build-url-ts": "^6.1.5",
         "csstype": "^3.1.2",
