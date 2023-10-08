@@ -28,7 +28,7 @@ export const queryClient = new QueryClient({
                 window.Sentry.captureException(e);
             },
             "networkMode": "always",
-            cacheTime: 1000 * 60 * 3
+            cacheTime: 1000 * 60 * 1
         },
         "mutations": {
             "networkMode": "always"

@@ -4,16 +4,16 @@ import { useAtom } from "jotai";
 import { DrawerOverlay } from "@chakra-ui/react";
 
 export default function Overlay() {
-    const [ isOverlay ] = useAtom(OptionOverlayAtom);
-    if(isOverlay){
+    const [isOverlay] = useAtom(OptionOverlayAtom);
+    if (isOverlay) {
         return (
             <DrawerOverlay
-                        zIndex={"100"}
-                    />
+                zIndex={"100"}
+            />
         );
-    }else{
+    } else {
         return (
-            <React.Fragment/>
+            <React.Fragment />
         );
     }
 }
