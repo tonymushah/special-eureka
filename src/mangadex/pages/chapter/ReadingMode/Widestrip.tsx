@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
 import React from "react";
-import { FreeMode, Keyboard } from "swiper";
+import { FreeMode, Keyboard } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
 import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";

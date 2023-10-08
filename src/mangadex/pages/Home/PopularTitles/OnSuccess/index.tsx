@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
-import { Autoplay, Keyboard, Navigation } from "swiper";
+import { Autoplay, Keyboard, Navigation } from "swiper/modules";
 import { Swiper } from "swiper/react";
 import randomInteger from "random-int";
 import { useHomeRecentlyPopular } from "..";

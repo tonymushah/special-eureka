@@ -1,4 +1,4 @@
-import { FreeMode } from "swiper";
+import { FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/free-mode";

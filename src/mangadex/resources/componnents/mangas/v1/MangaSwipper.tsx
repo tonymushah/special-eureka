@@ -1,5 +1,5 @@
 import React from "react";
-import { FreeMode, Mousewheel, Pagination } from "swiper";
+import { FreeMode, Mousewheel, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
 import "swiper/css/free-mode";
