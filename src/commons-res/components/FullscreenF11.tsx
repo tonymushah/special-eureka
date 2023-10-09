@@ -11,10 +11,14 @@ export async function toggleFullscreen() {
     await appWindow.emit(eventName);
 }
 
-async function initF11ShortCut() {
+async function unregisterF11ShortCut(){
     if(await globalShortcut.isRegistered(FullScreenKey)){
         await globalShortcut.unregister(FullScreenKey);
     }
+}
+
+async function initF11ShortCut() {
+    await unregisterF11ShortCut();
     await globalShortcut.register(FullScreenKey, () => {
         toggleFullscreen().catch((e) => {
             console.error(e);
@@ -22,11 +26,16 @@ async function initF11ShortCut() {
     });
 }
 
+
+
 export default function FullscreenF11(){
     React.useEffect(() => {
         initF11ShortCut().catch((e) => {
             console.error(e);
         });
+        return () => {
+            unregisterF11ShortCut();
+        };
     }, []);
     return (
         <React.Fragment/>
