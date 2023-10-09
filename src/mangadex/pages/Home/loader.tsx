@@ -3,7 +3,8 @@ import { LoaderFunction, json } from "react-router";
 
 
 export const loader: LoaderFunction = async function () {
-    const { queryfn: queryFn, queryKey } = await import("./HomeAfterPing");
+    const { queryfn: queryFn } = await import("./HomeAfterPing/queryfn");
+    const { queryKey } = await import("./HomeAfterPing/queryKey");
     const { queryClient } = await import("@mangadex/resources/query.client");
     if (await Api_Request.ping()) {
         try {

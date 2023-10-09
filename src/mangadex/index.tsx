@@ -130,7 +130,7 @@ const useMangadexRouter: RouteObject = {
         {
             index: true,
             lazy: async () => {
-                const { default : Component } = await import("@mangadex/pages/Home/Home");
+                const { default: Component } = await import("@mangadex/pages/Home/Home");
                 const { loader } = await import("@mangadex/pages/Home/loader");
                 return {
                     Component,
@@ -147,7 +147,7 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const { default : Component } = await import("@mangadex/pages/manga/index");
+                        const { default: Component } = await import("@mangadex/pages/manga/index");
                         const { loader } = await import("@mangadex/pages/manga/loader");
                         return {
                             Component,
@@ -217,8 +217,8 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const { default : Component, loader } = await import("@mangadex/pages/chapter/Chapter_Page");
-                        const { default : ErrorBoundary } = await import("@mangadex/pages/chapter/Chapter_Page/ErrorBoundary");
+                        const { default: Component, loader } = await import("@mangadex/pages/chapter/Chapter_Page");
+                        const { default: ErrorBoundary } = await import("@mangadex/pages/chapter/Chapter_Page/ErrorBoundary");
                         return {
                             Component,
                             ErrorBoundary,
@@ -255,7 +255,7 @@ const useMangadexRouter: RouteObject = {
                 {
                     index: true,
                     async lazy() {
-                        const { default : Component, ErrorBoundary } = await import("@mangadex/pages/download");
+                        const { default: Component, ErrorBoundary } = await import("@mangadex/pages/download");
                         const { loader } = await import("@mangadex/pages/download/loader");
                         return {
                             Component,
@@ -285,7 +285,7 @@ const useMangadexRouter: RouteObject = {
                         {
                             index: true,
                             async lazy() {
-                                const { default : Component } = await import("@mangadex/pages/groups/page/Details");
+                                const { default: Component } = await import("@mangadex/pages/groups/page/Details");
                                 return {
                                     Component,
                                     ErrorBoundary,
@@ -296,7 +296,7 @@ const useMangadexRouter: RouteObject = {
                         {
                             path: "titles",
                             async lazy() {
-                                const { default : Component } = await import("@mangadex/pages/groups/page/Titles");
+                                const { default: Component } = await import("@mangadex/pages/groups/page/Titles");
                                 return {
                                     Component,
                                     ErrorBoundary
@@ -306,7 +306,7 @@ const useMangadexRouter: RouteObject = {
                         {
                             path: "feeds",
                             async lazy() {
-                                const { default : Component } = await import("@mangadex/pages/groups/page/Feeds");
+                                const { default: Component } = await import("@mangadex/pages/groups/page/Feeds");
                                 return {
                                     Component,
                                     ErrorBoundary
@@ -319,7 +319,7 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: "search",
                     async lazy() {
-                        const { default : Component } = await import("@mangadex/pages/groups/search");
+                        const { default: Component } = await import("@mangadex/pages/groups/search");
                         return {
                             Component,
                             ErrorBoundary
@@ -337,7 +337,7 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: "recently-added",
                     async lazy() {
-                        const { default : Component } = await import("@mangadex/pages/titles/RecentlyAdded");
+                        const { default: Component } = await import("@mangadex/pages/titles/RecentlyAdded");
                         const { loader } = await import("@mangadex/pages/titles/RecentlyAdded/loader");
                         return {
                             Component,
@@ -350,7 +350,7 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: "latest-updates",
                     async lazy() {
-                        const { default : Component } = await import("@mangadex/pages/titles/LatestUpdates");
+                        const { default: Component } = await import("@mangadex/pages/titles/LatestUpdates");
                         const { loader } = await import("@mangadex/pages/titles/LatestUpdates/loader");
                         return {
                             Component,
@@ -391,7 +391,7 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const { default : Component } = await import("@mangadex/pages/author");
+                        const { default: Component } = await import("@mangadex/pages/author");
                         const { loader } = await import("@mangadex/pages/author/loader");
                         return {
                             Component,
@@ -402,7 +402,7 @@ const useMangadexRouter: RouteObject = {
                 },
                 {
                     path: "search",
-                    async lazy(){
+                    async lazy() {
                         const { default: Component } = await import("@mangadex/pages/author/search");
                         return {
                             Component,
@@ -419,8 +419,8 @@ const useMangadexRouter: RouteObject = {
             children: [
                 {
                     path: ":id",
-                    async lazy(){
-                        const { default : Component, loader } = await import("@mangadex/pages/user/UserPage+Loader");
+                    async lazy() {
+                        const { default: Component, loader } = await import("@mangadex/pages/user/UserPage+Loader");
                         return {
                             Component,
                             ErrorBoundary,
@@ -430,17 +430,17 @@ const useMangadexRouter: RouteObject = {
                     children: [
                         {
                             index: true,
-                            async lazy(){
-                                const {default : UserPageInfo} = await import("@mangadex/pages/user/UserPageInfo");
+                            async lazy() {
+                                const { default: UserPageInfo } = await import("@mangadex/pages/user/UserPageInfo");
                                 return {
-                                    Component : UserPageInfo,
+                                    Component: UserPageInfo,
                                     ErrorBoundary
                                 };
                             },
                         },
                         {
                             path: "feed",
-                            async lazy(){
+                            async lazy() {
                                 const { default: Component } = await import("@mangadex/pages/user/UserPageFeed");
                                 return {
                                     Component,
@@ -455,10 +455,10 @@ const useMangadexRouter: RouteObject = {
         // Kuru
         {
             path: "kuru",
-            async lazy(){
+            async lazy() {
                 const Kuru_Credits = await import("@mangadex/resources/componnents/kuru_kuru/index");
                 return {
-                    Component : Kuru_Credits.default,
+                    Component: Kuru_Credits.default,
                     ErrorBoundary
                 };
             }

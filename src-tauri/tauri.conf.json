@@ -53,17 +53,7 @@
                 "relaunchDangerousAllowSymlinkMacos": false
             },
             "fs": {
-                "all": true,
-                "readFile": true,
-                "writeFile": true,
-                "readDir": true,
-                "copyFile": true,
-                "createDir": true,
-                "removeDir": true,
-                "removeFile": true,
-                "renameFile": true,
-                "exists": true,
-                "scope": ["$APP/**"]
+                "all": false
             },
             "path": {
                 "all": true
@@ -83,10 +73,10 @@
                 "center": true,
                 "close": true,
                 "create": true,
-                "hide": true,
-                "maximize": true,
-                "minimize": true,
-                "print": true,
+                "hide": false,
+                "maximize": false,
+                "minimize": false,
+                "print": false,
                 "requestUserAttention": false,
                 "setAlwaysOnTop": false,
                 "setCursorGrab": false,
@@ -96,7 +86,7 @@
                 "setDecorations": false,
                 "setFocus": false,
                 "setFullscreen": true,
-                "setIcon": true,
+                "setIcon": false,
                 "setIgnoreCursorEvents": false,
                 "setMaxSize": false,
                 "setMinSize": false,
@@ -106,9 +96,10 @@
                 "setSkipTaskbar": false,
                 "setTitle": true,
                 "show": true,
-                "startDragging": true,
-                "unmaximize": true,
-                "unminimize": true
+                "startDragging": false,
+                "unmaximize": false,
+                "unminimize": false,
+                "setContentProtected": true
             }
         },
         "bundle": {

@@ -1,7 +1,7 @@
-import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import { LoaderFunction } from "react-router-dom";
 import { queryKey, queryFn } from ".";
-
+import { QueryClient } from "@tanstack/react-query";
 
 export const loader: LoaderFunction = async function ({ params }) {
     const { id } = params;
@@ -14,45 +14,25 @@ export const loader: LoaderFunction = async function ({ params }) {
             });
             if (queryData != undefined) {
                 const { manga, isOffline } = queryData;
-                if (manga instanceof Manga_with_allRelationship) {
-                    if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
-                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
-                            initialData: {
-                                manga,
-                                isOffline
-                            }
-                        });
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
-                    } else {
-                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
-                    }
+                if (!isOffline) {
+                    return await prefetch({ queryClient, _queryKey_, id });
                 } else {
-                    if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
-                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
+                    if (manga instanceof Manga_with_allRelationship) {
+                        if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
+                            return await prefecth2({ queryClient, _queryKey_, id, manga, isOffline });
+                        } else {
+                            return await prefetch({ queryClient, _queryKey_, id });
+                        }
                     } else {
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
+                        if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
+                            return await prefetch({ queryClient, _queryKey_, id });
+                        } else {
+                            return response();
+                        }
                     }
                 }
             } else {
-                await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {});
-                return new Response(null, {
-                    "status": 204,
-                    "statusText": "Loaded"
-                });
+                return await prefetch({ queryClient, _queryKey_, id });
             }
         } catch (e) {
             if (e instanceof Error) {
@@ -71,3 +51,26 @@ export const loader: LoaderFunction = async function ({ params }) {
         });
     }
 };
+
+async function prefecth2({ queryClient, _queryKey_, id, manga, isOffline }: { queryClient: QueryClient; _queryKey_: (string | undefined)[]; id: string; manga: Manga; isOffline: boolean; }) {
+    await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
+        initialData: {
+            manga,
+            isOffline
+        }
+    });
+    return response();
+}
+
+function response() {
+    return new Response(null, {
+        "status": 204,
+        "statusText": "Loaded"
+    });
+}
+
+async function prefetch({ queryClient, _queryKey_, id }: { queryClient: QueryClient; _queryKey_: (string | undefined)[]; id: string; }) {
+    await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
+    return response();
+}
+

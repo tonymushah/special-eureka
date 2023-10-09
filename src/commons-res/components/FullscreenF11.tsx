@@ -4,8 +4,11 @@ import React from "react";
 
 export const FullScreenKey = "F11";
 
+export const eventName = "special-eureka:\\F11-clicked";
+
 export async function toggleFullscreen() {
     await appWindow.setFullscreen(!(await appWindow.isFullscreen()));
+    await appWindow.emit(eventName);
 }
 
 async function initF11ShortCut() {
