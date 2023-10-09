@@ -98,8 +98,7 @@
                 "show": true,
                 "startDragging": false,
                 "unmaximize": false,
-                "unminimize": false,
-                "setContentProtected": true
+                "unminimize": false
             }
         },
         "bundle": {
