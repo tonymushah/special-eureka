@@ -46,7 +46,7 @@ tauri = { version = "1.5.1", features = [
     "window-set-icon",
     "window-set-title",
 ] }
-tokio = "1.32.0"
+tokio = "1.33.0"
 tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 tauri-plugin-aptabase = "0"
