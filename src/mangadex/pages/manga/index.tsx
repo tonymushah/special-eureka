@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import Manga, { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
 import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
@@ -11,7 +11,7 @@ import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import { useQuery } from "@tanstack/react-query";
 import { Client } from "@tauri-apps/api/http";
 import React from "react";
-import { LoaderFunction, Outlet as ReactRouterOutlet, useOutletContext, useParams } from "react-router-dom";
+import { Outlet as ReactRouterOutlet, useOutletContext, useParams } from "react-router-dom";
 import ButtonsNavigation from "./ButtonsNavigation";
 
 type MangaPage_OutletContex = {
@@ -116,72 +116,3 @@ export function queryKey(id: string | undefined) {
     return ["mdx", "manga", id];
 }
 
-export const loader: LoaderFunction = async function ({ params }) {
-    const { id } = params;
-    if (id != undefined) {
-        try {
-            const { queryClient } = await import("@mangadex/resources/query.client");
-            const _queryKey_ = queryKey(id);
-            const queryData = queryClient.getQueryData<GetMangaByIDResponse>(_queryKey_, {
-                exact: true
-            });
-            if (queryData != undefined) {
-                const { manga, isOffline } = queryData;
-                if (manga instanceof Manga_with_allRelationship) {
-                    if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
-                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
-                            initialData: {
-                                manga,
-                                isOffline
-                            }
-                        });
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
-                    } else {
-                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
-                    }
-                } else {
-                    if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
-                        await queryClient.prefetchQuery(_queryKey_, () => queryFn(id));
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
-                    } else {
-                        return new Response(null, {
-                            "status": 204,
-                            "statusText": "Loaded"
-                        });
-                    }
-                }
-            } else {
-                await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
-                });
-                return new Response(null, {
-                    "status": 204,
-                    "statusText": "Loaded"
-                });
-            }
-        } catch (e) {
-            if (e instanceof Error) {
-                throw e;
-            } else {
-                throw new Response(JSON.stringify(e), {
-                    status: 500,
-                    statusText: "Internal Loader Error"
-                });
-            }
-        } 
-    } else {
-        throw new Response(undefined, {
-            "status": 404,
-            "statusText": "MangaID Undefined"
-        });
-    }
-};

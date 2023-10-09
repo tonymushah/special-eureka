@@ -130,7 +130,8 @@ const useMangadexRouter: RouteObject = {
         {
             index: true,
             lazy: async () => {
-                const { default : Component, loader } = await import("@mangadex/pages/Home/Home");
+                const { default : Component } = await import("@mangadex/pages/Home/Home");
+                const { loader } = await import("@mangadex/pages/Home/loader");
                 return {
                     Component,
                     ErrorBoundary,
@@ -146,7 +147,8 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const { default : Component, loader } = await import("@mangadex/pages/manga/index");
+                        const { default : Component } = await import("@mangadex/pages/manga/index");
+                        const { loader } = await import("@mangadex/pages/manga/loader");
                         return {
                             Component,
                             ErrorBoundary,
@@ -253,7 +255,8 @@ const useMangadexRouter: RouteObject = {
                 {
                     index: true,
                     async lazy() {
-                        const { default : Component, loader, ErrorBoundary } = await import("@mangadex/pages/download");
+                        const { default : Component, ErrorBoundary } = await import("@mangadex/pages/download");
+                        const { loader } = await import("@mangadex/pages/download/loader");
                         return {
                             Component,
                             ErrorBoundary,
@@ -334,7 +337,8 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: "recently-added",
                     async lazy() {
-                        const { default : Component, loader } = await import("@mangadex/pages/titles/RecentlyAdded");
+                        const { default : Component } = await import("@mangadex/pages/titles/RecentlyAdded");
+                        const { loader } = await import("@mangadex/pages/titles/RecentlyAdded/loader");
                         return {
                             Component,
                             ErrorBoundary,
@@ -346,7 +350,8 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: "latest-updates",
                     async lazy() {
-                        const { default : Component, loader } = await import("@mangadex/pages/titles/LatestUpdates");
+                        const { default : Component } = await import("@mangadex/pages/titles/LatestUpdates");
+                        const { loader } = await import("@mangadex/pages/titles/LatestUpdates/loader");
                         return {
                             Component,
                             ErrorBoundary,
@@ -386,7 +391,8 @@ const useMangadexRouter: RouteObject = {
                 {
                     path: ":id",
                     async lazy() {
-                        const { default : Component, loader } = await import("@mangadex/pages/author");
+                        const { default : Component } = await import("@mangadex/pages/author");
+                        const { loader } = await import("@mangadex/pages/author/loader");
                         return {
                             Component,
                             ErrorBoundary,
@@ -425,9 +431,9 @@ const useMangadexRouter: RouteObject = {
                         {
                             index: true,
                             async lazy(){
-                                const UserPageInfo = await import("@mangadex/pages/user/UserPageInfo");
+                                const {default : UserPageInfo} = await import("@mangadex/pages/user/UserPageInfo");
                                 return {
-                                    Component : UserPageInfo.default,
+                                    Component : UserPageInfo,
                                     ErrorBoundary
                                 };
                             },

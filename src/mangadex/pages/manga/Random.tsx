@@ -2,7 +2,7 @@ import { LoaderFunction, json, redirect } from "react-router";
 
 
 export const loader : LoaderFunction = async function () {
-    const { Manga } = await import("@mangadex/api/structures/Manga");
+    const { default: Manga } = await import("@mangadex/api/structures/Manga");
     const { getClient } = await import("@tauri-apps/api/http");
     const { queryClient } = await import("@mangadex/resources/query.client");
     const { Api_Request } = await import("@mangadex/api/internal/Api_Request");
