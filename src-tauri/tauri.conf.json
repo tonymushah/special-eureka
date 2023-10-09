@@ -166,8 +166,8 @@
                 "decorations": true
             },
             {
-                "width": 600,
-                "height": 400,
+                "width": 640,
+                "height": 320,
                 "decorations": false,
                 "title": "Special Eureka Loader",
                 "url": "splashscreen.html",

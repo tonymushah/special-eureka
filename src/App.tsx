@@ -73,7 +73,9 @@ export default function App() {
                     }
                 >
                     <Router />
-                    <Close_splashscreen />
+
+                            <Close_splashscreen />
+
                 </React.Suspense>
 
             </TryCatch>
