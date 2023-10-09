@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { Box, Center, ChakraProvider, Heading, Image, Tooltip } from "@chakra-ui/react";
 import viteIco from "@commons-res/common-icon/favicon.svg";
 import tauriIco from "@commons-res/common-icon/tauri.svg";
-import appIcon from "@commons-res/common-icon/eureka-logo6.svg";
+import appIcon from "@commons-res/common-icon/app-icon.png";
 import reactIcon from "@commons-res/common-icon/React-icon.svg";
 import theme from "@/theme";
 
