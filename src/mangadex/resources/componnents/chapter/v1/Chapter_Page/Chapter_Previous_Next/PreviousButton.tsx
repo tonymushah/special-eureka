@@ -12,7 +12,7 @@ export function PreviousButton({ rightIcon }: {
     const { aggregate, chapter } = useChapter_Previous_NextAggregate();
     const icon = React.useMemo(() => rightIcon == true ? <ChakraIcon.ArrowRightIcon /> : <ChakraIcon.ArrowLeftIcon />, [rightIcon]);
     const queryKey = React.useMemo(() => ["mdx", "chapter", chapter.get_id(), "previous"], [chapter]);
-    const query = useQuery(queryKey, () => aggregate.getNext(chapter.get_id()), {
+    const query = useQuery(queryKey, () => aggregate.getPrevious(chapter.get_id()), {
         retry() {
             return false;
         },
