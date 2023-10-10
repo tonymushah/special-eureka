@@ -1,9 +1,7 @@
-use std::sync::Arc;
-
 use reqwest::header::InvalidHeaderValue;
 use tauri::{
     plugin::{Builder, TauriPlugin},
-    AppHandle, Manager, Runtime
+    Manager, Runtime
 };
 pub mod utils;
 pub mod intelligent_notification_system;
@@ -85,75 +83,11 @@ impl Serialize for Error {
     }
 }
 
-//#[derive(Default)]
-
-
-// remember to call `.manage(MyState::default())`
-
-fn emit_events<R: Runtime>(app_handle: AppHandle<R>) -> fern::Output {
-    let app_handle = Arc::new(app_handle);
-    fern::Output::call(move |record| {
-        let app = &app_handle;
-        if record.level() == log::LevelFilter::Info {
-            let _ = app.emit_all(
-                "mangadesk_api_info",
-                ExportPayload {
-                    message: record.args().to_string(),
-                },
-            );
-        } else if record.level() == log::LevelFilter::Warn {
-            let _ = app.emit_all(
-                "mangadesk_api_warn",
-                ExportPayload {
-                    message: record.args().to_string(),
-                },
-            );
-        } else if record.level() == log::LevelFilter::Debug {
-            let _ = app.emit_all(
-                "mangadesk_api_debug",
-                ExportPayload {
-                    message: record.args().to_string(),
-                },
-            );
-        } else if record.level() == log::LevelFilter::Error {
-            let _ = app.emit_all(
-                "mangadex_api_error",
-                ExportPayload {
-                    message: record.args().to_string(),
-                },
-            );
-        } else if record.level() == log::LevelFilter::Trace {
-            let _ = app.emit_all(
-                "mangadesk_api_trace",
-                ExportPayload {
-                    message: record.args().to_string(),
-                },
-            );
-        }
-        println!(" log : {}", record.args().to_string());
-    })
-}
 
 #[tauri::command]
 async fn reset_queue() -> Result<String>{
     reset_ins_handle()?;
     Ok("Queue reinitialized".to_string())
-}
-
-#[tauri::command]
-async fn emit_events_to_webview<R: Runtime>(app: tauri::AppHandle<R>) -> Result<String> {
-    let output = emit_events(app);
-    let dispatch = fern::Dispatch::new().chain(output);
-    match dispatch.apply() {
-        Ok(_) => (),
-        Err(error) => {
-            return Err(Error::Io(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                error.to_string(),
-            )))
-        }
-    };
-    Ok("Result setted".into())
 }
 
 /// Initializes the plugin.
@@ -174,7 +108,6 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
             download::download_chapter,
             download::download_chapter_normal_mode,
             download::download_chapter_data_saver_mode,
-            emit_events_to_webview,
             reset_queue,
             server::get_running_tasks,
             server::get_tasks_limit
