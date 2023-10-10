@@ -12,7 +12,9 @@ export function CoverModal({
 }) {
     return (
         <Chakra.Center>
-            <motion.div layoutId={`cover-${selectedCover.get_id()}`}>
+            <motion.div 
+                //layoutId={`cover-${selectedCover.get_id()}`}
+            >
                 <Chakra.Card width={"md"} overflow={"hidden"}>
                     <CoverImage
                         src={selectedCover}

@@ -37,6 +37,6 @@ export default function MangaTitle(props: {
 }) {
     const title = useMangaTitle(props);
     return (
-        <motion.span layoutId={`manga-title-${props.src.get_id()}`}>{title}</motion.span>
+        <motion.span /*layoutId={`manga-title-${props.src.get_id()}`}*/ >{title}</motion.span>
     );
 }

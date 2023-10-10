@@ -1,12 +1,17 @@
 import { Heading } from "@chakra-ui/react";
-import { useProps, useProps_MangaTitle } from ".";
+import {
+    //useProps, 
+    useProps_MangaTitle
+} from ".";
 import { motion } from "framer-motion";
 
 export default function Title() {
-    const { src } = useProps();
+    //const { src } = useProps();
     const title = useProps_MangaTitle();
     return (
-        <motion.div layoutId={`manga-title-${src.get_id()}`}>
+        <motion.div
+        // layoutId={`manga-title-${src.get_id()}`}
+        >
             <Heading
                 noOfLines={2}
                 marginTop={"5px"}

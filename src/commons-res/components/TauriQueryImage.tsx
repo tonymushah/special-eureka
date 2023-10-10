@@ -41,7 +41,7 @@ export default function TauriQueryImage(props: ImageProps) {
     }, [query.data]);
     if(query.isSuccess){
         return (
-            <Image as={motion.img} {...onSuccessProps} layoutID={props.src}/>
+            <Image as={motion.img} {...onSuccessProps} /*layoutID={props.src}*/ />
         );
     } else {
         return (

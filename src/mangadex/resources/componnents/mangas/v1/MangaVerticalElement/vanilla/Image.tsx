@@ -18,7 +18,7 @@ export default function Image() {
                 src={coverQuery.data}
                 fallbackSrc={Mangadex_placeHolder}
                 borderTopRadius={"10px"}
-                layoutId={coverQuery.data}
+                //layoutId={coverQuery.data}
             />
         );
     } else if (coverQuery.isError) {

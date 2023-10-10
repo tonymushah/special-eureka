@@ -16,7 +16,7 @@ export default function CoverImage() {
                 fallback={<FallBackImage/>}
                 height={"full"}
                 objectFit={"cover"}
-                layoutId={coverQuery.data}
+                // layoutId={coverQuery.data}
             />
         );
     } else if (coverQuery.isError) {
