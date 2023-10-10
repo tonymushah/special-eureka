@@ -4,6 +4,7 @@ import { ResponseType, fetch } from "@tauri-apps/api/http";
 import React from "react";
 import { toBase64 } from "./TauriImage";
 import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 
 export default function TauriQueryImage(props: ImageProps) {
     const query = useQuery(["image", props.src], async () => {
@@ -40,7 +41,7 @@ export default function TauriQueryImage(props: ImageProps) {
     }, [query.data]);
     if(query.isSuccess){
         return (
-            <Image {...onSuccessProps}/>
+            <Image as={motion.img} {...onSuccessProps} layoutID={props.src}/>
         );
     } else {
         return (
