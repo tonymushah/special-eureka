@@ -14,7 +14,7 @@ export default function CoverImage() {
                 as={motion.img}
                 src={coverQuery.data}
                 fallback={<FallBackImage/>}
-                height={"full"}
+                height={"160px"}
                 objectFit={"cover"}
                 // layoutId={coverQuery.data}
             />
@@ -24,7 +24,7 @@ export default function CoverImage() {
             <Image
                 src={Mangadex_cover_not_found}
                 fallback={<FallBackImage/>}
-                height={"full"}
+                height={"160px"}
                 objectFit={"cover"}
             />
         );
@@ -33,7 +33,7 @@ export default function CoverImage() {
             <Image
                 src={Mangadex_placeHolder}
                 fallback={<FallBackImage/>}
-                height={"full"}
+                height={"160px"}
                 objectFit={"cover"}
             />
         );
@@ -46,7 +46,7 @@ export default function CoverImage() {
             <Image
                 src={Mangadex_placeHolder}
                 fallback={<FallBackImage/>}
-                height={"full"}
+                height={"160px"}
                 objectFit={"cover"}
             />
         );
