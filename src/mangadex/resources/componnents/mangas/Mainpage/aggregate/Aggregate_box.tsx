@@ -54,7 +54,7 @@ export function Aggregate_box(props: Aggregate_boxProps) {
     const slices = useSpliceAggregate({ src, separator: props.separator });
     return (
         <React.Fragment>
-            <Chakra.Tabs /*isLazy*/>
+            <Chakra.Tabs isLazy>
                 <Chakra.TabPanels>
                     {
                         slices.map<React.ReactNode>((volumes, index) => (
@@ -62,6 +62,7 @@ export function Aggregate_box(props: Aggregate_boxProps) {
                                 <Chakra.Accordion
                                     allowMultiple={true}
                                     defaultIndex={[0]}
+                                    
                                 >
                                     {
                                         volumes.map<React.ReactNode>((volume, index_) => (

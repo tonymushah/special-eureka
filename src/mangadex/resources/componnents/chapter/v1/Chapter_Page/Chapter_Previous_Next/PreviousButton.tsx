@@ -17,11 +17,12 @@ export function PreviousButton({ rightIcon }: {
             return false;
         },
     });
-    const navigate = useNavigate();
+    const navigate_ = useNavigate();
     const mangaDexPath = useMangaDexPath();
+    const navigate = React.useCallback(() => navigate_(`${mangaDexPath}/chapter/${query.data}`), [navigate_, mangaDexPath, query]);
     if (query.isSuccess) {
         return (
-            <Chakra.IconButton aria-label="previous chapter" onClick={() => navigate(`${mangaDexPath}/chapter/${query.data}`)} icon={icon} />
+            <Chakra.IconButton aria-label="previous chapter" onClick={navigate} icon={icon} />
         );
     } else if (query.isError) {
         return (

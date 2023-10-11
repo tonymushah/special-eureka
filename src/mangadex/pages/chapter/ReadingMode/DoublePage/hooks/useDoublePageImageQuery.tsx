@@ -12,19 +12,19 @@ export type DoublePageImageInput = [string, string] | string;
 export async function queryFn({ data }: DoublePageProps) {
     const images: Array<DoublePageImageInput> = [];
     const getImageSize = async (url : string) => {
-        const file_ext = fileExtension(url);
+        //const file_ext = fileExtension(url);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        if(window.__TAURI__ != undefined){
+        /*if(window.__TAURI__ != undefined){
             
             const res = await queryClient.fetchQuery([url], () => fetch<Buffer>(url, {
                 "responseType": ResponseType.Binary,
                 method: "GET"
             }));
             return queryClient.fetchQuery([url, "dimension"], () => getReactImageSize(`data:image/${file_ext};base64,${toBase64(res.data)}`));
-        }else{
+        }else{*/
             return queryClient.fetchQuery([url, "dimension"], () => getReactImageSize(url));
-        }
+        //}
     };
     for (let index = 1; index < data.images.length; index++) {
 

@@ -46,9 +46,8 @@ export default class User extends Attribute {
             instance.set_relationships_Wany(relationships);
             // eslint-disable-next-line no-empty
         } catch (e) {
-            console.error(e);
         }
-
+        console.log("instanced");
         return instance;
     }
     public static async getUserById(id: string, client?: Client): Promise<User> {
