@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, StackDivider, VStack } from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import { Asc_Desc, Offset_limits, Order } from "@mangadex/api/internal/Utils";
 import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
@@ -7,12 +7,14 @@ import React from "react";
 import CollectionComponnent_withInfiniteQuery from "../../Collection/CollectionComponnent_withInfiniteQuery";
 import { InfiniteQueryConsumer } from "../../Collection/InfiniteQueryConsumer";
 import ChapterCollectionToAccordion from "../../mangas/v1/ChapterCollectionToAccordion";
+import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectLanguage";
 
 export default function UserFeed(props: {
     user_id: string
 }) {
     const client = useHTTPClient();
     const queryKey = React.useMemo(() => getUserFeedQueryKey(props), []);
+    const { query } = useLanguageUserOption();
     return (
         <Box>
             <CollectionComponnent_withInfiniteQuery<Chapter>
@@ -22,8 +24,12 @@ export default function UserFeed(props: {
                         client: client,
                         "uploader": props.user_id,
                         offset_limits: offset_limits,
-                        order
+                        order,
+                        translatedLanguage: (query.data ?? []).map(e => e.get_two_letter())
                     });
+                }}
+                options={{
+                    enabled: !!query.data
                 }}
                 queryKey={queryKey}
             >
@@ -31,13 +37,13 @@ export default function UserFeed(props: {
                     <InfiniteQueryConsumer<Chapter> query={query}>
                         {(collections) => {
                             return (
-                                <React.Fragment>
+                                <VStack divider={<StackDivider/>}>
                                     {
                                         collections?.map((value) => (
                                             <ChapterCollectionToAccordion value={value} key={`${value.get_current_page()}`} />
                                         )) ?? <React.Fragment />
                                     }
-                                </React.Fragment>
+                                </VStack>
                             );
                         }}
                     </InfiniteQueryConsumer>

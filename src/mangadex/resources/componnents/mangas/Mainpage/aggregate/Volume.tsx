@@ -22,11 +22,7 @@ export function Volume_(props: Volume_Props) {
                         <Chakra.AccordionIcon />
                     </Chakra.AccordionButton>
                 </h2>
-                <Chakra.AccordionPanel
-                /*motionProps={{
-                    unmountOnExit: true
-                }}*/
-                >
+                <Chakra.AccordionPanel>
                     <Chakra.Accordion allowMultiple>
                         {
                             props.src.get_chapters().map((getted, index) => (

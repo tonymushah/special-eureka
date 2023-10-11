@@ -1,6 +1,5 @@
 import { Mangadex_suspense } from "@mangadex/index";
 import UserOptionProvider from "@mangadex/resources/componnents/userOption/utils/UserOptionProvider";
-import { AnimatePresence } from "framer-motion";
 import React from "react";
 import { ProSidebarProvider } from "react-pro-sidebar";
 
@@ -12,11 +11,9 @@ export default function Providers({ children }: React.PropsWithChildren) {
             <ProSidebarProvider>
                 <Mangadex_suspense>
                     <Content>
-                        <AnimatePresence>
-                            {
-                                children
-                            }
-                        </AnimatePresence>
+                        {
+                            children
+                        }
                     </Content>
                 </Mangadex_suspense>
             </ProSidebarProvider>

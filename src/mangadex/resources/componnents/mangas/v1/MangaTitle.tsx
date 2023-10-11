@@ -1,6 +1,7 @@
-import React from "react";
 import { Alt_title } from "@mangadex/api/internal/Utils";
 import Manga from "@mangadex/api/structures/Manga";
+import { motion } from "framer-motion";
+import React from "react";
 
 export function useMangaAltTitle({ src }: {
     src: Manga
@@ -36,6 +37,6 @@ export default function MangaTitle(props: {
 }) {
     const title = useMangaTitle(props);
     return (
-        <React.Fragment>{title}</React.Fragment>
+        <motion.span /*layoutId={`manga-title-${props.src.get_id()}`}*/ >{title}</motion.span>
     );
 }

@@ -88,7 +88,7 @@ export default function AllDownlaodedMangaConsumer(props: {
     );
 }
 
-export function queryKey(arg : {
+export function queryKey(arg?: {
     title?: string 
 }) {
     return ["mdx", "dowloaded_manga", arg];

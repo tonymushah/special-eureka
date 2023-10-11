@@ -40,7 +40,7 @@ export function useSinglePageReadingHooks({ data, startPage }: {
                 navigateToNext();
             }
         });
-    }, [page]);
+    }, [page, navigateToNext]);
     
     const onPrevious = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
@@ -50,9 +50,7 @@ export function useSinglePageReadingHooks({ data, startPage }: {
                 navigateToPrevious();
             }
         });
-    }, [page]);
-    
-    
+    }, [page, navigateToPrevious]);
     
     return React.useMemo(() => {
         return ({

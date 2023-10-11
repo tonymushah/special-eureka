@@ -5,15 +5,14 @@ import NavigationAnimation from "./Navigation";
 
 const pageVariants: Variants = {
     initial: {
-        opacity: 0,
+        opacity: 0
     },
     in: {
-        opacity: 1,
+        opacity: 1
     },
     out: {
         opacity: 0
-    },
-
+    }
 };
 
 const pageTransition: Transition = {
@@ -34,9 +33,7 @@ export default function AnimationLayout() {
                 variants={pageVariants}
                 transition={pageTransition}
             >
-                <Mangadex_suspense>
-                    <Outlet />
-                </Mangadex_suspense>
+                <Outlet />
             </motion.div>
         </NavigationAnimation>
     );

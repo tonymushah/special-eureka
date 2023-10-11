@@ -5,92 +5,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SplashScreen</title>
-    <style defer>
-        #blob-animation {
-            width: 600px;
-            position: relative;
-            z-index: -3;
-            overflow: hidden;
-        }
-
-        #visual {
-            height: 100vh;
-        }
-
-        #root {
-            position: fixed;
-            width: 600px;
-            height: 100vh;
-        }
-    </style>
 </head>
 
 <body>
-    <div id="content-body">
-        <div id="root"></div>
-
-        <div id="blob-animation">
-            <svg id="visual" viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(960, 540)">
-                    <path id="top-haikei1"
-                        d="M-486 0C-438.9 -46.8 -391.8 -93.6 -375.1 -155.4C-358.4 -217.2 -372.1 -294 -343.7 -343.7C-315.2 -393.3 -244.5 -415.9 -180.2 -435.1C-115.9 -454.4 -58 -470.2 0 -486L0 0Z"
-                        fill="#ff683e"></path>
-                    <path id="top-haikei2" style="visibility: hidden"
-                        d="M-486 0C-475.7 -65.7 -465.5 -131.3 -433.3 -179.5C-401.1 -227.6 -347 -258.3 -305.5 -305.5C-263.9 -352.6 -234.8 -416.2 -186 -449C-137.2 -481.8 -68.6 -483.9 0 -486L0 0Z"
-                        fill="#ff683e"></path>
-                    <path id="top-haikei3" style="visibility: hidden"
-                        d="M-486 0C-481.7 -66 -477.4 -131.9 -449 -186C-420.6 -240 -368 -282.2 -318.9 -318.9C-269.8 -355.6 -224 -387 -171.4 -413.9C-118.9 -440.8 -59.4 -463.4 0 -486L0 0Z"
-                        fill="#ff683e"></path>
-                </g>
-                <g transform="translate(0, 0)">
-                    <path id="bottom-haikei1"
-                        d="M486 0C484.3 68.2 482.6 136.5 449 186C415.4 235.5 349.9 266.3 299.1 299.1C248.3 331.9 212.3 366.7 164.9 398.2C117.5 429.7 58.8 457.8 0 486L0 0Z"
-                        fill="#ff683e"></path>
-                    <path id="bottom-haikei2" style="visibility: hidden"
-                        d="M486 0C449.2 53 412.3 106 389 161.1C365.6 216.2 355.8 273.5 325.3 325.3C294.8 377 243.6 423.1 186 449C128.3 474.9 64.2 480.4 0 486L0 0Z"
-                        fill="#ff683e"></path>
-                    <path id="bottom-haikei3" style="visibility: hidden"
-                        d="M486 0C483 66.1 480.1 132.3 449 186C418 239.7 358.8 281 304.1 304.1C249.3 327.2 198.8 332.1 148.9 359.4C98.9 386.7 49.5 436.3 0 486L0 0Z"
-                        fill="#ff683e"></path>
-                </g>
-            </svg>
-        </div>
-        <script type="module" defer>
-            import KUTE from "./splashscreen/kute.esm.js"
-            const tween1 = KUTE.fromTo(
-                "#top-haikei1",
-                {
-                    path: "#top-haikei1",
-                },
-                {
-                    path: "#top-haikei2",
-                },
-                {
-                    repeat: 999,
-                    duration: 3000,
-                    yoyo: true,
-                }
-            );
-            tween1.start();
-            const tween2 = KUTE.fromTo(
-                "#bottom-haikei1",
-                {
-                    path: "#bottom-haikei1",
-                },
-                {
-                    path: "#bottom-haikei2",
-                },
-                {
-                    repeat: 999,
-                    duration: 3000,
-                    yoyo: true,
-                }
-            );
-            tween2.start();
-        </script>
-        <script type="module" src="./splashscreen/index.tsx"></script>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="./splashscreen/index.tsx"></script>
 </body>
 
 </html>

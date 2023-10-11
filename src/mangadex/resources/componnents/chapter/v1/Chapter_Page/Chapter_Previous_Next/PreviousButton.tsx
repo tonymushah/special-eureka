@@ -12,16 +12,17 @@ export function PreviousButton({ rightIcon }: {
     const { aggregate, chapter } = useChapter_Previous_NextAggregate();
     const icon = React.useMemo(() => rightIcon == true ? <ChakraIcon.ArrowRightIcon /> : <ChakraIcon.ArrowLeftIcon />, [rightIcon]);
     const queryKey = React.useMemo(() => ["mdx", "chapter", chapter.get_id(), "previous"], [chapter]);
-    const query = useQuery(queryKey, () => aggregate.getNext(chapter.get_id()), {
+    const query = useQuery(queryKey, () => aggregate.getPrevious(chapter.get_id()), {
         retry() {
             return false;
         },
     });
-    const navigate = useNavigate();
+    const navigate_ = useNavigate();
     const mangaDexPath = useMangaDexPath();
+    const navigate = React.useCallback(() => navigate_(`${mangaDexPath}/chapter/${query.data}`), [navigate_, mangaDexPath, query]);
     if (query.isSuccess) {
         return (
-            <Chakra.IconButton aria-label="previous chapter" onClick={() => navigate(`${mangaDexPath}/chapter/${query.data}`)} icon={icon} />
+            <Chakra.IconButton aria-label="previous chapter" onClick={navigate} icon={icon} />
         );
     } else if (query.isError) {
         return (

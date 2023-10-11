@@ -1,34 +1,16 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
-import { Client } from "@tauri-apps/api/http";
+import { queryfn } from "./queryfn";
+import { queryKey } from "./queryKey";
 
 const Seasonal = React.lazy(() => import("../Seasonal"));
 const Latest_Updates = React.lazy(() => import("../Latest_Update"));
 const RecentlyAdded = React.lazy(() => import("../RecentlyAdded"));
 const PopularRecently = React.lazy(() => import("../PopularTitles"));
-
-export function queryKey() {
-    return ["mdx", "home", "page", "loader"];
-}
-
-export function queryfn(client: Client | undefined, queryClient: QueryClient) {
-    return async () => {
-        const { latest_loader } = await import("./latest_loader");
-        const { popular_loader } = await import("./popular_loader");
-        const { recentlyAdded_loader } = await import("./recentlyAdded_loader");
-        const { seasonal_loader } = await import("./seasonal_loader");
-        return (await Promise.all([
-            latest_loader(client, queryClient),
-            popular_loader(client, queryClient),
-            recentlyAdded_loader(client, queryClient),
-            seasonal_loader(client, queryClient),
-        ]));
-    };
-}
 
 export default function HomeAfterPing() {
     const client = useHTTPClient();

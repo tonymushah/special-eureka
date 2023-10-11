@@ -5,7 +5,6 @@ import ReactHotkeys from "react-hot-keys";
 import FullScreenOptionsProvider from "./FullScreenOptionsProvider";
 import FullScreenOptions from "./FullScreenOptions";
 import { useChapterFullscreen } from "../../../fullscreen/useChapterFullscreen";
-import { appWindow } from "@tauri-apps/api/window";
 import useChapterReadingModeOption from "../ChapterReadingMode/useChapterReadingModeOption";
 import { ReadingMode } from "@mangadex/api/internal/UserOptions/ReadingMode";
 
@@ -13,16 +12,6 @@ export default function ChapterFullScreen(props: React.PropsWithChildren<{
     chapter: Chapter
 }>) {
     const fullscreen = useChapterFullscreen();
-    React.useEffect(() => {
-        async function t() {
-            if (fullscreen.query.data == true) {
-                appWindow.setFullscreen(true);
-            } else {
-                appWindow.setFullscreen(false);
-            }
-        }
-        t().then();
-    }, [fullscreen.query.data]);
     const { query : mode } = useChapterReadingModeOption();
     return (
         <React.Fragment>

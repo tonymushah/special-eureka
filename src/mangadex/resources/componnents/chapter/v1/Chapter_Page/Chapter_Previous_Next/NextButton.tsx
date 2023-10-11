@@ -3,7 +3,7 @@ import * as Chakra from "@chakra-ui/react";
 import { useMangaDexPath } from "@mangadex/index";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useChapter_Previous_NextAggregate } from ".";
 
 export function NextButton({ leftIcon }: {
@@ -17,11 +17,15 @@ export function NextButton({ leftIcon }: {
             return false;
         },
     });
-    const navigate = useNavigate();
+    const navigate_ = useNavigate();
     const mangaDexPath = useMangaDexPath();
+    const navigate = React.useCallback(() => {
+        const path = `${mangaDexPath}/chapter/${query.data}`;
+        navigate_(path);
+    }, [navigate_, mangaDexPath, query]);
     if (query.isSuccess) {
         return (
-            <Chakra.IconButton aria-label="Next chapter" onClick={() => navigate(`${mangaDexPath}/chapter/${query.data}`)} icon={icon} />
+            <Chakra.IconButton aria-label="Next chapter" onClick={navigate} icon={icon} />
         );
     } else if (query.isError) {
         return (

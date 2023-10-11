@@ -6,6 +6,7 @@ import { ChakraProvider, Box, Spinner, AbsoluteCenter, ColorModeScript } from "@
 import theme from "./theme";
 import { defaultOptions } from "@commons-res/sentry";
 import {  } from "@tauri-apps/api/window";
+import { tauriColorModeManager } from "@commons-res/theme";
 
 window.Sentry.init(
     defaultOptions
@@ -23,7 +24,7 @@ if (appElement != undefined) {
     app.render(
         <React.StrictMode>
             <ColorModeScript type="localStorage"/>
-            <ChakraProvider theme={theme}>
+            <ChakraProvider theme={theme} colorModeManager={tauriColorModeManager}>
                 <Box>
                     <React.Suspense
                         fallback={

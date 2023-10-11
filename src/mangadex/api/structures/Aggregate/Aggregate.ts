@@ -133,7 +133,9 @@ export class Aggregate {
                     if (index_to_use >= this.get_volumes().length) {
                         throw Error("this chapter has no previous chapter");
                     } else {
-                        return this.volumes[index - 1].get_chapters()[0].get_ids()[0];
+                        const chapters = this.volumes[index - 1].get_chapters();
+                        const ids = chapters[chapters.length - 1].get_ids();
+                        return ids[ids.length - 1];
                     }
                 } else {
                     return result;

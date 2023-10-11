@@ -8,7 +8,9 @@ export function MangaPage_CoverImage(props: {
     setSelectedCover?: () => void;
 }) {
     return (
-        <motion.div layoutId={`cover-${props.cover.get_id()}`}>
+        <motion.div 
+            // layoutId={`cover-${props.cover.get_id()}`}
+        >
             <Image_Part_pHoverVolume cover={props.cover} setSelectedCover={props.setSelectedCover}/>
         </motion.div>
     );

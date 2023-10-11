@@ -72,7 +72,7 @@ export default function useState({ images }: ActualDoublePageProps) {
                 navigateToNext();
             }
         });
-    }, [page]);
+    }, [page, navigateToNext]);
 
     const onPrevious = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
@@ -82,7 +82,7 @@ export default function useState({ images }: ActualDoublePageProps) {
                 navigateToPrevious();
             }
         });
-    }, [page]);
+    }, [page, navigateToNext]);
 
     return {
         page,

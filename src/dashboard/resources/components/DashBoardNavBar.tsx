@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import special_eureka_logo from "@commons-res/common-icon/eureka-logo6.svg";
+import special_eureka_logo from "@commons-res/common-icon/app-icon.png";
 import { ColorModeSwitcher } from "./ColorModeButton";
 
 export default function WithSubnavigation() {

@@ -55,7 +55,7 @@ export default function CoverImage(props: {
             );
         } else {
             return (
-                <motion.div layoutId={`cover-${props.src.get_id()}`} >
+                <motion.div /*layoutId={`cover-${props.src.get_id()}`}*/ >
                     <Chakra.Image
                         src={cover_image_query.data}
                         fallbackSrc={Mangadex_placeHolder}
@@ -78,7 +78,7 @@ export default function CoverImage(props: {
             );
         } else {
             return (
-                <motion.div layoutId={`cover-${props.src.get_id()}`} >
+                <motion.div /*layoutId={`cover-${props.src.get_id()}`}*/ >
                     <Chakra.Image
                         key={props.src.get_id()}
                         src={Mangadex_cover_not_found}
@@ -100,7 +100,7 @@ export default function CoverImage(props: {
         );
     } else {
         return (
-            <motion.div layoutId={`cover-${props.src.get_id()}`} >
+            <motion.div /*layoutId={`cover-${props.src.get_id()}`}*/ >
                 <Chakra.Image
                     key={props.src.get_id()}
                     src={Mangadex_placeHolder}

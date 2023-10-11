@@ -90,7 +90,9 @@ export default class Volume {
                 if (index_to_use >= this.chapters.length || index_to_use < 0) {
                     return true;
                 } else {
-                    return this.chapters[index_to_use].get_ids()[0];
+                    const chapters = this.chapters[index_to_use];
+                    const ids = chapters.get_ids();
+                    return ids[ids.length - 1];
                 }
             }
         }
