@@ -13,12 +13,12 @@ export function useChapterFullscreen() {
             return await appWindow.isFullscreen();
         },
     });
+    const [unlistenFn, setUnlistenFn] = React.useState<UnlistenFn | undefined>(undefined);
     React.useEffect(() => {
-        let unlistenFn: UnlistenFn | undefined = undefined;
         appWindow.listen(eventName, () => {
             query.refetch();
         }).then((getted) => { 
-            unlistenFn = getted;
+            setUnlistenFn(getted);
         });
         return () => {
             if(unlistenFn){

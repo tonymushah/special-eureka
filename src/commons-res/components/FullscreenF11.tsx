@@ -26,8 +26,6 @@ async function initF11ShortCut() {
     });
 }
 
-
-
 export default function FullscreenF11(){
     React.useEffect(() => {
         initF11ShortCut().catch((e) => {

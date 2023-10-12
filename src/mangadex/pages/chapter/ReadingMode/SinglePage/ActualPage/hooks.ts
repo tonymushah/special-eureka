@@ -13,13 +13,13 @@ export function useSinglePageReadingHooks({ data, startPage }: {
     const { query, setCurrentPage } = useChapterPages({
         chapter: data.chapter
     });
-    
+
     const { navigateToNext, navigateToPrevious } = useChapterNavigation(data.chapter);
-    
+
     const page = React.useMemo(() => {
         return query.data.current;
     }, [query.data.current]);
-    
+
     const setPage = React.useCallback((input: number) => {
         setCurrentPage(input);
     }, [page]);
@@ -31,27 +31,27 @@ export function useSinglePageReadingHooks({ data, startPage }: {
     }, [startPage]);
 
     const rtl = useRTLSwipperMode();
-    
+
     const onNext = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
             if (page >= 0 && page < (data.images.length - 1)) {
                 setPage(page + 1);
-            } else if (page >= data.images.length - 1) {
+            } else {
                 navigateToNext();
             }
         });
-    }, [page, navigateToNext]);
-    
+    }, [page, navigateToNext, startTransition]);
+
     const onPrevious = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
             if (page > 0 && page < data.images.length) {
                 setPage(page - 1);
-            } else if (page <= 0) {
+            } else {
                 navigateToPrevious();
             }
         });
-    }, [page, navigateToPrevious]);
-    
+    }, [page, navigateToPrevious, startTransition]);
+
     return React.useMemo(() => {
         return ({
             page,

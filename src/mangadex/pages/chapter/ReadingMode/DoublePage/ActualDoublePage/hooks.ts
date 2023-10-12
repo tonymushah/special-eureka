@@ -45,7 +45,6 @@ export default function useState({ images }: ActualDoublePageProps) {
     const { navigateToNext, navigateToPrevious } = useChapterNavigation(data.chapter);
 
     const [, startTransition] = React.useTransition();
-
     const pageQuery = useDoublePageReadingState({
         data
     });
@@ -62,27 +61,27 @@ export default function useState({ images }: ActualDoublePageProps) {
         startTransition(() => {
             mutation.mutate(input);
         });
-    }, [page]);
+    }, [page, startTransition]);
 
     const onNext = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
             if (page >= 0 && page < (images.length - 1)) {
                 setPage(page + 1);
-            } else if (page >= data.images.length - 1) {
+            } else {
                 navigateToNext();
             }
         });
-    }, [page, navigateToNext]);
+    }, [page, navigateToNext, startTransition]);
 
     const onPrevious = React.useCallback<HotkeyCallback>(() => {
         startTransition(() => {
             if (page > 0 && page < images.length) {
                 setPage(page - 1);
-            } else if (page <= 0) {
+            } else {
                 navigateToPrevious();
             }
         });
-    }, [page, navigateToNext]);
+    }, [page, navigateToNext, startTransition]);
 
     return {
         page,
