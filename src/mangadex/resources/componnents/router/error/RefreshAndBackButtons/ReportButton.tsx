@@ -3,7 +3,7 @@ import React from "react";
 import { FiMessageSquare } from "react-icons/fi";
 import UserFeedBackModal from "../../../user/feedback/modal";
 
-export function ReportButton({ error }: {
+export default function ReportButton({ error }: {
     error: Error;
 }) {
     const { isOpen, onClose, onOpen } = Chakra.useDisclosure();

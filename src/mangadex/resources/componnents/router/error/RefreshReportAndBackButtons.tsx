@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
-import { GoBackButton } from "./RefreshAndBackButtons/GoBackButton";
-import { RefreshButton } from "./RefreshAndBackButtons/RefreshButton";
-import { ReportButton } from "./RefreshAndBackButtons/ReportButton";
+import GoBackButton from "./RefreshAndBackButtons/GoBackButton";
+import RefreshButton from "./RefreshAndBackButtons/RefreshButton";
+import ReportButton from "./RefreshAndBackButtons/ReportButton";
 
 
 export default function RefreshReportAndBackButtons({ error }: {

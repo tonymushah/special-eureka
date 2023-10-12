@@ -1,9 +1,9 @@
 import React from "react";
 import { isRouteErrorResponse, useLocation, useRouteError } from "react-router";
 import { appWindow } from "@tauri-apps/api/window";
-import { ShowErrorDefault } from "./ShowErrorDefault";
-import { ShowErrorResponse } from "./ShowErrorResponse";
-import { ShowStringError } from "./ShowStringError";
+import ShowErrorDefault from "./ShowErrorDefault";
+import ShowErrorResponse from "./ShowErrorResponse";
+import ShowStringError from "./ShowStringError";
 
 export function RouteErrorBoundary() {
     const error = useRouteError();

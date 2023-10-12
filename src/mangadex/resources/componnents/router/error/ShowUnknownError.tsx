@@ -1,10 +1,9 @@
 import * as Chakra from "@chakra-ui/react";
-import React from "react";
 import ChakraContainer from "../../layout/Container";
 import RefreshAndBackButtons from "./RefreshAndBackButtons";
+import { JsonViewer } from "@textea/json-viewer";
 
-
-export function ShowUnknownError({ error }: {
+export default function ShowUnknownError({ error }: {
     error: unknown;
 }) {
     return (
@@ -22,9 +21,10 @@ export function ShowUnknownError({ error }: {
                 <Chakra.AlertTitle
                     fontSize={"2xl"}
                 >
-                    {JSON.stringify(error)}
+                    Unknown Error caught
                 </Chakra.AlertTitle>
                 <Chakra.AlertDescription>
+                    <JsonViewer value={error}/>
                     <RefreshAndBackButtons />
                 </Chakra.AlertDescription>
             </Chakra.Alert>

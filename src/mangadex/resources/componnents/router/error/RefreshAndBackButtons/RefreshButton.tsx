@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigate, useNavigation } from "react-router";
 import { RepeatIcon } from "@chakra-ui/icons";
 
-export function RefreshButton() {
+export default function RefreshButton() {
     const [isTranstion, startTransition] = React.useTransition();
     const navigation = useNavigation();
     const navigate = useNavigate();

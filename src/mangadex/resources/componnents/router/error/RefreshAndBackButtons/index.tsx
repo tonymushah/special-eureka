@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
-import { GoBackButton } from "./GoBackButton";
-import { RefreshButton } from "./RefreshButton";
+import GoBackButton from "./GoBackButton";
+import RefreshButton from "./RefreshButton";
 
 export default function RefreshAndBackButtons() {
     return (

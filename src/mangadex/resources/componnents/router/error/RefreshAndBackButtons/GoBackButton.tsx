@@ -3,7 +3,7 @@ import React from "react";
 import { useNavigation } from "react-router";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 
-export function GoBackButton() {
+export default function GoBackButton() {
     const [isTranstion, startTransition] = React.useTransition();
     const navigation = useNavigation();
     return (

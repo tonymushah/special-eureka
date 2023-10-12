@@ -1,5 +1,6 @@
 import { Box, Switch } from "@chakra-ui/react";
 import useServerAutoStart from "@mangadex/resources/hooks/userOptions/ServerAutoStart";
+import React from "react";
 
 export default function ServerAutoStart(){
     const {
@@ -20,6 +21,6 @@ export default function ServerAutoStart(){
         );
     }
     return (
-        <>Loading...</>
+        <React.Fragment>Loading...</React.Fragment>
     );
 }
