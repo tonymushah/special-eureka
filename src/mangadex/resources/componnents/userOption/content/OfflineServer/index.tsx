@@ -20,9 +20,9 @@ export function OfflineServerTab() {
 export default function OfflineServer() {
     return (
         <Chakra.TabPanel>
-            <ServerPart/>
+            <ServerPart />
             <ServerAutoStartPart />
-            <TasksPart/>
+            <TasksPart />
         </Chakra.TabPanel>
     );
 }

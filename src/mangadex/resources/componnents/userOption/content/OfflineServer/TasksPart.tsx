@@ -6,7 +6,7 @@ const Tasks = React.lazy(() => import("@mangadex/resources/componnents/userOptio
 
 export default function TasksPart() {
     return (
-        <BasicTwoElement title="Tasks&nbsp;">
+        <BasicTwoElement title="Tasks">
             <Chakra.Box display={"block"} width={"100%"}>
                 <React.Suspense
                     fallback={<Chakra.Progress isIndeterminate />}
