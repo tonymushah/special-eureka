@@ -1,5 +1,5 @@
 import React from "react";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementFallback from "./MangaElementFallback";
 

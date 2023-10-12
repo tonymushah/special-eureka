@@ -7,7 +7,8 @@ import { CollectionComponnent_WithQuery } from "@mangadex/resources/componnents/
 import IsPingable from "@mangadex/resources/componnents/IsPingable";
 import IsPingable_defaultError from "@mangadex/resources/componnents/IsPingable_defaultError";
 import MangaList from "@mangadex/resources/componnents/mangas/v1/MangaList";
-import { get_author_works_promise, get_author_works_query_key_byAuthor_ID } from "@mangadex/resources/hooks/AuthorState";
+import get_author_works_query_key_byAuthor_ID from "@mangadex/resources/hooks/AuthorState/get_author_works_query_key_byAuthor_ID";
+import get_author_works_promise from "@mangadex/resources/hooks/AuthorState/get_author_works_promise";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import MangadexSpinner from "../kuru_kuru/MangadexSpinner";

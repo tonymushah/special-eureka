@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import { UseQueryOptions } from "@tanstack/react-query";
 import React from "react";
 import { FaUsers } from "react-icons/fa";

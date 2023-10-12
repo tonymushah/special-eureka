@@ -4,7 +4,7 @@ import { Cover } from "@mangadex/api/structures/Cover";
 import React from "react";
 
 
-export function get_cover_art_image(props: {
+export default function get_cover_art_image(props: {
     src: Cover;
     isThumbail?: boolean;
     size?: 256 | 512;

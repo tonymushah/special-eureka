@@ -2,7 +2,7 @@ import { UseQueryResult, useMutation, useQueryClient } from "@tanstack/react-que
 import { launch_server, stop_server } from "@mangadex/api/offline/plugin";
 import { useChakraToast } from "@commons-res/hooks/useChakraToast";
 
-export function useServerStateMutation(key: string[], query: UseQueryResult<boolean>) {
+export default function useServerStateMutation({ key, query }: { key: string[]; query: UseQueryResult<boolean>; }) {
     const toast = useChakraToast({
         id: "offline-server",
         position: "bottom-right",

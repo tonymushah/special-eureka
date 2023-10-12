@@ -3,7 +3,7 @@ import Manga from "@mangadex/api/structures/Manga";
 import { getClient } from "@tauri-apps/api/http";
 import { queryClient } from "@mangadex/resources/query.client";
 import { Api_Request } from "@mangadex/api/internal/Api_Request";
-import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID";
+import get_mangaQueryKey_byID from "@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID";
 import { getMangaDexPath } from "@mangadex/index";
 
 export const loader: LoaderFunction = async function () {

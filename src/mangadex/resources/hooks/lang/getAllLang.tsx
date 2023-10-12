@@ -1,9 +1,9 @@
 import { Lang } from "@mangadex/api/internal/Utils";
 import { useQuery } from "@tanstack/react-query";
-import { getLanguages } from "./getLanguages";
+import getLanguages from "./getLanguages";
 import React from "react";
 
-export function getAllLang(){
+export default function getAllLang(){
     const required_query = getLanguages().query;
     // [x] Refactor this query key into a function
     // [x] use `React.useMemo` for optimization

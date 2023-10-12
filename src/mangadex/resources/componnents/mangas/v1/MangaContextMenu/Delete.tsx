@@ -1,6 +1,6 @@
 import { DeleteIcon } from "@chakra-ui/icons";
 import { HStack, Box, Text } from "@chakra-ui/react";
-import { useMangaDownload_Delete } from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload_Delete";
+import useMangaDownload_Delete from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload_Delete";
 import { ContextMenuItem } from "@radix-ui/react-context-menu";
 import { BeatLoader } from "react-spinners";
 import { useMangaContextMenu_Context } from ".";

@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import ChakraContainer from "../../layout/Container";
-import { RefreshAndBackButtons } from "./RefreshAndBackButtons";
+import RefreshAndBackButtons from "./RefreshAndBackButtons";
 
 
 export function ShowStringError({ error }: {

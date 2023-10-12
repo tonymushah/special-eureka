@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 
-export function get_manga_page_cover(props: MangaPageProps) {
+export default function get_manga_page_cover(props: MangaPageProps) {
     const client = useHTTPClient();
     // [x] Refaction this queryKey into a function
     const cover_key = React.useMemo(() => {

@@ -1,6 +1,6 @@
 import { Api_Request } from "@mangadex/api/internal/Api_Request";
 import { Author } from "@mangadex/api/structures/Author";
-import { get_author_queryKey_byID } from "@mangadex/resources/hooks/AuthorState";
+import get_author_queryKey_byID from "@mangadex/resources/hooks/AuthorState/get_author_queryKey_byID";
 import { LoaderFunction } from "react-router-dom";
 
 

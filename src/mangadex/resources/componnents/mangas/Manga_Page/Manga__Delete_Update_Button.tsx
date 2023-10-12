@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
-import { useMangaDelete } from "@mangadex/resources/hooks/MangaStateHooks/useMangaDelete";
-import { useMangaDownload } from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload";
+import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import useMangaDelete from "@mangadex/resources/hooks/MangaStateHooks/useMangaDelete";
+import useMangaDownload from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload";
 import React from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { BeatLoader } from "react-spinners";

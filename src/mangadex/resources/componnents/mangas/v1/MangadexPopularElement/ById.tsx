@@ -1,5 +1,5 @@
 import React from "react";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
 
 const MangaPopularElement= React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));

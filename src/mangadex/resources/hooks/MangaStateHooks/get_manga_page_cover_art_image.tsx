@@ -9,7 +9,7 @@ export function cover_queryKey(id: string) {
     return ["mdx", "cover", id];
 }
 
-export function get_manga_page_cover_art_image(props: {
+export default function get_manga_page_cover_art_image(props: {
     src: Manga;
     isThumbail?: boolean;
     scale?: 256 | 512;

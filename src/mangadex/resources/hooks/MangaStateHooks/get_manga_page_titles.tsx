@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 
-export function get_manga_page_titles(props: MangaPageProps) {
+export default function get_manga_page_titles(props: MangaPageProps) {
     // [x] Refactor this `queryKey` into a function
     const title_query_key = React.useMemo(() => queryKey(props.src.get_id()), []);
     const title_query = useQuery<Array<Lang_and_Data>, Error>(title_query_key, () => {
