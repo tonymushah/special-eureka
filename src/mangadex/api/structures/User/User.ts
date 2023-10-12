@@ -49,6 +49,7 @@ export default class User extends Attribute {
         }
         return instance;
     }
+    // TODO find why the relationship is not found
     public static async getUserById(id: string, client?: Client): Promise<User> {
         const getted: Response<UserResponse> = await Api_Request.get_methods("user/" + id, undefined, client);
         console.dir(getted.data.data.relationships.length);
