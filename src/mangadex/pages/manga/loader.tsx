@@ -2,38 +2,48 @@ import Manga, { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangad
 import { LoaderFunction } from "react-router-dom";
 import { queryKey, queryFn } from ".";
 import { QueryClient } from "@tanstack/react-query";
+import { queryClient } from "@mangadex/resources/query.client";
+import Api_Request from "@mangadex/api/offline/DeskApiRequest";
 
 export const loader: LoaderFunction = async function ({ params }) {
     const { id } = params;
     if (id != undefined) {
         try {
-            const { queryClient } = await import("@mangadex/resources/query.client");
             const _queryKey_ = queryKey(id);
-            const queryData = queryClient.getQueryData<GetMangaByIDResponse>(_queryKey_, {
-                exact: true
-            });
-            if (queryData != undefined) {
-                const { manga, isOffline } = queryData;
-                if (!isOffline) {
-                    return await prefetch({ queryClient, _queryKey_, id });
-                } else {
-                    if (manga instanceof Manga_with_allRelationship) {
-                        if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
-                            return await prefecth2({ queryClient, _queryKey_, id, manga, isOffline });
-                        } else {
-                            return await prefetch({ queryClient, _queryKey_, id });
-                        }
+            if (await Api_Request.ping()) {
+                return await prefetch({
+                    queryClient,
+                    _queryKey_,
+                    id
+                });
+            } else {
+                const queryData = queryClient.getQueryData<GetMangaByIDResponse>(_queryKey_, {
+                    exact: true
+                });
+                if (queryData != undefined) {
+                    const { manga, isOffline } = queryData;
+                    if (!isOffline) {
+                        return await prefetch({ queryClient, _queryKey_, id });
                     } else {
-                        if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
-                            return await prefetch({ queryClient, _queryKey_, id });
+                        if (manga instanceof Manga_with_allRelationship) {
+                            if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
+                                return await prefecth2({ queryClient, _queryKey_, id, manga, isOffline });
+                            } else {
+                                return await prefetch({ queryClient, _queryKey_, id });
+                            }
                         } else {
-                            return response();
+                            if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
+                                return await prefetch({ queryClient, _queryKey_, id });
+                            } else {
+                                return response();
+                            }
                         }
                     }
+                } else {
+                    return await prefetch({ queryClient, _queryKey_, id });
                 }
-            } else {
-                return await prefetch({ queryClient, _queryKey_, id });
             }
+
         } catch (e) {
             if (e instanceof Error) {
                 throw e;

@@ -1,11 +1,10 @@
 import { Api_Request } from "@mangadex/api/internal/Api_Request";
 import { LoaderFunction, json } from "react-router";
-
+import { queryfn as queryFn } from "./HomeAfterPing/queryfn";
+import { queryKey } from "./HomeAfterPing/queryKey";
+import { queryClient } from "@mangadex/resources/query.client";
 
 export const loader: LoaderFunction = async function () {
-    const { queryfn: queryFn } = await import("./HomeAfterPing/queryfn");
-    const { queryKey } = await import("./HomeAfterPing/queryKey");
-    const { queryClient } = await import("@mangadex/resources/query.client");
     if (await Api_Request.ping()) {
         try {
             await queryClient.prefetchQuery(queryKey(), () => queryFn(undefined, queryClient));

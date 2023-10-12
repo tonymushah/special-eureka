@@ -2,14 +2,13 @@ import { Api_Request } from "@mangadex/api/internal/Api_Request";
 import { User } from "@mangadex/api/structures/User";
 import { getUserByIDQueryKey } from "@mangadex/resources/hooks/UserPageHooks/getUserByIDQueryKey";
 import { LoaderFunction } from "react-router";
-
+import { queryClient } from "@mangadex/resources/query.client";
 
 export const loader: LoaderFunction = async function ({ params }) {
     if (await Api_Request.ping()) {
         const { id } = params;
         if (id != undefined) {
             try {
-                const { queryClient } = await import("@mangadex/resources/query.client");
                 const _queryKey_ = getUserByIDQueryKey({
                     user_id: id
                 });

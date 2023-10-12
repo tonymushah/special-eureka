@@ -1,11 +1,11 @@
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
 import { open } from "@tauri-apps/api/shell";
 import { LoaderFunction, json } from "react-router";
+import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
+import { queryClient } from "@mangadex/resources/query.client";
+import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapter";
 
 export const loader: LoaderFunction = async function ({ params }) {
-    const { get_chapter_queryKey } = await import("@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey");
-    const { queryClient } = await import("@mangadex/resources/query.client");
-    const { Chapter, Chapter_withAllIncludes } = await import("@mangadex/api/structures/Chapter");
     const { id } = params;
     if (id != undefined) {
         const queryKey = get_chapter_queryKey({

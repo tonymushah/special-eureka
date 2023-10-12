@@ -10,7 +10,7 @@ export default function DownloadsLaoyut(){
                     <BackButton/>
                     <Chakra.Heading fontFamily={"inherit"}>Download</Chakra.Heading>
                 </Chakra.HStack>
-                <Chakra.Text>A place where you manage all of your downloaded manga</Chakra.Text>
+                <Chakra.Text>A place where you manage all of your downloaded data</Chakra.Text>
             </Chakra.Box>
             <Chakra.Box>
                 <Outlet/>

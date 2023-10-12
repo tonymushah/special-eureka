@@ -1,15 +1,13 @@
 import handleRouteError from "@mangadex/resources/hooks/handleRouteError";
 import { LoaderFunction } from "react-router";
-
+import { queryKey } from "@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer";
+import Manga from "@mangadex/api/structures/Manga";
+import { queryClient } from "@mangadex/resources/query.client";
+import { Offset_limits } from "@mangadex/api/internal/Utils";
+import Api_Requests from "@mangadex/api/offline/DeskApiRequest";
 
 export const loader: LoaderFunction = async function () {
-
     try {
-        const { queryKey } = await import("@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer");
-        const { default: Manga } = await import("@mangadex/api/structures/Manga");
-        const { queryClient } = await import("@mangadex/resources/query.client");
-        const { Offset_limits } = await import("@mangadex/api/internal/Utils");
-        const { default: Api_Requests } = await import("@mangadex/api/offline/DeskApiRequest");
         if (await Api_Requests.ping()) {
             await queryClient.prefetchInfiniteQuery(queryKey(), async function ({ pageParam = new Offset_limits() }) {
                 return await Manga.getAllDownloadedMangaID(pageParam);
