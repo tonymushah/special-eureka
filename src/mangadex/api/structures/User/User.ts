@@ -38,20 +38,20 @@ export default class User extends Attribute {
         this.set_roles(roles);
         this.set_version(version);
     }
-    public static build_wANY(object: StaUser): User {
-        const attributes = object.attributes;
-        const relationships = object.relationships;
-        const instance: User = new User(object.id, attributes.username, parse_user_role_array(attributes.roles), attributes.version);
+    public static build_wANY({ id, attributes, relationships }: StaUser): User {
+        const instance: User = new User(id, attributes.username, parse_user_role_array(attributes.roles), attributes.version);
+        //console.log(relationships);
+        //console.log(object);
         try {
             instance.set_relationships_Wany(relationships);
             // eslint-disable-next-line no-empty
         } catch (e) {
         }
-        console.log("instanced");
         return instance;
     }
     public static async getUserById(id: string, client?: Client): Promise<User> {
         const getted: Response<UserResponse> = await Api_Request.get_methods("user/" + id, undefined, client);
+        console.dir(getted.data.data.relationships.length);
         const instance: User = User.build_wANY(getted.data.data);
         return instance;
     }
@@ -73,7 +73,7 @@ export default class User extends Attribute {
         };
         const getted: Response<UserList> = await Api_Request.get_methods("user?" +
             stringify(querys)
-        , undefined, client);
+            , undefined, client);
         const data: Array<StaUser> = getted.data.data;
         const mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -111,11 +111,11 @@ export default class User extends Attribute {
         };
         const getted: Response<UserList> = await Api_Request.get_methods("user?" +
             stringify(querys)
-        , {
-            headers: {
-                Authorization: "Bearer " + token
-            }
-        }, client);
+            , {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            }, client);
         const data: Array<StaUser> = getted.data.data;
         const mangaArray: Array<User> = new Array<User>(data.length);
         for (let index = 0; index < data.length; index++) {

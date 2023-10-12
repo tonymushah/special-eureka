@@ -20,6 +20,7 @@ export default function CollectionComponnent_withInfiniteQuery<T>({ queryKey, qu
             return undefined;
         }
     },
+    staleTime: Infinity
 }, children }: {
     queryKey: QueryKey,
     queryFn: QueryFunction<Collection<T>, QueryKey, Offset_limits>,

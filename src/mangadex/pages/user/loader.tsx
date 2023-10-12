@@ -17,8 +17,10 @@ export const loader: LoaderFunction = async function ({ params }) {
                     exact: true
                 });
                 if (queryData != undefined) {
-                    if (queryData.get_relationships() == undefined || queryData.get_relationships()?.length == 0) {
-                        await queryClient.prefetchQuery(_queryKey_, () => User.getUserById(id));
+                    if (queryData.get_relationships().length === 0) {
+                        await queryClient.fetchQuery(_queryKey_, async () => { 
+                            return User.getUserById(id); 
+                        });
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -30,7 +32,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                         });
                     }
                 } else {
-                    await queryClient.prefetchQuery(_queryKey_, () => User.getUserById(id));
+                    await queryClient.fetchQuery(_queryKey_, () => User.getUserById(id));
                     return new Response(null, {
                         "status": 204,
                         "statusText": "Loaded"
