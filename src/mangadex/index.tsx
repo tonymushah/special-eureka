@@ -244,9 +244,9 @@ const useMangadexRouter: RouteObject = {
         {
             path: "download",
             async lazy() {
-                const DownloadLayout = await import("@mangadex/pages/download/layout");
+                const { default: Component } = await import("@mangadex/pages/download/layout");
                 return {
-                    Component: DownloadLayout.default,
+                    Component,
                     ErrorBoundary
                 };
             },

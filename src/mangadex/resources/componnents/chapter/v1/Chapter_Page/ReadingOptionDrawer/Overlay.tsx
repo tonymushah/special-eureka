@@ -1,5 +1,5 @@
 import React from "react";
-import { OptionOverlayAtom } from "./OptionOverlay";
+import { OptionOverlayAtom } from "./OptionOverlayAtom";
 import { useAtom } from "jotai";
 import { DrawerOverlay } from "@chakra-ui/react";
 

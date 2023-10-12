@@ -8,7 +8,7 @@ const ImageWidthSlider = React.lazy(() => import("../ChapterFullScreen/ImageWidt
 
 export default function ImageWidthController() {
     const reading_mode = useChapterReadingModeOption();
-    if (reading_mode.query.data == ReadingMode.LongStrip || reading_mode.query.data == ReadingMode.WideStrip || reading_mode.query.data == ReadingMode.SinglePage) {
+    if (reading_mode.query.data == ReadingMode.LongStrip || reading_mode.query.data == ReadingMode.WideStrip) {
         return (
             <HStack
                 mt={3}

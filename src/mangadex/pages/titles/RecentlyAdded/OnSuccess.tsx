@@ -6,7 +6,6 @@ import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collectio
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import MangaListWithCollectionArray from "@mangadex/resources/componnents/mangas/v1/MangaList/ViaMangaCollectionArray";
 import { Client } from "@tauri-apps/api/http";
-import React from "react";
 import { queryFn } from ".";
 import { useInfiniteQuery } from "@tanstack/react-query";
 

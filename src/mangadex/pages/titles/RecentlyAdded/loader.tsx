@@ -2,11 +2,11 @@ import { Offset_limits } from "@mangadex/api/internal/Utils";
 import { LoaderFunction } from "react-router";
 import handleRouteError from "@mangadex/resources/hooks/handleRouteError";
 import { queryKey, queryFn } from ".";
-
+import { Api_Request } from "@mangadex/api/internal/Api_Request";
+import { queryClient } from "@mangadex/resources/query.client";
 
 export const loader: LoaderFunction = async function () {
-    const { Api_Request } = await import("@mangadex/api/internal/Api_Request");
-    const { queryClient } = await import("@mangadex/resources/query.client");
+    
     try {
         const startOffsetLimit = new Offset_limits(0, 25);
         if (await Api_Request.ping()) {

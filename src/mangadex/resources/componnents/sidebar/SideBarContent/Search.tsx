@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { MangaDexPath } from ".";
 import { useBackgroundColor, useBackgroundColorHover } from "../ActualSidebar";
 
-
 export function Search() {
     const hoverBackgroundColor = useBackgroundColorHover();
     const backgroundColor = useBackgroundColor();
@@ -38,7 +37,11 @@ export function Search() {
                 >
                     Groups
                 </MenuItem>
-                <MenuItem>Chapter</MenuItem>
+                {
+                    /*
+                        <MenuItem>Chapter</MenuItem>
+                    */
+                }
             </Menu>
         </SubMenu>
     );

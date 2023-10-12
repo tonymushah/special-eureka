@@ -29,7 +29,9 @@ export default function NextTrigger({ query }: {
                             </Text>
                         </HStack>
                     ) : (
-                        <React.Fragment />
+                        <React.Fragment>
+                            Next...
+                        </React.Fragment>
                     )}
                 </Box>
             </Center>

@@ -1,10 +1,11 @@
 import handleRouteError from "@mangadex/resources/hooks/handleRouteError";
 import { LoaderFunction } from "react-router";
+import { queryClient } from "@mangadex/resources/query.client";
+import { queryKey, queryFn } from ".";
 
 export const loader : LoaderFunction = async function({ params }){
     const { id } = params;
-    const { queryClient } = await import("@mangadex/resources/query.client");
-    const { queryKey, queryFn } = await import(".");
+    
     if(id != undefined){
         try{
             await queryClient.prefetchQuery(queryKey(id), () => queryFn(id));

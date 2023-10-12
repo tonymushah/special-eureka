@@ -2,14 +2,13 @@ import { Api_Request } from "@mangadex/api/internal/Api_Request";
 import { User } from "@mangadex/api/structures/User";
 import { getUserByIDQueryKey } from "@mangadex/resources/hooks/UserPageHooks/getUserByIDQueryKey";
 import { LoaderFunction } from "react-router";
-
+import { queryClient } from "@mangadex/resources/query.client";
 
 export const loader: LoaderFunction = async function ({ params }) {
     if (await Api_Request.ping()) {
         const { id } = params;
         if (id != undefined) {
             try {
-                const { queryClient } = await import("@mangadex/resources/query.client");
                 const _queryKey_ = getUserByIDQueryKey({
                     user_id: id
                 });
@@ -17,8 +16,10 @@ export const loader: LoaderFunction = async function ({ params }) {
                     exact: true
                 });
                 if (queryData != undefined) {
-                    if (queryData.get_relationships() == undefined || queryData.get_relationships()?.length == 0) {
-                        await queryClient.prefetchQuery(_queryKey_, () => User.getUserById(id));
+                    if (queryData.get_relationships().length === 0) {
+                        await queryClient.fetchQuery(_queryKey_, async () => { 
+                            return User.getUserById(id); 
+                        });
                         return new Response(null, {
                             "status": 204,
                             "statusText": "Loaded"
@@ -30,7 +31,7 @@ export const loader: LoaderFunction = async function ({ params }) {
                         });
                     }
                 } else {
-                    await queryClient.prefetchQuery(_queryKey_, () => User.getUserById(id));
+                    await queryClient.fetchQuery(_queryKey_, () => User.getUserById(id));
                     return new Response(null, {
                         "status": 204,
                         "statusText": "Loaded"

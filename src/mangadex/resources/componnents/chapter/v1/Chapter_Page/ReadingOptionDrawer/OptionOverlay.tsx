@@ -1,7 +1,6 @@
 import { HStack, Switch, Text } from "@chakra-ui/react";
-import { atom, useAtom } from "jotai";
-
-export const OptionOverlayAtom = atom(false);
+import { useAtom } from "jotai";
+import { OptionOverlayAtom } from "./OptionOverlayAtom";
 
 export default function OptionOverlay() {
     const [ isOverlay, setIsOverlay ] = useAtom(OptionOverlayAtom);

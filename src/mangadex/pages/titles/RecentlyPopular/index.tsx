@@ -7,6 +7,7 @@ import CollectionComponnent_withInfiniteQuery from "@mangadex/resources/componne
 import { InfiniteQueryConsumer } from "@mangadex/resources/componnents/Collection/InfiniteQueryConsumer";
 import React from "react";
 import { MangaComponnent } from "./MangaComponnent";
+import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 
 export const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
@@ -16,14 +17,18 @@ export default function RecentlyPopularPage() {
     /// [x] Refactor into a function
     const query_Key = React.useMemo(() => queryKey(), []);
     useTrackEvent("mangadex-latest-update-entrance");
+    const setTitle = useAppWindowTitle();
+    React.useEffect(() => {
+        setTitle("Recently Popular Titles");
+    });
     return (
-        <React.Fragment>
+        <Chakra.Box m={2}>
             <Chakra.Heading fontFamily={"inherit"}>Recent Popular Titles</Chakra.Heading>
             <CollectionComponnent_withInfiniteQuery<Manga>
                 queryKey={query_Key}
-                queryFn={() => {
+                queryFn={({ pageParam: offset_Limits = offset_limits }) => {
                     return Manga_with_allRelationship.search({
-                        offset_Limits: offset_limits,
+                        offset_Limits,
                         order: order,
                         client,
                         createdAtSince: touse_date,
@@ -31,7 +36,21 @@ export default function RecentlyPopularPage() {
                     });
                 }}
                 options={{
-                    staleTime: Infinity
+                    staleTime: Infinity,
+                    getNextPageParam(lastPage) {
+                        try {
+                            return lastPage.next_offset_limit();
+                        } catch {
+                            return undefined;
+                        }
+                    },
+                    getPreviousPageParam(lastPage) {
+                        try {
+                            return lastPage.previous_offset_limit();
+                        } catch {
+                            return undefined;
+                        }
+                    },
                 }}
             >
                 {(query) => (
@@ -57,12 +76,12 @@ export default function RecentlyPopularPage() {
                 )}
             </CollectionComponnent_withInfiniteQuery>
 
-        </React.Fragment>
+        </Chakra.Box>
     );
 }
 
 export function queryKey() {
-    return ["mdx", "popular-recent-titles"];
+    return ["mdx", "popular-recent-titles", "somehow"];
 }
 
 function useState() {
