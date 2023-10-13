@@ -1,5 +1,5 @@
 import { Mangadex_suspense, Mangadex_suspense__ } from "@mangadex/index";
-import { get_author_byID } from "@mangadex/resources/hooks/AuthorState";
+import get_author_byID from "@mangadex/resources/hooks/AuthorState/get_author_byID";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
 import { useParams } from "react-router-dom";

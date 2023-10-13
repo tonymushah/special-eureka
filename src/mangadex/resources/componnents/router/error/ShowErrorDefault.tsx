@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import ChakraContainer from "../../layout/Container";
-import { RefreshReportAndBackButtons } from "./RefreshAndBackButtons";
+import RefreshReportAndBackButtons from "./RefreshReportAndBackButtons";
 
-export function ShowErrorDefault({ error }: {
+export default function ShowErrorDefault({ error }: {
     error: Error;
 }) {
     return (

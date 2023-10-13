@@ -3,7 +3,7 @@ import React from "react";
 import { Await } from "react-router-dom";
 import { make_first_UpperCare, Manga_related } from "../../../../api/internal/Utils";
 import Manga from "../../../../api/structures/Manga";
-import { ErrorELAsync1 } from "../../Error_cmp";
+import { ErrorELAsync1 } from "../../Error_cmp/ErrorELAsync1";
 import MangaElementDef from "../v1/MangaElementDef";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 

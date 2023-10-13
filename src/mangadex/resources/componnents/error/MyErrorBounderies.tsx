@@ -1,7 +1,7 @@
 import TryCatch from "@commons-res/components/TryCatch";
 import { Mangadex_suspense } from "@mangadex/index";
 import React from "react";
-import { ShowErrorDefault } from "../router/error/ShowErrorDefault";
+import ShowErrorDefault from "../router/error/ShowErrorDefault";
 
 function OnError(e: Error) {
     return (

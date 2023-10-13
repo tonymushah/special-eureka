@@ -3,7 +3,7 @@ import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import DesktopApi from "@mangadex/api/offline/DeskApiRequest";
 import React from "react";
 
-export function useServerStateQuery() {
+export default function useServerStateQuery() {
     const client = useHTTPClient();
 
     // [x] Refactor this into a new function

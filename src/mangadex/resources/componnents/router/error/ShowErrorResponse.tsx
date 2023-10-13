@@ -2,11 +2,10 @@ import * as Chakra from "@chakra-ui/react";
 import React from "react";
 import { isRouteErrorResponse } from "react-router";
 import ChakraContainer from "../../layout/Container";
-import { RefreshAndBackButtons } from "./RefreshAndBackButtons";
-import { ShowUnknownError } from "./ShowUnknownError";
+import RefreshAndBackButtons from "./RefreshAndBackButtons";
+import ShowUnknownError from "./ShowUnknownError";
 
-
-export function ShowErrorResponse({ error }: {
+export default function ShowErrorResponse({ error }: {
     error: unknown;
 }) {
     if (isRouteErrorResponse(error)) {

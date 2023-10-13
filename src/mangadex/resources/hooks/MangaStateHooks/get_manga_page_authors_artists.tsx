@@ -1,6 +1,6 @@
 import { MangaPageProps } from "@mangadex/resources/componnents/mangas/Manga_Page";
-import { get_manga_page_authors } from "./get_manga_page_authors";
-import { get_manga_page_artists } from "./get_manga_page_artists";
+import get_manga_page_authors from "./get_manga_page_authors";
+import get_manga_page_artists from "./get_manga_page_artists";
 import React from "react";
 
 

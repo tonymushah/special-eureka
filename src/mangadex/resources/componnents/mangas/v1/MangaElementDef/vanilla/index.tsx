@@ -1,8 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import Manga from "@mangadex/api/structures/Manga";
 import { getMangaDexPath } from "@mangadex/index";
-import { get_manga_description } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
-import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
+import get_manga_description from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
+import get_manga_page_cover_art_image from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import React from "react";
 import { useMangaTitle } from "../../MangaTitle";
 import Description from "./Description";

@@ -6,7 +6,7 @@ import { UseQueryOptions, useQueries } from "@tanstack/react-query";
 import React from "react";
 
 
-export function get_manga_page_authors(props: MangaPageProps) {
+export default function get_manga_page_authors(props: MangaPageProps) {
     const client = useHTTPClient();
     const queries = React.useMemo<UseQueryOptions<Author>[]>(() => {
         const manga = props.src;

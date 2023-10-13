@@ -1,8 +1,8 @@
-import { useMangaDownload } from "./useMangaDownload";
-import { useMangaDelete } from "./useMangaDelete";
+import useMangaDownload from "./useMangaDownload";
+import useMangaDelete from "./useMangaDelete";
 
 
-export function useMangaDownload_Delete(props: {
+export default function useMangaDownload_Delete(props: {
     mangaID: string;
 }) {
     const delete_ = useMangaDelete(props);

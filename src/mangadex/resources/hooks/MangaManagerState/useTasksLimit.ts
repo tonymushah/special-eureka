@@ -1,5 +1,5 @@
 import React from "react";
-import { useServerStateQuery, querykey as useServerStateQuery_queryKey } from "./useServerStateQuery";
+import useServerStateQuery, { querykey as useServerStateQuery_queryKey } from "./useServerStateQuery";
 import { useQuery } from "@tanstack/react-query";
 import { get_tasks_limit } from "@mangadex/plugin";
 

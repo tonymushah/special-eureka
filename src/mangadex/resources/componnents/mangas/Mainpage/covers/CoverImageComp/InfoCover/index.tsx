@@ -3,7 +3,7 @@ import { useCoverImageCover } from "@mangadex/resources/componnents/covers/v1/Co
 import React from "react";
 import { motion } from "framer-motion";
 import Flag_icons from "@mangadex/resources/componnents/FlagIcons";
-import { getAllLang } from "@mangadex/resources/hooks/lang/getAllLang";
+import getAllLang from "@mangadex/resources/hooks/lang/getAllLang";
 import DownloadButton from "./DownloadButton";
 
 export function InfoCover({ isHovered }: {

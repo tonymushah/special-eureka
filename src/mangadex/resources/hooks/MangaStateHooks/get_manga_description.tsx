@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
 
-export function get_manga_description(props: {
+export default function get_manga_description(props: {
     src: Manga;
 }) {
     // [x] Refactor this query key into a function

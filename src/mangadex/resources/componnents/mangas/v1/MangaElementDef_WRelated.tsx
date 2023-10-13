@@ -2,7 +2,7 @@ import Manga from "@mangadex/api/structures/Manga";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementDef from "./MangaElementDef";
 import MangaElementFallback from "./MangaElementFallback";
-import { get_manga_byId } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import { InitialDataFunction } from "@tanstack/react-query";
 
 export default function MangaElementDef_wRelated({ mangaID, initialData }: {

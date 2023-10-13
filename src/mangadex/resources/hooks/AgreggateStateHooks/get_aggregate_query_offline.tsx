@@ -1,7 +1,7 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { Aggregate } from "@mangadex/api/structures/Aggregate";
 import { AggregateListOptions } from "@mangadex/api/structures/SearchType/AggregateListOptions";
-import { useServerStateQuery } from "../MangaManagerState/useServerStateQuery";
+import useServerStateQuery from "../MangaManagerState/useServerStateQuery";
 import React from "react";
 
 

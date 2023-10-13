@@ -2,8 +2,9 @@ import * as Chakra from "@chakra-ui/react";
 import useUserOptionModal from "@mangadex/resources/hooks/userOptions/ModalContext";
 import React from "react";
 import ReactHotkeys from "react-hot-keys";
-import ActivateKuru from "../../kuru_kuru/ActivateKuru";
-import UserOptionContent from "../content";
+import Header from "./Header";
+import Body from "./Body";
+import Footer from "./Footer";
 
 export default function UserOptionModal() {
     const { state, changeOption, toggle } = useUserOptionModal();
@@ -18,31 +19,10 @@ export default function UserOptionModal() {
             <Chakra.Modal isOpen={state} size={"3xl"} onClose={() => changeOption(false)}>
                 <Chakra.ModalOverlay />
                 <Chakra.ModalContent>
-                    <Chakra.ModalHeader>
-                        <Chakra.Tooltip
-                            hasArrow
-                            label={
-                                <Chakra.HStack>
-                                    <Chakra.Text>
-                                        you can open this with
-                                    </Chakra.Text>
-                                    <React.Fragment>
-                                        <Chakra.Kbd color="slateblue">ctrl</Chakra.Kbd> +
-                                        <Chakra.Kbd color="slateblue">O</Chakra.Kbd>
-                                    </React.Fragment>
-                                </Chakra.HStack>
-                            }
-                        >
-                            Mangadex Options
-                        </Chakra.Tooltip>
-                    </Chakra.ModalHeader>
+                    <Header />
                     <Chakra.ModalCloseButton />
-                    <Chakra.ModalBody>
-                        <UserOptionContent/>
-                    </Chakra.ModalBody>
-                    <Chakra.ModalFooter>
-                        <ActivateKuru />
-                    </Chakra.ModalFooter>
+                    <Body />
+                    <Footer/>
                 </Chakra.ModalContent>
             </Chakra.Modal>
         </React.Fragment>

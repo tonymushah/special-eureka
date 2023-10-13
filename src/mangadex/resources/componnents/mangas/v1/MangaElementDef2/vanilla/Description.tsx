@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import { get_manga_description } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
+import get_manga_description from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
 import { useProps } from "../../MangaElementDef/vanilla";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";

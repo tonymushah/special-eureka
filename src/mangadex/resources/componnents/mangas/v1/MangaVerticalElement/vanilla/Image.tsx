@@ -1,4 +1,4 @@
-import { get_manga_page_cover_art_image } from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
+import get_manga_page_cover_art_image from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import { useProps } from "../../MangaElementDef/vanilla";
 import * as Chakra from "@chakra-ui/react";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
