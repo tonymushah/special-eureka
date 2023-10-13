@@ -1,4 +1,3 @@
-import React from "react";
 import { useManga } from "..";
 import Manga from "@mangadex/api/structures/Manga";
 import { Covers_Manga } from "@mangadex/resources/componnents/mangas/Mainpage/Covers_";

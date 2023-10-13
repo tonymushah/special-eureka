@@ -8,9 +8,11 @@ export enum UserOptionsKeys{
     mangalistOption = "mangaList-option",
     rtlSidebar = "rtlSidebar",
     readingMode = "readingMode",
-    rtlSwipperMode = "rtlSwipperMode"
+    rtlSwipperMode = "rtlSwipperMode",
+    coverLocality = "cover-locality"
 }
 
+// Add onChange on every Keys
 export default class UserOptions extends Store{
     constructor(){
         super(".UserOptions.speu-mangadex");
@@ -77,5 +79,22 @@ export default class UserOptions extends Store{
     }
     public async getRtlSwipperMode() : Promise<boolean>{
         return (await this.get<boolean>(UserOptionsKeys.rtlSwipperMode)) ?? false;
+    }
+    public async setCoverLocality(input : Array<Lang>, save? : boolean){
+        const to_in = input.map((value) => value.get_two_letter());
+        await this.set(UserOptionsKeys.coverLocality, to_in);
+        if(save == undefined || save == true){
+            console.log("saving");
+            await this.save();
+        }
+    }
+    public async getCoverLocality() : Promise<Array<Lang>>{
+        const languages = await Languages.initialize();
+        const cachedLangs = (await this.get<Array<string>>(UserOptionsKeys.coverLocality));
+        if(cachedLangs == null){
+            return [languages.getLang_byTwo_letter("ja")];
+        }else{
+            return cachedLangs.map((value) => languages.getLang_byTwo_letter(value));
+        }
     }
 }
