@@ -72,9 +72,35 @@ If you want to give some feedback, please put them to :
 
 ### [Feedbacks Discussions](https://github.com/tonymushah/special-eureka/discussions/categories/feedbacks)
 
-## Contributions
+## Using the source directly
 
+Before we start, make sure you have meet the [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) and done the [Tauri Quick Start With Vite](https://tauri.app/v1/guides/getting-started/setup/vite).
 
+And, this project also use [pnpm](https://pnpm.io) as a package manager, so make sure you have installed it.
+
+If that's done, then let's get started.
+
+First, clone the repository
+
+```bash
+git clone https://github.com/tonymushah/special-eureka.git
+```
+
+Second, install the frontend dependencies:
+
+```bash
+pnpm install
+```
+
+Note : Make sure you have [pnpm](https://pnpm.io) installed
+
+Last, but at least :
+
+```bash
+pnpm dev
+```
+
+The build might take a long time, like 30 minutes so i recommend doing else instead.
 
 ## License
 
