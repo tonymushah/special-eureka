@@ -1,7 +1,8 @@
 name: build-test
 on:
-    release : 
-        types : [published]
+    push: 
+        branches:
+          - master
 env:
     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 jobs:
@@ -41,5 +42,5 @@ jobs:
                   tagName: v__VERSION__
                   releaseName: "Special Eureka v__VERSION__"
                   releaseBody: "See the assets to download this version and install."
-                  releaseDraft: false
-                  prerelease: true
+                  releaseDraft: true
+                  prerelease: false
