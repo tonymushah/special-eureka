@@ -261,8 +261,8 @@ dependencies:
     specifier: ^2.0.7
     version: 2.0.7(@storybook/blocks@7.4.6)(@storybook/channels@7.4.6)(@storybook/components@7.4.6)(@storybook/core-events@7.4.6)(@storybook/manager-api@7.4.6)(@storybook/preview-api@7.4.6)(@storybook/theming@7.4.6)(react-dom@18.2.0)(react-router-dom@6.16.0)(react@18.2.0)
   swiper:
-    specifier: ^10.3.1
-    version: 10.3.1
+    specifier: ^11.0.0
+    version: 11.0.1
   tauri-plugin-log-api:
     specifier: github:tauri-apps/tauri-plugin-log#dev
     version: github.com/tauri-apps/tauri-plugin-log/be811332676ff73e1e891f31ce3de8d447fdf07e
@@ -15319,8 +15319,8 @@ packages:
       - encoding
     dev: true
 
-  /swiper@10.3.1:
-    resolution: {integrity: sha512-24Wk3YUdZHxjc9faID97GTu6xnLNia+adMt6qMTZG/HgdSUt4fS0REsGUXJOgpTED0Amh/j+gRGQxsLayJUlBQ==}
+  /swiper@11.0.1:
+    resolution: {integrity: sha512-pxVygCS5CVL2pRYSnv8RbjlOC/nN+JrAn5/JM0WBQzIWisv9FYe1s69KEB82TOeqh/T3zc9zks/gxctY6G/XMg==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
