@@ -37,7 +37,7 @@ There was two solutions :
 
 I decided to take the second solution.
 
-There is some great alternatives like : [mangadesk](https://github.com/darylhjd/mangadesk) and [Mangal](https://github.com/metafates/mangal) for Terminal, or [Tachiyomi](https://tachiyomi.org/) for Mobile, ect,... (i recommend visiting [wotaku](https://wotaku.its.moe/) if you want to know more about those).
+There is some great alternatives like : [mangadesk](https://github.com/darylhjd/mangadesk) and [Mangal](https://github.com/metafates/mangal) for Terminal, or [Tachiyomi](https://tachiyomi.org/) for Mobile, etc,... (i recommend visiting [wotaku](https://wotaku.moe/) if you want to know more about those).
 
 But they don't satisfy my own need, like :
 
