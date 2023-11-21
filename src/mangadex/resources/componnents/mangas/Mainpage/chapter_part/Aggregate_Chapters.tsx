@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import "@commons-res/flag-icons/less/flag-icons.less";
+import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";

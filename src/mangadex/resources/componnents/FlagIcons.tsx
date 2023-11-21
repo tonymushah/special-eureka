@@ -1,4 +1,4 @@
-import "@commons-res/flag-icons/less/flag-icons.less";
+import "flag-icons/css/flag-icons.min.css";
 import { Box } from "@chakra-ui/react";
 
 type Flag_icons_props = {

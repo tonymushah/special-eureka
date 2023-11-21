@@ -1,6 +1,6 @@
 import useLanguageUserOption from "@mangadex/resources/hooks/userOptions/SelectLanguage";
 import * as Chakra from "@chakra-ui/react";
-import "@commons-res/flag-icons/less/flag-icons.less";
+import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import ErrorEL1 from "../../../error/ErrorEL1";
 import { MangaPageProps } from "../../Manga_Page";
