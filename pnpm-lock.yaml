@@ -64,7 +64,7 @@ dependencies:
     version: 3.0.0(@types/react@18.2.25)(react@18.2.0)
   '@mdx-js/rollup':
     specifier: ^3.0.0
-    version: 3.0.0(rollup@4.0.2)
+    version: 3.0.0(rollup@4.5.0)
   '@popperjs/core':
     specifier: ^2.11.8
     version: 2.11.8
@@ -123,8 +123,8 @@ dependencies:
     specifier: ^4.1.0
     version: 4.1.0(vite@5.0.0)
   axios:
-    specifier: ^1.5.1
-    version: 1.5.1
+    specifier: ^1.6.0
+    version: 1.6.0
   axios-tauri-adapter:
     specifier: ^0.3.0
     version: 0.3.0
@@ -309,7 +309,7 @@ devDependencies:
     version: 6.1.3(typescript@5.2.2)
   '@rollup/plugin-eslint':
     specifier: ^9.0.5
-    version: 9.0.5(rollup@4.0.2)
+    version: 9.0.5(rollup@4.5.0)
   '@storybook/addon-a11y':
     specifier: ^7.4.6
     version: 7.4.6(@types/react-dom@18.2.11)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
@@ -333,7 +333,7 @@ devDependencies:
     version: 7.5.3(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
   '@storybook/react-vite':
     specifier: 7.5.3
-    version: 7.5.3(react-dom@18.2.0)(react@18.2.0)(rollup@4.0.2)(typescript@5.2.2)(vite@5.0.0)
+    version: 7.5.3(react-dom@18.2.0)(react@18.2.0)(rollup@4.5.0)(typescript@5.2.2)(vite@5.0.0)
   '@storybook/testing-library':
     specifier: 0.2.2
     version: 0.2.2
@@ -441,7 +441,7 @@ devDependencies:
     version: 1.1.7(vite@5.0.0)
   vite-plugin-svgr:
     specifier: ^4.0.0
-    version: 4.1.0(rollup@4.0.2)(vite@5.0.0)
+    version: 4.1.0(rollup@4.5.0)(vite@5.0.0)
   vitest:
     specifier: ^0.34.6
     version: 0.34.6(less@4.2.0)(sass@1.69.0)(terser@5.21.0)
@@ -3839,14 +3839,14 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@mdx-js/rollup@3.0.0(rollup@4.0.2):
+  /@mdx-js/rollup@3.0.0(rollup@4.5.0):
     resolution: {integrity: sha512-ITvGiwPGEBW+D7CCnpSA9brzAosIWHAi4y+Air8wgfLnez8aWue50avHtWMfnFLCp7vt+JQ9UM8nwfuQuuydxw==}
     peerDependencies:
       rollup: '>=2'
     dependencies:
       '@mdx-js/mdx': 3.0.0
-      '@rollup/pluginutils': 5.0.5(rollup@4.0.2)
-      rollup: 4.0.2
+      '@rollup/pluginutils': 5.0.5(rollup@4.5.0)
+      rollup: 4.5.0
       source-map: 0.7.4
       vfile: 6.0.1
     transitivePeerDependencies:
@@ -4956,7 +4956,7 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rollup/plugin-eslint@9.0.5(rollup@4.0.2):
+  /@rollup/plugin-eslint@9.0.5(rollup@4.5.0):
     resolution: {integrity: sha512-C4nh0sSeJuxVW5u5tDX+dCMjKcNfHm4hS+zeUVh1si7gttnhgGbrmPkUxIX7iZgYABwdEh/ewyMbZB+WXjSJdA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4965,14 +4965,14 @@ packages:
       rollup:
         optional: true
     dependencies:
-      '@rollup/pluginutils': 5.0.5(rollup@4.0.2)
+      '@rollup/pluginutils': 5.0.5(rollup@4.5.0)
       eslint: 8.54.0
-      rollup: 4.0.2
+      rollup: 4.5.0
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /@rollup/pluginutils@5.0.5(rollup@4.0.2):
+  /@rollup/pluginutils@5.0.5(rollup@4.5.0):
     resolution: {integrity: sha512-6aEYR910NyP73oHiJglti74iRyOwgFU4x3meH/H8OJx6Ry0j6cOVZ5X/wTvub7G7Ao6qaHBEaNsV3GLJkSsF+Q==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -4984,25 +4984,11 @@ packages:
       '@types/estree': 1.0.2
       estree-walker: 2.0.2
       picomatch: 2.3.1
-      rollup: 4.0.2
-
-  /@rollup/rollup-android-arm-eabi@4.0.2:
-    resolution: {integrity: sha512-xDvk1pT4vaPU2BOLy0MqHMdYZyntqpaBf8RhBiezlqG9OjY8F50TyctHo8znigYKd+QCFhCmlmXHOL/LoaOl3w==}
-    cpu: [arm]
-    os: [android]
-    requiresBuild: true
-    optional: true
+      rollup: 4.5.0
 
   /@rollup/rollup-android-arm-eabi@4.5.0:
     resolution: {integrity: sha512-OINaBGY+Wc++U0rdr7BLuFClxcoWaVW3vQYqmQq6B3bqQ/2olkaoz+K8+af/Mmka/C2yN5j+L9scBkv4BtKsDA==}
     cpu: [arm]
-    os: [android]
-    requiresBuild: true
-    optional: true
-
-  /@rollup/rollup-android-arm64@4.0.2:
-    resolution: {integrity: sha512-lqCglytY3E6raze27DD9VQJWohbwCxzqs9aSHcj5X/8hJpzZfNdbsr4Ja9Hqp6iPyF53+5PtPx0pKRlkSvlHZg==}
-    cpu: [arm64]
     os: [android]
     requiresBuild: true
     optional: true
@@ -5014,23 +5000,9 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rollup/rollup-darwin-arm64@4.0.2:
-    resolution: {integrity: sha512-nkBKItS6E6CCzvRwgiKad+j+1ibmL7SIInj7oqMWmdkCjiSX6VeVZw2mLlRKIUL+JjsBgpATTfo7BiAXc1v0jA==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
   /@rollup/rollup-darwin-arm64@4.5.0:
     resolution: {integrity: sha512-L0/CA5p/idVKI+c9PcAPGorH6CwXn6+J0Ys7Gg1axCbTPgI8MeMlhA6fLM9fK+ssFhqogMHFC8HDvZuetOii7w==}
     cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    optional: true
-
-  /@rollup/rollup-darwin-x64@4.0.2:
-    resolution: {integrity: sha512-vX2C8xvWPIbpEgQht95+dY6BReKAvtDgPDGi0XN0kWJKkm4WdNmq5dnwscv/zxvi+n6jUTBhs6GtpkkWT4q8Gg==}
-    cpu: [x64]
     os: [darwin]
     requiresBuild: true
     optional: true
@@ -5042,13 +5014,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rollup/rollup-linux-arm-gnueabihf@4.0.2:
-    resolution: {integrity: sha512-DVFIfcHOjgmeHOAqji4xNz2wczt1Bmzy9MwBZKBa83SjBVO/i38VHDR+9ixo8QpBOiEagmNw12DucG+v55tCrg==}
-    cpu: [arm]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
   /@rollup/rollup-linux-arm-gnueabihf@4.5.0:
     resolution: {integrity: sha512-VpSQ+xm93AeV33QbYslgf44wc5eJGYfYitlQzAi3OObu9iwrGXEnmu5S3ilkqE3Pr/FkgOiJKV/2p0ewf4Hrtg==}
     cpu: [arm]
@@ -5056,22 +5021,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rollup/rollup-linux-arm64-gnu@4.0.2:
-    resolution: {integrity: sha512-GCK/a9ItUxPI0V5hQEJjH4JtOJO90GF2Hja7TO+EZ8rmkGvEi8/ZDMhXmcuDpQT7/PWrTT9RvnG8snMd5SrhBQ==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
   /@rollup/rollup-linux-arm64-gnu@4.5.0:
     resolution: {integrity: sha512-OrEyIfpxSsMal44JpEVx9AEcGpdBQG1ZuWISAanaQTSMeStBW+oHWwOkoqR54bw3x8heP8gBOyoJiGg+fLY8qQ==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /@rollup/rollup-linux-arm64-musl@4.0.2:
-    resolution: {integrity: sha512-cLuBp7rOjIB1R2j/VazjCmHC7liWUur2e9mFflLJBAWCkrZ+X0+QwHLvOQakIwDymungzAKv6W9kHZnTp/Mqrg==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
@@ -5084,22 +5035,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rollup/rollup-linux-x64-gnu@4.0.2:
-    resolution: {integrity: sha512-Zqw4iVnJr2naoyQus0yLy7sLtisCQcpdMKUCeXPBjkJtpiflRime/TMojbnl8O3oxUAj92mxr+t7im/RbgA20w==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
   /@rollup/rollup-linux-x64-gnu@4.5.0:
     resolution: {integrity: sha512-FVyFI13tXw5aE65sZdBpNjPVIi4Q5mARnL/39UIkxvSgRAIqCo5sCpCELk0JtXHGee2owZz5aNLbWNfBHzr71Q==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    optional: true
-
-  /@rollup/rollup-linux-x64-musl@4.0.2:
-    resolution: {integrity: sha512-jJRU9TyUD/iMqjf8aLAp7XiN3pIj5v6Qcu+cdzBfVTKDD0Fvua4oUoK8eVJ9ZuKBEQKt3WdlcwJXFkpmMLk6kg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
@@ -5112,13 +5049,6 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rollup/rollup-win32-arm64-msvc@4.0.2:
-    resolution: {integrity: sha512-ZkS2NixCxHKC4zbOnw64ztEGGDVIYP6nKkGBfOAxEPW71Sji9v8z3yaHNuae/JHPwXA+14oDefnOuVfxl59SmQ==}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    optional: true
-
   /@rollup/rollup-win32-arm64-msvc@4.5.0:
     resolution: {integrity: sha512-xaOHIfLOZypoQ5U2I6rEaugS4IYtTgP030xzvrBf5js7p9WI9wik07iHmsKaej8Z83ZDxN5GyypfoyKV5O5TJA==}
     cpu: [arm64]
@@ -5126,23 +5056,9 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@rollup/rollup-win32-ia32-msvc@4.0.2:
-    resolution: {integrity: sha512-3SKjj+tvnZ0oZq2BKB+fI+DqYI83VrRzk7eed8tJkxeZ4zxJZcLSE8YDQLYGq1tZAnAX+H076RHHB4gTZXsQzw==}
-    cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    optional: true
-
   /@rollup/rollup-win32-ia32-msvc@4.5.0:
     resolution: {integrity: sha512-Al6quztQUrHwcOoU2TuFblUQ5L+/AmPBXFR6dUvyo4nRj2yQRK0WIUaGMF/uwKulvRcXkpHe3k9A8Vf93VDktA==}
     cpu: [ia32]
-    os: [win32]
-    requiresBuild: true
-    optional: true
-
-  /@rollup/rollup-win32-x64-msvc@4.0.2:
-    resolution: {integrity: sha512-MBdJIOxRauKkry7t2q+rTHa3aWjVez2eioWg+etRVS3dE4tChhmt5oqZYr48R6bPmcwEhxQr96gVRfeQrLbqng==}
-    cpu: [x64]
     os: [win32]
     requiresBuild: true
     optional: true
@@ -6305,7 +6221,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: true
 
-  /@storybook/react-vite@7.5.3(react-dom@18.2.0)(react@18.2.0)(rollup@4.0.2)(typescript@5.2.2)(vite@5.0.0):
+  /@storybook/react-vite@7.5.3(react-dom@18.2.0)(react@18.2.0)(rollup@4.5.0)(typescript@5.2.2)(vite@5.0.0):
     resolution: {integrity: sha512-ArPyHgiPbT5YvcyK4xK/DfqBOpn4R4/EP3kfIGhx8QKJyOtxPEYFdkLIZ5xu3KnPX7/z7GT+4a6Rb+8sk9gliA==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -6314,7 +6230,7 @@ packages:
       vite: ^3.0.0 || ^4.0.0 || ^5.0.0
     dependencies:
       '@joshwooding/vite-plugin-react-docgen-typescript': 0.3.0(typescript@5.2.2)(vite@5.0.0)
-      '@rollup/pluginutils': 5.0.5(rollup@4.0.2)
+      '@rollup/pluginutils': 5.0.5(rollup@4.5.0)
       '@storybook/builder-vite': 7.5.3(typescript@5.2.2)(vite@5.0.0)
       '@storybook/react': 7.5.3(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
       '@vitejs/plugin-react': 3.1.0(vite@5.0.0)
@@ -8256,7 +8172,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@tauri-apps/api': 1.5.0
-      axios: 1.5.1
+      axios: 1.6.0
       build-url-ts: 6.1.5
       http-status-codes: 2.3.0
       url-parse: 1.5.10
@@ -8273,8 +8189,8 @@ packages:
       - debug
     dev: false
 
-  /axios@1.5.1:
-    resolution: {integrity: sha512-Q28iYCWzNHjAm+yEAot5QaAMxhMghWLFVf7rRdwhUI+c2jix2DUXjAHXVi+s1ibs3mjPO/cCgbA++3BjD0vP/A==}
+  /axios@1.6.0:
+    resolution: {integrity: sha512-EZ1DYihju9pwVB+jg67ogm+Tmqc6JmhamRN6I4Zt8DfZu5lbcQGw3ozH9lFejSJgs/ibaef3A9PMXPLeefFGJg==}
     dependencies:
       follow-redirects: 1.15.3
       form-data: 4.0.0
@@ -15014,25 +14930,6 @@ packages:
       fsevents: 2.3.3
     dev: true
 
-  /rollup@4.0.2:
-    resolution: {integrity: sha512-MCScu4usMPCeVFaiLcgMDaBQeYi1z6vpWxz0r0hq0Hv77Y2YuOTZldkuNJ54BdYBH3e+nkrk6j0Rre/NLDBYzg==}
-    engines: {node: '>=18.0.0', npm: '>=8.0.0'}
-    hasBin: true
-    optionalDependencies:
-      '@rollup/rollup-android-arm-eabi': 4.0.2
-      '@rollup/rollup-android-arm64': 4.0.2
-      '@rollup/rollup-darwin-arm64': 4.0.2
-      '@rollup/rollup-darwin-x64': 4.0.2
-      '@rollup/rollup-linux-arm-gnueabihf': 4.0.2
-      '@rollup/rollup-linux-arm64-gnu': 4.0.2
-      '@rollup/rollup-linux-arm64-musl': 4.0.2
-      '@rollup/rollup-linux-x64-gnu': 4.0.2
-      '@rollup/rollup-linux-x64-musl': 4.0.2
-      '@rollup/rollup-win32-arm64-msvc': 4.0.2
-      '@rollup/rollup-win32-ia32-msvc': 4.0.2
-      '@rollup/rollup-win32-x64-msvc': 4.0.2
-      fsevents: 2.3.3
-
   /rollup@4.5.0:
     resolution: {integrity: sha512-41xsWhzxqjMDASCxH5ibw1mXk+3c4TNI2UjKbLxe6iEzrSQnqOzmmK8/3mufCPbzHNJ2e04Fc1ddI35hHy+8zg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -16861,12 +16758,12 @@ packages:
       - supports-color
     dev: false
 
-  /vite-plugin-svgr@4.1.0(rollup@4.0.2)(vite@5.0.0):
+  /vite-plugin-svgr@4.1.0(rollup@4.5.0)(vite@5.0.0):
     resolution: {integrity: sha512-v7Qic+FWmCChgQNGSI4V8X63OEYsdUoLt66iqIcHozq9bfK/Dwmr0V+LBy1NE8CE98Y8HouEBJ+pto4AMfN5xw==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4
     dependencies:
-      '@rollup/pluginutils': 5.0.5(rollup@4.0.2)
+      '@rollup/pluginutils': 5.0.5(rollup@4.5.0)
       '@svgr/core': 8.1.0
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
       vite: 5.0.0(@types/node@20.8.10)(less@4.2.0)(sass@1.69.0)(terser@5.21.0)
