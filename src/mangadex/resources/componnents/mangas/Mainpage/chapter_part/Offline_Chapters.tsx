@@ -1,5 +1,5 @@
 import * as Chakra from "@chakra-ui/react";
-import "@commons-res/flag-icons/less/flag-icons.less";
+import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import Chapter_Element1_byChapID from "@mangadex/resources/componnents/chapter/v1/Chapter_Element1_byChapID";
 import { MangaPageProps } from "../../Manga_Page";

@@ -1,5 +1,5 @@
 import MangadexLogo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107119.svg";
-import "@commons-res/flag-icons/less/flag-icons.less";
+import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { RouteObject } from "react-router-dom";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
