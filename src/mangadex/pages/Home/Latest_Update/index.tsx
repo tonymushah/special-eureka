@@ -6,7 +6,7 @@ import { Chapter, Chapter_withAllIncludes } from "@mangadex/api/structures/Chapt
 import Collection from "@mangadex/api/structures/Collection";
 import { get_chapter_queryKey } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_queryKey";
 import GetChapterByIdResult from "@mangadex/api/structures/additonal_types/GetChapterByIdResult";
-import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import get_mangaQueryKey_byID from "@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID";
 import { Client } from "@tauri-apps/api/http";
 import UserOptions from "@mangadex/api/internal/UserOptions";
@@ -57,13 +57,10 @@ export async function loader({
         const mangaQueryKey = get_mangaQueryKey_byID({
             mangaID: manga.get_id()
         });
-        queryClient.fetchQuery<GetMangaByIDResponse>(mangaQueryKey, async function () {
-            return await Manga_with_allRelationship.getMangaByID(manga.get_id());
+        queryClient.prefetchQuery<Manga>(mangaQueryKey, async function () {
+            return await Manga_with_allRelationship.getMangaByID(manga.get_id(), client);
         }, {
-            initialData: {
-                isOffline: false,
-                manga: manga
-            }
+            initialData: manga
         });
     });
     return search_result;
