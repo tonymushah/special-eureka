@@ -83,6 +83,7 @@
         "vite-plugin-checker": "^0.6.2",
         "vite-plugin-image-optimizer": "^1.1.7",
         "vite-plugin-svgr": "^4.2.0",
+        "vite-tsconfig-paths": "^4.2.1",
         "vitest": "^0.34.6"
     },
     "dependencies": {
@@ -182,8 +183,7 @@
         "tslib": "^2.6.2",
         "use-image": "^1.1.1",
         "uuid": "^9.0.1",
-        "vite-plugin-remark-rehype": "^1.1.0",
-        "vite-tsconfig-paths": "^4.2.1"
+        "vite-plugin-remark-rehype": "^1.1.0"
     },
     "nx": {
         "targets": {}
