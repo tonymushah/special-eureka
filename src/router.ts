@@ -7,12 +7,14 @@ export type Path =
   | `/`
   | `/dashboard`
   | `/mangadex`
+  | `/mangadex/chapter/:id`
   | `/mangadex/manga/:id`
   | `/mangadex/manga/:id/covers`
   | `/mangadex/manga/:id/related`
   | `/mangadex/manga/random`
 
 export type Params = {
+  '/mangadex/chapter/:id': { id: string }
   '/mangadex/manga/:id': { id: string }
   '/mangadex/manga/:id/covers': { id: string }
   '/mangadex/manga/:id/related': { id: string }
