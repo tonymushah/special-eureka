@@ -1,4 +1,3 @@
-import React from "react";
 import IsPingable from "@mangadex/resources/componnents/IsPingable";
 
 import * as Chakra from "@chakra-ui/react";

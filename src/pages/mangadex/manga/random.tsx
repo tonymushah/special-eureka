@@ -7,7 +7,7 @@ import get_mangaQueryKey_byID from "@mangadex/resources/hooks/MangaStateHooks/ge
 
 import { redirect } from "@router";
 
-export const loader: LoaderFunction = async function () {
+export const Loader: LoaderFunction = async function () {
     const client = await getClient();
     try {
         if (await Api_Request.ping(client)) {
@@ -62,3 +62,5 @@ export const loader: LoaderFunction = async function () {
         client.drop();
     }
 };
+
+export { default as Catch } from "@mangadex/resources/componnents/router/error/Boundary";

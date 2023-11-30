@@ -5,7 +5,7 @@ import ShowErrorDefault from "./ShowErrorDefault";
 import ShowErrorResponse from "./ShowErrorResponse";
 import ShowStringError from "./ShowStringError";
 
-export function RouteErrorBoundary() {
+export default function RouteErrorBoundary() {
     const error = useRouteError();
 
     const location = useLocation();
@@ -13,15 +13,15 @@ export function RouteErrorBoundary() {
         appWindow.setTitle(`Error on loading ${location.pathname}`);
     }, []);
     if (isRouteErrorResponse(error)) {
-        if (error.error != undefined) {
+        /*if (error.error != undefined) {
             return (
                 <ShowErrorDefault error={error.error} />
             );
-        } else {
-            return (
-                <ShowErrorResponse error={error} />
-            );
-        }
+        } else {*/
+        return (
+            <ShowErrorResponse error={error} />
+        );
+        //}
     } else {
         if (error instanceof Error) {
             return (
@@ -33,7 +33,7 @@ export function RouteErrorBoundary() {
             );
         } else {
             return (
-                <ShowErrorResponse error={error}/>
+                <ShowErrorResponse error={error} />
             );
         }
     }

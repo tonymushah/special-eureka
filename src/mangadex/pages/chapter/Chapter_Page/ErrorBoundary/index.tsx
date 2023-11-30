@@ -1,16 +1,16 @@
-import { RouteErrorBoundary } from "@mangadex/resources/componnents/router/error/Boundary";
+import RouteErrorBoundary from "@mangadex/resources/componnents/router/error/Boundary";
 import { isRouteErrorResponse, useRouteError } from "react-router";
 import { ShowMissingImagesError } from "./ShowMissingImagesError";
 
-export default function ErrorBoundary(){
+export default function ErrorBoundary() {
     const error = useRouteError();
-    if(isRouteErrorResponse(error) && error.status == 403){
+    if (isRouteErrorResponse(error) && error.status == 403) {
         return (
-            <ShowMissingImagesError error={error}/>
+            <ShowMissingImagesError error={error} />
         );
-    }else{
+    } else {
         return (
-            <RouteErrorBoundary/>
+            <RouteErrorBoundary />
         );
     }
 }
