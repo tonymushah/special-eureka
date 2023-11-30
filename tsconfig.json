@@ -40,8 +40,14 @@
             "@mangadex/*": [
                 "src/mangadex/*"
             ],
+            "@mangadex/resources/*": [
+                "src/mangadex/resources/*"
+            ],
             "@router/*": [
                 "src/router/*"
+            ],
+            "@router": [
+                "src/router.ts"
             ],
             "@splashscreen/*": [
                 "src/splashscreen/*"
@@ -51,7 +57,13 @@
             ],
             "@/*": [
                 "src/*"
-            ]
+            ],
+            "@theme": [
+                "src/theme.ts"
+            ],
+            "@pages/*" : [
+                "src/pages/*"
+            ],
         }
     },
     "exclude": [

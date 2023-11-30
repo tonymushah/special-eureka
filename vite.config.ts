@@ -7,6 +7,7 @@ import { resolve } from "path";
 import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import tsconfigPaths from "vite-tsconfig-paths";
+import generouted from "@generouted/react-router/plugin";
 
 export default defineConfig({
     clearScreen: false,
@@ -19,6 +20,7 @@ export default defineConfig({
             "tsDecorators": true,
             "jsxImportSource": "react"
         }),
+        generouted(),
         remarkRehypePlugin({}),
         ViteImageOptimizer(),
         sentryVitePlugin({
@@ -55,8 +57,8 @@ export default defineConfig({
         outDir: "../dist",
         rollupOptions: {
             input: {
-                main: resolve(__dirname, "src/index.html"),
-                splashscreen: resolve(__dirname, "src/splashscreen.html")
+                main: resolve(__dirname, "./index.html"),
+                splashscreen: resolve(__dirname, "./splashscreen.html")
             },
         },
         "emptyOutDir": true,
