@@ -40,7 +40,7 @@ export default function MangaChapterAccordion_Element(props: {
                 <MangaFallback2 />
             }>
                 <MangaElementDef2_withChildren
-                    src={query.data.manga}
+                    src={query.data}
                     isRefetching={query.isRefetching}
                     refetch={query.refetch}
                     download={download_.refetch}

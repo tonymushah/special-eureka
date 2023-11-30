@@ -5,6 +5,7 @@ import Manga from "@mangadex/api/structures/Manga";
 import { QueryKey, useQuery } from "@tanstack/react-query";
 import get_manga_byId from "./get_manga_byId";
 import React from "react";
+import isMangaDonwloaded from "./isMangaDownloaded";
 
 export default function useMangaDownload(props: {
     mangaID: string;
@@ -14,6 +15,12 @@ export default function useMangaDownload(props: {
         id: `manga-download-${props.mangaID}`,
         position: "bottom-right",
         duration: 9000
+    });
+    const is_downloaded = isMangaDonwloaded({
+        variables: {
+            mangaId: props.mangaID,
+            client
+        }
     });
     const manga_query = get_manga_byId({
         mangaID: props.mangaID
@@ -42,6 +49,7 @@ export default function useMangaDownload(props: {
                 isClosable: true
             });
             manga_query.query.refetch();
+            is_downloaded.refetch();
         },
         onError(error) {
             toast({

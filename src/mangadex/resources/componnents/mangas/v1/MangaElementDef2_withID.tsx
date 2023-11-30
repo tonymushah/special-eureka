@@ -16,7 +16,7 @@ export default function MangaElementDef2_withID(props: {
                 <MangaFallback2 />
             }>
                 <MangaElementDef2
-                    src={query.data.manga}
+                    src={query.data}
                     isRefetching={query.isRefetching}
                     refetch={query.refetch}
                 />

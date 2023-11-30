@@ -9,29 +9,29 @@ export default function MangaElementDef_wID(props: {
     mangaID: string
 }) {
     const { query } = get_manga_byId({
-        mangaID : props.mangaID
+        mangaID: props.mangaID
     });
-    if (query.isLoading) {
-        return(
-            <MangaElementFallback/>
+    if (query.isSuccess) {
+        return (
+            <React.Suspense
+                fallback={
+                    <MangaElementFallback />
+                }
+            >
+                <MangaElementDef
+                    src={query.data}
+                    isRefetching={query.isRefetching}
+                    refetch={query.refetch}
+                />
+            </React.Suspense>
         );
     }
-    if(query.isError){
-        return(
-            <ErrorEL1 error={query.error}/>
+    if (query.isError) {
+        return (
+            <ErrorEL1 error={query.error} />
         );
     }
     return (
-        <React.Suspense
-            fallback={
-                <MangaElementFallback/>
-            }
-        >
-            <MangaElementDef 
-                src={query.data!.manga} 
-                isRefetching={query.isRefetching} 
-                refetch={query.refetch}
-            />
-        </React.Suspense>
+        <MangaElementFallback />
     );
 }

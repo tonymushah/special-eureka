@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
-import Manga, { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { Mangadex_suspense__, useTrackEvent } from "@mangadex/index";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import MyErrorBounderies from "@mangadex/resources/componnents/error/MyErrorBounderies";
@@ -69,7 +69,7 @@ export default function MangaPage() {
     useTrackEvent("mangadex-manga-page-entrance", {
         "manga-id": id ?? ""
     });
-    const query = useQuery<GetMangaByIDResponse, Error>(query_key, async () => {
+    const query = useQuery<Manga, Error>(query_key, async () => {
         return await queryFn(id, client);
     }, {
         "staleTime": Infinity,
@@ -82,12 +82,12 @@ export default function MangaPage() {
                     mangaID={id}
                 />
                 <Manga_Page
-                    src={query.data.manga}
+                    src={query.data}
                 >
                     <ButtonsNavigation />
                     <Chakra.Box>
                         <ChakraContainer>
-                            <Outlet context={{ toUse: query.data.manga }} />
+                            <Outlet context={{ toUse: query.data }} />
                         </ChakraContainer>
                     </Chakra.Box>
                 </Manga_Page>

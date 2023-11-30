@@ -10,10 +10,19 @@ import Loading from "./Loading";
 import OpenToMangadex from "./OpenToMangadex";
 import Refresh from "./Refresh";
 import Update from "./Update";
+import isMangaDonwloaded from "@mangadex/resources/hooks/MangaStateHooks/isMangaDownloaded";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 
 export default function Portal(props: MangaContextMenuProps) {
+    const client = useHTTPClient();
     const { query } = get_manga_byId({
         mangaID: props.mangaId
+    });
+    const { data: isOffline } = isMangaDonwloaded({
+        variables: {
+            client,
+            mangaId: props.mangaId
+        }
     });
     const { backgroundColor, borderColor } = usePortalColorModeValue();
     return (
@@ -38,7 +47,7 @@ export default function Portal(props: MangaContextMenuProps) {
                             query.isSuccess ? (
                                 <React.Fragment>
                                     {
-                                        query.data.isOffline ? (
+                                        isOffline ? (
                                             <React.Fragment>
                                                 <Update />
                                                 <Delete />

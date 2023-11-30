@@ -49,9 +49,6 @@ import MangaSearchType from "../SearchType/Manga";
 import MangaSearch_withAllIncludes from "../SearchType/MangaSearch_withAllIncludes";
 import { Tag } from "../Tag";
 import GetChapterByIdResult from "../additonal_types/GetChapterByIdResult";
-import { GetMangaByIDResponse } from "./GetMangaByIDResponse";
-
-export type { GetMangaByIDResponse } from "./GetMangaByIDResponse";
 
 export default class Manga extends Attribute {
     protected static request_a = "manga/";
@@ -737,7 +734,7 @@ export default class Manga extends Attribute {
         const related = this.get_some_relationship("manga");
         for (let index = 0; index < related.length; index++) {
             const element = related[index];
-            returns[index] = (await Manga.getMangaByID(element.get_id(), client)).manga;
+            returns[index] = (await Manga.getMangaByID(element.get_id(), client));
         }
         return returns;
     }
@@ -759,7 +756,7 @@ export default class Manga extends Attribute {
         for (let index = 0; index < related.length; index++) {
             const element = related[index];
             if (element.get_related() == manga_relation_enum) {
-                returns[index1] = (await Manga.getMangaByID(element.get_id(), client)).manga;
+                returns[index1] = (await Manga.getMangaByID(element.get_id(), client));
             }
         }
         return returns;
@@ -805,24 +802,15 @@ export default class Manga extends Attribute {
             }
         }
     }
-    public static async getMangaByID(id: string, client?: Client): Promise<GetMangaByIDResponse> {
+    public static async getMangaByID(id: string, client?: Client): Promise<Manga> {
         if (await DeskApiRequest.ping(client) == true) {
             try {
-                return {
-                    manga: await Manga.getOfflineMangaByID(id, client),
-                    isOffline: true
-                };
+                return await Manga.getOfflineMangaByID(id, client);
             } catch (e) {
-                return {
-                    manga: await Manga.getOnlinebyID(id, client),
-                    isOffline: false
-                };
+                return await Manga.getOnlinebyID(id, client);
             }
         } else {
-            return {
-                manga: await Manga.getOnlinebyID(id, client),
-                isOffline: false
-            };
+            return await Manga.getOnlinebyID(id, client);
         }
     }
     public static async getOfflineMangaCover(mangaId: string, client?: Client): Promise<Cover> {
@@ -833,7 +821,7 @@ export default class Manga extends Attribute {
             throw new Error("The offline server isn't started");
         }
     }
-    public static async getAllOfflineMangaID({ offset_Limits, client, title }: { offset_Limits?: Offset_limits; client?: Client; title? : string} = {}): Promise<Collection<string>> {
+    public static async getAllOfflineMangaID({ offset_Limits, client, title }: { offset_Limits?: Offset_limits; client?: Client; title?: string } = {}): Promise<Collection<string>> {
         if (offset_Limits == undefined) {
             offset_Limits = new Offset_limits();
         }
@@ -954,7 +942,7 @@ export default class Manga extends Attribute {
         for (let index = 0; index < to_use.length; index++) {
             const element = to_use[index];
             if (element.get_id() == mangaID) {
-                return (await Manga.getMangaByID(element.get_id())).manga;
+                return (await Manga.getMangaByID(element.get_id()));
             }
         }
         throw new Error("The manga " + mangaID + " is not related to " + this.get_id());
@@ -1388,24 +1376,15 @@ export class Manga_with_allRelationship extends Manga {
             }
         }
     }
-    public static async getMangaByID(id: string, client?: Client): Promise<GetMangaByIDResponse> {
+    public static async getMangaByID(id: string, client?: Client): Promise<Manga> {
         if (await DeskApiRequest.ping(client) == true) {
             try {
-                return {
-                    manga: await Manga.getOfflineMangaByID(id, client),
-                    isOffline: true
-                };
+                return await Manga.getOfflineMangaByID(id, client);
             } catch (e) {
-                return {
-                    manga: await Manga_with_allRelationship.getOnlinebyID(id, client),
-                    isOffline: false
-                };
+                return await Manga_with_allRelationship.getOnlinebyID(id, client);
             }
         } else {
-            return {
-                manga: await Manga_with_allRelationship.getOnlinebyID(id, client),
-                isOffline: false
-            };
+            return await Manga_with_allRelationship.getOnlinebyID(id, client);
         }
     }
     public static async search({

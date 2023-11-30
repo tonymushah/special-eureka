@@ -233,6 +233,9 @@ dependencies:
   react-pro-sidebar:
     specifier: 1.0.0
     version: 1.0.0(@types/react@18.2.39)(react-dom@18.2.0)(react@18.2.0)
+  react-query-kit:
+    specifier: ^2.0.10
+    version: 2.0.10(@tanstack/react-query@4.36.1)
   react-router:
     specifier: ^6.20.0
     version: 6.20.0(react@18.2.0)
@@ -277,7 +280,7 @@ dependencies:
     version: github.com/tauri-apps/tauri-plugin-upload/53fe17d5cfec7acf286ce9f8c8cdbc0b69d09b7b
   tauri-plugin-websocket-api:
     specifier: github:tauri-apps/tauri-plugin-websocket
-    version: github.com/tauri-apps/tauri-plugin-websocket/d1eb7d15d2d04528d98144948f261cd4cd05e19d
+    version: github.com/tauri-apps/tauri-plugin-websocket/0f31e31fbe5dbea89bab40aa9903c2eafa84e605
   tauri-settings:
     specifier: ^0.3.4
     version: 0.3.4
@@ -13985,6 +13988,17 @@ packages:
       - '@types/react'
     dev: false
 
+  /react-query-kit@2.0.10(@tanstack/react-query@4.36.1):
+    resolution: {integrity: sha512-uQGLlKsV2M0N+b6Og7i0hkRx9MZTHHr0IfhsvQYXGoCWsMvPg9B14r6CGqekM9Bh05KIUxrJQhc9uB9KQTPVxg==}
+    peerDependencies:
+      '@tanstack/react-query': ^4 || ^5
+    peerDependenciesMeta:
+      '@tanstack/react-query':
+        optional: true
+    dependencies:
+      '@tanstack/react-query': 4.36.1(react-dom@18.2.0)(react@18.2.0)
+    dev: false
+
   /react-refresh@0.14.0:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
@@ -16914,8 +16928,8 @@ packages:
       '@tauri-apps/api': 1.5.1
     dev: false
 
-  github.com/tauri-apps/tauri-plugin-websocket/d1eb7d15d2d04528d98144948f261cd4cd05e19d:
-    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/d1eb7d15d2d04528d98144948f261cd4cd05e19d}
+  github.com/tauri-apps/tauri-plugin-websocket/0f31e31fbe5dbea89bab40aa9903c2eafa84e605:
+    resolution: {tarball: https://codeload.github.com/tauri-apps/tauri-plugin-websocket/tar.gz/0f31e31fbe5dbea89bab40aa9903c2eafa84e605}
     name: tauri-plugin-websocket-api
     version: 0.0.0
     dependencies:

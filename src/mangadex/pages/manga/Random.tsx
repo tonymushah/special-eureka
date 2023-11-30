@@ -1,5 +1,5 @@
 import { LoaderFunction, json } from "react-router";
-import Manga, { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { getClient } from "@tauri-apps/api/http";
 import { queryClient } from "@mangadex/resources/query.client";
 import { Api_Request } from "@mangadex/api/internal/Api_Request";
@@ -12,26 +12,20 @@ export const loader: LoaderFunction = async function () {
     try {
         if (await Api_Request.ping(client)) {
             const getted = await Manga.getRandom(client);
-            const inQuery = queryClient.getQueryData<GetMangaByIDResponse>(get_mangaQueryKey_byID({
+            const inQuery = queryClient.getQueryData<Manga>(get_mangaQueryKey_byID({
                 mangaID: getted.get_id()
             }));
             if (inQuery) {
                 queryClient.prefetchQuery(get_mangaQueryKey_byID({
                     mangaID: getted.get_id()
                 }), async () => (await Manga.getMangaByID(getted.get_id(), client)), {
-                    initialData: {
-                        isOffline: inQuery.isOffline,
-                        manga: getted
-                    }
+                    initialData: getted
                 });
             } else {
                 queryClient.prefetchQuery(get_mangaQueryKey_byID({
                     mangaID: getted.get_id()
                 }), async () => (await Manga.getMangaByID(getted.get_id(), client)), {
-                    initialData: {
-                        isOffline: false,
-                        manga: getted
-                    }
+                    initialData: getted
                 });
             }
 

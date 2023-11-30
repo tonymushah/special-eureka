@@ -11,15 +11,12 @@ export function MangaComponnent({ value, data, index }: { value: Manga; data: Co
     const { query } = get_manga_byId({
         mangaID: value.get_id(),
         options: {
-            initialData: {
-                "isOffline": false,
-                manga: value
-            }
+            initialData: value
         }
     });
     if (query.data != undefined) {
         return (
-            <Chakra.Card key={query.data.manga.get_id()}>
+            <Chakra.Card key={`manga-${query.data.get_id()}`}>
                 {data.get_offset() + index == 0 ? (
                     <Heading m={2} fontFamily={"inherit"} color={"orange"} size={"sm"}>No.{data.get_offset() + index + 1}</Heading>
                 ) : (

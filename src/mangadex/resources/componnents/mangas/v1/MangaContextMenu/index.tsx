@@ -1,19 +1,19 @@
 import { UseQueryResult } from "@tanstack/react-query";
-import { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
 import React from "react";
 import Portal from "./Portal";
 import { Root, Trigger } from "@radix-ui/react-context-menu";
+import Manga from "@mangadex/api/structures/Manga";
 export type MangaContextMenuProps = {
-    mangaId : string,
+    mangaId: string,
     refetch?: () => void,
 }
 
 const MangaContextMenu_Context = React.createContext<MangaContextMenuProps & {
-    query : UseQueryResult<GetMangaByIDResponse, Error>
+    query: UseQueryResult<Manga, Error>
 } | undefined>(undefined);
 
 export function useMangaContextMenu_Context(): MangaContextMenuProps & {
-    query : UseQueryResult<GetMangaByIDResponse, Error>
+    query: UseQueryResult<Manga, Error>
 } {
     const data = React.useContext(MangaContextMenu_Context);
     if (data == undefined) {
@@ -24,9 +24,9 @@ export function useMangaContextMenu_Context(): MangaContextMenuProps & {
 }
 
 export function MangaContextMenuProvider({ value, children }: React.PropsWithChildren<{
-    value : MangaContextMenuProps & {
-    query : UseQueryResult<GetMangaByIDResponse, Error>
-}
+    value: MangaContextMenuProps & {
+        query: UseQueryResult<Manga, Error>
+    }
 }>) {
     return (
         <MangaContextMenu_Context.Provider value={value}>
@@ -41,7 +41,7 @@ export default function MangaContextMenu(props: React.PropsWithChildren<MangaCon
             <Trigger>{
                 props.children
             }</Trigger>
-            <Portal {...props}/>
+            <Portal {...props} />
         </Root>
     );
 }

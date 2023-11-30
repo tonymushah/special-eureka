@@ -1,5 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
-import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import isMangaDonwloaded from "@mangadex/resources/hooks/MangaStateHooks/isMangaDownloaded";
 import useMangaDelete from "@mangadex/resources/hooks/MangaStateHooks/useMangaDelete";
 import useMangaDownload from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload";
 import React from "react";
@@ -9,8 +10,12 @@ import { BeatLoader } from "react-spinners";
 export function Manga__Delete_Update_Button(props: {
     manga_id: string;
 }) {
-    const { query } = get_manga_byId({
-        mangaID: props.manga_id
+    const client = useHTTPClient();
+    const query = isMangaDonwloaded({
+        variables: {
+            mangaId: props.manga_id,
+            client
+        }
     });
     const download_query = useMangaDownload({
         mangaID: props.manga_id
@@ -18,7 +23,7 @@ export function Manga__Delete_Update_Button(props: {
     const delete_ = useMangaDelete({
         mangaID: props.manga_id
     });
-    if (query.isSuccess && query.data?.isOffline == true) {
+    if (query.isSuccess && query.data == true) {
         return (
             <Chakra.IconButton
                 backgroundColor={"orange.400"}
@@ -33,7 +38,7 @@ export function Manga__Delete_Update_Button(props: {
                 aria-label={"Delete Manga"}
                 icon={<FiTrash2 />}
                 isDisabled={download_query.isFetching}
-                onClick={() => delete_.refetch()} 
+                onClick={() => delete_.refetch()}
             />
         );
     } else {
