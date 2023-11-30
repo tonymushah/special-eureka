@@ -8,6 +8,7 @@ export type Path =
   | `/dashboard`
   | `/mangadex`
   | `/mangadex/chapter/:id`
+  | `/mangadex/download`
   | `/mangadex/manga/:id`
   | `/mangadex/manga/:id/covers`
   | `/mangadex/manga/:id/related`
