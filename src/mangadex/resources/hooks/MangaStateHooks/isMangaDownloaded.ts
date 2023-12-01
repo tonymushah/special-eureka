@@ -1,8 +1,9 @@
 import Manga from "@mangadex/api/structures/Manga";
 import { Client } from "@tauri-apps/api/http";
 import { createQuery } from "react-query-kit";
-import isServerStated from "@mangadex/resources/signals/isServerStated";
 import { queryClient } from "@mangadex/resources/query.client";
+import { event } from "@tauri-apps/api";
+import { appWindow } from "@tauri-apps/api/window";
 
 export type Variables = {
     mangaId: string,
@@ -24,12 +25,16 @@ const isMangaDonwloaded = createQuery<boolean, Variables, Error>({
     "networkMode": "always"
 });
 
-isServerStated.subscribe(() => {
+const unlisten = event.listen("mdx-server-state", () => {
     queryClient.refetchQueries({
         predicate(query) {
             return query.queryKey.includes(isMangaDonwloaded.getPrimaryKey());
         },
     });
+});
+
+appWindow.onCloseRequested(() => {
+    unlisten.then((e) => e());
 });
 
 export default isMangaDonwloaded;
