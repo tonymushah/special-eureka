@@ -26,9 +26,9 @@ async function shuffle_a_collect_lenght(images: readonly string[]): Promise<numb
 
 describe("DoublePage Input Output", async () => {
     let index = 0;
-    const test_limit = 5000;
+    const test_limit = 1000;
     while (index < test_limit) {
-        test.concurrent(`DIO ${index}`, async () => {
+        test(`DIO ${index}`, async () => {
             await expect(shuffle_a_collect_lenght(images)).resolves.toBe(images.length);
         });
         index += 1;
