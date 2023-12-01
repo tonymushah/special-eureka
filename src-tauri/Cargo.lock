@@ -4369,6 +4369,7 @@ dependencies = [
 name = "special-eureka"
 version = "0.1.7"
 dependencies = [
+ "anyhow",
  "sentry-tauri",
  "serde",
  "serde_json",

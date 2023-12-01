@@ -9,15 +9,16 @@ use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_aptabase::EventTracker;
 
 #[tauri::command]
-async fn close_splashscreen(window: tauri::Window) {
+async fn close_splashscreen(window: tauri::Window) -> Result<(), String> {
     // Close splashscreen
-    window.emit_all("splash", "closing...").unwrap();
-    std::thread::sleep(std::time::Duration::from_secs(10));
+    window.emit_all("splash", "closing...").map_err(|e| e.to_string())?;
+    tokio::time::sleep(std::time::Duration::from_secs(10)).await;
     if let Some(splashscreen) = window.get_window("splashscreen") {
-        splashscreen.close().unwrap();
+        splashscreen.close().map_err(|e| e.to_string())?;
     }
     // Show main window
-    window.get_window("main").unwrap().show().unwrap()
+    window.get_window("main").ok_or(String::from("the main window is not found"))?.show().map_err(|e| e.to_string())?;
+    Ok(())
 }
 
 #[tokio::main]
