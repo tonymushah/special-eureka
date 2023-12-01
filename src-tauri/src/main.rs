@@ -46,28 +46,32 @@ async fn main() {
     match tauri::Builder::default()
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
-            let window = app.get_window("main").unwrap(); 
-            if let SystemTrayEvent::MenuItemClick { id, .. } = event {
-                let item_handle = app.tray_handle().get_item(&id);
-                match id.as_str() {
-                    "hide" => {
-                        if window.is_visible().unwrap() {
-                            window.hide().unwrap();
-                            item_handle.set_title("Show").unwrap();
-                        } else {
-                            window.show().unwrap();
-                            item_handle.set_title("Hide").unwrap();
-                        }
-                    },
-                    "quit" => {
-                        app.exit(0);
-                    },
-                    _ => {}
-                } 
-            }else if let SystemTrayEvent::LeftClick { .. } = event {
-                let item_handle = app.tray_handle().get_item("hide");
-                window.show().unwrap();
-                item_handle.set_title("Hide").unwrap();
+            if app.get_window("splashscreen").is_none() {
+                let window = app.get_window("main").unwrap(); 
+                if let SystemTrayEvent::MenuItemClick { id, .. } = event {
+                    let item_handle = app.tray_handle().get_item(&id);
+                    match id.as_str() {
+                        "hide" => {
+                            if window.is_visible().unwrap() {
+                                item_handle.set_title("Show").unwrap();
+                                window.hide().unwrap();
+                            } else {
+                                item_handle.set_title("Hide").unwrap();
+                                window.show().unwrap();
+                                window.set_focus().unwrap();
+                            }
+                        },
+                        "quit" => {
+                            app.exit(0);
+                        },
+                        _ => {}
+                    } 
+                }else if let SystemTrayEvent::LeftClick { .. } = event {
+                    let item_handle = app.tray_handle().get_item("hide");
+                    item_handle.set_title("Hide").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
             }
         })
         .invoke_handler(tauri::generate_handler![close_splashscreen])
