@@ -1,42 +1,34 @@
-import { getImageSize } from "./getImageSize";
+import generateImageRationMap from "./generateImageRationMap";
 import { DoublePageImageInput } from "./useDoublePageImageQuery";
 
-async function getImageRatio(url: string) {
-    const size = await getImageSize(url);
-    return size.width / size.height;
-}
-
 export default async function generateDoublePageOutput(images: string[]): Promise<DoublePageImageInput[]> {
+    const to_use_map = await generateImageRationMap(images);
     const output: Array<DoublePageImageInput> = [];
-
-    for (let index = 1; index < images.length; index++) {
-
-        const currentElement = images[index];
-
-        const previousCurrentElement: string | undefined = (index - 1) >= 0 ? images[index - 1] : undefined;
-
-        const lastElement: DoublePageImageInput | undefined = (output.length != 0) ? output[output.length - 1] : undefined;
-
-        if (previousCurrentElement != undefined && lastElement?.includes(previousCurrentElement) != true) {
-            const currentElementRatio = await getImageRatio(currentElement);
-            const previousElementRatio = await getImageRatio(previousCurrentElement);
-            if (previousElementRatio >= 1) {
-                output.push(previousCurrentElement);
-            } else if (currentElementRatio >= 1) {
-                const lastElement = output[output.length - 1];
-                if (previousCurrentElement != undefined) {
-                    if (typeof lastElement === "string" && previousCurrentElement != lastElement) {
-                        output.push(previousCurrentElement);
-                    } else if (Array.isArray(lastElement)) {
-                        if (!lastElement.includes(previousCurrentElement)) output.push(previousCurrentElement);
-                    }
-                }
-                output.push(currentElement);
-            } else /*(currentElementRatio < 1 && previousElementRatio < 1)*/ {
-                output.push([previousCurrentElement, currentElement]);
-            }
+    let accumalator: string[] = [];
+    function push_accumalator_to_output1() {
+        if (accumalator.length == 1) {
+            output.push(accumalator[0]);
+        } else if (accumalator.length == 2) {
+            output.push([accumalator[0], accumalator[1]]);
+        }
+        accumalator = [];
+    }
+    function push_accumalator_to_output2() {
+        if (accumalator.length == 2) {
+            output.push([accumalator[0], accumalator[1]]);
+            accumalator = [];
         }
     }
-    return images;
+    to_use_map.forEach((value, key) => {
+        if (value < 1) {
+            accumalator.push(key);
+        } else {
+            push_accumalator_to_output1();
+            output.push(key);
+        }
+        push_accumalator_to_output2();
+    });
+    push_accumalator_to_output1();
+    return output;
 
 }

@@ -13,6 +13,7 @@ export const getImageSize = async (url: string) => {
         }));
         return queryClient.fetchQuery([url, "dimension"], () => getReactImageSize(`data:image/${file_ext};base64,${toBase64(res.data)}`));
     }else{*/
-    return /*queryClient.fetchQuery([url, "dimension"], () => */getReactImageSize(url); /*);*/
+    //return queryClient.fetchQuery([url, "dimension"], () => getReactImageSize(url));
     //}
+    return getReactImageSize(url);
 };

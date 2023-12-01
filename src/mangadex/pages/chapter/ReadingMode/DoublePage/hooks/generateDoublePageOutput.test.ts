@@ -18,13 +18,18 @@ function collectLenght(_input: DoublePageImageInput[]): number {
     return length;
 }
 
-describe("DoublePage Input Output", () => {
+async function shuffle_a_collect_lenght(images: readonly string[]): Promise<number> {
+    const to_use = arrayShuffle(images);
+    const length = collectLenght(await generateDoublePageOutput(to_use));
+    return length;
+}
+
+describe("DoublePage Input Output", async () => {
     let index = 0;
-    const test_limit = 2000;
+    const test_limit = 5000;
     while (index < test_limit) {
         test.concurrent(`DIO ${index}`, async () => {
-            const to_use = arrayShuffle(images);
-            expect(collectLenght(await generateDoublePageOutput(to_use))).toBe(to_use.length);
+            await expect(shuffle_a_collect_lenght(images)).resolves.toBe(images.length);
         });
         index += 1;
     }
