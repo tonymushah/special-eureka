@@ -5,12 +5,12 @@ import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexS
 import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import { useAppWindowTitle } from "@mangadex/resources/hooks/TauriAppWindow";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "@router";
 
 const Chapter_Page_Success = React.lazy(() => import("@mangadex/resources/componnents/chapter/v1/Chapter_Page/Chapter_Page_Success"));
 
 export default function Chapter_Page() {
-    const { id } = useParams();
+    const { id } = useParams("/mangadex/chapter/:id");
     const setTitle = useAppWindowTitle();
     React.useEffect(() => {
         setTitle("Loading... | Mangadex");
@@ -27,7 +27,7 @@ export default function Chapter_Page() {
     });
 
     if (query.isError) {
-        setTitle(`Error on loading chapter ${id!} | Mangadex`);
+        setTitle(`Error on loading chapter ${id} | Mangadex`);
         return (
             <ErrorEL1 error={query.error} />
         );

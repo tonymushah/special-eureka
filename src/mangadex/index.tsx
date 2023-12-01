@@ -5,7 +5,7 @@ import { RouteObject } from "react-router-dom";
 import { trackEvent as aptabaseTrackEvent } from "@aptabase/tauri";
 export { Mangadex_suspense__ } from "./resources/componnents/suspense";
 import { Mangadex_suspense__ as Mangadex_SUS } from "./resources/componnents/suspense";
-import { RouteErrorBoundary as ErrorBoundary } from "./resources/componnents/router/error/Boundary";
+import ErrorBoundary from "./resources/componnents/router/error/Boundary";
 
 const MangaDexPath = "/mangadex";
 

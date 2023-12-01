@@ -1,5 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
-import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
+import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
+import isMangaDonwloaded from "@mangadex/resources/hooks/MangaStateHooks/isMangaDownloaded";
 import useMangaDelete from "@mangadex/resources/hooks/MangaStateHooks/useMangaDelete";
 import useMangaDownload from "@mangadex/resources/hooks/MangaStateHooks/useMangaDownload";
 import { FiSave, FiRefreshCcw } from "react-icons/fi";
@@ -8,14 +9,18 @@ import { BeatLoader } from "react-spinners";
 export function Manga__Download_Update_Button(props: {
     manga_id: string;
 }) {
-    const { query } = get_manga_byId({
-        mangaID: props.manga_id
+    const client = useHTTPClient();
+    const query = isMangaDonwloaded({
+        variables: {
+            mangaId: props.manga_id,
+            client
+        }
     });
     const download_query = useMangaDownload({
         mangaID: props.manga_id
     });
     const delete_query = useMangaDelete({
-        mangaID : props.manga_id
+        mangaID: props.manga_id
     });
     return (
         <Chakra.IconButton
@@ -29,9 +34,9 @@ export function Manga__Download_Update_Button(props: {
             spinner={<BeatLoader
                 size={8} color='black' />}
             isDisabled={delete_query.isFetching}
-            aria-label={query.data?.isOffline ? "Update" : "Download"}
-            icon={query.data?.isOffline ? <FiRefreshCcw /> : <FiSave />}
-            onClick={() => download_query.refetch()} 
+            aria-label={query.data ? "Update" : "Download"}
+            icon={query.data ? <FiRefreshCcw /> : <FiSave />}
+            onClick={() => download_query.refetch()}
         />
     );
 }

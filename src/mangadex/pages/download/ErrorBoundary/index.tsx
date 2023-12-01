@@ -1,11 +1,11 @@
 import React from "react";
-import { RouteErrorBoundary } from "@mangadex/resources/componnents/router/error/Boundary";
+import RouteErrorBoundary from "@mangadex/resources/componnents/router/error/Boundary";
 import * as Chakra from "@chakra-ui/react";
 import { isRouteErrorResponse, useRouteError } from "react-router";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import { RefreshServerBackButtons } from "./Bouttons";
 
-export default function ErrorBoundary(){
+export default function ErrorBoundary() {
     const error = useRouteError();
     if (isRouteErrorResponse(error) && error.status == 503) {
         return (
@@ -48,7 +48,7 @@ export default function ErrorBoundary(){
         );
     } else {
         return (
-            <RouteErrorBoundary/>
+            <RouteErrorBoundary />
         );
     }
 }

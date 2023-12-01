@@ -1,9 +1,7 @@
 import { FiBook } from "react-icons/fi";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
-import { MangaDexPath } from ".";
+import { Link } from "@router";
 import { useBackgroundColor, useBackgroundColorHover } from "../ActualSidebar";
-
 
 export function Titles() {
     const hoverBackgroundColor = useBackgroundColorHover();
@@ -28,23 +26,23 @@ export function Titles() {
             >
                 <MenuItem
                     component={<Link
-                        to={MangaDexPath + "download"} />}
+                        to={"/mangadex/download"} />}
                 >
                     Offline Library
                 </MenuItem>
                 <MenuItem
-                    component={<Link to={MangaDexPath + "titles/recently-added"} />}
+                    component={<Link to={"/mangadex/titles/recently-added"} />}
                 >Recently Added</MenuItem>
                 <MenuItem
-                    component={<Link to={MangaDexPath + "titles/latest-updates"} />}
+                    component={<Link to={"/mangadex/titles/latest-updates"} />}
                 >Latest Updates</MenuItem>
                 <MenuItem
-                    component={<Link to={MangaDexPath + "manga/random"} />}
+                    component={<Link to={"/mangadex/manga/random"} />}
                 >
                     Random
                 </MenuItem>
                 <MenuItem
-                    component={<Link to={MangaDexPath + "titles/recently-popular"} />}
+                    component={<Link to={"/mangadex/titles/recently-popular"} />}
                 >
                     Recently Popular
                 </MenuItem>

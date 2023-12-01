@@ -392,7 +392,7 @@ export default class Chapter extends Attribute {
         return this.get_some_relationship("manga")[0].get_id();
     }
     public async get_manga(client?: Client): Promise<Manga> {
-        return (await Manga.getMangaByID(this.get_manga_id(), client)).manga;
+        return (await Manga.getMangaByID(this.get_manga_id(), client));
     }
     public get_user_id(): string {
         return this.get_some_relationship("user")[0].get_id();

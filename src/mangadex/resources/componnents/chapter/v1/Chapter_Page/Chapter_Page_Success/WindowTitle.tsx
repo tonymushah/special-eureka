@@ -16,7 +16,7 @@ function setWindowTitle() {
     });
     React.useEffect(() => {
         if (mangaQuery.isSuccess) {
-            const data = mangaQuery.data.manga;
+            const data = mangaQuery.data;
             let title: string;
             if (data.get_title().en == null) {
                 title = new Alt_title(data.get_alt_title()).get_quicklang()!;
@@ -33,9 +33,9 @@ function setWindowTitle() {
 
 }
 
-export default function WindowTitle(){
+export default function WindowTitle() {
     setWindowTitle();
     return (
-        <React.Fragment/>
+        <React.Fragment />
     );
 }

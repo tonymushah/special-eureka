@@ -1,5 +1,4 @@
 import * as Chakra from "@chakra-ui/react";
-import { GetMangaByIDResponse } from "@mangadex/api/structures/Manga";
 import ChakraContainer from "@mangadex/resources/componnents/layout/Container";
 import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import { UseQueryOptions } from "@tanstack/react-query";
@@ -11,12 +10,14 @@ import LangIcon from "./LangIcon";
 import ReadingState from "./ReadingState";
 import Title from "./Title";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
+import Manga from "@mangadex/api/structures/Manga";
 
 const ReadingOptions = React.lazy(() => import("../../ReadingOption"));
 
+// TODO Find its users
 export function getMangaByID__(props: {
     manga_id: string,
-    options?: Omit<UseQueryOptions<GetMangaByIDResponse, Error>, "queryKey" | "queryFn">
+    options?: Omit<UseQueryOptions<Manga, Error>, "queryKey" | "queryFn">
 }) {
     const { query } = get_manga_byId({
         mangaID: props.manga_id,
@@ -62,7 +63,7 @@ export default function Chapter_on_non_FullScreen() {
                     </Chakra.GridItem>
                     <Chakra.GridItem>
                         <React.Suspense
-                            fallback={<MangadexSpinner/>}
+                            fallback={<MangadexSpinner />}
                         >
                             <ReadingOptions />
                         </React.Suspense>

@@ -1,8 +1,9 @@
 import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
-import { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga, { Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
 import React from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Heading } from "@chakra-ui/react";
+import { get_mangaQueryKey_byID } from "@mangadex/resources/hooks/MangaStateHooks";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
@@ -14,10 +15,9 @@ export function Slide({
 }) {
     const queryClient = useQueryClient();
     React.useEffect(() => {
-        queryClient.setQueryData<GetMangaByIDResponse>(["mdx", "manga", value.get_id()], {
-            isOffline: false,
-            manga: value
-        });
+        queryClient.setQueryData<Manga>(get_mangaQueryKey_byID({
+            mangaID: value.get_id()
+        }), value);
     }, []);
     return (
         <React.Fragment>

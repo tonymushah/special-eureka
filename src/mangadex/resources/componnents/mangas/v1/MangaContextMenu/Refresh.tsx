@@ -42,7 +42,7 @@ export default function Refresh() {
         return (
             <Box paddingRight={"2"} paddingLeft={"2"}
                 _hover={{
-                    backgroundColor: "gray.100"
+                    backgroundColor
                 }}
                 as={ContextMenuItem}
                 onClick={() => {

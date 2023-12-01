@@ -9,16 +9,24 @@ export default function Chapter_Element1_byChapID(props: {
     with_all_includes?: boolean
 }) {
     const { query } = get_ChapterbyId({
-        id : props.id,
-        with_all_includes : props.with_all_includes
+        id: props.id,
+        with_all_includes: props.with_all_includes
     });
-    if (query.isLoading) {
+    if (query.isSuccess) {
         return (
-            <Chakra.Box width={"full"}>
-                <Chakra.Center>
-                    <MangadexSpinner />
-                </Chakra.Center>
-            </Chakra.Box>
+            <React.Suspense
+                fallback={
+                    <Chakra.Box width={"full"}>
+                        <Chakra.Center>
+                            <MangadexSpinner />
+                        </Chakra.Center>
+                    </Chakra.Box>
+                }
+            >
+                <Chapter_Element1
+                    chapter={query.data.data}
+                />
+            </React.Suspense>
         );
     }
     if (query.isError) {
@@ -37,19 +45,10 @@ export default function Chapter_Element1_byChapID(props: {
         );
     }
     return (
-        <React.Suspense
-            fallback={
-                <Chakra.Box width={"full"}>
-                    <Chakra.Center>
-                        <MangadexSpinner />
-                    </Chakra.Center>
-                </Chakra.Box>
-            }
-        >
-            <Chapter_Element1
-                chapter={query.data!.data}
-            />
-        </React.Suspense>
+        <Chakra.Box width={"full"}>
+            <Chakra.Center>
+                <MangadexSpinner />
+            </Chakra.Center>
+        </Chakra.Box>
     );
-    
 }

@@ -1,6 +1,6 @@
 [package]
 name = "special-eureka"
-version = "0.1.6"
+version = "0.1.7"
 description = "a mangadex desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
@@ -43,6 +43,7 @@ tokio = "1"
 tauri-plugin-aptabase = "0"
 sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+anyhow = "1"
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"

@@ -1,6 +1,6 @@
 import handleRouteError from "@mangadex/resources/hooks/handleRouteError";
 import { LoaderFunction } from "react-router";
-import { queryKey } from "@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer";
+import { queryKey } from "@mangadex/resources/componnents/download/All_downloaded_Manga_Consumer/queryKey";
 import Manga from "@mangadex/api/structures/Manga";
 import { queryClient } from "@mangadex/resources/query.client";
 import { Offset_limits } from "@mangadex/api/internal/Utils";

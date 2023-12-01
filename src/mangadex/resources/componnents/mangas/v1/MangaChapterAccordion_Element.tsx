@@ -6,7 +6,7 @@ import React from "react";
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 import MangaFallback2 from "./MangaElement2Fallback";
-import CollapseHeight from "../Mainpage/Top_chap/utils/CollapseHeight";
+import CollapseHeight from "@mangadex/resources/componnents/mangas/Mainpage/top_chap_/utils/CollapseHeight";
 
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
 const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"));
@@ -40,7 +40,7 @@ export default function MangaChapterAccordion_Element(props: {
                 <MangaFallback2 />
             }>
                 <MangaElementDef2_withChildren
-                    src={query.data.manga}
+                    src={query.data}
                     isRefetching={query.isRefetching}
                     refetch={query.refetch}
                     download={download_.refetch}

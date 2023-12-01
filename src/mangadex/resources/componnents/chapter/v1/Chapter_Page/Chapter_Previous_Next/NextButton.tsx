@@ -1,9 +1,8 @@
 import * as ChakraIcon from "@chakra-ui/icons";
 import * as Chakra from "@chakra-ui/react";
-import { useMangaDexPath } from "@mangadex/index";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "@router";
 import { useChapter_Previous_NextAggregate } from ".";
 
 export function NextButton({ leftIcon }: {
@@ -18,11 +17,15 @@ export function NextButton({ leftIcon }: {
         },
     });
     const navigate_ = useNavigate();
-    const mangaDexPath = useMangaDexPath();
     const navigate = React.useCallback(() => {
-        const path = `${mangaDexPath}/chapter/${query.data}`;
-        navigate_(path);
-    }, [navigate_, mangaDexPath, query]);
+        if (query.isSuccess) {
+            navigate_("/mangadex/chapter/:id", {
+                params: {
+                    id: query.data
+                }
+            });
+        }
+    }, [navigate_, query]);
     if (query.isSuccess) {
         return (
             <Chakra.IconButton aria-label="Next chapter" onClick={navigate} icon={icon} />

@@ -1,27 +1,39 @@
-import { LoaderFunction, json, redirect } from "react-router";
+import { LoaderFunction, json } from "react-router";
 import Manga from "@mangadex/api/structures/Manga";
 import { getClient } from "@tauri-apps/api/http";
 import { queryClient } from "@mangadex/resources/query.client";
 import { Api_Request } from "@mangadex/api/internal/Api_Request";
 import get_mangaQueryKey_byID from "@mangadex/resources/hooks/MangaStateHooks/get_mangaQueryKey_byID";
-import { getMangaDexPath } from "@mangadex/index";
+
+import { redirect } from "@router";
 
 export const loader: LoaderFunction = async function () {
     const client = await getClient();
-    
-    const MangaDexPath = getMangaDexPath();
     try {
         if (await Api_Request.ping(client)) {
             const getted = await Manga.getRandom(client);
-            queryClient.prefetchQuery(get_mangaQueryKey_byID({
+            const inQuery = queryClient.getQueryData<Manga>(get_mangaQueryKey_byID({
                 mangaID: getted.get_id()
-            }), async () => (await Manga.getMangaByID(getted.get_id(), client)), {
-                initialData: {
-                    isOffline: false,
-                    manga: getted
+            }));
+            if (inQuery) {
+                queryClient.prefetchQuery(get_mangaQueryKey_byID({
+                    mangaID: getted.get_id()
+                }), async () => (await Manga.getMangaByID(getted.get_id(), client)), {
+                    initialData: getted
+                });
+            } else {
+                queryClient.prefetchQuery(get_mangaQueryKey_byID({
+                    mangaID: getted.get_id()
+                }), async () => (await Manga.getMangaByID(getted.get_id(), client)), {
+                    initialData: getted
+                });
+            }
+
+            return redirect("/mangadex/manga/:id", {
+                params: {
+                    id: getted.get_id()
                 }
             });
-            return redirect(`${MangaDexPath}/manga/${getted.get_id()}`);
         } else {
             // TODO Add Random manga for offline
             throw json({

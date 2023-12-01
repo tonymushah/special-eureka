@@ -68,7 +68,7 @@ export default class List extends Attribute {
         const manga_array: Array<Manga> = new Array<Manga>(manga_attributes.length);
         for (let index = 0; index < manga_attributes.length; index++) {
             const choosed = manga_attributes[index];
-            manga_array[index] = (await Manga.getMangaByID(choosed.get_id(), client)).manga;
+            manga_array[index] = (await Manga.getMangaByID(choosed.get_id(), client));
         }
         this.set_manga_array(manga_array);
     }
@@ -131,12 +131,12 @@ export default class List extends Attribute {
     }
     public static async get_seasonal_id(client?: Client): Promise<string> {
         let isInternal = false;
-        if(client == undefined){
+        if (client == undefined) {
             client = await getClient();
             isInternal = true;
         }
         const res = await client.get<Seasonal>("https://raw.githubusercontent.com/tonymushah/special-eureka/master/public/mangadex/json/seasonal.json");
-        if(isInternal){
+        if (isInternal) {
             await client.drop();
         }
         return res.data.id;

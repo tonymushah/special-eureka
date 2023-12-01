@@ -8,7 +8,7 @@ import { CoverResponse, GetCoverData, Relationship, Cover as StaCover } from "..
 import Attribute from "../Attributes";
 import Collection from "../Collection";
 import CoverCollection from "../CollectionTypes/CoverCollection";
-import Manga, { GetMangaByIDResponse } from "../Manga";
+import Manga from "../Manga";
 import CoverSearchType from "../SearchType/Cover";
 import download_cover from "@mangadex/plugin/download/download_cover";
 
@@ -165,7 +165,7 @@ export default class Cover extends Attribute {
         }
     }
     // [x] get the manga relative 
-    public async get_manga_relative(client?: Client): Promise<GetMangaByIDResponse> {
+    public async get_manga_relative(client?: Client): Promise<Manga> {
         try {
             const relationships = this.get_relationships();
             if (relationships != undefined) {
@@ -176,15 +176,15 @@ export default class Cover extends Attribute {
                     }
                 }
                 throw new Error("this cover has no relative Manga");
-            }else{
+            } else {
                 throw new Error("this cover has no relationships");
             }
         } catch (error) {
-            if(typeof error == "string"){
+            if (typeof error == "string") {
                 throw new Error(error);
-            }else{
+            } else {
                 throw new Error("Unknown error", {
-                    cause : error
+                    cause: error
                 });
             }
         }
@@ -193,20 +193,20 @@ export default class Cover extends Attribute {
     // [ ] {256, 512}
     public get_CoverImageOnline_thumbnail(size: 256 | 512): string {
         const manga_relative = this.get_some_relationship("manga");
-        if(manga_relative.length > 0){
+        if (manga_relative.length > 0) {
             const manga = manga_relative[0];
             return Upload.make_upload_url("covers/" + manga.get_id() + "/" + this.get_file_name() + "." + size + ".jpg");
-        }else{
+        } else {
             throw new Error("No manga relative have been found");
         }
     }
     // [ ] original
     public get_CoverImageOnline(): string {
         const manga_relative = this.get_some_relationship("manga");
-        if(manga_relative.length > 0){
+        if (manga_relative.length > 0) {
             const manga = manga_relative[0];
             return Upload.make_upload_url("covers/" + manga.get_id() + "/" + this.get_file_name());
-        }else{
+        } else {
             throw new Error("No manga relative have been found");
         }
     }
@@ -253,12 +253,12 @@ export default class Cover extends Attribute {
             order,
             ids,
             uploaders,
-            manga : mangaIDs,
+            manga: mangaIDs,
             locales
         };
         const getted: Response<GetCoverData> = await Api_Request.get_methods("cover" + "?" +
             stringify(querys)
-        ,undefined, client);
+            , undefined, client);
         const data: Array<StaCover> = getted.data.data;
         const mangaArray: Array<Cover> = new Array<Cover>(data.length);
         for (let index = 0; index < data.length; index++) {
@@ -295,11 +295,11 @@ export default class Cover extends Attribute {
     public static getOfflineCoverImage_notasync(coverId: string): string {
         return DesktopApi.get_url() + "cover/" + coverId + "/image";
     }
-    public static async downloadCover(cover_id : string): Promise<Cover>{
+    public static async downloadCover(cover_id: string): Promise<Cover> {
         await download_cover(cover_id);
         return Cover.getAOfflineCover(cover_id);
     }
-    public async download_cover(): Promise<Cover>{
+    public async download_cover(): Promise<Cover> {
         return await Cover.downloadCover(this.get_id());
     }
 }

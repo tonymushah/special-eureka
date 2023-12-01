@@ -1,41 +1,34 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { AliasOptions, defineConfig } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import remarkRehypePlugin from "vite-plugin-remark-rehype";
 import { resolve } from "path";
 //import { ViteAliases } from "vite-aliases";
 import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-import tsConfig from "./tsconfig.json";
-
-function generateAliases(): AliasOptions {
-    const returns: AliasOptions = {};
-    const tsPaths = tsConfig.compilerOptions.paths;
-    for (const key in tsPaths) {
-        returns[key.replace("/*", "")] = resolve(__dirname, tsPaths[key][0].replace("/*", ""));
-    }
-    return returns;
-}
+import tsconfigPaths from "vite-tsconfig-paths";
+import generouted from "@generouted/react-router/plugin";
 
 export default defineConfig({
     clearScreen: false,
-    plugins: [{ enforce: "pre", ...mdx() }, //ReactInspector(),
-    //progress(),
-    /*ViteAliases({
-        "dir": "src",
-        useConfig: true,
-        useTypescript: true,
-        "adjustDuplicates" : true,
-    }),*/ react({
-        "tsDecorators": true,
-        "jsxImportSource": "react"
-    }), remarkRehypePlugin({
-    }), ViteImageOptimizer(),
-    sentryVitePlugin({
-        org: "tony-mushah",
-        project: "special-eureka",
-        telemetry: false
-    })],
+    plugins: [
+        { enforce: "pre", ...mdx() },
+        tsconfigPaths({
+            root: "."
+        }),
+        react({
+            "tsDecorators": true,
+            "jsxImportSource": "react"
+        }),
+        generouted(),
+        remarkRehypePlugin({}),
+        ViteImageOptimizer(),
+        sentryVitePlugin({
+            org: "tony-mushah",
+            project: "special-eureka",
+            telemetry: false
+        })
+    ],
     envPrefix: ["VITE_", "TAURI_"],
     server: {
         port: 9305,
@@ -45,15 +38,14 @@ export default defineConfig({
             allow: ["../node_modules/.pnpm/flag-icons@6.6.6", ".", "../node_modules/.pnpm/bootstrap@5.2.3_@popperjs+core@2.11.6/node_modules/bootstrap/dist/css/", "../"]
         },
     },
-    resolve: {
+    /*resolve: {
         alias: {
-            ...generateAliases(),
-            /*"react": "preact/compat",
+            "react": "preact/compat",
             "react-dom/test-utils": "preact/test-utils",
             "react-dom": "preact/compat",     // Must be below test-utils
-            "react/jsx-runtime": "preact/jsx-runtime"*/
+            "react/jsx-runtime": "preact/jsx-runtime"
         }
-    },
+    },*/
     appType: "spa",
     build: {
         // Tauri supports es2021
@@ -62,15 +54,14 @@ export default defineConfig({
         minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
         // produce sourcemaps for debug builds
         sourcemap: !!process.env.TAURI_DEBUG,
-        outDir: "../dist",
+        outDir: "./dist",
         rollupOptions: {
             input: {
-                main: resolve(__dirname, "src/index.html"),
-                splashscreen: resolve(__dirname, "src/splashscreen.html")
+                main: resolve(__dirname, "./index.html"),
+                splashscreen: resolve(__dirname, "./splashscreen.html")
             },
         },
         "emptyOutDir": true,
     },
-    root: "./src",
     publicDir: "./public",
 });

@@ -1,4 +1,4 @@
-import Manga, { GetMangaByIDResponse, Manga_with_allRelationship } from "@mangadex/api/structures/Manga";
+import Manga from "@mangadex/api/structures/Manga";
 import { LoaderFunction } from "react-router-dom";
 import { queryKey, queryFn } from ".";
 import { QueryClient } from "@tanstack/react-query";
@@ -17,33 +17,15 @@ export const loader: LoaderFunction = async function ({ params }) {
                     id
                 });
             } else {
-                const queryData = queryClient.getQueryData<GetMangaByIDResponse>(_queryKey_, {
+                const queryData = queryClient.getQueryData<Manga>(_queryKey_, {
                     exact: true
                 });
                 if (queryData != undefined) {
-                    const { manga, isOffline } = queryData;
-                    if (!isOffline) {
-                        return await prefetch({ queryClient, _queryKey_, id });
-                    } else {
-                        if (manga instanceof Manga_with_allRelationship) {
-                            if (manga.$artists != undefined && manga.$authors != undefined && manga.$cover != undefined && manga.$related_manga != undefined) {
-                                return await prefecth2({ queryClient, _queryKey_, id, manga, isOffline });
-                            } else {
-                                return await prefetch({ queryClient, _queryKey_, id });
-                            }
-                        } else {
-                            if (manga.get_relationships() == undefined || manga.get_relationships()?.length == 0) {
-                                return await prefetch({ queryClient, _queryKey_, id });
-                            } else {
-                                return response();
-                            }
-                        }
-                    }
-                } else {
                     return await prefetch({ queryClient, _queryKey_, id });
+                } else {
+                    return response();
                 }
             }
-
         } catch (e) {
             if (e instanceof Error) {
                 throw e;
@@ -61,16 +43,6 @@ export const loader: LoaderFunction = async function ({ params }) {
         });
     }
 };
-
-async function prefecth2({ queryClient, _queryKey_, id, manga, isOffline }: { queryClient: QueryClient; _queryKey_: (string | undefined)[]; id: string; manga: Manga; isOffline: boolean; }) {
-    await queryClient.prefetchQuery(_queryKey_, () => queryFn(id), {
-        initialData: {
-            manga,
-            isOffline
-        }
-    });
-    return response();
-}
 
 function response() {
     return new Response(null, {

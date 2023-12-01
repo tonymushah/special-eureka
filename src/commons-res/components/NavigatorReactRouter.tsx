@@ -16,7 +16,6 @@ import {
 import websites from "../../websites";
 import ReactHotkeys from "react-hot-keys";
 import { Link } from "react-router-dom";
-import EventListener_ from "./EventListner";
 
 export default function NavigatorReactRouter_(props: React.PropsWithChildren) {
     const { isOpen, onOpen, onClose } = useDisclosure();
