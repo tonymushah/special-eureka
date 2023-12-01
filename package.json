@@ -31,7 +31,8 @@
         "build": "tauri build",
         "storybook-dev": "storybook dev -p 6239 --no-open",
         "build-storybook": "storybook build",
-        "tauri-storybook": "cargo run --manifest-path=./src-tauri/Cargo.toml --example=storybook"
+        "tauri-storybook": "cargo run --manifest-path=./src-tauri/Cargo.toml --example=storybook",
+        "test": "vitest"
     },
     "devDependencies": {
         "@chakra-ui/storybook-addon": "^5.1.0",
@@ -62,6 +63,8 @@
         "@typescript-eslint/parser": "^6.13.1",
         "@vitejs/plugin-legacy": "^5.2.0",
         "@vitejs/plugin-react-swc": "^3.5.0",
+        "@vitest/browser": "^0.34.6",
+        "array-shuffle": "^3.0.0",
         "eslint": "~8.54.0",
         "eslint-config-prettier": "9.0.0",
         "eslint-formatter-markdown": "^1.0.4",
@@ -84,7 +87,8 @@
         "vite-plugin-image-optimizer": "^1.1.7",
         "vite-plugin-svgr": "^4.2.0",
         "vite-tsconfig-paths": "^4.2.1",
-        "vitest": "^0.34.6"
+        "vitest": "^0.34.6",
+        "webdriverio": "^8.24.6"
     },
     "dependencies": {
         "@aptabase/tauri": "^0.4.1",

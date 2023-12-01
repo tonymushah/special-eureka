@@ -69,6 +69,7 @@
     "exclude": [
         "./dist",
         "./vite.config.ts",
-        "vite.storybook.config.ts"
+        "vite.storybook.config.ts",
+        "**/*.test.ts"
     ]
 }

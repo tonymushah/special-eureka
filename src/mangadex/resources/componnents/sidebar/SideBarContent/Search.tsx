@@ -1,7 +1,6 @@
 import { FiSearch } from "react-icons/fi";
 import { Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
-import { MangaDexPath } from ".";
+import { Link } from "@router";
 import { useBackgroundColor, useBackgroundColorHover } from "../ActualSidebar";
 
 export function Search() {
@@ -23,17 +22,17 @@ export function Search() {
                 }}
             >
                 <MenuItem
-                    component={<Link to={MangaDexPath + "titles/search"} />}
+                    component={<Link to={"/mangadex/titles/search"} />}
                 >
                     Manga
                 </MenuItem>
                 <MenuItem
-                    component={<Link to={MangaDexPath + "author/search"} />}
+                    component={<Link to={"/mangadex/author/search"} />}
                 >
                     Author
                 </MenuItem>
                 <MenuItem
-                    component={<Link to={MangaDexPath + "group/search"} />}
+                    component={<Link to={"/mangadex/group/search"} />}
                 >
                     Groups
                 </MenuItem>

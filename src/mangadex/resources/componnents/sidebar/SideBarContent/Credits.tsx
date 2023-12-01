@@ -6,7 +6,6 @@ import mangadex_logo from "@mangadex/resources/ico/ddb5721c5458b5edc9d6782a5f107
 import { useBackgroundColor, useBackgroundColorHover } from "../ActualSidebar";
 import { FaCog } from "react-icons/fa";
 
-
 export function Credits() {
     const { collapseSidebar } = useProSidebar();
     const hoverBackgroundColor = useBackgroundColorHover();

@@ -2,7 +2,7 @@ import TryCatch from "@commons-res/components/TryCatch";
 import { getMangaDexPath } from "@mangadex/index";
 import { get_chapter_groups } from "@mangadex/resources/hooks/ChapterStateHooks/get_chapter_groups";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@router";
 import * as Chakra from "@chakra-ui/react";
 import { usePropsChapter } from "../PropsContext";
 
@@ -10,7 +10,7 @@ export default function Groups() {
     const { chapter } = usePropsChapter();
     const MangaDexPath = React.useMemo(() => getMangaDexPath(), []);
     const groups_query = get_chapter_groups({
-        chapter 
+        chapter
     });
     if (groups_query.length == 0) {
         return (
@@ -43,12 +43,14 @@ export default function Groups() {
                                             <Chakra.Link>{value.data.get_name()}</Chakra.Link>
                                         )}
                                     >
-                                        <Chakra.Link
-                                            as={Link}
-                                            to={MangaDexPath + "/group/" + value.data.get_id()}
+                                        <Link
+                                            to={"/mangadex/group/:id"}
+                                            params={{
+                                                id: value.data.get_id()
+                                            }}
                                         >
                                             {value.data.get_name()}
-                                        </Chakra.Link>
+                                        </Link>
                                     </TryCatch>
                                 </Chakra.WrapItem>
                             );
