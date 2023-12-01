@@ -5,7 +5,7 @@
 //use mangadex_desktop_api2::{verify_all_fs, launch_async_server_default};
 use tauri::Manager;
 use tauri::SystemTray;
-use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent};
 use tauri_plugin_aptabase::EventTracker;
 
 #[tauri::command]
@@ -45,6 +45,23 @@ async fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     match tauri::Builder::default()
         .system_tray(tray)
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::MenuItemClick { id, .. } => {
+                let item_handle = app.tray_handle().get_item(&id);
+                match id.as_str() {
+                    "hide" => {
+                        let window = app.get_window("main").unwrap();
+                        window.hide().unwrap();
+                        item_handle.set_title("Show").unwrap();
+                    },
+                    "quit" => {
+                        std::process::exit(0);
+                    },
+                    _ => {}
+                }
+            },
+            _ => {}
+        })
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
