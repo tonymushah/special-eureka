@@ -45,22 +45,19 @@ async fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     match tauri::Builder::default()
         .system_tray(tray)
-        .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::MenuItemClick { id, .. } => {
-                let item_handle = app.tray_handle().get_item(&id);
-                match id.as_str() {
-                    "hide" => {
-                        let window = app.get_window("main").unwrap();
-                        window.hide().unwrap();
-                        item_handle.set_title("Show").unwrap();
-                    },
-                    "quit" => {
-                        std::process::exit(0);
-                    },
-                    _ => {}
-                }
-            },
-            _ => {}
+        .on_system_tray_event(|app, event| if let SystemTrayEvent::MenuItemClick { id, .. } = event {
+            let item_handle = app.tray_handle().get_item(&id);
+            match id.as_str() {
+                "hide" => {
+                    let window = app.get_window("main").unwrap();
+                    window.hide().unwrap();
+                    item_handle.set_title("Show").unwrap();
+                },
+                "quit" => {
+                    std::process::exit(0);
+                },
+                _ => {}
+            }
         })
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
