@@ -1,5 +1,6 @@
 import { Body, Client, ClientOptions, getClient, RequestOptions, Response } from "@tauri-apps/api/http";
 import { is_server_started } from "./plugin";
+import isServerStated from "@mangadex/resources/signals/isServerStated";
 
 export default class Api_Request {
     private static url = "http://localhost:8145/";
@@ -113,9 +114,10 @@ export default class Api_Request {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public static async ping(_client?: Client): Promise<boolean> {
         try {
-            return await is_server_started();
+            isServerStated.value = await is_server_started();
+            return isServerStated.peek();
         } catch (e) {
-            return false;
+            return isServerStated.peek();
         }
     }
 }

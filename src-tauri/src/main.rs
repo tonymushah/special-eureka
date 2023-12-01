@@ -45,18 +45,29 @@ async fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     match tauri::Builder::default()
         .system_tray(tray)
-        .on_system_tray_event(|app, event| if let SystemTrayEvent::MenuItemClick { id, .. } = event {
-            let item_handle = app.tray_handle().get_item(&id);
-            match id.as_str() {
-                "hide" => {
-                    let window = app.get_window("main").unwrap();
-                    window.hide().unwrap();
-                    item_handle.set_title("Show").unwrap();
-                },
-                "quit" => {
-                    std::process::exit(0);
-                },
-                _ => {}
+        .on_system_tray_event(|app, event| {
+            let window = app.get_window("main").unwrap(); 
+            if let SystemTrayEvent::MenuItemClick { id, .. } = event {
+                let item_handle = app.tray_handle().get_item(&id);
+                match id.as_str() {
+                    "hide" => {
+                        if window.is_visible().unwrap() {
+                            window.hide().unwrap();
+                            item_handle.set_title("Show").unwrap();
+                        } else {
+                            window.show().unwrap();
+                            item_handle.set_title("Hide").unwrap();
+                        }
+                    },
+                    "quit" => {
+                        app.exit(0);
+                    },
+                    _ => {}
+                } 
+            }else if let SystemTrayEvent::LeftClick { .. } = event {
+                let item_handle = app.tray_handle().get_item("hide");
+                window.show().unwrap();
+                item_handle.set_title("Hide").unwrap();
             }
         })
         .invoke_handler(tauri::generate_handler![close_splashscreen])
