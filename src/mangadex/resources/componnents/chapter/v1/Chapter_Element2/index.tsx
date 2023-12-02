@@ -11,7 +11,7 @@ import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexS
 
 const ChapterDownloadButton = React.lazy(() => import("../ChapterDownloadButton"));
 
-export default function Chapter_Element2(props: {
+const Chapter_Element2 = React.memo(function Chapter_Element2(props: {
     chapter: Chapter,
 }) {
     return (
@@ -40,7 +40,7 @@ export default function Chapter_Element2(props: {
                                         }
                                     >
                                         <ChapterDownloadButton hstackProps={{
-                                            spacing : "2px"
+                                            spacing: "2px"
                                         }} chapter={props.chapter} />
                                     </React.Suspense>
                                 </Chakra.Center>
@@ -62,4 +62,6 @@ export default function Chapter_Element2(props: {
             </ChapterContextMenu>
         </ChapterPropsProvider>
     );
-}
+});
+
+export default Chapter_Element2;

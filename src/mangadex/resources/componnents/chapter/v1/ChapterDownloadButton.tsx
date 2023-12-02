@@ -7,8 +7,9 @@ import { useChapterDownloadMutation } from "@mangadex/resources/hooks/ChapterSta
 import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get_ChapterbyId";
 import { UseQueryResult } from "@tanstack/react-query";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
+import React from "react";
 
-export default function ChapterDownloadButton(props: {
+const ChapterDownloadButton = React.memo(function ChapterDownloadButton(props: {
     chapter: Chapter,
     hstackProps?: Chakra.StackProps
 }) {
@@ -122,4 +123,6 @@ export default function ChapterDownloadButton(props: {
             );
         }
     }
-}
+});
+
+export default ChapterDownloadButton;

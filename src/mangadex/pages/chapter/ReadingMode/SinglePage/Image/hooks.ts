@@ -33,6 +33,8 @@ export function useImageState() {
     useHotkeys("ctrl", () => {
         setIsDisabled(!isDisabled);
     }, [isDisabled]);
+    // TODO Reimplement this later...
+    /*
     useHotkeys("w", () => {
         const current = transformWarperRef.current;
         if (current) {
@@ -69,6 +71,7 @@ export function useImageState() {
             current.setTransform(x - speed, y, scale);
         }
     }, [transformWarperRef]);
+    */
     return {
         isDisabled,
         setIsDisabled,

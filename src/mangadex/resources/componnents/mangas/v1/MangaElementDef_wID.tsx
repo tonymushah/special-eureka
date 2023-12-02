@@ -5,7 +5,7 @@ import MangaElementFallback from "./MangaElementFallback";
 
 const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
 
-export default function MangaElementDef_wID(props: {
+const MangaElementDef_wID = React.memo(function MangaElementDef_wID(props: {
     mangaID: string
 }) {
     const { query } = get_manga_byId({
@@ -34,4 +34,6 @@ export default function MangaElementDef_wID(props: {
     return (
         <MangaElementFallback />
     );
-}
+});
+
+export default MangaElementDef_wID;

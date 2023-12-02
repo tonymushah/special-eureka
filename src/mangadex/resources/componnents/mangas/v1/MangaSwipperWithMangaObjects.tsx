@@ -13,7 +13,7 @@ const MangaElementDef = React.lazy(() => import("./MangaElementDef"));
 
 const MangaVerticalElement = React.lazy(() => import("./MangaVerticalElement"));
 
-export default function MangaSwipperWithMangaObjects(props: {
+const MangaSwipperWithMangaObjects = React.memo(function MangaSwipperWithMangaObjects(props: {
     mangaArray: Array<Manga>,
     isVertical?: boolean
 }) {
@@ -69,4 +69,6 @@ export default function MangaSwipperWithMangaObjects(props: {
             </Swiper>
         </React.Suspense>
     );
-}
+});
+
+export default MangaSwipperWithMangaObjects;

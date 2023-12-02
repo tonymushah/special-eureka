@@ -3,8 +3,9 @@ import { get_ChapterbyId } from "@mangadex/resources/hooks/ChapterStateHooks/get
 import ErrorEL1 from "../../error/ErrorEL1";
 import MangaFeedElement from "./MangaFeedElement";
 import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
+import React from "react";
 
-export default function MangaFeedElement_byChapID(props: {
+const MangaFeedElement_byChapID = React.memo(function MangaFeedElement_byChapID(props: {
     id: string
 }) {
     const { query } = get_ChapterbyId({
@@ -27,4 +28,6 @@ export default function MangaFeedElement_byChapID(props: {
             <MangadexSpinner />
         </Chakra.Box>
     );
-}
+});
+
+export default MangaFeedElement_byChapID;

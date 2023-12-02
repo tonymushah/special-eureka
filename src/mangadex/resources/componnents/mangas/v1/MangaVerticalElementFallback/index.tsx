@@ -1,6 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
+import React from "react";
 
-export default function MangaVerticalElementFallback() {
+const MangaVerticalElementFallback = React.memo(function MangaVerticalElementFallback() {
     const backgroundColor = Chakra.useColorModeValue("gray.100", "gray.800");
     return (
         <Chakra.Box
@@ -25,4 +26,6 @@ export default function MangaVerticalElementFallback() {
             </Chakra.Center >
         </Chakra.Box >
     );
-}
+});
+
+export default MangaVerticalElementFallback;

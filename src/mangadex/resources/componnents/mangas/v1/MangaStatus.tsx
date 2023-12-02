@@ -3,7 +3,7 @@ import { MangaPageProps } from "../Manga_Page";
 import { Status, make_first_UpperCare } from "@mangadex/api/internal/Utils";
 import { Tag } from "@chakra-ui/react";
 
-export function Get_status_color(props: MangaPageProps){
+export const Get_status_color = React.memo(function Get_status_color(props: MangaPageProps) {
     switch (props.src.get_status()) {
         case Status.ongoing():
             return (<Tag colorScheme="green"> {make_first_UpperCare(props.src.get_status())} </Tag>);
@@ -21,4 +21,4 @@ export function Get_status_color(props: MangaPageProps){
             return (<React.Fragment />);
             break;
     }
-}
+});

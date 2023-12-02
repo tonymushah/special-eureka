@@ -4,7 +4,7 @@ import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaEleme
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
-export default function MangaPopularElementByMangaId(props: {
+const MangaPopularElementByMangaId = React.memo(function MangaPopularElementByMangaId(props: {
     mangaID: string
 }) {
     const { query } = get_manga_byId({
@@ -25,4 +25,6 @@ export default function MangaPopularElementByMangaId(props: {
             <MangaFallback2 />
         );
     }
-}
+});
+
+export default MangaPopularElementByMangaId;

@@ -4,9 +4,9 @@ import Vanilla from "./vanilla";
 import { motion } from "framer-motion";
 import MangaContextMenu from "../MangaContextMenu";
 import ErrorBoundary from "./error";
+import React from "react";
 
-
-export default function MangaElementDef(props: {
+const MangaElementDef = React.memo(function MangaElementDef(props: {
     src: Manga,
     isRefetching?: boolean,
     refetch?: () => void
@@ -33,4 +33,6 @@ export default function MangaElementDef(props: {
             </ErrorBoundary>
         </motion.div >
     );
-}
+});
+
+export default MangaElementDef;

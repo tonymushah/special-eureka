@@ -9,7 +9,7 @@ import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 
 const MangaElementDef_wID = React.lazy(() => import("../../mangas/v1/MangaElementDef_wID"));
 
-export default function MangaSwipper(props: {
+const MangaSwipper = React.memo(function MangaSwipper(props: {
     mangaIDS: Array<string>
 }) {
     return (
@@ -49,4 +49,6 @@ export default function MangaSwipper(props: {
             </Swiper>
         </React.Suspense>
     );
-}
+});
+
+export default MangaSwipper;

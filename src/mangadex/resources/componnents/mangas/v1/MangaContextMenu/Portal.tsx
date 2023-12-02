@@ -1,7 +1,7 @@
 import { VStack, Box, useToken, useColorModeValue } from "@chakra-ui/react";
 import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
 import { Content, Portal as CttxPortal } from "@radix-ui/react-context-menu";
-import React from "react";
+import React, { memo } from "react";
 import { MangaContextMenuProps, MangaContextMenuProvider } from ".";
 import Delete from "./Delete";
 import Download from "./Download";
@@ -13,7 +13,7 @@ import Update from "./Update";
 import isMangaDonwloaded from "@mangadex/resources/hooks/MangaStateHooks/isMangaDownloaded";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 
-export default function Portal(props: MangaContextMenuProps) {
+const Portal = memo(function Portal(props: MangaContextMenuProps) {
     const client = useHTTPClient();
     const { query } = get_manga_byId({
         mangaID: props.mangaId
@@ -71,7 +71,9 @@ export default function Portal(props: MangaContextMenuProps) {
 
         </CttxPortal>
     );
-}
+});
+
+export default Portal;
 
 export function usePortalColorModeValue() {
     const [gray1, gray2] = useToken("colors", ["gray.100", "gray.900"]);
