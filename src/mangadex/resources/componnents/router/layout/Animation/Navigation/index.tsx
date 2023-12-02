@@ -2,39 +2,34 @@ import React from "react";
 import { Transition, Variants, motion } from "framer-motion";
 import { useNavigation } from "react-router";
 
-const variants : Variants = {
-    isNormalLoad : {
-        filter : "blur(4px)",
+const variants: Variants = {
+    isNormalLoad: {
+        filter: "blur(4px)",
     }
 };
-const transition : Transition = {
+const transition: Transition = {
     type: "tween",
     ease: "easeInOut",
     duration: 0.3
 };
 
-export default function NavigationAnimation({ children } : React.PropsWithChildren){
+export default function NavigationAnimation({ children }: React.PropsWithChildren) {
     const navigation = useNavigation();
-    const shouldTransit = React.useMemo(() => navigation.state == "loading" || navigation.state == "submitting", [navigation]);
+    const shouldTransit = React.useMemo(() => navigation.state == "loading" || navigation.state == "submitting", [navigation.state]);
     const animate = React.useMemo(() => {
-        if(shouldTransit){
+        if (shouldTransit) {
             return "isNormalLoad";
-        }else{
+        } else {
             return "none";
         }
-    }, [navigation]);
+    }, [navigation, shouldTransit]);
     const cursor = React.useMemo(() => {
-        if(shouldTransit){
+        if (shouldTransit) {
             return "wait";
-        }else{
+        } else {
             return "default";
         }
-    }, [navigation]);
-    const onClickCapture = React.useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
-        if(shouldTransit){
-            e.preventDefault();
-        }
-    }, [shouldTransit]);
+    }, [navigation, shouldTransit]);
     return (
         <motion.div
             animate={animate}
@@ -43,7 +38,6 @@ export default function NavigationAnimation({ children } : React.PropsWithChildr
             style={{
                 cursor
             }}
-            onClickCapture={onClickCapture}
         >
             {children}
         </motion.div>

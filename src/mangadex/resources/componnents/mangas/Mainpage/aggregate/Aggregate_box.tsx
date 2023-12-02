@@ -62,7 +62,6 @@ export function Aggregate_box(props: Aggregate_boxProps) {
                                 <Chakra.Accordion
                                     allowMultiple={true}
                                     defaultIndex={[0]}
-                                    
                                 >
                                     {
                                         volumes.map<React.ReactNode>((volume, index_) => (

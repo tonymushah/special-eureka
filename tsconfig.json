@@ -64,6 +64,9 @@
             "@pages/*" : [
                 "src/pages/*"
             ],
+            "@public/*": [
+                "public/*"
+            ]
         }
     },
     "exclude": [

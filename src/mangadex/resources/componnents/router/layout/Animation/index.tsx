@@ -1,4 +1,3 @@
-import { Mangadex_suspense } from "@mangadex/index";
 import { Transition, Variants, motion } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import NavigationAnimation from "./Navigation";
