@@ -23,6 +23,16 @@ async fn close_splashscreen(window: tauri::Window) -> Result<(), String> {
 
 #[tokio::main]
 async fn main() {
+    /*
+    #[cfg(debug_assertions)] // only enable instrumentation in development builds
+    let _devtools = devtools::init();
+    */
+
+    let builder = tauri::Builder::default();
+
+    /*#[cfg(debug_assertions)]
+    let builder = builder.plugin(_devtools);
+    */
     let client = sentry_tauri::sentry::init((
         "https://9ded544d4e5945459c62371ec4177585@o4505556825473024.ingest.sentry.io/4505556830322688",
         sentry_tauri::sentry::ClientOptions {
@@ -43,9 +53,17 @@ async fn main() {
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(hide);
     let tray = SystemTray::new().with_menu(tray_menu);
-    match tauri::Builder::default()
+    match builder
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
+            if let SystemTrayEvent::MenuItemClick { ref id, .. } = event {
+                match id.as_str() {
+                    "quit" => {
+                        app.exit(0);
+                    },
+                    _ => {},
+                }
+            }
             if app.get_window("splashscreen").is_none() {
                 let window = app.get_window("main").unwrap(); 
                 if let SystemTrayEvent::MenuItemClick { id, .. } = event {
@@ -60,9 +78,6 @@ async fn main() {
                                 window.show().unwrap();
                                 window.set_focus().unwrap();
                             }
-                        },
-                        "quit" => {
-                            app.exit(0);
                         },
                         _ => {}
                     } 

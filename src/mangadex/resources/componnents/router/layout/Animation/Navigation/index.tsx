@@ -14,22 +14,22 @@ const transition: Transition = {
 };
 
 export default function NavigationAnimation({ children }: React.PropsWithChildren) {
-    const navigation = useNavigation();
-    const shouldTransit = React.useMemo(() => navigation.state == "loading" || navigation.state == "submitting", [navigation.state]);
+    const { state } = useNavigation();
+    const shouldTransit = React.useMemo(() => state === "loading", [state]);
     const animate = React.useMemo(() => {
         if (shouldTransit) {
             return "isNormalLoad";
         } else {
             return "none";
         }
-    }, [navigation, shouldTransit]);
+    }, [shouldTransit]);
     const cursor = React.useMemo(() => {
         if (shouldTransit) {
             return "wait";
         } else {
             return "default";
         }
-    }, [navigation, shouldTransit]);
+    }, [shouldTransit]);
     return (
         <motion.div
             animate={animate}
