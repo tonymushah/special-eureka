@@ -1,4 +1,4 @@
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 import { ResponsiveValue } from "@chakra-ui/react";
 import CoverImageByCoverID from "@mangadex/resources/componnents/covers/v1/CoverImageByCoverID";
 

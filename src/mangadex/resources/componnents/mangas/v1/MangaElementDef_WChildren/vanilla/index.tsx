@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import Manga from "@mangadex/api/structures/Manga";
 import React from "react";
 import MangaContextMenu from "../../MangaContextMenu";
-import { PropsProvider } from "../../MangaElementDef/vanilla";
+import { PropsProvider } from "../../MangaElementDef/vanilla/Props";
 import GridLayout from "../../MangaElementDef/vanilla/GridLayout";
 import Image from "../../MangaElementDef/vanilla/Image";
 import Laoyut from "../../MangaElementDef/vanilla/Layout";
@@ -36,7 +36,7 @@ export default function MangaElementDef_WChildren(props: React.PropsWithChildren
                                         rowSpan={1}
                                         colSpan={8}
                                     >
-                                        <Title/>
+                                        <Title />
                                     </Chakra.GridItem>
                                     <Chakra.GridItem
                                         rowSpan={1}

@@ -3,7 +3,7 @@ import { getMangaDexPath } from "@mangadex/index";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Author_Artists_Cmp_via_manga } from "../../../Manga_Page/Author_Artists_Cmp";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 
 const MangaDexPath = getMangaDexPath();
 

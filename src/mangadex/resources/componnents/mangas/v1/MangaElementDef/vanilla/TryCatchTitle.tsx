@@ -2,7 +2,8 @@ import * as Chakra from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
 import { Link } from "react-router-dom";
 import Title from "./Title";
-import { useProps, MangaDexPath } from ".";
+import { MangaDexPath } from ".";
+import { useProps } from "./Props";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OnCatch(__error: Error) {
@@ -14,7 +15,7 @@ function OnCatch(__error: Error) {
     );
 }
 
-export function TryCatchTitle() {
+export default function TryCatchTitle() {
     const { src } = useProps();
     const color = Chakra.useColorModeValue("black", "white");
     return (

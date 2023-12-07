@@ -4,7 +4,7 @@ import TryCatch from "@commons-res/components/TryCatch";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import get_manga_description from "@mangadex/resources/hooks/MangaStateHooks/get_manga_description";
 import React from "react";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 import { ReactMarkdownProps } from "react-markdown/lib/complex-types";
 
 const ReactMarkDown = React.lazy(() => import("react-markdown"));
@@ -75,7 +75,7 @@ export default function Description() {
                         <ReactMarkDown
                             components={{
                                 a: MDX_a,
-                                p : MDX_p
+                                p: MDX_p
                             }}
                         >
                             {manga_description_query.data[0].get_data()}

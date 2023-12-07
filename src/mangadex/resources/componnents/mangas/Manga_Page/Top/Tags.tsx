@@ -1,7 +1,7 @@
 import { Wrap, WrapItem } from "@chakra-ui/react";
 import { v4 } from "uuid";
 import MangaTags from "../../tags";
-import { useProps } from "../../v1/MangaElementDef/vanilla";
+import { useProps } from "../../v1/MangaElementDef/vanilla/Props";
 
 export default function Tags() {
     const { src } = useProps();

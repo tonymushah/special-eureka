@@ -1,4 +1,4 @@
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 
 import * as Chakra from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";

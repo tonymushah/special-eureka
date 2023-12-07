@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import TryCatch from "@commons-res/components/TryCatch";
 import { getMangaDexPath } from "@mangadex/index";
 import { Link } from "react-router-dom";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 import Title_ from "../../MangaElementDef/vanilla/Title";
 
 const MangaDexPath = getMangaDexPath();

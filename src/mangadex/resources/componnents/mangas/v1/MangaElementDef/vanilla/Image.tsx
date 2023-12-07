@@ -1,6 +1,5 @@
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
-import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
-import { useProps_manga_page_cover_art_image } from ".";
+import { useProps_manga_page_cover_art_image } from "./Props";
 import { Image } from "@chakra-ui/react";
 
 import { FallBackImage } from "../../MangaElementFallback/FallBackImage";
@@ -13,42 +12,28 @@ export default function CoverImage() {
             <Image
                 as={motion.img}
                 src={coverQuery.data}
-                fallback={<FallBackImage/>}
+                fallback={<FallBackImage />}
                 height={"160px"}
                 objectFit={"cover"}
-                // layoutId={coverQuery.data}
+            // layoutId={coverQuery.data}
             />
         );
     } else if (coverQuery.isError) {
         return (
             <Image
                 src={Mangadex_cover_not_found}
-                fallback={<FallBackImage/>}
-                height={"160px"}
-                objectFit={"cover"}
-            />
-        );
-    } else if (coverQuery.isFetching) {
-        return (
-            <Image
-                src={Mangadex_placeHolder}
-                fallback={<FallBackImage/>}
+                fallback={<FallBackImage />}
                 height={"160px"}
                 objectFit={"cover"}
             />
         );
     } else if (coverQuery.isLoading) {
         return (
-            <FallBackImage/>
+            <FallBackImage />
         );
     } else {
         return (
-            <Image
-                src={Mangadex_placeHolder}
-                fallback={<FallBackImage/>}
-                height={"160px"}
-                objectFit={"cover"}
-            />
+            <FallBackImage />
         );
     }
 }

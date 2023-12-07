@@ -1,6 +1,6 @@
 import { HStack, Tag, TagLabel, Text } from "@chakra-ui/react";
 import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
-import { useProps } from ".";
+import { useProps } from "./Props";
 import React from "react";
 
 export default function Publication() {

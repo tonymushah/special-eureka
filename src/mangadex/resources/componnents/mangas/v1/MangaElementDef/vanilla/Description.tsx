@@ -1,7 +1,7 @@
 import { Skeleton, Text } from "@chakra-ui/react";
 import ErrorEL1 from "@mangadex/resources/componnents/error/ErrorEL1";
 import React from "react";
-import { useProps_manga_description } from ".";
+import { useProps_manga_description } from "./Props";
 
 export default function Description() {
     const { manga_description_query } = useProps_manga_description();
