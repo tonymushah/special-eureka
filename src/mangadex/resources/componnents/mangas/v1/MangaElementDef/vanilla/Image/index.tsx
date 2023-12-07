@@ -1,8 +1,8 @@
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
-import { useProps_manga_page_cover_art_image } from "./Props";
+import { useProps_manga_page_cover_art_image } from "../Props";
 import { Image } from "@chakra-ui/react";
 
-import { FallBackImage } from "../../MangaElementFallback/FallBackImage";
+import { FallBackImage } from "../../../MangaElementFallback/FallBackImage";
 import { motion } from "framer-motion";
 
 export default function CoverImage() {

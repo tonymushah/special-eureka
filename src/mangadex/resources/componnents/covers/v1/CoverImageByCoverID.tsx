@@ -15,14 +15,14 @@ export default function CoverImageByCoverID(props: {
     const {
         coverQuery
     } = get_cover_art_byId({
-        coverID : props.coverID
+        coverID: props.coverID
     });
     if (coverQuery.isSuccess) {
         return (
             <React.Suspense
                 fallback={
                     <Chakra.Image
-                        src={Mangadex_placeHolder}
+                        //src={Mangadex_placeHolder}
                         {...props.image_props}
                     />
                 }

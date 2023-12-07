@@ -12,11 +12,7 @@ export default function CustomListSwiper(props: {
     listID: string
 }) {
     const query = useState(props);
-    if (query.isError) {
-        return (
-            <ErrorEL1 error={query.error} />
-        );
-    }
+
     if (query.isSuccess) {
         return (
             <React.Suspense
@@ -38,6 +34,11 @@ export default function CustomListSwiper(props: {
             >
                 <MangaSwipperWithMangaObjects mangaArray={query.data.get_manga_array()} />
             </React.Suspense>
+        );
+    }
+    if (query.isError) {
+        return (
+            <ErrorEL1 error={query.error} />
         );
     }
     return (
