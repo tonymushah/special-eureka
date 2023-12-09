@@ -3,7 +3,7 @@ import React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 
-const speed = 10;
+// const speed = 10;
 
 export function useImageState() {
     const [isDisabled, setIsDisabled] = React.useState(true);
@@ -34,44 +34,30 @@ export function useImageState() {
         setIsDisabled(!isDisabled);
     }, [isDisabled]);
     // TODO Reimplement this later...
-    /*
-    useHotkeys("w", () => {
+    /*useHotkeys(["w", "s", "a", "d"], ({ key }) => {
         const current = transformWarperRef.current;
         if (current) {
             const x = current.instance.transformState.positionX;
             const y = current.instance.transformState.positionY;
             const scale = current.instance.transformState.scale;
-            current.setTransform(x, y + speed, scale);
+            switch (key) {
+                case "w":
+                    current.setTransform(x, y + speed, scale, undefined, "easeInOutCubic");
+                    break;
+                case "s":
+                    current.setTransform(x, y - speed, scale);
+                    break;
+                case "a":
+                    current.setTransform(x + speed, y, scale);
+                    break;
+                case "d":
+                    current.setTransform(x - speed, y, scale);
+                    break;
+                default:
+                    break;
+            }
         }
-    }, [transformWarperRef]);
-    useHotkeys("s", () => {
-        const current = transformWarperRef.current;
-        if (current) {
-            const x = current.instance.transformState.positionX;
-            const y = current.instance.transformState.positionY;
-            const scale = current.instance.transformState.scale;
-            current.setTransform(x, y - speed, scale);
-        }
-    }, [transformWarperRef]);
-    useHotkeys("a", () => {
-        const { current } = transformWarperRef;
-        if (current) {
-            const x = current.instance.transformState.positionX;
-            const y = current.instance.transformState.positionY;
-            const scale = current.instance.transformState.scale;
-            current.setTransform(x + speed, y, scale);
-        }
-    }, [transformWarperRef]);
-    useHotkeys("d", () => {
-        const current = transformWarperRef.current;
-        if (current) {
-            const x = current.instance.transformState.positionX;
-            const y = current.instance.transformState.positionY;
-            const scale = current.instance.transformState.scale;
-            current.setTransform(x - speed, y, scale);
-        }
-    }, [transformWarperRef]);
-    */
+    }, [transformWarperRef]);*/
     return {
         isDisabled,
         setIsDisabled,
@@ -84,6 +70,6 @@ export function useImageState() {
         startTransition,
         cursor,
         isTransition,
-        transformWarperRef
+        transformWarperRef,
     };
 }

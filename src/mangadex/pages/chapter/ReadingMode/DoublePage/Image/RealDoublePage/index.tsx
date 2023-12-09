@@ -8,25 +8,49 @@ import { useImageState } from "../../../SinglePage/Image/hooks";
 //import { useStoryBookRTLSwipperMode } from "@mangadex/resources/storybook/hooks/user-option/RTLMode";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
 
+function ThisImage({ src }: {
+    src: string
+}) {
+    return (
+        <Image
+            fallback={
+                <Box width={"full"}>
+                    <Center>
+                        <MangadexSpinner
+                            size={"xl"}
+                            color={"orange"}
+                            thickness={"10px"}
+                        />
+                    </Center>
+                </Box>
+            }
+            src={src}
+            alt={src}
+            height={"100vh"}
+        />
+    );
+}
+
 export default function RealDoublePage({ src, onPrevious, onNext }: {
     src: [string, string],
     onPrevious?: HotkeyCallback,
     onNext?: HotkeyCallback
 }) {
-    // const rtlMode = useStoryBookRTLSwipperMode();
-    const rtlMode = useRTLSwipperMode();
-    const src_ = React.useMemo<[string, string]>(() => {
-        if(rtlMode.query.data == true){
-            return [src[1], src[0]];
-        }else{
-            return src;
-        }
-    }, [rtlMode.query.data]);
     React.useEffect(() => {
-        if(src.length > 2){
+        if (src.length > 2) {
             throw new Error("The length of the input array should be <= 2");
         }
     }, []);
+    // const rtlMode = useStoryBookRTLSwipperMode();
+    const rtlMode = useRTLSwipperMode();
+    const src_ = React.useMemo<[string, string]>(() => {
+        if (rtlMode.query.data == true) {
+            return [src[1], src[0]];
+        } else {
+            return src;
+        }
+    }, [rtlMode.query.data]);
+
     const { isDisabled, setIsDeZooming, setIsPanning, startTransition, setIsZooming, cursor, transformWarperRef } = useImageState();
     return (
         <React.Fragment>
@@ -63,7 +87,7 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
                             });
                         }}
                         doubleClick={{
-                            disabled : true
+                            disabled: true
                         }}
                         onZoom={(e) => {
                             startTransition(() => {
@@ -98,35 +122,8 @@ export default function RealDoublePage({ src, onPrevious, onNext }: {
                             }}
                         >
                             <Center>
-                                {
-                                    src_.map((image, index) => {
-                                        if (index < 2) {
-                                            return (
-                                                <Image
-                                                    fallback={
-                                                        <Box width={"full"}>
-                                                            <Center>
-                                                                <MangadexSpinner
-                                                                    size={"xl"}
-                                                                    color={"orange"}
-                                                                    thickness={"10px"}
-                                                                />
-                                                            </Center>
-                                                        </Box>
-                                                    }
-                                                    src={image}
-                                                    alt={image}
-                                                    height={"100vh"}
-                                                    key={`${index}-${image}`}
-                                                />
-                                            );
-                                        } else {
-                                            return (
-                                                <React.Fragment key={image} />
-                                            );
-                                        }
-                                    })
-                                }
+                                <ThisImage src={src_[0]} />
+                                <ThisImage src={src_[1]} />
                             </Center>
                         </TransformComponent>
                     </TransformWrapper>
