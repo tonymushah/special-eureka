@@ -80,7 +80,7 @@
         "swagger-typescript-api": "^13.0.3",
         "terser": "^5.24.0",
         "ts-jest": "^29.1.1",
-        "ts-node": "10.9.1",
+        "ts-node": "10.9.2",
         "typescript": "^5.3.2",
         "vite": "^5.0.4",
         "vite-plugin-checker": "^0.6.2",
