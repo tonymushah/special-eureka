@@ -21,8 +21,7 @@ async fn close_splashscreen(window: tauri::Window) -> Result<(), String> {
     Ok(())
 }
 
-#[tokio::main]
-async fn main() {
+fn main() {
     /*
     #[cfg(debug_assertions)] // only enable instrumentation in development builds
     let _devtools = devtools::init();
