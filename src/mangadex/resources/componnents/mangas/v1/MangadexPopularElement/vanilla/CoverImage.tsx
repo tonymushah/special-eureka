@@ -1,8 +1,7 @@
-import * as Chakra from "@chakra-ui/react";
 import TauriQueryImage from "@commons-res/components/TauriQueryImage";
 import get_manga_page_cover_art_image from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
-import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import { useProps } from "../../MangaElementDef/vanilla/Props";
+import FallBack from "../../MangaPopularElementFallback/Image";
 
 export default function CoverImage() {
     const { src } = useProps();
@@ -19,20 +18,12 @@ export default function CoverImage() {
                 margin={"10px"}
                 boxShadow={"lg"}
                 borderRadius={"10px"}
-                fallbackSrc={CoverPlaceHolder}
+                fallback={<FallBack />}
             />
         );
     } else {
         return (
-            <Chakra.Image
-                src={CoverPlaceHolder}
-                objectFit={"cover"}
-                maxW={"200px"}
-                margin={"10px"}
-                boxShadow={"lg"}
-                borderRadius={"10px"}
-            />
+            <FallBack />
         );
-
     }
 }
