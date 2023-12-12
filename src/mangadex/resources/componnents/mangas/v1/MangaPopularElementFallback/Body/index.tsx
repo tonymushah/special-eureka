@@ -11,11 +11,11 @@ export default function Body() {
             <Box marginBottom={"5px"}>
                 <Title />
             </Box>
-            <Box m={"5px"}>
+            <Box mb={"5px"}>
                 <Tags />
             </Box>
             <Description />
-            <Box m={"5px"}>
+            <Box mt={"5px"} mb={"5px"}>
                 <AuthorArtists />
             </Box>
         </CardBody>

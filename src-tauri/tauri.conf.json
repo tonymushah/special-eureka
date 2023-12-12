@@ -163,8 +163,7 @@
                 "label": "main",
                 "url": "index.html",
                 "visible": false,
-                "decorations": true,
-                "transparent": true
+                "decorations": true
             },
             {
                 "width": 640,
