@@ -1,6 +1,6 @@
 import * as Chakra from "@chakra-ui/react";
 import { make_first_UpperCare } from "@mangadex/api/internal/Utils";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 
 export default function Publication() {
     const { src } = useProps();

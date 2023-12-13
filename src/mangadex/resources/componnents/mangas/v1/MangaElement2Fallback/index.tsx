@@ -1,18 +1,8 @@
 import * as Chakra from "@chakra-ui/react";
 import React from "react";
+import FallBackImage from "./FallBackImage";
 
-function FallBackImage({ card_maxHeight }: {
-    card_maxHeight: Chakra.ResponsiveValue<string>
-}) {
-    return (
-        <Chakra.Skeleton
-            width={"6em"}
-            maxHeight={card_maxHeight}
-        />
-    );
-}
-
-export default function MangaFallback2() {
+const MangaFallback2 = React.memo(function MangaFallback2() {
     const card_maxHeight: Chakra.ResponsiveValue<string> = React.useMemo(() => ({
         base: "11em"
     }), []);
@@ -40,4 +30,6 @@ export default function MangaFallback2() {
             </Chakra.CardBody>
         </Chakra.Card>
     );
-}
+});
+
+export default MangaFallback2;

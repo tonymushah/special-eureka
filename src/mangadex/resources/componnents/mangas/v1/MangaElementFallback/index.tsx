@@ -1,7 +1,11 @@
 import * as Chakra from "@chakra-ui/react";
-import { FallBackImage } from "./FallBackImage";
+import React from "react";
+import GridFallBackImage from "./GridFallBackImage";
+import GridTitleFallback from "./GridTitleFallback";
+import GridTagFallback from "./GridTagFallback";
+import GridDescriptionFallback from "./GridDescriptionFallback";
 
-export default function MangaElementFallback() {
+const MangaElementFallback = React.memo(function MangaElementFallback() {
     const backgroundColor = Chakra.useColorModeValue("gray.100", "gray.800");
     return (
         <Chakra.Box
@@ -27,36 +31,15 @@ export default function MangaElementFallback() {
                         rowGap={1}
                         paddingRight={"10px"}
                     >
-                        <Chakra.GridItem
-                            rowSpan={3}
-                            colSpan={4}
-                        >
-                            <FallBackImage />
-                        </Chakra.GridItem>
-                        <Chakra.GridItem
-                            rowSpan={1}
-                            colSpan={8}
-                        >
-                            <Chakra.Skeleton height={"30px"} mt={2} />
-                        </Chakra.GridItem>
-                        <Chakra.GridItem
-                            rowSpan={1}
-                            colSpan={8}
-                        >
-                            <Chakra.HStack>
-                                <Chakra.Text as={"span"}>Publication : </Chakra.Text>
-                                <Chakra.Tag variant={"solid"}>Loading...</Chakra.Tag>
-                            </Chakra.HStack>
-                        </Chakra.GridItem>
-                        <Chakra.GridItem
-                            rowSpan={1}
-                            colSpan={8}
-                        >
-                            <Chakra.SkeletonText />
-                        </Chakra.GridItem>
+                        <GridFallBackImage />
+                        <GridTitleFallback />
+                        <GridTagFallback />
+                        <GridDescriptionFallback />
                     </Chakra.Grid>
                 </Chakra.Box>
             </Chakra.Center >
         </Chakra.Box >
     );
-}
+});
+
+export default MangaElementFallback;

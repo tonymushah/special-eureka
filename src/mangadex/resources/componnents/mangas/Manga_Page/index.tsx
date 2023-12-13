@@ -4,7 +4,7 @@ import { useMangaTitle } from "@mangadex/resources/componnents/mangas/v1/MangaTi
 import { appWindow } from "@tauri-apps/api/window";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
-import { PropsProvider } from "../v1/MangaElementDef/vanilla";
+import { PropsProvider } from "../v1/MangaElementDef/vanilla/Props";
 import TopInfo from "./Top";
 
 export type MangaPageProps = {

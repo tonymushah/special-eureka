@@ -1,5 +1,5 @@
 import get_manga_page_cover_art_image from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 import * as Chakra from "@chakra-ui/react";
 import Mangadex_cover_not_found from "@mangadex/resources/imgs/cover-not-found.jpg";
 import Mangadex_placeHolder from "@mangadex/resources/imgs/cover-placeholder.png";
@@ -18,7 +18,7 @@ export default function Image() {
                 src={coverQuery.data}
                 fallbackSrc={Mangadex_placeHolder}
                 borderTopRadius={"10px"}
-                //layoutId={coverQuery.data}
+            //layoutId={coverQuery.data}
             />
         );
     } else if (coverQuery.isError) {

@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import get_manga_page_cover_art_image from "@mangadex/resources/hooks/MangaStateHooks/get_manga_page_cover_art_image";
 import CoverPlaceHolder from "@mangadex/resources/imgs/cover-placeholder.png";
 import React from "react";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 
 
 export default function Layout(props: React.PropsWithChildren) {

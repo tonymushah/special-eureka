@@ -8,17 +8,20 @@ import useChapterPages from "@mangadex/resources/componnents/chapter/v1/Chapter_
 import useSwipperModeRef from "./useSwipperModeRef";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
 
-export default function SwipperMode({ data, swipper_option, children }: {
+type Props = {
     data: ChapterPage_outlet_context,
     swipper_option?: SwiperProps,
-    children? : (props : 
+    children?: (props:
         {
-            images : string[], 
-            reading_state : ReturnType<typeof useChapterPages>,
-            fullScreenOptions : ReturnType<typeof useFullScreenOptions_Query>
+            images: string[],
+            reading_state: ReturnType<typeof useChapterPages>,
+            fullScreenOptions: ReturnType<typeof useFullScreenOptions_Query>
         }
-        ) => React.ReactNode
-}) {
+    ) => React.ReactNode
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const SwipperMode = React.forwardRef<SwiperRef, Props>(function SwipperMode({ data, swipper_option, children }, _swipperRef) {
     const fullScreenOptions = useFullScreenOptions_Query();
     const reading_state = useChapterPages({
         chapter: data.chapter
@@ -77,15 +80,17 @@ export default function SwipperMode({ data, swipper_option, children }: {
                                     id={`mdx-chapter-${data.chapter.get_id()}-${index + 1}`}
                                 />
                             </SwiperSlide>
-                        ))) : 
-                        children({
-                            images : data.images,
-                            fullScreenOptions,
-                            reading_state
-                        })
+                        ))) :
+                            children({
+                                images: data.images,
+                                fullScreenOptions,
+                                reading_state
+                            })
                     }
                 </Swiper>
             </Chakra.Box>
         </React.Suspense>
     );
-}
+});
+
+export default SwipperMode;

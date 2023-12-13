@@ -1,5 +1,5 @@
 import React from "react";
-import { useProps } from "../../v1/MangaElementDef/vanilla";
+import { useProps } from "../../v1/MangaElementDef/vanilla/Props";
 import { HStack } from "@chakra-ui/react";
 import { Get_status_color } from "../../v1/MangaStatus";
 

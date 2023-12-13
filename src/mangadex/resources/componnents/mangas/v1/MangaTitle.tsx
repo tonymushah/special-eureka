@@ -14,29 +14,31 @@ export function useMangaAltTitle({ src }: {
 export function useMangaTitle({ src }: {
     src: Manga
 }): string {
-    if(src instanceof Manga){
+    if (src instanceof Manga) {
         return React.useMemo(() => {
-        if (src.get_title() != undefined) {
-            if (src.get_title().en == null) {
-                return new Alt_title(src.get_alt_title()).get_quicklang()!;
+            if (src.get_title() != undefined) {
+                if (src.get_title().en == null) {
+                    return new Alt_title(src.get_alt_title()).get_quicklang()!;
+                } else {
+                    return src.get_title().en;
+                }
             } else {
-                return src.get_title().en;
+                return new Alt_title(src.get_alt_title()).get_random_lang()!;
             }
-        } else {
-            return new Alt_title(src.get_alt_title()).get_random_lang()!;
-        }
-    }, [src]);
-    }else{
+        }, [src]);
+    } else {
         throw new Error("The given src is not a manga");
     }
-    
+
 }
 
-export default function MangaTitle(props: {
+const MangaTitle = React.memo(function MangaTitle(props: {
     src: Manga
 }) {
     const title = useMangaTitle(props);
     return (
         <motion.span /*layoutId={`manga-title-${props.src.get_id()}`}*/ >{title}</motion.span>
     );
-}
+});
+
+export default MangaTitle;

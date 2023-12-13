@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Link } from "react-router-dom";
-import { useProps } from "../../v1/MangaElementDef/vanilla";
+import { useProps } from "../../v1/MangaElementDef/vanilla/Props";
 import { Author_Artists_Cmp_via_manga } from "../Author_Artists_Cmp";
 import { useMangaDexPath } from "@mangadex/index";
 

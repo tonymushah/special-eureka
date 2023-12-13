@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import useRTLSwipperMode from "@mangadex/resources/hooks/userOptions/RtlSwipperMode";
 import React from "react";
-import { FreeMode, Keyboard } from "swiper/modules";
+import { FreeMode, Keyboard, Zoom } from "swiper/modules";
 import { SwiperSlide } from "swiper/react";
 import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/ChapterFullScreen/FullScreenOptionsProvider";
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
@@ -18,11 +18,23 @@ export default function Widestrip({ data }: {
         <SwipperMode
             data={data}
             swipper_option={{
-                slidesPerView: 2,
-                modules: [FreeMode, Keyboard],
+                slidesPerView: "auto",
+                modules: [FreeMode, Keyboard, Zoom],
                 keyboard: true,
                 freeMode: true,
                 dir: query.data ? "rtl" : undefined,
+                onKeyPress({ zoom }, keyCode) {
+                    if (keyCode == "control") {
+                        if (zoom.enabled) {
+                            zoom.disable();
+                        } else {
+                            zoom.enable();
+                        }
+                    }
+                },
+                zoom: {
+                    toggle: false
+                }
             }}
         >
             {({ images, reading_state }) => (

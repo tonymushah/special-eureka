@@ -3,7 +3,9 @@ import React from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ReactZoomPanPinchRef } from "react-zoom-pan-pinch";
 
-export function useImageState(){
+// const speed = 10;
+
+export function useImageState() {
     const [isDisabled, setIsDisabled] = React.useState(true);
     const [isPanning, setIsPanning] = React.useState(false);
     const [isZooming, setIsZooming] = React.useState(false);
@@ -21,7 +23,7 @@ export function useImageState(){
                 return "grabbing";
             } else if (isZooming) {
                 return "zoom-in";
-            } else if(isDeZooming){
+            } else if (isDeZooming) {
                 return "zoom-out";
             } else {
                 return "grab";
@@ -31,6 +33,31 @@ export function useImageState(){
     useHotkeys("ctrl", () => {
         setIsDisabled(!isDisabled);
     }, [isDisabled]);
+    // TODO Reimplement this later...
+    /*useHotkeys(["w", "s", "a", "d"], ({ key }) => {
+        const current = transformWarperRef.current;
+        if (current) {
+            const x = current.instance.transformState.positionX;
+            const y = current.instance.transformState.positionY;
+            const scale = current.instance.transformState.scale;
+            switch (key) {
+                case "w":
+                    current.setTransform(x, y + speed, scale, undefined, "easeInOutCubic");
+                    break;
+                case "s":
+                    current.setTransform(x, y - speed, scale);
+                    break;
+                case "a":
+                    current.setTransform(x + speed, y, scale);
+                    break;
+                case "d":
+                    current.setTransform(x - speed, y, scale);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }, [transformWarperRef]);*/
     return {
         isDisabled,
         setIsDisabled,
@@ -43,6 +70,6 @@ export function useImageState(){
         startTransition,
         cursor,
         isTransition,
-        transformWarperRef
+        transformWarperRef,
     };
 }

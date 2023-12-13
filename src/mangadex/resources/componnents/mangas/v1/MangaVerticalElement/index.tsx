@@ -2,8 +2,9 @@ import Manga from "@mangadex/api/structures/Manga";
 import Vanilla from "./vanilla";
 import ErrorBoundary from "./error";
 import { motion } from "framer-motion";
+import React from "react";
 
-export default function MangaVerticalElement(props: {
+const MangaVerticalElement = React.memo(function MangaVerticalElement(props: {
     src: Manga,
     isRefetching?: boolean,
     refetch?: () => void
@@ -22,4 +23,6 @@ export default function MangaVerticalElement(props: {
             </ErrorBoundary>
         </motion.div>
     );
-}
+});
+
+export default MangaVerticalElement;

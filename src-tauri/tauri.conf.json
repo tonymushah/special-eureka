@@ -5,11 +5,11 @@
         "beforeDevCommand": "pnpm run vite:dev",
         "devPath": "http://localhost:9305",
         "distDir": "../dist",
-        "withGlobalTauri": true
+        "withGlobalTauri": false
     },
     "package": {
         "productName": "Special-Eureka",
-        "version": "0.1.6"
+        "version": "0.1.7"
     },
     "tauri": {
         "allowlist": {
@@ -173,7 +173,8 @@
                 "url": "splashscreen.html",
                 "label": "splashscreen",
                 "center": true,
-                "resizable": false
+                "resizable": false,
+                "transparent": true
             }
         ],
         "systemTray": {

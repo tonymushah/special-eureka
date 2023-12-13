@@ -1,6 +1,5 @@
-import { eventName } from "@commons-res/components/FullscreenF11";
+import { toggleFullscreen, eventName } from "@commons-res/components/FullscreenF11";
 import { MutationKey, useMutation, useQuery } from "@tanstack/react-query";
-import { UnlistenFn } from "@tauri-apps/api/event";
 import { appWindow } from "@tauri-apps/api/window";
 import React from "react";
 
@@ -13,23 +12,18 @@ export function useChapterFullscreen() {
             return await appWindow.isFullscreen();
         },
     });
-    const [unlistenFn, setUnlistenFn] = React.useState<UnlistenFn | undefined>(undefined);
     React.useEffect(() => {
-        appWindow.listen(eventName, () => {
+        const getted = appWindow.listen(eventName, () => {
             query.refetch();
-        }).then((getted) => { 
-            setUnlistenFn(getted);
         });
         return () => {
-            if(unlistenFn){
-                unlistenFn();
-            }
+            getted.then((d) => d());
         };
     }, [query]);
     const mutationKey: MutationKey = queryKey_.concat("mutation");
     const update_mutation = useMutation({
-        mutationFn: async (value: boolean) => {
-            await appWindow.setFullscreen(value);
+        mutationFn: async (_value: boolean) => {
+            await toggleFullscreen(_value);
             query.refetch();
         },
         mutationKey: mutationKey

@@ -4,8 +4,9 @@ import ErrorEL1 from "../../error/ErrorEL1";
 import MangaElementDef_WChildren from "../../mangas/v1/MangaElementDef_WChildren";
 import MangaElementFallback from "../../mangas/v1/MangaElementFallback";
 import Chapter_Element2 from "./Chapter_Element2";
+import React from "react";
 
-export default function MangaFeedElement(props: {
+const MangaFeedElement = React.memo(function MangaFeedElement(props: {
     src: Chapter
 }) {
     const { query } = get_manga_of_chapter({
@@ -31,4 +32,6 @@ export default function MangaFeedElement(props: {
     return (
         <MangaElementFallback />
     );
-}
+});
+
+export default MangaFeedElement;

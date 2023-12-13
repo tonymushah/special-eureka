@@ -11,7 +11,7 @@ import CollapseHeight from "@mangadex/resources/componnents/mangas/Mainpage/top_
 const MangaElementDef2_withChildren = React.lazy(() => import("./MangaElementDef2_withChildren"));
 const Chapter_Element1 = React.lazy(() => import("../../chapter/v1/Chapter_Element1"));
 
-export default function MangaChapterAccordion_Element(props: {
+const MangaChapterAccordion_Element = React.memo(function MangaChapterAccordion_Element(props: {
     src: MangaChapter_Accordion
 }) {
     const mangaID = props.src.$mangaid;
@@ -108,4 +108,6 @@ export default function MangaChapterAccordion_Element(props: {
     return (
         <MangaFallback2 />
     );
-}
+});
+
+export default MangaChapterAccordion_Element;

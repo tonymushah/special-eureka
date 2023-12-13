@@ -7,9 +7,16 @@ use tauri::Manager;
 use tauri::SystemTray;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTrayEvent};
 use tauri_plugin_aptabase::EventTracker;
+#[cfg(any(windows, target_os = "macos"))]
+use window_shadows::set_shadow;
+#[cfg(any(windows, target_os = "macos"))]
+use window_vibrancy::apply_blur;
+#[cfg(target_os = "macos")]
+use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 #[tauri::command]
 async fn close_splashscreen(window: tauri::Window) -> Result<(), String> {
+    let main = window.get_window("main").ok_or(String::from("the main window is not found"))?;
     // Close splashscreen
     window.emit_all("splash", "closing...").map_err(|e| e.to_string())?;
     tokio::time::sleep(std::time::Duration::from_secs(10)).await;
@@ -17,12 +24,29 @@ async fn close_splashscreen(window: tauri::Window) -> Result<(), String> {
         splashscreen.close().map_err(|e| e.to_string())?;
     }
     // Show main window
-    window.get_window("main").ok_or(String::from("the main window is not found"))?.show().map_err(|e| e.to_string())?;
+    main.show().map_err(|e| e.to_string())?;
+    /* 
+    #[cfg(any(windows, target_os = "macos"))]
+    set_shadow(&main, true).unwrap();
+    #[cfg(target_os = "macos")]
+    apply_vibrancy(&main, NSVisualEffectMaterial::HudWindow, None, None).expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+    #[cfg(target_os = "windows")]
+    apply_blur(&main, Some((18, 18, 18, 125))).expect("Unsupported platform! 'apply_blur' is only supported on Windows");
+    */
     Ok(())
 }
 
-#[tokio::main]
-async fn main() {
+fn main() {
+    /*
+    #[cfg(debug_assertions)] // only enable instrumentation in development builds
+    let _devtools = devtools::init();
+    */
+
+    let builder = tauri::Builder::default();
+
+    /*#[cfg(debug_assertions)]
+    let builder = builder.plugin(_devtools);
+    */
     let client = sentry_tauri::sentry::init((
         "https://9ded544d4e5945459c62371ec4177585@o4505556825473024.ingest.sentry.io/4505556830322688",
         sentry_tauri::sentry::ClientOptions {
@@ -43,9 +67,17 @@ async fn main() {
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(hide);
     let tray = SystemTray::new().with_menu(tray_menu);
-    match tauri::Builder::default()
+    match builder
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
+            if let SystemTrayEvent::MenuItemClick { ref id, .. } = event {
+                match id.as_str() {
+                    "quit" => {
+                        app.exit(0);
+                    },
+                    _ => {},
+                }
+            }
             if app.get_window("splashscreen").is_none() {
                 let window = app.get_window("main").unwrap(); 
                 if let SystemTrayEvent::MenuItemClick { id, .. } = event {
@@ -60,9 +92,6 @@ async fn main() {
                                 window.show().unwrap();
                                 window.set_focus().unwrap();
                             }
-                        },
-                        "quit" => {
-                            app.exit(0);
                         },
                         _ => {}
                     } 
@@ -80,6 +109,15 @@ async fn main() {
         .plugin(tauri_plugin_speu_mangadex::init())
         .plugin(sentry_tauri::plugin())
         .setup(|app|{
+            #[cfg(any(windows, target_os = "macos"))]
+            if let Some(splashscreen) = app.get_window("splashscreen") {
+                set_shadow(&splashscreen, true).unwrap();
+                #[cfg(target_os = "macos")]
+                apply_vibrancy(&splashscreen, NSVisualEffectMaterial::HudWindow, None, None).expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+
+                #[cfg(target_os = "windows")]
+                apply_blur(&splashscreen, Some((18, 18, 18, 125))).expect("Unsupported platform! 'apply_blur' is only supported on Windows");
+            }
             app.track_event("app_launched", None);
             Ok(())
         })

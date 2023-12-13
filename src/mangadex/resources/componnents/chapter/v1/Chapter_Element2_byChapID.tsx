@@ -6,7 +6,7 @@ import MangadexSpinner from "../../kuru_kuru/MangadexSpinner";
 const ErrorEL1 = React.lazy(() => import("../../error/ErrorEL1"));
 const Chapter_Element2 = React.lazy(() => import("./Chapter_Element2"));
 
-export default function Chapter_Element2_byChapID(props: {
+const Chapter_Element2_byChapID = React.memo(function Chapter_Element2_byChapID(props: {
     id: string
 }) {
     const { query } = get_ChapterbyId({
@@ -52,4 +52,6 @@ export default function Chapter_Element2_byChapID(props: {
         </React.Suspense>
     );
 
-}
+});
+
+export default Chapter_Element2_byChapID;

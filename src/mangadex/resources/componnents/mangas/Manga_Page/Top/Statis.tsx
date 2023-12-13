@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import { useHTTPClient } from "@commons-res/components/HTTPClientProvider";
 import TryCatch from "@commons-res/components/TryCatch";
 import React from "react";
-import { useProps } from "../../v1/MangaElementDef/vanilla";
+import { useProps } from "../../v1/MangaElementDef/vanilla/Props";
 import { Manga_Page_Statis } from "../Manga_Page_Statis";
 
 const IsPingable = React.lazy(() => import("@mangadex/resources/componnents/IsPingable"));
@@ -22,7 +22,7 @@ export default function Statis() {
             <IsPingable
                 client={client}
                 onError={() => (
-                    <React.Fragment/>
+                    <React.Fragment />
                 )}
                 onLoading={
                     <Chakra.Skeleton

@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { FaBookmark } from "react-icons/fa";
 import { NumericFormat } from "react-number-format";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 import Manga from "@mangadex/api/structures/Manga";
 
 const Statis = React.lazy(() => import("../../../Statistics/Statis"));

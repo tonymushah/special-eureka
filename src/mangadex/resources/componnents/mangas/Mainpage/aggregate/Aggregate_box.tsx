@@ -2,7 +2,7 @@ import * as Chakra from "@chakra-ui/react";
 import "flag-icons/css/flag-icons.min.css";
 import React from "react";
 import { Aggregate } from "@mangadex/api/structures/Aggregate";
-import { Volume_ } from "./Volume";
+import VolumeSlices from "./VolumeSlices";
 type Aggregate_boxProps = {
     src: Aggregate,
     isReverse?: boolean,
@@ -58,19 +58,7 @@ export function Aggregate_box(props: Aggregate_boxProps) {
                 <Chakra.TabPanels>
                     {
                         slices.map<React.ReactNode>((volumes, index) => (
-                            <Chakra.TabPanel key={`tab-panel-${index}`}>
-                                <Chakra.Accordion
-                                    allowMultiple={true}
-                                    defaultIndex={[0]}
-                                    
-                                >
-                                    {
-                                        volumes.map<React.ReactNode>((volume, index_) => (
-                                            <Volume_ key={`volume-${index_}`} src={volume} open={true} />
-                                        ))
-                                    }
-                                </Chakra.Accordion>
-                            </Chakra.TabPanel>
+                            <VolumeSlices key={`tab-panel-${index}`} src={volumes} />
                         ))
                     }
                 </Chakra.TabPanels>

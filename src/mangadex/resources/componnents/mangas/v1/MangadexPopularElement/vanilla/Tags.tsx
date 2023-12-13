@@ -1,7 +1,7 @@
 import * as Chakra from "@chakra-ui/react";
 import { v4 } from "uuid";
 import MangaTags from "../../../tags";
-import { useProps } from "../../MangaElementDef/vanilla";
+import { useProps } from "../../MangaElementDef/vanilla/Props";
 
 export default function Tags() {
     const { src } = useProps();

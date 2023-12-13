@@ -24,9 +24,9 @@ function MangaListWithCollectionArraySrcProvider({ src, children }: React.PropsW
     );
 }
 
-export default function MangaListWithCollectionArray({ src } : {
-    src : Array<Collection<Manga>>
-}){
+export default function MangaListWithCollectionArray({ src }: {
+    src: Array<Collection<Manga>>
+}) {
     return (
         <MangaListWithCollectionArraySrcProvider src={src}>
             <ActualTab />

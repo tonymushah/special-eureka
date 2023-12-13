@@ -2,8 +2,9 @@ import Manga from "@mangadex/api/structures/Manga";
 import ErrorBoundary from "./error";
 import MangaElementDef2_ from "./vanilla";
 import { motion } from "framer-motion";
+import { memo } from "react";
 
-export default function MangaElementDef2(props: {
+const MangaElementDef2 = memo(function MangaElementDef2(props: {
     src: Manga,
     isRefetching?: boolean,
     refetch?: () => void
@@ -19,4 +20,7 @@ export default function MangaElementDef2(props: {
             </ErrorBoundary>
         </motion.div>
     );
-}
+});
+
+
+export default MangaElementDef2;

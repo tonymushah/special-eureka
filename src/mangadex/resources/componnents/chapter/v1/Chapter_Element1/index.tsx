@@ -13,9 +13,7 @@ import TryCatch from "@commons-res/components/TryCatch";
 
 const ChapterDownloadButton = React.lazy(() => import("../ChapterDownloadButton"));
 
-
-
-export default function Chapter_Element1(props: {
+const Chapter_Element1 = React.memo(function Chapter_Element1(props: {
     chapter: Chapter,
 }) {
     const gray500 = Chakra.useToken("colors", "gray.500");
@@ -48,7 +46,7 @@ export default function Chapter_Element1(props: {
                             }}
                         >
                             <Chakra.Center>
-                                <ChapterLang/>
+                                <ChapterLang />
                             </Chakra.Center>
                         </Chakra.GridItem>
                         <Chakra.GridItem
@@ -60,7 +58,7 @@ export default function Chapter_Element1(props: {
                             <Chakra.Box
                             >
                                 <Chakra.Heading noOfLines={1} margin={0} size={"sm"} fontFamily={"inherit"}>
-                                    <Title/>
+                                    <Title />
                                 </Chakra.Heading>
                             </Chakra.Box>
                         </Chakra.GridItem>
@@ -109,7 +107,7 @@ export default function Chapter_Element1(props: {
                             }}
                         >
                             <Chakra.Wrap>
-                                <Groups/>
+                                <Groups />
                             </Chakra.Wrap>
                         </Chakra.GridItem>
                         <Chakra.GridItem
@@ -119,7 +117,7 @@ export default function Chapter_Element1(props: {
                             }}
                         >
                             <TryCatch catch={() => (<Chakra.Text as={"i"}>No user, i guess</Chakra.Text>)}>
-                                <User/>
+                                <User />
                             </TryCatch>
                         </Chakra.GridItem>
                     </Chakra.Grid>
@@ -127,4 +125,6 @@ export default function Chapter_Element1(props: {
             </ChapterContextMenu>
         </ChapterPropsProvider>
     );
-}
+});
+
+export default Chapter_Element1;

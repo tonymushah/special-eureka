@@ -1,10 +1,10 @@
 import React from "react";
 import get_manga_byId from "@mangadex/resources/hooks/MangaStateHooks/get_manga_byId";
-import MangaFallback2 from "@mangadex/resources/componnents/mangas/v1/MangaElement2Fallback";
+import MangaPopularElementFallback from "../MangaPopularElementFallback";
 
 const MangaPopularElement = React.lazy(() => import("@mangadex/resources/componnents/mangas/v1/MangadexPopularElement"));
 
-export default function MangaPopularElementByMangaId(props: {
+const MangaPopularElementByMangaId = React.memo(function MangaPopularElementByMangaId(props: {
     mangaID: string
 }) {
     const { query } = get_manga_byId({
@@ -14,7 +14,7 @@ export default function MangaPopularElementByMangaId(props: {
         return (
             <React.Suspense
                 fallback={
-                    <MangaFallback2 />
+                    <MangaPopularElementFallback />
                 }
             >
                 <MangaPopularElement src={query.data} />
@@ -22,7 +22,9 @@ export default function MangaPopularElementByMangaId(props: {
         );
     } else {
         return (
-            <MangaFallback2 />
+            <MangaPopularElementFallback />
         );
     }
-}
+});
+
+export default MangaPopularElementByMangaId;

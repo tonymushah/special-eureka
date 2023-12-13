@@ -1,4 +1,3 @@
-import { Mangadex_suspense } from "@mangadex/index";
 import { Transition, Variants, motion } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import NavigationAnimation from "./Navigation";
@@ -24,17 +23,17 @@ const pageTransition: Transition = {
 export default function AnimationLayout() {
     const { pathname } = useLocation();
     return (
-        <NavigationAnimation>
-            <motion.div
-                key={pathname}
-                initial="initial"
-                animate={"in"}
-                exit={"out"}
-                variants={pageVariants}
-                transition={pageTransition}
-            >
+        <motion.div
+            key={pathname}
+            initial="initial"
+            animate={"in"}
+            exit={"out"}
+            variants={pageVariants}
+            transition={pageTransition}
+        >
+            <NavigationAnimation>
                 <Outlet />
-            </motion.div>
-        </NavigationAnimation>
+            </NavigationAnimation>
+        </motion.div>
     );
 }

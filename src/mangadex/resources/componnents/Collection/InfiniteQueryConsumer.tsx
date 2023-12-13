@@ -22,7 +22,7 @@ export function InfiniteQueryConsumer<T>({
                         children
                     }
                 </Consumer>
-                <NextTrigger query={query}/>
+                <NextTrigger query={query} />
             </React.Fragment>
         );
     } else if (query.isError) {

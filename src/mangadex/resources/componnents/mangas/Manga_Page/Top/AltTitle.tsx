@@ -1,5 +1,5 @@
 import React from "react";
-import { useProps } from "../../v1/MangaElementDef/vanilla";
+import { useProps } from "../../v1/MangaElementDef/vanilla/Props";
 import { useMangaAltTitle } from "../../v1/MangaTitle";
 
 export default function AltTitle() {

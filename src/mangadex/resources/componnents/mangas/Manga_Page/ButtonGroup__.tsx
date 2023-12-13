@@ -1,4 +1,4 @@
-import { useProps } from "../v1/MangaElementDef/vanilla";
+import { useProps } from "../v1/MangaElementDef/vanilla/Props";
 import { Manga__Download_Update_Button } from "./Manga__Download_Update_Button";
 import { Manga__Delete_Update_Button } from "./Manga__Delete_Update_Button";
 import * as ChakraIcons from "@chakra-ui/icons";

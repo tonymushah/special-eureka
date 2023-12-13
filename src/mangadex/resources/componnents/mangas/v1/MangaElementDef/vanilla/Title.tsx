@@ -2,7 +2,7 @@ import { Heading } from "@chakra-ui/react";
 import {
     //useProps, 
     useProps_MangaTitle
-} from ".";
+} from "./Props";
 import { motion } from "framer-motion";
 
 export default function Title() {
