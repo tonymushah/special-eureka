@@ -1,57 +1,37 @@
-use reqwest::header::InvalidHeaderValue;
+use std::sync::Arc;
+
+use app_state::OfflineAppState;
+use async_graphql::{EmptyMutation, EmptySubscription, Schema};
+use mangadex_api::MangaDexClient;
+use mangadex_desktop_api2::AppState;
+use query::Query;
+use reqwest::{
+    header::{HeaderMap, HeaderValue, USER_AGENT},
+    Client,
+};
+use tauri::http::header::InvalidHeaderValue;
 use tauri::{
     plugin::{Builder, TauriPlugin},
-    Manager, Runtime
+    Manager, Runtime,
 };
-pub mod utils;
 pub mod intelligent_notification_system;
-use ins_handle::{reset_ins_handle, set_ins_chapter_checker_handle, init_ins_chapter_handle, check_plus_notify};
-use utils::set_indentifier;
+pub mod utils;
+use ins_handle::{
+    check_plus_notify, init_ins_chapter_handle, reset_ins_handle, set_ins_chapter_checker_handle,
+};
 use serde::{ser::Serializer, Deserialize, Serialize};
-use crate::commands::{download, server};
+use tokio::sync::RwLock;
+use utils::set_indentifier;
 pub mod ins_handle;
-pub mod commands;
 pub type Result<T> = std::result::Result<T, Error>;
+use mizuki::MizukiPluginTrait;
+pub mod mutation;
+pub mod query;
+pub mod app_state;
 
-
-#[derive(Serialize, Deserialize)]
-pub struct ErrorPayload {
-    result: String,
-    message: String,
-}
-
-#[macro_export]
-macro_rules! this_eureka_reqwest_result {
-    ($to_use:expr) => {
-        match $to_use.send().await {
-            Err(e) => {
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::Other,
-                    e.to_string().as_str(),
-                )));
-            }
-            Ok(f) => {
-                if f.status().is_success() {
-                    f
-                } else {
-                    let to_return: ErrorPayload = match f.json().await {
-                        Ok(data) => data,
-                        Err(e) => {
-                            return Err(Error::Io(std::io::Error::new(
-                                std::io::ErrorKind::Other,
-                                e.to_string().as_str(),
-                            )));
-                        }
-                    };
-                    return Err(Error::Io(std::io::Error::new(
-                        std::io::ErrorKind::Other,
-                        to_return.message,
-                    )));
-                }
-            }
-        }
-    };
-}
+type Q = Query;
+type M = EmptyMutation;
+type S = EmptySubscription;
 
 #[derive(Clone, serde::Serialize)]
 struct ExportPayload {
@@ -71,7 +51,7 @@ pub enum Error {
     #[error("reqwest crate error : {0}")]
     ReqwestError(#[from] reqwest::Error),
     #[error("invalid header value : {0}")]
-    InvalidHeaderValue(#[from] InvalidHeaderValue)
+    InvalidHeaderValue(#[from] InvalidHeaderValue),
 }
 
 impl Serialize for Error {
@@ -83,59 +63,70 @@ impl Serialize for Error {
     }
 }
 
-
-#[tauri::command]
-async fn reset_queue() -> Result<String>{
-    reset_ins_handle()?;
-    Ok("Queue reinitialized".to_string())
+pub struct MangadexDesktopApi {
+    pub schema: Schema<Q, M, S>,
+    pub client: MangaDexClient,
+    pub offline_app_state: OfflineAppState
 }
 
-/// Initializes the plugin.
-pub fn init<R: Runtime>() -> TauriPlugin<R> {
-    Builder::new("mangadex-desktop-api")
-        .invoke_handler(tauri::generate_handler![
-            server::launch_server,
-            server::stop_server,
-            server::is_server_started,
-            download::refetch_all_manga,
-            download::patch_all_manga_cover,
-            download::download_manga_covers,
-            download::download_manga_cover,
-            download::download_manga,
-            download::update_cover_data,
-            download::download_cover,
-            download::download_cover_with_quality,
-            download::download_chapter,
-            download::download_chapter_normal_mode,
-            download::download_chapter_data_saver_mode,
-            reset_queue,
-            server::get_running_tasks,
-            server::get_tasks_limit
-        ])
-        .setup(move |app| {
-            let identifier = app.config().tauri.bundle.identifier.clone();
+impl Default for MangadexDesktopApi {
+    fn default() -> Self {
+        let mut default_headers = HeaderMap::new();
+        default_headers.append(
+            USER_AGENT,
+            HeaderValue::from_str("special-eureka 0.1.7").unwrap(),
+        );
+        let cli = Client::builder()
+                    .default_headers(default_headers)
+                    .build()
+                    .unwrap();
+        Self {
+            schema: Schema::new(Query, EmptyMutation, EmptySubscription),
+            client: MangaDexClient::new(
+                cli
+            ),
+            offline_app_state: OfflineAppState(Arc::new(RwLock::new(None)))
+        }
+    }
+}
 
-            match set_indentifier(identifier){
-                    Ok(_) => (),
-                    Err(err) => {
-                    panic!("{}", err.to_string());
-                    }
-                };
-            app.manage(server::MangadexDesktopApiHandle::default());
-            init_ins_chapter_handle()?;
-            set_ins_chapter_checker_handle(std::thread::spawn(|| {
-                loop {
-                    match check_plus_notify() {
-                        Ok(()) => (),
-                        Err(error) => {
-                            println!("{}", error.to_string());
-                        }
-                    }
-                    std::thread::sleep(std::time::Duration::from_millis(500));
+impl<R> MizukiPluginTrait<R, Q, M, S> for MangadexDesktopApi
+where
+    R: Runtime,
+{
+    fn name(&self) -> &'static str {
+        "mangadex-desktop-api"
+    }
+
+    fn schema(&self) -> async_graphql::Schema<Q, M, S> {
+        self.schema.clone()
+    }
+    fn initialize(
+        &mut self,
+        app: &tauri::AppHandle<R>,
+        _config: serde_json::Value,
+    ) -> tauri::plugin::Result<()> {
+        let identifier = app.config().tauri.bundle.identifier.clone();
+
+        match set_indentifier(identifier) {
+            Ok(_) => (),
+            Err(err) => {
+                panic!("{}", err.to_string());
+            }
+        };
+        //app.manage(server::MangadexDesktopApiHandle::default());
+        //app.manage(self.app_state.clone());
+        app.manage(self.client.clone());
+        init_ins_chapter_handle()?;
+        set_ins_chapter_checker_handle(std::thread::spawn(|| loop {
+            match check_plus_notify() {
+                Ok(()) => (),
+                Err(error) => {
+                    println!("{}", error.to_string());
                 }
-                
-            }))?;
-            Ok(())
-        })
-        .build()
+            }
+            std::thread::sleep(std::time::Duration::from_millis(500));
+        }))?;
+        Ok(())
+    }
 }
