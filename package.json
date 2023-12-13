@@ -167,7 +167,7 @@
         "react-medium-image-zoom": "^5.1.8",
         "react-number-format": "^5.3.1",
         "react-pro-sidebar": "1.0.0",
-        "react-query-kit": "^2.0.10",
+        "react-query-kit": "^3.0.0",
         "react-router": "^6.20.0",
         "react-router-dom": "^6.20.0",
         "react-spinners": "^0.13.8",
