@@ -35,3 +35,18 @@ features = ["mangadex-api-resolver", "async-graphql"]
 
 [dependencies.mizuki]
 version = "0.2.0-alpha.1"
+
+[dependencies.url]
+version = "2.5.0"
+features = ["serde"]
+
+[dependencies.uuid]
+version = "1.6.1"
+features = [
+    "serde",
+    "v4",
+]
+
+[dependencies.time]
+version = "0.3"
+features = ["serde-human-readable", "large-dates", "local-offset"]

@@ -28,6 +28,7 @@ use mizuki::MizukiPluginTrait;
 pub mod mutation;
 pub mod query;
 pub mod app_state;
+pub mod objects;
 
 type Q = Query;
 type M = EmptyMutation;

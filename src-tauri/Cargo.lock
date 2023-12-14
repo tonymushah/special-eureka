@@ -4789,7 +4789,10 @@ dependencies = [
  "serde_json",
  "tauri",
  "thiserror",
+ "time",
  "tokio",
+ "url",
+ "uuid",
 ]
 
 [[package]]
