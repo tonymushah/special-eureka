@@ -1,15 +1,18 @@
 use std::sync::Arc;
 
 use app_state::OfflineAppState;
-use async_graphql::{EmptyMutation, EmptySubscription, Schema};
+use async_graphql::{BatchRequest, EmptyMutation, EmptySubscription, Schema};
 use mangadex_api::MangaDexClient;
 use mangadex_desktop_api2::AppState;
 use query::Query;
 use reqwest::{
     header::{HeaderMap, HeaderValue, USER_AGENT},
-    Client,
+    Client, StatusCode,
 };
-use tauri::http::header::InvalidHeaderValue;
+use tauri::{
+    http::{header::InvalidHeaderValue, MimeType},
+    plugin::Plugin,
+};
 use tauri::{
     plugin::{Builder, TauriPlugin},
     Manager, Runtime,
@@ -106,13 +109,53 @@ where
         _config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
         let identifier = app.config().tauri.bundle.identifier.clone();
-
         match set_indentifier(identifier) {
             Ok(_) => (),
             Err(err) => {
                 panic!("{}", err.to_string());
             }
         };
+        #[cfg(debug_assertions)]
+        {
+            let schema = self.schema.clone();
+            Builder::<R, ()>::new("mangadex-graphiql")
+                .register_uri_scheme_protocol("mangadex", move |app, r| match r.uri() {
+                    "graphql" => {
+                        let schema = schema.clone();
+                        let window = r
+                            .headers()
+                            .iter()
+                            .find(|(k, _)| "window" == *k)
+                            .map(|(_, v)| v)
+                            .and_then(move |i| app.get_window(i.to_str().ok()?))
+                            .ok_or(std::io::Error::new(
+                                std::io::ErrorKind::NotFound,
+                                "Window header not found",
+                            ))?;
+                        tauri::async_runtime::block_on(async move {
+                            let mut resp = tauri::http::ResponseBuilder::new();
+                            let req: BatchRequest = serde_json::from_slice(r.body())?;
+                            let res = schema
+                                .clone()
+                                .execute_batch(req.data(app.clone()).data(window.clone()))
+                                .await;
+                            for (n, v) in res.http_headers_iter() {
+                                resp = resp.header(n, v);
+                            }
+                            resp.mimetype(MimeType::Json.to_string().as_str())
+                                .status(StatusCode::ACCEPTED)
+                                .body(serde_json::to_vec(&res)?)
+                        })
+                    }
+                    _ => tauri::http::ResponseBuilder::new()
+                        .status(StatusCode::NOT_FOUND)
+                        .mimetype(MimeType::Txt.to_string().as_str())
+                        .body(Vec::new()),
+                })
+                .build()
+                .initialize(app, _config)?;
+        }
+
         app.manage(self.offline_app_state.clone());
         app.manage(self.client.clone());
         init_ins_chapter_handle()?;
