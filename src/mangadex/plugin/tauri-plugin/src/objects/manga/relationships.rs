@@ -20,9 +20,8 @@ pub struct MangaRelationships {
 
 #[Object]
 impl MangaRelationships {
-    pub async fn manga(&self) -> GraphQLResult<Vec<MangaRelated>> {
-        Ok(self
-            .relationships
+    pub async fn manga(&self) -> Vec<MangaRelated> {
+        self.relationships
             .iter()
             .map(
                 |i| -> Result<
@@ -45,7 +44,7 @@ impl MangaRelationships {
                 },
             )
             .flatten()
-            .collect::<Vec<MangaRelated>>())
+            .collect::<Vec<MangaRelated>>()
     }
     pub async fn cover_art(&self) -> GraphQLResult<Cover> {
         let rel: ApiObjectNoRelationships<CoverAttributes> = self
@@ -57,9 +56,8 @@ impl MangaRelationships {
             .try_into()?;
         Ok(Cover::WithoutRelationship(rel))
     }
-    pub async fn authors(&self) -> GraphQLResult<Vec<Author>> {
-        Ok(self
-            .relationships
+    pub async fn authors(&self) -> Vec<Author> {
+        self.relationships
             .iter()
             .filter(|rel| rel.type_ == RelationshipType::Author)
             .flat_map(|e| {
@@ -68,11 +66,10 @@ impl MangaRelationships {
                 )
             })
             .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
-            .collect::<Vec<Author>>())
+            .collect::<Vec<Author>>()
     }
-    pub async fn artists(&self) -> GraphQLResult<Vec<Author>> {
-        Ok(self
-            .relationships
+    pub async fn artists(&self) -> Vec<Author> {
+        self.relationships
             .iter()
             .filter(|rel| rel.type_ == RelationshipType::Artist)
             .flat_map(
@@ -94,9 +91,9 @@ impl MangaRelationships {
                 },
             )
             .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
-            .collect::<Vec<Author>>())
+            .collect::<Vec<Author>>()
     }
-    pub async fn author_artists(&self) -> GraphQLResult<Vec<Author>> {
+    pub async fn author_artists(&self) -> Vec<Author> {
         let mut getted = self
             .relationships
             .iter()
@@ -123,10 +120,10 @@ impl MangaRelationships {
             )
             .collect::<Vec<ApiObjectNoRelationships<AuthorAttributes>>>();
         getted.dedup_by(|a, b| a.id == b.id);
-        Ok(getted
+        getted
             .iter()
             .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e.clone()))
-            .collect::<Vec<Author>>())
+            .collect::<Vec<Author>>()
     }
     pub async fn creator(&self) -> Option<User> {
         self.relationships

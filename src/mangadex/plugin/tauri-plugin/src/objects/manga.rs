@@ -46,17 +46,32 @@ impl MangaObject {
             }),
             MangaObject::WithoutRel(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-                let res = client
-                    .manga()
-                    .id(o.id)
-                    .get()
-                    .include(ReferenceExpansionResource::Artist)
-                    .include(ReferenceExpansionResource::Manga)
-                    .include(ReferenceExpansionResource::Author)
-                    .include(ReferenceExpansionResource::Creator)
-                    .include(ReferenceExpansionResource::CoverArt)
-                    .send()
-                    .await?;
+                let mut req = client.manga().id(o.id).get();
+                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+                ctx.field().selection_set().for_each(|f| match f.name() {
+                    "manga" => {
+                        includes.push(ReferenceExpansionResource::Manga);
+                    }
+                    "cover_art" => {
+                        includes.push(ReferenceExpansionResource::CoverArt);
+                    }
+                    "authors" => {
+                        includes.push(ReferenceExpansionResource::Author);
+                    }
+                    "artists" => {
+                        includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "author_artists" => {
+                        includes.push(ReferenceExpansionResource::Author);
+                        includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "creator" => {
+                        includes.push(ReferenceExpansionResource::Creator);
+                    }
+                    _ => {}
+                });
+                includes.dedup();
+                let res = req.includes(includes).send().await?;
                 Ok(MangaRelationships {
                     id: res.data.id,
                     relationships: res.data.relationships,
