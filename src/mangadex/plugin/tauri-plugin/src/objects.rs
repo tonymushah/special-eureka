@@ -1,4 +1,5 @@
 pub mod api_client;
+pub mod author;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;

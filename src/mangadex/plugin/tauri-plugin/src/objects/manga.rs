@@ -1,15 +1,20 @@
 pub mod attributes;
 pub mod links;
+pub mod related;
 pub mod relationships;
 
-use async_graphql::Object;
+use async_graphql::{Context, Object, Result as GraphQLResult};
+use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::{
     v5::{MangaAttributes, MangaObject as MangaData},
     ApiObjectNoRelationships,
 };
+use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
-use self::attributes::GraphQLMangaAttributes;
+use self::{attributes::GraphQLMangaAttributes, relationships::MangaRelationships};
+
+#[derive(Clone)]
 pub enum MangaObject {
     WithRel(MangaData),
     WithoutRel(ApiObjectNoRelationships<MangaAttributes>),
@@ -27,6 +32,32 @@ impl MangaObject {
         match self {
             MangaObject::WithRel(e) => e.attributes.clone().into(),
             MangaObject::WithoutRel(e) => e.attributes.clone().into(),
+        }
+    }
+    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<MangaRelationships> {
+        match self {
+            MangaObject::WithRel(o) => Ok(MangaRelationships {
+                id: o.id,
+                relationships: o.relationships.clone(),
+            }),
+            MangaObject::WithoutRel(o) => {
+                let client = ctx.data::<MangaDexClient>()?;
+                let res = client
+                    .manga()
+                    .id(o.id)
+                    .get()
+                    .include(ReferenceExpansionResource::Artist)
+                    .include(ReferenceExpansionResource::Manga)
+                    .include(ReferenceExpansionResource::Author)
+                    .include(ReferenceExpansionResource::Creator)
+                    .include(ReferenceExpansionResource::CoverArt)
+                    .send()
+                    .await?;
+                Ok(MangaRelationships {
+                    id: res.data.id,
+                    relationships: res.data.relationships,
+                })
+            }
         }
     }
 }
