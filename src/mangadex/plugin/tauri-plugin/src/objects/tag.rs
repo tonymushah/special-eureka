@@ -1,8 +1,8 @@
 use std::ops::Deref;
 
 use async_graphql::Object;
-use mangadex_api_schema_rust::ApiObject;
 use mangadex_api_schema_rust::v5::TagAttributes as Attributes;
+use mangadex_api_schema_rust::ApiObject;
 use uuid::Uuid;
 
 use self::attributes::TagAttributes;
@@ -26,11 +26,11 @@ impl From<ApiObject<Attributes>> for Tag {
 }
 
 #[Object]
-impl Tag{
-    async fn id(&self) -> Uuid {
+impl Tag {
+    pub async fn id(&self) -> Uuid {
         self.id
     }
-    async fn attributes(&self) -> TagAttributes {
+    pub async fn attributes(&self) -> TagAttributes {
         self.attributes.clone().into()
     }
 }

@@ -23,7 +23,7 @@ impl MangaObject {
             MangaObject::WithoutRel(e) => e.id,
         }
     }
-    async fn attributes(&self) -> GraphQLMangaAttributes {
+    pub async fn attributes(&self) -> GraphQLMangaAttributes {
         match self {
             MangaObject::WithRel(e) => e.attributes.clone().into(),
             MangaObject::WithoutRel(e) => e.attributes.clone().into(),
