@@ -3,11 +3,12 @@ use mangadex_api_schema_rust::{
     v5::{ApiClientAttributes as Attributes, ApiClientObject as ApiClientData},
     ApiObjectNoRelationships,
 };
+use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::utils::get_mangadex_client_from_graphql_context;
 
-use self::attributes::ApiClientAttributes;
+use self::{attributes::ApiClientAttributes, relationships::ApiClientRelationships};
 
 pub mod attributes;
 pub mod relationships;
@@ -42,6 +43,30 @@ impl ApiClient {
         match self {
             ApiClient::WithRelationship(i) => i.attributes.clone().into(),
             ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
+        }
+    }
+    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<ApiClientRelationships> {
+        match self {
+            ApiClient::WithRelationship(o) => Ok(o.relationships.clone().into()),
+            ApiClient::WithoutRelationship(o) => {
+                let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+                let mut req = client.client().id(o.id).get();
+                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+                ctx.field().selection_set().for_each(|f| match f.name() {
+                    "creator" => {
+                        includes.push(ReferenceExpansionResource::Creator);
+                    }
+                    _ => {}
+                });
+                includes.dedup();
+                Ok(req
+                    .includes(includes)
+                    .send()
+                    .await?
+                    .data
+                    .relationships
+                    .into())
+            }
         }
     }
     pub async fn secret(&self, ctx: &Context<'_>) -> GraphQLResult<String> {
