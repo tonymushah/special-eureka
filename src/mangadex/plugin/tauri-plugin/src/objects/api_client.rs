@@ -10,6 +10,7 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 use self::attributes::ApiClientAttributes;
 
 pub mod attributes;
+pub mod relationships;
 
 #[derive(Clone)]
 pub enum ApiClient {

@@ -128,12 +128,11 @@ impl MangaRelationships {
             .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e.clone()))
             .collect::<Vec<Author>>())
     }
-    pub async fn creator(&self) -> GraphQLResult<Vec<User>> {
-        Ok(self
-            .relationships
+    pub async fn creator(&self) -> Option<User> {
+        self.relationships
             .iter()
-            .filter(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
-            .flat_map(
+            .find(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
+            .map(
                 |value| -> Result<
                     ApiObjectNoRelationships<UserAttributes>,
                     RelationshipConversionError,
@@ -151,7 +150,7 @@ impl MangaRelationships {
                     }
                 },
             )
+            .and_then(|inner| inner.ok())
             .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
-            .collect())
     }
 }
