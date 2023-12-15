@@ -25,10 +25,10 @@ use utils::set_indentifier;
 pub mod ins_handle;
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
-pub mod mutation;
-pub mod query;
 pub mod app_state;
+pub mod mutation;
 pub mod objects;
+pub mod query;
 
 type Q = Query;
 type M = EmptyMutation;
@@ -67,7 +67,7 @@ impl Serialize for Error {
 pub struct MangadexDesktopApi {
     pub schema: Schema<Q, M, S>,
     pub client: MangaDexClient,
-    pub offline_app_state: OfflineAppState
+    pub offline_app_state: OfflineAppState,
 }
 
 impl Default for MangadexDesktopApi {
@@ -78,15 +78,13 @@ impl Default for MangadexDesktopApi {
             HeaderValue::from_str("special-eureka 0.1.7").unwrap(),
         );
         let cli = Client::builder()
-                    .default_headers(default_headers)
-                    .build()
-                    .unwrap();
+            .default_headers(default_headers)
+            .build()
+            .unwrap();
         Self {
             schema: Schema::new(Query, EmptyMutation, EmptySubscription),
-            client: MangaDexClient::new(
-                cli
-            ),
-            offline_app_state: OfflineAppState(Arc::new(RwLock::new(None)))
+            client: MangaDexClient::new(cli),
+            offline_app_state: OfflineAppState(Arc::new(RwLock::new(None))),
         }
     }
 }
@@ -115,8 +113,7 @@ where
                 panic!("{}", err.to_string());
             }
         };
-        //app.manage(server::MangadexDesktopApiHandle::default());
-        //app.manage(self.app_state.clone());
+        app.manage(self.offline_app_state.clone());
         app.manage(self.client.clone());
         init_ins_chapter_handle()?;
         set_ins_chapter_checker_handle(std::thread::spawn(|| loop {
