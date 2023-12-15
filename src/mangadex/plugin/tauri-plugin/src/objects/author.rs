@@ -1,13 +1,17 @@
 pub mod attributes;
+pub mod relationships;
 
-use async_graphql::Object;
+use async_graphql::{Context, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
     v5::{AuthorAttributes as Attributes, AuthorObject},
     ApiObjectNoRelationships,
 };
+use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
-use self::attributes::AuthorAttributes;
+use crate::utils::get_mangadex_client_from_graphql_context;
+
+use self::{attributes::AuthorAttributes, relationships::AuthorRelationships};
 
 #[derive(Clone)]
 pub enum Author {
@@ -39,6 +43,30 @@ impl Author {
         match self {
             Author::WithRel(o) => o.attributes.clone().into(),
             Author::WithoutRel(o) => o.attributes.clone().into(),
+        }
+    }
+    pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<AuthorRelationships> {
+        match self {
+            Author::WithRel(o) => Ok(o.relationships.clone().into()),
+            Author::WithoutRel(o) => {
+                let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+                let mut req = client.author().id(o.id).get();
+                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+                ctx.field().selection_set().for_each(|f| match f.name() {
+                    "works" => {
+                        includes.push(ReferenceExpansionResource::Manga);
+                    }
+                    _ => {}
+                });
+                includes.dedup();
+                Ok(req
+                    .includes(includes)
+                    .send()
+                    .await?
+                    .data
+                    .relationships
+                    .into())
+            }
         }
     }
 }
