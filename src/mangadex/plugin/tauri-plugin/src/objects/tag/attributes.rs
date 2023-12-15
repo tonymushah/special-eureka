@@ -1,7 +1,7 @@
 use std::ops::Deref;
 
 use async_graphql::Object;
-use mangadex_api_schema_rust::v5::{TagAttributes as Attributes, LocalizedString};
+use mangadex_api_schema_rust::v5::{LocalizedString, TagAttributes as Attributes};
 use mangadex_api_types_rust::TagGroup;
 
 pub struct TagAttributes(pub(crate) Attributes);
@@ -21,13 +21,13 @@ impl From<Attributes> for TagAttributes {
 
 #[Object]
 impl TagAttributes {
-    async fn name(&self) -> &LocalizedString {
+    pub async fn name(&self) -> &LocalizedString {
         &self.name
     }
-    async fn description(&self) -> &LocalizedString {
+    pub async fn description(&self) -> &LocalizedString {
         &self.description
     }
-    async fn group(&self) -> TagGroup {
+    pub async fn group(&self) -> TagGroup {
         self.group
     }
 }

@@ -24,40 +24,40 @@ impl Deref for ChapterAttributes {
 
 #[Object]
 impl ChapterAttributes {
-    async fn title(&self) -> Option<&String> {
+    pub async fn title(&self) -> Option<&String> {
         self.title.as_ref()
     }
-    async fn volume(&self) -> Option<&String> {
+    pub async fn volume(&self) -> Option<&String> {
         self.volume.as_ref()
     }
-    async fn chapter(&self) -> Option<&String> {
+    pub async fn chapter(&self) -> Option<&String> {
         self.chapter.as_ref()
     }
-    async fn pages(&self) -> u32 {
+    pub async fn pages(&self) -> u32 {
         self.pages
     }
-    async fn translated_language(&self) -> Language {
+    pub async fn translated_language(&self) -> Language {
         self.translated_language
     }
-    async fn uploader(&self) -> Option<Uuid> {
+    pub async fn uploader(&self) -> Option<Uuid> {
         self.uploader
     }
-    async fn external_url(&self) -> Option<&Url> {
+    pub async fn external_url(&self) -> Option<&Url> {
         self.external_url.as_ref()
     }
-    async fn created_at(&self) -> MangaDexDateTime {
+    pub async fn created_at(&self) -> MangaDexDateTime {
         self.created_at
     }
-    async fn updated_at(&self) -> Option<MangaDexDateTime> {
+    pub async fn updated_at(&self) -> Option<MangaDexDateTime> {
         self.updated_at
     }
-    async fn publish_at(&self) -> Option<MangaDexDateTime> {
+    pub async fn publish_at(&self) -> Option<MangaDexDateTime> {
         self.publish_at
     }
-    async fn readable_at(&self) -> Option<MangaDexDateTime> {
+    pub async fn readable_at(&self) -> Option<MangaDexDateTime> {
         self.readable_at
     }
-    async fn version(&self) -> u32 {
+    pub async fn version(&self) -> u32 {
         self.version
     }
 }

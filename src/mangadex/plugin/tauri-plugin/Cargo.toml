@@ -50,3 +50,6 @@ features = [
 [dependencies.time]
 version = "0.3"
 features = ["serde-human-readable", "large-dates", "local-offset"]
+
+[[bin]]
+name = "sdl"

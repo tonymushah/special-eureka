@@ -1,2 +1,7 @@
+pub mod chapter;
+pub mod cover;
+pub mod custom_list;
 pub mod manga;
+pub mod scanlation_group;
 pub mod tag;
+pub mod user;

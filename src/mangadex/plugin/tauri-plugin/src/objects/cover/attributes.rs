@@ -22,25 +22,25 @@ impl Deref for CoverAttributes {
 
 #[Object]
 impl CoverAttributes {
-    async fn description(&self) -> &String {
+    pub async fn description(&self) -> &String {
         &self.description
     }
-    async fn locale(&self) -> Option<Language> {
+    pub async fn locale(&self) -> Option<Language> {
         self.locale
     }
-    async fn volume(&self) -> Option<&String> {
+    pub async fn volume(&self) -> Option<&String> {
         self.volume.as_ref()
     }
-    async fn file_name(&self) -> &String {
+    pub async fn file_name(&self) -> &String {
         &self.file_name
     }
-    async fn created_at(&self) -> MangaDexDateTime {
+    pub async fn created_at(&self) -> MangaDexDateTime {
         self.created_at
     }
-    async fn updated_at(&self) -> Option<MangaDexDateTime> {
+    pub async fn updated_at(&self) -> Option<MangaDexDateTime> {
         self.updated_at
     }
-    async fn version(&self) -> u32 {
+    pub async fn version(&self) -> u32 {
         self.version
     }
 }
