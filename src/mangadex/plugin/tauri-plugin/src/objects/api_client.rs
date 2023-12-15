@@ -1,4 +1,5 @@
-use async_graphql::Object;
+use async_graphql::{Context, Object, Result as GraphQLResult};
+use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::{
     v5::{ApiClientAttributes as Attributes, ApiClientObject as ApiClientData},
     ApiObjectNoRelationships,
@@ -40,5 +41,16 @@ impl ApiClient {
             ApiClient::WithRelationship(i) => i.attributes.clone().into(),
             ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
         }
+    }
+    pub async fn secret(&self, ctx: &Context<'_>) -> GraphQLResult<String> {
+        let client = ctx.data::<MangaDexClient>()?;
+        Ok(client
+            .client()
+            .id(self.id(ctx).await?)
+            .secret()
+            .get()
+            .send()
+            .await?
+            .data)
     }
 }

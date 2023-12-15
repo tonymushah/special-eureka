@@ -1,12 +1,15 @@
 use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
-    v5::{CoverAttributes, MangaAttributes as Attributes, Relationship},
+    v5::{
+        AuthorAttributes, CoverAttributes, MangaAttributes as Attributes, RelatedAttributes,
+        Relationship, UserAttributes,
+    },
     ApiObjectNoRelationships,
 };
 use mangadex_api_types_rust::{error::RelationshipConversionError, RelationshipType};
 use uuid::Uuid;
 
-use crate::objects::{cover::Cover, manga::MangaObject};
+use crate::objects::{author::Author, cover::Cover, manga::MangaObject, user::User};
 
 use super::related::MangaRelated;
 
@@ -54,5 +57,101 @@ impl MangaRelationships {
             .try_into()?;
         Ok(Cover::WithoutRelationship(rel))
     }
-    //pub async fn authors(&self) -> GraphQLResult<Vec<Author>>
+    pub async fn authors(&self) -> GraphQLResult<Vec<Author>> {
+        Ok(self
+            .relationships
+            .iter()
+            .filter(|rel| rel.type_ == RelationshipType::Author)
+            .flat_map(|e| {
+                <ApiObjectNoRelationships<AuthorAttributes> as TryFrom<Relationship>>::try_from(
+                    e.clone(),
+                )
+            })
+            .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
+            .collect::<Vec<Author>>())
+    }
+    pub async fn artists(&self) -> GraphQLResult<Vec<Author>> {
+        Ok(self
+            .relationships
+            .iter()
+            .filter(|rel| rel.type_ == RelationshipType::Artist)
+            .flat_map(
+                |value| -> Result<
+                    ApiObjectNoRelationships<AuthorAttributes>,
+                    RelationshipConversionError,
+                > {
+                    if let Some(RelatedAttributes::Author(attributes)) = &value.attributes {
+                        Ok(ApiObjectNoRelationships {
+                            id: value.id,
+                            type_: RelationshipType::Author,
+                            attributes: attributes.clone(),
+                        })
+                    } else {
+                        Err(RelationshipConversionError::AttributesNotFound(
+                            RelationshipType::Author,
+                        ))
+                    }
+                },
+            )
+            .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
+            .collect::<Vec<Author>>())
+    }
+    pub async fn author_artists(&self) -> GraphQLResult<Vec<Author>> {
+        let mut getted = self
+            .relationships
+            .iter()
+            .filter(|rel| {
+                rel.type_ == RelationshipType::Artist && rel.type_ == RelationshipType::Author
+            })
+            .flat_map(
+                |value| -> Result<
+                    ApiObjectNoRelationships<AuthorAttributes>,
+                    RelationshipConversionError,
+                > {
+                    if let Some(RelatedAttributes::Author(attributes)) = &value.attributes {
+                        Ok(ApiObjectNoRelationships {
+                            id: value.id,
+                            type_: RelationshipType::Author,
+                            attributes: attributes.clone(),
+                        })
+                    } else {
+                        Err(RelationshipConversionError::AttributesNotFound(
+                            RelationshipType::Author,
+                        ))
+                    }
+                },
+            )
+            .collect::<Vec<ApiObjectNoRelationships<AuthorAttributes>>>();
+        getted.dedup_by(|a, b| a.id == b.id);
+        Ok(getted
+            .iter()
+            .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e.clone()))
+            .collect::<Vec<Author>>())
+    }
+    pub async fn creator(&self) -> GraphQLResult<Vec<User>> {
+        Ok(self
+            .relationships
+            .iter()
+            .filter(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
+            .flat_map(
+                |value| -> Result<
+                    ApiObjectNoRelationships<UserAttributes>,
+                    RelationshipConversionError,
+                > {
+                    if let Some(RelatedAttributes::User(ref attributes)) = value.attributes {
+                        Ok(ApiObjectNoRelationships {
+                            id: value.id,
+                            type_: RelationshipType::User,
+                            attributes: attributes.clone(),
+                        })
+                    } else {
+                        Err(RelationshipConversionError::AttributesNotFound(
+                            RelationshipType::User,
+                        ))
+                    }
+                },
+            )
+            .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
+            .collect())
+    }
 }
