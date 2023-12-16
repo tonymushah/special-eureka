@@ -1,4 +1,5 @@
 pub mod attributes;
+pub mod lists;
 pub mod relationships;
 
 use async_graphql::{Context, Object, Result as GraphQLResult};
