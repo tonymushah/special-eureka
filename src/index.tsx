@@ -7,6 +7,8 @@ import { createGraphiQLFetcher } from "@graphiql/toolkit";
 //import { Routes } from "@generouted/react-router/lazy";
 import "graphiql/graphiql.css";
 import { GraphiQL } from "graphiql";
+import Close_splashscreen from "@splashscreen/Close_splashscreen";
+import { appWindow } from "@tauri-apps/api/window";
 
 window.Sentry.init(
     defaultOptions
@@ -15,8 +17,13 @@ window.Sentry.init(
 const appElement = document.getElementById("app");
 
 const fetcher = createGraphiQLFetcher({
-    url: "mangadex://graphql"
+    url: "mangadex://graphql",
+    "headers": {
+        "window": appWindow.label
+    }
 });
+
+console.log(appWindow.label);
 
 if (appElement != undefined) {
     const app = ReactDOM.createRoot(appElement);
@@ -28,6 +35,7 @@ if (appElement != undefined) {
                 */
             }
             <GraphiQL fetcher={fetcher} />
+            <Close_splashscreen />
         </React.StrictMode>
     );
 }

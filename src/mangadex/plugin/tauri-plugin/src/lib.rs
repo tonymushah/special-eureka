@@ -3,7 +3,7 @@ use std::{path::PathBuf, sync::Arc};
 use app_state::OfflineAppState;
 use async_graphql::{BatchRequest, EmptyMutation, EmptySubscription, Schema};
 use mangadex_api::MangaDexClient;
-use mangadex_desktop_api2::AppState;
+// use mangadex_desktop_api2::AppState;
 use query::Query;
 use reqwest::{
     header::{HeaderMap, HeaderValue, USER_AGENT},
@@ -13,17 +13,13 @@ use tauri::{
     http::{header::InvalidHeaderValue, MimeType},
     plugin::Plugin,
 };
-use tauri::{
-    plugin::{Builder, TauriPlugin},
-    Manager, Runtime,
-};
+use tauri::{plugin::Builder, Manager, Runtime};
 pub mod intelligent_notification_system;
 pub mod utils;
-use ins_handle::{
-    check_plus_notify, init_ins_chapter_handle, reset_ins_handle, set_ins_chapter_checker_handle,
-};
-use serde::{ser::Serializer, Deserialize, Serialize};
+use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
+use serde::{ser::Serializer, Serialize};
 use tokio::sync::RwLock;
+use url::Url;
 use utils::set_indentifier;
 pub mod ins_handle;
 pub type Result<T> = std::result::Result<T, Error>;
@@ -130,38 +126,68 @@ where
         {
             let schema = self.schema.clone();
             Builder::<R, ()>::new("mangadex-graphiql")
-                .register_uri_scheme_protocol("mangadex", move |app, r| match r.uri() {
-                    "graphql" => {
-                        let schema = schema.clone();
-                        let window = r
-                            .headers()
-                            .iter()
-                            .find(|(k, _)| "window" == *k)
-                            .map(|(_, v)| v)
-                            .and_then(move |i| app.get_window(i.to_str().ok()?))
-                            .ok_or(std::io::Error::new(
-                                std::io::ErrorKind::NotFound,
-                                "Window header not found",
-                            ))?;
-                        tauri::async_runtime::block_on(async move {
-                            let mut resp = tauri::http::ResponseBuilder::new();
-                            let req: BatchRequest = serde_json::from_slice(r.body())?;
-                            let res = schema
-                                .clone()
-                                .execute_batch(req.data(app.clone()).data(window.clone()))
-                                .await;
-                            for (n, v) in res.http_headers_iter() {
-                                resp = resp.header(n, v);
+                .register_uri_scheme_protocol("mangadex", move |app, r| {
+                    if let Ok(uri) = Url::parse(r.uri()) {
+                        if uri.domain() == Some("graphql") {
+                            let schema = schema.clone();
+                            if let Ok(window) = r
+                                .headers()
+                                .iter()
+                                .find(|(k, _)| "window" == *k)
+                                .map(|(_, v)| v)
+                                .and_then(move |i| app.get_window(i.to_str().ok()?))
+                                .ok_or(std::io::Error::new(
+                                    std::io::ErrorKind::NotFound,
+                                    "Window header not found",
+                                ))
+                            {
+                                let resp_ = tauri::async_runtime::block_on(async move {
+                                    let resp = tauri::http::ResponseBuilder::new()
+                                        .header("access-control-allow-origin", "*");
+                                    if let Ok(s) = String::from_utf8(r.body().clone()) {
+                                        println!("{s}");
+                                    }
+                                    match serde_json::from_slice::<BatchRequest>(r.body()) {
+                                        Ok(req) => {
+                                            let res = schema
+                                                .clone()
+                                                .execute_batch(
+                                                    req.data(app.clone()).data(window.clone()),
+                                                )
+                                                .await;
+                                            resp.mimetype(MimeType::Json.to_string().as_str())
+                                                .status(StatusCode::ACCEPTED)
+                                                .body(serde_json::to_vec(&res)?)
+                                        }
+                                        Err(error) => tauri::http::ResponseBuilder::new()
+                                            .header("access-control-allow-origin", "*")
+                                            .status(StatusCode::BAD_REQUEST)
+                                            .mimetype(MimeType::Txt.to_string().as_str())
+                                            .body(error.to_string().as_bytes().to_vec()),
+                                    }
+                                })?;
+                                Ok(resp_)
+                            } else {
+                                tauri::http::ResponseBuilder::new()
+                                    .header("access-control-allow-origin", "*")
+                                    .status(StatusCode::NOT_FOUND)
+                                    .mimetype(MimeType::Txt.to_string().as_str())
+                                    .body(Vec::new())
                             }
-                            resp.mimetype(MimeType::Json.to_string().as_str())
-                                .status(StatusCode::ACCEPTED)
-                                .body(serde_json::to_vec(&res)?)
-                        })
+                        } else {
+                            tauri::http::ResponseBuilder::new()
+                                .header("access-control-allow-origin", "*")
+                                .status(StatusCode::NOT_FOUND)
+                                .mimetype(MimeType::Txt.to_string().as_str())
+                                .body(Vec::new())
+                        }
+                    } else {
+                        tauri::http::ResponseBuilder::new()
+                            .header("access-control-allow-origin", "*")
+                            .status(StatusCode::BAD_REQUEST)
+                            .mimetype(MimeType::Txt.to_string().as_str())
+                            .body(Vec::new())
                     }
-                    _ => tauri::http::ResponseBuilder::new()
-                        .status(StatusCode::NOT_FOUND)
-                        .mimetype(MimeType::Txt.to_string().as_str())
-                        .body(Vec::new()),
                 })
                 .build()
                 .initialize(app, _config)?;

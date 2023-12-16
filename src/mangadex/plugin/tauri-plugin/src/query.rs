@@ -1,6 +1,6 @@
 pub mod manga;
 
-use async_graphql::{Object, Result};
+use async_graphql::Object;
 
 use self::manga::MangaQueries;
 

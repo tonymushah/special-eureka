@@ -36,6 +36,7 @@ tauri = { version = "1.5.3", features = [ "window-set-content-protected",
     "updater",
     "window-set-fullscreen",
     "window-set-title",
+    "linux-protocol-headers"
 ] }
 tokio = "1"
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }

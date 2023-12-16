@@ -105,7 +105,7 @@ dependencies:
     specifier: 3.0.1
     version: 3.0.1(react-dom@18.2.0)(react@18.2.0)
   '@tauri-apps/api':
-    specifier: ^1.5.1
+    specifier: ^1.5.2
     version: 1.5.2
   '@textea/json-viewer':
     specifier: ^3.2.3
