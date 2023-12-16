@@ -4,7 +4,7 @@ version = "0.3.0"
 authors = ["You"]
 description = ""
 edition = "2021"
-rust-version = "1.59"
+rust-version = "1.70"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 
 [dependencies]
@@ -53,3 +53,4 @@ features = ["serde-human-readable", "large-dates", "local-offset"]
 
 [[bin]]
 name = "sdl"
+path = "sdl.rs"
