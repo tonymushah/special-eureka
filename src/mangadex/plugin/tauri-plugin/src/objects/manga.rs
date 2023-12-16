@@ -1,5 +1,6 @@
 pub mod attributes;
 pub mod links;
+pub mod lists;
 pub mod related;
 pub mod relationships;
 
