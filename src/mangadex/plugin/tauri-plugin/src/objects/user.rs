@@ -8,6 +8,7 @@ use uuid::Uuid;
 use self::attributes::UserAttributes;
 
 pub mod attributes;
+pub mod lists;
 pub mod relationships;
 
 #[derive(Clone)]
