@@ -10,6 +10,7 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 use self::{attributes::CustomListAttributes, relationships::CustomListRelationships};
 
 pub mod attributes;
+pub mod lists;
 pub mod relationships;
 
 #[derive(Clone)]
