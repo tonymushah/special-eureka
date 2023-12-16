@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::{path::PathBuf, sync::Arc};
 
 use app_state::OfflineAppState;
 use async_graphql::{BatchRequest, EmptyMutation, EmptySubscription, Schema};
@@ -92,16 +92,27 @@ impl Default for MangadexDesktopApi {
     }
 }
 
+impl MangadexDesktopApi {
+    pub fn export_sdl(&self, path: PathBuf) -> std::io::Result<()> {
+        <Self as MizukiPluginTrait<tauri::Wry, Q, M, S>>::export_sdl(self, path)
+    }
+}
+
 impl<R> MizukiPluginTrait<R, Q, M, S> for MangadexDesktopApi
+where
+    R: Runtime,
+{
+    fn schema(&self) -> async_graphql::Schema<Q, M, S> {
+        self.schema.clone()
+    }
+}
+
+impl<R> Plugin<R> for MangadexDesktopApi
 where
     R: Runtime,
 {
     fn name(&self) -> &'static str {
         "mangadex-desktop-api"
-    }
-
-    fn schema(&self) -> async_graphql::Schema<Q, M, S> {
-        self.schema.clone()
     }
     fn initialize(
         &mut self,
@@ -169,5 +180,8 @@ where
             std::thread::sleep(std::time::Duration::from_millis(500));
         }))?;
         Ok(())
+    }
+    fn extend_api(&mut self, invoke: tauri::Invoke<R>) {
+        <Self as MizukiPluginTrait<R, Q, M, S>>::extend_api(self, invoke);
     }
 }

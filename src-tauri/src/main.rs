@@ -71,6 +71,7 @@ fn main() {
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(hide);
     let tray = SystemTray::new().with_menu(tray_menu);
+    let mangadex = tauri_plugin_speu_mangadex::MangadexDesktopApi::default();
     match builder
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
@@ -110,7 +111,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
-        .plugin(tauri_plugin_speu_mangadex::MangadexDesktopApi::default())
+        .plugin(mangadex)
         .plugin(sentry_tauri::plugin())
         .setup(|app| {
             #[cfg(any(windows, target_os = "macos"))]
