@@ -8,7 +8,9 @@ use uuid::Uuid;
 use self::attributes::TagAttributes;
 
 pub mod attributes;
+pub mod lists;
 
+#[derive(Clone)]
 pub struct Tag(ApiObject<Attributes>);
 
 impl Deref for Tag {
