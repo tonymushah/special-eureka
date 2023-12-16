@@ -8,6 +8,7 @@ use uuid::Uuid;
 use self::attributes::UserAttributes;
 
 pub mod attributes;
+pub mod relationships;
 
 #[derive(Clone)]
 pub enum User {

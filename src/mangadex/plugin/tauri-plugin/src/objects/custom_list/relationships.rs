@@ -2,12 +2,10 @@ use std::ops::Deref;
 
 use async_graphql::{Context, Error as GraphQLError, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
-    v5::{MangaAttributes, RelatedAttributes, Relationship, UserAttributes},
-    ApiObject, ApiObjectNoRelationships,
+    v5::{MangaAttributes, Relationship},
+    ApiObject,
 };
-use mangadex_api_types_rust::{
-    error::RelationshipConversionError, ReferenceExpansionResource, RelationshipType,
-};
+use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
 
 use crate::{
@@ -88,8 +86,7 @@ impl CustomListRelationships {
             .find(|e| e.type_ == RelationshipType::Creator || e.type_ == RelationshipType::User)
             .map(|rel| rel.id)
             .ok_or(GraphQLError::new("Related Uploader or User not found"))?;
-        let mut req = client.user().id(id).get();
-
+        let req = client.user().id(id).get();
         Ok(req.send().await?.data.into())
     }
 }
