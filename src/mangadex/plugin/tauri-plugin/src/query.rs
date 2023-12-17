@@ -1,3 +1,4 @@
+pub mod api_client;
 pub mod manga;
 
 use async_graphql::Object;
