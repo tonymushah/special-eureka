@@ -7,7 +7,7 @@ import { resolve } from "path";
 import mdx from "@mdx-js/rollup";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import tsconfigPaths from "vite-tsconfig-paths";
-import generouted from "@generouted/react-router/plugin";
+//import generouted from "@generouted/react-router/plugin";
 
 export default defineConfig({
     clearScreen: false,
@@ -20,7 +20,6 @@ export default defineConfig({
             "tsDecorators": true,
             "jsxImportSource": "react"
         }),
-        generouted(),
         remarkRehypePlugin({}),
         ViteImageOptimizer(),
         sentryVitePlugin({

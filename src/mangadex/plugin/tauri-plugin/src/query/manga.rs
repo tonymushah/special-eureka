@@ -50,7 +50,7 @@ impl MangaQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        mut params: MangaListParams,
+        #[graphql(default)] mut params: MangaListParams,
     ) -> Result<MangaResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         params.includes.clear();
