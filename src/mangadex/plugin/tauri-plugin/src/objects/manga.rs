@@ -72,6 +72,8 @@ impl MangaObject {
                     _ => {}
                 });
                 includes.dedup();
+                #[cfg(debug_assertions)]
+                println!("{:?}", includes);
                 let res = req.includes(includes).send().await?;
                 Ok(MangaRelationships {
                     id: res.data.id,

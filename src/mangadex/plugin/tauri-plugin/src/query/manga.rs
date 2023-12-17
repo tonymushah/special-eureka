@@ -83,6 +83,9 @@ impl MangaQueries {
                 _ => {}
             });
         }
+        params.includes.dedup();
+        #[cfg(debug_assertions)]
+        println!("{:?}", params.includes);
         Ok(params.send(client.inner()).await?.into())
     }
 }

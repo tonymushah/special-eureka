@@ -76,29 +76,23 @@ fn main() {
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
             if let SystemTrayEvent::MenuItemClick { ref id, .. } = event {
-                match id.as_str() {
-                    "quit" => {
-                        app.exit(0);
-                    }
-                    _ => {}
+                if id.as_str() == "quit" {
+                    app.exit(0);
                 }
             }
             if app.get_window("splashscreen").is_none() {
                 let window = app.get_window("main").unwrap();
                 if let SystemTrayEvent::MenuItemClick { id, .. } = event {
                     let item_handle = app.tray_handle().get_item(&id);
-                    match id.as_str() {
-                        "hide" => {
-                            if window.is_visible().unwrap() {
-                                item_handle.set_title("Show").unwrap();
-                                window.hide().unwrap();
-                            } else {
-                                item_handle.set_title("Hide").unwrap();
-                                window.show().unwrap();
-                                window.set_focus().unwrap();
-                            }
+                    if id.as_str() == "hide" {
+                        if window.is_visible().unwrap() {
+                            item_handle.set_title("Show").unwrap();
+                            window.hide().unwrap();
+                        } else {
+                            item_handle.set_title("Hide").unwrap();
+                            window.show().unwrap();
+                            window.set_focus().unwrap();
                         }
-                        _ => {}
                     }
                 } else if let SystemTrayEvent::LeftClick { .. } = event {
                     let item_handle = app.tray_handle().get_item("hide");
