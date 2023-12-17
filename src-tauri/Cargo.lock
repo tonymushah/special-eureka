@@ -346,9 +346,9 @@ dependencies = [
 
 [[package]]
 name = "async-task"
-version = "4.5.0"
+version = "4.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b4eb2cdb97421e01129ccb49169d8279ed21e829929144f4a22a6e54ac549ca1"
+checksum = "e1d90cd0b264dfdd8eb5bad0a2c217c1f88fa96a8573f40e7b12de23fb468f46"
 
 [[package]]
 name = "async-trait"
@@ -2450,9 +2450,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api-input-types"
-version = "0.1.0"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "115ad2630a5cdbc39ad16ded50d438f190bf8a191fb9a978552a645fbfa67143"
+checksum = "0b430e794362ae4285d9d61e0734779f4cad64312ce6ee31a0d3b2adaa8cde0c"
 dependencies = [
  "anyhow",
  "async-graphql",
