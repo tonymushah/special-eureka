@@ -12,6 +12,7 @@ use self::{attributes::ChapterAttributes, relationships::ChapterRelationships};
 
 pub mod attributes;
 pub mod lists;
+pub mod pages;
 pub mod relationships;
 
 #[derive(Clone)]
