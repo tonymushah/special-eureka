@@ -1,4 +1,5 @@
 use async_graphql::{Context, Object, Result};
+use convert_case::Casing;
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
@@ -60,27 +61,29 @@ impl MangaQueries {
             .find(|f| f.name() == "data")
             .and_then(|pf| pf.selection_set().find(|f| f.name() == "relationships"))
         {
-            rel.selection_set().for_each(|f| match f.name() {
-                "manga" => {
-                    params.includes.push(ReferenceExpansionResource::Manga);
+            rel.selection_set().for_each(|f| {
+                match f.name().to_case(convert_case::Case::Snake).as_str() {
+                    "manga" => {
+                        params.includes.push(ReferenceExpansionResource::Manga);
+                    }
+                    "cover_art" => {
+                        params.includes.push(ReferenceExpansionResource::CoverArt);
+                    }
+                    "authors" => {
+                        params.includes.push(ReferenceExpansionResource::Author);
+                    }
+                    "artists" => {
+                        params.includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "author_artists" => {
+                        params.includes.push(ReferenceExpansionResource::Author);
+                        params.includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "creator" => {
+                        params.includes.push(ReferenceExpansionResource::Creator);
+                    }
+                    _ => {}
                 }
-                "cover_art" => {
-                    params.includes.push(ReferenceExpansionResource::CoverArt);
-                }
-                "authors" => {
-                    params.includes.push(ReferenceExpansionResource::Author);
-                }
-                "artists" => {
-                    params.includes.push(ReferenceExpansionResource::Artist);
-                }
-                "author_artists" => {
-                    params.includes.push(ReferenceExpansionResource::Author);
-                    params.includes.push(ReferenceExpansionResource::Artist);
-                }
-                "creator" => {
-                    params.includes.push(ReferenceExpansionResource::Creator);
-                }
-                _ => {}
             });
         }
         params.includes.dedup();

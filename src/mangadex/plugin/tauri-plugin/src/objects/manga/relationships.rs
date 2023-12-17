@@ -46,7 +46,6 @@ impl MangaRelationships {
             .flatten()
             .collect::<Vec<MangaRelated>>()
     }
-    #[graphql(name = "cover_art")]
     pub async fn cover_art(&self) -> GraphQLResult<Cover> {
         let rel: ApiObjectNoRelationships<CoverAttributes> = self
             .relationships
@@ -94,7 +93,6 @@ impl MangaRelationships {
             .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
             .collect::<Vec<Author>>()
     }
-    #[graphql(name = "author_artists")]
     pub async fn author_artists(&self) -> Vec<Author> {
         let mut getted = self
             .relationships

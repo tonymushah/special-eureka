@@ -24,6 +24,7 @@ mangadex-api-schema-rust = { version = "0.6", default-features = false, features
 mangadex-api-types-rust = { version = "0.6", default-features = false, features = ["async-graphql"]}
 async-graphql = "6"
 actix-router = "0"
+convert_case = "0.6"
 
 [dependencies.mangadex-desktop-api2]
 version = "0.6.0-alpha.1"
