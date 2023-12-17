@@ -2,6 +2,7 @@ use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::Results;
 
 pub mod api_client;
+pub mod auth;
 pub mod author;
 pub mod chapter;
 pub mod cover;

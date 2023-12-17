@@ -1,0 +1,14 @@
+use async_graphql::{Context, Object, Result};
+
+use crate::{objects::auth::check::AuthCheck, utils::get_mangadex_client_from_graphql_context};
+
+#[derive(Debug, Clone, Copy)]
+pub struct AuthQuery;
+
+#[Object]
+impl AuthQuery {
+    pub async fn check(&self, ctx: &Context<'_>) -> Result<AuthCheck> {
+        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        Ok(client.auth().check().get().send().await?.into())
+    }
+}
