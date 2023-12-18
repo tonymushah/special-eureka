@@ -1,4 +1,5 @@
 pub mod api_client;
+pub mod author;
 
 use async_graphql::Object;
 
