@@ -1,4 +1,5 @@
 use async_graphql::{Context, Object, Result};
+use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     v5::{ChapterAttributes as Attributes, ChapterObject},
     ApiObjectNoRelationships,
@@ -54,17 +55,19 @@ impl Chapter {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.chapter().id(o.id).get();
                 let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| match f.name() {
-                    "manga" => {
-                        includes.push(ReferenceExpansionResource::Manga);
+                ctx.field().selection_set().for_each(|f| {
+                    match f.name().to_case(Case::Snake).as_str() {
+                        "manga" => {
+                            includes.push(ReferenceExpansionResource::Manga);
+                        }
+                        "scanlation_groups" => {
+                            includes.push(ReferenceExpansionResource::ScanlationGroup);
+                        }
+                        "user" => {
+                            includes.push(ReferenceExpansionResource::User);
+                        }
+                        _ => {}
                     }
-                    "scanlation_groups" => {
-                        includes.push(ReferenceExpansionResource::ScanlationGroup);
-                    }
-                    "user" => {
-                        includes.push(ReferenceExpansionResource::User);
-                    }
-                    _ => {}
                 });
                 includes.dedup();
                 Ok(req

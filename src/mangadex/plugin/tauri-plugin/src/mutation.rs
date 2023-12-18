@@ -1,10 +1,14 @@
 pub mod api_client;
 pub mod author;
 pub mod captcha;
+pub mod chapter;
 
 use async_graphql::Object;
 
-use self::{api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations};
+use self::{
+    api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
+    chapter::ChapterMutations,
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Mutation;
@@ -19,5 +23,8 @@ impl Mutation {
     }
     pub async fn captcha(&self) -> CaptchaMutations {
         CaptchaMutations
+    }
+    pub async fn chapter(&self) -> ChapterMutations {
+        ChapterMutations
     }
 }

@@ -2,6 +2,8 @@ use mangadex_api::MangaDexClient;
 use once_cell::sync::OnceCell;
 use std::io::Result;
 use tauri::{AppHandle, Manager, Runtime, State};
+
+use crate::app_state::OfflineAppState;
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
 pub fn set_indentifier(identifier: String) -> Result<()> {
@@ -76,4 +78,12 @@ pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> async_graphql::Result<&'ctx AppHandle<R>> {
     ctx.data::<AppHandle<R>>()
+}
+
+pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(
+    ctx: &async_graphql::Context<'ctx>,
+) -> async_graphql::Result<State<'ctx, OfflineAppState>> {
+    Ok(get_app_handle_from_async_graphql::<R>(ctx)?
+        .try_state::<OfflineAppState>()
+        .ok_or(async_graphql::Error::new("OfflineAppState not found"))?)
 }

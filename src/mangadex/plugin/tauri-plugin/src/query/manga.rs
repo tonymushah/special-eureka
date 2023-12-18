@@ -14,6 +14,7 @@ pub struct MangaQueries;
 #[Object]
 impl MangaQueries {
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
+        // TODO Add offline supports
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.manga().id(id).get();
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
