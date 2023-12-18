@@ -5,7 +5,7 @@ pub mod manga;
 
 use async_graphql::Object;
 
-use self::{api_client::ApiClientQuery, author::AuthorQueries, manga::MangaQueries};
+use self::{api_client::ApiClientQueries, author::AuthorQueries, manga::MangaQueries};
 
 pub struct Query;
 
@@ -14,8 +14,8 @@ impl Query {
     pub async fn manga(&self) -> MangaQueries {
         MangaQueries
     }
-    pub async fn api_client(&self) -> ApiClientQuery {
-        ApiClientQuery
+    pub async fn api_client(&self) -> ApiClientQueries {
+        ApiClientQueries
     }
     pub async fn author(&self) -> AuthorQueries {
         AuthorQueries

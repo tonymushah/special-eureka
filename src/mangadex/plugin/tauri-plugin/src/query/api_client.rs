@@ -9,10 +9,10 @@ use crate::{
 };
 
 #[derive(Debug, Clone, Copy)]
-pub struct ApiClientQuery;
+pub struct ApiClientQueries;
 
 #[Object]
-impl ApiClientQuery {
+impl ApiClientQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
