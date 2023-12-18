@@ -11,7 +11,7 @@ pub mod attributes;
 pub mod lists;
 pub mod relationships;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum User {
     WithRelationship(UserObject),
     WithoutRelationship(ApiObjectNoRelationships<Attributes>),

@@ -14,7 +14,7 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::AuthorAttributes, relationships::AuthorRelationships};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Author {
     WithRel(AuthorObject),
     WithoutRel(ApiObjectNoRelationships<Attributes>),

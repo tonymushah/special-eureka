@@ -13,7 +13,7 @@ pub mod attributes;
 pub mod lists;
 pub mod relationships;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum CustomList {
     WithRelationship(CustomListObject),
     WithoutRelationship(ApiObjectNoRelationships<Attributes>),

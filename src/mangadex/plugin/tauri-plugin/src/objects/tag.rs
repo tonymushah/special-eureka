@@ -10,7 +10,7 @@ use self::attributes::TagAttributes;
 pub mod attributes;
 pub mod lists;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Tag(ApiObject<Attributes>);
 
 impl Deref for Tag {

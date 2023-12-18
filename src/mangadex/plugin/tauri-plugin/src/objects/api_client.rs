@@ -14,7 +14,7 @@ pub mod attributes;
 pub mod lists;
 pub mod relationships;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum ApiClient {
     WithRelationship(ApiClientData),
     WithoutRelationship(ApiObjectNoRelationships<Attributes>),

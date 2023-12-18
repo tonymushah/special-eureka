@@ -8,6 +8,7 @@ pub mod chapter;
 pub mod cover;
 pub mod custom_list;
 pub mod manga;
+pub mod manga_chapter_group;
 pub mod scanlation_group;
 pub mod tag;
 pub mod user;
@@ -21,6 +22,16 @@ pub struct ResultsInfo {
 
 impl<T> From<Results<T>> for ResultsInfo {
     fn from(value: Results<T>) -> Self {
+        Self {
+            limit: value.limit,
+            offset: value.offset,
+            total: value.total,
+        }
+    }
+}
+
+impl<T> From<&Results<T>> for ResultsInfo {
+    fn from(value: &Results<T>) -> Self {
         Self {
             limit: value.limit,
             offset: value.offset,

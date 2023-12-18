@@ -14,7 +14,7 @@ pub mod attributes;
 pub mod lists;
 pub mod relationships;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum ScanlationGroup {
     WithRelationship(GroupObject),
     WithoutRelationship(ApiObjectNoRelationships<Attributes>),

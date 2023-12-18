@@ -16,7 +16,7 @@ pub mod lists;
 pub mod pages;
 pub mod relationships;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum Chapter {
     WithRelationship(ChapterObject),
     WithoutRelationship(ApiObjectNoRelationships<Attributes>),
