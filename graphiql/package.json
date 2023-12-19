@@ -10,6 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@graphiql/toolkit": "^0.9.1",
+    "@tauri-apps/api": "^1.5.2",
+    "graphiql": "^3.0.10",
+    "graphql": "^16.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -2,7 +2,7 @@
     "$schema": "../node_modules/@tauri-apps/cli/schema.json",
     "build": {
         "beforeBuildCommand": "pnpm run vite:build",
-        "beforeDevCommand": "pnpm run vite:dev",
+        "beforeDevCommand": "pnpm run graphiql",
         "devPath": "http://localhost:9305",
         "distDir": "../build",
         "withGlobalTauri": false
@@ -49,7 +49,7 @@
             "process": {
                 "all": false,
                 "exit": true,
-                "relaunch": false,
+                "relaunch": true,
                 "relaunchDangerousAllowSymlinkMacos": false
             },
             "fs": {
@@ -162,9 +162,10 @@
                 "theme": "Light",
                 "label": "main",
                 "url": "index.html",
-                "visible": false,
+                //"visible": false,
                 "decorations": true
-            },
+            }
+            /*
             {
                 "width": 640,
                 "height": 320,
@@ -175,7 +176,7 @@
                 "center": true,
                 "resizable": false,
                 "transparent": true
-            }
+            }*/
         ],
         "systemTray": {
             "iconPath": "./icons/icon.png"
