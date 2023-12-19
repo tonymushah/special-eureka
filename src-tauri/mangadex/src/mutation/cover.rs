@@ -28,10 +28,10 @@ impl CoverMutations {
         Ok(EmptyMutation)
     }
     /// Work in progress
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<Cover> {
+    pub async fn download(&self, _ctx: &Context<'_>, _id: Uuid) -> Result<Cover> {
         todo!()
     }
-    pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn remove(&self, _ctx: &Context<'_>, _id: Uuid) -> Result<EmptyMutation> {
         todo!()
     }
 }

@@ -34,7 +34,7 @@ impl ApiClientQueries {
             });
         }
         params.includes.dedup();
-        Ok(params.send(&*client).await?.into())
+        Ok(params.send(&client).await?.into())
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<ApiClient> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;

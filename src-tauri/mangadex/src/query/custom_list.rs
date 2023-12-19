@@ -9,20 +9,20 @@ pub struct CustomListQueries;
 
 #[Object]
 impl CustomListQueries {
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<CustomList> {
+    pub async fn get(&self, _ctx: &Context<'_>, _id: Uuid) -> Result<CustomList> {
         todo!()
     }
     pub async fn current_logged_lists(
         &self,
-        ctx: &Context<'_>,
-        #[graphql(default)] params: CurrentLoggedLists,
+        _ctx: &Context<'_>,
+        #[graphql(default)] _params: CurrentLoggedLists,
     ) -> Result<CustomListResults> {
         todo!()
     }
     pub async fn get_user_lists(
         &self,
-        ctx: &Context<'_>,
-        params: UserCustomListParams,
+        _ctx: &Context<'_>,
+        _params: UserCustomListParams,
     ) -> Result<CustomListResults> {
         todo!()
     }

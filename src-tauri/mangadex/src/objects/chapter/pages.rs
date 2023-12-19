@@ -19,7 +19,7 @@ impl From<AtHomeServer> for ChapterPages {
                 .data
                 .iter()
                 .flat_map(|url| -> Result<Url, url::ParseError> {
-                    base_url.join("data")?.join(&hash)?.join(&url)
+                    base_url.join("data")?.join(&hash)?.join(url)
                 })
                 .collect(),
             data_saver: value
@@ -27,7 +27,7 @@ impl From<AtHomeServer> for ChapterPages {
                 .data_saver
                 .iter()
                 .flat_map(|url| -> Result<Url, url::ParseError> {
-                    base_url.join("data-saver")?.join(&hash)?.join(&url)
+                    base_url.join("data-saver")?.join(&hash)?.join(url)
                 })
                 .collect(),
         }

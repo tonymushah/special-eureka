@@ -6,9 +6,15 @@ pub struct DownloadEntry<T: Clone + PartialEq>{
     success : Vec<T>,
     failed : Vec<T>
 }
+impl<T: Clone + PartialEq> Default for DownloadEntry<T> {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<T: Clone + PartialEq> DownloadEntry<T>{
     pub fn new() -> Self{
-        return Self { 
+        Self { 
             queue: Vec::new(), 
             success: Vec::new(), 
             failed: Vec::new() 
@@ -53,7 +59,7 @@ impl<T: Clone + PartialEq> DownloadEntry<T>{
         Ok(())
     }
     pub fn add_in_failed(&mut self, to_insert: T) -> Result<()>{
-        if self.queue.contains(&to_insert) == false{
+        if !self.queue.contains(&to_insert){
             return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "The value to insert is'nt in queue"));
         }else if self.failed.contains(&to_insert){
             return Err(std::io::Error::new(std::io::ErrorKind::AlreadyExists, "The value to insert is alredy in failed"));
@@ -63,7 +69,7 @@ impl<T: Clone + PartialEq> DownloadEntry<T>{
         Ok(())
     }
     pub fn add_in_success(&mut self, to_insert: T) -> Result<()>{
-        if self.queue.contains(&to_insert) == false{
+        if !self.queue.contains(&to_insert){
             return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "The value to insert is'nt in queue"));
         }else if self.success.contains(&to_insert){
             return Err(std::io::Error::new(std::io::ErrorKind::AlreadyExists, "The value to insert is alredy in success"));

@@ -23,14 +23,14 @@ impl ChapterMutations {
         Ok(EmptyMutation)
     }
     /// Remove the chapter from the current device or offline
-    pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn remove(&self, _ctx: &Context<'_>, _id: Uuid) -> Result<EmptyMutation> {
         todo!()
     }
     pub async fn download(
         &self,
-        ctx: &Context<'_>,
-        id: Uuid,
-        #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
+        _ctx: &Context<'_>,
+        _id: Uuid,
+        #[graphql(default_with = "default_download_quality()")] _quality: DownloadMode,
     ) -> Result<EmptyMutation> {
         todo!()
     }

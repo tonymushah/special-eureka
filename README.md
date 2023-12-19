@@ -1,107 +1,38 @@
-# Special Eureka
+# create-svelte
 
-[![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml)
-[![Dev Builds](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml)
+Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
 
-A desktop manga reader which support for :
+## Creating a project
 
-- the [Mangadex](https://mangadex.org) website. [Code source](https://github.com/tonymushah/special-eureka/tree/master/src/mangadex)
-
-It's build in [Tauri](https://tauri.app) and [React](https://react.dev)
-
-## Features
-
-### Mangadex
-
-- Accurate UI (pretty much the same as in Mangadex)
-- Chapter Downloading
-- Offline Chapter Reading
-- Single Page, Double Page, WideStrip, LongStrip Reading Mode
-- RTL Support for Chapter Reading
-- Zoom for Chapter Reading (Single Page and Double Page Only)
-- Light and dark theme
-
-## Why I Created this project??
-
-I love reading manga.
-
-There is many website that allows you to read manga for free like [Mangadex](https://mangadex.org), [Manga Plus](https://mangaplus.shueisha.co.jp/updates), [RawKuma](https://rawkuma.com/) for raws.
-
-The problem is that these are website, you need internet connection to access them.
-And me, who live in a country where internet connection is SLOW and EXPENSIVE, want to read manga without worrying about internet connection.
-
-There was two solutions :
-
-- be rich (which i can't do due to my complicated situations)
-- create or use a tool that allow me to download manga from website
-
-I decided to take the second solution.
-
-There is some great alternatives like : [mangadesk](https://github.com/darylhjd/mangadesk) and [Mangal](https://github.com/metafates/mangal) for Terminal, or [Tachiyomi](https://tachiyomi.org/) for Mobile, etc,... (i recommend visiting [wotaku](https://wotaku.moe/) if you want to know more about those).
-
-But they don't satisfy my own need, like :
-
-- Having a desktop app 😅
-- Reading Chapter and Manga on both offline and online
-- Having the same user experience as the website
-- Zoom for chapter
-- Customization
-- Exports
-- etc,...
-
-So with those goals in mind, i decided to create my own manga reader app for Desktop.
-
-### Why choosing Tauri??
-
-[Tauri](https://tauri.app) is a toolkit for building desktop apps (they will support mobile soon too!), kinda like [Electron](https://www.electronjs.org/) but built in [Rust](https://rust-lang.org).
-
-Now, i wanted to use [Tauri](https://tauri.app) for fun, just to see of how can it go and such.
-But even if the Tauri ecosystem is still growing, it has so many great features that make me fall off.
-
-### Why use React??
-
-It was a mistake at first, but React is amazing. I know that there is good alternative like Solid, Vue, Svelte, and such,... but I'm still learning while building project.
-
-## Bug reporting
-
-If you find a bug or something like that, please create an issue.
-
-## Feedbacks
-
-If you want to give some feedback, please put them to :
-
-### [Feedbacks Discussions](https://github.com/tonymushah/special-eureka/discussions/categories/feedbacks)
-
-## Using the source directly
-
-Before we start, make sure you have meet the [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) and done the [Tauri Quick Start With Vite](https://tauri.app/v1/guides/getting-started/setup/vite).
-
-And, this project also use [pnpm](https://pnpm.io) as a package manager, so make sure you have installed it.
-
-If that's done, then let's get started.
-
-First, clone the repository
+If you're seeing this, you've probably already done this step. Congrats!
 
 ```bash
-git clone https://github.com/tonymushah/special-eureka.git
+# create a new project in the current directory
+npm create svelte@latest
+
+# create a new project in my-app
+npm create svelte@latest my-app
 ```
 
-Second, install the frontend dependencies:
+## Developing
+
+Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
 ```bash
-pnpm install
+npm run dev
+
+# or start the server and open the app in a new browser tab
+npm run dev -- --open
 ```
 
-Note : Make sure you have [pnpm](https://pnpm.io) installed
+## Building
 
-Last, but at least :
+To create a production version of your app:
 
 ```bash
-pnpm dev
+npm run build
 ```
 
-The build might take a long time, like 30 minutes so i recommend doing else instead.
+You can preview the production build with `npm run preview`.
 
-## License
-
-GPL-3.0 license
+> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

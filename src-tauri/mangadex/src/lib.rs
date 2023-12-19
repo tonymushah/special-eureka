@@ -200,7 +200,7 @@ where
             match check_plus_notify() {
                 Ok(()) => (),
                 Err(error) => {
-                    println!("{}", error.to_string());
+                    println!("{}", error);
                 }
             }
             std::thread::sleep(std::time::Duration::from_millis(500));

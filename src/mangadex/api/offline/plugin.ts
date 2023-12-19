@@ -1,1 +1,0 @@
-export * from "@mangadex/plugin/server";

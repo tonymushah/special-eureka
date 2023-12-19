@@ -23,8 +23,7 @@ impl MangaRelationships {
     pub async fn manga(&self) -> Vec<MangaRelated> {
         self.relationships
             .iter()
-            .map(
-                |i| -> Result<
+            .flat_map(|i| -> Result<
                     MangaRelated,
                     <ApiObjectNoRelationships<Attributes> as TryFrom<Relationship>>::Error,
                 > {
@@ -41,9 +40,7 @@ impl MangaRelationships {
                         )?,
                         obj: MangaObject::WithoutRel(rel),
                     })
-                },
-            )
-            .flatten()
+                })
             .collect::<Vec<MangaRelated>>()
     }
     pub async fn cover_art(&self) -> GraphQLResult<Cover> {
@@ -65,7 +62,7 @@ impl MangaRelationships {
                     e.clone(),
                 )
             })
-            .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
+            .map(<Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from)
             .collect::<Vec<Author>>()
     }
     pub async fn artists(&self) -> Vec<Author> {
@@ -90,7 +87,7 @@ impl MangaRelationships {
                     }
                 },
             )
-            .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e))
+            .map(<Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from)
             .collect::<Vec<Author>>()
     }
     pub async fn author_artists(&self) -> Vec<Author> {

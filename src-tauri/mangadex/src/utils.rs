@@ -10,12 +10,12 @@ pub fn set_indentifier(identifier: String) -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {
         unsafe {
             match INDENTIFIER.set(identifier) {
-                Ok(_) => return Ok(()),
+                Ok(_) => Ok(()),
                 Err(_) => {
-                    return Err(std::io::Error::new(
+                    Err(std::io::Error::new(
                         std::io::ErrorKind::AlreadyExists,
                         "The identifier already setted",
-                    ));
+                    ))
                 }
             }
         }
@@ -69,9 +69,9 @@ pub fn get_notification_handle_mut() -> Result<&'static mut String> {
 pub(crate) fn get_mangadex_client_from_graphql_context<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> async_graphql::Result<State<'ctx, MangaDexClient>> {
-    Ok(get_app_handle_from_async_graphql::<R>(ctx)?
+    get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<MangaDexClient>()
-        .ok_or(async_graphql::Error::new("MangaDexClient not found"))?)
+        .ok_or(async_graphql::Error::new("MangaDexClient not found"))
 }
 
 pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
@@ -83,7 +83,7 @@ pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
 pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> async_graphql::Result<State<'ctx, OfflineAppState>> {
-    Ok(get_app_handle_from_async_graphql::<R>(ctx)?
+    get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<OfflineAppState>()
-        .ok_or(async_graphql::Error::new("OfflineAppState not found"))?)
+        .ok_or(async_graphql::Error::new("OfflineAppState not found"))
 }

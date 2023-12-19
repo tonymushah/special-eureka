@@ -14,12 +14,12 @@ pub fn set_ins_chapter_checker_handle(joinhandle: JoinHandle<()>) -> Result<()> 
     match std::thread::spawn(move || -> Result<()> {
         unsafe {
             match INS_CHAPTER_CHECKER.set(joinhandle) {
-                Ok(_) => return Ok(()),
+                Ok(_) => Ok(()),
                 Err(_) => {
-                    return Err(Error::Io(std::io::Error::new(
+                    Err(Error::Io(std::io::Error::new(
                         std::io::ErrorKind::AlreadyExists,
                         "The ins chapter checker handle already setted",
-                    )));
+                    )))
                 }
             }
         }
@@ -56,7 +56,7 @@ pub fn init_ins_chapter_handle() -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {
         unsafe {
             match INS_CHAPTER.set(DownloadEntry::new()) {
-                Ok(_) => return Ok(()),
+                Ok(_) => Ok(()),
                 Err(_) => Err(Error::Io(std::io::Error::new(
                     std::io::ErrorKind::AlreadyExists,
                     "The ins chapter handle already setted",
@@ -146,7 +146,7 @@ pub fn add_in_chapter_failed(id: String) -> Result<()> {
 
 pub fn check_if_ins_finished() -> Result<bool> {
     let handle = get_ins_handle_mut()?;
-    if handle.is_empty() == true {
+    if handle.is_empty() {
         return Ok(false);
     }
     Ok(handle.is_all_finished())
@@ -156,9 +156,9 @@ pub fn check_plus_notify() -> Result<()> {
     let check_ = check_if_ins_finished()?;
     let ins_chapter = get_ins_handle_mut()?;
     let identifier = get_indentifier()?;
-    let identifier = format!("{}", identifier);
+    let identifier = identifier.to_string();
     let notification_handle = Notification::new(identifier);
-    if check_ == true {
+    if check_ {
         match notification_handle
             .title("Chapter download finished")
             .body(format!(
@@ -170,7 +170,7 @@ pub fn check_plus_notify() -> Result<()> {
         {
             Ok(_) => (),
             Err(error) => {
-                println!("{}", error.to_string());
+                println!("{}", error);
             }
         }
         reset_ins_handle()?;

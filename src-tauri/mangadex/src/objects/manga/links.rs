@@ -43,14 +43,14 @@ impl MangaLinks {
         let inner = self.anilist.as_ref()?;
         Url::parse("https://anilist.co/manga/")
             .ok()?
-            .join(&inner)
+            .join(inner)
             .ok()
     }
     pub async fn anime_planet(&self) -> Option<Url> {
         let inner = self.anime_planet.as_ref()?;
         Url::parse("https://www.anime-planet.com/manga/")
             .ok()?
-            .join(&inner)
+            .join(inner)
             .ok()
     }
     pub async fn book_walker(&self) -> Option<Url> {
@@ -59,7 +59,7 @@ impl MangaLinks {
     }
     pub async fn cd_japan(&self) -> Option<Url> {
         let inner = self.cd_japan.as_ref()?;
-        Url::parse(&inner).ok()
+        Url::parse(inner).ok()
     }
     pub async fn ebook_japan(&self) -> Option<&Url> {
         self.ebook_japan.as_ref()
@@ -67,7 +67,7 @@ impl MangaLinks {
     pub async fn english_translation(&self) -> Option<Url> {
         self.english_translation
             .as_ref()
-            .and_then(|u| Url::parse(&u).ok())
+            .and_then(|u| Url::parse(u).ok())
     }
     pub async fn kitsu(&self) -> Option<Url> {
         let inner = self.kitsu.as_ref()?;

@@ -45,7 +45,7 @@ impl GraphQLMangaAttributes {
         self.is_locked
     }
     pub async fn links(&self) -> Option<MangaLinks> {
-        self.links.clone().map(|i| From::from(i))
+        self.links.clone().map(From::from)
     }
     pub async fn original_language(&self) -> Language {
         self.original_language

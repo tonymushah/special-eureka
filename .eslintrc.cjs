@@ -1,30 +1,31 @@
-/*eslint-env node*/
-/**
- * @type {import("eslint").Linter.Config}
- */
+/** @type { import("eslint").Linter.FlatConfig } */
 module.exports = {
-  "env": {
-    "browser": true,
-    "es2021": true
-  },
-  "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "plugin:react/jsx-runtime", "plugin:storybook/recommended"],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module",
-    "ecmaFeatures": {
-      jsx: true
-    }
-  },
-  "plugins": ["react", "@typescript-eslint", "@tanstack/query"],
-  "rules": {
-    "indent": ["off", "tab"],
-    "linebreak-style": ["off", "unix"],
-    "quotes": ["warn", "double"],
-    "semi": ["warn", "always"],
-    "react/jsx-filename-extension": ["error", {
-      "extensions": [".tsx", ".mdx"]
-    }],
-    "react/no-unstable-nested-components" : ["warn"]
-  }
+	root: true,
+	extends: [
+		'eslint:recommended',
+		'plugin:@typescript-eslint/recommended',
+		'plugin:svelte/recommended',
+		'prettier'
+	],
+	parser: '@typescript-eslint/parser',
+	plugins: ['@typescript-eslint'],
+	parserOptions: {
+		sourceType: 'module',
+		ecmaVersion: 2020,
+		extraFileExtensions: ['.svelte']
+	},
+	env: {
+		browser: true,
+		es2017: true,
+		node: true
+	},
+	overrides: [
+		{
+			files: ['*.svelte'],
+			parser: 'svelte-eslint-parser',
+			parserOptions: {
+				parser: '@typescript-eslint/parser'
+			}
+		}
+	]
 };

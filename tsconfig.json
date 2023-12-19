@@ -1,78 +1,17 @@
 {
-    "compilerOptions": {
-        "jsx": "react-jsx",
-        "target": "ESNext",
-        "useDefineForClassFields": true,
-        "module": "ESNext",
-        "lib": [
-            "ESNext",
-            "DOM"
-        ],
-        "moduleResolution": "Node10",
-        "strict": true,
-        "sourceMap": true,
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "esModuleInterop": true,
-        "noEmit": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "skipLibCheck": true,
-        "baseUrl": "./",
-        "allowJs": true,
-        "forceConsistentCasingInFileNames": true,
-        "types": [
-            "vite-plugin-remark-rehype/types",
-            "@types/mdx",
-            "vite/client"
-        ],
+	"extends": "./.svelte-kit/tsconfig.json",
+	"compilerOptions": {
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"strict": true,
+		"moduleResolution": "bundler",
         "paths": {
-            "@bilibili-comics/*": [
-                "src/bilibili-comics/*"
-            ],
-            "@commons-res/*": [
-                "src/commons-res/*"
-            ],
-            "@dashboard/*": [
-                "src/dashboard/*"
-            ],
-            "@mangadex/*": [
-                "src/mangadex/*"
-            ],
-            "@mangadex/resources/*": [
-                "src/mangadex/resources/*"
-            ],
-            "@router/*": [
-                "src/router/*"
-            ],
-            "@router": [
-                "src/router.ts"
-            ],
-            "@splashscreen/*": [
-                "src/splashscreen/*"
-            ],
-            "@test/*": [
-                "src/test/*"
-            ],
-            "@/*": [
-                "src/*"
-            ],
-            "@theme": [
-                "src/theme.ts"
-            ],
-            "@pages/*" : [
-                "src/pages/*"
-            ],
-            "@public/*": [
-                "public/*"
-            ]
+            "@mangadex/components/*" : ["../src/lib/components/mangadex/*"]
         }
-    },
-    "exclude": [
-        "./dist",
-        "./vite.config.ts",
-        "vite.storybook.config.ts",
-        "**/*.test.ts"
-    ]
+	},
 }

@@ -30,18 +30,18 @@ impl CustomListMutations {
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = client.custom_list().id(id).delete().send().await?;
+        client.custom_list().id(id).delete().send().await?;
         Ok(EmptyMutation)
     }
     pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = client.custom_list().id(id).follow().post().send().await?;
+        client.custom_list().id(id).follow().post().send().await?;
         Ok(EmptyMutation)
     }
     pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         // TODO fix this shit with `mangadex-api` v3.0.1
-        let _ = client
+        client
             .custom_list()
             .id(id)
             .follow()
@@ -57,7 +57,7 @@ impl CustomListMutations {
         params: CustomListAddMangaParam,
     ) -> Result<EmptyMutation> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = params.send(&client).await?;
+        params.send(&client).await?;
         Ok(EmptyMutation)
     }
     pub async fn remove_manga(
@@ -66,7 +66,7 @@ impl CustomListMutations {
         params: CustomListRemoveMangaParam,
     ) -> Result<EmptyMutation> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = params.send(&client).await?;
+        params.send(&client).await?;
         Ok(EmptyMutation)
     }
 }

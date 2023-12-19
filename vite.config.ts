@@ -1,67 +1,29 @@
-import { sentryVitePlugin } from "@sentry/vite-plugin";
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import remarkRehypePlugin from "vite-plugin-remark-rehype";
-import { resolve } from "path";
-//import { ViteAliases } from "vite-aliases";
-import mdx from "@mdx-js/rollup";
-import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
-import tsconfigPaths from "vite-tsconfig-paths";
-//import generouted from "@generouted/react-router/plugin";
+import { sveltekit } from '@sveltejs/kit/vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-    clearScreen: false,
-    plugins: [
-        { enforce: "pre", ...mdx() },
-        tsconfigPaths({
-            root: "."
-        }),
-        react({
-            "tsDecorators": true,
-            "jsxImportSource": "react"
-        }),
-        remarkRehypePlugin({}),
-        ViteImageOptimizer(),
-        sentryVitePlugin({
-            org: "tony-mushah",
-            project: "special-eureka",
-            telemetry: false
-        })
-    ],
-    envPrefix: ["VITE_", "TAURI_"],
-    server: {
-        port: 9305,
-        strictPort: true,
-        open: false,
-        fs: {
-            deny: ["./dist/*", "./src-tauri/*"],
-        },
-        cors: false
+	plugins: [sveltekit()],
+	test: {
+		include: ['src/**/*.{test,spec}.{js,ts}']
+	},
+	optimizeDeps: {
+        exclude: ['@urql/svelte'],
     },
-    /*resolve: {
-        alias: {
-            "react": "preact/compat",
-            "react-dom/test-utils": "preact/test-utils",
-            "react-dom": "preact/compat",     // Must be below test-utils
-            "react/jsx-runtime": "preact/jsx-runtime"
-        }
-    },*/
-    appType: "spa",
-    build: {
-        // Tauri supports es2021
-        target: ["es2021", "chrome100", "safari13"],
-        // don't minify for debug builds
-        minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
-        // produce sourcemaps for debug builds
-        sourcemap: !!process.env.TAURI_DEBUG,
-        outDir: "./dist",
-        rollupOptions: {
-            input: {
-                main: resolve(__dirname, "./index.html"),
-                splashscreen: resolve(__dirname, "./splashscreen.html")
-            },
-        },
-        "emptyOutDir": true,
-    },
-    publicDir: "./public",
+    // prevent vite from obscuring rust errors
+  clearScreen: false,
+  // Tauri expects a fixed port, fail if that port is not available
+  server: {
+    port: 9305,
+    strictPort: true,
+  },
+  // to access the Tauri environment variables set by the CLI with information about the current target
+  envPrefix: ['VITE_', 'TAURI_PLATFORM', 'TAURI_ARCH', 'TAURI_FAMILY', 'TAURI_PLATFORM_VERSION', 'TAURI_PLATFORM_TYPE', 'TAURI_DEBUG'],
+  build: {
+    // Tauri uses Chromium on Windows and WebKit on macOS and Linux
+    target: process.env.TAURI_PLATFORM == 'windows' ? 'chrome105' : 'safari13',
+    // don't minify for debug builds
+    minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
+    // produce sourcemaps for debug builds
+    sourcemap: !!process.env.TAURI_DEBUG,
+  },
 });

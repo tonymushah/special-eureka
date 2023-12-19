@@ -39,7 +39,7 @@ pub async fn group_results(
         .for_each(|(id, obj)| {
             manga_ids_chapter_group
                 .entry(id)
-                .or_insert_with(Vec::new)
+                .or_default()
                 .push(obj)
         });
     manga_list_params.manga_ids = manga_ids_chapter_group.keys().cloned().collect();

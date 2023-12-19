@@ -16,8 +16,8 @@ impl CoverQueries {
     #[graphql(skip)]
     pub async fn list_offline(
         &self,
-        ctx: &Context<'_>,
-        mut params: CoverListParam,
+        _ctx: &Context<'_>,
+        _params: CoverListParam,
     ) -> Result<CoverResults> {
         todo!()
     }
@@ -91,7 +91,7 @@ impl CoverQueries {
             .into())
     }
     #[graphql(skip)]
-    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Cover> {
+    pub async fn get_offline(&self, _ctx: &Context<'_>, _id: Uuid) -> Result<Cover> {
         todo!()
     }
 

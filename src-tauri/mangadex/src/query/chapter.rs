@@ -83,11 +83,11 @@ impl ChapterQueries {
             .into())
     }
     #[graphql(skip)]
-    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    pub async fn get_offline(&self, ctx: &Context<'_>, _id: Uuid) -> Result<Chapter> {
         // TODO Add offline support
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
-        let inner_off_state = read_off_state
+        let _inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::new("Offline AppState not found"))?;
         todo!()
@@ -113,12 +113,12 @@ impl ChapterQueries {
             .into())
     }
     #[graphql(skip)]
-    pub async fn pages_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
+    pub async fn pages_offline(&self, ctx: &Context<'_>, _id: Uuid) -> Result<ChapterPages> {
         // TODO Add offline support
         // TODO Add offline support
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
-        let inner_off_state = read_off_state
+        let _inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::new("Offline AppState not found"))?;
         todo!()

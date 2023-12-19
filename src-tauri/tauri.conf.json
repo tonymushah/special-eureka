@@ -4,7 +4,7 @@
         "beforeBuildCommand": "pnpm run vite:build",
         "beforeDevCommand": "pnpm run vite:dev",
         "devPath": "http://localhost:9305",
-        "distDir": "../dist",
+        "distDir": "../build",
         "withGlobalTauri": false
     },
     "package": {
