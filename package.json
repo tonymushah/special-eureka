@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"vite:dev": "vite dev",
-        "graphiql": "cd ./graphiql && pnpm dev",
+		"graphiql": "cd ./graphiql && pnpm dev",
 		"vite:build_preview": "pnpm vite:build && pnpm vite:preview",
 		"vite:build": "vite build --emptyOutDir",
 		"vite:preview": "vite preview --port 9305",
@@ -46,9 +46,16 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@svelteuidev/composables": "^0.15.4",
+		"@svelteuidev/core": "^0.15.4",
+		"@svelteuidev/dates": "^0.15.4",
+		"@svelteuidev/motion": "^0.15.4",
+		"@svelteuidev/preprocessors": "^0.15.4",
+		"@svelteuidev/prism": "^0.15.4",
 		"@tauri-apps/api": "^1.5.2",
 		"@urql/svelte": "^4.0.4",
+		"dayjs": "^1.11.10",
 		"mizuki-urql-adapter": "^0.1.0"
 	},
-    "packageManager": "pnpm@8.11.0"
+	"packageManager": "pnpm@8.11.0"
 }
