@@ -1,6 +1,6 @@
 use async_graphql::{Context, Object, Result};
-use convert_case::Casing;
-use mangadex_api_input_types::manga::list::MangaListParams;
+use convert_case::{Case, Casing};
+use mangadex_api_input_types::manga::{list::MangaListParams, random::MangaRandomParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
@@ -23,28 +23,29 @@ impl MangaQueries {
             .selection_set()
             .find(|f| f.name() == "relationships")
         {
-            rel.selection_set().for_each(|f| match f.name() {
-                "manga" => {
-                    includes.push(ReferenceExpansionResource::Manga);
-                }
-                "cover_art" => {
-                    includes.push(ReferenceExpansionResource::CoverArt);
-                }
-                "authors" => {
-                    includes.push(ReferenceExpansionResource::Author);
-                }
-                "artists" => {
-                    includes.push(ReferenceExpansionResource::Artist);
-                }
-                "author_artists" => {
-                    includes.push(ReferenceExpansionResource::Author);
-                    includes.push(ReferenceExpansionResource::Artist);
-                }
-                "creator" => {
-                    includes.push(ReferenceExpansionResource::Creator);
-                }
-                _ => {}
-            });
+            rel.selection_set()
+                .for_each(|f| match f.name().to_case(Case::Snake).as_str() {
+                    "manga" => {
+                        includes.push(ReferenceExpansionResource::Manga);
+                    }
+                    "cover_art" => {
+                        includes.push(ReferenceExpansionResource::CoverArt);
+                    }
+                    "authors" => {
+                        includes.push(ReferenceExpansionResource::Author);
+                    }
+                    "artists" => {
+                        includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "author_artists" => {
+                        includes.push(ReferenceExpansionResource::Author);
+                        includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "creator" => {
+                        includes.push(ReferenceExpansionResource::Creator);
+                    }
+                    _ => {}
+                });
         }
         includes.dedup();
         Ok(req.includes(includes).send().await?.data.into())
@@ -91,5 +92,44 @@ impl MangaQueries {
         #[cfg(debug_assertions)]
         println!("{:?}", params.includes);
         Ok(params.send(client.inner()).await?.into())
+    }
+    pub async fn random(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(default)] mut params: MangaRandomParams,
+    ) -> Result<Manga> {
+        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let includes = &mut params.includes;
+        includes.clear();
+        if let Some(rel) = ctx
+            .field()
+            .selection_set()
+            .find(|f| f.name() == "relationships")
+        {
+            rel.selection_set()
+                .for_each(|f| match f.name().to_case(Case::Snake).as_str() {
+                    "manga" => {
+                        includes.push(ReferenceExpansionResource::Manga);
+                    }
+                    "cover_art" => {
+                        includes.push(ReferenceExpansionResource::CoverArt);
+                    }
+                    "authors" => {
+                        includes.push(ReferenceExpansionResource::Author);
+                    }
+                    "artists" => {
+                        includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "author_artists" => {
+                        includes.push(ReferenceExpansionResource::Author);
+                        includes.push(ReferenceExpansionResource::Artist);
+                    }
+                    "creator" => {
+                        includes.push(ReferenceExpansionResource::Creator);
+                    }
+                    _ => {}
+                });
+        }
+        Ok(params.send(&client).await?.body.data.into())
     }
 }
