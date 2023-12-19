@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result};
+use async_graphql::{Context, Error, Object, Result};
 use convert_case::{Case, Casing};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -49,7 +49,7 @@ impl ChapterQueries {
         Ok(params.send(&client).await?.into())
     }
     #[graphql(skip)]
-    async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
         if let Some(rel) = ctx
@@ -82,33 +82,52 @@ impl ChapterQueries {
             .data
             .into())
     }
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+    #[graphql(skip)]
+    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
         // TODO Add offline support
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
-        if let Some(_app_state) = read_off_state.as_ref() {
-            todo!()
+        let inner_off_state = read_off_state
+            .as_ref()
+            .ok_or(Error::new("Offline AppState not found"))?;
+        todo!()
+    }
+    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
+        if let Ok(online) = self.get_online(ctx, id).await {
+            Ok(online)
         } else {
-            self.get_online(ctx, id).await
+            self.get_offline(ctx, id).await
         }
     }
-    pub async fn pages(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
+    #[graphql(skip)]
+    pub async fn pages_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
+        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        Ok(client
+            .at_home()
+            .server()
+            .id(id)
+            .get()
+            .send()
+            .await?
+            .body
+            .into())
+    }
+    #[graphql(skip)]
+    pub async fn pages_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
+        // TODO Add offline support
         // TODO Add offline support
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
-        if let Some(_app_state) = read_off_state.as_ref() {
-            todo!()
+        let inner_off_state = read_off_state
+            .as_ref()
+            .ok_or(Error::new("Offline AppState not found"))?;
+        todo!()
+    }
+    pub async fn pages(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
+        if let Ok(offline) = self.pages_offline(ctx, id).await {
+            Ok(offline)
         } else {
-            let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-            Ok(client
-                .at_home()
-                .server()
-                .id(id)
-                .get()
-                .send()
-                .await?
-                .body
-                .into())
+            self.pages_online(ctx, id).await
         }
     }
     pub async fn list_with_group_by_manga(

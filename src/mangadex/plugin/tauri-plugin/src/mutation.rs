@@ -2,6 +2,7 @@ pub mod api_client;
 pub mod author;
 pub mod captcha;
 pub mod chapter;
+pub mod cover;
 
 use async_graphql::Object;
 
