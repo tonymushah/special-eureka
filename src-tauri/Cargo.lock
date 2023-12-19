@@ -4385,7 +4385,6 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tauri-plugin-aptabase",
- "tauri-plugin-speu-bilibili-comics",
  "tauri-plugin-speu-mangadex",
  "tauri-plugin-store",
  "tokio",
@@ -4767,15 +4766,6 @@ dependencies = [
  "time",
  "tokio",
  "uuid",
-]
-
-[[package]]
-name = "tauri-plugin-speu-bilibili-comics"
-version = "0.0.0"
-dependencies = [
- "serde",
- "tauri",
- "thiserror",
 ]
 
 [[package]]

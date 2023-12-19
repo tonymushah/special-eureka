@@ -54,11 +54,8 @@ git = "https://github.com/tauri-apps/plugins-workspace"
 #tag = "v0.1.0"
 branch = "dev"
 
-[dependencies.tauri-plugin-speu-bilibili-comics]
-path = "../src/bilibili-comics/plugin/tauri-plugin"
-
 [dependencies.tauri-plugin-speu-mangadex]
-path = "../src/mangadex/plugin/tauri-plugin"
+path = "./mangadex"
 
 [profile.dev]
 opt-level = 3
@@ -73,3 +70,6 @@ custom-protocol = ["tauri/custom-protocol"]
 
 [[bin]]
 name = "mangadex-sdl"
+
+[workspace]
+members = ["./mangadex"]
