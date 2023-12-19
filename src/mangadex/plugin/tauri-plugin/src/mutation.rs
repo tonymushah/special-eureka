@@ -3,12 +3,13 @@ pub mod author;
 pub mod captcha;
 pub mod chapter;
 pub mod cover;
+pub mod custom_list;
 
 use async_graphql::Object;
 
 use self::{
     api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
-    chapter::ChapterMutations,
+    chapter::ChapterMutations, custom_list::CustomListMutations,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -27,5 +28,8 @@ impl Mutation {
     }
     pub async fn chapter(&self) -> ChapterMutations {
         ChapterMutations
+    }
+    pub async fn custom_list(&self) -> CustomListMutations {
+        CustomListMutations
     }
 }
