@@ -1,10 +1,10 @@
-use once_cell::sync::OnceCell;
-use std::thread::JoinHandle;
 use crate::intelligent_notification_system::DownloadEntry;
-use tauri::api::notification::Notification;
 use crate::utils::get_indentifier;
 use crate::Error;
 use crate::Result;
+use once_cell::sync::OnceCell;
+use std::thread::JoinHandle;
+use tauri::api::notification::Notification;
 
 static mut INS_CHAPTER: OnceCell<DownloadEntry<String>> = OnceCell::new();
 
@@ -146,14 +146,13 @@ pub fn add_in_chapter_failed(id: String) -> Result<()> {
 
 pub fn check_if_ins_finished() -> Result<bool> {
     let handle = get_ins_handle_mut()?;
-    if handle.is_empty() == true{
+    if handle.is_empty() == true {
         return Ok(false);
     }
     Ok(handle.is_all_finished())
 }
 
 pub fn check_plus_notify() -> Result<()> {
-    
     let check_ = check_if_ins_finished()?;
     let ins_chapter = get_ins_handle_mut()?;
     let identifier = get_indentifier()?;
@@ -162,13 +161,18 @@ pub fn check_plus_notify() -> Result<()> {
     if check_ == true {
         match notification_handle
             .title("Chapter download finished")
-            .body(format!("Success {} \n Failed {}", ins_chapter.get_success_len(), ins_chapter.get_failed_len()))
-            .show(){
-                Ok(_) => (),
-                Err(error) => {
-                    println!("{}", error.to_string());
-                }
+            .body(format!(
+                "Success {} \n Failed {}",
+                ins_chapter.get_success_len(),
+                ins_chapter.get_failed_len()
+            ))
+            .show()
+        {
+            Ok(_) => (),
+            Err(error) => {
+                println!("{}", error.to_string());
             }
+        }
         reset_ins_handle()?;
     }
     Ok(())
