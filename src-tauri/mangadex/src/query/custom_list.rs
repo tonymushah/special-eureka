@@ -2,7 +2,6 @@ use async_graphql::{Context, InputObject, Object, Result};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::custom_list::get_user_lists::UserCustomListParams;
 use mangadex_api_schema_rust::v5::CustomListListResponse;
-use mangadex_api_types_rust::error::Result as MDResult;
 use uuid::Uuid;
 
 use crate::{
