@@ -17,7 +17,7 @@ pub mod relationships;
 #[derive(Clone, Debug)]
 pub enum ScanlationGroup {
     WithRelationship(GroupObject),
-    WithoutRelationship(ApiObjectNoRelationships<Attributes>),
+    WithoutRelationship(Box<ApiObjectNoRelationships<Attributes>>),
 }
 
 impl From<GroupObject> for ScanlationGroup {
@@ -28,7 +28,7 @@ impl From<GroupObject> for ScanlationGroup {
 
 impl From<ApiObjectNoRelationships<Attributes>> for ScanlationGroup {
     fn from(value: ApiObjectNoRelationships<Attributes>) -> Self {
-        Self::WithoutRelationship(value)
+        Self::WithoutRelationship(Box::new(value))
     }
 }
 

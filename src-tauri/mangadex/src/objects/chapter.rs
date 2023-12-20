@@ -19,7 +19,7 @@ pub mod relationships;
 #[derive(Clone, Debug)]
 pub enum Chapter {
     WithRelationship(ChapterObject),
-    WithoutRelationship(ApiObjectNoRelationships<Attributes>),
+    WithoutRelationship(Box<ApiObjectNoRelationships<Attributes>>),
 }
 
 impl From<ChapterObject> for Chapter {
@@ -30,7 +30,7 @@ impl From<ChapterObject> for Chapter {
 
 impl From<ApiObjectNoRelationships<Attributes>> for Chapter {
     fn from(value: ApiObjectNoRelationships<Attributes>) -> Self {
-        Self::WithoutRelationship(value)
+        Self::WithoutRelationship(Box::new(value))
     }
 }
 

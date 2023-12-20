@@ -17,7 +17,7 @@ use self::{attributes::AuthorAttributes, relationships::AuthorRelationships};
 #[derive(Clone, Debug)]
 pub enum Author {
     WithRel(AuthorObject),
-    WithoutRel(ApiObjectNoRelationships<Attributes>),
+    WithoutRel(Box<ApiObjectNoRelationships<Attributes>>),
 }
 
 impl From<AuthorObject> for Author {
@@ -28,7 +28,7 @@ impl From<AuthorObject> for Author {
 
 impl From<ApiObjectNoRelationships<Attributes>> for Author {
     fn from(value: ApiObjectNoRelationships<Attributes>) -> Self {
-        Self::WithoutRel(value)
+        Self::WithoutRel(Box::new(value))
     }
 }
 
