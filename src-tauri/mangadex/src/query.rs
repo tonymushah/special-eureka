@@ -5,13 +5,15 @@ pub mod chapter;
 pub mod cover;
 pub mod custom_list;
 pub mod feed;
+pub mod follows;
 pub mod manga;
 
 use async_graphql::Object;
 
 use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
-    cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries, manga::MangaQueries,
+    cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
+    follows::FollowsQueries, manga::MangaQueries,
 };
 
 pub struct Query;
@@ -38,5 +40,8 @@ impl Query {
     }
     pub async fn feed(&self) -> FeedQueries {
         FeedQueries
+    }
+    pub async fn follows(&self) -> FollowsQueries {
+        FollowsQueries
     }
 }
