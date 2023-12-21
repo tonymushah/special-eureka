@@ -8,6 +8,7 @@ pub mod author;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
+pub mod legacy_id_mapping;
 pub mod manga;
 pub mod manga_chapter_group;
 pub mod scanlation_group;

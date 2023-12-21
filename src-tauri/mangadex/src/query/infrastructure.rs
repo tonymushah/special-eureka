@@ -9,7 +9,7 @@ pub struct InfrastructureQueries;
 impl InfrastructureQueries {
     pub async fn ping(&self, ctx: &Context<'_>) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        if let Err(_) = client.ping().get().send().await {
+        if (client.ping().get().send().await).is_err() {
             Ok(false)
         } else {
             Ok(true)
