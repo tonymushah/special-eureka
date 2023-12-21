@@ -6,6 +6,7 @@ pub mod cover;
 pub mod custom_list;
 pub mod feed;
 pub mod follows;
+pub mod infrastructure;
 pub mod manga;
 
 use async_graphql::Object;
@@ -13,7 +14,7 @@ use async_graphql::Object;
 use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
-    follows::FollowsQueries, manga::MangaQueries,
+    follows::FollowsQueries, infrastructure::InfrastructureQueries, manga::MangaQueries,
 };
 
 pub struct Query;
@@ -43,5 +44,8 @@ impl Query {
     }
     pub async fn follows(&self) -> FollowsQueries {
         FollowsQueries
+    }
+    pub async fn infrastructure(&self) -> InfrastructureQueries {
+        InfrastructureQueries
     }
 }
