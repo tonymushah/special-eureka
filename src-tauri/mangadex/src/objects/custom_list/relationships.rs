@@ -9,7 +9,7 @@ use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
 
 use crate::{
-    objects::{manga::MangaObject, user::User},
+    objects::{manga::MangaObject, user::User, ExtractReferenceExpansion},
     utils::get_mangadex_client_from_graphql_context,
 };
 
@@ -45,28 +45,8 @@ impl CustomListRelationships {
             .selection_set()
             .find(|f| f.name() == "relationships")
             .and_then(|f| {
-                f.selection_set().for_each(|f| match f.name() {
-                    "manga" => {
-                        includes.push(ReferenceExpansionResource::Manga);
-                    }
-                    "cover_art" => {
-                        includes.push(ReferenceExpansionResource::CoverArt);
-                    }
-                    "authors" => {
-                        includes.push(ReferenceExpansionResource::Author);
-                    }
-                    "artists" => {
-                        includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "author_artists" => {
-                        includes.push(ReferenceExpansionResource::Author);
-                        includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "creator" => {
-                        includes.push(ReferenceExpansionResource::Creator);
-                    }
-                    _ => {}
-                });
+                let mut out = <MangaObject as ExtractReferenceExpansion>::exctract(f);
+                includes.append(&mut out);
                 None::<()>
             });
         includes.dedup();

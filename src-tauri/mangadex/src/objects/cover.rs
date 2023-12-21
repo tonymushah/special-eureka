@@ -10,6 +10,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::CoverAttributes, relationships::CoverRelationships};
 
+use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+
 pub mod attributes;
 pub mod lists;
 pub mod relationships;
@@ -52,17 +54,7 @@ impl Cover {
             Cover::WithoutRelationship(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.cover().cover_id(o.id).get();
-                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| match f.name() {
-                    "manga" => {
-                        includes.push(ReferenceExpansionResource::Manga);
-                    }
-                    "user" => {
-                        includes.push(ReferenceExpansionResource::User);
-                    }
-                    _ => {}
-                });
-                includes.dedup();
+                let includes = <Self as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
                 Ok(req
                     .includes(includes)
                     .send()
@@ -74,3 +66,22 @@ impl Cover {
         }
     }
 }
+
+impl ExtractReferenceExpansion<'_> for Cover {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field.selection_set().for_each(|f| match f.name() {
+            "manga" => {
+                includes.push(ReferenceExpansionResource::Manga);
+            }
+            "user" => {
+                includes.push(ReferenceExpansionResource::User);
+            }
+            _ => {}
+        });
+        includes.dedup();
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for Cover {}

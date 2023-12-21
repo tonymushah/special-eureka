@@ -14,6 +14,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::AuthorAttributes, relationships::AuthorRelationships};
 
+use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+
 #[derive(Clone, Debug)]
 pub enum Author {
     WithRel(AuthorObject),
@@ -52,13 +54,8 @@ impl Author {
             Author::WithoutRel(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.author().id(o.id).get();
-                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| match f.name() {
-                    "works" => {
-                        includes.push(ReferenceExpansionResource::Manga);
-                    }
-                    _ => {}
-                });
+                let mut includes: Vec<ReferenceExpansionResource> =
+                    <Self as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
                 includes.dedup();
                 Ok(req
                     .includes(includes)
@@ -71,3 +68,17 @@ impl Author {
         }
     }
 }
+
+impl ExtractReferenceExpansion<'_> for Author {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field.selection_set().for_each(|f| {
+            if f.name() == "works" {
+                includes.push(ReferenceExpansionResource::Manga);
+            }
+        });
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for Author {}

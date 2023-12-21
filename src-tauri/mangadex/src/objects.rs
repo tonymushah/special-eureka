@@ -1,5 +1,6 @@
-use async_graphql::SimpleObject;
+use async_graphql::{Context, SelectionField, SimpleObject};
 use mangadex_api_schema_rust::v5::Results;
+use mangadex_api_types_rust::ReferenceExpansionResource;
 
 pub mod api_client;
 pub mod auth;
@@ -37,5 +38,15 @@ impl<T> From<&Results<T>> for ResultsInfo {
             offset: value.offset,
             total: value.total,
         }
+    }
+}
+
+pub trait ExtractReferenceExpansion<'a> {
+    fn exctract(field: SelectionField<'a>) -> Vec<ReferenceExpansionResource>;
+}
+
+pub trait ExtractReferenceExpansionFromContext<'a>: ExtractReferenceExpansion<'a> {
+    fn exctract(ctx: &'a Context<'a>) -> Vec<ReferenceExpansionResource> {
+        <Self as ExtractReferenceExpansion<'a>>::exctract(ctx.field())
     }
 }

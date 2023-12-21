@@ -17,6 +17,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::GraphQLMangaAttributes, relationships::MangaRelationships};
 
+use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+
 #[derive(Clone, Debug)]
 pub enum MangaObject {
     WithRel(MangaData),
@@ -49,32 +51,7 @@ impl MangaObject {
             MangaObject::WithoutRel(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.manga().id(o.id).get();
-                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| {
-                    match f.name().to_case(Case::Snake).as_str() {
-                        "manga" => {
-                            includes.push(ReferenceExpansionResource::Manga);
-                        }
-                        "cover_art" => {
-                            includes.push(ReferenceExpansionResource::CoverArt);
-                        }
-                        "authors" => {
-                            includes.push(ReferenceExpansionResource::Author);
-                        }
-                        "artists" => {
-                            includes.push(ReferenceExpansionResource::Artist);
-                        }
-                        "author_artists" => {
-                            includes.push(ReferenceExpansionResource::Author);
-                            includes.push(ReferenceExpansionResource::Artist);
-                        }
-                        "creator" => {
-                            includes.push(ReferenceExpansionResource::Creator);
-                        }
-                        _ => {}
-                    }
-                });
-                includes.dedup();
+                let includes = <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
                 let res = req.includes(includes).send().await?;
                 Ok(MangaRelationships {
                     id: res.data.id,
@@ -96,3 +73,37 @@ impl From<ApiObjectNoRelationships<MangaAttributes>> for MangaObject {
         Self::WithoutRel(value)
     }
 }
+
+impl ExtractReferenceExpansion<'_> for MangaObject {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field
+            .selection_set()
+            .for_each(|f| match f.name().to_case(Case::Snake).as_str() {
+                "manga" => {
+                    includes.push(ReferenceExpansionResource::Manga);
+                }
+                "cover_art" => {
+                    includes.push(ReferenceExpansionResource::CoverArt);
+                }
+                "authors" => {
+                    includes.push(ReferenceExpansionResource::Author);
+                }
+                "artists" => {
+                    includes.push(ReferenceExpansionResource::Artist);
+                }
+                "author_artists" => {
+                    includes.push(ReferenceExpansionResource::Author);
+                    includes.push(ReferenceExpansionResource::Artist);
+                }
+                "creator" => {
+                    includes.push(ReferenceExpansionResource::Creator);
+                }
+                _ => {}
+            });
+        includes.dedup();
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for MangaObject {}

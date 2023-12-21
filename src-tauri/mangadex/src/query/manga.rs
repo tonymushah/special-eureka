@@ -1,11 +1,13 @@
 use async_graphql::{Context, Object, Result};
-use convert_case::{Case, Casing};
 use mangadex_api_input_types::manga::{list::MangaListParams, random::MangaRandomParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
-    objects::manga::{lists::MangaResults, MangaObject as Manga},
+    objects::{
+        manga::{lists::MangaResults, MangaObject as Manga},
+        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+    },
     utils::get_mangadex_client_from_graphql_context,
 };
 
@@ -23,29 +25,8 @@ impl MangaQueries {
             .selection_set()
             .find(|f| f.name() == "relationships")
         {
-            rel.selection_set()
-                .for_each(|f| match f.name().to_case(Case::Snake).as_str() {
-                    "manga" => {
-                        includes.push(ReferenceExpansionResource::Manga);
-                    }
-                    "cover_art" => {
-                        includes.push(ReferenceExpansionResource::CoverArt);
-                    }
-                    "authors" => {
-                        includes.push(ReferenceExpansionResource::Author);
-                    }
-                    "artists" => {
-                        includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "author_artists" => {
-                        includes.push(ReferenceExpansionResource::Author);
-                        includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "creator" => {
-                        includes.push(ReferenceExpansionResource::Creator);
-                    }
-                    _ => {}
-                });
+            let mut out = <Manga as ExtractReferenceExpansion>::exctract(rel);
+            includes.append(&mut out);
         }
         includes.dedup();
         Ok(req.includes(includes).send().await?.data.into())
@@ -56,41 +37,7 @@ impl MangaQueries {
         #[graphql(default)] mut params: MangaListParams,
     ) -> Result<MangaResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        params.includes.clear();
-        if let Some(rel) = ctx
-            .field()
-            .selection_set()
-            .find(|f| f.name() == "data")
-            .and_then(|pf| pf.selection_set().find(|f| f.name() == "relationships"))
-        {
-            rel.selection_set().for_each(|f| {
-                match f.name().to_case(convert_case::Case::Snake).as_str() {
-                    "manga" => {
-                        params.includes.push(ReferenceExpansionResource::Manga);
-                    }
-                    "cover_art" => {
-                        params.includes.push(ReferenceExpansionResource::CoverArt);
-                    }
-                    "authors" => {
-                        params.includes.push(ReferenceExpansionResource::Author);
-                    }
-                    "artists" => {
-                        params.includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "author_artists" => {
-                        params.includes.push(ReferenceExpansionResource::Author);
-                        params.includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "creator" => {
-                        params.includes.push(ReferenceExpansionResource::Creator);
-                    }
-                    _ => {}
-                }
-            });
-        }
-        params.includes.dedup();
-        #[cfg(debug_assertions)]
-        println!("{:?}", params.includes);
+        params.includes = <Manga as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok(params.send(client.inner()).await?.into())
     }
     pub async fn random(
@@ -100,35 +47,13 @@ impl MangaQueries {
     ) -> Result<Manga> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let includes = &mut params.includes;
-        includes.clear();
         if let Some(rel) = ctx
             .field()
             .selection_set()
             .find(|f| f.name() == "relationships")
         {
-            rel.selection_set()
-                .for_each(|f| match f.name().to_case(Case::Snake).as_str() {
-                    "manga" => {
-                        includes.push(ReferenceExpansionResource::Manga);
-                    }
-                    "cover_art" => {
-                        includes.push(ReferenceExpansionResource::CoverArt);
-                    }
-                    "authors" => {
-                        includes.push(ReferenceExpansionResource::Author);
-                    }
-                    "artists" => {
-                        includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "author_artists" => {
-                        includes.push(ReferenceExpansionResource::Author);
-                        includes.push(ReferenceExpansionResource::Artist);
-                    }
-                    "creator" => {
-                        includes.push(ReferenceExpansionResource::Creator);
-                    }
-                    _ => {}
-                });
+            let out = <Manga as ExtractReferenceExpansion>::exctract(rel);
+            *includes = out;
         }
         Ok(params.send(&client).await?.body.data.into())
     }

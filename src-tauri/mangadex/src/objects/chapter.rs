@@ -11,6 +11,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::ChapterAttributes, relationships::ChapterRelationships};
 
+use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+
 pub mod attributes;
 pub mod lists;
 pub mod pages;
@@ -54,22 +56,7 @@ impl Chapter {
             Chapter::WithoutRelationship(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.chapter().id(o.id).get();
-                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| {
-                    match f.name().to_case(Case::Snake).as_str() {
-                        "manga" => {
-                            includes.push(ReferenceExpansionResource::Manga);
-                        }
-                        "scanlation_groups" => {
-                            includes.push(ReferenceExpansionResource::ScanlationGroup);
-                        }
-                        "user" => {
-                            includes.push(ReferenceExpansionResource::User);
-                        }
-                        _ => {}
-                    }
-                });
-                includes.dedup();
+                let includes = <Self as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
                 Ok(req
                     .includes(includes)
                     .send()
@@ -81,3 +68,27 @@ impl Chapter {
         }
     }
 }
+
+impl ExtractReferenceExpansion<'_> for Chapter {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field
+            .selection_set()
+            .for_each(|f| match f.name().to_case(Case::Snake).as_str() {
+                "manga" => {
+                    includes.push(ReferenceExpansionResource::Manga);
+                }
+                "scanlation_groups" => {
+                    includes.push(ReferenceExpansionResource::ScanlationGroup);
+                }
+                "user" => {
+                    includes.push(ReferenceExpansionResource::User);
+                }
+                _ => {}
+            });
+        includes.dedup();
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for Chapter {}

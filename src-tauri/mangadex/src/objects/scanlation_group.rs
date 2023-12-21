@@ -10,6 +10,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::ScanlationGroupAttributes, relationships::ScanlationGroupRelationships};
 
+use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+
 pub mod attributes;
 pub mod lists;
 pub mod relationships;
@@ -55,16 +57,7 @@ impl ScanlationGroup {
             ScanlationGroup::WithoutRelationship(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.scanlation_group().id(o.id).get();
-                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| match f.name() {
-                    "leader" => {
-                        includes.push(ReferenceExpansionResource::Leader);
-                    }
-                    "members" => {
-                        includes.push(ReferenceExpansionResource::Member);
-                    }
-                    _ => {}
-                });
+                let includes = <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
                 Ok(req
                     .includes(includes)
                     .send()
@@ -76,3 +69,21 @@ impl ScanlationGroup {
         }
     }
 }
+
+impl ExtractReferenceExpansion<'_> for ScanlationGroup {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field.selection_set().for_each(|f| match f.name() {
+            "leader" => {
+                includes.push(ReferenceExpansionResource::Leader);
+            }
+            "members" => {
+                includes.push(ReferenceExpansionResource::Member);
+            }
+            _ => {}
+        });
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for ScanlationGroup {}

@@ -4,7 +4,10 @@ use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
-    objects::cover::{lists::CoverResults, Cover},
+    objects::{
+        cover::{lists::CoverResults, Cover},
+        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+    },
     utils::get_mangadex_client_from_graphql_context,
 };
 
@@ -28,25 +31,7 @@ impl CoverQueries {
         mut params: CoverListParam,
     ) -> Result<CoverResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let includes = &mut params.includes;
-        includes.clear();
-        if let Some(rel) = ctx
-            .field()
-            .selection_set()
-            .find(|f| f.name() == "data")
-            .and_then(|pf| pf.selection_set().find(|f| f.name() == "relationships"))
-        {
-            rel.selection_set().for_each(|f| match f.name() {
-                "manga" => {
-                    includes.push(ReferenceExpansionResource::Manga);
-                }
-                "user" => {
-                    includes.push(ReferenceExpansionResource::User);
-                }
-                _ => {}
-            });
-        }
-        includes.dedup();
+        params.includes = <CoverResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok(params.send(&client).await?.into())
     }
     pub async fn list(
@@ -69,15 +54,8 @@ impl CoverQueries {
             .selection_set()
             .find(|f| f.name() == "relationships")
         {
-            rel.selection_set().for_each(|f| match f.name() {
-                "manga" => {
-                    includes.push(ReferenceExpansionResource::Manga);
-                }
-                "user" => {
-                    includes.push(ReferenceExpansionResource::User);
-                }
-                _ => {}
-            });
+            let mut out = <Cover as ExtractReferenceExpansion>::exctract(rel);
+            includes.append(&mut out);
         }
         includes.dedup();
         Ok(client

@@ -1,7 +1,10 @@
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{GroupObject, Results};
+use mangadex_api_types_rust::ReferenceExpansionResource;
 
-use crate::objects::ResultsInfo;
+use crate::objects::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, ResultsInfo,
+};
 
 use super::ScanlationGroup as Group;
 
@@ -24,3 +27,20 @@ impl From<Results<GroupObject>> for ScanlationGroupResults {
         }
     }
 }
+
+impl ExtractReferenceExpansion<'_> for ScanlationGroupResults {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        if let Some(rel_field) = field
+            .selection_set()
+            .find(|f| f.name() == "data")
+            .and_then(|_f| _f.selection_set().find(|f| f.name() == "relationship"))
+        {
+            let mut out = <Group as ExtractReferenceExpansion>::exctract(rel_field);
+            includes.append(&mut out);
+        }
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for ScanlationGroupResults {}

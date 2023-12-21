@@ -4,7 +4,10 @@ use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
-    objects::api_client::{lists::ApiClientResults, ApiClient},
+    objects::{
+        api_client::{lists::ApiClientResults, ApiClient},
+        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+    },
     utils::get_mangadex_client_from_graphql_context,
 };
 
@@ -19,21 +22,7 @@ impl ApiClientQueries {
         #[graphql(default_with = "default_params()")] mut params: ApiClientListParam,
     ) -> Result<ApiClientResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        params.includes.clear();
-        if let Some(rel) = ctx
-            .field()
-            .selection_set()
-            .find(|f| f.name() == "data")
-            .and_then(|pf| pf.selection_set().find(|f| f.name() == "relationships"))
-        {
-            rel.selection_set().for_each(|f| match f.name() {
-                "creator" => {
-                    params.includes.push(ReferenceExpansionResource::Creator);
-                }
-                _ => {}
-            });
-        }
-        params.includes.dedup();
+        params.includes = <ApiClientResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok(params.send(&client).await?.into())
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<ApiClient> {
@@ -44,12 +33,8 @@ impl ApiClientQueries {
             .selection_set()
             .find(|f| f.name() == "relationships")
         {
-            rel.selection_set().for_each(|f| match f.name() {
-                "creator" => {
-                    includes.push(ReferenceExpansionResource::Creator);
-                }
-                _ => {}
-            });
+            let mut out = <ApiClient as ExtractReferenceExpansion>::exctract(rel);
+            includes.append(&mut out);
         }
         includes.dedup();
         Ok(client

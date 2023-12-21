@@ -10,6 +10,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::ApiClientAttributes, relationships::ApiClientRelationships};
 
+use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+
 pub mod attributes;
 pub mod lists;
 pub mod relationships;
@@ -52,13 +54,8 @@ impl ApiClient {
             ApiClient::WithoutRelationship(o) => {
                 let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
                 let mut req = client.client().id(o.id).get();
-                let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-                ctx.field().selection_set().for_each(|f| match f.name() {
-                    "creator" => {
-                        includes.push(ReferenceExpansionResource::Creator);
-                    }
-                    _ => {}
-                });
+                let mut includes: Vec<ReferenceExpansionResource> =
+                    <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
                 includes.dedup();
                 Ok(req
                     .includes(includes)
@@ -82,3 +79,17 @@ impl ApiClient {
             .data)
     }
 }
+
+impl ExtractReferenceExpansion<'_> for ApiClient {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field.selection_set().for_each(|f| {
+            if f.name() == "creator" {
+                includes.push(ReferenceExpansionResource::Creator);
+            }
+        });
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for ApiClient {}

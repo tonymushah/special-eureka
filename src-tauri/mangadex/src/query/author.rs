@@ -4,7 +4,10 @@ use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
-    objects::author::{lists::AuthorResults, Author},
+    objects::{
+        author::{lists::AuthorResults, Author},
+        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+    },
     utils::get_mangadex_client_from_graphql_context,
 };
 
@@ -19,22 +22,7 @@ impl AuthorQueries {
         #[graphql(default_with = "list_default_params()")] mut params: AuthorListParams,
     ) -> Result<AuthorResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let includes = &mut params.includes;
-        includes.clear();
-        if let Some(rel) = ctx
-            .field()
-            .selection_set()
-            .find(|f| f.name() == "data")
-            .and_then(|pf| pf.selection_set().find(|f| f.name() == "relationships"))
-        {
-            rel.selection_set().for_each(|f| match f.name() {
-                "works" => {
-                    includes.push(ReferenceExpansionResource::Manga);
-                }
-                _ => {}
-            });
-        }
-        includes.dedup();
+        params.includes = <AuthorResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok(params.send(&client).await?.into())
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Author> {
@@ -45,12 +33,8 @@ impl AuthorQueries {
             .selection_set()
             .find(|f| f.name() == "relationships")
         {
-            rel.selection_set().for_each(|f| match f.name() {
-                "works" => {
-                    includes.push(ReferenceExpansionResource::Manga);
-                }
-                _ => {}
-            });
+            let mut out = <Author as ExtractReferenceExpansion>::exctract(rel);
+            includes.append(&mut out);
         }
         includes.dedup();
         Ok(client
