@@ -1,6 +1,8 @@
+pub mod aggregate;
 pub mod attributes;
 pub mod links;
 pub mod lists;
+pub mod manga_reading_status;
 pub mod related;
 pub mod relationships;
 
