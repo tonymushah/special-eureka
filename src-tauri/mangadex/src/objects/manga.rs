@@ -27,19 +27,28 @@ pub enum MangaObject {
     WithoutRel(ApiObjectNoRelationships<MangaAttributes>),
 }
 
-#[Object]
 impl MangaObject {
-    pub async fn id(&self) -> Uuid {
+    pub fn get_id(&self) -> Uuid {
         match self {
             MangaObject::WithRel(e) => e.id,
             MangaObject::WithoutRel(e) => e.id,
         }
     }
-    pub async fn attributes(&self) -> GraphQLMangaAttributes {
+    pub fn get_attributes(&self) -> MangaAttributes {
         match self {
-            MangaObject::WithRel(e) => e.attributes.clone().into(),
-            MangaObject::WithoutRel(e) => e.attributes.clone().into(),
+            MangaObject::WithRel(e) => e.attributes.clone(),
+            MangaObject::WithoutRel(e) => e.attributes.clone(),
         }
+    }
+}
+
+#[Object]
+impl MangaObject {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> GraphQLMangaAttributes {
+        self.get_attributes().into()
     }
     pub async fn relationships<'ctx>(
         &'ctx self,

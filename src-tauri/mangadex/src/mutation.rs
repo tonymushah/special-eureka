@@ -5,6 +5,7 @@ pub mod chapter;
 pub mod cover;
 pub mod custom_list;
 pub mod forums;
+pub mod manga;
 
 use async_graphql::Object;
 
