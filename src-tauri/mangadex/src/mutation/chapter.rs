@@ -1,10 +1,13 @@
-use async_graphql::{Context, EmptyMutation, Enum, Object, Result};
+use async_graphql::{Context, EmptyMutation, Enum, Error, Object, Result};
 use mangadex_api::utils::download::chapter::DownloadMode as MDDownloadMode;
 use mangadex_api_input_types::chapter::edit::ChapterUpdateParams;
 use mangadex_api_schema_rust::{v5::ChapterAttributes, ApiObjectNoRelationships};
 use uuid::Uuid;
 
-use crate::{objects::chapter::Chapter, utils::get_mangadex_client_from_graphql_context};
+use crate::{
+    objects::chapter::Chapter,
+    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ChapterMutations;
@@ -23,16 +26,32 @@ impl ChapterMutations {
         Ok(EmptyMutation)
     }
     /// Remove the chapter from the current device or offline
-    pub async fn remove(&self, _ctx: &Context<'_>, _id: Uuid) -> Result<EmptyMutation> {
-        todo!()
+    pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let mut offline_app_state_write = ola.write().await;
+        let olasw = offline_app_state_write
+            .as_mut()
+            .ok_or(Error::new("Offline AppState Not loaded"))?;
+        olasw.chapter_utils().with_id(id).delete()?;
+        Ok(EmptyMutation)
     }
     pub async fn download(
         &self,
-        _ctx: &Context<'_>,
-        _id: Uuid,
-        #[graphql(default_with = "default_download_quality()")] _quality: DownloadMode,
+        ctx: &Context<'_>,
+        id: Uuid,
+        #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
     ) -> Result<EmptyMutation> {
-        todo!()
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let mut offline_app_state_write = ola.write().await;
+        let olasw = offline_app_state_write
+            .as_mut()
+            .ok_or(Error::new("Offline AppState Not loaded"))?;
+        let chapter_download = olasw.chapter_download(id);
+        let _ = match quality {
+            DownloadMode::Normal => chapter_download.download_chapter(olasw).await?,
+            DownloadMode::DataSaver => chapter_download.download_chapter_data_saver(olasw).await?,
+        };
+        Ok(EmptyMutation)
     }
 }
 

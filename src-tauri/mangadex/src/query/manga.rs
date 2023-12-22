@@ -1,4 +1,6 @@
 pub mod aggregate;
+pub mod get_unique;
+pub mod list;
 
 use std::collections::HashMap;
 
@@ -8,7 +10,7 @@ use mangadex_api_input_types::manga::{
     get_drafts::MangaDraftsParams, get_relation_list::MangaRelationParam, list::MangaListParams,
     random::MangaRandomParams,
 };
-use mangadex_api_types_rust::{MangaRelation, ReadingStatus, ReferenceExpansionResource};
+use mangadex_api_types_rust::{MangaRelation, ReadingStatus};
 use uuid::Uuid;
 
 use crate::{
@@ -23,36 +25,24 @@ use crate::{
     utils::get_mangadex_client_from_graphql_context,
 };
 
-use self::aggregate::MangaAggregateQueries;
+use self::{
+    aggregate::MangaAggregateQueries, get_unique::MangaGetUniqueQueries, list::MangaListQueries,
+};
 
+#[derive(Debug, Clone, Copy)]
 pub struct MangaQueries;
 
 #[Object]
 impl MangaQueries {
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
-        // TODO Add offline supports
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let mut req = client.manga().id(id).get();
-        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-        if let Some(rel) = ctx
-            .field()
-            .selection_set()
-            .find(|f| f.name() == "relationships")
-        {
-            let mut out = <Manga as ExtractReferenceExpansion>::exctract(rel);
-            includes.append(&mut out);
-        }
-        includes.dedup();
-        Ok(req.includes(includes).send().await?.data.into())
+        MangaGetUniqueQueries(id).get(ctx).await
     }
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: MangaListParams,
+        #[graphql(default)] params: MangaListParams,
     ) -> Result<MangaResults> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        params.includes = <Manga as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(client.inner()).await?.into())
+        MangaListQueries(params).list(ctx).await
     }
     pub async fn random(
         &self,
