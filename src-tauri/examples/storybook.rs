@@ -4,14 +4,13 @@
 )]
 //use mangadex_desktop_api2::{verify_all_fs, launch_async_server_default};
 
-#[tokio::main]
-async fn main() {
+fn main() {
     let context = tauri::generate_context!("./examples/tauri.conf.json");
     match tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![])
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
-        .plugin(tauri_plugin_speu_mangadex::init())
+        .plugin(tauri_plugin_speu_mangadex::MangadexDesktopApi::default())
         .plugin(sentry_tauri::plugin())
         .build(context)
     {

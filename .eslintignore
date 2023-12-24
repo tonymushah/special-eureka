@@ -1,6 +1,13 @@
+.DS_Store
 node_modules
-commons-res/bootstrap.bundle.js
-commons-res/bootstrap.bundle.js.map
-commons-res/flags-color-font
-commons-res/fontawesome-free-6.1.2-desktop
-commons-res/fontawesome-free-6.1.2-web
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+
+# Ignore files for PNPM, NPM and YARN
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
