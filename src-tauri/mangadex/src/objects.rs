@@ -11,6 +11,7 @@ pub mod custom_list;
 pub mod legacy_id_mapping;
 pub mod manga;
 pub mod manga_chapter_group;
+pub mod rating;
 pub mod scanlation_group;
 pub mod tag;
 pub mod user;
