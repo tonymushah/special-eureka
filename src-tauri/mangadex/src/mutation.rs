@@ -13,6 +13,7 @@ use async_graphql::Object;
 use self::{
     api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
     chapter::ChapterMutations, custom_list::CustomListMutations, forums::ForumsMutations,
+    manga::MangaMutations, rating::RatingMutations,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -37,5 +38,11 @@ impl Mutation {
     }
     pub async fn forums(&self) -> ForumsMutations {
         ForumsMutations
+    }
+    pub async fn manga(&self) -> MangaMutations {
+        MangaMutations
+    }
+    pub async fn rating(&self) -> RatingMutations {
+        RatingMutations
     }
 }

@@ -18,7 +18,7 @@ use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
-    manga::MangaQueries, tag::TagQueries,
+    manga::MangaQueries, rating::RatingQueries, tag::TagQueries,
 };
 
 pub struct Query;
@@ -57,5 +57,8 @@ impl Query {
     }
     pub async fn tag(&self) -> TagQueries {
         TagQueries
+    }
+    pub async fn rating(&self) -> RatingQueries {
+        RatingQueries
     }
 }
