@@ -8,7 +8,7 @@ use crate::{
         api_client::{lists::ApiClientResults, ApiClient},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
-    utils::get_mangadex_client_from_graphql_context,
+    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -21,12 +21,14 @@ impl ApiClientQueries {
         ctx: &Context<'_>,
         #[graphql(default_with = "default_params()")] mut params: ApiClientListParam,
     ) -> Result<ApiClientResults> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.includes = <ApiClientResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok(params.send(&client).await?.into())
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<ApiClient> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
         if let Some(rel) = ctx
             .field()

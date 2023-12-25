@@ -6,7 +6,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::custom_list::{lists::CustomListResults, CustomList},
-    utils::get_mangadex_client_from_graphql_context,
+    utils::{
+        get_mangadex_client_from_graphql_context,
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -23,7 +26,8 @@ impl CustomListQueries {
         ctx: &Context<'_>,
         #[graphql(default)] params: CurrentLoggedLists,
     ) -> Result<CustomListResults> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(params.send(&client).await?.into())
     }
     pub async fn get_user_lists(

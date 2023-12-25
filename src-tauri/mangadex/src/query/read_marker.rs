@@ -4,7 +4,7 @@ use uuid::Uuid;
 
 use crate::{
     objects::read_marker::{grouped::MangaReadMarkerGroupedItems, user_history::UserHistoryEntry},
-    utils::get_mangadex_client_from_graphql_context,
+    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -17,7 +17,8 @@ impl ReadMarkerQueries {
         ctx: &Context<'_>,
         manga_id: Uuid,
     ) -> Result<Vec<Uuid>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(client.manga().id(manga_id).read().get().send().await?.data)
     }
     pub async fn manga_read_markers(
@@ -25,7 +26,8 @@ impl ReadMarkerQueries {
         ctx: &Context<'_>,
         #[graphql(validator(min_items = 1, max_items = 100))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<Uuid>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         if let MangaReadMarkers::Ungrouped(res) = client
             .manga()
             .read()
@@ -44,7 +46,8 @@ impl ReadMarkerQueries {
         ctx: &Context<'_>,
         #[graphql(validator(min_items = 1, max_items = 100))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<MangaReadMarkerGroupedItems>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         if let MangaReadMarkers::Grouped(res) = client
             .manga()
             .read()
@@ -64,7 +67,8 @@ impl ReadMarkerQueries {
         }
     }
     pub async fn user_history(&self, ctx: &Context<'_>) -> Result<Vec<UserHistoryEntry>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(client
             .user()
             .history()

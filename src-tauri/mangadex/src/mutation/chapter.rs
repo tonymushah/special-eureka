@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use crate::{
     objects::chapter::Chapter,
-    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+    utils::{get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -15,13 +15,15 @@ pub struct ChapterMutations;
 #[Object]
 impl ChapterMutations {
     pub async fn update(&self, ctx: &Context<'_>, params: ChapterUpdateParams) -> Result<Chapter> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let res: ApiObjectNoRelationships<ChapterAttributes> =
             params.send(&client).await?.body.data.into();
         Ok(res.into())
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let _ = client.chapter().id(id).delete().send().await?;
         Ok(EmptyMutation)
     }

@@ -5,7 +5,10 @@ use mangadex_api_input_types::custom_list::{
 };
 use uuid::Uuid;
 
-use crate::{objects::custom_list::CustomList, utils::get_mangadex_client_from_graphql_context};
+use crate::{
+    objects::custom_list::CustomList,
+    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct CustomListMutations;
@@ -17,7 +20,8 @@ impl CustomListMutations {
         ctx: &Context<'_>,
         params: CustomListCreateParam,
     ) -> Result<CustomList> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(params.send(&client).await?.data.into())
     }
     pub async fn update(
@@ -25,21 +29,25 @@ impl CustomListMutations {
         ctx: &Context<'_>,
         params: CustomListUpdateParams,
     ) -> Result<CustomList> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(params.send(&client).await?.data.into())
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).delete().send().await?;
         Ok(EmptyMutation)
     }
     pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).follow().post().send().await?;
         Ok(EmptyMutation)
     }
     pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).follow().delete().send().await?;
         Ok(EmptyMutation)
     }
@@ -48,7 +56,8 @@ impl CustomListMutations {
         ctx: &Context<'_>,
         params: CustomListAddMangaParam,
     ) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.send(&client).await?;
         Ok(EmptyMutation)
     }
@@ -57,7 +66,8 @@ impl CustomListMutations {
         ctx: &Context<'_>,
         params: CustomListRemoveMangaParam,
     ) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.send(&client).await?;
         Ok(EmptyMutation)
     }

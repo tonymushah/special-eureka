@@ -9,6 +9,7 @@ pub mod follows;
 pub mod infrastructure;
 pub mod legacy;
 pub mod manga;
+pub mod oauth;
 pub mod rating;
 pub mod read_marker;
 pub mod tag;
@@ -19,7 +20,8 @@ use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
-    manga::MangaQueries, rating::RatingQueries, read_marker::ReadMarkerQueries, tag::TagQueries,
+    manga::MangaQueries, oauth::OauthQueries, rating::RatingQueries,
+    read_marker::ReadMarkerQueries, tag::TagQueries,
 };
 
 pub struct Query;
@@ -64,5 +66,8 @@ impl Query {
     }
     pub async fn read_marker(&self) -> ReadMarkerQueries {
         ReadMarkerQueries
+    }
+    pub async fn oauth(&self) -> OauthQueries {
+        OauthQueries
     }
 }
