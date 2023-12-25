@@ -10,6 +10,7 @@ pub mod infrastructure;
 pub mod legacy;
 pub mod manga;
 pub mod rating;
+pub mod read_marker;
 pub mod tag;
 
 use async_graphql::Object;
@@ -18,7 +19,7 @@ use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
-    manga::MangaQueries, rating::RatingQueries, tag::TagQueries,
+    manga::MangaQueries, rating::RatingQueries, read_marker::ReadMarkerQueries, tag::TagQueries,
 };
 
 pub struct Query;
@@ -60,5 +61,8 @@ impl Query {
     }
     pub async fn rating(&self) -> RatingQueries {
         RatingQueries
+    }
+    pub async fn read_marker(&self) -> ReadMarkerQueries {
+        ReadMarkerQueries
     }
 }
