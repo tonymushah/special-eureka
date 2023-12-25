@@ -6,6 +6,7 @@ pub mod cover;
 pub mod custom_list;
 pub mod forums;
 pub mod manga;
+pub mod oauth;
 pub mod rating;
 pub mod read_marker;
 
@@ -14,7 +15,8 @@ use async_graphql::Object;
 use self::{
     api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
     chapter::ChapterMutations, custom_list::CustomListMutations, forums::ForumsMutations,
-    manga::MangaMutations, rating::RatingMutations, read_marker::ReadMarkerMutations,
+    manga::MangaMutations, oauth::OauthMutations, rating::RatingMutations,
+    read_marker::ReadMarkerMutations,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -48,5 +50,8 @@ impl Mutation {
     }
     pub async fn read_marker(&self) -> ReadMarkerMutations {
         ReadMarkerMutations
+    }
+    pub async fn oauth(&self) -> OauthMutations {
+        OauthMutations
     }
 }
