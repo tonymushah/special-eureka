@@ -6,6 +6,7 @@ pub mod cover;
 pub mod custom_list;
 pub mod forums;
 pub mod manga;
+pub mod rating;
 
 use async_graphql::Object;
 

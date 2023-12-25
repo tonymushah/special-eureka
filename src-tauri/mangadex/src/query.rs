@@ -9,6 +9,7 @@ pub mod follows;
 pub mod infrastructure;
 pub mod legacy;
 pub mod manga;
+pub mod rating;
 pub mod tag;
 
 use async_graphql::Object;

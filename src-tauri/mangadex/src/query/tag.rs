@@ -5,7 +5,10 @@ use mangadex_api_schema_rust::{
 };
 use mangadex_api_types_rust::{ResponseType, Tag as TagEnum};
 
-use crate::{objects::tag::lists::TagResults, utils::get_mangadex_client_from_graphql_context};
+use crate::{
+    objects::tag::lists::{TagResults, TagResultsGrouped},
+    utils::get_mangadex_client_from_graphql_context,
+};
 
 #[derive(Clone, Copy, Debug, Default)]
 pub struct TagQueries;
@@ -40,5 +43,8 @@ impl TagQueries {
         } else {
             self.get_offline()
         }
+    }
+    pub async fn list_grouped(&self, ctx: &Context<'_>) -> Result<TagResultsGrouped> {
+        Ok(self.list(ctx).await?.into())
     }
 }
