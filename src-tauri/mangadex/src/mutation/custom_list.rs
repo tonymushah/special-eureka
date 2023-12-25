@@ -40,15 +40,7 @@ impl CustomListMutations {
     }
     pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        // TODO fix this shit with `mangadex-api` v3.0.1
-        client
-            .custom_list()
-            .id(id)
-            .follow()
-            .delete()
-            .build()?
-            .send()
-            .await?;
+        client.custom_list().id(id).follow().delete().send().await?;
         Ok(EmptyMutation)
     }
     pub async fn add_manga(
