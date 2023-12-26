@@ -13,6 +13,7 @@ pub mod oauth;
 pub mod rating;
 pub mod read_marker;
 pub mod report;
+pub mod scanlation_group;
 pub mod tag;
 
 use async_graphql::Object;

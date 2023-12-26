@@ -53,3 +53,8 @@ features = ["serde", "v4"]
 [dependencies.time]
 version = "0.3"
 features = ["serde-human-readable", "large-dates", "local-offset"]
+
+[dependencies.tauri-plugin-store]
+git = "https://github.com/tauri-apps/plugins-workspace"
+#tag = "v0.1.0"
+branch = "v1"

@@ -53,7 +53,7 @@ window-vibrancy = "0.4"
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"
 #tag = "v0.1.0"
-branch = "dev"
+branch = "v1"
 
 [dependencies.tauri-plugin-speu-mangadex]
 path = "./mangadex"
