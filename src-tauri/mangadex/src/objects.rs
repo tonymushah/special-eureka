@@ -14,6 +14,8 @@ pub mod manga_chapter_group;
 pub mod oauth;
 pub mod rating;
 pub mod read_marker;
+pub mod report;
+pub mod report_reason;
 pub mod scanlation_group;
 pub mod tag;
 pub mod user;
