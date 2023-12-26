@@ -12,6 +12,7 @@ pub mod manga;
 pub mod oauth;
 pub mod rating;
 pub mod read_marker;
+pub mod report;
 pub mod tag;
 
 use async_graphql::Object;
@@ -21,7 +22,7 @@ use self::{
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
     manga::MangaQueries, oauth::OauthQueries, rating::RatingQueries,
-    read_marker::ReadMarkerQueries, tag::TagQueries,
+    read_marker::ReadMarkerQueries, report::ReportQueries, tag::TagQueries,
 };
 
 pub struct Query;
@@ -69,5 +70,8 @@ impl Query {
     }
     pub async fn oauth(&self) -> OauthQueries {
         OauthQueries
+    }
+    pub async fn report(&self) -> ReportQueries {
+        ReportQueries
     }
 }
