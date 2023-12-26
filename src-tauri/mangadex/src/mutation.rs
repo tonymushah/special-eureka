@@ -10,6 +10,7 @@ pub mod oauth;
 pub mod rating;
 pub mod read_marker;
 pub mod report;
+pub mod scanlation_group;
 
 use async_graphql::Object;
 
@@ -18,6 +19,7 @@ use self::{
     chapter::ChapterMutations, custom_list::CustomListMutations, forums::ForumsMutations,
     manga::MangaMutations, oauth::OauthMutations, rating::RatingMutations,
     read_marker::ReadMarkerMutations, report::ReportMutations,
+    scanlation_group::ScanlationGroupMutation,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -57,5 +59,8 @@ impl Mutation {
     }
     pub async fn report(&self) -> ReportMutations {
         ReportMutations
+    }
+    pub async fn scanlation_group(&self) -> ScanlationGroupMutation {
+        ScanlationGroupMutation
     }
 }
