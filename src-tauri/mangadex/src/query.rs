@@ -16,6 +16,7 @@ pub mod report;
 pub mod scanlation_group;
 pub mod statistics;
 pub mod tag;
+pub mod user;
 
 use async_graphql::Object;
 
@@ -25,7 +26,7 @@ use self::{
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
     manga::MangaQueries, oauth::OauthQueries, rating::RatingQueries,
     read_marker::ReadMarkerQueries, report::ReportQueries, statistics::StatisticsQueries,
-    tag::TagQueries,
+    tag::TagQueries, user::UserQueries,
 };
 
 pub struct Query;
@@ -79,5 +80,8 @@ impl Query {
     }
     pub async fn statistics(&self) -> StatisticsQueries {
         StatisticsQueries
+    }
+    pub async fn user(&self) -> UserQueries {
+        UserQueries
     }
 }
