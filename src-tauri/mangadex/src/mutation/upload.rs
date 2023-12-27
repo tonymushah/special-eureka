@@ -1,4 +1,4 @@
-use async_graphql::{Context, EmptyMutation, Error, Object, Result};
+use async_graphql::{Context, Error, Object, Result};
 use mangadex_api::{
     utils::upload::{abandon_session, check_and_abandon_session_if_exists},
     v5::upload::upload_session_id::post::UploadImage,
@@ -85,15 +85,11 @@ impl UploadMutations {
             .ok_or(Error::new("No files has been uploaded"))?
             .into())
     }
-    pub async fn abandon_session(
-        &self,
-        ctx: &Context<'_>,
-        session_id: Uuid,
-    ) -> Result<EmptyMutation> {
+    pub async fn abandon_session(&self, ctx: &Context<'_>, session_id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         abandon_session(session_id, &client).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn commit_session(
         &self,
@@ -109,20 +105,20 @@ impl UploadMutations {
         &self,
         ctx: &Context<'_>,
         params: DeleteImageParam,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let _res = params.send(&client).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn delete_files_from_upload_session(
         &self,
         ctx: &Context<'_>,
         params: DeleteImagesParam,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let _res = params.send(&client).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

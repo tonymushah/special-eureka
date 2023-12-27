@@ -1,4 +1,4 @@
-use async_graphql::{Context, EmptyMutation, Error, Object, Result};
+use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_schema_rust::v5::oauth::ClientInfo;
 use mangadex_api_types_rust::{Password, Username};
 use tokio::time::{Duration, Instant};
@@ -15,7 +15,7 @@ impl OauthMutations {
         ctx: &Context<'_>,
         username: Username,
         password: Password,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = client
             .oauth()
@@ -35,9 +35,9 @@ impl OauthMutations {
                     ))?,
             );
         }
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn refresh(&self, ctx: &Context<'_>) -> Result<EmptyMutation> {
+    pub async fn refresh(&self, ctx: &Context<'_>) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = client.oauth().refresh().send().await?;
         {
@@ -51,14 +51,14 @@ impl OauthMutations {
                     ))?,
             );
         }
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn set_client_info(
         &self,
         ctx: &Context<'_>,
         client_id: String,
         client_secret: String,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         client
             .set_client_info(&ClientInfo {
@@ -66,11 +66,11 @@ impl OauthMutations {
                 client_secret,
             })
             .await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn clear_client_info(&self, ctx: &Context<'_>) -> Result<EmptyMutation> {
+    pub async fn clear_client_info(&self, ctx: &Context<'_>) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         client.clear_client_info().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

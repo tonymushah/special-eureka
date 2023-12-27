@@ -214,3 +214,8 @@ where
         <Self as MizukiPluginTrait<R, Q, M, S>>::extend_api(self, invoke);
     }
 }
+
+/*
+    might be usefule in the future
+    "(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<file_name>\w*.\w*)"
+*/

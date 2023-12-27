@@ -1,4 +1,4 @@
-use async_graphql::{Context, EmptyMutation, Object, Result};
+use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::custom_list::{
     add_manga::CustomListAddMangaParam, create::CustomListCreateParam,
     remove_manga::CustomListRemoveMangaParam, update::CustomListUpdateParams,
@@ -33,42 +33,42 @@ impl CustomListMutations {
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(params.send(&client).await?.data.into())
     }
-    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).delete().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).follow().post().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).follow().delete().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn add_manga(
         &self,
         ctx: &Context<'_>,
         params: CustomListAddMangaParam,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.send(&client).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn remove_manga(
         &self,
         ctx: &Context<'_>,
         params: CustomListRemoveMangaParam,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.send(&client).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

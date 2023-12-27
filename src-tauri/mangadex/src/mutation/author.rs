@@ -1,4 +1,4 @@
-use async_graphql::{Context, EmptyMutation, Object, Result};
+use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::author::{create::AuthorCreateParams, edit::AuthorEditParams};
 use mangadex_api_schema_rust::{v5::AuthorAttributes, ApiObjectNoRelationships};
 use uuid::Uuid;
@@ -26,10 +26,10 @@ impl AuthorMutations {
         let res: ApiObjectNoRelationships<AuthorAttributes> = pre_res.body.data.into();
         Ok(res.into())
     }
-    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let _ = client.author().id(id).delete().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

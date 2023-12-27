@@ -1,4 +1,4 @@
-use async_graphql::{Context, EmptyMutation, Object, Result};
+use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::scanlation_group::{
     create::CreateScalantionGroupParam, edit::EditScanlationGroupParam,
 };
@@ -37,13 +37,13 @@ impl ScanlationGroupMutation {
         let res: ApiObjectNoRelationships<ScanlationGroupAttributes> = res.body.data.into();
         Ok(res.into())
     }
-    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let _res = client.scanlation_group().id(id).delete().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client
@@ -53,9 +53,9 @@ impl ScanlationGroupMutation {
             .post()
             .send()
             .await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client
@@ -65,6 +65,6 @@ impl ScanlationGroupMutation {
             .delete()
             .send()
             .await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

@@ -1,4 +1,4 @@
-use async_graphql::{Context, EmptyMutation, Object, Result};
+use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::read_marker::batch_read_marker::MarkChapterBatchParam;
 
 use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;
@@ -12,10 +12,10 @@ impl ReadMarkerMutations {
         &self,
         ctx: &Context<'_>,
         params: MarkChapterBatchParam,
-    ) -> Result<EmptyMutation> {
+    ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.send(&client).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

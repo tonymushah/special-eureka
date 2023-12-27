@@ -1,4 +1,4 @@
-use async_graphql::{EmptyMutation, Error};
+use async_graphql::Error;
 use mangadex_api::MangaDexClient;
 use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
@@ -124,21 +124,21 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
 
 pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<EmptyMutation> {
+) -> async_graphql::Result<bool> {
     let client = get_mangadex_client_from_graphql_context::<R>(ctx)?;
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
     let mut app_state = AppState::init().await?;
     app_state.http_client = client.get_http_client().clone();
     offline_app_state_write.replace(app_state);
-    Ok(EmptyMutation)
+    Ok(true)
 }
 
 pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<EmptyMutation> {
+) -> async_graphql::Result<bool> {
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
     let _ = offline_app_state_write.take();
-    Ok(EmptyMutation)
+    Ok(true)
 }
