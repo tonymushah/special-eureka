@@ -1,6 +1,6 @@
 use async_graphql::{EmptyMutation, Error};
 use mangadex_api::MangaDexClient;
-use mangadex_desktop_api2::{verify_all_fs, AppState};
+use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
 use std::io::Result;
 use tauri::{AppHandle, Manager, Runtime, State};
