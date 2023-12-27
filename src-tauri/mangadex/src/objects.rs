@@ -19,6 +19,7 @@ pub mod report_reason;
 pub mod scanlation_group;
 pub mod statistics;
 pub mod tag;
+pub mod upload;
 pub mod user;
 
 #[derive(Debug, Clone, Copy, SimpleObject)]

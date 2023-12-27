@@ -19,6 +19,12 @@ impl From<Attributes> for UserAttributes {
     }
 }
 
+impl From<UserAttributes> for Attributes {
+    fn from(value: UserAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl UserAttributes {
     pub async fn username(&self) -> &String {
