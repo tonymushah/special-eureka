@@ -216,6 +216,7 @@ where
 }
 
 /*
+    <https://regex101.com/r/rI3jhp/1>
     might be usefule in the future
     "(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<file_name>\w*.\w*)"
 */
