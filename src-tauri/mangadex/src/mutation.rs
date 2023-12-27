@@ -6,12 +6,22 @@ pub mod cover;
 pub mod custom_list;
 pub mod forums;
 pub mod manga;
+pub mod oauth;
+pub mod offline_app_state;
+pub mod rating;
+pub mod read_marker;
+pub mod report;
+pub mod scanlation_group;
+pub mod upload;
 
 use async_graphql::Object;
 
 use self::{
     api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
     chapter::ChapterMutations, custom_list::CustomListMutations, forums::ForumsMutations,
+    manga::MangaMutations, oauth::OauthMutations, offline_app_state::OfflineAppStateMutations,
+    rating::RatingMutations, read_marker::ReadMarkerMutations, report::ReportMutations,
+    scanlation_group::ScanlationGroupMutation, upload::UploadMutations,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -36,5 +46,29 @@ impl Mutation {
     }
     pub async fn forums(&self) -> ForumsMutations {
         ForumsMutations
+    }
+    pub async fn manga(&self) -> MangaMutations {
+        MangaMutations
+    }
+    pub async fn rating(&self) -> RatingMutations {
+        RatingMutations
+    }
+    pub async fn read_marker(&self) -> ReadMarkerMutations {
+        ReadMarkerMutations
+    }
+    pub async fn oauth(&self) -> OauthMutations {
+        OauthMutations
+    }
+    pub async fn report(&self) -> ReportMutations {
+        ReportMutations
+    }
+    pub async fn scanlation_group(&self) -> ScanlationGroupMutation {
+        ScanlationGroupMutation
+    }
+    pub async fn upload(&self) -> UploadMutations {
+        UploadMutations
+    }
+    pub async fn offline_app_state(&self) -> OfflineAppStateMutations {
+        OfflineAppStateMutations
     }
 }

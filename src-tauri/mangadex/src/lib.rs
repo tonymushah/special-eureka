@@ -1,8 +1,9 @@
-use std::{path::PathBuf, sync::Arc};
+use std::path::PathBuf;
 
-use app_state::OfflineAppState;
-use async_graphql::{BatchRequest, EmptyMutation, EmptySubscription, Schema};
+use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
+use async_graphql::{BatchRequest, EmptySubscription, Schema};
 use mangadex_api::MangaDexClient;
+use mutation::Mutation;
 // use mangadex_desktop_api2::AppState;
 use query::Query;
 use reqwest::{
@@ -18,7 +19,6 @@ pub mod intelligent_notification_system;
 pub mod utils;
 use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
 use serde::{ser::Serializer, Serialize};
-use tokio::sync::RwLock;
 use url::Url;
 use utils::set_indentifier;
 pub mod ins_handle;
@@ -30,7 +30,7 @@ pub mod objects;
 pub mod query;
 
 type Q = Query;
-type M = EmptyMutation;
+type M = Mutation;
 type S = EmptySubscription;
 
 #[derive(Clone, serde::Serialize)]
@@ -67,6 +67,7 @@ pub struct MangadexDesktopApi {
     pub schema: Schema<Q, M, S>,
     pub client: MangaDexClient,
     pub offline_app_state: OfflineAppState,
+    pub last_time_fetched: LastTimeTokenWhenFecthed,
 }
 
 impl Default for MangadexDesktopApi {
@@ -81,9 +82,10 @@ impl Default for MangadexDesktopApi {
             .build()
             .unwrap();
         Self {
-            schema: Schema::new(Query, EmptyMutation, EmptySubscription),
+            schema: Schema::new(Query, Mutation, EmptySubscription),
             client: MangaDexClient::new(cli),
-            offline_app_state: OfflineAppState(Arc::new(RwLock::new(None))),
+            offline_app_state: Default::default(),
+            last_time_fetched: Default::default(),
         }
     }
 }
@@ -195,6 +197,7 @@ where
 
         app.manage(self.offline_app_state.clone());
         app.manage(self.client.clone());
+        app.manage(self.last_time_fetched.clone());
         init_ins_chapter_handle()?;
         set_ins_chapter_checker_handle(std::thread::spawn(|| loop {
             match check_plus_notify() {
@@ -211,3 +214,9 @@ where
         <Self as MizukiPluginTrait<R, Q, M, S>>::extend_api(self, invoke);
     }
 }
+
+/*
+    <https://regex101.com/r/rI3jhp/1>
+    might be usefule in the future
+    "(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<file_name>\w*.\w*)"
+*/

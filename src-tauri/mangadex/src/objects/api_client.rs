@@ -6,7 +6,7 @@ use mangadex_api_schema_rust::{
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
-use crate::utils::get_mangadex_client_from_graphql_context;
+use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;
 
 use self::{attributes::ApiClientAttributes, relationships::ApiClientRelationships};
 
@@ -52,7 +52,9 @@ impl ApiClient {
         match self {
             ApiClient::WithRelationship(o) => Ok(o.relationships.clone().into()),
             ApiClient::WithoutRelationship(o) => {
-                let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+                let client =
+                    get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                        .await?;
                 let mut req = client.client().id(o.id).get();
                 let mut includes: Vec<ReferenceExpansionResource> =
                     <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
@@ -68,7 +70,8 @@ impl ApiClient {
         }
     }
     pub async fn secret(&self, ctx: &Context<'_>) -> GraphQLResult<String> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(client
             .client()
             .id(self.id(ctx).await?)

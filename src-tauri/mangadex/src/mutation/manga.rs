@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use async_graphql::{Context, EmptyMutation, Error, Object, Result};
+use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::manga::{
     create::CreateMangaParam, create_relation::MangaCreateRelationParam, list::MangaListParams,
     submit_draft::SubmitMangaDraftParams, update::UpdateMangaParam,
@@ -14,7 +14,7 @@ use crate::{
         manga::{related::MangaRelated, MangaObject as Manga},
         ExtractReferenceExpansionFromContext,
     },
-    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+    utils::{get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -22,60 +22,66 @@ pub struct MangaMutations;
 
 #[Object]
 impl MangaMutations {
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let mut offline_app_state_write = ola.write().await;
         let olasw = offline_app_state_write
             .as_mut()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         olasw.manga_download(id).download_manga(olasw).await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
         .into())
     }
     pub async fn edit(&self, ctx: &Context<'_>, params: UpdateMangaParam) -> Result<Manga> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
         .into())
     }
-    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+    pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let _ = client.manga().id(id).delete().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
+    pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let mut offline_app_state_write = ola.write().await;
         let olasw = offline_app_state_write
             .as_mut()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         olasw.manga_utils().with_id(id).delete().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+    pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.manga().id(id).follow().post().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
-    pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+    pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.manga().id(id).follow().delete().send().await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn update_reading_status(
         &self,
         ctx: &Context<'_>,
         id: Uuid,
         status: Option<ReadingStatus>,
-    ) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+    ) -> Result<bool> {
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client
             .manga()
             .id(id)
@@ -84,14 +90,15 @@ impl MangaMutations {
             .status(status)
             .send()
             .await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
     pub async fn submit_draft(
         &self,
         ctx: &Context<'_>,
         params: SubmitMangaDraftParams,
     ) -> Result<Manga> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
@@ -103,7 +110,8 @@ impl MangaMutations {
         params: MangaCreateRelationParam,
         #[graphql(default)] mut manga_list_params: MangaListParams,
     ) -> Result<Vec<MangaRelated>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let related_list: HashMap<Uuid, MangaRelation> = params
             .send(&client)
             .await?
@@ -133,8 +141,9 @@ impl MangaMutations {
         ctx: &Context<'_>,
         id: Uuid,
         target_manga: Uuid,
-    ) -> Result<EmptyMutation> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+    ) -> Result<bool> {
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client
             .manga()
             .manga_id(id)
@@ -143,6 +152,6 @@ impl MangaMutations {
             .delete()
             .send()
             .await?;
-        Ok(EmptyMutation)
+        Ok(true)
     }
 }

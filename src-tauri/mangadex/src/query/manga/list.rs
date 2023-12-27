@@ -61,6 +61,6 @@ impl MangaListQueries {
         Ok(params.send(&client).await?.into())
     }
     pub async fn list(&self, ctx: &Context<'_>) -> Result<MangaResults> {
-        todo!()
+        self.list_online(ctx).await
     }
 }

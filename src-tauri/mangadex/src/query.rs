@@ -9,7 +9,15 @@ pub mod follows;
 pub mod infrastructure;
 pub mod legacy;
 pub mod manga;
+pub mod oauth;
+pub mod rating;
+pub mod read_marker;
+pub mod report;
+pub mod scanlation_group;
+pub mod statistics;
 pub mod tag;
+pub mod upload;
+pub mod user;
 
 use async_graphql::Object;
 
@@ -17,7 +25,9 @@ use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
-    manga::MangaQueries,
+    manga::MangaQueries, oauth::OauthQueries, rating::RatingQueries,
+    read_marker::ReadMarkerQueries, report::ReportQueries, statistics::StatisticsQueries,
+    tag::TagQueries, upload::UploadQueries, user::UserQueries,
 };
 
 pub struct Query;
@@ -53,5 +63,29 @@ impl Query {
     }
     pub async fn legacy(&self) -> LegacyQueries {
         LegacyQueries
+    }
+    pub async fn tag(&self) -> TagQueries {
+        TagQueries
+    }
+    pub async fn rating(&self) -> RatingQueries {
+        RatingQueries
+    }
+    pub async fn read_marker(&self) -> ReadMarkerQueries {
+        ReadMarkerQueries
+    }
+    pub async fn oauth(&self) -> OauthQueries {
+        OauthQueries
+    }
+    pub async fn report(&self) -> ReportQueries {
+        ReportQueries
+    }
+    pub async fn statistics(&self) -> StatisticsQueries {
+        StatisticsQueries
+    }
+    pub async fn upload(&self) -> UploadQueries {
+        UploadQueries
+    }
+    pub async fn user(&self) -> UserQueries {
+        UserQueries
     }
 }

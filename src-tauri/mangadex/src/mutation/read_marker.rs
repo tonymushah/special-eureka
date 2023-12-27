@@ -1,0 +1,21 @@
+use async_graphql::{Context, Object, Result};
+use mangadex_api_input_types::read_marker::batch_read_marker::MarkChapterBatchParam;
+
+use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;
+
+#[derive(Debug, Clone, Copy)]
+pub struct ReadMarkerMutations;
+
+#[Object]
+impl ReadMarkerMutations {
+    pub async fn manga_read_markers_batch(
+        &self,
+        ctx: &Context<'_>,
+        params: MarkChapterBatchParam,
+    ) -> Result<bool> {
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        params.send(&client).await?;
+        Ok(true)
+    }
+}
