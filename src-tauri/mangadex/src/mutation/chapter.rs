@@ -2,6 +2,7 @@ use async_graphql::{Context, Enum, Error, Object, Result};
 use mangadex_api::utils::download::chapter::DownloadMode as MDDownloadMode;
 use mangadex_api_input_types::chapter::edit::ChapterUpdateParams;
 use mangadex_api_schema_rust::{v5::ChapterAttributes, ApiObjectNoRelationships};
+use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{

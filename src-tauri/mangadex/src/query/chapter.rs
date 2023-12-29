@@ -1,16 +1,22 @@
+pub mod list;
+
 use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
+use mangadex_desktop_api2::utils::ExtractData;
+use url::Url;
 use uuid::Uuid;
 
 use crate::{
     objects::{
         chapter::{lists::ChapterResults, pages::ChapterPages, Chapter},
         manga_chapter_group::{group_results, MangaChapterGroup},
-        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+        ExtractReferenceExpansion,
     },
     utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
 };
+
+use list::{ChapterListQueries, GetAllChapterParams};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ChapterQueries;
@@ -20,11 +26,12 @@ impl ChapterQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: ChapterListParams,
+        #[graphql(default)] params: ChapterListParams,
+        offline_params: Option<GetAllChapterParams>,
     ) -> Result<ChapterResults> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        ChapterListQueries(params)
+            .default(ctx, offline_params)
+            .await
     }
     #[graphql(skip)]
     pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
@@ -50,14 +57,18 @@ impl ChapterQueries {
             .into())
     }
     #[graphql(skip)]
-    pub async fn get_offline(&self, ctx: &Context<'_>, _id: Uuid) -> Result<Chapter> {
+    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
         // TODO Add offline support
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
-        let _inner_off_state = read_off_state
+        let inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::new("Offline AppState not found"))?;
-        todo!()
+        Ok(inner_off_state
+            .chapter_utils()
+            .with_id(id)
+            .get_data()?
+            .into())
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
         if let Ok(online) = self.get_online(ctx, id).await {
@@ -80,15 +91,32 @@ impl ChapterQueries {
             .into())
     }
     #[graphql(skip)]
-    pub async fn pages_offline(&self, ctx: &Context<'_>, _id: Uuid) -> Result<ChapterPages> {
-        // TODO Add offline support
-        // TODO Add offline support
+    pub async fn pages_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
-        let _inner_off_state = read_off_state
+        let inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::new("Offline AppState not found"))?;
-        todo!()
+        let chapter_utils = inner_off_state.chapter_utils().with_id(id);
+        let data: Vec<Url> = chapter_utils
+            .get_data_images()
+            .unwrap_or_default()
+            .into_iter()
+            .flat_map(|i| {
+                let i = i.to_str()?;
+                Url::parse(format!("mangadex://offline/chapter/{id}/data/{i}").as_str()).ok()
+            })
+            .collect();
+        let data_saver: Vec<Url> = chapter_utils
+            .get_data_saver_images()
+            .unwrap_or_default()
+            .into_iter()
+            .flat_map(|i| {
+                let i = i.to_str()?;
+                Url::parse(format!("mangadex://offline/chapter/{id}/data-saver/{i}").as_str()).ok()
+            })
+            .collect();
+        Ok(ChapterPages { data, data_saver })
     }
     pub async fn pages(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
         if let Ok(offline) = self.pages_offline(ctx, id).await {

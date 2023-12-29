@@ -50,9 +50,9 @@ impl MangaListQueries {
             .as_ref()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         let manga_utils = olasw.manga_utils();
-        let ids = Box::pin(manga_utils.get_all_downloaded_manga()?);
-        manga_utils.get_manga_data_by_ids(ids);
-        todo!()
+        let mut params = self.deref().clone();
+        params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        Ok(manga_utils.get_downloaded_manga(params).await?.into())
     }
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;

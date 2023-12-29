@@ -61,7 +61,7 @@ impl UploadMutations {
     ) -> Result<UploadSessionFile> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        let path: StdPathBuf = path.try_into()?;
+        let path: StdPathBuf = path.into();
         let image: UploadImage = path.try_into()?;
         let res = client
             .upload()
@@ -71,7 +71,7 @@ impl UploadMutations {
             .send()
             .await?;
         if !res.errors.is_empty() {
-            return Err(Error::new_with_source(res.errors.get(0).cloned().ok_or(
+            return Err(Error::new_with_source(res.errors.first().cloned().ok_or(
                 Error::new("The error array is not empty but any error has been found"),
             )?));
         }
@@ -80,7 +80,7 @@ impl UploadMutations {
         }
         Ok(res
             .data
-            .get(0)
+            .first()
             .cloned()
             .ok_or(Error::new("No files has been uploaded"))?
             .into())

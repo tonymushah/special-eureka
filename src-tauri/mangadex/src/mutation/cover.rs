@@ -1,6 +1,7 @@
 use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
 use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
+use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{

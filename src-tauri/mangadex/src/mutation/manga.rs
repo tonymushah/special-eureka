@@ -7,6 +7,7 @@ use mangadex_api_input_types::manga::{
 };
 use mangadex_api_schema_rust::{v5::MangaAttributes, ApiObjectNoRelationships};
 use mangadex_api_types_rust::{MangaRelation, ReadingStatus};
+use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{
@@ -59,7 +60,7 @@ impl MangaMutations {
         let olasw = offline_app_state_write
             .as_mut()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
-        olasw.manga_utils().with_id(id).delete().await?;
+        olasw.manga_utils().with_id(id).delete()?;
         Ok(true)
     }
     pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
