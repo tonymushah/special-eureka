@@ -3,7 +3,7 @@ use std::{io::Read, ops::Add, path::PathBuf};
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::{EmptySubscription, Schema};
 use bytes::{Bytes, BytesMut};
-use mangadex_api::MangaDexClient;
+use mangadex_api::{MangaDexClient, CDN_URL};
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
 use mangadex_api_types_rust::MangaDexDateTime;
 use mutation::Mutation;
@@ -137,7 +137,7 @@ impl MangadexDesktopApi {
                     if let Some(app_state) = app_state_read.as_ref() {
                         if let Ok(uri) = Url::parse(r.uri()) {
                             if uri.domain() == Some("chapter") {
-                                if let Ok(regex) = Regex::new(r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.\w*)") {
+                                if let Ok(regex) = Regex::new(r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.*)") {
                                     if let Some(res) = regex.captures(uri.path()) {
                                         if let Some(chapter_id) = res.name("chapter_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
                                             let chapter_util = app_state.chapter_utils().with_id(chapter_id);
@@ -162,25 +162,88 @@ impl MangadexDesktopApi {
                                                                         }
                                                                     }
                                                                     ChapterMode::DataSaver => {
-                                                                        let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
-                                                                            buf_reader.read_exact(&mut to_res)?;
-                                                                            Ok(())
-                                                                        });
-                                                                        if res.is_err() {
-                                                                            return not_found;
-                                                                        }
+                                                                    let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
+                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    Ok(())
+                                                                    });
+                                                                    if res.is_err() {
+                                                                        return not_found;
                                                                     }
-                                                                };
-                                                            to_res.into()
-                                                        };
+                                                                }
+                                                            };
+                                                        to_res.into()
+                                                    };
+                                                    tauri::http::ResponseBuilder::new()
+                                                        .header("access-control-allow-origin", "*")
+                                                        .status(StatusCode::OK)
+                                                        // TODO Add jpeg mimetype
+                                                        .mimetype("image/jpeg")
+                                                        .body(body.to_vec())
+                                                }else {
+                                                    not_found
+                                                }
+                                            }else {
+                                                not_found
+                                            }
+                                        }else {
+                                            not_found
+                                        }
+                                    }else {
+                                        not_found
+                                    }
+                                }else {
+                                    bad_request
+                                }
+                            } else if uri.domain() == Some("covers") {
+                                let _client = app.try_state::<MangaDexClient>();
+                                if let Some(client) = _client {
+                                    if let Ok(regex) = Regex::new(r"(?x)/(?P<cover_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<filename>\w*.*)") {
+                                        if let Some(res) = regex.captures(uri.path()) {
+                                            if let Some(cover_id) = res.name("cover_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
+                                                if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
+                                                    let body: Bytes = {
+                                                        let cover_utils = app_state.cover_utils().with_id(cover_id);
+                                                        let mut to_res = BytesMut::new();
+                                                        if let Some(manga_id) = uri.query_pairs().find(|(k, _)| k == "mangaId").map(|(_,v)| {v.to_string()}).and_then(|id| Uuid::parse_str(&id).ok()) {
+                                                            let cli = client.get_http_client().blocking_read().client.clone();
+                                                            let url = {
+                                                                let filename_ = uri.query_pairs().find(|(k, _)| k == "mode").map(|(_,v)| {v.to_string()}).and_then(|m| match m.as_str() {
+                                                                    "256" => Some(256),
+                                                                    "512" => Some(512),
+                                                                    _ => None
+                                                                }).map(|quality| format!("{filename}.{quality}.png")).unwrap_or(filename.to_string());
+
+                                                                Url::parse(format!("{CDN_URL}/covers/{manga_id}/{filename_}").as_str())
+                                                            };
+                                                            
+                                                            if let Ok(res) = tauri::async_runtime::block_on(async move {
+                                                                let b = cli.get(url?).send().await?.bytes().await?;
+                                                                Ok::<Bytes, mangadex_api_types_rust::error::Error>(b)
+                                                            }) {
+                                                                to_res.extend_from_slice(&res);
+                                                            }else {
+                                                                let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
+                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    Ok(())
+                                                                });
+                                                            }
+                                                        }else {
+                                                            let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
+                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    Ok(())
+                                                                });
+                                                        }
+                                                        to_res.into()
+                                                    };
+                                                    if body.is_empty() {
+                                                        not_found
+                                                    } else {
                                                         tauri::http::ResponseBuilder::new()
                                                             .header("access-control-allow-origin", "*")
                                                             .status(StatusCode::OK)
                                                             // TODO Add jpeg mimetype
-                                                            .mimetype("")
+                                                            .mimetype("image/jpeg")
                                                             .body(body.to_vec())
-                                                    }else {
-                                                        not_found
                                                     }
                                                 }else {
                                                     not_found
@@ -192,23 +255,26 @@ impl MangadexDesktopApi {
                                             not_found
                                         }
                                     }else {
-                                        bad_request
+                                        not_found
                                     }
-                                } else {
+                                }else {
                                     not_found
                                 }
-                            } else {
-                                bad_request
-                            }
                             }else {
-                                not_loaded
+                                not_found
                             }
                         } else {
-                            not_loaded
+                            bad_request
                         }
-                    })
-                    .build()
-                    .initialize(app, config)
+                    }else {
+                        not_loaded
+                    }
+                } else {
+                    not_loaded
+                }
+            })
+            .build()
+            .initialize(app, config)
     }
     pub fn init_client_state<R: Runtime>(
         &mut self,
