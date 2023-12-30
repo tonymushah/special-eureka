@@ -103,31 +103,31 @@ impl MangadexDesktopApi {
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
         Builder::<R, ()>::new("mangadex-graphiql")
-                    .register_uri_scheme_protocol("mangadex", move |app, r| {
-                        let bad_request = tauri::http::ResponseBuilder::new()
-                            .header("access-control-allow-origin", "*")
-                            .status(StatusCode::BAD_REQUEST)
-                            .mimetype(MimeType::Txt.to_string().as_str())
-                            .body(Vec::new());
-                        let not_found = tauri::http::ResponseBuilder::new()
-                            .header("access-control-allow-origin", "*")
-                            .status(StatusCode::NOT_FOUND)
-                            .mimetype(MimeType::Txt.to_string().as_str())
-                            .body(Vec::new());
-                        let not_loaded = tauri::http::ResponseBuilder::new()
-                                .header("access-control-allow-origin", "*")
-                                .status(StatusCode::INTERNAL_SERVER_ERROR)
-                                .mimetype(MimeType::Txt.to_string().as_str())
-                                .body(b"Offline App State is not loaded".to_vec());
-                        if let Some(offline_app_state) = app.try_state::<OfflineAppState>() {
-                            let app_state_read = offline_app_state.blocking_read();
-                            if let Some(app_state) = app_state_read.as_ref() {
-                                if let Ok(uri) = Url::parse(r.uri()) {
-                                if uri.domain() == Some("chapter") {
-                                    if let Ok(regex) = Regex::new(r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.\w*)") {
-                                        if let Some(res) = regex.captures(uri.path()) {
-                                            if let Some(chapter_id) = res.name("chapter_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
-                                                let chapter_util = app_state.chapter_utils().with_id(chapter_id);
+            .register_uri_scheme_protocol("mangadex", move |app, r| {
+                let bad_request = tauri::http::ResponseBuilder::new()
+                    .header("access-control-allow-origin", "*")
+                    .status(StatusCode::BAD_REQUEST)
+                    .mimetype(MimeType::Txt.to_string().as_str())
+                    .body(Vec::new());
+                let not_found = tauri::http::ResponseBuilder::new()
+                    .header("access-control-allow-origin", "*")
+                    .status(StatusCode::NOT_FOUND)
+                    .mimetype(MimeType::Txt.to_string().as_str())
+                    .body(Vec::new());
+                let not_loaded = tauri::http::ResponseBuilder::new()
+                    .header("access-control-allow-origin", "*")
+                    .status(StatusCode::INTERNAL_SERVER_ERROR)
+                    .mimetype(MimeType::Txt.to_string().as_str())
+                    .body(b"Offline App State is not loaded".to_vec());
+                if let Some(offline_app_state) = app.try_state::<OfflineAppState>() {
+                    let app_state_read = offline_app_state.blocking_read();
+                    if let Some(app_state) = app_state_read.as_ref() {
+                        if let Ok(uri) = Url::parse(r.uri()) {
+                            if uri.domain() == Some("chapter") {
+                                if let Ok(regex) = Regex::new(r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.\w*)") {
+                                    if let Some(res) = regex.captures(uri.path()) {
+                                        if let Some(chapter_id) = res.name("chapter_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
+                                            let chapter_util = app_state.chapter_utils().with_id(chapter_id);
                                                 if let Some(mode) = res.name("mode").and_then(|mode| {
                                                     match mode.as_str() {
                                                         "data" => Some(ChapterMode::Data),
