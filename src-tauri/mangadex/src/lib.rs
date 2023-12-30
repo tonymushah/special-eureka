@@ -137,7 +137,7 @@ impl MangadexDesktopApi {
                                                 }) {
                                                     if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
                                                         let body: Bytes = {
-                                                            let mut to_res = BytesMut::new(); 
+                                                            let mut to_res = BytesMut::new();
                                                                 match mode {
                                                                     ChapterMode::Data => {
                                                                         let res = chapter_util.get_data_image(filename).and_then(|mut buf_reader| {
