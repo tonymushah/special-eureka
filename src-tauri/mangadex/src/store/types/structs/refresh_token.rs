@@ -13,6 +13,7 @@ use crate::store::{
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct RefreshTokenData {
     pub refresh_token: String,
+    #[serde(serialize_with = "mangadex_api_schema_rust::v5::mangadex_datetime_serialize")]
     pub expires_in: MangaDexDateTime,
 }
 

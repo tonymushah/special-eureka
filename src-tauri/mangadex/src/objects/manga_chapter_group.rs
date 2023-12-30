@@ -84,6 +84,7 @@ pub async fn group_results(
         })
         .for_each(|(id, obj)| manga_ids_chapter_group.entry(id).or_default().push(obj));
     manga_list_params.manga_ids = manga_ids_chapter_group.keys().cloned().collect();
+    println!("{:#?}", manga_list_params.manga_ids);
     manga_list_params.offset = Some(0_u32);
     manga_list_params.limit = Some(manga_list_params.manga_ids.len().try_into()?);
     let mangas = MangaListQueries(manga_list_params).list(ctx).await?;

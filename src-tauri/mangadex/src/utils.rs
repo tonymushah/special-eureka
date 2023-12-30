@@ -154,6 +154,6 @@ pub(crate) async fn get_store<'ctx, R: Runtime>(
     let mut store = get_store_builder(app.clone())
         .map_err(|e| async_graphql::Error::new(e.to_string()))?
         .build();
-    store.load()?;
+    let _ = store.load();
     Ok(store)
 }
