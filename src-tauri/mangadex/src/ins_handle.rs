@@ -15,12 +15,10 @@ pub fn set_ins_chapter_checker_handle(joinhandle: JoinHandle<()>) -> Result<()> 
         unsafe {
             match INS_CHAPTER_CHECKER.set(joinhandle) {
                 Ok(_) => Ok(()),
-                Err(_) => {
-                    Err(Error::Io(std::io::Error::new(
-                        std::io::ErrorKind::AlreadyExists,
-                        "The ins chapter checker handle already setted",
-                    )))
-                }
+                Err(_) => Err(Error::Io(std::io::Error::new(
+                    std::io::ErrorKind::AlreadyExists,
+                    "The ins chapter checker handle already setted",
+                ))),
             }
         }
     })

@@ -1,8 +1,8 @@
-use std::{path::PathBuf, io::Read};
+use std::{io::Read, path::PathBuf};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::{EmptySubscription, Schema};
-use bytes::{BytesMut, Bytes};
+use bytes::{Bytes, BytesMut};
 use mangadex_api::MangaDexClient;
 use mutation::Mutation;
 use regex::Regex;
@@ -97,8 +97,12 @@ impl MangadexDesktopApi {
     pub fn export_sdl(&self, path: PathBuf) -> std::io::Result<()> {
         <Self as MizukiPluginTrait<tauri::Wry, Q, M, S>>::export_sdl(self, path)
     }
-    pub fn register_uri_scheme_protocol<R: Runtime>(&self, app: &tauri::AppHandle<R>, config: serde_json::Value) -> tauri::plugin::Result<()> {
-    Builder::<R, ()>::new("mangadex-graphiql")
+    pub fn register_uri_scheme_protocol<R: Runtime>(
+        &self,
+        app: &tauri::AppHandle<R>,
+        config: serde_json::Value,
+    ) -> tauri::plugin::Result<()> {
+        Builder::<R, ()>::new("mangadex-graphiql")
                     .register_uri_scheme_protocol("mangadex", move |app, r| {
                         let bad_request = tauri::http::ResponseBuilder::new()
                             .header("access-control-allow-origin", "*")
@@ -134,7 +138,7 @@ impl MangadexDesktopApi {
                                                     if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
                                                         let body: Bytes = {
                                                             let mut to_res = BytesMut::new(); 
-                                                                    match mode {
+                                                                match mode {
                                                                     ChapterMode::Data => {
                                                                         let res = chapter_util.get_data_image(filename).and_then(|mut buf_reader| {
                                                                             buf_reader.read_exact(&mut to_res)?;
@@ -248,10 +252,10 @@ where
 /*
     <https://regex101.com/r/rI3jhp/1>
     might be usefule in the future
-    
+
 */
 
-enum ChapterMode{
+enum ChapterMode {
     Data,
-    DataSaver
+    DataSaver,
 }
