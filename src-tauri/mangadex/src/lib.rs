@@ -1,11 +1,20 @@
-use std::{io::Read, path::PathBuf};
+use std::{io::Read, ops::Add, path::PathBuf};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::{EmptySubscription, Schema};
 use bytes::{Bytes, BytesMut};
 use mangadex_api::MangaDexClient;
+use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
+use mangadex_api_types_rust::MangaDexDateTime;
 use mutation::Mutation;
 use regex::Regex;
+use store::{
+    get_store_builder,
+    types::{
+        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore},
+        ExtractFromStore,
+    },
+};
 // use mangadex_desktop_api2::AppState;
 use query::Query;
 use reqwest::{
@@ -21,16 +30,20 @@ pub mod intelligent_notification_system;
 pub mod utils;
 use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
 use serde::{ser::Serializer, Serialize};
+use tauri_plugin_store::Store;
+use tokio::time::{Duration, Instant};
 use url::Url;
 use utils::set_indentifier;
 pub mod ins_handle;
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
 use uuid::Uuid;
+
 pub mod app_state;
 pub mod mutation;
 pub mod objects;
 pub mod query;
+pub mod store;
 
 type Q = Query;
 type M = Mutation;
@@ -197,6 +210,79 @@ impl MangadexDesktopApi {
                     .build()
                     .initialize(app, config)
     }
+    pub fn init_client_state<R: Runtime>(
+        &mut self,
+        app: &tauri::AppHandle<R>,
+        store: &Store<R>,
+    ) -> tauri::plugin::Result<()> {
+        let cis = ClientInfoStore::extract_from_store(store)?;
+        let r_token_store = RefreshTokenStore::extract_from_store(store)?;
+        let last_time_fetched = self.last_time_fetched.clone();
+        let ltf = last_time_fetched.clone();
+        let mut client = self.client.clone();
+        if let Some(info) = cis.as_ref().map(|i| -> Info { i.clone().into() }) {
+            client = tauri::async_runtime::block_on(async move {
+                client.set_client_info(&info).await?;
+                Ok::<MangaDexClient, mangadex_api_types_rust::error::Error>(client)
+            })?;
+        }
+        if let Some(auth_tokens) = r_token_store.as_ref().and_then(|i| -> Option<AuthTokens> {
+            if i.expires_in.as_ref() < MangaDexDateTime::default().as_ref() {
+                None
+            } else {
+                Some(i.clone().into())
+            }
+        }) {
+            client = tauri::async_runtime::block_on(async move {
+                client.set_auth_tokens(&auth_tokens).await?;
+                if let Ok(res) = client.oauth().refresh().send().await {
+                    let mut last_time_fetched_write = ltf.write().await;
+                    let _ = last_time_fetched_write
+                        .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
+                } else {
+                    client.clear_auth_tokens().await?;
+                }
+                Ok::<MangaDexClient, mangadex_api_types_rust::error::Error>(client)
+            })?;
+        }
+        app.manage(client);
+        app.manage(last_time_fetched);
+        Ok(())
+    }
+    pub fn init_states<R: Runtime>(
+        &mut self,
+        app: &tauri::AppHandle<R>,
+        _config: &serde_json::Value,
+    ) -> tauri::plugin::Result<()> {
+        let mut store = get_store_builder(app.app_handle())?.build();
+        let _ = store.load();
+
+        self.init_client_state(app, &store)?;
+        app.manage(self.offline_app_state.clone());
+
+        Ok(())
+    }
+    pub fn ins_handle<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
+        let identifier = app.config().tauri.bundle.identifier.clone();
+        match set_indentifier(identifier) {
+            Ok(_) => (),
+            Err(err) => {
+                panic!("{}", err.to_string());
+            }
+        };
+
+        init_ins_chapter_handle()?;
+        set_ins_chapter_checker_handle(std::thread::spawn(|| loop {
+            match check_plus_notify() {
+                Ok(()) => (),
+                Err(error) => {
+                    println!("{}", error);
+                }
+            }
+            std::thread::sleep(std::time::Duration::from_millis(500));
+        }))?;
+        Ok(())
+    }
 }
 
 impl<R> MizukiPluginTrait<R, Q, M, S> for MangadexDesktopApi
@@ -220,29 +306,9 @@ where
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
-        let identifier = app.config().tauri.bundle.identifier.clone();
-        match set_indentifier(identifier) {
-            Ok(_) => (),
-            Err(err) => {
-                panic!("{}", err.to_string());
-            }
-        };
+        self.init_states(app, &config)?;
         self.register_uri_scheme_protocol(app, config)?;
-
-        app.manage(self.offline_app_state.clone());
-        app.manage(self.client.clone());
-        app.manage(self.last_time_fetched.clone());
-        init_ins_chapter_handle()?;
-        set_ins_chapter_checker_handle(std::thread::spawn(|| loop {
-            match check_plus_notify() {
-                Ok(()) => (),
-                Err(error) => {
-                    println!("{}", error);
-                }
-            }
-            std::thread::sleep(std::time::Duration::from_millis(500));
-        }))?;
-        Ok(())
+        self.ins_handle(app)
     }
     fn extend_api(&mut self, invoke: tauri::Invoke<R>) {
         <Self as MizukiPluginTrait<R, Q, M, S>>::extend_api(self, invoke);

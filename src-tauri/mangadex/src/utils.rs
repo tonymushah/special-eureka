@@ -4,9 +4,13 @@ use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
 use std::io::Result;
 use tauri::{AppHandle, Manager, Runtime, State};
+use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 
-use crate::app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
+use crate::{
+    app_state::{LastTimeTokenWhenFecthed, OfflineAppState},
+    store::get_store_builder,
+};
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
 pub fn set_indentifier(identifier: String) -> Result<()> {
@@ -141,4 +145,15 @@ pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     let mut offline_app_state_write = offline_app_state.write().await;
     let _ = offline_app_state_write.take();
     Ok(true)
+}
+
+pub(crate) async fn get_store<'ctx, R: Runtime>(
+    ctx: &async_graphql::Context<'ctx>,
+) -> async_graphql::Result<Store<R>> {
+    let app = get_app_handle_from_async_graphql::<R>(ctx)?;
+    let mut store = get_store_builder(app.clone())
+        .map_err(|e| async_graphql::Error::new(e.to_string()))?
+        .build();
+    store.load()?;
+    Ok(store)
 }

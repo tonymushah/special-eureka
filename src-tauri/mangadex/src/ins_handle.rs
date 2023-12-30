@@ -5,8 +5,9 @@ use crate::Result;
 use once_cell::sync::OnceCell;
 use std::thread::JoinHandle;
 use tauri::api::notification::Notification;
+use uuid::Uuid;
 
-static mut INS_CHAPTER: OnceCell<DownloadEntry<String>> = OnceCell::new();
+static mut INS_CHAPTER: OnceCell<DownloadEntry<Uuid>> = OnceCell::new();
 
 static mut INS_CHAPTER_CHECKER: OnceCell<JoinHandle<()>> = OnceCell::new();
 
@@ -72,8 +73,8 @@ pub fn init_ins_chapter_handle() -> Result<()> {
     }
 }
 
-pub fn get_ins_handle() -> Result<&'static DownloadEntry<String>> {
-    let data_: &'static DownloadEntry<String>;
+pub fn get_ins_handle() -> Result<&'static DownloadEntry<Uuid>> {
+    let data_: &'static DownloadEntry<Uuid>;
     unsafe {
         match INS_CHAPTER.get() {
             None => {
@@ -90,8 +91,8 @@ pub fn get_ins_handle() -> Result<&'static DownloadEntry<String>> {
     Ok(data_)
 }
 
-pub fn get_ins_handle_mut() -> Result<&'static mut DownloadEntry<String>> {
-    let data_: &'static mut DownloadEntry<String>;
+pub fn get_ins_handle_mut() -> Result<&'static mut DownloadEntry<Uuid>> {
+    let data_: &'static mut DownloadEntry<Uuid>;
     unsafe {
         match INS_CHAPTER.get_mut() {
             None => {
@@ -124,19 +125,19 @@ pub fn reset_ins_handle() -> Result<()> {
     Ok(())
 }
 
-pub fn add_in_chapter_queue(id: String) -> Result<()> {
+pub fn add_in_chapter_queue(id: Uuid) -> Result<()> {
     let handle = get_ins_handle_mut()?;
     handle.add_in_queue(id)?;
     Ok(())
 }
 
-pub fn add_in_chapter_success(id: String) -> Result<()> {
+pub fn add_in_chapter_success(id: Uuid) -> Result<()> {
     let handle = get_ins_handle_mut()?;
     handle.add_in_success(id)?;
     Ok(())
 }
 
-pub fn add_in_chapter_failed(id: String) -> Result<()> {
+pub fn add_in_chapter_failed(id: Uuid) -> Result<()> {
     let handle = get_ins_handle_mut()?;
     handle.add_in_failed(id)?;
     Ok(())
