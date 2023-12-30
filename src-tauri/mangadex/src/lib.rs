@@ -240,7 +240,8 @@ impl MangadexDesktopApi {
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
                 } else {
-                    client.clear_auth_tokens().await?;
+                    let mut last_time_fetched_write = ltf.write().await;
+                    let _ = last_time_fetched_write.replace(Instant::now());
                 }
                 Ok::<MangaDexClient, mangadex_api_types_rust::error::Error>(client)
             })?;
