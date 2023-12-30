@@ -10,6 +10,7 @@ pub mod infrastructure;
 pub mod legacy;
 pub mod manga;
 pub mod oauth;
+pub mod offline_app_state;
 pub mod rating;
 pub mod read_marker;
 pub mod report;
@@ -25,9 +26,9 @@ use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
     follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
-    manga::MangaQueries, oauth::OauthQueries, rating::RatingQueries,
-    read_marker::ReadMarkerQueries, report::ReportQueries, statistics::StatisticsQueries,
-    tag::TagQueries, upload::UploadQueries, user::UserQueries,
+    manga::MangaQueries, oauth::OauthQueries, offline_app_state::OfflineAppStateQueries,
+    rating::RatingQueries, read_marker::ReadMarkerQueries, report::ReportQueries,
+    statistics::StatisticsQueries, tag::TagQueries, upload::UploadQueries, user::UserQueries,
 };
 
 pub struct Query;
@@ -87,5 +88,8 @@ impl Query {
     }
     pub async fn user(&self) -> UserQueries {
         UserQueries
+    }
+    pub async fn offline_app_state(&self) -> OfflineAppStateQueries {
+        OfflineAppStateQueries
     }
 }

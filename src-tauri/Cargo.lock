@@ -4810,6 +4810,7 @@ version = "0.3.0"
 dependencies = [
  "actix-router",
  "async-graphql",
+ "bytes",
  "convert_case 0.6.0",
  "log",
  "mangadex-api",
@@ -4819,6 +4820,7 @@ dependencies = [
  "mangadex-desktop-api2",
  "mizuki",
  "once_cell",
+ "regex",
  "reqwest",
  "serde",
  "serde_json",

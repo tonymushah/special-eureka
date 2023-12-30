@@ -1,13 +1,12 @@
 use std::collections::HashMap;
 
-use async_graphql::{Context, SelectionField, SimpleObject};
-use mangadex_api::MangaDexClient;
+use async_graphql::{Context, Result, SelectionField, SimpleObject};
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{ChapterObject, Results};
-use mangadex_api_types_rust::{
-    error::Result as MDResult, ReferenceExpansionResource, RelationshipType,
-};
+use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
+
+use crate::query::manga::list::MangaListQueries;
 
 use self::item::MangaChapterItem;
 
@@ -69,9 +68,9 @@ impl MangaChapterGroup {
 
 pub async fn group_results(
     chapter_results: Results<ChapterObject>,
-    client: &MangaDexClient,
+    ctx: &Context<'_>,
     mut manga_list_params: MangaListParams,
-) -> MDResult<MangaChapterGroup> {
+) -> Result<MangaChapterGroup> {
     let info: ResultsInfo = (&chapter_results).into();
     let mut manga_ids_chapter_group: HashMap<Uuid, Vec<ChapterObject>> = HashMap::new();
     chapter_results
@@ -85,13 +84,15 @@ pub async fn group_results(
         })
         .for_each(|(id, obj)| manga_ids_chapter_group.entry(id).or_default().push(obj));
     manga_list_params.manga_ids = manga_ids_chapter_group.keys().cloned().collect();
-    let mangas = manga_list_params.send(client).await?.data;
+    manga_list_params.offset = Some(0_u32);
+    manga_list_params.limit = Some(manga_list_params.manga_ids.len().try_into()?);
+    let mangas = MangaListQueries(manga_list_params).list(ctx).await?;
     Ok(MangaChapterGroup {
         data: manga_ids_chapter_group
             .into_iter()
             .flat_map(|(id, obj)| -> Option<MangaChapterItem> {
                 Some(MangaChapterItem {
-                    manga: mangas.iter().find(|manga| manga.id == id).cloned()?.into(),
+                    manga: mangas.iter().find(|manga| manga.get_id() == id).cloned()?,
                     chapters: obj
                         .into_iter()
                         .map(|chap| -> Chapter { chap.into() })

@@ -1,9 +1,11 @@
-use std::path::PathBuf;
+use std::{path::PathBuf, io::Read};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
-use async_graphql::{BatchRequest, EmptySubscription, Schema};
+use async_graphql::{EmptySubscription, Schema};
+use bytes::{BytesMut, Bytes};
 use mangadex_api::MangaDexClient;
 use mutation::Mutation;
+use regex::Regex;
 // use mangadex_desktop_api2::AppState;
 use query::Query;
 use reqwest::{
@@ -24,6 +26,7 @@ use utils::set_indentifier;
 pub mod ins_handle;
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
+use uuid::Uuid;
 pub mod app_state;
 pub mod mutation;
 pub mod objects;
@@ -124,71 +127,97 @@ where
                 panic!("{}", err.to_string());
             }
         };
-        #[cfg(debug_assertions)]
         {
-            let schema = self.schema.clone();
             Builder::<R, ()>::new("mangadex-graphiql")
                 .register_uri_scheme_protocol("mangadex", move |app, r| {
-                    if let Ok(uri) = Url::parse(r.uri()) {
-                        if uri.domain() == Some("graphql") {
-                            let schema = schema.clone();
-                            if let Ok(window) = r
-                                .headers()
-                                .iter()
-                                .find(|(k, _)| "window" == *k)
-                                .map(|(_, v)| v)
-                                .and_then(move |i| app.get_window(i.to_str().ok()?))
-                                .ok_or(std::io::Error::new(
-                                    std::io::ErrorKind::NotFound,
-                                    "Window header not found",
-                                ))
-                            {
-                                let resp_ = tauri::async_runtime::block_on(async move {
-                                    let resp = tauri::http::ResponseBuilder::new()
-                                        .header("access-control-allow-origin", "*");
-                                    if let Ok(s) = String::from_utf8(r.body().clone()) {
-                                        println!("{s}");
-                                    }
-                                    match serde_json::from_slice::<BatchRequest>(r.body()) {
-                                        Ok(req) => {
-                                            let res = schema
-                                                .clone()
-                                                .execute_batch(
-                                                    req.data(app.clone()).data(window.clone()),
-                                                )
-                                                .await;
-                                            resp.mimetype(MimeType::Json.to_string().as_str())
-                                                .status(StatusCode::ACCEPTED)
-                                                .body(serde_json::to_vec(&res)?)
+                    let bad_request = tauri::http::ResponseBuilder::new()
+                        .header("access-control-allow-origin", "*")
+                        .status(StatusCode::BAD_REQUEST)
+                        .mimetype(MimeType::Txt.to_string().as_str())
+                        .body(Vec::new());
+                    let not_found = tauri::http::ResponseBuilder::new()
+                        .header("access-control-allow-origin", "*")
+                        .status(StatusCode::NOT_FOUND)
+                        .mimetype(MimeType::Txt.to_string().as_str())
+                        .body(Vec::new());
+                    let not_loaded = tauri::http::ResponseBuilder::new()
+                            .header("access-control-allow-origin", "*")
+                            .status(StatusCode::INTERNAL_SERVER_ERROR)
+                            .mimetype(MimeType::Txt.to_string().as_str())
+                            .body(b"Offline App State is not loaded".to_vec());
+                    if let Some(offline_app_state) = app.try_state::<OfflineAppState>() {
+                        let app_state_read = offline_app_state.blocking_read();
+                        if let Some(app_state) = app_state_read.as_ref() {
+                            if let Ok(uri) = Url::parse(r.uri()) {
+                            if uri.domain() == Some("chapter") {
+                                if let Ok(regex) = Regex::new(r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.\w*)") {
+                                    if let Some(res) = regex.captures(uri.path()) {
+                                        if let Some(chapter_id) = res.name("chapter_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
+                                            let chapter_util = app_state.chapter_utils().with_id(chapter_id);
+                                            if let Some(mode) = res.name("mode").and_then(|mode| {
+                                                match mode.as_str() {
+                                                    "data" => Some(ChapterMode::Data),
+                                                    "data-saver" => Some(ChapterMode::DataSaver),
+                                                    _ => None
+                                                }
+                                            }) {
+                                                if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
+                                                    let body: Bytes = {
+                                                        let mut to_res = BytesMut::new(); 
+                                                                match mode {
+                                                                ChapterMode::Data => {
+                                                                    let res = chapter_util.get_data_image(filename).and_then(|mut buf_reader| {
+                                                                        buf_reader.read_exact(&mut to_res)?;
+                                                                        Ok(())
+                                                                    });
+                                                                    if res.is_err() {
+                                                                        return not_found;
+                                                                    }
+                                                                }
+                                                                ChapterMode::DataSaver => {
+                                                                    let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
+                                                                        buf_reader.read_exact(&mut to_res)?;
+                                                                        Ok(())
+                                                                    });
+                                                                    if res.is_err() {
+                                                                        return not_found;
+                                                                    }
+                                                                }
+                                                            };
+                                                        to_res.into()
+                                                    };
+                                                    tauri::http::ResponseBuilder::new()
+                                                        .header("access-control-allow-origin", "*")
+                                                        .status(StatusCode::OK)
+                                                        // TODO Add jpeg mimetype
+                                                        .mimetype("")
+                                                        .body(body.to_vec())
+                                                }else {
+                                                    not_found
+                                                }
+                                            }else {
+                                                not_found
+                                            }
+                                        }else {
+                                            not_found
                                         }
-                                        Err(error) => tauri::http::ResponseBuilder::new()
-                                            .header("access-control-allow-origin", "*")
-                                            .status(StatusCode::BAD_REQUEST)
-                                            .mimetype(MimeType::Txt.to_string().as_str())
-                                            .body(error.to_string().as_bytes().to_vec()),
+                                    }else {
+                                        not_found
                                     }
-                                })?;
-                                Ok(resp_)
+                                }else {
+                                    bad_request
+                                }
                             } else {
-                                tauri::http::ResponseBuilder::new()
-                                    .header("access-control-allow-origin", "*")
-                                    .status(StatusCode::NOT_FOUND)
-                                    .mimetype(MimeType::Txt.to_string().as_str())
-                                    .body(Vec::new())
+                                not_found
                             }
                         } else {
-                            tauri::http::ResponseBuilder::new()
-                                .header("access-control-allow-origin", "*")
-                                .status(StatusCode::NOT_FOUND)
-                                .mimetype(MimeType::Txt.to_string().as_str())
-                                .body(Vec::new())
+                            bad_request
+                        }
+                        }else {
+                            not_loaded
                         }
                     } else {
-                        tauri::http::ResponseBuilder::new()
-                            .header("access-control-allow-origin", "*")
-                            .status(StatusCode::BAD_REQUEST)
-                            .mimetype(MimeType::Txt.to_string().as_str())
-                            .body(Vec::new())
+                        not_loaded
                     }
                 })
                 .build()
@@ -218,5 +247,10 @@ where
 /*
     <https://regex101.com/r/rI3jhp/1>
     might be usefule in the future
-    "(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<file_name>\w*.\w*)"
+    
 */
+
+enum ChapterMode{
+    Data,
+    DataSaver
+}

@@ -9,7 +9,6 @@ use mangadex_desktop_api2::utils::{
 };
 use tokio_stream::StreamExt;
 
-use crate::objects::ExtractReferenceExpansionFromContext;
 use crate::utils::{get_mangadex_client_from_graphql_context, get_offline_app_state};
 
 #[derive(Debug, InputObject, Clone)]
@@ -76,11 +75,12 @@ impl From<&ChapterListQueries> for Param {
 
 #[Object]
 impl ChapterListQueries {
+    #[graphql(skip)]
     pub async fn get_offline(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: GetAllChapterParams,
-    ) -> Result<ChapterResults> {
+        params: GetAllChapterParams,
+    ) -> Result<ChapterCollection> {
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
@@ -101,19 +101,20 @@ impl ChapterListQueries {
         )
         .await?
         .try_into()?;
-        Ok(res.into())
+        Ok(res)
     }
-    pub async fn get_online(&self, ctx: &Context<'_>) -> Result<ChapterResults> {
+    #[graphql(skip)]
+    pub async fn get_online(&self, ctx: &Context<'_>) -> Result<ChapterCollection> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let mut params = self.deref().clone();
-        params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        let params = self.deref().clone();
+        Ok(params.send(&client).await?)
     }
-    pub async fn default(
+    #[graphql(skip)]
+    pub async fn _default(
         &self,
         ctx: &Context<'_>,
         offline_params: Option<GetAllChapterParams>,
-    ) -> Result<ChapterResults> {
+    ) -> Result<ChapterCollection> {
         if let Some(params) = offline_params {
             self.get_offline(ctx, params).await
         } else if let Ok(res) = self.get_online(ctx).await {
@@ -121,5 +122,14 @@ impl ChapterListQueries {
         } else {
             self.get_offline(ctx, Default::default()).await
         }
+    }
+    pub async fn default(
+        &self,
+        ctx: &Context<'_>,
+        offline_params: Option<GetAllChapterParams>,
+    ) -> Result<ChapterResults> {
+        self._default(ctx, offline_params)
+            .await
+            .map(|res| res.into())
     }
 }

@@ -104,7 +104,7 @@ impl ChapterQueries {
             .into_iter()
             .flat_map(|i| {
                 let i = i.to_str()?;
-                Url::parse(format!("mangadex://offline/chapter/{id}/data/{i}").as_str()).ok()
+                Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
             })
             .collect();
         let data_saver: Vec<Url> = chapter_utils
@@ -113,7 +113,7 @@ impl ChapterQueries {
             .into_iter()
             .flat_map(|i| {
                 let i = i.to_str()?;
-                Url::parse(format!("mangadex://offline/chapter/{id}/data-saver/{i}").as_str()).ok()
+                Url::parse(format!("mangadex://chapter/{id}/data-saver/{i}").as_str()).ok()
             })
             .collect();
         Ok(ChapterPages { data, data_saver })
@@ -131,16 +131,17 @@ impl ChapterQueries {
         #[graphql(default)] mut chapter_list_params: ChapterListParams,
         #[graphql(default)] mut manga_list_params: MangaListParams,
     ) -> Result<MangaChapterGroup> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         chapter_list_params.includes =
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        Ok(group_results(
-            chapter_list_params.send(&client).await?,
-            &client,
+        group_results(
+            ChapterListQueries(chapter_list_params)
+                ._default(ctx, None)
+                .await?,
+            ctx,
             manga_list_params,
         )
-        .await?)
+        .await
     }
 }
