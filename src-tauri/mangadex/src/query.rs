@@ -6,6 +6,7 @@ pub mod cover;
 pub mod custom_list;
 pub mod feed;
 pub mod follows;
+pub mod home;
 pub mod infrastructure;
 pub mod legacy;
 pub mod manga;
@@ -25,10 +26,11 @@ use async_graphql::Object;
 use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, feed::FeedQueries,
-    follows::FollowsQueries, infrastructure::InfrastructureQueries, legacy::LegacyQueries,
-    manga::MangaQueries, oauth::OauthQueries, offline_app_state::OfflineAppStateQueries,
-    rating::RatingQueries, read_marker::ReadMarkerQueries, report::ReportQueries,
-    statistics::StatisticsQueries, tag::TagQueries, upload::UploadQueries, user::UserQueries,
+    follows::FollowsQueries, home::HomeQueries, infrastructure::InfrastructureQueries,
+    legacy::LegacyQueries, manga::MangaQueries, oauth::OauthQueries,
+    offline_app_state::OfflineAppStateQueries, rating::RatingQueries,
+    read_marker::ReadMarkerQueries, report::ReportQueries, statistics::StatisticsQueries,
+    tag::TagQueries, upload::UploadQueries, user::UserQueries,
 };
 
 pub struct Query;
@@ -91,5 +93,8 @@ impl Query {
     }
     pub async fn offline_app_state(&self) -> OfflineAppStateQueries {
         OfflineAppStateQueries
+    }
+    pub async fn home(&self) -> HomeQueries {
+        HomeQueries
     }
 }

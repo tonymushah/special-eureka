@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use async_graphql::{Context, Result, SelectionField, SimpleObject};
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{ChapterObject, Results};
@@ -72,7 +70,7 @@ pub async fn group_results(
     mut manga_list_params: MangaListParams,
 ) -> Result<MangaChapterGroup> {
     let info: ResultsInfo = (&chapter_results).into();
-    let mut manga_ids_chapter_group: HashMap<Uuid, Vec<ChapterObject>> = HashMap::new();
+    let mut manga_ids_chapter_group: Vec<(Uuid, Vec<ChapterObject>)> = Vec::new();
     chapter_results
         .data
         .into_iter()
@@ -82,8 +80,20 @@ pub async fn group_results(
                 .map(|o| o.id)?;
             Some((id, obj))
         })
-        .for_each(|(id, obj)| manga_ids_chapter_group.entry(id).or_default().push(obj));
-    manga_list_params.manga_ids = manga_ids_chapter_group.keys().cloned().collect();
+        .for_each(|(id, obj)| {
+            if let Some(chapters_ids) = manga_ids_chapter_group
+                .iter_mut()
+                .find(|(i, _)| id == *i)
+                .map(|(_, ids)| ids)
+            {
+                chapters_ids.push(obj)
+            } else {
+                manga_ids_chapter_group.push((id, vec![obj]));
+            }
+        });
+
+    manga_list_params.manga_ids = manga_ids_chapter_group.iter().map(|(id, _)| *id).collect();
+    #[cfg(debug_assertions)]
     println!("{:#?}", manga_list_params.manga_ids);
     manga_list_params.offset = Some(0_u32);
     manga_list_params.limit = Some(manga_list_params.manga_ids.len().try_into()?);

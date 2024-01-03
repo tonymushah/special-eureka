@@ -111,9 +111,14 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
     let should_fetched: bool = {
         let last_time_fetched_inner = last_time_fetched.read().await;
         let inner = last_time_fetched_inner.ok_or("You're not logged in")?;
+        #[cfg(debug_assertions)]
+        println!("{:#?}", inner);
         inner < Instant::now()
     };
+
     if should_fetched {
+        #[cfg(debug_assertions)]
+        println!("Should be fetched");
         let time = client.oauth().refresh().send().await?.expires_in;
         let _ = last_time_fetched.write().await.replace(
             Instant::now()

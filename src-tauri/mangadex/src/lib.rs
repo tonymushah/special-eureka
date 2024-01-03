@@ -1,4 +1,4 @@
-use std::{io::Read, ops::Add, path::PathBuf};
+use std::{io::Read, ops::Add, path::{PathBuf, Path}};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::{EmptySubscription, Schema};
@@ -301,7 +301,10 @@ impl MangadexDesktopApi {
         }) {
             client = tauri::async_runtime::block_on(async move {
                 client.set_auth_tokens(&auth_tokens).await?;
-                if let Ok(res) = client.oauth().refresh().send().await {
+                
+                if let Ok(Ok(res)) = tokio::time::timeout(Duration::from_secs(5), async {
+                    client.oauth().refresh().send().await
+                }).await {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
@@ -323,7 +326,7 @@ impl MangadexDesktopApi {
     ) -> tauri::plugin::Result<()> {
         let mut store = get_store_builder(app.app_handle())?.build();
         let _ = store.load();
-
+        
         self.init_client_state(app, &store)?;
         app.manage(self.offline_app_state.clone());
 
@@ -373,6 +376,8 @@ where
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
+        #[cfg(debug_assertions)]
+        self.export_sdl(Path::new("../src/lib/schemas/mangadex.graphqls").to_path_buf())?;
         self.init_states(app, &config)?;
         self.register_uri_scheme_protocol(app, config)?;
         self.ins_handle(app)

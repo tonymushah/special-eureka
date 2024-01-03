@@ -54,7 +54,6 @@ impl OauthMutations {
             let _ = last_time_fetched_write
                 .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
         }
-
         Ok(true)
     }
     pub async fn set_client_info(
@@ -79,6 +78,16 @@ impl OauthMutations {
         client.clear_client_info().await?;
         let mut store = get_store::<tauri::Wry>(ctx).await?;
         ClientInfoStore::extract_from_store(&store)?.delete_and_save(&mut store)?;
+        Ok(true)
+    }
+    pub async fn logout(&self, ctx: &Context<'_>) -> Result<bool> {
+        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        client.clear_auth_tokens().await?;
+        let last_time_fetched = get_last_time_token_when_fetched::<tauri::Wry>(ctx)?;
+        let mut last_time_fetched_write = last_time_fetched.write().await;
+        let _ = last_time_fetched_write.take();
+        let mut store = get_store::<tauri::Wry>(ctx).await?;
+        RefreshTokenStore::extract_from_store(&store)?.delete_and_save(&mut store)?;
         Ok(true)
     }
 }

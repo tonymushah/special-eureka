@@ -12,6 +12,7 @@ use self::{attributes::CustomListAttributes, relationships::CustomListRelationsh
 pub mod attributes;
 pub mod lists;
 pub mod relationships;
+pub mod seasonal;
 
 #[derive(Clone, Debug)]
 pub enum CustomList {

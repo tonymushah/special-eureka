@@ -56,7 +56,6 @@ impl MangaListQueries {
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let params = self.deref().clone();
-        println!("send!manga");
         Ok(params.send(&client).await?.into())
     }
     pub async fn list(&self, ctx: &Context<'_>) -> Result<MangaResults> {
