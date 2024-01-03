@@ -37,18 +37,18 @@ impl CoverMutations {
     }
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<Cover> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let mut offline_app_state_write = ola.write().await;
-        let olasw = offline_app_state_write
-            .as_mut()
+        let offline_app_state_write = ola.read().await;
+        let mut olasw = offline_app_state_write
+            .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
-        olasw.cover_download(id).download(olasw).await?;
+        olasw.cover_download(id).download(&mut olasw).await?;
         CoverQueries.get(ctx, id).await
     }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let mut offline_app_state_write = ola.write().await;
+        let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .as_mut()
+            .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         olasw.cover_utils().with_id(id).delete()?;
         Ok(true)

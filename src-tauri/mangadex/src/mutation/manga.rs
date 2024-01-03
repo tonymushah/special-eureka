@@ -25,11 +25,11 @@ pub struct MangaMutations;
 impl MangaMutations {
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let mut offline_app_state_write = ola.write().await;
-        let olasw = offline_app_state_write
-            .as_mut()
+        let offline_app_state_write = ola.read().await;
+        let mut olasw = offline_app_state_write
+            .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
-        olasw.manga_download(id).download_manga(olasw).await?;
+        olasw.manga_download(id).download_manga(&mut olasw).await?;
         Ok(true)
     }
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
@@ -56,9 +56,9 @@ impl MangaMutations {
     }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let mut offline_app_state_write = ola.write().await;
+        let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .as_mut()
+            .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         olasw.manga_utils().with_id(id).delete()?;
         Ok(true)

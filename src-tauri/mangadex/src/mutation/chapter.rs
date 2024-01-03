@@ -31,9 +31,9 @@ impl ChapterMutations {
     /// Remove the chapter from the current device or offline
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let mut offline_app_state_write = ola.write().await;
+        let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .as_mut()
+            .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         olasw.chapter_utils().with_id(id).delete()?;
         Ok(true)
@@ -45,14 +45,18 @@ impl ChapterMutations {
         #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
     ) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let mut offline_app_state_write = ola.write().await;
-        let olasw = offline_app_state_write
-            .as_mut()
+        let offline_app_state_write = ola.read().await;
+        let mut olasw = offline_app_state_write
+            .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         let chapter_download = olasw.chapter_download(id);
         let _ = match quality {
-            DownloadMode::Normal => chapter_download.download_chapter(olasw).await?,
-            DownloadMode::DataSaver => chapter_download.download_chapter_data_saver(olasw).await?,
+            DownloadMode::Normal => chapter_download.download_chapter(&mut olasw).await?,
+            DownloadMode::DataSaver => {
+                chapter_download
+                    .download_chapter_data_saver(&mut olasw)
+                    .await?
+            }
         };
         Ok(true)
     }
