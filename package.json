@@ -4,8 +4,8 @@
 	"private": true,
 	"scripts": {
 		"vite:dev": "vite dev",
-        "codegen": "graphql-codegen",
-        "codegen:mangadex": "pnpm codegen -c ./src/lib/codegen/mangadex.ts",
+		"codegen": "graphql-codegen",
+		"codegen:mangadex": "pnpm codegen -c ./src/lib/codegen/mangadex.ts",
 		"vite:build_preview": "pnpm vite:build && pnpm vite:preview",
 		"vite:build": "vite build --emptyOutDir",
 		"vite:preview": "vite preview --port 9305",
@@ -24,6 +24,7 @@
 	"devDependencies": {
 		"@graphql-codegen/cli": "^5.0.0",
 		"@graphql-codegen/client-preset": "^4.1.0",
+		"@parcel/watcher": "^2.3.0",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.0",
