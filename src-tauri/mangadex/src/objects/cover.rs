@@ -10,7 +10,9 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::CoverAttributes, relationships::CoverRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 pub mod attributes;
 pub mod lists;
@@ -34,19 +36,47 @@ impl From<ApiObjectNoRelationships<Attributes>> for Cover {
     }
 }
 
-#[Object]
-impl Cover {
-    pub async fn id(&self) -> Uuid {
+impl GetId for Cover {
+    fn get_id(&self) -> Uuid {
         match self {
             Cover::WithRelationship(i) => i.id,
             Cover::WithoutRelationship(i) => i.id,
         }
     }
-    pub async fn attributes(&self) -> CoverAttributes {
-        match self {
-            Cover::WithRelationship(i) => i.attributes.clone().into(),
-            Cover::WithoutRelationship(i) => i.attributes.clone().into(),
+}
+
+impl From<Cover> for Attributes {
+    fn from(value: Cover) -> Self {
+        match value {
+            Cover::WithRelationship(i) => i.attributes,
+            Cover::WithoutRelationship(i) => i.attributes,
         }
+    }
+}
+
+impl From<&Cover> for Attributes {
+    fn from(value: &Cover) -> Self {
+        match value {
+            Cover::WithRelationship(i) => i.attributes.clone(),
+            Cover::WithoutRelationship(i) => i.attributes.clone(),
+        }
+    }
+}
+
+impl GetAttributes for Cover {
+    type Attributes = CoverAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+#[Object]
+impl Cover {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> CoverAttributes {
+        self.get_attributes()
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<CoverRelationships> {
         match self {
