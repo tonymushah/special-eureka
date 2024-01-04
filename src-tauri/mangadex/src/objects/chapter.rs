@@ -11,7 +11,9 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::ChapterAttributes, relationships::ChapterRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 pub mod attributes;
 pub mod lists;
@@ -36,19 +38,47 @@ impl From<ApiObjectNoRelationships<Attributes>> for Chapter {
     }
 }
 
-#[Object]
-impl Chapter {
-    pub async fn id(&self) -> Uuid {
+impl GetId for Chapter {
+    fn get_id(&self) -> Uuid {
         match self {
             Chapter::WithRelationship(i) => i.id,
             Chapter::WithoutRelationship(i) => i.id,
         }
     }
-    pub async fn attributes(&self) -> ChapterAttributes {
-        match self {
-            Chapter::WithRelationship(i) => i.attributes.clone().into(),
-            Chapter::WithoutRelationship(i) => i.attributes.clone().into(),
+}
+
+impl From<Chapter> for Attributes {
+    fn from(value: Chapter) -> Self {
+        match value {
+            Chapter::WithRelationship(i) => i.attributes,
+            Chapter::WithoutRelationship(i) => i.attributes,
         }
+    }
+}
+
+impl From<&Chapter> for Attributes {
+    fn from(value: &Chapter) -> Self {
+        match value {
+            Chapter::WithRelationship(i) => i.attributes.clone(),
+            Chapter::WithoutRelationship(i) => i.attributes.clone(),
+        }
+    }
+}
+
+impl GetAttributes for Chapter {
+    type Attributes = ChapterAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+#[Object]
+impl Chapter {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> ChapterAttributes {
+        self.get_attributes()
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> Result<ChapterRelationships> {
         match self {
