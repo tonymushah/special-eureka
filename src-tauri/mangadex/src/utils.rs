@@ -3,7 +3,7 @@ use mangadex_api::MangaDexClient;
 use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
 use std::io::Result;
-use tauri::{AppHandle, Manager, Runtime, State};
+use tauri::{AppHandle, Manager, Runtime, State, Window};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 
@@ -85,6 +85,12 @@ pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> async_graphql::Result<&'ctx AppHandle<R>> {
     ctx.data::<AppHandle<R>>()
+}
+
+pub(crate) fn get_window_from_async_graphql<'ctx, R: Runtime>(
+    ctx: &async_graphql::Context<'ctx>,
+) -> async_graphql::Result<&'ctx Window<R>> {
+    ctx.data::<Window<R>>()
 }
 
 pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(
