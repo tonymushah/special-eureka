@@ -19,6 +19,12 @@ impl From<Attributes> for TagAttributes {
     }
 }
 
+impl From<TagAttributes> for Attributes {
+    fn from(value: TagAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl TagAttributes {
     pub async fn name(&self) -> &LocalizedString {
