@@ -48,7 +48,7 @@ impl From<UploadSession> for Attributes {
 
 impl From<&UploadSession> for Attributes {
     fn from(value: &UploadSession) -> Self {
-        value.attributes.clone()
+        value.attributes
     }
 }
 
