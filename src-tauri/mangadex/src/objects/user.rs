@@ -7,6 +7,8 @@ use uuid::Uuid;
 
 use self::attributes::UserAttributes;
 
+use super::{GetAttributes, GetId};
+
 pub mod attributes;
 pub mod lists;
 pub mod relationships;
@@ -29,18 +31,46 @@ impl From<ApiObjectNoRelationships<Attributes>> for User {
     }
 }
 
-#[Object]
-impl User {
-    pub async fn id(&self) -> Uuid {
+impl GetId for User {
+    fn get_id(&self) -> Uuid {
         match self {
             User::WithRelationship(i) => i.id,
             User::WithoutRelationship(i) => i.id,
         }
     }
-    pub async fn attributes(&self) -> UserAttributes {
-        match self {
-            User::WithRelationship(i) => i.attributes.clone().into(),
-            User::WithoutRelationship(i) => i.attributes.clone().into(),
+}
+
+impl From<User> for Attributes {
+    fn from(value: User) -> Self {
+        match value {
+            User::WithRelationship(i) => i.attributes,
+            User::WithoutRelationship(i) => i.attributes,
         }
+    }
+}
+
+impl From<&User> for Attributes {
+    fn from(value: &User) -> Self {
+        match value {
+            User::WithRelationship(i) => i.attributes.clone(),
+            User::WithoutRelationship(i) => i.attributes.clone(),
+        }
+    }
+}
+
+impl GetAttributes for User {
+    type Attributes = UserAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+#[Object]
+impl User {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> UserAttributes {
+        self.get_attributes()
     }
 }
