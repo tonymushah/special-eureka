@@ -6,6 +6,8 @@
 	import React from 'react';
     import { invoke } from "@tauri-apps/api"
 
+    import "graphiql/graphiql.min.css";
+
     const fetcher: Fetcher =async (params) => {
         let [res, _] = await invoke<[string, boolean]>("plugin:mangadex-desktop-api|graphql", params);
         return JSON.parse(res);
@@ -37,9 +39,11 @@
     });
 </script>
 
-<div bind:this={container} />
+<div bind:this={container} class="graphiql-container" />
 
 
-<style>
-    @import "graphiql/graphiql.min.css";
+<style global>
+    .graphiql-container {
+        height: 100vh;
+    }
 </style>

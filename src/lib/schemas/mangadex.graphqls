@@ -1455,6 +1455,7 @@ type OauthMutations {
 	refresh: Boolean!
 	setClientInfo(clientId: String!, clientSecret: String!): Boolean!
 	clearClientInfo: Boolean!
+	logout: Boolean!
 }
 
 type OauthQueries {
