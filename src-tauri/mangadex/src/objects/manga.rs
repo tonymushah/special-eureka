@@ -19,7 +19,9 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::GraphQLMangaAttributes, relationships::MangaRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 #[derive(Clone, Debug)]
 pub enum MangaObject {
@@ -27,18 +29,37 @@ pub enum MangaObject {
     WithoutRel(ApiObjectNoRelationships<MangaAttributes>),
 }
 
-impl MangaObject {
-    pub fn get_id(&self) -> Uuid {
+impl GetId for MangaObject {
+    fn get_id(&self) -> Uuid {
         match self {
             MangaObject::WithRel(e) => e.id,
             MangaObject::WithoutRel(e) => e.id,
         }
     }
-    pub fn get_attributes(&self) -> MangaAttributes {
-        match self {
+}
+
+impl From<MangaObject> for MangaAttributes {
+    fn from(value: MangaObject) -> Self {
+        match value {
+            MangaObject::WithRel(e) => e.attributes,
+            MangaObject::WithoutRel(e) => e.attributes,
+        }
+    }
+}
+
+impl From<&MangaObject> for MangaAttributes {
+    fn from(value: &MangaObject) -> Self {
+        match value {
             MangaObject::WithRel(e) => e.attributes.clone(),
             MangaObject::WithoutRel(e) => e.attributes.clone(),
         }
+    }
+}
+
+impl GetAttributes for MangaObject {
+    type Attributes = GraphQLMangaAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<MangaAttributes>::into(self).into()
     }
 }
 
@@ -48,7 +69,7 @@ impl MangaObject {
         self.get_id()
     }
     pub async fn attributes(&self) -> GraphQLMangaAttributes {
-        self.get_attributes().into()
+        self.get_attributes()
     }
     pub async fn relationships<'ctx>(
         &'ctx self,

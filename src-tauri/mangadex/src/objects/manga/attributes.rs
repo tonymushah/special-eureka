@@ -31,6 +31,12 @@ impl From<MangaAttributes> for GraphQLMangaAttributes {
     }
 }
 
+impl From<GraphQLMangaAttributes> for MangaAttributes {
+    fn from(value: GraphQLMangaAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl GraphQLMangaAttributes {
     pub async fn title(&self) -> &LocalizedString {

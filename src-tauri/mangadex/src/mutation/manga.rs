@@ -13,7 +13,7 @@ use uuid::Uuid;
 use crate::{
     objects::{
         manga::{related::MangaRelated, MangaObject as Manga},
-        ExtractReferenceExpansionFromContext,
+        ExtractReferenceExpansionFromContext, GetId,
     },
     utils::{get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state},
 };
