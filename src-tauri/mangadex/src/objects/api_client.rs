@@ -39,10 +39,7 @@ impl From<ApiObjectNoRelationships<Attributes>> for ApiClient {
 impl GetAttributes for ApiClient {
     type Attributes = ApiClientAttributes;
     fn get_attributes(&self) -> Self::Attributes {
-        match self {
-            ApiClient::WithRelationship(i) => i.attributes.clone().into(),
-            ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
-        }
+        Into::<Attributes>::into(self).into()
     }
 }
 
@@ -51,6 +48,24 @@ impl GetId for ApiClient {
         match self {
             ApiClient::WithRelationship(i) => i.id,
             ApiClient::WithoutRelationship(i) => i.id,
+        }
+    }
+}
+
+impl From<ApiClient> for Attributes {
+    fn from(value: ApiClient) -> Self {
+        match value {
+            ApiClient::WithRelationship(i) => i.attributes,
+            ApiClient::WithoutRelationship(i) => i.attributes,
+        }
+    }
+}
+
+impl From<&ApiClient> for Attributes {
+    fn from(value: &ApiClient) -> Self {
+        match value {
+            ApiClient::WithRelationship(i) => i.attributes.clone(),
+            ApiClient::WithoutRelationship(i) => i.attributes.clone(),
         }
     }
 }

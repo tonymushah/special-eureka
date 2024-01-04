@@ -20,6 +20,12 @@ impl From<Attributes> for ApiClientAttributes {
     }
 }
 
+impl From<ApiClientAttributes> for Attributes {
+    fn from(value: ApiClientAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl ApiClientAttributes {
     pub async fn name(&self) -> &String {

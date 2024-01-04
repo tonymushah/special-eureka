@@ -1,12 +1,17 @@
 use std::{ops::Deref, sync::Arc};
 
-use crate::objects::api_client::{attributes::ApiClientAttributes, ApiClient};
+use crate::objects::api_client::attributes::ApiClientAttributes;
+use mangadex_api_schema_rust::{
+    v5::ApiClientAttributes as Attributes, ApiObjectNoRelationships as AONR,
+};
+use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
-use uuid::Uuid;
 
-use super::{SendData, SendDataResult};
+use super::{SendData, SendDataResult, WatcherInnerData};
 
-type Inner = Sender<Option<(Uuid, ApiClientAttributes)>>;
+type Inner = Sender<Option<WatcherInnerData<ApiClientAttributes>>>;
+
+type AONRApiClient = AONR<Attributes>;
 
 #[derive(Clone, Debug)]
 pub struct ApiClientWatch(Arc<Inner>);
@@ -24,12 +29,25 @@ impl Default for ApiClientWatch {
     }
 }
 
-impl SendData<ApiClient> for ApiClientWatch {
-    fn send_data(&self, data: ApiClient) -> SendDataResult {
-        if let Err(err) = self.send(Some((data.get_id(), data.get_attributes()))) {
+impl<T> SendData<T> for ApiClientWatch
+where
+    T: Into<WatcherInnerData<ApiClientAttributes>>,
+{
+    fn send_data(&self, data: T) -> SendDataResult {
+        if let Err(err) = self.send(Some(data.into())) {
             Err(err.to_string())
         } else {
             Ok(())
+        }
+    }
+}
+
+impl From<WatcherInnerData<ApiClientAttributes>> for AONRApiClient {
+    fn from(value: WatcherInnerData<ApiClientAttributes>) -> Self {
+        Self {
+            id: value.id,
+            type_: RelationshipType::ApiClient,
+            attributes: value.attributes.into(),
         }
     }
 }
