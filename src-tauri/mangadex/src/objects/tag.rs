@@ -37,7 +37,7 @@ impl GetId for Tag {
 
 impl From<Tag> for Attributes {
     fn from(value: Tag) -> Self {
-        value.attributes
+        value.0.attributes
     }
 }
 
