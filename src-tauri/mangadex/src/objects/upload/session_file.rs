@@ -3,8 +3,12 @@ pub mod attributes;
 use std::ops::Deref;
 
 use async_graphql::Object;
-use mangadex_api_schema_rust::v5::UploadSessionFileObject;
+use mangadex_api_schema_rust::v5::{
+    UploadSessionFileAttributes as Attributes, UploadSessionFileObject,
+};
 use uuid::Uuid;
+
+use crate::objects::{GetAttributes, GetId};
 
 use self::attributes::UploadSessionFileAttributes;
 
@@ -30,12 +34,37 @@ impl From<UploadSessionFile> for UploadSessionFileObject {
     }
 }
 
+impl GetId for UploadSessionFile {
+    fn get_id(&self) -> Uuid {
+        self.id
+    }
+}
+
+impl From<UploadSessionFile> for Attributes {
+    fn from(value: UploadSessionFile) -> Self {
+        value.attributes.clone()
+    }
+}
+
+impl From<&UploadSessionFile> for Attributes {
+    fn from(value: &UploadSessionFile) -> Self {
+        value.attributes.clone()
+    }
+}
+
+impl GetAttributes for UploadSessionFile {
+    type Attributes = UploadSessionFileAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
 #[Object]
 impl UploadSessionFile {
     pub async fn id(&self) -> Uuid {
-        self.id
+        self.get_id()
     }
     pub async fn attributes(&self) -> UploadSessionFileAttributes {
-        self.attributes.clone().into()
+        self.get_attributes()
     }
 }
