@@ -6,6 +6,7 @@ use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use url::Url;
 use uuid::Uuid;
 
+#[derive(Clone, Debug)]
 pub struct ChapterAttributes(Attributes);
 
 impl From<Attributes> for ChapterAttributes {

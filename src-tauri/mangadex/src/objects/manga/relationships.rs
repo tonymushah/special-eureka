@@ -13,6 +13,7 @@ use crate::objects::{author::Author, cover::Cover, manga::MangaObject, user::Use
 
 use super::related::MangaRelated;
 
+#[derive(Clone, Debug)]
 pub struct MangaRelationships {
     pub id: Uuid,
     pub relationships: Vec<Relationship>,

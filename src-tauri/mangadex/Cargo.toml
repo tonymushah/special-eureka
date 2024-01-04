@@ -30,9 +30,10 @@ mangadex-api-types-rust = { version = "0.6", default-features = false, features 
 async-graphql = "6"
 actix-router = "0"
 convert_case = "0.6"
-tokio-stream = "0"
+tokio-stream = { version = "0" }
 regex = "1"
 bytes = "1"
+async-stream = "0"
 
 [dependencies.mangadex-desktop-api2]
 version = "0.6.0-alpha.1"

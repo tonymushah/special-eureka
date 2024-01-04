@@ -4,6 +4,7 @@ use async_graphql::Object;
 use mangadex_api_schema_rust::v5::CustomListAttributes as Attributes;
 use mangadex_api_types_rust::CustomListVisibility;
 
+#[derive(Clone, Debug)]
 pub struct CustomListAttributes(Attributes);
 
 impl From<Attributes> for CustomListAttributes {

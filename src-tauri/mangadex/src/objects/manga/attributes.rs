@@ -14,6 +14,7 @@ use crate::objects::tag::Tag;
 
 use super::links::MangaLinks;
 
+#[derive(Clone, Debug)]
 pub struct GraphQLMangaAttributes(pub(crate) MangaAttributes);
 
 impl Deref for GraphQLMangaAttributes {

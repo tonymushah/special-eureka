@@ -13,6 +13,8 @@ use crate::{
 };
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
+pub mod watch;
+
 pub fn set_indentifier(identifier: String) -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {
         unsafe {

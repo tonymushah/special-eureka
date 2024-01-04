@@ -4,6 +4,7 @@ use async_graphql::Object;
 use mangadex_api_schema_rust::v5::ApiClientAttributes as Attributes;
 use mangadex_api_types_rust::{ApiClientProfile, ApiClientState, MangaDexDateTime};
 
+#[derive(Clone, Debug)]
 pub struct ApiClientAttributes(Attributes);
 
 impl Deref for ApiClientAttributes {

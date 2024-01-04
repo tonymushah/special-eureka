@@ -34,19 +34,28 @@ impl From<ApiObjectNoRelationships<Attributes>> for ApiClient {
     }
 }
 
-#[Object]
 impl ApiClient {
-    pub async fn id(&self) -> Uuid {
+    pub fn get_attributes(&self) -> ApiClientAttributes {
+        match self {
+            ApiClient::WithRelationship(i) => i.attributes.clone().into(),
+            ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
+        }
+    }
+    pub fn get_id(&self) -> Uuid {
         match self {
             ApiClient::WithRelationship(i) => i.id,
             ApiClient::WithoutRelationship(i) => i.id,
         }
     }
+}
+
+#[Object]
+impl ApiClient {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
     pub async fn attributes(&self) -> ApiClientAttributes {
-        match self {
-            ApiClient::WithRelationship(i) => i.attributes.clone().into(),
-            ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
-        }
+        self.get_attributes()
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<ApiClientRelationships> {
         match self {
