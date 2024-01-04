@@ -9,6 +9,8 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::CustomListAttributes, relationships::CustomListRelationships};
 
+use super::{GetAttributes, GetId};
+
 pub mod attributes;
 pub mod lists;
 pub mod relationships;
@@ -32,19 +34,47 @@ impl From<ApiObjectNoRelationships<Attributes>> for CustomList {
     }
 }
 
-#[Object]
-impl CustomList {
-    pub async fn id(&self) -> Uuid {
+impl GetId for CustomList {
+    fn get_id(&self) -> Uuid {
         match self {
             CustomList::WithRelationship(i) => i.id,
             CustomList::WithoutRelationship(i) => i.id,
         }
     }
-    pub async fn attributes(&self) -> CustomListAttributes {
-        match self {
-            CustomList::WithRelationship(i) => i.attributes.clone().into(),
-            CustomList::WithoutRelationship(i) => i.attributes.clone().into(),
+}
+
+impl From<CustomList> for Attributes {
+    fn from(value: CustomList) -> Self {
+        match value {
+            CustomList::WithRelationship(i) => i.attributes,
+            CustomList::WithoutRelationship(i) => i.attributes,
         }
+    }
+}
+
+impl From<&CustomList> for Attributes {
+    fn from(value: &CustomList) -> Self {
+        match value {
+            CustomList::WithRelationship(i) => i.attributes.clone(),
+            CustomList::WithoutRelationship(i) => i.attributes.clone(),
+        }
+    }
+}
+
+impl GetAttributes for CustomList {
+    type Attributes = CustomListAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+#[Object]
+impl CustomList {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> CustomListAttributes {
+        self.get_attributes()
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<CustomListRelationships> {
         match self {
