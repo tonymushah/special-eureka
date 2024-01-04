@@ -10,7 +10,9 @@ use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;
 
 use self::{attributes::ApiClientAttributes, relationships::ApiClientRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 pub mod attributes;
 pub mod lists;
@@ -34,14 +36,18 @@ impl From<ApiObjectNoRelationships<Attributes>> for ApiClient {
     }
 }
 
-impl ApiClient {
-    pub fn get_attributes(&self) -> ApiClientAttributes {
+impl GetAttributes for ApiClient {
+    type Attributes = ApiClientAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
         match self {
             ApiClient::WithRelationship(i) => i.attributes.clone().into(),
             ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
         }
     }
-    pub fn get_id(&self) -> Uuid {
+}
+
+impl GetId for ApiClient {
+    fn get_id(&self) -> Uuid {
         match self {
             ApiClient::WithRelationship(i) => i.id,
             ApiClient::WithoutRelationship(i) => i.id,
