@@ -23,6 +23,12 @@ impl Deref for ChapterAttributes {
     }
 }
 
+impl From<ChapterAttributes> for Attributes {
+    fn from(value: ChapterAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl ChapterAttributes {
     pub async fn title(&self) -> Option<&String> {

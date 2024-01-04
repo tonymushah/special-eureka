@@ -20,6 +20,12 @@ impl Deref for ScanlationGroupAttributes {
     }
 }
 
+impl From<ScanlationGroupAttributes> for Attributes {
+    fn from(value: ScanlationGroupAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl ScanlationGroupAttributes {
     pub async fn name(&self) -> &String {
