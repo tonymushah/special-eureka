@@ -9,7 +9,9 @@ use tokio::sync::watch::Sender;
 
 use super::{SendData, SendDataResult, WatcherInnerData};
 
-type Inner = Sender<Option<WatcherInnerData<ApiClientAttributes>>>;
+type InnerData = WatcherInnerData<ApiClientAttributes>;
+
+type Inner = Sender<Option<InnerData>>;
 
 type AONRApiClient = AONR<Attributes>;
 
@@ -31,7 +33,7 @@ impl Default for ApiClientWatch {
 
 impl<T> SendData<T> for ApiClientWatch
 where
-    T: Into<WatcherInnerData<ApiClientAttributes>>,
+    T: Into<InnerData>,
 {
     fn send_data(&self, data: T) -> SendDataResult {
         if let Err(err) = self.send(Some(data.into())) {
@@ -42,8 +44,8 @@ where
     }
 }
 
-impl From<WatcherInnerData<ApiClientAttributes>> for AONRApiClient {
-    fn from(value: WatcherInnerData<ApiClientAttributes>) -> Self {
+impl From<InnerData> for AONRApiClient {
+    fn from(value: InnerData) -> Self {
         Self {
             id: value.id,
             type_: RelationshipType::ApiClient,
