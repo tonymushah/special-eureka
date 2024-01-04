@@ -23,7 +23,8 @@ impl MangaRelationships {
     pub async fn manga(&self) -> Vec<MangaRelated> {
         self.relationships
             .iter()
-            .flat_map(|i| -> Result<
+            .flat_map(
+                |i| -> Result<
                     MangaRelated,
                     <ApiObjectNoRelationships<Attributes> as TryFrom<Relationship>>::Error,
                 > {
@@ -40,7 +41,8 @@ impl MangaRelationships {
                         )?,
                         obj: MangaObject::WithoutRel(rel),
                     })
-                })
+                },
+            )
             .collect::<Vec<MangaRelated>>()
     }
     pub async fn cover_art(&self) -> GraphQLResult<Cover> {

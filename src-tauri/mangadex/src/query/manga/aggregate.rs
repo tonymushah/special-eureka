@@ -2,6 +2,7 @@ use std::ops::Deref;
 
 use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
+use mangadex_desktop_api2::utils::manga_aggregate::MangaAggregateParams;
 use uuid::Uuid;
 
 use crate::{
@@ -77,7 +78,14 @@ impl MangaAggregateQueries {
         let mut res: MangaAggregate = app_state
             .manga_utils()
             .with_id(self.manga_id)
-            .aggregate_manga_chapters()
+            .aggregate_manga_chapter(
+                MangaAggregateParams {
+                    translated_language: self.translated_language.clone(),
+                    groups: self.groups.clone(),
+                    ..Default::default()
+                },
+                app_state,
+            )
             .await?
             .into();
         if is_reversed {

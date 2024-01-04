@@ -40,8 +40,9 @@ impl MangaQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: MangaListParams,
+        #[graphql(default)] mut params: MangaListParams,
     ) -> Result<MangaResults> {
+        params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         MangaListQueries(params).list(ctx).await
     }
     pub async fn random(

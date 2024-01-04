@@ -4,7 +4,7 @@ use async_graphql::{Context, Error, Result};
 use mangadex_api_input_types::manga::list::MangaListParams;
 
 use crate::{
-    objects::{manga::lists::MangaResults, ExtractReferenceExpansionFromContext},
+    objects::manga::lists::MangaResults,
     utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
 };
 
@@ -50,17 +50,19 @@ impl MangaListQueries {
             .as_ref()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         let manga_utils = olasw.manga_utils();
-        let ids = Box::pin(manga_utils.get_all_downloaded_manga()?);
-        manga_utils.get_manga_data_by_ids(ids);
-        todo!()
+        let params = self.deref().clone();
+        Ok(manga_utils.get_downloaded_manga(params).await?.into())
     }
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let mut params = self.deref().clone();
-        params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        let params = self.deref().clone();
         Ok(params.send(&client).await?.into())
     }
     pub async fn list(&self, ctx: &Context<'_>) -> Result<MangaResults> {
-        self.list_online(ctx).await
+        if let Ok(res) = self.list_online(ctx).await {
+            Ok(res)
+        } else {
+            self.list_offline(ctx).await
+        }
     }
 }

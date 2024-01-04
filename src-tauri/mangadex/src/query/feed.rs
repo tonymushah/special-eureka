@@ -42,7 +42,7 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        Ok(group_results(feed_params.send(&client).await?, &client, manga_list_params).await?)
+        group_results(feed_params.send(&client).await?, ctx, manga_list_params).await
     }
     pub async fn custom_list_feed(
         &self,
@@ -66,6 +66,6 @@ impl FeedQueries {
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
-        Ok(group_results(feed_params.send(&client).await?, &client, manga_list_params).await?)
+        group_results(feed_params.send(&client).await?, ctx, manga_list_params).await
     }
 }

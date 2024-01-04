@@ -13,7 +13,9 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
-			'@mangadex/components/*': '$lib/components/mangadex/*'
+			'@mangadex/gql/*': './src/lib/gql/mangadex/*',
+			'@mangadex/components/*': './src/lib/components/mangadex/*',
+			'@mangadex/const': './src/lib/const/mangadex.ts'
 		}
 	}
 };

@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{MangaObject, Results};
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -12,7 +14,22 @@ use super::MangaObject as Manga;
 pub struct MangaResults {
     data: Vec<Manga>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub info: ResultsInfo,
+}
+
+impl Deref for MangaResults {
+    type Target = Vec<Manga>;
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
+}
+
+impl IntoIterator for MangaResults {
+    type Item = Manga;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
 }
 
 impl From<Results<MangaObject>> for MangaResults {
