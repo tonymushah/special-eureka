@@ -10,6 +10,7 @@ pub mod chapter;
 pub mod cover;
 pub mod custom_list;
 pub mod manga;
+pub mod rating;
 pub mod read_marker;
 pub mod scanalation_group;
 pub mod statistics;
