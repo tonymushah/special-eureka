@@ -21,6 +21,12 @@ impl Deref for AuthorAttributes {
     }
 }
 
+impl From<AuthorAttributes> for Attributes {
+    fn from(value: AuthorAttributes) -> Self {
+        value.0
+    }
+}
+
 #[Object]
 impl AuthorAttributes {
     pub async fn name(&self) -> &String {

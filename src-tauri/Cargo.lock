@@ -4810,6 +4810,7 @@ version = "0.3.0"
 dependencies = [
  "actix-router",
  "async-graphql",
+ "async-stream",
  "bytes",
  "convert_case 0.6.0",
  "log",

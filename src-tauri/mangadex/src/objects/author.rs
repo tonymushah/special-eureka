@@ -14,7 +14,9 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::AuthorAttributes, relationships::AuthorRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 #[derive(Clone, Debug)]
 pub enum Author {
@@ -34,19 +36,47 @@ impl From<ApiObjectNoRelationships<Attributes>> for Author {
     }
 }
 
-#[Object]
-impl Author {
-    pub async fn id(&self) -> Uuid {
+impl GetId for Author {
+    fn get_id(&self) -> Uuid {
         match self {
             Author::WithRel(o) => o.id,
             Author::WithoutRel(o) => o.id,
         }
     }
-    pub async fn attributes(&self) -> AuthorAttributes {
-        match self {
-            Author::WithRel(o) => o.attributes.clone().into(),
-            Author::WithoutRel(o) => o.attributes.clone().into(),
+}
+
+impl From<Author> for Attributes {
+    fn from(value: Author) -> Self {
+        match value {
+            Author::WithRel(o) => o.attributes,
+            Author::WithoutRel(o) => o.attributes,
         }
+    }
+}
+
+impl From<&Author> for Attributes {
+    fn from(value: &Author) -> Self {
+        match value {
+            Author::WithRel(o) => o.attributes.clone(),
+            Author::WithoutRel(o) => o.attributes.clone(),
+        }
+    }
+}
+
+impl GetAttributes for Author {
+    type Attributes = AuthorAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+#[Object]
+impl Author {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> AuthorAttributes {
+        self.get_attributes()
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<AuthorRelationships> {
         match self {

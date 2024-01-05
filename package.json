@@ -58,12 +58,14 @@
 		"@tauri-apps/api": "^1.5.2",
 		"@types/react": "^18.2.46",
 		"@types/react-dom": "^18.2.18",
+		"@types/uuid": "^9.0.7",
 		"@urql/svelte": "^4.0.4",
 		"dayjs": "^1.11.10",
 		"graphiql": "^3.0.10",
 		"mizuki-urql-adapter": "^0.1.0",
 		"react": "^18.2.0",
-		"react-dom": "^18.2.0"
+		"react-dom": "^18.2.0",
+		"uuid": "^9.0.1"
 	},
 	"packageManager": "pnpm@8.11.0"
 }

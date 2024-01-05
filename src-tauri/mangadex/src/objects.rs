@@ -1,6 +1,7 @@
 use async_graphql::{Context, SelectionField, SimpleObject};
 use mangadex_api_schema_rust::v5::Results;
 use mangadex_api_types_rust::ReferenceExpansionResource;
+use uuid::Uuid;
 
 pub mod api_client;
 pub mod auth;
@@ -57,4 +58,13 @@ pub trait ExtractReferenceExpansionFromContext<'a>: ExtractReferenceExpansion<'a
     fn exctract(ctx: &'a Context<'a>) -> Vec<ReferenceExpansionResource> {
         <Self as ExtractReferenceExpansion<'a>>::exctract(ctx.field())
     }
+}
+
+pub trait GetId {
+    fn get_id(&self) -> Uuid;
+}
+
+pub trait GetAttributes {
+    type Attributes;
+    fn get_attributes(&self) -> Self::Attributes;
 }

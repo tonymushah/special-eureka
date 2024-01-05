@@ -4,7 +4,7 @@ use mangadex_api_schema_rust::v5::{ChapterObject, Results};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
 
-use crate::query::manga::list::MangaListQueries;
+use crate::{objects::GetId, query::manga::list::MangaListQueries};
 
 use self::item::MangaChapterItem;
 

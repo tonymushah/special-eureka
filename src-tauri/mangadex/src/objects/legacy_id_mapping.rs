@@ -11,6 +11,8 @@ use mangadex_api_schema_rust::{
 };
 use uuid::Uuid;
 
+use super::{GetAttributes, GetId};
+
 #[derive(Debug)]
 pub struct LegacyIdMapping(pub IdMappingObject);
 
@@ -43,12 +45,25 @@ impl Deref for LegacyIdMapping {
     }
 }
 
+impl GetId for LegacyIdMapping {
+    fn get_id(&self) -> Uuid {
+        self.id
+    }
+}
+
+impl GetAttributes for LegacyIdMapping {
+    type Attributes = LegacyMappingIdAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        (&self.attributes).into()
+    }
+}
+
 #[Object]
 impl LegacyIdMapping {
     pub async fn id(&self) -> Uuid {
-        self.id
+        self.get_id()
     }
     pub async fn attributes(&self) -> LegacyMappingIdAttributes {
-        (&self.attributes).into()
+        self.get_attributes()
     }
 }

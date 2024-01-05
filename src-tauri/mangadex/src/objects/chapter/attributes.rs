@@ -6,6 +6,7 @@ use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use url::Url;
 use uuid::Uuid;
 
+#[derive(Clone, Debug)]
 pub struct ChapterAttributes(Attributes);
 
 impl From<Attributes> for ChapterAttributes {
@@ -19,6 +20,12 @@ impl Deref for ChapterAttributes {
 
     fn deref(&self) -> &Self::Target {
         &self.0
+    }
+}
+
+impl From<ChapterAttributes> for Attributes {
+    fn from(value: ChapterAttributes) -> Self {
+        value.0
     }
 }
 

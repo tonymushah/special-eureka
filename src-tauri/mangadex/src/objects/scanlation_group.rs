@@ -10,7 +10,9 @@ use crate::utils::get_mangadex_client_from_graphql_context;
 
 use self::{attributes::ScanlationGroupAttributes, relationships::ScanlationGroupRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 pub mod attributes;
 pub mod lists;
@@ -34,19 +36,47 @@ impl From<ApiObjectNoRelationships<Attributes>> for ScanlationGroup {
     }
 }
 
-#[Object]
-impl ScanlationGroup {
-    pub async fn id(&self) -> Uuid {
+impl GetId for ScanlationGroup {
+    fn get_id(&self) -> Uuid {
         match self {
             ScanlationGroup::WithRelationship(i) => i.id,
             ScanlationGroup::WithoutRelationship(i) => i.id,
         }
     }
-    pub async fn attributes(&self) -> ScanlationGroupAttributes {
-        match self {
-            ScanlationGroup::WithRelationship(i) => i.attributes.clone().into(),
-            ScanlationGroup::WithoutRelationship(i) => i.attributes.clone().into(),
+}
+
+impl From<ScanlationGroup> for Attributes {
+    fn from(value: ScanlationGroup) -> Self {
+        match value {
+            ScanlationGroup::WithRelationship(i) => i.attributes,
+            ScanlationGroup::WithoutRelationship(i) => i.attributes,
         }
+    }
+}
+
+impl From<&ScanlationGroup> for Attributes {
+    fn from(value: &ScanlationGroup) -> Self {
+        match value {
+            ScanlationGroup::WithRelationship(i) => i.attributes.clone(),
+            ScanlationGroup::WithoutRelationship(i) => i.attributes.clone(),
+        }
+    }
+}
+
+impl GetAttributes for ScanlationGroup {
+    type Attributes = ScanlationGroupAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+#[Object]
+impl ScanlationGroup {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> ScanlationGroupAttributes {
+        self.get_attributes()
     }
     pub async fn relationships(
         &self,

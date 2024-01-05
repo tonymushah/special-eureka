@@ -3,7 +3,7 @@ use mangadex_api::MangaDexClient;
 use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
 use std::io::Result;
-use tauri::{AppHandle, Manager, Runtime, State};
+use tauri::{AppHandle, Manager, Runtime, State, Window};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 
@@ -11,7 +11,11 @@ use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState},
     store::get_store_builder,
 };
+
+use self::watch::Watches;
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
+
+pub mod watch;
 
 pub fn set_indentifier(identifier: String) -> Result<()> {
     match std::thread::spawn(move || -> Result<()> {
@@ -79,10 +83,24 @@ pub(crate) fn get_mangadex_client_from_graphql_context<'ctx, R: Runtime>(
         .ok_or(async_graphql::Error::new("MangaDexClient not found"))
 }
 
+pub(crate) fn get_watches_from_graphql_context<'ctx, R: Runtime>(
+    ctx: &async_graphql::Context<'ctx>,
+) -> async_graphql::Result<State<'ctx, Watches>> {
+    get_app_handle_from_async_graphql::<R>(ctx)?
+        .try_state::<Watches>()
+        .ok_or(async_graphql::Error::new("Watches not found"))
+}
+
 pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> async_graphql::Result<&'ctx AppHandle<R>> {
     ctx.data::<AppHandle<R>>()
+}
+
+pub(crate) fn get_window_from_async_graphql<'ctx, R: Runtime>(
+    ctx: &async_graphql::Context<'ctx>,
+) -> async_graphql::Result<&'ctx Window<R>> {
+    ctx.data::<Window<R>>()
 }
 
 pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(

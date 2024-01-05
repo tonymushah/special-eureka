@@ -5,6 +5,8 @@ use mangadex_api_schema_rust::v5::statistics::{
 use url::Url;
 use uuid::Uuid;
 
+use super::{GetAttributes, GetId};
+
 pub mod manga;
 
 #[derive(Debug, Clone, Copy, SimpleObject)]
@@ -28,6 +30,19 @@ impl From<(Uuid, GroupStatistics)> for Statistics {
             id,
             comments: value.comments.map(Into::into),
         }
+    }
+}
+
+impl GetId for Statistics {
+    fn get_id(&self) -> Uuid {
+        self.id
+    }
+}
+
+impl GetAttributes for Statistics {
+    type Attributes = Option<StatisticsComments>;
+    fn get_attributes(&self) -> Self::Attributes {
+        self.comments
     }
 }
 

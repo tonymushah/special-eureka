@@ -4,6 +4,7 @@ use async_graphql::Object;
 use mangadex_api_schema_rust::v5::{LocalizedString, TagAttributes as Attributes};
 use mangadex_api_types_rust::TagGroup;
 
+#[derive(Debug, Clone)]
 pub struct TagAttributes(pub(crate) Attributes);
 
 impl Deref for TagAttributes {
@@ -16,6 +17,12 @@ impl Deref for TagAttributes {
 impl From<Attributes> for TagAttributes {
     fn from(value: Attributes) -> Self {
         Self(value)
+    }
+}
+
+impl From<TagAttributes> for Attributes {
+    fn from(value: TagAttributes) -> Self {
+        value.0
     }
 }
 

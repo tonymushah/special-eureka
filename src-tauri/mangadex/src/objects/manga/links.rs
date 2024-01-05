@@ -4,6 +4,7 @@ use async_graphql::Object;
 use mangadex_api_schema_rust::v5::MangaLinks as Links;
 use url::Url;
 
+#[derive(Clone, Debug)]
 pub struct MangaLinks(Links);
 
 impl Deref for MangaLinks {

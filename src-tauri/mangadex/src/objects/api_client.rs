@@ -10,7 +10,9 @@ use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;
 
 use self::{attributes::ApiClientAttributes, relationships::ApiClientRelationships};
 
-use super::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+};
 
 pub mod attributes;
 pub mod lists;
@@ -34,19 +36,47 @@ impl From<ApiObjectNoRelationships<Attributes>> for ApiClient {
     }
 }
 
-#[Object]
-impl ApiClient {
-    pub async fn id(&self) -> Uuid {
+impl GetAttributes for ApiClient {
+    type Attributes = ApiClientAttributes;
+    fn get_attributes(&self) -> Self::Attributes {
+        Into::<Attributes>::into(self).into()
+    }
+}
+
+impl GetId for ApiClient {
+    fn get_id(&self) -> Uuid {
         match self {
             ApiClient::WithRelationship(i) => i.id,
             ApiClient::WithoutRelationship(i) => i.id,
         }
     }
-    pub async fn attributes(&self) -> ApiClientAttributes {
-        match self {
-            ApiClient::WithRelationship(i) => i.attributes.clone().into(),
-            ApiClient::WithoutRelationship(i) => i.attributes.clone().into(),
+}
+
+impl From<ApiClient> for Attributes {
+    fn from(value: ApiClient) -> Self {
+        match value {
+            ApiClient::WithRelationship(i) => i.attributes,
+            ApiClient::WithoutRelationship(i) => i.attributes,
         }
+    }
+}
+
+impl From<&ApiClient> for Attributes {
+    fn from(value: &ApiClient) -> Self {
+        match value {
+            ApiClient::WithRelationship(i) => i.attributes.clone(),
+            ApiClient::WithoutRelationship(i) => i.attributes.clone(),
+        }
+    }
+}
+
+#[Object]
+impl ApiClient {
+    pub async fn id(&self) -> Uuid {
+        self.get_id()
+    }
+    pub async fn attributes(&self) -> ApiClientAttributes {
+        self.get_attributes()
     }
     pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<ApiClientRelationships> {
         match self {

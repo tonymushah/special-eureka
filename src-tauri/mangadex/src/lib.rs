@@ -1,7 +1,7 @@
 use std::{io::Read, ops::Add, path::{PathBuf, Path}};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
-use async_graphql::{EmptySubscription, Schema};
+use async_graphql::Schema;
 use bytes::{Bytes, BytesMut};
 use mangadex_api::{MangaDexClient, CDN_URL};
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
@@ -26,28 +26,31 @@ use tauri::{
     plugin::Plugin,
 };
 use tauri::{plugin::Builder, Manager, Runtime};
-pub mod intelligent_notification_system;
-pub mod utils;
 use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
 use serde::{ser::Serializer, Serialize};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 use url::Url;
-use utils::set_indentifier;
-pub mod ins_handle;
+use utils::{set_indentifier, watch::Watches};
+
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
 use uuid::Uuid;
+use subscription::Subscriptions;
 
+pub mod intelligent_notification_system;
+pub mod utils;
 pub mod app_state;
 pub mod mutation;
 pub mod objects;
 pub mod query;
 pub mod store;
+pub mod subscription;
+pub mod ins_handle;
 
 type Q = Query;
 type M = Mutation;
-type S = EmptySubscription;
+type S = Subscriptions;
 
 #[derive(Clone, serde::Serialize)]
 struct ExportPayload {
@@ -98,7 +101,7 @@ impl Default for MangadexDesktopApi {
             .build()
             .unwrap();
         Self {
-            schema: Schema::new(Query, Mutation, EmptySubscription),
+            schema: Schema::new(Query, Mutation, Subscriptions),
             client: MangaDexClient::new(cli),
             offline_app_state: Default::default(),
             last_time_fetched: Default::default(),
@@ -281,6 +284,7 @@ impl MangadexDesktopApi {
         app: &tauri::AppHandle<R>,
         store: &Store<R>,
     ) -> tauri::plugin::Result<()> {
+        let watches = app.state::<Watches>();
         let cis = ClientInfoStore::extract_from_store(store)?;
         let r_token_store = RefreshTokenStore::extract_from_store(store)?;
         let last_time_fetched = self.last_time_fetched.clone();
@@ -308,6 +312,7 @@ impl MangadexDesktopApi {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
+                    let _ = watches.is_logged.send_replace(true);
                 } else {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write.replace(Instant::now());
@@ -330,6 +335,10 @@ impl MangadexDesktopApi {
         self.init_client_state(app, &store)?;
         app.manage(self.offline_app_state.clone());
 
+        Ok(())
+    }
+    pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
+        app.manage(Watches::default());
         Ok(())
     }
     pub fn ins_handle<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
@@ -376,6 +385,7 @@ where
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
+        self.init_watches_states(app)?;
         #[cfg(debug_assertions)]
         self.export_sdl(Path::new("../src/lib/schemas/mangadex.graphqls").to_path_buf())?;
         self.init_states(app, &config)?;
