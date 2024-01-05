@@ -284,6 +284,7 @@ impl MangadexDesktopApi {
         app: &tauri::AppHandle<R>,
         store: &Store<R>,
     ) -> tauri::plugin::Result<()> {
+        let watches = app.state::<Watches>();
         let cis = ClientInfoStore::extract_from_store(store)?;
         let r_token_store = RefreshTokenStore::extract_from_store(store)?;
         let last_time_fetched = self.last_time_fetched.clone();
@@ -311,6 +312,7 @@ impl MangadexDesktopApi {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
+                    let _ = watches.is_logged.send_replace(true);
                 } else {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write.replace(Instant::now());

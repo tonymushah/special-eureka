@@ -29,10 +29,7 @@ where
     T: Into<InnerData>,
 {
     fn send_data(&self, data: T) -> SendDataResult {
-        if let Err(err) = self.send(data.into()) {
-            Err(err.to_string())
-        } else {
-            Ok(())
-        }
+        self.send(data.into());
+        Ok(())
     }
 }
