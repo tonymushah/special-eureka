@@ -5,9 +5,9 @@ use mangadex_api_schema_rust::{
     v5::ApiClientAttributes as Attributes, ApiObjectNoRelationships as AONR,
 };
 use mangadex_api_types_rust::RelationshipType;
-use tokio::sync::watch::{Receiver, Sender};
+use tokio::sync::watch::Sender;
 
-use super::{SendData, SendDataResult, WatcherInnerData, Watches};
+use super::{SendData, SendDataResult, WatcherInnerData};
 
 type InnerData = WatcherInnerData<ApiClientAttributes>;
 
@@ -51,20 +51,5 @@ impl From<InnerData> for AONRApiClient {
             type_: RelationshipType::ApiClient,
             attributes: value.attributes.into(),
         }
-    }
-}
-
-impl Watches {
-    pub fn api_client_subscribe(&self) -> Receiver<Option<InnerData>> {
-        self.api_client.subscribe()
-    }
-}
-
-impl<T> SendData<T> for Watches
-where
-    T: Into<InnerData>,
-{
-    fn send_data(&self, data: T) -> SendDataResult {
-        self.api_client.send_data(data)
     }
 }

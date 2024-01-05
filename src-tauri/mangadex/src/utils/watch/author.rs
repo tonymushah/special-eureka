@@ -4,7 +4,7 @@ use mangadex_api_schema_rust::{v5::AuthorAttributes as Attributes, ApiObjectNoRe
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
-use crate::objects::{author::attributes::AuthorAttributes, GetAttributes, GetId};
+use crate::objects::author::attributes::AuthorAttributes;
 
 use super::{SendData, WatcherInnerData};
 
@@ -32,7 +32,7 @@ impl Default for AuthorWatch {
 
 impl<T> SendData<T> for AuthorWatch
 where
-    T: GetId + GetAttributes<Attributes = AuthorAttributes>,
+    T: Into<InnerData>,
 {
     fn send_data(&self, data: T) -> super::SendDataResult {
         if let Err(err) = self.send(Some(data.into())) {
