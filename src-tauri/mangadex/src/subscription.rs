@@ -29,6 +29,7 @@ use self::{
     manga::MangaSubscriptions,
     rating::RatingSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
+    tag::TagSubscriptions,
 };
 use crate::{
     objects::{
@@ -40,6 +41,7 @@ use crate::{
         manga::attributes::GraphQLMangaAttributes as MangaAttributes,
         rating::RatingItemAttributes,
         statistics::{manga::MangaStatisticsAttributes, StatisticsComments},
+        tag::attributes::TagAttributes,
     },
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
@@ -132,6 +134,14 @@ impl Subscriptions {
         MangaStatisticsSubscriptions
             .listen_by_id(ctx, manga_id, sub_id)
             .await
+    }
+    pub async fn watch_tag<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        tag_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = TagAttributes> + 'ctx> {
+        TagSubscriptions.listen_by_id(ctx, tag_id, sub_id).await
     }
 }
 
