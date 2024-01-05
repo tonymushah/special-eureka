@@ -18,12 +18,13 @@ pub mod user;
 use self::{
     api_client::ApiClientSubscriptions, author::AuthorSubscriptions, chapter::ChapterSubscriptions,
     cover::CoverSubscriptions, custom_list::CustomListSubscriptions, manga::MangaSubscriptions,
+    rating::RatingSubscriptions,
 };
 use crate::objects::{
     api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
     chapter::attributes::ChapterAttributes, cover::attributes::CoverAttributes,
     custom_list::attributes::CustomListAttributes,
-    manga::attributes::GraphQLMangaAttributes as MangaAttributes,
+    manga::attributes::GraphQLMangaAttributes as MangaAttributes, rating::RatingItemAttributes,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -86,5 +87,15 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaAttributes> + 'ctx> {
         MangaSubscriptions.listen_by_id(ctx, manga_id, sub_id).await
+    }
+    pub async fn watch_rating<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        manga_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = RatingItemAttributes> + 'ctx> {
+        RatingSubscriptions
+            .listen_by_id(ctx, manga_id, sub_id)
+            .await
     }
 }
