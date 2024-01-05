@@ -31,6 +31,7 @@ use self::{
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
     tag::TagSubscriptions,
     upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
+    user::{me::UserMeSubscriptions, UserSubscriptions},
 };
 use crate::{
     objects::{
@@ -47,6 +48,7 @@ use crate::{
             session::attributes::UploadSessionAttributes,
             session_file::attributes::UploadSessionFileAttributes,
         },
+        user::attributes::UserAttributes,
     },
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
@@ -167,6 +169,21 @@ impl Subscriptions {
         UploadSessionFileSubscriptions
             .listen_by_id(ctx, upload_session_file_id, sub_id)
             .await
+    }
+    pub async fn watch_user<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        user_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
+        UserSubscriptions.listen_by_id(ctx, user_id, sub_id).await
+    }
+    pub async fn watch_user_me<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
+        UserMeSubscriptions.listen(ctx, sub_id).await
     }
 }
 
