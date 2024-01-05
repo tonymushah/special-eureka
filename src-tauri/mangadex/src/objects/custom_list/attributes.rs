@@ -13,6 +13,12 @@ impl From<Attributes> for CustomListAttributes {
     }
 }
 
+impl From<CustomListAttributes> for Attributes {
+    fn from(value: CustomListAttributes) -> Self {
+        value.0
+    }
+}
+
 impl Deref for CustomListAttributes {
     type Target = Attributes;
 
