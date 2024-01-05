@@ -30,6 +30,7 @@ use self::{
     rating::RatingSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
     tag::TagSubscriptions,
+    upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
 };
 use crate::{
     objects::{
@@ -42,6 +43,10 @@ use crate::{
         rating::RatingItemAttributes,
         statistics::{manga::MangaStatisticsAttributes, StatisticsComments},
         tag::attributes::TagAttributes,
+        upload::{
+            session::attributes::UploadSessionAttributes,
+            session_file::attributes::UploadSessionFileAttributes,
+        },
     },
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
@@ -142,6 +147,26 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = TagAttributes> + 'ctx> {
         TagSubscriptions.listen_by_id(ctx, tag_id, sub_id).await
+    }
+    pub async fn watch_upload_session<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        upload_session_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = UploadSessionAttributes> + 'ctx> {
+        UploadSessionSubscriptions
+            .listen_by_id(ctx, upload_session_id, sub_id)
+            .await
+    }
+    pub async fn watch_upload_session_file<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        upload_session_file_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = UploadSessionFileAttributes> + 'ctx> {
+        UploadSessionFileSubscriptions
+            .listen_by_id(ctx, upload_session_file_id, sub_id)
+            .await
     }
 }
 
