@@ -7,6 +7,7 @@ use crate::objects::{GetAttributes, GetId};
 use self::{
     api_client::ApiClientWatch,
     author::AuthorWatch,
+    chapter::ChapterWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
     manga::MangaWatch,
@@ -110,6 +111,7 @@ pub trait SendData<T>: Send + Sync + Clone {
 pub struct Watches {
     pub api_client: ApiClientWatch,
     pub author: AuthorWatch,
+    pub chapter: ChapterWatch,
     pub cover: CoverWatch,
     pub custom_list: CustomListWatch,
     pub manga: MangaWatch,
