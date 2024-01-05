@@ -17,11 +17,12 @@ pub mod user;
 
 use self::{
     api_client::ApiClientSubscriptions, author::AuthorSubscriptions, chapter::ChapterSubscriptions,
-    cover::CoverSubscriptions,
+    cover::CoverSubscriptions, custom_list::CustomListSubscriptions,
 };
 use crate::objects::{
     api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
     chapter::attributes::ChapterAttributes, cover::attributes::CoverAttributes,
+    custom_list::attributes::CustomListAttributes,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -66,5 +67,15 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = CoverAttributes> + 'ctx> {
         CoverSubscriptions.listen_by_id(ctx, cover_id, sub_id).await
+    }
+    pub async fn watch_custom_list<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        custom_list_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = CustomListAttributes> + 'ctx> {
+        CustomListSubscriptions
+            .listen_by_id(ctx, custom_list_id, sub_id)
+            .await
     }
 }
