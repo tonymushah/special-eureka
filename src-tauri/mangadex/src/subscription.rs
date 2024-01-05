@@ -15,8 +15,10 @@ pub mod tag;
 pub mod upload;
 pub mod user;
 
-use self::api_client::ApiClientSubscriptions;
-use crate::objects::api_client::attributes::ApiClientAttributes;
+use self::{api_client::ApiClientSubscriptions, author::AuthorSubscriptions};
+use crate::objects::{
+    api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
+};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Subscriptions;
@@ -31,6 +33,16 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = ApiClientAttributes> + 'ctx> {
         ApiClientSubscriptions
             .listen_by_id(ctx, api_client_id, sub_id)
+            .await
+    }
+    pub async fn watch_author<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        author_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = AuthorAttributes> + 'ctx> {
+        AuthorSubscriptions
+            .listen_by_id(ctx, author_id, sub_id)
             .await
     }
 }
