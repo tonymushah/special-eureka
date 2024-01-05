@@ -1,7 +1,7 @@
 use std::{io::Read, ops::Add, path::{PathBuf, Path}};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
-use async_graphql::{EmptySubscription, Schema};
+use async_graphql::Schema;
 use bytes::{Bytes, BytesMut};
 use mangadex_api::{MangaDexClient, CDN_URL};
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
@@ -36,6 +36,7 @@ use utils::{set_indentifier, watch::Watches};
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
 use uuid::Uuid;
+use subscription::Subscriptions;
 
 pub mod intelligent_notification_system;
 pub mod utils;
@@ -49,7 +50,7 @@ pub mod ins_handle;
 
 type Q = Query;
 type M = Mutation;
-type S = EmptySubscription;
+type S = Subscriptions;
 
 #[derive(Clone, serde::Serialize)]
 struct ExportPayload {
@@ -100,7 +101,7 @@ impl Default for MangadexDesktopApi {
             .build()
             .unwrap();
         Self {
-            schema: Schema::new(Query, Mutation, EmptySubscription),
+            schema: Schema::new(Query, Mutation, Subscriptions),
             client: MangaDexClient::new(cli),
             offline_app_state: Default::default(),
             last_time_fetched: Default::default(),
