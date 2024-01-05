@@ -13,6 +13,12 @@ impl From<Attributes> for CoverAttributes {
     }
 }
 
+impl From<CoverAttributes> for Attributes {
+    fn from(value: CoverAttributes) -> Self {
+        value.0
+    }
+}
+
 impl Deref for CoverAttributes {
     type Target = Attributes;
 
