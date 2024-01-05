@@ -21,16 +21,25 @@ pub mod upload;
 pub mod user;
 
 use self::{
-    api_client::ApiClientSubscriptions, author::AuthorSubscriptions, chapter::ChapterSubscriptions,
-    cover::CoverSubscriptions, custom_list::CustomListSubscriptions, manga::MangaSubscriptions,
+    api_client::ApiClientSubscriptions,
+    author::AuthorSubscriptions,
+    chapter::ChapterSubscriptions,
+    cover::CoverSubscriptions,
+    custom_list::CustomListSubscriptions,
+    manga::MangaSubscriptions,
     rating::RatingSubscriptions,
+    statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
 };
 use crate::{
     objects::{
-        api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
-        chapter::attributes::ChapterAttributes, cover::attributes::CoverAttributes,
+        api_client::attributes::ApiClientAttributes,
+        author::attributes::AuthorAttributes,
+        chapter::attributes::ChapterAttributes,
+        cover::attributes::CoverAttributes,
         custom_list::attributes::CustomListAttributes,
-        manga::attributes::GraphQLMangaAttributes as MangaAttributes, rating::RatingItemAttributes,
+        manga::attributes::GraphQLMangaAttributes as MangaAttributes,
+        rating::RatingItemAttributes,
+        statistics::{manga::MangaStatisticsAttributes, StatisticsComments},
     },
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
@@ -103,6 +112,24 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = RatingItemAttributes> + 'ctx> {
         RatingSubscriptions
+            .listen_by_id(ctx, manga_id, sub_id)
+            .await
+    }
+    pub async fn watch_statistics<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = StatisticsComments> + 'ctx> {
+        StatisticsSubscriptions.listen_by_id(ctx, id, sub_id).await
+    }
+    pub async fn watch_manga_statistics<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        manga_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaStatisticsAttributes> + 'ctx> {
+        MangaStatisticsSubscriptions
             .listen_by_id(ctx, manga_id, sub_id)
             .await
     }
