@@ -1,5 +1,5 @@
 use crate::store::{
-    keys::READING_MODE,
+    keys::PAGE_DIRECTION as READING_MODE,
     types::{DefaulStore, ExtractFromStore, StoreCrud},
 };
 
