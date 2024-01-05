@@ -1,3 +1,6 @@
+pub mod reading;
+pub mod sidebar;
+
 use async_graphql::Enum;
 use serde::{Deserialize, Serialize};
 
