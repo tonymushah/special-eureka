@@ -11,6 +11,8 @@ use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState},
     store::get_store_builder,
 };
+
+use self::watch::Watches;
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
 pub mod watch;
@@ -79,6 +81,14 @@ pub(crate) fn get_mangadex_client_from_graphql_context<'ctx, R: Runtime>(
     get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<MangaDexClient>()
         .ok_or(async_graphql::Error::new("MangaDexClient not found"))
+}
+
+pub(crate) fn get_watches_from_graphql_context<'ctx, R: Runtime>(
+    ctx: &async_graphql::Context<'ctx>,
+) -> async_graphql::Result<State<'ctx, Watches>> {
+    get_app_handle_from_async_graphql::<R>(ctx)?
+        .try_state::<Watches>()
+        .ok_or(async_graphql::Error::new("Watches not found"))
 }
 
 pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(

@@ -26,24 +26,26 @@ use tauri::{
     plugin::Plugin,
 };
 use tauri::{plugin::Builder, Manager, Runtime};
-pub mod intelligent_notification_system;
-pub mod utils;
 use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
 use serde::{ser::Serializer, Serialize};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 use url::Url;
-use utils::set_indentifier;
-pub mod ins_handle;
+use utils::{set_indentifier, watch::Watches};
+
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
 use uuid::Uuid;
 
+pub mod intelligent_notification_system;
+pub mod utils;
 pub mod app_state;
 pub mod mutation;
 pub mod objects;
 pub mod query;
 pub mod store;
+pub mod subscription;
+pub mod ins_handle;
 
 type Q = Query;
 type M = Mutation;
@@ -332,6 +334,10 @@ impl MangadexDesktopApi {
 
         Ok(())
     }
+    pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
+        app.manage(Watches::default());
+        Ok(())
+    }
     pub fn ins_handle<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
         let identifier = app.config().tauri.bundle.identifier.clone();
         match set_indentifier(identifier) {
@@ -380,6 +386,7 @@ where
         self.export_sdl(Path::new("../src/lib/schemas/mangadex.graphqls").to_path_buf())?;
         self.init_states(app, &config)?;
         self.register_uri_scheme_protocol(app, config)?;
+        self.init_watches_states(app)?;
         self.ins_handle(app)
     }
     fn extend_api(&mut self, invoke: tauri::Invoke<R>) {

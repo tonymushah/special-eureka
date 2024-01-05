@@ -16,6 +16,7 @@ use self::{
     tag::TagWatch,
     upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
     user::UserWatch,
+    user_me::UserMeWatch,
 };
 
 pub mod api_client;
@@ -31,6 +32,7 @@ pub mod statistics;
 pub mod tag;
 pub mod upload;
 pub mod user;
+pub mod user_me;
 
 pub struct WatcherInnerData<T: ?Sized> {
     pub id: Uuid,
@@ -119,4 +121,5 @@ pub struct Watches {
     pub upload_session: UploadSessionWatch,
     pub upload_session_file: UploadSessionFileWatch,
     pub user: UserWatch,
+    pub user_me: UserMeWatch,
 }

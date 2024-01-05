@@ -1,0 +1,12 @@
+pub mod api_client;
+pub mod author;
+pub mod chapter;
+pub mod cover;
+pub mod custom_list;
+pub mod manga;
+pub mod rating;
+pub mod scanlation_group;
+pub mod statistics;
+pub mod tag;
+pub mod upload;
+pub mod user;
