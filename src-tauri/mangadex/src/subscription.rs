@@ -17,10 +17,11 @@ pub mod user;
 
 use self::{
     api_client::ApiClientSubscriptions, author::AuthorSubscriptions, chapter::ChapterSubscriptions,
+    cover::CoverSubscriptions,
 };
 use crate::objects::{
     api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
-    chapter::attributes::ChapterAttributes,
+    chapter::attributes::ChapterAttributes, cover::attributes::CoverAttributes,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -57,5 +58,13 @@ impl Subscriptions {
         ChapterSubscriptions
             .listen_by_id(ctx, chapter_id, sub_id)
             .await
+    }
+    pub async fn watch_cover<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        cover_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = CoverAttributes> + 'ctx> {
+        CoverSubscriptions.listen_by_id(ctx, cover_id, sub_id).await
     }
 }

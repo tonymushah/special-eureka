@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use async_graphql::{Context, Result, Subscription};
+use tauri::WindowEvent;
 use tokio::{
     sync::RwLock,
     time::{sleep, Duration},
@@ -27,9 +28,15 @@ impl ApiClientSubscriptions {
     ) -> Result<impl Stream<Item = ApiClientAttributes> + 'ctx> {
         let should_end = Arc::new(RwLock::new(false));
         let should_end_un = should_end.clone();
-
+        let should_end_un_n = should_end.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let window = get_window_from_async_graphql::<tauri::Wry>(ctx)?;
+        window.on_window_event(move |e| {
+            if let WindowEvent::Destroyed = e {
+                let mut write = should_end_un_n.blocking_write();
+                *write = true;
+            }
+        });
         let unlisten = window.listen("sub_end", move |e| {
             if let Some(payload) = e.payload() {
                 let mut write = should_end_un.blocking_write();
@@ -41,7 +48,7 @@ impl ApiClientSubscriptions {
         let api_client_sub = watches.api_client.subscribe();
         Ok(stream! {
             loop {
-                if *should_end.read().await {
+                if !*should_end.read().await {
                     if let Ok(has_changed) = api_client_sub.has_changed() {
                         if has_changed {
                             let borrow = {
