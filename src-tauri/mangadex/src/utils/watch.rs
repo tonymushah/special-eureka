@@ -12,7 +12,7 @@ pub mod custom_list;
 pub mod manga;
 pub mod rating;
 pub mod read_marker;
-pub mod scanalation_group;
+pub mod scanlation_group;
 pub mod statistics;
 pub mod tag;
 pub mod upload;

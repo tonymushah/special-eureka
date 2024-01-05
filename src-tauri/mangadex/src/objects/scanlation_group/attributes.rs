@@ -5,6 +5,7 @@ use mangadex_api_schema_rust::v5::{LocalizedString, ScanlationGroupAttributes as
 use mangadex_api_types_rust::{Language, MangaDexDateTime, MangaDexDuration};
 use url::Url;
 
+#[derive(Clone, Debug)]
 pub struct ScanlationGroupAttributes(Attributes);
 
 impl From<Attributes> for ScanlationGroupAttributes {
