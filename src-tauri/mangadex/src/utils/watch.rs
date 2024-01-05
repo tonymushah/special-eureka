@@ -4,6 +4,20 @@ use uuid::Uuid;
 
 use crate::objects::{GetAttributes, GetId};
 
+use self::{
+    api_client::ApiClientWatch,
+    author::AuthorWatch,
+    cover::CoverWatch,
+    custom_list::CustomListWatch,
+    manga::MangaWatch,
+    rating::RatingWatch,
+    scanlation_group::ScanlationGroupWatch,
+    statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
+    tag::TagWatch,
+    upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
+    user::UserWatch,
+};
+
 pub mod api_client;
 pub mod author;
 pub mod chapter;
@@ -88,4 +102,21 @@ pub type SendDataResult = Result<(), String>;
 
 pub trait SendData<T>: Send + Sync + Clone {
     fn send_data(&self, data: T) -> SendDataResult;
+}
+
+#[derive(Debug, Clone, Default)]
+pub struct Watches {
+    pub(crate) api_client: ApiClientWatch,
+    pub(crate) author: AuthorWatch,
+    pub(crate) cover: CoverWatch,
+    pub(crate) custom_list: CustomListWatch,
+    pub(crate) manga: MangaWatch,
+    pub(crate) rating: RatingWatch,
+    pub(crate) scanlation_group: ScanlationGroupWatch,
+    pub(crate) statistics: StatisticsWatch,
+    pub(crate) manga_statistics: MangaStatisticsWatch,
+    pub(crate) tag: TagWatch,
+    pub(crate) upload_session: UploadSessionWatch,
+    pub(crate) upload_session_file: UploadSessionFileWatch,
+    pub(crate) user: UserWatch,
 }
