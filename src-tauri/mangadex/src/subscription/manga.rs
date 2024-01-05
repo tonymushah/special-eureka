@@ -1,19 +1,11 @@
-use std::sync::Arc;
-
 use async_graphql::{Context, Result, Subscription};
-use tauri::WindowEvent;
-use tokio::{
-    sync::RwLock,
-    time::{sleep, Duration},
-};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
-use crate::{
-    objects::manga::attributes::GraphQLMangaAttributes as MangaAttributes,
-    utils::{get_watches_from_graphql_context, get_window_from_async_graphql},
-};
+use crate::objects::manga::attributes::GraphQLMangaAttributes as MangaAttributes;
 use async_stream::stream;
+
+use super::{init_watch_subscription, sub_sleep};
 
 #[derive(Debug, Clone, Copy)]
 pub struct MangaSubscriptions;
@@ -26,25 +18,8 @@ impl MangaSubscriptions {
         manga_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaAttributes> + 'ctx> {
-        let should_end = Arc::new(RwLock::new(false));
-        let should_end_un = should_end.clone();
-        let should_end_un_n = should_end.clone();
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let window = get_window_from_async_graphql::<tauri::Wry>(ctx)?;
-        window.on_window_event(move |e| {
-            if let WindowEvent::Destroyed = e {
-                let mut write = should_end_un_n.blocking_write();
-                *write = true;
-            }
-        });
-        let unlisten = window.listen("sub_end", move |e| {
-            if let Some(payload) = e.payload() {
-                let mut write = should_end_un.blocking_write();
-                if let Ok(id) = Uuid::parse_str(payload) {
-                    *write = id == sub_id;
-                }
-            }
-        });
+        let (watches, should_end, unlisten, window) =
+            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let manga_sub = watches.manga.subscribe();
         Ok(stream! {
             loop {
@@ -66,7 +41,7 @@ impl MangaSubscriptions {
                 } else{
                     break;
                 }
-                sleep(Duration::from_secs(1)).await;
+                sub_sleep().await;
             }
             window.unlisten(unlisten);
         })

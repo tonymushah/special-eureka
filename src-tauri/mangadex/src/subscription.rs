@@ -1,4 +1,9 @@
+use std::sync::Arc;
+
 use async_graphql::{Context, Result, Subscription};
+use tauri::{EventHandler, Window, WindowEvent};
+use tokio::sync::RwLock;
+use tokio::time::{sleep, Duration};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -20,11 +25,14 @@ use self::{
     cover::CoverSubscriptions, custom_list::CustomListSubscriptions, manga::MangaSubscriptions,
     rating::RatingSubscriptions,
 };
-use crate::objects::{
-    api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
-    chapter::attributes::ChapterAttributes, cover::attributes::CoverAttributes,
-    custom_list::attributes::CustomListAttributes,
-    manga::attributes::GraphQLMangaAttributes as MangaAttributes, rating::RatingItemAttributes,
+use crate::{
+    objects::{
+        api_client::attributes::ApiClientAttributes, author::attributes::AuthorAttributes,
+        chapter::attributes::ChapterAttributes, cover::attributes::CoverAttributes,
+        custom_list::attributes::CustomListAttributes,
+        manga::attributes::GraphQLMangaAttributes as MangaAttributes, rating::RatingItemAttributes,
+    },
+    utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -98,4 +106,41 @@ impl Subscriptions {
             .listen_by_id(ctx, manga_id, sub_id)
             .await
     }
+}
+
+type InitWatchSubRes<'ctx, R> = Result<(
+    tauri::State<'ctx, Watches>,
+    Arc<RwLock<bool>>,
+    EventHandler,
+    &'ctx Window<R>,
+)>;
+
+pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
+    ctx: &'ctx Context<'ctx>,
+    sub_id: Uuid,
+) -> InitWatchSubRes<'ctx, R> {
+    let should_end = Arc::new(RwLock::new(false));
+    let should_end_un = should_end.clone();
+    let should_end_un_n = should_end.clone();
+    let watches = get_watches_from_graphql_context::<R>(ctx)?;
+    let window = get_window_from_async_graphql::<R>(ctx)?;
+    window.on_window_event(move |e| {
+        if let WindowEvent::Destroyed = e {
+            let mut write = should_end_un_n.blocking_write();
+            *write = true;
+        }
+    });
+    let unlisten = window.listen("sub_end", move |e| {
+        if let Some(payload) = e.payload() {
+            let mut write = should_end_un.blocking_write();
+            if let Ok(id) = Uuid::parse_str(payload) {
+                *write = id == sub_id;
+            }
+        }
+    });
+    Ok((watches, should_end, unlisten, window))
+}
+
+pub async fn sub_sleep() {
+    sleep(Duration::from_secs(1)).await
 }
