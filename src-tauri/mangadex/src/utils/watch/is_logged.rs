@@ -29,7 +29,7 @@ where
     T: Into<InnerData>,
 {
     fn send_data(&self, data: T) -> SendDataResult {
-        self.send(data.into());
+        self.send_replace(data.into());
         Ok(())
     }
 }
