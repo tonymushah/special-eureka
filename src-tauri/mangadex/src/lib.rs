@@ -383,11 +383,11 @@ where
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
+        self.init_watches_states(app)?;
         #[cfg(debug_assertions)]
         self.export_sdl(Path::new("../src/lib/schemas/mangadex.graphqls").to_path_buf())?;
         self.init_states(app, &config)?;
         self.register_uri_scheme_protocol(app, config)?;
-        self.init_watches_states(app)?;
         self.ins_handle(app)
     }
     fn extend_api(&mut self, invoke: tauri::Invoke<R>) {

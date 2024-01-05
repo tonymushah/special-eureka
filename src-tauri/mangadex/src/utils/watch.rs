@@ -10,6 +10,7 @@ use self::{
     chapter::ChapterWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
+    is_logged::IsLoggedWatch,
     manga::MangaWatch,
     rating::RatingWatch,
     scanlation_group::ScanlationGroupWatch,
@@ -25,6 +26,7 @@ pub mod author;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
+pub mod is_logged;
 pub mod manga;
 pub mod rating;
 pub mod read_marker;
@@ -124,4 +126,5 @@ pub struct Watches {
     pub upload_session_file: UploadSessionFileWatch,
     pub user: UserWatch,
     pub user_me: UserMeWatch,
+    pub is_logged: IsLoggedWatch,
 }
