@@ -11,8 +11,8 @@ use regex::Regex;
 use store::{
     get_store_builder,
     types::{
-        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore},
-        ExtractFromStore,
+        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore, chapter_language::ChapterLanguagesStore},
+        ExtractFromStore, enums::{reading_mode::ReadingModeStore, direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore}},
     },
 };
 // use mangadex_desktop_api2::AppState;
@@ -31,7 +31,7 @@ use serde::{ser::Serializer, Serialize};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 use url::Url;
-use utils::{set_indentifier, watch::Watches};
+use utils::{set_indentifier, watch::{Watches, SendData}};
 
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
@@ -331,14 +331,19 @@ impl MangadexDesktopApi {
     ) -> tauri::plugin::Result<()> {
         let mut store = get_store_builder(app.app_handle())?.build();
         let _ = store.load();
-        
+        self.init_watches_states(app, &store)?;
         self.init_client_state(app, &store)?;
         app.manage(self.offline_app_state.clone());
 
         Ok(())
     }
-    pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
-        app.manage(Watches::default());
+    pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>, store: &Store<R>) -> tauri::plugin::Result<()> {
+        let watches = Watches::default();
+        let _ = watches.reading_mode.send_data(ReadingModeStore::extract_from_store(store)?);
+        let _ = watches.chapter_languages.send_data(ChapterLanguagesStore::extract_from_store(store)?);
+        let _ = watches.page_direction.send_data(ReadingDirectionStore::extract_from_store(store)?);
+        let _ = watches.sidebar_direction.send_data(SidebarDirectionStore::extract_from_store(store)?);
+        app.manage(watches);
         Ok(())
     }
     pub fn ins_handle<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
@@ -385,7 +390,6 @@ where
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
-        self.init_watches_states(app)?;
         #[cfg(debug_assertions)]
         self.export_sdl(Path::new("../src/lib/schemas/mangadex.graphqls").to_path_buf())?;
         self.init_states(app, &config)?;
