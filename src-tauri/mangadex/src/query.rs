@@ -20,6 +20,7 @@ pub mod statistics;
 pub mod tag;
 pub mod upload;
 pub mod user;
+pub mod user_option;
 
 use async_graphql::Object;
 
