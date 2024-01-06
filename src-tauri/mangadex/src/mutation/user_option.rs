@@ -1,4 +1,5 @@
 use async_graphql::{Context, Object, Result};
+use mangadex_api_types_rust::Language;
 
 use crate::{
     store::types::{
@@ -8,6 +9,7 @@ use crate::{
             },
             reading_mode::{ReadingMode, ReadingModeStore},
         },
+        structs::chapter_language::ChapterLanguagesStore,
         ExtractFromStore, StoreCrud,
     },
     utils::{get_store, get_watches_from_graphql_context, watch::SendData},
@@ -53,5 +55,17 @@ impl UserOptionMutations {
         inner.insert_and_save(&mut store)?;
         watches.sidebar_direction.send_data(inner)?;
         Ok(SidebarDirectionStore::extract_from_store(&store)?.into())
+    }
+    pub async fn set_chapter_languages(
+        &self,
+        ctx: &Context<'_>,
+        languages: Vec<Language>,
+    ) -> Result<Vec<Language>> {
+        let mut store = get_store::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ChapterLanguagesStore::from(languages);
+        inner.insert_and_save(&mut store)?;
+        watches.chapter_languages.send_data(inner)?;
+        Ok(ChapterLanguagesStore::extract_from_store(&store)?.into())
     }
 }
