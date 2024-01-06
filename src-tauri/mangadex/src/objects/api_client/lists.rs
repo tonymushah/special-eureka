@@ -1,3 +1,5 @@
+use std::ops::{Deref, DerefMut};
+
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{ApiClientObject, Results};
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -12,7 +14,20 @@ use super::ApiClient;
 pub struct ApiClientResults {
     data: Vec<ApiClient>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub info: ResultsInfo,
+}
+
+impl Deref for ApiClientResults {
+    type Target = Vec<ApiClient>;
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
+}
+
+impl DerefMut for ApiClientResults {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.data
+    }
 }
 
 impl From<Results<ApiClientObject>> for ApiClientResults {

@@ -7,7 +7,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::api_client::ApiClient,
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -22,16 +25,22 @@ impl ApiClientMutation {
     ) -> Result<ApiClient> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let data: ApiObjectNoRelationships<ApiClientAttributes> =
             params.send(&client).await?.data.into();
-        Ok(data.into())
+        let data: ApiClient = data.into();
+        let _ = watches.api_client.send_data(data.clone());
+        Ok(data)
     }
     pub async fn edit(&self, ctx: &Context<'_>, params: ApiClientEditParam) -> Result<ApiClient> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let data: ApiObjectNoRelationships<ApiClientAttributes> =
             params.send(&client).await?.data.into();
-        Ok(data.into())
+        let data: ApiClient = data.into();
+        let _ = watches.api_client.send_data(data.clone());
+        Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, params: ApiClientDeleteParam) -> Result<bool> {
         let client =
