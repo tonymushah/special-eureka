@@ -8,6 +8,7 @@ use self::{
     api_client::ApiClientWatch,
     author::AuthorWatch,
     chapter::ChapterWatch,
+    chapter_languages::ChapterLanguagesWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
     is_logged::IsLoggedWatch,
@@ -27,6 +28,7 @@ use self::{
 pub mod api_client;
 pub mod author;
 pub mod chapter;
+pub mod chapter_languages;
 pub mod cover;
 pub mod custom_list;
 pub mod is_logged;
@@ -136,4 +138,5 @@ pub struct Watches {
     pub page_direction: PageDirectionWatch,
     pub reading_mode: ReadingModeWatch,
     pub sidebar_direction: SideBarDirectionWatch,
+    pub chapter_languages: ChapterLanguagesWatch,
 }
