@@ -21,6 +21,8 @@ pub mod upload;
 pub mod user;
 pub mod user_option;
 
+use mangadex_api_types_rust::Language;
+
 use self::{
     api_client::ApiClientSubscriptions,
     author::AuthorSubscriptions,
@@ -215,6 +217,15 @@ impl Subscriptions {
             .listen_to_reading_mode(ctx, sub_id)
             .await
     }
+    pub async fn watch_chapter_languages<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_chapter_languages(ctx, sub_id)
+            .await
+    }
 }
 
 type InitWatchSubRes<'ctx, R> = Result<(
@@ -251,5 +262,5 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
 }
 
 pub async fn sub_sleep() {
-    sleep(Duration::from_secs(1)).await
+    sleep(Duration::from_millis(500)).await
 }
