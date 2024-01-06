@@ -31,6 +31,12 @@ impl From<Direction> for ReadingDirectionStore {
     }
 }
 
+impl From<ReadingDirectionStore> for Direction {
+    fn from(value: ReadingDirectionStore) -> Self {
+        value.0
+    }
+}
+
 impl<'de, R> ExtractFromStore<'de, R> for ReadingDirectionStore
 where
     R: Runtime,

@@ -19,6 +19,7 @@ pub mod statistics;
 pub mod tag;
 pub mod upload;
 pub mod user;
+pub mod user_option;
 
 use self::{
     api_client::ApiClientSubscriptions,
@@ -32,6 +33,7 @@ use self::{
     tag::TagSubscriptions,
     upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
     user::{me::UserMeSubscriptions, UserSubscriptions},
+    user_option::UserOptionSubscriptions,
 };
 use crate::{
     objects::{
@@ -50,6 +52,7 @@ use crate::{
         },
         user::attributes::UserAttributes,
     },
+    store::types::enums::{direction::Direction, reading_mode::ReadingMode},
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
 
@@ -184,6 +187,33 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
         UserMeSubscriptions.listen(ctx, sub_id).await
+    }
+    pub async fn watch_sidebar_direction<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Direction> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_sidebar_direction(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_page_direction<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Direction> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_page_direction(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_reading_mode<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_reading_mode(ctx, sub_id)
+            .await
     }
 }
 

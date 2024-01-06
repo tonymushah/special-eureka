@@ -31,6 +31,12 @@ impl From<Direction> for SidebarDirectionStore {
     }
 }
 
+impl From<SidebarDirectionStore> for Direction {
+    fn from(value: SidebarDirectionStore) -> Self {
+        value.0
+    }
+}
+
 impl<'de, R> ExtractFromStore<'de, R> for SidebarDirectionStore
 where
     R: Runtime,

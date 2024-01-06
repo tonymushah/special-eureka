@@ -43,6 +43,12 @@ impl From<ReadingMode> for ReadingModeStore {
     }
 }
 
+impl From<ReadingModeStore> for ReadingMode {
+    fn from(value: ReadingModeStore) -> Self {
+        value.0
+    }
+}
+
 impl<'de, R> ExtractFromStore<'de, R> for ReadingModeStore
 where
     R: Runtime,

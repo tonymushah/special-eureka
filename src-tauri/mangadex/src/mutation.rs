@@ -13,6 +13,7 @@ pub mod read_marker;
 pub mod report;
 pub mod scanlation_group;
 pub mod upload;
+pub mod user_option;
 
 use async_graphql::Object;
 

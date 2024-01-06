@@ -1,8 +1,7 @@
-use async_graphql::Error;
 use mangadex_api::MangaDexClient;
 use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
-use std::io::Result;
+use std::{io::Result, ops::Add};
 use tauri::{AppHandle, Manager, Runtime, State, Window};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
@@ -126,6 +125,7 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
 ) -> async_graphql::Result<State<'ctx, MangaDexClient>> {
     let client = get_mangadex_client_from_graphql_context::<R>(ctx)?;
     let last_time_fetched = get_last_time_token_when_fetched::<R>(ctx)?;
+    let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let should_fetched: bool = {
         let last_time_fetched_inner = last_time_fetched.read().await;
         let inner = last_time_fetched_inner.ok_or("You're not logged in")?;
@@ -137,14 +137,15 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
     if should_fetched {
         #[cfg(debug_assertions)]
         println!("Should be fetched");
-        let time = client.oauth().refresh().send().await?.expires_in;
-        let _ = last_time_fetched.write().await.replace(
-            Instant::now()
-                .checked_add(Duration::from_millis(time as u64))
-                .ok_or(Error::new(
-                    "Error on calculating the next time to fetch the token",
-                ))?,
-        );
+        if let Ok(res) = client.oauth().refresh().send().await {
+            let _ = last_time_fetched
+                .write()
+                .await
+                .replace(Instant::now().add(Duration::from_millis(res.expires_in as u64)));
+            watches.is_logged.send_replace(true);
+        } else {
+            watches.is_logged.send_replace(false);
+        }
     }
     Ok(client)
 }
