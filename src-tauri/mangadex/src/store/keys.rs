@@ -9,3 +9,5 @@ pub const PAGE_DIRECTION: &str = "page_direction";
 pub const SIDEBAR_DIRECTION: &str = "sidebar_direction";
 
 pub const READING_MODE: &str = "reading_mode";
+
+pub const CHAPTER_LANGUAGES: &str = "chapter_languages";
