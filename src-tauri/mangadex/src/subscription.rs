@@ -19,6 +19,9 @@ pub mod statistics;
 pub mod tag;
 pub mod upload;
 pub mod user;
+pub mod user_option;
+
+use mangadex_api_types_rust::Language;
 
 use self::{
     api_client::ApiClientSubscriptions,
@@ -32,6 +35,7 @@ use self::{
     tag::TagSubscriptions,
     upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
     user::{me::UserMeSubscriptions, UserSubscriptions},
+    user_option::UserOptionSubscriptions,
 };
 use crate::{
     objects::{
@@ -50,6 +54,7 @@ use crate::{
         },
         user::attributes::UserAttributes,
     },
+    store::types::enums::{direction::Direction, reading_mode::ReadingMode},
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
 
@@ -185,6 +190,42 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
         UserMeSubscriptions.listen(ctx, sub_id).await
     }
+    pub async fn watch_sidebar_direction<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Direction> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_sidebar_direction(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_page_direction<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Direction> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_page_direction(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_reading_mode<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_reading_mode(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_chapter_languages<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_chapter_languages(ctx, sub_id)
+            .await
+    }
 }
 
 type InitWatchSubRes<'ctx, R> = Result<(
@@ -221,5 +262,5 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
 }
 
 pub async fn sub_sleep() {
-    sleep(Duration::from_secs(1)).await
+    sleep(Duration::from_millis(500)).await
 }

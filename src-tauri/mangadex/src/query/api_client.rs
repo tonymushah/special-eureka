@@ -8,7 +8,10 @@ use crate::{
         api_client::{lists::ApiClientResults, ApiClient},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -23,12 +26,18 @@ impl ApiClientQueries {
     ) -> Result<ApiClientResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         params.includes = <ApiClientResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        let res: ApiClientResults = params.send(&client).await?.into();
+        res.iter().for_each(|data| {
+            let _ = watches.api_client.send_data(data.clone());
+        });
+        Ok(res)
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<ApiClient> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
         if let Some(rel) = ctx
             .field()
@@ -39,7 +48,7 @@ impl ApiClientQueries {
             includes.append(&mut out);
         }
         includes.dedup();
-        Ok(client
+        let res: ApiClient = client
             .client()
             .id(id)
             .get()
@@ -47,7 +56,9 @@ impl ApiClientQueries {
             .send()
             .await?
             .data
-            .into())
+            .into();
+        let _ = watches.api_client.send_data(res.clone());
+        Ok(res)
     }
 }
 

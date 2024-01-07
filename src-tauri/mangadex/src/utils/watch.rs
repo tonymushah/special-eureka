@@ -8,12 +8,16 @@ use self::{
     api_client::ApiClientWatch,
     author::AuthorWatch,
     chapter::ChapterWatch,
+    chapter_languages::ChapterLanguagesWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
     is_logged::IsLoggedWatch,
     manga::MangaWatch,
+    page_direction::PageDirectionWatch,
     rating::RatingWatch,
+    reading_mode::ReadingModeWatch,
     scanlation_group::ScanlationGroupWatch,
+    sidebar_direction::SideBarDirectionWatch,
     statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
     tag::TagWatch,
     upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
@@ -24,13 +28,17 @@ use self::{
 pub mod api_client;
 pub mod author;
 pub mod chapter;
+pub mod chapter_languages;
 pub mod cover;
 pub mod custom_list;
 pub mod is_logged;
 pub mod manga;
+pub mod page_direction;
 pub mod rating;
 pub mod read_marker;
+pub mod reading_mode;
 pub mod scanlation_group;
+pub mod sidebar_direction;
 pub mod statistics;
 pub mod tag;
 pub mod upload;
@@ -127,4 +135,8 @@ pub struct Watches {
     pub user: UserWatch,
     pub user_me: UserMeWatch,
     pub is_logged: IsLoggedWatch,
+    pub page_direction: PageDirectionWatch,
+    pub reading_mode: ReadingModeWatch,
+    pub sidebar_direction: SideBarDirectionWatch,
+    pub chapter_languages: ChapterLanguagesWatch,
 }
