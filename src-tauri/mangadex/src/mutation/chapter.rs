@@ -6,8 +6,12 @@ use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{
+    ins_handle::{add_in_chapter_failed, add_in_chapter_queue, add_in_chapter_success},
     objects::chapter::Chapter,
-    utils::{get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state},
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -18,9 +22,12 @@ impl ChapterMutations {
     pub async fn update(&self, ctx: &Context<'_>, params: ChapterUpdateParams) -> Result<Chapter> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res: ApiObjectNoRelationships<ChapterAttributes> =
             params.send(&client).await?.body.data.into();
-        Ok(res.into())
+        let data: Chapter = res.into();
+        let _ = watches.chapter.send_data(data.clone());
+        Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
@@ -45,20 +52,27 @@ impl ChapterMutations {
         #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
     ) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        add_in_chapter_queue(id)?;
         let offline_app_state_write = ola.read().await;
         let mut olasw = offline_app_state_write
             .clone()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         let chapter_download = olasw.chapter_download(id);
-        let _ = match quality {
-            DownloadMode::Normal => chapter_download.download_chapter(&mut olasw).await?,
+        let res = match quality {
+            DownloadMode::Normal => chapter_download.download_chapter(&mut olasw).await,
             DownloadMode::DataSaver => {
                 chapter_download
                     .download_chapter_data_saver(&mut olasw)
-                    .await?
+                    .await
             }
         };
-        Ok(true)
+        if let Err(_err) = res {
+            add_in_chapter_failed(id)?;
+            Ok(false)
+        } else {
+            add_in_chapter_success(id)?;
+            Ok(true)
+        }
     }
 }
 
