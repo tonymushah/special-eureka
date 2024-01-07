@@ -7,7 +7,10 @@ use uuid::Uuid;
 use crate::{
     objects::cover::Cover,
     query::cover::CoverQueries,
-    utils::{get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state},
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -18,16 +21,22 @@ impl CoverMutations {
     pub async fn upload(&self, ctx: &Context<'_>, params: CoverUploadParam) -> Result<Cover> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let data: ApiObjectNoRelationships<CoverAttributes> =
             params.send(&client).await?.body.data.into();
-        Ok(data.into())
+        let data: Cover = data.into();
+        let _ = watches.cover.send_data(data.clone());
+        Ok(data)
     }
     pub async fn edit(&self, ctx: &Context<'_>, params: CoverEditParam) -> Result<Cover> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let data: ApiObjectNoRelationships<CoverAttributes> =
             params.send(&client).await?.body.data.into();
-        Ok(data.into())
+        let data: Cover = data.into();
+        let _ = watches.cover.send_data(data.clone());
+        Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
