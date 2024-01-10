@@ -1,6 +1,7 @@
 import { Transition, Variants, motion } from "framer-motion";
 import { Outlet, useLocation } from "react-router-dom";
 import NavigationAnimation from "./Navigation";
+import { PropsWithChildren } from "react";
 
 const pageVariants: Variants = {
     initial: {
@@ -20,7 +21,7 @@ const pageTransition: Transition = {
     duration: 0.3
 };
 
-export default function AnimationLayout() {
+export default function AnimationLayout({ children }: PropsWithChildren) {
     const { pathname } = useLocation();
     return (
         <motion.div
@@ -32,7 +33,7 @@ export default function AnimationLayout() {
             transition={pageTransition}
         >
             <NavigationAnimation>
-                <Outlet />
+                {children ?? (<Outlet />)}
             </NavigationAnimation>
         </motion.div>
     );
