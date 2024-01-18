@@ -10,7 +10,7 @@ use crate::{
     objects::chapter::Chapter,
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context, watch::SendData,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
     },
 };
 
@@ -26,7 +26,7 @@ impl ChapterMutations {
         let res: ApiObjectNoRelationships<ChapterAttributes> =
             params.send(&client).await?.body.data.into();
         let data: Chapter = res.into();
-        let _ = watches.chapter.send_data(data.clone());
+        let _ = watches.chapter.send_online(data.clone());
         Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
@@ -71,6 +71,9 @@ impl ChapterMutations {
             Ok(false)
         } else {
             add_in_chapter_success(id)?;
+            let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            let data: Chapter = olasw.chapter_utils().with_id(id).get_data()?.into();
+            let _ = watches.chapter.send_offline(data.clone());
             Ok(true)
         }
     }

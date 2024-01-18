@@ -7,7 +7,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::custom_list::CustomList,
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -22,7 +25,10 @@ impl CustomListMutations {
     ) -> Result<CustomList> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(params.send(&client).await?.data.into())
+        let data: CustomList = params.send(&client).await?.data.into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.custom_list.send_data(data.clone());
+        Ok(data)
     }
     pub async fn update(
         &self,
@@ -31,7 +37,10 @@ impl CustomListMutations {
     ) -> Result<CustomList> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(params.send(&client).await?.data.into())
+        let data: CustomList = params.send(&client).await?.data.into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.custom_list.send_data(data.clone());
+        Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =

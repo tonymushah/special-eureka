@@ -15,7 +15,10 @@ use crate::{
         manga::{related::MangaRelated, MangaObject as Manga},
         ExtractReferenceExpansionFromContext, GetId,
     },
-    utils::{get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state},
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -35,18 +38,24 @@ impl MangaMutations {
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
+        let data: Manga = Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
-        .into())
+        .into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.manga.send_online(data.clone());
+        Ok(data)
     }
     pub async fn edit(&self, ctx: &Context<'_>, params: UpdateMangaParam) -> Result<Manga> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
+        let data: Manga = Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
-        .into())
+        .into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.manga.send_online(data.clone());
+        Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
@@ -100,10 +109,13 @@ impl MangaMutations {
     ) -> Result<Manga> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
+        let data: Manga = Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
-        .into())
+        .into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.manga.send_online(data.clone());
+        Ok(data)
     }
     pub async fn create_relation(
         &self,

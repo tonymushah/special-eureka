@@ -14,6 +14,7 @@ use crate::{
 use self::watch::Watches;
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
+pub mod source;
 pub mod watch;
 
 pub fn set_indentifier(identifier: String) -> Result<()> {
