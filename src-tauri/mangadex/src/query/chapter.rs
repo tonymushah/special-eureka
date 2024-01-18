@@ -1,9 +1,9 @@
+pub mod get_unique;
 pub mod list;
 
 use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
-use mangadex_desktop_api2::utils::ExtractData;
 use url::Url;
 use uuid::Uuid;
 
@@ -13,12 +13,10 @@ use crate::{
         manga_chapter_group::{group_results, MangaChapterGroup},
         ExtractReferenceExpansion,
     },
-    utils::{
-        get_mangadex_client_from_graphql_context, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
-    },
+    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
 };
 
+use get_unique::GetUniqueChapterQuery;
 use list::{ChapterListQueries, GetAllChapterParams};
 
 #[derive(Debug, Clone, Copy)]
@@ -36,54 +34,23 @@ impl ChapterQueries {
             .default(ctx, offline_params)
             .await
     }
-    #[graphql(skip)]
-    pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
-        if let Some(rel) = ctx
-            .field()
-            .selection_set()
-            .find(|f| f.name() == "relationships")
-        {
-            let mut out = <Chapter as ExtractReferenceExpansion>::exctract(rel);
-            includes.append(&mut out);
-        }
-        includes.dedup();
-        let data: Chapter = client
-            .chapter()
-            .id(id)
-            .get()
-            .includes(includes)
-            .send()
-            .await?
-            .data
-            .into();
-        let _ = watches.chapter.send_online(data.clone());
-        Ok(data)
-    }
-    #[graphql(skip)]
-    pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let read_off_state = off_state.read().await;
-        let inner_off_state = read_off_state
-            .as_ref()
-            .ok_or(Error::new("Offline AppState not found"))?;
-        let chapter: Chapter = inner_off_state
-            .chapter_utils()
-            .with_id(id)
-            .get_data()?
-            .into();
-        let _ = watches.chapter.send_offline(chapter.clone());
-        Ok(chapter)
-    }
+
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
-        if let Ok(online) = self.get_online(ctx, id).await {
-            Ok(online)
-        } else {
-            self.get_offline(ctx, id).await
-        }
+        GetUniqueChapterQuery({
+            let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+            if let Some(rel) = ctx
+                .field()
+                .selection_set()
+                .find(|f| f.name() == "relationships")
+            {
+                let mut out = <Chapter as ExtractReferenceExpansion>::exctract(rel);
+                includes.append(&mut out);
+            }
+            includes.dedup();
+            includes
+        })
+        .get(ctx, id)
+        .await
     }
     #[graphql(skip)]
     pub async fn pages_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
