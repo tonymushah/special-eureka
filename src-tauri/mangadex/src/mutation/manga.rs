@@ -17,7 +17,7 @@ use crate::{
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context, watch::SendData,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
     },
 };
 
@@ -43,7 +43,7 @@ impl MangaMutations {
         )
         .into();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = watches.manga.send_data(data.clone());
+        let _ = watches.manga.send_online(data.clone());
         Ok(data)
     }
     pub async fn edit(&self, ctx: &Context<'_>, params: UpdateMangaParam) -> Result<Manga> {
@@ -54,7 +54,7 @@ impl MangaMutations {
         )
         .into();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = watches.manga.send_data(data.clone());
+        let _ = watches.manga.send_online(data.clone());
         Ok(data)
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
@@ -114,7 +114,7 @@ impl MangaMutations {
         )
         .into();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let _ = watches.manga.send_data(data.clone());
+        let _ = watches.manga.send_online(data.clone());
         Ok(data)
     }
     pub async fn create_relation(

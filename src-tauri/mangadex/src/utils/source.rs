@@ -1,4 +1,9 @@
-use std::ops::{Deref, DerefMut};
+use std::{
+    fmt::Debug,
+    ops::{Deref, DerefMut},
+};
+
+use super::watch::SendDataResult;
 
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub enum Source {
@@ -57,6 +62,12 @@ impl<T> MultiSourceData<T> {
             None
         }
     }
+    pub fn inner_data(self) -> T {
+        self.data
+    }
+    pub fn inner_data_ref(&self) -> &T {
+        self.deref()
+    }
 }
 
 impl<T> Clone for MultiSourceData<T>
@@ -72,3 +83,18 @@ where
 }
 
 impl<T> Copy for MultiSourceData<T> where T: Copy {}
+
+impl<T> Debug for MultiSourceData<T>
+where
+    T: Debug,
+{
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.source.fmt(f)?;
+        self.data.fmt(f)
+    }
+}
+
+pub trait SendMultiSourceData<T>: Send + Sync + Clone {
+    fn send_online(&self, data: T) -> SendDataResult;
+    fn send_offline(&self, data: T) -> SendDataResult;
+}

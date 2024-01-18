@@ -4,13 +4,14 @@ use mangadex_api_schema_rust::{v5::MangaAttributes as Attributes, ApiObjectNoRel
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
-use crate::objects::{
-    manga::attributes::GraphQLMangaAttributes as MangaAttributes, GetAttributes, GetId,
+use crate::{
+    objects::{manga::attributes::GraphQLMangaAttributes as MangaAttributes, GetAttributes, GetId},
+    utils::source::{MultiSourceData, SendMultiSourceData},
 };
 
 use super::{SendData, WatcherInnerData};
 
-type InnerData = WatcherInnerData<MangaAttributes>;
+type InnerData = WatcherInnerData<MultiSourceData<MangaAttributes>>;
 
 type Inner = Sender<Option<InnerData>>;
 
@@ -32,12 +33,33 @@ impl Default for MangaWatch {
     }
 }
 
-impl<T> SendData<T> for MangaWatch
+impl<T> SendMultiSourceData<T> for MangaWatch
 where
     T: GetId + GetAttributes<Attributes = MangaAttributes>,
 {
-    fn send_data(&self, data: T) -> super::SendDataResult {
-        self.send_replace(Some(data.into()));
+    fn send_offline(&self, data: T) -> super::SendDataResult {
+        self.send_data(
+            (
+                data.get_id(),
+                MultiSourceData::online(data.get_attributes()),
+            )
+                .into(),
+        )
+    }
+    fn send_online(&self, data: T) -> super::SendDataResult {
+        self.send_data(
+            (
+                data.get_id(),
+                MultiSourceData::offline(data.get_attributes()),
+            )
+                .into(),
+        )
+    }
+}
+
+impl SendData<InnerData> for MangaWatch {
+    fn send_data(&self, data: InnerData) -> super::SendDataResult {
+        self.send_replace(Some(data));
         Ok(())
     }
 }
@@ -47,7 +69,7 @@ impl From<InnerData> for AONRManga {
         Self {
             id: value.id,
             type_: RelationshipType::Manga,
-            attributes: value.attributes.into(),
+            attributes: value.attributes.inner_data().into(),
         }
     }
 }
