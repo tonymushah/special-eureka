@@ -13,7 +13,10 @@ use crate::{
         manga_chapter_group::{group_results, MangaChapterGroup},
         ExtractReferenceExpansion,
     },
-    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+    utils::{
+        get_mangadex_client_from_graphql_context, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+    },
 };
 
 use list::{ChapterListQueries, GetAllChapterParams};
@@ -36,6 +39,7 @@ impl ChapterQueries {
     #[graphql(skip)]
     pub async fn get_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
         if let Some(rel) = ctx
             .field()
@@ -46,7 +50,7 @@ impl ChapterQueries {
             includes.append(&mut out);
         }
         includes.dedup();
-        Ok(client
+        let data: Chapter = client
             .chapter()
             .id(id)
             .get()
@@ -54,21 +58,25 @@ impl ChapterQueries {
             .send()
             .await?
             .data
-            .into())
+            .into();
+        let _ = watches.chapter.send_online(data.clone());
+        Ok(data)
     }
     #[graphql(skip)]
     pub async fn get_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
-        // TODO Add offline support
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
         let read_off_state = off_state.read().await;
         let inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::new("Offline AppState not found"))?;
-        Ok(inner_off_state
+        let chapter: Chapter = inner_off_state
             .chapter_utils()
             .with_id(id)
             .get_data()?
-            .into())
+            .into();
+        let _ = watches.chapter.send_offline(chapter.clone());
+        Ok(chapter)
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Chapter> {
         if let Ok(online) = self.get_online(ctx, id).await {

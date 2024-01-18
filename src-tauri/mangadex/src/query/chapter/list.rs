@@ -9,7 +9,13 @@ use mangadex_desktop_api2::utils::{
 };
 use tokio_stream::StreamExt;
 
-use crate::utils::{get_mangadex_client_from_graphql_context, get_offline_app_state};
+use crate::{
+    objects::chapter::Chapter,
+    utils::{
+        get_mangadex_client_from_graphql_context, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+    },
+};
 
 #[derive(Debug, InputObject, Clone)]
 pub struct GetAllChapterParams {
@@ -81,6 +87,9 @@ impl ChapterListQueries {
         ctx: &Context<'_>,
         params: GetAllChapterParams,
     ) -> Result<ChapterCollection> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
@@ -101,13 +110,31 @@ impl ChapterListQueries {
         )
         .await?
         .try_into()?;
+        let _res = res.clone();
+        tauri::async_runtime::spawn(async move {
+            for data in _res.data {
+                let data: Chapter = data.into();
+                let _ = watches.chapter.send_offline(data);
+            }
+        });
         Ok(res)
     }
     #[graphql(skip)]
     pub async fn get_online(&self, ctx: &Context<'_>) -> Result<ChapterCollection> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         let params = self.deref().clone();
-        Ok(params.send(&client).await?)
+        let res = params.send(&client).await?;
+        let _res = res.clone();
+        tauri::async_runtime::spawn(async move {
+            for data in _res.data {
+                let data: Chapter = data.into();
+                let _ = watches.chapter.send_offline(data);
+            }
+        });
+        Ok(res)
     }
     #[graphql(skip)]
     pub async fn _default(
