@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::author::list::AuthorListParams;
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -8,7 +10,9 @@ use crate::{
         author::{lists::AuthorResults, Author},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
-    utils::get_mangadex_client_from_graphql_context,
+    utils::{
+        get_mangadex_client_from_graphql_context, get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -22,11 +26,21 @@ impl AuthorQueries {
         #[graphql(default_with = "list_default_params()")] mut params: AuthorListParams,
     ) -> Result<AuthorResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = _watches.deref().clone();
         params.includes = <AuthorResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        let res: AuthorResults = params.send(&client).await?.into();
+        let _res = res.clone();
+        tauri::async_runtime::spawn(async move {
+            _res.iter().for_each(|i| {
+                let _ = watches.author.send_data(i.clone());
+            });
+        });
+        Ok(res)
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Author> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
         if let Some(rel) = ctx
             .field()
@@ -37,7 +51,7 @@ impl AuthorQueries {
             includes.append(&mut out);
         }
         includes.dedup();
-        Ok(client
+        let data: Author = client
             .author()
             .id(id)
             .get()
@@ -45,7 +59,9 @@ impl AuthorQueries {
             .send()
             .await?
             .data
-            .into())
+            .into();
+        let _ = watches.author.send_data(data.clone());
+        Ok(data)
     }
 }
 
