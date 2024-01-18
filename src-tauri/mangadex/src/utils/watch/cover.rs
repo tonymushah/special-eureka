@@ -4,11 +4,14 @@ use mangadex_api_schema_rust::{v5::CoverAttributes as Attributes, ApiObjectNoRel
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
-use crate::objects::{cover::attributes::CoverAttributes, GetAttributes, GetId};
+use crate::{
+    objects::{cover::attributes::CoverAttributes, GetAttributes, GetId},
+    utils::source::{MultiSourceData, SendMultiSourceData},
+};
 
 use super::{SendData, WatcherInnerData};
 
-type InnerData = WatcherInnerData<CoverAttributes>;
+type InnerData = WatcherInnerData<MultiSourceData<CoverAttributes>>;
 
 type Inner = Sender<Option<InnerData>>;
 
@@ -30,12 +33,33 @@ impl Default for CoverWatch {
     }
 }
 
-impl<T> SendData<T> for CoverWatch
+impl<T> SendMultiSourceData<T> for CoverWatch
 where
     T: GetId + GetAttributes<Attributes = CoverAttributes>,
 {
-    fn send_data(&self, data: T) -> super::SendDataResult {
-        self.send_replace(Some(data.into()));
+    fn send_offline(&self, data: T) -> super::SendDataResult {
+        self.send_data(
+            (
+                data.get_id(),
+                MultiSourceData::offline(data.get_attributes()),
+            )
+                .into(),
+        )
+    }
+    fn send_online(&self, data: T) -> super::SendDataResult {
+        self.send_data(
+            (
+                data.get_id(),
+                MultiSourceData::online(data.get_attributes()),
+            )
+                .into(),
+        )
+    }
+}
+
+impl SendData<InnerData> for CoverWatch {
+    fn send_data(&self, data: InnerData) -> super::SendDataResult {
+        self.send_replace(Some(data));
         Ok(())
     }
 }
@@ -45,7 +69,7 @@ impl From<InnerData> for AONRCover {
         Self {
             id: value.id,
             type_: RelationshipType::CoverArt,
-            attributes: value.attributes.into(),
+            attributes: value.attributes.inner_data().into(),
         }
     }
 }

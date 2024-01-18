@@ -7,7 +7,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::scanlation_group::ScanlationGroup,
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -22,8 +25,13 @@ impl ScanlationGroupMutation {
     ) -> Result<ScanlationGroup> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = params.send(&client).await?;
         let res: ApiObjectNoRelationships<ScanlationGroupAttributes> = res.body.data.into();
+        let _ = watches.scanlation_group.send_data({
+            let data: ScanlationGroup = res.clone().into();
+            data
+        });
         Ok(res.into())
     }
     pub async fn edit(
@@ -33,8 +41,13 @@ impl ScanlationGroupMutation {
     ) -> Result<ScanlationGroup> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = params.send(&client).await?;
         let res: ApiObjectNoRelationships<ScanlationGroupAttributes> = res.body.data.into();
+        let _ = watches.scanlation_group.send_data({
+            let data: ScanlationGroup = res.clone().into();
+            data
+        });
         Ok(res.into())
     }
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {

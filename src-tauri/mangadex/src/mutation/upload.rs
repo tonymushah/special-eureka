@@ -19,7 +19,10 @@ use crate::{
         chapter::Chapter,
         upload::{session::UploadSession, session_file::UploadSessionFile},
     },
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -38,7 +41,10 @@ impl UploadMutations {
         if abandon_if_exists {
             check_and_abandon_session_if_exists(&client).await?;
         }
-        Ok(params.send(&client).await?.body.data.into())
+        let data: UploadSession = params.send(&client).await?.body.data.into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.upload_session.send_data(data.clone());
+        Ok(data)
     }
     pub async fn begin_edit_session(
         &self,
@@ -51,7 +57,10 @@ impl UploadMutations {
         if abandon_if_exists {
             check_and_abandon_session_if_exists(&client).await?;
         }
-        Ok(params.send(&client).await?.body.data.into())
+        let data: UploadSession = params.send(&client).await?.body.data.into();
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let _ = watches.upload_session.send_data(data.clone());
+        Ok(data)
     }
     pub async fn upload_images_to_session(
         &self,
@@ -61,6 +70,7 @@ impl UploadMutations {
     ) -> Result<UploadSessionFile> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let path: StdPathBuf = path.into();
         let image: UploadImage = path.try_into()?;
         let res = client
@@ -78,12 +88,14 @@ impl UploadMutations {
         if res.data.is_empty() {
             return Err(Error::new("No files has been uploaded"));
         }
-        Ok(res
+        let data: UploadSessionFile = res
             .data
             .first()
             .cloned()
             .ok_or(Error::new("No files has been uploaded"))?
-            .into())
+            .into();
+        let _ = watches.upload_session_file.send_data(data.clone());
+        Ok(data)
     }
     pub async fn abandon_session(&self, ctx: &Context<'_>, session_id: Uuid) -> Result<bool> {
         let client =
@@ -98,8 +110,11 @@ impl UploadMutations {
     ) -> Result<Chapter> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = params.send(&client).await?;
-        Ok(res.data.clone().drop_relationships().into())
+        let data: Chapter = res.data.clone().drop_relationships().into();
+        let _ = watches.chapter.send_online(data.clone());
+        Ok(data)
     }
     pub async fn delete_file_from_upload_session(
         &self,
