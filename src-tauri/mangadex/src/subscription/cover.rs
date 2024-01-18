@@ -31,7 +31,7 @@ impl CoverSubscriptions {
                             };
                             if let Some(data) = borrow {
                                 if data.id == cover_id {
-                                    yield data.attributes.clone()
+                                    yield data.attributes.inner_data()
                                 }
                             }
                         }
