@@ -1,23 +1,22 @@
 pub mod get_unique;
 pub mod list;
+pub mod pages;
 
-use async_graphql::{Context, Error, Object, Result};
+use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
-use url::Url;
 use uuid::Uuid;
 
-use crate::{
-    objects::{
-        chapter::{lists::ChapterResults, pages::ChapterPages, Chapter},
-        manga_chapter_group::{group_results, MangaChapterGroup},
-        ExtractReferenceExpansion,
-    },
-    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+use crate::objects::{
+    chapter::{lists::ChapterResults, pages::ChapterPages, Chapter},
+    manga_chapter_group::{group_results, MangaChapterGroup},
+    ExtractReferenceExpansion,
 };
 
 use get_unique::GetUniqueChapterQuery;
 use list::{ChapterListQueries, GetAllChapterParams};
+
+use self::pages::ChapterPagesQuery;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ChapterQueries;
@@ -52,53 +51,8 @@ impl ChapterQueries {
         .get(ctx, id)
         .await
     }
-    #[graphql(skip)]
-    pub async fn pages_online(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        Ok(client
-            .at_home()
-            .server()
-            .id(id)
-            .get()
-            .send()
-            .await?
-            .body
-            .into())
-    }
-    #[graphql(skip)]
-    pub async fn pages_offline(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
-        let off_state = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let read_off_state = off_state.read().await;
-        let inner_off_state = read_off_state
-            .as_ref()
-            .ok_or(Error::new("Offline AppState not found"))?;
-        let chapter_utils = inner_off_state.chapter_utils().with_id(id);
-        let data: Vec<Url> = chapter_utils
-            .get_data_images()
-            .unwrap_or_default()
-            .into_iter()
-            .flat_map(|i| {
-                let i = i.to_str()?;
-                Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
-            })
-            .collect();
-        let data_saver: Vec<Url> = chapter_utils
-            .get_data_saver_images()
-            .unwrap_or_default()
-            .into_iter()
-            .flat_map(|i| {
-                let i = i.to_str()?;
-                Url::parse(format!("mangadex://chapter/{id}/data-saver/{i}").as_str()).ok()
-            })
-            .collect();
-        Ok(ChapterPages { data, data_saver })
-    }
     pub async fn pages(&self, ctx: &Context<'_>, id: Uuid) -> Result<ChapterPages> {
-        if let Ok(offline) = self.pages_offline(ctx, id).await {
-            Ok(offline)
-        } else {
-            self.pages_online(ctx, id).await
-        }
+        ChapterPagesQuery { id }.pages(ctx).await
     }
     pub async fn list_with_group_by_manga(
         &self,
