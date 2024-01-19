@@ -15,7 +15,7 @@ use crate::{
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_watches_from_graphql_context, watch::SendData,
+        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
     },
 };
 
@@ -101,8 +101,20 @@ impl FollowsQueries {
     ) -> Result<MangaResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: MangaResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_online(data);
+                }
+            });
+            res
+        })
     }
     pub async fn is_following_mangas(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
