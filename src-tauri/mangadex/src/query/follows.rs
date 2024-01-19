@@ -67,7 +67,19 @@ impl FollowsQueries {
     ) -> Result<UserResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(params.send(&client).await?.into())
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
+        Ok({
+            let res: UserResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.user.send_data(data);
+                }
+            });
+            res
+        })
     }
     pub async fn is_following_user(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
