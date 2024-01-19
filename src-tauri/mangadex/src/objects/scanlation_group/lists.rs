@@ -1,3 +1,6 @@
+use std::ops::Deref;
+use std::vec::IntoIter;
+
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{GroupObject, Results};
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -12,7 +15,25 @@ use super::ScanlationGroup as Group;
 pub struct ScanlationGroupResults {
     data: Vec<Group>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub info: ResultsInfo,
+}
+
+impl Deref for ScanlationGroupResults {
+    type Target = Vec<Group>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
+}
+
+impl IntoIterator for ScanlationGroupResults {
+    type Item = Group;
+
+    type IntoIter = IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
 }
 
 impl From<Results<GroupObject>> for ScanlationGroupResults {
