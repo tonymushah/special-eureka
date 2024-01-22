@@ -12,6 +12,8 @@ pub mod author;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
+pub mod is_appstate_mounted;
+pub mod is_logged;
 pub mod manga;
 pub mod rating;
 pub mod scanlation_group;
@@ -29,6 +31,8 @@ use self::{
     chapter::ChapterSubscriptions,
     cover::CoverSubscriptions,
     custom_list::CustomListSubscriptions,
+    is_appstate_mounted::IsAppStateMountedSubscriptions,
+    is_logged::IsLoggedSubscriptions,
     manga::MangaSubscriptions,
     rating::RatingSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
@@ -225,6 +229,20 @@ impl Subscriptions {
         UserOptionSubscriptions
             .listen_to_chapter_languages(ctx, sub_id)
             .await
+    }
+    pub async fn watch_is_app_mounted<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsAppStateMountedSubscriptions.listen(ctx, sub_id).await
+    }
+    pub async fn watch_is_logged<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsLoggedSubscriptions.listen(ctx, sub_id).await
     }
 }
 
