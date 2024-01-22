@@ -31,7 +31,7 @@ impl UploadSessionSubscriptions {
                             };
                             if let Some(data) = borrow {
                                 if data.id == upload_session_id {
-                                    yield data.attributes.clone()
+                                    yield data.attributes
                                 }
                             }
                         }
