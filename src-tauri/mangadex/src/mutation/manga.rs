@@ -31,6 +31,7 @@ impl MangaMutations {
         let offline_app_state_write = ola.read().await;
         let mut olasw = offline_app_state_write
             .clone()
+            .map(|a| a.app_state.clone())
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         olasw.manga_download(id).download_manga(&mut olasw).await?;
         Ok(true)

@@ -99,7 +99,7 @@ impl ChapterListQueries {
         let stream = Box::pin(
             chapter_utils.get_chapters_by_stream_id(Box::pin(
                 chapter_utils
-                    .get_all_chapter(Some(params.into()), app_state)
+                    .get_all_chapter(Some(params.into()), app_state.deref())
                     .await?,
             )),
         );

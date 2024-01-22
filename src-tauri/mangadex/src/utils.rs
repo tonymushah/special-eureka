@@ -1,5 +1,4 @@
 use mangadex_api::MangaDexClient;
-use mangadex_desktop_api2::AppState;
 use once_cell::sync::OnceCell;
 use std::{io::Result, ops::Add};
 use tauri::{AppHandle, Manager, Runtime, State, Window};
@@ -7,7 +6,7 @@ use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 
 use crate::{
-    app_state::{LastTimeTokenWhenFecthed, OfflineAppState},
+    app_state::{inner::AppStateInner, LastTimeTokenWhenFecthed, OfflineAppState},
     store::get_store_builder,
 };
 
@@ -155,12 +154,9 @@ pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> async_graphql::Result<bool> {
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
-    let client = get_mangadex_client_from_graphql_context::<R>(ctx)?;
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
-    let mut app_state = AppState::init().await?;
-    app_state.http_client = client.get_http_client().clone();
-    offline_app_state_write.replace(app_state);
+    offline_app_state_write.replace(AppStateInner::init::<R>(ctx).await?);
     let _ = watches.is_appstate_mounted.send_data(true);
     Ok(true)
 }

@@ -1,9 +1,12 @@
+pub mod inner;
+
 use std::{ops::Deref, sync::Arc};
 
-use mangadex_desktop_api2::AppState;
 use tokio::{sync::RwLock, time::Instant};
 
-type OfflineAppStateInner = Arc<RwLock<Option<AppState>>>;
+use self::inner::AppStateInner;
+
+type OfflineAppStateInner = Arc<RwLock<Option<AppStateInner>>>;
 
 type LastTimeTokenWhenFecthedInner = Arc<RwLock<Option<Instant>>>;
 
