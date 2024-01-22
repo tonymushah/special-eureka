@@ -4390,6 +4390,7 @@ dependencies = [
  "tauri-plugin-speu-mangadex",
  "tauri-plugin-store",
  "tokio",
+ "uuid",
  "window-shadows",
  "window-vibrancy",
 ]

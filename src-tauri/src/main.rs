@@ -2,11 +2,16 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
+use std::path::Path;
+
 //use mangadex_desktop_api2::{verify_all_fs, launch_async_server_default};
 use tauri::Manager;
+use tauri::Menu;
 use tauri::SystemTray;
+use tauri::Window;
 use tauri::{CustomMenuItem, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_aptabase::EventTracker;
+use uuid::Uuid;
 #[cfg(any(windows, target_os = "macos"))]
 use window_shadows::set_shadow;
 #[cfg(any(windows, target_os = "macos"))]
@@ -46,7 +51,7 @@ fn main() {
     let _devtools = devtools::init();
     */
 
-    let builder = tauri::Builder::default();
+    let mut builder = tauri::Builder::default();
 
     /*#[cfg(debug_assertions)]
     let builder = builder.plugin(_devtools);
@@ -72,6 +77,24 @@ fn main() {
         .add_item(hide);
     let tray = SystemTray::new().with_menu(tray_menu);
     let mangadex = tauri_plugin_speu_mangadex::MangadexDesktopApi::default();
+
+    #[cfg(debug_assertions)]
+    {
+        let dev_menu = Menu::new().add_item(CustomMenuItem::new(
+            String::from("new_window"),
+            "New Window",
+        ));
+        builder = builder.menu(dev_menu).on_menu_event(|e| {
+            if e.menu_item_id() == "new_window" {
+                let _ = Window::builder(
+                    e.window(),
+                    Uuid::new_v4().to_string(),
+                    tauri::WindowUrl::App(Path::new("").to_path_buf()),
+                )
+                .build();
+            }
+        });
+    }
     match builder
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
