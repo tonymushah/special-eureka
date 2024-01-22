@@ -1,8 +1,14 @@
+use std::ops::Deref;
+
 use async_graphql::{Context, Object, Result};
 use uuid::Uuid;
 
 use crate::{
-    objects::rating::RatingItem, utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    objects::rating::RatingItem,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -17,7 +23,10 @@ impl RatingQueries {
     ) -> Result<Vec<RatingItem>> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(client
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
+        let res: Vec<RatingItem> = client
             .rating()
             .get()
             .manga(manga_ids)
@@ -26,6 +35,13 @@ impl RatingQueries {
             .ratings
             .into_iter()
             .map(|i| -> RatingItem { i.into() })
-            .collect())
+            .collect();
+        let _res = res.clone();
+        tauri::async_runtime::spawn(async move {
+            for data in _res {
+                let _ = watches.rating.send_data(data);
+            }
+        });
+        Ok(res)
     }
 }
