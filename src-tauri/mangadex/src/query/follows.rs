@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
@@ -11,7 +13,10 @@ use crate::{
         scanlation_group::lists::ScanlationGroupResults, user::lists::UserResults,
         ExtractReferenceExpansionFromContext,
     },
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -26,9 +31,21 @@ impl FollowsQueries {
     ) -> Result<ScanlationGroupResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         params.includes =
             <ScanlationGroupResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: ScanlationGroupResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.scanlation_group.send_data(data);
+                }
+            });
+            res
+        })
     }
     pub async fn is_following_group(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
@@ -50,7 +67,19 @@ impl FollowsQueries {
     ) -> Result<UserResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(params.send(&client).await?.into())
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
+        Ok({
+            let res: UserResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.user.send_data(data);
+                }
+            });
+            res
+        })
     }
     pub async fn is_following_user(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
@@ -72,8 +101,20 @@ impl FollowsQueries {
     ) -> Result<MangaResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: MangaResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_online(data);
+                }
+            });
+            res
+        })
     }
     pub async fn is_following_mangas(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
@@ -95,7 +136,19 @@ impl FollowsQueries {
     ) -> Result<CustomListResults> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(params.send(&client).await?.into())
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
+        Ok({
+            let res: CustomListResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.custom_list.send_data(data);
+                }
+            });
+            res
+        })
     }
     pub async fn is_following_lists(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =

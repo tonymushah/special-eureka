@@ -8,7 +8,10 @@ use crate::{
         manga::MangaObject as Manga, ExtractReferenceExpansion,
         ExtractReferenceExpansionFromContext,
     },
-    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+    utils::{
+        get_mangadex_client_from_graphql_context, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -47,18 +50,28 @@ impl ExtractReferenceExpansionFromContext<'_> for MangaGetUniqueQueries {}
 impl MangaGetUniqueQueries {
     pub async fn get_online(&self, ctx: &Context<'_>) -> Result<Manga> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.manga().id(self.into()).get();
         let mut includes = <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
         includes.dedup();
-        Ok(req.includes(includes).send().await?.data.into())
+        Ok({
+            let data: Manga = req.includes(includes).send().await?.data.into();
+            let _ = watches.manga.send_online(data.clone());
+            data
+        })
     }
     pub async fn get_offline(&self, ctx: &Context<'_>) -> Result<Manga> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
-        Ok(olasw.manga_utils().with_id(self.into()).get_data()?.into())
+        Ok({
+            let data: Manga = olasw.manga_utils().with_id(self.into()).get_data()?.into();
+            let _ = watches.manga.send_offline(data.clone());
+            data
+        })
     }
     pub async fn get(&self, ctx: &Context<'_>) -> Result<Manga> {
         if let Ok(online) = self.get_online(ctx).await {

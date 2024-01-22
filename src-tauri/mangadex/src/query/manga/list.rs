@@ -5,7 +5,10 @@ use mangadex_api_input_types::manga::list::MangaListParams;
 
 use crate::{
     objects::manga::lists::MangaResults,
-    utils::{get_mangadex_client_from_graphql_context, get_offline_app_state},
+    utils::{
+        get_mangadex_client_from_graphql_context, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+    },
 };
 
 #[derive(Debug, Clone)]
@@ -44,6 +47,9 @@ impl From<&MangaListQueries> for MangaListParams {
 
 impl MangaListQueries {
     pub async fn list_offline(&self, ctx: &Context<'_>) -> Result<MangaResults> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
@@ -51,12 +57,33 @@ impl MangaListQueries {
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         let manga_utils = olasw.manga_utils();
         let params = self.deref().clone();
-        Ok(manga_utils.get_downloaded_manga(params).await?.into())
+        Ok({
+            let res: MangaResults = manga_utils.get_downloaded_manga(params).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_offline(data);
+                }
+            });
+            res
+        })
     }
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let params = self.deref().clone();
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: MangaResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_online(data);
+                }
+            });
+            res
+        })
     }
     pub async fn list(&self, ctx: &Context<'_>) -> Result<MangaResults> {
         if let Ok(res) = self.list_online(ctx).await {

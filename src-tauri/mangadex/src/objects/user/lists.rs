@@ -1,3 +1,6 @@
+use std::ops::Deref;
+use std::vec::IntoIter;
+
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{Results, UserObject};
 
@@ -9,7 +12,25 @@ use super::User;
 pub struct UserResults {
     data: Vec<User>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub info: ResultsInfo,
+}
+
+impl IntoIterator for UserResults {
+    type Item = User;
+
+    type IntoIter = IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
+}
+
+impl Deref for UserResults {
+    type Target = Vec<User>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
 }
 
 impl From<Results<UserObject>> for UserResults {

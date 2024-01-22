@@ -1,3 +1,6 @@
+use std::ops::Deref;
+use std::vec::IntoIter;
+
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{CustomListObject, Results};
 
@@ -9,7 +12,25 @@ use super::CustomList;
 pub struct CustomListResults {
     data: Vec<CustomList>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub info: ResultsInfo,
+}
+
+impl IntoIterator for CustomListResults {
+    type Item = CustomList;
+
+    type IntoIter = IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
+}
+
+impl Deref for CustomListResults {
+    type Target = Vec<CustomList>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
 }
 
 impl From<Results<CustomListObject>> for CustomListResults {

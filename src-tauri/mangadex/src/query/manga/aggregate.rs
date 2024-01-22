@@ -84,7 +84,7 @@ impl MangaAggregateQueries {
                     groups: self.groups.clone(),
                     ..Default::default()
                 },
-                app_state,
+                app_state.deref(),
             )
             .await?
             .into();

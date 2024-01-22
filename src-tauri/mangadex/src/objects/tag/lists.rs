@@ -1,3 +1,5 @@
+use std::{ops::Deref, vec::IntoIter};
+
 use async_graphql::SimpleObject;
 use mangadex_api_schema_rust::v5::{Results, TagObject};
 use mangadex_api_types_rust::TagGroup;
@@ -10,7 +12,25 @@ use super::Tag;
 pub struct TagResults {
     data: Vec<Tag>,
     #[graphql(flatten)]
-    info: ResultsInfo,
+    pub info: ResultsInfo,
+}
+
+impl Deref for TagResults {
+    type Target = Vec<Tag>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
+}
+
+impl IntoIterator for TagResults {
+    type Item = Tag;
+
+    type IntoIter = IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.data.into_iter()
+    }
 }
 
 impl From<Results<TagObject>> for TagResults {

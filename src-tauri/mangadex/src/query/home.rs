@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ChapterSortOrder, MangaDexDateTime, MangaSortOrder, OrderDirection};
@@ -10,7 +12,10 @@ use crate::{
         manga::lists::MangaResults,
         ExtractReferenceExpansionFromContext,
     },
-    utils::get_mangadex_client_from_graphql_context,
+    utils::{
+        get_mangadex_client_from_graphql_context, get_watches_from_graphql_context,
+        source::SendMultiSourceData, watch::SendData,
+    },
 };
 
 use super::chapter::list::ChapterListQueries;
@@ -22,12 +27,17 @@ pub struct HomeQueries;
 impl HomeQueries {
     pub async fn seasonal(&self, ctx: &Context<'_>) -> Result<CustomList> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = {
             let arc_cli = client.get_http_client();
             let cli = arc_cli.read().await;
             SeasonalData::get(&cli.client).await?
         };
-        Ok(res.get_result(&client).await?.data.into())
+        Ok({
+            let data: CustomList = res.get_result(&client).await?.data.into();
+            let _ = watches.custom_list.send_data(data.clone());
+            data
+        })
     }
     pub async fn recently_uploaded(
         &self,
@@ -46,16 +56,31 @@ impl HomeQueries {
         #[graphql(default)] mut params: MangaListParams,
     ) -> Result<MangaResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::CreatedAt(OrderDirection::Descending));
         params.manga_ids.clear();
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: MangaResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_online(data);
+                }
+            });
+            res
+        })
     }
     pub async fn popular_titles(
         &self,
         ctx: &Context<'_>,
         #[graphql(default)] mut params: MangaListParams,
     ) -> Result<MangaResults> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::FollowedCount(OrderDirection::Descending));
@@ -66,6 +91,15 @@ impl HomeQueries {
         };
         params.created_at_since = Some(created_at_since);
         params.manga_ids.clear();
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: MangaResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_online(data);
+                }
+            });
+            res
+        })
     }
 }

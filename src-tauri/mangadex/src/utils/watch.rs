@@ -11,6 +11,7 @@ use self::{
     chapter_languages::ChapterLanguagesWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
+    is_appstate_mounted::IsAppStateMountedWatch,
     is_logged::IsLoggedWatch,
     manga::MangaWatch,
     page_direction::PageDirectionWatch,
@@ -31,6 +32,7 @@ pub mod chapter;
 pub mod chapter_languages;
 pub mod cover;
 pub mod custom_list;
+pub mod is_appstate_mounted;
 pub mod is_logged;
 pub mod manga;
 pub mod page_direction;
@@ -139,4 +141,5 @@ pub struct Watches {
     pub reading_mode: ReadingModeWatch,
     pub sidebar_direction: SideBarDirectionWatch,
     pub chapter_languages: ChapterLanguagesWatch,
+    pub is_appstate_mounted: IsAppStateMountedWatch,
 }

@@ -4,7 +4,7 @@ use async_graphql::Object;
 use mangadex_api_schema_rust::v5::upload_session::UploadSessionAttributes as Attributes;
 use mangadex_api_types_rust::MangaDexDateTime;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct UploadSessionAttributes(Attributes);
 
 impl Deref for UploadSessionAttributes {

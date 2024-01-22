@@ -2,7 +2,7 @@ pub mod aggregate;
 pub mod get_unique;
 pub mod list;
 
-use std::collections::HashMap;
+use std::{collections::HashMap, ops::Deref};
 
 use async_graphql::{Context, Object, Result};
 use mangadex_api_input_types::manga::{
@@ -22,7 +22,11 @@ use crate::{
         },
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
-    utils::get_mangadex_client_from_graphql_context,
+    utils::{
+        get_mangadex_client_from_graphql_context,
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+    },
 };
 
 use self::{
@@ -45,11 +49,20 @@ impl MangaQueries {
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         MangaListQueries(params).list(ctx).await
     }
+    pub async fn list_offline(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(default)] mut params: MangaListParams,
+    ) -> Result<MangaResults> {
+        params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        MangaListQueries(params).list_offline(ctx).await
+    }
     pub async fn random(
         &self,
         ctx: &Context<'_>,
         #[graphql(default)] mut params: MangaRandomParams,
     ) -> Result<Manga> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let includes = &mut params.includes;
         if let Some(rel) = ctx
@@ -60,7 +73,11 @@ impl MangaQueries {
             let out = <Manga as ExtractReferenceExpansion>::exctract(rel);
             *includes = out;
         }
-        Ok(params.send(&client).await?.body.data.into())
+        Ok({
+            let data: Manga = params.send(&client).await?.body.data.into();
+            let _ = watches.manga.send_online(data.clone());
+            data
+        })
     }
     pub async fn feed(
         &self,
@@ -68,8 +85,20 @@ impl MangaQueries {
         mut params: MangaFeedParams,
     ) -> Result<ChapterResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: ChapterResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.chapter.send_online(data);
+                }
+            });
+            res
+        })
     }
     pub async fn get_manga_status(
         &self,
@@ -94,18 +123,37 @@ impl MangaQueries {
         ctx: &Context<'_>,
         mut params: GetMangaDraftParams,
     ) -> Result<Manga> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.includes = <Manga as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.data.into())
+        Ok({
+            let data: Manga = params.send(&client).await?.data.into();
+            let _ = watches.manga.send_online(data.clone());
+            data
+        })
     }
     pub async fn get_drafts(
         &self,
         ctx: &Context<'_>,
         #[graphql(default)] mut params: MangaDraftsParams,
     ) -> Result<MangaResults> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
+            .deref()
+            .clone();
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        Ok(params.send(&client).await?.into())
+        Ok({
+            let res: MangaResults = params.send(&client).await?.into();
+            let _res = res.clone();
+            tauri::async_runtime::spawn(async move {
+                for data in _res {
+                    let _ = watches.manga.send_online(data);
+                }
+            });
+            res
+        })
     }
     pub async fn relation_list(
         &self,
