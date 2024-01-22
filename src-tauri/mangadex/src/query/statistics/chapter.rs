@@ -33,9 +33,8 @@ impl ChapterStatisticsQueries {
             .ok_or(Error::new(
                 "Can't find the statistics for the given chapter id",
             ))?;
-        let _res = res.clone();
 
-        let _ = watches.statistics.send_data(_res);
+        let _ = watches.statistics.send_data(res);
 
         Ok(res)
     }
