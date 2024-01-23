@@ -13,6 +13,7 @@ use crate::{
 use self::watch::{SendData, Watches};
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
+pub mod download_state;
 pub mod source;
 pub mod watch;
 
