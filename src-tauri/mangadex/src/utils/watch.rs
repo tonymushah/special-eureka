@@ -41,6 +41,7 @@ pub mod page_direction;
 pub mod rating;
 pub mod read_marker;
 pub mod reading_mode;
+pub mod reading_state;
 pub mod scanlation_group;
 pub mod sidebar_direction;
 pub mod statistics;
