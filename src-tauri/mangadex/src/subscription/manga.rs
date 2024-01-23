@@ -18,12 +18,23 @@ impl MangaSubscriptions {
         manga_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaAttributes> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let manga_sub = watches.manga.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = {
+                        manga_sub.borrow().as_ref().cloned()
+                    };
+                    if let Some(data) = borrow {
+                        if data.id == manga_id {
+                            yield data.attributes.inner_data()
+                        }
+                    }
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = manga_sub.has_changed() {
                         if has_changed {
                             let borrow = {
