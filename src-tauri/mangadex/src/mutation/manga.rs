@@ -6,8 +6,8 @@ use mangadex_api_input_types::manga::{
     submit_draft::SubmitMangaDraftParams, update::UpdateMangaParam,
 };
 use mangadex_api_schema_rust::{v5::MangaAttributes, ApiObjectNoRelationships};
-use mangadex_api_types_rust::{MangaRelation, ReadingStatus};
-use mangadex_desktop_api2::utils::ExtractData;
+use mangadex_api_types_rust::{MangaRelation, ReadingStatus, RelationshipType};
+use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{
@@ -16,8 +16,11 @@ use crate::{
         ExtractReferenceExpansionFromContext, GetId,
     },
     utils::{
+        download_state::{DownloadState, DownloadedStateObject},
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        get_watches_from_graphql_context,
+        source::SendMultiSourceData,
+        watch::{SendData, WatcherInnerData},
     },
 };
 
@@ -26,15 +29,44 @@ pub struct MangaMutations;
 
 #[Object]
 impl MangaMutations {
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadedStateObject> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let mut olasw = offline_app_state_write
             .clone()
             .map(|a| a.app_state.clone())
             .ok_or(Error::new("Offline AppState Not loaded"))?;
-        olasw.manga_download(id).download_manga(&mut olasw).await?;
-        Ok(true)
+        let _ = watches.manga.send_offline({
+            let data: Manga = olasw
+                .manga_download(id)
+                .download_manga(&mut olasw)
+                .await?
+                .data
+                .into();
+            data
+        });
+        let state = {
+            if olasw.manga_utils().with_id(id).is_there() {
+                DownloadState::Downloaded {
+                    has_failed: olasw
+                        .history
+                        .get_history_w_file_by_rel_or_init(
+                            RelationshipType::Manga,
+                            &olasw.dir_options,
+                        )
+                        .await?
+                        .is_in(id)?,
+                }
+            } else {
+                DownloadState::NotDownloaded
+            }
+        };
+        let _ = watches.download_state.send_data(WatcherInnerData {
+            id,
+            attributes: state,
+        });
+        Ok(state.into())
     }
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
         let client =
