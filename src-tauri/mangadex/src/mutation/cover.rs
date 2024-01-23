@@ -1,15 +1,18 @@
 use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
 use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
-use mangadex_desktop_api2::utils::ExtractData;
+use mangadex_api_types_rust::RelationshipType;
+use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{
     objects::cover::Cover,
-    query::cover::CoverQueries,
     utils::{
+        download_state::{DownloadState, DownloadedStateObject},
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        get_watches_from_graphql_context,
+        source::SendMultiSourceData,
+        watch::{SendData, WatcherInnerData},
     },
 };
 
@@ -44,7 +47,7 @@ impl CoverMutations {
         let _ = client.cover().cover_id(id).delete().send().await?;
         Ok(true)
     }
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<Cover> {
+    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadedStateObject> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let mut olasw = offline_app_state_write
@@ -58,8 +61,28 @@ impl CoverMutations {
             .await?
             .data
             .into();
+        let state = {
+            if olasw.cover_utils().with_id(id).is_there() {
+                DownloadState::Downloaded {
+                    has_failed: olasw
+                        .history
+                        .get_history_w_file_by_rel_or_init(
+                            RelationshipType::CoverArt,
+                            &olasw.dir_options,
+                        )
+                        .await?
+                        .is_in(id)?,
+                }
+            } else {
+                DownloadState::NotDownloaded
+            }
+        };
+        let _ = watches.download_state.send_data(WatcherInnerData {
+            id,
+            attributes: state,
+        });
         let _ = watches.cover.send_offline(data.clone());
-        CoverQueries.get(ctx, id).await
+        Ok(state.into())
     }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
