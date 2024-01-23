@@ -18,12 +18,19 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Direction> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let page_direction_sub = watches.page_direction.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await{
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = {
+                        *page_direction_sub.borrow()
+                    };
+                    yield borrow;
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = page_direction_sub.has_changed() {
                         if has_changed {
                             let borrow = {
@@ -47,12 +54,19 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Direction> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let sidebar_direction_sub = watches.sidebar_direction.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = {
+                        *sidebar_direction_sub.borrow()
+                    };
+                    yield borrow;
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = sidebar_direction_sub.has_changed() {
                         if has_changed {
                             let borrow = {
@@ -76,12 +90,19 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let reading_mode_sub = watches.reading_mode.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = {
+                        *reading_mode_sub.borrow()
+                    };
+                    yield borrow;
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = reading_mode_sub.has_changed() {
                         if has_changed {
                             let borrow = {
@@ -105,12 +126,19 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let chapter_languages_sub = watches.chapter_languages.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = {
+                        chapter_languages_sub.borrow().clone()
+                    };
+                    yield borrow;
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = chapter_languages_sub.has_changed() {
                         if has_changed {
                             let borrow = {
