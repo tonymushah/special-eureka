@@ -25,7 +25,7 @@ impl From<ReadingState> for ReadingStateEnum {
 }
 
 impl ReadingState {
-    pub async fn get_page(&self) -> Option<u32> {
+    pub fn get_page(&self) -> Option<u32> {
         if let Self::Current(page) = *self {
             Some(page)
         } else {
