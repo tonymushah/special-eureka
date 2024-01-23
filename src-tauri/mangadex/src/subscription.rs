@@ -263,18 +263,24 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let window = get_window_from_async_graphql::<R>(ctx)?;
     window.on_window_event(move |e| {
-        if let WindowEvent::Destroyed = e {
-            let mut write = should_end_un_n.blocking_write();
-            *write = true;
-        }
+        let should_end_un_n = should_end_un_n.clone();
+        tauri::async_runtime::block_on(async move {
+            if let WindowEvent::Destroyed = e {
+                let mut write = should_end_un_n.write().await;
+                *write = true;
+            }
+        });
     });
     let unlisten = window.listen("sub_end", move |e| {
-        if let Some(payload) = e.payload() {
-            let mut write = should_end_un.blocking_write();
-            if let Ok(id) = Uuid::parse_str(payload) {
-                *write = id == sub_id;
+        let should_end_un = should_end_un.clone();
+        tauri::async_runtime::block_on(async move {
+            if let Some(payload) = e.payload() {
+                let mut write = should_end_un.write().await;
+                if let Ok(id) = Uuid::parse_str(payload) {
+                    *write = id == sub_id;
+                }
             }
-        }
+        });
     });
     Ok((watches, should_end, unlisten, window))
 }

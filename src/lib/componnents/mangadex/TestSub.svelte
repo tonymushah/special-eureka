@@ -10,7 +10,7 @@
         query: graphql(/* GraphQL */
         `
             subscription isLogged($sub_id: UUID!) {
-                watchIsLogged(subId: $sub_id)
+                watchIsAppMounted(subId: $sub_id)
             }
         `),
         variables: {
@@ -22,8 +22,8 @@
     })
 </script>
 
-{#if $store.data?.watchIsLogged}
-    <p>You're logged in</p>
+{#if $store.data?.watchIsAppMounted}
+    <p>Offline mounted</p>
 {:else}
-    <p>You're not logged in</p>
+    <p>Offline not mounted</p>
 {/if}

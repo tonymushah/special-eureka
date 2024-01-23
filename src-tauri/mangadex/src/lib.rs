@@ -312,10 +312,11 @@ impl MangadexDesktopApi {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
-                    let _ = watches.is_logged.send_replace(true);
+                    let _ = watches.is_logged.send_data(true);
                 } else {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write.replace(Instant::now());
+                    let _ = watches.is_logged.send_data(false);
                 }
                 Ok::<MangaDexClient, mangadex_api_types_rust::error::Error>(client)
             })?;

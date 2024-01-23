@@ -142,9 +142,9 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
                 .write()
                 .await
                 .replace(Instant::now().add(Duration::from_millis(res.expires_in as u64)));
-            watches.is_logged.send_replace(true);
+            let _ = watches.is_logged.send_data(true);
         } else {
-            watches.is_logged.send_replace(false);
+            let _ = watches.is_logged.send_data(false);
         }
     }
     Ok(client)

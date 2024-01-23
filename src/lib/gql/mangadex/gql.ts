@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "\n\t\t\tquery myManga {\n\t\t\t\tmanga {\n\t\t\t\t\trandom {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n                            title\n                            altTitles\n                            state\n                            status\n                        }\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t": types.MyMangaDocument,
-    "\n            subscription isLogged($sub_id: UUID!) {\n                watchIsLogged(subId: $sub_id)\n            }\n        ": types.IsLoggedDocument,
+    "\n            subscription isLogged($sub_id: UUID!) {\n                watchIsAppMounted(subId: $sub_id)\n            }\n        ": types.IsLoggedDocument,
 };
 
 /**
@@ -38,7 +38,7 @@ export function graphql(source: "\n\t\t\tquery myManga {\n\t\t\t\tmanga {\n\t\t\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n            subscription isLogged($sub_id: UUID!) {\n                watchIsLogged(subId: $sub_id)\n            }\n        "): (typeof documents)["\n            subscription isLogged($sub_id: UUID!) {\n                watchIsLogged(subId: $sub_id)\n            }\n        "];
+export function graphql(source: "\n            subscription isLogged($sub_id: UUID!) {\n                watchIsAppMounted(subId: $sub_id)\n            }\n        "): (typeof documents)["\n            subscription isLogged($sub_id: UUID!) {\n                watchIsAppMounted(subId: $sub_id)\n            }\n        "];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
