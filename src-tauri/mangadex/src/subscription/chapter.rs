@@ -18,12 +18,23 @@ impl ChapterSubscriptions {
         chapter_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = ChapterAttributes> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let chapter_sub = watches.chapter.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let borrow = {
+                        chapter_sub.borrow().as_ref().cloned()
+                    };
+                    if let Some(data) = borrow {
+                        if data.id == chapter_id {
+                            yield data.attributes.inner_data()
+                        }
+                    }
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = chapter_sub.has_changed() {
                         if has_changed {
                             let borrow = {
