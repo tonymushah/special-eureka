@@ -4,14 +4,13 @@
     import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { onDestroy } from "svelte";
 	import { v4 } from "uuid";
-	import TestSubAuth from "./TestSubAuth.svelte";
     const sub_id = v4()
     let store = subscriptionStore({
         client: getContextClient(),
         query: graphql(/* GraphQL */
         `
-            subscription isAppMounted($sub_id: UUID!) {
-                watchIsAppMounted(subId: $sub_id)
+            subscription isLogged($sub_id: UUID!) {
+                watchIsLogged(subId: $sub_id)
             }
         `),
         variables: {
@@ -23,10 +22,8 @@
     })
 </script>
 
-{#if $store.data?.watchIsAppMounted}
-    <p>Offline mounted</p>
+{#if $store.data?.watchIsLogged}
+    <p>You're logged in</p>
 {:else}
-    <p>Offline not mounted</p>
+    <p>You're not logged in</p>
 {/if}
-
-<TestSubAuth/>

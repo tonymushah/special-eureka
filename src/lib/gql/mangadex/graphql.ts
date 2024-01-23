@@ -2662,13 +2662,21 @@ export type MyMangaQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyMangaQuery = { __typename?: 'Query', manga: { __typename?: 'MangaQueries', random: { __typename?: 'MangaObject', id: any, attributes: { __typename?: 'GraphQLMangaAttributes', title: any, altTitles: Array<any>, state: MangaState, status: MangaStatus } } } };
 
+export type IsAppMountedSubscriptionVariables = Exact<{
+  sub_id: Scalars['UUID']['input'];
+}>;
+
+
+export type IsAppMountedSubscription = { __typename?: 'Subscriptions', watchIsAppMounted: boolean };
+
 export type IsLoggedSubscriptionVariables = Exact<{
   sub_id: Scalars['UUID']['input'];
 }>;
 
 
-export type IsLoggedSubscription = { __typename?: 'Subscriptions', watchIsAppMounted: boolean };
+export type IsLoggedSubscription = { __typename?: 'Subscriptions', watchIsLogged: boolean };
 
 
 export const MyMangaDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myManga"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"manga"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"random"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"altTitles"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MyMangaQuery, MyMangaQueryVariables>;
-export const IsLoggedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isLogged"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsAppMounted"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;
+export const IsAppMountedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isAppMounted"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsAppMounted"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<IsAppMountedSubscription, IsAppMountedSubscriptionVariables>;
+export const IsLoggedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isLogged"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsLogged"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;

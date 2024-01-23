@@ -277,6 +277,7 @@ type InitWatchSubRes<'ctx, R> = Result<(
     Arc<RwLock<bool>>,
     EventHandler,
     &'ctx Window<R>,
+    Arc<RwLock<bool>>,
 )>;
 
 pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
@@ -308,7 +309,13 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
             }
         });
     });
-    Ok((watches, should_end, unlisten, window))
+    Ok((
+        watches,
+        should_end,
+        unlisten,
+        window,
+        Arc::new(RwLock::new(true)),
+    ))
 }
 
 pub async fn sub_sleep() {
