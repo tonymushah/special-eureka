@@ -23,6 +23,7 @@ impl ChapterPagesQuery {
             .server()
             .id(id)
             .get()
+            .force_port_443(false)
             .send()
             .await?
             .body
