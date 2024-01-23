@@ -42,8 +42,13 @@ impl ChapterPagesQuery {
             .unwrap_or_default()
             .into_iter()
             .flat_map(|i| {
-                let i = i.to_str()?;
-                Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
+                let ext = i.extension().and_then(|e| e.to_str())?;
+                if ext != "json" {
+                    let i = i.to_str()?;
+                    Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
+                } else {
+                    None
+                }
             })
             .collect();
         let data_saver: Vec<Url> = chapter_utils
@@ -51,10 +56,16 @@ impl ChapterPagesQuery {
             .unwrap_or_default()
             .into_iter()
             .flat_map(|i| {
-                let i = i.to_str()?;
-                Url::parse(format!("mangadex://chapter/{id}/data-saver/{i}").as_str()).ok()
+                let ext = i.extension().and_then(|e| e.to_str())?;
+                if ext != "json" {
+                    let i = i.to_str()?;
+                    Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
+                } else {
+                    None
+                }
             })
             .collect();
+
         Ok(ChapterPages { data, data_saver })
     }
     pub async fn pages(&self, ctx: &Context<'_>) -> Result<ChapterPages> {
