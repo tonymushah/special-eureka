@@ -10,6 +10,7 @@ pub mod oauth;
 pub mod offline_app_state;
 pub mod rating;
 pub mod read_marker;
+pub mod reading_state;
 pub mod report;
 pub mod scanlation_group;
 pub mod upload;
