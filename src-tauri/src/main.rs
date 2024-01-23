@@ -91,6 +91,7 @@ fn main() {
                     Uuid::new_v4().to_string(),
                     tauri::WindowUrl::App(Path::new("").to_path_buf()),
                 )
+                .title("Special Eureka")
                 .build();
             }
         });

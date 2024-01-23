@@ -386,7 +386,7 @@ export type ChapterListParams = {
 export type ChapterMutations = {
   __typename?: 'ChapterMutations';
   delete: Scalars['Boolean']['output'];
-  download: Scalars['Boolean']['output'];
+  download: DownloadState;
   /** Remove the chapter from the current device or offline */
   remove: Scalars['Boolean']['output'];
   update: Chapter;
@@ -885,6 +885,34 @@ export enum DownloadMode {
   DataSaver = 'DATA_SAVER',
   Normal = 'NORMAL'
 }
+
+export type DownloadState = {
+  __typename?: 'DownloadState';
+  hasFailed: Scalars['Boolean']['output'];
+  isDownloaded: Scalars['Boolean']['output'];
+};
+
+export type DownloadStateQueries = {
+  __typename?: 'DownloadStateQueries';
+  chapter: DownloadState;
+  cover: DownloadState;
+  manga: DownloadState;
+};
+
+
+export type DownloadStateQueriesChapterArgs = {
+  chapterId: Scalars['UUID']['input'];
+};
+
+
+export type DownloadStateQueriesCoverArgs = {
+  coverId: Scalars['UUID']['input'];
+};
+
+
+export type DownloadStateQueriesMangaArgs = {
+  mangaId: Scalars['UUID']['input'];
+};
 
 export type EditScanlationGroupParam = {
   /** Nullable. */
@@ -1432,7 +1460,7 @@ export type MangaMutations = {
   createRelation: Array<MangaRelated>;
   delete: Scalars['Boolean']['output'];
   deleteRelation: Scalars['Boolean']['output'];
-  download: Scalars['Boolean']['output'];
+  download: DownloadState;
   edit: MangaObject;
   follow: Scalars['Boolean']['output'];
   remove: Scalars['Boolean']['output'];
@@ -1820,6 +1848,7 @@ export type Query = {
   chapter: ChapterQueries;
   cover: CoverQueries;
   customList: CustomListQueries;
+  downloadState: DownloadStateQueries;
   feed: FeedQueries;
   follows: FollowsQueries;
   home: HomeQueries;
@@ -1914,6 +1943,18 @@ export enum ReadingMode {
   LongStrip = 'LONG_STRIP',
   SinglePage = 'SINGLE_PAGE',
   WideStrip = 'WIDE_STRIP'
+}
+
+export type ReadingState = {
+  __typename?: 'ReadingState';
+  page?: Maybe<Scalars['Int']['output']>;
+  state: ReadingStateEnum;
+};
+
+export enum ReadingStateEnum {
+  Current = 'CURRENT',
+  Next = 'NEXT',
+  Previous = 'PREVIOUS'
 }
 
 export enum ReadingStatus {
@@ -2162,6 +2203,7 @@ export type Subscriptions = {
   watchChapterLanguages: Array<Language>;
   watchCover: CoverAttributes;
   watchCustomList: CustomListAttributes;
+  watchDownloadState: DownloadState;
   watchIsAppMounted: Scalars['Boolean']['output'];
   watchIsLogged: Scalars['Boolean']['output'];
   watchManga: GraphQlMangaAttributes;
@@ -2169,6 +2211,7 @@ export type Subscriptions = {
   watchPageDirection: Direction;
   watchRating: RatingItemAttributes;
   watchReadingMode: ReadingMode;
+  watchReadingState: ReadingState;
   watchSidebarDirection: Direction;
   watchStatistics: StatisticsComments;
   watchTag: TagAttributes;
@@ -2214,6 +2257,12 @@ export type SubscriptionsWatchCustomListArgs = {
 };
 
 
+export type SubscriptionsWatchDownloadStateArgs = {
+  objectId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
 export type SubscriptionsWatchIsAppMountedArgs = {
   subId: Scalars['UUID']['input'];
 };
@@ -2248,6 +2297,12 @@ export type SubscriptionsWatchRatingArgs = {
 
 
 export type SubscriptionsWatchReadingModeArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchReadingStateArgs = {
+  chapterId: Scalars['UUID']['input'];
   subId: Scalars['UUID']['input'];
 };
 

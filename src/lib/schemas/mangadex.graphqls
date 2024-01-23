@@ -300,7 +300,7 @@ type ChapterMutations {
 	Remove the chapter from the current device or offline
 	"""
 	remove(id: UUID!): Boolean!
-	download(id: UUID!, quality: DownloadMode! = NORMAL): Boolean!
+	download(id: UUID!, quality: DownloadMode! = NORMAL): DownloadState!
 }
 
 type ChapterPages {
@@ -713,6 +713,17 @@ enum Direction {
 enum DownloadMode {
 	NORMAL
 	DATA_SAVER
+}
+
+type DownloadState {
+	isDownloaded: Boolean!
+	hasFailed: Boolean!
+}
+
+type DownloadStateQueries {
+	chapter(chapterId: UUID!): DownloadState!
+	cover(coverId: UUID!): DownloadState!
+	manga(mangaId: UUID!): DownloadState!
 }
 
 input EditScanlationGroupParam {
@@ -1210,7 +1221,7 @@ input MangaListParams {
 }
 
 type MangaMutations {
-	download(id: UUID!): Boolean!
+	download(id: UUID!): DownloadState!
 	create(params: CreateMangaParam!): MangaObject!
 	edit(params: UpdateMangaParam!): MangaObject!
 	delete(id: UUID!): Boolean!
@@ -1515,6 +1526,7 @@ type Query {
 	user: UserQueries!
 	offlineAppState: OfflineAppStateQueries!
 	home: HomeQueries!
+	downloadState: DownloadStateQueries!
 }
 
 type RatingItem {
@@ -1553,6 +1565,17 @@ enum ReadingMode {
 	WIDE_STRIP
 	SINGLE_PAGE
 	DOUBLE_PAGE
+}
+
+type ReadingState {
+	state: ReadingStateEnum!
+	page: Int
+}
+
+enum ReadingStateEnum {
+	PREVIOUS
+	CURRENT
+	NEXT
 }
 
 enum ReadingStatus {
@@ -1791,6 +1814,8 @@ type Subscriptions {
 	watchChapterLanguages(subId: UUID!): [Language!]!
 	watchIsAppMounted(subId: UUID!): Boolean!
 	watchIsLogged(subId: UUID!): Boolean!
+	watchDownloadState(objectId: UUID!, subId: UUID!): DownloadState!
+	watchReadingState(chapterId: UUID!, subId: UUID!): ReadingState!
 }
 
 type Tag {
