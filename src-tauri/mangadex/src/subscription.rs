@@ -12,6 +12,7 @@ pub mod author;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
+pub mod download_state;
 pub mod is_appstate_mounted;
 pub mod is_logged;
 pub mod manga;
