@@ -24,6 +24,8 @@ impl ApiClientSubscriptions {
         Ok(stream! {
             loop {
                 if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
                     let borrow = {
                         api_client_sub.borrow().as_ref().cloned()
                     };
@@ -32,8 +34,6 @@ impl ApiClientSubscriptions {
                             yield data.attributes.clone()
                         }
                     }
-                    let mut write = is_initial_loading.write().await;
-                    *write = false
                 } else if !*should_end.read().await {
                     if let Ok(has_changed) = api_client_sub.has_changed() {
                         if has_changed {

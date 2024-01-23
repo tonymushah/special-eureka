@@ -24,6 +24,8 @@ impl CoverSubscriptions {
         Ok(stream! {
             loop {
                 if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
                     let borrow = {
                         cover_sub.borrow().as_ref().cloned()
                     };
@@ -32,8 +34,6 @@ impl CoverSubscriptions {
                             yield data.attributes.inner_data()
                         }
                     }
-                    let mut write = is_initial_loading.write().await;
-                    *write = false
                 } else if !*should_end.read().await {
                     if let Ok(has_changed) = cover_sub.has_changed() {
                         if has_changed {
