@@ -10,7 +10,7 @@ use crate::{
     ins_handle::{add_in_chapter_failed, add_in_chapter_queue, add_in_chapter_success},
     objects::chapter::Chapter,
     utils::{
-        download_state::{DownloadState, DownloadedStateObject},
+        download_state::DownloadState,
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
         get_watches_from_graphql_context,
         source::SendMultiSourceData,
@@ -54,7 +54,7 @@ impl ChapterMutations {
         ctx: &Context<'_>,
         id: Uuid,
         #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
-    ) -> Result<DownloadedStateObject> {
+    ) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola: tauri::State<'_, crate::app_state::OfflineAppState> =
             get_offline_app_state::<tauri::Wry>(ctx)?;
@@ -95,13 +95,13 @@ impl ChapterMutations {
         });
         if let Err(_err) = res {
             add_in_chapter_failed(id)?;
-            Ok(state.into())
+            Ok(state)
         } else {
             add_in_chapter_success(id)?;
             let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
             let data: Chapter = olasw.chapter_utils().with_id(id).get_data()?.into();
             let _ = watches.chapter.send_offline(data.clone());
-            Ok(state.into())
+            Ok(state)
         }
     }
 }

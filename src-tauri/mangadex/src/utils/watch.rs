@@ -18,6 +18,7 @@ use self::{
     page_direction::PageDirectionWatch,
     rating::RatingWatch,
     reading_mode::ReadingModeWatch,
+    reading_state::ReadingStateWatch,
     scanlation_group::ScanlationGroupWatch,
     sidebar_direction::SideBarDirectionWatch,
     statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
@@ -146,4 +147,5 @@ pub struct Watches {
     pub chapter_languages: ChapterLanguagesWatch,
     pub is_appstate_mounted: IsAppStateMountedWatch,
     pub download_state: DownloadStateWatch,
+    pub reading_state: ReadingStateWatch,
 }

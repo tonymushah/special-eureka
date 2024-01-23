@@ -8,7 +8,7 @@ use uuid::Uuid;
 use crate::{
     objects::cover::Cover,
     utils::{
-        download_state::{DownloadState, DownloadedStateObject},
+        download_state::DownloadState,
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
         get_watches_from_graphql_context,
         source::SendMultiSourceData,
@@ -47,7 +47,7 @@ impl CoverMutations {
         let _ = client.cover().cover_id(id).delete().send().await?;
         Ok(true)
     }
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadedStateObject> {
+    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let mut olasw = offline_app_state_write
@@ -82,7 +82,7 @@ impl CoverMutations {
             attributes: state,
         });
         let _ = watches.cover.send_offline(data.clone());
-        Ok(state.into())
+        Ok(state)
     }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;

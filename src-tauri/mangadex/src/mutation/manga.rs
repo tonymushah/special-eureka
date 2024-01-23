@@ -16,7 +16,7 @@ use crate::{
         ExtractReferenceExpansionFromContext, GetId,
     },
     utils::{
-        download_state::{DownloadState, DownloadedStateObject},
+        download_state::DownloadState,
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
         get_watches_from_graphql_context,
         source::SendMultiSourceData,
@@ -29,7 +29,7 @@ pub struct MangaMutations;
 
 #[Object]
 impl MangaMutations {
-    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadedStateObject> {
+    pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
@@ -66,7 +66,7 @@ impl MangaMutations {
             id,
             attributes: state,
         });
-        Ok(state.into())
+        Ok(state)
     }
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
         let client =

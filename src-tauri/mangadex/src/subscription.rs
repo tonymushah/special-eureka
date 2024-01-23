@@ -17,6 +17,7 @@ pub mod is_appstate_mounted;
 pub mod is_logged;
 pub mod manga;
 pub mod rating;
+pub mod reading_state;
 pub mod scanlation_group;
 pub mod statistics;
 pub mod tag;
@@ -32,16 +33,20 @@ use self::{
     chapter::ChapterSubscriptions,
     cover::CoverSubscriptions,
     custom_list::CustomListSubscriptions,
+    download_state::DownloadStateSubscriptions,
     is_appstate_mounted::IsAppStateMountedSubscriptions,
     is_logged::IsLoggedSubscriptions,
     manga::MangaSubscriptions,
     rating::RatingSubscriptions,
+    reading_state::ReadingStateSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
     tag::TagSubscriptions,
     upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
     user::{me::UserMeSubscriptions, UserSubscriptions},
     user_option::UserOptionSubscriptions,
 };
+use crate::utils::download_state::DownloadState;
+use crate::utils::watch::reading_state::data::ReadingState;
 use crate::{
     objects::{
         api_client::attributes::ApiClientAttributes,
@@ -245,6 +250,26 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsLoggedSubscriptions.listen(ctx, sub_id).await
     }
+    pub async fn watch_download_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        object_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = DownloadState> + 'ctx> {
+        DownloadStateSubscriptions
+            .listen_by_id(ctx, object_id, sub_id)
+            .await
+    }
+    pub async fn watch_reading_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        chapter_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ReadingState> + 'ctx> {
+        ReadingStateSubscriptions
+            .listen_by_id(ctx, chapter_id, sub_id)
+            .await
+    }
 }
 
 type InitWatchSubRes<'ctx, R> = Result<(
@@ -287,5 +312,5 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
 }
 
 pub async fn sub_sleep() {
-    sleep(Duration::from_millis(500)).await
+    sleep(Duration::from_millis(100)).await
 }

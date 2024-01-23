@@ -4,7 +4,7 @@ use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::utils::{
-    download_state::{DownloadState, DownloadedStateObject},
+    download_state::DownloadState,
     get_offline_app_state, get_watches_from_graphql_context,
     watch::{SendData, WatcherInnerData},
 };
@@ -14,11 +14,7 @@ pub struct DownloadStateQueries;
 
 #[Object]
 impl DownloadStateQueries {
-    pub async fn chapter(
-        &self,
-        ctx: &Context<'_>,
-        chapter_id: Uuid,
-    ) -> Result<DownloadedStateObject> {
+    pub async fn chapter(&self, ctx: &Context<'_>, chapter_id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let oas_r = oas.read().await;
@@ -45,9 +41,9 @@ impl DownloadStateQueries {
             id: chapter_id,
             attributes: state,
         });
-        Ok(state.into())
+        Ok(state)
     }
-    pub async fn cover(&self, ctx: &Context<'_>, cover_id: Uuid) -> Result<DownloadedStateObject> {
+    pub async fn cover(&self, ctx: &Context<'_>, cover_id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let oas_r = oas.read().await;
@@ -74,9 +70,9 @@ impl DownloadStateQueries {
             id: cover_id,
             attributes: state,
         });
-        Ok(state.into())
+        Ok(state)
     }
-    pub async fn manga(&self, ctx: &Context<'_>, manga_id: Uuid) -> Result<DownloadedStateObject> {
+    pub async fn manga(&self, ctx: &Context<'_>, manga_id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let oas_r = oas.read().await;
@@ -103,6 +99,6 @@ impl DownloadStateQueries {
             id: manga_id,
             attributes: state,
         });
-        Ok(state.into())
+        Ok(state)
     }
 }
