@@ -1,3 +1,4 @@
+use async_graphql::Error;
 use mangadex_api::MangaDexClient;
 use once_cell::sync::OnceCell;
 use std::{io::Result, ops::Add};
@@ -157,6 +158,9 @@ pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
+    if offline_app_state_write.is_some() {
+        return Err(Error::new("Offline app state is already mounted"));
+    }
     offline_app_state_write.replace(AppStateInner::init::<R>(ctx).await?);
     let _ = watches.is_appstate_mounted.send_data(true);
     Ok(true)
@@ -168,6 +172,9 @@ pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
+    if offline_app_state_write.is_none() {
+        return Err(Error::new("Offline app state is not mounted"));
+    }
     let _ = offline_app_state_write.take();
     let _ = watches.is_appstate_mounted.send_data(false);
     Ok(true)
