@@ -50,7 +50,6 @@ fn main() {
     #[cfg(debug_assertions)] // only enable instrumentation in development builds
     let _devtools = devtools::init();
     */
-
     let mut builder = tauri::Builder::default();
 
     /*#[cfg(debug_assertions)]

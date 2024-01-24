@@ -24,5 +24,16 @@
     "rust-analyzer.showUnlinkedFileNotification": false,
     "evenBetterToml.schema.associations": {
         "Tauri.toml" : "../node_modules/@tauri-apps/cli/schema.json"
-    }
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "src-tauri/target": true,
+        "src-tauri/data": true
+    },
+    "explorerExclude.backup": {}
 }

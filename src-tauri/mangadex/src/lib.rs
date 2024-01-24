@@ -2,7 +2,7 @@ use std::{io::Read, ops::Add, path::{PathBuf, Path}};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::Schema;
-use bytes::{Bytes, BytesMut};
+use bytes::Bytes;
 use mangadex_api::{MangaDexClient, CDN_URL};
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
 use mangadex_api_types_rust::MangaDexDateTime;
@@ -153,11 +153,11 @@ impl MangadexDesktopApi {
                                                 }) {
                                                     if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
                                                         let body: Bytes = {
-                                                            let mut to_res = BytesMut::new();
+                                                            let mut to_res = Vec::<u8>::new();
                                                                 match mode {
                                                                     ChapterMode::Data => {
                                                                         let res = chapter_util.get_data_image(filename).and_then(|mut buf_reader| {
-                                                                            buf_reader.read_exact(&mut to_res)?;
+                                                                            buf_reader.read_to_end(&mut to_res)?;
                                                                             Ok(())
                                                                         });
                                                                         if res.is_err() {
@@ -165,10 +165,10 @@ impl MangadexDesktopApi {
                                                                         }
                                                                     }
                                                                     ChapterMode::DataSaver => {
-                                                                    let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
-                                                                    buf_reader.read_exact(&mut to_res)?;
-                                                                    Ok(())
-                                                                    });
+                                                                        let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
+                                                                            buf_reader.read_to_end(&mut to_res)?;
+                                                                            Ok(())
+                                                                        });
                                                                     if res.is_err() {
                                                                         return not_found;
                                                                     }
@@ -206,7 +206,7 @@ impl MangadexDesktopApi {
                                                 if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
                                                     let body: Bytes = {
                                                         let cover_utils = app_state.cover_utils().with_id(cover_id);
-                                                        let mut to_res = BytesMut::new();
+                                                        let mut to_res = Vec::<u8>::new();
                                                         if let Some(manga_id) = uri.query_pairs().find(|(k, _)| k == "mangaId").map(|(_,v)| {v.to_string()}).and_then(|id| Uuid::parse_str(&id).ok()) {
                                                             let cli = client.get_http_client().blocking_read().client.clone();
                                                             let url = {
@@ -226,13 +226,13 @@ impl MangadexDesktopApi {
                                                                 to_res.extend_from_slice(&res);
                                                             }else {
                                                                 let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
-                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    buf_reader.read_to_end(&mut to_res)?;
                                                                     Ok(())
                                                                 });
                                                             }
                                                         }else {
                                                             let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
-                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    buf_reader.read_to_end(&mut to_res)?;
                                                                     Ok(())
                                                                 });
                                                         }
