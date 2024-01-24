@@ -65,8 +65,11 @@
   },
   "type": "module",
   "dependencies": {
+    "@fontsource-variable/josefin-sans": "^5.0.19",
+    "@fontsource/poppins": "^5.0.8",
     "@graphiql/toolkit": "^0.9.1",
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@stitches/core": "^1.2.8",
     "@svelteuidev/composables": "^0.15.4",
     "@svelteuidev/core": "^0.15.4",
     "@svelteuidev/dates": "^0.15.4",

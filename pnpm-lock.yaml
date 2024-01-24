@@ -5,12 +5,21 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@fontsource-variable/josefin-sans':
+    specifier: ^5.0.19
+    version: 5.0.19
+  '@fontsource/poppins':
+    specifier: ^5.0.8
+    version: 5.0.8
   '@graphiql/toolkit':
     specifier: ^0.9.1
     version: 0.9.1(graphql@16.8.1)
   '@graphql-typed-document-node/core':
     specifier: ^3.2.0
     version: 3.2.0(graphql@16.8.1)
+  '@stitches/core':
+    specifier: ^1.2.8
+    version: 1.2.8
   '@svelteuidev/composables':
     specifier: ^0.15.4
     version: 0.15.4(svelte@4.2.8)
@@ -2103,6 +2112,14 @@ packages:
 
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
+
+  /@fontsource-variable/josefin-sans@5.0.19:
+    resolution: {integrity: sha512-/e2QwUF+m5m6zj7BKgLFak0oZwEhUKNk2k/4Sb1BGqHy8ghKN0XpmEn5dKw8xzjab612N5QrIs0XTSz5CkyHAA==}
+    dev: false
+
+  /@fontsource/poppins@5.0.8:
+    resolution: {integrity: sha512-P8owfYWluoUY5Nyzk4gT/L6LmLmseP6ezFWhj6VBUa5pRIdnCvNJpoQ6i/vhekjtJOfqX6nKlB+LCttoUl2GQQ==}
+    dev: false
 
   /@graphiql/react@0.20.2(@codemirror/language@6.0.0)(@types/react-dom@18.2.18)(@types/react@18.2.48)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-/crAUlM+4iVHyNHVdiZjsTEqfMXBHfjEvrMwCwTVig6YXmCAVuaxqkD7NlDtrrPQArLGkABmf1Nw7ObRpby5lg==}
