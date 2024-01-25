@@ -17,6 +17,7 @@ pub mod is_appstate_mounted;
 pub mod is_following;
 pub mod is_logged;
 pub mod manga;
+pub mod manga_reading_state;
 pub mod rating;
 pub mod reading_state;
 pub mod scanlation_group;
@@ -27,6 +28,7 @@ pub mod user;
 pub mod user_option;
 
 use mangadex_api_types_rust::Language;
+use mangadex_api_types_rust::ReadingStatus;
 
 use self::{
     api_client::ApiClientSubscriptions,
@@ -39,6 +41,7 @@ use self::{
     is_following::IsFollowingSubscriptions,
     is_logged::IsLoggedSubscriptions,
     manga::MangaSubscriptions,
+    manga_reading_state::MangaReadingStatusSubscriptions,
     rating::RatingSubscriptions,
     reading_state::ReadingStateSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
@@ -300,6 +303,16 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsFollowingSubscriptions
             .listen_by_user_id(ctx, user_id, sub_id)
+            .await
+    }
+    pub async fn watch_manga_reading_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        manga_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<ReadingStatus>> + 'ctx> {
+        MangaReadingStatusSubscriptions
+            .listen_by_id(ctx, manga_id, sub_id)
             .await
     }
 }
