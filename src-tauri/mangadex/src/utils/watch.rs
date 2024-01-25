@@ -13,8 +13,10 @@ use self::{
     custom_list::CustomListWatch,
     download_state::DownloadStateWatch,
     is_appstate_mounted::IsAppStateMountedWatch,
+    is_following::IsFollowingWatch,
     is_logged::IsLoggedWatch,
     manga::MangaWatch,
+    manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
     rating::RatingWatch,
     reading_mode::ReadingModeWatch,
@@ -36,8 +38,10 @@ pub mod cover;
 pub mod custom_list;
 pub mod download_state;
 pub mod is_appstate_mounted;
+pub mod is_following;
 pub mod is_logged;
 pub mod manga;
+pub mod manga_reading_state;
 pub mod page_direction;
 pub mod rating;
 pub mod read_marker;
@@ -148,4 +152,6 @@ pub struct Watches {
     pub is_appstate_mounted: IsAppStateMountedWatch,
     pub download_state: DownloadStateWatch,
     pub reading_state: ReadingStateWatch,
+    pub is_following: IsFollowingWatch,
+    pub manga_reading_state: MangaReadingStateWatch,
 }
