@@ -14,6 +14,7 @@ pub mod cover;
 pub mod custom_list;
 pub mod download_state;
 pub mod is_appstate_mounted;
+pub mod is_following;
 pub mod is_logged;
 pub mod manga;
 pub mod rating;
@@ -35,6 +36,7 @@ use self::{
     custom_list::CustomListSubscriptions,
     download_state::DownloadStateSubscriptions,
     is_appstate_mounted::IsAppStateMountedSubscriptions,
+    is_following::IsFollowingSubscriptions,
     is_logged::IsLoggedSubscriptions,
     manga::MangaSubscriptions,
     rating::RatingSubscriptions,
@@ -268,6 +270,36 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = ReadingState> + 'ctx> {
         ReadingStateSubscriptions
             .listen_by_id(ctx, chapter_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_manga<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        manga_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_manga_id(ctx, manga_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_group<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        group_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_group_id(ctx, group_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_user<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        user_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_user_id(ctx, user_id, sub_id)
             .await
     }
 }
