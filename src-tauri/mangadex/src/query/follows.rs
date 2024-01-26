@@ -5,17 +5,20 @@ use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
     mangas::UserFollowedMangaParams, users::UserFollowedUserParams,
 };
+use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
 use crate::{
     objects::{
         custom_list::lists::CustomListResults, manga::lists::MangaResults,
         scanlation_group::lists::ScanlationGroupResults, user::lists::UserResults,
-        ExtractReferenceExpansionFromContext,
+        ExtractReferenceExpansionFromContext, GetId,
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
+        get_watches_from_graphql_context,
+        source::SendMultiSourceData,
+        watch::{is_following::inner::IsFollowingInnerData, SendData},
     },
 };
 
@@ -41,6 +44,13 @@ impl FollowsQueries {
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
+                    let _ = watches.is_following.send_data((
+                        data.get_id(),
+                        IsFollowingInnerData {
+                            type_: RelationshipType::ScanlationGroup,
+                            data: true,
+                        },
+                    ));
                     let _ = watches.scanlation_group.send_data(data);
                 }
             });
@@ -48,9 +58,10 @@ impl FollowsQueries {
         })
     }
     pub async fn is_following_group(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(client
+        let is_following = client
             .user()
             .follows()
             .group()
@@ -58,7 +69,15 @@ impl FollowsQueries {
             .get()
             .send()
             .await?
-            .is_following)
+            .is_following;
+        let _ = watches.is_following.send_data((
+            id,
+            IsFollowingInnerData {
+                type_: RelationshipType::ScanlationGroup,
+                data: is_following,
+            },
+        ));
+        Ok(is_following)
     }
     pub async fn users(
         &self,
