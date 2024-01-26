@@ -36,7 +36,7 @@
     "@storybook/test": "^7.6.7",
     "@sveltejs/adapter-auto": "^3.1.0",
     "@sveltejs/adapter-static": "^3.0.1",
-    "@sveltejs/kit": "^2.0.6",
+    "@sveltejs/kit": "^2.4.3",
     "@sveltejs/vite-plugin-svelte": "^3.0.1",
     "@tauri-apps/cli": "^1.5.9",
     "@types/react": "^18.2.48",
@@ -59,7 +59,7 @@
     "svelte2tsx": "^0.7.0",
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
-    "vite": "^5.0.11",
+    "vite": "^5.0.12",
     "vite-plugin-kit-routes": "^0.5.1",
     "vitest": "^1.1.3"
   },
