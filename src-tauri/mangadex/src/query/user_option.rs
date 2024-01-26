@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use async_graphql::{Context, Object, Result};
 use mangadex_api_types_rust::Language;
 
@@ -22,29 +24,33 @@ pub struct UserOptionQueries;
 impl UserOptionQueries {
     pub async fn get_reading_mode(&self, ctx: &Context<'_>) -> Result<ReadingMode> {
         let store = get_store::<tauri::Wry>(ctx).await?;
+        let store_read = store.read().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let rms = ReadingModeStore::extract_from_store(&store)?;
+        let rms = ReadingModeStore::extract_from_store(store_read.deref())?;
         let _ = watches.reading_mode.send_data(rms.clone());
         Ok(rms.into())
     }
     pub async fn get_page_direction(&self, ctx: &Context<'_>) -> Result<Direction> {
         let store = get_store::<tauri::Wry>(ctx).await?;
+        let store_read = store.read().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let pds = ReadingDirectionStore::extract_from_store(&store)?;
+        let pds = ReadingDirectionStore::extract_from_store(store_read.deref())?;
         let _ = watches.page_direction.send_data(pds.clone());
         Ok(pds.into())
     }
     pub async fn get_sidebar_direction(&self, ctx: &Context<'_>) -> Result<Direction> {
         let store = get_store::<tauri::Wry>(ctx).await?;
+        let store_read = store.read().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let sds = SidebarDirectionStore::extract_from_store(&store)?;
+        let sds = SidebarDirectionStore::extract_from_store(store_read.deref())?;
         let _ = watches.sidebar_direction.send_data(sds.clone());
         Ok(sds.into())
     }
     pub async fn get_chapter_languages(&self, ctx: &Context<'_>) -> Result<Vec<Language>> {
         let store = get_store::<tauri::Wry>(ctx).await?;
+        let store_read = store.read().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let cls = ChapterLanguagesStore::extract_from_store(&store)?;
+        let cls = ChapterLanguagesStore::extract_from_store(store_read.deref())?;
         let _ = watches.chapter_languages.send_data(cls.clone());
         Ok(cls.into())
     }

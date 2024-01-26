@@ -3,13 +3,9 @@ use mangadex_api::MangaDexClient;
 use once_cell::sync::OnceCell;
 use std::{io::Result, ops::Add};
 use tauri::{AppHandle, Manager, Runtime, State, Window};
-use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 
-use crate::{
-    app_state::{inner::AppStateInner, LastTimeTokenWhenFecthed, OfflineAppState},
-    store::get_store_builder,
-};
+use crate::app_state::{inner::AppStateInner, LastTimeTokenWhenFecthed, OfflineAppState};
 
 use self::{
     store::MangaDexStoreState,
