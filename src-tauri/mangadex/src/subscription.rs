@@ -19,6 +19,7 @@ pub mod is_logged;
 pub mod manga;
 pub mod manga_reading_state;
 pub mod rating;
+pub mod read_marker;
 pub mod reading_state;
 pub mod scanlation_group;
 pub mod statistics;
@@ -43,6 +44,7 @@ use self::{
     manga::MangaSubscriptions,
     manga_reading_state::MangaReadingStatusSubscriptions,
     rating::RatingSubscriptions,
+    read_marker::ChapterReadMarkerSubscriptions,
     reading_state::ReadingStateSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
     tag::TagSubscriptions,
@@ -323,6 +325,16 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = Option<ReadingStatus>> + 'ctx> {
         MangaReadingStatusSubscriptions
             .listen_by_id(ctx, manga_id, sub_id)
+            .await
+    }
+    pub async fn watch_read_marker<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        chapter_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        ChapterReadMarkerSubscriptions
+            .listen_by_id(ctx, chapter_id, sub_id)
             .await
     }
 }
