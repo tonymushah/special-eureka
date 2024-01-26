@@ -36,7 +36,7 @@ bytes = "1"
 async-stream = "0"
 
 [dependencies.mangadex-desktop-api2]
-version = "0.6.0-alpha.1"
+version = "0.6.0-alpha.3"
 default-features = false
 
 [dependencies.mangadex-api-input-types]

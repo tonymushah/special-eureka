@@ -1,4 +1,5 @@
 /* eslint-disable */
+import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -385,7 +386,7 @@ export type ChapterListParams = {
 export type ChapterMutations = {
   __typename?: 'ChapterMutations';
   delete: Scalars['Boolean']['output'];
-  download: Scalars['Boolean']['output'];
+  download: DownloadState;
   /** Remove the chapter from the current device or offline */
   remove: Scalars['Boolean']['output'];
   update: Chapter;
@@ -875,10 +876,43 @@ export enum Demographic {
   Shounen = 'SHOUNEN'
 }
 
+export enum Direction {
+  Ltr = 'LTR',
+  Rtl = 'RTL'
+}
+
 export enum DownloadMode {
   DataSaver = 'DATA_SAVER',
   Normal = 'NORMAL'
 }
+
+export type DownloadState = {
+  __typename?: 'DownloadState';
+  hasFailed: Scalars['Boolean']['output'];
+  isDownloaded: Scalars['Boolean']['output'];
+};
+
+export type DownloadStateQueries = {
+  __typename?: 'DownloadStateQueries';
+  chapter: DownloadState;
+  cover: DownloadState;
+  manga: DownloadState;
+};
+
+
+export type DownloadStateQueriesChapterArgs = {
+  chapterId: Scalars['UUID']['input'];
+};
+
+
+export type DownloadStateQueriesCoverArgs = {
+  coverId: Scalars['UUID']['input'];
+};
+
+
+export type DownloadStateQueriesMangaArgs = {
+  mangaId: Scalars['UUID']['input'];
+};
 
 export type EditScanlationGroupParam = {
   /** Nullable. */
@@ -1426,7 +1460,7 @@ export type MangaMutations = {
   createRelation: Array<MangaRelated>;
   delete: Scalars['Boolean']['output'];
   deleteRelation: Scalars['Boolean']['output'];
-  download: Scalars['Boolean']['output'];
+  download: DownloadState;
   edit: MangaObject;
   follow: Scalars['Boolean']['output'];
   remove: Scalars['Boolean']['output'];
@@ -1509,6 +1543,7 @@ export type MangaQueries = {
   getDrafts: MangaResults;
   getMangaStatus: Array<MangaReadingStatusItem>;
   list: MangaResults;
+  listOffline: MangaResults;
   random: MangaObject;
   relationList: Array<MangaRelated>;
 };
@@ -1545,6 +1580,11 @@ export type MangaQueriesGetMangaStatusArgs = {
 
 
 export type MangaQueriesListArgs = {
+  params?: MangaListParams;
+};
+
+
+export type MangaQueriesListOfflineArgs = {
   params?: MangaListParams;
 };
 
@@ -1700,6 +1740,12 @@ export type MangaStatistics = {
   rating: MangaRating;
 };
 
+export type MangaStatisticsAttributes = {
+  __typename?: 'MangaStatisticsAttributes';
+  comments?: Maybe<StatisticsComments>;
+  rating: MangaRating;
+};
+
 export type MangaStatisticsQueries = {
   __typename?: 'MangaStatisticsQueries';
   get: MangaStatistics;
@@ -1756,6 +1802,7 @@ export type OauthMutations = {
   __typename?: 'OauthMutations';
   clearClientInfo: Scalars['Boolean']['output'];
   login: Scalars['Boolean']['output'];
+  logout: Scalars['Boolean']['output'];
   refresh: Scalars['Boolean']['output'];
   setClientInfo: Scalars['Boolean']['output'];
 };
@@ -1801,6 +1848,7 @@ export type Query = {
   chapter: ChapterQueries;
   cover: CoverQueries;
   customList: CustomListQueries;
+  downloadState: DownloadStateQueries;
   feed: FeedQueries;
   follows: FollowsQueries;
   home: HomeQueries;
@@ -1822,6 +1870,12 @@ export type RatingItem = {
   __typename?: 'RatingItem';
   createdAt: Scalars['MangaDexDateTime']['output'];
   id: Scalars['UUID']['output'];
+  rating: Scalars['Int']['output'];
+};
+
+export type RatingItemAttributes = {
+  __typename?: 'RatingItemAttributes';
+  createdAt: Scalars['MangaDexDateTime']['output'];
   rating: Scalars['Int']['output'];
 };
 
@@ -1883,6 +1937,25 @@ export type ReadMarkerQueriesMangaReadMarkersByMangaIdArgs = {
 export type ReadMarkerQueriesMangaReadMarkersGroupedArgs = {
   mangaIds: Array<Scalars['UUID']['input']>;
 };
+
+export enum ReadingMode {
+  DoublePage = 'DOUBLE_PAGE',
+  LongStrip = 'LONG_STRIP',
+  SinglePage = 'SINGLE_PAGE',
+  WideStrip = 'WIDE_STRIP'
+}
+
+export type ReadingState = {
+  __typename?: 'ReadingState';
+  page?: Maybe<Scalars['Int']['output']>;
+  state: ReadingStateEnum;
+};
+
+export enum ReadingStateEnum {
+  Current = 'CURRENT',
+  Next = 'NEXT',
+  Previous = 'PREVIOUS'
+}
 
 export enum ReadingStatus {
   Completed = 'COMPLETED',
@@ -2120,6 +2193,157 @@ export type StatisticsQueries = {
 export type SubmitMangaDraftParams = {
   mangaId: Scalars['UUID']['input'];
   version: Scalars['Int']['input'];
+};
+
+export type Subscriptions = {
+  __typename?: 'Subscriptions';
+  watchApiClient: ApiClientAttributes;
+  watchAuthor: AuthorAttributes;
+  watchChapter: ChapterAttributes;
+  watchChapterLanguages: Array<Language>;
+  watchCover: CoverAttributes;
+  watchCustomList: CustomListAttributes;
+  watchDownloadState: DownloadState;
+  watchIsAppMounted: Scalars['Boolean']['output'];
+  watchIsLogged: Scalars['Boolean']['output'];
+  watchManga: GraphQlMangaAttributes;
+  watchMangaStatistics: MangaStatisticsAttributes;
+  watchPageDirection: Direction;
+  watchRating: RatingItemAttributes;
+  watchReadingMode: ReadingMode;
+  watchReadingState: ReadingState;
+  watchSidebarDirection: Direction;
+  watchStatistics: StatisticsComments;
+  watchTag: TagAttributes;
+  watchUploadSession: UploadSessionAttributes;
+  watchUploadSessionFile: UploadSessionFileAttributes;
+  watchUser: UserAttributes;
+  watchUserMe: UserAttributes;
+};
+
+
+export type SubscriptionsWatchApiClientArgs = {
+  apiClientId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchAuthorArgs = {
+  authorId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchChapterArgs = {
+  chapterId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchChapterLanguagesArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchCoverArgs = {
+  coverId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchCustomListArgs = {
+  customListId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchDownloadStateArgs = {
+  objectId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchIsAppMountedArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchIsLoggedArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchMangaArgs = {
+  mangaId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchMangaStatisticsArgs = {
+  mangaId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchPageDirectionArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchRatingArgs = {
+  mangaId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchReadingModeArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchReadingStateArgs = {
+  chapterId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchSidebarDirectionArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchStatisticsArgs = {
+  id: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchTagArgs = {
+  subId: Scalars['UUID']['input'];
+  tagId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchUploadSessionArgs = {
+  subId: Scalars['UUID']['input'];
+  uploadSessionId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchUploadSessionFileArgs = {
+  subId: Scalars['UUID']['input'];
+  uploadSessionFileId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchUserArgs = {
+  subId: Scalars['UUID']['input'];
+  userId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchUserMeArgs = {
+  subId: Scalars['UUID']['input'];
 };
 
 export type Tag = {
@@ -2432,3 +2656,27 @@ export type VolumeAggregate = {
   ids: Array<Scalars['UUID']['output']>;
   volume: Scalars['String']['output'];
 };
+
+export type MyMangaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyMangaQuery = { __typename?: 'Query', manga: { __typename?: 'MangaQueries', random: { __typename?: 'MangaObject', id: any, attributes: { __typename?: 'GraphQLMangaAttributes', title: any, altTitles: Array<any>, state: MangaState, status: MangaStatus } } } };
+
+export type IsAppMountedSubscriptionVariables = Exact<{
+  sub_id: Scalars['UUID']['input'];
+}>;
+
+
+export type IsAppMountedSubscription = { __typename?: 'Subscriptions', watchIsAppMounted: boolean };
+
+export type IsLoggedSubscriptionVariables = Exact<{
+  sub_id: Scalars['UUID']['input'];
+}>;
+
+
+export type IsLoggedSubscription = { __typename?: 'Subscriptions', watchIsLogged: boolean };
+
+
+export const MyMangaDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"myManga"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"manga"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"random"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"altTitles"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MyMangaQuery, MyMangaQueryVariables>;
+export const IsAppMountedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isAppMounted"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsAppMounted"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<IsAppMountedSubscription, IsAppMountedSubscriptionVariables>;
+export const IsLoggedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isLogged"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsLogged"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;

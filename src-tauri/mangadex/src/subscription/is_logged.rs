@@ -16,12 +16,17 @@ impl IsLoggedSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let is_logged_sub = watches.is_logged.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = *is_logged_sub.borrow();
+                    yield borrow;
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = is_logged_sub.has_changed() {
                         if has_changed {
                             let borrow = *is_logged_sub.borrow();

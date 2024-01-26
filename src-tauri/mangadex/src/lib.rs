@@ -1,8 +1,12 @@
-use std::{io::Read, ops::Add, path::{PathBuf, Path}};
+use std::{
+    io::Read,
+    ops::Add,
+    path::{Path, PathBuf},
+};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::Schema;
-use bytes::{Bytes, BytesMut};
+use bytes::Bytes;
 use mangadex_api::{MangaDexClient, CDN_URL};
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
 use mangadex_api_types_rust::MangaDexDateTime;
@@ -11,42 +15,53 @@ use regex::Regex;
 use store::{
     get_store_builder,
     types::{
-        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore, chapter_language::ChapterLanguagesStore},
-        ExtractFromStore, enums::{reading_mode::ReadingModeStore, direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore}},
+        enums::{
+            direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
+            reading_mode::ReadingModeStore,
+        },
+        structs::{
+            chapter_language::ChapterLanguagesStore, client_info::ClientInfoStore,
+            refresh_token::RefreshTokenStore,
+        },
+        ExtractFromStore,
     },
 };
 // use mangadex_desktop_api2::AppState;
+use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
 use query::Query;
 use reqwest::{
     header::{HeaderMap, HeaderValue, USER_AGENT},
     Client, StatusCode,
 };
+use serde::{ser::Serializer, Serialize};
 use tauri::{
     http::{header::InvalidHeaderValue, MimeType},
     plugin::Plugin,
 };
 use tauri::{plugin::Builder, Manager, Runtime};
-use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
-use serde::{ser::Serializer, Serialize};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 use url::Url;
-use utils::{set_indentifier, watch::{Watches, SendData}};
+use utils::{
+    set_indentifier,
+    store::MangaDexStoreState,
+    watch::{SendData, Watches},
+};
 
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
-use uuid::Uuid;
 use subscription::Subscriptions;
+use uuid::Uuid;
 
-pub mod intelligent_notification_system;
-pub mod utils;
 pub mod app_state;
+pub mod ins_handle;
+pub mod intelligent_notification_system;
 pub mod mutation;
 pub mod objects;
 pub mod query;
 pub mod store;
 pub mod subscription;
-pub mod ins_handle;
+pub mod utils;
 
 type Q = Query;
 type M = Mutation;
@@ -153,11 +168,11 @@ impl MangadexDesktopApi {
                                                 }) {
                                                     if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
                                                         let body: Bytes = {
-                                                            let mut to_res = BytesMut::new();
+                                                            let mut to_res = Vec::<u8>::new();
                                                                 match mode {
                                                                     ChapterMode::Data => {
                                                                         let res = chapter_util.get_data_image(filename).and_then(|mut buf_reader| {
-                                                                            buf_reader.read_exact(&mut to_res)?;
+                                                                            buf_reader.read_to_end(&mut to_res)?;
                                                                             Ok(())
                                                                         });
                                                                         if res.is_err() {
@@ -165,10 +180,10 @@ impl MangadexDesktopApi {
                                                                         }
                                                                     }
                                                                     ChapterMode::DataSaver => {
-                                                                    let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
-                                                                    buf_reader.read_exact(&mut to_res)?;
-                                                                    Ok(())
-                                                                    });
+                                                                        let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
+                                                                            buf_reader.read_to_end(&mut to_res)?;
+                                                                            Ok(())
+                                                                        });
                                                                     if res.is_err() {
                                                                         return not_found;
                                                                     }
@@ -206,7 +221,7 @@ impl MangadexDesktopApi {
                                                 if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
                                                     let body: Bytes = {
                                                         let cover_utils = app_state.cover_utils().with_id(cover_id);
-                                                        let mut to_res = BytesMut::new();
+                                                        let mut to_res = Vec::<u8>::new();
                                                         if let Some(manga_id) = uri.query_pairs().find(|(k, _)| k == "mangaId").map(|(_,v)| {v.to_string()}).and_then(|id| Uuid::parse_str(&id).ok()) {
                                                             let cli = client.get_http_client().blocking_read().client.clone();
                                                             let url = {
@@ -226,13 +241,13 @@ impl MangadexDesktopApi {
                                                                 to_res.extend_from_slice(&res);
                                                             }else {
                                                                 let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
-                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    buf_reader.read_to_end(&mut to_res)?;
                                                                     Ok(())
                                                                 });
                                                             }
                                                         }else {
                                                             let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
-                                                                    buf_reader.read_exact(&mut to_res)?;
+                                                                    buf_reader.read_to_end(&mut to_res)?;
                                                                     Ok(())
                                                                 });
                                                         }
@@ -305,17 +320,20 @@ impl MangadexDesktopApi {
         }) {
             client = tauri::async_runtime::block_on(async move {
                 client.set_auth_tokens(&auth_tokens).await?;
-                
+
                 if let Ok(Ok(res)) = tokio::time::timeout(Duration::from_secs(5), async {
                     client.oauth().refresh().send().await
-                }).await {
+                })
+                .await
+                {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
-                    let _ = watches.is_logged.send_replace(true);
+                    let _ = watches.is_logged.send_data(true);
                 } else {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write.replace(Instant::now());
+                    let _ = watches.is_logged.send_data(false);
                 }
                 Ok::<MangaDexClient, mangadex_api_types_rust::error::Error>(client)
             })?;
@@ -334,15 +352,27 @@ impl MangadexDesktopApi {
         self.init_watches_states(app, &store)?;
         self.init_client_state(app, &store)?;
         app.manage(self.offline_app_state.clone());
-
+        app.manage(MangaDexStoreState::new_from_store(store));
         Ok(())
     }
-    pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>, store: &Store<R>) -> tauri::plugin::Result<()> {
+    pub fn init_watches_states<R: Runtime>(
+        &self,
+        app: &tauri::AppHandle<R>,
+        store: &Store<R>,
+    ) -> tauri::plugin::Result<()> {
         let watches = Watches::default();
-        let _ = watches.reading_mode.send_data(ReadingModeStore::extract_from_store(store)?);
-        let _ = watches.chapter_languages.send_data(ChapterLanguagesStore::extract_from_store(store)?);
-        let _ = watches.page_direction.send_data(ReadingDirectionStore::extract_from_store(store)?);
-        let _ = watches.sidebar_direction.send_data(SidebarDirectionStore::extract_from_store(store)?);
+        let _ = watches
+            .reading_mode
+            .send_data(ReadingModeStore::extract_from_store(store)?);
+        let _ = watches
+            .chapter_languages
+            .send_data(ChapterLanguagesStore::extract_from_store(store)?);
+        let _ = watches
+            .page_direction
+            .send_data(ReadingDirectionStore::extract_from_store(store)?);
+        let _ = watches
+            .sidebar_direction
+            .send_data(SidebarDirectionStore::extract_from_store(store)?);
         app.manage(watches);
         Ok(())
     }

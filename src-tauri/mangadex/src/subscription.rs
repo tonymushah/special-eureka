@@ -12,10 +12,15 @@ pub mod author;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
+pub mod download_state;
 pub mod is_appstate_mounted;
+pub mod is_following;
 pub mod is_logged;
 pub mod manga;
+pub mod manga_reading_state;
 pub mod rating;
+pub mod read_marker;
+pub mod reading_state;
 pub mod scanlation_group;
 pub mod statistics;
 pub mod tag;
@@ -24,6 +29,7 @@ pub mod user;
 pub mod user_option;
 
 use mangadex_api_types_rust::Language;
+use mangadex_api_types_rust::ReadingStatus;
 
 use self::{
     api_client::ApiClientSubscriptions,
@@ -31,16 +37,23 @@ use self::{
     chapter::ChapterSubscriptions,
     cover::CoverSubscriptions,
     custom_list::CustomListSubscriptions,
+    download_state::DownloadStateSubscriptions,
     is_appstate_mounted::IsAppStateMountedSubscriptions,
+    is_following::IsFollowingSubscriptions,
     is_logged::IsLoggedSubscriptions,
     manga::MangaSubscriptions,
+    manga_reading_state::MangaReadingStatusSubscriptions,
     rating::RatingSubscriptions,
+    read_marker::ChapterReadMarkerSubscriptions,
+    reading_state::ReadingStateSubscriptions,
     statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
     tag::TagSubscriptions,
     upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
     user::{me::UserMeSubscriptions, UserSubscriptions},
     user_option::UserOptionSubscriptions,
 };
+use crate::utils::download_state::DownloadState;
+use crate::utils::watch::reading_state::data::ReadingState;
 use crate::{
     objects::{
         api_client::attributes::ApiClientAttributes,
@@ -244,6 +257,86 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsLoggedSubscriptions.listen(ctx, sub_id).await
     }
+    pub async fn watch_download_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        object_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = DownloadState> + 'ctx> {
+        DownloadStateSubscriptions
+            .listen_by_id(ctx, object_id, sub_id)
+            .await
+    }
+    pub async fn watch_reading_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        chapter_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ReadingState> + 'ctx> {
+        ReadingStateSubscriptions
+            .listen_by_id(ctx, chapter_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_manga<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        manga_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_manga_id(ctx, manga_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_group<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        group_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_group_id(ctx, group_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_user<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        user_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_user_id(ctx, user_id, sub_id)
+            .await
+    }
+    pub async fn watch_is_following_custom_list<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        custom_list_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_custom_list_id(ctx, custom_list_id, sub_id)
+            .await
+    }
+    pub async fn watch_manga_reading_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        manga_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<ReadingStatus>> + 'ctx> {
+        MangaReadingStatusSubscriptions
+            .listen_by_id(ctx, manga_id, sub_id)
+            .await
+    }
+    pub async fn watch_read_marker<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        chapter_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        ChapterReadMarkerSubscriptions
+            .listen_by_id(ctx, chapter_id, sub_id)
+            .await
+    }
 }
 
 type InitWatchSubRes<'ctx, R> = Result<(
@@ -251,6 +344,7 @@ type InitWatchSubRes<'ctx, R> = Result<(
     Arc<RwLock<bool>>,
     EventHandler,
     &'ctx Window<R>,
+    Arc<RwLock<bool>>,
 )>;
 
 pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
@@ -263,22 +357,34 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let window = get_window_from_async_graphql::<R>(ctx)?;
     window.on_window_event(move |e| {
-        if let WindowEvent::Destroyed = e {
-            let mut write = should_end_un_n.blocking_write();
-            *write = true;
-        }
+        let should_end_un_n = should_end_un_n.clone();
+        tauri::async_runtime::block_on(async move {
+            if let WindowEvent::Destroyed = e {
+                let mut write = should_end_un_n.write().await;
+                *write = true;
+            }
+        });
     });
     let unlisten = window.listen("sub_end", move |e| {
-        if let Some(payload) = e.payload() {
-            let mut write = should_end_un.blocking_write();
-            if let Ok(id) = Uuid::parse_str(payload) {
-                *write = id == sub_id;
+        let should_end_un = should_end_un.clone();
+        tauri::async_runtime::block_on(async move {
+            if let Some(payload) = e.payload() {
+                let mut write = should_end_un.write().await;
+                if let Ok(id) = Uuid::parse_str(payload) {
+                    *write = id == sub_id;
+                }
             }
-        }
+        });
     });
-    Ok((watches, should_end, unlisten, window))
+    Ok((
+        watches,
+        should_end,
+        unlisten,
+        window,
+        Arc::new(RwLock::new(true)),
+    ))
 }
 
 pub async fn sub_sleep() {
-    sleep(Duration::from_millis(500)).await
+    sleep(Duration::from_millis(100)).await
 }

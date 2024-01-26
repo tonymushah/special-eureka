@@ -25,7 +25,7 @@ use crate::{
     utils::{
         get_mangadex_client_from_graphql_context,
         get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
     },
 };
 
@@ -187,5 +187,17 @@ impl MangaQueries {
     }
     pub async fn aggregate(&self, params: MangaAggregateParam) -> MangaAggregateQueries {
         params.into()
+    }
+    pub async fn reading_status(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+    ) -> Result<Option<ReadingStatus>> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let status = client.manga().id(id).status().get().send().await?.status;
+        let _ = watches.manga_reading_state.send_data((id, status));
+        Ok(status)
     }
 }

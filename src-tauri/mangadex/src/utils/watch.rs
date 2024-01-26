@@ -11,12 +11,17 @@ use self::{
     chapter_languages::ChapterLanguagesWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
+    download_state::DownloadStateWatch,
     is_appstate_mounted::IsAppStateMountedWatch,
+    is_following::IsFollowingWatch,
     is_logged::IsLoggedWatch,
     manga::MangaWatch,
+    manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
     rating::RatingWatch,
+    read_marker::ReadMarkerWatch,
     reading_mode::ReadingModeWatch,
+    reading_state::ReadingStateWatch,
     scanlation_group::ScanlationGroupWatch,
     sidebar_direction::SideBarDirectionWatch,
     statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
@@ -32,13 +37,17 @@ pub mod chapter;
 pub mod chapter_languages;
 pub mod cover;
 pub mod custom_list;
+pub mod download_state;
 pub mod is_appstate_mounted;
+pub mod is_following;
 pub mod is_logged;
 pub mod manga;
+pub mod manga_reading_state;
 pub mod page_direction;
 pub mod rating;
 pub mod read_marker;
 pub mod reading_mode;
+pub mod reading_state;
 pub mod scanlation_group;
 pub mod sidebar_direction;
 pub mod statistics;
@@ -142,4 +151,9 @@ pub struct Watches {
     pub sidebar_direction: SideBarDirectionWatch,
     pub chapter_languages: ChapterLanguagesWatch,
     pub is_appstate_mounted: IsAppStateMountedWatch,
+    pub download_state: DownloadStateWatch,
+    pub reading_state: ReadingStateWatch,
+    pub is_following: IsFollowingWatch,
+    pub manga_reading_state: MangaReadingStateWatch,
+    pub read_marker: ReadMarkerWatch,
 }

@@ -3,13 +3,15 @@ use mangadex_api_input_types::custom_list::{
     add_manga::CustomListAddMangaParam, create::CustomListCreateParam,
     remove_manga::CustomListRemoveMangaParam, update::CustomListUpdateParams,
 };
+use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
 use crate::{
     objects::custom_list::CustomList,
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_watches_from_graphql_context, watch::SendData,
+        get_watches_from_graphql_context,
+        watch::{is_following::inner::IsFollowingInnerData, SendData},
     },
 };
 
@@ -49,15 +51,31 @@ impl CustomListMutations {
         Ok(true)
     }
     pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).follow().post().send().await?;
+        let _ = watches.is_following.send_data((
+            id,
+            IsFollowingInnerData {
+                type_: RelationshipType::CustomList,
+                data: true,
+            },
+        ));
         Ok(true)
     }
     pub async fn unfollow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client.custom_list().id(id).follow().delete().send().await?;
+        let _ = watches.is_following.send_data((
+            id,
+            IsFollowingInnerData {
+                type_: RelationshipType::CustomList,
+                data: false,
+            },
+        ));
         Ok(true)
     }
     pub async fn add_manga(

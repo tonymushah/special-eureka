@@ -49,6 +49,7 @@ sentry-tauri = "0.2"
 anyhow = "1"
 window-shadows = "0.2"
 window-vibrancy = "0.4"
+uuid = "1"
 
 [dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"

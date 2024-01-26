@@ -17,12 +17,21 @@ impl UserMeSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
-        let (watches, should_end, unlisten, window) =
+        let (watches, should_end, unlisten, window, is_initial_loading) =
             init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
         let cover_sub = watches.user_me.subscribe();
         Ok(stream! {
             loop {
-                if !*should_end.read().await {
+                if *is_initial_loading.read().await {
+                    let mut write = is_initial_loading.write().await;
+                    *write = false;
+                    let borrow = {
+                        cover_sub.borrow().as_ref().cloned()
+                    };
+                    if let Some(data) = borrow {
+                        yield data.attributes.clone()
+                    }
+                } else if !*should_end.read().await {
                     if let Ok(has_changed) = cover_sub.has_changed() {
                         if has_changed {
                             let borrow = {
