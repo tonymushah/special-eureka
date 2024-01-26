@@ -94,6 +94,13 @@ impl FollowsQueries {
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
+                    let _ = watches.is_following.send_data((
+                        data.get_id(),
+                        IsFollowingInnerData {
+                            type_: RelationshipType::User,
+                            data: true,
+                        },
+                    ));
                     let _ = watches.user.send_data(data);
                 }
             });
@@ -101,9 +108,10 @@ impl FollowsQueries {
         })
     }
     pub async fn is_following_user(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(client
+        let is_following = client
             .user()
             .follows()
             .user()
@@ -111,7 +119,15 @@ impl FollowsQueries {
             .get()
             .send()
             .await?
-            .is_following)
+            .is_following;
+        let _ = watches.is_following.send_data((
+            id,
+            IsFollowingInnerData {
+                type_: RelationshipType::User,
+                data: is_following,
+            },
+        ));
+        Ok(is_following)
     }
     pub async fn mangas(
         &self,
