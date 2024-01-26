@@ -1,4 +1,8 @@
-use std::{io::Read, ops::Add, path::{PathBuf, Path}};
+use std::{
+    io::Read,
+    ops::Add,
+    path::{Path, PathBuf},
+};
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::Schema;
@@ -11,42 +15,53 @@ use regex::Regex;
 use store::{
     get_store_builder,
     types::{
-        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore, chapter_language::ChapterLanguagesStore},
-        ExtractFromStore, enums::{reading_mode::ReadingModeStore, direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore}},
+        enums::{
+            direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
+            reading_mode::ReadingModeStore,
+        },
+        structs::{
+            chapter_language::ChapterLanguagesStore, client_info::ClientInfoStore,
+            refresh_token::RefreshTokenStore,
+        },
+        ExtractFromStore,
     },
 };
 // use mangadex_desktop_api2::AppState;
+use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
 use query::Query;
 use reqwest::{
     header::{HeaderMap, HeaderValue, USER_AGENT},
     Client, StatusCode,
 };
+use serde::{ser::Serializer, Serialize};
 use tauri::{
     http::{header::InvalidHeaderValue, MimeType},
     plugin::Plugin,
 };
 use tauri::{plugin::Builder, Manager, Runtime};
-use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_checker_handle};
-use serde::{ser::Serializer, Serialize};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 use url::Url;
-use utils::{set_indentifier, store::MangaDexStoreState, watch::{Watches, SendData}};
+use utils::{
+    set_indentifier,
+    store::MangaDexStoreState,
+    watch::{SendData, Watches},
+};
 
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
-use uuid::Uuid;
 use subscription::Subscriptions;
+use uuid::Uuid;
 
-pub mod intelligent_notification_system;
-pub mod utils;
 pub mod app_state;
+pub mod ins_handle;
+pub mod intelligent_notification_system;
 pub mod mutation;
 pub mod objects;
 pub mod query;
 pub mod store;
 pub mod subscription;
-pub mod ins_handle;
+pub mod utils;
 
 type Q = Query;
 type M = Mutation;
@@ -305,10 +320,12 @@ impl MangadexDesktopApi {
         }) {
             client = tauri::async_runtime::block_on(async move {
                 client.set_auth_tokens(&auth_tokens).await?;
-                
+
                 if let Ok(Ok(res)) = tokio::time::timeout(Duration::from_secs(5), async {
                     client.oauth().refresh().send().await
-                }).await {
+                })
+                .await
+                {
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write
                         .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
@@ -338,12 +355,24 @@ impl MangadexDesktopApi {
         app.manage(MangaDexStoreState::new_from_store(store));
         Ok(())
     }
-    pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>, store: &Store<R>) -> tauri::plugin::Result<()> {
+    pub fn init_watches_states<R: Runtime>(
+        &self,
+        app: &tauri::AppHandle<R>,
+        store: &Store<R>,
+    ) -> tauri::plugin::Result<()> {
         let watches = Watches::default();
-        let _ = watches.reading_mode.send_data(ReadingModeStore::extract_from_store(store)?);
-        let _ = watches.chapter_languages.send_data(ChapterLanguagesStore::extract_from_store(store)?);
-        let _ = watches.page_direction.send_data(ReadingDirectionStore::extract_from_store(store)?);
-        let _ = watches.sidebar_direction.send_data(SidebarDirectionStore::extract_from_store(store)?);
+        let _ = watches
+            .reading_mode
+            .send_data(ReadingModeStore::extract_from_store(store)?);
+        let _ = watches
+            .chapter_languages
+            .send_data(ChapterLanguagesStore::extract_from_store(store)?);
+        let _ = watches
+            .page_direction
+            .send_data(ReadingDirectionStore::extract_from_store(store)?);
+        let _ = watches
+            .sidebar_direction
+            .send_data(SidebarDirectionStore::extract_from_store(store)?);
         app.manage(watches);
         Ok(())
     }
