@@ -150,7 +150,7 @@ impl FollowsQueries {
             res
         })
     }
-    pub async fn is_following_lists(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+    pub async fn is_following_list(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(client

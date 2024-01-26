@@ -305,6 +305,16 @@ impl Subscriptions {
             .listen_by_user_id(ctx, user_id, sub_id)
             .await
     }
+    pub async fn watch_is_following_custom_list<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        custom_list_id: Uuid,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = bool> + 'ctx> {
+        IsFollowingSubscriptions
+            .listen_by_custom_list_id(ctx, custom_list_id, sub_id)
+            .await
+    }
     pub async fn watch_manga_reading_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
