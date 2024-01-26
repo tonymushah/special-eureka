@@ -4,7 +4,10 @@ use uuid::Uuid;
 
 use crate::{
     objects::read_marker::{grouped::MangaReadMarkerGroupedItems, user_history::UserHistoryEntry},
-    utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
+    utils::{
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, watch::SendData,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -17,15 +20,21 @@ impl ReadMarkerQueries {
         ctx: &Context<'_>,
         manga_id: Uuid,
     ) -> Result<Vec<Uuid>> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(client.manga().id(manga_id).read().get().send().await?.data)
+        let data = client.manga().id(manga_id).read().get().send().await?.data;
+        data.iter().for_each(|id| {
+            let _ = watches.read_marker.send_data((*id, true));
+        });
+        Ok(data)
     }
     pub async fn manga_read_markers(
         &self,
         ctx: &Context<'_>,
         #[graphql(validator(min_items = 1, max_items = 100))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<Uuid>> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         if let MangaReadMarkers::Ungrouped(res) = client
@@ -36,6 +45,9 @@ impl ReadMarkerQueries {
             .send()
             .await?
         {
+            res.data.iter().for_each(|id| {
+                let _ = watches.read_marker.send_data((*id, true));
+            });
             Ok(res.data)
         } else {
             Err(Error::new("Invalid Response : Expected `MangaReadMarkers::Ungrouped` found `MangaReadMarkers::Grouped`"))
@@ -46,6 +58,7 @@ impl ReadMarkerQueries {
         ctx: &Context<'_>,
         #[graphql(validator(min_items = 1, max_items = 100))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<MangaReadMarkerGroupedItems>> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         if let MangaReadMarkers::Grouped(res) = client
@@ -60,13 +73,19 @@ impl ReadMarkerQueries {
             Ok(res
                 .data
                 .into_iter()
-                .map(|i| -> MangaReadMarkerGroupedItems { i.into() })
+                .map(|i| -> MangaReadMarkerGroupedItems {
+                    i.1.iter().for_each(|id| {
+                        let _ = watches.read_marker.send_data((*id, true));
+                    });
+                    i.into()
+                })
                 .collect())
         } else {
             Err(Error::new("Invalid Response : Expected `MangaReadMarkers::Grouped` found `MangaReadMarkers::Ungrouped`"))
         }
     }
     pub async fn user_history(&self, ctx: &Context<'_>) -> Result<Vec<UserHistoryEntry>> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         Ok(client
@@ -77,7 +96,10 @@ impl ReadMarkerQueries {
             .await?
             .ratings
             .into_iter()
-            .map(|entry| -> UserHistoryEntry { entry.into() })
+            .map(|entry| -> UserHistoryEntry {
+                let _ = watches.read_marker.send_data((entry.chapter_id, true));
+                entry.into()
+            })
             .collect())
     }
 }
