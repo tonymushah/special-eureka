@@ -180,7 +180,7 @@ impl FollowsQueries {
         ));
         Ok(is_following)
     }
-    pub async fn lists(
+    pub async fn custom_lists(
         &self,
         ctx: &Context<'_>,
         #[graphql(default)] params: UserFollowedListParams,
@@ -195,16 +195,24 @@ impl FollowsQueries {
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
+                    let _ = watches.is_following.send_data((
+                        data.get_id(),
+                        IsFollowingInnerData {
+                            data: true,
+                            type_: RelationshipType::CustomList,
+                        },
+                    ));
                     let _ = watches.custom_list.send_data(data);
                 }
             });
             res
         })
     }
-    pub async fn is_following_list(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+    pub async fn is_following_custom_list(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
-        Ok(client
+        let is_following = client
             .user()
             .follows()
             .list()
@@ -212,6 +220,14 @@ impl FollowsQueries {
             .get()
             .send()
             .await?
-            .is_following)
+            .is_following;
+        let _ = watches.is_following.send_data((
+            id,
+            IsFollowingInnerData {
+                type_: RelationshipType::CustomList,
+                data: is_following,
+            },
+        ));
+        Ok(is_following)
     }
 }
