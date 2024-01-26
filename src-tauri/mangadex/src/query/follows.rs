@@ -171,7 +171,7 @@ impl FollowsQueries {
             .send()
             .await?
             .is_following;
-        watches.is_following.send_data((
+        let _ = watches.is_following.send_data((
             id,
             IsFollowingInnerData {
                 type_: RelationshipType::Manga,
