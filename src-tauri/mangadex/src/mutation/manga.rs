@@ -123,6 +123,7 @@ impl MangaMutations {
         id: Uuid,
         status: Option<ReadingStatus>,
     ) -> Result<bool> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         client
@@ -133,6 +134,7 @@ impl MangaMutations {
             .status(status)
             .send()
             .await?;
+        let _ = watches.manga_reading_state.send_data((id, status));
         Ok(true)
     }
     pub async fn submit_draft(
