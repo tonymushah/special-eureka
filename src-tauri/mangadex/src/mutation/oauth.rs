@@ -57,9 +57,10 @@ impl OauthMutations {
             let mut last_time_fetched_write = last_time_fetched.write().await;
             let _ = last_time_fetched_write
                 .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
-            let mut store = get_store::<tauri::Wry>(ctx).await?;
+            let store = get_store::<tauri::Wry>(ctx).await?;
+            let mut store_write = store.write().await;
             let rf_token_store: RefreshTokenStore = res.into();
-            rf_token_store.insert_and_save(&mut store)?;
+            rf_token_store.insert_and_save(&mut store_write)?;
             let _ = watches.is_logged.send_data(true);
             Ok(true)
         } else {
@@ -95,16 +96,18 @@ impl OauthMutations {
             client_secret,
         };
         client.set_client_info(&client_info).await?;
-        let mut store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
         let cis: ClientInfoStore = client_info.into();
-        cis.insert_and_save(&mut store)?;
+        cis.insert_and_save(&mut store_write)?;
         Ok(true)
     }
     pub async fn clear_client_info(&self, ctx: &Context<'_>) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         client.clear_client_info().await?;
-        let mut store = get_store::<tauri::Wry>(ctx).await?;
-        ClientInfoStore::extract_from_store(&store)?.delete_and_save(&mut store)?;
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        ClientInfoStore::extract_from_store(&store_write)?.delete_and_save(&mut store_write)?;
         Ok(true)
     }
     pub async fn logout(&self, ctx: &Context<'_>) -> Result<bool> {
@@ -114,8 +117,9 @@ impl OauthMutations {
         let last_time_fetched = get_last_time_token_when_fetched::<tauri::Wry>(ctx)?;
         let mut last_time_fetched_write = last_time_fetched.write().await;
         let _ = last_time_fetched_write.take();
-        let mut store = get_store::<tauri::Wry>(ctx).await?;
-        RefreshTokenStore::extract_from_store(&store)?.delete_and_save(&mut store)?;
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        RefreshTokenStore::extract_from_store(&store_write)?.delete_and_save(&mut store_write)?;
         let _ = watches.is_logged.send_data(false);
         Ok(true)
     }
