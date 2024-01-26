@@ -2,7 +2,8 @@
 	import { client } from "@mangadex/gql/urql";
 	import { SvelteUIProvider, createTheme } from "@svelteuidev/core";
 	import { setContextClient } from "@urql/svelte";
-    import "@fontsource-variable/poppins";
+    import "@fontsource/poppins";
+    import "@fontsource-variable/josefin-sans";
     setContextClient(client);
     const theme = createTheme({
         fonts: {
