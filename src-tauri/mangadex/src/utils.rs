@@ -11,11 +11,15 @@ use crate::{
     store::get_store_builder,
 };
 
-use self::watch::{SendData, Watches};
+use self::{
+    store::MangaDexStoreState,
+    watch::{SendData, Watches},
+};
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
 pub mod download_state;
 pub mod source;
+pub mod store;
 pub mod watch;
 
 pub fn set_indentifier(identifier: String) -> Result<()> {
@@ -182,11 +186,8 @@ pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
 
 pub(crate) async fn get_store<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<Store<R>> {
+) -> async_graphql::Result<State<'ctx, MangaDexStoreState<R>>> {
     let app = get_app_handle_from_async_graphql::<R>(ctx)?;
-    let mut store = get_store_builder(app.clone())
-        .map_err(|e| async_graphql::Error::new(e.to_string()))?
-        .build();
-    let _ = store.load();
-    Ok(store)
+    app.try_state::<MangaDexStoreState<R>>()
+        .ok_or(Error::new("Unable to load the MangaDexStore"))
 }

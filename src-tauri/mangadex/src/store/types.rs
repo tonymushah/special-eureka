@@ -1,3 +1,5 @@
+use std::ops::{Deref, DerefMut};
+
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 use tauri_plugin_store::{Error, Store, StoreBuilder};
@@ -35,4 +37,20 @@ where
     R: Runtime,
 {
     fn default_store(store_builder: StoreBuilder<R>) -> Result<StoreBuilder<R>, Error>;
+}
+
+#[derive(Clone)]
+pub struct MangaDexStore<R: Runtime>(pub(crate) Store<R>);
+
+impl<R: Runtime> Deref for MangaDexStore<R> {
+    type Target = Store<R>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl<R: Runtime> DerefMut for MangaDexStore<R> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
 }

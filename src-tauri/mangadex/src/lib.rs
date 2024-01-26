@@ -31,7 +31,7 @@ use serde::{ser::Serializer, Serialize};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
 use url::Url;
-use utils::{set_indentifier, watch::{Watches, SendData}};
+use utils::{set_indentifier, store::MangaDexStoreState, watch::{Watches, SendData}};
 
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
@@ -335,7 +335,7 @@ impl MangadexDesktopApi {
         self.init_watches_states(app, &store)?;
         self.init_client_state(app, &store)?;
         app.manage(self.offline_app_state.clone());
-
+        app.manage(MangaDexStoreState::new_from_store(store));
         Ok(())
     }
     pub fn init_watches_states<R: Runtime>(&self, app: &tauri::AppHandle<R>, store: &Store<R>) -> tauri::plugin::Result<()> {
