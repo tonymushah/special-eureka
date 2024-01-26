@@ -19,6 +19,7 @@ use self::{
     manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
     rating::RatingWatch,
+    read_marker::ReadMarkerWatch,
     reading_mode::ReadingModeWatch,
     reading_state::ReadingStateWatch,
     scanlation_group::ScanlationGroupWatch,
@@ -154,4 +155,5 @@ pub struct Watches {
     pub reading_state: ReadingStateWatch,
     pub is_following: IsFollowingWatch,
     pub manga_reading_state: MangaReadingStateWatch,
+    pub read_marker: ReadMarkerWatch,
 }
