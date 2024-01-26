@@ -14,6 +14,7 @@ pub mod reading_state;
 pub mod report;
 pub mod scanlation_group;
 pub mod upload;
+pub mod user;
 pub mod user_option;
 
 use async_graphql::Object;
@@ -23,7 +24,7 @@ use self::{
     chapter::ChapterMutations, custom_list::CustomListMutations, forums::ForumsMutations,
     manga::MangaMutations, oauth::OauthMutations, offline_app_state::OfflineAppStateMutations,
     rating::RatingMutations, read_marker::ReadMarkerMutations, report::ReportMutations,
-    scanlation_group::ScanlationGroupMutation, upload::UploadMutations,
+    scanlation_group::ScanlationGroupMutation, upload::UploadMutations, user::UserMutations,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -72,5 +73,8 @@ impl Mutation {
     }
     pub async fn offline_app_state(&self) -> OfflineAppStateMutations {
         OfflineAppStateMutations
+    }
+    pub async fn user(&self) -> UserMutations {
+        UserMutations
     }
 }
