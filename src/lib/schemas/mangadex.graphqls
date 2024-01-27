@@ -832,9 +832,9 @@ type FollowsQueries {
 	users(params: UserFollowedUserParams! = {limit: null,offset: null}): UserResults!
 	isFollowingUser(id: UUID!): Boolean!
 	mangas(params: UserFollowedMangaParams! = {limit: null,offset: null}): MangaResults!
-	isFollowingMangas(id: UUID!): Boolean!
-	lists(params: UserFollowedListParams! = {limit: null,offset: null}): CustomListResults!
-	isFollowingLists(id: UUID!): Boolean!
+	isFollowingManga(id: UUID!): Boolean!
+	customLists(params: UserFollowedListParams! = {limit: null,offset: null}): CustomListResults!
+	isFollowingCustomList(id: UUID!): Boolean!
 }
 
 enum ForumThreadType {
@@ -1251,6 +1251,7 @@ type MangaQueries {
 	getDrafts(params: MangaDraftsParams! = {limit: null,offset: null,state: null,order: null,includes: []}): MangaResults!
 	relationList(params: MangaRelationParam!, listParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): [MangaRelated!]!
 	aggregate(params: MangaAggregateParam!): MangaAggregateQueries!
+	readingStatus(id: UUID!): ReadingStatus
 }
 
 input MangaRandomParams {
@@ -1470,6 +1471,7 @@ type Mutation {
 	scanlationGroup: ScanlationGroupMutation!
 	upload: UploadMutations!
 	offlineAppState: OfflineAppStateMutations!
+	user: UserMutations!
 }
 
 type OauthMutations {
@@ -1816,6 +1818,12 @@ type Subscriptions {
 	watchIsLogged(subId: UUID!): Boolean!
 	watchDownloadState(objectId: UUID!, subId: UUID!): DownloadState!
 	watchReadingState(chapterId: UUID!, subId: UUID!): ReadingState!
+	watchIsFollowingManga(mangaId: UUID!, subId: UUID!): Boolean!
+	watchIsFollowingGroup(groupId: UUID!, subId: UUID!): Boolean!
+	watchIsFollowingUser(userId: UUID!, subId: UUID!): Boolean!
+	watchIsFollowingCustomList(customListId: UUID!, subId: UUID!): Boolean!
+	watchMangaReadingState(mangaId: UUID!, subId: UUID!): ReadingStatus
+	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
 }
 
 type Tag {
@@ -2008,6 +2016,11 @@ input UserListParam {
 	userIds: [UUID!]! = []
 	username: String
 	order: UserSortOrder
+}
+
+type UserMutations {
+	follow(id: UUID!): Boolean!
+	unfollow(id: UUID!): Boolean!
 }
 
 type UserQueries {
