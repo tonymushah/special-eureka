@@ -2,7 +2,7 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-use std::path::Path;
+//use std::path::Path;
 
 //use mangadex_desktop_api2::{verify_all_fs, launch_async_server_default};
 use tauri::Manager;
@@ -77,24 +77,31 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     let mangadex = tauri_plugin_speu_mangadex::MangadexDesktopApi::default();
 
-    #[cfg(debug_assertions)]
-    {
-        let dev_menu = Menu::new().add_item(CustomMenuItem::new(
+    let dev_menu = Menu::new()
+        .add_item(CustomMenuItem::new(String::from("home"), "Home"))
+        .add_item(CustomMenuItem::new(
             String::from("new_window"),
             "New Window",
         ));
-        builder = builder.menu(dev_menu).on_menu_event(|e| {
-            if e.menu_item_id() == "new_window" {
+    builder = builder
+        .menu(dev_menu)
+        .on_menu_event(|e| match e.menu_item_id() {
+            "new_window" => {
+                let current_url = e.window().url();
                 let _ = Window::builder(
                     e.window(),
                     Uuid::new_v4().to_string(),
-                    tauri::WindowUrl::App(Path::new("").to_path_buf()),
+                    tauri::WindowUrl::External(current_url),
                 )
                 .title("Special Eureka")
                 .build();
             }
+            "home" => {
+                let _ = e.window().emit("redirect", "/");
+            }
+            _ => {}
         });
-    }
+
     match builder
         .system_tray(tray)
         .on_system_tray_event(|app, event| {

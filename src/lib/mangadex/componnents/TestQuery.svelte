@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { graphql } from '@mangadex/gql/gql';
+	import { graphql } from '@mangadex/gql';
 	import { getContextClient, queryStore } from '@urql/svelte';
 
 	const res = queryStore({

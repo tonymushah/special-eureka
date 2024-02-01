@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sub_end } from "$lib/utils/mangadex";
+	import { sub_end } from "@mangadex/utils";
 	import { graphql } from "@mangadex/gql/gql";
     import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { onDestroy } from "svelte";

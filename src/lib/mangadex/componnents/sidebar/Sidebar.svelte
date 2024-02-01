@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { Box, Button, createStyles, theme, Text } from "@svelteuidev/core";
+	import { sidebarState as isOpen } from "@mangadex/stores";
+    import { Box, Button, createStyles, theme, Text } from "@svelteuidev/core";
 
-	let isOpen = true;
-	$: width = isOpen ? "200px" : "80px";
 </script>
 
-<div class:sidebar={true} class:collapsed={isOpen}>
+<div class:sidebar={true} class:collapsed={$isOpen}>
 	<Box
 		on:click={() => {
-			isOpen = !isOpen;
+			$isOpen = !$isOpen;
 		}}
 	>
 		<Text>Mangadex</Text>
