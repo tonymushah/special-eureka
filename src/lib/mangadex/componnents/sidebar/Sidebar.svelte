@@ -19,8 +19,11 @@
 		transition: width ease-in-out 300ms;
 		background-color: #cccccc;
 		height: 100vh;
-		width: 200px;
-        display: inline-block;
+		width: 256px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 8px;
 	}
 	.collapsed {
 		width: 80px;
