@@ -8,8 +8,7 @@
     const sub_id = v4()
     let store = subscriptionStore({
         client: getContextClient(),
-        query: graphql(/* GraphQL */
-        `
+        query: graphql(/* GraphQL */`
             subscription isAppMounted($sub_id: UUID!) {
                 watchIsAppMounted(subId: $sub_id)
             }
