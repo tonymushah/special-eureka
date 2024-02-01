@@ -4,6 +4,7 @@
 	import { setContextClient } from "@urql/svelte";
     import "@fontsource/poppins";
     import "@fontsource-variable/josefin-sans";
+	import Sidebar from "$lib/componnents/mangadex/sidebar/Sidebar.svelte";
     setContextClient(client);
     const theme = createTheme({
         fonts: {
@@ -13,5 +14,6 @@
 </script>
 
 <SvelteUIProvider theme={theme}>
+    <Sidebar/>
     <slot/>
 </SvelteUIProvider>
