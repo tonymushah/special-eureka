@@ -41,10 +41,14 @@
 
 <style>
 	.provider {
-		display: flex;
-		max-width: 100%;
-	}
+        width: 100% !important;
+        display: inline-flex;
+    }
 	.inner {
-		margin-left: 1em;
+        width: 100%;
+        height: 100vh;
+        scroll-behavior: smooth;
+        overflow-y: scroll;
+        margin-left: 1em;
 	}
 </style>

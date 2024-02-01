@@ -10,8 +10,7 @@
  */
 const PAGES = {
   "/": `/`,
-  "/mangadex": `/mangadex`,
-  "/mangadex/playground": `/mangadex/playground`
+  "/mangadex": `/mangadex`
 }
 
 /**
@@ -135,7 +134,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/mangadex': never, '/mangadex/playground': never }
+  PAGES: { '/': never, '/mangadex': never }
   SERVERS: Record<string, never>
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>

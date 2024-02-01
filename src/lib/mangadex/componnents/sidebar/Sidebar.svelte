@@ -19,7 +19,8 @@
 		transition: width ease-in-out 300ms;
 		background-color: #cccccc;
 		height: 100vh;
-		width: 300px;
+		width: 200px;
+        display: inline-block;
 	}
 	.collapsed {
 		width: 80px;
