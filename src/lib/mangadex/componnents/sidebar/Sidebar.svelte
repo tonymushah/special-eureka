@@ -20,7 +20,7 @@
 		transition: width ease-in-out 300ms;
 		background-color: #cccccc;
 		height: 100vh;
-		width: 200px;
+		width: 300px;
 	}
 	.collapsed {
 		width: 80px;

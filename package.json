@@ -4,7 +4,7 @@
   "scripts": {
     "vite:dev": "vite dev",
     "codegen": "graphql-codegen",
-    "codegen:mangadex": "pnpm codegen -c ./src/lib/codegen/mangadex.ts",
+    "codegen:mangadex": "pnpm codegen -c ./src/lib/mangadex/codegen.ts",
     "vite:build_preview": "pnpm vite:build && pnpm vite:preview",
     "vite:build": "vite build --emptyOutDir",
     "vite:preview": "vite preview --port 9305",
@@ -84,6 +84,7 @@
     "dayjs": "^1.11.10",
     "graphiql": "^3.1.0",
     "mizuki-urql-adapter": "^0.1.0",
+    "svelte-feather-icons": "^4.1.0",
     "uuid": "^9.0.1"
   },
   "packageManager": "pnpm@8.11.0",
