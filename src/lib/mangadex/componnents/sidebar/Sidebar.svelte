@@ -2,10 +2,19 @@
 	import { sidebarState as isOpen } from "@mangadex/stores";
 	import { Box, Button, createStyles, theme, Text } from "@svelteuidev/core";
 	import SidebarHeader from "./SidebarHeader.svelte";
+	import SidebarBody from "./SidebarBody.svelte";
 </script>
 
 <aside class:sidebar={true} class:collapsed={$isOpen}>
-	<SidebarHeader />
+	<div class="header">
+        <SidebarHeader />
+    </div>
+    <div class="body">
+        <SidebarBody/>
+    </div>
+    <div class="footer">
+        
+    </div>
 </aside>
 
 <style>
@@ -22,4 +31,14 @@
 	.collapsed {
 		width: 80px;
 	}
+	.header {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+    .body {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+    }
 </style>
