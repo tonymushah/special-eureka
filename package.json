@@ -67,6 +67,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@floating-ui/dom": "^1.6.1",
     "@fontsource-variable/josefin-sans": "^5.0.19",
     "@fontsource/poppins": "^5.0.8",
     "@graphiql/toolkit": "^0.9.1",
