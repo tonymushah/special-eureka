@@ -13,11 +13,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n\t\t\tquery myManga {\n\t\t\t\tmanga {\n\t\t\t\t\trandom {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n                            title\n                            altTitles\n                            state\n                            status\n                        }\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t": types.MyMangaDocument,
-    "\n            subscription isAppMounted($sub_id: UUID!) {\n                watchIsAppMounted(subId: $sub_id)\n            }\n        ": types.IsAppMountedDocument,
-    "\n            subscription isLogged($sub_id: UUID!) {\n                watchIsLogged(subId: $sub_id)\n            }\n        ": types.IsLoggedDocument,
+    "\n\t\t\tsubscription serverIconState($sub_id: UUID!) {\n\t\t\t\twatchIsAppMounted(subId: $sub_id)\n\t\t\t}\n\t\t": types.ServerIconStateDocument,
+    "\n\t\t\t\t\t\tmutation mountAppState {\n\t\t\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t": types.MountAppStateDocument,
+    "\n\t\t\tmutation unmountAppState {\n\t\t\t\tofflineAppState {\n\t\t\t\t\tunmountOfflineAppState\n\t\t\t\t}\n\t\t\t}\n\t\t": types.UnmountAppStateDocument,
     "\n    subscription rtlSidebarSub($sub_id: UUID!) {\n        watchSidebarDirection(subId: $sub_id)\n    }\n": types.RtlSidebarSubDocument,
-    "\n            subscription rtlSidebarSub($sub_id: UUID!) {\n                watchSidebarDirection(subId: $sub_id)\n            }\n        ": types.RtlSidebarSubDocument,
+    "\n\t\t\t\tmutation mountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t": types.MountAppStateDocument,
+    "\n\t\t\t\tmutation unmountAppState {\n\t\t\t\t    offlineAppState {\n\t\t\t\t\t    unmountOfflineAppState\n\t\t\t\t    }\n\t\t\t    }\n\t\t\t": types.UnmountAppStateDocument,
 };
 
 /**
@@ -37,15 +38,15 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\t\t\tquery myManga {\n\t\t\t\tmanga {\n\t\t\t\t\trandom {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n                            title\n                            altTitles\n                            state\n                            status\n                        }\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t"): (typeof documents)["\n\t\t\tquery myManga {\n\t\t\t\tmanga {\n\t\t\t\t\trandom {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n                            title\n                            altTitles\n                            state\n                            status\n                        }\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t"];
+export function graphql(source: "\n\t\t\tsubscription serverIconState($sub_id: UUID!) {\n\t\t\t\twatchIsAppMounted(subId: $sub_id)\n\t\t\t}\n\t\t"): (typeof documents)["\n\t\t\tsubscription serverIconState($sub_id: UUID!) {\n\t\t\t\twatchIsAppMounted(subId: $sub_id)\n\t\t\t}\n\t\t"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n            subscription isAppMounted($sub_id: UUID!) {\n                watchIsAppMounted(subId: $sub_id)\n            }\n        "): (typeof documents)["\n            subscription isAppMounted($sub_id: UUID!) {\n                watchIsAppMounted(subId: $sub_id)\n            }\n        "];
+export function graphql(source: "\n\t\t\t\t\t\tmutation mountAppState {\n\t\t\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t"): (typeof documents)["\n\t\t\t\t\t\tmutation mountAppState {\n\t\t\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n            subscription isLogged($sub_id: UUID!) {\n                watchIsLogged(subId: $sub_id)\n            }\n        "): (typeof documents)["\n            subscription isLogged($sub_id: UUID!) {\n                watchIsLogged(subId: $sub_id)\n            }\n        "];
+export function graphql(source: "\n\t\t\tmutation unmountAppState {\n\t\t\t\tofflineAppState {\n\t\t\t\t\tunmountOfflineAppState\n\t\t\t\t}\n\t\t\t}\n\t\t"): (typeof documents)["\n\t\t\tmutation unmountAppState {\n\t\t\t\tofflineAppState {\n\t\t\t\t\tunmountOfflineAppState\n\t\t\t\t}\n\t\t\t}\n\t\t"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -53,7 +54,11 @@ export function graphql(source: "\n    subscription rtlSidebarSub($sub_id: UUID!
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n            subscription rtlSidebarSub($sub_id: UUID!) {\n                watchSidebarDirection(subId: $sub_id)\n            }\n        "): (typeof documents)["\n            subscription rtlSidebarSub($sub_id: UUID!) {\n                watchSidebarDirection(subId: $sub_id)\n            }\n        "];
+export function graphql(source: "\n\t\t\t\tmutation mountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t"): (typeof documents)["\n\t\t\t\tmutation mountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\t\t\t\tmutation unmountAppState {\n\t\t\t\t    offlineAppState {\n\t\t\t\t\t    unmountOfflineAppState\n\t\t\t\t    }\n\t\t\t    }\n\t\t\t"): (typeof documents)["\n\t\t\t\tmutation unmountAppState {\n\t\t\t\t    offlineAppState {\n\t\t\t\t\t    unmountOfflineAppState\n\t\t\t\t    }\n\t\t\t    }\n\t\t\t"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

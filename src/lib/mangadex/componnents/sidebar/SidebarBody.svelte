@@ -1,20 +1,17 @@
 <script lang="ts">
-	import { HomeIcon, BookIcon } from "svelte-feather-icons";
-	import Menu from "./base/Menu.svelte";
-	import SubMenu from "./base/SubMenu.svelte";
-	import SubMenuItem from "./base/SubMenuItem.svelte";
-	import { route } from "$lib/ROUTES";
+	import Follows from "./body/Follows.svelte";
+	import Home from "./body/Home.svelte";
+	import OfflineServer from "./body/OfflineServer.svelte";
+	import Search from "./body/Search.svelte";
+	import Titles from "./body/Titles.svelte";
 </script>
 
-<Menu label="Home" href={route("/mangadex")}>
-	<HomeIcon slot="icon" />
-</Menu>
+<Home/>
 
-<SubMenu label="Titles">
-    <BookIcon slot="icon"/>
-    <SubMenuItem label="Follows"/>
-    <SubMenuItem label="Follows"/>
-    <SubMenuItem label="Follows"/>
-    <SubMenuItem label="Follows"/>
-    <SubMenuItem label="Follows"/>
-</SubMenu>
+<Follows/>
+
+<OfflineServer/>
+
+<Titles/>
+
+<Search/>
