@@ -3,6 +3,7 @@
 	import { Box, Button, createStyles, theme, Text } from "@svelteuidev/core";
 	import SidebarHeader from "./SidebarHeader.svelte";
 	import SidebarBody from "./SidebarBody.svelte";
+	import SidebarFooter from "./SidebarFooter.svelte";
 </script>
 
 <aside class:sidebar={true} class:collapsed={$isOpen}>
@@ -13,7 +14,7 @@
         <SidebarBody/>
     </div>
     <div class="footer">
-        
+        <SidebarFooter/>
     </div>
 </aside>
 

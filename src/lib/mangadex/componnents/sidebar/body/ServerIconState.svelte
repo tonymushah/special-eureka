@@ -29,7 +29,7 @@
 			const res = await _mount(client);
 			const error = res.error;
 			if (error) {
-				console.log(error.networkError);
+                error.graphQLErrors.forEach((e) => console.error(e))
 			}
 			isLoading = false;
 		}
@@ -40,7 +40,7 @@
 			const res = await _unmount(client);
 			const error = res.error;
 			if (error) {
-				console.error(error.networkError);
+				error.graphQLErrors.forEach((e) => console.error(e))
 			}
 			isLoading = false;
 		}

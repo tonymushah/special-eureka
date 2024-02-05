@@ -2722,12 +2722,38 @@ export type VolumeAggregate = {
   volume: Scalars['String']['output'];
 };
 
+export type UserMeOnSidebarFooterQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserMeOnSidebarFooterQuery = { __typename?: 'Query', user: { __typename?: 'UserQueries', me: { __typename?: 'User', id: any, attributes: { __typename?: 'UserAttributes', username: string, roles: Array<UserRole> } } } };
+
 export type ServerIconStateSubscriptionVariables = Exact<{
   sub_id: Scalars['UUID']['input'];
 }>;
 
 
 export type ServerIconStateSubscription = { __typename?: 'Subscriptions', watchIsAppMounted: boolean };
+
+export type RtlSidebarSubSubscriptionVariables = Exact<{
+  sub_id: Scalars['UUID']['input'];
+}>;
+
+
+export type RtlSidebarSubSubscription = { __typename?: 'Subscriptions', watchSidebarDirection: Direction };
+
+export type UserMeSubscriptionVariables = Exact<{
+  sub_id: Scalars['UUID']['input'];
+}>;
+
+
+export type UserMeSubscription = { __typename?: 'Subscriptions', watchUserMe: { __typename?: 'UserAttributes', username: string, roles: Array<UserRole> } };
+
+export type IsLoggedSubscriptionVariables = Exact<{
+  sub_id: Scalars['UUID']['input'];
+}>;
+
+
+export type IsLoggedSubscription = { __typename?: 'Subscriptions', watchIsLogged: boolean };
 
 export type MountAppStateMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -2739,15 +2765,11 @@ export type UnmountAppStateMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type UnmountAppStateMutation = { __typename?: 'Mutation', offlineAppState: { __typename?: 'OfflineAppStateMutations', unmountOfflineAppState: boolean } };
 
-export type RtlSidebarSubSubscriptionVariables = Exact<{
-  sub_id: Scalars['UUID']['input'];
-}>;
 
-
-export type RtlSidebarSubSubscription = { __typename?: 'Subscriptions', watchSidebarDirection: Direction };
-
-
+export const UserMeOnSidebarFooterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"userMeOnSidebarFooter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"attributes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}}]}}]}}]}}]}}]} as unknown as DocumentNode<UserMeOnSidebarFooterQuery, UserMeOnSidebarFooterQueryVariables>;
 export const ServerIconStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"serverIconState"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsAppMounted"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<ServerIconStateSubscription, ServerIconStateSubscriptionVariables>;
+export const RtlSidebarSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"rtlSidebarSub"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchSidebarDirection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<RtlSidebarSubSubscription, RtlSidebarSubSubscriptionVariables>;
+export const UserMeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"userMe"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchUserMe"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"roles"}}]}}]}}]} as unknown as DocumentNode<UserMeSubscription, UserMeSubscriptionVariables>;
+export const IsLoggedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isLogged"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsLogged"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;
 export const MountAppStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"mountAppState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offlineAppState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mountOfflineAppState"}}]}}]}}]} as unknown as DocumentNode<MountAppStateMutation, MountAppStateMutationVariables>;
 export const UnmountAppStateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"unmountAppState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"offlineAppState"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unmountOfflineAppState"}}]}}]}}]} as unknown as DocumentNode<UnmountAppStateMutation, UnmountAppStateMutationVariables>;
-export const RtlSidebarSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"rtlSidebarSub"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchSidebarDirection"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"subId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sub_id"}}}]}]}}]} as unknown as DocumentNode<RtlSidebarSubSubscription, RtlSidebarSubSubscriptionVariables>;
