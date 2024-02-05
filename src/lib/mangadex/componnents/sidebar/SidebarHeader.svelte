@@ -3,6 +3,7 @@
 	import { sidebarState as isOpen } from "@mangadex/stores";
 	import Logo from "../Logo.svelte";
 	import { Box } from "@svelteuidev/core";
+	import WordMark from "../WordMark.svelte";
 </script>
 
 <Box on:click={() => {
@@ -13,19 +14,22 @@
 			<Logo />
 		</div>
 
-		<img alt="MangaDex" class:collapsed={$isOpen} src={wordMark} />
+		<div class="img" class:collapsed={$isOpen} >
+            <WordMark/>
+        </div>
 	</div>
 </Box>
 
 <style>
-	img {
+	.img {
 		margin-left: 0.5em;
 		animation: img-fade-in 300ms ease-in-out;
 		animation-fill-mode: forwards;
 	}
-	img.collapsed {
+	.img.collapsed {
 		animation: img-fade-out 300ms ease-in-out;
 		animation-fill-mode: forwards;
+        display: none;
 	}
 	@keyframes img-fade-out {
 		from {

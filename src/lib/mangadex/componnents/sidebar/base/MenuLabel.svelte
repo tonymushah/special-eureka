@@ -27,6 +27,7 @@
 
 <style lang="scss">
     h4 {
+        color: currentColor;
         font-family: Poppins;
         margin: 0px;
         margin-left: 10px;

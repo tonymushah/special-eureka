@@ -4,13 +4,15 @@
 	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
-	import { UserCheckIcon, UserXIcon } from "svelte-feather-icons";
+	import { UserCheckIcon, UserXIcon, UserIcon } from "svelte-feather-icons";
 	import { v4 } from "uuid";
 	import Menu from "./base/Menu.svelte";
 	const client = getContextClient();
 	let initial_user_name: string | undefined = undefined;
-	onMount(async () => {
-		const me = await client
+	let isRefreshing = false;
+    async function loadUserMe(){
+        isRefreshing = true;
+        const me = await client
 			.query(
 				graphql(/* GraphQL */ `
 					query userMeOnSidebarFooter {
@@ -29,6 +31,10 @@
 			)
 			.toPromise();
 		initial_user_name = me.data?.user.me.attributes.username;
+        isRefreshing = false;
+    }
+    onMount(async () => {
+		await loadUserMe();
 	});
 	const sub_ids = [v4(), v4()];
 	const userMe = subscriptionStore({
@@ -48,15 +54,26 @@
 	onDestroy(() => {
 		sub_ids.forEach((id) => sub_end(id));
 	});
+    
 	$: label = $userMe.data?.watchUserMe.username ?? "Login";
 </script>
 
 <Menu bind:label>
-	<div slot="icon">
-		{#if $isLogged.data?.watchIsLogged}
+	<div slot="icon" class:isRefreshing on:click={async () => {
+        await loadUserMe();
+    }}>
+        {#if isRefreshing}
+            <UserIcon size="24"/>
+		{:else if $isLogged.data?.watchIsLogged}
 			<UserCheckIcon size="24" />
         {:else}
             <UserXIcon size="24"/>
 		{/if}
 	</div>
 </Menu>
+
+<style lang="scss">
+    .isRefreshing {
+        color: var(--status-blue);
+    }
+</style>

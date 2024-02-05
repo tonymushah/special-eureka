@@ -1,12 +1,13 @@
 <script lang="ts">
 	import type { MangadexTheme } from "@mangadex/theme";
 	import { Box } from "@svelteuidev/core";
+	import MangadexBackground from "./MangadexBackground.svelte";
 
 	export let theme: MangadexTheme;
     export let fonts = "Poppins";
 </script>
 
-<Box
+<MangadexBackground
     --fonts={fonts}
     --text-color={theme.textColor} 
     --main-background={theme.mainBackground}
@@ -49,4 +50,4 @@
     --danger-l2={theme.danger.l2}
 >
 	<slot />
-</Box>
+</MangadexBackground>

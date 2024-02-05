@@ -69,12 +69,12 @@
 
 <style lang="scss">
 	.isLoading {
-		color: blue;
+		color: var(--status-blue);
 	}
 	.isEnabled {
-		color: green;
+		color: var(--status-green);
 	}
 	.isDisabled {
-		color: red;
+		color: var(--status-red);
 	}
 </style>

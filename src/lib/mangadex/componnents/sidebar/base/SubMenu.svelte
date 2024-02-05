@@ -23,9 +23,6 @@
 			isMenuOpen = !isMenuOpen;
 		}}
 	>
-        
-
-        
 		<MenuBase bind:collapsed>
 			<MenuIcons>
                 <div slot="icon" class="icon" class:collapsed>
@@ -33,7 +30,7 @@
                 </div>
                     <div slot="suffix-icon" class="suffix-icon" class:collapsed>
                         {#if collapsed}
-                            <HeaderChevronBase size="16"  />
+                            <HeaderChevronBase size="16" />
                         {:else}
                             {#if isMenuOpen} 
                                 <ChevronUpIcon size="24"/>
@@ -54,6 +51,7 @@
 
 <style lang="scss">
 	div {
+        color: var(--text-color);
 		animation-duration: 300ms;
 		animation-timing-function: ease-in-out;
 		animation-fill-mode: forwards;

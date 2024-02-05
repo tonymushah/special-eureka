@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { route } from "$lib/ROUTES";
 	import { createEventDispatcher } from "svelte";
 
     export let href: string | undefined = undefined;
@@ -19,9 +18,10 @@
 <style lang="scss">
     a {
         text-decoration: none;
-        color: black;
+        color: var(--text-color);
+        transition: color 300ms ease-in-out;
     }
     a.active {
-        color: #b34a00;
+        color: var(--primary-l1);
     }
 </style>

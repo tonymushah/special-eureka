@@ -39,7 +39,7 @@
         flex-direction: row;
     }
     .base:hover {
-        background-color: #c0c0c0;
+        background-color: var(--accent-l1-hover);
     }
     .base.collapsed {
         animation-name: base-out;

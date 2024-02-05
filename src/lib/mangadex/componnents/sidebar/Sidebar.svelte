@@ -21,7 +21,7 @@
 <style>
 	.sidebar {
 		transition: width ease-in-out 300ms;
-		background-color: #cccccc;
+		background-color: var(--accent-l1);
 		height: 100vh;
 		width: 256px;
 		display: flex;
@@ -33,13 +33,20 @@
 		width: 80px;
 	}
 	.header {
-		margin-top: 10px;
-		margin-bottom: 10px;
+        transition: background-color 300ms ease-in-out;
+		padding-top: 10px;
+		padding-bottom: 10px;
 	}
+    .header:hover {
+        background-color: var(--accent-l1-hover);
+    }
     .body {
-        margin-top: 20px;
-        margin-bottom: 20px;
+        padding-top: 20px;
+        padding-bottom: 20px;
         display: flex;
         flex-direction: column;
+        max-height: 75%;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 </style>
