@@ -11,7 +11,6 @@ fn main() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(tauri_plugin_speu_mangadex::MangadexDesktopApi::default())
-        .plugin(sentry_tauri::plugin())
         .build(context)
     {
         Ok(app) => app.run(|_app_handle, _event| {}),

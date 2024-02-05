@@ -52,21 +52,6 @@ fn main() {
     */
     let mut builder = tauri::Builder::default();
 
-    /*#[cfg(debug_assertions)]
-    let builder = builder.plugin(_devtools);
-    */
-    let client = sentry_tauri::sentry::init((
-        "https://9ded544d4e5945459c62371ec4177585@o4505556825473024.ingest.sentry.io/4505556830322688",
-        sentry_tauri::sentry::ClientOptions {
-            release: sentry_tauri::sentry::release_name!(),
-            ..Default::default()
-        },
-    ));
-
-    // Everything before here runs in both app and crash reporter processes
-    let _guard = sentry_tauri::minidump::init(&client);
-    // Everything after here runs in only the app process
-
     let context = tauri::generate_context!();
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
@@ -136,7 +121,6 @@ fn main() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(mangadex)
-        .plugin(sentry_tauri::plugin())
         .setup(|app| {
             #[cfg(any(windows, target_os = "macos"))]
             if let Some(splashscreen) = app.get_window("splashscreen") {

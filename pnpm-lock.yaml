@@ -57,8 +57,8 @@ dependencies:
     specifier: ^3.1.0
     version: 3.1.0(@codemirror/language@6.0.0)(@types/react-dom@18.2.18)(@types/react@18.2.48)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
   mizuki-urql-adapter:
-    specifier: ^0.1.0
-    version: 0.1.0(graphql@16.8.1)
+    specifier: ^0.1.1
+    version: 0.1.1(graphql@16.8.1)
   svelte-feather-icons:
     specifier: ^4.1.0
     version: 4.1.0
@@ -9471,8 +9471,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /mizuki-urql-adapter@0.1.0(graphql@16.8.1):
-    resolution: {integrity: sha512-swWEW+2N8nA8jUsJ63P71wHjZoJmom6QEuNCj2s4lNeHxmsFRWD0XTryMis/oFJSI7XoO5YbP2rPY8DD2A9n+w==}
+  /mizuki-urql-adapter@0.1.1(graphql@16.8.1):
+    resolution: {integrity: sha512-7Fu226TzzIPAxRfe84LWSaQSDEDfQjJvskvn5gxoRnCgmMwAu4gOSvQFJ7L8hk47lOY5M6M/gWSZ117wwz1EEQ==}
     dependencies:
       '@tauri-apps/api': 1.5.3
       '@urql/core': 4.2.3(graphql@16.8.1)
