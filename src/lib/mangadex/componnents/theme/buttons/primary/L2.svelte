@@ -26,6 +26,7 @@
         align-items: center;
         color: var(--text-color);
         background-color: var(--primary-l2);
+        font-family: var(--fonts);
     }
     button:hover {
         filter: brightness(90%);
