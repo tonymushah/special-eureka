@@ -26,6 +26,7 @@
         align-items: center;
         color: var(--text-color);
         background-color: var(--accent-l1);
+        font-family: var(--fonts);
     }
     button:hover {
         background-color: var(--accent-l1-hover);

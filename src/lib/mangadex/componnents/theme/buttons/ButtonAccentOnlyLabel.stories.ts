@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
+import "@fontsource/poppins/index.css";
 
 import ButtonAccent from "./ButtonAccentOnlyLabel.svelte";
 import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svelte";

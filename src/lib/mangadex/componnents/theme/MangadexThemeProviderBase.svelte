@@ -1,7 +1,5 @@
 <script lang="ts">
 	import type { MangadexTheme } from "@mangadex/theme";
-	import { Box } from "@svelteuidev/core";
-	import MangadexBackground from "./MangadexBackground.svelte";
 	import SomeDiv from "./SomeDiv.svelte";
 
 	export let theme: MangadexTheme;

@@ -28,6 +28,7 @@
         transition: background-color 300ms ease-in-out;
         color: var(--text-color);
         background-color: var(--accent-l4);
+        font-family: var(--fonts);
     }
     button:hover {
         background-color: var(--accent-l4-hover);

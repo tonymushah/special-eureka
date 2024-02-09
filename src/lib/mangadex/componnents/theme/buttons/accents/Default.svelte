@@ -27,6 +27,7 @@
         border-color: var(--accent-active);
         color: var(--text-color);
         background-color: var(--accent);
+        font-family: var(--fonts);
     }
     button:hover {
         background-color: var(--accent-hover);
