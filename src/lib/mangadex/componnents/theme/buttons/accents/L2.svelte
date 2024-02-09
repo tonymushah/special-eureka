@@ -19,8 +19,8 @@
         min-width: 3em;
         border-radius: .25rem;
         border: 0;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
         transition: background-color 100ms ease-in-out;
         box-shadow: none;
         display: flex;
