@@ -28,9 +28,9 @@
         background-color: var(--primary);
     }
     button:hover {
-        filter: brightness(85%);
+        filter: brightness(90%);
     }
     button:active {
-        filter: brightness(70%);
+        filter: brightness(80%);
     }
 </style>
