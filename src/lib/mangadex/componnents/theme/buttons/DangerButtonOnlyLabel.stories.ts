@@ -30,21 +30,21 @@ type Story = StoryObj<typeof meta>;
 
 const label = "Button";
 
-export const PrimaryDefault: Story = {
+export const DangerDefault: Story = {
 	args: {
 		variant: "default",
 		label
 	}
 };
 
-export const PrimaryL1: Story = {
+export const DangerL1: Story = {
 	args: {
 		variant: "1",
 		label
 	}
 };
 
-export const PrimaryL2: Story = {
+export const DangerL2: Story = {
 	args: {
 		variant: "2",
 		label
