@@ -70,3 +70,17 @@ export const L5: Story = {
         label
     }
 }
+
+export const Accent: Story = {
+    args: {
+        variant: "accent",
+        label
+    }
+}
+
+export const AccentAlt: Story = {
+    args: {
+        variant: "accent-alt",
+        label
+    }
+}

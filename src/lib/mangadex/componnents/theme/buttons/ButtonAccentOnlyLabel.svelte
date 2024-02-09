@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from "svelte";
 	import ButtonAccent from "./ButtonAccent.svelte";
 
-    export let variant: "default" | "1" | "2" | "3" | "4" | "5" = "default";
+    export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" = "default";
     createEventDispatcher<{
         click: MouseEvent & {
             currentTarget: EventTarget & HTMLButtonElement

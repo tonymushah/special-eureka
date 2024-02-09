@@ -6,8 +6,10 @@
 	import L4 from "./accents/L4.svelte";
 	import L5 from "./accents/L5.svelte";
 	import Default from "./accents/Default.svelte";
+	import Accent from "./accents/Accent.svelte";
+	import AccentAlt from "./accents/AccentAlt.svelte";
 
-    export let variant: "default" | "1" | "2" | "3" | "4" | "5" = "default";
+    export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" = "default";
     createEventDispatcher<{
         click: MouseEvent & {
             currentTarget: EventTarget & HTMLButtonElement
@@ -37,6 +39,14 @@
     <L5 on:click {style} {type}>
         <slot/>
     </L5>
+{:else if variant == "accent"}
+    <Accent on:click {style} {type}>
+        <slot/>
+    </Accent>
+{:else if variant == "accent-alt"}
+    <AccentAlt on:click {style} {type}>
+        <slot/>
+    </AccentAlt>
 {:else}
     <Default on:click {style} {type}>
         <slot/>
