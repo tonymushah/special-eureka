@@ -25,7 +25,7 @@
         display: flex;
         align-items: center;
         color: var(--text-color);
-        background-color: var(--primary);
+        background-color: var(--primary-l2);
     }
     button:hover {
         filter: brightness(85%);
