@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/theme/span/MidToneSpan",
+	title: "MangaDex/theme/spans/MidToneSpan",
 	component: MidToneSpan,
 	tags: ["autodocs"]
 } satisfies Meta<MidToneSpan>;

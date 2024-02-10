@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/theme/span/PrimarySpan",
+	title: "MangaDex/theme/spans/PrimarySpan",
 	component: PrimarySpan,
 	tags: ["autodocs"],
 	argTypes: {
