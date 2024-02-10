@@ -10,6 +10,9 @@
 </span>
 
 <style lang="scss">
+    span {
+        font-family: var(--fonts);
+    }
 	span.default {
 		color: var(--primary);
 	}
