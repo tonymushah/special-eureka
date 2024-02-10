@@ -10,6 +10,9 @@
 </p>
 
 <style lang="scss">
+    p {
+        font-family: var(--fonts);
+    }
 	p.default {
 		color: var(--danger);
 	}
