@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
 import "@fontsource/poppins/index.css";
 
-import MidToneParagraph from "./DefaultParagraphOnlyLabel.svelte";
+import MidToneParagraph from "./MidToneParagraphOnlyLabel.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
