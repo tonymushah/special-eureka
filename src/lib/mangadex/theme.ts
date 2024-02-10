@@ -147,7 +147,8 @@ export function buildSvelteUITheme({
 	indication,
 	danger: _danger,
 	textColor: color,
-	mainBackground: backgroundColor
+	mainBackground: backgroundColor,
+	contrast
 }: MangadexTheme) {
 	const {
 		red: statusRed,
@@ -198,6 +199,7 @@ export function buildSvelteUITheme({
 			scrollbar: scrollbar.default,
 			scrollbarHover: scrollbar.hovered,
 			indicationBlue: indication.blue,
+			constrastL1: contrast.l1,
 			danger,
 			dangerl1,
 			dangerl2

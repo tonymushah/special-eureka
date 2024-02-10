@@ -10,10 +10,11 @@
 </span>
 
 <style lang="scss">
-    span {
-        font-family: var(--fonts);
-    }
-    span.default {
+	span {
+		font-size: var(--font-size);
+		font-family: var(--fonts);
+	}
+	span.default {
 		color: var(--danger);
 	}
 	span.l1 {

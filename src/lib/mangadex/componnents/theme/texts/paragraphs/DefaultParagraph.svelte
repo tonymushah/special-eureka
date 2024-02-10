@@ -1,10 +1,11 @@
 <p>
-    <slot/>
+	<slot />
 </p>
 
 <style lang="scss">
-    p {
-        font-family: var(--fonts);
-        color: var(--text-color);
-    }
+	p {
+		font-size: var(--font-size);
+		font-family: var(--fonts);
+		color: var(--text-color);
+	}
 </style>

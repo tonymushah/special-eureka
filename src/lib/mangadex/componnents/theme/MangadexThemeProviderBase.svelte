@@ -9,6 +9,7 @@
 </script>
 
 <SomeDiv
+	--font-size={"16px"}
 	--fonts={fonts}
 	--text-color={theme.textColor}
 	--main-background={theme.mainBackground}
@@ -50,7 +51,7 @@
 	--danger-l1={theme.danger.l1}
 	--danger-l2={theme.danger.l2}
 >
-	<SvelteUIProvider bind:class={svelte_ui_theme} themeObserver={undefined}>
+	<SvelteUIProvider bind:class={svelte_ui_theme}>
 		<slot />
 	</SvelteUIProvider>
 </SomeDiv>
