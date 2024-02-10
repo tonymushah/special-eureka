@@ -6,13 +6,10 @@
 
 	export let theme: MangadexTheme;
 	export let fonts = "Poppins";
-	$: svelte_ui_theme = buildSvelteUITheme(theme);
 </script>
 
 <MangadexThemeProviderBase {theme} {fonts}>
-	<SvelteUIProvider bind:class={svelte_ui_theme} themeObserver={undefined}>
-		<MangadexBackground>
-			<slot />
-		</MangadexBackground>
-	</SvelteUIProvider>
+	<MangadexBackground>
+		<slot />
+	</MangadexBackground>
 </MangadexThemeProviderBase>
