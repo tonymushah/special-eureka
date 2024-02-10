@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svel
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "DangerButton",
+	title: "MangaDex/theme/buttons/DangerButton",
 	component: DangerButton,
 	tags: ["autodocs"],
 	argTypes: {

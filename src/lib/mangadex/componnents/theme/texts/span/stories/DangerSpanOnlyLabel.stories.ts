@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "DangerSpan",
+	title: "MangaDex/theme/spans/DangerSpan",
 	component: DangerSpan,
 	tags: ["autodocs"],
 	argTypes: {

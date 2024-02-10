@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svel
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "PrimaryButton",
+	title: "MangaDex/theme/buttons/PrimaryButton",
 	component: PrimaryButton,
 	tags: ["autodocs"],
 	argTypes: {

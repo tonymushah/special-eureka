@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MidToneParagraph",
+	title: "MangaDex/theme/paragraphs/MidToneParagraph",
 	component: MidToneParagraph,
 	tags: ["autodocs"]
 } satisfies Meta<MidToneParagraph>;

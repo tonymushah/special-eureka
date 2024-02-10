@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svel
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MidToneLine",
+	title: "MangaDex/theme/lines/MidToneLine",
 	component: MidtoneLine,
 	tags: ["autodocs"]
 } satisfies Meta<MidtoneLine>;

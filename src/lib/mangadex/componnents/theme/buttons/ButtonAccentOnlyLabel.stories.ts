@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svel
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "AccentButton",
+	title: "MangaDex/theme/buttons/AccentButton",
 	component: ButtonAccent,
 	tags: ["autodocs"],
 	argTypes: {
