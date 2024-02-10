@@ -21,6 +21,9 @@
     "[rust]": {
         "editor.formatOnSave": true
     },
+    "[svelte]": {
+        "editor.formatOnSave": true
+    },
     "rust-analyzer.showUnlinkedFileNotification": false,
     "evenBetterToml.schema.associations": {
         "Tauri.toml" : "../node_modules/@tauri-apps/cli/schema.json"
