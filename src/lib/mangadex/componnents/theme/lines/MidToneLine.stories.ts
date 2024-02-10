@@ -1,0 +1,18 @@
+import type { Meta, StoryObj } from "@storybook/svelte";
+import "@fontsource/poppins/index.css";
+
+import MidtoneLine from "./MidToneLine.svelte";
+import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svelte";
+
+const meta = {
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MidToneLine",
+	component: MidtoneLine,
+	tags: ["autodocs"]
+} satisfies Meta<MidtoneLine>;
+
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};
