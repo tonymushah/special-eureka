@@ -1,0 +1,2148 @@
+directive @oneOf on INPUT_OBJECT
+
+type ApiClient {
+	id: UUID!
+	attributes: ApiClientAttributes!
+	relationships: ApiClientRelationships!
+	secret: String!
+}
+
+type ApiClientAttributes {
+	name: String!
+	description: String
+	profile: ApiClientProfile!
+	externalClientId: String
+	isActive: Boolean!
+	state: ApiClientState!
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime!
+	version: Int!
+}
+
+input ApiClientCreateParams {
+	name: String!
+	description: String = null
+	profile: ApiClientProfile! = PERSONAL
+	version: Int
+}
+
+input ApiClientDeleteParam {
+	clientId: UUID!
+	version: Int = null
+}
+
+input ApiClientEditParam {
+	clientId: UUID!
+	description: String = null
+	version: Int!
+}
+
+input ApiClientListParam {
+	limit: Int = null
+	offset: Int = null
+	state: ApiClientState = null
+	name: String = null
+	includes: [ReferenceExpansionResource!]! = []
+}
+
+type ApiClientMutation {
+	create(params: ApiClientCreateParams!): ApiClient!
+	edit(params: ApiClientEditParam!): ApiClient!
+	delete(params: ApiClientDeleteParam!): Boolean!
+	regenerateSecret(id: UUID!): String!
+}
+
+"""
+The Api Client profile
+"""
+enum ApiClientProfile {
+	PERSONAL
+	PUBLIC
+}
+
+type ApiClientQueries {
+	list(params: ApiClientListParam! = {limit: null,offset: null,state: null,name: null,includes: []}): ApiClientResults!
+	get(id: UUID!): ApiClient!
+}
+
+type ApiClientRelationships {
+	creator: User!
+}
+
+type ApiClientResults {
+	data: [ApiClient!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+"""
+API Client state for approval.
+
+The purpose of these are to discourage troll entries by requiring staff approval.
+"""
+enum ApiClientState {
+	REQUESTED
+	APPROVED
+	REJECTED
+	AUTOAPPROVED
+}
+
+type Author {
+	id: UUID!
+	attributes: AuthorAttributes!
+	relationships: AuthorRelationships!
+}
+
+type AuthorAttributes {
+	name: String!
+	imageUrl: Url
+	biography: JSONObject!
+	twitter: Url
+	pixiv: Url
+	melonBook: Url
+	fanBox: Url
+	booth: Url
+	nicoVideo: Url
+	skeb: Url
+	fantia: Url
+	tumblr: Url
+	youtube: Url
+	weibo: Url
+	naver: Url
+	website: Url
+	version: Int!
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime
+}
+
+input AuthorCreateParams {
+	name: String!
+	biography: JSONObject = null
+	twitter: Url = null
+	pixiv: Url = null
+	melonBook: Url = null
+	fanBox: Url = null
+	booth: Url = null
+	nicoVideo: Url = null
+	skeb: Url = null
+	fantia: Url = null
+	tumblr: Url = null
+	youtube: Url = null
+	weibo: Url = null
+	naver: Url = null
+	website: Url = null
+}
+
+input AuthorEditParams {
+	id: UUID!
+	name: String = null
+	biography: JSONObject = null
+	twitter: Url = null
+	pixiv: Url = null
+	melonBook: Url = null
+	fanBox: Url = null
+	booth: Url = null
+	nicoVideo: Url = null
+	skeb: Url = null
+	fantia: Url = null
+	tumblr: Url = null
+	youtube: Url = null
+	weibo: Url = null
+	naver: Url = null
+	website: Url = null
+	version: Int!
+}
+
+input AuthorListParams {
+	limit: Int = null
+	offset: Int = null
+	authorIds: [UUID!]! = []
+	name: String = null
+	order: AuthorSortOrder = null
+	includes: [ReferenceExpansionResource!]! = []
+}
+
+type AuthorMutations {
+	create(params: AuthorCreateParams!): Author!
+	edit(params: AuthorEditParams!): Author!
+	delete(id: UUID!): Boolean!
+}
+
+type AuthorQueries {
+	list(params: AuthorListParams! = {limit: null,offset: null,authorIds: [],name: null,order: null,includes: []}): AuthorResults!
+	get(id: UUID!): Author!
+}
+
+type AuthorRelationships {
+	works: [MangaObject!]!
+}
+
+type AuthorResults {
+	data: [Author!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+input AuthorSortOrder @oneOf {
+	name: OrderDirection
+}
+
+input BeginEditUploadSessionParam {
+	chapterId: UUID!
+	version: Int!
+}
+
+input BeginUploadSessionParam {
+	groups: [UUID!]! = []
+	mangaId: UUID!
+}
+
+
+type CaptchaMutations {
+	solve(params: CaptchaSolveParams!): Boolean!
+}
+
+input CaptchaSolveParams {
+	captchaChallenge: String!
+}
+
+type Chapter {
+	id: UUID!
+	attributes: ChapterAttributes!
+	relationships: ChapterRelationships!
+}
+
+type ChapterAggregate {
+	chapter: String!
+	ids: [UUID!]!
+	count: Int!
+}
+
+type ChapterAttributes {
+	title: String
+	volume: String
+	chapter: String
+	pages: Int!
+	translatedLanguage: Language!
+	uploader: UUID
+	externalUrl: Url
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime
+	publishAt: MangaDexDateTime
+	readableAt: MangaDexDateTime
+	version: Int!
+}
+
+input ChapterListParams {
+	limit: Int
+	offset: Int
+	chapterIds: [UUID!]! = []
+	title: String
+	groups: [UUID!]! = []
+	uploaders: [UUID!]! = []
+	mangaId: UUID
+	volumes: [String!]! = []
+	"""
+	Chapter number in the series or volume.
+	"""
+	chapters: [String!]! = []
+	translatedLanguages: [Language!]! = []
+	originalLanguages: [Language!]! = []
+	excludedOriginalLanguages: [Language!]! = []
+	contentRating: [ContentRating!]! = []
+	"""
+	Groups to exclude from the results.
+	"""
+	excludedGroups: [UUID!]! = []
+	"""
+	Uploaders to exclude from the results.
+	"""
+	excludedUploaders: [UUID!]! = []
+	"""
+	Flag to include future chapter updates in the results.
+	
+	Default: `IncludeFutureUpdates::Include` (1)
+	"""
+	includeFutureUpdates: IncludeFutureUpdates
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	publishAtSince: MangaDexDateTime
+	"""
+	Include empty pages
+	"""
+	includeEmptyPages: IncludeFuturePages
+	"""
+	Include external url chapters
+	"""
+	includeExternalUrl: IncludeExternalUrl
+	"""
+	Include future publish at
+	"""
+	includeFuturePublishAt: IncludeFuturePublishAt
+	order: ChapterSortOrder
+}
+
+type ChapterMutations {
+	update(params: ChapterUpdateParams!): Chapter!
+	delete(id: UUID!): Boolean!
+	"""
+	Remove the chapter from the current device or offline
+	"""
+	remove(id: UUID!): Boolean!
+	download(id: UUID!, quality: DownloadMode! = NORMAL): DownloadState!
+}
+
+type ChapterPages {
+	data: [Url!]!
+	dataSaver: [Url!]!
+}
+
+type ChapterQueries {
+	list(params: ChapterListParams! = {limit: null,offset: null,chapterIds: [],title: null,groups: [],uploaders: [],mangaId: null,volumes: [],chapters: [],translatedLanguages: [],originalLanguages: [],excludedOriginalLanguages: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,includeEmptyPages: null,includeExternalUrl: null,includeFuturePublishAt: null,order: null}, offlineParams: GetAllChapterParams): ChapterResults!
+	get(id: UUID!): Chapter!
+	pages(id: UUID!): ChapterPages!
+	listWithGroupByManga(chapterListParams: ChapterListParams! = {limit: null,offset: null,chapterIds: [],title: null,groups: [],uploaders: [],mangaId: null,volumes: [],chapters: [],translatedLanguages: [],originalLanguages: [],excludedOriginalLanguages: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,includeEmptyPages: null,includeExternalUrl: null,includeFuturePublishAt: null,order: null}, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaChapterGroup!
+}
+
+type ChapterRelationships {
+	manga: MangaObject!
+	scanlationGroups: [ScanlationGroup!]!
+	user: User!
+}
+
+type ChapterResults {
+	data: [Chapter!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+input ChapterSortOrder @oneOf {
+	chapter: OrderDirection
+	createdAt: OrderDirection
+	publishAt: OrderDirection
+	readableAt: OrderDirection
+	updatedAt: OrderDirection
+	volume: OrderDirection
+}
+
+type ChapterStatisticsQueries {
+	get(id: UUID!): Statistics!
+	list(ids: [UUID!]!): [Statistics!]!
+}
+
+input ChapterUpdateParams {
+	chapterId: UUID!
+	"""
+	<= 255 characters in length.
+	
+	Nullable.
+	"""
+	title: String = null
+	"""
+	Volume number.
+	
+	Nullable.
+	"""
+	volume: String = null
+	"""
+	Chapter number.
+	
+	<= 8 characters in length.
+	
+	Nullable.
+	"""
+	chapter: String = null
+	translatedLanguage: Language = null
+	groups: [UUID!]! = []
+	"""
+	>= 1
+	"""
+	version: Int!
+}
+
+type ClientInfo {
+	clientId: String!
+	clientSecret: String!
+}
+
+input CommitUploadSessionParam {
+	sessionId: UUID!
+	"""
+	Ordered list of Upload Session File IDs.
+	"""
+	pageOrder: [UUID!]!
+	"""
+	Nullable
+	"""
+	volume: String = null
+	"""
+	Nullable
+	"""
+	chapter: String = null
+	"""
+	Nullable
+	"""
+	title: String
+	translatedLanguage: Language!
+	"""
+	Must be a URL with "http(s)://".
+	
+	Nullable
+	"""
+	externalUrl: Url = null
+	publishAt: MangaDexDateTime = null
+}
+
+enum ContentRating {
+	EROTICA
+	PORNOGRAPHIC
+	SAFE
+	SUGGESTIVE
+}
+
+type Cover {
+	id: UUID!
+	attributes: CoverAttributes!
+	relationships: CoverRelationships!
+}
+
+type CoverAttributes {
+	description: String!
+	locale: Language
+	volume: String
+	fileName: String!
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime
+	version: Int!
+}
+
+input CoverListParam {
+	limit: Int
+	offset: Int
+	mangaIds: [UUID!]! = []
+	coverIds: [UUID!]! = []
+	uploaderIds: [UUID!]! = []
+	locales: [Language!]! = []
+	order: CoverSortOrder
+}
+
+type CoverQueries {
+	list(params: CoverListParam! = {limit: null,offset: null,mangaIds: [],coverIds: [],uploaderIds: [],locales: [],order: null}): CoverResults!
+	get(id: UUID!): Cover!
+}
+
+type CoverRelationships {
+	manga: MangaObject!
+	user: User!
+}
+
+type CoverResults {
+	data: [Cover!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+input CoverSortOrder @oneOf {
+	createdAt: OrderDirection
+	updatedAt: OrderDirection
+	volume: OrderDirection
+}
+
+input CreateForumThreadParams {
+	type: ForumThreadType!
+	id: UUID!
+}
+
+input CreateMangaParam {
+	title: JSONObject!
+	altTitles: [JSONObject!] = null
+	description: JSONObject = null
+	authors: [UUID!] = null
+	artists: [UUID!] = null
+	links: JSONObject = null
+	originalLanguage: Language!
+	lastVolume: String = null
+	lastChapter: String = null
+	publicationDemographic: Demographic = null
+	status: MangaStatus!
+	"""
+	Year the manga was released.
+	"""
+	year: Int = null
+	contentRating: ContentRating!
+	chapterNumbersResetOnNewVolume: Boolean = null
+	tags: [UUID!] = null
+	"""
+	Cover ID.
+	"""
+	primaryCover: UUID = null
+	"""
+	>= 1
+	"""
+	version: Int!
+}
+
+input CreateReportParam {
+	category: ReportCategory!
+	"""
+	The report reason ID for sub-categorization.
+	
+	For example, if a manga was being reported for being a troll entry, the specific reason ID should be used, obtained from the [list report reasons endpoint](crate::v5::report::list).
+	"""
+	reason: UUID!
+	"""
+	The ID from the category type.
+	
+	For example, if the category is "manga", this should be a manga UUID.
+	"""
+	objectId: UUID!
+	"""
+	Optional notes about why this is being reported.
+	"""
+	details: String = null
+}
+
+input CreateScalantionGroupParam {
+	name: String!
+	"""
+	Nullable.
+	"""
+	website: String = null
+	"""
+	Nullable.
+	"""
+	ircServer: String = null
+	"""
+	Nullable.
+	"""
+	ircChannel: String = null
+	"""
+	Nullable.
+	"""
+	discord: String = null
+	"""
+	Nullable.
+	"""
+	contactEmail: String = null
+	"""
+	Nullable.
+	"""
+	description: String = null
+	"""
+	Nullable.
+	"""
+	twitter: Url = null
+	"""
+	Regex: [^https:/\/www\.mangaupdates\.com\/(?:groups|publishers)\.html\?id=\d+](https://www.mangaupdates.com)
+	
+	Nullable.
+	"""
+	mangaUpdates: Url = null
+	inactive: Boolean = null
+	"""
+	Nullable.
+	"""
+	publishDelay: MangaDexDuration = null
+}
+
+input CreateUpdateRating {
+	mangaId: UUID!
+	"""
+	`[ 1 .. 10 ]`.
+	
+	Numbers below `1` will be set at `1` and numbers above `10` will be set at `10`.
+	"""
+	rating: Int!
+}
+
+input CurrentLoggedLists {
+	offset: Int
+	limit: Int
+}
+
+type CustomList {
+	id: UUID!
+	attributes: CustomListAttributes!
+	relationships: CustomListRelationships!
+}
+
+input CustomListAddMangaParam {
+	mangaId: UUID!
+	listId: UUID!
+}
+
+type CustomListAttributes {
+	name: String!
+	visibility: CustomListVisibility!
+	version: Int!
+}
+
+input CustomListCreateParam {
+	name: String!
+	visibility: CustomListVisibility = null
+	manga: [UUID!]! = []
+	version: Int = null
+}
+
+input CustomListMangaFeedParams {
+	listId: UUID!
+	limit: Int = null
+	offset: Int = null
+	translatedLanguage: [Language!]! = []
+	originalLanguage: [Language!]! = []
+	excludedOriginalLanguage: [Language!]! = []
+	contentRating: [ContentRating!]! = []
+	"""
+	Groups to exclude from the results.
+	"""
+	excludedGroups: [UUID!]! = []
+	"""
+	Uploaders to exclude from the results.
+	"""
+	excludedUploaders: [UUID!]! = []
+	"""
+	Flag to include future chapter updates in the results.
+	
+	Default: `IncludeFutureUpdates::Include` (1)
+	"""
+	includeFutureUpdates: IncludeFutureUpdates = null
+	includeEmptyPages: IncludeFuturePages = null
+	includeFuturePublishAt: IncludeFuturePublishAt = null
+	includeExternalUrl: IncludeExternalUrl = null
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime = null
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime = null
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	publishAtSince: MangaDexDateTime = null
+	order: MangaFeedSortOrder = null
+	includes: [ReferenceExpansionResource!]! = []
+}
+
+type CustomListMutations {
+	create(params: CustomListCreateParam!): CustomList!
+	update(params: CustomListUpdateParams!): CustomList!
+	delete(id: UUID!): Boolean!
+	follow(id: UUID!): Boolean!
+	unfollow(id: UUID!): Boolean!
+	addManga(params: CustomListAddMangaParam!): Boolean!
+	removeManga(params: CustomListRemoveMangaParam!): Boolean!
+}
+
+type CustomListQueries {
+	get(id: UUID!): CustomList!
+	currentLoggedLists(params: CurrentLoggedLists! = {offset: null,limit: null}): CustomListResults!
+	getUserLists(params: UserCustomListParams!): CustomListResults!
+}
+
+type CustomListRelationships {
+	titles: [MangaObject!]!
+	user: User!
+}
+
+input CustomListRemoveMangaParam {
+	mangaId: UUID!
+	listId: UUID!
+}
+
+type CustomListResults {
+	data: [CustomList!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+input CustomListUpdateParams {
+	listId: UUID!
+	name: String = null
+	visibility: CustomListVisibility = null
+	manga: [UUID!]! = []
+	version: Int!
+}
+
+enum CustomListVisibility {
+	PUBLIC
+	PRIVATE
+}
+
+input DeleteImageParam {
+	sessionId: UUID!
+	sessionFileId: UUID!
+}
+
+input DeleteImagesParam {
+	sessionId: UUID!
+	sessionFileIds: [UUID!]!
+}
+
+"""
+Target demographic for manga.
+"""
+enum Demographic {
+	SHOUNEN
+	SHOUJO
+	SEINEN
+	JOSEI
+	NONE
+}
+
+enum Direction {
+	RTL
+	LTR
+}
+
+enum DownloadMode {
+	NORMAL
+	DATA_SAVER
+}
+
+type DownloadState {
+	isDownloaded: Boolean!
+	hasFailed: Boolean!
+}
+
+type DownloadStateQueries {
+	chapter(chapterId: UUID!): DownloadState!
+	cover(coverId: UUID!): DownloadState!
+	manga(mangaId: UUID!): DownloadState!
+}
+
+input EditScanlationGroupParam {
+	groupId: UUID!
+	name: String = null
+	leader: UUID = null
+	"""
+	Nullable.
+	"""
+	website: String = null
+	"""
+	Nullable.
+	"""
+	ircServer: String = null
+	"""
+	Nullable.
+	"""
+	ircChannel: String = null
+	"""
+	Nullable.
+	"""
+	discord: String = null
+	"""
+	Nullable.
+	"""
+	contactEmail: String = null
+	"""
+	Nullable.
+	"""
+	description: String = null
+	"""
+	Nullable.
+	"""
+	twitter: Url = null
+	"""
+	Regex: [^https:/\/www\.mangaupdates\.com\/(?:groups|publishers)\.html\?id=\d+](https://www.mangaupdates.com)
+	
+	Nullable.
+	"""
+	mangaUpdates: Url = null
+	"""
+	Languages the scanlation primarily translates or uploads works into.
+	
+	Nullable.
+	"""
+	focusedLanguages: [Language!] = null
+	inactive: Boolean = null
+	locked: Boolean = null
+	publishDelay: MangaDexDuration = null
+	"""
+	>= 1
+	"""
+	version: Int!
+}
+
+type FeedQueries {
+	userLoggedMangaFeed(params: FollowedMangaFeedParams! = {limit: null,offset: null,translatedLanguage: [],originalLanguage: [],excludedOriginalLanguage: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,order: null,includeEmptyPages: null,includeFuturePublishAt: null,includeExternalUrl: null}): ChapterResults!
+	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams! = {limit: null,offset: null,translatedLanguage: [],originalLanguage: [],excludedOriginalLanguage: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,order: null,includeEmptyPages: null,includeFuturePublishAt: null,includeExternalUrl: null}, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaChapterGroup!
+	customListFeed(params: CustomListMangaFeedParams!): ChapterResults!
+	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaChapterGroup!
+}
+
+
+input FollowedMangaFeedParams {
+	limit: Int
+	offset: Int
+	translatedLanguage: [Language!]! = []
+	originalLanguage: [Language!]! = []
+	excludedOriginalLanguage: [Language!]! = []
+	contentRating: [ContentRating!]! = []
+	"""
+	Groups to exclude from the results.
+	"""
+	excludedGroups: [UUID!]! = []
+	"""
+	Uploaders to exclude from the results.
+	"""
+	excludedUploaders: [UUID!]! = []
+	"""
+	Flag to include future chapter updates in the results.
+	
+	Default: `IncludeFutureUpdates::Include` (1)
+	"""
+	includeFutureUpdates: IncludeFutureUpdates
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	publishAtSince: MangaDexDateTime
+	order: MangaFeedSortOrder
+	includeEmptyPages: IncludeFuturePages
+	includeFuturePublishAt: IncludeFuturePublishAt
+	includeExternalUrl: IncludeExternalUrl
+}
+
+type FollowsQueries {
+	groups(params: UserFollowedGroupsParams! = {limit: null,offset: null}): ScanlationGroupResults!
+	isFollowingGroup(id: UUID!): Boolean!
+	users(params: UserFollowedUserParams! = {limit: null,offset: null}): UserResults!
+	isFollowingUser(id: UUID!): Boolean!
+	mangas(params: UserFollowedMangaParams! = {limit: null,offset: null}): MangaResults!
+	isFollowingManga(id: UUID!): Boolean!
+	customLists(params: UserFollowedListParams! = {limit: null,offset: null}): CustomListResults!
+	isFollowingCustomList(id: UUID!): Boolean!
+}
+
+enum ForumThreadType {
+	MANGA
+	GROUP
+	CHAPTER
+}
+
+type ForumsMutations {
+	"""
+	create a forum thread and return the generated forum id
+	"""
+	createThread(params: CreateForumThreadParams!): Int!
+}
+
+input GetAllChapterParams {
+	includeFails: Boolean!
+	onlyFails: Boolean!
+}
+
+input GetMangaDraftParams {
+	mangaId: UUID!
+	includes: [ReferenceExpansionResource!]! = []
+}
+
+type GraphQLMangaAttributes {
+	title: JSONObject!
+	altTitles: [JSONObject!]!
+	description: JSONObject!
+	isLocked: Boolean!
+	links: MangaLinks
+	originalLanguage: Language!
+	lastVolume: String
+	lastChapter: String
+	publicationDemographic: Demographic
+	status: MangaStatus!
+	year: Int
+	contentRating: ContentRating
+	latestUploadedChapter: UUID
+	availableTranslatedLanguages: [Language!]
+	tags: [Tag!]!
+	state: MangaState!
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime
+	version: Int!
+}
+
+type GroupStatisticsQueries {
+	get(id: UUID!): Statistics!
+	list(ids: [UUID!]!): [Statistics!]!
+}
+
+type HomeQueries {
+	seasonal: CustomList!
+	recentlyUploaded(params: ChapterListParams! = {limit: null,offset: null,chapterIds: [],title: null,groups: [],uploaders: [],mangaId: null,volumes: [],chapters: [],translatedLanguages: [],originalLanguages: [],excludedOriginalLanguages: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,includeEmptyPages: null,includeExternalUrl: null,includeFuturePublishAt: null,order: null}): ChapterResults!
+	recentlyAdded(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
+	popularTitles(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
+}
+
+
+"""
+Flag to include future updates in the results.
+"""
+enum IncludeExternalUrl {
+	INCLUDE
+	EXCLUDE
+}
+
+"""
+Flag to include future updates in the results.
+"""
+enum IncludeFuturePages {
+	INCLUDE
+	EXCLUDE
+}
+
+"""
+Flag to include future updates in the results.
+"""
+enum IncludeFuturePublishAt {
+	INCLUDE
+	EXCLUDE
+}
+
+"""
+Flag to include future updates in the results.
+"""
+enum IncludeFutureUpdates {
+	INCLUDE
+	EXCLUDE
+}
+
+type InfrastructureQueries {
+	ping: Boolean!
+}
+
+
+"""
+A scalar that can represent any JSON Object value.
+"""
+scalar JSONObject
+
+"""
+Languages supported by MangaDex.
+"""
+enum Language {
+	ARABIC
+	AZERBAIJANI
+	ALBANIAN
+	BENGALI
+	BULGARIAN
+	BURMESE
+	CATALAN
+	CHINESE_ROMANIZED
+	CHINESE_SIMPLIFIED
+	CHINESE_TRADITIONAL
+	CROATIAN
+	CZECH
+	DANISH
+	DUTCH
+	ENGLISH
+	ESPERANTO
+	ESTONIAN
+	FILIPINO
+	FINNISH
+	FRENCH
+	GEORGIAN
+	GERMAN
+	GREEK
+	HEBREW
+	HINDI
+	HUNGARIAN
+	INDONESIAN
+	ITALIAN
+	JAPANESE
+	JAPANESE_ROMANIZED
+	KAZAKH
+	KOREAN
+	KOREAN_ROMANIZED
+	LATIN
+	LITHUANIAN
+	MALAGASY
+	MALAY
+	MONGOLIAN
+	NEPALI
+	NILO_SAHARAN
+	NORWEGIAN
+	PERSIAN
+	POLISH
+	PORTUGUESE_BRAZILIAN
+	PORTUGUESE_PORTUGAL
+	ROMANSH
+	ROMANIAN
+	RUSSIAN
+	SERBO_CROATIAN
+	SLOVAK
+	SPANISH_CASTILIAN
+	SPANISH_LATIN_AMERICAN
+	SWEDISH
+	TAMIL
+	TELUGU
+	THAI
+	TURKISH
+	UKRAINIAN
+	VIETNAMESE
+	UNKNOWN
+}
+
+type LegacyIdMapping {
+	id: UUID!
+	attributes: LegacyMappingIdAttributes!
+}
+
+input LegacyIdMappingParams {
+	mapType: LegacyMappingType!
+	ids: [Int!]!
+}
+
+type LegacyIdMappingResults {
+	data: [LegacyIdMapping!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+type LegacyMappingIdAttributes {
+	type: LegacyMappingType!
+	legacyId: Int!
+	newId: UUID!
+}
+
+"""
+Mapping types to get the new UUIDs from the legacy, numerical, IDs.
+"""
+enum LegacyMappingType {
+	CHAPTER
+	GROUP
+	MANGA
+	TAG
+}
+
+type LegacyQueries {
+	idMapping(params: LegacyIdMappingParams!): LegacyIdMappingResults!
+}
+
+input ListReasonsByCategory {
+	category: ReportCategory!
+}
+
+input ListReportParams {
+	limit: Int
+	offset: Int
+	category: ReportCategory
+	objectId: UUID
+	reasonId: UUID
+	status: ReportStatus
+	order: ReportSortOrder
+}
+
+type MangaAggregate {
+	volumes: [VolumeAggregate!]!
+	ids: [UUID!]!
+}
+
+input MangaAggregateParam {
+	mangaId: UUID!
+	translatedLanguage: [Language!]! = []
+	groups: [UUID!]! = []
+}
+
+type MangaAggregateQueries {
+	chunked(isReversed: Boolean! = false, chunkSize: Int!): [MangaAggregate!]!
+	default(isReversed: Boolean! = false): MangaAggregate!
+}
+
+type MangaChapterGroup {
+	data: [MangaChapterItem!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+type MangaChapterItem {
+	manga: MangaObject!
+	chapters: [Chapter!]!
+}
+
+input MangaCreateRelationParam {
+	mangaId: UUID!
+	targetManga: UUID!
+	relation: MangaRelation!
+}
+
+scalar MangaDexDateTime
+
+scalar MangaDexDuration
+
+input MangaDraftsParams {
+	limit: Int
+	"""
+	>= 0
+	"""
+	offset: Int
+	state: MangaState
+	order: MangaDraftsSortOrder
+	includes: [ReferenceExpansionResource!]! = []
+}
+
+input MangaDraftsSortOrder @oneOf {
+	createdAt: OrderDirection
+	title: OrderDirection
+	updatedAt: OrderDirection
+	year: OrderDirection
+}
+
+input MangaFeedParams {
+	mangaId: UUID!
+	limit: Int = null
+	offset: Int = null
+	translatedLanguage: [Language!]! = []
+	originalLanguage: [Language!]! = []
+	excludedOriginalLanguage: [Language!]! = []
+	contentRating: [ContentRating!]! = []
+	"""
+	Groups to exclude from the results.
+	"""
+	excludedGroups: [UUID!]! = []
+	"""
+	Uploaders to exclude from the results.
+	"""
+	excludedUploaders: [UUID!]! = []
+	"""
+	Flag to include future chapter updates in the results.
+	
+	Default: `IncludeFutureUpdates::Include` (1)
+	"""
+	includeFutureUpdates: IncludeFutureUpdates = null
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime = null
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime = null
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	publishAtSince: MangaDexDateTime = null
+	order: MangaFeedSortOrder = null
+	includes: [ReferenceExpansionResource!]! = []
+	includeEmptyPages: IncludeFuturePages = null
+	includeFuturePublishAt: IncludeFuturePublishAt = null
+	includeExternalUrl: IncludeExternalUrl = null
+}
+
+input MangaFeedSortOrder @oneOf {
+	chapter: OrderDirection
+	createdAt: OrderDirection
+	publishAt: OrderDirection
+	readableAt: OrderDirection
+	updatedAt: OrderDirection
+	volume: OrderDirection
+}
+
+type MangaLinks {
+	hasNoLinks: Boolean!
+	amazon: Url
+	anilist: Url
+	animePlanet: Url
+	bookWalker: Url
+	cdJapan: Url
+	ebookJapan: Url
+	englishTranslation: Url
+	kitsu: Url
+	mangaUpdates: Url
+	myAnimeList: Url
+	novelUpdates: Url
+	raw: Url
+}
+
+input MangaListParams {
+	limit: Int
+	offset: Int
+	title: String
+	authorOrArtist: UUID
+	authors: [UUID!]! = []
+	artists: [UUID!]! = []
+	year: Int
+	includedTags: [UUID!]! = []
+	includedTagsMode: TagSearchMode
+	excludedTags: [UUID!]! = []
+	excludedTagsMode: TagSearchMode
+	status: [MangaStatus!]! = []
+	"""
+	Languages the manga results are originally published in.
+	"""
+	originalLanguage: [Language!]! = []
+	"""
+	A list of original languages to exclude.
+	"""
+	excludedOriginalLanguage: [Language!]! = []
+	"""
+	A list of languages that the manga is translated into.
+	"""
+	availableTranslatedLanguage: [Language!]! = []
+	publicationDemographic: [Demographic!]! = []
+	mangaIds: [UUID!]! = []
+	contentRating: [ContentRating!]! = []
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime
+	order: MangaSortOrder
+	hasAvailableChapters: Boolean
+	"""
+	Scanlation group ID.
+	"""
+	group: UUID
+}
+
+type MangaMutations {
+	download(id: UUID!): DownloadState!
+	create(params: CreateMangaParam!): MangaObject!
+	edit(params: UpdateMangaParam!): MangaObject!
+	delete(id: UUID!): Boolean!
+	remove(id: UUID!): Boolean!
+	follow(id: UUID!): Boolean!
+	unfollow(id: UUID!): Boolean!
+	updateReadingStatus(id: UUID!, status: ReadingStatus): Boolean!
+	submitDraft(params: SubmitMangaDraftParams!): MangaObject!
+	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): [MangaRelated!]!
+	deleteRelation(id: UUID!, targetManga: UUID!): Boolean!
+}
+
+type MangaObject {
+	id: UUID!
+	attributes: GraphQLMangaAttributes!
+	relationships: MangaRelationships!
+}
+
+type MangaQueries {
+	get(id: UUID!): MangaObject!
+	list(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
+	listOffline(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
+	random(params: MangaRandomParams! = {includes: [],contentRating: [],includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null}): MangaObject!
+	feed(params: MangaFeedParams!): ChapterResults!
+	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
+	getDraft(params: GetMangaDraftParams!): MangaObject!
+	getDrafts(params: MangaDraftsParams! = {limit: null,offset: null,state: null,order: null,includes: []}): MangaResults!
+	relationList(params: MangaRelationParam!, listParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): [MangaRelated!]!
+	aggregate(params: MangaAggregateParam!): MangaAggregateQueries!
+	readingStatus(id: UUID!): ReadingStatus
+}
+
+input MangaRandomParams {
+	includes: [ReferenceExpansionResource!]! = []
+	contentRating: [ContentRating!]! = []
+	includedTags: [UUID!]! = []
+	includedTagsMode: TagSearchMode
+	excludedTags: [UUID!]! = []
+	excludedTagsMode: TagSearchMode
+}
+
+type MangaRating {
+	average: Float
+	bayesian: Float
+	distrubution: MangaRatingDistribution!
+}
+
+type MangaRatingDistribution {
+	r1: Int!
+	r2: Int!
+	r3: Int!
+	r4: Int!
+	r5: Int!
+	r6: Int!
+	r7: Int!
+	r8: Int!
+	r9: Int!
+	r10: Int!
+}
+
+type MangaReadMarkerGroupedItems {
+	mangaId: UUID!
+	chapters: [UUID!]!
+}
+
+type MangaReadingStatusItem {
+	id: UUID!
+	status: ReadingStatus!
+}
+
+type MangaRelated {
+	id: UUID!
+	related: MangaRelation!
+	attributes: GraphQLMangaAttributes!
+	relationships: MangaRelationships!
+}
+
+"""
+Used in the `related` field of a Manga relationships.
+
+<https://api.mangadex.org/docs/static-data/#manga-related-enum>
+"""
+enum MangaRelation {
+	"""
+	The original work this spin-off manga has been adapted from.
+	"""
+	ADAPTED_FROM
+	"""
+	An alternative take of the story in this manga.
+	"""
+	ALTERNATE_STORY
+	"""
+	A different version of this manga with no other specific distinction.
+	"""
+	ALTERNATE_VERSION
+	"""
+	The original work this self-published derivative manga is based on.
+	"""
+	BASED_ON
+	"""
+	A colored variant of this manga.
+	"""
+	COLORED
+	"""
+	A self-published derivative work based on this manga.
+	"""
+	DOUJINSHI
+	"""
+	The original narrative this manga is based on.
+	"""
+	MAIN_STORY
+	"""
+	A monochrome variant of this manga.
+	"""
+	MONOCHROME
+	"""
+	The previous entry in the same series.
+	"""
+	PREQUEL
+	"""
+	The original version of this manga before its official serialization.
+	"""
+	PRESERIALIZATION
+	"""
+	A manga based on the same intellectual property as this manga.
+	"""
+	SAME_FRANCHISE
+	"""
+	The next entry in the same series.
+	"""
+	SEQUEL
+	"""
+	The official serialization of this manga.
+	"""
+	SERIALIZATION
+	"""
+	A manga taking place in the same fictional world as this manga.
+	"""
+	SHARED_UNIVERSE
+	"""
+	A side work contemporaneous with the narrative of this manga.
+	"""
+	SIDE_STORY
+	"""
+	An official derivative work based on this manga.
+	"""
+	SPIN_OFF
+}
+
+input MangaRelationParam {
+	mangaId: UUID!
+	includes: [ReferenceExpansionResource!]! = []
+}
+
+type MangaRelationships {
+	manga: [MangaRelated!]!
+	coverArt: Cover!
+	authors: [Author!]!
+	artists: [Author!]!
+	authorArtists: [Author!]!
+	creator: User
+}
+
+type MangaResults {
+	data: [MangaObject!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+input MangaSortOrder @oneOf {
+	createdAt: OrderDirection
+	followedCount: OrderDirection
+	latestUploadedChapter: OrderDirection
+	relevance: OrderDirection
+	title: OrderDirection
+	updatedAt: OrderDirection
+	year: OrderDirection
+}
+
+"""
+Manga state for approval.
+
+The purpose of these are to discourage troll entries by requiring staff approval.
+"""
+enum MangaState {
+	DRAFT
+	PUBLISHED
+	REJECTED
+	SUBMITTED
+}
+
+type MangaStatistics {
+	id: UUID!
+	comments: StatisticsComments
+	rating: MangaRating!
+}
+
+type MangaStatisticsAttributes {
+	comments: StatisticsComments
+	rating: MangaRating!
+}
+
+type MangaStatisticsQueries {
+	get(id: UUID!): MangaStatistics!
+	list(ids: [UUID!]!): [MangaStatistics!]!
+}
+
+enum MangaStatus {
+	"""
+	Manga is still going on.
+	"""
+	ONGOING
+	"""
+	Manga is completed.
+	"""
+	COMPLETED
+	"""
+	Manga is paused from publishing new chapters.
+	"""
+	HIATUS
+	"""
+	Manga has been cancelled.
+	"""
+	CANCELLED
+}
+
+input MarkChapterBatchParam {
+	mangaId: UUID!
+	chapterIdsRead: [UUID!]! = []
+	chapterIdsUnread: [UUID!]! = []
+	updateHistory: Boolean! = false
+}
+
+type Mutation {
+	apiClient: ApiClientMutation!
+	author: AuthorMutations!
+	captcha: CaptchaMutations!
+	chapter: ChapterMutations!
+	customList: CustomListMutations!
+	forums: ForumsMutations!
+	manga: MangaMutations!
+	rating: RatingMutations!
+	readMarker: ReadMarkerMutations!
+	oauth: OauthMutations!
+	report: ReportMutations!
+	scanlationGroup: ScanlationGroupMutation!
+	upload: UploadMutations!
+	offlineAppState: OfflineAppStateMutations!
+	user: UserMutations!
+}
+
+type OauthMutations {
+	login(username: Username!, password: Password!): Boolean!
+	refresh: Boolean!
+	setClientInfo(clientId: String!, clientSecret: String!): Boolean!
+	clearClientInfo: Boolean!
+	logout: Boolean!
+}
+
+type OauthQueries {
+	getClientInfo: ClientInfo
+}
+
+type OfflineAppStateMutations {
+	mountOfflineAppState: Boolean!
+	unmountOfflineAppState: Boolean!
+}
+
+type OfflineAppStateQueries {
+	isMounted: Boolean!
+}
+
+"""
+"Order by" directions for manga results.
+"""
+enum OrderDirection {
+	ASCENDING
+	DESCENDING
+}
+
+scalar Password
+
+scalar PathBuf
+
+type Query {
+	manga: MangaQueries!
+	apiClient: ApiClientQueries!
+	author: AuthorQueries!
+	chapter: ChapterQueries!
+	cover: CoverQueries!
+	customList: CustomListQueries!
+	feed: FeedQueries!
+	follows: FollowsQueries!
+	infrastructure: InfrastructureQueries!
+	legacy: LegacyQueries!
+	tag: TagQueries!
+	rating: RatingQueries!
+	readMarker: ReadMarkerQueries!
+	oauth: OauthQueries!
+	report: ReportQueries!
+	statistics: StatisticsQueries!
+	upload: UploadQueries!
+	user: UserQueries!
+	offlineAppState: OfflineAppStateQueries!
+	home: HomeQueries!
+	downloadState: DownloadStateQueries!
+}
+
+type RatingItem {
+	id: UUID!
+	rating: Int!
+	createdAt: MangaDexDateTime!
+}
+
+type RatingItemAttributes {
+	rating: Int!
+	createdAt: MangaDexDateTime!
+}
+
+type RatingMutations {
+	createUpdate(params: CreateUpdateRating!): Boolean!
+	delete(id: UUID!): Boolean!
+}
+
+type RatingQueries {
+	lists(mangaIds: [UUID!]!): [RatingItem!]!
+}
+
+type ReadMarkerMutations {
+	mangaReadMarkersBatch(params: MarkChapterBatchParam!): Boolean!
+}
+
+type ReadMarkerQueries {
+	mangaReadMarkersByMangaId(mangaId: UUID!): [UUID!]!
+	mangaReadMarkers(mangaIds: [UUID!]!): [UUID!]!
+	mangaReadMarkersGrouped(mangaIds: [UUID!]!): [MangaReadMarkerGroupedItems!]!
+	userHistory: [UserHistoryEntry!]!
+}
+
+enum ReadingMode {
+	LONG_STRIP
+	WIDE_STRIP
+	SINGLE_PAGE
+	DOUBLE_PAGE
+}
+
+type ReadingState {
+	state: ReadingStateEnum!
+	page: Int
+}
+
+enum ReadingStateEnum {
+	PREVIOUS
+	CURRENT
+	NEXT
+}
+
+enum ReadingStatus {
+	COMPLETED
+	DROPPED
+	ON_HOLD
+	PLAN_TO_READ
+	READING
+	RE_READING
+}
+
+"""
+Relationship types for reference expansion.
+
+<https://api.mangadex.org/docs/static-data/#relationship-types>
+
+This should only be used with the `includes[]` query parameter.
+For response types, refer to the [`RelationshipType` enum](crate::RelationshipType).
+"""
+enum ReferenceExpansionResource {
+	"""
+	Manga resource.
+	"""
+	MANGA
+	"""
+	Chapter resource.
+	"""
+	CHAPTER
+	"""
+	A Cover Art for a manga.
+	
+	On manga resources, only one cover art resource relation is returned,
+	marking the primary cover if there are more than one. By default, this will be the latest
+	volume's cover art. To see all the covers for a given manga, use the cover search endpoint.
+	"""
+	COVER_ART
+	"""
+	Author resource.
+	"""
+	AUTHOR
+	"""
+	Author resource (drawers only).
+	"""
+	ARTIST
+	"""
+	ScanlationGroup resource.
+	"""
+	SCANLATION_GROUP
+	"""
+	Tag resource.
+	"""
+	TAG
+	"""
+	User resource.
+	"""
+	USER
+	"""
+	CustomList resource.
+	"""
+	CUSTOM_LIST
+	"""
+	The user that created the resource
+	"""
+	CREATOR
+	"""
+	Report reason
+	"""
+	REASON
+	"""
+	Leader of a group
+	"""
+	LEADER
+	"""
+	Member of a group
+	"""
+	MEMBER
+	"""
+	A Mangadex Forums Thread,
+	"""
+	THREAD
+}
+
+type ReportAttributes {
+	details: String!
+	objectId: String!
+	status: ReportStatus!
+	createdAt: MangaDexDateTime!
+}
+
+"""
+Report reasons for submitting reports to the MangaDex staff.
+"""
+enum ReportCategory {
+	AUTHOR
+	CHAPTER
+	MANGA
+	SCANLATION_GROUP
+	USER
+}
+
+type ReportMutations {
+	create(params: CreateReportParam!): Boolean!
+}
+
+type ReportQueries {
+	list(params: ListReportParams! = {limit: null,offset: null,category: null,objectId: null,reasonId: null,status: null,order: null}): UserReportResults!
+	listByCaterogy(params: ListReasonsByCategory!): ReportReasonResults!
+}
+
+type ReportReason {
+	id: UUID!
+	attributes: ReportReasonAttributes!
+}
+
+type ReportReasonAttributes {
+	reason: JSONObject!
+	detailsRequired: Boolean!
+	category: ReportCategory!
+	version: Int!
+}
+
+type ReportReasonResults {
+	data: [ReportReason!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+type ReportRelationship {
+	user: User!
+}
+
+input ReportSortOrder @oneOf {
+	createdAt: OrderDirection
+}
+
+"""
+Report reasons for submitting reports to the MangaDex staff.
+"""
+enum ReportStatus {
+	ACCEPTED
+	AUTORESOLVED
+	REFUSED
+	WAITING
+}
+
+type ScanlationGroup {
+	id: UUID!
+	attributes: ScanlationGroupAttributes!
+	relationships: ScanlationGroupRelationships!
+}
+
+type ScanlationGroupAttributes {
+	name: String!
+	altNames: [JSONObject!]!
+	website: Url
+	ircServer: String
+	ircChannel: String
+	discord: String
+	contactEmail: String
+	description: String
+	twitter: Url
+	mangaUpdates: Url
+	focusedLanguages: [Language!]
+	locked: Boolean!
+	official: Boolean!
+	verified: Boolean!
+	exLicensed: Boolean
+	publishDelay: MangaDexDuration
+	version: Int!
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime!
+}
+
+type ScanlationGroupMutation {
+	create(params: CreateScalantionGroupParam!): ScanlationGroup!
+	edit(params: EditScanlationGroupParam!): ScanlationGroup!
+	delete(id: UUID!): Boolean!
+	follow(id: UUID!): Boolean!
+	unfollow(id: UUID!): Boolean!
+}
+
+type ScanlationGroupRelationships {
+	leader: User!
+	members: [User!]!
+}
+
+type ScanlationGroupResults {
+	data: [ScanlationGroup!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+type Statistics {
+	id: UUID!
+	comments: StatisticsComments
+}
+
+type StatisticsComments {
+	threadId: Int!
+	repliesCount: Int!
+	threadUrl: Url!
+}
+
+type StatisticsQueries {
+	chapter: ChapterStatisticsQueries!
+	group: GroupStatisticsQueries!
+	manga: MangaStatisticsQueries!
+}
+
+
+input SubmitMangaDraftParams {
+	mangaId: UUID!
+	version: Int!
+}
+
+type Subscriptions {
+	watchApiClient(apiClientId: UUID!, subId: UUID!): ApiClientAttributes!
+	watchAuthor(authorId: UUID!, subId: UUID!): AuthorAttributes!
+	watchChapter(chapterId: UUID!, subId: UUID!): ChapterAttributes!
+	watchCover(coverId: UUID!, subId: UUID!): CoverAttributes!
+	watchCustomList(customListId: UUID!, subId: UUID!): CustomListAttributes!
+	watchManga(mangaId: UUID!, subId: UUID!): GraphQLMangaAttributes!
+	watchRating(mangaId: UUID!, subId: UUID!): RatingItemAttributes!
+	watchStatistics(id: UUID!, subId: UUID!): StatisticsComments!
+	watchMangaStatistics(mangaId: UUID!, subId: UUID!): MangaStatisticsAttributes!
+	watchTag(tagId: UUID!, subId: UUID!): TagAttributes!
+	watchUploadSession(uploadSessionId: UUID!, subId: UUID!): UploadSessionAttributes!
+	watchUploadSessionFile(uploadSessionFileId: UUID!, subId: UUID!): UploadSessionFileAttributes!
+	watchUser(userId: UUID!, subId: UUID!): UserAttributes!
+	watchUserMe(subId: UUID!): UserAttributes!
+	watchSidebarDirection(subId: UUID!): Direction!
+	watchPageDirection(subId: UUID!): Direction!
+	watchReadingMode(subId: UUID!): ReadingMode!
+	watchChapterLanguages(subId: UUID!): [Language!]!
+	watchIsAppMounted(subId: UUID!): Boolean!
+	watchIsLogged(subId: UUID!): Boolean!
+	watchDownloadState(objectId: UUID!, subId: UUID!): DownloadState!
+	watchReadingState(chapterId: UUID!, subId: UUID!): ReadingState!
+	watchIsFollowingManga(mangaId: UUID!, subId: UUID!): Boolean!
+	watchIsFollowingGroup(groupId: UUID!, subId: UUID!): Boolean!
+	watchIsFollowingUser(userId: UUID!, subId: UUID!): Boolean!
+	watchIsFollowingCustomList(customListId: UUID!, subId: UUID!): Boolean!
+	watchMangaReadingState(mangaId: UUID!, subId: UUID!): ReadingStatus
+	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
+}
+
+type Tag {
+	id: UUID!
+	attributes: TagAttributes!
+}
+
+type TagAttributes {
+	name: JSONObject!
+	description: JSONObject!
+	group: TagGroup!
+}
+
+enum TagGroup {
+	CONTENT
+	FORMAT
+	GENRE
+	THEME
+}
+
+type TagQueries {
+	list: TagResults!
+	listGrouped: TagResultsGrouped!
+}
+
+type TagResults {
+	data: [Tag!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+type TagResultsGrouped {
+	content: [Tag!]!
+	format: [Tag!]!
+	genre: [Tag!]!
+	theme: [Tag!]!
+}
+
+"""
+Determines the behavior of tag interaction when including or excluding tags in the results.
+"""
+enum TagSearchMode {
+	AND
+	OR
+}
+
+"""
+A UUID is a unique 128-bit number, stored as 16 octets. UUIDs are parsed as
+Strings within GraphQL. UUIDs are used to assign unique identifiers to
+entities without requiring a central allocating authority.
+
+# References
+
+* [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)
+* [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)
+"""
+scalar UUID
+
+input UpdateMangaParam {
+	mangaId: UUID!
+	title: JSONObject!
+	altTitles: [JSONObject!] = null
+	description: JSONObject = null
+	authors: [UUID!] = null
+	artists: [UUID!] = null
+	links: JSONObject = null
+	originalLanguage: Language!
+	lastVolume: String = null
+	lastChapter: String = null
+	publicationDemographic: Demographic = null
+	status: MangaStatus!
+	"""
+	Year the manga was released.
+	"""
+	year: Int = null
+	contentRating: ContentRating!
+	chapterNumbersResetOnNewVolume: Boolean = null
+	tags: [UUID!] = null
+	"""
+	Cover ID.
+	"""
+	primaryCover: UUID = null
+	"""
+	>= 1
+	"""
+	version: Int!
+}
+
+type UploadMutations {
+	beginSession(params: BeginUploadSessionParam!, abandonIfExists: Boolean! = true): UploadSession!
+	beginEditSession(params: BeginEditUploadSessionParam!, abandonIfExists: Boolean! = true): UploadSession!
+	uploadImagesToSession(sessionId: UUID!, path: PathBuf!): UploadSessionFile!
+	abandonSession(sessionId: UUID!): Boolean!
+	commitSession(params: CommitUploadSessionParam!): Chapter!
+	deleteFileFromUploadSession(params: DeleteImageParam!): Boolean!
+	deleteFilesFromUploadSession(params: DeleteImagesParam!): Boolean!
+}
+
+type UploadQueries {
+	getCurrent: UploadSession
+}
+
+type UploadSession {
+	id: UUID!
+	attributes: UploadSessionAttributes!
+}
+
+type UploadSessionAttributes {
+	isCommitted: Boolean!
+	isProcessed: Boolean!
+	isDeleted: Boolean!
+	version: Int!
+	createdAt: MangaDexDateTime!
+	updatedAt: MangaDexDateTime!
+}
+
+type UploadSessionFile {
+	id: UUID!
+	attributes: UploadSessionFileAttributes!
+}
+
+type UploadSessionFileAttributes {
+	originalFileName: String!
+	fileHash: String!
+	fileSize: Int!
+	mimeType: String!
+	source: UploadSource!
+	version: Int!
+}
+
+"""
+Upload file source.
+"""
+enum UploadSource {
+	LOCAL
+	REMOTE
+}
+
+"""
+URL is a String implementing the [URL Standard](http://url.spec.whatwg.org/)
+"""
+scalar Url
+
+type User {
+	id: UUID!
+	attributes: UserAttributes!
+}
+
+type UserAttributes {
+	username: String!
+	roles: [UserRole!]!
+	version: Int!
+}
+
+input UserCustomListParams {
+	userId: UUID!
+	limit: Int = null
+	offset: Int = null
+}
+
+input UserFollowedGroupsParams {
+	limit: Int
+	offset: Int
+}
+
+input UserFollowedListParams {
+	limit: Int
+	offset: Int
+}
+
+input UserFollowedMangaParams {
+	limit: Int
+	offset: Int
+}
+
+input UserFollowedUserParams {
+	limit: Int
+	offset: Int
+}
+
+type UserHistoryEntry {
+	chapterId: UUID!
+	readDate: MangaDexDateTime!
+}
+
+input UserListParam {
+	limit: Int
+	offset: Int
+	userIds: [UUID!]! = []
+	username: String
+	order: UserSortOrder
+}
+
+type UserMutations {
+	follow(id: UUID!): Boolean!
+	unfollow(id: UUID!): Boolean!
+}
+
+type UserQueries {
+	get(id: UUID!): User!
+	list(params: UserListParam! = {limit: null,offset: null,userIds: [],username: null,order: null}): UserResults!
+	me: User!
+}
+
+type UserReport {
+	id: UUID!
+	attributes: ReportAttributes!
+	relationship: ReportRelationship!
+}
+
+type UserReportResults {
+	data: [UserReport!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+type UserResults {
+	data: [User!]!
+	limit: Int!
+	offset: Int!
+	total: Int!
+}
+
+"""
+User roles that define what a user has permission to do.
+More details at : https://api.mangadex.org/docs/static-data/#user-roles-enum
+"""
+enum UserRole {
+	"""
+	MangaDex admins
+	"""
+	ROLE_ADMIN
+	"""
+	Banned
+	"""
+	ROLE_BANNED
+	"""
+	Helpers contributing by filling in missing information (Description, External Links) on Manga pages on MangaDex
+	"""
+	ROLE_CONTRIBUTOR
+	"""
+	Designer
+	"""
+	ROLE_DESIGNER
+	"""
+	MangaDex site developers
+	"""
+	ROLE_DEVELOPER
+	"""
+	Moderates the forum
+	"""
+	ROLE_FORUM_MODERATOR
+	ROLE_GLOBAL_MODERATOR
+	"""
+	Leaders of active groups on MangaDex
+	"""
+	ROLE_GROUP_LEADER
+	"""
+	Member of a group
+	"""
+	ROLE_GROUP_MEMBER
+	"""
+	Users viewing the site without being logged in
+	"""
+	ROLE_GUEST
+	"""
+	Member of a group
+	"""
+	ROLE_MEMBER
+	"""
+	Involved with the [MangaDex@Home](mailto:MangaDex@Home) project
+	"""
+	ROLE_MD_AT_HOME
+	"""
+	Uploaded 500 or more chapters to MangaDex
+	"""
+	ROLE_POWER_UPLOADER
+	"""
+	Manages social media
+	"""
+	ROLE_PUBLIC_RELATIONS
+	"""
+	Staff
+	"""
+	ROLE_STAFF
+	"""
+	Accounts that haven't had their email address verified yet
+	"""
+	ROLE_UNVERIFIED
+	"""
+	A normal account
+	"""
+	ROLE_USER
+	"""
+	Important people that in one way or another helped MangaDex
+	"""
+	ROLE_VIP
+	UNKNOWN
+}
+
+input UserSortOrder @oneOf {
+	username: OrderDirection
+}
+
+scalar Username
+
+type VolumeAggregate {
+	volume: String!
+	count: Int!
+	chapters: [ChapterAggregate!]!
+	ids: [UUID!]!
+}
+
+directive @include(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+directive @skip(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+schema {
+	query: Query
+	mutation: Mutation
+	subscription: Subscriptions
+}

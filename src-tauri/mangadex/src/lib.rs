@@ -421,7 +421,7 @@ where
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
         #[cfg(debug_assertions)]
-        self.export_sdl(Path::new("../src/lib/schemas/mangadex.graphqls").to_path_buf())?;
+        self.export_sdl(Path::new("../src/lib/mangadex/schemas.graphqls").to_path_buf())?;
         self.init_states(app, &config)?;
         self.register_uri_scheme_protocol(app, config)?;
         self.ins_handle(app)

@@ -1,17 +1,50 @@
 <script lang="ts">
+	import Sidebar from "$lib/mangadex/componnents/sidebar/Sidebar.svelte";
+	import "@fontsource-variable/josefin-sans";
+	import "@fontsource/poppins";
+	import MangaDexThemeProvider from "@mangadex/componnents/theme/MangaDexThemeProvider.svelte";
+	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
+	import { Direction } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
-	import { SvelteUIProvider, createTheme } from "@svelteuidev/core";
-	import { setContextClient } from "@urql/svelte";
-    import "@fontsource/poppins";
-    import "@fontsource-variable/josefin-sans";
+	import { custom } from "@mangadex/theme";
+	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
+	import { v4 } from "uuid";
     setContextClient(client);
-    const theme = createTheme({
-        fonts: {
-            standard: "Poppins"
-        }
-    });
+	const sub_id = v4();
+	const rtl = subscriptionStore({
+		client: getContextClient(),
+		query: sideDirGQLDoc,
+		variables: {
+			sub_id
+		}
+	});
+    const theme = custom;
 </script>
 
-<SvelteUIProvider theme={theme}>
-    <slot/>
-</SvelteUIProvider>
+<MangaDexThemeProvider {theme}>
+	<div class="provider">
+		{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
+			<Sidebar />
+		{/if}
+		<div class="inner">
+			<slot />
+		</div>
+		{#if $rtl.data?.watchSidebarDirection == Direction.Rtl}
+			<Sidebar />
+		{/if}
+	</div>
+</MangaDexThemeProvider>
+<style>
+	.provider {
+        width: 100% !important;
+        display: inline-flex;
+        color: var(--text-color);
+    }
+	.inner {
+        width: 100%;
+        height: 100vh;
+        scroll-behavior: smooth;
+        overflow-y: scroll;
+        margin-left: 1em;
+	}
+</style>

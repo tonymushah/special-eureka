@@ -2,7 +2,7 @@
     all(not(debug_assertions), target_os = "windows"),
     windows_subsystem = "windows"
 )]
-use std::path::Path;
+//use std::path::Path;
 
 //use mangadex_desktop_api2::{verify_all_fs, launch_async_server_default};
 use tauri::Manager;
@@ -52,21 +52,6 @@ fn main() {
     */
     let mut builder = tauri::Builder::default();
 
-    /*#[cfg(debug_assertions)]
-    let builder = builder.plugin(_devtools);
-    */
-    let client = sentry_tauri::sentry::init((
-        "https://9ded544d4e5945459c62371ec4177585@o4505556825473024.ingest.sentry.io/4505556830322688",
-        sentry_tauri::sentry::ClientOptions {
-            release: sentry_tauri::sentry::release_name!(),
-            ..Default::default()
-        },
-    ));
-
-    // Everything before here runs in both app and crash reporter processes
-    let _guard = sentry_tauri::minidump::init(&client);
-    // Everything after here runs in only the app process
-
     let context = tauri::generate_context!();
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
@@ -77,24 +62,31 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     let mangadex = tauri_plugin_speu_mangadex::MangadexDesktopApi::default();
 
-    #[cfg(debug_assertions)]
-    {
-        let dev_menu = Menu::new().add_item(CustomMenuItem::new(
+    let dev_menu = Menu::new()
+        .add_item(CustomMenuItem::new(String::from("home"), "Home"))
+        .add_item(CustomMenuItem::new(
             String::from("new_window"),
             "New Window",
         ));
-        builder = builder.menu(dev_menu).on_menu_event(|e| {
-            if e.menu_item_id() == "new_window" {
+    builder = builder
+        .menu(dev_menu)
+        .on_menu_event(|e| match e.menu_item_id() {
+            "new_window" => {
+                let current_url = e.window().url();
                 let _ = Window::builder(
                     e.window(),
                     Uuid::new_v4().to_string(),
-                    tauri::WindowUrl::App(Path::new("").to_path_buf()),
+                    tauri::WindowUrl::External(current_url),
                 )
                 .title("Special Eureka")
                 .build();
             }
+            "home" => {
+                let _ = e.window().emit("redirect", "/");
+            }
+            _ => {}
         });
-    }
+
     match builder
         .system_tray(tray)
         .on_system_tray_event(|app, event| {
@@ -129,7 +121,6 @@ fn main() {
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(mangadex)
-        .plugin(sentry_tauri::plugin())
         .setup(|app| {
             #[cfg(any(windows, target_os = "macos"))]
             if let Some(splashscreen) = app.get_window("splashscreen") {
