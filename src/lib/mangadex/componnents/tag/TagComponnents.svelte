@@ -13,11 +13,11 @@
 	onMount(() => {
 		tags.sort((a) => {
 			if (is_tag_gore(a.id)) {
-				return 0;
-			} else if (is_tag_sexual_violence(a.id)) {
 				return -1;
+			} else if (is_tag_sexual_violence(a.id)) {
+				return -2;
 			} else {
-				return 1;
+				return 0;
 			}
 		});
 		to_show = tags;
