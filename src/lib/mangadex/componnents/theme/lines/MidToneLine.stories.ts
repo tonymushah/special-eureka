@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
-import "@fontsource/poppins/index.css";
+import "@fontsource/poppins/latin.css";
 
 import MidtoneLine from "./MidToneLine.svelte";
 import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svelte";

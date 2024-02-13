@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Sidebar from "$lib/mangadex/componnents/sidebar/Sidebar.svelte";
-	import "@fontsource-variable/josefin-sans";
-	import "@fontsource/poppins";
+	import "@fontsource-variable/josefin-sans/index.css";
+	import "@fontsource/poppins/latin.css";
 	import MangaDexThemeProvider from "@mangadex/componnents/theme/MangaDexThemeProvider.svelte";
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
@@ -9,7 +9,7 @@
 	import { custom } from "@mangadex/theme";
 	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
 	import { v4 } from "uuid";
-    setContextClient(client);
+	setContextClient(client);
 	const sub_id = v4();
 	const rtl = subscriptionStore({
 		client: getContextClient(),
@@ -18,7 +18,7 @@
 			sub_id
 		}
 	});
-    const theme = custom;
+	const theme = custom;
 </script>
 
 <MangaDexThemeProvider {theme}>
@@ -34,17 +34,18 @@
 		{/if}
 	</div>
 </MangaDexThemeProvider>
+
 <style>
 	.provider {
-        width: 100% !important;
-        display: inline-flex;
-        color: var(--text-color);
-    }
+		width: 100% !important;
+		display: inline-flex;
+		color: var(--text-color);
+	}
 	.inner {
-        width: 100%;
-        height: 100vh;
-        scroll-behavior: smooth;
-        overflow-y: scroll;
-        margin-left: 1em;
+		width: 100%;
+		height: 100vh;
+		scroll-behavior: smooth;
+		overflow-y: scroll;
+		margin-left: 1em;
 	}
 </style>
