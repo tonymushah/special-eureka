@@ -6,7 +6,8 @@
 	import Purple from "./status/Purple.svelte";
 	import Red from "./status/Red.svelte";
 	import Yellow from "./status/Yellow.svelte";
-	export let color: "blue" | "gray" | "green" | "purple" | "red" | "yellow";
+	import type { StatusColor } from "@mangadex/utils/types/status";
+	export let color: StatusColor;
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

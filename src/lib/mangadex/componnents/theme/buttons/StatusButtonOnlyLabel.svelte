@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import StatusButton from "./StatusButton.svelte";
-	export let color: "blue" | "gray" | "green" | "purple" | "red" | "yellow";
+	import type { StatusColor } from "@mangadex/utils/types/status";
+	export let color: StatusColor;
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

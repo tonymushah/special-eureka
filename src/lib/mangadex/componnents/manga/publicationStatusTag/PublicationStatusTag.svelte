@@ -2,9 +2,10 @@
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
 	import { MangaStatus } from "@mangadex/gql/graphql";
 	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
+	import type { StatusColor } from "@mangadex/utils/types/status";
 	import { onMount } from "svelte";
 	export let status: MangaStatus;
-	let color: "blue" | "gray" | "green" | "purple" | "red" | "yellow" = "gray";
+	let color: StatusColor = "gray";
 	export let showText = true;
 	onMount(() => {
 		switch (status) {

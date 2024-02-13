@@ -1,5 +1,7 @@
 <script lang="ts">
-	export let type: "red" | "green" | "yellow" | "blue" | "gray" | "purple";
+	import type { StatusColor } from "@mangadex/utils/types/status";
+
+	export let type: StatusColor;
 	$: red = type == "red";
 	$: green = type == "green";
 	$: yellow = type == "yellow";
