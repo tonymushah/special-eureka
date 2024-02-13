@@ -32,5 +32,6 @@
 	.title {
 		color: var(--text-color);
 		font-family: var(--fonts);
+		margin: var(--title-margin);
 	}
 </style>
