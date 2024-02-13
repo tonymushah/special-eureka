@@ -57,7 +57,40 @@ const data = [
 		relationships: []
 	}
 ];
-const tags = data.map((d) => ({
+
+const data2 = [
+	{
+		id: "423e2eae-a7a2-4a8b-ac03-a8351462d71d",
+		type: "tag",
+		attributes: { name: { en: "Romance" }, description: {}, group: "genre", version: 1 },
+		relationships: []
+	},
+	{
+		id: "97893a4c-12af-4dac-b6be-0dffb353568e",
+		type: "tag",
+		attributes: {
+			name: { en: "Sexual Violence" },
+			description: {},
+			group: "content",
+			version: 1
+		},
+		relationships: []
+	},
+	{
+		id: "b9af3a63-f058-46de-a9a0-e0c13906197a",
+		type: "tag",
+		attributes: { name: { en: "Drama" }, description: {}, group: "genre", version: 1 },
+		relationships: []
+	},
+	{
+		id: "caaa44eb-cd40-4177-b930-79d3ef2afe87",
+		type: "tag",
+		attributes: { name: { en: "School Life" }, description: {}, group: "theme", version: 1 },
+		relationships: []
+	}
+];
+
+const tags = data2.map((d) => ({
 	id: d.id,
 	name: d.attributes.name.en
 }));

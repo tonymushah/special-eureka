@@ -16,6 +16,7 @@
 				return 0;
 			}
 		});
+		tags = tags;
 	});
 </script>
 
