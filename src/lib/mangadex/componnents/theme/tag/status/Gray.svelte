@@ -1,8 +1,11 @@
 <script lang="ts">
-	import { Badge } from "@svelteuidev/core";
-	export let variant: "light" | "filled" | "outline" | "dot" | "gradient" | undefined = undefined;
+	import { Badge, createStyles } from "@svelteuidev/core";
+	export let variant: "light" | "filled" | "outline" | "dot" | "gradient" | undefined = "filled";
 </script>
 
-<Badge {variant} color={"var(--status-gray)"} style={"color: var(--text-color)"}>
+<Badge
+	{variant}
+	style={"background-color: var(--status-gray); color: var(--text-color); font-family: var(--fonts)"}
+>
 	<slot />
 </Badge>

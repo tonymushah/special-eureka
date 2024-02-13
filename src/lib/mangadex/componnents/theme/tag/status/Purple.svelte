@@ -3,6 +3,9 @@
 	export let variant: "light" | "filled" | "outline" | "dot" | "gradient" | undefined = undefined;
 </script>
 
-<Badge {variant} color={"var(--status-purple)"} style={"color: var(--text-color)"}>
+<Badge
+	{variant}
+	style={"background-color: var(--status-purple); color: var(--text-color); font-family: var(--fonts)"}
+>
 	<slot />
 </Badge>

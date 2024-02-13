@@ -10,15 +10,27 @@
 </script>
 
 {#if color == "blue"}
-	<Blue {variant} />
+	<Blue {variant}>
+		<slot />
+	</Blue>
 {:else if color == "gray"}
-	<Gray {variant} />
+	<Gray {variant}>
+		<slot />
+	</Gray>
 {:else if color == "green"}
-	<Green {variant} />
+	<Green {variant}>
+		<slot />
+	</Green>
 {:else if color == "purple"}
-	<Purple {variant} />
+	<Purple {variant}>
+		<slot />
+	</Purple>
 {:else if color == "red"}
-	<Red {variant} />
+	<Red {variant}>
+		<slot />
+	</Red>
 {:else if color == "yellow"}
-	<Yellow {variant} />
+	<Yellow {variant}>
+		<slot />
+	</Yellow>
 {/if}
