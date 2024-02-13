@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
 	export let status: MangaStatus;
 	let color: "blue" | "gray" | "green" | "purple" | "red" | "yellow" = "gray";
+	export let showText = true;
 	onMount(() => {
 		switch (status) {
 			case MangaStatus.Cancelled:
@@ -26,5 +27,7 @@
 </script>
 
 <StatusBadge {color}>
-	{_status}
+	{#if showText}
+		{_status}
+	{/if}
 </StatusBadge>
