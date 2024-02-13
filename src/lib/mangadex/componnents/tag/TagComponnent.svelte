@@ -13,7 +13,7 @@
 </script>
 
 {#if isDanger}
-	<DangerBadge>
+	<DangerBadge type="l1">
 		{name}
 	</DangerBadge>
 {:else}
