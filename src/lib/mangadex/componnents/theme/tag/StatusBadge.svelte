@@ -6,31 +6,30 @@
 	import Red from "./status/Red.svelte";
 	import Yellow from "./status/Yellow.svelte";
 	export let color: "blue" | "gray" | "green" | "purple" | "red" | "yellow";
-	export let variant: "light" | "filled" | "outline" | "dot" | "gradient" | undefined = undefined;
 </script>
 
 {#if color == "blue"}
-	<Blue {variant}>
+	<Blue>
 		<slot />
 	</Blue>
 {:else if color == "gray"}
-	<Gray {variant}>
+	<Gray>
 		<slot />
 	</Gray>
 {:else if color == "green"}
-	<Green {variant}>
+	<Green>
 		<slot />
 	</Green>
 {:else if color == "purple"}
-	<Purple {variant}>
+	<Purple>
 		<slot />
 	</Purple>
 {:else if color == "red"}
-	<Red {variant}>
+	<Red>
 		<slot />
 	</Red>
 {:else if color == "yellow"}
-	<Yellow {variant}>
+	<Yellow>
 		<slot />
 	</Yellow>
 {/if}

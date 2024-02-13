@@ -1,11 +1,7 @@
 <script lang="ts">
-	import { Badge, createStyles } from "@svelteuidev/core";
-	export let variant: "light" | "filled" | "outline" | "dot" | "gradient" | undefined = "filled";
+	import TagBase from "../base/TagBase.svelte";
 </script>
 
-<Badge
-	{variant}
-	style={"background-color: var(--status-green); color: var(--text-color); font-family: var(--fonts)"}
->
+<TagBase --tag-color="var(--status-green)">
 	<slot />
-</Badge>
+</TagBase>

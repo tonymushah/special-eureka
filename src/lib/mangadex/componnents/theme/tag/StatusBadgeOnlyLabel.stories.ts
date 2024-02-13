@@ -15,12 +15,6 @@ const meta = {
 				name: "enum",
 				value: ["red", "green", "yellow", "blue", "gray", "purple"]
 			}
-		},
-		variant: {
-			type: {
-				name: "enum",
-				value: ["light", "filled", "outline", "dot", "gradient"]
-			}
 		}
 	}
 } satisfies Meta<StatusBadge>;

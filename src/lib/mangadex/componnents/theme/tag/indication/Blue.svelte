@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { Badge } from "@svelteuidev/core";
+	import TagBase from "../base/TagBase.svelte";
 </script>
 
-<Badge
-	style={"background-color: var(--indication-blue); color: var(--text-color); font-family: var(--fonts)"}
->
+<TagBase --tag-color="var(--indication-blue)">
 	<slot />
-</Badge>
+</TagBase>
