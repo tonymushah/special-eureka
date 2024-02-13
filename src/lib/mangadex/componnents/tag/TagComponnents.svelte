@@ -1,5 +1,5 @@
 <script lang="ts">
-	import is_tag_danger from "@mangadex/utils/is_tag_danger";
+	import is_tag_danger from "@mangadex/utils/tags/is_tag_danger";
 	import { onMount } from "svelte";
 	import TagComponnent from "./TagComponnent.svelte";
 
@@ -8,6 +8,7 @@
 		name: string;
 	};
 	export let tags: Tag[];
+	let to_show: Tag[];
 	onMount(() => {
 		tags.sort((a) => {
 			if (is_tag_danger(a.id)) {
@@ -16,10 +17,12 @@
 				return 0;
 			}
 		});
-		tags = tags;
+		to_show = tags;
 	});
 </script>
 
-{#each tags as { id, name }}
-	<TagComponnent {id} {name} />
-{/each}
+{#if to_show}
+	{#each to_show as { id, name }}
+		<TagComponnent {id} {name} />
+	{/each}
+{/if}

@@ -1,18 +1,23 @@
 <script lang="ts">
-	import is_tag_danger from "@mangadex/utils/is_tag_danger";
+	import is_tag_danger from "@mangadex/utils/tags/is_tag_danger";
 	import { onMount } from "svelte";
 	import StatusBadge from "../theme/tag/StatusBadge.svelte";
+	import DangerBadge from "../theme/tag/DangerBadge.svelte";
 
 	export let id: string;
 	export let name: string;
-	let color: "red" | "gray" = "gray";
+	let isDanger = false;
 	onMount(() => {
-		if (is_tag_danger(id)) {
-			color = "red";
-		}
+		isDanger = is_tag_danger(id);
 	});
 </script>
 
-<StatusBadge {color}>
-	{name}
-</StatusBadge>
+{#if isDanger}
+	<DangerBadge>
+		{name}
+	</DangerBadge>
+{:else}
+	<StatusBadge color="gray">
+		{name}
+	</StatusBadge>
+{/if}
