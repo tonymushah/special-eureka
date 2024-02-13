@@ -52,7 +52,7 @@
 	--danger-l2={theme.danger.l2}
 	--tag-padding={"6px 10px"}
 	--tag-font-size={"10px"}
-	--tag-font-weight={"900"}
+	--tag-font-weight={"600"}
 >
 	<SvelteUIProvider bind:class={svelte_ui_theme}>
 		<slot />
