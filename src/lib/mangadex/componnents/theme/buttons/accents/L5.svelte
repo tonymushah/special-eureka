@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
+	import ButtonBase from "../base/ButtonBase.svelte";
 	export let type: "reset" | "submit" | "button" = "button";
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -9,32 +10,15 @@
 	export let style: string | undefined = undefined;
 </script>
 
-<button {style} on:click {type}>
+<ButtonBase
+	--button-color="var(--accent-l5)"
+	--button-hover="var(--accent-l5-hover)"
+	--button-active="var(--accent-l5-active)"
+	with_active
+	with_hover
+	{style}
+	on:click
+	{type}
+>
 	<slot />
-</button>
-
-<style lang="scss">
-	button {
-		font-size: var(--font-size);
-		min-height: 3em;
-		min-width: 3em;
-		border-radius: 0.25rem;
-		border: 0;
-		padding-left: 0.75rem;
-		padding-right: 0.75rem;
-		transition: background-color 100ms ease-in-out;
-		box-shadow: none;
-		display: flex;
-		align-items: center;
-		transition: background-color 300ms ease-in-out;
-		color: var(--text-color);
-		background-color: var(--accent-l5);
-		font-family: var(--fonts);
-	}
-	button:hover {
-		background-color: var(--accent-l5-hover);
-	}
-	button:active {
-		background-color: var(--accent-l5-active);
-	}
-</style>
+</ButtonBase>

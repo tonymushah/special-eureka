@@ -15,7 +15,10 @@ export default defineConfig({
 	// Tauri expects a fixed port, fail if that port is not available
 	server: {
 		port: 9305,
-		strictPort: true
+		strictPort: true,
+		fs: {
+			deny: ["**/src-tauri/**", ".env", ".env.*", "*.crt", "*.pem"]
+		}
 	},
 	// to access the Tauri environment variables set by the CLI with information about the current target
 	envPrefix: [

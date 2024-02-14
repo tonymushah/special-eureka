@@ -162,7 +162,7 @@ export function buildSvelteUITheme({
 	const { default: danger, l1: dangerl1, l2: dangerl2 } = _danger;
 	return createTheme("mangadex", {
 		fonts: {
-			standard: "Poppins"
+			standard: "var(--fonts)"
 		},
 		colors: {
 			backgroundColor,

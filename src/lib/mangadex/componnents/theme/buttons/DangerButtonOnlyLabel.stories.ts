@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
-import "@fontsource/poppins/index.css";
+import "@fontsource/poppins/latin.css";
 
 import DangerButton from "./DangerButtonOnlyLabel.svelte";
 import MangadexThemeProviderForStory from "../MangadexThemeProviderForStory.svelte";
