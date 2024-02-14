@@ -4,20 +4,35 @@
 	import { onMount } from "svelte";
 	import TagComponnent from "./TagComponnent.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-
+	import is_tag_danger from "@mangadex/utils/tags/is_tag_danger";
+	export let limit: number = 0;
 	export let tags: Tag[];
 	let to_show: Tag[];
+	let more = 0;
 	onMount(() => {
-		tags.sort((a) => {
-			if (is_tag_gore(a.id)) {
-				return 0;
-			} else if (is_tag_sexual_violence(a.id)) {
-				return -1;
-			} else {
-				return 1;
+		const temp: Tag[] = [];
+		const gore_i = tags.findIndex((t) => is_tag_gore(t.id));
+		const sexual_violence_i = tags.findLastIndex((t) => is_tag_sexual_violence(t.id));
+		let gore = gore_i != -1 ? tags[gore_i] : undefined;
+		let sexual_violence = sexual_violence_i != -1 ? tags[sexual_violence_i] : undefined;
+		if (sexual_violence) {
+			temp.push(sexual_violence);
+		}
+		if (gore) {
+			temp.push(gore);
+		}
+		tags.forEach((v) => {
+			if (!is_tag_danger(v.id)) {
+				temp.push(v);
 			}
 		});
-		to_show = tags;
+		if (limit > 0 && limit < temp.length) {
+			let _t = temp.splice(limit);
+			more = temp.length - _t.length;
+			to_show = _t;
+		} else {
+			to_show = temp;
+		}
 	});
 </script>
 
