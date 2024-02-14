@@ -93,7 +93,8 @@
 	div.title > p {
 		margin: 2px;
 		height: 3em;
-		overflow: clip;
+		overflow: hidden;
+		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 	div.publication {
@@ -117,6 +118,7 @@
 		height: 4.5em;
 		margin: 2px;
 		overflow: hidden;
+		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
 </style>
