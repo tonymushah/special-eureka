@@ -10,13 +10,12 @@
 </script>
 
 <ButtonBase
-	type="button"
 	on:click
 	isBase={false}
 	noPadding
 	--button-color={"var(--accent-l3)"}
 	--button-hover={"var(--accent-l3-hover)"}
-	--button-active={"var(--accent-l3-active)"}
+	--button-active={"var(--accent-l-active)"}
 >
 	<div class="layout">
 		<slot />
@@ -25,15 +24,11 @@
 
 <style lang="scss">
 	div.layout {
-		width: 19em;
-		display: grid;
-		grid-template-areas: "cover content content";
-		grid-column-gap: 3;
-		grid-row-gap: 1;
-		padding-right: 10px;
-		height: 160px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		border-radius: 0.25em;
+		min-width: 10em;
+		max-height: 11em;
+		display: flex;
+		flex-direction: row;
+		overflow-y: hidden;
+		border-radius: 0.25rem;
 	}
 </style>

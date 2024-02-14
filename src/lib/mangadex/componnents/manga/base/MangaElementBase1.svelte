@@ -93,7 +93,7 @@
 	div.title > p {
 		margin: 2px;
 		height: 3em;
-		overflow: clip;
+		overflow: hidden;
 		text-overflow: ellipsis;
 	}
 	div.publication {
