@@ -3,11 +3,8 @@
 	import is_tag_sexual_violence from "@mangadex/utils/tags/is_tag_sexual_violence";
 	import { onMount } from "svelte";
 	import TagComponnent from "./TagComponnent.svelte";
+	import type { Tag } from "@mangadex/utils/types/Tag";
 
-	type Tag = {
-		id: string;
-		name: string;
-	};
 	export let tags: Tag[];
 	let to_show: Tag[];
 	onMount(() => {
