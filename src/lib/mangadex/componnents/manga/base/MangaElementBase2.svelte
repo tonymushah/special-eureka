@@ -59,9 +59,9 @@
 
 <style lang="scss">
 	div.cover > img {
-		max-height: 11em;
+		height: 11em;
 		object-fit: cover;
-		width: 8em;
+		width: 7em;
 	}
 	div.tags {
 		display: flex;

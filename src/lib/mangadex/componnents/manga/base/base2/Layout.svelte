@@ -12,12 +12,10 @@
 <ButtonBase
 	on:click
 	isBase={false}
-	with_active
-	with_hover
 	noPadding
 	--button-color={"var(--accent-l3)"}
 	--button-hover={"var(--accent-l3-hover)"}
-	--button-active={"var(--accent-l3-active)"}
+	--button-active={"var(--accent-l-active)"}
 >
 	<div class="layout">
 		<slot />
