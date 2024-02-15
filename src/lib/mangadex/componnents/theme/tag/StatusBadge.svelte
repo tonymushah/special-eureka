@@ -6,31 +6,38 @@
 	import Purple from "./status/Purple.svelte";
 	import Red from "./status/Red.svelte";
 	import Yellow from "./status/Yellow.svelte";
+	import { createEventDispatcher } from "svelte";
+
+	createEventDispatcher<{
+		click: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
+	}>();
 	export let color: StatusColor;
 </script>
 
 {#if color == "blue"}
-	<Blue>
+	<Blue on:click>
 		<slot />
 	</Blue>
 {:else if color == "gray"}
-	<Gray>
+	<Gray on:click>
 		<slot />
 	</Gray>
 {:else if color == "green"}
-	<Green>
+	<Green on:click>
 		<slot />
 	</Green>
 {:else if color == "purple"}
-	<Purple>
+	<Purple on:click>
 		<slot />
 	</Purple>
 {:else if color == "red"}
-	<Red>
+	<Red on:click>
 		<slot />
 	</Red>
 {:else if color == "yellow"}
-	<Yellow>
+	<Yellow on:click>
 		<slot />
 	</Yellow>
 {/if}

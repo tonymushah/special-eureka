@@ -15,9 +15,13 @@
 	export let description: string;
 	export let tags: Tag[];
 	export let contentRating: ContentRating = ContentRating.Safe;
-	createEventDispatcher<{
+	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		tagClick: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+			id: string;
 		};
 	}>();
 </script>
@@ -48,7 +52,12 @@
 				{:else if contentRating == ContentRating.Suggestive}
 					<StatusBadge color="green">Suggestive</StatusBadge>
 				{/if}
-				<TagComponnents {tags} />
+				<TagComponnents
+					on:click={(e) => {
+						dispatch("tagClick", e.detail);
+					}}
+					{tags}
+				/>
 			</div>
 			<div class="description">
 				<p>{description}</p>

@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	export let type: "reset" | "submit" | "button" = "button";
-	createEventDispatcher<{
+	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 		mouseover: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
-		focus: MouseEvent & {
+		focus: FocusEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
@@ -21,15 +21,21 @@
 </script>
 
 <button
-	on:mouseover
-	on:focus
+	on:mouseover={(e) => {
+		dispatch("mouseover", e);
+	}}
+	on:focus={(e) => {
+		dispatch("focus", e);
+	}}
 	{style}
 	class:isBase
 	class:haveBorderRadius
 	class:with-active={with_active}
 	class:with-hover={with_hover}
 	class:noPadding
-	on:click
+	on:click={(e) => {
+		dispatch("click", e);
+	}}
 	{type}
 >
 	<slot />

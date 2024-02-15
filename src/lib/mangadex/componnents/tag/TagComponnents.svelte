@@ -9,6 +9,14 @@
 	export let tags: Tag[];
 	let to_show: Tag[];
 	let more = 0;
+	import { createEventDispatcher } from "svelte";
+
+	createEventDispatcher<{
+		click: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+			id: string;
+		};
+	}>();
 	onMount(() => {
 		const temp: Tag[] = [];
 		const gore_i = tags.findIndex((t) => is_tag_gore(t.id));
@@ -38,6 +46,6 @@
 
 {#if to_show}
 	{#each to_show as { id, name }}
-		<TagComponnent {id} {name} />
+		<TagComponnent {id} {name} on:click />
 	{/each}
 {/if}
