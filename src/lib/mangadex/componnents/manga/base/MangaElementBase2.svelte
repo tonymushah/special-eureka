@@ -73,9 +73,10 @@
 	div.title > p {
 		margin: 0px;
 		font-size: 23px;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		line-clamp: 2;
+		-webkit-line-clamp: 2;
+		display: -webkit-box;
 		font-weight: 800;
 	}
 	div.top-body {
@@ -93,8 +94,10 @@
 	}
 	div.description > p {
 		text-align: left;
-		overflow: hidden;
-		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		line-clamp: 3;
+		-webkit-line-clamp: 3;
+		display: -webkit-box;
 	}
 	div.description {
 		height: 5em;
