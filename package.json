@@ -86,6 +86,7 @@
     "graphiql": "^3.1.0",
     "mizuki-urql-adapter": "^0.1.2",
     "svelte-feather-icons": "^4.1.0",
+    "swiper": "^11.0.6",
     "uuid": "^9.0.1"
   },
   "packageManager": "pnpm@8.11.0",
