@@ -15,6 +15,7 @@
 <ButtonBase
 	on:click
 	isBase={false}
+	with_hover
 	noPadding
 	--button-color={"var(--accent-l3)"}
 	--button-hover={"var(--accent-l3-hover)"}
@@ -29,6 +30,34 @@
 </ButtonBase>
 
 <style lang="scss">
+	img {
+		width: 10em;
+		height: 15em;
+		object-fit: cover;
+		border-radius: 0.25rem;
+	}
+	div.title {
+		width: 10em;
+		height: 16em;
+		top: -16em;
+		position: relative;
+		display: flex;
+		align-items: end;
+		opacity: 1;
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent-l3) 100%);
+		border-radius: 0.25rem;
+		transition: opacity 300ms ease-in-out;
+	}
+	div.title > p {
+		font-weight: 700;
+	}
+	div.title:hover {
+		opacity: 0;
+	}
 	.layout {
+		width: 10em;
+		height: 15em;
+		overflow: hidden;
+		border-radius: 0.25rem;
 	}
 </style>
