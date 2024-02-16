@@ -107,6 +107,8 @@
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
 		display: -webkit-box;
+		margin: 0px;
+		overflow: hidden;
 	}
 	div.description {
 		height: 5em;

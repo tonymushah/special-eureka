@@ -54,6 +54,7 @@
 		line-clamp: 2;
 		-webkit-line-clamp: 2;
 		display: -webkit-box;
+		overflow: hidden;
 	}
 	div.title:hover {
 		opacity: 0;

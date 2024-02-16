@@ -95,6 +95,7 @@
 		margin: 2px;
 		line-clamp: 2;
 		-webkit-line-clamp: 2;
+		overflow: hidden;
 		-webkit-box-orient: vertical;
 	}
 	div.publication {
@@ -119,6 +120,7 @@
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
 		display: -webkit-box;
+		overflow: hidden;
 		margin: 2px;
 	}
 </style>
