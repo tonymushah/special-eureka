@@ -15,9 +15,13 @@
 	export let description: string;
 	export let tags: Tag[];
 	export let contentRating: ContentRating = ContentRating.Safe;
-	createEventDispatcher<{
+	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		tagClick: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+			id: string;
 		};
 	}>();
 </script>
@@ -48,7 +52,12 @@
 				{:else if contentRating == ContentRating.Suggestive}
 					<StatusBadge color="green">Suggestive</StatusBadge>
 				{/if}
-				<TagComponnents {tags} />
+				<TagComponnents
+					on:click={(e) => {
+						dispatch("tagClick", e.detail);
+					}}
+					{tags}
+				/>
 			</div>
 			<div class="description">
 				<p>{description}</p>
@@ -73,9 +82,10 @@
 	div.title > p {
 		margin: 0px;
 		font-size: 23px;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		line-clamp: 2;
+		-webkit-line-clamp: 2;
+		display: -webkit-box;
 		font-weight: 800;
 	}
 	div.top-body {
@@ -93,8 +103,12 @@
 	}
 	div.description > p {
 		text-align: left;
+		-webkit-box-orient: vertical;
+		line-clamp: 3;
+		-webkit-line-clamp: 3;
+		display: -webkit-box;
+		margin: 0px;
 		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 	div.description {
 		height: 5em;

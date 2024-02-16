@@ -1,6 +1,13 @@
 <script lang="ts">
 	import TagComponnents from "./TagComponnents.svelte";
+	import { createEventDispatcher } from "svelte";
 
+	createEventDispatcher<{
+		click: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+			id: string;
+		};
+	}>();
 	type Tag = {
 		id: string;
 		name: string;
@@ -9,7 +16,7 @@
 </script>
 
 <div>
-	<TagComponnents {tags} />
+	<TagComponnents on:click {tags} />
 </div>
 
 <style lang="scss">

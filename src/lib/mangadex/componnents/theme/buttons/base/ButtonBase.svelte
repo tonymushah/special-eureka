@@ -1,35 +1,41 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	export let type: "reset" | "submit" | "button" = "button";
-	createEventDispatcher<{
+	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 		mouseover: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
-		focus: MouseEvent & {
+		focus: FocusEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
 	export let with_active: boolean = false;
 	export let with_hover: boolean = false;
 	export let style: string | undefined = undefined;
-	export let isBase = true;
+	export let isBase = false;
 	export let haveBorderRadius = true;
 	export let noPadding = false;
 </script>
 
 <button
-	on:mouseover
-	on:focus
+	on:mouseover={(e) => {
+		dispatch("mouseover", e);
+	}}
+	on:focus={(e) => {
+		dispatch("focus", e);
+	}}
 	{style}
 	class:isBase
 	class:haveBorderRadius
 	class:with-active={with_active}
 	class:with-hover={with_hover}
 	class:noPadding
-	on:click
+	on:click={(e) => {
+		dispatch("click", e);
+	}}
 	{type}
 >
 	<slot />

@@ -91,10 +91,12 @@
 		font-size: 16px;
 	}
 	div.title > p {
+		display: -webkit-box;
 		margin: 2px;
-		height: 3em;
+		line-clamp: 2;
+		-webkit-line-clamp: 2;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
 	}
 	div.publication {
 		display: flex;
@@ -114,9 +116,11 @@
 		font-size: 12px;
 	}
 	div.description > p {
-		height: 4.5em;
-		margin: 2px;
+		-webkit-box-orient: vertical;
+		line-clamp: 3;
+		-webkit-line-clamp: 3;
+		display: -webkit-box;
 		overflow: hidden;
-		text-overflow: ellipsis;
+		margin: 2px;
 	}
 </style>
