@@ -1,0 +1,28 @@
+<script lang="ts">
+	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
+	import { createEventDispatcher } from "svelte";
+	const dispatch = createEventDispatcher<{
+		click: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+			id: string;
+		};
+	}>();
+	export let name: string;
+	export let id: string;
+</script>
+
+<ButtonBase
+	with_hover
+	with_active
+	on:click={({ detail }) => {
+		dispatch("click", {
+			...detail,
+			id
+		});
+	}}
+	--button-color={"var(--accent-l3)"}
+	--button-hover={"var(--accent-l3-hover)"}
+	--button-active={"var(--accent-l3-active)"}
+>
+	{name}
+</ButtonBase>
