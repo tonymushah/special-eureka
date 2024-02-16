@@ -39,7 +39,7 @@
 	</div>
 	<div class="content">
 		<div class="title">
-			<p>{title}</p>
+			<h2>{title}</h2>
 		</div>
 		<div class="tags">
 			{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
@@ -74,4 +74,31 @@
 </Layout>
 
 <style lang="scss">
+	.cover > img {
+		margin: 1em;
+		border-radius: 0.25rem;
+		max-width: 15em;
+	}
+	.content {
+		display: flex;
+		margin: 1rem;
+		flex-direction: column;
+		align-items: start;
+		text-align: start;
+	}
+	.tags {
+		display: flex;
+		gap: 0.25rem;
+	}
+	.description > p {
+		-webkit-box-orient: vertical;
+		line-clamp: 3;
+		-webkit-line-clamp: 3;
+		display: -webkit-box;
+		overflow: hidden;
+	}
+	.authors {
+		display: flex;
+		gap: 0.5rem;
+	}
 </style>

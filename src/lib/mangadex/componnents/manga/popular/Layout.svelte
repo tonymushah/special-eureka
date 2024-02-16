@@ -20,23 +20,27 @@
 	--button-hover={"var(--accent-l3-hover)"}
 	--button-active={"var(--accent-l3-active)"}
 >
-	<div class="layout-image">
-		<div class="layout">
-			<slot />
+	<div class="layout-image" style={`background-image: url(${coverImage});`}>
+		<div class="layout-color">
+			<div class="layout">
+				<slot />
+			</div>
 		</div>
 	</div>
 </ButtonBase>
 
 <style lang="scss">
 	.layout-image {
-		background-image: var(--cover-image);
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: 0px -400px;
 	}
+	.layout-color {
+		background-color: color-mix(in srgb, var(--main-background) 70%, white 0%);
+	}
 	.layout {
-		background: var(--background-color + dd);
-		backdrop-filter: blur(20px);
+		backdrop-filter: blur(20px) opacity(20%);
+		-webkit-backdrop-filter: blur(20px);
 		display: flex;
 		align-items: start;
 		flex-direction: row;
