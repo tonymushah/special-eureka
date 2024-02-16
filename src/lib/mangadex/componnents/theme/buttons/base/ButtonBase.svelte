@@ -15,7 +15,7 @@
 	export let with_active: boolean = false;
 	export let with_hover: boolean = false;
 	export let style: string | undefined = undefined;
-	export let isBase = true;
+	export let isBase = false;
 	export let haveBorderRadius = true;
 	export let noPadding = false;
 </script>
