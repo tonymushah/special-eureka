@@ -39,6 +39,7 @@
 		background-color: color-mix(in srgb, var(--main-background) 70%, white 0%);
 	}
 	.layout {
+		margin: var(--popular-element-layout-margin);
 		backdrop-filter: blur(20px) opacity(20%);
 		-webkit-backdrop-filter: blur(20px);
 		display: flex;
