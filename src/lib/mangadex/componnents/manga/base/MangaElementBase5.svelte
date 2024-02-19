@@ -42,7 +42,10 @@
 				}}
 			>
 				<div class="read-btn-content">
-					<BookOpenIcon /> Read
+					<span class="book-open-icon">
+						<BookOpenIcon size="18" />
+					</span>
+					<span> Read </span>
 				</div>
 			</PrimaryButton>
 			<ButtonAccent
@@ -143,5 +146,9 @@
 		display: flex;
 		flex-direction: row;
 		gap: 10px;
+	}
+	.book-open-icon {
+		width: 18px;
+		height: 18px;
 	}
 </style>
