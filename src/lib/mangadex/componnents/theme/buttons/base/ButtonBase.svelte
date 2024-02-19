@@ -51,6 +51,9 @@
 		background-color: var(--button-color);
 		font-family: var(--fonts);
 		border: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	button.haveBorderRadius {
 		border-radius: 0.25rem;
@@ -64,8 +67,6 @@
 		min-width: 3em;
 		padding-left: 0.75rem;
 		padding-right: 0.75rem;
-		display: flex;
-		align-items: center;
 	}
 	button.with-hover:hover {
 		background-color: var(--button-hover);
