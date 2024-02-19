@@ -84,6 +84,7 @@
     "@types/uuid": "^9.0.7",
     "@urql/svelte": "^4.0.4",
     "dayjs": "^1.11.10",
+    "flag-icons": "^7.1.0",
     "graphiql": "^3.1.0",
     "mizuki-urql-adapter": "^0.1.2",
     "svelte-feather-icons": "^4.1.0",

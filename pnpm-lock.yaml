@@ -53,6 +53,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
+  flag-icons:
+    specifier: ^7.1.0
+    version: 7.1.0
   graphiql:
     specifier: ^3.1.0
     version: 3.1.0(@codemirror/language@6.0.0)(@types/react-dom@18.2.18)(@types/react@18.2.48)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -7872,6 +7875,10 @@ packages:
       locate-path: 6.0.0
       path-exists: 4.0.0
     dev: true
+
+  /flag-icons@7.1.0:
+    resolution: {integrity: sha512-AH4v++19bpC5P3Wh767top4wylJYJCWkFnvNiDqGHDxqSqdMZ49jpLXp8PWBHTTXaNQ+/A+QPrOwyiIGaiIhmw==}
+    dev: false
 
   /flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
