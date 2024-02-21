@@ -89,6 +89,7 @@
     "mizuki-urql-adapter": "^0.1.2",
     "svelte-feather-icons": "^4.1.0",
     "swiper": "^11.0.6",
+    "timeago.js": "^4.0.2",
     "uuid": "^9.0.1"
   },
   "packageManager": "pnpm@8.11.0",
