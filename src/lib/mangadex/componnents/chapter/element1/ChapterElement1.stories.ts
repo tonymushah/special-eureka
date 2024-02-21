@@ -31,7 +31,8 @@ export const Default: Story = {
 			.filter((rel) => rel.type == "user")
 			.map((rel) => ({
 				id: rel.id,
-				name: rel.attributes.username!
+				name: rel.attributes.username!,
+				roles: []
 			}))[0],
 		upload_date: new Date(testData.data.attributes.readableAt),
 		download_state: ChapterDownloadState.Downloaded,

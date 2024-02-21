@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Language } from "@mangadex/gql/graphql";
+	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import {
 		CheckIcon,
@@ -12,7 +12,7 @@
 		XIcon
 	} from "svelte-feather-icons";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-	import { onDestroy, onMount } from "svelte";
+	import { createEventDispatcher, onDestroy, onMount } from "svelte";
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
 	type Group = {
 		id: string;
@@ -20,6 +20,7 @@
 	};
 	type Uploader = {
 		id: string;
+		roles: UserRole[];
 		name: string;
 	};
 	export let title: string | undefined = undefined;
@@ -31,6 +32,18 @@
 	export let download_state: ChapterDownloadState;
 	export let comments: number;
 	let timeago: HTMLTimeElement;
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	const dispatch = createEventDispatcher<{
+		download: MouseEnvDiv;
+		downloadKeyPress: KeyboardEnvDiv;
+		read: MouseEnvDiv;
+		readKeyPress: KeyboardEnvDiv;
+	}>();
 	onMount(() => {
 		timeRender(timeago);
 	});
@@ -39,9 +52,27 @@
 	});
 </script>
 
-<div class="border">
+<div
+	class="border"
+	role="article"
+	on:contextmenu={(e) => {
+		e.preventDefault();
+	}}
+>
 	<div class="layout" class:haveBeenRead>
-		<div class="state">
+		<div
+			class="state buttons"
+			role="button"
+			on:click={(e) => {
+				if (download_state != ChapterDownloadState.Downloading) {
+					dispatch("download", e);
+				}
+			}}
+			on:keypress={(e) => {
+				dispatch("downloadKeyPress", e);
+			}}
+			tabindex={0}
+		>
 			{#if download_state == ChapterDownloadState.Downloaded}
 				<CheckIcon />
 			{:else if download_state == ChapterDownloadState.Downloading}
@@ -56,7 +87,17 @@
 			<div>
 				<MangaDexFlagIcon bind:lang />
 			</div>
-			<div role="button" on:click={() => {}} tabindex={1} on:keypress={() => {}}>
+			<div
+				class="buttons"
+				role="button"
+				on:click={(e) => {
+					dispatch("read", e);
+				}}
+				tabindex={1}
+				on:keypress={(e) => {
+					dispatch("readKeyPress", e);
+				}}
+			>
 				{#if !haveBeenRead}
 					<EyeIcon />
 				{:else}
@@ -65,7 +106,7 @@
 			</div>
 		</div>
 		<div class="title-groups">
-			<h4>{title}</h4>
+			<a href="/"><h4>{title}</h4></a>
 			<div class="groups">
 				<UsersIcon />
 				{#if groups.length != 0}
@@ -98,6 +139,15 @@
 </div>
 
 <style lang="scss">
+	.buttons {
+		transition: background-color 300ms ease-in-out;
+	}
+	.buttons:hover {
+		background-color: var(--accent-l1-hover);
+	}
+	.buttons:active {
+		background-color: var(--accent-l1-active);
+	}
 	.border {
 		border-radius: 0.5rem;
 		border: 1px solid var(--accent-l3);
@@ -122,7 +172,7 @@
 		flex-direction: column;
 		justify-content: center;
 	}
-	.title-groups > h4 {
+	.title-groups > a > h4 {
 		margin: 0px;
 	}
 	.title-groups {
@@ -163,7 +213,7 @@
 	.layout:hover {
 		background-color: var(--accent-hover);
 	}
-	.uploader {
+	a {
 		color: var(--text-color);
 		text-decoration: none;
 	}
