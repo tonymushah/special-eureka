@@ -4,6 +4,8 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { onDestroy, onMount } from "svelte";
 	import { appWindow } from "@tauri-apps/api/window";
+	import { computePosition } from "@floating-ui/dom";
+	import { flip } from "@floating-ui/dom";
 
 	export let items: Item[];
 	export let tabindex: number | null;
@@ -18,6 +20,26 @@
 		});
 	};
 	let contextMenuUnlisten: UnlistenFn | undefined = undefined;
+
+	let contextMenu: HTMLDivElement;
+	let anchor: HTMLDivElement;
+	const close = async () => {
+		await appWindow.emit("close-context-menu");
+	};
+	function refreshAnchorPos(x: number, y: number) {
+		anchor.style.top = `${y}px`;
+		anchor.style.left = `${x}px`;
+	}
+	async function refreshStyle() {
+		const { x: _x, y: _y } = await computePosition(anchor, contextMenu, {
+			middleware: [flip()],
+			placement: "bottom-start"
+		});
+		Object.assign(contextMenu.style, {
+			top: `${_y}px`,
+			left: `${_x}px`
+		});
+	}
 	onMount(async () => {
 		let unlisten_ = await contextMenuListen();
 		contextMenuUnlisten = () => {
@@ -36,25 +58,19 @@
 		}
 		unlistenAll();
 	});
-	let style: string = "";
-	function refreshStyle(x: number, y: number) {
-		style = `top: ${y}px; left: ${x}px`;
-	}
-	const close = async () => {
-		await appWindow.emit("close-context-menu");
-	};
 	$: console.log(`isOpen: ${isOpen}`);
 </script>
 
 <div
 	class="content"
 	on:contextmenu={async (e) => {
+		refreshAnchorPos(e.x, e.y);
 		isOpening = true;
 		if (contextMenuUnlisten) contextMenuUnlisten();
 		e.preventDefault();
 		try {
 			await close();
-			refreshStyle(e.x, e.y);
+			await refreshStyle();
 			isOpen = true;
 		} finally {
 			isOpening = false;
@@ -67,10 +83,11 @@
 	}}
 	role="document"
 >
+	<div class="cm" bind:this={anchor} />
 	<slot />
 </div>
 
-<div class="context-menu" class:isOpen {style}>
+<div class="context-menu" class:isOpen bind:this={contextMenu}>
 	<ContextMenuBase
 		{items}
 		{tabindex}
@@ -81,11 +98,14 @@
 </div>
 
 <style lang="scss">
+	.cm {
+		position: absolute;
+	}
 	.context-menu {
 		display: none;
 		position: absolute;
-		top: 0;
-		left: 0;
+		top: 0px;
+		left: 0px;
 	}
 	.context-menu.isOpen {
 		display: block;
