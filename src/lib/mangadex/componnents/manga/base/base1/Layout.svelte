@@ -25,7 +25,7 @@
 
 <style lang="scss">
 	div.layout {
-		width: 19em;
+		width: var(--layout-width);
 		display: grid;
 		grid-template-areas: "cover content content";
 		grid-column-gap: 3;

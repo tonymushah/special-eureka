@@ -56,7 +56,7 @@
 	});
 </script>
 
-<Layout on:click>
+<Layout on:click --layout-width="19em">
 	<div class="cover-image">
 		<img src={coverImage} alt={coverImageAlt} />
 	</div>
@@ -98,9 +98,6 @@
 		overflow: hidden;
 		-webkit-box-orient: vertical;
 	}
-	div.publication {
-		display: flex;
-	}
 	div.content {
 		padding-left: 12px;
 		grid-area: content;
@@ -111,6 +108,9 @@
 		align-items: start;
 		justify-items: center;
 		gap: 8px;
+	}
+	div.publication {
+		display: flex;
 	}
 	div.description {
 		font-size: 12px;

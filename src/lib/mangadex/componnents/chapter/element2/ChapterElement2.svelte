@@ -254,4 +254,7 @@
 		align-items: center;
 		justify-content: center;
 	}
+	:root {
+		--layout-width: 50vw;
+	}
 </style>
