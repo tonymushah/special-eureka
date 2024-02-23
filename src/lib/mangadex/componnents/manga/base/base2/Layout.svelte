@@ -25,7 +25,7 @@
 <style lang="scss">
 	div.layout {
 		min-width: 10em;
-		max-height: 11em;
+		max-height: var(--max-height);
 		display: flex;
 		flex-direction: row;
 		overflow-y: hidden;

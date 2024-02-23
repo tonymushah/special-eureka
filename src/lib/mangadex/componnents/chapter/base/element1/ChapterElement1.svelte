@@ -23,6 +23,7 @@
 		roles: UserRole[];
 		name: string;
 	};
+	export let id: string;
 	export let title: string | undefined = undefined;
 	export let lang: Language;
 	export let groups: Group[] = [];
@@ -39,10 +40,18 @@
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv;
-		downloadKeyPress: KeyboardEnvDiv;
-		read: MouseEnvDiv;
-		readKeyPress: KeyboardEnvDiv;
+		download: MouseEnvDiv & {
+			id: string;
+		};
+		downloadKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+		read: MouseEnvDiv & {
+			id: string;
+		};
+		readKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
 	}>();
 	onMount(() => {
 		timeRender(timeago);
@@ -65,11 +74,17 @@
 			role="button"
 			on:click={(e) => {
 				if (download_state != ChapterDownloadState.Downloading) {
-					dispatch("download", e);
+					dispatch("download", {
+						...e,
+						id
+					});
 				}
 			}}
 			on:keypress={(e) => {
-				dispatch("downloadKeyPress", e);
+				dispatch("downloadKeyPress", {
+					...e,
+					id
+				});
 			}}
 			tabindex={0}
 		>
@@ -91,11 +106,17 @@
 				class="buttons"
 				role="button"
 				on:click={(e) => {
-					dispatch("read", e);
+					dispatch("read", {
+						...e,
+						id
+					});
 				}}
 				tabindex={1}
 				on:keypress={(e) => {
-					dispatch("readKeyPress", e);
+					dispatch("readKeyPress", {
+						...e,
+						id
+					});
 				}}
 			>
 				{#if !haveBeenRead}
@@ -106,7 +127,7 @@
 			</div>
 		</div>
 		<div class="title-groups">
-			<a href="/"><h4>{title}</h4></a>
+			<a href={`/mangadex/chapter/${id}`}><h4>{title}</h4></a>
 			<div class="groups">
 				<UsersIcon />
 				{#if groups.length != 0}

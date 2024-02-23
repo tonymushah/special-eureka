@@ -15,7 +15,7 @@
 	import { createEventDispatcher, onDestroy, onMount } from "svelte";
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
 	import Layout from "@mangadex/componnents/manga/base/base1/Layout.svelte";
-	import ChapterElement2 from "../../element2/ChapterElement2.svelte";
+	import ChapterElement2 from "../../base/element2/ChapterElement2.svelte";
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	type Group = {
 		id: string;
@@ -46,10 +46,12 @@
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv;
-		downloadKeyPress: KeyboardEnvDiv;
-		chapterClick: MouseEnvDiv;
-		chapterKeyPress: KeyboardEnvDiv;
+		download: MouseEnvDiv & {
+			id: string;
+		};
+		downloadKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
 		mangaClick: MouseEnvDiv & {
 			id: string;
 		};

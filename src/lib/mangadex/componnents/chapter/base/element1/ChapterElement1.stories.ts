@@ -5,6 +5,7 @@ import ChapterElement1 from "./ChapterElement1.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { Language } from "@mangadex/gql/graphql";
 import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
+import { v4 } from "uuid";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -19,6 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
+		id: v4(),
 		title: testData.data.attributes.title,
 		lang: Language.English,
 		groups: testData.data.relationships

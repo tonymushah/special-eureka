@@ -44,12 +44,12 @@
 	let tooltip: HTMLDivElement;
 	let arrowElement: HTMLDivElement;
 	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv;
-		downloadKeyPress: KeyboardEnvDiv;
-		chapterClick: MouseEnvDiv;
-		chapterKeyPress: KeyboardEnvDiv;
-		mangaClick: MouseEnvDiv;
-		mangaKeyClick: KeyboardEnvDiv;
+		download: MouseEnvDiv & {
+			id: string;
+		};
+		downloadKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
 	}>();
 	async function update() {
 		const { x, y, placement, middlewareData } = await computePosition(layout, tooltip, {
@@ -118,11 +118,17 @@
 		role="button"
 		on:click={(e) => {
 			if (download_state != ChapterDownloadState.Downloading) {
-				dispatch("download", e);
+				dispatch("download", {
+					...e,
+					id
+				});
 			}
 		}}
 		on:keypress={(e) => {
-			dispatch("downloadKeyPress", e);
+			dispatch("downloadKeyPress", {
+				...e,
+				id
+			});
 		}}
 		tabindex={0}
 	>
