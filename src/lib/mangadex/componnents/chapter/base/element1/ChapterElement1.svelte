@@ -202,6 +202,17 @@
 	.groups {
 		display: flex;
 		gap: 5px;
+		flex-direction: row;
+	}
+	.groups > a {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+	.groups > i {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 	.reading-number-comments {
 		align-items: center;

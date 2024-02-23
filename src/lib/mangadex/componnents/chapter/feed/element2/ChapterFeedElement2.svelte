@@ -31,19 +31,11 @@
 	export let title: string;
 	export let mangaId: string;
 	export let chapters: Chapter[];
-	let displayed_chapters: Chapter[];
 	let isCollapsed = true;
 	let canCollaspe = false;
 	function setDisplayedChapters() {
 		if (chapters.length > 3) {
-			displayed_chapters = chapters.filter((v, i) => {
-				if (i < 2) {
-					return v;
-				}
-			});
 			canCollaspe = true;
-		} else {
-			displayed_chapters = chapters;
 		}
 	}
 	onMount(() => {
@@ -75,13 +67,6 @@
 			id: string;
 		};
 	}>();
-	$: {
-		if (isCollapsed) {
-			setDisplayedChapters();
-		} else {
-			displayed_chapters = chapters;
-		}
-	}
 </script>
 
 <div class="layout">
@@ -125,8 +110,8 @@
 			<div class="title"><p>{title}</p></div>
 		</div>
 		<div class="bottom-body">
-			{#if displayed_chapters}
-				{#each displayed_chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, download_state, comments }}
+			<div class="chapters" class:isCollapsed>
+				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, download_state, comments }}
 					<ChapterElement1
 						on:download
 						on:downloadKeyPress
@@ -143,7 +128,7 @@
 						{comments}
 					/>
 				{/each}
-			{/if}
+			</div>
 			{#if canCollaspe}
 				<div class="collapse">
 					<ButtonAccent
@@ -204,12 +189,20 @@
 		margin: 10px;
 		gap: 10px;
 		width: 100%;
-		transition: height 300ms ease-in-out;
 	}
-	div.bottom-body {
+	div.bottom-body > div.chapters {
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
+		overflow: hidden;
+		transition: height 300ms ease-in-out;
+		margin-bottom: 5px;
+	}
+	div.bottom-body > div.chapters:not(.isCollapsed) {
+		height: initial;
+	}
+	div.bottom-body > div.chapters.isCollapsed {
+		height: 8.6em;
 	}
 	div.manga-content:hover {
 		cursor: pointer;
