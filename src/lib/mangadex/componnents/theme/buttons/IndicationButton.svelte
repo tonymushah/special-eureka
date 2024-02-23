@@ -9,11 +9,12 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
+	export let isBase = false;
 	export let style: string | undefined = undefined;
 </script>
 
 {#if variant == "blue"}
-	<Blue {type} {style} on:click>
+	<Blue {type} {style} on:click {isBase}>
 		<slot />
 	</Blue>
 {/if}

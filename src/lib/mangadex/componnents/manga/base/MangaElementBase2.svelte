@@ -26,7 +26,7 @@
 	}>();
 </script>
 
-<Layout on:click>
+<Layout on:click --max-height="11em">
 	<div class="cover">
 		<img src={coverImage} alt={coverImageAlt} />
 	</div>

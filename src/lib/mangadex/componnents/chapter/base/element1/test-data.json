@@ -1,0 +1,146 @@
+{
+	"result": "ok",
+	"response": "entity",
+	"data": {
+		"id": "060fd020-48b7-4aa2-9977-3260f8ac8481",
+		"type": "chapter",
+		"attributes": {
+			"volume": null,
+			"chapter": "63",
+			"title": "Ch. 63",
+			"translatedLanguage": "en",
+			"externalUrl": null,
+			"publishAt": "2023-08-04T19:04:49+00:00",
+			"readableAt": "2023-08-04T19:04:49+00:00",
+			"createdAt": "2023-08-04T19:04:48+00:00",
+			"updatedAt": "2023-08-04T19:08:23+00:00",
+			"pages": 39,
+			"version": 5
+		},
+		"relationships": [
+			{
+				"id": "b4c93297-b32f-4f90-b619-55456a38b0aa",
+				"type": "manga",
+				"attributes": {
+					"title": { "en": "Fuufu Ijou, Koibito Miman." },
+					"altTitles": [
+						{ "ms": "Melebihi Suami Isteri, Namun Bukan Kekasih." },
+						{ "en": "More Than A Married Couple, But Not Lovers." },
+						{ "zh": "\u592b\u5987\u4ee5\u4e0a\uff0c\u604b\u4eba\u672a\u6ee1\u3002" },
+						{ "ko": "\ubd80\ubd80\uc774\uc0c1, \uc5f0\uc778\ubbf8\ub9cc" },
+						{ "ja": "\u592b\u5a66\u4ee5\u4e0a\u3001\u604b\u4eba\u672a\u6e80\u3002" },
+						{ "pt-br": "Mais do que um casal, menos do que um amante." },
+						{
+							"th": "\u0e41\u0e1c\u0e19\u0e2a\u0e21\u0e23\u0e31\u0e01\u0e44\u0e21\u0e48\u0e2a\u0e21\u0e40\u0e25\u0e34\u0e1f"
+						},
+						{ "fr": "Presque mari\u00e9s, loin d\u0027\u00eatre amoureux." }
+					],
+					"description": {
+						"en": "Jirou, a third-year in high school, is forced to live with a gyaru named Akari under a course called the \u0022Couple Practical\u0022. In order to be paired with their own romantic interests, they\u0027re going to act as a married couple\u2026!?",
+						"ja": "\u9ad8\u6821\u4e09\u5e74\u751f\u306b\u306a\u3063\u305f\u6b21\u90ce\u306f\u3001\u300c\u592b\u5a66\u5b9f\u7fd2\u300d\u3068\u3044\u3046\u6388\u696d\u306e\u4e00\u74b0\u3067\u975e\u30ea\u30a2\u5145\u306a\u81ea\u5206\u3068\u306f\u6b63\u53cd\u5bfe\u306e\u5b58\u5728\u306e\u30af\u30e9\u30b9\u306e\u30ae\u30e3\u30eb\u30fb\u6e21\u8fba\u661f\u3068\u4e00\u7dd2\u306b\u66ae\u3089\u3059\u3053\u3068\u306b\u306a\u3063\u3066\u3057\u307e\u3046\u3002\u3060\u304c\u3001\u30da\u30a2\u3092\u5165\u308c\u66ff\u3048\u3089\u308c\u308b\u5236\u5ea6\u3092\u77e5\u3063\u305f\u4e8c\u4eba\u306f\u3001\u305d\u308c\u305e\u308c\u306e\u597d\u304d\u306a\u4eba\u3068\u4e00\u7dd2\u306b\u306a\u308b\u305f\u3081\u306b\u7121\u7406\u77e2\u7406\u3010\u592b\u5a66\u3011\u3089\u3057\u3044\u4e8b\u3092\u6f14\u3058\u308b\u306e\u3060\u304c\u2026!?",
+						"vi": "Yakuin Jirou, nam sinh n\u0103m ba cao trung. C\u1eadu ta bu\u1ed9c ph\u1ea3i s\u1ed1ng chung nh\u00e0 v\u1edbi m\u1ed9t g\u00e1i Gyaru t\u00ean l\u00e0 Watanabe Akari. L\u00fd do l\u00e0 v\u00ec \u0111\u1ee3t hu\u1ea5n luy\u1ec7n \u201cC\u1eb7p \u0111\u00f4i\u201c c\u1ee7a tr\u01b0\u1eddng m\u00e0 hai ng\u01b0\u1eddi h\u1ecd theo h\u1ecdc. \u0110\u1ec3 \u0111\u01b0\u1ee3c s\u1ed1ng v\u1edbi ng\u01b0\u1eddi t\u00ecnh trong m\u1ed9ng c\u1ee7a m\u00ecnh, hai ng\u01b0\u1eddi h\u1ecd ph\u1ea3i \u0111\u00e3 l\u00ean k\u1ebf ho\u1ea1ch s\u1ed1ng c\u00f9ng nhau nh\u01b0 m\u1ed9t c\u1eb7p v\u1ee3 ch\u1ed3ng."
+					},
+					"isLocked": false,
+					"links": {
+						"al": "105011",
+						"ap": "fuufu-ijou-koibito-miman",
+						"bw": "series/178013",
+						"kt": "54329",
+						"mu": "clae4et",
+						"amz": "https://www.amazon.co.jp/dp/B07Q6MBVZL",
+						"ebj": "https://ebookjapan.yahoo.co.jp/books/491867",
+						"mal": "115848",
+						"raw": "https://comic-walker.com/contents/detail/KDCW_KS02200254010000_68/"
+					},
+					"originalLanguage": "ja",
+					"lastVolume": "",
+					"lastChapter": "",
+					"publicationDemographic": "seinen",
+					"status": "ongoing",
+					"year": 2018,
+					"contentRating": "suggestive",
+					"tags": [
+						{
+							"id": "423e2eae-a7a2-4a8b-ac03-a8351462d71d",
+							"type": "tag",
+							"attributes": {
+								"name": { "en": "Romance" },
+								"description": {},
+								"group": "genre",
+								"version": 1
+							},
+							"relationships": []
+						},
+						{
+							"id": "4d32cc48-9f00-4cca-9b5a-a839f0764984",
+							"type": "tag",
+							"attributes": {
+								"name": { "en": "Comedy" },
+								"description": {},
+								"group": "genre",
+								"version": 1
+							},
+							"relationships": []
+						},
+						{
+							"id": "b9af3a63-f058-46de-a9a0-e0c13906197a",
+							"type": "tag",
+							"attributes": {
+								"name": { "en": "Drama" },
+								"description": {},
+								"group": "genre",
+								"version": 1
+							},
+							"relationships": []
+						},
+						{
+							"id": "caaa44eb-cd40-4177-b930-79d3ef2afe87",
+							"type": "tag",
+							"attributes": {
+								"name": { "en": "School Life" },
+								"description": {},
+								"group": "theme",
+								"version": 1
+							},
+							"relationships": []
+						},
+						{
+							"id": "e5301a23-ebd9-49dd-a0cb-2add944c7fe9",
+							"type": "tag",
+							"attributes": {
+								"name": { "en": "Slice of Life" },
+								"description": {},
+								"group": "genre",
+								"version": 1
+							},
+							"relationships": []
+						},
+						{
+							"id": "fad12b5e-68ba-460e-b933-9ae8318f5b65",
+							"type": "tag",
+							"attributes": {
+								"name": { "en": "Gyaru" },
+								"description": {},
+								"group": "theme",
+								"version": 1
+							},
+							"relationships": []
+						}
+					],
+					"state": "published",
+					"chapterNumbersResetOnNewVolume": false,
+					"createdAt": "2019-08-20T23:13:05+00:00",
+					"updatedAt": "2023-06-02T09:32:05+00:00",
+					"version": 35,
+					"availableTranslatedLanguages": ["vi", "fr", "pt-br", "en", "es-la"],
+					"latestUploadedChapter": "060fd020-48b7-4aa2-9977-3260f8ac8481"
+				}
+			},
+			{
+				"id": "d0d5313d-2b91-45be-8342-b56dc7b48455",
+				"type": "user",
+				"attributes": { "username": "12strawberries", "roles": ["ROLE_USER"], "version": 1 }
+			}
+		]
+	}
+}

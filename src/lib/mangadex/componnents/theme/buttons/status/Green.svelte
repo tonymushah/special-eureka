@@ -8,8 +8,9 @@
 		};
 	}>();
 	export let style: string | undefined = undefined;
+	export let isBase = false;
 </script>
 
-<ButtonBase --button-color={"var(--status-green)"} {style} on:click {type}>
+<ButtonBase {isBase} --button-color={"var(--status-green)"} {style} on:click {type}>
 	<slot />
 </ButtonBase>

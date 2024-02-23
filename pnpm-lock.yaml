@@ -53,6 +53,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
+  flag-icons:
+    specifier: ^7.1.0
+    version: 7.1.0
   graphiql:
     specifier: ^3.1.0
     version: 3.1.0(@codemirror/language@6.0.0)(@types/react-dom@18.2.18)(@types/react@18.2.48)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -65,6 +68,9 @@ dependencies:
   swiper:
     specifier: ^11.0.6
     version: 11.0.6
+  timeago.js:
+    specifier: ^4.0.2
+    version: 4.0.2
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -175,6 +181,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.6.2
     version: 3.6.3(@babel/core@7.23.9)(less@4.2.0)(postcss@8.4.33)(sass@1.70.0)(svelte@4.2.9)
+  svelte-loading-spinners:
+    specifier: ^0.3.4
+    version: 0.3.4
   svelte-markdown:
     specifier: ^0.4.1
     version: 0.4.1(svelte@4.2.9)
@@ -7873,6 +7882,10 @@ packages:
       path-exists: 4.0.0
     dev: true
 
+  /flag-icons@7.1.0:
+    resolution: {integrity: sha512-AH4v++19bpC5P3Wh767top4wylJYJCWkFnvNiDqGHDxqSqdMZ49jpLXp8PWBHTTXaNQ+/A+QPrOwyiIGaiIhmw==}
+    dev: false
+
   /flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -11203,6 +11216,10 @@ packages:
       svelte: 4.2.9
     dev: true
 
+  /svelte-loading-spinners@0.3.4:
+    resolution: {integrity: sha512-vKaW71QMCBcTNijAGc0mUl8k3DQ66iYmp6MB8BMGCXyWk82bTrcLy8FOnSm9fE+8q6TwzD6PLUoYFHt0II93Xw==}
+    dev: true
+
   /svelte-markdown@0.4.1(svelte@4.2.9):
     resolution: {integrity: sha512-pOlLY6EruKJaWI9my/2bKX8PdTeP5CM0s4VMmwmC2prlOkjAf+AOmTM4wW/l19Y6WZ87YmP8+ZCJCCwBChWjYw==}
     peerDependencies:
@@ -11429,6 +11446,10 @@ packages:
   /through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
     dev: true
+
+  /timeago.js@4.0.2:
+    resolution: {integrity: sha512-a7wPxPdVlQL7lqvitHGGRsofhdwtkoSXPGATFuSOA2i1ZNQEPLrGnj68vOp2sOJTCFAQVXPeNMX/GctBaO9L2w==}
+    dev: false
 
   /tiny-glob@0.2.9:
     resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}

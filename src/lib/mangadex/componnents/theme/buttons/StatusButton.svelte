@@ -15,30 +15,31 @@
 	}>();
 	export let type: "reset" | "submit" | "button" = "button";
 	export let style: string | undefined = undefined;
+	export let isBase = false;
 </script>
 
 {#if color == "blue"}
-	<Blue on:click {type} {style}>
+	<Blue on:click {type} {style} {isBase}>
 		<slot />
 	</Blue>
 {:else if color == "gray"}
-	<Gray on:click {type} {style}>
+	<Gray on:click {type} {style} {isBase}>
 		<slot />
 	</Gray>
 {:else if color == "green"}
-	<Green on:click {type} {style}>
+	<Green on:click {type} {style} {isBase}>
 		<slot />
 	</Green>
 {:else if color == "purple"}
-	<Purple on:click {type} {style}>
+	<Purple on:click {type} {style} {isBase}>
 		<slot />
 	</Purple>
 {:else if color == "red"}
-	<Red on:click {type} {style}>
+	<Red on:click {type} {style} {isBase}>
 		<slot />
 	</Red>
 {:else if color == "yellow"}
-	<Yellow on:click {type} {style}>
+	<Yellow on:click {type} {style} {isBase}>
 		<slot />
 	</Yellow>
 {/if}
