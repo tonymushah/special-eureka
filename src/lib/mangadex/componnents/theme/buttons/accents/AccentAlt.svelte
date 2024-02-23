@@ -8,8 +8,9 @@
 		};
 	}>();
 	export let style: string | undefined = undefined;
+	export let isBase = false;
 </script>
 
-<ButtonBase --button-color="var(--button-accent-alt)" {style} on:click {type}>
+<ButtonBase {isBase} --button-color="var(--button-accent-alt)" {style} on:click {type}>
 	<slot />
 </ButtonBase>

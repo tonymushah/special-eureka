@@ -8,6 +8,7 @@
 		};
 	}>();
 	export let style: string | undefined = undefined;
+	export let isBase = false;
 </script>
 
 <ButtonBase
@@ -19,6 +20,7 @@
 	{style}
 	on:click
 	{type}
+	{isBase}
 >
 	<slot />
 </ButtonBase>
