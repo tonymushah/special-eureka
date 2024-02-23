@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
 import "@fontsource/poppins/latin.css";
-import testData from "../../element1/test-data.json";
+import testData from "../../base/element1/test-data.json";
 import ChapterFeedElement1 from "./ChapterFeedElement1.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { Language } from "@mangadex/gql/graphql";
