@@ -11,8 +11,9 @@
 	}>();
 	export let style: string | undefined = undefined;
 	export let label: string;
+	export let isBase = false;
 </script>
 
-<IndicationButton {variant} {type} {style} on:click>
+<IndicationButton {variant} {type} {style} on:click {isBase}>
 	{label}
 </IndicationButton>
