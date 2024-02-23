@@ -11,8 +11,9 @@
 	export let type: "reset" | "submit" | "button" = "button";
 	export let style: string | undefined = undefined;
 	export let label: string;
+	export let isBase = false;
 </script>
 
-<StatusButton {color} {type} on:click {style}>
+<StatusButton {isBase} {color} {type} on:click {style}>
 	{label}
 </StatusButton>
