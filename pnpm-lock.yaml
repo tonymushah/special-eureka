@@ -181,9 +181,6 @@ devDependencies:
   svelte-check:
     specifier: ^3.6.2
     version: 3.6.3(@babel/core@7.23.9)(less@4.2.0)(postcss@8.4.33)(sass@1.70.0)(svelte@4.2.9)
-  svelte-loading-spinners:
-    specifier: ^0.3.4
-    version: 0.3.4
   svelte-markdown:
     specifier: ^0.4.1
     version: 0.4.1(svelte@4.2.9)
@@ -11214,10 +11211,6 @@ packages:
       svelte: ^3.19.0 || ^4.0.0
     dependencies:
       svelte: 4.2.9
-    dev: true
-
-  /svelte-loading-spinners@0.3.4:
-    resolution: {integrity: sha512-vKaW71QMCBcTNijAGc0mUl8k3DQ66iYmp6MB8BMGCXyWk82bTrcLy8FOnSm9fE+8q6TwzD6PLUoYFHt0II93Xw==}
     dev: true
 
   /svelte-markdown@0.4.1(svelte@4.2.9):
