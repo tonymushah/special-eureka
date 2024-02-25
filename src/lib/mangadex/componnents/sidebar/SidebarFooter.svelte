@@ -10,9 +10,9 @@
 	const client = getContextClient();
 	let initial_user_name: string | undefined = undefined;
 	let isRefreshing = false;
-    async function loadUserMe(){
-        isRefreshing = true;
-        const me = await client
+	async function loadUserMe() {
+		isRefreshing = true;
+		const me = await client
 			.query(
 				graphql(/* GraphQL */ `
 					query userMeOnSidebarFooter {
@@ -31,9 +31,9 @@
 			)
 			.toPromise();
 		initial_user_name = me.data?.user.me.attributes.username;
-        isRefreshing = false;
-    }
-    onMount(async () => {
+		isRefreshing = false;
+	}
+	onMount(async () => {
 		await loadUserMe();
 	});
 	const sub_ids = [v4(), v4()];
@@ -54,26 +54,33 @@
 	onDestroy(() => {
 		sub_ids.forEach((id) => sub_end(id));
 	});
-    
+
 	$: label = $userMe.data?.watchUserMe.username ?? "Login";
 </script>
 
 <Menu bind:label>
-	<div slot="icon" class:isRefreshing on:click={async () => {
-        await loadUserMe();
-    }}>
-        {#if isRefreshing}
-            <UserIcon size="24"/>
+	<div
+		slot="icon"
+		role="button"
+		tabindex="0"
+		on:keypress={(e) => {}}
+		class:isRefreshing
+		on:click={async () => {
+			await loadUserMe();
+		}}
+	>
+		{#if isRefreshing}
+			<UserIcon size="24" />
 		{:else if $isLogged.data?.watchIsLogged}
 			<UserCheckIcon size="24" />
-        {:else}
-            <UserXIcon size="24"/>
+		{:else}
+			<UserXIcon size="24" />
 		{/if}
 	</div>
 </Menu>
 
 <style lang="scss">
-    .isRefreshing {
-        color: var(--status-blue);
-    }
+	.isRefreshing {
+		color: var(--status-blue);
+	}
 </style>
