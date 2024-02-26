@@ -19,7 +19,7 @@
 	export let authors: Author[];
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
+			currentTarget: EventTarget & HTMLDivElement;
 		};
 		authorClick: MouseEvent & {
 			currentTarget: EventTarget & HTMLAnchorElement;
@@ -32,12 +32,28 @@
 	}>();
 </script>
 
-<Layout coverImage="" on:click>
-	<div class="cover">
+<Layout coverImage="">
+	<div
+		class="cover"
+		role="button"
+		on:keydown={(e) => {}}
+		tabindex="0"
+		on:click={(e) => {
+			dispatch("click", e);
+		}}
+	>
 		<Skeleton width="15em" height="20em" border_radius={"0.25em"} />
 	</div>
 	<div class="content">
-		<div class="title">
+		<div
+			class="title"
+			role="button"
+			on:keydown={(e) => {}}
+			tabindex="0"
+			on:click={(e) => {
+				dispatch("click", e);
+			}}
+		>
 			<h2>{title}</h2>
 		</div>
 		<div class="tags">

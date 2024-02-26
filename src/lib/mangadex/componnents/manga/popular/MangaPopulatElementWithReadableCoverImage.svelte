@@ -19,7 +19,7 @@
 	export let authors: Author[];
 	createEventDispatcher<{
 		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
+			currentTarget: EventTarget & HTMLDivElement;
 		};
 		authorClick: MouseEvent & {
 			currentTarget: EventTarget & HTMLAnchorElement;
