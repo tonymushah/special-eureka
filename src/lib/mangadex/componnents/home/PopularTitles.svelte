@@ -7,7 +7,7 @@
 	import Spinner from "../theme/loader/Spinner.svelte";
 	import type { SwiperContainer } from "swiper/element";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
-	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon, ArrowRightIcon, RefreshCwIcon } from "svelte-feather-icons";
 	import { CoverImageQuality } from "@mangadex/gql/graphql";
 	import { derived } from "svelte/store";
 	const client = getContextClient();
@@ -57,46 +57,52 @@
 			}
 		});
 	}
-	const popular_titles_query = queryStore({
-		client,
-		query: graphql(`
-			query homePopularTitle {
-				home {
-					popularTitles {
-						data {
-							id
-							attributes {
-								title
-								tags {
-									id
-									attributes {
-										name
-									}
+	const query = graphql(`
+		query homePopularTitle {
+			home {
+				popularTitles {
+					data {
+						id
+						attributes {
+							title
+							tags {
+								id
+								attributes {
+									name
 								}
-								contentRating
-								description
 							}
-							relationships {
-								authorArtists {
-									id
-									attributes {
-										name
-									}
+							contentRating
+							description
+						}
+						relationships {
+							authorArtists {
+								id
+								attributes {
+									name
 								}
-								coverArt {
-									id
-									attributes {
-										fileName
-									}
+							}
+							coverArt {
+								id
+								attributes {
+									fileName
 								}
 							}
 						}
 					}
 				}
 			}
-		`)
+		}
+	`);
+	let popular_titles_query = queryStore({
+		client,
+		query
 	});
-
+	function execute() {
+		popular_titles_query = queryStore({
+			client,
+			query
+		});
+	}
 	$: popular_titles = $popular_titles_query.data?.home.popularTitles.data.map((manga) => ({
 		id: manga.id,
 		title: manga.attributes.title["en"] ?? "",
@@ -121,7 +127,22 @@
 	$: fetching = $popular_titles_query.fetching;
 </script>
 
-<Title>Popular Titles</Title>
+<div class="title">
+	<Title>Popular Titles</Title>
+	<span class="button" class:fetching>
+		<ButtonAccent
+			on:click={(e) => {
+				if (!fetching) {
+					execute();
+				}
+			}}
+		>
+			<div class="icon" class:fetching>
+				<RefreshCwIcon size={"24px"} />
+			</div>
+		</ButtonAccent>
+	</span>
+</div>
 
 {#if popular_titles}
 	<div class="result">
@@ -203,8 +224,43 @@
 	}
 	div.result {
 		div.pagination {
+			align-items: end;
 			display: flex;
 			gap: 1em;
+			justify-content: end;
+			position: relative;
+			top: -2em;
+			z-index: 1;
+		}
+	}
+	div.title {
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		flex-direction: row;
+		gap: 10px;
+		span.button.fetching {
+			cursor: not-allowed;
+		}
+		span.button {
+			div.icon {
+				width: 24px;
+				height: 24px;
+			}
+			div.icon.fetching {
+				animation: icon-rotate 2s ease-in-out 0s infinite;
+			}
+		}
+	}
+	@keyframes icon-rotate {
+		0% {
+			transform: rotate(0deg);
+		}
+		50% {
+			transform: rotate(180deg);
+		}
+		100% {
+			transform: rotate(360deg);
 		}
 	}
 </style>
