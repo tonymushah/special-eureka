@@ -37,7 +37,7 @@
 
 <style>
 	.provider {
-		width: 100% !important;
+		width: 100%;
 		display: inline-flex;
 		color: var(--text-color);
 	}

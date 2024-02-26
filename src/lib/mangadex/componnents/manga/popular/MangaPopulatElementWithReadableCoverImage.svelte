@@ -16,7 +16,7 @@
 	export let tags: Tag[];
 	export let contentRating: ContentRating = ContentRating.Safe;
 	export let authors: Author[];
-	const dispatch = createEventDispatcher<{
+	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
@@ -30,6 +30,7 @@
 		};
 	}>();
 	const image = derived(coverImage, (v) => v);
+	$: image_ = $image ?? "";
 </script>
 
 {#if $image}
@@ -37,7 +38,7 @@
 		on:authorClick
 		on:click
 		on:tagClick
-		bind:coverImage={$image}
+		bind:coverImage={image_}
 		{coverImageAlt}
 		{tags}
 		{title}
