@@ -14,6 +14,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `Binary` scalar type represents binary data. */
+  Bytes: { input: any; output: any; }
   /** A scalar that can represent any JSON Object value. */
   JSONObject: { input: any; output: any; }
   MangaDexDateTime: { input: any; output: any; }
@@ -567,6 +569,11 @@ export type CoverAttributes = {
   volume?: Maybe<Scalars['String']['output']>;
 };
 
+export enum CoverImageQuality {
+  V256 = 'V256',
+  V512 = 'V512'
+}
+
 export type CoverListParam = {
   coverIds?: Array<Scalars['UUID']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -580,12 +587,21 @@ export type CoverListParam = {
 export type CoverQueries = {
   __typename?: 'CoverQueries';
   get: Cover;
+  getImage: Scalars['Bytes']['output'];
   list: CoverResults;
 };
 
 
 export type CoverQueriesGetArgs = {
   id: Scalars['UUID']['input'];
+};
+
+
+export type CoverQueriesGetImageArgs = {
+  coverId: Scalars['UUID']['input'];
+  filename: Scalars['String']['input'];
+  mangaId: Scalars['UUID']['input'];
+  mode?: InputMaybe<CoverImageQuality>;
 };
 
 
