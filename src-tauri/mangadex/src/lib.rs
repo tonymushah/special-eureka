@@ -9,7 +9,7 @@ use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
 use mangadex_api_types_rust::MangaDexDateTime;
 use mutation::Mutation;
-use scheme::{chapters::handle_chapters, covers::handle_covers, invalid_url_input, not_found};
+use scheme::register_scheme;
 use store::{
     get_store_builder,
     types::{
@@ -33,10 +33,9 @@ use reqwest::{
 };
 use serde::{ser::Serializer, Serialize};
 use tauri::{http::header::InvalidHeaderValue, plugin::Plugin};
-use tauri::{plugin::Builder, Manager, Runtime};
+use tauri::{Manager, Runtime};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
-use url::Url;
 use utils::{
     set_indentifier,
     store::MangaDexStoreState,
@@ -128,22 +127,7 @@ impl MangadexDesktopApi {
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
-        Builder::<R, ()>::new("mangadex-graphiql")
-            .register_uri_scheme_protocol("mangadex", move |app, req| {
-                if let Ok(uri) = Url::parse(req.uri()) {
-                    if uri.domain() == Some("chapter") {
-                        handle_chapters(app, req)
-                    } else if uri.domain() == Some("covers") {
-                        handle_covers(app, req)
-                    } else {
-                        not_found(String::from("The given domain is not defined").into_bytes())
-                    }
-                } else {
-                    invalid_url_input()
-                }
-            })
-            .build()
-            .initialize(app, config)
+        register_scheme(app, config)
     }
     pub fn init_client_state<R: Runtime>(
         &mut self,

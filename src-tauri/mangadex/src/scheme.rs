@@ -2,7 +2,14 @@ pub mod chapters;
 pub mod covers;
 
 use reqwest::StatusCode;
-use tauri::http::MimeType;
+use tauri::{
+    http::MimeType,
+    plugin::{Builder, Plugin},
+    AppHandle, Runtime,
+};
+use url::Url;
+
+use self::{chapters::handle_chapters, covers::handle_covers};
 
 pub type SchemeResponse = Result<tauri::http::Response, Box<dyn std::error::Error>>;
 
@@ -38,4 +45,26 @@ pub fn invalid_url_input() -> SchemeResponse {
         .header("access-control-allow-origin", "*")
         .mimetype(MimeType::Txt.to_string().as_str())
         .body(String::from("invalid url input").into_bytes())
+}
+
+pub fn register_scheme<R: Runtime>(
+    app: &AppHandle<R>,
+    config: serde_json::Value,
+) -> tauri::plugin::Result<()> {
+    Builder::<R, ()>::new("mangadex-graphiql")
+        .register_uri_scheme_protocol("mangadex", move |app, req| {
+            if let Ok(uri) = Url::parse(req.uri()) {
+                if uri.domain() == Some("chapter") {
+                    handle_chapters(app, req)
+                } else if uri.domain() == Some("covers") {
+                    handle_covers(app, req)
+                } else {
+                    not_found(String::from("The given domain is not defined").into_bytes())
+                }
+            } else {
+                invalid_url_input()
+            }
+        })
+        .build()
+        .initialize(app, config)
 }
