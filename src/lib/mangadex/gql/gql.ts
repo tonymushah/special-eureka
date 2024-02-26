@@ -13,6 +13,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
+    "\n\t\t\t\tquery coverImage(\n\t\t\t\t\t$cover_id: UUID!\n\t\t\t\t\t$manga_id: UUID!\n\t\t\t\t\t$filename: String!\n\t\t\t\t\t$mode: CoverImageQuality!\n\t\t\t\t) {\n\t\t\t\t\tcover {\n\t\t\t\t\t\tgetImage(\n\t\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t\t)\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t": types.CoverImageDocument,
     "\n\t\t\tquery homePopularTitle {\n\t\t\t\thome {\n\t\t\t\t\tpopularTitles {\n\t\t\t\t\t\tdata {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\t\tauthorArtists {\n\t\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t": types.HomePopularTitleDocument,
     "\n\t\t\t\t\tquery userMeOnSidebarFooter {\n\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\tme {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t": types.UserMeOnSidebarFooterDocument,
     "\n\t\t\tsubscription serverIconState($sub_id: UUID!) {\n\t\t\t\twatchIsAppMounted(subId: $sub_id)\n\t\t\t}\n\t\t": types.ServerIconStateDocument,
@@ -37,6 +38,10 @@ const documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\t\t\t\tquery coverImage(\n\t\t\t\t\t$cover_id: UUID!\n\t\t\t\t\t$manga_id: UUID!\n\t\t\t\t\t$filename: String!\n\t\t\t\t\t$mode: CoverImageQuality!\n\t\t\t\t) {\n\t\t\t\t\tcover {\n\t\t\t\t\t\tgetImage(\n\t\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t\t)\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t"): (typeof documents)["\n\t\t\t\tquery coverImage(\n\t\t\t\t\t$cover_id: UUID!\n\t\t\t\t\t$manga_id: UUID!\n\t\t\t\t\t$filename: String!\n\t\t\t\t\t$mode: CoverImageQuality!\n\t\t\t\t) {\n\t\t\t\t\tcover {\n\t\t\t\t\t\tgetImage(\n\t\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t\t)\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
