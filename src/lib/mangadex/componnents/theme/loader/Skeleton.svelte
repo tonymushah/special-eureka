@@ -2,10 +2,11 @@
 	export let height: string = "100px";
 	export let width: string = "360px";
 	export let duration: string = "1s";
+	export let border_radius: string = "0px";
 </script>
 
 <span class="loader" style="animation-duration: {duration}; --width: {width}; --height: {height};">
-	<div></div>
+	<div style="border-radius: {border_radius};"></div>
 </span>
 
 <style lang="scss">

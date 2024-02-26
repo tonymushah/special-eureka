@@ -179,6 +179,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		height: 20em;
 	}
 	div.error {
 		h3 {
@@ -200,6 +201,7 @@
 	div.result {
 		div.pagination {
 			display: flex;
+			gap: 1em;
 		}
 	}
 </style>

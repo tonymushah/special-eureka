@@ -4,6 +4,7 @@
 	import { createEventDispatcher } from "svelte";
 	import { derived, type Readable } from "svelte/store";
 	import MangaPopularElement from "./MangaPopularElement.svelte";
+	import MangaPopularElementLoader from "./MangaPopularElementLoader.svelte";
 
 	type Author = {
 		id: string;
@@ -40,6 +41,17 @@
 		on:tagClick
 		bind:coverImage={image_}
 		{coverImageAlt}
+		{tags}
+		{title}
+		{contentRating}
+		{authors}
+		{description}
+	/>
+{:else}
+	<MangaPopularElementLoader
+		on:authorClick
+		on:click
+		on:tagClick
 		{tags}
 		{title}
 		{contentRating}

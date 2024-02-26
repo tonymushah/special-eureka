@@ -12,8 +12,6 @@
 		id: string;
 		name: string;
 	};
-	export let coverImage: string;
-	export let coverImageAlt: string;
 	export let title: string;
 	export let description: string;
 	export let tags: Tag[];
@@ -32,30 +30,11 @@
 			id: string;
 		};
 	}>();
-	let isCoverLoading = true;
-	let isCoverError = false;
-	onMount(() => {
-		let img = new Image();
-		img.addEventListener("load", (e) => {
-			isCoverLoading = false;
-		});
-		img.addEventListener("error", (e) => {
-			isCoverLoading = false;
-			isCoverError = true;
-		});
-		img.src = coverImage;
-	});
 </script>
 
-<Layout {coverImage} on:click>
+<Layout coverImage="" on:click>
 	<div class="cover">
-		{#if isCoverLoading}
-			<Skeleton width="15em" height="20em" />
-		{:else if isCoverError}
-			<Skeleton width="15em" height="20em" />
-		{:else}
-			<img src={coverImage} alt={coverImageAlt} />
-		{/if}
+		<Skeleton width="15em" height="20em" border_radius={"0.25em"} />
 	</div>
 	<div class="content">
 		<div class="title">
@@ -94,15 +73,6 @@
 </Layout>
 
 <style lang="scss">
-	.cover {
-		margin: 1em;
-		img {
-			border-radius: 0.25rem;
-			max-width: 15em;
-			height: 20em;
-			object-fit: cover;
-		}
-	}
 	.content {
 		display: flex;
 		margin: 1rem;
