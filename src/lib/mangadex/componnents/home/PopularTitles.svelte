@@ -2,7 +2,7 @@
 	import { graphql } from "@mangadex/gql";
 	import { getContextClient, queryStore } from "@urql/svelte";
 	import MangaPopularElement from "../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
-	import { SvelteComponent } from "svelte";
+	import Title from "../theme/texts/title/Title.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import Spinner from "../theme/loader/Spinner.svelte";
 	import type { SwiperContainer } from "swiper/element";
@@ -118,7 +118,10 @@
 		}))
 	}));
 	$: error = $popular_titles_query.error;
+	$: fetching = $popular_titles_query.fetching;
 </script>
+
+<Title>Popular Titles</Title>
 
 {#if popular_titles}
 	<div class="result">
@@ -175,7 +178,7 @@
 
 <style lang="scss">
 	div.loader {
-		width: 100vw;
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
