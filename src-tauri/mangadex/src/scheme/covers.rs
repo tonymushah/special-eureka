@@ -70,7 +70,7 @@ pub fn handle_covers<'a, R: Runtime>(app: &'a AppHandle<R>, req: &'a Request) ->
                                             "512" => Some(512),
                                             _ => None,
                                         })
-                                        .map(|quality| format!("{filename}.{quality}.png"))
+                                        .map(|quality| format!("{filename}.{quality}.jpg"))
                                         .unwrap_or(filename.to_string());
                                     Url::parse(
                                         format!("{CDN_URL}/covers/{manga_id}/{filename_}").as_str(),
