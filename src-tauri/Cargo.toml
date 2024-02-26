@@ -48,7 +48,7 @@ tauri-plugin-aptabase = "0"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 anyhow = "1"
 window-shadows = "0.2"
-window-vibrancy = "0.5"
+window-vibrancy = "0.4"
 uuid = "1"
 
 [dependencies.tauri-plugin-store]
