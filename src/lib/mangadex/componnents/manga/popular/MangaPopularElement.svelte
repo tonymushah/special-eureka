@@ -9,10 +9,13 @@
 	import AuthorLink from "./authors/AuthorLink.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import Content from "./Content.svelte";
+	import PrimarySpan from "@mangadex/componnents/theme/texts/span/PrimarySpan.svelte";
+	import NoIndex from "./NoIndex.svelte";
 	type Author = {
 		id: string;
 		name: string;
 	};
+	export let index: number = -1;
 	export let coverImage: string;
 	export let coverImageAlt: string;
 	export let title: string;
@@ -49,6 +52,7 @@
 </script>
 
 <Layout {coverImage}>
+	<NoIndex {index} />
 	<div
 		class="cover"
 		role="button"
@@ -59,9 +63,9 @@
 		}}
 	>
 		{#if isCoverLoading}
-			<Skeleton width="15em" height="20em" />
+			<Skeleton width="13em" height="20em" />
 		{:else if isCoverError}
-			<Skeleton width="15em" height="20em" />
+			<Skeleton width="13em" height="20em" />
 		{:else}
 			<img src={coverImage} alt={coverImageAlt} />
 		{/if}
@@ -83,7 +87,7 @@
 		margin: 1em;
 		img {
 			border-radius: 0.25rem;
-			max-width: 15em;
+			max-width: 13em;
 			height: 20em;
 			object-fit: cover;
 		}

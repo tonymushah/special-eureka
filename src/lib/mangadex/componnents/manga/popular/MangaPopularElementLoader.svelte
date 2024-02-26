@@ -9,10 +9,12 @@
 	import AuthorLink from "./authors/AuthorLink.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import Content from "./Content.svelte";
+	import NoIndex from "./NoIndex.svelte";
 	type Author = {
 		id: string;
 		name: string;
 	};
+	export let index: number = -1;
 	export let title: string;
 	export let description: string;
 	export let tags: Tag[];
@@ -34,6 +36,7 @@
 </script>
 
 <Layout coverImage="">
+	<NoIndex {index} />
 	<div
 		class="cover"
 		role="button"
@@ -43,7 +46,7 @@
 			dispatch("click", e);
 		}}
 	>
-		<Skeleton width="15em" height="20em" border_radius={"0.25em"} />
+		<Skeleton width="13em" height="20em" border_radius={"0.25em"} />
 	</div>
 	<Content
 		{title}
@@ -56,3 +59,9 @@
 		on:tagClick
 	/>
 </Layout>
+
+<style lang="scss">
+	div.cover {
+		margin: 1em;
+	}
+</style>

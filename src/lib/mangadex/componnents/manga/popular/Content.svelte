@@ -1,4 +1,5 @@
 <script lang="ts">
+	import MarkDown from "svelte-markdown";
 	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
@@ -31,38 +32,40 @@
 </script>
 
 <div class="content">
-	<div
-		class="title"
-		role="button"
-		on:keydown={(e) => {}}
-		tabindex="0"
-		on:click={(e) => {
-			dispatch("click", e);
-		}}
-	>
-		<h2>{title}</h2>
-	</div>
-	<div class="tags">
-		{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
-			<DangerBadge type="l1">
-				{#if contentRating == ContentRating.Erotica}
-					Erotica
-				{:else}
-					Pornographic
-				{/if}
-			</DangerBadge>
-		{:else if contentRating == ContentRating.Suggestive}
-			<StatusBadge color="green">Suggestive</StatusBadge>
-		{/if}
-		<TagComponnents
+	<div class="content-top">
+		<div
+			class="title"
+			role="button"
+			on:keydown={(e) => {}}
+			tabindex="0"
 			on:click={(e) => {
-				dispatch("tagClick", e.detail);
+				dispatch("click", e);
 			}}
-			{tags}
-		/>
-	</div>
-	<div class="description">
-		<p>{description}</p>
+		>
+			<h2>{title}</h2>
+		</div>
+		<div class="tags">
+			{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
+				<DangerBadge type="l1">
+					{#if contentRating == ContentRating.Erotica}
+						Erotica
+					{:else}
+						Pornographic
+					{/if}
+				</DangerBadge>
+			{:else if contentRating == ContentRating.Suggestive}
+				<StatusBadge color="green">Suggestive</StatusBadge>
+			{/if}
+			<TagComponnents
+				on:click={(e) => {
+					dispatch("tagClick", e.detail);
+				}}
+				{tags}
+			/>
+		</div>
+		<div class="description">
+			<MarkDown source={description} />
+		</div>
 	</div>
 	<div class="authors">
 		{#if authors}
@@ -80,17 +83,16 @@
 		flex-direction: column;
 		align-items: start;
 		text-align: start;
+		height: 20em;
+		justify-content: space-between;
 	}
 	.tags {
 		display: flex;
 		gap: 0.25rem;
 	}
-	.description > p {
-		-webkit-box-orient: vertical;
-		line-clamp: 3;
-		-webkit-line-clamp: 3;
-		display: -webkit-box;
-		overflow: hidden;
+	.description {
+		height: 10em;
+		overflow-y: scroll;
 	}
 	.authors {
 		display: flex;

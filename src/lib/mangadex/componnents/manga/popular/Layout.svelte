@@ -14,21 +14,22 @@
 	.layout-image {
 		background-repeat: no-repeat;
 		background-size: cover;
-		background-position: 0px -400px;
+		background-position: 0px -200px;
 		color: var(--text-color);
 	}
 	.layout-color {
 		background: linear-gradient(
 			180deg,
-			color-mix(in srgb, var(--main-background) 20%, transparent),
-			color-mix(in srgb, var(--main-background) 45%, transparent),
-			color-mix(in srgb, var(--main-background) 70%, transparent)
+			color-mix(in srgb, var(--main-background) 30%, transparent),
+			color-mix(in srgb, var(--main-background) 80%, transparent),
+			color-mix(in srgb, var(--main-background) 100%, transparent)
 		);
 	}
 	.layout {
 		margin: var(--popular-element-layout-margin);
-		backdrop-filter: blur(10px);
-		-webkit-backdrop-filter: blur(10px);
+		padding: var(--popular-element-layout-padding);
+		//backdrop-filter: blur(10px);
+		//-webkit-backdrop-filter: blur(10px);
 		display: flex;
 		align-items: start;
 		flex-direction: row;

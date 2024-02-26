@@ -12,14 +12,16 @@
 	import { derived } from "svelte/store";
 	const client = getContextClient();
 	let swiper_container: SwiperContainer | undefined = undefined;
-	let current_page: number | undefined = undefined;
+	let current_page_: number | undefined = undefined;
 	$: {
 		if (swiper_container) {
+			current_page_ = swiper_container.swiper.activeIndex;
 			swiper_container.swiper.on("slideChange", (s) => {
-				current_page = s.activeIndex;
+				current_page_ = s.activeIndex;
 			});
 		}
 	}
+	$: current_page = (current_page_ ?? 0) + 1;
 	function get_cover_art(cover_id: string, manga_id: string, filename: string) {
 		const store = queryStore({
 			client,
@@ -125,9 +127,10 @@
 	}));
 	$: error = $popular_titles_query.error;
 	$: fetching = $popular_titles_query.fetching;
+	//let fetching = true;
 </script>
 
-<div class="title">
+<div class="title with-margin">
 	<Title>Popular Titles</Title>
 	<span class="button" class:fetching>
 		<ButtonAccent
@@ -147,7 +150,7 @@
 {#if popular_titles}
 	<div class="result">
 		<swiper-container bind:this={swiper_container}>
-			{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description }}
+			{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
 				<swiper-slide>
 					<MangaPopularElement
 						{coverImage}
@@ -181,12 +184,12 @@
 			</ButtonAccent>
 		</div>
 	</div>
-{:else if $popular_titles_query.fetching}
-	<div class="loader">
+{:else if fetching}
+	<div class="loader with-margin">
 		<Spinner />
 	</div>
 {:else if error}
-	<div class="error">
+	<div class="error with-margin">
 		<h3>Oops! Something happens when loading the popular titles</h3>
 		{#each error.graphQLErrors as { name, message }}
 			<div>
@@ -198,6 +201,14 @@
 {/if}
 
 <style lang="scss">
+	:root {
+		--popular-element-layout-margin: 0em 0em 0em 0em;
+		--popular-element-layout-padding: 3em 0em 0em 0em;
+	}
+	.with-margin {
+		margin-left: 1em;
+		margin-right: 1em;
+	}
 	div.loader {
 		width: 100%;
 		display: flex;
@@ -223,6 +234,9 @@
 		padding: 1em;
 	}
 	div.result {
+		position: relative;
+		top: -3em;
+		margin-bottom: -3em;
 		div.pagination {
 			align-items: end;
 			display: flex;
@@ -239,6 +253,8 @@
 		justify-content: start;
 		flex-direction: row;
 		gap: 10px;
+		z-index: 3;
+		position: relative;
 		span.button.fetching {
 			cursor: not-allowed;
 		}
@@ -248,7 +264,7 @@
 				height: 24px;
 			}
 			div.icon.fetching {
-				animation: icon-rotate 2s ease-in-out 0s infinite;
+				animation: icon-rotate 1s ease-in-out 0s infinite;
 			}
 		}
 	}

@@ -45,7 +45,6 @@
 		height: 100vh;
 		scroll-behavior: smooth;
 		overflow-y: scroll;
-		margin-left: 1em;
-		margin-right: 1em;
+		width: 100%;
 	}
 </style>

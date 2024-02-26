@@ -10,6 +10,7 @@
 		id: string;
 		name: string;
 	};
+	export let index: number = -1;
 	export let coverImage: Readable<string | undefined>;
 	export let coverImageAlt: string;
 	export let title: string;
@@ -40,6 +41,7 @@
 		on:click
 		on:tagClick
 		bind:coverImage={image_}
+		{index}
 		{coverImageAlt}
 		{tags}
 		{title}
@@ -52,6 +54,7 @@
 		on:authorClick
 		on:click
 		on:tagClick
+		{index}
 		{tags}
 		{title}
 		{contentRating}
