@@ -43,7 +43,7 @@
 		color: var(--text-color);
 		align-items: center;
 		gap: 5px;
-		padding: 0.5em;
+		padding: var(--menu-item-padding);
 		cursor: pointer;
 	}
 	div.menu-item.isDisabled {
@@ -54,6 +54,9 @@
 	}
 	div.menu-item:active {
 		background-color: var(--accent-l3-active);
+	}
+	p.label {
+		font-size: var(--font-size);
 	}
 	p {
 		margin: 0px;
