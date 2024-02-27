@@ -23,8 +23,8 @@
 
 <style lang="scss">
 	img {
-		width: 10em;
-		height: 15em;
+		width: 9.5em;
+		height: 12.5em;
 		object-fit: cover;
 		border-radius: 0.25rem;
 	}
@@ -38,9 +38,10 @@
 		text-align: start;
 		margin: 0px;
 		padding: 5px;
+		font-size: 16px;
 	}
 	.layout {
-		width: 10em;
+		width: 9.5em;
 		overflow: hidden;
 		border-radius: 0.25rem;
 		display: flex;
