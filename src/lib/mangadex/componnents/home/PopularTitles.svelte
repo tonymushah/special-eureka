@@ -245,6 +245,7 @@
 			position: relative;
 			top: -2em;
 			z-index: 1;
+			margin-right: 2em;
 		}
 	}
 	div.title {
