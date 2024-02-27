@@ -4,6 +4,7 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import PublicationStatusTag from "../publicationStatusTag/PublicationStatusTag.svelte";
 	import Layout from "./base1/Layout.svelte";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -70,9 +71,7 @@
 			>
 		</div>
 		<div class="description">
-			<p>
-				{description}
-			</p>
+			<Markdown source={description} />
 		</div>
 	</div>
 </Layout>
@@ -114,8 +113,6 @@
 	}
 	div.description {
 		font-size: 12px;
-	}
-	div.description > p {
 		-webkit-box-orient: vertical;
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
