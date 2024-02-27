@@ -41,6 +41,7 @@
     "@tauri-apps/cli": "^1.5.9",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "@types/toastify-js": "^1.12.3",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
     "eslint": "^8.56.0",
@@ -90,6 +91,7 @@
     "svelte-feather-icons": "^4.1.0",
     "swiper": "^11.0.6",
     "timeago.js": "^4.0.2",
+    "toastify-js": "^1.12.0",
     "uuid": "^9.0.1"
   },
   "packageManager": "pnpm@8.11.0",
