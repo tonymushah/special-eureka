@@ -23,6 +23,7 @@
 
 <style lang="scss">
 	span {
+		cursor: pointer;
 		transition: color 300ms ease-in-out;
 		color: var(--primary);
 	}
