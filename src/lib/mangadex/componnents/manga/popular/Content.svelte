@@ -1,5 +1,5 @@
 <script lang="ts">
-	import MarkDown from "svelte-markdown";
+	import MarkDown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
@@ -77,6 +77,16 @@
 </div>
 
 <style lang="scss">
+	div.title {
+		h2 {
+			display: -webkit-box;
+			margin: 2px;
+			line-clamp: 2;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
+			-webkit-box-orient: vertical;
+		}
+	}
 	.content {
 		display: flex;
 		margin: 1rem;
