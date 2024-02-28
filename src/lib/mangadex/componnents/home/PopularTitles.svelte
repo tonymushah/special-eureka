@@ -11,6 +11,7 @@
 	import { CoverImageQuality, type HomePopularTitleQuery } from "@mangadex/gql/graphql";
 	import { derived, writable } from "svelte/store";
 	import { onMount } from "svelte";
+	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	const client = getContextClient();
 	let swiper_container: SwiperContainer | undefined = undefined;
 	let current_page_: number | undefined = undefined;
@@ -96,23 +97,19 @@
 			}
 		}
 	`);
-	let fetching = false;
-	const popular_titles_query = writable<OperationResult<HomePopularTitleQuery, {}>>(undefined);
-	async function execute() {
-		fetching = true;
-		const res = await client
-			.query(query, {})
-			.toPromise()
-			.finally(() => {
-				fetching = false;
-			});
-		popular_titles_query.set(res);
-	}
-	onMount(async () => {
-		await execute();
+	const popular_titles_query = specialQueryStore({
+		client,
+		query,
+		variable: {}
 	});
-	$: error = $popular_titles_query.error;
-	$: popular_titles = $popular_titles_query.data?.home.popularTitles.data.map((manga) => ({
+	const _isFetching = popular_titles_query.isFetching;
+
+	onMount(async () => {
+		await popular_titles_query.execute();
+	});
+	$: fetching = $_isFetching;
+	$: error = $popular_titles_query?.error;
+	$: popular_titles = $popular_titles_query?.data?.home.popularTitles.data.map((manga) => ({
 		id: manga.id,
 		title: manga.attributes.title["en"] ?? "",
 		description: manga.attributes.description["en"] ?? "",
@@ -132,8 +129,6 @@
 			name: author_artist.attributes.name
 		}))
 	}));
-
-	//let fetching = true;
 </script>
 
 <div class="title with-margin">
@@ -142,7 +137,7 @@
 		<ButtonAccent
 			on:click={async (e) => {
 				if (!fetching) {
-					await execute();
+					await popular_titles_query.execute();
 				}
 			}}
 		>
