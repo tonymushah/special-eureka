@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { graphql } from "@mangadex/gql";
-	import { getContextClient, queryStore } from "@urql/svelte";
+	import { getContextClient, queryStore, type OperationResult } from "@urql/svelte";
 	import MangaPopularElement from "../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
 	import Title from "../theme/texts/title/Title.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
@@ -8,8 +8,9 @@
 	import type { SwiperContainer } from "swiper/element";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import { ArrowLeftIcon, ArrowRightIcon, RefreshCwIcon } from "svelte-feather-icons";
-	import { CoverImageQuality } from "@mangadex/gql/graphql";
-	import { derived } from "svelte/store";
+	import { CoverImageQuality, type HomePopularTitleQuery } from "@mangadex/gql/graphql";
+	import { derived, writable } from "svelte/store";
+	import { onMount } from "svelte";
 	const client = getContextClient();
 	let swiper_container: SwiperContainer | undefined = undefined;
 	let current_page_: number | undefined = undefined;
@@ -95,16 +96,22 @@
 			}
 		}
 	`);
-	let popular_titles_query = queryStore({
-		client,
-		query
-	});
-	function execute() {
-		popular_titles_query = queryStore({
-			client,
-			query
-		});
+	let fetching = false;
+	const popular_titles_query = writable<OperationResult<HomePopularTitleQuery, {}>>(undefined);
+	async function execute() {
+		fetching = true;
+		const res = await client
+			.query(query, {})
+			.toPromise()
+			.finally(() => {
+				fetching = false;
+			});
+		popular_titles_query.set(res);
 	}
+	onMount(async () => {
+		await execute();
+	});
+	$: error = $popular_titles_query.error;
 	$: popular_titles = $popular_titles_query.data?.home.popularTitles.data.map((manga) => ({
 		id: manga.id,
 		title: manga.attributes.title["en"] ?? "",
@@ -125,8 +132,7 @@
 			name: author_artist.attributes.name
 		}))
 	}));
-	$: error = $popular_titles_query.error;
-	$: fetching = $popular_titles_query.fetching;
+
 	//let fetching = true;
 </script>
 
@@ -134,9 +140,9 @@
 	<Title>Popular Titles</Title>
 	<span class="button" class:fetching>
 		<ButtonAccent
-			on:click={(e) => {
+			on:click={async (e) => {
 				if (!fetching) {
-					execute();
+					await execute();
 				}
 			}}
 		>
@@ -184,10 +190,6 @@
 			</ButtonAccent>
 		</div>
 	</div>
-{:else if fetching}
-	<div class="loader with-margin">
-		<Spinner />
-	</div>
 {:else if error}
 	<div class="error with-margin">
 		<h3>Oops! Something happens when loading the popular titles</h3>
@@ -197,6 +199,10 @@
 				<p>{message}</p>
 			</div>
 		{/each}
+	</div>
+{:else}
+	<div class="loader with-margin">
+		<Spinner />
 	</div>
 {/if}
 
