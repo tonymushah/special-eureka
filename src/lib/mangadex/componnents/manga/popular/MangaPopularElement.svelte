@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from "svelte";
-	import Layout from "./Layout.svelte";
-	import { ContentRating, type MangaStatus } from "@mangadex/gql/graphql";
-	import type { Tag } from "@mangadex/utils/types/Tag";
-	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
-	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
-	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
-	import AuthorLink from "./authors/AuthorLink.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import { ContentRating } from "@mangadex/gql/graphql";
+	import type { Tag } from "@mangadex/utils/types/Tag";
+	import { createEventDispatcher, onMount } from "svelte";
 	import Content from "./Content.svelte";
-	import PrimarySpan from "@mangadex/componnents/theme/texts/span/PrimarySpan.svelte";
+	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
 	type Author = {
 		id: string;
