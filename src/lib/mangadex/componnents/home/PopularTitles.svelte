@@ -12,6 +12,7 @@
 	import { derived, writable } from "svelte/store";
 	import { onMount } from "svelte";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
+	import TopTitle from "./utils/TopTitle.svelte";
 	const client = getContextClient();
 	let swiper_container: SwiperContainer | undefined = undefined;
 	let current_page_: number | undefined = undefined;
@@ -131,8 +132,7 @@
 	}));
 </script>
 
-<div class="title with-margin">
-	<Title>Popular Titles</Title>
+<TopTitle label="Popular Title">
 	<span class="button" class:fetching>
 		<ButtonAccent
 			on:click={async (e) => {
@@ -146,7 +146,7 @@
 			</div>
 		</ButtonAccent>
 	</span>
-</div>
+</TopTitle>
 
 {#if popular_titles}
 	<div class="result">
@@ -249,25 +249,16 @@
 			margin-right: 2em;
 		}
 	}
-	div.title {
-		display: flex;
-		align-items: center;
-		justify-content: start;
-		flex-direction: row;
-		gap: 10px;
-		z-index: 3;
-		position: relative;
-		span.button.fetching {
-			cursor: not-allowed;
+	span.button.fetching {
+		cursor: not-allowed;
+	}
+	span.button {
+		div.icon {
+			width: 24px;
+			height: 24px;
 		}
-		span.button {
-			div.icon {
-				width: 24px;
-				height: 24px;
-			}
-			div.icon.fetching {
-				animation: icon-rotate 1s ease-in-out 0s infinite;
-			}
+		div.icon.fetching {
+			animation: icon-rotate 1s ease-in-out 0s infinite;
 		}
 	}
 	@keyframes icon-rotate {
