@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { getContextClient } from "@urql/svelte";
+	import type { ContentRating } from "@mangadex/gql/graphql";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import MangaPopularElement from "../../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
-	import PopularTitles from "../PopularTitles.svelte";
-	import type { Readable } from "svelte/store";
-	import type { ContentRating } from "@mangadex/gql/graphql";
 	let swiper_container: SwiperContainer | undefined = undefined;
 	let current_page_: number | undefined = undefined;
 	$: {
@@ -76,6 +74,10 @@
 </div>
 
 <style lang="scss">
+	:root {
+		--popular-element-layout-margin: 0em 0em 0em 0em;
+		--popular-element-layout-padding: 3em 0em 0em 0em;
+	}
 	div.result {
 		position: relative;
 		top: -3em;
