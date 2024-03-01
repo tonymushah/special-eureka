@@ -94,6 +94,13 @@
 		overflow: hidden;
 		-webkit-box-orient: vertical;
 		color: var(--text-color);
+		transition: color 300ms ease-in-out;
+	}
+	.manga-title:hover > h4 {
+		color: var(--primary);
+	}
+	.manga-title:hover {
+		cursor: pointer;
 	}
 	div.content {
 		padding-left: 12px;
@@ -103,7 +110,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: start;
-		justify-items: center;
-		gap: 8px;
+		justify-content: center;
 	}
 </style>

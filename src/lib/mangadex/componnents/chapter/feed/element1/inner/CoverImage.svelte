@@ -42,10 +42,15 @@
 <style lang="scss">
 	div.cover-image {
 		grid-area: cover;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0px 10px;
 	}
 	div.cover-image > img {
-		height: 120px;
-		width: 80px;
+		height: 100px;
+		width: 60px;
 		object-fit: cover;
+		border-radius: 0.25em;
 	}
 </style>

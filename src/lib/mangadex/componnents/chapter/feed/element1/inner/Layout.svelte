@@ -3,19 +3,9 @@
 	export let haveBeenRead: boolean = true;
 </script>
 
-<ButtonBase
-	type="button"
-	on:click
-	isBase={false}
-	noPadding
-	--button-color={"var(--accent-l3)"}
-	--button-hover={"var(--accent-l3-hover)"}
-	--button-active={"var(--accent-l3-active)"}
->
-	<div class="layout" class:haveBeenRead>
-		<slot />
-	</div>
-</ButtonBase>
+<div class="layout" class:haveBeenRead>
+	<slot />
+</div>
 
 <style lang="scss">
 	div.layout {

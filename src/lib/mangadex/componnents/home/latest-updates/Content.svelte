@@ -44,36 +44,69 @@
 				: ""
 		}`
 	}));
+	$: halfwayThrough = Math.floor(data.length / 2);
+
+	$: data1 = data.slice(0, halfwayThrough);
+	$: data2 = data.slice(halfwayThrough, data.length);
 </script>
 
 <div class="content">
-	{#each data as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt } (chapterId)}
-		<div class="chapter">
-			<ChapterFeedElement1
-				{mangaId}
-				{chapterId}
-				download_state={ChapterDownloadState.NotDownloaded}
-				{coverImage}
-				{upload_date}
-				{lang}
-				{uploader}
-				{groups}
-				{mangaTitle}
-				{coverImageAlt}
-				{chapterTitle}
-			/>
-		</div>
-	{/each}
+	<div class="chapter-col data1">
+		{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt } (chapterId)}
+			<div class="chapter">
+				<ChapterFeedElement1
+					{mangaId}
+					{chapterId}
+					download_state={ChapterDownloadState.NotDownloaded}
+					{coverImage}
+					{upload_date}
+					{lang}
+					{uploader}
+					{groups}
+					{mangaTitle}
+					{coverImageAlt}
+					{chapterTitle}
+				/>
+			</div>
+		{/each}
+	</div>
+	<div class="chapter-col data2">
+		{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt } (chapterId)}
+			<div class="chapter">
+				<ChapterFeedElement1
+					{mangaId}
+					{chapterId}
+					download_state={ChapterDownloadState.NotDownloaded}
+					{coverImage}
+					{upload_date}
+					{lang}
+					{uploader}
+					{groups}
+					{mangaTitle}
+					{coverImageAlt}
+					{chapterTitle}
+				/>
+			</div>
+		{/each}
+	</div>
 </div>
 
 <style lang="scss">
 	:root {
-		--layout-width: 40vw;
+		--layout-width: 100%;
+	}
+	div.chapter-col {
+		display: grid;
+		gap: 0.25em;
+		background-color: var(--accent-l1);
+	}
+	.chapter {
+		margin: 0em 0.5em;
 	}
 	div.content {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		display: grid;
 		margin: 1em;
 		gap: 1em;
-		display: flex;
-		flex-wrap: wrap;
 	}
 </style>
