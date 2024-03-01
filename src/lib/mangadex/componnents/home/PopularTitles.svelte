@@ -2,9 +2,8 @@
 	import { graphql } from "@mangadex/gql";
 	import { getContextClient, queryStore, type OperationResult } from "@urql/svelte";
 	import MangaPopularElement from "../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
-	import Title from "../theme/texts/title/Title.svelte";
+	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import Spinner from "../theme/loader/Spinner.svelte";
 	import type { SwiperContainer } from "swiper/element";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
 	import { ArrowLeftIcon, ArrowRightIcon, RefreshCwIcon } from "svelte-feather-icons";
@@ -190,9 +189,7 @@
 		{/each}
 	</div>
 {:else}
-	<div class="loader with-margin">
-		<Spinner />
-	</div>
+	<PopularTitleSpinner --height="20em" />
 {/if}
 
 <style lang="scss">
@@ -203,13 +200,6 @@
 	.with-margin {
 		margin-left: 1em;
 		margin-right: 1em;
-	}
-	div.loader {
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 20em;
 	}
 	div.error {
 		h3 {
