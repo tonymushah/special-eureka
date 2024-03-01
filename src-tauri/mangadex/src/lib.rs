@@ -1,17 +1,15 @@
 use std::{
-    io::Read,
     ops::Add,
     path::{Path, PathBuf},
 };
 
 use app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use async_graphql::Schema;
-use bytes::Bytes;
-use mangadex_api::{MangaDexClient, CDN_URL};
+use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
 use mangadex_api_types_rust::MangaDexDateTime;
 use mutation::Mutation;
-use regex::Regex;
+use scheme::register_scheme;
 use store::{
     get_store_builder,
     types::{
@@ -31,17 +29,13 @@ use ins_handle::{check_plus_notify, init_ins_chapter_handle, set_ins_chapter_che
 use query::Query;
 use reqwest::{
     header::{HeaderMap, HeaderValue, USER_AGENT},
-    Client, StatusCode,
+    Client,
 };
 use serde::{ser::Serializer, Serialize};
-use tauri::{
-    http::{header::InvalidHeaderValue, MimeType},
-    plugin::Plugin,
-};
-use tauri::{plugin::Builder, Manager, Runtime};
+use tauri::{http::header::InvalidHeaderValue, plugin::Plugin};
+use tauri::{Manager, Runtime};
 use tauri_plugin_store::Store;
 use tokio::time::{Duration, Instant};
-use url::Url;
 use utils::{
     set_indentifier,
     store::MangaDexStoreState,
@@ -51,7 +45,6 @@ use utils::{
 pub type Result<T> = std::result::Result<T, Error>;
 use mizuki::MizukiPluginTrait;
 use subscription::Subscriptions;
-use uuid::Uuid;
 
 pub mod app_state;
 pub mod ins_handle;
@@ -59,6 +52,7 @@ pub mod intelligent_notification_system;
 pub mod mutation;
 pub mod objects;
 pub mod query;
+pub mod scheme;
 pub mod store;
 pub mod subscription;
 pub mod utils;
@@ -133,166 +127,7 @@ impl MangadexDesktopApi {
         app: &tauri::AppHandle<R>,
         config: serde_json::Value,
     ) -> tauri::plugin::Result<()> {
-        Builder::<R, ()>::new("mangadex-graphiql")
-            .register_uri_scheme_protocol("mangadex", move |app, r| {
-                let bad_request = tauri::http::ResponseBuilder::new()
-                    .header("access-control-allow-origin", "*")
-                    .status(StatusCode::BAD_REQUEST)
-                    .mimetype(MimeType::Txt.to_string().as_str())
-                    .body(Vec::new());
-                let not_found = tauri::http::ResponseBuilder::new()
-                    .header("access-control-allow-origin", "*")
-                    .status(StatusCode::NOT_FOUND)
-                    .mimetype(MimeType::Txt.to_string().as_str())
-                    .body(Vec::new());
-                let not_loaded = tauri::http::ResponseBuilder::new()
-                    .header("access-control-allow-origin", "*")
-                    .status(StatusCode::INTERNAL_SERVER_ERROR)
-                    .mimetype(MimeType::Txt.to_string().as_str())
-                    .body(b"Offline App State is not loaded".to_vec());
-                if let Some(offline_app_state) = app.try_state::<OfflineAppState>() {
-                    let app_state_read = offline_app_state.blocking_read();
-                    if let Some(app_state) = app_state_read.as_ref() {
-                        if let Ok(uri) = Url::parse(r.uri()) {
-                            if uri.domain() == Some("chapter") {
-                                if let Ok(regex) = Regex::new(r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.*)") {
-                                    if let Some(res) = regex.captures(uri.path()) {
-                                        if let Some(chapter_id) = res.name("chapter_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
-                                            let chapter_util = app_state.chapter_utils().with_id(chapter_id);
-                                                if let Some(mode) = res.name("mode").and_then(|mode| {
-                                                    match mode.as_str() {
-                                                        "data" => Some(ChapterMode::Data),
-                                                        "data-saver" => Some(ChapterMode::DataSaver),
-                                                        _ => None
-                                                    }
-                                                }) {
-                                                    if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
-                                                        let body: Bytes = {
-                                                            let mut to_res = Vec::<u8>::new();
-                                                                match mode {
-                                                                    ChapterMode::Data => {
-                                                                        let res = chapter_util.get_data_image(filename).and_then(|mut buf_reader| {
-                                                                            buf_reader.read_to_end(&mut to_res)?;
-                                                                            Ok(())
-                                                                        });
-                                                                        if res.is_err() {
-                                                                            return not_found;
-                                                                        }
-                                                                    }
-                                                                    ChapterMode::DataSaver => {
-                                                                        let res = chapter_util.get_data_saver_image(filename).and_then(|mut buf_reader| {
-                                                                            buf_reader.read_to_end(&mut to_res)?;
-                                                                            Ok(())
-                                                                        });
-                                                                    if res.is_err() {
-                                                                        return not_found;
-                                                                    }
-                                                                }
-                                                            };
-                                                        to_res.into()
-                                                    };
-                                                    tauri::http::ResponseBuilder::new()
-                                                        .header("access-control-allow-origin", "*")
-                                                        .status(StatusCode::OK)
-                                                        // TODO Add jpeg mimetype
-                                                        .mimetype("image/jpeg")
-                                                        .body(body.to_vec())
-                                                }else {
-                                                    not_found
-                                                }
-                                            }else {
-                                                not_found
-                                            }
-                                        }else {
-                                            not_found
-                                        }
-                                    }else {
-                                        not_found
-                                    }
-                                }else {
-                                    bad_request
-                                }
-                            } else if uri.domain() == Some("covers") {
-                                let _client = app.try_state::<MangaDexClient>();
-                                if let Some(client) = _client {
-                                    if let Ok(regex) = Regex::new(r"(?x)/(?P<cover_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<filename>\w*.*)") {
-                                        if let Some(res) = regex.captures(uri.path()) {
-                                            if let Some(cover_id) = res.name("cover_id").and_then(|id| Uuid::parse_str(id.as_str()).ok()) {
-                                                if let Some(filename) = res.name("filename").map(|f| f.as_str()) {
-                                                    let body: Bytes = {
-                                                        let cover_utils = app_state.cover_utils().with_id(cover_id);
-                                                        let mut to_res = Vec::<u8>::new();
-                                                        if let Some(manga_id) = uri.query_pairs().find(|(k, _)| k == "mangaId").map(|(_,v)| {v.to_string()}).and_then(|id| Uuid::parse_str(&id).ok()) {
-                                                            let cli = client.get_http_client().blocking_read().client.clone();
-                                                            let url = {
-                                                                let filename_ = uri.query_pairs().find(|(k, _)| k == "mode").map(|(_,v)| {v.to_string()}).and_then(|m| match m.as_str() {
-                                                                    "256" => Some(256),
-                                                                    "512" => Some(512),
-                                                                    _ => None
-                                                                }).map(|quality| format!("{filename}.{quality}.png")).unwrap_or(filename.to_string());
-
-                                                                Url::parse(format!("{CDN_URL}/covers/{manga_id}/{filename_}").as_str())
-                                                            };
-                                                            
-                                                            if let Ok(res) = tauri::async_runtime::block_on(async move {
-                                                                let b = cli.get(url?).send().await?.bytes().await?;
-                                                                Ok::<Bytes, mangadex_api_types_rust::error::Error>(b)
-                                                            }) {
-                                                                to_res.extend_from_slice(&res);
-                                                            }else {
-                                                                let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
-                                                                    buf_reader.read_to_end(&mut to_res)?;
-                                                                    Ok(())
-                                                                });
-                                                            }
-                                                        }else {
-                                                            let _ = cover_utils.get_image_buf_reader().and_then(|mut buf_reader| {
-                                                                    buf_reader.read_to_end(&mut to_res)?;
-                                                                    Ok(())
-                                                                });
-                                                        }
-                                                        to_res.into()
-                                                    };
-                                                    if body.is_empty() {
-                                                        not_found
-                                                    } else {
-                                                        tauri::http::ResponseBuilder::new()
-                                                            .header("access-control-allow-origin", "*")
-                                                            .status(StatusCode::OK)
-                                                            // TODO Add jpeg mimetype
-                                                            .mimetype("image/jpeg")
-                                                            .body(body.to_vec())
-                                                    }
-                                                }else {
-                                                    not_found
-                                                }
-                                            }else {
-                                                not_found
-                                            }
-                                        }else {
-                                            not_found
-                                        }
-                                    }else {
-                                        not_found
-                                    }
-                                }else {
-                                    not_found
-                                }
-                            }else {
-                                not_found
-                            }
-                        } else {
-                            bad_request
-                        }
-                    }else {
-                        not_loaded
-                    }
-                } else {
-                    not_loaded
-                }
-            })
-            .build()
-            .initialize(app, config)
+        register_scheme(app, config)
     }
     pub fn init_client_state<R: Runtime>(
         &mut self,
@@ -436,8 +271,3 @@ where
     might be usefule in the future
 
 */
-
-enum ChapterMode {
-    Data,
-    DataSaver,
-}

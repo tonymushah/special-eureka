@@ -7,8 +7,10 @@
 	import { computePosition } from "@floating-ui/dom";
 	import { flip } from "@floating-ui/dom";
 
-	export let items: Item[];
+	export let items: (Item | undefined)[];
 	export let tabindex: number | null;
+	export let font_size: string = "var(--font-size)";
+	export let menu_padding: string = "0.5em";
 	let isOpening = false;
 	let isOpen = false;
 	let unlisten: UnlistenFn[] = [];
@@ -89,6 +91,8 @@
 
 <div class="context-menu" class:isOpen bind:this={contextMenu}>
 	<ContextMenuBase
+		{menu_padding}
+		{font_size}
 		{items}
 		{tabindex}
 		on:menuItemClick={async () => {
@@ -112,5 +116,6 @@
 	}
 	.content {
 		width: min-content;
+		display: contents;
 	}
 </style>

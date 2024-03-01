@@ -10,7 +10,6 @@ use tauri::Menu;
 use tauri::SystemTray;
 use tauri::Window;
 use tauri::{CustomMenuItem, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
-use tauri_plugin_aptabase::EventTracker;
 use uuid::Uuid;
 #[cfg(any(windows, target_os = "macos"))]
 use window_shadows::set_shadow;
@@ -119,7 +118,6 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(mangadex)
         .setup(|app| {
             #[cfg(any(windows, target_os = "macos"))]
@@ -133,7 +131,6 @@ fn main() {
                 apply_blur(&splashscreen, Some((18, 18, 18, 125)))
                     .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
             }
-            app.track_event("app_launched", None);
             Ok(())
         })
         .build(context)

@@ -1,49 +1,45 @@
 <script lang="ts">
-	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	import { createEventDispatcher } from "svelte";
-
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
 	export let coverImage: string;
 </script>
 
-<ButtonBase
-	type="button"
-	on:click
-	isBase={false}
-	noPadding
-	--cover-image={coverImage}
-	--button-color={"var(--accent-l3)"}
-	--button-hover={"var(--accent-l3-hover)"}
-	--button-active={"var(--accent-l3-active)"}
->
-	<div class="layout-image" style={`background-image: url(${coverImage});`}>
-		<div class="layout-color">
-			<div class="layout">
+<div class="layout-image" style={`background-image: url(${coverImage});`}>
+	<div class="layout-color">
+		<div class="layout">
+			<div class="no-index">
+				<slot name="no-index" />
+			</div>
+			<div class="content">
 				<slot />
 			</div>
 		</div>
 	</div>
-</ButtonBase>
+</div>
 
 <style lang="scss">
 	.layout-image {
 		background-repeat: no-repeat;
 		background-size: cover;
-		background-position: 0px -400px;
+		background-position: 0px -200px;
+		color: var(--text-color);
 	}
 	.layout-color {
-		background-color: color-mix(in srgb, var(--main-background) 70%, white 0%);
+		background: linear-gradient(
+			180deg,
+			color-mix(in srgb, var(--main-background) 30%, transparent),
+			color-mix(in srgb, var(--main-background) 80%, transparent),
+			color-mix(in srgb, var(--main-background) 100%, transparent)
+		);
 	}
 	.layout {
 		margin: var(--popular-element-layout-margin);
-		backdrop-filter: blur(20px) opacity(20%);
-		-webkit-backdrop-filter: blur(20px);
-		display: flex;
-		align-items: start;
-		flex-direction: row;
+		padding: var(--popular-element-layout-padding);
+		//backdrop-filter: blur(10px);
+		//-webkit-backdrop-filter: blur(10px);
+		div.content {
+			display: flex;
+			align-items: start;
+			flex-direction: row;
+			width: 100%;
+		}
 	}
 </style>

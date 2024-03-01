@@ -61,7 +61,7 @@ enum ApiClientProfile {
 }
 
 type ApiClientQueries {
-	list(params: ApiClientListParam! = {limit: null,offset: null,state: null,name: null,includes: []}): ApiClientResults!
+	list(params: ApiClientListParam! = {limit: null, offset: null, state: null, name: null, includes: []}): ApiClientResults!
 	get(id: UUID!): ApiClient!
 }
 
@@ -170,7 +170,7 @@ type AuthorMutations {
 }
 
 type AuthorQueries {
-	list(params: AuthorListParams! = {limit: null,offset: null,authorIds: [],name: null,order: null,includes: []}): AuthorResults!
+	list(params: AuthorListParams! = {limit: null, offset: null, authorIds: [], name: null, order: null, includes: []}): AuthorResults!
 	get(id: UUID!): Author!
 }
 
@@ -199,6 +199,11 @@ input BeginUploadSessionParam {
 	mangaId: UUID!
 }
 
+
+"""
+The `Binary` scalar type represents binary data.
+"""
+scalar Bytes
 
 type CaptchaMutations {
 	solve(params: CaptchaSolveParams!): Boolean!
@@ -309,10 +314,10 @@ type ChapterPages {
 }
 
 type ChapterQueries {
-	list(params: ChapterListParams! = {limit: null,offset: null,chapterIds: [],title: null,groups: [],uploaders: [],mangaId: null,volumes: [],chapters: [],translatedLanguages: [],originalLanguages: [],excludedOriginalLanguages: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,includeEmptyPages: null,includeExternalUrl: null,includeFuturePublishAt: null,order: null}, offlineParams: GetAllChapterParams): ChapterResults!
+	list(params: ChapterListParams! = {limit: null, offset: null, chapterIds: [], title: null, groups: [], uploaders: [], mangaId: null, volumes: [], chapters: [], translatedLanguages: [], originalLanguages: [], excludedOriginalLanguages: [], contentRating: [], excludedGroups: [], excludedUploaders: [], includeFutureUpdates: null, createdAtSince: null, updatedAtSince: null, publishAtSince: null, includeEmptyPages: null, includeExternalUrl: null, includeFuturePublishAt: null, order: null}, offlineParams: GetAllChapterParams): ChapterResults!
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
-	listWithGroupByManga(chapterListParams: ChapterListParams! = {limit: null,offset: null,chapterIds: [],title: null,groups: [],uploaders: [],mangaId: null,volumes: [],chapters: [],translatedLanguages: [],originalLanguages: [],excludedOriginalLanguages: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,includeEmptyPages: null,includeExternalUrl: null,includeFuturePublishAt: null,order: null}, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaChapterGroup!
+	listWithGroupByManga(chapterListParams: ChapterListParams! = {limit: null, offset: null, chapterIds: [], title: null, groups: [], uploaders: [], mangaId: null, volumes: [], chapters: [], translatedLanguages: [], originalLanguages: [], excludedOriginalLanguages: [], contentRating: [], excludedGroups: [], excludedUploaders: [], includeFutureUpdates: null, createdAtSince: null, updatedAtSince: null, publishAtSince: null, includeEmptyPages: null, includeExternalUrl: null, includeFuturePublishAt: null, order: null}, mangaListParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaChapterGroup!
 }
 
 type ChapterRelationships {
@@ -428,6 +433,11 @@ type CoverAttributes {
 	version: Int!
 }
 
+enum CoverImageQuality {
+	V512
+	V256
+}
+
 input CoverListParam {
 	limit: Int
 	offset: Int
@@ -439,8 +449,9 @@ input CoverListParam {
 }
 
 type CoverQueries {
-	list(params: CoverListParam! = {limit: null,offset: null,mangaIds: [],coverIds: [],uploaderIds: [],locales: [],order: null}): CoverResults!
+	list(params: CoverListParam! = {limit: null, offset: null, mangaIds: [], coverIds: [], uploaderIds: [], locales: [], order: null}): CoverResults!
 	get(id: UUID!): Cover!
+	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Bytes!
 }
 
 type CoverRelationships {
@@ -650,7 +661,7 @@ type CustomListMutations {
 
 type CustomListQueries {
 	get(id: UUID!): CustomList!
-	currentLoggedLists(params: CurrentLoggedLists! = {offset: null,limit: null}): CustomListResults!
+	currentLoggedLists(params: CurrentLoggedLists! = {offset: null, limit: null}): CustomListResults!
 	getUserLists(params: UserCustomListParams!): CustomListResults!
 }
 
@@ -780,10 +791,10 @@ input EditScanlationGroupParam {
 }
 
 type FeedQueries {
-	userLoggedMangaFeed(params: FollowedMangaFeedParams! = {limit: null,offset: null,translatedLanguage: [],originalLanguage: [],excludedOriginalLanguage: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,order: null,includeEmptyPages: null,includeFuturePublishAt: null,includeExternalUrl: null}): ChapterResults!
-	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams! = {limit: null,offset: null,translatedLanguage: [],originalLanguage: [],excludedOriginalLanguage: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,order: null,includeEmptyPages: null,includeFuturePublishAt: null,includeExternalUrl: null}, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaChapterGroup!
+	userLoggedMangaFeed(params: FollowedMangaFeedParams! = {limit: null, offset: null, translatedLanguage: [], originalLanguage: [], excludedOriginalLanguage: [], contentRating: [], excludedGroups: [], excludedUploaders: [], includeFutureUpdates: null, createdAtSince: null, updatedAtSince: null, publishAtSince: null, order: null, includeEmptyPages: null, includeFuturePublishAt: null, includeExternalUrl: null}): ChapterResults!
+	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams! = {limit: null, offset: null, translatedLanguage: [], originalLanguage: [], excludedOriginalLanguage: [], contentRating: [], excludedGroups: [], excludedUploaders: [], includeFutureUpdates: null, createdAtSince: null, updatedAtSince: null, publishAtSince: null, order: null, includeEmptyPages: null, includeFuturePublishAt: null, includeExternalUrl: null}, mangaListParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaChapterGroup!
 	customListFeed(params: CustomListMangaFeedParams!): ChapterResults!
-	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaChapterGroup!
+	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaChapterGroup!
 }
 
 
@@ -827,13 +838,13 @@ input FollowedMangaFeedParams {
 }
 
 type FollowsQueries {
-	groups(params: UserFollowedGroupsParams! = {limit: null,offset: null}): ScanlationGroupResults!
+	groups(params: UserFollowedGroupsParams! = {limit: null, offset: null}): ScanlationGroupResults!
 	isFollowingGroup(id: UUID!): Boolean!
-	users(params: UserFollowedUserParams! = {limit: null,offset: null}): UserResults!
+	users(params: UserFollowedUserParams! = {limit: null, offset: null}): UserResults!
 	isFollowingUser(id: UUID!): Boolean!
-	mangas(params: UserFollowedMangaParams! = {limit: null,offset: null}): MangaResults!
+	mangas(params: UserFollowedMangaParams! = {limit: null, offset: null}): MangaResults!
 	isFollowingManga(id: UUID!): Boolean!
-	customLists(params: UserFollowedListParams! = {limit: null,offset: null}): CustomListResults!
+	customLists(params: UserFollowedListParams! = {limit: null, offset: null}): CustomListResults!
 	isFollowingCustomList(id: UUID!): Boolean!
 }
 
@@ -889,9 +900,9 @@ type GroupStatisticsQueries {
 
 type HomeQueries {
 	seasonal: CustomList!
-	recentlyUploaded(params: ChapterListParams! = {limit: null,offset: null,chapterIds: [],title: null,groups: [],uploaders: [],mangaId: null,volumes: [],chapters: [],translatedLanguages: [],originalLanguages: [],excludedOriginalLanguages: [],contentRating: [],excludedGroups: [],excludedUploaders: [],includeFutureUpdates: null,createdAtSince: null,updatedAtSince: null,publishAtSince: null,includeEmptyPages: null,includeExternalUrl: null,includeFuturePublishAt: null,order: null}): ChapterResults!
-	recentlyAdded(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
-	popularTitles(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
+	recentlyUploaded(params: ChapterListParams! = {limit: null, offset: null, chapterIds: [], title: null, groups: [], uploaders: [], mangaId: null, volumes: [], chapters: [], translatedLanguages: [], originalLanguages: [], excludedOriginalLanguages: [], contentRating: [], excludedGroups: [], excludedUploaders: [], includeFutureUpdates: null, createdAtSince: null, updatedAtSince: null, publishAtSince: null, includeEmptyPages: null, includeExternalUrl: null, includeFuturePublishAt: null, order: null}): ChapterResults!
+	recentlyAdded(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
+	popularTitles(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
 }
 
 
@@ -1230,7 +1241,7 @@ type MangaMutations {
 	unfollow(id: UUID!): Boolean!
 	updateReadingStatus(id: UUID!, status: ReadingStatus): Boolean!
 	submitDraft(params: SubmitMangaDraftParams!): MangaObject!
-	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): [MangaRelated!]!
+	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): [MangaRelated!]!
 	deleteRelation(id: UUID!, targetManga: UUID!): Boolean!
 }
 
@@ -1242,14 +1253,14 @@ type MangaObject {
 
 type MangaQueries {
 	get(id: UUID!): MangaObject!
-	list(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
-	listOffline(params: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): MangaResults!
-	random(params: MangaRandomParams! = {includes: [],contentRating: [],includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null}): MangaObject!
+	list(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
+	listOffline(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
+	random(params: MangaRandomParams! = {includes: [], contentRating: [], includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null}): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
 	getDraft(params: GetMangaDraftParams!): MangaObject!
-	getDrafts(params: MangaDraftsParams! = {limit: null,offset: null,state: null,order: null,includes: []}): MangaResults!
-	relationList(params: MangaRelationParam!, listParams: MangaListParams! = {limit: null,offset: null,title: null,authorOrArtist: null,authors: [],artists: [],year: null,includedTags: [],includedTagsMode: null,excludedTags: [],excludedTagsMode: null,status: [],originalLanguage: [],excludedOriginalLanguage: [],availableTranslatedLanguage: [],publicationDemographic: [],mangaIds: [],contentRating: [],createdAtSince: null,updatedAtSince: null,order: null,hasAvailableChapters: null,group: null}): [MangaRelated!]!
+	getDrafts(params: MangaDraftsParams! = {limit: null, offset: null, state: null, order: null, includes: []}): MangaResults!
+	relationList(params: MangaRelationParam!, listParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): [MangaRelated!]!
 	aggregate(params: MangaAggregateParam!): MangaAggregateQueries!
 	readingStatus(id: UUID!): ReadingStatus
 }
@@ -1683,7 +1694,7 @@ type ReportMutations {
 }
 
 type ReportQueries {
-	list(params: ListReportParams! = {limit: null,offset: null,category: null,objectId: null,reasonId: null,status: null,order: null}): UserReportResults!
+	list(params: ListReportParams! = {limit: null, offset: null, category: null, objectId: null, reasonId: null, status: null, order: null}): UserReportResults!
 	listByCaterogy(params: ListReasonsByCategory!): ReportReasonResults!
 }
 
@@ -2025,7 +2036,7 @@ type UserMutations {
 
 type UserQueries {
 	get(id: UUID!): User!
-	list(params: UserListParam! = {limit: null,offset: null,userIds: [],username: null,order: null}): UserResults!
+	list(params: UserListParam! = {limit: null, offset: null, userIds: [], username: null, order: null}): UserResults!
 	me: User!
 }
 

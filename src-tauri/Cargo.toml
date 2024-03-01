@@ -1,6 +1,6 @@
 [package]
 name = "special-eureka"
-version = "0.1.7"
+version = "0.2.0"
 description = "a mangadex desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
@@ -18,7 +18,7 @@ tauri-build = { version = "1.5.0", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.5", features = [ "process-relaunch", "window-set-content-protected",
+tauri = { version = "1.6", features = [ "process-relaunch", "window-set-content-protected",
     "os-all",
     "window-create",
     "window-close",
@@ -43,7 +43,6 @@ tauri = { version = "1.5", features = [ "process-relaunch", "window-set-content-
 tokio = "1"
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
-tauri-plugin-aptabase = "0"
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 anyhow = "1"
@@ -69,9 +68,6 @@ default = ["custom-protocol"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
-
-[[bin]]
-name = "mangadex-sdl"
 
 [workspace]
 members = ["./mangadex"]

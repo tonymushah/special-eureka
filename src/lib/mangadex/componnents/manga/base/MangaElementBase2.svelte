@@ -8,6 +8,7 @@
 	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DefaultSpan from "@mangadex/componnents/theme/texts/span/DefaultSpan.svelte";
 	import PublicationStatusTag from "../publicationStatusTag/PublicationStatusTag.svelte";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	export let coverImage: string;
 	export let coverImageAlt: string;
 	export let title: string;
@@ -60,7 +61,7 @@
 				/>
 			</div>
 			<div class="description">
-				<p>{description}</p>
+				<Markdown source={description} />
 			</div>
 		</div>
 	</div>
@@ -101,19 +102,19 @@
 		margin: 10px;
 		gap: 10px;
 	}
-	div.description > p {
+	div.description {
 		text-align: left;
 		-webkit-box-orient: vertical;
 		line-clamp: 3;
 		-webkit-line-clamp: 3;
 		display: -webkit-box;
 		overflow: hidden;
-		margin: 0px;
+		margin-top: 0.5em;
 	}
-	div.description {
+	/*div.description {
 		height: 5em;
 		overflow: hidden;
-	}
+	}*/
 	div.publication {
 		align-self: center;
 	}

@@ -60,10 +60,18 @@ impl MangaRelationships {
         self.relationships
             .iter()
             .filter(|rel| rel.type_ == RelationshipType::Author)
-            .flat_map(|e| {
-                <ApiObjectNoRelationships<AuthorAttributes> as TryFrom<Relationship>>::try_from(
-                    e.clone(),
-                )
+            .flat_map(|value| {
+                if let Some(RelatedAttributes::Author(attributes)) = &value.attributes {
+                    Ok(ApiObjectNoRelationships {
+                        id: value.id,
+                        type_: RelationshipType::Author,
+                        attributes: attributes.clone(),
+                    })
+                } else {
+                    Err(RelationshipConversionError::AttributesNotFound(
+                        RelationshipType::Author,
+                    ))
+                }
             })
             .map(<Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from)
             .collect::<Vec<Author>>()
@@ -98,7 +106,7 @@ impl MangaRelationships {
             .relationships
             .iter()
             .filter(|rel| {
-                rel.type_ == RelationshipType::Artist && rel.type_ == RelationshipType::Author
+                rel.type_ == RelationshipType::Artist || rel.type_ == RelationshipType::Author
             })
             .flat_map(
                 |value| -> Result<

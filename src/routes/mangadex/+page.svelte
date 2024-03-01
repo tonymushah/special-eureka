@@ -1,5 +1,23 @@
 <script>
-	import ContextMenuForStories from "@mangadex/componnents/theme/context-menu/stories/ContextMenuForStories.svelte";
+	import LatestUpdates from "@mangadex/componnents/home/LatestUpdates.svelte";
+	import PopularTitles from "@mangadex/componnents/home/PopularTitles.svelte";
+	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 </script>
 
-<ContextMenuForStories />
+<div class="popular-titles">
+	<PopularTitles />
+</div>
+
+<MidToneLine />
+
+<div class="latest-updates">
+	<LatestUpdates />
+</div>
+
+<MidToneLine />
+
+<style lang="scss">
+	div.popular-titles {
+		margin-top: 0.5em;
+	}
+</style>

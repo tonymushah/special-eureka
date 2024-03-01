@@ -37,15 +37,14 @@
 
 <style>
 	.provider {
-		width: 100% !important;
+		width: 100%;
 		display: inline-flex;
 		color: var(--text-color);
 	}
 	.inner {
-		width: 100%;
 		height: 100vh;
 		scroll-behavior: smooth;
 		overflow-y: scroll;
-		margin-left: 1em;
+		width: 100%;
 	}
 </style>

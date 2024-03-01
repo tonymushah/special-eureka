@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { createEventDispatcher } from "svelte";
@@ -34,7 +35,9 @@
 		<h3>{title}</h3>
 	</div>
 	<div class="contents has-transition" class:isHover>
-		<p>{description}</p>
+		<div class="description">
+			<Markdown source={description} />
+		</div>
 		<div class="button-group">
 			<PrimaryButton
 				on:click={({ detail }) => {
@@ -126,7 +129,7 @@
 		);
 		gap: 5px;
 	}
-	div.contents > p {
+	div.contents > div.description {
 		height: 15em;
 		overflow-y: scroll;
 		margin: 0px;

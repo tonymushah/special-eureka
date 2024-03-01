@@ -204,6 +204,11 @@
 	}
 	.title-groups > div > a > h4 {
 		margin: 0px;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+		overflow: hidden;
 	}
 	.title-groups {
 		flex-grow: 3;

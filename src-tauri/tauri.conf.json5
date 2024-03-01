@@ -2,14 +2,14 @@
     "$schema": "../node_modules/@tauri-apps/cli/schema.json",
     "build": {
         "beforeBuildCommand": "pnpm run vite:build",
-        "beforeDevCommand": "pnpm run storybook",
+        "beforeDevCommand": "pnpm run vite:dev",
         "devPath": "http://localhost:9305",
         "distDir": "../build",
         "withGlobalTauri": false
     },
     "package": {
         "productName": "Special-Eureka",
-        "version": "0.1.7"
+        "version": "0.2.0"
     },
     "tauri": {
         "allowlist": {
