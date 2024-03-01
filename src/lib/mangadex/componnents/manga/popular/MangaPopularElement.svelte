@@ -47,7 +47,7 @@
 </script>
 
 <Layout {coverImage}>
-	<NoIndex {index} />
+	<NoIndex {index} slot="no-index" />
 	<div
 		class="cover"
 		role="button"

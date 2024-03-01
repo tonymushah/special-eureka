@@ -5,7 +5,12 @@
 <div class="layout-image" style={`background-image: url(${coverImage});`}>
 	<div class="layout-color">
 		<div class="layout">
-			<slot />
+			<div class="no-index">
+				<slot name="no-index" />
+			</div>
+			<div class="content">
+				<slot />
+			</div>
 		</div>
 	</div>
 </div>
@@ -30,9 +35,11 @@
 		padding: var(--popular-element-layout-padding);
 		//backdrop-filter: blur(10px);
 		//-webkit-backdrop-filter: blur(10px);
-		display: flex;
-		align-items: start;
-		flex-direction: row;
-		width: 100%;
+		div.content {
+			display: flex;
+			align-items: start;
+			flex-direction: row;
+			width: 100%;
+		}
 	}
 </style>

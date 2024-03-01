@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from "svelte";
-	import Layout from "./Layout.svelte";
+	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
+	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
 	import { ContentRating, type MangaStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
-	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
-	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
-	import AuthorLink from "./authors/AuthorLink.svelte";
-	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import { createEventDispatcher, onMount } from "svelte";
 	import Content from "./Content.svelte";
+	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
+	import AuthorLink from "./authors/AuthorLink.svelte";
 	type Author = {
 		id: string;
 		name: string;
@@ -36,7 +36,7 @@
 </script>
 
 <Layout coverImage="">
-	<NoIndex {index} />
+	<NoIndex {index} slot="no-index" />
 	<div
 		class="cover"
 		role="button"
