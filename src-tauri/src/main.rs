@@ -119,7 +119,6 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(mangadex)
         .setup(|app| {
             #[cfg(any(windows, target_os = "macos"))]
