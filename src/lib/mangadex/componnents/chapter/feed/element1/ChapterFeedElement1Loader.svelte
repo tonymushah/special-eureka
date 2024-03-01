@@ -5,6 +5,8 @@
 	import Content from "./inner/Content.svelte";
 	import CoverImage from "./inner/CoverImage.svelte";
 	import Layout from "./inner/Layout.svelte";
+	import type { Readable } from "svelte/store";
+	import LoaderImage from "./inner/LoaderImage.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -16,8 +18,6 @@
 	};
 	export let mangaId: string;
 	export let chapterId: string;
-	export let coverImage: string;
-	export let coverImageAlt: string;
 	export let mangaTitle: string;
 	export let chapterTitle: string | undefined = undefined;
 	export let lang: Language;
@@ -49,7 +49,7 @@
 </script>
 
 <Layout bind:haveBeenRead>
-	<CoverImage {coverImage} {coverImageAlt} {mangaId} on:mangaClick on:mangaKeyClick />
+	<LoaderImage {mangaId} on:mangaClick on:mangaKeyClick />
 	<Content
 		{mangaId}
 		{mangaTitle}

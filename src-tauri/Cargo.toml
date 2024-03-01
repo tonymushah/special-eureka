@@ -43,7 +43,6 @@ tauri = { version = "1.6", features = [ "process-relaunch", "window-set-content-
 tokio = "1"
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
-tauri-plugin-aptabase = "0"
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 anyhow = "1"
