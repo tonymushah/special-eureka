@@ -132,21 +132,15 @@
 	}));
 </script>
 
-<TopTitle label="Popular Title">
-	<span class="button" class:fetching>
-		<ButtonAccent
-			on:click={async (e) => {
-				if (!fetching) {
-					await popular_titles_query.execute();
-				}
-			}}
-		>
-			<div class="icon" class:fetching>
-				<RefreshCwIcon size={"24px"} />
-			</div>
-		</ButtonAccent>
-	</span>
-</TopTitle>
+<TopTitle
+	label="Popular Title"
+	bind:fetching
+	on:refresh={async () => {
+		if (!fetching) {
+			await popular_titles_query.execute();
+		}
+	}}
+/>
 
 {#if popular_titles}
 	<div class="result">
@@ -247,29 +241,6 @@
 			top: -2em;
 			z-index: 1;
 			margin-right: 2em;
-		}
-	}
-	span.button.fetching {
-		cursor: not-allowed;
-	}
-	span.button {
-		div.icon {
-			width: 24px;
-			height: 24px;
-		}
-		div.icon.fetching {
-			animation: icon-rotate 1s ease-in-out 0s infinite;
-		}
-	}
-	@keyframes icon-rotate {
-		0% {
-			transform: rotate(0deg);
-		}
-		50% {
-			transform: rotate(180deg);
-		}
-		100% {
-			transform: rotate(360deg);
 		}
 	}
 </style>
