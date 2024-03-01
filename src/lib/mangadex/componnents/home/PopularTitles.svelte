@@ -13,6 +13,7 @@
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import TopTitle from "./utils/TopTitle.svelte";
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
+	import Content from "./popular-titles/Content.svelte";
 	const client = getContextClient();
 	let swiper_container: SwiperContainer | undefined = undefined;
 	let current_page_: number | undefined = undefined;
@@ -125,10 +126,12 @@
 			id: tag.id,
 			name: tag.attributes.name["en"] ?? ""
 		})),
-		authors: manga.relationships.authorArtists.map((author_artist) => ({
-			id: author_artist.id,
-			name: author_artist.attributes.name
-		}))
+		authors: manga.relationships.authorArtists.map<{ id: string; name: string }>(
+			(author_artist) => ({
+				id: author_artist.id,
+				name: author_artist.attributes.name
+			})
+		)
 	}));
 </script>
 
@@ -143,42 +146,7 @@
 />
 
 {#if popular_titles}
-	<div class="result">
-		<swiper-container bind:this={swiper_container}>
-			{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
-				<swiper-slide>
-					<MangaPopularElement
-						{coverImage}
-						{coverImageAlt}
-						{tags}
-						{title}
-						{contentRating}
-						{authors}
-						{description}
-					/>
-				</swiper-slide>
-			{/each}
-		</swiper-container>
-		<div class="pagination">
-			<ButtonAccent
-				isBase={false}
-				on:click={() => {
-					swiper_container?.swiper.slidePrev();
-				}}
-			>
-				<ArrowLeftIcon />
-			</ButtonAccent>
-			<ButtonAccent>{current_page}</ButtonAccent>
-			<ButtonAccent
-				isBase={false}
-				on:click={() => {
-					swiper_container?.swiper.slideNext();
-				}}
-			>
-				<ArrowRightIcon />
-			</ButtonAccent>
-		</div>
-	</div>
+	<Content {popular_titles} />
 {:else if error}
 	<HomeErrorComponnent {error} />
 {:else}
@@ -189,20 +157,5 @@
 	:root {
 		--popular-element-layout-margin: 0em 0em 0em 0em;
 		--popular-element-layout-padding: 3em 0em 0em 0em;
-	}
-	div.result {
-		position: relative;
-		top: -3em;
-		margin-bottom: -3em;
-		div.pagination {
-			align-items: end;
-			display: flex;
-			gap: 1em;
-			justify-content: end;
-			position: relative;
-			top: -2em;
-			z-index: 1;
-			margin-right: 2em;
-		}
 	}
 </style>
