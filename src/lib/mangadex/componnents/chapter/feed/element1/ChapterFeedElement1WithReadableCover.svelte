@@ -48,12 +48,13 @@
 			id: string;
 		};
 	}>();
+	$: image_ = $coverImage;
 </script>
 
 <Layout bind:haveBeenRead>
-	{#if $coverImage}
+	{#if image_}
 		<CoverImage
-			bind:coverImage={$coverImage}
+			bind:coverImage={image_}
 			{coverImageAlt}
 			{mangaId}
 			on:mangaClick

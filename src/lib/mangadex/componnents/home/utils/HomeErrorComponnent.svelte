@@ -2,10 +2,11 @@
 	import type { CombinedError } from "@urql/svelte";
 
 	export let error: CombinedError;
+	export let label: string;
 </script>
 
 <div class="error with-margin">
-	<h3>Oops! Something happens when loading the popular titles</h3>
+	<h3>{label}</h3>
 	{#each error.graphQLErrors as { name, message }}
 		<div>
 			<h4>{name}</h4>

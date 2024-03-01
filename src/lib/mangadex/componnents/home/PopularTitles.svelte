@@ -98,7 +98,10 @@
 {#if popular_titles}
 	<Content {popular_titles} />
 {:else if error}
-	<HomeErrorComponnent {error} />
+	<HomeErrorComponnent
+		label={"Oops! Something happens when loading the popular titles"}
+		{error}
+	/>
 {:else}
 	<PopularTitleSpinner --height="20em" />
 {/if}
