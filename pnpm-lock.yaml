@@ -49,7 +49,7 @@ dependencies:
     version: 9.0.8
   '@urql/svelte':
     specifier: ^4.0.4
-    version: 4.0.4(graphql@16.8.1)(svelte@4.2.12)
+    version: 4.1.0(graphql@16.8.1)(svelte@4.2.12)
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
@@ -5750,10 +5750,6 @@ packages:
   /@types/scheduler@0.16.8:
     resolution: {integrity: sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==}
 
-  /@types/semver@7.5.6:
-    resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==}
-    dev: true
-
   /@types/semver@7.5.8:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
     dev: true
@@ -6019,12 +6015,21 @@ packages:
       - graphql
     dev: false
 
-  /@urql/svelte@4.0.4(graphql@16.8.1)(svelte@4.2.12):
-    resolution: {integrity: sha512-HYz9dHdqEcs9d82WWczQ3XG+zuup3TS01H+txaij/QfQ+KHjrlrn0EkOHQQd1S+H8+nFjFU2x9+HE3+3fuwL1A==}
+  /@urql/core@4.3.0(graphql@16.8.1):
+    resolution: {integrity: sha512-wT+FeL8DG4x5o6RfHEnONNFVDM3616ouzATMYUClB6CB+iIu2mwfBKd7xSUxYOZmwtxna5/hDRQdMl3nbQZlnw==}
+    dependencies:
+      '@0no-co/graphql.web': 1.0.4(graphql@16.8.1)
+      wonka: 6.3.4
+    transitivePeerDependencies:
+      - graphql
+    dev: false
+
+  /@urql/svelte@4.1.0(graphql@16.8.1)(svelte@4.2.12):
+    resolution: {integrity: sha512-Ov3EclCjaXPPTjKNTcIDlAG3qY/jhLjl/J9yyz9FeLUQ9S2jEgsvlzNXibrY27f4ihD4gH36CNGuj1XOi5hEEQ==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0
     dependencies:
-      '@urql/core': 4.2.3(graphql@16.8.1)
+      '@urql/core': 4.3.0(graphql@16.8.1)
       svelte: 4.2.12
       wonka: 6.3.4
     transitivePeerDependencies:
