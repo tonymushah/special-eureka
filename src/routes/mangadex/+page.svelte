@@ -1,6 +1,7 @@
 <script>
 	import LatestUpdates from "@mangadex/componnents/home/LatestUpdates.svelte";
 	import PopularTitles from "@mangadex/componnents/home/PopularTitles.svelte";
+	import StaffPicks from "@mangadex/componnents/home/StaffPicks.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 </script>
 
@@ -12,6 +13,12 @@
 
 <div class="latest-updates">
 	<LatestUpdates />
+</div>
+
+<MidToneLine />
+
+<div class="staff-picks">
+	<StaffPicks />
 </div>
 
 <MidToneLine />
