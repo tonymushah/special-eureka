@@ -4,6 +4,7 @@ const query = graphql(/* GraphQL */`
   query staffPicks {
     home {
       staffPicks {
+        id
         relationships {
           titles {
             id
