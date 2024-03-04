@@ -1,4 +1,4 @@
-import type { LangDataMap } from ".";
+import type { LangDataMap } from "..";
 
 export default function manga_title_to_lang_map(data: Record<string, string>): LangDataMap {
     const res: Map<string, string> = new Map();
