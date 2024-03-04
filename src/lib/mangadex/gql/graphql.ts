@@ -1150,6 +1150,7 @@ export type HomeQueries = {
   recentlyAdded: MangaResults;
   recentlyUploaded: ChapterResults;
   seasonal: CustomList;
+  staffPicks: CustomList;
 };
 
 
