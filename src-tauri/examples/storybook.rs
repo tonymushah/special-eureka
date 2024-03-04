@@ -9,7 +9,6 @@ fn main() {
     match tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_aptabase::Builder::new("A-EU-7568015669").build())
         .plugin(tauri_plugin_speu_mangadex::MangadexDesktopApi::default())
         .build(context)
     {

@@ -8,7 +8,7 @@ use time::Duration;
 use crate::{
     objects::{
         chapter::lists::ChapterResults,
-        custom_list::{seasonal::SeasonalData, CustomList},
+        custom_list::{seasonal::SeasonalData, staff_picks::StaffPicksData, CustomList},
         manga::lists::MangaResults,
         ExtractReferenceExpansionFromContext,
     },
@@ -32,6 +32,20 @@ impl HomeQueries {
             let arc_cli = client.get_http_client();
             let cli = arc_cli.read().await;
             SeasonalData::get(&cli.client).await?
+        };
+        Ok({
+            let data: CustomList = res.get_result(&client).await?.data.into();
+            let _ = watches.custom_list.send_data(data.clone());
+            data
+        })
+    }
+    pub async fn staff_picks(&self, ctx: &Context<'_>) -> Result<CustomList> {
+        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let res = {
+            let arc_cli = client.get_http_client();
+            let cli = arc_cli.read().await;
+            StaffPicksData::get(&cli.client).await?
         };
         Ok({
             let data: CustomList = res.get_result(&client).await?.data.into();

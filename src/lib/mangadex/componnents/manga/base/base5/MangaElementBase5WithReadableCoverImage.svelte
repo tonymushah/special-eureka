@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
-	import Content from "./base5/Content.svelte";
-	import Layout from "./base5/Layout.svelte";
+	import Content from "./Content.svelte";
+	import type { Readable } from "svelte/store";
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import Layout from "./Layout.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readClick: MouseEvent & {
@@ -11,15 +13,20 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let coverImage: string;
+	export let coverImage: Readable<string | undefined>;
 	export let coverImageAlt: string;
 	export let title: string;
 	export let description: string;
 	let isHover = false;
+	$: image = $coverImage;
 </script>
 
 <Layout bind:isHover>
-	<img src={coverImage} alt={coverImageAlt} />
+	{#if image}
+		<img src={image} alt={coverImageAlt} />
+	{:else}
+		<Skeleton height={"var(--s-h)"} width={"var(--s-w)"} />
+	{/if}
 	<Content {title} {description} {isHover} on:moreInfoClick on:readClick />
 </Layout>
 
@@ -30,6 +37,8 @@
 		--width: 16em;
 		--height: 23em;
 		--height-c: 24em;
+		--s-w: var(--width);
+		--s-h: var(--height);
 	}
 	img {
 		width: var(--width);

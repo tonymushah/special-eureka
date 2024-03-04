@@ -35,11 +35,15 @@
 	}}
 	class="cover-image"
 >
-	<Skeleton width="80px" height="120px" />
+	<Skeleton width="60px" height="100px" />
 </div>
 
 <style lang="scss">
 	div.cover-image {
 		grid-area: cover;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0px 10px;
 	}
 </style>
