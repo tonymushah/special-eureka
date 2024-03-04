@@ -88,6 +88,9 @@
 		}
 	}
 	.content {
+		.content-top {
+			width: 100%;
+		}
 		display: flex;
 		margin: 1rem;
 		flex-direction: column;
@@ -95,6 +98,7 @@
 		text-align: start;
 		height: 20em;
 		justify-content: space-between;
+		width: 100%;
 	}
 	.tags {
 		display: flex;
@@ -103,6 +107,7 @@
 	.description {
 		height: 10em;
 		overflow-y: scroll;
+		width: 100%;
 	}
 	.authors {
 		display: flex;
