@@ -10,6 +10,7 @@
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	const client = getContextClient();
 	const query = graphql(`
 		query homePopularTitle {
@@ -61,8 +62,9 @@
 	$: error = $popular_titles_query?.error;
 	$: popular_titles = $popular_titles_query?.data?.home.popularTitles.data.map((manga) => ({
 		id: manga.id,
-		title: manga.attributes.title["en"] ?? "",
-		description: manga.attributes.description["en"] ?? "",
+		title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
+		description:
+			get_value_from_title_and_random_if_undefined(manga.attributes.description, "en") ?? "",
 		coverImage: get_cover_art({
 			client,
 			manga_id: manga.id,

@@ -2,6 +2,7 @@
 	import ChapterFeedElement1 from "@mangadex/componnents/chapter/feed/element1/ChapterFeedElement1WithReadableCover.svelte";
 	import { CoverImageQuality, type RecentlyAddedHomeQuery } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { getContextClient } from "@urql/svelte";
 	const client = getContextClient();
@@ -28,7 +29,11 @@
 			id: v.id,
 			name: v.attributes.name
 		})),
-		mangaTitle: c.relationships.manga.attributes.title["en"] ?? "",
+		mangaTitle:
+			get_value_from_title_and_random_if_undefined(
+				c.relationships.manga.attributes.title,
+				"en"
+			) ?? "",
 		coverImageAlt: `${c.id}/${c.attributes.volume}`,
 		chapterTitle: `${
 			c.attributes.volume != null && c.attributes.volume != undefined
