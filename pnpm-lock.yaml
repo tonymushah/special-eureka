@@ -55,7 +55,7 @@ dependencies:
     version: 1.11.10
   flag-icons:
     specifier: ^7.1.0
-    version: 7.1.0
+    version: 7.2.0
   graphiql:
     specifier: ^3.1.0
     version: 3.1.1(@codemirror/language@6.0.0)(@types/react-dom@18.2.19)(@types/react@18.2.62)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -8148,8 +8148,8 @@ packages:
       path-exists: 4.0.0
     dev: true
 
-  /flag-icons@7.1.0:
-    resolution: {integrity: sha512-AH4v++19bpC5P3Wh767top4wylJYJCWkFnvNiDqGHDxqSqdMZ49jpLXp8PWBHTTXaNQ+/A+QPrOwyiIGaiIhmw==}
+  /flag-icons@7.2.0:
+    resolution: {integrity: sha512-0ZQ5gzCoCBb6A6QQS59DUazZWxs9za8olMXnuYbvtUbBfM45+/CQm+i2lvn6aDct6SKyAe6MUFQLgYk7kn49+A==}
     dev: false
 
   /flat-cache@3.2.0:
