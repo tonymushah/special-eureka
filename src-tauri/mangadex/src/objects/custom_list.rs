@@ -15,6 +15,7 @@ pub mod attributes;
 pub mod lists;
 pub mod relationships;
 pub mod seasonal;
+pub mod staff_picks;
 
 #[derive(Clone, Debug)]
 pub enum CustomList {
