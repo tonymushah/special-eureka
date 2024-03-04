@@ -10,10 +10,10 @@ dependencies:
     version: 1.6.3
   '@fontsource-variable/josefin-sans':
     specifier: ^5.0.19
-    version: 5.0.19
+    version: 5.0.20
   '@fontsource/poppins':
     specifier: ^5.0.8
-    version: 5.0.8
+    version: 5.0.12
   '@graphiql/toolkit':
     specifier: ^0.9.1
     version: 0.9.1(graphql@16.8.1)
@@ -2142,12 +2142,12 @@ packages:
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
 
-  /@fontsource-variable/josefin-sans@5.0.19:
-    resolution: {integrity: sha512-/e2QwUF+m5m6zj7BKgLFak0oZwEhUKNk2k/4Sb1BGqHy8ghKN0XpmEn5dKw8xzjab612N5QrIs0XTSz5CkyHAA==}
+  /@fontsource-variable/josefin-sans@5.0.20:
+    resolution: {integrity: sha512-18pRxL/jA7HFT+bMsFsDHFPTJ2lTxMK3eMQt5cruQ9/RWFqci2Pp0R4iQz6qr09nMslfJudEsXt06LX2AuQ34Q==}
     dev: false
 
-  /@fontsource/poppins@5.0.8:
-    resolution: {integrity: sha512-P8owfYWluoUY5Nyzk4gT/L6LmLmseP6ezFWhj6VBUa5pRIdnCvNJpoQ6i/vhekjtJOfqX6nKlB+LCttoUl2GQQ==}
+  /@fontsource/poppins@5.0.12:
+    resolution: {integrity: sha512-0qzBxtIJLh82iMJ9pCXKYwGs1zyS+jyUmwVJ59+JdYnEaFVkDsxVOk9yDWfVOs14ALUneodU2m5YSGma6dCYCw==}
     dev: false
 
   /@graphiql/react@0.20.3(@codemirror/language@6.0.0)(@types/react-dom@18.2.19)(@types/react@18.2.61)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
@@ -5749,10 +5749,6 @@ packages:
 
   /@types/scheduler@0.16.8:
     resolution: {integrity: sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==}
-
-  /@types/semver@7.5.6:
-    resolution: {integrity: sha512-dn1l8LaMea/IjDoHNd9J52uBbInB796CDffS6VdIxvqYCPSG0V0DzHp76GpaWnlhg88uYyPbXCDIowa86ybd5A==}
-    dev: true
 
   /@types/semver@7.5.8:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
