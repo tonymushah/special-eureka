@@ -18,6 +18,7 @@
 		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent-l3) 100%);
 		border-radius: 0.25rem;
 		transition: opacity 300ms ease-in-out;
+		justify-content: center;
 	}
 	div.title > p {
 		font-weight: 700;
@@ -26,6 +27,8 @@
 		-webkit-line-clamp: 2;
 		display: -webkit-box;
 		overflow: hidden;
+		text-align: center;
+		width: 100%;
 	}
 	div.title:hover {
 		opacity: 0;
