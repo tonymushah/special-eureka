@@ -1,6 +1,6 @@
 import { graphql } from "@mangadex/gql";
 
-const query = graphql(/** GraphQL */`
+const query = graphql(/* GraphQL */`
 	query seasonal {
 		home {
 			seasonal {
