@@ -4,8 +4,8 @@
 	import type { SwiperContainer } from "swiper/element";
 	import { onMount } from "svelte";
 
-	let swiper_container: SwiperContainer | undefined = undefined;
 	export let mangas: StaffPicksTitle[];
+	let swiper_container: SwiperContainer | undefined = undefined;
 	onMount(() => {
 		// swiper parameters
 		const swiperParams = {
