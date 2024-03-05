@@ -23,8 +23,9 @@ impl AuthorQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default_with = "list_default_params()")] mut params: AuthorListParams,
+        #[graphql(default_with = "list_default_params()")] params: AuthorListParams,
     ) -> Result<AuthorResults> {
+        let mut params: AuthorListParams = params;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let _watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = _watches.deref().clone();

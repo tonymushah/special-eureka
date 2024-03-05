@@ -30,8 +30,9 @@ impl FollowsQueries {
     pub async fn groups(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: UserFollowedGroupsParams,
+        #[graphql(default)] params: UserFollowedGroupsParams,
     ) -> Result<ScanlationGroupResults> {
+        let mut params: UserFollowedGroupsParams = params;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -132,8 +133,9 @@ impl FollowsQueries {
     pub async fn mangas(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: UserFollowedMangaParams,
+        #[graphql(default)] params: UserFollowedMangaParams,
     ) -> Result<MangaResults> {
+        let mut params: UserFollowedMangaParams = params;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?

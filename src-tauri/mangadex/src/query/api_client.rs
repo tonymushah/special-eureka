@@ -22,8 +22,9 @@ impl ApiClientQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default_with = "default_params()")] mut params: ApiClientListParam,
+        #[graphql(default_with = "default_params()")] params: ApiClientListParam,
     ) -> Result<ApiClientResults> {
+        let mut params: ApiClientListParam = params;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;

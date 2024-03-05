@@ -56,8 +56,9 @@ impl HomeQueries {
     pub async fn recently_uploaded(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: ChapterListParams,
+        #[graphql(default)] params: ChapterListParams,
     ) -> Result<ChapterResults> {
+        let mut params: ChapterListParams = params;
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(ChapterSortOrder::ReadableAt(OrderDirection::Descending));
         params.chapter_ids.clear();
@@ -67,8 +68,9 @@ impl HomeQueries {
     pub async fn recently_added(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: MangaListParams,
+        #[graphql(default)] params: MangaListParams,
     ) -> Result<MangaResults> {
+        let mut params: MangaListParams = params;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
@@ -90,8 +92,9 @@ impl HomeQueries {
     pub async fn popular_titles(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: MangaListParams,
+        #[graphql(default)] params: MangaListParams,
     ) -> Result<MangaResults> {
+        let mut params: MangaListParams = params;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
