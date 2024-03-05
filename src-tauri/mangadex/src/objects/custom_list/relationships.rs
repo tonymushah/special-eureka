@@ -31,15 +31,31 @@ impl Deref for CustomListRelationships {
 
 #[Object]
 impl CustomListRelationships {
-    pub async fn titles(&self, ctx: &Context<'_>) -> GraphQLResult<Vec<MangaObject>> {
+    pub async fn titles_ids(&self) -> Vec<Uuid> {
+        self.iter()
+            .filter(|e| e.type_ == RelationshipType::Manga)
+            .map(|rel| rel.id)
+            .collect::<Vec<Uuid>>()
+    }
+    pub async fn titles(
+        &self,
+        ctx: &Context<'_>,
+        offset: Option<u32>,
+        limit: Option<u32>,
+    ) -> GraphQLResult<Vec<MangaObject>> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.manga().get();
-        req.manga_ids(
-            self.iter()
-                .filter(|e| e.type_ == RelationshipType::Manga)
-                .map(|rel| rel.id)
-                .collect::<Vec<Uuid>>(),
-        );
+        let manga_ids = self.titles_ids(ctx).await?;
+        let manga_len: u32 = manga_ids.len().try_into()?;
+        req.manga_ids(manga_ids);
+        if let Some(o) = offset {
+            req.offset(o);
+        }
+        if let Some(l) = limit {
+            req.limit(l);
+        } else {
+            req.limit(manga_len);
+        }
         let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
         ctx.field()
             .selection_set()
