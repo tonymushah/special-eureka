@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from "svelte";
 	import Content from "./base3/Content.svelte";
 	import Layout from "./base3/Layout.svelte";
-
+	import Image from "./base3/Image.svelte";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -14,15 +14,13 @@
 </script>
 
 <Layout>
-	<img src={coverImage} alt={coverImageAlt} />
+	<Image {coverImage} {coverImageAlt} />
 	<Content {title} />
 </Layout>
 
 <style lang="scss">
-	img {
-		width: 10em;
-		height: 15em;
-		object-fit: cover;
-		border-radius: 0.25rem;
+	:root {
+		--element-w: 10em;
+		--element-h: 15em;
 	}
 </style>

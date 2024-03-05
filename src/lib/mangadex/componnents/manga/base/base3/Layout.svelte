@@ -24,8 +24,8 @@
 
 <style lang="scss">
 	.layout {
-		width: 10em;
-		height: 15em;
+		width: var(--element-w);
+		height: var(--element-h);
 		overflow: hidden;
 		border-radius: 0.25rem;
 	}
