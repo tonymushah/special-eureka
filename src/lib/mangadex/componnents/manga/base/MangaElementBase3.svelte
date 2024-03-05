@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
+	import Content from "./base3/Content.svelte";
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -23,9 +24,7 @@
 >
 	<div class="layout">
 		<img src={coverImage} alt={coverImageAlt} />
-		<div class="title">
-			<p>{title}</p>
-		</div>
+		<Content {title} />
 	</div>
 </ButtonBase>
 
@@ -36,29 +35,7 @@
 		object-fit: cover;
 		border-radius: 0.25rem;
 	}
-	div.title {
-		width: 10em;
-		height: 16em;
-		top: -16em;
-		position: relative;
-		display: flex;
-		align-items: end;
-		opacity: 1;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent-l3) 100%);
-		border-radius: 0.25rem;
-		transition: opacity 300ms ease-in-out;
-	}
-	div.title > p {
-		font-weight: 700;
-		-webkit-box-orient: vertical;
-		line-clamp: 2;
-		-webkit-line-clamp: 2;
-		display: -webkit-box;
-		overflow: hidden;
-	}
-	div.title:hover {
-		opacity: 0;
-	}
+
 	.layout {
 		width: 10em;
 		height: 15em;
