@@ -666,7 +666,8 @@ type CustomListQueries {
 }
 
 type CustomListRelationships {
-	titles: [MangaObject!]!
+	titlesIds: [UUID!]!
+	titles(offset: Int, limit: Int): [MangaObject!]!
 	user: User!
 }
 

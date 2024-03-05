@@ -844,7 +844,14 @@ export type CustomListQueriesGetUserListsArgs = {
 export type CustomListRelationships = {
   __typename?: 'CustomListRelationships';
   titles: Array<MangaObject>;
+  titlesIds: Array<Scalars['UUID']['output']>;
   user: User;
+};
+
+
+export type CustomListRelationshipsTitlesArgs = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CustomListRemoveMangaParam = {
