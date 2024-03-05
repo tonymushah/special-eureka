@@ -16,7 +16,7 @@
 	$: cover = $coverImage;
 </script>
 
-<Layout>
+<Layout --element-w="10em" --element-h="15em">
 	{#if cover}
 		<Image bind:coverImage={cover} {coverImageAlt} />
 	{:else}
@@ -24,10 +24,3 @@
 	{/if}
 	<Content {title} />
 </Layout>
-
-<style lang="scss">
-	:root {
-		--element-w: 10em;
-		--element-h: 15em;
-	}
-</style>

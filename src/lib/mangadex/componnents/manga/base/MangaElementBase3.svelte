@@ -13,14 +13,7 @@
 	export let title: string;
 </script>
 
-<Layout>
+<Layout --element-w="10em" --element-h="15em">
 	<Image {coverImage} {coverImageAlt} />
 	<Content {title} />
 </Layout>
-
-<style lang="scss">
-	:root {
-		--element-w: 10em;
-		--element-h: 15em;
-	}
-</style>
