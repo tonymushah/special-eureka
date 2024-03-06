@@ -46,6 +46,7 @@ use crate::{
 };
 
 #[derive(Debug, Clone, Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct PluginConfig {
     #[serde(default)]
     user_agent: Option<String>,
