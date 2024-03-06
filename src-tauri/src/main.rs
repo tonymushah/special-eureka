@@ -59,7 +59,6 @@ fn main() {
         .add_native_item(SystemTrayMenuItem::Separator)
         .add_item(hide);
     let tray = SystemTray::new().with_menu(tray_menu);
-    let mangadex = tauri_plugin_speu_mangadex::MangadexDesktopApi::default();
 
     let dev_menu = Menu::new()
         .add_item(CustomMenuItem::new(String::from("home"), "Home"))
@@ -113,9 +112,9 @@ fn main() {
             }
         }
     };
-    let setup = |app: &mut tauri::App| -> Result<(), Box<dyn std::error::Error>> {
+    let setup = |_app: &mut tauri::App| -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(any(windows, target_os = "macos"))]
-        if let Some(splashscreen) = app.get_window("splashscreen") {
+        if let Some(splashscreen) = _app.get_window("splashscreen") {
             set_shadow(&splashscreen, true).unwrap();
             #[cfg(target_os = "macos")]
             apply_vibrancy(&splashscreen, NSVisualEffectMaterial::HudWindow, None, None)
@@ -132,7 +131,7 @@ fn main() {
         .on_system_tray_event(on_system_tray_event)
         .invoke_handler(tauri::generate_handler![close_splashscreen])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(mangadex)
+        .plugin(tauri_plugin_speu_mangadex::init())
         .setup(setup)
         .build(context)
     {
