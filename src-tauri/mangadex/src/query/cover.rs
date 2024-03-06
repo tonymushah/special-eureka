@@ -25,8 +25,9 @@ impl CoverQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: CoverListParam,
+        #[graphql(default)] params: CoverListParam,
     ) -> Result<CoverResults> {
+        let mut params: CoverListParam = params;
         params.includes = <CoverResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         CoverListQuery { params }.list(ctx).await
     }

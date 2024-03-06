@@ -19,8 +19,9 @@ impl ReportQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: ListReportParams,
+        #[graphql(default)] params: ListReportParams,
     ) -> Result<UserReportResults> {
+        let mut params = params;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         params.includes =

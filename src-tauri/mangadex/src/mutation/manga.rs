@@ -172,8 +172,9 @@ impl MangaMutations {
         &self,
         ctx: &Context<'_>,
         params: MangaCreateRelationParam,
-        #[graphql(default)] mut manga_list_params: MangaListParams,
+        #[graphql(default)] manga_list_params: MangaListParams,
     ) -> Result<Vec<MangaRelated>> {
+        let mut manga_list_params = manga_list_params;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let related_list: HashMap<Uuid, MangaRelation> = params

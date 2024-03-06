@@ -23,8 +23,9 @@ impl ScanlationGroupQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut params: ScanlationGroupListParams,
+        #[graphql(default)] params: ScanlationGroupListParams,
     ) -> Result<ScanlationGroupResults> {
+        let mut params = params;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()

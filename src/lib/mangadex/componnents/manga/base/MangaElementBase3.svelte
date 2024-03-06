@@ -1,7 +1,8 @@
 <script lang="ts">
-	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
-
+	import Content from "./base3/Content.svelte";
+	import Layout from "./base3/Layout.svelte";
+	import Image from "./base3/Image.svelte";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -12,57 +13,7 @@
 	export let title: string;
 </script>
 
-<ButtonBase
-	on:click
-	isBase={false}
-	with_hover
-	noPadding
-	--button-color={"var(--accent-l3)"}
-	--button-hover={"var(--accent-l3-hover)"}
-	--button-active={"var(--accent-l-active)"}
->
-	<div class="layout">
-		<img src={coverImage} alt={coverImageAlt} />
-		<div class="title">
-			<p>{title}</p>
-		</div>
-	</div>
-</ButtonBase>
-
-<style lang="scss">
-	img {
-		width: 10em;
-		height: 15em;
-		object-fit: cover;
-		border-radius: 0.25rem;
-	}
-	div.title {
-		width: 10em;
-		height: 16em;
-		top: -16em;
-		position: relative;
-		display: flex;
-		align-items: end;
-		opacity: 1;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent-l3) 100%);
-		border-radius: 0.25rem;
-		transition: opacity 300ms ease-in-out;
-	}
-	div.title > p {
-		font-weight: 700;
-		-webkit-box-orient: vertical;
-		line-clamp: 2;
-		-webkit-line-clamp: 2;
-		display: -webkit-box;
-		overflow: hidden;
-	}
-	div.title:hover {
-		opacity: 0;
-	}
-	.layout {
-		width: 10em;
-		height: 15em;
-		overflow: hidden;
-		border-radius: 0.25rem;
-	}
-</style>
+<Layout --element-w="10em" --element-h="15em">
+	<Image {coverImage} {coverImageAlt} />
+	<Content {title} />
+</Layout>

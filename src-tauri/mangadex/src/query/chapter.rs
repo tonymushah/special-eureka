@@ -57,9 +57,11 @@ impl ChapterQueries {
     pub async fn list_with_group_by_manga(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] mut chapter_list_params: ChapterListParams,
-        #[graphql(default)] mut manga_list_params: MangaListParams,
+        #[graphql(default)] chapter_list_params: ChapterListParams,
+        #[graphql(default)] manga_list_params: MangaListParams,
     ) -> Result<MangaChapterGroup> {
+        let mut chapter_list_params: ChapterListParams = chapter_list_params;
+        let mut manga_list_params: MangaListParams = manga_list_params;
         chapter_list_params.includes =
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
