@@ -1,6 +1,6 @@
 use async_graphql::Schema;
 use mutation::Mutation;
-use plugin::setup;
+use plugin_setup::setup;
 // use mangadex_desktop_api2::AppState;
 use query::Query;
 use tauri::Runtime;
@@ -13,7 +13,7 @@ pub mod ins_handle;
 pub mod intelligent_notification_system;
 pub mod mutation;
 pub mod objects;
-mod plugin;
+mod plugin_setup;
 pub mod query;
 pub mod scheme;
 pub mod store;
