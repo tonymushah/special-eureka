@@ -2617,9 +2617,9 @@ dependencies = [
 
 [[package]]
 name = "mizuki"
-version = "0.2.0-alpha.3"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec1e2f7f0c99021f39d4ad77b0cdb6aa72e0380d6c14980f4361d5b359af03dc"
+checksum = "b9da0522a24dcecac52f722448ef2131c5571f76b833c8980f95673716e81f3b"
 dependencies = [
  "async-graphql",
  "serde",
