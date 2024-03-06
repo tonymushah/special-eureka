@@ -1,16 +1,19 @@
-use std::time::Duration;
+use std::{ops::Add, time::Duration};
 
 use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
 use mangadex_api_types_rust::MangaDexDateTime;
-use tauri::Runtime;
+use tauri::{Manager, Runtime};
 use tauri_plugin_store::Store;
 use tokio::time::Instant;
 
 use crate::{
     app_state::LastTimeTokenWhenFecthed,
-    store::types::structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore},
-    utils::watch::Watches,
+    store::types::{
+        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore},
+        ExtractFromStore,
+    },
+    utils::watch::{SendData, Watches},
 };
 
 pub fn init_client_state<R: Runtime>(
