@@ -1,7 +1,9 @@
+mod error;
+
 use crate::intelligent_notification_system::DownloadEntry;
 use crate::utils::get_indentifier;
-use crate::Error;
-use crate::Result;
+use error::Error;
+use error::Result;
 use once_cell::sync::OnceCell;
 use std::thread::JoinHandle;
 use tauri::api::notification::Notification;
