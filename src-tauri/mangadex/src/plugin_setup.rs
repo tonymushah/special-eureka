@@ -70,8 +70,10 @@ fn register_mangadex_client<R: Runtime>(
     if let Some(version) = app.config().package.version.clone() {
         ua = ua.replacen("{{current_version}}", &version, 1);
     }
+    /*
     #[cfg(debug_assertions)]
     println!("{ua}");
+     */
 
     default_headers.append(USER_AGENT, HeaderValue::from_str(&ua)?);
     let mut cli_builder = Client::builder().default_headers(default_headers);
