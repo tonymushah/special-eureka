@@ -36,16 +36,16 @@
 	onMount(() => {
 		// swiper parameters
 		const swiperParams = {
-			slidesPerView: 1,
+			slidesPerView: "auto",
 			breakpoints: {
 				640: {
-					slidesPerView: 2
-				},
-				1024: {
 					slidesPerView: 3
 				},
+				1024: {
+					slidesPerView: 5
+				},
 				1360: {
-					slidesPerView: 4
+					slidesPerView: 6
 				}
 			},
 			freeMode: true,
