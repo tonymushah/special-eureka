@@ -9,7 +9,7 @@ fn main() {
     match tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_speu_mangadex::MangadexDesktopApi::default())
+        .plugin(tauri_plugin_speu_mangadex::init())
         .build(context)
     {
         Ok(app) => app.run(|_app_handle, _event| {}),
