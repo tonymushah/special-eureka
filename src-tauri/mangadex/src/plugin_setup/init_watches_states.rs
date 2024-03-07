@@ -1,4 +1,4 @@
-use tauri::Runtime;
+use tauri::{Manager, Runtime};
 use tauri_plugin_store::Store;
 
 use crate::{
@@ -8,8 +8,9 @@ use crate::{
             reading_mode::ReadingModeStore,
         },
         structs::chapter_language::ChapterLanguagesStore,
+        ExtractFromStore,
     },
-    utils::watch::Watches,
+    utils::watch::{SendData, Watches},
 };
 
 pub fn init_watches_states<R: Runtime>(
