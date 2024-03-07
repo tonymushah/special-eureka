@@ -1,4 +1,4 @@
-use tauri::Runtime;
+use tauri::{Manager, Runtime};
 
 use crate::{
     app_state::OfflineAppState, store::get_store_builder, utils::store::MangaDexStoreState,
