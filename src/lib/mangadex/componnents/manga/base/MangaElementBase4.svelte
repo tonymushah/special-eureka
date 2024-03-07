@@ -2,6 +2,7 @@
 	import Layout from "./base4/Layout.svelte";
 	import Content from "./base4/Content.svelte";
 	import { createEventDispatcher } from "svelte";
+	import CoverImage from "./base4/CoverImage.svelte";
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -14,15 +15,6 @@
 </script>
 
 <Layout on:click>
-	<img src={coverImage} alt={coverImageAlt} />
+	<CoverImage {coverImage} {coverImageAlt} />
 	<Content {title} />
 </Layout>
-
-<style lang="scss">
-	img {
-		width: 9.5em;
-		height: 12.5em;
-		object-fit: cover;
-		border-radius: 0.25rem;
-	}
-</style>
