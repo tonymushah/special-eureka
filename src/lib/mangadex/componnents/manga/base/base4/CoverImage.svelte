@@ -7,8 +7,8 @@
 
 <style lang="scss">
 	img {
-		width: 9.5em;
-		height: 12.5em;
+		width: var(--w-base);
+		height: var(--img-h);
 		object-fit: cover;
 		border-radius: 0.25rem;
 	}

@@ -14,7 +14,7 @@
 	export let title: string;
 </script>
 
-<Layout on:click>
+<Layout on:click --w-base={"9.5em"} --img-h={"12.5em"}>
 	<CoverImage {coverImage} {coverImageAlt} />
 	<Content {title} />
 </Layout>

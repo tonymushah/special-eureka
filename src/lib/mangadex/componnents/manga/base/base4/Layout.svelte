@@ -17,7 +17,7 @@
 
 <style lang="scss">
 	.layout {
-		width: 9.5em;
+		width: var(--w-base);
 		overflow: hidden;
 		border-radius: 0.25rem;
 		display: flex;
