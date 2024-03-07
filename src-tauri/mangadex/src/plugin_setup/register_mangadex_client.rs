@@ -5,7 +5,7 @@ use reqwest::{
     header::{HeaderMap, HeaderValue, USER_AGENT},
     Client,
 };
-use tauri::{plugin::Result, Runtime};
+use tauri::{plugin::Result, Manager, Runtime};
 
 use super::plugin_config::PluginConfig;
 
