@@ -19,7 +19,7 @@
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "clean-src-tauri": "cd src-tauri && cargo clean",
-    "storybook": "storybook dev -p 9305 --no-open",
+    "storybook:dev": "storybook dev -p 9305 --no-open",
     "build-storybook": "storybook build"
   },
   "devDependencies": {
