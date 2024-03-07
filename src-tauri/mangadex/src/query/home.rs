@@ -77,6 +77,7 @@ impl HomeQueries {
             .clone();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::CreatedAt(OrderDirection::Descending));
+        params.has_available_chapters = Some(true);
         params.manga_ids.clear();
         Ok({
             let res: MangaResults = params.send(&client).await?.into();
