@@ -1236,6 +1236,7 @@ export enum Language {
   Italian = 'ITALIAN',
   Japanese = 'JAPANESE',
   JapaneseRomanized = 'JAPANESE_ROMANIZED',
+  Jp = 'JP',
   Kazakh = 'KAZAKH',
   Korean = 'KOREAN',
   KoreanRomanized = 'KOREAN_ROMANIZED',
