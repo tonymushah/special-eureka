@@ -17,7 +17,7 @@
 	$: coverImage_ = $coverImage;
 </script>
 
-<Layout on:click>
+<Layout on:click --w-base={"9.5em"} --img-h={"12.5em"}>
 	{#if coverImage_}
 		<CoverImage bind:coverImage={coverImage_} {coverImageAlt} />
 	{:else}
