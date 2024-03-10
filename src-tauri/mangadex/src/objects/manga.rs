@@ -6,21 +6,22 @@ pub mod manga_reading_status;
 pub mod related;
 pub mod relationships;
 
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Error, Object, Result as GraphQLResult};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
-    v5::{MangaAttributes, MangaObject as MangaData},
+    v5::{MangaAttributes, MangaObject as MangaData, Relationship},
     ApiObjectNoRelationships,
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
-use crate::utils::get_mangadex_client_from_graphql_context;
+use crate::query::manga::get_unique::MangaGetUniqueQueries;
 
 use self::{attributes::GraphQLMangaAttributes, relationships::MangaRelationships};
 
 use super::{
-    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, ExtractRelationships,
+    GetAttributes, GetId,
 };
 
 #[derive(Clone, Debug)]
@@ -63,6 +64,15 @@ impl GetAttributes for MangaObject {
     }
 }
 
+impl ExtractRelationships for MangaObject {
+    fn get_relationships(&self) -> Option<Vec<Relationship>> {
+        match self {
+            MangaObject::WithRel(o) => Some(o.relationships.clone()),
+            MangaObject::WithoutRel(_) => None,
+        }
+    }
+}
+
 #[Object]
 impl MangaObject {
     pub async fn id(&self) -> Uuid {
@@ -80,16 +90,14 @@ impl MangaObject {
                 id: o.id,
                 relationships: o.relationships.clone(),
             }),
-            MangaObject::WithoutRel(o) => {
-                let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-                let mut req = client.manga().id(o.id).get();
-                let includes = <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
-                let res = req.includes(includes).send().await?;
-                Ok(MangaRelationships {
-                    id: res.data.id,
-                    relationships: res.data.relationships,
-                })
-            }
+            MangaObject::WithoutRel(o) => Ok(MangaRelationships {
+                id: o.id,
+                relationships: MangaGetUniqueQueries(o.id)
+                    .get(ctx)
+                    .await?
+                    .get_relationships()
+                    .ok_or(Error::new("Empty Relationship table"))?,
+            }),
         }
     }
 }

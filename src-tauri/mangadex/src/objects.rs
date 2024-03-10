@@ -1,5 +1,5 @@
 use async_graphql::{Context, SelectionField, SimpleObject};
-use mangadex_api_schema_rust::v5::Results;
+use mangadex_api_schema_rust::v5::{Relationship, Results};
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
@@ -67,4 +67,8 @@ pub trait GetId {
 pub trait GetAttributes {
     type Attributes;
     fn get_attributes(&self) -> Self::Attributes;
+}
+
+pub trait ExtractRelationships {
+    fn get_relationships(&self) -> Option<Vec<Relationship>>;
 }
