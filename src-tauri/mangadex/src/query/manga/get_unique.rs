@@ -77,7 +77,7 @@ impl MangaGetUniqueQueries {
         if let Ok(online) = self.get_online(ctx).await {
             Ok(online)
         } else {
-            self.get_online(ctx).await
+            self.get_offline(ctx).await
         }
     }
 }
