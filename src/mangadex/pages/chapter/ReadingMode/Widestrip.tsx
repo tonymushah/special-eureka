@@ -7,7 +7,7 @@ import { useFullScreenOptions_Query } from "@mangadex/resources/componnents/chap
 import { ChapterPage_outlet_context } from "@mangadex/resources/componnents/chapter/v1/Chapter_Page/UseChapterOutletContext";
 import SwipperMode from "./SwipperMode";
 import MangadexSpinner from "@mangadex/resources/componnents/kuru_kuru/MangadexSpinner";
-
+import "swiper/css/zoom";
 
 export default function Widestrip({ data }: {
     data: ChapterPage_outlet_context
@@ -18,23 +18,23 @@ export default function Widestrip({ data }: {
         <SwipperMode
             data={data}
             swipper_option={{
-                slidesPerView: "auto",
+                slidesPerView: 2,
                 modules: [FreeMode, Keyboard, Zoom],
                 keyboard: true,
                 freeMode: true,
                 dir: query.data ? "rtl" : undefined,
                 onKeyPress({ zoom }, keyCode) {
-                    if (keyCode == "control") {
-                        if (zoom.enabled) {
+                    // console.log(keyCode);
+                    if (keyCode == "90") {
+                        zoom.toggle();
+                        /*if (zoom.enabled) {
                             zoom.disable();
                         } else {
                             zoom.enable();
-                        }
+                        }*/
                     }
                 },
-                zoom: {
-                    toggle: false
-                }
+                zoom: true
             }}
         >
             {({ images, reading_state }) => (
@@ -42,7 +42,7 @@ export default function Widestrip({ data }: {
                     {
                         images.map((value, index) => (
                             <SwiperSlide onMouseOver={() => {
-                                reading_state.setCurrentPage(index + 1);
+                                reading_state.setCurrentPage(index);
                             }} key={`${data.chapter.get_id()}-${index}`}>
                                 <Chakra.Container height={"100vh"}>
                                     <Chakra.Image

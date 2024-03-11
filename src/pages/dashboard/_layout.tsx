@@ -1,6 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router";
 import RouterSuspense from "@router/RouterSuspense";
+import AnimationLayout from "@mangadex/resources/componnents/router/layout/Animation";
 
 const DashboardNavBar = React.lazy(() => import("@dashboard/resources/components/DashBoardNavBar"));
 
@@ -11,15 +12,17 @@ const BasicWebsitesRessources = React.lazy(() => import("@commons-res/components
 export default function DashboardLayout() {
     return (
         <RouterSuspense>
-            <ToDevModal />
-            <BasicWebsitesRessources>
-                <RouterSuspense>
-                    <React.Fragment>
-                        <DashboardNavBar />
-                        <Outlet />
-                    </React.Fragment>
-                </RouterSuspense>
-            </BasicWebsitesRessources>
+            <AnimationLayout>
+                <ToDevModal />
+                <BasicWebsitesRessources>
+                    <RouterSuspense>
+                        <React.Fragment>
+                            <DashboardNavBar />
+                            <Outlet />
+                        </React.Fragment>
+                    </RouterSuspense>
+                </BasicWebsitesRessources>
+            </AnimationLayout>
         </RouterSuspense>
     );
 }

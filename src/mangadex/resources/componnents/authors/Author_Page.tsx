@@ -14,27 +14,27 @@ const Author_works = React.lazy(() => import("./Author_works"));
 function Author_Where_ToFind(props: {
     src: Author
 }) {
-    if(props.src.has_socials()){
+    if (props.src.has_socials()) {
         return (
-        <React.Fragment>
-            <Chakra.Heading size={"md"} fontFamily={"inherit"}>
-                Where to find
-            </Chakra.Heading>
-            <Chakra.Box>
-                <Author_Page_Suspense>
-                    <Author_Page_Socials
-                        src={props.src}
-                    />
-                </Author_Page_Suspense>
-            </Chakra.Box>
-        </React.Fragment>
-    );
-    }else{
+            <React.Fragment>
+                <Chakra.Heading size={"md"} fontFamily={"inherit"}>
+                    Where to find
+                </Chakra.Heading>
+                <Chakra.Box>
+                    <Author_Page_Suspense>
+                        <Author_Page_Socials
+                            src={props.src}
+                        />
+                    </Author_Page_Suspense>
+                </Chakra.Box>
+            </React.Fragment>
+        );
+    } else {
         return (
-            <React.Fragment/>
+            <React.Fragment />
         );
     }
-    
+
 }
 
 function Author_Page_Suspense(props: React.PropsWithChildren) {
@@ -63,7 +63,7 @@ export default function Author_Page(props: {
     React.useEffect(() => {
         appWindow.setTitle(`${props.src.get_Name()} | Mangadex`);
     }, []);
-    const backgroundColor = Chakra.useColorModeValue("#e2e8f0","#4A5568");
+    const backgroundColor = Chakra.useColorModeValue("#e2e8f0", "#4A5568");
     const waveHaikei = Chakra.useColorModeValue(waveHaikei_, waveHaikeiDark_);
     return (
         <Chakra.Box>
@@ -82,26 +82,23 @@ export default function Author_Page(props: {
             >
                 <Chakra.Box paddingTop={"25px"} as={ChakraContainer}>
                     <Chakra.Box>
-                        <Chakra.Heading size={"md"} fontFamily={"inherit"}>
-                            Biography
-                        </Chakra.Heading>
-                        <Chakra.Box
-                        >
-                            {
-                                props.src.get_biography() == undefined ? (
-                                    <Chakra.Text as='i'>No Biography</Chakra.Text>
-                                ) : (
-                                    <Author_Page_Suspense>
-                                        <Author_Page_Biography
-                                            src={props.src}
-                                        />
-                                    </Author_Page_Suspense>
-                                )
-                            }
-                        </Chakra.Box>
+                        {
+                            props.src.get_biography() == undefined ? (
+                                <React.Fragment />
+                            ) : (
+                                <Author_Page_Suspense>
+                                    <Chakra.Heading size={"md"} fontFamily={"inherit"}>
+                                        Biography
+                                    </Chakra.Heading>
+                                    <Author_Page_Biography
+                                        src={props.src}
+                                    />
+                                </Author_Page_Suspense>
+                            )
+                        }
                     </Chakra.Box>
                     <Chakra.Box>
-                        <Author_Where_ToFind src={props.src}/>
+                        <Author_Where_ToFind src={props.src} />
                         <Chakra.Box>
                             <Author_Page_Suspense>
                                 <Author_works
