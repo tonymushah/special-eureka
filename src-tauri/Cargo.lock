@@ -2471,9 +2471,9 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api-types-rust"
-version = "0.7.0"
+version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d40610ea37f000cb79648bef8658e78e4eb4f70e9de7b5e921e0461afb87b653"
+checksum = "2598144830f3f7328d789f6f2d80112d5efbf0f19b3148ad5bb163f85f82525d"
 dependencies = [
  "anyhow",
  "async-graphql",

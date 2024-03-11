@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result};
+use async_graphql::{Context, Error, Object, Result};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     v5::{ChapterAttributes as Attributes, ChapterObject},
@@ -7,12 +7,13 @@ use mangadex_api_schema_rust::{
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
-use crate::utils::get_mangadex_client_from_graphql_context;
+use crate::query::chapter::get_unique::GetUniqueChapterQuery;
 
 use self::{attributes::ChapterAttributes, relationships::ChapterRelationships};
 
 use super::{
-    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, ExtractRelationships,
+    GetAttributes, GetId,
 };
 
 pub mod attributes;
@@ -72,6 +73,15 @@ impl GetAttributes for Chapter {
     }
 }
 
+impl ExtractRelationships for Chapter {
+    fn get_relationships(&self) -> Option<Vec<mangadex_api_schema_rust::v5::Relationship>> {
+        match self {
+            Chapter::WithRelationship(o) => Some(o.relationships.clone()),
+            Chapter::WithoutRelationship(_) => None,
+        }
+    }
+}
+
 #[Object]
 impl Chapter {
     pub async fn id(&self) -> Uuid {
@@ -84,15 +94,12 @@ impl Chapter {
         match self {
             Chapter::WithRelationship(o) => Ok(o.relationships.clone().into()),
             Chapter::WithoutRelationship(o) => {
-                let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-                let mut req = client.chapter().id(o.id).get();
                 let includes = <Self as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
-                Ok(req
-                    .includes(includes)
-                    .send()
+                Ok(GetUniqueChapterQuery(includes)
+                    .get(ctx, o.id)
                     .await?
-                    .data
-                    .relationships
+                    .get_relationships()
+                    .ok_or(Error::new("Empty relationshipTable"))?
                     .into())
             }
         }

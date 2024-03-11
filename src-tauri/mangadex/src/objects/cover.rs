@@ -1,4 +1,4 @@
-use async_graphql::{Context, Object, Result as GraphQLResult};
+use async_graphql::{Context, Error, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
     v5::{CoverAttributes as Attributes, CoverObject},
     ApiObjectNoRelationships,
@@ -6,12 +6,13 @@ use mangadex_api_schema_rust::{
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
-use crate::utils::get_mangadex_client_from_graphql_context;
+use crate::query::cover::get_unique::CoverGetUniqueQuery;
 
 use self::{attributes::CoverAttributes, relationships::CoverRelationships};
 
 use super::{
-    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, GetAttributes, GetId,
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, ExtractRelationships,
+    GetAttributes, GetId,
 };
 
 pub mod attributes;
@@ -70,6 +71,15 @@ impl GetAttributes for Cover {
     }
 }
 
+impl ExtractRelationships for Cover {
+    fn get_relationships(&self) -> Option<Vec<mangadex_api_schema_rust::v5::Relationship>> {
+        match self {
+            Cover::WithRelationship(o) => Some(o.relationships.clone()),
+            Cover::WithoutRelationship(_) => None,
+        }
+    }
+}
+
 #[Object]
 impl Cover {
     pub async fn id(&self) -> Uuid {
@@ -81,18 +91,12 @@ impl Cover {
     pub async fn relationships(&self, ctx: &Context<'_>) -> GraphQLResult<CoverRelationships> {
         match self {
             Cover::WithRelationship(o) => Ok(o.relationships.clone().into()),
-            Cover::WithoutRelationship(o) => {
-                let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-                let mut req = client.cover().cover_id(o.id).get();
-                let includes = <Self as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
-                Ok(req
-                    .includes(includes)
-                    .send()
-                    .await?
-                    .data
-                    .relationships
-                    .into())
-            }
+            Cover::WithoutRelationship(o) => CoverGetUniqueQuery { id: o.id }
+                .get(ctx)
+                .await?
+                .get_relationships()
+                .map(|rel| -> CoverRelationships { rel.into() })
+                .ok_or(Error::new("Empty Relationship Table")),
         }
     }
 }
