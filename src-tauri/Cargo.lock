@@ -1016,7 +1016,16 @@ version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f59169f400d8087f238c5c0c7db6a28af18681717f3b623227d92f397e938c7"
 dependencies = [
- "derive_builder_macro",
+ "derive_builder_macro 0.13.1",
+]
+
+[[package]]
+name = "derive_builder"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0350b5cb0331628a5916d6c5c0b72e97393b8b6b03b47a9284f4e7f5a405ffd7"
+dependencies = [
+ "derive_builder_macro 0.20.0",
 ]
 
 [[package]]
@@ -1032,13 +1041,35 @@ dependencies = [
 ]
 
 [[package]]
+name = "derive_builder_core"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d48cda787f839151732d396ac69e3473923d54312c070ee21e9effcaa8ca0b1d"
+dependencies = [
+ "darling 0.20.8",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.50",
+]
+
+[[package]]
 name = "derive_builder_macro"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "870368c3fb35b8031abb378861d4460f573b92238ec2152c927a21f77e3e0127"
 dependencies = [
- "derive_builder_core",
+ "derive_builder_core 0.13.1",
  "syn 1.0.109",
+]
+
+[[package]]
+name = "derive_builder_macro"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "206868b8242f27cecce124c19fd88157fbd0dd334df2587f36417bafbc85097b"
+dependencies = [
+ "derive_builder_core 0.20.0",
+ "syn 2.0.50",
 ]
 
 [[package]]
@@ -2416,16 +2447,16 @@ dependencies = [
 
 [[package]]
 name = "mangadex-api"
-version = "3.1.0"
+version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffdab3f03a30f0a52b5a0d4a13dc5b1112fe0424d578e6408c3cfffe818998f1"
+checksum = "fd0907b78ea3702bcc6c4d538418ed22f3d4d335b4a6f4d3cdf8e934eb1783c2"
 dependencies = [
  "anyhow",
  "async-stream",
  "bytes",
- "derive_builder",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "derive_builder 0.20.0",
+ "mangadex-api-schema-rust 0.8.0",
+ "mangadex-api-types-rust 0.8.0",
  "reqwest",
  "serde",
  "serde_qs",
@@ -2446,8 +2477,8 @@ dependencies = [
  "anyhow",
  "async-graphql",
  "mangadex-api",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api-schema-rust 0.7.1",
+ "mangadex-api-types-rust 0.7.2",
  "serde",
  "tokio",
  "url",
@@ -2460,7 +2491,22 @@ version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f59af818dc5d3f0dd30759ebe8746fc3f06fc9857f5d0385071719433b0cb9e4"
 dependencies = [
- "mangadex-api-types-rust",
+ "mangadex-api-types-rust 0.7.2",
+ "reqwest",
+ "serde",
+ "serde_qs",
+ "thiserror",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "mangadex-api-schema-rust"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7517f5991a8b48f260684062e9402bb8d115568eb64b38b8a9e5aeeb01c8b3fa"
+dependencies = [
+ "mangadex-api-types-rust 0.8.0",
  "reqwest",
  "serde",
  "serde_qs",
@@ -2477,7 +2523,23 @@ checksum = "2598144830f3f7328d789f6f2d80112d5efbf0f19b3148ad5bb163f85f82525d"
 dependencies = [
  "anyhow",
  "async-graphql",
- "derive_builder",
+ "derive_builder 0.13.1",
+ "reqwest",
+ "serde",
+ "thiserror",
+ "time",
+ "url",
+ "uuid",
+]
+
+[[package]]
+name = "mangadex-api-types-rust"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "45b87ef8beced98b869ad52ef4d3c05093b0ecce1a8805655be30799c42812e4"
+dependencies = [
+ "anyhow",
+ "derive_builder 0.20.0",
  "reqwest",
  "serde",
  "thiserror",
@@ -2500,8 +2562,8 @@ dependencies = [
  "log",
  "mangadex-api",
  "mangadex-api-input-types",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api-schema-rust 0.7.1",
+ "mangadex-api-types-rust 0.7.2",
  "regex",
  "reqwest",
  "serde",
@@ -4473,8 +4535,8 @@ dependencies = [
  "log",
  "mangadex-api",
  "mangadex-api-input-types",
- "mangadex-api-schema-rust",
- "mangadex-api-types-rust",
+ "mangadex-api-schema-rust 0.7.1",
+ "mangadex-api-types-rust 0.7.2",
  "mangadex-desktop-api2",
  "mizuki",
  "once_cell",
