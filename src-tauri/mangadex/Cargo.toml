@@ -39,7 +39,7 @@ version = "0.6.0-alpha.4"
 default-features = false
 
 [dependencies.mangadex-api-input-types]
-version = "0.3"
+version = "0.4"
 features = ["mangadex-api-resolver", "async-graphql"]
 
 [dependencies.mizuki]
