@@ -250,7 +250,7 @@ dependencies:
     version: 0.13.8(react-dom@18.2.0)(react@18.2.0)
   react-time-ago:
     specifier: ^7.2.1
-    version: 7.2.1(javascript-time-ago@2.5.9)(react-dom@18.2.0)(react@18.2.0)
+    version: 7.3.1(javascript-time-ago@2.5.9)(react-dom@18.2.0)(react@18.2.0)
   react-timeago:
     specifier: ^7.2.0
     version: 7.2.0(react@18.2.0)
@@ -15350,8 +15350,8 @@ packages:
       react: 18.2.0
       tslib: 2.6.2
 
-  /react-time-ago@7.2.1(javascript-time-ago@2.5.9)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-X5zwJDZHa1fsMwMvh8mrHN31g85s84zMCp+d7YL6IX50kNnr6YMAS2wpt1BmO9OxBV2Ue5J1ptD6JI8Zjd35HA==}
+  /react-time-ago@7.3.1(javascript-time-ago@2.5.9)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-c6QKSRrnIhZiEbOa2PXdh1InNYpqX3wwXA0fuOFX4r/C2hdt5hNvjvKXbKbGWXAeumMi9DoS3oGPboEpgccnOQ==}
     peerDependencies:
       javascript-time-ago: ^2.3.7
       react: '>=0.16.8'
