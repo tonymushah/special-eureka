@@ -1,5 +1,3 @@
-use std::{io::Read, vec::Vec};
-
 use async_graphql::{Context, Enum, Result};
 use bytes::Bytes;
 use mangadex_api::CDN_URL;
@@ -61,15 +59,13 @@ impl CoverImageQuery {
     async fn get_offline<'a, R: Runtime>(&'a self, ctx: &'a Context<'a>) -> Result<Bytes> {
         let offline_app_state = get_offline_app_state::<R>(ctx)?;
         let read = offline_app_state.read().await;
-        let mut image_buf_reader = read
+        let bytes = read
             .as_ref()
             .ok_or(async_graphql::Error::new("Offline AppState is not loaded"))?
             .cover_utils()
             .with_id(self.cover_id)
-            .get_image_buf_reader()?;
-        let mut bytes = Vec::<u8>::new();
-        image_buf_reader.read_to_end(&mut bytes)?;
-        Ok(bytes.into())
+            .get_image_buf()?;
+        Ok(bytes)
     }
     pub async fn get<'a, R: Runtime>(&'a self, ctx: &'a Context<'a>) -> Result<Bytes> {
         if let Ok(res) = self.get_offline::<R>(ctx).await {
