@@ -93,7 +93,7 @@
         "@aptabase/tauri": "^0.4.1",
         "@babel/core": "^7.23.5",
         "@babel/runtime": "^7.23.5",
-        "@builder.io/partytown": "^0.8.1",
+        "@builder.io/partytown": "^0.10.0",
         "@chakra-ui/icons": "^2.1.1",
         "@chakra-ui/react": "^2.8.2",
         "@chakra-ui/system": "^2.6.2",
