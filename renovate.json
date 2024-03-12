@@ -3,6 +3,5 @@
 	"extends": ["config:base"],
 	"ignoreDeps": ["window-vibrancy"],
     "baseBranches": ["main", "0.1.x"],
-    "label": ["chore"],
     "commitMessagePrefix": "chore(deps)"
 }
