@@ -40,10 +40,10 @@ dependencies:
     version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.45)(react@18.2.0)
   '@fontsource-variable/josefin-sans':
     specifier: ^5.0.18
-    version: 5.0.19
+    version: 5.0.20
   '@fontsource/poppins':
     specifier: ^5.0.8
-    version: 5.0.8
+    version: 5.0.12
   '@fullcalendar/core':
     specifier: ^6.1.10
     version: 6.1.10
@@ -3470,12 +3470,12 @@ packages:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: false
 
-  /@fontsource-variable/josefin-sans@5.0.19:
-    resolution: {integrity: sha512-/e2QwUF+m5m6zj7BKgLFak0oZwEhUKNk2k/4Sb1BGqHy8ghKN0XpmEn5dKw8xzjab612N5QrIs0XTSz5CkyHAA==}
+  /@fontsource-variable/josefin-sans@5.0.20:
+    resolution: {integrity: sha512-18pRxL/jA7HFT+bMsFsDHFPTJ2lTxMK3eMQt5cruQ9/RWFqci2Pp0R4iQz6qr09nMslfJudEsXt06LX2AuQ34Q==}
     dev: false
 
-  /@fontsource/poppins@5.0.8:
-    resolution: {integrity: sha512-P8owfYWluoUY5Nyzk4gT/L6LmLmseP6ezFWhj6VBUa5pRIdnCvNJpoQ6i/vhekjtJOfqX6nKlB+LCttoUl2GQQ==}
+  /@fontsource/poppins@5.0.12:
+    resolution: {integrity: sha512-0qzBxtIJLh82iMJ9pCXKYwGs1zyS+jyUmwVJ59+JdYnEaFVkDsxVOk9yDWfVOs14ALUneodU2m5YSGma6dCYCw==}
     dev: false
 
   /@fullcalendar/core@6.1.10:
