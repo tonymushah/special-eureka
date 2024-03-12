@@ -172,10 +172,10 @@ dependencies:
     version: 2.5.9
   jotai:
     specifier: ^2.6.0
-    version: 2.6.0(@types/react@18.2.65)(react@18.2.0)
+    version: 2.7.0(@types/react@18.2.65)(react@18.2.0)
   jotai-optics:
     specifier: ^0.3.1
-    version: 0.3.2(jotai@2.6.0)(optics-ts@2.4.1)
+    version: 0.3.2(jotai@2.7.0)(optics-ts@2.4.1)
   kute.js:
     specifier: ^2.2.4
     version: 2.2.4
@@ -8955,7 +8955,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001597
-      electron-to-chromium: 1.4.701
+      electron-to-chromium: 1.4.702
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: false
@@ -10114,8 +10114,8 @@ packages:
   /electron-to-chromium@1.4.611:
     resolution: {integrity: sha512-ZtRpDxrjHapOwxtv+nuth5ByB8clyn8crVynmRNGO3wG3LOp8RTcyZDqwaI6Ng6y8FCK2hVZmJoqwCskKbNMaw==}
 
-  /electron-to-chromium@1.4.701:
-    resolution: {integrity: sha512-K3WPQ36bUOtXg/1+69bFlFOvdSm0/0bGqmsfPDLRXLanoKXdA+pIWuf/VbA9b+2CwBFuONgl4NEz4OEm+OJOKA==}
+  /electron-to-chromium@1.4.702:
+    resolution: {integrity: sha512-LYLXyEUsZ3nNSwiOWjI88N1PJUAMU2QphQSgGLVkFnb3FxZxNui2Vzi2PaKPgPWbsWbZstZnh6BMf/VQJamjiQ==}
     dev: false
 
   /emittery@0.13.1:
@@ -12862,18 +12862,18 @@ packages:
       - ts-node
     dev: true
 
-  /jotai-optics@0.3.2(jotai@2.6.0)(optics-ts@2.4.1):
+  /jotai-optics@0.3.2(jotai@2.7.0)(optics-ts@2.4.1):
     resolution: {integrity: sha512-RH6SvqU5hmkVqnHmaqf9zBXvIAs4jLxkDHS4fr5ljuBKHs8+HQ02v+9hX7ahTppxx6dUb0GGUE80jQKJ0kFTLw==}
     peerDependencies:
       jotai: '>=1.11.0'
       optics-ts: '*'
     dependencies:
-      jotai: 2.6.0(@types/react@18.2.65)(react@18.2.0)
+      jotai: 2.7.0(@types/react@18.2.65)(react@18.2.0)
       optics-ts: 2.4.1
     dev: false
 
-  /jotai@2.6.0(@types/react@18.2.65)(react@18.2.0):
-    resolution: {integrity: sha512-Vt6hsc04Km4j03l+Ax+Sc+FVft5cRJhqgxt6GTz6GM2eM3DyX3CdBdzcG0z2FrlZToL1/0OAkqDghIyARWnSuQ==}
+  /jotai@2.7.0(@types/react@18.2.65)(react@18.2.0):
+    resolution: {integrity: sha512-4qsyFKu4MprI39rj2uoItyhu24NoCHzkOV7z70PQr65SpzV6CSyhQvVIfbNlNqOIOspNMdf5OK+kTXLvqe63Jw==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '>=17.0.0'
