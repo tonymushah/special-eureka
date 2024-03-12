@@ -121,7 +121,7 @@ dependencies:
     version: 3.0.3
   '@types/react-timeago':
     specifier: ^4.1.6
-    version: 4.1.6
+    version: 4.1.7
   '@types/uuid':
     specifier: ^9.0.7
     version: 9.0.7
@@ -7522,8 +7522,8 @@ packages:
       '@types/react': 18.2.45
     dev: false
 
-  /@types/react-timeago@4.1.6:
-    resolution: {integrity: sha512-BFUH7FEple9m0K8dNvOqhba3+iCyrgsLcRtAnaZ6HlXvG8AJfC/7NCDcLaXfB1jvpAezwDRi/BflzdaLI4+Fow==}
+  /@types/react-timeago@4.1.7:
+    resolution: {integrity: sha512-ogD4Ror/hDG+pQggCX+TgPgJ8W2jeeUxsgNU485Qpm0Ma+E2TND2EJuKwK5+sxlkDXDEgsHradO0zWBkTgLzNg==}
     dependencies:
       '@types/react': 18.2.45
     dev: false
