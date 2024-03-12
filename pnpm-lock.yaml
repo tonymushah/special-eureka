@@ -268,7 +268,7 @@ dependencies:
     version: 1.69.5
   storybook-addon-react-router-v6:
     specifier: ^2.0.10
-    version: 2.0.10(@storybook/blocks@7.6.4)(@storybook/channels@7.6.17)(@storybook/components@7.6.17)(@storybook/core-events@7.6.17)(@storybook/manager-api@7.6.17)(@storybook/preview-api@7.6.17)(@storybook/theming@7.6.17)(react-dom@18.2.0)(react-router-dom@6.22.3)(react@18.2.0)
+    version: 2.0.11(@storybook/blocks@7.6.4)(@storybook/channels@7.6.17)(@storybook/components@7.6.17)(@storybook/core-events@7.6.17)(@storybook/manager-api@7.6.17)(@storybook/preview-api@7.6.17)(@storybook/theming@7.6.17)(react-dom@18.2.0)(react-router-dom@6.22.3)(react@18.2.0)
   swiper:
     specifier: ^11.0.5
     version: 11.0.5
@@ -16539,8 +16539,8 @@ packages:
   /store2@2.14.3:
     resolution: {integrity: sha512-4QcZ+yx7nzEFiV4BMLnr/pRa5HYzNITX2ri0Zh6sT9EyQHbBHacC6YigllUPU9X3D0f/22QCgfokpKs52YRrUg==}
 
-  /storybook-addon-react-router-v6@2.0.10(@storybook/blocks@7.6.4)(@storybook/channels@7.6.17)(@storybook/components@7.6.17)(@storybook/core-events@7.6.17)(@storybook/manager-api@7.6.17)(@storybook/preview-api@7.6.17)(@storybook/theming@7.6.17)(react-dom@18.2.0)(react-router-dom@6.22.3)(react@18.2.0):
-    resolution: {integrity: sha512-HnrjbujAW1oGCdgvv7W6QKskETNXvt0U5qR2pKD8GXHlqkV9wmWa6HW3J0ks0aiBJBsRrPdEViatrhnRD5RZZw==}
+  /storybook-addon-react-router-v6@2.0.11(@storybook/blocks@7.6.4)(@storybook/channels@7.6.17)(@storybook/components@7.6.17)(@storybook/core-events@7.6.17)(@storybook/manager-api@7.6.17)(@storybook/preview-api@7.6.17)(@storybook/theming@7.6.17)(react-dom@18.2.0)(react-router-dom@6.22.3)(react@18.2.0):
+    resolution: {integrity: sha512-xV8nCkgh1SF5ak0fdobqcQm+QiUDiJQwQ1ffgAL0/s2E5UWy5mCkkDeTwg1K7QikyzqDAegxs1jXzschSB8iwQ==}
     peerDependencies:
       '@storybook/blocks': ^7.0.0
       '@storybook/channels': ^7.0.0
