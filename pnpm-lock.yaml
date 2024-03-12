@@ -363,7 +363,7 @@ devDependencies:
     version: 0.5.3
   '@tanstack/eslint-plugin-query':
     specifier: ^4.36.1
-    version: 4.36.1(eslint@8.56.0)
+    version: 4.38.0(eslint@8.56.0)
   '@tauri-apps/cli':
     specifier: ^1.5.6
     version: 1.5.11
@@ -6961,8 +6961,8 @@ packages:
       defer-to-connect: 2.0.1
     dev: true
 
-  /@tanstack/eslint-plugin-query@4.36.1(eslint@8.56.0):
-    resolution: {integrity: sha512-qFIYV/BuwWzg0t5mSRMcb+rzrOVtCO9EizYxeClFxuFq/c54cNhAQCnDrA3iCxFz/fqRv7I9rxxnR/ZWkX15cQ==}
+  /@tanstack/eslint-plugin-query@4.38.0(eslint@8.56.0):
+    resolution: {integrity: sha512-KmcrnjTQzONBqxNWSVKyPNi5tLq0URvIiWThE9HIK5qePGtB0VqoHfOsn4nuGJD268xDNDpFQjQiko9mMa5iLQ==}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
     dependencies:
