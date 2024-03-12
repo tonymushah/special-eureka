@@ -21,7 +21,7 @@ mangadex-api = { version = "2.3.1", default-features = false, features = [
     "multi-thread",
 ] }
 mangadex-api-schema-rust = { version = "0.4.1", default-features = false }
-mangadex-api-types-rust = { version = "0.4.0", default-features = false }
+mangadex-api-types-rust = { version = "0.8.0", default-features = false }
 
 [dependencies.mangadex-desktop-api2]
 version = "0.5.7"
