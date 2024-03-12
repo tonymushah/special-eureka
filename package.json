@@ -153,7 +153,7 @@
         "preact": "^10.19.2",
         "prop-types": "^15.8.1",
         "qs": "^6.11.2",
-        "query-string": "^8.1.0",
+        "query-string": "^9.0.0",
         "random-int": "^3.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
