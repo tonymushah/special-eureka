@@ -426,7 +426,7 @@ devDependencies:
     version: 7.6.4
   svgo:
     specifier: ^3.0.5
-    version: 3.1.0
+    version: 3.2.0
   swagger-typescript-api:
     specifier: ^13.0.3
     version: 13.0.3
@@ -16746,8 +16746,8 @@ packages:
       dommatrix: 1.0.3
     dev: false
 
-  /svgo@3.1.0:
-    resolution: {integrity: sha512-R5SnNA89w1dYgNv570591F66v34b3eQShpIBcQtZtM5trJwm1VvxbIoMpRYY3ybTAutcKTLEmTsdnaknOHbiQA==}
+  /svgo@3.2.0:
+    resolution: {integrity: sha512-4PP6CMW/V7l/GmKRKzsLR8xxjdHTV4IMvhTnpuHwwBazSIlw5W/5SmPjN8Dwyt7lKbSJrRDgp4t9ph0HgChFBQ==}
     engines: {node: '>=14.0.0'}
     hasBin: true
     dependencies:
