@@ -55,7 +55,7 @@ dependencies:
     version: 6.1.10(@fullcalendar/core@6.1.10)(react-dom@18.2.0)(react@18.2.0)
   '@generouted/react-router':
     specifier: ^1.16.1
-    version: 1.17.0(react-router-dom@6.20.1)(react@18.2.0)(vite@4.5.2)
+    version: 1.18.5(react-router-dom@6.20.1)(react@18.2.0)(vite@4.5.2)
   '@mdx-js/loader':
     specifier: ^3.0.0
     version: 3.0.0(webpack@5.90.3)
@@ -3530,15 +3530,15 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@generouted/react-router@1.17.0(react-router-dom@6.20.1)(react@18.2.0)(vite@4.5.2):
-    resolution: {integrity: sha512-zxjJqs0FWtqrdE81bsNNJVwaByOGOf8yhynu/uHEt8dUZVzIlYToE/oBUK3/4vCPhBqHTUrURfGba+I43JgAbw==}
+  /@generouted/react-router@1.18.5(react-router-dom@6.20.1)(react@18.2.0)(vite@4.5.2):
+    resolution: {integrity: sha512-PY2KeXaEIRwM2Irwie6Coe0oMeFWQnc4bjxC+01VxOam3eOhFq0e1Zh0tCg8yVDPdnA/IezT35gteG2jMN21yg==}
     peerDependencies:
       react: '>=18'
       react-router-dom: '>=6'
       vite: '>=4'
     dependencies:
       fast-glob: 3.3.2
-      generouted: 1.17.0(vite@4.5.2)
+      generouted: 1.18.5(vite@4.5.2)
       react: 18.2.0
       react-router-dom: 6.20.1(react-dom@18.2.0)(react@18.2.0)
       vite: 4.5.2(@types/node@20.10.4)(less@4.2.0)(sass@1.69.5)(terser@5.26.0)
@@ -11055,8 +11055,8 @@ packages:
       - supports-color
     dev: true
 
-  /generouted@1.17.0(vite@4.5.2):
-    resolution: {integrity: sha512-p7HJGQbPxeQpKJt2A/O6/28BMgX3eVlHn6bMVyh6acbcvji8reZMFDDt8kBR9UYmO0nx5W+IhH7GJ192IfUiGQ==}
+  /generouted@1.18.5(vite@4.5.2):
+    resolution: {integrity: sha512-mmtOmmTLojF52jZpXZD0J+rdxI5CkQrmvWqMat1KUazrx+jtpCiDqspp+ItrNnmke2fnbdQGp/3mhqqspxqqKA==}
     peerDependencies:
       vite: '>=3'
     dependencies:
