@@ -262,7 +262,7 @@ dependencies:
     version: 3.2.2
   react-zoom-pan-pinch:
     specifier: ^3.3.0
-    version: 3.3.0(react-dom@18.2.0)(react@18.2.0)
+    version: 3.4.3(react-dom@18.2.0)(react@18.2.0)
   sass:
     specifier: ^1.69.5
     version: 1.69.5
@@ -15427,8 +15427,8 @@ packages:
       classnames: 2.3.2
     dev: false
 
-  /react-zoom-pan-pinch@3.3.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-vy1h8aenDzXye+HRqANZaSA8IPHoqOiuDPFBkswoyPUH8uMfsmbeH6gFI4r4BhEJa0xIlcA+FbvhidRWKGUrOg==}
+  /react-zoom-pan-pinch@3.4.3(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-x5MFlfAx2D6NTpZu8OISqc2nYn4p+YEaM1p21w7S/VE1wbVzK8vRzTo9Bj1ydufa649MuP7JBRM3vvj1RftFZw==}
     engines: {node: '>=8', npm: '>=5'}
     peerDependencies:
       react: '*'
