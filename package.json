@@ -68,7 +68,7 @@
         "eslint-config-prettier": "9.1.0",
         "eslint-formatter-markdown": "^1.0.4",
         "eslint-plugin-react": "^7.33.2",
-        "eslint-plugin-storybook": "^0.6.15",
+        "eslint-plugin-storybook": "^0.8.0",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "jsonc-eslint-parser": "^2.4.0",
