@@ -237,8 +237,8 @@ dependencies:
     specifier: 1.1.0
     version: 1.1.0(@types/react@18.2.45)(react-dom@18.2.0)(react@18.2.0)
   react-query-kit:
-    specifier: ^2.0.10
-    version: 2.0.10(@tanstack/react-query@4.36.1)
+    specifier: ^3.0.0
+    version: 3.2.0(@tanstack/react-query@4.36.1)
   react-router:
     specifier: ^6.20.0
     version: 6.20.1(react@18.2.0)
@@ -15235,8 +15235,8 @@ packages:
       - '@types/react'
     dev: false
 
-  /react-query-kit@2.0.10(@tanstack/react-query@4.36.1):
-    resolution: {integrity: sha512-uQGLlKsV2M0N+b6Og7i0hkRx9MZTHHr0IfhsvQYXGoCWsMvPg9B14r6CGqekM9Bh05KIUxrJQhc9uB9KQTPVxg==}
+  /react-query-kit@3.2.0(@tanstack/react-query@4.36.1):
+    resolution: {integrity: sha512-4EKF/XPt50rurdH0hPBjPinsFsPmsC6nvoMDCsyUjxJq+pdN+B8jiZ57aqshL6yhWhuPZrEpWOVKXhCFYEoG8Q==}
     peerDependencies:
       '@tanstack/react-query': ^4 || ^5
     peerDependenciesMeta:
