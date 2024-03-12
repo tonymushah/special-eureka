@@ -24,7 +24,7 @@ mangadex-api = { version = "3.1", default-features = false, features = [
 mangadex-api-schema-rust = { version = "0.7", default-features = false, features = [
     "serialize",
 ] }
-mangadex-api-types-rust = { version = "0.7", default-features = false, features = [
+mangadex-api-types-rust = { version = "0.8", default-features = false, features = [
     "async-graphql",
 ] }
 async-graphql = "7"
