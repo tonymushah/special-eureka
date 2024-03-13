@@ -908,33 +908,21 @@ type HomeQueries {
 }
 
 
-"""
-Flag to include future updates in the results.
-"""
 enum IncludeExternalUrl {
 	INCLUDE
 	EXCLUDE
 }
 
-"""
-Flag to include future updates in the results.
-"""
 enum IncludeFuturePages {
 	INCLUDE
 	EXCLUDE
 }
 
-"""
-Flag to include future updates in the results.
-"""
 enum IncludeFuturePublishAt {
 	INCLUDE
 	EXCLUDE
 }
 
-"""
-Flag to include future updates in the results.
-"""
 enum IncludeFutureUpdates {
 	INCLUDE
 	EXCLUDE
