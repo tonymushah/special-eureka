@@ -3,7 +3,7 @@ import "@fontsource/poppins/latin.css";
 
 import TopInfo from "../MangaPageTopInfo.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
-import { volume7 } from "@mangadex/test-data/images/yuusha-party";
+import { fukkoi1 } from "@mangadex/test-data/images/fukkoi";
 import { id, attributes, author } from "./data/b4c93297-b32f-4f90-b619-55456a38b0aa";
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
@@ -28,8 +28,8 @@ export const Default: Story = {
 		id,
 		title: attributes.title.en,
 		altTitle: get_value_and_random_if_undefined(altTitle, "en"),
-		coverImage: writable(volume7),
-		coverImageAlt: volume7,
+		coverImage: writable(fukkoi1),
+		coverImageAlt: fukkoi1,
 		authors: [
 			{
 				id: author.id,

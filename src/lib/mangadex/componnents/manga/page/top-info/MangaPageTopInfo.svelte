@@ -3,6 +3,9 @@
 	import { setTopCoverAltContextStore, setTopCoverContextStore } from "./context";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import type { MangaStatus } from "@mangadex/gql/graphql";
+	import TopInfoLayout from "./TopInfoLayout.svelte";
+	import TopInfoCover from "./TopInfoCover.svelte";
+	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 
 	type Author = {
 		id: string;
@@ -22,3 +25,15 @@
 	setTopCoverContextStore(coverImage);
 	setTopCoverAltContextStore(coverImageAlt);
 </script>
+
+<TopInfoLayout>
+	<div class="cover-image" slot="cover">
+		<TopInfoCover />
+	</div>
+	<svelte:fragment>
+		<h1>{title}</h1>
+		{#if altTitle}
+			<h2>{altTitle}</h2>
+		{/if}
+	</svelte:fragment>
+</TopInfoLayout>
