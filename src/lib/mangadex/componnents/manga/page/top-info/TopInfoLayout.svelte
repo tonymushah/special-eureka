@@ -39,6 +39,8 @@
 		padding: var(--manga-page-layout-padding);
 		grid-template-columns: repeat(3, 1fr);
 		gap: 10px;
+		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(5px);
 		.cover {
 			grid-column: 0 / 3;
 			grid-row: 1;
