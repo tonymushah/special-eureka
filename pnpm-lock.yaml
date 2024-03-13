@@ -91,7 +91,7 @@ dependencies:
     version: 7.106.1
   '@sentry/vite-plugin':
     specifier: ^2.10.2
-    version: 2.14.3
+    version: 2.15.0
   '@tanstack/react-query':
     specifier: ^4.36.1
     version: 4.36.1(react-dom@18.2.0)(react@18.2.0)
@@ -5183,8 +5183,8 @@ packages:
       '@sentry/utils': 7.106.1
     dev: false
 
-  /@sentry/babel-plugin-component-annotate@2.14.3:
-    resolution: {integrity: sha512-h0ONVTe8j3Ma2g5SMsl9ynmLZdCf+CupLF7PQ7n06K0L8dDtrHqo8yjsWaZSJf4InGrJ9HC4MaOSItbFjiTFLw==}
+  /@sentry/babel-plugin-component-annotate@2.15.0:
+    resolution: {integrity: sha512-4AaRN2E1iqOPlceDE5ae4thnq717reEQkqOslSWpJf7FmJ+oDrp2bWQhO82xcW8ZBBMbtkOGw2wmrScq5TnMxw==}
     engines: {node: '>= 14'}
     dev: false
 
@@ -5201,13 +5201,13 @@ packages:
       '@sentry/utils': 7.106.1
     dev: false
 
-  /@sentry/bundler-plugin-core@2.14.3:
-    resolution: {integrity: sha512-iEtMdAPFUAYngvYhkfbgY8m3zB439u+5tvovj9rBXHGMr3nEB5fzZLOcVuiL47GEuUvMjDdrubl9MDGZ0c1IuQ==}
+  /@sentry/bundler-plugin-core@2.15.0:
+    resolution: {integrity: sha512-K6tEmo6ilUdR5uEQZ4P1uaXCvRoAeq5JsJAg7lRv0JSG5XG67jhoHu+mrpiDMB93FxbTgCQkPCT87Z0Bmqpmew==}
     engines: {node: '>= 14'}
     dependencies:
       '@babel/core': 7.24.0
-      '@sentry/babel-plugin-component-annotate': 2.14.3
-      '@sentry/cli': 2.30.1
+      '@sentry/babel-plugin-component-annotate': 2.15.0
+      '@sentry/cli': 2.30.2
       dotenv: 16.4.5
       find-up: 5.0.0
       glob: 9.3.5
@@ -5218,16 +5218,16 @@ packages:
       - supports-color
     dev: false
 
-  /@sentry/cli-darwin@2.30.1:
-    resolution: {integrity: sha512-xEUGoplRON7QH6IlgYuqAlIb3Dz9dLIMDbZzT7XTOIeSep+BRhnupXqTL55ENcC22w8m91YyY9n9qG7/ZaRmNA==}
+  /@sentry/cli-darwin@2.30.2:
+    resolution: {integrity: sha512-lZkKXMt0HUAwLQuPpi/DM3CsdCCp+6B2cdur+8fAq7uARXTOsTKVDxv9pkuJHCgHUnguh8ittP5GMr0baTxmMg==}
     engines: {node: '>=10'}
     os: [darwin]
     requiresBuild: true
     dev: false
     optional: true
 
-  /@sentry/cli-linux-arm64@2.30.1:
-    resolution: {integrity: sha512-Tx0EA6oEcAoW029Hv328aez3YgM5ixVumvytcOOWYHOjRzm8yK1v79DoNvFPVK1tmEmiobVZ2ZOTUK/Nqi/VTw==}
+  /@sentry/cli-linux-arm64@2.30.2:
+    resolution: {integrity: sha512-IWassuXggNhHOPCNrORNmd5SrAx5rU4XDlgOWBJr/ez7DvlPrr9EhV1xsdht6K4mPXhCGJq3rtRdCoWGJQW6Uw==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux, freebsd]
@@ -5235,8 +5235,8 @@ packages:
     dev: false
     optional: true
 
-  /@sentry/cli-linux-arm@2.30.1:
-    resolution: {integrity: sha512-MGi+aBxiXWaoYndc3ObDt5NDbPV2n5CJF8fQ7uuQgZsMVwnDFGfD1O6bXjOoRlMTPs0PkinpKVVNbc5hIE7bWw==}
+  /@sentry/cli-linux-arm@2.30.2:
+    resolution: {integrity: sha512-H7hqiLpEL7w/EHdhuUGatwg9O080mdujq4/zS96buKIHXxZE6KqMXGtMVIAvTl1+z6BlBEnfvZGI19MPw3t/7w==}
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux, freebsd]
@@ -5244,8 +5244,8 @@ packages:
     dev: false
     optional: true
 
-  /@sentry/cli-linux-i686@2.30.1:
-    resolution: {integrity: sha512-LyXpgAbQSS9XCQK431xEHMWTh9c53c3eOAv5S7BpqNZW8qryMPyNHL1TykWY+PJgXM8EWIo45IuPZ1Ppw9fYWg==}
+  /@sentry/cli-linux-i686@2.30.2:
+    resolution: {integrity: sha512-gZIq131M4TJTG1lX9uvpoaGWaEXCEfdDXrXu/z/YZmAKBcThpMYChodXmm8FB6X4xb0TPXzIFqdzlLdglFK46g==}
     engines: {node: '>=10'}
     cpu: [x86, ia32]
     os: [linux, freebsd]
@@ -5253,8 +5253,8 @@ packages:
     dev: false
     optional: true
 
-  /@sentry/cli-linux-x64@2.30.1:
-    resolution: {integrity: sha512-8Ji5ZtJnpyKXfP0HQD9FKmd/fWns7NUoknCfNVrwpSlk7LydpiWNhMVCKiU/zkDS6kKZzqFTuK1DvLA7LmCV4w==}
+  /@sentry/cli-linux-x64@2.30.2:
+    resolution: {integrity: sha512-NmTAIl7aW9OHxwB4149sBfvCbTyK9T/CvBX38keaD2yIThet9gZ4koP49hBDxYF99aQX3E+LIAqWwnkV9W72Sw==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux, freebsd]
@@ -5262,8 +5262,8 @@ packages:
     dev: false
     optional: true
 
-  /@sentry/cli-win32-i686@2.30.1:
-    resolution: {integrity: sha512-MBrYs2mX3jEF8ZOPf1L6CTL8Aooiyn6navFeqBOo9VovgT1NfJP3qBHs0YbHGCkvBNqHAdf7eA6caBHSLTwZBg==}
+  /@sentry/cli-win32-i686@2.30.2:
+    resolution: {integrity: sha512-SBR/Q3T6o+7uHwHNdjcG9GA3R++9w8oi778b95GuOC3dh0WOU6hXaKwQWe95ZcuSd2rKpouH7dhMjqqNM4HxOA==}
     engines: {node: '>=10'}
     cpu: [x86, ia32]
     os: [win32]
@@ -5271,8 +5271,8 @@ packages:
     dev: false
     optional: true
 
-  /@sentry/cli-win32-x64@2.30.1:
-    resolution: {integrity: sha512-Do/9U0e70heqVDFEnOFCXtid52uUEGYvlrLa6AU6nsO4KM2c2A+c4t3gfwckKDOs2VaRuCW9sgtYy0LGmUlc5w==}
+  /@sentry/cli-win32-x64@2.30.2:
+    resolution: {integrity: sha512-gF9wSZxzXFgakkC+uKVLAAYlbYj13e1gTsNm3gm+ODfpV+rbHwvbKoLfNsbVCFVCEZxIV2rXEP5WmTr0kiMvWQ==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
@@ -5280,8 +5280,8 @@ packages:
     dev: false
     optional: true
 
-  /@sentry/cli@2.30.1:
-    resolution: {integrity: sha512-xa9FG83gCDlVPljp88zOqiUmmt3lYMYjunP8jyahVgsMH/Mxv8aRbgRc7sioWnvDRiPnZkZazCooMsqcWMOk7w==}
+  /@sentry/cli@2.30.2:
+    resolution: {integrity: sha512-jQ/RBJ3bZ4PFbfOsGq8EykygHHmXXPw+i6jqsnQfAPIeZoX+DsqpAZbYubQEZKekmQ8EVGFxGHzUVkd6hLVMbA==}
     engines: {node: '>= 10'}
     hasBin: true
     requiresBuild: true
@@ -5292,13 +5292,13 @@ packages:
       proxy-from-env: 1.1.0
       which: 2.0.2
     optionalDependencies:
-      '@sentry/cli-darwin': 2.30.1
-      '@sentry/cli-linux-arm': 2.30.1
-      '@sentry/cli-linux-arm64': 2.30.1
-      '@sentry/cli-linux-i686': 2.30.1
-      '@sentry/cli-linux-x64': 2.30.1
-      '@sentry/cli-win32-i686': 2.30.1
-      '@sentry/cli-win32-x64': 2.30.1
+      '@sentry/cli-darwin': 2.30.2
+      '@sentry/cli-linux-arm': 2.30.2
+      '@sentry/cli-linux-arm64': 2.30.2
+      '@sentry/cli-linux-i686': 2.30.2
+      '@sentry/cli-linux-x64': 2.30.2
+      '@sentry/cli-win32-i686': 2.30.2
+      '@sentry/cli-win32-x64': 2.30.2
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -5348,11 +5348,11 @@ packages:
       '@sentry/types': 7.106.1
     dev: false
 
-  /@sentry/vite-plugin@2.14.3:
-    resolution: {integrity: sha512-sSMbn6lND0N5eE0R/gmzlZKgegIgkSge/yrECf0xZi3tMHn4n6Ue1VO7m0+sJZFLP5C26htYFh0lI16EUweYEg==}
+  /@sentry/vite-plugin@2.15.0:
+    resolution: {integrity: sha512-Q1ML+6p0xBLEbk6pHnZoLs7gQctXrsyI/zzhEQsR/uyPIZIkrwSLcnZ6iCjSz570SvK9H0UVgp1bdLJK/Mpb7Q==}
     engines: {node: '>= 14'}
     dependencies:
-      '@sentry/bundler-plugin-core': 2.14.3
+      '@sentry/bundler-plugin-core': 2.15.0
       unplugin: 1.0.1
     transitivePeerDependencies:
       - encoding
@@ -7561,8 +7561,8 @@ packages:
       - supports-color
     dev: true
 
-  /@webassemblyjs/ast@1.11.6:
-    resolution: {integrity: sha512-IN1xI7PwOvLPgjcf180gC1bqn3q/QaOCwYUahIOhbYUu8KA/3tw2RT/T0Gidi1l7Hhj5D/INhJxiICObqpMu4Q==}
+  /@webassemblyjs/ast@1.12.1:
+    resolution: {integrity: sha512-EKfMUOPRRUTy5UII4qJDGPpqfwjOmZ5jeGFwid9mnoqIFK+e0vqoi1qH56JpmZSzEL53jKnNzScdmftJyG5xWg==}
     dependencies:
       '@webassemblyjs/helper-numbers': 1.11.6
       '@webassemblyjs/helper-wasm-bytecode': 1.11.6
@@ -7576,8 +7576,8 @@ packages:
     resolution: {integrity: sha512-o0YkoP4pVu4rN8aTJgAyj9hC2Sv5UlkzCHhxqWj8butaLvnpdc2jOwh4ewE6CX0txSfLn/UYaV/pheS2Txg//Q==}
     dev: false
 
-  /@webassemblyjs/helper-buffer@1.11.6:
-    resolution: {integrity: sha512-z3nFzdcp1mb8nEOFFk8DrYLpHvhKC3grJD2ardfKOzmbmJvEf/tPIqCY+sNcwZIY8ZD7IkB2l7/pqhUhqm7hLA==}
+  /@webassemblyjs/helper-buffer@1.12.1:
+    resolution: {integrity: sha512-nzJwQw99DNDKr9BVCOZcLuJJUlqkJh+kVzVl6Fmq/tI5ZtEyWT1KZMyOXltXLZJmDtvLCDgwsyrkohEtopTXCw==}
     dev: false
 
   /@webassemblyjs/helper-numbers@1.11.6:
@@ -7592,13 +7592,13 @@ packages:
     resolution: {integrity: sha512-sFFHKwcmBprO9e7Icf0+gddyWYDViL8bpPjJJl0WHxCdETktXdmtWLGVzoHbqUcY4Be1LkNfwTmXOJUFZYSJdA==}
     dev: false
 
-  /@webassemblyjs/helper-wasm-section@1.11.6:
-    resolution: {integrity: sha512-LPpZbSOwTpEC2cgn4hTydySy1Ke+XEu+ETXuoyvuyezHO3Kjdu90KK95Sh9xTbmjrCsUwvWwCOQQNta37VrS9g==}
+  /@webassemblyjs/helper-wasm-section@1.12.1:
+    resolution: {integrity: sha512-Jif4vfB6FJlUlSbgEMHUyk1j234GTNG9dBJ4XJdOySoj518Xj0oGsNi59cUQF4RRMS9ouBUxDDdyBVfPTypa5g==}
     dependencies:
-      '@webassemblyjs/ast': 1.11.6
-      '@webassemblyjs/helper-buffer': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/helper-buffer': 1.12.1
       '@webassemblyjs/helper-wasm-bytecode': 1.11.6
-      '@webassemblyjs/wasm-gen': 1.11.6
+      '@webassemblyjs/wasm-gen': 1.12.1
     dev: false
 
   /@webassemblyjs/ieee754@1.11.6:
@@ -7617,42 +7617,42 @@ packages:
     resolution: {integrity: sha512-vtXf2wTQ3+up9Zsg8sa2yWiQpzSsMyXj0qViVP6xKGCUT8p8YJ6HqI7l5eCnWx1T/FYdsv07HQs2wTFbbof/RA==}
     dev: false
 
-  /@webassemblyjs/wasm-edit@1.11.6:
-    resolution: {integrity: sha512-Ybn2I6fnfIGuCR+Faaz7YcvtBKxvoLV3Lebn1tM4o/IAJzmi9AWYIPWpyBfU8cC+JxAO57bk4+zdsTjJR+VTOw==}
+  /@webassemblyjs/wasm-edit@1.12.1:
+    resolution: {integrity: sha512-1DuwbVvADvS5mGnXbE+c9NfA8QRcZ6iKquqjjmR10k6o+zzsRVesil54DKexiowcFCPdr/Q0qaMgB01+SQ1u6g==}
     dependencies:
-      '@webassemblyjs/ast': 1.11.6
-      '@webassemblyjs/helper-buffer': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/helper-buffer': 1.12.1
       '@webassemblyjs/helper-wasm-bytecode': 1.11.6
-      '@webassemblyjs/helper-wasm-section': 1.11.6
-      '@webassemblyjs/wasm-gen': 1.11.6
-      '@webassemblyjs/wasm-opt': 1.11.6
-      '@webassemblyjs/wasm-parser': 1.11.6
-      '@webassemblyjs/wast-printer': 1.11.6
+      '@webassemblyjs/helper-wasm-section': 1.12.1
+      '@webassemblyjs/wasm-gen': 1.12.1
+      '@webassemblyjs/wasm-opt': 1.12.1
+      '@webassemblyjs/wasm-parser': 1.12.1
+      '@webassemblyjs/wast-printer': 1.12.1
     dev: false
 
-  /@webassemblyjs/wasm-gen@1.11.6:
-    resolution: {integrity: sha512-3XOqkZP/y6B4F0PBAXvI1/bky7GryoogUtfwExeP/v7Nzwo1QLcq5oQmpKlftZLbT+ERUOAZVQjuNVak6UXjPA==}
+  /@webassemblyjs/wasm-gen@1.12.1:
+    resolution: {integrity: sha512-TDq4Ojh9fcohAw6OIMXqiIcTq5KUXTGRkVxbSo1hQnSy6lAM5GSdfwWeSxpAo0YzgsgF182E/U0mDNhuA0tW7w==}
     dependencies:
-      '@webassemblyjs/ast': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
       '@webassemblyjs/helper-wasm-bytecode': 1.11.6
       '@webassemblyjs/ieee754': 1.11.6
       '@webassemblyjs/leb128': 1.11.6
       '@webassemblyjs/utf8': 1.11.6
     dev: false
 
-  /@webassemblyjs/wasm-opt@1.11.6:
-    resolution: {integrity: sha512-cOrKuLRE7PCe6AsOVl7WasYf3wbSo4CeOk6PkrjS7g57MFfVUF9u6ysQBBODX0LdgSvQqRiGz3CXvIDKcPNy4g==}
+  /@webassemblyjs/wasm-opt@1.12.1:
+    resolution: {integrity: sha512-Jg99j/2gG2iaz3hijw857AVYekZe2SAskcqlWIZXjji5WStnOpVoat3gQfT/Q5tb2djnCjBtMocY/Su1GfxPBg==}
     dependencies:
-      '@webassemblyjs/ast': 1.11.6
-      '@webassemblyjs/helper-buffer': 1.11.6
-      '@webassemblyjs/wasm-gen': 1.11.6
-      '@webassemblyjs/wasm-parser': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/helper-buffer': 1.12.1
+      '@webassemblyjs/wasm-gen': 1.12.1
+      '@webassemblyjs/wasm-parser': 1.12.1
     dev: false
 
-  /@webassemblyjs/wasm-parser@1.11.6:
-    resolution: {integrity: sha512-6ZwPeGzMJM3Dqp3hCsLgESxBGtT/OeCvCZ4TA1JUPYgmhAx38tTPR9JaKy0S5H3evQpO/h2uWs2j6Yc/fjkpTQ==}
+  /@webassemblyjs/wasm-parser@1.12.1:
+    resolution: {integrity: sha512-xikIi7c2FHXysxXe3COrVUPSheuBtpcfhbpFj4gmu7KRLYOzANztwUU0IbsqvMqzuNK2+glRGWCEqZo1WCLyAQ==}
     dependencies:
-      '@webassemblyjs/ast': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
       '@webassemblyjs/helper-api-error': 1.11.6
       '@webassemblyjs/helper-wasm-bytecode': 1.11.6
       '@webassemblyjs/ieee754': 1.11.6
@@ -7660,10 +7660,10 @@ packages:
       '@webassemblyjs/utf8': 1.11.6
     dev: false
 
-  /@webassemblyjs/wast-printer@1.11.6:
-    resolution: {integrity: sha512-JM7AhRcE+yW2GWYaKeHL5vt4xqee5N2WcezptmgyhNS+ScggqcT1OtXykhAb13Sn5Yas0j2uv9tHgrjwvzAP4A==}
+  /@webassemblyjs/wast-printer@1.12.1:
+    resolution: {integrity: sha512-+X4WAlOisVWQMikjbcvY2e0rwPsKQ9F688lksZhBcPycBBuii3O7m8FACbDMWDojpAqvjIncrG8J0XHKyQfVeA==}
     dependencies:
-      '@webassemblyjs/ast': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
       '@xtuc/long': 4.2.2
     dev: false
 
@@ -8282,8 +8282,8 @@ packages:
     dev: true
     optional: true
 
-  /bare-fs@2.2.1:
-    resolution: {integrity: sha512-+CjmZANQDFZWy4PGbVdmALIwmt33aJg8qTkVjClU6X4WmZkTPBDxRHiBn7fpqEWEfF3AC2io++erpViAIQbSjg==}
+  /bare-fs@2.2.2:
+    resolution: {integrity: sha512-X9IqgvyB0/VA5OZJyb5ZstoN62AzD7YxVGog13kkfYWYqJYcK0kcqLZ6TrmH5qr4/8//ejVcX4x/a0UvaogXmA==}
     requiresBuild: true
     dependencies:
       bare-events: 2.2.1
@@ -16329,7 +16329,7 @@ packages:
       pump: 3.0.0
       tar-stream: 3.1.7
     optionalDependencies:
-      bare-fs: 2.2.1
+      bare-fs: 2.2.2
       bare-path: 2.1.0
     dev: true
 
@@ -17632,9 +17632,9 @@ packages:
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.5
-      '@webassemblyjs/ast': 1.11.6
-      '@webassemblyjs/wasm-edit': 1.11.6
-      '@webassemblyjs/wasm-parser': 1.11.6
+      '@webassemblyjs/ast': 1.12.1
+      '@webassemblyjs/wasm-edit': 1.12.1
+      '@webassemblyjs/wasm-parser': 1.12.1
       acorn: 8.11.3
       acorn-import-assertions: 1.9.0(acorn@8.11.3)
       browserslist: 4.23.0
