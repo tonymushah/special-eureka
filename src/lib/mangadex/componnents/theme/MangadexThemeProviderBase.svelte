@@ -2,9 +2,11 @@
 	import { buildSvelteUITheme, type MangadexTheme } from "@mangadex/theme";
 	import SomeDiv from "./SomeDiv.svelte";
 	import { SvelteUIProvider } from "@svelteuidev/core";
+	import { setMangaDexThemeContext } from "@mangadex/utils/contexts/theme";
 
 	export let theme: MangadexTheme;
 	export let fonts = "Poppins";
+	setMangaDexThemeContext(theme);
 	$: svelte_ui_theme = buildSvelteUITheme(theme);
 </script>
 
