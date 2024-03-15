@@ -4,5 +4,5 @@
 </script>
 
 <IconLayout>
-	<PlusSquareIcon size="12px" />
+	<PlusSquareIcon size="25px" />
 </IconLayout>
