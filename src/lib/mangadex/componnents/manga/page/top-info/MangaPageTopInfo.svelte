@@ -6,11 +6,8 @@
 	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopInfoCover from "./TopInfoCover.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-
-	type Author = {
-		id: string;
-		name: string;
-	};
+	import type { Author } from "./index";
+	import TopInfoAuthors from "./TopInfoAuthors.svelte";
 	export let id: string;
 	export let title: string;
 	export let altTitle: string | undefined = undefined;
@@ -35,5 +32,6 @@
 		{#if altTitle}
 			<h2>{altTitle}</h2>
 		{/if}
+		<TopInfoAuthors {authors} />
 	</svelte:fragment>
 </TopInfoLayout>
