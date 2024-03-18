@@ -9,6 +9,7 @@
 	import StatusSelect from "./StatusSelect.svelte";
 	import type { ReadingStatusEventDetail } from ".";
 	import { createEventDispatcher } from "svelte";
+	import IsFollowingButton from "./dialog/IsFollowingButton.svelte";
 
 	const title = getTopMangaTitleContextStore();
 	const dispatch = createEventDispatcher<{
@@ -44,7 +45,8 @@
 				<h3>{title}</h3>
 				<h4>Reading Status</h4>
 				<div class="form">
-					<StatusSelect readingStatus={selectedStatus} />
+					<StatusSelect bind:readingStatus={selectedStatus} />
+					<IsFollowingButton bind:isFollowing={selectedIsFollowing} />
 				</div>
 			</div>
 			<div class="bottom">
