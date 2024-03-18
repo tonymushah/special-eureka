@@ -7,6 +7,7 @@
 
 	let target: HTMLDivElement | undefined = undefined;
 	export let readingStatus: Writable<ReadingStatus | undefined>;
+
 	$: status = getText($readingStatus);
 </script>
 
