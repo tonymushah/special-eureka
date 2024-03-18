@@ -46,7 +46,12 @@
 	</div>
 </PrimaryButton>
 
-<Dialog bind:dialog />
+<Dialog
+	bind:dialog
+	on:readingStatus={({ detail }) => {
+		dispatch("readingStatus", detail);
+	}}
+/>
 
 <style lang="scss">
 	.primary-button {
