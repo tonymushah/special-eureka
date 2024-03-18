@@ -23,29 +23,30 @@ export default meta;
 
 const readingStatus = writable<ReadingStatus | undefined>(undefined);
 const isFollowing = writable<boolean>(false);
+const args = {
+	id,
+	title: attributes.title.en,
+	altTitle: get_value_and_random_if_undefined(altTitle, "en"),
+	coverImage: writable(fukkoi1),
+	coverImageAlt: fukkoi1,
+	authors: [
+		{
+			id: author.id,
+			name: author.attributes.name
+		}
+	],
+	tags: attributes.tags.map((t) => ({
+		id: t.id,
+		name: t.attributes.name.en
+	})),
+	status: MangaStatus.Ongoing,
+	description: attributes.description.en,
+	reading_status: readingStatus,
+	isFollowing
+};
 
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: {
-		id,
-		title: attributes.title.en,
-		altTitle: get_value_and_random_if_undefined(altTitle, "en"),
-		coverImage: writable(fukkoi1),
-		coverImageAlt: fukkoi1,
-		authors: [
-			{
-				id: author.id,
-				name: author.attributes.name
-			}
-		],
-		tags: attributes.tags.map((t) => ({
-			id: t.id,
-			name: t.attributes.name.en
-		})),
-		status: MangaStatus.Ongoing,
-		description: attributes.description.en,
-		reading_status: readingStatus,
-		isFollowing
-	}
+	args
 };

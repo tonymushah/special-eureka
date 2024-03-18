@@ -42,6 +42,8 @@
 </PrimaryButton>
 
 <Dialog
+	bind:status={$readingStatus}
+	bind:isFollowing
 	bind:dialog
 	on:readingStatus={({ detail }) => {
 		dispatch("readingStatus", detail);
