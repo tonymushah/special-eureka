@@ -8,7 +8,7 @@ import { id, attributes, author } from "./data/b4c93297-b32f-4f90-b619-55456a38b
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 import { writable } from "svelte/store";
-import { MangaStatus } from "@mangadex/gql/graphql";
+import { MangaStatus, ReadingStatus } from "@mangadex/gql/graphql";
 
 const altTitle = manga_altTitle_to_lang_map(attributes.altTitles);
 
@@ -20,6 +20,9 @@ const meta = {
 } satisfies Meta<TopInfo>;
 
 export default meta;
+
+const readingStatus = writable<ReadingStatus | undefined>(undefined);
+const isFollowing = writable<boolean>(false);
 
 type Story = StoryObj<typeof meta>;
 
@@ -41,6 +44,8 @@ export const Default: Story = {
 			name: t.attributes.name.en
 		})),
 		status: MangaStatus.Ongoing,
-		description: attributes.description.en
+		description: attributes.description.en,
+		reading_status: readingStatus,
+		isFollowing
 	}
 };

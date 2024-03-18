@@ -20,6 +20,9 @@
 		}
 	}
 	$: if (isOpen) {
+		openMenu().catch(() => {
+			isOpen = false;
+		});
 	}
 </script>
 

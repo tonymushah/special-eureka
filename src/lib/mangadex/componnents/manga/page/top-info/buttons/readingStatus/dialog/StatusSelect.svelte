@@ -7,12 +7,18 @@
 
 	let target: HTMLDivElement | undefined = undefined;
 	export let readingStatus: Writable<ReadingStatus | undefined>;
+	let isOpen: boolean = false;
 
-	$: status = getText($readingStatus);
+	$: status = getText($readingStatus) ?? "None";
 </script>
 
 <div class="outer-button" bind:this={target}>
-	<ButtonAccent>
+	<ButtonAccent
+		isBase
+		on:click={() => {
+			isOpen = !isOpen;
+		}}
+	>
 		<div class="inner-button">
 			<span>{status}</span>
 		</div>
@@ -20,6 +26,7 @@
 </div>
 
 <MenuKeyed
+	bind:isOpen
 	bind:target
 	items={[
 		{
@@ -27,27 +34,27 @@
 			key: undefined
 		},
 		{
-			label: getText(ReadingStatus.Reading),
+			label: getText(ReadingStatus.Reading) ?? "",
 			key: ReadingStatus.Reading
 		},
 		{
-			label: getText(ReadingStatus.OnHold),
+			label: getText(ReadingStatus.OnHold) ?? "",
 			key: ReadingStatus.OnHold
 		},
 		{
-			label: getText(ReadingStatus.Dropped),
+			label: getText(ReadingStatus.Dropped) ?? "",
 			key: ReadingStatus.Dropped
 		},
 		{
-			label: getText(ReadingStatus.PlanToRead),
+			label: getText(ReadingStatus.PlanToRead) ?? "",
 			key: ReadingStatus.PlanToRead
 		},
 		{
-			label: getText(ReadingStatus.Completed),
+			label: getText(ReadingStatus.Completed) ?? "",
 			key: ReadingStatus.Completed
 		},
 		{
-			label: getText(ReadingStatus.ReReading),
+			label: getText(ReadingStatus.ReReading) ?? "",
 			key: ReadingStatus.ReReading
 		}
 	]}

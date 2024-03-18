@@ -1,6 +1,6 @@
 import { ReadingStatus } from "@mangadex/gql/graphql";
 
-export default function getText(status: ReadingStatus | undefined): string {
+export default function getText(status: ReadingStatus | undefined): string | undefined {
 	switch (status) {
 		case ReadingStatus.Reading:
 			return "Reading";
@@ -15,6 +15,6 @@ export default function getText(status: ReadingStatus | undefined): string {
 		case ReadingStatus.ReReading:
 			return "Re-Reading";
 		default:
-			return "Add to Library";
+			return undefined;
 	}
 }

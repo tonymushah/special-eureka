@@ -6,7 +6,7 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { writable } from "svelte/store";
 	import type { ReadingStatus } from "@mangadex/gql/graphql";
-	import StatusSelect from "./StatusSelect.svelte";
+	import StatusSelect from "./dialog/StatusSelect.svelte";
 	import type { ReadingStatusEventDetail } from ".";
 	import { createEventDispatcher } from "svelte";
 	import IsFollowingButton from "./dialog/IsFollowingButton.svelte";

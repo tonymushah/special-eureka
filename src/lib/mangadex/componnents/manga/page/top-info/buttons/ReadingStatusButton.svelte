@@ -1,19 +1,14 @@
 <script lang="ts">
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import type { ReadingStatus } from "@mangadex/gql/graphql";
+	import getText from "@mangadex/utils/manga/readingStatus/getText";
 	import { createEventDispatcher } from "svelte";
 	import {
 		getTopMangaIsFollowingContextStore,
-		getTopMangaReadingStatusContextStore,
-		getTopMangaTitleContextStore
+		getTopMangaReadingStatusContextStore
 	} from "../context";
-	import getText from "@mangadex/utils/manga/readingStatus/getText";
-	import IsFollowingIcon from "./readingStatus/IsFollowingIcon.svelte";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { CloseIcon } from "@svelteuidev/core";
-	import CoverImage from "./readingStatus/dialog/CoverImage.svelte";
 	import type { ReadingStatusEventDetail } from "./readingStatus";
 	import Dialog from "./readingStatus/Dialog.svelte";
+	import IsFollowingIcon from "./readingStatus/IsFollowingIcon.svelte";
 
 	const readingStatus = getTopMangaReadingStatusContextStore();
 	const isFollowingStore = getTopMangaIsFollowingContextStore();
@@ -28,7 +23,7 @@
 		}
 	}
 
-	$: readingStatusText = getText($readingStatus);
+	$: readingStatusText = getText($readingStatus) ?? "Add to Library";
 	$: isFollowing = $isFollowingStore;
 </script>
 
