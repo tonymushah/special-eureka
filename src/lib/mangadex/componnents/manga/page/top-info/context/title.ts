@@ -4,8 +4,8 @@ const key = "top-manga-title";
 
 type TopMangaTitle = string;
 
-export function setTopMangaTitleContextStore(cover: TopMangaTitle) {
-	return setContext<TopMangaTitle>(key, cover);
+export function setTopMangaTitleContextStore(title: TopMangaTitle) {
+	return setContext<TopMangaTitle>(key, title);
 }
 
 export function getTopMangaTitleContextStore() {
