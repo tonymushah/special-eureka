@@ -63,3 +63,9 @@
 		readingStatus.set(value);
 	}}
 />
+
+<style lang="scss">
+	.inner-button {
+		width: 7em;
+	}
+</style>
