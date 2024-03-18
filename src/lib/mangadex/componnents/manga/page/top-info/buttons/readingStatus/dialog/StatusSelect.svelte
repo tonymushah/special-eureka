@@ -26,6 +26,8 @@
 </div>
 
 <MenuKeyed
+	--menu-height={"10em"}
+	--menu-overflow={"scroll"}
 	bind:isOpen
 	bind:target
 	items={[

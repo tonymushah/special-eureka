@@ -100,6 +100,13 @@
 			justify-content: center;
 			margin: 1em;
 		}
+		.top {
+			.form {
+				display: flex;
+				flex-direction: row;
+				gap: 10px;
+			}
+		}
 		.content {
 			grid-column: 2 / -1;
 			grid-row: 1;

@@ -10,4 +10,5 @@ export type Item = {
 			}
 		>
 	) => Promise<void> | void;
+	disabled?: undefined;
 };

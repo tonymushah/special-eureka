@@ -39,6 +39,7 @@
 						}
 						dispatch("menuItemClick", e.detail);
 					}}
+					isDisabled={item.disabled}
 				/>
 				{#if index < items.length - 1}
 					<hr />

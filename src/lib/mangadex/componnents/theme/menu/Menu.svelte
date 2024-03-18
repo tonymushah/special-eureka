@@ -7,8 +7,9 @@
 	export let isOpen: boolean = false;
 	export let items: Item[] = [];
 	let menu: HTMLDivElement;
+
 	async function openMenu() {
-		if (target) {
+		if (target && menu) {
 			const { x: _x, y: _y } = await computePosition(target, menu, {
 				middleware: [flip()],
 				placement: "bottom"
@@ -19,6 +20,7 @@
 			});
 		}
 	}
+
 	$: if (isOpen) {
 		openMenu().catch(() => {
 			isOpen = false;
@@ -27,7 +29,7 @@
 </script>
 
 <div class="menu" class:isOpen bind:this={menu}>
-	<ContextMenuBase {items} tabindex={0} />
+	<ContextMenuBase bind:items tabindex={0} />
 </div>
 
 <style lang="scss">
@@ -36,6 +38,8 @@
 		position: absolute;
 		top: 0px;
 		left: 0px;
+		height: var(--menu-height);
+		overflow: var(--menu-overflow);
 	}
 	.menu.isOpen {
 		display: block;

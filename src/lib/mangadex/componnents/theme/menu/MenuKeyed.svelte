@@ -22,6 +22,7 @@
 
 	$: menuItems = items.map<Item>((i) => ({
 		onClick(e) {
+			console.log(i.key);
 			dispatch("onSelect", {
 				...e.detail,
 				value: i.key
