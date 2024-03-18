@@ -23,6 +23,9 @@ dependencies:
   '@stitches/core':
     specifier: ^1.2.8
     version: 1.2.8
+  '@storybook/addon-a11y':
+    specifier: ^8.0.0
+    version: 8.0.0
   '@svelteuidev/composables':
     specifier: ^0.15.4
     version: 0.15.4(svelte@4.2.12)
@@ -3919,6 +3922,13 @@ packages:
     resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
     dev: false
 
+  /@storybook/addon-a11y@8.0.0:
+    resolution: {integrity: sha512-lxvXOMYqeM6DOUvNP3e18GzPDVhcOZtLnjkJ8XQbRk2xx2qHodAEiFhiKBhfStsn6/rg0zWLRpZ1NJxjnZ0l/Q==}
+    dependencies:
+      '@storybook/addon-highlight': 8.0.0
+      axe-core: 4.8.4
+    dev: false
+
   /@storybook/addon-actions@8.0.0:
     resolution: {integrity: sha512-QXfnEWZt5k35cPYsLvxq505XrCgXujc4UEkky1lBtSMI9SLzlXZg3fC/lW0c0hiu2c0+zI+y4fj5vTE9AZJdjw==}
     dependencies:
@@ -4009,7 +4019,6 @@ packages:
     resolution: {integrity: sha512-bSba9UTcPJBFUy5peIU8XPlKK/7lT054977oLGgVYup2u88km6pWaMNSGMWhb3xXdseTgrj96k/b+md4X+WrMg==}
     dependencies:
       '@storybook/global': 5.0.0
-    dev: true
 
   /@storybook/addon-interactions@8.0.0:
     resolution: {integrity: sha512-lb6WZAeF3MIT05wSVbz2ZKDpTIoTmHW5e8hImdquNlOm8qNm4fl5BLpVrZT1YkC6v42MM8yU/DeeUw+8w7rXDg==}
@@ -4427,7 +4436,6 @@ packages:
 
   /@storybook/global@5.0.0:
     resolution: {integrity: sha512-FcOqPAXACP0I3oJ/ws6/rrPT9WGhu915Cg8D02a9YxLo0DE9zI+a9A5gRGvmQ09fiWPukqI8ZAEoQEdWUKMQdQ==}
-    dev: true
 
   /@storybook/icons@1.2.8(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-YMF5DiBvMiAVH6qd6Cf6WCwZq3D1OZNxsKtZVFBlzJXqlZb1CLEuCHy5MwL4WI5mzb6q8MJsLYpVMoH84OzUpQ==}
@@ -5829,6 +5837,11 @@ packages:
     dependencies:
       possible-typed-array-names: 1.0.0
     dev: true
+
+  /axe-core@4.8.4:
+    resolution: {integrity: sha512-CZLSKisu/bhJ2awW4kJndluz2HLZYIHh5Uy1+ZwDRkJi69811xgIXXfdU9HSLX0Th+ILrHj8qfL/5wzamsFtQg==}
+    engines: {node: '>=4'}
+    dev: false
 
   /axobject-query@3.2.1:
     resolution: {integrity: sha512-jsyHu61e6N4Vbz/v18DHwWYKK0bSWLqn47eeDSKPB7m8tqMHF9YJ+mhIk2lVteyZrY8tnSj/jHOv4YiTCuCJgg==}
