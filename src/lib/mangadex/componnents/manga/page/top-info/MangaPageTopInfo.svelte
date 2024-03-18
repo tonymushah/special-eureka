@@ -11,10 +11,16 @@
 	import type { MangaStatus, ReadingState, ReadingStatus } from "@mangadex/gql/graphql";
 	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopInfoCover from "./TopInfoCover.svelte";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { Author } from "./index";
 	import TopInfoAuthors from "./TopInfoAuthors.svelte";
 	import TopInfoButtons from "./TopInfoButtons.svelte";
+	import { createEventDispatcher } from "svelte";
+	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
+
+	const dispatch = createEventDispatcher<{
+		readingStatus: ReadingStatusEventDetail;
+	}>();
+
 	export let id: string;
 	export let title: string;
 	export let altTitle: string | undefined = undefined;
@@ -49,6 +55,10 @@
 			<h2>{altTitle}</h2>
 		{/if}
 		<TopInfoAuthors {authors} />
-		<TopInfoButtons />
+		<TopInfoButtons
+			on:readingStatus={({ detail }) => {
+				dispatch("readingStatus", detail);
+			}}
+		/>
 	</svelte:fragment>
 </TopInfoLayout>
