@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { CloseIcon } from "@svelteuidev/core";
-	import CoverImage from "./CoverImage.svelte";
+	import CoverImage from "./dialog/CoverImage.svelte";
 	import { getTopMangaTitleContextStore } from "../../context";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { writable } from "svelte/store";

@@ -11,7 +11,7 @@
 	import IsFollowingIcon from "./readingStatus/IsFollowingIcon.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { CloseIcon } from "@svelteuidev/core";
-	import CoverImage from "./readingStatus/CoverImage.svelte";
+	import CoverImage from "./readingStatus/dialog/CoverImage.svelte";
 	import type { ReadingStatusEventDetail } from "./readingStatus";
 	import Dialog from "./readingStatus/Dialog.svelte";
 

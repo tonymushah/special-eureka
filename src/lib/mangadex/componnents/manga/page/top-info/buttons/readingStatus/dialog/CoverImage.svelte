@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	import { getTopCoverAltContextStore, getTopCoverContextStore } from "../../context";
+	import { getTopCoverAltContextStore, getTopCoverContextStore } from "../../../context";
 
 	const coverStore = getTopCoverContextStore();
 	const alt = getTopCoverAltContextStore();
