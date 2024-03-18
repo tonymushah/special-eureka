@@ -22,6 +22,7 @@
 
 	$: selectedStatus = writable<ReadingStatus | undefined>(status);
 	$: selectedIsFollowing = writable(isFollowing);
+
 	function closeDialog() {
 		if (dialog) {
 			dialog.close();
