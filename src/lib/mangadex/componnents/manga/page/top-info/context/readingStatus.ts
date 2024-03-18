@@ -1,10 +1,10 @@
 import type { ReadingStatus } from "@mangadex/gql/graphql";
 import { getContext, setContext } from "svelte";
-import type { Readable } from "svelte/store";
+import type { Writable } from "svelte/store";
 
 const key = "top-manga-reading-status";
 
-type TopMangaReadingStatus = Readable<ReadingStatus | undefined>;
+type TopMangaReadingStatus = Writable<ReadingStatus | undefined>;
 
 export function setTopMangaReadingStatusContextStore(cover: TopMangaReadingStatus) {
 	return setContext<TopMangaReadingStatus>(key, cover);
