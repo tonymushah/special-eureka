@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { ReadingStatus } from "@mangadex/gql/graphql";
-	import type { ReadingStatusEventDetail } from "./index.ts";
+	import type { ReadingStatusEventDetail } from "./index.js";
 	import { createEventDispatcher } from "svelte";
 	import getText from "@mangadex/utils/manga/readingStatus/getText.js";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import type { Writable } from "svelte/store";
 	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
-	import ReadingStatusButton from "../ReadingStatusButton.svelte";
+	import ReadingStatusButton from "../ReadingStatusButton.svelte.js";
 	let target: HTMLDivElement | undefined = undefined;
 	export let readingStatus: Writable<ReadingStatus | undefined>;
 	$: status = getText($readingStatus);
