@@ -29,6 +29,9 @@
 		delete: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
+		addToList: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	export let id: string;
@@ -83,6 +86,9 @@
 			}}
 			on:delete={({ detail }) => {
 				dispatch("delete", detail);
+			}}
+			on:addToList={({ detail }) => {
+				dispatch("addToList", detail);
 			}}
 		/>
 	</svelte:fragment>

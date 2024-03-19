@@ -4,6 +4,7 @@
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import StarButton from "./buttons/StarButton.svelte";
 	import DownloadButton from "./buttons/DownloadButton.svelte";
+	import AddToListButton from "./buttons/AddToListButton.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -12,6 +13,9 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 		delete: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		addToList: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
@@ -34,6 +38,11 @@
 	<StarButton
 		on:select={({ detail }) => {
 			dispatch("rating", detail);
+		}}
+	/>
+	<AddToListButton
+		on:click={({ detail }) => {
+			dispatch("addToList", detail);
 		}}
 	/>
 </div>

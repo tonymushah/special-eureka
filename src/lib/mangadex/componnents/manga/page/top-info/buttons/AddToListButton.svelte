@@ -4,7 +4,7 @@
 	import AddToListIcon from "./add-to-list/AddToListIcon.svelte";
 
 	const dispatch = createEventDispatcher<{
-		onClick: MouseEvent & {
+		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
@@ -13,7 +13,7 @@
 <ButtonAccent
 	isBase
 	on:click={({ detail }) => {
-		dispatch("onClick", detail);
+		dispatch("click", detail);
 	}}
 >
 	<AddToListIcon />
