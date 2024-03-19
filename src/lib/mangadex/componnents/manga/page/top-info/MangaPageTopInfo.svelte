@@ -35,6 +35,9 @@
 		read: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
+		report: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	export let id: string;
@@ -95,6 +98,9 @@
 			}}
 			on:read={({ detail }) => {
 				dispatch("read", detail);
+			}}
+			on:report={({ detail }) => {
+				dispatch("report", detail);
 			}}
 		/>
 	</svelte:fragment>

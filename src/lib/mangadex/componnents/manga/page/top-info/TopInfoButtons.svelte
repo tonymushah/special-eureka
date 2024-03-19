@@ -6,6 +6,7 @@
 	import DownloadButton from "./buttons/DownloadButton.svelte";
 	import AddToListButton from "./buttons/AddToListButton.svelte";
 	import ReadButton from "./buttons/ReadButton.svelte";
+	import ReportButton from "./buttons/ReportButton.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -20,6 +21,9 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 		read: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		report: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
@@ -52,6 +56,11 @@
 	<ReadButton
 		on:click={({ detail }) => {
 			dispatch("read", detail);
+		}}
+	/>
+	<ReportButton
+		on:click={({ detail }) => {
+			dispatch("report", detail);
 		}}
 	/>
 </div>
