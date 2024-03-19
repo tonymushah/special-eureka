@@ -20,6 +20,7 @@
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
+		rating: number;
 	}>();
 
 	export let id: string;
@@ -61,6 +62,9 @@
 		<TopInfoButtons
 			on:readingStatus={({ detail }) => {
 				dispatch("readingStatus", detail);
+			}}
+			on:rating={({ detail }) => {
+				dispatch("rating", detail);
 			}}
 		/>
 	</svelte:fragment>

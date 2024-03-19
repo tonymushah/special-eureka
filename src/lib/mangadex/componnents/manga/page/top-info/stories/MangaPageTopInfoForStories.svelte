@@ -21,6 +21,7 @@
 		undefined
 	);
 	let isFollowing: Writable<boolean | undefined> = writable<boolean | undefined>(undefined);
+	let rating: Writable<number | undefined> = writable(undefined);
 </script>
 
 <MangaPageTopInfo
@@ -36,8 +37,12 @@
 	{description}
 	{reading_status}
 	{isFollowing}
+	{rating}
 	on:readingStatus={({ detail }) => {
 		reading_status.set(detail.readingStatus);
 		isFollowing.set(detail.isFollowing);
+	}}
+	on:rating={({ detail }) => {
+		rating.set(detail);
 	}}
 />
