@@ -19,6 +19,7 @@
 	import { createEventDispatcher } from "svelte";
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
+	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -40,6 +41,10 @@
 		};
 		upload: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		tag: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+			id: string;
 		};
 	}>();
 
@@ -77,37 +82,62 @@
 	<div class="cover-image" slot="cover">
 		<TopInfoCover />
 	</div>
-	<svelte:fragment>
-		<h1>{title}</h1>
-		{#if altTitle}
-			<h2>{altTitle}</h2>
-		{/if}
-		<TopInfoAuthors {authors} />
-		<TopInfoButtons
-			on:readingStatus={({ detail }) => {
-				dispatch("readingStatus", detail);
-			}}
-			on:rating={({ detail }) => {
-				dispatch("rating", detail);
-			}}
-			on:download={({ detail }) => {
-				dispatch("download", detail);
-			}}
-			on:delete={({ detail }) => {
-				dispatch("delete", detail);
-			}}
-			on:addToList={({ detail }) => {
-				dispatch("addToList", detail);
-			}}
-			on:read={({ detail }) => {
-				dispatch("read", detail);
-			}}
-			on:report={({ detail }) => {
-				dispatch("report", detail);
-			}}
-			on:upload={({ detail }) => {
-				dispatch("upload", detail);
-			}}
-		/>
-	</svelte:fragment>
+	<div class="content">
+		<div class="top">
+			<h1>{title}</h1>
+			{#if altTitle}
+				<h2>{altTitle}</h2>
+			{/if}
+		</div>
+		<div class="bottom">
+			<TopInfoAuthors {authors} />
+			<TopInfoButtons
+				on:readingStatus={({ detail }) => {
+					dispatch("readingStatus", detail);
+				}}
+				on:rating={({ detail }) => {
+					dispatch("rating", detail);
+				}}
+				on:download={({ detail }) => {
+					dispatch("download", detail);
+				}}
+				on:delete={({ detail }) => {
+					dispatch("delete", detail);
+				}}
+				on:addToList={({ detail }) => {
+					dispatch("addToList", detail);
+				}}
+				on:read={({ detail }) => {
+					dispatch("read", detail);
+				}}
+				on:report={({ detail }) => {
+					dispatch("report", detail);
+				}}
+				on:upload={({ detail }) => {
+					dispatch("upload", detail);
+				}}
+			/>
+			<TagComponnentsFlex
+				bind:tags
+				on:click={({ detail }) => {
+					dispatch("tag", detail);
+				}}
+			/>
+		</div>
+	</div>
 </TopInfoLayout>
+
+<style lang="scss">
+	div.content {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		div.bottom {
+			display: flex;
+			flex-direction: column;
+			height: 60%;
+			gap: 10px;
+		}
+	}
+</style>
