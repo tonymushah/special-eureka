@@ -6,7 +6,8 @@
 		setTopMangaReadingStatusContextStore,
 		setTopMangaIsFollowingContextStore,
 		setTopMangaTitleContextStore,
-		setTopMangaRatingContextStore
+		setTopMangaRatingContextStore,
+		setTopMangaDownloadContextStore
 	} from "./context";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import type { MangaStatus, ReadingState, ReadingStatus } from "@mangadex/gql/graphql";
@@ -17,6 +18,7 @@
 	import TopInfoButtons from "./TopInfoButtons.svelte";
 	import { createEventDispatcher } from "svelte";
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
+	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -40,6 +42,9 @@
 		undefined
 	);
 	export let rating: Readable<number | undefined> = writable<number | undefined>(undefined);
+	export let downloadState: Readable<ChapterDownloadState> = writable(
+		ChapterDownloadState.NotDownloaded
+	);
 
 	setTopMangaTitleContextStore(title);
 	setTopCoverContextStore(coverImage);
@@ -47,6 +52,7 @@
 	setTopCoverAltContextStore(coverImageAlt);
 	setTopMangaIsFollowingContextStore(isFollowing);
 	setTopMangaRatingContextStore(rating);
+	setTopMangaDownloadContextStore(downloadState);
 </script>
 
 <TopInfoLayout>
