@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
+import { within, fireEvent } from "@storybook/testing-library";
 import "@fontsource/poppins/latin.css";
 
 import TopInfo from "../MangaPageTopInfo.svelte";
@@ -49,4 +50,30 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args
+};
+
+export const WithReadingButtonInteration: Story = {
+	args,
+	async play(self) {
+		const canvas = within(self.canvasElement);
+		const step = self.step;
+		await step("click on add to library button", async () => {
+			fireEvent.click(canvas.getByText("Add to Library", { selector: "button div" }));
+		});
+		await step("click the status select button", async () => {
+			fireEvent.click(canvas.getByText("None", { selector: "button div.inner-button span" }));
+
+			fireEvent.click(
+				canvas.getByText("Reading", {
+					selector: "dialog div.menu div.menu div.menu-item p.label"
+				})
+			);
+		});
+		await step("click the icon button", async () => {
+			fireEvent.click(self.canvasElement.querySelector("dialog div.is-following-off")!);
+		});
+		await step("click the add button", async () => {
+			fireEvent.click(canvas.getByText("Add", { selector: "dialog button div.buttons" }));
+		});
+	}
 };
