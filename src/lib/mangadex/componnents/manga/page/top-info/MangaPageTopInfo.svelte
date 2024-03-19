@@ -20,6 +20,7 @@
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
+	import MangaStatusComp from "./MangaStatus.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -117,12 +118,15 @@
 					dispatch("upload", detail);
 				}}
 			/>
-			<TagComponnentsFlex
-				bind:tags
-				on:click={({ detail }) => {
-					dispatch("tag", detail);
-				}}
-			/>
+			<div class="tag-status">
+				<TagComponnentsFlex
+					bind:tags
+					on:click={({ detail }) => {
+						dispatch("tag", detail);
+					}}
+				/>
+				<MangaStatusComp bind:status bind:year />
+			</div>
 		</div>
 	</div>
 </TopInfoLayout>
