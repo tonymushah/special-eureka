@@ -23,17 +23,17 @@
 			dispatch("readingStatus", detail);
 		}}
 	/>
-	<StarButton
-		on:select={({ detail }) => {
-			dispatch("rating", detail);
-		}}
-	/>
 	<DownloadButton
 		on:delete={({ detail }) => {
 			dispatch("delete", detail);
 		}}
 		on:download={({ detail }) => {
 			dispatch("download", detail);
+		}}
+	/>
+	<StarButton
+		on:select={({ detail }) => {
+			dispatch("rating", detail);
 		}}
 	/>
 </div>
