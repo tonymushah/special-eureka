@@ -7,6 +7,7 @@
 	import AddToListButton from "./buttons/AddToListButton.svelte";
 	import ReadButton from "./buttons/ReadButton.svelte";
 	import ReportButton from "./buttons/ReportButton.svelte";
+	import UploadButton from "./buttons/UploadButton.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -24,6 +25,9 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 		report: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		upload: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
@@ -61,6 +65,11 @@
 	<ReportButton
 		on:click={({ detail }) => {
 			dispatch("report", detail);
+		}}
+	/>
+	<UploadButton
+		on:click={({ detail }) => {
+			dispatch("upload", detail);
 		}}
 	/>
 </div>

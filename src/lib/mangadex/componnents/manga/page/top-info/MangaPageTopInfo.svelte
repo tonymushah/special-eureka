@@ -38,6 +38,9 @@
 		report: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
+		upload: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	export let id: string;
@@ -101,6 +104,9 @@
 			}}
 			on:report={({ detail }) => {
 				dispatch("report", detail);
+			}}
+			on:upload={({ detail }) => {
+				dispatch("upload", detail);
 			}}
 		/>
 	</svelte:fragment>
