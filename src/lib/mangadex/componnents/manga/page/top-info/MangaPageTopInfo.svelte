@@ -23,6 +23,12 @@
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
 		rating: number;
+		download: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
+		delete: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	export let id: string;
@@ -71,6 +77,12 @@
 			}}
 			on:rating={({ detail }) => {
 				dispatch("rating", detail);
+			}}
+			on:download={({ detail }) => {
+				dispatch("download", detail);
+			}}
+			on:delete={({ detail }) => {
+				dispatch("delete", detail);
 			}}
 		/>
 	</svelte:fragment>
