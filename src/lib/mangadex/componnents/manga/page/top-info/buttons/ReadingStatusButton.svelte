@@ -53,5 +53,9 @@
 <style lang="scss">
 	.primary-button {
 		width: 10em;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
 	}
 </style>
