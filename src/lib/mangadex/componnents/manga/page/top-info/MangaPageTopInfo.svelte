@@ -21,6 +21,7 @@
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
 	import MangaStatusComp from "./MangaStatus.svelte";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -127,9 +128,16 @@
 				/>
 				<MangaStatusComp bind:status bind:year />
 			</div>
+			<div></div>
 		</div>
 	</div>
 </TopInfoLayout>
+
+{#if description != undefined}
+	<div class="description">
+		<Markdown bind:source={description} />
+	</div>
+{/if}
 
 <style lang="scss">
 	div.content {
