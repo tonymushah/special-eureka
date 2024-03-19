@@ -5,7 +5,8 @@
 		setTopCoverContextStore,
 		setTopMangaReadingStatusContextStore,
 		setTopMangaIsFollowingContextStore,
-		setTopMangaTitleContextStore
+		setTopMangaTitleContextStore,
+		setTopMangaRatingContextStore
 	} from "./context";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import type { MangaStatus, ReadingState, ReadingStatus } from "@mangadex/gql/graphql";
@@ -37,12 +38,14 @@
 	export let isFollowing: Readable<boolean | undefined> = writable<boolean | undefined>(
 		undefined
 	);
+	export let rating: Readable<number | undefined> = writable<number | undefined>(undefined);
 
 	setTopMangaTitleContextStore(title);
 	setTopCoverContextStore(coverImage);
 	setTopMangaReadingStatusContextStore(reading_status);
 	setTopCoverAltContextStore(coverImageAlt);
 	setTopMangaIsFollowingContextStore(isFollowing);
+	setTopMangaRatingContextStore(rating);
 </script>
 
 <TopInfoLayout>
