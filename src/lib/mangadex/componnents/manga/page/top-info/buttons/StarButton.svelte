@@ -38,6 +38,8 @@
 </div>
 
 <MenuKeyed
+	--menu-height={"16em"}
+	--menu-overflow={"scroll"}
 	on:onSelect={({ detail }) => {
 		dispatch("select", detail.value);
 	}}
