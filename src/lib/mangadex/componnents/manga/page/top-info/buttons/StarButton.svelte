@@ -56,5 +56,6 @@
 <style lang="scss">
 	.inner-button {
 		display: flex;
+		gap: 10px;
 	}
 </style>
