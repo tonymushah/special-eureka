@@ -2,7 +2,7 @@
 	import { BellOffIcon } from "svelte-feather-icons";
 </script>
 
-<div>
+<div class="is-following-off">
 	<BellOffIcon size="24px" />
 </div>
 

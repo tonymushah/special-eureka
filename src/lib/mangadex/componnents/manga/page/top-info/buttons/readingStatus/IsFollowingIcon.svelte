@@ -2,7 +2,7 @@
 	import { BellIcon } from "svelte-feather-icons";
 </script>
 
-<div>
+<div class="is-following">
 	<BellIcon size="24px" />
 </div>
 
