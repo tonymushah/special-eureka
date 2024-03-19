@@ -32,6 +32,9 @@
 		addToList: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
+		read: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	export let id: string;
@@ -89,6 +92,9 @@
 			}}
 			on:addToList={({ detail }) => {
 				dispatch("addToList", detail);
+			}}
+			on:read={({ detail }) => {
+				dispatch("read", detail);
 			}}
 		/>
 	</svelte:fragment>
