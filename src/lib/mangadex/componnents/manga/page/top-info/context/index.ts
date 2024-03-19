@@ -9,3 +9,5 @@ export * from "./isFollowing";
 export * from "./title";
 
 export * from "./stars";
+
+export * from "./downloadState";
