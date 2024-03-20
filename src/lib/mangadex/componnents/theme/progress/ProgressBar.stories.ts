@@ -15,9 +15,18 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Solid: Story = {
 	args: {
 		lineColor: "var(--primary)",
-		progress: 50
+		progress: 25,
+		variant: "solid"
+	}
+};
+
+export const Rounded: Story = {
+	args: {
+		lineColor: "var(--primary)",
+		progress: 50,
+		variant: "rounded"
 	}
 };
