@@ -60,10 +60,15 @@
 	.distribution-info {
 		display: none;
 		flex-direction: column;
-		width: 324px;
+		width: 16em;
 		position: fixed;
 		top: 0px;
 		left: 0px;
+		background-color: var(--accent-l1);
+		padding: 0.5em;
+		color: var(--text-color);
+		border-radius: 0.25em;
+		box-shadow: black 0px 0px 10px;
 	}
 	.distribution-info.isOpen {
 		display: flex;
