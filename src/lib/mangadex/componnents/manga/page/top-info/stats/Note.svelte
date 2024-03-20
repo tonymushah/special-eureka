@@ -1,5 +1,4 @@
 <script lang="ts">
-	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import type { TopMangaStatsInner } from ".";
 	import NoteInner from "./note/NoteInner.svelte";
 	import StarIcon from "./note/StarIcon.svelte";
