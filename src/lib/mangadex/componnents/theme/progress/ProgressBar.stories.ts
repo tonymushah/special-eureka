@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/theme/progress-bar",
+	title: "MangaDex/theme/ProgressBar",
 	component: ProgressBar,
 	tags: ["autodocs"]
 } satisfies Meta<ProgressBar>;

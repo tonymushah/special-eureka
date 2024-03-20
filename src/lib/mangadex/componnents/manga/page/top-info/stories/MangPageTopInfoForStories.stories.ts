@@ -15,7 +15,7 @@ const altTitle = manga_altTitle_to_lang_map(attributes.altTitles);
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/TopInfo/WithInteractivity",
+	title: "MangaDex/manga/page/top-info/TopInfo/WithInteractivity",
 	component: TopInfo,
 	tags: ["autodocs"]
 } satisfies Meta<TopInfo>;
