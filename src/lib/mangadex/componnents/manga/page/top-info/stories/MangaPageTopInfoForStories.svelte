@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-	import type { ReadingStatusEventDetail } from "../buttons/readingStatus";
+	import type { MangaStatus, ReadingStatus } from "@mangadex/gql/graphql";
+	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
+	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { writable, type Readable, type Writable } from "svelte/store";
 	import type { Author } from "..";
-	import type { Tag } from "@mangadex/utils/types/Tag";
-	import type { MangaStatus, ReadingStatus } from "@mangadex/gql/graphql";
 	import MangaPageTopInfo from "../MangaPageTopInfo.svelte";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { download } from "@svelteuidev/composables";
+	import type { TopMangaStatistics } from "../stats";
 
 	export let id: string;
 	export let title: string;
@@ -19,6 +17,7 @@
 	export let status: MangaStatus;
 	export let year: number | undefined = undefined;
 	export let description: string | undefined = undefined;
+	export let stats: TopMangaStatistics | undefined = undefined;
 	let reading_status: Writable<ReadingStatus | undefined> = writable<ReadingStatus | undefined>(
 		undefined
 	);
@@ -42,6 +41,7 @@
 	{isFollowing}
 	{rating}
 	{downloadState}
+	{stats}
 	on:readingStatus={({ detail }) => {
 		reading_status.set(detail.readingStatus);
 		isFollowing.set(detail.isFollowing);

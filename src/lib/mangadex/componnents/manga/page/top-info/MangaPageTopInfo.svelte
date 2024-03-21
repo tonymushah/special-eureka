@@ -7,7 +7,8 @@
 		setTopMangaIsFollowingContextStore,
 		setTopMangaTitleContextStore,
 		setTopMangaRatingContextStore,
-		setTopMangaDownloadContextStore
+		setTopMangaDownloadContextStore,
+		setTopMangaIdContextStore
 	} from "./context";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import type { MangaStatus, ReadingState, ReadingStatus } from "@mangadex/gql/graphql";
@@ -22,6 +23,8 @@
 	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
 	import MangaStatusComp from "./MangaStatus.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import type { TopMangaStatistics } from "./stats";
+	import TopMangaStats from "./TopMangaStats.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -48,6 +51,9 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 			id: string;
 		};
+		comments: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	export let id: string;
@@ -70,7 +76,9 @@
 	export let downloadState: Readable<ChapterDownloadState> = writable(
 		ChapterDownloadState.NotDownloaded
 	);
+	export let stats: TopMangaStatistics | undefined = undefined;
 
+	setTopMangaIdContextStore(id);
 	setTopMangaTitleContextStore(title);
 	setTopCoverContextStore(coverImage);
 	setTopMangaReadingStatusContextStore(reading_status);
@@ -128,7 +136,16 @@
 				/>
 				<MangaStatusComp bind:status bind:year />
 			</div>
-			<div></div>
+			{#if stats != undefined}
+				<div class="stats">
+					<TopMangaStats
+						bind:stats
+						on:commentClick={({ detail }) => {
+							dispatch("comments", detail);
+						}}
+					/>
+				</div>
+			{/if}
 		</div>
 	</div>
 </TopInfoLayout>

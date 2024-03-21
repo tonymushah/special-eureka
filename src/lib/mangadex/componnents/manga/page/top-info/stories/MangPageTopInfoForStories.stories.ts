@@ -9,7 +9,7 @@ import { id, attributes, author } from "./data/b4c93297-b32f-4f90-b619-55456a38b
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 import { writable } from "svelte/store";
-import { MangaStatus, ReadingStatus } from "@mangadex/gql/graphql";
+import { MangaStatus } from "@mangadex/gql/graphql";
 
 const altTitle = manga_altTitle_to_lang_map(attributes.altTitles);
 
@@ -39,7 +39,24 @@ const args = {
 		name: t.attributes.name.en
 	})),
 	status: MangaStatus.Ongoing,
-	description: attributes.description.en
+	description: attributes.description.en,
+	stats: {
+		average: 7.64,
+		inner: {
+			10: 80,
+			9: 28,
+			8: 40,
+			7: 28,
+			6: 11,
+			5: 11,
+			4: 10,
+			3: 4,
+			2: 6,
+			1: 20
+		},
+		follows: 145121,
+		comments: 13
+	}
 };
 
 type Story = StoryObj<typeof meta>;
