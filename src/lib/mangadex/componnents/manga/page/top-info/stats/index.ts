@@ -11,14 +11,9 @@ export type TopMangaStatsInner = {
 	10: number;
 };
 
-export type TopMangaCommentsInfo = {
-	value: number;
-	threadId: string;
-};
-
 export type TopMangaStatistics = {
 	average: number;
 	inner: TopMangaStatsInner;
 	follows: number;
-	comments: TopMangaCommentsInfo;
+	comments?: number;
 };
