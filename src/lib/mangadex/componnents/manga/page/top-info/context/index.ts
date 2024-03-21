@@ -11,3 +11,5 @@ export * from "./title";
 export * from "./stars";
 
 export * from "./downloadState";
+
+export * from "./mangaId";
