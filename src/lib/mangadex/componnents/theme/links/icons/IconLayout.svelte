@@ -4,7 +4,7 @@
 
 <style lang="scss">
 	div {
-		width: 12px;
-		height: 12px;
+		width: 25px;
+		height: 25px;
 	}
 </style>

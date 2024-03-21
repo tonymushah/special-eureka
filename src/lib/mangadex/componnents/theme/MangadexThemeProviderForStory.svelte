@@ -4,6 +4,8 @@
 	const theme = custom;
 	import { mockWindows, clearMocks, mockIPC } from "@tauri-apps/api/mocks";
 	import { onMount } from "svelte";
+	import { setContextClient } from "@urql/svelte";
+	import { client } from "@mangadex/gql/urql";
 	/*
     onMount(() => {
 		mockWindows("main");
@@ -20,6 +22,7 @@
 		return clearMocks;
 	});
     */
+	setContextClient(client);
 </script>
 
 <MangadexThemeProviderBase {theme}>

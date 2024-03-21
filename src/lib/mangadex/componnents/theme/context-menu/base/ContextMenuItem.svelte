@@ -16,7 +16,7 @@
 <div
 	role="button"
 	on:click={(e) => {
-		if (isDisabled) {
+		if (!isDisabled) {
 			dispatch("click", e);
 		}
 	}}

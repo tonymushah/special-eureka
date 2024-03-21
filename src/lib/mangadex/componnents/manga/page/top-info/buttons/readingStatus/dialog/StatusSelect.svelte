@@ -1,0 +1,73 @@
+<script lang="ts">
+	import { ReadingStatus } from "@mangadex/gql/graphql";
+	import getText from "@mangadex/utils/manga/readingStatus/getText.js";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import type { Writable } from "svelte/store";
+	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
+
+	let target: HTMLDivElement | undefined = undefined;
+	export let readingStatus: Writable<ReadingStatus | undefined>;
+	let isOpen: boolean = false;
+
+	$: status = getText($readingStatus) ?? "None";
+</script>
+
+<div class="outer-button" bind:this={target}>
+	<ButtonAccent
+		isBase
+		on:click={() => {
+			isOpen = !isOpen;
+		}}
+	>
+		<div class="inner-button">
+			<span>{status}</span>
+		</div>
+	</ButtonAccent>
+</div>
+
+<MenuKeyed
+	--menu-height={"10em"}
+	--menu-overflow={"scroll"}
+	bind:isOpen
+	bind:target
+	items={[
+		{
+			label: "None",
+			key: undefined
+		},
+		{
+			label: getText(ReadingStatus.Reading) ?? "",
+			key: ReadingStatus.Reading
+		},
+		{
+			label: getText(ReadingStatus.OnHold) ?? "",
+			key: ReadingStatus.OnHold
+		},
+		{
+			label: getText(ReadingStatus.Dropped) ?? "",
+			key: ReadingStatus.Dropped
+		},
+		{
+			label: getText(ReadingStatus.PlanToRead) ?? "",
+			key: ReadingStatus.PlanToRead
+		},
+		{
+			label: getText(ReadingStatus.Completed) ?? "",
+			key: ReadingStatus.Completed
+		},
+		{
+			label: getText(ReadingStatus.ReReading) ?? "",
+			key: ReadingStatus.ReReading
+		}
+	]}
+	on:onSelect={({ detail }) => {
+		const { value } = detail;
+		readingStatus.set(value);
+	}}
+/>
+
+<style lang="scss">
+	.inner-button {
+		width: 7em;
+	}
+</style>

@@ -1175,25 +1175,21 @@ export type HomeQueriesRecentlyUploadedArgs = {
   params?: ChapterListParams;
 };
 
-/** Flag to include future updates in the results. */
 export enum IncludeExternalUrl {
   Exclude = 'EXCLUDE',
   Include = 'INCLUDE'
 }
 
-/** Flag to include future updates in the results. */
 export enum IncludeFuturePages {
   Exclude = 'EXCLUDE',
   Include = 'INCLUDE'
 }
 
-/** Flag to include future updates in the results. */
 export enum IncludeFuturePublishAt {
   Exclude = 'EXCLUDE',
   Include = 'INCLUDE'
 }
 
-/** Flag to include future updates in the results. */
 export enum IncludeFutureUpdates {
   Exclude = 'EXCLUDE',
   Include = 'INCLUDE'

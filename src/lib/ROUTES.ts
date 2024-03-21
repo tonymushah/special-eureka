@@ -11,7 +11,55 @@
 const PAGES = {
   "/": `/`,
   "/mangadex": `/mangadex`,
-  "/mangadex-graphiql": `/mangadex-graphiql`
+  "/mangadex-graphiql": `/mangadex-graphiql`,
+  "/mangadex/author/[id]": (params: { id: (string | number) }) => {
+    return `/mangadex/author/${params.id}`
+  },
+  "/mangadex/chapter/[id]": (params: { id: (string | number) }) => {
+    return `/mangadex/chapter/${params.id}`
+  },
+  "/mangadex/group": `/mangadex/group`,
+  "/mangadex/group/[id]": (params: { id: (string | number) }) => {
+    return `/mangadex/group/${params.id}`
+  },
+  "/mangadex/group/[id]/titles": (params: { id: (string | number) }) => {
+    return `/mangadex/group/${params.id}/titles`
+  },
+  "/mangadex/group/[id]/uploads": (params: { id: (string | number) }) => {
+    return `/mangadex/group/${params.id}/uploads`
+  },
+  "/mangadex/group/new": `/mangadex/group/new`,
+  "/mangadex/list": `/mangadex/list`,
+  "/mangadex/list/[id]": (params: { id: (string | number) }) => {
+    return `/mangadex/list/${params.id}`
+  },
+  "/mangadex/list/new": `/mangadex/list/new`,
+  "/mangadex/login": `/mangadex/login`,
+  "/mangadex/settings": `/mangadex/settings`,
+  "/mangadex/title/[id]": (params: { id: (string | number) }) => {
+    return `/mangadex/title/${params.id}`
+  },
+  "/mangadex/title/[id]/covers": (params: { id: (string | number) }) => {
+    return `/mangadex/title/${params.id}/covers`
+  },
+  "/mangadex/title/[id]/related": (params: { id: (string | number) }) => {
+    return `/mangadex/title/${params.id}/related`
+  },
+  "/mangadex/titles/feed": `/mangadex/titles/feed`,
+  "/mangadex/upload": `/mangadex/upload`,
+  "/mangadex/user": `/mangadex/user`,
+  "/mangadex/user/[id]": (params: { id: (string | number) }) => {
+    return `/mangadex/user/${params.id}`
+  },
+  "/mangadex/user/[id]/lists": (params: { id: (string | number) }) => {
+    return `/mangadex/user/${params.id}/lists`
+  },
+  "/mangadex/user/[id]/uploads": (params: { id: (string | number) }) => {
+    return `/mangadex/user/${params.id}/uploads`
+  },
+  "/mangadex/user/me": `/mangadex/user/me`,
+  "/mangadex/user/me/lists": `/mangadex/user/me/lists`,
+  "/mangadex/user/me/uploads": `/mangadex/user/me/uploads`
 }
 
 /**
@@ -135,9 +183,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/mangadex': never, '/mangadex-graphiql': never }
+  PAGES: { '/': never, '/mangadex': never, '/mangadex-graphiql': never, '/mangadex/author/[id]': 'id', '/mangadex/chapter/[id]': 'id', '/mangadex/group': never, '/mangadex/group/[id]': 'id', '/mangadex/group/[id]/titles': 'id', '/mangadex/group/[id]/uploads': 'id', '/mangadex/group/new': never, '/mangadex/list': never, '/mangadex/list/[id]': 'id', '/mangadex/list/new': never, '/mangadex/login': never, '/mangadex/settings': never, '/mangadex/title/[id]': 'id', '/mangadex/title/[id]/covers': 'id', '/mangadex/title/[id]/related': 'id', '/mangadex/titles/feed': never, '/mangadex/upload': never, '/mangadex/user': never, '/mangadex/user/[id]': 'id', '/mangadex/user/[id]/lists': 'id', '/mangadex/user/[id]/uploads': 'id', '/mangadex/user/me': never, '/mangadex/user/me/lists': never, '/mangadex/user/me/uploads': never }
   SERVERS: Record<string, never>
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>
-  Params: Record<string, never>
+  Params: { id: never }
 }
