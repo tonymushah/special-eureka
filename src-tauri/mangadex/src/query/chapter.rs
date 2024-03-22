@@ -10,7 +10,7 @@ use uuid::Uuid;
 use crate::objects::{
     chapter::{lists::ChapterResults, pages::ChapterPages, Chapter},
     manga_chapter_group::{group_results, MangaChapterGroup},
-    ExtractReferenceExpansion,
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
 };
 
 use get_unique::GetUniqueChapterQuery;
@@ -29,6 +29,8 @@ impl ChapterQueries {
         #[graphql(default)] params: ChapterListParams,
         offline_params: Option<GetAllChapterParams>,
     ) -> Result<ChapterResults> {
+        let mut params = params;
+        params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         ChapterListQueries(params)
             .default(ctx, offline_params)
             .await
