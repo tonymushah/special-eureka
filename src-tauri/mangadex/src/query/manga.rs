@@ -39,7 +39,14 @@ pub struct MangaQueries;
 #[Object]
 impl MangaQueries {
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
-        MangaGetUniqueQueries(id).get(ctx).await
+        MangaGetUniqueQueries {
+            id,
+            includes: <MangaGetUniqueQueries as ExtractReferenceExpansionFromContext>::exctract(
+                ctx,
+            ),
+        }
+        .get(ctx)
+        .await
     }
     pub async fn list(
         &self,

@@ -92,11 +92,14 @@ impl MangaObject {
             }),
             MangaObject::WithoutRel(o) => Ok(MangaRelationships {
                 id: o.id,
-                relationships: MangaGetUniqueQueries(o.id)
-                    .get(ctx)
-                    .await?
-                    .get_relationships()
-                    .ok_or(Error::new("Empty Relationship table"))?,
+                relationships: MangaGetUniqueQueries {
+                    id: o.id,
+                    includes: <Self as ExtractReferenceExpansionFromContext>::exctract(ctx),
+                }
+                .get(ctx)
+                .await?
+                .get_relationships()
+                .ok_or(Error::new("Empty Relationship table"))?,
             }),
         }
     }

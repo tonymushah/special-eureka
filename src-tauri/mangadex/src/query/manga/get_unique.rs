@@ -14,24 +14,30 @@ use crate::{
     },
 };
 
-#[derive(Debug, Clone, Copy)]
-pub struct MangaGetUniqueQueries(pub Uuid);
+#[derive(Debug, Clone)]
+pub struct MangaGetUniqueQueries {
+    pub id: Uuid,
+    pub includes: Vec<ReferenceExpansionResource>,
+}
 
 impl From<Uuid> for MangaGetUniqueQueries {
     fn from(value: Uuid) -> Self {
-        Self(value)
+        Self {
+            id: value,
+            includes: Default::default(),
+        }
     }
 }
 
 impl From<MangaGetUniqueQueries> for Uuid {
     fn from(value: MangaGetUniqueQueries) -> Self {
-        value.0
+        value.id
     }
 }
 
 impl From<&MangaGetUniqueQueries> for Uuid {
     fn from(value: &MangaGetUniqueQueries) -> Self {
-        value.0
+        value.id
     }
 }
 
@@ -52,10 +58,13 @@ impl MangaGetUniqueQueries {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.manga().id(self.into()).get();
-        let mut includes = <Self as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        includes.dedup();
         Ok({
-            let data: Manga = req.includes(includes).send().await?.data.into();
+            let data: Manga = req
+                .includes(self.includes.clone())
+                .send()
+                .await?
+                .data
+                .into();
             let _ = watches.manga.send_online(data.clone());
             data
         })
