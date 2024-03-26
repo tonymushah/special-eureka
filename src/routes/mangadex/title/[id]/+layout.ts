@@ -1,6 +1,7 @@
 import { client } from "@mangadex/gql/urql";
 import type { LayoutLoad } from "./$types";
 import query from "./(layout)/query";
+import statsQuery from "./(layout)/statsQuery";
 import { error } from "@sveltejs/kit";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
@@ -8,6 +9,7 @@ import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_an
 import type { Tag } from "@mangadex/utils/types/Tag";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import { CoverImageQuality } from "@mangadex/gql/graphql";
+import { queryStore } from "@urql/svelte";
 
 export const load: LayoutLoad = async function ({ params }) {
     const { id } = params;
@@ -48,7 +50,14 @@ export const load: LayoutLoad = async function ({ params }) {
                         mode: CoverImageQuality.V512
                     }),
                     coverImageAlt: `${data.relationships.coverArt.id}/${data.relationships.coverArt.attributes.fileName}`
-                }
+                },
+                statsQueryStore: queryStore({
+                    client,
+                    query: statsQuery,
+                    variables: {
+                        id
+                    }
+                })
             }
         } else {
             error(404, {
