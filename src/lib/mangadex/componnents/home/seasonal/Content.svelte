@@ -3,6 +3,7 @@
 	import { CoverImageQuality, type SeasonalQuery } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
 	import type { Readable } from "svelte/store";
@@ -70,7 +71,14 @@
 	<swiper-container bind:this={swiper_container} init="false">
 		{#each seasonal as { id, title, coverImage, coverImageAlt } (id)}
 			<swiper-slide>
-				<MangaElementBase3 {title} {coverImage} {coverImageAlt} />
+				<MangaElementBase3
+					{title}
+					{coverImage}
+					{coverImageAlt}
+					on:click={() => {
+						openTitle(id);
+					}}
+				/>
 			</swiper-slide>
 		{/each}
 	</swiper-container>

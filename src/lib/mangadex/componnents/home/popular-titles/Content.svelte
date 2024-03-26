@@ -5,6 +5,7 @@
 	import type { SwiperContainer } from "swiper/element";
 	import MangaPopularElement from "../../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
+	import openTitle from "@mangadex/utils/links/title/[id]";
 	let swiper_container: SwiperContainer | undefined = undefined;
 	let current_page_: number | undefined = undefined;
 	$: {
@@ -47,6 +48,9 @@
 					{title}
 					{contentRating}
 					{authors}
+					on:click={() => {
+						openTitle(id);
+					}}
 					{description}
 				/>
 			</swiper-slide>

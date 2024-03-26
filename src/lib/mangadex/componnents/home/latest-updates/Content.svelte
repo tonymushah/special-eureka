@@ -3,6 +3,7 @@
 	import { CoverImageQuality, type RecentlyAddedHomeQuery } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { getContextClient } from "@urql/svelte";
 	const client = getContextClient();
@@ -71,6 +72,9 @@
 					{mangaTitle}
 					{coverImageAlt}
 					{chapterTitle}
+					on:mangaClick={() => {
+						openTitle(mangaId);
+					}}
 				/>
 			</div>
 		{/each}
@@ -90,6 +94,9 @@
 					{mangaTitle}
 					{coverImageAlt}
 					{chapterTitle}
+					on:mangaClick={() => {
+						openTitle(mangaId);
+					}}
 				/>
 			</div>
 		{/each}

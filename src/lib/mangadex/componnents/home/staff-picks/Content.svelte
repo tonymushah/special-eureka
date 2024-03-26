@@ -3,6 +3,7 @@
 	import type { StaffPicksTitle } from ".";
 	import type { SwiperContainer } from "swiper/element";
 	import { onMount } from "svelte";
+	import openTitle from "@mangadex/utils/links/title/[id]";
 
 	export let mangas: StaffPicksTitle[];
 	let swiper_container: SwiperContainer | undefined = undefined;
@@ -48,6 +49,9 @@
 					{coverImageAlt}
 					{title}
 					{description}
+					on:moreInfoClick={() => {
+						openTitle(id);
+					}}
 				/>
 			</swiper-slide>
 		{/each}

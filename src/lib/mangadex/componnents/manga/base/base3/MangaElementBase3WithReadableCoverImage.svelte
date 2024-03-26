@@ -5,7 +5,7 @@
 	import Image from "./Image.svelte";
 	import type { Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	createEventDispatcher<{
+	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
@@ -16,7 +16,13 @@
 	$: cover = $coverImage;
 </script>
 
-<Layout --element-w="10em" --element-h="15em">
+<Layout
+	--element-w="10em"
+	--element-h="15em"
+	on:click={({ detail }) => {
+		dispatch("click", detail);
+	}}
+>
 	{#if cover}
 		<Image bind:coverImage={cover} {coverImageAlt} />
 	{:else}
