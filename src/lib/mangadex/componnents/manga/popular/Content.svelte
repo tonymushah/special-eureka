@@ -86,6 +86,14 @@
 			overflow: hidden;
 			-webkit-box-orient: vertical;
 		}
+		transition: color 300ms ease-in-out;
+	}
+	div.title:hover {
+		color: var(--primary);
+		cursor: pointer;
+	}
+	div.title:active {
+		color: var(--primary-l1);
 	}
 	.content {
 		.content-top {
