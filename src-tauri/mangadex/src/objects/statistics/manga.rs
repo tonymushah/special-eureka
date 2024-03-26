@@ -13,6 +13,7 @@ use super::StatisticsComments;
 #[derive(Debug, Clone, Copy, SimpleObject)]
 pub struct MangaStatistics {
     pub id: Uuid,
+    pub follow_count: u32,
     pub comments: Option<StatisticsComments>,
     pub rating: MangaRating,
 }
@@ -21,6 +22,7 @@ impl From<(Uuid, Statistics)> for MangaStatistics {
     fn from((id, value): (Uuid, Statistics)) -> Self {
         Self {
             id,
+            follow_count: value.follows,
             comments: value.comments.map(Into::into),
             rating: value.rating.into(),
         }
