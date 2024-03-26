@@ -1,7 +1,8 @@
+import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
 
 export default function openTitleRelated(id: string) {
-    route("/mangadex/title/[id]/related", {
+    goto(route("/mangadex/title/[id]/related", {
         id
-    });
+    }));
 }
