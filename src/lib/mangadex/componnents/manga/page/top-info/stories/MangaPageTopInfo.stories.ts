@@ -41,7 +41,6 @@ const args = {
 		name: t.attributes.name.en
 	})),
 	status: MangaStatus.Ongoing,
-	description: attributes.description.en,
 	reading_status: readingStatus,
 	isFollowing
 };
