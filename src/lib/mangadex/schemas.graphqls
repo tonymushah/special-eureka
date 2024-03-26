@@ -1418,6 +1418,7 @@ enum MangaState {
 
 type MangaStatistics {
 	id: UUID!
+	followCount: Int!
 	comments: StatisticsComments
 	rating: MangaRating!
 }

@@ -1763,6 +1763,7 @@ export enum MangaState {
 export type MangaStatistics = {
   __typename?: 'MangaStatistics';
   comments?: Maybe<StatisticsComments>;
+  followCount: Scalars['Int']['output'];
   id: Scalars['UUID']['output'];
   rating: MangaRating;
 };
