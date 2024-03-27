@@ -47,7 +47,7 @@
 	year={layoutData.year ?? undefined}
 	stats={$stats}
 	on:comments={() => {
-		if ($stats) {
+		if ($stats != undefined) {
 			open($stats?.threadUrl);
 		}
 	}}
