@@ -56,7 +56,15 @@
 />
 
 {#if description}
-	<Markdown bind:source={description} />
+	<div class="description">
+		<Markdown bind:source={description} />
+	</div>
 {/if}
 
 <slot />
+
+<style lang="scss">
+	div.description {
+		margin: 0em 1em;
+	}
+</style>
