@@ -24,9 +24,10 @@ impl IsFollowingSubscriptions {
         let is_following_sub = watches.is_following.subscribe();
         Ok(stream! {
             loop {
-                if *is_initial_loading.read().await {
-                    let mut write = is_initial_loading.write().await;
-                    *write = false;
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
                     let borrow = {
                         is_following_sub.borrow().as_ref().copied()
                     };
@@ -35,7 +36,7 @@ impl IsFollowingSubscriptions {
                             yield data.attributes.data
                         }
                     }
-                } else if !*should_end.read().await {
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
                     if let Ok(has_changed) = is_following_sub.has_changed() {
                         if has_changed {
                             let borrow = {
@@ -69,9 +70,10 @@ impl IsFollowingSubscriptions {
         let is_following_sub = watches.is_following.subscribe();
         Ok(stream! {
             loop {
-                if *is_initial_loading.read().await {
-                    let mut write = is_initial_loading.write().await;
-                    *write = false;
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
                     let borrow = {
                         is_following_sub.borrow().as_ref().copied()
                     };
@@ -80,7 +82,7 @@ impl IsFollowingSubscriptions {
                             yield data.attributes.data
                         }
                     }
-                } else if !*should_end.read().await {
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
                     if let Ok(has_changed) = is_following_sub.has_changed() {
                         if has_changed {
                             let borrow = {
@@ -114,9 +116,10 @@ impl IsFollowingSubscriptions {
         let is_following_sub = watches.is_following.subscribe();
         Ok(stream! {
             loop {
-                if *is_initial_loading.read().await {
-                    let mut write = is_initial_loading.write().await;
-                    *write = false;
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
                     let borrow = {
                         is_following_sub.borrow().as_ref().copied()
                     };
@@ -125,7 +128,7 @@ impl IsFollowingSubscriptions {
                             yield data.attributes.data
                         }
                     }
-                } else if !*should_end.read().await {
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
                     if let Ok(has_changed) = is_following_sub.has_changed() {
                         if has_changed {
                             let borrow = {
@@ -159,9 +162,10 @@ impl IsFollowingSubscriptions {
         let is_following_sub = watches.is_following.subscribe();
         Ok(stream! {
             loop {
-                if *is_initial_loading.read().await {
-                    let mut write = is_initial_loading.write().await;
-                    *write = false;
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
                     let borrow = {
                         is_following_sub.borrow().as_ref().copied()
                     };
@@ -170,7 +174,7 @@ impl IsFollowingSubscriptions {
                             yield data.attributes.data
                         }
                     }
-                } else if !*should_end.read().await {
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
                     if let Ok(has_changed) = is_following_sub.has_changed() {
                         if has_changed {
                             let borrow = {
