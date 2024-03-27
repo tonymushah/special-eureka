@@ -1,6 +1,6 @@
 use std::{
     env::temp_dir,
-    fs::File,
+    fs::{create_dir_all, File},
     io::{BufReader, BufWriter, Read, Write},
     path::PathBuf,
 };
@@ -51,7 +51,9 @@ impl CoverImageQuery {
             .unwrap_or(self.filename.clone())
     }
     fn get_cover_temp_dir() -> PathBuf {
-        temp_dir().join("special-eureka").join("covers")
+        let path = temp_dir().join("special-eureka").join("covers");
+        let _ = create_dir_all(&path);
+        path
     }
     fn get_cover_temp_image_path(&self) -> PathBuf {
         Self::get_cover_temp_dir().join(self.get_online_filename())
