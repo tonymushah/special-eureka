@@ -11,6 +11,8 @@ import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import { CoverImageQuality } from "@mangadex/gql/graphql";
 import { queryStore } from "@urql/svelte";
 
+export const ssr = false;
+
 export const load: LayoutLoad = async function ({ params }) {
     const { id } = params;
     if (id != null) {
