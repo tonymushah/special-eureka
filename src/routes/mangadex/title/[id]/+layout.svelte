@@ -4,6 +4,7 @@
 	import { derived } from "svelte/store";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
 	import { open } from "@tauri-apps/api/shell";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -33,6 +34,7 @@
 		}
 	});
 	$: layoutData = data.layoutData!;
+	$: description = layoutData.description;
 </script>
 
 <MangaPageTopInfo
@@ -52,5 +54,9 @@
 		}
 	}}
 />
+
+{#if description}
+	<Markdown bind:source={description} />
+{/if}
 
 <slot />

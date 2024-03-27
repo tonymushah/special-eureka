@@ -51,7 +51,8 @@ export const load: LayoutLoad = async function ({ params }) {
                         client,
                         mode: CoverImageQuality.V512
                     }),
-                    coverImageAlt: `${data.relationships.coverArt.id}/${data.relationships.coverArt.attributes.fileName}`
+                    coverImageAlt: `${data.relationships.coverArt.id}/${data.relationships.coverArt.attributes.fileName}`,
+                    description: get_value_from_title_and_random_if_undefined(data.attributes.description, "en")
                 },
                 statsQueryStore: queryStore({
                     client,
