@@ -7,6 +7,7 @@
 	export let inner: TopMangaStatsInner;
 	let target: HTMLButtonElement | undefined = undefined;
 	let isOpen = false;
+	$: _average = average.toFixed(2);
 </script>
 
 <button
@@ -17,7 +18,7 @@
 	bind:this={target}
 >
 	<StarIcon />
-	<span>{average}</span>
+	<span>{_average}</span>
 </button>
 
 <NoteInner bind:target bind:inner bind:isOpen />
