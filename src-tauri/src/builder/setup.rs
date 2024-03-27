@@ -6,11 +6,14 @@ use window_vibrancy::apply_blur;
 #[cfg(target_os = "macos")]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
+use crate::states::last_focused_window::LastFocusedWindow;
+
 type SetupResult = Result<(), Box<dyn std::error::Error>>;
 
-pub fn setup<R: Runtime>(_app: &mut App<R>) -> SetupResult {
+pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
+    app.manage(LastFocusedWindow::<R>::default());
     #[cfg(any(windows, target_os = "macos"))]
-    if let Some(splashscreen) = _app.get_window("splashscreen") {
+    if let Some(splashscreen) = app.get_window("splashscreen") {
         set_shadow(&splashscreen, true).unwrap();
         #[cfg(target_os = "macos")]
         apply_vibrancy(&splashscreen, NSVisualEffectMaterial::HudWindow, None, None)
