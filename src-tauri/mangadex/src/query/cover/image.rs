@@ -64,7 +64,7 @@ impl CoverImageQuery {
         )?))
     }
     fn get_temp_buf_reader(&self) -> Result<BufReader<File>> {
-        Ok(BufReader::new(File::create(
+        Ok(BufReader::new(File::open(
             self.get_cover_temp_image_path(),
         )?))
     }
