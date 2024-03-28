@@ -9,9 +9,10 @@ import type { Tag } from "@mangadex/utils/types/Tag";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import { CoverImageQuality } from "@mangadex/gql/graphql";
 import { queryStore } from "@urql/svelte";
+import getClient from "@mangadex/gql/urql/getClient";
 
 export const load: LayoutLoad = async function ({ params }) {
-    const { client } = await import("@mangadex/gql/urql");
+    const client = await getClient();
     const { id } = params;
     if (id != null) {
         const queryRes = await client.query(query, {
