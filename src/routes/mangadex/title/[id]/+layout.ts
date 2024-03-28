@@ -1,4 +1,3 @@
-import { client } from "@mangadex/gql/urql";
 import type { LayoutLoad } from "./$types";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
@@ -11,9 +10,8 @@ import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import { CoverImageQuality } from "@mangadex/gql/graphql";
 import { queryStore } from "@urql/svelte";
 
-export const ssr = false;
-
 export const load: LayoutLoad = async function ({ params }) {
+    const { client } = await import("@mangadex/gql/urql");
     const { id } = params;
     if (id != null) {
         const queryRes = await client.query(query, {
