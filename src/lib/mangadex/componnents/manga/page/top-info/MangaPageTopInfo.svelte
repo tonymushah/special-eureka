@@ -65,7 +65,6 @@
 	export let tags: Tag[];
 	export let status: MangaStatus;
 	export let year: number | undefined = undefined;
-	export let description: string | undefined = undefined;
 	export let reading_status: Readable<ReadingStatus | undefined> = writable<
 		ReadingStatus | undefined
 	>(undefined);
@@ -149,12 +148,6 @@
 		</div>
 	</div>
 </TopInfoLayout>
-
-{#if description != undefined}
-	<div class="description">
-		<Markdown bind:source={description} />
-	</div>
-{/if}
 
 <style lang="scss">
 	div.content {

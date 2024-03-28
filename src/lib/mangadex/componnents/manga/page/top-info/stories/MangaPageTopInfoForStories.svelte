@@ -16,7 +16,6 @@
 	export let tags: Tag[];
 	export let status: MangaStatus;
 	export let year: number | undefined = undefined;
-	export let description: string | undefined = undefined;
 	export let stats: TopMangaStatistics | undefined = undefined;
 	let reading_status: Writable<ReadingStatus | undefined> = writable<ReadingStatus | undefined>(
 		undefined
@@ -36,7 +35,6 @@
 	{tags}
 	{status}
 	{year}
-	{description}
 	{reading_status}
 	{isFollowing}
 	{rating}

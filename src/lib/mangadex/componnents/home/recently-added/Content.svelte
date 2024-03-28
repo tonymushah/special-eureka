@@ -7,6 +7,7 @@
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import MangaElementBase4 from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
+	import openTitle from "@mangadex/utils/links/title/[id]";
 
 	export let data: RecentlyAddedHomeQueryQuery;
 	const client = getContextClient();
@@ -70,7 +71,14 @@
 	<swiper-container bind:this={swiper_container} init="false">
 		{#each titles as { id, title, coverImage, coverImageAlt } (id)}
 			<swiper-slide>
-				<MangaElementBase4 {title} {coverImage} {coverImageAlt} />
+				<MangaElementBase4
+					on:click={() => {
+						openTitle(id);
+					}}
+					{title}
+					{coverImage}
+					{coverImageAlt}
+				/>
 			</swiper-slide>
 		{/each}
 	</swiper-container>

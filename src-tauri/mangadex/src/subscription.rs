@@ -1,8 +1,8 @@
 use std::sync::Arc;
+use std::sync::RwLock;
 
 use async_graphql::{Context, Result, Subscription};
 use tauri::{EventHandler, Window, WindowEvent};
-use tokio::sync::RwLock;
 use tokio::time::{sleep, Duration};
 use tokio_stream::Stream;
 use uuid::Uuid;
@@ -358,23 +358,21 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
     let window = get_window_from_async_graphql::<R>(ctx)?;
     window.on_window_event(move |e| {
         let should_end_un_n = should_end_un_n.clone();
-        tauri::async_runtime::block_on(async move {
-            if let WindowEvent::Destroyed = e {
-                let mut write = should_end_un_n.write().await;
+        if let WindowEvent::Destroyed = e {
+            if let Ok(mut write) = should_end_un_n.write() {
                 *write = true;
-            }
-        });
+            };
+        }
     });
     let unlisten = window.listen("sub_end", move |e| {
         let should_end_un = should_end_un.clone();
-        tauri::async_runtime::block_on(async move {
-            if let Some(payload) = e.payload() {
-                let mut write = should_end_un.write().await;
+        if let Some(payload) = e.payload() {
+            if let Ok(mut write) = should_end_un.write() {
                 if let Ok(id) = Uuid::parse_str(payload) {
                     *write = id == sub_id;
                 }
-            }
-        });
+            };
+        }
     });
     Ok((
         watches,

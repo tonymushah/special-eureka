@@ -39,7 +39,6 @@ const args = {
 		name: t.attributes.name.en
 	})),
 	status: MangaStatus.Ongoing,
-	description: attributes.description.en,
 	stats: {
 		average: 7.64,
 		inner: {

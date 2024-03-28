@@ -24,9 +24,10 @@ impl MangaReadingStatusSubscriptions {
         let manga_reading_state_sub = watches.manga_reading_state.subscribe();
         Ok(stream! {
             loop {
-                if *is_initial_loading.read().await {
-                    let mut write = is_initial_loading.write().await;
-                    *write = false;
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
                     let borrow = {
                         manga_reading_state_sub.borrow().as_ref().copied()
                     };
@@ -35,7 +36,7 @@ impl MangaReadingStatusSubscriptions {
                             yield data.attributes
                         }
                     }
-                } else if !*should_end.read().await {
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
                     if let Ok(has_changed) = manga_reading_state_sub.has_changed() {
                         if has_changed {
                             let borrow = {

@@ -23,9 +23,10 @@ impl RatingSubscriptions {
         let rating_sub = watches.rating.subscribe();
         Ok(stream! {
             loop {
-                if *is_initial_loading.read().await {
-                    let mut write = is_initial_loading.write().await;
-                    *write = false;
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
                     let borrow = {
                         rating_sub.borrow().as_ref().copied()
                     };
@@ -34,7 +35,7 @@ impl RatingSubscriptions {
                             yield data.attributes
                         }
                     }
-                }else if !*should_end.read().await {
+                }else if !should_end.read().map(|read| *read).unwrap_or(true) {
                     if let Ok(has_changed) = rating_sub.has_changed() {
                         if has_changed {
                             let borrow = {

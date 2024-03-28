@@ -25,7 +25,8 @@
 <style lang="scss">
 	.authors {
 		display: flex;
-		align-items: center;
+		align-items: start;
 		gap: 5px;
+		flex-wrap: wrap;
 	}
 </style>
