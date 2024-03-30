@@ -26,11 +26,9 @@
 	<div class="inner">
 		{#each items as { id, name } (id)}
 			<ButtonBase
-				with_active
 				with_hover
 				--button-color="var(--accent-l2)"
 				--button-hover="var(--primary)"
-				--button-active="var(--primary-l1)"
 				on:click={({ detail }) => {
 					dispatch("click", {
 						...detail,
@@ -39,20 +37,26 @@
 					});
 				}}
 			>
-				{name}
+				<h4>
+					{name}
+				</h4>
 			</ButtonBase>
 		{/each}
 	</div>
 </div>
 
 <style lang="scss">
+	h4 {
+		margin: 0px;
+		padding: 0px;
+	}
 	.outer {
 		display: flex;
-		flex-direction: row;
-	}
-	.inner {
-		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		.inner {
+			display: flex;
+			flex-direction: row;
+			gap: 5px;
+		}
 	}
 </style>
