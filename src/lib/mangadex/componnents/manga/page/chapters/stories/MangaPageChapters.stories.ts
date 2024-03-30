@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/Chapters",
+	title: "MangaDex/manga/page/chapters/Chapters",
 	component: MangaPageChapters,
 	tags: ["autodocs"]
 } satisfies Meta<MangaPageChapters>;
