@@ -96,7 +96,7 @@
 			width: var(--cover-w);
 			height: var(--cover-h);
 			border-radius: 0.25em;
-			object-fit: cover;
+			image-rendering: optimizeSpeed;
 		}
 	}
 	/*
