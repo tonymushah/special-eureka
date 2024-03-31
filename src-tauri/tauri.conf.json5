@@ -8,8 +8,7 @@
         "withGlobalTauri": false
     },
     "package": {
-        "productName": "Special-Eureka",
-        "version": "0.2.0"
+        "productName": "Special-Eureka"
     },
     "tauri": {
         "allowlist": {
