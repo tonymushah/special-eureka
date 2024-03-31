@@ -26,7 +26,7 @@
     },
     "rust-analyzer.showUnlinkedFileNotification": false,
     "evenBetterToml.schema.associations": {
-        "Tauri.toml" : "../node_modules/@tauri-apps/cli/schema.json"
+        "Tauri.toml": "../node_modules/@tauri-apps/cli/schema.json"
     },
     "files.exclude": {
         "**/.git": true,
@@ -37,6 +37,16 @@
         "**/Thumbs.db": true,
         "src-tauri/target": true,
         "src-tauri/data": true
+    },
+    "[jsonc]": {
+        "editor.quickSuggestions": {
+            "strings": true
+        },
+        "editor.formatOnSave": true,
+        "editor.suggest.insertMode": "replace"
+    },
+    "files.associations": {
+        "*.json5": "jsonc"
     },
     "explorerExclude.backup": {}
 }
