@@ -15,6 +15,7 @@
 	}}
 	--button-color="var(--accent-l2)"
 	--button-hover="var(--primary)"
+	with_hover
 >
 	<div>
 		<Favicon icon={$icon} alt={href} />
