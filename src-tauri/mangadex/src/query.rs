@@ -33,7 +33,7 @@ use self::{
     infrastructure::InfrastructureQueries, legacy::LegacyQueries, manga::MangaQueries,
     oauth::OauthQueries, offline_app_state::OfflineAppStateQueries, rating::RatingQueries,
     read_marker::ReadMarkerQueries, report::ReportQueries, statistics::StatisticsQueries,
-    tag::TagQueries, upload::UploadQueries, user::UserQueries,
+    tag::TagQueries, upload::UploadQueries, user::UserQueries, utils::UtilsQuery,
 };
 
 pub struct Query;
@@ -102,5 +102,8 @@ impl Query {
     }
     pub async fn download_state(&self) -> DownloadStateQueries {
         DownloadStateQueries
+    }
+    pub async fn utils(&self) -> UtilsQuery {
+        UtilsQuery
     }
 }
