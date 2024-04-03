@@ -8,7 +8,7 @@
 
 <div class="alt-title">
 	<FlagIcon bind:lang={locale} />
-	<h5>{title}</h5>
+	<h4>{title}</h4>
 </div>
 
 <style lang="scss">
@@ -17,8 +17,9 @@
 		flex-direction: row;
 		gap: 5px;
 		align-items: center;
-		h5 {
+		h4 {
 			margin: 0px;
+			font-weight: 500;
 		}
 	}
 </style>
