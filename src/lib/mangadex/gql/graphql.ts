@@ -2739,11 +2739,23 @@ export type UserSortOrder =
 export type UtilsQuery = {
   __typename?: 'UtilsQuery';
   favicon: Scalars['Bytes']['output'];
+  languageToStr: Scalars['String']['output'];
+  strToLanguage: Language;
 };
 
 
 export type UtilsQueryFaviconArgs = {
   url: Scalars['Url']['input'];
+};
+
+
+export type UtilsQueryLanguageToStrArgs = {
+  language: Language;
+};
+
+
+export type UtilsQueryStrToLanguageArgs = {
+  input: Scalars['String']['input'];
 };
 
 export type VolumeAggregate = {
