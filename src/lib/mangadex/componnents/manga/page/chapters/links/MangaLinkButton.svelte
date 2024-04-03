@@ -29,6 +29,5 @@
 		justify-content: center;
 		gap: 5px;
 		margin: 2px;
-		font-weight: 700;
 	}
 </style>
