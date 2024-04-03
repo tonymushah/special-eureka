@@ -33,6 +33,7 @@ tokio-stream = { version = "0" }
 regex = "1"
 bytes = "1"
 async-stream = "0"
+favicon-picker = "1.0.0"
 
 [dependencies.mangadex-desktop-api2]
 version = "0.6.0-alpha.5"
