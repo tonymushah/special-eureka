@@ -2137,6 +2137,8 @@ scalar Username
 
 type UtilsQuery {
 	favicon(url: Url!): Bytes!
+	strToLanguage(input: String!): Language!
+	languageToStr(language: Language!): String!
 }
 
 type VolumeAggregate {
