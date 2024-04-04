@@ -13,7 +13,7 @@ dependencies:
     version: 5.0.20
   '@fontsource/poppins':
     specifier: ^5.0.8
-    version: 5.0.12
+    version: 5.0.13
   '@graphiql/toolkit':
     specifier: ^0.9.1
     version: 0.9.1(graphql@16.8.1)
@@ -2171,8 +2171,8 @@ packages:
     resolution: {integrity: sha512-18pRxL/jA7HFT+bMsFsDHFPTJ2lTxMK3eMQt5cruQ9/RWFqci2Pp0R4iQz6qr09nMslfJudEsXt06LX2AuQ34Q==}
     dev: false
 
-  /@fontsource/poppins@5.0.12:
-    resolution: {integrity: sha512-0qzBxtIJLh82iMJ9pCXKYwGs1zyS+jyUmwVJ59+JdYnEaFVkDsxVOk9yDWfVOs14ALUneodU2m5YSGma6dCYCw==}
+  /@fontsource/poppins@5.0.13:
+    resolution: {integrity: sha512-8G9odFoxH43oZpvq43fpGucm8iHm6iatu0M1LIshb+tx3/y6YBXenVED7CI4resvPz6hyDu8a2vHSh9vrpe+wQ==}
     dev: false
 
   /@graphiql/react@0.20.3(@codemirror/language@6.0.0)(@types/react-dom@18.2.21)(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
