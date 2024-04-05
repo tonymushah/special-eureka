@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import type { AltTitleItem } from "./alt-titles/MangaAltTitles.svelte";
-	import type { LinkItem } from "./links/MangaLinksBase.svelte";
+	import type { LinkItem } from "./info/links/MangaLinksBase.svelte";
 	import type { TitlePButtonItem } from "./title-buttons/TitlePButton.svelte";
 
 	export type IdKeyedItem<T> = {
@@ -16,7 +16,7 @@
 
 <script lang="ts" generics="T">
 	import { createEventDispatcher } from "svelte";
-	import MangaLinksBase from "./links/MangaLinksBase.svelte";
+	import MangaLinksBase from "./info/links/MangaLinksBase.svelte";
 	import TitlePButton from "./title-buttons/TitlePButton.svelte";
 	import MangaAltTitles from "./alt-titles/MangaAltTitles.svelte";
 	const dispatch = createEventDispatcher<{
