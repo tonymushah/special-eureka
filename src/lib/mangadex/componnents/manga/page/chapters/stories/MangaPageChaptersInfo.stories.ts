@@ -15,7 +15,7 @@ enum IdTitleKey {
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/chapters/Chapters",
+	title: "MangaDex/manga/page/chapters/ChaptersInfo",
 	component: MangaPageChapters,
 	tags: ["autodocs"]
 } satisfies Meta<MangaPageChapters<IdTitleKey>>;
