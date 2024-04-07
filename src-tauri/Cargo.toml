@@ -1,7 +1,7 @@
 [package]
 name = "special-eureka"
-version = "0.2.0"
-description = "a mangadex desktop app build with tauri"
+version = "0.2.0-alpha.1"
+description = "a manga reader desktop app build with tauri"
 authors = ["tonymushah"]
 license = ""
 repository = "https://github.com/tonymushah/special-eureka"
