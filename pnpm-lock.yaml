@@ -55,7 +55,7 @@ dependencies:
     version: 9.0.8
   '@urql/svelte':
     specifier: ^4.0.4
-    version: 4.1.0(graphql@16.8.1)(svelte@4.2.12)
+    version: 4.1.1(graphql@16.8.1)(svelte@4.2.12)
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
@@ -228,6 +228,17 @@ packages:
 
   /@0no-co/graphql.web@1.0.4(graphql@16.8.1):
     resolution: {integrity: sha512-W3ezhHGfO0MS1PtGloaTpg0PbaT8aZSmmaerL7idtU5F7oCI+uu25k+MsMS31BVFlp4aMkHSrNRxiD72IlK8TA==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+    dependencies:
+      graphql: 16.8.1
+    dev: false
+
+  /@0no-co/graphql.web@1.0.6(graphql@16.8.1):
+    resolution: {integrity: sha512-KZ7TnwMcQJcFgzjoY623AVxtlDQonkqp3rSz0wb15/jHPyU1v5gynUibEpuutDeoyGJ5Tp+FwxjGyDGDwq3vIw==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
     peerDependenciesMeta:
@@ -6073,21 +6084,21 @@ packages:
       - graphql
     dev: false
 
-  /@urql/core@4.3.0(graphql@16.8.1):
-    resolution: {integrity: sha512-wT+FeL8DG4x5o6RfHEnONNFVDM3616ouzATMYUClB6CB+iIu2mwfBKd7xSUxYOZmwtxna5/hDRQdMl3nbQZlnw==}
+  /@urql/core@5.0.0(graphql@16.8.1):
+    resolution: {integrity: sha512-kFkZxusq/VBQKEUcQFtf7AilMotLO+oGpE4WFhCiminZm8ZU2aulXSDWla50TaD0pj704FnWlXts6lRm0uHdDg==}
     dependencies:
-      '@0no-co/graphql.web': 1.0.4(graphql@16.8.1)
+      '@0no-co/graphql.web': 1.0.6(graphql@16.8.1)
       wonka: 6.3.4
     transitivePeerDependencies:
       - graphql
     dev: false
 
-  /@urql/svelte@4.1.0(graphql@16.8.1)(svelte@4.2.12):
-    resolution: {integrity: sha512-Ov3EclCjaXPPTjKNTcIDlAG3qY/jhLjl/J9yyz9FeLUQ9S2jEgsvlzNXibrY27f4ihD4gH36CNGuj1XOi5hEEQ==}
+  /@urql/svelte@4.1.1(graphql@16.8.1)(svelte@4.2.12):
+    resolution: {integrity: sha512-GqgfTtOB6VkQGEazfNl5UasviWjyEZp15I+rG5bpTDQZJSZgkkGZJF+4CdaNNQVBdnWeQlKOsyXRiadYXfe5Vw==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0
     dependencies:
-      '@urql/core': 4.3.0(graphql@16.8.1)
+      '@urql/core': 5.0.0(graphql@16.8.1)
       svelte: 4.2.12
       wonka: 6.3.4
     transitivePeerDependencies:
