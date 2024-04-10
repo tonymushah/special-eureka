@@ -5,12 +5,13 @@
 	export let title: string;
 	export let isOpen: boolean = false;
 	export let key: string = "Enter";
+	export let withBorder = false;
 	function toggle() {
 		isOpen = !isOpen;
 	}
 </script>
 
-<div class="accordion" class:isOpen>
+<div class="accordion" class:isOpen class:withBorder>
 	<div
 		role="button"
 		on:click={() => {
@@ -23,6 +24,7 @@
 		}}
 		tabindex="0"
 		class="title"
+		class:withBorder
 	>
 		<slot name="title">
 			<div class="default">
@@ -44,13 +46,15 @@
 	.accordion {
 		transition: border 300ms ease-in-out;
 		border-radius: 5px;
-		.title {
-			transition: border 300ms ease-in-out;
-			padding: 5px;
+		.title.withBorder {
 			border-color: var(--mid-tone);
 			border-bottom-width: 1px;
 			border-bottom-style: solid;
+		}
+		.title {
+			transition: border 300ms ease-in-out;
 			.default {
+				padding: 5px;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
@@ -71,7 +75,7 @@
 			rotate: 180deg;
 		}
 	}
-	.accordion.isOpen:hover {
+	.accordion.isOpen.withBorder:hover {
 		.title {
 			border-color: var(--mid-tone);
 			border-bottom-width: 1px;
@@ -83,7 +87,7 @@
 			border: none;
 		}
 	}
-	.accordion:hover {
+	.accordion.withBorder:hover {
 		border-color: var(--mid-tone);
 		border-width: 1px;
 		border-style: solid;
