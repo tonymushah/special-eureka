@@ -6,6 +6,7 @@
 	export let isOpen: boolean = false;
 	export let key: string = "Enter";
 	export let withBorder = false;
+	export let titleBorder = false;
 	function toggle() {
 		isOpen = !isOpen;
 	}
@@ -27,7 +28,7 @@
 		class:withBorder
 	>
 		<slot name="title">
-			<div class="default">
+			<div class="default" class:titleBorder>
 				<p>{title}</p>
 				<div class="chevron">
 					<ChevronDownIcon />
@@ -46,6 +47,7 @@
 	.accordion {
 		transition: border 300ms ease-in-out;
 		border-radius: 5px;
+		color: var(--text-color);
 		.title.withBorder {
 			border-color: var(--mid-tone);
 			border-bottom-width: 1px;
@@ -91,5 +93,12 @@
 		border-color: var(--mid-tone);
 		border-width: 1px;
 		border-style: solid;
+	}
+	.title {
+		.default.titleBorder {
+			border-color: var(--mid-tone);
+			border-bottom-width: 1px;
+			border-bottom-style: solid;
+		}
 	}
 </style>

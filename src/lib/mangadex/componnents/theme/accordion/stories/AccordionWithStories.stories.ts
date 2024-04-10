@@ -22,3 +22,9 @@ export const WithBorder: Story = {
 		withBorder: true
 	}
 };
+
+export const TitleBorder: Story = {
+	args: {
+		titleBorder: true
+	}
+};
