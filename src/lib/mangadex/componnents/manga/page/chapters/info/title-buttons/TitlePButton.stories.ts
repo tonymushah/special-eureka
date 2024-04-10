@@ -13,7 +13,7 @@ enum TestStoryKey {
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/chapters/TitlePButton",
+	title: "MangaDex/manga/page/chapters/info/TitlePButton",
 	component: TitlePButton,
 	tags: ["autodocs"]
 } satisfies Meta<TitlePButton<TestStoryKey>>;

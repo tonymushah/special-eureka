@@ -7,7 +7,7 @@ import { Language } from "@mangadex/gql/graphql";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/chapters/MangaAltTitles",
+	title: "MangaDex/manga/page/chapters/info/MangaAltTitles",
 	component: MangaAltTitles,
 	tags: ["autodocs"]
 } satisfies Meta<MangaAltTitles>;

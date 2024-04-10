@@ -8,7 +8,7 @@ import { writable } from "svelte/store";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/chapters/MangaLinkButton",
+	title: "MangaDex/manga/page/chapters/info/MangaLinkButton",
 	component: MangaLinkButton,
 	tags: ["autodocs"]
 } satisfies Meta<MangaLinkButton>;
