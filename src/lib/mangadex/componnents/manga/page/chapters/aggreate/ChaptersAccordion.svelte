@@ -46,27 +46,29 @@
 		}}
 	/>
 {:else}
-	<Accordion {title} titleBorder>
-		<div class="chapters">
-			{#each chapters as chapter (chapter.id)}
-				<ChapterElement1
-					{...chapter}
-					on:download={({ detail }) => {
-						dispatch("download", detail);
-					}}
-					on:downloadKeyPress={({ detail }) => {
-						dispatch("downloadKeyPress", detail);
-					}}
-					on:read={({ detail }) => {
-						dispatch("read", detail);
-					}}
-					on:readKeyPress={({ detail }) => {
-						dispatch("readKeyPress", detail);
-					}}
-				/>
-			{/each}
-		</div>
-	</Accordion>
+	<div class="some-margin">
+		<Accordion {title} titleBorder>
+			<div class="chapters">
+				{#each chapters as chapter (chapter.id)}
+					<ChapterElement1
+						{...chapter}
+						on:download={({ detail }) => {
+							dispatch("download", detail);
+						}}
+						on:downloadKeyPress={({ detail }) => {
+							dispatch("downloadKeyPress", detail);
+						}}
+						on:read={({ detail }) => {
+							dispatch("read", detail);
+						}}
+						on:readKeyPress={({ detail }) => {
+							dispatch("readKeyPress", detail);
+						}}
+					/>
+				{/each}
+			</div>
+		</Accordion>
+	</div>
 {/if}
 
 <style lang="scss">
@@ -75,5 +77,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
+	}
+	.some-margin {
+		margin: 5px;
 	}
 </style>
