@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
 import "@fontsource/poppins/latin.css";
 
-import icon from "../links/images/favicon.ico";
+import icon from "../info/links/images/favicon.ico";
 import MangaPageChapters from "../MangaPageChaptersInfo.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { v4 } from "uuid";
