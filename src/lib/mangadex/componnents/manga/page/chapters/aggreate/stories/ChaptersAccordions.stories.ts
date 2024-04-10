@@ -9,7 +9,7 @@ import { v4 } from "uuid";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/manga/page/chapters/ChaptersAccordions",
+	title: "MangaDex/manga/page/chapters/aggregate/ChaptersAccordions",
 	component: ChaptersAccordions,
 	tags: ["autodocs"]
 } satisfies Meta<ChaptersAccordions>;
