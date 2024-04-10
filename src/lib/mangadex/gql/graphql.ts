@@ -1893,6 +1893,7 @@ export type Query = {
   tag: TagQueries;
   upload: UploadQueries;
   user: UserQueries;
+  utils: UtilsQuery;
 };
 
 export type RatingItem = {
@@ -2735,6 +2736,28 @@ export enum UserRole {
 
 export type UserSortOrder =
   { username: OrderDirection; };
+
+export type UtilsQuery = {
+  __typename?: 'UtilsQuery';
+  favicon: Scalars['Bytes']['output'];
+  languageToStr: Scalars['String']['output'];
+  strToLanguage: Language;
+};
+
+
+export type UtilsQueryFaviconArgs = {
+  url: Scalars['Url']['input'];
+};
+
+
+export type UtilsQueryLanguageToStrArgs = {
+  language: Language;
+};
+
+
+export type UtilsQueryStrToLanguageArgs = {
+  input: Scalars['String']['input'];
+};
 
 export type VolumeAggregate = {
   __typename?: 'VolumeAggregate';

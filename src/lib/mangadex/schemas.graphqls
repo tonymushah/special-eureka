@@ -1532,6 +1532,7 @@ type Query {
 	offlineAppState: OfflineAppStateQueries!
 	home: HomeQueries!
 	downloadState: DownloadStateQueries!
+	utils: UtilsQuery!
 }
 
 type RatingItem {
@@ -2134,6 +2135,12 @@ input UserSortOrder @oneOf {
 }
 
 scalar Username
+
+type UtilsQuery {
+	favicon(url: Url!): Bytes!
+	strToLanguage(input: String!): Language!
+	languageToStr(language: Language!): String!
+}
 
 type VolumeAggregate {
 	volume: String!
