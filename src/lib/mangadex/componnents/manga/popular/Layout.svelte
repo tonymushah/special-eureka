@@ -33,8 +33,8 @@
 	.layout {
 		margin: var(--popular-element-layout-margin);
 		padding: var(--popular-element-layout-padding);
-		//backdrop-filter: blur(10px);
-		//-webkit-backdrop-filter: blur(10px);
+		backdrop-filter: blur(5px);
+		-webkit-backdrop-filter: blur(5px);
 		div.content {
 			display: flex;
 			align-items: start;
