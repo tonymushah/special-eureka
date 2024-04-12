@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
 import "@fontsource/poppins/latin.css";
 
-import MangaPageCovers from "../MangaPageCovers.svelte";
+import MangaPageCovers, { Variant } from "../MangaPageCovers.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { writable } from "svelte/store";
 import { v4 } from "uuid";
@@ -18,28 +18,45 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
+const items = [{
+    coverImage: writable(volume1),
+    title: "Volume 1",
+    alt: v4()
+}, {
+    coverImage: writable(undefined),
+    title: "Volume 2",
+    alt: v4()
+}, {
+    coverImage: writable(volume3),
+    title: "Volume 3",
+    alt: v4()
+}, {
+    coverImage: writable(undefined),
+    title: "Volume 4",
+    alt: v4()
+}, {
+    coverImage: writable(volume5),
+    title: "Volume 5",
+    alt: v4()
+}];
+
 export const Default: Story = {
     args: {
-        items: [{
-            coverImage: writable(volume1),
-            title: "Volume 1",
-            alt: v4()
-        }, {
-            coverImage: writable(undefined),
-            title: "Volume 2",
-            alt: v4()
-        }, {
-            coverImage: writable(volume3),
-            title: "Volume 3",
-            alt: v4()
-        }, {
-            coverImage: writable(undefined),
-            title: "Volume 4",
-            alt: v4()
-        }, {
-            coverImage: writable(volume5),
-            title: "Volume 5",
-            alt: v4()
-        }]
+        items,
+        variant: Variant.None
     }
 };
+
+export const Flex: Story = {
+    args: {
+        items,
+        variant: Variant.Flex
+    }
+}
+
+export const Grid: Story = {
+    args: {
+        items,
+        variant: Variant.Grid
+    }
+}
