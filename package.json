@@ -18,7 +18,7 @@
     "format": "prettier --write .",
     "test:integration": "playwright test",
     "test:unit": "vitest",
-    "clean-src-tauri": "cd src-tauri && cargo clean",
+    "cargo:clean": "pnpm cargo clean --manifest-path ./src-tauri/Cargo.toml",
     "storybook:dev": "storybook dev -p 9305 --no-open",
     "build-storybook": "storybook build"
   },
