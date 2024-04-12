@@ -16,7 +16,6 @@
 
 <style lang="scss">
 	div.top {
-		margin: 8px;
 		display: flex;
 		align-content: center;
 		justify-content: center;
