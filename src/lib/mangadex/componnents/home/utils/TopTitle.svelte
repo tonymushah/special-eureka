@@ -11,7 +11,7 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	$: console.log(`fetching ${fetching}`);
+	// $: console.log(`fetching ${fetching}`);
 </script>
 
 <div class="title with-margin">
