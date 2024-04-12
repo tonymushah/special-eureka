@@ -24,42 +24,53 @@
 	$: loading = $navigating != null;
 </script>
 
-<MangaDexThemeProvider {theme}>
-	<div class="provider">
-		{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
-			<Sidebar />
-		{/if}
-		<div
-			class="inner"
-			class:loading
-			role="button"
-			tabindex="0"
-			on:keydown={(e) => {
-				if (loading) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			}}
-			on:click={(e) => {
-				if (loading) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			}}
-		>
-			<slot />
-		</div>
-		{#if $rtl.data?.watchSidebarDirection == Direction.Rtl}
-			<Sidebar />
-		{/if}
-	</div>
-</MangaDexThemeProvider>
+<div class="d-content">
+	<style>
+		html::-webkit-scrollbar {
+			display: none;
+		}
+	</style>
 
-<style>
+	<MangaDexThemeProvider {theme}>
+		<div class="provider">
+			{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
+				<Sidebar />
+			{/if}
+			<div
+				class="inner"
+				class:loading
+				role="button"
+				tabindex="0"
+				on:keydown={(e) => {
+					if (loading) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				}}
+				on:click={(e) => {
+					if (loading) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				}}
+			>
+				<slot />
+			</div>
+			{#if $rtl.data?.watchSidebarDirection == Direction.Rtl}
+				<Sidebar />
+			{/if}
+		</div>
+	</MangaDexThemeProvider>
+</div>
+
+<style lang="scss">
 	.provider {
 		width: 100%;
 		display: inline-flex;
 		color: var(--text-color);
+	}
+	.provider::-webkit-scrollbar {
+		display: none;
 	}
 	.inner {
 		height: 100vh;
@@ -77,6 +88,7 @@
 		animation-fill-mode: both;
 		animation-duration: 300ms;
 		animation-timing-function: ease-in-out;
+		pointer-events: none;
 	}
 	.inner.loading * {
 		pointer-events: none;
