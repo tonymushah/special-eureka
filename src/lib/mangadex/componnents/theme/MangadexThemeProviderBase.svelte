@@ -38,7 +38,7 @@
 	--mid-tone={$theme_store.mid_tone}
 	--contrast-l1={$theme_store.contrast.l1}
 	--scrollbar-color={$theme_store.scrollbar.default}
-	--scrollbar-color-hover={$theme_store.scrollbar.default}
+	--scrollbar-color-hover={$theme_store.scrollbar.hovered}
 	--button-accent={$theme_store.button.default}
 	--button-accent-alt={$theme_store.button.alternate}
 	--primary={$theme_store.primary.primary}

@@ -81,6 +81,21 @@
 			filter,
 			webkit-filter 300ms ease-in-out;
 	}
+	.inner::-webkit-scrollbar {
+		width: 12px;
+	}
+	.inner::-webkit-scrollbar-thumb {
+		border-radius: 0.25em;
+		background-color: var(--scrollbar-color);
+		transition: background-color 300ms ease-in-out;
+	}
+	.inner::-webkit-scrollbar-thumb:hover {
+		background-color: var(--scrollbar-color-hover);
+	}
+
+	.inner::-webkit-scrollbar-track {
+		background-color: var(--accent);
+	}
 	.inner.loading {
 		cursor: wait;
 		animation-name: loading;
