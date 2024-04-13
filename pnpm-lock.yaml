@@ -43,7 +43,7 @@ dependencies:
     version: 0.15.4(svelte@4.2.13)
   '@svelteuidev/preprocessors':
     specifier: ^0.15.4
-    version: 0.15.4(svelte@4.2.13)
+    version: 0.15.5(svelte@4.2.13)
   '@svelteuidev/prism':
     specifier: ^0.15.4
     version: 0.15.4(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13)
@@ -5426,8 +5426,8 @@ packages:
       svelte: 4.2.13
     dev: false
 
-  /@svelteuidev/preprocessors@0.15.4(svelte@4.2.13):
-    resolution: {integrity: sha512-Y+D0A6CXRfwp0NRSO7t/mTJQ1H1C72QhxAMIhRJVEXAHmenozILoWOo22lbPqheCU5R/bghZF1onc8a7itseCw==}
+  /@svelteuidev/preprocessors@0.15.5(svelte@4.2.13):
+    resolution: {integrity: sha512-86wXdPs1zgvTJD5P1mi0sENGQ71bHoGxan8INJW4ZlN3chcK+4nsuxXWgsXObgBGqwFyZWCgD1YbQMP6iM1ZRw==}
     peerDependencies:
       svelte: '>=3.55.0'
     dependencies:
