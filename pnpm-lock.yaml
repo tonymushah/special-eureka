@@ -37,7 +37,7 @@ dependencies:
     version: 0.15.4(@svelteuidev/composables@0.15.5)(svelte@4.2.13)
   '@svelteuidev/dates':
     specifier: ^0.15.4
-    version: 0.15.4(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13)
+    version: 0.15.5(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13)
   '@svelteuidev/motion':
     specifier: ^0.15.4
     version: 0.15.4(svelte@4.2.13)
@@ -5405,11 +5405,11 @@ packages:
       svelte: 4.2.13
     dev: false
 
-  /@svelteuidev/dates@0.15.4(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13):
-    resolution: {integrity: sha512-OLVz623oJ63JJyQv2b4MLXYmdp293F76NNcSreqJmdihbGm2TZEgwfbnWnv6rIhxW8e7iw648oRDt27fi1Rb8Q==}
+  /@svelteuidev/dates@0.15.5(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13):
+    resolution: {integrity: sha512-C6KkrlB7frCMgLLRhuj9S/qXZXyieZU7UpbcVCpbEsWjZu6lyizZPXp2h8rUvcFu2QYOzYffdOH7tLBiu8Z6Lg==}
     peerDependencies:
-      '@svelteuidev/composables': 0.15.4
-      '@svelteuidev/core': 0.15.4
+      '@svelteuidev/composables': 0.15.5
+      '@svelteuidev/core': 0.15.5
       svelte: '>=3.55.0'
     dependencies:
       '@svelteuidev/composables': 0.15.5(svelte@4.2.13)
