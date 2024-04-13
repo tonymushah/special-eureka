@@ -46,7 +46,7 @@ dependencies:
     version: 0.15.4(svelte@4.2.13)
   '@svelteuidev/prism':
     specifier: ^0.15.4
-    version: 0.15.4(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13)
+    version: 0.15.5(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13)
   '@tauri-apps/api':
     specifier: ^1.5.3
     version: 1.5.3
@@ -5434,11 +5434,11 @@ packages:
       svelte: 4.2.13
     dev: false
 
-  /@svelteuidev/prism@0.15.4(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13):
-    resolution: {integrity: sha512-xfE+9uCFZaclSO/OOmVznffR91iRvr3UkhR0pBwDzOEE/70eUecPdoeypCxAGLJTkG/ZEBj+ws+aipvV5gvQFg==}
+  /@svelteuidev/prism@0.15.5(@svelteuidev/composables@0.15.5)(@svelteuidev/core@0.15.4)(svelte@4.2.13):
+    resolution: {integrity: sha512-ZLn9S1II4I+DNLw+Bdf+LsTXypKU3Wxl9s9d9dewsrVb1lVzEiiIx7qJP6tEaSewMXqo55rOjRY/V8tNO3ZerQ==}
     peerDependencies:
-      '@svelteuidev/composables': 0.15.4
-      '@svelteuidev/core': 0.15.4
+      '@svelteuidev/composables': 0.15.5
+      '@svelteuidev/core': 0.15.5
       svelte: '>=3.55.0'
     dependencies:
       '@svelteuidev/composables': 0.15.5(svelte@4.2.13)
