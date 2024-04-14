@@ -47,8 +47,7 @@ impl MangaQueries {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .clone()
-            .map(|a| a.app_state.clone())
+            .as_ref()
             .ok_or(Error::new("Offline AppState Not loaded"))?;
         let state = {
             if olasw.manga_utils().with_id(id).is_there() {
