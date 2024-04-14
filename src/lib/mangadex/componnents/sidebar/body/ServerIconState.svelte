@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Toast from "toastify-js";
 	import { graphql } from "@mangadex/gql";
 	import { sub_end } from "@mangadex/utils";
 	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
@@ -6,8 +7,11 @@
 	import { onDestroy } from "svelte";
 	import { ServerIcon } from "svelte-feather-icons";
 	import { v4 } from "uuid";
+	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	const client = getContextClient();
+	const theme = getMangaDexThemeContext();
 	const sub_id = v4();
+	const toast = Toast({});
 	const offline_server_state_sub = subscriptionStore({
 		client,
 		query: graphql(/* GraphQL */ `
@@ -29,8 +33,16 @@
 			const res = await _mount(client);
 			const error = res.error;
 			if (error) {
-                error.graphQLErrors.forEach((e) => console.error(e))
+				error.graphQLErrors.forEach((e) => console.error(e));
+				toast.options.text = "Error on loading offline data";
+				if (toast.options.style) toast.options.style.background = $theme.danger.default;
+				toast.showToast();
+			} else {
+				toast.options.text = "Offline data loaded";
+				if (toast.options.style) toast.options.style.background = $theme.status.green;
+				toast.showToast();
 			}
+
 			isLoading = false;
 		}
 	};
@@ -40,7 +52,14 @@
 			const res = await _unmount(client);
 			const error = res.error;
 			if (error) {
-				error.graphQLErrors.forEach((e) => console.error(e))
+				error.graphQLErrors.forEach((e) => console.error(e));
+				toast.options.text = "Error on unmounting offline data";
+				if (toast.options.style) toast.options.style.background = $theme.danger.default;
+				toast.showToast();
+			} else {
+				toast.options.text = "Offline data unmounted";
+				if (toast.options.style) toast.options.style.background = $theme.status.green;
+				toast.showToast();
 			}
 			isLoading = false;
 		}
@@ -63,6 +82,7 @@
 			}
 		}
 	}}
+	tabindex="0"
 >
 	<ServerIcon size="24" />
 </a>
