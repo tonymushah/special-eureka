@@ -52,5 +52,7 @@
 		width: 60px;
 		object-fit: cover;
 		border-radius: 0.25em;
+		image-rendering: crisp-edges;
+		-webkit-image-rendering: crisp-edges;
 	}
 </style>
