@@ -318,6 +318,7 @@ type ChapterQueries {
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
 	listWithGroupByManga(chapterListParams: ChapterListParams! = {limit: null, offset: null, chapterIds: [], title: null, groups: [], uploaders: [], mangaId: null, volumes: [], chapters: [], translatedLanguages: [], originalLanguages: [], excludedOriginalLanguages: [], contentRating: [], excludedGroups: [], excludedUploaders: [], includeFutureUpdates: null, createdAtSince: null, updatedAtSince: null, publishAtSince: null, includeEmptyPages: null, includeExternalUrl: null, includeFuturePublishAt: null, order: null}, mangaListParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaChapterGroup!
+	isDownloaded(id: UUID!): DownloadState!
 }
 
 type ChapterRelationships {
@@ -452,6 +453,7 @@ type CoverQueries {
 	list(params: CoverListParam! = {limit: null, offset: null, mangaIds: [], coverIds: [], uploaderIds: [], locales: [], order: null}): CoverResults!
 	get(id: UUID!): Cover!
 	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Bytes!
+	isDownloaded(id: UUID!): DownloadState!
 }
 
 type CoverRelationships {
@@ -1243,6 +1245,7 @@ type MangaObject {
 }
 
 type MangaQueries {
+	isDownloaded(id: UUID!): DownloadState!
 	get(id: UUID!): MangaObject!
 	list(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
 	listOffline(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
