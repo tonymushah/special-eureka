@@ -19,6 +19,7 @@
     "test:integration": "playwright test",
     "test:unit": "vitest",
     "cargo:clean": "cargo clean --manifest-path ./src-tauri/Cargo.toml",
+    "cargo:clippy": "cargo clippy --manifest-path ./src-tauri/Cargo.toml",
     "cargo:build": "cargo build --manifest-path ./src-tauri/Cargo.toml",
     "storybook:dev": "storybook dev -p 9305 --no-open",
     "build-storybook": "storybook build"
