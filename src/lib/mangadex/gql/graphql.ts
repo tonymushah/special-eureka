@@ -424,6 +424,7 @@ export type ChapterPages = {
 export type ChapterQueries = {
   __typename?: 'ChapterQueries';
   get: Chapter;
+  isDownloaded: DownloadState;
   list: ChapterResults;
   listWithGroupByManga: MangaChapterGroup;
   pages: ChapterPages;
@@ -431,6 +432,11 @@ export type ChapterQueries = {
 
 
 export type ChapterQueriesGetArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+
+export type ChapterQueriesIsDownloadedArgs = {
   id: Scalars['UUID']['input'];
 };
 
@@ -588,6 +594,7 @@ export type CoverQueries = {
   __typename?: 'CoverQueries';
   get: Cover;
   getImage: Scalars['Bytes']['output'];
+  isDownloaded: DownloadState;
   list: CoverResults;
 };
 
@@ -602,6 +609,11 @@ export type CoverQueriesGetImageArgs = {
   filename: Scalars['String']['input'];
   mangaId: Scalars['UUID']['input'];
   mode?: InputMaybe<CoverImageQuality>;
+};
+
+
+export type CoverQueriesIsDownloadedArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 
@@ -1563,6 +1575,7 @@ export type MangaQueries = {
   getDraft: MangaObject;
   getDrafts: MangaResults;
   getMangaStatus: Array<MangaReadingStatusItem>;
+  isDownloaded: DownloadState;
   list: MangaResults;
   listOffline: MangaResults;
   random: MangaObject;
@@ -1598,6 +1611,11 @@ export type MangaQueriesGetDraftsArgs = {
 
 export type MangaQueriesGetMangaStatusArgs = {
   status?: InputMaybe<ReadingStatus>;
+};
+
+
+export type MangaQueriesIsDownloadedArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 
