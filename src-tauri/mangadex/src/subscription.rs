@@ -365,12 +365,26 @@ pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
         }
     });
     let unlisten = window.listen("sub_end", move |e| {
+        /*#[cfg(debug_assertions)]
+        println!("{:#?}", e);*/
         let should_end_un = should_end_un.clone();
-        if let Some(payload) = e.payload() {
+        if let Some(id) = e
+            .payload()
+            .map(|p| p.trim().replace('\"', ""))
+            .and_then(|payload| {
+                Uuid::parse_str(&payload)
+                    /*
+                        .map_err(|er| {
+                            #[cfg(debug_assertions)]
+                            eprintln!("{:#?}", er);
+                            er
+                        })
+                    */
+                    .ok()
+            })
+        {
             if let Ok(mut write) = should_end_un.write() {
-                if let Ok(id) = Uuid::parse_str(payload) {
-                    *write = id == sub_id;
-                }
+                *write = id == sub_id;
             };
         }
     });
