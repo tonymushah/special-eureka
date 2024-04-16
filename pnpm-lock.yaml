@@ -82,7 +82,7 @@ dependencies:
     version: 4.1.0
   swiper:
     specifier: ^11.0.6
-    version: 11.0.7
+    version: 11.1.1
   timeago.js:
     specifier: ^4.0.2
     version: 4.0.2
@@ -11469,8 +11469,8 @@ packages:
       tslib: 2.6.2
     dev: true
 
-  /swiper@11.0.7:
-    resolution: {integrity: sha512-cDfglW1B6uSmB6eB6pNmzDTNLmZtu5bWWa1vak0RU7fOI9qHjMzl7gVBvYSl34b0RU2N11HxxETJqQ5LeqI1cA==}
+  /swiper@11.1.1:
+    resolution: {integrity: sha512-jGmEA/fNz1lACIcY4/40ggm1Gcyv+EUivmgV/Jd2WFPsEJhbWXnRAwzZR8OPjkBLtDxmzcoYG/iiAMWfRs0YKQ==}
     engines: {node: '>= 4.7.0'}
     dev: false
 
