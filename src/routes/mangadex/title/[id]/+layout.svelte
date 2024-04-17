@@ -5,6 +5,9 @@
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
 	import { open } from "@tauri-apps/api/shell";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
+	import MangaDexTab from "@mangadex/componnents/theme/tabs/MangaDexTab.svelte";
+	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -35,6 +38,7 @@
 	});
 	$: layoutData = data.layoutData!;
 	$: description = layoutData.description;
+	$: hasRelation = data.queryResult!.relationships.manga.length > 0;
 </script>
 
 <MangaPageTopInfo
@@ -55,16 +59,29 @@
 	}}
 />
 
-{#if description}
-	<div class="description">
-		<Markdown bind:source={description} />
-	</div>
-{/if}
+<div class="out-top">
+	{#if description}
+		<div class="description">
+			<Markdown bind:source={description} />
+		</div>
+	{/if}
+
+	<MangaNavBar
+		bind:id={layoutData.id}
+		bind:hasRelation
+		comments={$stats?.comments}
+		on:comment={() => {
+			if ($stats != undefined) {
+				open($stats?.threadUrl);
+			}
+		}}
+	/>
+</div>
 
 <slot />
 
 <style lang="scss">
-	div.description {
+	div.out-top {
 		margin: 0em 1em;
 	}
 </style>
