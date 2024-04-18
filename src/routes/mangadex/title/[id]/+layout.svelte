@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+	const contextKey = "title-layout-data";
+	export function getTitleLayoutData(): LayoutData {
+		return getContext(contextKey);
+	}
+	function setTitleLayoutData(data: LayoutData) {
+		setContext(contextKey, data);
+	}
+</script>
+
 <script lang="ts">
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { LayoutData } from "./$types";
@@ -5,13 +15,13 @@
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
 	import { open } from "@tauri-apps/api/shell";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
-	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
-	import MangaDexTab from "@mangadex/componnents/theme/tabs/MangaDexTab.svelte";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
+	import { getContext, setContext } from "svelte";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
 	export let data: LayoutData;
+	$: setTitleLayoutData(data);
 	const statsStore = data.statsQueryStore!;
 	const stats = derived(statsStore, ($stats) => {
 		const _data = $stats.data?.statistics.manga.get;
