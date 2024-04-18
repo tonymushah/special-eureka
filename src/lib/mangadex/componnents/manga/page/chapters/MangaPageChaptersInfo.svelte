@@ -34,27 +34,35 @@
 
 <div class="infos">
 	<slot name="top" />
-	<div class="flex-row">
-		{#each idsKeysItem as { key, title, items } (key)}
-			<TitlePButton
-				{title}
-				{items}
-				{key}
-				on:click={({ detail }) => {
-					dispatch("titlePButton", detail);
-				}}
-			/>
-		{/each}
-	</div>
-	<div class="flex-row">
-		{#each links as { title, items } (title)}
-			<MangaLinksBase {title} {items} />
-		{/each}
-	</div>
-	<div class="alt-titles-outer">
-		<h4>{altTitlesBoxTitle}</h4>
-		<MangaAltTitles bind:titles={altTitles} />
-	</div>
+	{#if idsKeysItem.length > 0}
+		<div class="flex-row">
+			{#each idsKeysItem as { key, title, items } (key)}
+				<TitlePButton
+					{title}
+					{items}
+					{key}
+					on:click={({ detail }) => {
+						dispatch("titlePButton", detail);
+					}}
+				/>
+			{/each}
+		</div>
+	{/if}
+
+	{#if links.length > 0}
+		<div class="flex-row">
+			{#each links as { title, items } (title)}
+				<MangaLinksBase {title} {items} />
+			{/each}
+		</div>
+	{/if}
+	{#if altTitles.length > 0}
+		<div class="alt-titles-outer">
+			<h4>{altTitlesBoxTitle}</h4>
+			<MangaAltTitles bind:titles={altTitles} />
+		</div>
+	{/if}
+
 	<slot />
 </div>
 

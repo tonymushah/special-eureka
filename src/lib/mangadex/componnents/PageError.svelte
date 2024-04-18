@@ -36,5 +36,8 @@
 		flex-direction: column;
 		flex-wrap: nowrap;
 		background-color: color-mix(in srgb, var(--danger-l1) 50%, transparent 50%);
+		h2 {
+			margin: 0px;
+		}
 	}
 </style>
