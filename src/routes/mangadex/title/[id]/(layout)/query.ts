@@ -33,6 +33,7 @@ const query = graphql(/* GraphQL */`
                         id
                         attributes {
                             name
+                            group
                         }
                     }
                 }
