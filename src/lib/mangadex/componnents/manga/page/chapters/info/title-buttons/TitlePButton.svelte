@@ -28,7 +28,7 @@
 			{#each items as { id, name } (id)}
 				<ButtonBase
 					with_hover
-					--button-color="var(--accent-l2)"
+					--button-color="var(--accent)"
 					--button-hover="var(--primary)"
 					on:click={({ detail }) => {
 						dispatch("click", {
@@ -49,7 +49,7 @@
 
 <style lang="scss">
 	h4 {
-		margin: 0px;
+		margin: 1px;
 		padding: 0px;
 		font-weight: 500;
 	}
@@ -60,6 +60,9 @@
 			display: flex;
 			flex-direction: row;
 			gap: 5px;
+			h4 {
+				margin: 2px;
+			}
 		}
 	}
 </style>
