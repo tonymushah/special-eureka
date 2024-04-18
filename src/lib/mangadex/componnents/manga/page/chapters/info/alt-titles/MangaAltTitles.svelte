@@ -2,13 +2,14 @@
 	import type { Language } from "@mangadex/gql/graphql";
 
 	export type AltTitleItem = {
-		locale: Language;
+		locale: Readable<Language | undefined>;
 		title: string;
 	};
 </script>
 
 <script lang="ts">
 	import AltTitle from "./AltTitle.svelte";
+	import type { Readable } from "svelte/store";
 
 	export let titles: AltTitleItem[];
 </script>

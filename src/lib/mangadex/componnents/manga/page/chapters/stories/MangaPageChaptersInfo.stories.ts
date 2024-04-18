@@ -62,7 +62,7 @@ export const Default: Story = {
 		],
 		altTitles: [
 			{
-				locale: Language.English,
+				locale: writable(Language.English),
 				title: "Special Eureka"
 			}
 		]

@@ -4,6 +4,7 @@ import "@fontsource/poppins/latin.css";
 import MangaAltTitles from "../MangaAltTitles.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { Language } from "@mangadex/gql/graphql";
+import { writable } from "svelte/store";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -21,13 +22,13 @@ export const Default: Story = {
 		titles: [
 			{
 				title: "アイツノカノジョ",
-				locale: Language.JapaneseRomanized
+				locale: writable(Language.JapaneseRomanized)
 			},
 			{
 				title: "His girlfriend",
-				locale: Language.English
+				locale: writable(Language.English)
 			},
-			{ title: "Sa petite amie", locale: Language.French }
+			{ title: "Sa petite amie", locale: writable(Language.French) }
 		]
 	}
 };
