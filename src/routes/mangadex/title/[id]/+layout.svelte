@@ -86,9 +86,8 @@
 			}
 		}}
 	/>
+	<slot />
 </div>
-
-<slot />
 
 <style lang="scss">
 	div.out-top {
