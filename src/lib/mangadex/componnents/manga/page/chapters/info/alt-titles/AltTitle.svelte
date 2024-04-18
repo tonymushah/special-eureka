@@ -5,11 +5,12 @@
 
 	export let locale: Readable<Language | undefined>;
 	export let title: string;
+	$: lang = $locale;
 </script>
 
 <div class="alt-title">
-	{#if $locale}
-		<FlagIcon bind:lang={$locale} />
+	{#if lang}
+		<FlagIcon bind:lang />
 	{/if}
 	<h4>{title}</h4>
 </div>
