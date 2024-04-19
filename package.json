@@ -89,6 +89,7 @@
     "@types/uuid": "^9.0.7",
     "@urql/svelte": "^4.0.4",
     "dayjs": "^1.11.10",
+    "fast-xml-parser": "^4.3.6",
     "flag-icons": "^7.1.0",
     "graphiql": "^3.1.0",
     "medium-zoom": "^1.1.0",
