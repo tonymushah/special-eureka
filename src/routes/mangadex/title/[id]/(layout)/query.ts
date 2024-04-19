@@ -14,6 +14,12 @@ const query = graphql(/* GraphQL */`
                     availableTranslatedLanguages
                     year
                     contentRating
+                    publicationDemographic
+                  	lastVolume
+                  	lastChapter
+                  	latestUploadedChapter
+                  	availableTranslatedLanguages
+                  	originalLanguage
                     links {
                         hasNoLinks
                         amazon
