@@ -8,6 +8,7 @@
 	import { TagGroup, type MangaLinks, MangaStatus } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
+	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
 
 	const { queryResult: data } = getTitleLayoutData();
 	const client = getContextClient();
@@ -107,6 +108,8 @@
 	$: format = getFormat(data);
 	$: content = getContent(data);
 	$: links = getLinks(data);
+	$: lastVolume = data?.attributes.lastVolume;
+	$: lastChapter = data?.attributes.lastChapter;
 </script>
 
 <div class="layout">
@@ -128,19 +131,8 @@
 			bind:format
 			bind:content
 		>
-			{#if data?.attributes.status == MangaStatus.Completed && (data?.attributes.lastChapter != undefined || data?.attributes.lastChapter != null) && (data?.attributes.lastVolume != undefined || data?.attributes.lastVolume != null)}
-				<h4 class="latest-chapter">
-					Last Chapter: Volume {data?.attributes.lastVolume} Chapter {data?.attributes
-						.lastChapter}
-				</h4>
-			{/if}
+			<LatestChapter bind:volume={lastVolume} bind:chapter={lastChapter} />
 		</Info>
 	</div>
 	<div class="chapters"></div>
 </div>
-
-<style lang="scss">
-	.latest-chapter {
-		margin: 0px;
-	}
-</style>
