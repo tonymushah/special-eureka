@@ -5,7 +5,7 @@
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
 	import getLanguageFromStr from "@mangadex/utils/lang/getLanguageFromStr";
 	import { getContextClient } from "@urql/svelte";
-	import { TagGroup, type MangaLinks } from "@mangadex/gql/graphql";
+	import { TagGroup, type MangaLinks, MangaStatus } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
 
@@ -127,6 +127,20 @@
 			bind:demographic
 			bind:format
 			bind:content
-		/>
+		>
+			{#if data?.attributes.status == MangaStatus.Completed && (data?.attributes.lastChapter != undefined || data?.attributes.lastChapter != null) && (data?.attributes.lastVolume != undefined || data?.attributes.lastVolume != null)}
+				<h4 class="latest-chapter">
+					Last Chapter: Volume {data?.attributes.lastVolume} Chapter {data?.attributes
+						.lastChapter}
+				</h4>
+			{/if}
+		</Info>
 	</div>
+	<div class="chapters"></div>
 </div>
+
+<style lang="scss">
+	.latest-chapter {
+		margin: 0px;
+	}
+</style>
