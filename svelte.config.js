@@ -15,7 +15,8 @@ const config = {
 			fallback: "index.html"
 		}),
 		alias: {
-			"@mangadex/*": "./src/lib/mangadex/*"
+			"@mangadex/routes/*": "./src/routes/mangadex/*",
+			"@mangadex/*": "./src/lib/mangadex/*",
 		}
 	}
 };
