@@ -237,7 +237,7 @@
 		},
 		{
 			key: TitleKey.Genres,
-			title: genres.length > 1 ? "Genres" : "Genres",
+			title: genres.length > 1 ? "Genres" : "Genre",
 			items: genres
 		},
 		{
@@ -247,21 +247,23 @@
 		},
 		{
 			key: TitleKey.Demographic,
-			title: demographic.length > 1 ? "Demographic" : "Demographics",
+			title: demographic.length > 1 ? "Demographics" : "Demographic",
 			items: demographic
 		},
 		{
 			key: TitleKey.Format,
-			title: format.length > 1 ? "Format" : "Formats",
+			title: format.length > 1 ? "Formats" : "Format",
 			items: format
 		},
 		{
 			key: TitleKey.Content,
-			title: content.length > 1 ? "Content" : "Contents",
+			title: content.length > 1 ? "Contents" : "Content",
 			items: content
 		}
 	];
 	$: toUseLinks = propsToUseLink(links ?? { hasNoLinks: true });
 </script>
 
-<MangaPageChaptersInfo bind:altTitles idsKeysItem={tBButtons} bind:links={toUseLinks} />
+<MangaPageChaptersInfo bind:altTitles idsKeysItem={tBButtons} bind:links={toUseLinks}>
+	<slot />
+</MangaPageChaptersInfo>
