@@ -15,7 +15,9 @@ fn get_favicon_file_path_from_cache(
     base_url: &Url,
     config: &Config,
 ) -> async_graphql::Result<PathBuf> {
-    let dir = app_cache_dir(config).ok_or(async_graphql::Error::new("Can't find app_cache_dir"))?;
+    let dir = app_cache_dir(config)
+        .ok_or(async_graphql::Error::new("Can't find app_cache_dir"))?
+        .join("favicons");
     let domain = base_url
         .domain()
         .ok_or(async_graphql::Error::new("Can't get domain from url"))?;
@@ -59,7 +61,7 @@ async fn get_favicon_online<R: Runtime>(
         .await
         .map_err(|e| async_graphql::Error::new(e.to_string()))?
         .into_iter()
-        .find(|f| f.href.path().ends_with(".ico"))
+        .next()
         .ok_or_else(|| async_graphql::Error::new("Can't find the favicon.ico"))?
         .get_image_bytes(client)
         .await?;
