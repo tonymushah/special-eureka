@@ -17,6 +17,7 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { getContext, setContext } from "svelte";
+	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -70,11 +71,16 @@
 />
 
 <div class="out-top">
-	{#if description}
-		<div class="description">
-			<Markdown bind:source={description} />
+	<div class="top">
+		{#if description}
+			<div class="description">
+				<Markdown bind:source={description} />
+			</div>
+		{/if}
+		<div class="info">
+			<MangaPageInfo />
 		</div>
-	{/if}
+	</div>
 
 	<MangaNavBar
 		bind:id={layoutData.id}
@@ -92,5 +98,13 @@
 <style lang="scss">
 	div.out-top {
 		margin: 0em 1em;
+	}
+	.top {
+		display: none;
+	}
+	@media screen and (max-width: 1200px) {
+		.top {
+			display: block;
+		}
 	}
 </style>
