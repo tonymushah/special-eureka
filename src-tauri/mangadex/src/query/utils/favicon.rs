@@ -1,5 +1,5 @@
 use std::{
-    fs::File,
+    fs::{create_dir_all, File},
     io::{BufReader, BufWriter, Read, Write},
     path::PathBuf,
 };
@@ -18,6 +18,7 @@ fn get_favicon_file_path_from_cache(
     let dir = app_cache_dir(config)
         .ok_or(async_graphql::Error::new("Can't find app_cache_dir"))?
         .join("favicons");
+    create_dir_all(&dir)?;
     let domain = base_url
         .domain()
         .ok_or(async_graphql::Error::new("Can't get domain from url"))?;
