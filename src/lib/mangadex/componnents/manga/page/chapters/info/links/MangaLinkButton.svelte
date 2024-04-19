@@ -13,7 +13,7 @@
 	on:click={async () => {
 		await open(href);
 	}}
-	--button-color="var(--accent-l2)"
+	--button-color="var(--accent)"
 	--button-hover="var(--primary)"
 	with_hover
 >
