@@ -51,7 +51,6 @@
 	h4 {
 		margin: 1px;
 		padding: 0px;
-		font-weight: 500;
 	}
 	.outer {
 		display: flex;
