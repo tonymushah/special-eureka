@@ -19,7 +19,9 @@
 >
 	<div>
 		<Favicon icon={$icon} alt={href} />
-		{title}
+		<span class="title">
+			{title}
+		</span>
 	</div>
 </ButtonBase>
 
