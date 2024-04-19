@@ -181,7 +181,6 @@
 		return returns;
 	}
 	function propsToUseLink(links: MangaLinks): MangaLinksItem[] {
-		console.log(links);
 		if (links.hasNoLinks == false) {
 			return [
 				{
@@ -212,7 +211,8 @@
 		Genres,
 		Themes,
 		Demographic,
-		Format
+		Format,
+		Content
 	}
 	export let authors: SimpleItems[] = [];
 	export let artists: SimpleItems[] = [];
@@ -220,9 +220,9 @@
 	export let themes: SimpleItems[] = [];
 	export let demographic: SimpleItems[] = [];
 	export let format: SimpleItems[] = [];
+	export let content: SimpleItems[] = [];
 	export let links: MangaLinks | undefined = undefined;
 	export let altTitles: AltTitleItem[] = [];
-	$: console.log(links);
 
 	$: tBButtons = [
 		{
@@ -254,6 +254,11 @@
 			key: TitleKey.Format,
 			title: format.length > 1 ? "Format" : "Formats",
 			items: format
+		},
+		{
+			key: TitleKey.Content,
+			title: content.length > 1 ? "Content" : "Contents",
+			items: content
 		}
 	];
 	$: toUseLinks = propsToUseLink(links ?? { hasNoLinks: true });
