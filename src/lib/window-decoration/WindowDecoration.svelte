@@ -3,19 +3,20 @@
 	import defaultLogo from "./app-icon.png";
 	import { appWindow } from "@tauri-apps/api/window";
 
+	export type ButtonStyles = {
+		default: string;
+		hover: string;
+		active: string;
+	};
+
 	export type WindowDecorationStyle = {
 		textColor: string;
 		background: string;
 		backgroundOnHover: string;
-		minBackground?: string;
-		maxBackground?: string;
-		closeBackground?: string;
-		minBackgroundHover?: string;
-		maxBackgroundHover?: string;
-		closeBackgroundHover?: string;
-		minBackgroundActive?: string;
-		maxBackgroundActive?: string;
-		closeBackgroundActive?: string;
+		minBackground?: ButtonStyles;
+		maxBackground?: ButtonStyles;
+		closeBackground?: ButtonStyles;
+		menuBackground?: ButtonStyles;
 	};
 
 	export const logo = writable(defaultLogo);
@@ -58,12 +59,15 @@
 	const textColor = derived(style, ($style) => $style.textColor);
 	const background = derived(style, ($s) => $s.background);
 	const backgroundOnHover = derived(style, ($style) => $style.backgroundOnHover);
-	const minBack = derived(style, ($style) => $style.minBackground ?? "#4F6");
-	const maxBack = derived(style, ($style) => $style.maxBackground ?? "#46F");
-	const closeBack = derived(style, ($style) => $style.closeBackground ?? "#F46");
-	const minBackHover = derived(style, ($style) => $style.minBackgroundHover ?? "#4F6");
-	const maxBackHover = derived(style, ($style) => $style.maxBackgroundHover ?? "#46F");
-	const closeBackHover = derived(style, ($style) => $style.closeBackgroundHover ?? "#F46");
+	const minBack = derived(style, ($style) => $style.minBackground?.default ?? "#4F6");
+	const maxBack = derived(style, ($style) => $style.maxBackground?.default ?? "#46F");
+	const closeBack = derived(style, ($style) => $style.closeBackground?.default ?? "#F46");
+	const minBackHover = derived(style, ($style) => $style.minBackground?.hover ?? "#3d4");
+	const maxBackHover = derived(style, ($style) => $style.maxBackground?.hover ?? "#24d");
+	const closeBackHover = derived(style, ($style) => $style.closeBackground?.hover ?? "#d25");
+	const minBackActive = derived(style, ($style) => $style.minBackground?.active ?? "#2c0");
+	const maxBackActive = derived(style, ($style) => $style.maxBackground?.active ?? "#02c");
+	const closeBackActive = derived(style, ($style) => $style.closeBackground?.active ?? "#b03");
 </script>
 
 <DragRegion
@@ -73,6 +77,12 @@
 	--minBack={$minBack}
 	--maxBack={$maxBack}
 	--closeBack={$closeBack}
+	--minBackHover={$minBackHover}
+	--maxBackHover={$maxBackHover}
+	--closeBackHover={$closeBackHover}
+	--minBackActive={$minBackActive}
+	--maxBackActive={$maxBackActive}
+	--closeBackActive={$closeBackActive}
 	--fonts={$fonts}
 >
 	<div class="title-bar" data-tauri-drag-region>
@@ -132,6 +142,9 @@
 				margin: 0px;
 				font-weight: 900;
 				font-size: larger;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
 			}
 			img {
 				width: 25px;
@@ -160,6 +173,24 @@
 			}
 			.close {
 				background-color: var(--closeBack);
+			}
+			.min:hover {
+				background-color: var(--minBackHover);
+			}
+			.max:hover {
+				background-color: var(--maxBackHover);
+			}
+			.close:hover {
+				background-color: var(--closeBackHover);
+			}
+			.min:active {
+				background-color: var(--minBackActive);
+			}
+			.max:active {
+				background-color: var(--maxBackActive);
+			}
+			.close:active {
+				background-color: var(--closeBackActive);
 			}
 		}
 	}
