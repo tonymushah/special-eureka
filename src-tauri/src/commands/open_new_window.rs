@@ -2,7 +2,7 @@ use tauri::{command, Runtime, Url, Window};
 use uuid::Uuid;
 
 #[command]
-pub async fn open_new_window<R: Runtime>(window: Window<R>, url: Option<Url>) {
+pub fn open_new_window<R: Runtime>(window: Window<R>, url: Option<Url>) {
     let current_url = url.unwrap_or(window.url());
     let _ = Window::builder(
         &window,
