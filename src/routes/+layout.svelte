@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
+	import WindowDecoration from "$lib/window-decoration/WindowDecoration.svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { appWindow } from "@tauri-apps/api/window";
 	import { onDestroy, onMount } from "svelte";
@@ -21,6 +22,7 @@
 	});
 </script>
 
+<WindowDecoration />
 <slot />
 
 <style>
