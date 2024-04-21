@@ -22,7 +22,7 @@
 	.sidebar {
 		transition: width ease-in-out 300ms;
 		background-color: var(--accent-l1);
-		height: 100vh;
+		height: 94cqh;
 		width: 256px;
 		display: flex;
 		flex-direction: column;

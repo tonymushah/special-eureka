@@ -9,7 +9,10 @@
 			style.set({
 				textColor: t.textColor,
 				background: t.accents.default.default,
-				backgroundOnHover: t.accents.default.hover
+				backgroundOnHover: t.accents.default.hover,
+				minBackground: t.accents.l1.default,
+				maxBackground: t.accents.l1.default,
+				closeBackground: t.danger.l1
 			});
 		});
 	});

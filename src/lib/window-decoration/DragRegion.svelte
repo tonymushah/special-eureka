@@ -4,14 +4,11 @@
 
 <style lang="scss">
 	div {
-		transition: background 300ms ease-in-out;
-		-webkit-transition: -webkit-background 300ms ease-in-out;
+		transition: background-color 300ms ease-in-out;
 		color: var(--textColor);
-		-webkit-background: var(--background);
-		background: var(--background);
+		background-color: var(--background);
 	}
 	div:hover {
-		-webkit-background: var(--backgroundOnHover);
-		background: var(--backgroundOnHover);
+		background-color: var(--backgroundOnHover);
 	}
 </style>

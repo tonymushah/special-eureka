@@ -76,7 +76,7 @@
 		display: none;
 	}
 	.inner {
-		height: 100vh;
+		height: 97cqh;
 		scroll-behavior: smooth;
 		overflow-y: scroll;
 		width: 100%;

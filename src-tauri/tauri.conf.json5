@@ -95,7 +95,7 @@
                 "setSkipTaskbar": false,
                 "setTitle": true,
                 "show": true,
-                "startDragging": false,
+                "startDragging": true,
                 "unmaximize": true,
                 "unminimize": true
             }
