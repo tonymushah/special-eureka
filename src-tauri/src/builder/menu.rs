@@ -1,6 +1,8 @@
 use tauri::{CustomMenuItem, Menu, Runtime, WindowMenuEvent};
 
-use crate::commands::{open_new_window::open_new_window, toggle_decoration::toggle_decoration};
+use crate::commands::{
+    open_new_window::open_new_window_sync, toggle_decoration::toggle_decoration,
+};
 
 pub fn get_menu() -> Menu {
     Menu::new()
@@ -18,7 +20,7 @@ pub fn get_menu() -> Menu {
 pub fn on_menu_event<R: Runtime>(e: WindowMenuEvent<R>) {
     match e.menu_item_id() {
         "new_window" => {
-            open_new_window(e.window().clone(), None);
+            let _ = open_new_window_sync(e.window(), None);
         }
         "home" => {
             let _ = e.window().emit("redirect", "/");
