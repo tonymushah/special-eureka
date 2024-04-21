@@ -35,9 +35,12 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import ActionButtons from "./ActionButtons.svelte";
 	import Title from "./Title.svelte";
+	import { slide } from "svelte/transition";
+	import Commands from "./Commands.svelte";
 
 	let isMaximize = false;
 	let unlistens: UnlistenFn[] = [];
+	let showCommands: boolean = false;
 	async function isMaximized() {
 		isMaximize = await appWindow.isMaximized();
 	}
@@ -95,8 +98,27 @@
 	--menuBackHover={$menuBackHover}
 	--menuBackActive={$menuBackActive}
 >
-	<div class="title-bar" data-tauri-drag-region>
+	<div
+		class="title-bar"
+		role="banner"
+		on:mouseenter={() => {
+			showCommands = true;
+		}}
+		on:mouseleave={() => {
+			showCommands = false;
+		}}
+		data-tauri-drag-region
+	>
 		<Title />
+		{#if showCommands}
+			<div
+				transition:slide={{
+					axis: "x"
+				}}
+			>
+				<Commands />
+			</div>
+		{/if}
 		<ActionButtons bind:isMaximize {isMaximized} />
 	</div>
 </DragRegion>
