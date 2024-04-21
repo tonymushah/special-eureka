@@ -34,6 +34,7 @@
 	import { onDestroy, onMount } from "svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import ActionButtons from "./ActionButtons.svelte";
+	import Title from "./Title.svelte";
 
 	let isMaximize = false;
 	let unlistens: UnlistenFn[] = [];
@@ -91,14 +92,11 @@
 	--closeBackActive={$closeBackActive}
 	--fonts={$fonts}
 	--menuBack={$menuBack}
-	--menuBackHover={$menuBack}
+	--menuBackHover={$menuBackHover}
 	--menuBackActive={$menuBackActive}
 >
 	<div class="title-bar" data-tauri-drag-region>
-		<div class="title" data-tauri-drag-region>
-			<img data-tauri-drag-region src={$logo} alt="icon" />
-			<h4 data-tauri-drag-region>{$title}</h4>
-		</div>
+		<Title />
 		<ActionButtons bind:isMaximize {isMaximized} />
 	</div>
 </DragRegion>
@@ -109,23 +107,5 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100vw;
-		.title {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			gap: 12px;
-			h4 {
-				margin: 0px;
-				font-weight: 900;
-				font-size: larger;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-			}
-			img {
-				width: 25px;
-				padding-left: 5px;
-			}
-		}
 	}
 </style>
