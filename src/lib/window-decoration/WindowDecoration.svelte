@@ -6,11 +6,16 @@
 	export type WindowDecorationStyle = {
 		textColor: string;
 		background: string;
+		backgroundOnHover: string;
 	};
 
 	export const logo = writable(defaultLogo);
 	export const title = writable("Special Eureka");
-	export const style = writable<WindowDecorationStyle>({ textColor: "#000", background: "#eee" });
+	export const style = writable<WindowDecorationStyle>({
+		textColor: "#000",
+		background: "#eee",
+		backgroundOnHover: "#ddd"
+	});
 </script>
 
 <script lang="ts">
@@ -42,9 +47,14 @@
 	$: appWindow.setTitle($title);
 	const textColor = derived(style, ($style) => $style.textColor);
 	const background = derived(style, ($s) => $s.background);
+	const backgroundOnHover = derived(style, ($style) => $style.backgroundOnHover);
 </script>
 
-<DragRegion --textColor={$textColor} --background={$background}>
+<DragRegion
+	--textColor={$textColor}
+	--background={$background}
+	--backgroundHover={$backgroundOnHover}
+>
 	<div class="title-bar">
 		<div class="title">
 			<img src={$logo} alt="icon" />

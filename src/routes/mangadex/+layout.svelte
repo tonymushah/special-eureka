@@ -10,6 +10,8 @@
 	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
 	import { v4 } from "uuid";
 	import { navigating } from "$app/stores";
+	import { onMount } from "svelte";
+	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
 
 	setContextClient(client);
 	const sub_id = v4();
@@ -32,6 +34,7 @@
 	</style>
 
 	<MangaDexThemeProvider {theme}>
+		<SetTitle />
 		<div class="provider">
 			{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
 				<Sidebar />
