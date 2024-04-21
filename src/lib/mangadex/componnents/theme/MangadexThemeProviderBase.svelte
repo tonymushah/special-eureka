@@ -4,11 +4,13 @@
 	import { SvelteUIProvider } from "@svelteuidev/core";
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
 	import { writable } from "svelte/store";
+	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
 
 	export let theme: MangadexTheme;
 	export let fonts = "Poppins";
-	let theme_store = writable(theme);
-	setMangaDexThemeContextWritable(theme_store);
+	$: theme_store = writable(theme);
+	$: setMangaDexThemeContextWritable(theme_store);
+	$: setMangaDexFontsContext(writable(fonts));
 	$: svelte_ui_theme = buildSvelteUITheme($theme_store);
 </script>
 
