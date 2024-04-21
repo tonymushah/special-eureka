@@ -112,6 +112,7 @@
 		<Title />
 		{#if showCommands}
 			<div
+				class="commands"
 				transition:slide={{
 					axis: "x"
 				}}
@@ -129,5 +130,11 @@
 		display: flex;
 		justify-content: space-between;
 		width: 100vw;
+	}
+	.commands {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 5px;
 	}
 </style>

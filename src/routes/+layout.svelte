@@ -23,7 +23,7 @@
 </script>
 
 <div class="outer">
-	{#if $isDefaultDecoration}
+	{#if !$isDefaultDecoration}
 		<div
 			transition:slide={{
 				axis: "y"
