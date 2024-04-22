@@ -11,7 +11,10 @@
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
 	const sub_id = v4();
-	const toast = Toast({});
+	const toast = Toast({
+		position: "right",
+		gravity: "bottom"
+	});
 	const offline_server_state_sub = subscriptionStore({
 		client,
 		query: graphql(/* GraphQL */ `

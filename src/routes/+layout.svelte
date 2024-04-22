@@ -7,6 +7,7 @@
 	import { onDestroy, onMount } from "svelte";
 	import { slide } from "svelte/transition";
 	import { register } from "swiper/element/bundle";
+	import "toastify-js/src/toastify.css";
 
 	const unlistens: UnlistenFn[] = [];
 	onMount(async () => {
