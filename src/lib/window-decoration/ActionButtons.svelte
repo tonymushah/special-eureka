@@ -54,6 +54,7 @@
 			display: flex;
 			justify-content: center;
 			align-content: center;
+			transition: background-color 300ms ease-in-out;
 		}
 		.min {
 			background-color: var(--minBack);

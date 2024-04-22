@@ -22,7 +22,11 @@
 						hover: `color-mix(in srgb, ${t.danger.l1} 50%, ${t.mainBackground} 50%)`,
 						active: `color-mix(in srgb, ${t.danger.l2} 50%, ${t.mainBackground} 50%)`
 					},
-					menuBackground: t.accents.l1
+					menuBackground: {
+						default: t.button.default,
+						hover: t.primary.primary,
+						active: t.primary.primary2
+					}
 				});
 			})
 		);
