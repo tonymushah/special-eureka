@@ -32,5 +32,8 @@
 		justify-content: center;
 		gap: 5px;
 		margin: 2px;
+		span {
+			text-wrap: nowrap;
+		}
 	}
 </style>
