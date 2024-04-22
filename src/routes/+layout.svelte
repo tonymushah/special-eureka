@@ -22,7 +22,7 @@
 	});
 </script>
 
-<div class="outer">
+<div class="outer" class:defaultDecoration={$isDefaultDecoration}>
 	{#if !$isDefaultDecoration}
 		<div
 			transition:slide={{
@@ -45,6 +45,9 @@
 		.inner {
 			height: 100cqh;
 		}
+	}
+	.outer.defaultDecoration {
+		height: 100vh;
 	}
 	:global(body) {
 		margin: 0px;

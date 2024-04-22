@@ -42,6 +42,10 @@
 		border: none;
 		border-radius: 0.25em;
 		font-family: var(--fonts);
+		font-weight: 900;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
 	}
 	button:hover {
 		background-color: var(--menuBackHover);

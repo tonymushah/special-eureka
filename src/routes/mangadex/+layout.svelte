@@ -12,6 +12,7 @@
 	import { navigating } from "$app/stores";
 	import { onMount } from "svelte";
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 
 	setContextClient(client);
 	const sub_id = v4();
@@ -42,6 +43,7 @@
 			<div
 				class="inner"
 				class:loading
+				class:defaultDecoration={$isDefaultDecoration}
 				role="button"
 				tabindex="0"
 				on:keydown={(e) => {
@@ -83,6 +85,9 @@
 		transition:
 			filter,
 			webkit-filter 300ms ease-in-out;
+	}
+	.inner.defaultDecoration {
+		height: 100cqh;
 	}
 	.inner::-webkit-scrollbar {
 		width: 12px;

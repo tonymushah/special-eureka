@@ -4,9 +4,14 @@
 	import SidebarHeader from "./SidebarHeader.svelte";
 	import SidebarBody from "./SidebarBody.svelte";
 	import SidebarFooter from "./SidebarFooter.svelte";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 </script>
 
-<aside class:sidebar={true} class:collapsed={$isOpen}>
+<aside
+	class:sidebar={true}
+	class:collapsed={$isOpen}
+	class:defaultDecoration={$isDefaultDecoration}
+>
 	<div class="header">
 		<SidebarHeader />
 	</div>
@@ -28,6 +33,9 @@
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 8px;
+	}
+	.sidebar.defaultDecoration {
+		height: 99vh;
 	}
 	.collapsed {
 		width: 80px;
