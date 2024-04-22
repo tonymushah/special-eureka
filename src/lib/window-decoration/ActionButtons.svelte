@@ -25,9 +25,9 @@
 		}}
 	>
 		{#if isMaximize}
-			<MaximizeIcon />
-		{:else}
 			<MinimizeIcon />
+		{:else}
+			<MaximizeIcon />
 		{/if}
 	</button>
 	<button
