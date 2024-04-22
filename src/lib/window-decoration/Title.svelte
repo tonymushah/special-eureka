@@ -15,7 +15,7 @@
 		gap: 12px;
 		h4 {
 			margin: 0px;
-			font-weight: 900;
+			font-weight: 600;
 			font-size: larger;
 			overflow: hidden;
 			white-space: nowrap;

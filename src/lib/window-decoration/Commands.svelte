@@ -42,7 +42,7 @@
 		border: none;
 		border-radius: 0.25em;
 		font-family: var(--fonts);
-		font-weight: 900;
+		font-weight: 600;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;

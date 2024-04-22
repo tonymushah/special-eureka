@@ -1,6 +1,9 @@
 <script lang="ts" context="module">
 	import { derived, writable } from "svelte/store";
 	import defaultLogo from "./app-icon.png";
+	// Supports weights 100-900
+	import "@fontsource-variable/noto-sans-jp";
+	import "@fontsource/pacifico";
 	import { appWindow } from "@tauri-apps/api/window";
 
 	export type ButtonStyles = {
@@ -21,12 +24,41 @@
 
 	export const logo = writable(defaultLogo);
 	export const title = writable("Special Eureka");
-	export const fonts = writable("Arial");
+	export const fonts = writable("'Noto Sans JP Variable', sans-serif");
 	export const style = writable<WindowDecorationStyle>({
 		textColor: "#000",
 		background: "#eee",
 		backgroundOnHover: "#ddd"
 	});
+	export function setDefaultLogo() {
+		logo.set(defaultLogo);
+	}
+	export function setDefaultTitle() {
+		title.set("Special Eureka");
+	}
+	export function setPacificoTitleBarFonts() {
+		fonts.set("'Pacifico', cursive");
+	}
+	export function setDefaultFonts() {
+		if (Math.floor(Math.random() * 10) % 5 == 0) {
+			setPacificoTitleBarFonts();
+		} else {
+			fonts.set("'Noto Sans JP Variable', sans-serif");
+		}
+	}
+	export function setDefaultStyles() {
+		style.set({
+			textColor: "#000",
+			background: "#eee",
+			backgroundOnHover: "#ddd"
+		});
+	}
+	export function setDefault() {
+		setDefaultLogo();
+		setDefaultTitle();
+		setDefaultFonts();
+		setDefaultStyles();
+	}
 </script>
 
 <script lang="ts">

@@ -1,8 +1,13 @@
-<script>
+<script lang="ts">
 	import { route } from "$lib/ROUTES";
+	import { fonts, setDefault } from "$lib/window-decoration/WindowDecoration.svelte";
+	import { onMount } from "svelte";
+	onMount(() => {
+		setDefault();
+	});
 </script>
 
-<div class="top">
+<div class="top" style="--fonts: {$fonts}">
 	<h1>Welcome to Special Eureka</h1>
 	<div class="alert">
 		<h2>If you see this page, means that you're in a prerealease version</h2>
@@ -16,6 +21,7 @@
 
 <style lang="scss">
 	div.top {
+		font-family: var(--fonts);
 		display: flex;
 		align-content: center;
 		justify-content: center;
