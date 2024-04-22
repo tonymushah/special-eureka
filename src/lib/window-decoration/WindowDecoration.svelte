@@ -40,7 +40,9 @@
 		fonts.set("'Pacifico', cursive");
 	}
 	export function setDefaultFonts() {
-		if (Math.floor(Math.random() * 10) % 5 == 0) {
+		const rand = Math.floor(Math.random() * 10);
+		console.debug("title default rand %d", rand);
+		if (rand % 5 == 0) {
 			setPacificoTitleBarFonts();
 		} else {
 			fonts.set("'Noto Sans JP Variable', sans-serif");
