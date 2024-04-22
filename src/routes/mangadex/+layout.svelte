@@ -85,6 +85,21 @@
 		transition:
 			filter,
 			webkit-filter 300ms ease-in-out;
+		*::-webkit-scrollbar {
+			width: 12px;
+		}
+		*::-webkit-scrollbar-thumb {
+			border-radius: 0.25em;
+			background-color: var(--scrollbar-color);
+			transition: background-color 300ms ease-in-out;
+		}
+		*::-webkit-scrollbar-thumb:hover {
+			background-color: var(--scrollbar-color-hover);
+		}
+
+		*::-webkit-scrollbar-track {
+			background-color: var(--accent);
+		}
 	}
 	.inner.defaultDecoration {
 		height: 100cqh;

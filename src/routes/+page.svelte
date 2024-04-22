@@ -15,7 +15,6 @@
 	</div>
 	<div class="links">
 		<p><a href={route("/mangadex")}>Mangadex Home</a></p>
-		<p><a href={route("/mangadex-graphiql")}>Mangadex GraphiQL</a></p>
 	</div>
 </div>
 
