@@ -14,6 +14,7 @@
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import { createEventDispatcher, onDestroy, onMount } from "svelte";
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
+	import type { Readable } from "svelte/store";
 	type Group = {
 		id: string;
 		name: string;
@@ -30,8 +31,8 @@
 	export let uploader: Uploader;
 	export let upload_date: Date;
 	export let haveBeenRead: boolean = true;
-	export let download_state: ChapterDownloadState;
-	export let comments: number;
+	export let download_state: Readable<ChapterDownloadState>;
+	export let comments: number | undefined = undefined;
 	let timeago: HTMLTimeElement;
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -73,7 +74,7 @@
 			class="state buttons"
 			role="button"
 			on:click={(e) => {
-				if (download_state != ChapterDownloadState.Downloading) {
+				if ($download_state != ChapterDownloadState.Downloading) {
 					dispatch("download", {
 						...e,
 						id
@@ -88,11 +89,11 @@
 			}}
 			tabindex={0}
 		>
-			{#if download_state == ChapterDownloadState.Downloaded}
+			{#if $download_state == ChapterDownloadState.Downloaded}
 				<CheckIcon />
-			{:else if download_state == ChapterDownloadState.Downloading}
+			{:else if $download_state == ChapterDownloadState.Downloading}
 				<DownloadCloudIcon />
-			{:else if download_state == ChapterDownloadState.Failed}
+			{:else if $download_state == ChapterDownloadState.Failed}
 				<XIcon />
 			{:else}
 				<DownloadIcon />
@@ -153,7 +154,13 @@
 				<div>
 					<MessageSquareIcon />
 				</div>
-				<p>{comments}</p>
+				<p>
+					{#if comments}
+						{comments}
+					{:else}
+						N/A
+					{/if}
+				</p>
 			</div>
 		</div>
 	</div>

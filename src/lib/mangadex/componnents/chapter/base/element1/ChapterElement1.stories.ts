@@ -6,6 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 import { Language } from "@mangadex/gql/graphql";
 import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 import { v4 } from "uuid";
+import { writable } from "svelte/store";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -37,7 +38,7 @@ export const Default: Story = {
 				roles: []
 			}))[0],
 		upload_date: new Date(testData.data.attributes.readableAt),
-		download_state: ChapterDownloadState.Downloaded,
+		download_state: writable(ChapterDownloadState.Downloaded),
 		comments: 124,
 		haveBeenRead: false
 	}
