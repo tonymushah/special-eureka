@@ -18,6 +18,9 @@
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { getContext, setContext } from "svelte";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
+	import { page } from "$app/stores";
+	import { route } from "$lib/ROUTES";
+	import { v4 } from "uuid";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -47,6 +50,14 @@
 			} satisfies TopMangaStatisticsStoreData;
 		}
 	});
+	const isOnInfoPage = derived(
+		page,
+		($page) =>
+			$page.url.pathname ==
+			route("/mangadex/list/[id]", {
+				id: data.layoutData?.id ?? v4()
+			})
+	);
 	$: layoutData = data.layoutData!;
 	$: description = layoutData.description;
 	$: hasRelation = data.queryResult!.relationships.manga.length > 0;
@@ -77,9 +88,11 @@
 				<Markdown bind:source={description} />
 			</div>
 		{/if}
-		<div class="info">
-			<MangaPageInfo />
-		</div>
+		{#if $isOnInfoPage}
+			<div class="info">
+				<MangaPageInfo />
+			</div>
+		{/if}
 	</div>
 
 	<MangaNavBar
