@@ -57,7 +57,10 @@
 								$rtl_sidebar_query.data?.watchSidebarDirection == Direction.Rtl
 									? "left"
 									: "right",
-							close: true
+							close: true,
+							style: {
+								fontFamily: "Popins"
+							}
 						});
 					})
 				);
@@ -70,7 +73,10 @@
 								$rtl_sidebar_query.data?.watchSidebarDirection == Direction.Rtl
 									? "left"
 									: "right",
-							close: true
+							close: true,
+							style: {
+								fontFamily: "Popins"
+							}
 						});
 					})
 				);

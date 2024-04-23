@@ -13,7 +13,11 @@
 	const sub_id = v4();
 	const toast = Toast({
 		position: "right",
-		gravity: "bottom"
+		gravity: "bottom",
+		style: {
+			fontFamily: "Poppins"
+		},
+		close: true
 	});
 	const offline_server_state_sub = subscriptionStore({
 		client,
