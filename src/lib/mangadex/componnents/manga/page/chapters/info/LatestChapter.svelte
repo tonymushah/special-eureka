@@ -2,7 +2,8 @@
 	export let volume: string | null | undefined = undefined;
 	export let chapter: string | null | undefined = undefined;
 	$: shouldShow =
-		volume != null || volume != undefined || chapter != null || chapter != undefined;
+		(typeof volume == "string" && volume.length > 0) ||
+		(typeof chapter == "string" && chapter.length > 0);
 </script>
 
 {#if shouldShow}
