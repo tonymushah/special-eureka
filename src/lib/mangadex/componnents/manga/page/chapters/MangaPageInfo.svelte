@@ -118,7 +118,7 @@
 		id: a.id,
 		name: a.attributes.name
 	}))}
-	artists={data?.relationships.authors.map((a) => ({
+	artists={data?.relationships.artists.map((a) => ({
 		id: a.id,
 		name: a.attributes.name
 	}))}
