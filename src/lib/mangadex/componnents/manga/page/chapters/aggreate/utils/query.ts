@@ -23,3 +23,35 @@ const mangaAggregateQuery = graphql(`
 
 
 export default mangaAggregateQuery
+
+export const getMangaAggregateChapterQuery = graphql(`
+    query getMangaAggregateChapter($ids: [UUID!]!) {
+        chapter {
+            list(params: {chapterIds: $ids}) {
+                data {
+                    id
+                    attributes {
+                        title
+                        translatedLanguage
+                        readableAt
+                    }
+                    relationships {
+                        scanlationGroups {
+                            id
+                            attributes {
+                                name
+                            }
+                        }
+                        user {
+                            id
+                            attributes {
+                                username
+                                roles
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+`);
