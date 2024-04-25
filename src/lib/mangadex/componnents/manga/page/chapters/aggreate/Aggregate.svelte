@@ -1,7 +1,10 @@
 <script lang="ts">
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
-	import mangaAggregateQuery, { getMangaAggregateChapterQuery } from "./utils/query";
+	import mangaAggregateQuery, {
+		getMangaAggregateChapterQuery,
+		chapterCommentsQuery
+	} from "./utils/query";
 	import { getContextClient } from "@urql/svelte";
 	import { onDestroy, onMount, type ComponentProps } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
@@ -25,6 +28,7 @@
 			id: data!.id
 		}
 	});
+	const threadUrls = new Map<string, string>();
 	let unlistens: UnlistenFn[] = [];
 	const isFetching = query.isFetching;
 	function chapterTitle({
@@ -85,6 +89,30 @@
 		);
 		return chapters;
 	}
+	async function fetchComments(ids: string[]) {
+		const res = await client
+			.query(chapterCommentsQuery, {
+				ids
+			})
+			.toPromise();
+		if (res.error) {
+			throw res.error;
+		}
+		const ret: { id: string; stats: { threadUrl: string; comments: number } }[] = [];
+		res.data?.statistics.chapter.list.forEach((d) => {
+			const c = d.comments;
+			if (c != null || c != undefined) {
+				ret.push({
+					id: d.id,
+					stats: {
+						threadUrl: c.threadUrl,
+						comments: c.repliesCount
+					}
+				});
+			}
+		});
+		return ret;
+	}
 	const aggregate = derived(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
 			chapter: MangaAggregateData;
@@ -129,8 +157,18 @@
 				e?.data?.manga.aggregate.chunked.forEach((c) => {
 					lodash.chunk<string>(c.ids, 100).forEach((ids) => {
 						fetchChapters(ids)
-							.then((cs) => {
+							.then(async (cs) => {
 								if (cs) chaptersStore.addByBatch(cs);
+								const comments = await fetchComments(ids);
+								comments.forEach((c) => {
+									threadUrls.set(c.id, c.stats.threadUrl);
+								});
+								chaptersStore.setComments(
+									comments.map((c) => ({
+										id: c.id,
+										comments: c.stats.comments
+									}))
+								);
 							})
 							.catch((e) => {
 								console.error(e);
