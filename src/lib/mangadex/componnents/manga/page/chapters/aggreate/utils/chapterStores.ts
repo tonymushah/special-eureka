@@ -5,11 +5,13 @@ import { writable, type Readable, type Writable } from "svelte/store";
 
 type Chapter = ComponentProps<ChapterElement1>;
 
-type ChapterStores = Writable<Map<string, Chapter>> & {
+export type ChapterMap = Map<string, Chapter>;
+
+type ChapterStores = Writable<ChapterMap> & {
     add: (value: Chapter) => void,
     remove: (id: string) => void,
     clear: () => void,
-    get: () => Map<string, Chapter>
+    get: () => ChapterMap
     setReadingState: (id: string, state: Readable<ChapterDownloadState>) => void,
     addByBatch: (value: Chapter[]) => void;
 }
