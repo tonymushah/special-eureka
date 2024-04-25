@@ -32,6 +32,8 @@ export const getMangaAggregateChapterQuery = graphql(`
                     id
                     attributes {
                         title
+                        volume
+                        chapter
                         translatedLanguage
                         readableAt
                     }
