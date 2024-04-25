@@ -16,6 +16,7 @@
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
 	import type { Readable } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
+	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -140,9 +141,11 @@
 			<p>
 				<time datetime={upload_date.toDateString()} bind:this={timeago} />
 			</p>
-			<a href="/" class="uploader">
-				{uploader.name}
-			</a>
+			<UserRolesComp roles={uploader.roles}>
+				<a href="/" class="uploader">
+					{uploader.name}
+				</a>
+			</UserRolesComp>
 		</div>
 		<div class="reading-number-comments">
 			<div>N/A</div>
@@ -250,8 +253,12 @@
 		background-color: var(--accent-hover);
 	}
 	a {
-		color: var(--text-color);
+		color: inherit;
 		text-decoration: none;
+		transition: color 300ms ease-in-out;
+	}
+	a:hover {
+		color: var(--primary);
 	}
 	.date-uploader > p {
 		margin: 0px;
