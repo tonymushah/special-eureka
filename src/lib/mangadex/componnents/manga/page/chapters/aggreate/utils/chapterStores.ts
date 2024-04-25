@@ -9,12 +9,14 @@ type ChapterStores = Writable<Map<string, Chapter>> & {
     add: (value: Chapter) => void,
     remove: (id: string) => void,
     clear: () => void,
+    get: () => Map<string, Chapter>
     setReadingState: (id: string, state: Readable<ChapterDownloadState>) => void,
     addByBatch: (value: Chapter[]) => void;
 }
 
 export default function chapterStores(): ChapterStores {
-    const store = writable(new Map<string, Chapter>());
+    const init = new Map<string, Chapter>();
+    const store = writable(init);
     return {
         ...store,
         add(value: Chapter) {
@@ -22,6 +24,9 @@ export default function chapterStores(): ChapterStores {
                 u.set(value.id, value);
                 return u
             })
+        },
+        get() {
+            return init;
         },
         addByBatch(value: Chapter[]) {
             store.update((u) => {
