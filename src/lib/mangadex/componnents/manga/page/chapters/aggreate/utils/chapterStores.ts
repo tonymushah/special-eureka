@@ -1,7 +1,7 @@
 import type ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 import type { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 import type { ComponentProps } from "svelte";
-import { writable, type Readable, type Writable } from "svelte/store";
+import { writable, type Readable } from "svelte/store";
 
 type Chapter = ComponentProps<ChapterElement1>;
 
@@ -12,7 +12,7 @@ type SetCommentsEntry = {
     comments: number
 }
 
-export type ChapterStores = Writable<ChapterMap> & {
+export type ChapterStores = Readable<ChapterMap> & {
     add: (value: Chapter) => void,
     remove: (id: string) => void,
     clear: () => void,
@@ -27,7 +27,9 @@ export default function chapterStores(): ChapterStores {
     const init = new Map<string, Chapter>();
     const store = writable(init);
     return {
-        ...store,
+        subscribe(run, invalidate) {
+            return store.subscribe(run, invalidate)
+        },
         add(value: Chapter) {
             store.update((u) => {
                 u.set(value.id, value);
