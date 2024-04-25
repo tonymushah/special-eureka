@@ -47,7 +47,8 @@ impl AppStateInner {
                 loop {
                     if watches1.chapter.is_closed() {
                         break;
-                    } else if sub.has_changed().unwrap_or(false) {
+                    }
+                    if sub.has_changed().unwrap_or(false) {
                         if let Some(data) = sub.borrow().as_ref().cloned() {
                             let data: ApiObjectNoRelationships<ChapterAttributes> = data.into();
                             let _ = ExtractData::update(
@@ -64,7 +65,8 @@ impl AppStateInner {
                 loop {
                     if watches2.manga.is_closed() {
                         break;
-                    } else if sub.has_changed().unwrap_or(false) {
+                    }
+                    if sub.has_changed().unwrap_or(false) {
                         if let Some(data) = sub.borrow().as_ref().cloned() {
                             let data: ApiObjectNoRelationships<MangaAttributes> = data.into();
                             let _ = ExtractData::update(
@@ -81,7 +83,8 @@ impl AppStateInner {
                 loop {
                     if watches3.cover.is_closed() {
                         break;
-                    } else if sub.has_changed().unwrap_or(false) {
+                    }
+                    if sub.has_changed().unwrap_or(false) {
                         if let Some(data) = sub.borrow().as_ref().cloned() {
                             let data: ApiObjectNoRelationships<CoverAttributes> = data.into();
                             let _ = ExtractData::update(
