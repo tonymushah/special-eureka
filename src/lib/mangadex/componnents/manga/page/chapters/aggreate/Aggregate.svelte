@@ -9,10 +9,11 @@
 	import chapterStores from "./utils/chapterStores";
 	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
-	import { derived } from "svelte/store";
+	import { derived, writable } from "svelte/store";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
 	import lodash from "lodash";
+	import { fade } from "svelte/transition";
 
 	const chaptersStore = chapterStores();
 	const client = getContextClient();
@@ -111,7 +112,16 @@
 			return [];
 		}
 	});
-	let isReversed = false;
+	const aggregateReverse = derived(aggregate, (a) => {
+		return a.toReversed().map<{ chapter: MangaAggregateData; id: string }>((vs) => ({
+			id: vs.id,
+			chapter: vs.chapter.toReversed().map((cs) => ({
+				volume: cs.volume,
+				chapters: cs.chapters.toReversed()
+			}))
+		}));
+	});
+	const isReversed = writable(false);
 	let selectedIndex = 0;
 	onMount(async () => {
 		unlistens.push(
@@ -139,29 +149,42 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	$: selected = $aggregate[selectedIndex];
+	$: selected = $isReversed ? $aggregateReverse[selectedIndex] : $aggregate[selectedIndex];
 </script>
 
 <div class="aggregate">
 	<div class="top">
-		<ButtonAccent
-			on:click={async () => {
-				if (!$isFetching) {
-					await query.execute();
-				}
-			}}
-		>
-			{#if $isFetching}
-				Loading...
-			{:else}
-				Refresh
-			{/if}
-		</ButtonAccent>
+		<div class="left">
+			<ButtonAccent
+				on:click={async () => {
+					if (!$isFetching) {
+						await query.execute();
+					}
+				}}
+			>
+				{#if $isFetching}
+					Loading...
+				{:else}
+					Refresh
+				{/if}
+			</ButtonAccent>
+		</div>
+		<div class="right">
+			<ButtonAccent
+				on:click={async () => {
+					isReversed.update((i) => !i);
+				}}
+			>
+				Reverse
+			</ButtonAccent>
+		</div>
 	</div>
 	<div class="content">
 		{#if selected}
 			{#key selected.id}
-				<AggregateContent {chaptersStore} volumes={selected.chapter} />
+				<div transition:fade>
+					<AggregateContent {chaptersStore} volumes={selected.chapter} />
+				</div>
 			{/key}
 		{/if}
 	</div>
@@ -183,6 +206,10 @@
 	.aggregate {
 		display: flex;
 		flex-direction: column;
+	}
+	.top {
+		display: flex;
+		justify-content: space-between;
 	}
 	.bottom {
 		display: flex;

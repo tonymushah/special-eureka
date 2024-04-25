@@ -2,6 +2,7 @@
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 	import Chapters from "./ChaptersAccordion.svelte";
 	import Accordion from "@mangadex/componnents/theme/accordion/Accordion.svelte";
+	import { createChapterEl1EventDispatcher } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 
 	export let title: string;
 	export let volumeContent: ComponentProps<Chapters>[];
@@ -12,20 +13,7 @@
 	type KeyboardEnvDiv = KeyboardEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+	const dispatch = createChapterEl1EventDispatcher();
 </script>
 
 <Accordion {title} titleBorder {isOpen}>
@@ -46,7 +34,15 @@
 				on:readKeyPress={({ detail }) => {
 					dispatch("readKeyPress", detail);
 				}}
+				on:remove={({ detail }) => {
+					dispatch("remove", detail);
+				}}
+				on:removeKeyPress={({ detail }) => {
+					dispatch("removeKeyPress", detail);
+				}}
 			/>
+		{:else}
+			<p>Still loading...</p>
 		{/each}
 	</div>
 </Accordion>

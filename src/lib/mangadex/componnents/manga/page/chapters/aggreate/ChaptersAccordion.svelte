@@ -1,5 +1,7 @@
 <script lang="ts">
-	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
+	import ChapterElement1, {
+		createChapterEl1EventDispatcher
+	} from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import Accordion from "@mangadex/componnents/theme/accordion/Accordion.svelte";
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 
@@ -7,26 +9,7 @@
 	export let chapters: ComponentProps<ChapterElement1>[];
 	export let isOpen: boolean = false;
 
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+	const dispatch = createChapterEl1EventDispatcher();
 	$: isSingle = chapters.length == 1;
 	$: isEmpty = chapters.length == 0;
 </script>
@@ -45,6 +28,12 @@
 		}}
 		on:readKeyPress={({ detail }) => {
 			dispatch("readKeyPress", detail);
+		}}
+		on:remove={({ detail }) => {
+			dispatch("remove", detail);
+		}}
+		on:removeKeyPress={({ detail }) => {
+			dispatch("removeKeyPress", detail);
 		}}
 	/>
 {:else if !isEmpty}
@@ -65,6 +54,12 @@
 						}}
 						on:readKeyPress={({ detail }) => {
 							dispatch("readKeyPress", detail);
+						}}
+						on:remove={({ detail }) => {
+							dispatch("remove", detail);
+						}}
+						on:removeKeyPress={({ detail }) => {
+							dispatch("removeKeyPress", detail);
 						}}
 					/>
 				{/each}

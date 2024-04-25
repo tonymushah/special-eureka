@@ -14,8 +14,12 @@
 	import { onMount, type ComponentProps } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import type { ChapterStores } from "./utils/chapterStores";
-	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
+	import ChapterElement1, {
+		createChapterEl1EventDispatcher
+	} from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import Volumes from "./Volumes.svelte";
+
+	const dispatch = createChapterEl1EventDispatcher();
 
 	export let volumes: MangaAggregateData;
 	export let chaptersStore: ChapterStores;
@@ -44,4 +48,25 @@
 	}
 </script>
 
-<Volumes openStart bind:volumes={data} />
+<Volumes
+	openStart
+	bind:volumes={data}
+	on:download={({ detail }) => {
+		dispatch("download", detail);
+	}}
+	on:downloadKeyPress={({ detail }) => {
+		dispatch("downloadKeyPress", detail);
+	}}
+	on:read={({ detail }) => {
+		dispatch("read", detail);
+	}}
+	on:readKeyPress={({ detail }) => {
+		dispatch("readKeyPress", detail);
+	}}
+	on:remove={({ detail }) => {
+		dispatch("remove", detail);
+	}}
+	on:removeKeyPress={({ detail }) => {
+		dispatch("removeKeyPress", detail);
+	}}
+/>

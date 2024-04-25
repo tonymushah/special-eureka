@@ -1,29 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
+	import { createChapterEl1EventDispatcher } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 
 	export let volumes: ComponentProps<VolumeAccordion>[];
 	export let openStart = false;
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+
+	const dispatch = createChapterEl1EventDispatcher();
 </script>
 
 <div class="volumes">
@@ -42,6 +25,12 @@
 			}}
 			on:readKeyPress={({ detail }) => {
 				dispatch("readKeyPress", detail);
+			}}
+			on:remove={({ detail }) => {
+				dispatch("remove", detail);
+			}}
+			on:removeKeyPress={({ detail }) => {
+				dispatch("removeKeyPress", detail);
 			}}
 		/>
 	{/each}
