@@ -125,7 +125,10 @@ impl ChapterListQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let params = self.deref().clone();
+        let mut params = self.deref().clone();
+        if params.limit.is_none() && !params.chapter_ids.is_empty() {
+            params.limit.replace(params.chapter_ids.len().try_into()?);
+        }
         let res = params.send(&client).await?;
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
