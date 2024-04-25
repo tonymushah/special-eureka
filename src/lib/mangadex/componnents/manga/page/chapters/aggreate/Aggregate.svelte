@@ -17,6 +17,7 @@
 	import AggregateContent from "./AggregateContent.svelte";
 	import lodash from "lodash";
 	import { fade } from "svelte/transition";
+	import { open } from "@tauri-apps/api/shell";
 
 	const chaptersStore = chapterStores();
 	const client = getContextClient();
@@ -221,7 +222,17 @@
 		{#if selected}
 			{#key selected.id}
 				<div transition:fade>
-					<AggregateContent {chaptersStore} volumes={selected.chapter} />
+					<AggregateContent
+						{chaptersStore}
+						volumes={selected.chapter}
+						on:comments={({ detail }) => {
+							console.log(`clicked ${detail.id}`);
+							const threadUrl = threadUrls.get(detail.id);
+							if (threadUrl) {
+								open(threadUrl);
+							}
+						}}
+					/>
 				</div>
 			{/key}
 		{/if}

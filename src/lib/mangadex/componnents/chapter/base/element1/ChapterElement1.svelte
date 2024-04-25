@@ -24,6 +24,12 @@
 		readKeyPress: KeyboardEnvDiv & {
 			id: string;
 		};
+		comments: MouseEnvDiv & {
+			id: string;
+		};
+		commentsKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
 	};
 	export function createChapterEl1EventDispatcher() {
 		return createEventDispatcher<ChapterEl1Events>();
@@ -190,7 +196,23 @@
 		</div>
 		<div class="reading-number-comments">
 			<div>N/A</div>
-			<div class="comments">
+			<div
+				class="comments buttons"
+				role="button"
+				on:click={(e) => {
+					dispatch("comments", {
+						...e,
+						id
+					});
+				}}
+				on:keypress={(e) => {
+					dispatch("commentsKeyPress", {
+						...e,
+						id
+					});
+				}}
+				tabindex={0}
+			>
 				<div>
 					<MessageSquareIcon />
 				</div>
@@ -286,14 +308,15 @@
 		display: flex;
 		align-items: center;
 		justify-items: center;
-		gap: 5px;
+		gap: 1px;
 	}
 	.reading-number-comments > .comments > p {
 		margin: 0px 5px;
 	}
 	.reading-number-comments > .comments > div {
-		width: 24px;
-		height: 24px;
+		display: flex;
+		align-content: center;
+		justify-content: center;
 	}
 	.layout:hover {
 		background-color: var(--accent-hover);
@@ -314,5 +337,8 @@
 	}
 	.remove {
 		color: var(--status-red);
+	}
+	.comments:hover {
+		color: var(--primary);
 	}
 </style>

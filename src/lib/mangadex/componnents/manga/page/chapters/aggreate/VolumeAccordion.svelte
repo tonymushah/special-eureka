@@ -40,6 +40,12 @@
 				on:removeKeyPress={({ detail }) => {
 					dispatch("removeKeyPress", detail);
 				}}
+				on:comments={({ detail }) => {
+					dispatch("comments", detail);
+				}}
+				on:commentsKeyPress={({ detail }) => {
+					dispatch("commentsKeyPress", detail);
+				}}
 			/>
 		{:else}
 			<p>Still loading...</p>

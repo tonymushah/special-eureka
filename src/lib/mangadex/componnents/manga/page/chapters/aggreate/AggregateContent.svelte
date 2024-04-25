@@ -11,15 +11,15 @@
 </script>
 
 <script lang="ts">
-	import { onMount, type ComponentProps } from "svelte";
+	import { onMount, type ComponentProps, createEventDispatcher } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import type { ChapterStores } from "./utils/chapterStores";
 	import ChapterElement1, {
-		createChapterEl1EventDispatcher
+		type ChapterEl1Events
 	} from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import Volumes from "./Volumes.svelte";
 
-	const dispatch = createChapterEl1EventDispatcher();
+	const dispatch = createEventDispatcher<ChapterEl1Events>();
 
 	export let volumes: MangaAggregateData;
 	export let chaptersStore: ChapterStores;
@@ -68,5 +68,11 @@
 	}}
 	on:removeKeyPress={({ detail }) => {
 		dispatch("removeKeyPress", detail);
+	}}
+	on:comments={({ detail }) => {
+		dispatch("comments", detail);
+	}}
+	on:commentsKeyPress={({ detail }) => {
+		dispatch("commentsKeyPress", detail);
 	}}
 />
