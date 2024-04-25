@@ -21,6 +21,11 @@
 </span>
 
 <style lang="scss">
+	span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	.downloading {
 		color: var(--indication-blue);
 	}

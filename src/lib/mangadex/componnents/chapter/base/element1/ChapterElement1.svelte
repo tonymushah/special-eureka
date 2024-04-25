@@ -1,15 +1,44 @@
+<script lang="ts" context="module">
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	export type ChapterEl1Events = {
+		download: MouseEnvDiv & {
+			id: string;
+		};
+		downloadKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+		remove: MouseEnvDiv & {
+			id: string;
+		};
+		removeKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+		read: MouseEnvDiv & {
+			id: string;
+		};
+		readKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+	};
+	export function createChapterEl1EventDispatcher() {
+		return createEventDispatcher<ChapterEl1Events>();
+	}
+</script>
+
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import {
-		CheckIcon,
-		DownloadCloudIcon,
-		DownloadIcon,
+		DeleteIcon,
 		EyeIcon,
 		EyeOffIcon,
 		MessageSquareIcon,
-		UsersIcon,
-		XIcon
+		UsersIcon
 	} from "svelte-feather-icons";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import { createEventDispatcher, onDestroy, onMount } from "svelte";
@@ -17,6 +46,7 @@
 	import type { Readable } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
+	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -36,26 +66,8 @@
 	export let download_state: Readable<ChapterDownloadState>;
 	export let comments: number | undefined = undefined;
 	let timeago: HTMLTimeElement;
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+
+	const dispatch = createChapterEl1EventDispatcher();
 	onMount(() => {
 		if (timeago) timeRender(timeago);
 	});
@@ -75,26 +87,55 @@
 	}}
 >
 	<div class="layout" class:haveBeenRead>
-		<div
-			class="state buttons"
-			role="button"
-			on:click={(e) => {
-				if ($download_state != ChapterDownloadState.Downloading) {
-					dispatch("download", {
+		<div class="state">
+			<div
+				class="buttons"
+				role="button"
+				on:click={(e) => {
+					if ($download_state != ChapterDownloadState.Downloading) {
+						dispatch("download", {
+							...e,
+							id
+						});
+					}
+				}}
+				on:keypress={(e) => {
+					dispatch("downloadKeyPress", {
 						...e,
 						id
 					});
-				}
-			}}
-			on:keypress={(e) => {
-				dispatch("downloadKeyPress", {
-					...e,
-					id
-				});
-			}}
-			tabindex={0}
-		>
-			<DownloadStateComp {download_state} />
+				}}
+				tabindex={0}
+			>
+				<DownloadStateComp {download_state} />
+			</div>
+			{#if (failed || downloaded) && !downloading}
+				<div
+					class="buttons remove"
+					on:click={(e) => {
+						if ($download_state != ChapterDownloadState.Downloading) {
+							dispatch("remove", {
+								...e,
+								id
+							});
+						}
+					}}
+					on:keypress={(e) => {
+						if ($download_state != ChapterDownloadState.Downloading) {
+							dispatch("removeKeyPress", {
+								...e,
+								id
+							});
+						}
+					}}
+					tabindex={0}
+					role="button"
+				>
+					<span>
+						<TrashIcon />
+					</span>
+				</div>
+			{/if}
 		</div>
 		<div class="flag-reading-state">
 			<div>
@@ -236,6 +277,11 @@
 		align-items: center;
 		justify-content: center;
 	}
+	.state {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	.reading-number-comments > .comments {
 		display: flex;
 		align-items: center;
@@ -265,5 +311,8 @@
 	}
 	.date-uploader {
 		flex-grow: 0.15;
+	}
+	.remove {
+		color: var(--status-red);
 	}
 </style>
