@@ -56,6 +56,9 @@ dependencies:
   '@tauri-apps/api':
     specifier: ^1.5.3
     version: 1.5.3
+  '@types/lodash':
+    specifier: ^4.17.0
+    version: 4.17.0
   '@types/uuid':
     specifier: ^9.0.7
     version: 9.0.8
@@ -74,6 +77,9 @@ dependencies:
   graphiql:
     specifier: ^3.1.0
     version: 3.1.1(@codemirror/language@6.0.0)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   medium-zoom:
     specifier: ^1.1.0
     version: 1.1.0
@@ -4728,7 +4734,7 @@ packages:
       '@storybook/preview-api': 8.0.0
       '@storybook/theming': 8.0.0(react-dom@18.2.0)(react@18.2.0)
       '@storybook/types': 8.0.0
-      '@types/lodash': 4.14.202
+      '@types/lodash': 4.17.0
       color-convert: 2.0.1
       dequal: 2.0.3
       lodash: 4.17.21
@@ -5768,9 +5774,8 @@ packages:
     resolution: {integrity: sha512-b7bq23s4fgBB76n34m2b3RBf6M369B0Z9uRR8aHTMd8kZISRkmDEpPD8hhpYvDFzr3bJCPES96cm3Q6qRNDbQw==}
     dev: true
 
-  /@types/lodash@4.14.202:
-    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
-    dev: true
+  /@types/lodash@4.17.0:
+    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
 
   /@types/marked@5.0.2:
     resolution: {integrity: sha512-OucS4KMHhFzhz27KxmWg7J+kIYqyqoW5kdIEI319hqARQQUTqhao3M/F+uFnDXD0Rg72iDDZxZNxq5gvctmLlg==}
@@ -9386,7 +9391,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /log-symbols@4.1.0:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
