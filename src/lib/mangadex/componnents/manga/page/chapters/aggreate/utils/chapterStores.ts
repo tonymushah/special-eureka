@@ -12,7 +12,7 @@ type SetCommentsEntry = {
     comments: number
 }
 
-type ChapterStores = Writable<ChapterMap> & {
+export type ChapterStores = Writable<ChapterMap> & {
     add: (value: Chapter) => void,
     remove: (id: string) => void,
     clear: () => void,
