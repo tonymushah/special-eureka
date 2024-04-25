@@ -55,12 +55,16 @@ export default function getChapterDownloadState({ id, client }: GetChapterDownlo
             if (data) set(DownloadStateToChapterDownloadState(data))
         });
         const sub_id = v4();
-        client.subscription(ChapterDownloadStateSubQuery, {
+        const sub = client.subscription(ChapterDownloadStateSubQuery, {
             id,
             sub: sub_id
+        }).subscribe((v) => {
+            const state = v.data?.watchDownloadState;
+            if (state) set(DownloadStateToChapterDownloadState(state));
         });
         return () => {
             sub_end(sub_id);
+            sub.unsubscribe();
         }
     });
 
