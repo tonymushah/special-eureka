@@ -105,7 +105,13 @@ impl ChapterListQueries {
         );
         let res: ChapterCollection = Collection::from_async_stream(
             stream.filter(|item| filter(item, self)),
-            self.limit.unwrap_or(10) as usize,
+            self.limit.map(|l| l as usize).unwrap_or_else(|| {
+                if self.chapter_ids.is_empty() {
+                    10
+                } else {
+                    self.chapter_ids.len()
+                }
+            }),
             self.offset.unwrap_or_default() as usize,
         )
         .await?
