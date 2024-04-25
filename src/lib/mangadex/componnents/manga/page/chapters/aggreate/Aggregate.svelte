@@ -12,6 +12,7 @@
 	import { derived } from "svelte/store";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
+	import lodash from "lodash";
 
 	const chaptersStore = chapterStores();
 	const client = getContextClient();
@@ -48,6 +49,9 @@
 				ids
 			})
 			.toPromise();
+		if (result.error) {
+			throw result.error;
+		}
 		const chapters = result.data?.chapter.list.data.map<ComponentProps<ChapterElement1>>(
 			(c) => {
 				const title = chapterTitle({
@@ -78,7 +82,7 @@
 				};
 			}
 		);
-		if (chapters) chaptersStore.addByBatch(chapters);
+		return chapters;
 	}
 	const aggregate = derived(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
@@ -87,10 +91,10 @@
 		}>((v, i) => {
 			const d = v.volumes.map<Volume>((vo) => {
 				return {
-					volume: vo.volume,
+					volume: `Volume ${vo.volume}`,
 					chapters: vo.chapters.map((chaps) => {
 						return {
-							chapter: chaps.chapter,
+							chapter: `Chapter ${chaps.chapter}`,
 							ids: chaps.ids
 						};
 					})
@@ -107,13 +111,27 @@
 			return [];
 		}
 	});
+	let isReversed = false;
 	let selectedIndex = 0;
 	onMount(async () => {
 		unlistens.push(
 			query.subscribe((e) => {
 				e?.data?.manga.aggregate.chunked.forEach((c) => {
-					fetchChapters(c.ids);
+					lodash.chunk<string>(c.ids, 100).forEach((ids) => {
+						fetchChapters(ids)
+							.then((cs) => {
+								if (cs) chaptersStore.addByBatch(cs);
+							})
+							.catch((e) => {
+								console.error(e);
+							});
+					});
 				});
+			})
+		);
+		unlistens.push(
+			chaptersStore.subscribe((e) => {
+				console.debug(e.keys());
 			})
 		);
 		await query.execute();
@@ -153,6 +171,7 @@
 				on:click={() => {
 					selectedIndex = i;
 				}}
+				class:selected={i == selectedIndex}
 			>
 				{i + 1}
 			</button>
@@ -164,5 +183,38 @@
 	.aggregate {
 		display: flex;
 		flex-direction: column;
+	}
+	.bottom {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin: 10px;
+		button {
+			background-color: var(--accent);
+			padding: 5px 10px;
+			font-size: 18px;
+			color: var(--textColor);
+			font-family: var(--fonts);
+			border: none;
+			transition:
+				background-color 300ms ease-in-out,
+				font-weight 300ms ease-in-out;
+		}
+		button:hover {
+			background-color: var(--accent-hover);
+		}
+		button:active {
+			background-color: var(--accent-active);
+		}
+		button.selected {
+			background-color: var(--primary);
+			font-weight: 800;
+		}
+		button.selected:hover {
+			background-color: color-mix(in srgb, var(--primary) 90%, transparent 10%);
+		}
+		button.selected:active {
+			background-color: color-mix(in srgb, var(--primary) 80%, transparent 20%);
+		}
 	}
 </style>

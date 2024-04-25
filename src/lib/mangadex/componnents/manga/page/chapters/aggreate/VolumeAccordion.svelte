@@ -5,6 +5,7 @@
 
 	export let title: string;
 	export let volumeContent: ComponentProps<Chapters>[];
+	export let isOpen: boolean = false;
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -27,10 +28,11 @@
 	}>();
 </script>
 
-<Accordion {title} withBorder>
+<Accordion {title} titleBorder {isOpen}>
 	<div class="volume">
 		{#each volumeContent as chapters (chapters.title)}
 			<Chapters
+				{isOpen}
 				{...chapters}
 				on:download={({ detail }) => {
 					dispatch("download", detail);

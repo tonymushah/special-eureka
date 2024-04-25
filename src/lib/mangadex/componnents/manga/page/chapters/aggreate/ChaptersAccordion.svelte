@@ -5,6 +5,7 @@
 
 	export let title: string;
 	export let chapters: ComponentProps<ChapterElement1>[];
+	export let isOpen: boolean = false;
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -27,6 +28,7 @@
 		};
 	}>();
 	$: isSingle = chapters.length == 1;
+	$: isEmpty = chapters.length == 0;
 </script>
 
 {#if isSingle}
@@ -45,9 +47,9 @@
 			dispatch("readKeyPress", detail);
 		}}
 	/>
-{:else}
+{:else if !isEmpty}
 	<div class="some-margin">
-		<Accordion {title} titleBorder>
+		<Accordion {title} titleBorder {isOpen}>
 			<div class="chapters">
 				{#each chapters as chapter (chapter.id)}
 					<ChapterElement1

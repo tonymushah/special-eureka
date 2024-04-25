@@ -44,4 +44,4 @@
 	}
 </script>
 
-<Volumes bind:volumes={data} />
+<Volumes openStart bind:volumes={data} />

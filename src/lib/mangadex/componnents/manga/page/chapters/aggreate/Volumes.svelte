@@ -3,6 +3,7 @@
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 
 	export let volumes: ComponentProps<VolumeAccordion>[];
+	export let openStart = false;
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -26,8 +27,9 @@
 </script>
 
 <div class="volumes">
-	{#each volumes as volume}
+	{#each volumes as volume, l}
 		<VolumeAccordion
+			isOpen={l == 0 && openStart}
 			{...volume}
 			on:download={({ detail }) => {
 				dispatch("download", detail);
