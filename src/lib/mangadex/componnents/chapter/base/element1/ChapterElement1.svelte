@@ -15,6 +15,7 @@
 	import { createEventDispatcher, onDestroy, onMount } from "svelte";
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
 	import type { Readable } from "svelte/store";
+	import DownloadStateComp from "./DownloadStateComp.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -55,11 +56,14 @@
 		};
 	}>();
 	onMount(() => {
-		timeRender(timeago);
+		if (timeago) timeRender(timeago);
 	});
 	onDestroy(() => {
-		timeCancel(timeago);
+		if (timeago) timeCancel(timeago);
 	});
+	$: downloaded = $download_state == ChapterDownloadState.Downloaded;
+	$: downloading = $download_state == ChapterDownloadState.Downloading;
+	$: failed = $download_state == ChapterDownloadState.Failed;
 </script>
 
 <div
@@ -89,15 +93,7 @@
 			}}
 			tabindex={0}
 		>
-			{#if $download_state == ChapterDownloadState.Downloaded}
-				<CheckIcon />
-			{:else if $download_state == ChapterDownloadState.Downloading}
-				<DownloadCloudIcon />
-			{:else if $download_state == ChapterDownloadState.Failed}
-				<XIcon />
-			{:else}
-				<DownloadIcon />
-			{/if}
+			<DownloadStateComp {download_state} />
 		</div>
 		<div class="flag-reading-state">
 			<div>
@@ -169,6 +165,7 @@
 <style lang="scss">
 	.buttons {
 		transition: background-color 300ms ease-in-out;
+		transition: color 300ms ease-in-out;
 	}
 	.buttons:hover {
 		background-color: var(--accent-l1-hover);
