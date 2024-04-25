@@ -57,3 +57,19 @@ export const getMangaAggregateChapterQuery = graphql(`
         }
     }
 `);
+
+export const chapterCommentsQuery = graphql(`
+    query chapterAggregateComments($ids: [UUID!]!) {
+        statistics {
+            chapter {
+                list(ids: $ids) {
+                    id
+                    comments {
+                        threadUrl
+                        repliesCount
+                    }
+                }
+            }
+        }
+    }
+`);
