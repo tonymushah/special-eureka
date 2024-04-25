@@ -35,7 +35,7 @@ export function DownloadStateToChapterDownloadState(data: {
     hasFailed: boolean
 }): ChapterDownloadState {
     if (data.isDownloaded) {
-        if (data.hasFailed) {
+        if (!data.hasFailed) {
             return ChapterDownloadState.Downloaded
         } else {
             return ChapterDownloadState.Failed
