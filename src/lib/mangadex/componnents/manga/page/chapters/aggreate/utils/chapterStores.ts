@@ -7,6 +7,11 @@ type Chapter = ComponentProps<ChapterElement1>;
 
 export type ChapterMap = Map<string, Chapter>;
 
+type SetCommentsEntry = {
+    id: string,
+    comments: number
+}
+
 type ChapterStores = Writable<ChapterMap> & {
     add: (value: Chapter) => void,
     remove: (id: string) => void,
@@ -14,6 +19,8 @@ type ChapterStores = Writable<ChapterMap> & {
     get: () => ChapterMap
     setReadingState: (id: string, state: Readable<ChapterDownloadState>) => void,
     addByBatch: (value: Chapter[]) => void;
+    setComment: (id: string, comments: number) => void;
+    setComments: (input: SetCommentsEntry[]) => void;
 }
 
 export default function chapterStores(): ChapterStores {
@@ -58,6 +65,26 @@ export default function chapterStores(): ChapterStores {
                 }
                 return u
             })
-        }
+        },
+        setComment(id, comments) {
+            store.update((u) => {
+                const chapter = u.get(id);
+                if (chapter) {
+                    chapter.comments = comments;
+                }
+                return u;
+            })
+        },
+        setComments(input) {
+            store.update((u) => {
+                input.forEach(({ id, comments }) => {
+                    const chapter = u.get(id);
+                    if (chapter) {
+                        chapter.comments = comments;
+                    }
+                })
+                return u;
+            })
+        },
     }
 }
