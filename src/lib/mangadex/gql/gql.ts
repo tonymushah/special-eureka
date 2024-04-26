@@ -29,7 +29,7 @@ const documents = {
     "\n    subscription rtlSidebarSub($sub_id: UUID!) {\n        watchSidebarDirection(subId: $sub_id)\n    }\n": types.RtlSidebarSubDocument,
     "\n    subscription userMe($sub_id: UUID!) {\n        watchUserMe(subId: $sub_id) {\n            username\n            roles\n        }\n    }\n": types.UserMeDocument,
     "\n    subscription isLogged($sub_id: UUID!) {\n        watchIsLogged(subId: $sub_id)\n    }  \n": types.IsLoggedDocument,
-    "\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality!\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t": types.CoverImageDocument,
+    "\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t": types.CoverImageDocument,
     "\n\tquery favicon($url: Url!) {\n\t\tutils {\n\t\t\tfavicon(url: $url)\n\t\t}\n\t}\n": types.FaviconDocument,
     "\n    query getLanguageFromStr($lang: String!) {\n        utils {\n            strToLanguage(input: $lang)\n        }\n    }\n": types.GetLanguageFromStrDocument,
     "\n\t\t\t\tmutation mountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t": types.MountAppStateDocument,
@@ -119,7 +119,7 @@ export function graphql(source: "\n    subscription isLogged($sub_id: UUID!) {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality!\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t"): (typeof documents)["\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality!\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t"];
+export function graphql(source: "\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t"): (typeof documents)["\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

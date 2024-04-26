@@ -15,7 +15,7 @@ export default function get_cover_art({
     manga_id: string;
     filename: string;
     client: Client;
-    mode: CoverImageQuality;
+    mode?: CoverImageQuality;
 }) {
     const store = queryStore({
         client,
@@ -24,7 +24,7 @@ export default function get_cover_art({
 				$cover_id: UUID!
 				$manga_id: UUID!
 				$filename: String!
-				$mode: CoverImageQuality!
+				$mode: CoverImageQuality
 			) {
 				cover {
 					getImage(
