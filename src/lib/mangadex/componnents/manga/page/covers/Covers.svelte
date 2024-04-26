@@ -127,7 +127,8 @@
 	.covers {
 		margin-top: 10px;
 		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 		width: 100%;
+		gap: 10px;
 	}
 </style>
