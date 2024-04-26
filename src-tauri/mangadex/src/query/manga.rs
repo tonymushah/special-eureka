@@ -88,6 +88,9 @@ impl MangaQueries {
     ) -> Result<MangaResults> {
         let mut params = params;
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        if params.limit.is_none() && !params.manga_ids.is_empty() {
+            params.limit.replace(params.manga_ids.len().try_into()?);
+        }
         MangaListQueries(params).list(ctx).await
     }
     pub async fn list_offline(
@@ -97,6 +100,9 @@ impl MangaQueries {
     ) -> Result<MangaResults> {
         let mut params = params;
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        if params.limit.is_none() && !params.manga_ids.is_empty() {
+            params.limit.replace(params.manga_ids.len().try_into()?);
+        }
         MangaListQueries(params).list_offline(ctx).await
     }
     pub async fn random(
