@@ -210,6 +210,7 @@ impl MangaQueries {
             .collect();
         list_params.includes = <Manga as ExtractReferenceExpansionFromContext>::exctract(ctx);
         list_params.manga_ids = rels.keys().copied().collect();
+        list_params.limit.replace(rels.keys().len().try_into()?);
         Ok(list_params
             .send(&client)
             .await?
