@@ -299,6 +299,9 @@
 	}
 	.title-groups h4 {
 		margin: 0px;
+		overflow: hidden;
+		text-wrap: nowrap;
+		text-overflow: ellipsis;
 	}
 	.title-groups {
 		flex-grow: 3;
