@@ -61,9 +61,9 @@ const KEY = "manga-covers-image-context";
 export function getCoversImageStoreContext(): CoversImageStore {
     const context = getContext<CoversImageStore>(KEY);
     if (context) {
-        throw new Error(`${KEY} context is undefined`)
-    } else {
         return context;
+    } else {
+        throw new Error(`${KEY} context is undefined`)
     }
 }
 

@@ -118,7 +118,16 @@
 	<div class="covers">
 		<CoverContents bind:covers={coversData} />
 	</div>
-	{#if isAtEnd && !isLoading}
+	{#if !isAtEnd && !isLoading}
 		<div bind:this={interObsEl}></div>
 	{/if}
 {/if}
+
+<style lang="scss">
+	.covers {
+		margin-top: 10px;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		width: 100%;
+	}
+</style>

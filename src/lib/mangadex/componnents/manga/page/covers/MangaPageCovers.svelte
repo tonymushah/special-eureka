@@ -21,7 +21,7 @@
 	export let fixedWidth_: boolean = false;
 	$: flex = variant == Variant.Flex;
 	$: grid = variant == Variant.Grid;
-	$: fixedWidth = !grid || fixedWidth_;
+	$: fixedWidth = flex || fixedWidth_;
 </script>
 
 <div class:flex class:grid>
@@ -33,15 +33,16 @@
 <style lang="scss">
 	div {
 		display: contents;
-		gap: 10px;
 	}
 	div.flex {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
+		gap: 10px;
 	}
 	div.grid {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr 1fr;
+		gap: 10px;
 	}
 </style>

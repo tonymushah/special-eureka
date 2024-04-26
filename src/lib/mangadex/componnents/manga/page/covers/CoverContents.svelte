@@ -35,4 +35,4 @@
 	}
 </script>
 
-<MangaPageCovers bind:items={data} variant={Variant.Grid} />
+<MangaPageCovers bind:items={data} />
