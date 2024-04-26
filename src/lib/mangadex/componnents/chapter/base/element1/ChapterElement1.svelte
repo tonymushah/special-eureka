@@ -53,6 +53,9 @@
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
+	import { route } from "$lib/ROUTES";
+	import Link from "@mangadex/componnents/theme/links/Link.svelte";
+	import ContextMenuLink from "@mangadex/componnents/theme/links/context-menu/ContextMenuLink.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -172,12 +175,38 @@
 			</div>
 		</div>
 		<div class="title-groups">
-			<a href={`/mangadex/chapter/${id}`}><h4>{title}</h4></a>
+			<ContextMenuLink
+				href={route("/mangadex/chapter/[id]", {
+					id
+				})}
+				ext_href={`https://mangadex.org/chapter/${id}`}
+			>
+				<a
+					href={route("/mangadex/chapter/[id]", {
+						id
+					})}
+				>
+					<h4>{title}</h4>
+				</a>
+			</ContextMenuLink>
 			<div class="groups">
 				<UsersIcon />
 				{#if groups.length != 0}
 					{#each groups as { id, name }}
-						<a href="/">{name}</a>
+						<ContextMenuLink
+							href={route("/mangadex/group/[id]", {
+								id
+							})}
+							ext_href={`https://mangadex.org/group/${id}`}
+						>
+							<a
+								href={route("/mangadex/group/[id]", {
+									id
+								})}
+							>
+								{name}
+							</a>
+						</ContextMenuLink>
 					{/each}
 				{:else}
 					<i>No Groups</i>
@@ -189,7 +218,12 @@
 				<time datetime={upload_date.toDateString()} bind:this={timeago} />
 			</p>
 			<UserRolesComp roles={uploader.roles}>
-				<a href="/" class="uploader">
+				<a
+					href={route("/mangadex/user/[id]", {
+						id: uploader.id
+					})}
+					class="uploader"
+				>
 					{uploader.name}
 				</a>
 			</UserRolesComp>
@@ -263,7 +297,7 @@
 		flex-direction: column;
 		justify-content: center;
 	}
-	.title-groups > a > h4 {
+	.title-groups h4 {
 		margin: 0px;
 	}
 	.title-groups {
