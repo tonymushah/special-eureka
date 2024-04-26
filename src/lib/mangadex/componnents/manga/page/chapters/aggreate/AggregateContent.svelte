@@ -13,7 +13,7 @@
 <script lang="ts">
 	import { onMount, type ComponentProps, createEventDispatcher } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
-	import type { ChapterStores } from "./utils/chapterStores";
+	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
 	import ChapterElement1, {
 		type ChapterEl1Events
 	} from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
@@ -22,7 +22,7 @@
 	const dispatch = createEventDispatcher<ChapterEl1Events>();
 
 	export let volumes: MangaAggregateData;
-	export let chaptersStore: ChapterStores;
+	const chaptersStore: ChapterStores = getChapterStoreContext();
 	let data: ComponentProps<VolumeAccordion>[] = [];
 	$: {
 		const store = $chaptersStore;

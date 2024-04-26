@@ -21,6 +21,8 @@
 	import { page } from "$app/stores";
 	import { route } from "$lib/ROUTES";
 	import { v4 } from "uuid";
+	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
+	import { initCoverImageStoreContext } from "@mangadex/componnents/manga/page/covers/utils/coverImageStoreContext";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -58,6 +60,8 @@
 				id: data.layoutData?.id ?? v4()
 			})
 	);
+	initChapterStoreContext();
+	initCoverImageStoreContext();
 	$: layoutData = data.layoutData!;
 	$: description = layoutData.description;
 	$: hasRelation = data.queryResult!.relationships.manga.length > 0;

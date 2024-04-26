@@ -1,6 +1,6 @@
 import type ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 import type { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-import type { ComponentProps } from "svelte";
+import { setContext, type ComponentProps, getContext } from "svelte";
 import { writable, type Readable } from "svelte/store";
 
 type Chapter = ComponentProps<ChapterElement1>;
@@ -88,5 +88,24 @@ export default function chapterStores(): ChapterStores {
                 return u;
             })
         },
+    }
+}
+
+const KEY = "mangadex-title-page-chapters";
+
+export function setChapterStoreContext(store: ChapterStores): ChapterStores {
+    return setContext(KEY, store);
+}
+
+export function initChapterStoreContext(): ChapterStores {
+    return setChapterStoreContext(chapterStores());
+}
+
+export function getChapterStoreContext(): ChapterStores {
+    const context = getContext<ChapterStores>(KEY);
+    if (context) {
+        return context;
+    } else {
+        throw new Error(`${KEY} context is missing`);
     }
 }

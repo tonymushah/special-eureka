@@ -9,7 +9,7 @@
 	import { onDestroy, onMount, type ComponentProps } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
-	import chapterStores from "./utils/chapterStores";
+	import chapterStores, { getChapterStoreContext } from "./utils/chapterStores";
 	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 	import { derived, writable } from "svelte/store";
@@ -19,7 +19,7 @@
 	import { fade } from "svelte/transition";
 	import { open } from "@tauri-apps/api/shell";
 
-	const chaptersStore = chapterStores();
+	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
 	const { queryResult: data } = getTitleLayoutData();
 	const query = specialQueryStore({
@@ -223,7 +223,6 @@
 			{#key selected.id}
 				<div transition:fade>
 					<AggregateContent
-						{chaptersStore}
 						volumes={selected.chapter}
 						on:comments={({ detail }) => {
 							console.log(`clicked ${detail.id}`);

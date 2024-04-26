@@ -1,18 +1,18 @@
 <script lang="ts">
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
-	import { getContextClient } from "@urql/svelte";
-	import { initCoverImageStoreContext } from "./utils/coverImageStoreContext";
-	import type { CoverInput } from "./CoverContents.svelte";
-	import getMangaCoversQuery from "./utils/query";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import { getContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
 	import { fade, slide } from "svelte/transition";
+	import type { CoverInput } from "./CoverContents.svelte";
 	import CoverContents from "./CoverContents.svelte";
+	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
+	import getMangaCoversQuery from "./utils/query";
 
 	const { layoutData: data } = getTitleLayoutData();
 	const id = data!.id;
 	const client = getContextClient();
-	const imagesStore = initCoverImageStoreContext();
+	const imagesStore = getCoversImageStoreContext();
 	let isLoading = false;
 	let currentOffset = 0;
 	let isAtEnd = false;
