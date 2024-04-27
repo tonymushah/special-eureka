@@ -23,6 +23,7 @@
 	import { v4 } from "uuid";
 	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
 	import { initCoverImageStoreContext } from "@mangadex/componnents/manga/page/covers/utils/coverImageStoreContext";
+	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -62,6 +63,7 @@
 	);
 	initChapterStoreContext();
 	initCoverImageStoreContext();
+	initRelatedTitlesStoreContext();
 	$: layoutData = data.layoutData!;
 	$: description = layoutData.description;
 	$: hasRelation = data.queryResult!.relationships.manga.length > 0;
