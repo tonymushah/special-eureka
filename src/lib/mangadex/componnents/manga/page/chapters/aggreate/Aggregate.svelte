@@ -156,25 +156,33 @@
 		unlistens.push(
 			query.subscribe((e) => {
 				e?.data?.manga.aggregate.chunked.forEach((c) => {
-					lodash.chunk<string>(c.ids, 100).forEach((ids) => {
-						fetchChapters(ids)
-							.then(async (cs) => {
-								if (cs) chaptersStore.addByBatch(cs);
-								const comments = await fetchComments(ids);
-								comments.forEach((c) => {
-									threadUrls.set(c.id, c.stats.threadUrl);
-								});
-								chaptersStore.setComments(
-									comments.map((c) => ({
-										id: c.id,
-										comments: c.stats.comments
-									}))
-								);
-							})
-							.catch((e) => {
-								console.error(e);
-							});
-					});
+					const cache = chaptersStore.get();
+
+					lodash
+						.chunk<string>(
+							c.ids.filter((id) => !cache.has(id)),
+							100
+						)
+						.forEach((ids) => {
+							if (ids.length > 0)
+								fetchChapters(ids)
+									.then(async (cs) => {
+										if (cs) chaptersStore.addByBatch(cs);
+										const comments = await fetchComments(ids);
+										comments.forEach((c) => {
+											threadUrls.set(c.id, c.stats.threadUrl);
+										});
+										chaptersStore.setComments(
+											comments.map((c) => ({
+												id: c.id,
+												comments: c.stats.comments
+											}))
+										);
+									})
+									.catch((e) => {
+										console.error(e);
+									});
+						});
 				});
 			})
 		);
