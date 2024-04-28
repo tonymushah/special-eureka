@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
+	import WindowDecoration from "$lib/window-decoration/WindowDecoration.svelte";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { appWindow } from "@tauri-apps/api/window";
 	import { onDestroy, onMount } from "svelte";
-	// import function to register Swiper custom elements
+	import { slide } from "svelte/transition";
 	import { register } from "swiper/element/bundle";
-	// register Swiper custom elements
+	import "toastify-js/src/toastify.css";
 
 	const unlistens: UnlistenFn[] = [];
 	onMount(async () => {
@@ -21,9 +23,33 @@
 	});
 </script>
 
-<slot />
+<div class="outer" class:defaultDecoration={$isDefaultDecoration}>
+	{#if !$isDefaultDecoration}
+		<div
+			transition:slide={{
+				axis: "y"
+			}}
+		>
+			<WindowDecoration />
+		</div>
+	{/if}
+	<div class="inner">
+		<slot />
+	</div>
+</div>
 
-<style>
+<style lang="scss">
+	.outer {
+		width: 100%;
+		height: 100cqh;
+		overflow: hidden;
+		.inner {
+			height: 100cqh;
+		}
+	}
+	.outer.defaultDecoration {
+		height: 100vh;
+	}
 	:global(body) {
 		margin: 0px;
 	}

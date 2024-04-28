@@ -2,23 +2,33 @@
 	import wordMark from "@mangadex/assets/mangadex-wordmark.svg";
 	import { sidebarState as isOpen } from "@mangadex/stores";
 	import Logo from "../Logo.svelte";
-	import { Box } from "@svelteuidev/core";
 	import WordMark from "../WordMark.svelte";
+
+	const toggle = () => isOpen.update((v) => !v);
 </script>
 
-<Box on:click={() => {
-    $isOpen = !$isOpen;
-}}>
+<div
+	role="button"
+	tabindex="0"
+	on:keypress={({ key }) => {
+		if (key == "Enter") {
+			toggle();
+		}
+	}}
+	on:click={() => {
+		toggle();
+	}}
+>
 	<div class="base">
 		<div>
 			<Logo />
 		</div>
 
-		<div class="img" class:collapsed={$isOpen} >
-            <WordMark/>
-        </div>
+		<div class="img" class:collapsed={$isOpen}>
+			<WordMark />
+		</div>
 	</div>
-</Box>
+</div>
 
 <style>
 	.img {
@@ -29,7 +39,7 @@
 	.img.collapsed {
 		animation: img-fade-out 300ms ease-in-out;
 		animation-fill-mode: forwards;
-        display: none;
+		display: none;
 	}
 	@keyframes img-fade-out {
 		from {

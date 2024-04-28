@@ -105,7 +105,13 @@ impl ChapterListQueries {
         );
         let res: ChapterCollection = Collection::from_async_stream(
             stream.filter(|item| filter(item, self)),
-            self.limit.unwrap_or(10) as usize,
+            self.limit.map(|l| l as usize).unwrap_or_else(|| {
+                if self.chapter_ids.is_empty() {
+                    10
+                } else {
+                    self.chapter_ids.len()
+                }
+            }),
             self.offset.unwrap_or_default() as usize,
         )
         .await?
@@ -125,7 +131,10 @@ impl ChapterListQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let params = self.deref().clone();
+        let mut params = self.deref().clone();
+        if params.limit.is_none() && !params.chapter_ids.is_empty() {
+            params.limit.replace(params.chapter_ids.len().try_into()?);
+        }
         let res = params.send(&client).await?;
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {

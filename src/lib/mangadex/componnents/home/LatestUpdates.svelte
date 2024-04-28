@@ -1,10 +1,8 @@
 <script lang="ts">
 	import { graphql } from "@mangadex/gql";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
-	import { getContextClient, queryStore } from "@urql/svelte";
+	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
-	import { derived } from "svelte/store";
-	import type { ResMapInner } from "./latest-updates";
 	import Content from "./latest-updates/Content.svelte";
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";

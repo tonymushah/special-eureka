@@ -1,13 +1,17 @@
 <script lang="ts">
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
+	import type { Readable } from "svelte/store";
 
-	export let locale: Language;
+	export let locale: Readable<Language | undefined>;
 	export let title: string;
+	$: lang = $locale;
 </script>
 
 <div class="alt-title">
-	<FlagIcon bind:lang={locale} />
+	{#if lang}
+		<FlagIcon bind:lang />
+	{/if}
 	<h4>{title}</h4>
 </div>
 

@@ -2,6 +2,7 @@ import { graphql } from "@mangadex/gql";
 import type { CoverImageQuality } from "@mangadex/gql/graphql";
 import { Client, queryStore } from "@urql/svelte";
 import { derived } from "svelte/store";
+import bufToImageSrc from "../bufToImageSrc";
 
 export default function get_cover_art({
     cover_id,
@@ -14,7 +15,7 @@ export default function get_cover_art({
     manga_id: string;
     filename: string;
     client: Client;
-    mode: CoverImageQuality;
+    mode?: CoverImageQuality;
 }) {
     const store = queryStore({
         client,
@@ -23,7 +24,7 @@ export default function get_cover_art({
 				$cover_id: UUID!
 				$manga_id: UUID!
 				$filename: String!
-				$mode: CoverImageQuality!
+				$mode: CoverImageQuality
 			) {
 				cover {
 					getImage(
@@ -45,8 +46,7 @@ export default function get_cover_art({
     return derived(store, ($s) => {
         const buf: Int8Array | undefined = $s.data?.cover.getImage;
         if (buf) {
-            const data = btoa(buf.reduce((data, byte) => data + String.fromCharCode(byte), ""));
-            return `data:image/*;base64,${data}`;
+            return bufToImageSrc(buf);
         } else {
             return undefined;
         }

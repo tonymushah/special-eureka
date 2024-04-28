@@ -21,33 +21,35 @@
 	}>();
 </script>
 
-<div class="outer">
-	<h4>{title}</h4>
-	<div class="inner">
-		{#each items as { id, name } (id)}
-			<ButtonBase
-				with_hover
-				--button-color="var(--accent-l2)"
-				--button-hover="var(--primary)"
-				on:click={({ detail }) => {
-					dispatch("click", {
-						...detail,
-						key,
-						id
-					});
-				}}
-			>
-				<h4>
-					{name}
-				</h4>
-			</ButtonBase>
-		{/each}
+{#if items.length > 0}
+	<div class="outer">
+		<h4>{title}</h4>
+		<div class="inner">
+			{#each items as { id, name } (id)}
+				<ButtonBase
+					with_hover
+					--button-color="var(--accent)"
+					--button-hover="var(--primary)"
+					on:click={({ detail }) => {
+						dispatch("click", {
+							...detail,
+							key,
+							id
+						});
+					}}
+				>
+					<h4>
+						{name}
+					</h4>
+				</ButtonBase>
+			{/each}
+		</div>
 	</div>
-</div>
+{/if}
 
 <style lang="scss">
 	h4 {
-		margin: 0px;
+		margin: 1px;
 		padding: 0px;
 		font-weight: 500;
 	}
@@ -57,7 +59,11 @@
 		.inner {
 			display: flex;
 			flex-direction: row;
+			flex-wrap: wrap;
 			gap: 5px;
+			h4 {
+				margin: 2px;
+			}
 		}
 	}
 </style>

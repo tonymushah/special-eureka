@@ -1,7 +1,7 @@
 import { graphql } from "@mangadex/gql";
 
 const query = graphql(/* GraphQL */`
-    query getMangaTests($id: UUID!) {
+    query getMangaHihi($id: UUID!) {
         manga {
             get(id: $id) {
                 id
@@ -14,6 +14,12 @@ const query = graphql(/* GraphQL */`
                     availableTranslatedLanguages
                     year
                     contentRating
+                    publicationDemographic
+                    lastVolume
+                    lastChapter
+                    latestUploadedChapter
+                    availableTranslatedLanguages
+                    originalLanguage
                     links {
                         hasNoLinks
                         amazon
@@ -33,6 +39,7 @@ const query = graphql(/* GraphQL */`
                         id
                         attributes {
                             name
+                            group
                         }
                     }
                 }

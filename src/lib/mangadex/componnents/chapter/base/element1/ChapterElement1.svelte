@@ -1,19 +1,61 @@
+<script lang="ts" context="module">
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	export type ChapterEl1Events = {
+		download: MouseEnvDiv & {
+			id: string;
+		};
+		downloadKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+		remove: MouseEnvDiv & {
+			id: string;
+		};
+		removeKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+		read: MouseEnvDiv & {
+			id: string;
+		};
+		readKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+		comments: MouseEnvDiv & {
+			id: string;
+		};
+		commentsKeyPress: KeyboardEnvDiv & {
+			id: string;
+		};
+	};
+	export function createChapterEl1EventDispatcher() {
+		return createEventDispatcher<ChapterEl1Events>();
+	}
+</script>
+
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import {
-		CheckIcon,
-		DownloadCloudIcon,
-		DownloadIcon,
+		DeleteIcon,
 		EyeIcon,
 		EyeOffIcon,
 		MessageSquareIcon,
-		UsersIcon,
-		XIcon
+		UsersIcon
 	} from "svelte-feather-icons";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import { createEventDispatcher, onDestroy, onMount } from "svelte";
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
+	import type { Readable } from "svelte/store";
+	import DownloadStateComp from "./DownloadStateComp.svelte";
+	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
+	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
+	import { route } from "$lib/ROUTES";
+	import Link from "@mangadex/componnents/theme/links/Link.svelte";
+	import ContextMenuLink from "@mangadex/componnents/theme/links/context-menu/ContextMenuLink.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -30,35 +72,20 @@
 	export let uploader: Uploader;
 	export let upload_date: Date;
 	export let haveBeenRead: boolean = true;
-	export let download_state: ChapterDownloadState;
-	export let comments: number;
+	export let download_state: Readable<ChapterDownloadState>;
+	export let comments: number | undefined = undefined;
 	let timeago: HTMLTimeElement;
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+
+	const dispatch = createChapterEl1EventDispatcher();
 	onMount(() => {
-		timeRender(timeago);
+		if (timeago) timeRender(timeago);
 	});
 	onDestroy(() => {
-		timeCancel(timeago);
+		if (timeago) timeCancel(timeago);
 	});
+	$: downloaded = $download_state == ChapterDownloadState.Downloaded;
+	$: downloading = $download_state == ChapterDownloadState.Downloading;
+	$: failed = $download_state == ChapterDownloadState.Failed;
 </script>
 
 <div
@@ -69,33 +96,54 @@
 	}}
 >
 	<div class="layout" class:haveBeenRead>
-		<div
-			class="state buttons"
-			role="button"
-			on:click={(e) => {
-				if (download_state != ChapterDownloadState.Downloading) {
-					dispatch("download", {
+		<div class="state">
+			<div
+				class="buttons"
+				role="button"
+				on:click={(e) => {
+					if ($download_state != ChapterDownloadState.Downloading) {
+						dispatch("download", {
+							...e,
+							id
+						});
+					}
+				}}
+				on:keypress={(e) => {
+					dispatch("downloadKeyPress", {
 						...e,
 						id
 					});
-				}
-			}}
-			on:keypress={(e) => {
-				dispatch("downloadKeyPress", {
-					...e,
-					id
-				});
-			}}
-			tabindex={0}
-		>
-			{#if download_state == ChapterDownloadState.Downloaded}
-				<CheckIcon />
-			{:else if download_state == ChapterDownloadState.Downloading}
-				<DownloadCloudIcon />
-			{:else if download_state == ChapterDownloadState.Failed}
-				<XIcon />
-			{:else}
-				<DownloadIcon />
+				}}
+				tabindex={0}
+			>
+				<DownloadStateComp {download_state} />
+			</div>
+			{#if (failed || downloaded) && !downloading}
+				<div
+					class="buttons remove"
+					on:click={(e) => {
+						if ($download_state != ChapterDownloadState.Downloading) {
+							dispatch("remove", {
+								...e,
+								id
+							});
+						}
+					}}
+					on:keypress={(e) => {
+						if ($download_state != ChapterDownloadState.Downloading) {
+							dispatch("removeKeyPress", {
+								...e,
+								id
+							});
+						}
+					}}
+					tabindex={0}
+					role="button"
+				>
+					<span>
+						<TrashIcon />
+					</span>
+				</div>
 			{/if}
 		</div>
 		<div class="flag-reading-state">
@@ -127,12 +175,38 @@
 			</div>
 		</div>
 		<div class="title-groups">
-			<a href={`/mangadex/chapter/${id}`}><h4>{title}</h4></a>
+			<ContextMenuLink
+				href={route("/mangadex/chapter/[id]", {
+					id
+				})}
+				ext_href={`https://mangadex.org/chapter/${id}`}
+			>
+				<a
+					href={route("/mangadex/chapter/[id]", {
+						id
+					})}
+				>
+					<h4>{title}</h4>
+				</a>
+			</ContextMenuLink>
 			<div class="groups">
 				<UsersIcon />
 				{#if groups.length != 0}
 					{#each groups as { id, name }}
-						<a href="/">{name}</a>
+						<ContextMenuLink
+							href={route("/mangadex/group/[id]", {
+								id
+							})}
+							ext_href={`https://mangadex.org/group/${id}`}
+						>
+							<a
+								href={route("/mangadex/group/[id]", {
+									id
+								})}
+							>
+								{name}
+							</a>
+						</ContextMenuLink>
 					{/each}
 				{:else}
 					<i>No Groups</i>
@@ -143,17 +217,46 @@
 			<p>
 				<time datetime={upload_date.toDateString()} bind:this={timeago} />
 			</p>
-			<a href="/" class="uploader">
-				{uploader.name}
-			</a>
+			<UserRolesComp roles={uploader.roles}>
+				<a
+					href={route("/mangadex/user/[id]", {
+						id: uploader.id
+					})}
+					class="uploader"
+				>
+					{uploader.name}
+				</a>
+			</UserRolesComp>
 		</div>
 		<div class="reading-number-comments">
 			<div>N/A</div>
-			<div class="comments">
+			<div
+				class="comments buttons"
+				role="button"
+				on:click={(e) => {
+					dispatch("comments", {
+						...e,
+						id
+					});
+				}}
+				on:keypress={(e) => {
+					dispatch("commentsKeyPress", {
+						...e,
+						id
+					});
+				}}
+				tabindex={0}
+			>
 				<div>
 					<MessageSquareIcon />
 				</div>
-				<p>{comments}</p>
+				<p>
+					{#if comments}
+						{comments}
+					{:else}
+						N/A
+					{/if}
+				</p>
 			</div>
 		</div>
 	</div>
@@ -162,6 +265,7 @@
 <style lang="scss">
 	.buttons {
 		transition: background-color 300ms ease-in-out;
+		transition: color 300ms ease-in-out;
 	}
 	.buttons:hover {
 		background-color: var(--accent-l1-hover);
@@ -193,8 +297,11 @@
 		flex-direction: column;
 		justify-content: center;
 	}
-	.title-groups > a > h4 {
+	.title-groups h4 {
 		margin: 0px;
+		overflow: hidden;
+		text-wrap: nowrap;
+		text-overflow: ellipsis;
 	}
 	.title-groups {
 		flex-grow: 3;
@@ -229,30 +336,46 @@
 		align-items: center;
 		justify-content: center;
 	}
+	.state {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	.reading-number-comments > .comments {
 		display: flex;
 		align-items: center;
 		justify-items: center;
-		gap: 5px;
+		gap: 1px;
 	}
 	.reading-number-comments > .comments > p {
 		margin: 0px 5px;
 	}
 	.reading-number-comments > .comments > div {
-		width: 24px;
-		height: 24px;
+		display: flex;
+		align-content: center;
+		justify-content: center;
 	}
 	.layout:hover {
 		background-color: var(--accent-hover);
 	}
 	a {
-		color: var(--text-color);
+		color: inherit;
 		text-decoration: none;
+		transition: color 300ms ease-in-out;
+	}
+	a:hover {
+		color: var(--primary);
 	}
 	.date-uploader > p {
 		margin: 0px;
 	}
 	.date-uploader {
 		flex-grow: 0.15;
+	}
+	.remove {
+		color: var(--status-red);
+	}
+	.comments:hover {
+		color: var(--primary);
 	}
 </style>

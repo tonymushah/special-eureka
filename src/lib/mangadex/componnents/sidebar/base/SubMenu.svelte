@@ -12,6 +12,7 @@
 	import { sub_end } from "@mangadex/utils";
 	import MenuIcons from "./MenuIcons.svelte";
 	import { ChevronDownIcon, ChevronUpIcon } from "svelte-feather-icons";
+	import { slide } from "svelte/transition";
 	export let label: string;
 	$: collapsed = $isOpen;
 	let isMenuOpen = false;
@@ -25,33 +26,31 @@
 	>
 		<MenuBase bind:collapsed>
 			<MenuIcons>
-                <div slot="icon" class="icon" class:collapsed>
-                    <slot name="icon"/>
-                </div>
-                    <div slot="suffix-icon" class="suffix-icon" class:collapsed>
-                        {#if collapsed}
-                            <HeaderChevronBase size="16" />
-                        {:else}
-                            {#if isMenuOpen} 
-                                <ChevronUpIcon size="24"/>
-                            {:else}
-                                <ChevronDownIcon size="24"/>
-                            {/if}
-                        {/if}
-                    </div>
+				<div slot="icon" class="icon" class:collapsed>
+					<slot name="icon" />
+				</div>
+				<div slot="suffix-icon" class="suffix-icon" class:collapsed class:isMenuOpen>
+					{#if collapsed}
+						<HeaderChevronBase size="16" />
+					{:else}
+						<ChevronUpIcon size="24" />
+					{/if}
+				</div>
 				<MenuLabel {label} bind:collapsed />
 			</MenuIcons>
 		</MenuBase>
 	</Box>
 
-	<div class:body={true} class:visible={isMenuOpen && !collapsed}>
-		<slot />
-	</div>
+	{#if isMenuOpen && !collapsed}
+		<div class:body={true} transition:slide>
+			<slot />
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
 	div {
-        color: var(--text-color);
+		color: var(--text-color);
 		animation-duration: 300ms;
 		animation-timing-function: ease-in-out;
 		animation-fill-mode: forwards;
@@ -59,38 +58,22 @@
 	.icon.collapsed {
 		padding-left: 16px;
 	}
-    .suffix-icon:not(.collapsed) {
-        margin-left: 12px;
-        margin-right: 12px;
-    }
+	.suffix-icon {
+		transition: rotate 200ms ease-in-out;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.suffix-icon:not(.collapsed) {
+		margin-left: 12px;
+		margin-right: 12px;
+	}
+	.suffix-icon.isMenuOpen {
+		rotate: 180deg;
+	}
 	.body {
 		overflow: hidden;
 		animation-name: body-out;
 		gap: 12px;
-	}
-	.body.visible {
-		animation-name: body-in;
-	}
-	@keyframes body-in {
-		from {
-			opacity: 0;
-			display: flex;
-			flex-direction: column;
-			height: 0;
-		}
-		to {
-			height: initial;
-			opacity: 1;
-		}
-	}
-	@keyframes body-out {
-		from {
-			height: initial;
-		}
-		to {
-			opacity: 0;
-			display: none;
-			height: 0px;
-		}
 	}
 </style>

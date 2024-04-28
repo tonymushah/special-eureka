@@ -2,7 +2,7 @@
     "$schema": "../node_modules/@tauri-apps/cli/schema.json",
     "build": {
         "beforeBuildCommand": "pnpm run vite:build",
-        "beforeDevCommand": "pnpm run storybook:dev",
+        "beforeDevCommand": "pnpm run vite:dev",
         "devPath": "http://localhost:9305",
         "distDir": "../build",
         "withGlobalTauri": false
@@ -72,9 +72,9 @@
                 "center": true,
                 "close": true,
                 "create": true,
-                "hide": false,
-                "maximize": false,
-                "minimize": false,
+                "hide": true,
+                "maximize": true,
+                "minimize": true,
                 "print": false,
                 "requestUserAttention": false,
                 "setAlwaysOnTop": false,
@@ -82,7 +82,7 @@
                 "setCursorIcon": false,
                 "setCursorPosition": false,
                 "setCursorVisible": false,
-                "setDecorations": false,
+                "setDecorations": true,
                 "setFocus": false,
                 "setFullscreen": true,
                 "setIcon": false,
@@ -95,9 +95,9 @@
                 "setSkipTaskbar": false,
                 "setTitle": true,
                 "show": true,
-                "startDragging": false,
-                "unmaximize": false,
-                "unminimize": false
+                "startDragging": true,
+                "unmaximize": true,
+                "unminimize": true
             }
         },
         "bundle": {
@@ -162,7 +162,7 @@
                 "label": "main",
                 "url": "index.html",
                 //"visible": false,
-                "decorations": true
+                "decorations": false
             }
             /*
             {

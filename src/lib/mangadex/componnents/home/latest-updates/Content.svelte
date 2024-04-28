@@ -1,17 +1,21 @@
 <script lang="ts">
-	import ChapterFeedElement1 from "@mangadex/componnents/chapter/feed/element1/ChapterFeedElement1WithReadableCover.svelte";
+	import ChapterFeedElement1 from "@mangadex/componnents/chapter/feed/element1/ChapterFeedElement1WithReadableCoverAndDownloadState.svelte";
 	import { CoverImageQuality, type RecentlyAddedHomeQuery } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { getContextClient } from "@urql/svelte";
+	import getChapterDownloadState from "./getChapterDownloadState";
 	const client = getContextClient();
 	export let chapters: RecentlyAddedHomeQuery;
 	$: data = chapters.home.recentlyUploaded.data.map((c) => ({
 		mangaId: c.relationships.manga.id,
 		chapterId: c.id,
-		download_state: ChapterDownloadState.NotDownloaded,
+		download_state: getChapterDownloadState({
+			id: c.id,
+			client
+		}),
 		coverImage: get_cover_art({
 			client,
 			cover_id: c.relationships.manga.relationships.coverArt.id,
@@ -58,12 +62,12 @@
 
 <div class="content">
 	<div class="chapter-col data1">
-		{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt } (chapterId)}
+		{#each data1 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
 			<div class="chapter">
 				<ChapterFeedElement1
 					{mangaId}
 					{chapterId}
-					download_state={ChapterDownloadState.NotDownloaded}
+					{download_state}
 					{coverImage}
 					{upload_date}
 					{lang}
@@ -80,12 +84,12 @@
 		{/each}
 	</div>
 	<div class="chapter-col data2">
-		{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt } (chapterId)}
+		{#each data2 as { chapterId, mangaId, coverImage, upload_date, lang, uploader, groups, mangaTitle, chapterTitle, coverImageAlt, download_state } (chapterId)}
 			<div class="chapter">
 				<ChapterFeedElement1
 					{mangaId}
 					{chapterId}
-					download_state={ChapterDownloadState.NotDownloaded}
+					{download_state}
 					{coverImage}
 					{upload_date}
 					{lang}

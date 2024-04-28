@@ -5,6 +5,7 @@
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 	import { createEventDispatcher, onMount } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import type { Writable } from "svelte/store";
 
 	type Group = {
 		id: string;
@@ -23,7 +24,7 @@
 		uploader: Uploader;
 		upload_date: Date;
 		haveBeenRead: boolean;
-		download_state: ChapterDownloadState;
+		download_state: Writable<ChapterDownloadState>;
 		comments: number;
 	};
 	export let coverImage: string;

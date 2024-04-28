@@ -30,7 +30,7 @@
 		<slot name="title">
 			<div class="default" class:titleBorder>
 				<p>{title}</p>
-				<div class="chevron">
+				<div class="chevron" class:isOpen>
 					<ChevronDownIcon />
 				</div>
 			</div>
@@ -66,17 +66,16 @@
 					justify-content: center;
 					align-items: center;
 				}
+				.chevron.isOpen {
+					rotate: 180deg;
+				}
 			}
 			p {
 				margin: 0px;
 			}
 		}
 	}
-	.accordion.isOpen {
-		.chevron {
-			rotate: 180deg;
-		}
-	}
+
 	.accordion.isOpen.withBorder:hover {
 		.title {
 			border-color: var(--mid-tone);

@@ -150,6 +150,20 @@
 </TopInfoLayout>
 
 <style lang="scss">
+	div.top {
+		h1 {
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+		h2 {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+	}
 	div.content {
 		height: 100%;
 		display: flex;

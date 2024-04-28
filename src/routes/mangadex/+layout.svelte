@@ -10,6 +10,9 @@
 	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
 	import { v4 } from "uuid";
 	import { navigating } from "$app/stores";
+	import { onMount } from "svelte";
+	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 
 	setContextClient(client);
 	const sub_id = v4();
@@ -24,51 +27,97 @@
 	$: loading = $navigating != null;
 </script>
 
-<MangaDexThemeProvider {theme}>
-	<div class="provider">
-		{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
-			<Sidebar />
-		{/if}
-		<div
-			class="inner"
-			class:loading
-			role="button"
-			tabindex="0"
-			on:keydown={(e) => {
-				if (loading) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			}}
-			on:click={(e) => {
-				if (loading) {
-					e.stopPropagation();
-					e.preventDefault();
-				}
-			}}
-		>
-			<slot />
-		</div>
-		{#if $rtl.data?.watchSidebarDirection == Direction.Rtl}
-			<Sidebar />
-		{/if}
-	</div>
-</MangaDexThemeProvider>
+<div class="d-content">
+	<style>
+		html::-webkit-scrollbar {
+			display: none;
+		}
+	</style>
 
-<style>
+	<MangaDexThemeProvider {theme}>
+		<SetTitle />
+		<div class="provider">
+			{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
+				<Sidebar />
+			{/if}
+			<div
+				class="inner"
+				class:loading
+				class:defaultDecoration={$isDefaultDecoration}
+				role="button"
+				tabindex="0"
+				on:keydown={(e) => {
+					if (loading) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				}}
+				on:click={(e) => {
+					if (loading) {
+						e.stopPropagation();
+						e.preventDefault();
+					}
+				}}
+			>
+				<slot />
+			</div>
+			{#if $rtl.data?.watchSidebarDirection == Direction.Rtl}
+				<Sidebar />
+			{/if}
+		</div>
+	</MangaDexThemeProvider>
+</div>
+
+<style lang="scss">
 	.provider {
 		width: 100%;
 		display: inline-flex;
 		color: var(--text-color);
 	}
+	.provider::-webkit-scrollbar {
+		display: none;
+	}
 	.inner {
-		height: 100vh;
+		height: 97cqh;
 		scroll-behavior: smooth;
 		overflow-y: scroll;
 		width: 100%;
 		transition:
 			filter,
 			webkit-filter 300ms ease-in-out;
+		*::-webkit-scrollbar {
+			width: 12px;
+		}
+		*::-webkit-scrollbar-thumb {
+			border-radius: 0.25em;
+			background-color: var(--scrollbar-color);
+			transition: background-color 300ms ease-in-out;
+		}
+		*::-webkit-scrollbar-thumb:hover {
+			background-color: var(--scrollbar-color-hover);
+		}
+
+		*::-webkit-scrollbar-track {
+			background-color: var(--accent);
+		}
+	}
+	.inner.defaultDecoration {
+		height: 100cqh;
+	}
+	.inner::-webkit-scrollbar {
+		width: 12px;
+	}
+	.inner::-webkit-scrollbar-thumb {
+		border-radius: 0.25em;
+		background-color: var(--scrollbar-color);
+		transition: background-color 300ms ease-in-out;
+	}
+	.inner::-webkit-scrollbar-thumb:hover {
+		background-color: var(--scrollbar-color-hover);
+	}
+
+	.inner::-webkit-scrollbar-track {
+		background-color: var(--accent);
 	}
 	.inner.loading {
 		cursor: wait;
@@ -77,6 +126,7 @@
 		animation-fill-mode: both;
 		animation-duration: 300ms;
 		animation-timing-function: ease-in-out;
+		pointer-events: none;
 	}
 	.inner.loading * {
 		pointer-events: none;

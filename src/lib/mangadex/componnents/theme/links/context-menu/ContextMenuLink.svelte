@@ -13,6 +13,7 @@
 	import { sub_end } from "@mangadex/utils";
 	import OpenExtLinkIcon from "../icons/OpenExtLinkIcon.svelte";
 	import { open } from "@tauri-apps/api/shell";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 	const client = getContextClient();
 	const sub_id = v4();
 	const rtl_sidebar_query = subscriptionStore({
@@ -24,11 +25,13 @@
 	});
 	export let href: string;
 	export let ext_href: string | undefined = undefined;
+
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 		sub_end(sub_id);
 	});
+	$: decorated = $isDefaultDecoration;
 	$: items = [
 		{
 			icon: OpenLinkIcon,
@@ -42,7 +45,8 @@
 			label: "Open in a new Window",
 			async onClick() {
 				const window = new WebviewWindow(v4(), {
-					url: href
+					url: href,
+					decorations: decorated
 				});
 				unlistens.push(
 					await window.once("tauri://created", () => {
@@ -53,7 +57,10 @@
 								$rtl_sidebar_query.data?.watchSidebarDirection == Direction.Rtl
 									? "left"
 									: "right",
-							close: true
+							close: true,
+							style: {
+								fontFamily: "Popins"
+							}
 						});
 					})
 				);
@@ -66,7 +73,10 @@
 								$rtl_sidebar_query.data?.watchSidebarDirection == Direction.Rtl
 									? "left"
 									: "right",
-							close: true
+							close: true,
+							style: {
+								fontFamily: "Popins"
+							}
 						});
 					})
 				);

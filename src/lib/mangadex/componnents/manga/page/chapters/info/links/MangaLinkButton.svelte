@@ -13,13 +13,15 @@
 	on:click={async () => {
 		await open(href);
 	}}
-	--button-color="var(--accent-l2)"
+	--button-color="var(--accent)"
 	--button-hover="var(--primary)"
 	with_hover
 >
 	<div>
 		<Favicon icon={$icon} alt={href} />
-		{title}
+		<span class="title">
+			{title}
+		</span>
 	</div>
 </ButtonBase>
 
@@ -30,5 +32,8 @@
 		justify-content: center;
 		gap: 5px;
 		margin: 2px;
+		span {
+			text-wrap: nowrap;
+		}
 	}
 </style>

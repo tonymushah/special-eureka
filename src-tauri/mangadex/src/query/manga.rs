@@ -4,13 +4,14 @@ pub mod list;
 
 use std::{collections::HashMap, ops::Deref};
 
-use async_graphql::{Context, Object, Result};
+use async_graphql::{Context, Error, Object, Result};
 use mangadex_api_input_types::manga::{
     aggregate::MangaAggregateParam, feed::MangaFeedParams, get_draft::GetMangaDraftParams,
     get_drafts::MangaDraftsParams, get_relation_list::MangaRelationParam, list::MangaListParams,
     random::MangaRandomParams,
 };
-use mangadex_api_types_rust::{MangaRelation, ReadingStatus};
+use mangadex_api_types_rust::{MangaRelation, ReadingStatus, RelationshipType};
+use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{
@@ -23,9 +24,12 @@ use crate::{
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
     utils::{
+        download_state::DownloadState,
         get_mangadex_client_from_graphql_context,
-        get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context,
+        source::SendMultiSourceData,
+        watch::{SendData, WatcherInnerData},
     },
 };
 
@@ -38,6 +42,35 @@ pub struct MangaQueries;
 
 #[Object]
 impl MangaQueries {
+    pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .ok_or(Error::new("Offline AppState Not loaded"))?;
+        let state = {
+            if olasw.manga_utils().with_id(id).is_there() {
+                DownloadState::Downloaded {
+                    has_failed: olasw
+                        .history
+                        .get_history_w_file_by_rel_or_init(
+                            RelationshipType::Manga,
+                            &olasw.dir_options,
+                        )
+                        .await?
+                        .is_in(id)?,
+                }
+            } else {
+                DownloadState::NotDownloaded
+            }
+        };
+        let _ = watches.download_state.send_data(WatcherInnerData {
+            id,
+            attributes: state,
+        });
+        Ok(state)
+    }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
         MangaGetUniqueQueries {
             id,
@@ -55,6 +88,9 @@ impl MangaQueries {
     ) -> Result<MangaResults> {
         let mut params = params;
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        if params.limit.is_none() && !params.manga_ids.is_empty() {
+            params.limit.replace(params.manga_ids.len().try_into()?);
+        }
         MangaListQueries(params).list(ctx).await
     }
     pub async fn list_offline(
@@ -64,6 +100,9 @@ impl MangaQueries {
     ) -> Result<MangaResults> {
         let mut params = params;
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        if params.limit.is_none() && !params.manga_ids.is_empty() {
+            params.limit.replace(params.manga_ids.len().try_into()?);
+        }
         MangaListQueries(params).list_offline(ctx).await
     }
     pub async fn random(
@@ -177,6 +216,7 @@ impl MangaQueries {
             .collect();
         list_params.includes = <Manga as ExtractReferenceExpansionFromContext>::exctract(ctx);
         list_params.manga_ids = rels.keys().copied().collect();
+        list_params.limit.replace(rels.keys().len().try_into()?);
         Ok(list_params
             .send(&client)
             .await?

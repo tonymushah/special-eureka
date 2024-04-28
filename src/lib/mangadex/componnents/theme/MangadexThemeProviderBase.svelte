@@ -4,11 +4,13 @@
 	import { SvelteUIProvider } from "@svelteuidev/core";
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
 	import { writable } from "svelte/store";
+	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
 
 	export let theme: MangadexTheme;
 	export let fonts = "Poppins";
-	let theme_store = writable(theme);
-	setMangaDexThemeContextWritable(theme_store);
+	$: theme_store = writable(theme);
+	$: setMangaDexThemeContextWritable(theme_store);
+	$: setMangaDexFontsContext(writable(fonts));
 	$: svelte_ui_theme = buildSvelteUITheme($theme_store);
 </script>
 
@@ -38,7 +40,7 @@
 	--mid-tone={$theme_store.mid_tone}
 	--contrast-l1={$theme_store.contrast.l1}
 	--scrollbar-color={$theme_store.scrollbar.default}
-	--scrollbar-color-hover={$theme_store.scrollbar.default}
+	--scrollbar-color-hover={$theme_store.scrollbar.hovered}
 	--button-accent={$theme_store.button.default}
 	--button-accent-alt={$theme_store.button.alternate}
 	--primary={$theme_store.primary.primary}
