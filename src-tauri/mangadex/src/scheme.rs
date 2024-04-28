@@ -1,9 +1,8 @@
 pub mod chapters;
 pub mod covers;
 
-use reqwest::StatusCode;
 use tauri::{
-    http::MimeType,
+    http::{status::StatusCode, MimeType},
     plugin::{Builder, Plugin},
     AppHandle, Runtime,
 };

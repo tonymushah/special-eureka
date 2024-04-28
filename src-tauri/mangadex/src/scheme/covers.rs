@@ -3,9 +3,8 @@ use std::io::Read;
 use bytes::Bytes;
 use mangadex_api::MangaDexClient;
 use regex::Regex;
-use reqwest::StatusCode;
 use tauri::{
-    http::{MimeType, Request},
+    http::{status::StatusCode, MimeType, Request},
     AppHandle, Manager, Runtime,
 };
 use url::Url;

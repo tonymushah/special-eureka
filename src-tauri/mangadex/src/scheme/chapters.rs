@@ -2,8 +2,7 @@ use std::{io::Read, path::Path};
 
 use bytes::Bytes;
 use regex::Regex;
-use reqwest::StatusCode;
-use tauri::{http::Request, AppHandle, Manager, Runtime};
+use tauri::{api::http::StatusCode, http::Request, AppHandle, Manager, Runtime};
 use url::Url;
 use uuid::Uuid;
 
