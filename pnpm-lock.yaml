@@ -43,10 +43,10 @@ importers:
         version: 0.15.6(svelte@4.2.12)
       '@svelteuidev/core':
         specifier: ^0.15.4
-        version: 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)
+        version: 0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)
       '@svelteuidev/dates':
         specifier: ^0.15.4
-        version: 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)
+        version: 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)
       '@svelteuidev/motion':
         specifier: ^0.15.4
         version: 0.15.4(svelte@4.2.12)
@@ -55,7 +55,7 @@ importers:
         version: 0.15.4(svelte@4.2.12)
       '@svelteuidev/prism':
         specifier: ^0.15.4
-        version: 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)
+        version: 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)
       '@tauri-apps/api':
         specifier: ^1.5.3
         version: 1.5.3
@@ -2582,10 +2582,10 @@ packages:
     peerDependencies:
       svelte: '>=3.55.0'
 
-  '@svelteuidev/core@0.15.4':
-    resolution: {integrity: sha512-TwGlFg3mlIMFKy+gm0+MzVF5DOU22coi4cT0wtcKCfV5oGzAkasAxhjLm+ZtUBb52b/lHgVDGv7bjmN7I17UUA==}
+  '@svelteuidev/core@0.15.6':
+    resolution: {integrity: sha512-6UaoyVW/8G+2wi9h4SjnJdJe9G6aefZo5S4Rg9M8AKl2QfzKe45ZElcO8L8MgzHUnGTx0LPkwePJUVlWHjBuOg==}
     peerDependencies:
-      '@svelteuidev/composables': 0.15.4
+      '@svelteuidev/composables': 0.15.6
       svelte: '>=3.55.0'
 
   '@svelteuidev/dates@0.15.4':
@@ -9676,17 +9676,17 @@ snapshots:
     dependencies:
       svelte: 4.2.12
 
-  '@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)':
+  '@svelteuidev/core@0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)':
     dependencies:
       '@floating-ui/dom': 1.2.8
       '@stitches/core': 1.2.8
       '@svelteuidev/composables': 0.15.6(svelte@4.2.12)
       svelte: 4.2.12
 
-  '@svelteuidev/dates@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)':
+  '@svelteuidev/dates@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)':
     dependencies:
       '@svelteuidev/composables': 0.15.6(svelte@4.2.12)
-      '@svelteuidev/core': 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)
+      '@svelteuidev/core': 0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)
       dayjs: 1.11.1
       svelte: 4.2.12
 
@@ -9698,10 +9698,10 @@ snapshots:
     dependencies:
       svelte: 4.2.12
 
-  '@svelteuidev/prism@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)':
+  '@svelteuidev/prism@0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(@svelteuidev/core@0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)':
     dependencies:
       '@svelteuidev/composables': 0.15.6(svelte@4.2.12)
-      '@svelteuidev/core': 0.15.4(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)
+      '@svelteuidev/core': 0.15.6(@svelteuidev/composables@0.15.6(svelte@4.2.12))(svelte@4.2.12)
       prism-svelte: 0.5.0
       prismjs: 1.28.0
       svelte: 4.2.12
