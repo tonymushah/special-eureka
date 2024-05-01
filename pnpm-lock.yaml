@@ -13,7 +13,7 @@ importers:
         version: 1.6.4
       '@fontsource-variable/josefin-sans':
         specifier: ^5.0.19
-        version: 5.0.20
+        version: 5.0.21
       '@fontsource-variable/noto-sans-jp':
         specifier: ^5.0.19
         version: 5.0.19
@@ -22,7 +22,7 @@ importers:
         version: 5.0.13
       '@fontsource/poppins':
         specifier: ^5.0.8
-        version: 5.0.13
+        version: 5.0.14
       '@graphiql/toolkit':
         specifier: ^0.9.1
         version: 0.9.1(@types/node@20.11.24)(graphql-ws@5.15.0(graphql@16.8.1))(graphql@16.8.1)
@@ -1418,8 +1418,8 @@ packages:
   '@floating-ui/utils@0.2.2':
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
 
-  '@fontsource-variable/josefin-sans@5.0.20':
-    resolution: {integrity: sha512-18pRxL/jA7HFT+bMsFsDHFPTJ2lTxMK3eMQt5cruQ9/RWFqci2Pp0R4iQz6qr09nMslfJudEsXt06LX2AuQ34Q==}
+  '@fontsource-variable/josefin-sans@5.0.21':
+    resolution: {integrity: sha512-64tZlQ9weEr3OqkG5OAToWuGA7BUTbB9xnwRAhWWkEB+6pbeZ2Mvind7j+OfmCqt9AtiAjuZ8XwDjI7bpsHpWA==}
 
   '@fontsource-variable/noto-sans-jp@5.0.19':
     resolution: {integrity: sha512-fAhvax6qyagBBf5x8WoIMxNsofgytN4e0cBn1eGgYHhbr4snWA+NxCHkaH+jlOv7nSv9ZzzsSusslkcsRJwGYg==}
@@ -1427,8 +1427,8 @@ packages:
   '@fontsource/pacifico@5.0.13':
     resolution: {integrity: sha512-E7YdFyuIYLfxuOZeRzKotZf2mirl52JY8kN3qfwwM7fT+ndYDnOBAb/nvYvPJIks2sjGwW00hYmJNNTvOmZRDg==}
 
-  '@fontsource/poppins@5.0.13':
-    resolution: {integrity: sha512-8G9odFoxH43oZpvq43fpGucm8iHm6iatu0M1LIshb+tx3/y6YBXenVED7CI4resvPz6hyDu8a2vHSh9vrpe+wQ==}
+  '@fontsource/poppins@5.0.14':
+    resolution: {integrity: sha512-nmM1zpPo3Uh4JcGAVSQuWaZNYh2FbbwWhZ5t6hRaynmJaNTBW85d3nEh9zMmzI0HX7X5xqQVdRHeDatKpOGsnA==}
 
   '@graphiql/react@0.20.3':
     resolution: {integrity: sha512-LHEiWQPABflTyRJZBZB50WSlrWER4RtlWg9XV1+D4yZQ3+6GbLM7X1zYf4D/TQ6AJB/vLZQHEnbhS0LuKcNqfA==}
@@ -7790,13 +7790,13 @@ snapshots:
 
   '@floating-ui/utils@0.2.2': {}
 
-  '@fontsource-variable/josefin-sans@5.0.20': {}
+  '@fontsource-variable/josefin-sans@5.0.21': {}
 
   '@fontsource-variable/noto-sans-jp@5.0.19': {}
 
   '@fontsource/pacifico@5.0.13': {}
 
-  '@fontsource/poppins@5.0.13': {}
+  '@fontsource/poppins@5.0.14': {}
 
   '@graphiql/react@0.20.3(@codemirror/language@6.0.0)(@types/node@20.11.24)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.15.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
