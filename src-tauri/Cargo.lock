@@ -1250,7 +1250,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5ce46453170786e5567445d10278655c573a39dd85c8526a8bc5b256f9ff394d"
 dependencies = [
  "bytes",
- "reqwest 0.12.4",
+ "reqwest 0.11.27",
  "scraper",
  "thiserror",
  "url",
