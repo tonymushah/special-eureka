@@ -45,7 +45,7 @@ tokio = "1"
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-anyhow = "1"
+anyhow = "1.0.82"
 window-shadows = "0.2"
 window-vibrancy = "0.4"
 uuid = "1"
