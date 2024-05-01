@@ -224,7 +224,7 @@ importers:
         version: 0.4.1(svelte@4.2.12)
       svelte2tsx:
         specifier: ^0.7.0
-        version: 0.7.6(svelte@4.2.12)(typescript@5.4.5)
+        version: 0.7.7(svelte@4.2.12)(typescript@5.4.5)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -5856,8 +5856,8 @@ packages:
       typescript:
         optional: true
 
-  svelte2tsx@0.7.6:
-    resolution: {integrity: sha512-awHvYsakyiGjRqqSOhb2F+qJ6lUT9klQe0UQofAcdHNaKKeDHA8kEZ8zYKGG3BiDPurKYMGvH5/lZ+jeIoG7yQ==}
+  svelte2tsx@0.7.7:
+    resolution: {integrity: sha512-HAIxtk5TUHXvCRKApKfxoh1BGT85S/17lS3DvbfxRKFd+Ghr5YScqBvd+sU+p7vJFw48LNkzdFk+ooNVk3e4kA==}
     peerDependencies:
       svelte: ^3.55 || ^4.0.0-next.0 || ^4.0 || ^5.0.0-next.0
       typescript: ^4.9.4 || ^5.0.0
@@ -13139,7 +13139,7 @@ snapshots:
       sass: 1.71.1
       typescript: 5.4.5
 
-  svelte2tsx@0.7.6(svelte@4.2.12)(typescript@5.4.5):
+  svelte2tsx@0.7.7(svelte@4.2.12)(typescript@5.4.5):
     dependencies:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
