@@ -38,24 +38,9 @@ importers:
       '@storybook/testing-library':
         specifier: ^0.2.2
         version: 0.2.2
-      '@svelteuidev/composables':
-        specifier: ^0.15.4
-        version: 0.15.5(svelte@4.2.12)
-      '@svelteuidev/core':
-        specifier: ^0.15.4
-        version: 0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12)
-      '@svelteuidev/dates':
-        specifier: ^0.15.4
-        version: 0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)
-      '@svelteuidev/motion':
-        specifier: ^0.15.4
-        version: 0.15.4(svelte@4.2.12)
       '@svelteuidev/preprocessors':
         specifier: ^0.15.4
         version: 0.15.4(svelte@4.2.12)
-      '@svelteuidev/prism':
-        specifier: ^0.15.4
-        version: 0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)
       '@tauri-apps/api':
         specifier: ^1.5.3
         version: 1.5.3
@@ -68,9 +53,6 @@ importers:
       '@urql/svelte':
         specifier: ^4.0.4
         version: 4.1.1(graphql@16.8.1)(svelte@4.2.12)
-      dayjs:
-        specifier: ^1.11.10
-        version: 1.11.10
       fast-xml-parser:
         specifier: ^4.3.6
         version: 4.3.6
@@ -1397,9 +1379,6 @@ packages:
   '@floating-ui/core@1.6.0':
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
 
-  '@floating-ui/dom@1.2.8':
-    resolution: {integrity: sha512-XLwhYV90MxiHDq6S0rzFZj00fnDM+A1R9jhSioZoMsa7G0Q0i+Q4x40ajR8FHSdYDE1bgjG45mIWe6jtv9UPmg==}
-
   '@floating-ui/dom@1.6.3':
     resolution: {integrity: sha512-RnDthu3mzPlQ31Ss/BTwQ1zjzIhr3lk1gZB1OC56h/1vEtaXkESrOqL5fQVMfXpwGtRwX+YsZBdyHtJMQnkArw==}
 
@@ -2597,39 +2576,9 @@ packages:
       svelte: ^4.0.0 || ^5.0.0-next.0
       vite: ^5.0.0
 
-  '@svelteuidev/composables@0.15.5':
-    resolution: {integrity: sha512-tcnHE5GF2NPBlJjQVqtwpmqtKICItv9vVuORZvl1j78wCo8IdhAhKkptKyyUeM+Mgl1rSTEqOc8g4Z9dn01diw==}
-    peerDependencies:
-      svelte: '>=3.55.0'
-
-  '@svelteuidev/core@0.15.4':
-    resolution: {integrity: sha512-TwGlFg3mlIMFKy+gm0+MzVF5DOU22coi4cT0wtcKCfV5oGzAkasAxhjLm+ZtUBb52b/lHgVDGv7bjmN7I17UUA==}
-    peerDependencies:
-      '@svelteuidev/composables': 0.15.4
-      svelte: '>=3.55.0'
-
-  '@svelteuidev/dates@0.15.4':
-    resolution: {integrity: sha512-OLVz623oJ63JJyQv2b4MLXYmdp293F76NNcSreqJmdihbGm2TZEgwfbnWnv6rIhxW8e7iw648oRDt27fi1Rb8Q==}
-    peerDependencies:
-      '@svelteuidev/composables': 0.15.4
-      '@svelteuidev/core': 0.15.4
-      svelte: '>=3.55.0'
-
-  '@svelteuidev/motion@0.15.4':
-    resolution: {integrity: sha512-Q49C1HCsEUWOswcYEdz2z7hREKQsN9QJOcj/6NURNNijXbQezd8C2VI+H7eSKFk3W9FjwtKlEhe7/GWHfH2oPg==}
-    peerDependencies:
-      svelte: '>=3.55.0'
-
   '@svelteuidev/preprocessors@0.15.4':
     resolution: {integrity: sha512-Y+D0A6CXRfwp0NRSO7t/mTJQ1H1C72QhxAMIhRJVEXAHmenozILoWOo22lbPqheCU5R/bghZF1onc8a7itseCw==}
     peerDependencies:
-      svelte: '>=3.55.0'
-
-  '@svelteuidev/prism@0.15.4':
-    resolution: {integrity: sha512-xfE+9uCFZaclSO/OOmVznffR91iRvr3UkhR0pBwDzOEE/70eUecPdoeypCxAGLJTkG/ZEBj+ws+aipvV5gvQFg==}
-    peerDependencies:
-      '@svelteuidev/composables': 0.15.4
-      '@svelteuidev/core': 0.15.4
       svelte: '>=3.55.0'
 
   '@swc/helpers@0.5.11':
@@ -3540,12 +3489,6 @@ packages:
 
   dataloader@2.2.2:
     resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
-
-  dayjs@1.11.1:
-    resolution: {integrity: sha512-ER7EjqVAMkRRsxNCC5YqJ9d9VQYuWdGt7aiH2qA5R5wt8ZmWaP2dLUSIK6y/kVzLMlmh1Tvu5xUf4M/wdGJ5KA==}
-
-  dayjs@1.11.10:
-    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
 
   debounce@1.2.1:
     resolution: {integrity: sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug==}
@@ -5359,13 +5302,6 @@ packages:
   pretty-hrtime@1.0.3:
     resolution: {integrity: sha512-66hKPCr+72mlfiSjlEB1+45IjXSqvVAIy6mocupoww4tBFE9R9IhwwUGoI4G++Tc9Aq+2rxOt0RFU6gPcrte0A==}
     engines: {node: '>= 0.8'}
-
-  prism-svelte@0.5.0:
-    resolution: {integrity: sha512-db91Bf3pRGKDPz1lAqLFSJXeW13mulUJxhycysFpfXV5MIK7RgWWK2E5aPAa71s8TCzQUXxF5JOV42/iOs6QkA==}
-
-  prismjs@1.28.0:
-    resolution: {integrity: sha512-8aaXdYvl1F7iC7Xm1spqSaY/OJBpYW3v+KJ+F17iYxvdc8sfjW194COK5wVhMZX45tGteiBQgdvD/nhxcRwylw==}
-    engines: {node: '>=6'}
 
   process-nextick-args@2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
@@ -7779,10 +7715,6 @@ snapshots:
     dependencies:
       '@floating-ui/utils': 0.2.1
 
-  '@floating-ui/dom@1.2.8':
-    dependencies:
-      '@floating-ui/core': 1.6.0
-
   '@floating-ui/dom@1.6.3':
     dependencies:
       '@floating-ui/core': 1.6.0
@@ -9727,38 +9659,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@svelteuidev/composables@0.15.5(svelte@4.2.12)':
-    dependencies:
-      svelte: 4.2.12
-
-  '@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12)':
-    dependencies:
-      '@floating-ui/dom': 1.2.8
-      '@stitches/core': 1.2.8
-      '@svelteuidev/composables': 0.15.5(svelte@4.2.12)
-      svelte: 4.2.12
-
-  '@svelteuidev/dates@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)':
-    dependencies:
-      '@svelteuidev/composables': 0.15.5(svelte@4.2.12)
-      '@svelteuidev/core': 0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12)
-      dayjs: 1.11.1
-      svelte: 4.2.12
-
-  '@svelteuidev/motion@0.15.4(svelte@4.2.12)':
-    dependencies:
-      svelte: 4.2.12
-
   '@svelteuidev/preprocessors@0.15.4(svelte@4.2.12)':
     dependencies:
-      svelte: 4.2.12
-
-  '@svelteuidev/prism@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(@svelteuidev/core@0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12))(svelte@4.2.12)':
-    dependencies:
-      '@svelteuidev/composables': 0.15.5(svelte@4.2.12)
-      '@svelteuidev/core': 0.15.4(@svelteuidev/composables@0.15.5(svelte@4.2.12))(svelte@4.2.12)
-      prism-svelte: 0.5.0
-      prismjs: 1.28.0
       svelte: 4.2.12
 
   '@swc/helpers@0.5.11':
@@ -10805,10 +10707,6 @@ snapshots:
   csstype@3.1.3: {}
 
   dataloader@2.2.2: {}
-
-  dayjs@1.11.1: {}
-
-  dayjs@1.11.10: {}
 
   debounce@1.2.1: {}
 
@@ -12772,10 +12670,6 @@ snapshots:
       react-is: 18.2.0
 
   pretty-hrtime@1.0.3: {}
-
-  prism-svelte@0.5.0: {}
-
-  prismjs@1.28.0: {}
 
   process-nextick-args@2.0.1: {}
 
