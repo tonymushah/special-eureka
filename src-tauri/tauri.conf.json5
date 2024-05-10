@@ -162,7 +162,7 @@
                 "label": "main",
                 "url": "index.html",
                 //"visible": false,
-                "decorations": false
+                "decorations": true
             }
             /*
             {
