@@ -29,18 +29,15 @@ importers:
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.8.1)
-      '@stitches/core':
-        specifier: ^1.2.8
-        version: 1.2.8
+      '@panzoom/panzoom':
+        specifier: ^4.5.1
+        version: 4.5.1
       '@storybook/addon-a11y':
         specifier: ^8.0.0
         version: 8.0.0
       '@storybook/testing-library':
         specifier: ^0.2.2
         version: 0.2.2
-      '@svelteuidev/preprocessors':
-        specifier: ^0.15.4
-        version: 0.15.4(svelte@4.2.12)
       '@tauri-apps/api':
         specifier: ^1.5.3
         version: 1.5.3
@@ -1863,6 +1860,9 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
+  '@panzoom/panzoom@4.5.1':
+    resolution: {integrity: sha512-QOr/t7314XTwgAUDazR+RDcTAWSbkpjDnZJddd9f56jSUA8ptUsyDblAb+sp/O5O1o5Fiu9KpWxVHKuhGUgp5w==}
+
   '@parcel/watcher-android-arm64@2.4.1':
     resolution: {integrity: sha512-LOi/WTbbh3aTn2RYddrO8pnapixAziFl6SMxHM69r3tvdSm94JtCenaKgk1GRg5FJ5wpMCpHeW+7yqPlvZv7kg==}
     engines: {node: '>= 10.0.0'}
@@ -2339,9 +2339,6 @@ packages:
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
 
-  '@stitches/core@1.2.8':
-    resolution: {integrity: sha512-Gfkvwk9o9kE9r9XNBmJRfV8zONvXThnm1tcuojL04Uy5uRyqg93DC83lDebl0rocZCfKSjUv+fWYtMQmEDJldg==}
-
   '@storybook/addon-a11y@8.0.0':
     resolution: {integrity: sha512-lxvXOMYqeM6DOUvNP3e18GzPDVhcOZtLnjkJ8XQbRk2xx2qHodAEiFhiKBhfStsn6/rg0zWLRpZ1NJxjnZ0l/Q==}
 
@@ -2575,11 +2572,6 @@ packages:
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0-next.0
       vite: ^5.0.0
-
-  '@svelteuidev/preprocessors@0.15.4':
-    resolution: {integrity: sha512-Y+D0A6CXRfwp0NRSO7t/mTJQ1H1C72QhxAMIhRJVEXAHmenozILoWOo22lbPqheCU5R/bghZF1onc8a7itseCw==}
-    peerDependencies:
-      svelte: '>=3.55.0'
 
   '@swc/helpers@0.5.11':
     resolution: {integrity: sha512-YNlnKRWF2sVojTpIyzwou9XoTNbzbzONwRhOoniEioF1AtaitTvVZblaQRrAzChWQ1bLYyYSWzM18y4WwgzJ+A==}
@@ -8540,6 +8532,8 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
+  '@panzoom/panzoom@4.5.1': {}
+
   '@parcel/watcher-android-arm64@2.4.1':
     optional: true
 
@@ -8983,8 +8977,6 @@ snapshots:
     optional: true
 
   '@sinclair/typebox@0.27.8': {}
-
-  '@stitches/core@1.2.8': {}
 
   '@storybook/addon-a11y@8.0.0':
     dependencies:
@@ -9658,10 +9650,6 @@ snapshots:
       vitefu: 0.2.5(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1))
     transitivePeerDependencies:
       - supports-color
-
-  '@svelteuidev/preprocessors@0.15.4(svelte@4.2.12)':
-    dependencies:
-      svelte: 4.2.12
 
   '@swc/helpers@0.5.11':
     dependencies:
