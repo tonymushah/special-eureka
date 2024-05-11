@@ -2,7 +2,6 @@
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
 	import { sidebarState as isOpen } from "@mangadex/stores";
-	import { Box, Text } from "@svelteuidev/core";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { v4 } from "uuid";
 	import HeaderChevronBase from "../header/HeaderChevronBase.svelte";
@@ -19,7 +18,12 @@
 </script>
 
 <div class="outer">
-	<Box
+	<div
+		role="button"
+		tabindex="0"
+		on:keypress={() => {
+			isMenuOpen = !isMenuOpen;
+		}}
 		on:click={() => {
 			isMenuOpen = !isMenuOpen;
 		}}
@@ -39,7 +43,7 @@
 				<MenuLabel {label} bind:collapsed />
 			</MenuIcons>
 		</MenuBase>
-	</Box>
+	</div>
 
 	{#if isMenuOpen && !collapsed}
 		<div class:body={true} transition:slide>

@@ -1,5 +1,3 @@
-import { createTheme } from "@svelteuidev/core";
-
 export type Accent = {
 	default: string;
 	hover: string;
@@ -137,72 +135,3 @@ export const custom: MangadexTheme = {
 		l2: "#bf2121"
 	}
 };
-
-export function buildSvelteUITheme({
-	primary,
-	status,
-	accents,
-	scrollbar,
-	button,
-	indication,
-	danger: _danger,
-	textColor: color,
-	mainBackground: backgroundColor,
-	contrast
-}: MangadexTheme) {
-	const {
-		red: statusRed,
-		green: statusGreen,
-		yellow: statusYellow,
-		blue: statusBlue,
-		grey: statusGrey,
-		purple: statusPurple
-	} = status;
-	const { default: l0, l1, l2, l3, l4, l5 } = accents;
-	const { default: danger, l1: dangerl1, l2: dangerl2 } = _danger;
-	return createTheme("mangadex", {
-		fonts: {
-			standard: "var(--fonts)"
-		},
-		colors: {
-			backgroundColor,
-			color,
-			primary: primary.primary,
-			primary1: primary.primary1,
-			primary2: primary.primary2,
-			statusRed,
-			statusGreen,
-			statusYellow,
-			statusBlue,
-			statusGrey,
-			statusPurple,
-			accent: l0.default,
-			accentHover: l0.hover,
-			accentActive: l0.active,
-			accentL1: l1.default,
-			accentL1Hover: l1.hover,
-			accentL1Active: l1.active,
-			accentL2: l2.default,
-			accentL2Hover: l2.hover,
-			accentL2Active: l2.active,
-			accentL3: l3.default,
-			accentL3Hover: l3.hover,
-			accentL3Active: l3.active,
-			accentL4: l4.default,
-			accentL4Hover: l4.hover,
-			accentL4Active: l4.active,
-			accentL5: l5.default,
-			accentL5Hover: l5.hover,
-			accentL5Active: l5.active,
-			buttonAccent: button.default,
-			buttonAccentAlt: button.alternate,
-			scrollbar: scrollbar.default,
-			scrollbarHover: scrollbar.hovered,
-			indicationBlue: indication.blue,
-			constrastL1: contrast.l1,
-			danger,
-			dangerl1,
-			dangerl2
-		}
-	});
-}

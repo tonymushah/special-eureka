@@ -4,10 +4,8 @@
 	import { createEventDispatcher } from "svelte";
 	import type { Item } from "../context-menu/base";
 
-	import { computePosition, flip } from "@floating-ui/dom";
-	import type { MenuItem } from "./index";
-	import ContextMenuBase from "../context-menu/base/ContextMenuBase.svelte";
 	import Menu from "./Menu.svelte";
+	import type { MenuItem } from "./index";
 
 	export let target: HTMLElement | undefined;
 	export let isOpen: boolean = false;
