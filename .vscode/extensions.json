@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "rust-lang.rust-analyzer",
+        "graphql.vscode-graphql",
+        "graphql.vscode-graphql-syntax",
+        "tauri-apps.tauri-vscode",
+        "gruntfuggly.todo-tree",
+        "svelte.svelte-vscode",
+        "pkief.material-icon-theme",
+        "dbaeumer.vscode-eslint",
+        "tamasfe.even-better-toml",
+        "christian-kohler.path-intellisense",
+        "oderwat.indent-rainbow"
+    ]
+}
