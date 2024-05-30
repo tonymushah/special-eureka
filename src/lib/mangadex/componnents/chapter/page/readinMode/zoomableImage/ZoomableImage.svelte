@@ -29,6 +29,7 @@
 		};
 	});
 	onDestroy(() => {
+		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
 	});
 </script>
@@ -52,10 +53,16 @@
 >
 	<div class="toZoom" bind:this={toZoom}>
 		{#if Array.isArray(src) && Array.isArray(alt)}
-			<img src={src[0]} alt={alt[0]} />
-			<img src={src[1]} alt={alt[1]} />
+			{#key src[0]}
+				<img src={src[0]} alt={alt[0]} />
+			{/key}
+			{#key src[1]}
+				<img src={src[1]} alt={alt[1]} />
+			{/key}
 		{:else if typeof src == "string" && typeof alt == "string"}
-			<img {src} {alt} />
+			{#key src}
+				<img {src} {alt} />
+			{/key}
 		{/if}
 	</div>
 </div>
