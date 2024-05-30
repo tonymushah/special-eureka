@@ -2,6 +2,7 @@
 	import isAltKeyPressed from "$lib/window-decoration/stores/isAltKeyPressed";
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
+	import { resetZoomKey, zoomSpeedValue } from "./settings";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
@@ -16,10 +17,11 @@
 	}
 	onMount(() => {
 		const event = (e: KeyboardEvent) => {
-			console.log(e.key);
-			if (e.key == "Escape") {
-				toZoomPanZoom?.reset({ animate: true });
-			}
+			resetZoomKey.subscribe((key) => {
+				if (e.key == key) {
+					toZoomPanZoom?.reset({ animate: true });
+				}
+			})();
 		};
 		window.addEventListener("keydown", event);
 		return () => {
@@ -38,7 +40,7 @@
 		const zoomElement = toZoomPanZoom;
 		if (zoomElement) {
 			let scale = zoomElement.getScale();
-			scale += e.deltaY * -0.009;
+			scale += e.deltaY * (-0.001 * $zoomSpeedValue);
 
 			// Restrict scale
 			scale = Math.min(Math.max(0.75, scale), 5);
