@@ -15,9 +15,16 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const Single: Story = {
 	args: {
 		src: fuufuIjouChapter56[0],
 		alt: fuufuIjouChapter56[0]
+	}
+};
+
+export const Double: Story = {
+	args: {
+		src: [fuufuIjouChapter56[1], fuufuIjouChapter56[0]],
+		alt: [fuufuIjouChapter56[1], fuufuIjouChapter56[0]]
 	}
 };
