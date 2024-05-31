@@ -5,8 +5,12 @@ type ChapterImagesList = Array<string>;
 
 const KEY = "chapter-page-images";
 
-export function initChapterImageContext(): Writable<ChapterImagesList> {
-	return setContext<Writable<ChapterImagesList>>(KEY, writable([]));
+export function initChapterImageContext(images?: ChapterImagesList): Writable<ChapterImagesList> {
+	if (images) {
+		return setContext<Writable<ChapterImagesList>>(KEY, writable(images));
+	} else {
+		return setContext<Writable<ChapterImagesList>>(KEY, writable([]));
+	}
 }
 
 export function getChapterImageContextWritable(): Writable<ChapterImagesList> {
