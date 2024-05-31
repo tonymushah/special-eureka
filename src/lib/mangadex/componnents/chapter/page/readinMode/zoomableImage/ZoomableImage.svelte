@@ -6,6 +6,7 @@
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
+
 	let toZoom: HTMLElement | undefined = undefined;
 	let toZoomPanZoom: PanzoomObject | undefined;
 	$: {
@@ -15,24 +16,19 @@
 			});
 		}
 	}
-	onMount(() => {
-		const event = (e: KeyboardEvent) => {
-			resetZoomKey.subscribe((key) => {
-				if (e.key == key) {
-					toZoomPanZoom?.reset({ animate: true });
-				}
-			})();
-		};
-		window.addEventListener("keydown", event);
-		return () => {
-			window.removeEventListener("keydown", event);
-		};
-	});
 	onDestroy(() => {
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
 	});
 </script>
+
+<svelte:window
+	on:keydown={(e) => {
+		if (e.key == $resetZoomKey) {
+			toZoomPanZoom?.reset({ animate: true });
+		}
+	}}
+/>
 
 <div
 	role="none"
