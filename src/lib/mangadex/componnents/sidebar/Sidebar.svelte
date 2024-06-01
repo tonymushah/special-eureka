@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { sidebarState as isOpen } from "@mangadex/stores";
-	import { Box, Button, createStyles, theme, Text } from "@svelteuidev/core";
 	import SidebarHeader from "./SidebarHeader.svelte";
 	import SidebarBody from "./SidebarBody.svelte";
 	import SidebarFooter from "./SidebarFooter.svelte";

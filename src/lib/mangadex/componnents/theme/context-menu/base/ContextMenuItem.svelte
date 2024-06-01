@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { melt, type AnyMeltElement, emptyMeltElement } from "@melt-ui/svelte";
 	import { SvelteComponent, createEventDispatcher, type ComponentType } from "svelte";
 	export let icon: ComponentType;
 	export let label: string;
 	export let key: string | undefined = undefined;
 	export let tabindex: number;
 	export let isDisabled: boolean = false;
+	export let element: AnyMeltElement = emptyMeltElement;
 	let isFocused = false;
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
@@ -14,8 +16,9 @@
 </script>
 
 <div
+	use:melt={$element}
 	role="button"
-	on:click={(e) => {
+	on:m-click={(e) => {
 		if (!isDisabled) {
 			dispatch("click", e);
 		}
@@ -31,7 +34,7 @@
 	class="menu-item"
 	class:isDisabled
 >
-	<svelte:component this={icon} />
+	<svelte:component this={icon} class="icon" />
 	<p class="label">{label}</p>
 </div>
 
@@ -45,6 +48,13 @@
 		gap: 5px;
 		padding: var(--menu-item-padding);
 		cursor: pointer;
+	}
+	.icon {
+		width: var(--font-size);
+		height: var(--font-size);
+		display: flex;
+		align-self: center;
+		justify-content: center;
 	}
 	div.menu-item.isDisabled {
 		cursor: not-allowed;

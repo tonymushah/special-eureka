@@ -2,7 +2,6 @@
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
 	import { sub_end } from "@mangadex/utils";
-	import { Box } from "@svelteuidev/core";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
@@ -22,12 +21,26 @@
 		sub_end(sub_id);
 	});
 	const rtl = derived(rtl_sub, ($r) => $r.data?.watchSidebarDirection == Direction.Rtl);
-    const dispatch = createEventDispatcher<{
-        click: CustomEvent<HTMLDivElement>
-    }>();
+	const dispatch = createEventDispatcher<{
+		click: MouseEvent & {
+			currentTarget: EventTarget & HTMLDivElement;
+		};
+		keydown: KeyboardEvent & {
+			currentTarget: EventTarget & HTMLDivElement;
+		};
+	}>();
 </script>
 
-<Box on:click>
+<div
+	tabindex="0"
+	role="button"
+	on:keydown={(e) => {
+		dispatch("keydown", e);
+	}}
+	on:click={(e) => {
+		dispatch("click", e);
+	}}
+>
 	{#if isRight}
 		{#if $rtl}
 			<ChevronRightIcon {size} />
@@ -39,4 +52,4 @@
 	{:else}
 		<ChevronRightIcon {size} />
 	{/if}
-</Box>
+</div>
