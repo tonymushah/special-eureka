@@ -55,7 +55,7 @@ importers:
         version: 4.3.6
       flag-icons:
         specifier: ^7.1.0
-        version: 7.2.1
+        version: 7.2.3
       graphiql:
         specifier: ^3.1.0
         version: 3.1.1(@codemirror/language@6.0.0)(@types/node@20.11.24)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.15.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -3964,8 +3964,8 @@ packages:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
 
-  flag-icons@7.2.1:
-    resolution: {integrity: sha512-EaU4XZmFt1BOilz9nMmJKjma5pOaNjzL7somOhadrrilollh4xj6aaXI2M1sd00VUfVWN0E25Q6xaW3SNt0k/Q==}
+  flag-icons@7.2.3:
+    resolution: {integrity: sha512-X2gUdteNuqdNqob2KKTJTS+ZCvyWeLCtDz9Ty8uJP17Y4o82Y+U/Vd4JNrdwTAjagYsRznOn9DZ+E/Q52qbmqg==}
 
   flat-cache@3.2.0:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
@@ -11366,7 +11366,7 @@ snapshots:
       locate-path: 6.0.0
       path-exists: 4.0.0
 
-  flag-icons@7.2.1: {}
+  flag-icons@7.2.3: {}
 
   flat-cache@3.2.0:
     dependencies:
