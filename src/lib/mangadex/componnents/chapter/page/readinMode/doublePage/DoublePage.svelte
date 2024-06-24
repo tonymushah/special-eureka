@@ -9,8 +9,8 @@
 	import { currentChapterPage } from "../../stores/currentPage";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
 	import { ceil, isArray, random } from "lodash";
-	import { blur } from "svelte/transition";
-	import { quadOut } from "svelte/easing";
+	import { blur, fade } from "svelte/transition";
+	import { quadIn, quadOut } from "svelte/easing";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 
 	const currentPage = getChapterDoublePageCurrentPage();
@@ -96,15 +96,15 @@
 
 {#if $currentPage}
 	<div class="double-page">
-		{#if $currentPage}
+		{#key $currentPage}
 			<div
 				transition:blur={{
-					duration: 200,
+					duration: 100,
 					easing: quadOut
 				}}
 			>
 				<ZoomableImage src={$currentPage} alt={$currentPage} />
 			</div>
-		{/if}
+		{/key}
 	</div>
 {/if}
