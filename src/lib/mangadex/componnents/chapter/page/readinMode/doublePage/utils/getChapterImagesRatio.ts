@@ -7,14 +7,29 @@ export default function getChapterImagesRatio(): Readable<Map<string, number>> {
 	return derived(
 		images,
 		($imgs, set, update) => {
-			$imgs.forEach((img) => {
-				getImageRatio(img).then((ratio) => {
-					update((inner) => {
-						inner.set(img, ratio);
-						return inner;
-					});
+			Promise.allSettled(
+				$imgs.map(async (img) => {
+					return [img, await getImageRatio(img)];
+				})
+			).then((results) => {
+				results.forEach((res) => {
+					if (res.status == "fulfilled") {
+						update((inner) => {
+							const [img, ratio] = res.value;
+							inner.set(img, ratio);
+							return inner;
+						});
+					}
 				});
 			});
+			/*update((inner) => {
+				$imgs.forEach((img) => {
+					getImageRatio(img).then((ratio) => {
+						inner.set(img, ratio);
+					});
+				});
+				return inner;
+			});*/
 		},
 		new Map()
 	);
