@@ -9,7 +9,7 @@ export default function getChapterDoublePageCurrentPageIndex(
 ): Readable<number> {
 	const images = getChapterDoublePageIndexes();
 	return derived([images, currentChapter], ([$images, $currentPage]) => {
-		$images.findIndex((image) => {
+		return $images.findIndex((image) => {
 			if (isArray(image)) {
 				return image.includes($currentPage);
 			} else {
