@@ -1,4 +1,3 @@
-import { a } from "vitest/dist/suite-UrZdHRff.js";
 import type { ChapterDoublePageImage } from "./getChapterImagesAsDoublePage";
 
 export default function generateDoublePageOutput(
