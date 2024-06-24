@@ -6,7 +6,6 @@ type ImageSize = {
 export default function getImageSize(src: string): Promise<ImageSize> {
 	return new Promise((resolve, reject) => {
 		const image = new Image();
-		console.log("load");
 		image.addEventListener("error", (e) => {
 			reject(e.error);
 		});
