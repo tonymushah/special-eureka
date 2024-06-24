@@ -1,33 +1,45 @@
 <script lang="ts">
-	import { currentChapterPage } from "../../stores/currentPage";
-	import { getChapterImageContext } from "../../contexts/images";
-	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
-	import { slide } from "svelte/transition";
 	import { createEventDispatcher } from "svelte";
+	import { quintOut } from "svelte/easing";
+	import { writable } from "svelte/store";
+	import { blur } from "svelte/transition";
+	import { getChapterImageContext } from "../../contexts/images";
+	import { currentChapterPage } from "../../stores/currentPage";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
-	import { elasticInOut } from "svelte/easing";
+	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 
+	const isOnTransition = writable(false);
 	const dispatch = createEventDispatcher<{
 		next: {};
 		previous: {};
 	}>();
 	const images_context = getChapterImageContext();
 	$: next = function () {
+		isOnTransition.set(true);
 		if ($currentChapterPage < $images_context.length - 1) {
 			$currentChapterPage++;
 		} else {
 			dispatch("next", {});
 		}
+		isOnTransition.set(false);
 	};
 	$: previous = function () {
+		isOnTransition.set(true);
 		if ($currentChapterPage > 0) {
 			$currentChapterPage--;
 		} else {
 			dispatch("previous", {});
 		}
+		isOnTransition.set(false);
 	};
-	$: current_page = $images_context[$currentChapterPage];
+	$: current_page = $images_context.at($currentChapterPage);
+	/*
+	$: previous_p = $images_context[$currentChapterPage - 1];
+	$: next_p = $images_context[$currentChapterPage + 1];
+	$: previous_page = $readingDirection == ReadingDirection.Ltr ? previous_p : next_p;
+	$: next_page = $readingDirection == ReadingDirection.Ltr ? next_p : previous_p;
+    */
 </script>
 
 <svelte:window
@@ -71,13 +83,16 @@
 		}
 	}}
 />
+<!--
 
+-->
 {#if current_page}
 	<div class="single-page">
 		{#key current_page}
 			<div
-				transition:slide={{
-					axis: "y"
+				transition:blur={{
+					duration: 200,
+					easing: quintOut
 				}}
 			>
 				<ZoomableImage src={current_page} alt={current_page} />
