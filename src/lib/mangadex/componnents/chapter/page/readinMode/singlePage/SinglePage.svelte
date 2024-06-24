@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import { quintOut } from "svelte/easing";
-	import { writable } from "svelte/store";
 	import { blur } from "svelte/transition";
 	import { getChapterImageContext } from "../../contexts/images";
 	import { currentChapterPage } from "../../stores/currentPage";
@@ -9,29 +8,24 @@
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 
-	const isOnTransition = writable(false);
 	const dispatch = createEventDispatcher<{
 		next: {};
 		previous: {};
 	}>();
 	const images_context = getChapterImageContext();
 	$: next = function () {
-		isOnTransition.set(true);
 		if ($currentChapterPage < $images_context.length - 1) {
 			$currentChapterPage++;
 		} else {
 			dispatch("next", {});
 		}
-		isOnTransition.set(false);
 	};
 	$: previous = function () {
-		isOnTransition.set(true);
 		if ($currentChapterPage > 0) {
 			$currentChapterPage--;
 		} else {
 			dispatch("previous", {});
 		}
-		isOnTransition.set(false);
 	};
 	$: current_page = $images_context.at($currentChapterPage);
 	/*
