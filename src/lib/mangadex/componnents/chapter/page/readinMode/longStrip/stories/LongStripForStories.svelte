@@ -45,7 +45,7 @@
 	<span class="slider-range-outer">
 		<span use:melt={$range} class="slider-range" />
 	</span>
-	<span use:melt={$thumbs[0]} class="slide-thumbs" />
+	<span use:melt={$thumbs[0]} class="slider-thumbs" />
 </span>
 
 <LongStrip />
@@ -72,13 +72,16 @@
 		background-color: var(--primary);
 	}
 	.slider-thumbs {
-		width: 20px;
-		height: 20px;
+		height: 1.25rem;
+		width: 1.25rem;
 		border-radius: 9999px;
 		background-color: var(--primary);
 		transition: box-shadow 200ms ease-in-out;
 	}
 	.slider-thumbs:focus {
-		box-shadow: 10px var(--accent-active);
+		box-shadow: 0 0 0 2px var(--accent-active);
+	}
+	.slider-thumbs:not(:focus) {
+		box-shadow: 0 0 0 2px var(--primary-l1);
 	}
 </style>
