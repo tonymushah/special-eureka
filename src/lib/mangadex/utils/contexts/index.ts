@@ -1,4 +1,5 @@
 import { getContext, setContext } from "svelte";
+import { readonly, type Writable } from "svelte/store";
 
 export * from "./theme";
 
@@ -26,6 +27,17 @@ export function generateContextMethodsIgnoreUndefined<T>(key: string, customErro
 		get() {
 			const data = getContext<T>(key);
 			return data;
+		}
+	};
+}
+
+export function generateContextStoresMethods<T>(key: string, customErrorMessage?: string) {
+	const { init, get } = generateContextMethods<Writable<T>>(key, customErrorMessage);
+	return {
+		init,
+		get,
+		getReadonly() {
+			return readonly(get());
 		}
 	};
 }
