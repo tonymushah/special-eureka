@@ -8,10 +8,12 @@ export function generateContextMethods<T>(key: string, customErrorMessage?: stri
 		init(value: T) {
 			return setContext<T>(key, value);
 		},
-		get() {
+		get(defaultValue?: T) {
 			const data = getContext<T | undefined>(key);
 			if (data != undefined) {
 				return data;
+			} else if (defaultValue != undefined) {
+				return defaultValue;
 			} else {
 				throw new Error(customErrorMessage ?? `The context ${key} should be defined`);
 			}
