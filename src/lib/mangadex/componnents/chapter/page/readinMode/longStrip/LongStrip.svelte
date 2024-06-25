@@ -13,3 +13,9 @@
 	{/each}
 	<slot name="bottom" />
 </div>
+
+<style lang="scss">
+	img {
+		max-width: 100%;
+	}
+</style>
