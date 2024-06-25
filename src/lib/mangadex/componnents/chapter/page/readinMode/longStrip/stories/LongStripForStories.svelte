@@ -38,8 +38,19 @@
 	});
 
 	initChapterImageContext(images);
-	const i_width = initLongStripImagesWidthContext(imageWidth);
+	initLongStripImagesWidthContext(imageWidth);
+	const imageWidthShow = derived(imageWidth, ($i) => {
+		if ($i == 0) {
+			return 100;
+		} else {
+			return Math.abs($i);
+		}
+	});
 </script>
+
+<h3>
+	Image Width: {$imageWidthShow}%
+</h3>
 
 <span use:melt={$root} class="slider-root">
 	<span class="slider-range-outer">
@@ -51,11 +62,14 @@
 <LongStrip />
 
 <style lang="scss">
+	h3 {
+		margin: 1px;
+	}
 	.slider-root {
 		position: relative;
 		display: flex;
 		height: 20px;
-		width: 200px;
+		width: 100%;
 		align-items: center;
 	}
 	.slider-range-outer {
@@ -81,7 +95,7 @@
 	.slider-thumbs:focus {
 		box-shadow: 0 0 0 2px var(--accent-active);
 	}
-	.slider-thumbs:not(:focus) {
-		box-shadow: 0 0 0 2px var(--primary-l1);
+	.slider-thumbs:hover {
+		box-shadow: 0 0 0 2px var(--accent-hover);
 	}
 </style>
