@@ -1,14 +1,16 @@
 <script lang="ts">
 	import { getChapterImageContext } from "../../contexts/images";
+	import { currentChapterPage } from "../../stores/currentPage";
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 
 	const images = getChapterImageContext();
+	export let innerOverflow = true;
 	$: rtl = $readingDirection == ReadingDirection.Rtl;
 </script>
 
 <slot name="top" />
 
-<div class="wide-strip" class:rtl>
+<div class="wide-strip" class:rtl class:innerOverflow>
 	<slot name="before" />
 	{#each $images as image}
 		<div>
@@ -23,10 +25,13 @@
 <style lang="scss">
 	.wide-strip {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
 	}
 	.wide-strip.rtl {
-		flex-direction: column-reverse;
+		flex-direction: row-reverse;
+	}
+	.wide-strip.innerOverflow {
+		overflow-x: scroll;
 	}
 	img {
 		max-height: 100%;
