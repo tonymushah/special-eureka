@@ -134,7 +134,7 @@ importers:
         version: 3.1.1(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))
       '@sveltejs/adapter-static':
         specifier: ^3.0.1
-        version: 3.0.1(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))
+        version: 3.0.2(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))
       '@sveltejs/kit':
         specifier: ^2.4.3
         version: 2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1))
@@ -1050,8 +1050,8 @@ packages:
   '@codemirror/state@6.4.1':
     resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
 
-  '@codemirror/view@6.26.3':
-    resolution: {integrity: sha512-gmqxkPALZjkgSxIeeweY/wGQXBfwTUaLs8h7OKtSwfbj9Ct3L11lD+u1sS7XHppxFQoMDiMDp07P9f3I2jWOHw==}
+  '@codemirror/view@6.28.2':
+    resolution: {integrity: sha512-A3DmyVfjgPsGIjiJqM/zvODUAPQdQl3ci0ghehYNnbt5x+o76xq+dL5+mMBuysDXnI3kapgOkoeJ0sbtL/3qPw==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -1731,10 +1731,12 @@ packages:
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/config-array@0.9.5':
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1742,9 +1744,11 @@ packages:
 
   '@humanwhocodes/object-schema@1.2.1':
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/retry@0.2.3':
     resolution: {integrity: sha512-X38nUbachlb01YMlvPFojKoiXq+LzZvuSce70KPMPdeM1Rj03k4dR7lDslhbqXn3Ang4EU3+EAmwEAsbrjHW3g==}
@@ -2545,8 +2549,8 @@ packages:
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
-  '@sveltejs/adapter-static@3.0.1':
-    resolution: {integrity: sha512-6lMvf7xYEJ+oGeR5L8DFJJrowkefTK6ZgA4JiMqoClMkKq0s6yvsd3FZfCFvX1fQ0tpCD7fkuRVHsnUVgsHyNg==}
+  '@sveltejs/adapter-static@3.0.2':
+    resolution: {integrity: sha512-/EBFydZDwfwFfFEuF1vzUseBoRziwKP7AoHAwv+Ot3M084sE/HTVBHf9mCmXfdM9ijprY5YEugZjleflncX5fQ==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
 
@@ -7501,7 +7505,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.26.3
+      '@codemirror/view': 6.28.2
       '@lezer/common': 1.2.1
       '@lezer/highlight': 1.2.0
       '@lezer/lr': 1.4.1
@@ -7509,7 +7513,7 @@ snapshots:
 
   '@codemirror/state@6.4.1': {}
 
-  '@codemirror/view@6.26.3':
+  '@codemirror/view@6.28.2':
     dependencies:
       '@codemirror/state': 6.4.1
       style-mod: 4.1.2
@@ -9612,7 +9616,7 @@ snapshots:
       '@sveltejs/kit': 2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1))
       import-meta-resolve: 4.0.0
 
-  '@sveltejs/adapter-static@3.0.1(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))':
+  '@sveltejs/adapter-static@3.0.2(@sveltejs/kit@2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))':
     dependencies:
       '@sveltejs/kit': 2.5.10(@sveltejs/vite-plugin-svelte@3.0.2(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1)))(svelte@4.2.12)(vite@5.1.7(@types/node@20.11.24)(less@4.2.0)(sass@1.71.1))
 
