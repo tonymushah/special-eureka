@@ -3,6 +3,8 @@
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
+	import { derived } from "svelte/store";
+	import { ImageFit, imageFitStore } from "./settings";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
@@ -20,6 +22,9 @@
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
 	});
+	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
+	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Height);
+	onMount(() => imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })));
 </script>
 
 <svelte:window
@@ -49,16 +54,28 @@
 >
 	<div class="toZoom" bind:this={toZoom}>
 		{#if Array.isArray(src) && Array.isArray(alt)}
-			{#key src[0]}
-				<img src={src[0]} alt={alt[0]} />
-			{/key}
-			{#key src[1]}
-				<img src={src[1]} alt={alt[1]} />
-			{/key}
+			<div
+				class="double-image"
+				class:fitWidth={$shouldFitWidth}
+				class:fitHeight={$shouldFitHeight}
+			>
+				{#key src[0]}
+					<img src={src[0]} alt={alt[0]} />
+				{/key}
+				{#key src[1]}
+					<img src={src[1]} alt={alt[1]} />
+				{/key}
+			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
-			{#key src}
-				<img {src} {alt} />
-			{/key}
+			<div
+				class="single-image"
+				class:fitWidth={$shouldFitWidth}
+				class:fitHeight={$shouldFitHeight}
+			>
+				{#key src}
+					<img {src} {alt} />
+				{/key}
+			</div>
 		{/if}
 	</div>
 </div>
@@ -68,13 +85,61 @@
 		width: 100%;
 		height: 100cqh;
 		.toZoom {
-			display: flex;
-			justify-content: center;
-			align-items: center;
 			height: 100%;
-		}
-		img {
-			height: 100%;
+			div.double-image {
+				display: flex;
+				justify-content: center;
+				img {
+					object-fit: none;
+					width: max-content;
+					height: max-content;
+				}
+			}
+			div.double-image.fitHeight {
+				height: 100%;
+				align-items: center;
+				img {
+					object-fit: contain;
+					height: 100%;
+				}
+			}
+			div.double-image.fitWidth {
+				width: max-content;
+				display: grid;
+				height: 100%;
+				grid-template-rows: 2;
+				img {
+					grid-row: 1;
+					height: 100%;
+					object-fit: contain;
+					width: 100%;
+				}
+			}
+			div.single-image {
+				img {
+					object-fit: none;
+					width: max-content;
+					height: max-content;
+				}
+			}
+			div.single-image.fitWidth {
+				width: 100%;
+				height: fit-content;
+				img {
+					object-fit: contain;
+					width: 100%;
+					height: 100%;
+				}
+			}
+			div.single-image.fitHeight {
+				height: 100%;
+				width: fit-content;
+				img {
+					object-fit: contain;
+					width: 100%;
+					height: 100%;
+				}
+			}
 		}
 	}
 </style>

@@ -1,13 +1,13 @@
-import { derived, type Readable } from "svelte/store";
-import { currentChapterPage } from "../../../stores/currentPage";
+import { derived, type Readable, type Writable } from "svelte/store";
 import type { ChapterDoublePageImage } from "./getChapterImagesAsDoublePage";
 import getChapterDoublePageCurrentPageIndex from "./getChapterDoublePageCurrentPageIndex";
 import getChapterImagesAsDoublePage from "./getChapterImagesAsDoublePage";
 import { ReadingDirection, readingDirection } from "../../../stores/readingDirection";
 import { isArray } from "lodash";
+import { getChapterCurrentPageContext } from "../../../contexts/currentPage";
 
 export default function getChapterDoublePageCurrentPage(
-	currentChapter = currentChapterPage
+	currentChapter = getChapterCurrentPageContext()
 ): Readable<ChapterDoublePageImage | undefined> {
 	const images = getChapterImagesAsDoublePage();
 	const current = getChapterDoublePageCurrentPageIndex(currentChapter);
