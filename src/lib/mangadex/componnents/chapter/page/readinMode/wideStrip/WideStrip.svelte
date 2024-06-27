@@ -54,7 +54,7 @@
 	// TODO Add support with the intersection observer API
 	const interObserver = new IntersectionObserver(
 		(entries) => {
-			console.debug(entries.length);
+			// console.debug(entries.length);
 			const entry = entries.reduce((previous, current) => {
 				if (previous.intersectionRatio < current.intersectionRatio) {
 					return current;
