@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@floating-ui/dom':
         specifier: ^1.6.1
-        version: 1.6.3
+        version: 1.6.6
       '@fontsource-variable/josefin-sans':
         specifier: ^5.0.19
         version: 5.0.20
@@ -1050,8 +1050,8 @@ packages:
   '@codemirror/state@6.4.1':
     resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
 
-  '@codemirror/view@6.26.3':
-    resolution: {integrity: sha512-gmqxkPALZjkgSxIeeweY/wGQXBfwTUaLs8h7OKtSwfbj9Ct3L11lD+u1sS7XHppxFQoMDiMDp07P9f3I2jWOHw==}
+  '@codemirror/view@6.28.2':
+    resolution: {integrity: sha512-A3DmyVfjgPsGIjiJqM/zvODUAPQdQl3ci0ghehYNnbt5x+o76xq+dL5+mMBuysDXnI3kapgOkoeJ0sbtL/3qPw==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -1376,8 +1376,11 @@ packages:
   '@floating-ui/core@1.6.0':
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
 
-  '@floating-ui/dom@1.6.3':
-    resolution: {integrity: sha512-RnDthu3mzPlQ31Ss/BTwQ1zjzIhr3lk1gZB1OC56h/1vEtaXkESrOqL5fQVMfXpwGtRwX+YsZBdyHtJMQnkArw==}
+  '@floating-ui/core@1.6.3':
+    resolution: {integrity: sha512-1ZpCvYf788/ZXOhRQGFxnYQOVgeU+pi0i+d0Ow34La7qjIXETi6RNswGVKkA6KcDO8/+Ysu2E/CeUmmeEBDvTg==}
+
+  '@floating-ui/dom@1.6.6':
+    resolution: {integrity: sha512-qiTYajAnh3P+38kECeffMSQgbvXty2VB6rS+42iWR4FPIlZjLK84E9qtLnMTLIpPz2znD/TaFqaiavMUrS+Hcw==}
 
   '@floating-ui/react-dom@2.0.8':
     resolution: {integrity: sha512-HOdqOt3R3OGeTKidaLvJKcgg75S6tibQ3Tif4eyd91QnIJWr0NLvoXFpJA/j8HqkFSL68GDca9AuyWEHlhyClw==}
@@ -1385,8 +1388,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@floating-ui/utils@0.2.1':
-    resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
+  '@floating-ui/utils@0.2.3':
+    resolution: {integrity: sha512-XGndio0l5/Gvd6CLIABvsav9HHezgDFFhDfHk1bvLfr9ni8dojqLSvBbotJEjmIwNHL7vK4QzBJTdBRoB+c1ww==}
 
   '@fontsource-variable/josefin-sans@5.0.20':
     resolution: {integrity: sha512-18pRxL/jA7HFT+bMsFsDHFPTJ2lTxMK3eMQt5cruQ9/RWFqci2Pp0R4iQz6qr09nMslfJudEsXt06LX2AuQ34Q==}
@@ -1731,10 +1734,12 @@ packages:
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/config-array@0.9.5':
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1742,9 +1747,11 @@ packages:
 
   '@humanwhocodes/object-schema@1.2.1':
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/retry@0.2.3':
     resolution: {integrity: sha512-X38nUbachlb01YMlvPFojKoiXq+LzZvuSce70KPMPdeM1Rj03k4dR7lDslhbqXn3Ang4EU3+EAmwEAsbrjHW3g==}
@@ -7501,7 +7508,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.26.3
+      '@codemirror/view': 6.28.2
       '@lezer/common': 1.2.1
       '@lezer/highlight': 1.2.0
       '@lezer/lr': 1.4.1
@@ -7509,7 +7516,7 @@ snapshots:
 
   '@codemirror/state@6.4.1': {}
 
-  '@codemirror/view@6.26.3':
+  '@codemirror/view@6.28.2':
     dependencies:
       '@codemirror/state': 6.4.1
       style-mod: 4.1.2
@@ -7711,20 +7718,24 @@ snapshots:
 
   '@floating-ui/core@1.6.0':
     dependencies:
-      '@floating-ui/utils': 0.2.1
+      '@floating-ui/utils': 0.2.3
 
-  '@floating-ui/dom@1.6.3':
+  '@floating-ui/core@1.6.3':
     dependencies:
-      '@floating-ui/core': 1.6.0
-      '@floating-ui/utils': 0.2.1
+      '@floating-ui/utils': 0.2.3
+
+  '@floating-ui/dom@1.6.6':
+    dependencies:
+      '@floating-ui/core': 1.6.3
+      '@floating-ui/utils': 0.2.3
 
   '@floating-ui/react-dom@2.0.8(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@floating-ui/dom': 1.6.3
+      '@floating-ui/dom': 1.6.6
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
-  '@floating-ui/utils@0.2.1': {}
+  '@floating-ui/utils@0.2.3': {}
 
   '@fontsource-variable/josefin-sans@5.0.20': {}
 
@@ -8476,7 +8487,7 @@ snapshots:
   '@melt-ui/svelte@0.79.1(svelte@4.2.12)':
     dependencies:
       '@floating-ui/core': 1.6.0
-      '@floating-ui/dom': 1.6.3
+      '@floating-ui/dom': 1.6.6
       '@internationalized/date': 3.5.3
       dequal: 2.0.3
       focus-trap: 7.5.4
