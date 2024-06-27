@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { writable } from "svelte/store";
+	import { initChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
 	import { ReadingDirection, readingDirection } from "../../../stores/readingDirection";
 	import SinglePage from "../SinglePage.svelte";
 	export let images: string[];
+	export let currentPage: number = 0;
+	initChapterCurrentPageContext(writable(currentPage));
 	initChapterImageContext(images);
 </script>
 
