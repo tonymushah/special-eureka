@@ -8,6 +8,7 @@
 	import { onMount } from "svelte";
 	import { delay } from "lodash";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import type { Action } from "svelte/action";
 	let widestrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
 	const isFromIntersector = writable(false);
@@ -107,6 +108,14 @@
 			}, 5);
 		})
 	);
+	const mount: Action = (node) => {
+		toObserve = [...toObserve, node];
+		return {
+			destroy() {
+				toObserve = toObserve.filter((e) => node != e);
+			}
+		};
+	};
 </script>
 
 <slot name="top" />
@@ -123,17 +132,8 @@
 >
 	<slot name="before" />
 	{#each $images as image, page}
-		<div data-page={page}>
-			<img
-				data-initial-loading="true"
-				on:drag|preventDefault
-				on:load={(e) => {
-					toObserve = [...toObserve, e.currentTarget];
-				}}
-				src={image}
-				alt={image}
-				data-page={page}
-			/>
+		<div data-page={page} use:mount>
+			<img on:drag|preventDefault src={image} alt={image} data-page={page} />
 		</div>
 	{/each}
 	<slot name="after" />
