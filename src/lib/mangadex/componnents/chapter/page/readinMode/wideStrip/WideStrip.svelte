@@ -26,8 +26,8 @@
 			return [$page, $fromInter] satisfies [number, boolean];
 		}
 	);
-	onMount(() =>
-		currentChapter.subscribe(([page, fromInter]) => {
+	onMount(() => {
+		return currentChapter.subscribe(([page, fromInter]) => {
 			if (!shouldIgnore && !fromInter) {
 				if (widestrip_root != undefined) {
 					const current = widestrip_root.querySelector(`div[data-page=\"${page}\"]`);
@@ -36,10 +36,13 @@
 					}
 				}
 			}
-		})
-	);
+		});
+	});
 	export let innerOverflow = true;
-	$: rtl = $readingDirection == ReadingDirection.Rtl;
+	const rtl = derived(
+		readingDirection,
+		($readingDirection) => $readingDirection == ReadingDirection.Rtl
+	);
 	// TODO Add support with the intersection observer API
 	const interObserver = new IntersectionObserver(
 		(entries) => {
@@ -62,7 +65,7 @@
 
 <slot name="top" />
 
-<div class="wide-strip" class:rtl class:innerOverflow bind:this={widestrip_root}>
+<div class="wide-strip" class:rtl={$rtl} class:innerOverflow bind:this={widestrip_root}>
 	<slot name="before" />
 	{#each $images as image, page}
 		<div data-page={page}>
