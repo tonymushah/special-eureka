@@ -2,9 +2,10 @@
 	import { derived, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
 	import { getLongStripImagesWidthContext } from "./utils/context/longstrip_images_width";
-	import { currentChapterPage } from "../../stores/currentPage";
 	import { onMount } from "svelte";
+	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 
+	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
 	const imageWidth = derived(getLongStripImagesWidthContext(), ($width) => {
