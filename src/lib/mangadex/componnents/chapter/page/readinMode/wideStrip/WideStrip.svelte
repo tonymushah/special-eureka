@@ -54,6 +54,7 @@
 	// TODO Add support with the intersection observer API
 	const interObserver = new IntersectionObserver(
 		(entries) => {
+			console.debug(entries.length);
 			const entry = entries.reduce((previous, current) => {
 				if (previous.intersectionRatio < current.intersectionRatio) {
 					return current;
@@ -61,19 +62,19 @@
 					return previous;
 				}
 			});
-			const isInitialLoading = entry.target.getAttribute("data-initial-loading");
+			/*const isInitialLoading = entry.target.getAttribute("data-initial-loading");
 			if (isInitialLoading == "true") {
 				entry.target.setAttribute("data-initial-loading", "false");
-			} else {
-				const page = entry.target.getAttribute("data-page");
-				if (page != null) {
-					if (entry.isIntersecting && entry.intersectionRatio > 0) {
-						fromIntersector(() => {
-							currentChapterPage.set(Number(page));
-						});
-					}
+			} else {*/
+			const page = entry.target.getAttribute("data-page");
+			if (page != null) {
+				if (entry.isIntersecting /*&& entry.intersectionRatio > 0*/) {
+					fromIntersector(() => {
+						currentChapterPage.set(Number(page));
+					});
 				}
 			}
+			//}
 		},
 		{
 			root: widestrip_root
