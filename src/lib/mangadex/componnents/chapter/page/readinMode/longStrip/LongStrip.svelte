@@ -50,14 +50,15 @@
 	});
 	const interObserver = new IntersectionObserver(
 		(entries) => {
-			console.debug(`intersected ${entries.length}`);
-			console.debug(
-				entries.map((entry) => ({
-					ratio: entry.intersectionRatio,
-					page: entry.target.getAttribute("data-page")
-				}))
-			);
-
+			/*
+                console.debug(`intersected ${entries.length}`);
+                console.debug(
+                    entries.map((entry) => ({
+                        ratio: entry.intersectionRatio,
+                        page: entry.target.getAttribute("data-page")
+                    }))
+                );
+            */
 			const entry = entries.reduce((previous, current) => {
 				if (previous.intersectionRatio < current.intersectionRatio) {
 					return current;
