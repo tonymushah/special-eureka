@@ -96,11 +96,14 @@
 				}
 			}
 			div.double-image.fitHeight {
+				display: grid;
 				height: 100%;
-				align-items: center;
+				grid-template-rows: 2;
 				img {
-					object-fit: contain;
+					grid-row: 1;
 					height: 100%;
+					object-fit: contain;
+					width: 100%;
 				}
 			}
 			div.double-image.fitWidth {
