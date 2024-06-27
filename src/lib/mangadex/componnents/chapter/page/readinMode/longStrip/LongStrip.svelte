@@ -4,6 +4,7 @@
 	import { getLongStripImagesWidthContext } from "./utils/context/longstrip_images_width";
 	import { onMount } from "svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import type { Action } from "svelte/action";
 
 	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined;
@@ -49,6 +50,14 @@
 	});
 	const interObserver = new IntersectionObserver(
 		(entries) => {
+			console.debug(`intersected ${entries.length}`);
+			console.debug(
+				entries.map((entry) => ({
+					ratio: entry.intersectionRatio,
+					page: entry.target.getAttribute("data-page")
+				}))
+			);
+
 			const entry = entries.reduce((previous, current) => {
 				if (previous.intersectionRatio < current.intersectionRatio) {
 					return current;
@@ -56,17 +65,14 @@
 					return previous;
 				}
 			});
-			const isInitialLoading = entry.target.getAttribute("data-initial-loading");
-			if (isInitialLoading == "true") {
-				entry.target.setAttribute("data-initial-loading", "false");
-			} else {
-				const page = entry.target.getAttribute("data-page");
-				if (page != null) {
-					if (entry.isIntersecting && entry.intersectionRatio > 0) {
-						fromIntersector(() => {
-							currentChapterPage.set(Number(page));
-						});
-					}
+			//const isInitialLoading = entry.target.getAttribute("data-initial-loading");
+
+			const page = entry.target.getAttribute("data-page");
+			if (page != null) {
+				if (entry.isIntersecting && entry.intersectionRatio > 0) {
+					fromIntersector(() => {
+						currentChapterPage.set(Number(page));
+					});
 				}
 			}
 		},
@@ -74,22 +80,22 @@
 			root: longstrip_root
 		}
 	);
+	const mount: Action = (node) => {
+		interObserver.observe(node);
+		return {
+			destroy() {
+				interObserver.unobserve(node);
+			}
+		};
+	};
+	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
 </script>
 
 <div class="longstrip" bind:this={longstrip_root}>
 	<slot name="top" />
 	{#each $images as image, page}
-		<div data-page={page}>
-			<img
-				data-initial-loading="true"
-				data-page={page}
-				on:load={(e) => {
-					interObserver.observe(e.currentTarget);
-				}}
-				src={image}
-				alt={image}
-				width="{$imageWidth}%"
-			/>
+		<div data-page={page} use:mount>
+			<img data-page={page} src={image} alt={image} width="{$imageWidth}%" />
 		</div>
 	{/each}
 	<slot name="bottom" />
