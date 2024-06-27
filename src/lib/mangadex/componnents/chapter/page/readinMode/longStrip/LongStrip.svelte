@@ -70,7 +70,7 @@
 
 			const page = entry.target.getAttribute("data-page");
 			if (page != null) {
-				if (entry.isIntersecting && entry.intersectionRatio > 0) {
+				if (entry.isIntersecting /*&& entry.intersectionRatio > 0*/) {
 					fromIntersector(() => {
 						currentChapterPage.set(Number(page));
 					});
