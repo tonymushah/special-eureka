@@ -4,7 +4,7 @@
 	import { onDestroy, onMount } from "svelte";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
 	import { derived } from "svelte/store";
-	import { ImageFit, imageFitStore } from "../../stores/imageFit";
+	import { ImageFit, imageFitStore } from "./settings";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
@@ -24,6 +24,7 @@
 	});
 	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
 	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Height);
+	onMount(() => imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })));
 </script>
 
 <svelte:window
@@ -82,6 +83,7 @@
 			height: 100%;
 			img.fitWidth {
 				width: 100%;
+				height: max-content;
 			}
 			img.fitHeight {
 				height: 100%;
