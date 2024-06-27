@@ -79,7 +79,7 @@ importers:
         version: 4.1.0
       swiper:
         specifier: ^11.0.6
-        version: 11.0.7
+        version: 11.1.4
       timeago.js:
         specifier: ^4.0.2
         version: 4.0.2
@@ -5981,8 +5981,8 @@ packages:
   swap-case@2.0.2:
     resolution: {integrity: sha512-kc6S2YS/2yXbtkSMunBtKdah4VFETZ8Oh6ONSmSd9bRxhqTrtARUCBUiWXH3xVPpvR7tz2CSnkuXVE42EcGnMw==}
 
-  swiper@11.0.7:
-    resolution: {integrity: sha512-cDfglW1B6uSmB6eB6pNmzDTNLmZtu5bWWa1vak0RU7fOI9qHjMzl7gVBvYSl34b0RU2N11HxxETJqQ5LeqI1cA==}
+  swiper@11.1.4:
+    resolution: {integrity: sha512-1n7kbYJB2dFEpUHRFszq7gys/ofIBrMNibwTiMvPHwneKND/t9kImnHt6CfGPScMHgI+dWMbGTycCKGMoOO1KA==}
     engines: {node: '>= 4.7.0'}
 
   tabbable@6.2.0:
@@ -13481,7 +13481,7 @@ snapshots:
     dependencies:
       tslib: 2.6.2
 
-  swiper@11.0.7: {}
+  swiper@11.1.4: {}
 
   tabbable@6.2.0: {}
 
