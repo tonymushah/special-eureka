@@ -5,10 +5,12 @@
 	import { initLongStripImagesWidthContext } from "../utils/context/longstrip_images_width";
 	import { createSlider, melt } from "@melt-ui/svelte";
 	import { initChapterCurrentPageContext } from "../../../contexts/currentPage";
+	import { onMount } from "svelte";
 	export let imageWidth = writable(100);
 	export let images: string[];
 	export let currentPage: number = 0;
-	initChapterCurrentPageContext(writable(currentPage));
+	const page = initChapterCurrentPageContext(writable(currentPage));
+	onMount(() => page.subscribe(console.debug));
 	const derivedImageWidth: Readable<number[]> & {
 		set: (value: number[]) => void;
 	} = {
