@@ -6,6 +6,7 @@
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
 
+	export let innerOverflow = true;
 	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
@@ -92,7 +93,7 @@
 	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
 </script>
 
-<div class="longstrip" bind:this={longstrip_root}>
+<div class="longstrip" class:innerOverflow bind:this={longstrip_root}>
 	<slot name="top" />
 	{#each $images as image, page}
 		<div data-page={page} use:mount>
@@ -105,5 +106,9 @@
 <style lang="scss">
 	img {
 		max-width: 100%;
+	}
+	.longstrip.innerOverflow {
+		max-height: 100%;
+		overflow-y: scroll;
 	}
 </style>
