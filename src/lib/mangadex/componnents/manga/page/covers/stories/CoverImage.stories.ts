@@ -8,10 +8,10 @@ import { fukkoi1 } from "@mangadex/test-data/images/fukkoi";
 import { v4 } from "uuid";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/page/covers/CoverImage",
-    component: CoverImage,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/page/covers/CoverImage",
+	component: CoverImage,
+	tags: ["autodocs"]
 } satisfies Meta<CoverImage>;
 
 export default meta;
@@ -19,9 +19,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        coverImage: writable(fukkoi1),
-        alt: v4(),
-        title: "Volume 10"
-    }
+	args: {
+		coverImage: writable(fukkoi1),
+		alt: v4(),
+		title: "Volume 10"
+	}
 };

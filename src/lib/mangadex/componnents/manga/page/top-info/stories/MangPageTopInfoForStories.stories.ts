@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
-import { within, fireEvent } from "@storybook/testing-library";
+import { within, fireEvent } from "@storybook/test";
 import "@fontsource/poppins/latin.css";
 
 import TopInfo from "./MangaPageTopInfoForStories.svelte";

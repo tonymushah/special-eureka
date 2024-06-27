@@ -9,10 +9,10 @@ import { writable } from "svelte/store";
 import { v4 } from "uuid";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/page/related/CategoryBase",
-    component: CategorizedTitles,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/page/related/CategoryBase",
+	component: CategorizedTitles,
+	tags: ["autodocs"]
 } satisfies Meta<CategorizedTitles>;
 
 export default meta;
@@ -20,21 +20,20 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const testTitle = {
-    coverImage: writable(volume7),
-    coverImageAlt: "Yuusha Party volume7",
-    status: MangaStatus.Ongoing,
-    title: "Yuusha Party o Oida Sareta Kiyou Binbou sdasdsadasdad",
-    description:
-        "The Jack-Of-All-Trades Kicked Out of the Hero\u2019s Party: The Swordsman Who Became a Support Mage Due to Party Circumstances, Becomes All-Powerful"
+	coverImage: writable(volume7),
+	coverImageAlt: "Yuusha Party volume7",
+	status: MangaStatus.Ongoing,
+	title: "Yuusha Party o Oida Sareta Kiyou Binbou sdasdsadasdad",
+	description:
+		"The Jack-Of-All-Trades Kicked Out of the Hero\u2019s Party: The Swordsman Who Became a Support Mage Due to Party Circumstances, Becomes All-Powerful"
 };
 
 export const Default: Story = {
-    args: {
-        title: "Prequel",
-        titles: Array.from({ length: Math.floor(Math.random() * 10) }, () => v4())
-            .map((id) => ({
-                ...testTitle,
-                id
-            }))
-    }
+	args: {
+		title: "Prequel",
+		titles: Array.from({ length: Math.floor(Math.random() * 10) }, () => v4()).map((id) => ({
+			...testTitle,
+			id
+		}))
+	}
 };
