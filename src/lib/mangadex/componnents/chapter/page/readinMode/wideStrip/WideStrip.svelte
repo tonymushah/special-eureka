@@ -2,11 +2,12 @@
     TODO Add drag support for scrolling
 -->
 <script lang="ts">
-	import { derived, writable, type Readable } from "svelte/store";
+	import { derived, get, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
 	import { currentChapterPage } from "../../stores/currentPage";
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import { onMount } from "svelte";
+	import { delay } from "lodash";
 	let widestrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
 	const isFromIntersector = writable(false);
@@ -29,23 +30,25 @@
 			return [$page, $fromInter] satisfies [number, boolean];
 		}
 	);
+	function toCurrentPage(page: number) {
+		console.log(page);
+		const current = widestrip_root?.querySelector(`div[data-page=\"${page}\"]`);
+		if (current != null) {
+			current.scrollIntoView();
+		}
+	}
 	onMount(() => {
 		return currentChapter.subscribe(([page, fromInter]) => {
 			if (!shouldIgnore && !fromInter) {
 				if (widestrip_root != undefined) {
-					const current = widestrip_root.querySelector(`div[data-page=\"${page}\"]`);
-					if (current != null) {
-						current.scrollIntoView();
-					}
+					toCurrentPage(page);
 				}
 			}
 		});
 	});
 	export let innerOverflow = true;
-	const rtl = derived(
-		readingDirection,
-		($readingDirection) => $readingDirection == ReadingDirection.Rtl
-	);
+
+	let toObserve: Element[] = [];
 	// TODO Add support with the intersection observer API
 	const interObserver = new IntersectionObserver(
 		(entries) => {
@@ -69,6 +72,35 @@
 			root: widestrip_root
 		}
 	);
+	$: toObserve.forEach((e) => {
+		interObserver.unobserve(e);
+		interObserver.observe(e);
+	});
+	const rtl = derived(readingDirection, ($readingDirection) => {
+		toObserve.forEach((entry) => {
+			interObserver.unobserve(entry);
+			entry.setAttribute("data-initial-loading", "true");
+		});
+		return $readingDirection == ReadingDirection.Rtl;
+	});
+	onMount(() =>
+		readingDirection.subscribe(() => {
+			delay(() => {
+				const entries = toObserve;
+				/*
+                entries.forEach((entry) => {
+                    interObserver.unobserve(entry);
+                    entry.setAttribute("data-initial-loading", "true");
+                });
+                */
+				const currentPage = get(currentChapterPage);
+				toCurrentPage(currentPage);
+				entries.forEach((entry) => {
+					interObserver.observe(entry);
+				});
+			}, 10);
+		})
+	);
 </script>
 
 <slot name="top" />
@@ -90,7 +122,7 @@
 				data-initial-loading="true"
 				on:drag|preventDefault
 				on:load={(e) => {
-					interObserver.observe(e.currentTarget);
+					toObserve = [...toObserve, e.currentTarget];
 				}}
 				src={image}
 				alt={image}
