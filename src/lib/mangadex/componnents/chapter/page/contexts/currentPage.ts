@@ -1,7 +1,7 @@
 import { generateContextStoresMethods } from "@mangadex/utils/contexts";
 
 export const {
-	get: getChapterCurrentPage,
-	getReadonly: getChapterCurrentPageReadOnly,
-	init: initChapterCurrentPage
+	get: getChapterCurrentPageContext,
+	getReadonly: getChapterCurrentPageContextReadOnly,
+	init: initChapterCurrentPageContext
 } = generateContextStoresMethods<number>("CHAPTER-CURRENT-PAGE");
