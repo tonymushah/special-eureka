@@ -54,21 +54,28 @@
 >
 	<div class="toZoom" bind:this={toZoom}>
 		{#if Array.isArray(src) && Array.isArray(alt)}
-			{#key src[0]}
-				<img src={src[0]} alt={alt[0]} />
-			{/key}
-			{#key src[1]}
-				<img src={src[1]} alt={alt[1]} />
-			{/key}
+			<div
+				class="double-image"
+				class:fitWidth={$shouldFitWidth}
+				class:fitHeight={$shouldFitHeight}
+			>
+				{#key src[0]}
+					<img src={src[0]} alt={alt[0]} />
+				{/key}
+				{#key src[1]}
+					<img src={src[1]} alt={alt[1]} />
+				{/key}
+			</div>
 		{:else if typeof src == "string" && typeof alt == "string"}
-			{#key src}
-				<img
-					{src}
-					{alt}
-					class:fitWidth={$shouldFitWidth}
-					class:fitHeight={$shouldFitHeight}
-				/>
-			{/key}
+			<div
+				class="single-image"
+				class:fitWidth={$shouldFitWidth}
+				class:fitHeight={$shouldFitHeight}
+			>
+				{#key src}
+					<img {src} {alt} />
+				{/key}
+			</div>
 		{/if}
 	</div>
 </div>
@@ -78,15 +85,30 @@
 		width: 100%;
 		height: 100cqh;
 		.toZoom {
-			display: flex;
-			justify-content: center;
 			height: 100%;
-			img.fitWidth {
-				width: 100%;
-				height: max-content;
+			div.single-image {
+				img {
+					object-fit: none;
+					width: max-content;
+					height: max-content;
+				}
 			}
-			img.fitHeight {
+			div.single-image.fitWidth {
+				width: 100%;
+				height: fit-content;
+				img {
+					object-fit: contain;
+					width: 100%;
+					height: 100%;
+				}
+			}
+			div.single-image.fitHeight {
 				height: 100%;
+				width: fit-content;
+				img {
+					object-fit: contain;
+					height: 100%;
+				}
 			}
 		}
 	}
