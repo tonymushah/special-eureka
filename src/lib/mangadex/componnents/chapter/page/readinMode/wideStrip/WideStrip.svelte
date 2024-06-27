@@ -1,3 +1,6 @@
+<!--
+    TODO Add drag support for scrolling
+-->
 <script lang="ts">
 	import { derived, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
@@ -65,11 +68,21 @@
 
 <slot name="top" />
 
-<div class="wide-strip" class:rtl={$rtl} class:innerOverflow bind:this={widestrip_root}>
+<div
+	role="document"
+	class="wide-strip"
+	class:rtl={$rtl}
+	class:innerOverflow
+	bind:this={widestrip_root}
+	on:drag|preventDefault={(e) => {
+		//console.log(e);
+	}}
+>
 	<slot name="before" />
 	{#each $images as image, page}
 		<div data-page={page}>
 			<img
+				on:drag|preventDefault
 				on:load={(e) => {
 					interObserver.observe(e.currentTarget);
 				}}
