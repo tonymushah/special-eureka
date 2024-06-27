@@ -6,13 +6,14 @@
 	import { createEventDispatcher } from "svelte";
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
-	import { currentChapterPage } from "../../stores/currentPage";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
 	import { ceil, isArray, random } from "lodash";
 	import { blur, fade } from "svelte/transition";
 	import { quadIn, quadOut } from "svelte/easing";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
+	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 
+	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPage = getChapterDoublePageCurrentPage();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
