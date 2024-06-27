@@ -85,7 +85,7 @@
     "@storybook/testing-library": "^0.2.2",
     "@tauri-apps/api": "^1.5.3",
     "@types/lodash": "^4.17.0",
-    "@types/uuid": "^9.0.7",
+    "@types/uuid": "^10.0.0",
     "@urql/svelte": "^4.0.4",
     "fast-xml-parser": "^4.3.6",
     "flag-icons": "^7.1.0",
@@ -99,7 +99,7 @@
     "swiper": "^11.0.6",
     "timeago.js": "^4.0.2",
     "toastify-js": "^1.12.0",
-    "uuid": "^9.0.1"
+    "uuid": "^10.0.0"
   },
   "packageManager": "pnpm@9.1.0",
   "engines": {

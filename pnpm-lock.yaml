@@ -45,8 +45,8 @@ importers:
         specifier: ^4.17.0
         version: 4.17.5
       '@types/uuid':
-        specifier: ^9.0.7
-        version: 9.0.8
+        specifier: ^10.0.0
+        version: 10.0.0
       '@urql/svelte':
         specifier: ^4.0.4
         version: 4.1.1(graphql@16.8.1)(svelte@4.2.12)
@@ -87,8 +87,8 @@ importers:
         specifier: ^1.12.0
         version: 1.12.0
       uuid:
-        specifier: ^9.0.1
-        version: 9.0.1
+        specifier: ^10.0.0
+        version: 10.0.0
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^5.0.0
@@ -2827,6 +2827,9 @@ packages:
 
   '@types/unist@3.0.2':
     resolution: {integrity: sha512-dqId9J8K/vGi5Zr7oo212BGii5m3q5Hxlkwy3WpYuKPklmBEvsbMYYyLxAQpSffdLl/gdW0XUpKWFvYmyoWCoQ==}
+
+  '@types/uuid@10.0.0':
+    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@types/uuid@9.0.8':
     resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
@@ -6205,6 +6208,10 @@ packages:
   utils-merge@1.0.1:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
+
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
 
   uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
@@ -9887,6 +9894,8 @@ snapshots:
   '@types/unist@2.0.10': {}
 
   '@types/unist@3.0.2': {}
+
+  '@types/uuid@10.0.0': {}
 
   '@types/uuid@9.0.8': {}
 
@@ -13623,6 +13632,8 @@ snapshots:
       which-typed-array: 1.1.14
 
   utils-merge@1.0.1: {}
+
+  uuid@10.0.0: {}
 
   uuid@9.0.1: {}
 
