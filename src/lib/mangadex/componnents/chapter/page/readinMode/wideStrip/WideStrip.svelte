@@ -50,12 +50,17 @@
 	const interObserver = new IntersectionObserver(
 		(entries) => {
 			entries.forEach((entry) => {
-				const page = entry.target.getAttribute("data-page");
-				if (page != null) {
-					if (entry.isIntersecting && entry.intersectionRatio > 0) {
-						fromIntersector(() => {
-							currentChapterPage.set(Number(page));
-						});
+				const isInitialLoading = entry.target.getAttribute("data-initial-loading");
+				if (isInitialLoading == "true") {
+					entry.target.setAttribute("data-initial-loading", "false");
+				} else {
+					const page = entry.target.getAttribute("data-page");
+					if (page != null) {
+						if (entry.isIntersecting && entry.intersectionRatio > 0) {
+							fromIntersector(() => {
+								currentChapterPage.set(Number(page));
+							});
+						}
 					}
 				}
 			});
@@ -82,6 +87,7 @@
 	{#each $images as image, page}
 		<div data-page={page}>
 			<img
+				data-initial-loading="true"
 				on:drag|preventDefault
 				on:load={(e) => {
 					interObserver.observe(e.currentTarget);
