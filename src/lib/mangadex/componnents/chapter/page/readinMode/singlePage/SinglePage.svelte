@@ -3,11 +3,12 @@
 	import { quintOut } from "svelte/easing";
 	import { blur } from "svelte/transition";
 	import { getChapterImageContext } from "../../contexts/images";
-	import { currentChapterPage } from "../../stores/currentPage";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
+	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 
+	const currentChapterPage = getChapterCurrentPageContext();
 	const dispatch = createEventDispatcher<{
 		next: {};
 		previous: {};
