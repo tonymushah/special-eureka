@@ -98,10 +98,10 @@ importers:
         version: 4.2.5(graphql@16.8.1)
       '@melt-ui/pp':
         specifier: ^0.3.2
-        version: 0.3.2(@melt-ui/svelte@0.79.1(svelte@4.2.12))(svelte@4.2.12)
+        version: 0.3.2(@melt-ui/svelte@0.82.0(svelte@4.2.12))(svelte@4.2.12)
       '@melt-ui/svelte':
-        specifier: ^0.79.1
-        version: 0.79.1(svelte@4.2.12)
+        specifier: ^0.82.0
+        version: 0.82.0(svelte@4.2.12)
       '@parcel/watcher':
         specifier: ^2.3.0
         version: 2.4.1
@@ -1841,10 +1841,10 @@ packages:
       '@melt-ui/svelte': '>= 0.29.0'
       svelte: ^3.55.0 || ^4.0.0 || ^5.0.0-next.1
 
-  '@melt-ui/svelte@0.79.1':
-    resolution: {integrity: sha512-8XQ8qfAvZz/m6k5aMOiaOlDOTY98zoPAPqWB+7p/peI46AGFygPCYOaAGFAHK+f2YcnddCh1vUYQXYjoHjipYg==}
+  '@melt-ui/svelte@0.82.0':
+    resolution: {integrity: sha512-WjR/u6Tk7vr8wZBpi3IVfoaq+lQ7QjS1HkedcvYhTag+P/SuwOMz7A9AIJ5lDeHc81Ljga/aJ/VotrSgOxJxKg==}
     peerDependencies:
-      svelte: '>=3 <5'
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.118
 
   '@motionone/animation@10.17.0':
     resolution: {integrity: sha512-ANfIN9+iq1kGgsZxs+Nz96uiNcPLGTXwfNo2Xz/fcJXniPYpaz/Uyrfa+7I5BPLxCP82sh7quVDudf1GABqHbg==}
@@ -8554,14 +8554,14 @@ snapshots:
       '@types/react': 18.3.3
       react: 18.3.1
 
-  '@melt-ui/pp@0.3.2(@melt-ui/svelte@0.79.1(svelte@4.2.12))(svelte@4.2.12)':
+  '@melt-ui/pp@0.3.2(@melt-ui/svelte@0.82.0(svelte@4.2.12))(svelte@4.2.12)':
     dependencies:
-      '@melt-ui/svelte': 0.79.1(svelte@4.2.12)
+      '@melt-ui/svelte': 0.82.0(svelte@4.2.12)
       estree-walker: 3.0.3
       magic-string: 0.30.10
       svelte: 4.2.12
 
-  '@melt-ui/svelte@0.79.1(svelte@4.2.12)':
+  '@melt-ui/svelte@0.82.0(svelte@4.2.12)':
     dependencies:
       '@floating-ui/core': 1.6.0
       '@floating-ui/dom': 1.6.6
