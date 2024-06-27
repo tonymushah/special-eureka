@@ -3,6 +3,8 @@
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
+	import { derived } from "svelte/store";
+	import { ImageFit, imageFitStore } from "../../stores/imageFit";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
@@ -20,6 +22,8 @@
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
 	});
+	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
+	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Height);
 </script>
 
 <svelte:window
@@ -57,7 +61,12 @@
 			{/key}
 		{:else if typeof src == "string" && typeof alt == "string"}
 			{#key src}
-				<img {src} {alt} />
+				<img
+					{src}
+					{alt}
+					class:fitWidth={$shouldFitWidth}
+					class:fitHeight={$shouldFitHeight}
+				/>
 			{/key}
 		{/if}
 	</div>
@@ -70,11 +79,13 @@
 		.toZoom {
 			display: flex;
 			justify-content: center;
-			align-items: center;
 			height: 100%;
-		}
-		img {
-			height: 100%;
+			img.fitWidth {
+				width: 100%;
+			}
+			img.fitHeight {
+				height: 100%;
+			}
 		}
 	}
 </style>
