@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { derived } from "svelte/store";
+	import { initDefaultChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
 	import { ReadingDirection, readingDirection } from "../../../stores/readingDirection";
 	import Page from "../WideStrip.svelte";
-	import { derived } from "svelte/store";
-	import { currentChapterPage } from "../../../stores/currentPage";
 	export let images: string[];
-	const currentPage = derived(currentChapterPage, (page) => page + 1);
+	export let currentPage: number = 0;
+	const currentChapterPage = initDefaultChapterCurrentPageContext();
+	$: {
+		currentChapterPage.set(currentPage);
+	}
+	const currentPageDerived = derived(currentChapterPage, (page) => page + 1);
 	initChapterImageContext(images);
 </script>
 
 <p>
-	Current Page: {$currentPage}
+	Current Page: {$currentPageDerived}
 	<button
 		on:click={() => {
 			if ($readingDirection == ReadingDirection.Ltr) {
