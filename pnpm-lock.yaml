@@ -98,10 +98,10 @@ importers:
         version: 4.2.5(graphql@16.8.1)
       '@melt-ui/pp':
         specifier: ^0.3.2
-        version: 0.3.2(@melt-ui/svelte@0.79.1(svelte@4.2.12))(svelte@4.2.12)
+        version: 0.3.2(@melt-ui/svelte@0.82.0(svelte@4.2.12))(svelte@4.2.12)
       '@melt-ui/svelte':
-        specifier: ^0.79.1
-        version: 0.79.1(svelte@4.2.12)
+        specifier: ^0.82.0
+        version: 0.82.0(svelte@4.2.12)
       '@parcel/watcher':
         specifier: ^2.3.0
         version: 2.4.1
@@ -1731,10 +1731,12 @@ packages:
   '@humanwhocodes/config-array@0.13.0':
     resolution: {integrity: sha512-DZLEEqFWQFiyK6h5YIeynKx7JlvCYWL0cImfSRXZ9l4Sg2efkFGTuFf6vzXjK1cq6IYkU+Eg/JizXw+TD2vRNw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/config-array@0.9.5':
     resolution: {integrity: sha512-ObyMyWxZiCu/yTisA7uzx81s40xR2fD5Cg/2Kq7G02ajkNubJf6BopgDTmDyc3U7sXpNKM8cYOw7s7Tyr+DnCw==}
     engines: {node: '>=10.10.0'}
+    deprecated: Use @eslint/config-array instead
 
   '@humanwhocodes/module-importer@1.0.1':
     resolution: {integrity: sha512-bxveV4V8v5Yb4ncFTT3rPSgZBOpCkjfK0y4oVVVJwIuDVBRMDXrPyXRL988i5ap9m9bnyEEjWfm5WkBmtffLfA==}
@@ -1742,9 +1744,11 @@ packages:
 
   '@humanwhocodes/object-schema@1.2.1':
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
+    deprecated: Use @eslint/object-schema instead
 
   '@humanwhocodes/retry@0.2.3':
     resolution: {integrity: sha512-X38nUbachlb01YMlvPFojKoiXq+LzZvuSce70KPMPdeM1Rj03k4dR7lDslhbqXn3Ang4EU3+EAmwEAsbrjHW3g==}
@@ -1818,10 +1822,10 @@ packages:
       '@melt-ui/svelte': '>= 0.29.0'
       svelte: ^3.55.0 || ^4.0.0 || ^5.0.0-next.1
 
-  '@melt-ui/svelte@0.79.1':
-    resolution: {integrity: sha512-8XQ8qfAvZz/m6k5aMOiaOlDOTY98zoPAPqWB+7p/peI46AGFygPCYOaAGFAHK+f2YcnddCh1vUYQXYjoHjipYg==}
+  '@melt-ui/svelte@0.82.0':
+    resolution: {integrity: sha512-WjR/u6Tk7vr8wZBpi3IVfoaq+lQ7QjS1HkedcvYhTag+P/SuwOMz7A9AIJ5lDeHc81Ljga/aJ/VotrSgOxJxKg==}
     peerDependencies:
-      svelte: '>=3 <5'
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.118
 
   '@motionone/animation@10.17.0':
     resolution: {integrity: sha512-ANfIN9+iq1kGgsZxs+Nz96uiNcPLGTXwfNo2Xz/fcJXniPYpaz/Uyrfa+7I5BPLxCP82sh7quVDudf1GABqHbg==}
@@ -8466,14 +8470,14 @@ snapshots:
       '@types/react': 18.2.75
       react: 18.2.0
 
-  '@melt-ui/pp@0.3.2(@melt-ui/svelte@0.79.1(svelte@4.2.12))(svelte@4.2.12)':
+  '@melt-ui/pp@0.3.2(@melt-ui/svelte@0.82.0(svelte@4.2.12))(svelte@4.2.12)':
     dependencies:
-      '@melt-ui/svelte': 0.79.1(svelte@4.2.12)
+      '@melt-ui/svelte': 0.82.0(svelte@4.2.12)
       estree-walker: 3.0.3
       magic-string: 0.30.10
       svelte: 4.2.12
 
-  '@melt-ui/svelte@0.79.1(svelte@4.2.12)':
+  '@melt-ui/svelte@0.82.0(svelte@4.2.12)':
     dependencies:
       '@floating-ui/core': 1.6.0
       '@floating-ui/dom': 1.6.3
