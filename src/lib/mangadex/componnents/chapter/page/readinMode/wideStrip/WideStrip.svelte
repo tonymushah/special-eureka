@@ -98,7 +98,7 @@
 				entries.forEach((entry) => {
 					interObserver.observe(entry);
 				});
-			}, 10);
+			}, 5);
 		})
 	);
 </script>
