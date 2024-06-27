@@ -86,6 +86,35 @@
 		height: 100cqh;
 		.toZoom {
 			height: 100%;
+			div.double-image {
+				display: flex;
+				justify-content: center;
+				img {
+					object-fit: none;
+					width: max-content;
+					height: max-content;
+				}
+			}
+			div.double-image.fitHeight {
+				height: 100%;
+				align-items: center;
+				img {
+					object-fit: contain;
+					height: 100%;
+				}
+			}
+			div.double-image.fitWidth {
+				width: max-content;
+				display: grid;
+				height: 100%;
+				grid-template-rows: 2;
+				img {
+					grid-row: 1;
+					height: 100%;
+					object-fit: contain;
+					width: 100%;
+				}
+			}
 			div.single-image {
 				img {
 					object-fit: none;
