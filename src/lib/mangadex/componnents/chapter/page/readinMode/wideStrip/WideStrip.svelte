@@ -12,7 +12,6 @@
 		shouldIgnore = true;
 		isFromIntersector.set(true);
 		try {
-			shouldIgnore = false;
 			return fn();
 		} catch (error) {
 			throw error;
