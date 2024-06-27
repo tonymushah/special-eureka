@@ -4,10 +4,10 @@
 <script lang="ts">
 	import { derived, get, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
-	import { currentChapterPage } from "../../stores/currentPage";
 	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import { onMount } from "svelte";
 	import { delay } from "lodash";
+	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	let widestrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
 	const isFromIntersector = writable(false);
@@ -24,6 +24,7 @@
 			shouldIgnore = false;
 		}
 	}
+	const currentChapterPage = getChapterCurrentPageContext();
 	const currentChapter: Readable<[number, boolean]> = derived(
 		[currentChapterPage, isFromIntersector],
 		([$page, $fromInter]) => {
