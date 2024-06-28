@@ -98,10 +98,10 @@ importers:
         version: 4.3.0(graphql@16.9.0)
       '@melt-ui/pp':
         specifier: ^0.3.2
-        version: 0.3.2(@melt-ui/svelte@0.82.0(svelte@4.2.18))(svelte@4.2.18)
+        version: 0.3.2(@melt-ui/svelte@0.83.0(svelte@4.2.18))(svelte@4.2.18)
       '@melt-ui/svelte':
-        specifier: ^0.82.0
-        version: 0.82.0(svelte@4.2.18)
+        specifier: ^0.83.0
+        version: 0.83.0(svelte@4.2.18)
       '@parcel/watcher':
         specifier: ^2.4.1
         version: 2.4.1
@@ -1588,8 +1588,8 @@ packages:
       '@melt-ui/svelte': '>= 0.29.0'
       svelte: ^3.55.0 || ^4.0.0 || ^5.0.0-next.1
 
-  '@melt-ui/svelte@0.82.0':
-    resolution: {integrity: sha512-WjR/u6Tk7vr8wZBpi3IVfoaq+lQ7QjS1HkedcvYhTag+P/SuwOMz7A9AIJ5lDeHc81Ljga/aJ/VotrSgOxJxKg==}
+  '@melt-ui/svelte@0.83.0':
+    resolution: {integrity: sha512-E7QT+8YSftz+Hdk1W0hNR3f+cnaF2COMWkStn+2u4vk0RO1I9mXRJl+bJD6uhYaH146oxEB+5elu/ABbv6rpsA==}
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.118
 
@@ -8020,14 +8020,14 @@ snapshots:
       '@types/react': 18.3.3
       react: 18.3.1
 
-  '@melt-ui/pp@0.3.2(@melt-ui/svelte@0.82.0(svelte@4.2.18))(svelte@4.2.18)':
+  '@melt-ui/pp@0.3.2(@melt-ui/svelte@0.83.0(svelte@4.2.18))(svelte@4.2.18)':
     dependencies:
-      '@melt-ui/svelte': 0.82.0(svelte@4.2.18)
+      '@melt-ui/svelte': 0.83.0(svelte@4.2.18)
       estree-walker: 3.0.3
       magic-string: 0.30.10
       svelte: 4.2.18
 
-  '@melt-ui/svelte@0.82.0(svelte@4.2.18)':
+  '@melt-ui/svelte@0.83.0(svelte@4.2.18)':
     dependencies:
       '@floating-ui/core': 1.6.3
       '@floating-ui/dom': 1.6.6
