@@ -34,6 +34,10 @@
 		color: var(--text-color);
 		overflow-x: hidden;
 		transition-duration: 0.5s;
+		border-color: var(--mid-tone);
+		border-style: solid;
+		border-top: 0px;
+		border-bottom: 0px;
 		.inner {
 			padding: 10px;
 		}
@@ -41,9 +45,13 @@
 	}
 	aside.left {
 		left: 0;
+		box-shadow: 1px 0px 1px var(--accent-l2);
+		border-left: 1px;
 	}
 	aside:not(.left) {
 		right: 0;
+		box-shadow: -1px 0px 1px var(--accent-l2);
+		border-right: 1px;
 	}
 	aside.fixed {
 		position: absolute;
@@ -51,6 +59,10 @@
 	.content {
 		transition-duration: 0.5s;
 		flex: 4;
+	}
+	aside:not(.open) {
+		border-style: none;
+		box-shadow: none;
 	}
 	aside.open {
 		width: 250px;
