@@ -2,10 +2,11 @@
 	import ChapterDrawer from "../ChapterDrawer.svelte";
 	let open = false;
 	let fixed = true;
+	let left = false;
 </script>
 
 <div class="container">
-	<ChapterDrawer bind:open bind:fixed>
+	<ChapterDrawer bind:open bind:fixed bind:left>
 		<div class="top-drawer">
 			<h3>Chapter Title</h3>
 			<h3>Manga Title</h3>
@@ -22,21 +23,35 @@
 				inventore, soluta eius praesentium maiores vel animi nemo?
 			</p>
 		</div>
-		<div class="content" slot="content">
-			<button
-				on:click={() => {
-					open = !open;
-				}}
-			>
-				Open
-			</button>
-			<button
-				on:click={() => {
-					fixed = !fixed;
-				}}
-			>
-				Fixed
-			</button>
+		<div class="content" class:left slot="content">
+			<div class="buttons" class:left>
+				<button
+					on:click={() => {
+						open = !open;
+					}}
+				>
+					Open
+				</button>
+				<button
+					on:click={() => {
+						fixed = !fixed;
+					}}
+				>
+					Fixed
+				</button>
+				<button
+					on:click={() => {
+						left = !left;
+					}}
+				>
+					{#if left}
+						Left
+					{:else}
+						Right
+					{/if}
+				</button>
+			</div>
+
 			<p>
 				Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam dolor delectus saepe
 				ex laboriosam nihil dignissimos, fuga, dolorum aliquid quod ullam aut natus officiis
@@ -51,6 +66,12 @@
 		height: 100vh;
 	}
 	.content {
-		display: contents;
+		display: block;
+	}
+	.content.left {
+		display: flex;
+		align-items: end;
+		flex-direction: column;
+		margin-left: 10px;
 	}
 </style>

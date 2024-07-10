@@ -1,17 +1,27 @@
 <script lang="ts">
 	export let open: boolean;
 	export let fixed: boolean = true;
+	export let left = false;
 </script>
 
 <div class="container" class:fixed>
+	{#if left}
+		<aside class:open class:fixed class:left>
+			<div class="inner">
+				<slot {open} {fixed} />
+			</div>
+		</aside>
+	{/if}
 	<div class="content" class:open class:fixed>
 		<slot name="content" />
 	</div>
-	<aside class:open class:fixed>
-		<div class="inner">
-			<slot {open} {fixed} />
-		</div>
-	</aside>
+	{#if !left}
+		<aside class:open class:fixed>
+			<div class="inner">
+				<slot {open} {fixed} />
+			</div>
+		</aside>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -20,7 +30,6 @@
 		width: 0;
 		z-index: 1;
 		top: 0;
-		right: 0;
 		background-color: var(--main-background);
 		color: var(--text-color);
 		overflow-x: hidden;
@@ -29,6 +38,12 @@
 			padding: 10px;
 		}
 		overflow-y: scroll;
+	}
+	aside.left {
+		left: 0;
+	}
+	aside:not(.left) {
+		right: 0;
 	}
 	aside.fixed {
 		position: absolute;
