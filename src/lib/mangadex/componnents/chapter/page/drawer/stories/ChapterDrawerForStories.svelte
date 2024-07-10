@@ -30,14 +30,22 @@
 						open = !open;
 					}}
 				>
-					Open
+					{#if open}
+						Close
+					{:else}
+						Open
+					{/if}
 				</button>
 				<button
 					on:click={() => {
 						fixed = !fixed;
 					}}
 				>
-					Fixed
+					{#if fixed}
+						Fixed
+					{:else}
+						Not Fixed
+					{/if}
 				</button>
 				<button
 					on:click={() => {
