@@ -31,7 +31,7 @@
 		overflow-y: scroll;
 	}
 	aside.fixed {
-		position: fixed;
+		position: absolute;
 	}
 	.content {
 		transition-duration: 0.5s;
