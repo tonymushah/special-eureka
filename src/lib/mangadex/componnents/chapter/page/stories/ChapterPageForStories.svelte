@@ -7,6 +7,7 @@
 	import { initIsDrawerFixedWritable } from "../contexts/isDrawerFixed";
 	import { initCurrentChapterReadingMode } from "../contexts/currentChapterReadingMode";
 	import ChapterPage from "../ChapterPage.svelte";
+	import { initIsDrawerOpenWritable } from "../contexts/isDrawerOpen";
 
 	export let chapter: CurrentChapterData;
 	export let images: string[];
@@ -26,7 +27,7 @@
 	$: {
 		fixed.set(isFixed);
 	}
-	const opened = initIsDrawerFixedWritable(writable(isMenuOpen));
+	const opened = initIsDrawerOpenWritable(writable(isMenuOpen));
 	$: {
 		opened.set(isMenuOpen);
 	}
@@ -37,4 +38,12 @@
 	$: mode.set(readingMode);
 </script>
 
-<ChapterPage />
+<div>
+	<ChapterPage />
+</div>
+
+<style lang="scss">
+	div {
+		height: 100vh;
+	}
+</style>

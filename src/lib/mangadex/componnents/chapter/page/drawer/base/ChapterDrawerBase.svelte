@@ -72,4 +72,7 @@
 		display: flex;
 		max-height: 100%;
 	}
+	.container {
+		height: 100%;
+	}
 </style>
