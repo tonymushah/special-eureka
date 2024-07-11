@@ -32,6 +32,7 @@
 			background-color 200ms ease-in-out;
 		border: 1px;
 		border-radius: 0.25em;
+		z-index: 1;
 	}
 	button.left {
 		left: 0;
