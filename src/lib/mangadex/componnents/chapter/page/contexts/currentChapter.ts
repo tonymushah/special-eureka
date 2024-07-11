@@ -51,6 +51,7 @@ export class CurrentChapterData {
 	id: string;
 	title?: string;
 	chapterNumber?: string;
+	volume?: string;
 	isOneshot: boolean = false;
 	series?: CurrentChapterTitle;
 	uploader: CurrentChapterUploader;
@@ -62,7 +63,8 @@ export class CurrentChapterData {
 		chapterNumber,
 		isOneshot,
 		series,
-		groups
+		groups,
+		volume
 	}: {
 		id: string;
 		uploader: CurrentChapterUploader;
@@ -71,6 +73,7 @@ export class CurrentChapterData {
 		isOneshot?: boolean;
 		series?: CurrentChapterTitle;
 		groups?: CurrentChapterGroup[];
+		volume?: string;
 	}) {
 		this.id = id;
 		this.uploader = uploader;
@@ -88,6 +91,9 @@ export class CurrentChapterData {
 		}
 		if (groups != undefined) {
 			this.groups = groups;
+		}
+		if (volume != undefined) {
+			this.volume = volume;
 		}
 	}
 }
