@@ -94,6 +94,6 @@
 	];
 </script>
 
-<ContextMenu {items} tabindex={0}>
+<ContextMenu {items}>
 	<slot />
 </ContextMenu>
