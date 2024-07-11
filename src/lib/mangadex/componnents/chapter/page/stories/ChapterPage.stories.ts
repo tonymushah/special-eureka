@@ -13,7 +13,7 @@ import fuufuIjouChapter56 from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
-	title: "MangaDex/chapter/page",
+	title: "MangaDex/chapter/Page",
 	component: Page,
 	tags: ["autodocs"]
 } satisfies Meta<Page>;
