@@ -1,0 +1,40 @@
+<script lang="ts">
+	import { writable } from "svelte/store";
+	import { initCurrentChapterData, type CurrentChapterData } from "../contexts/currentChapter";
+	import { initChapterCurrentPageContext } from "../contexts/currentPage";
+	import { initChapterImageContext } from "../contexts/images";
+	import { ReadingMode } from "@mangadex/gql/graphql";
+	import { initIsDrawerFixedWritable } from "../contexts/isDrawerFixed";
+	import { initCurrentChapterReadingMode } from "../contexts/currentChapterReadingMode";
+	import ChapterPage from "../ChapterPage.svelte";
+
+	export let chapter: CurrentChapterData;
+	export let images: string[];
+	export let currentPage: number = 0;
+	export let readingMode: ReadingMode = ReadingMode.SinglePage;
+	export let isFixed = false;
+	export let isMenuOpen = false;
+	const is = initChapterImageContext(images);
+	$: {
+		is.set(images);
+	}
+	const current = initChapterCurrentPageContext(writable(currentPage));
+	$: {
+		current.set(currentPage);
+	}
+	const fixed = initIsDrawerFixedWritable(writable(isFixed));
+	$: {
+		fixed.set(isFixed);
+	}
+	const opened = initIsDrawerFixedWritable(writable(isMenuOpen));
+	$: {
+		opened.set(isMenuOpen);
+	}
+	const c = writable(chapter);
+	initCurrentChapterData(c);
+	$: c.set(chapter);
+	const mode = initCurrentChapterReadingMode(writable(readingMode));
+	$: mode.set(readingMode);
+</script>
+
+<ChapterPage />
