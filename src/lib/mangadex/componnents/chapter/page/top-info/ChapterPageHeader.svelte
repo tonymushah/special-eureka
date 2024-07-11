@@ -4,6 +4,7 @@
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import { route } from "$lib/ROUTES";
 	import { createEventDispatcher } from "svelte";
+	import ChapterPageHeaderCurrentPage from "./currentPage/ChapterPageHeaderCurrentPage.svelte";
 
 	const current = getCurrentChapterData();
 	const dispatch = createEventDispatcher<{
@@ -58,7 +59,7 @@
 				??
 			{/if}
 		</div>
-		<div>?? / ??</div>
+		<div><ChapterPageHeaderCurrentPage /></div>
 		<div
 			class="menu-button"
 			tabindex="0"
