@@ -59,6 +59,7 @@
 		border-radius: 0.25em;
 		height: fit-content;
 		overflow: hidden;
+		z-index: 1;
 	}
 	hr {
 		width: 100%;
