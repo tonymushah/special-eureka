@@ -8,9 +8,28 @@ export const {
 	init: initCurrentChapterReadingMode
 } = generateContextStoresMethods<ReadingMode>("CURRENT_CHAPTER_READING_MODE");
 
+export function isDoublePage() {
+	return derived(getCurrentChapterReadingMode(), ($mode) => $mode == ReadingMode.DoublePage);
+}
+
+export function isSinglePage() {
+	return derived(getCurrentChapterReadingMode(), ($mode) => $mode == ReadingMode.SinglePage);
+}
+
+export function isLongStrip() {
+	return derived(getCurrentChapterReadingMode(), ($mode) => $mode == ReadingMode.LongStrip);
+}
+
+export function isWideStrip() {
+	return derived(getCurrentChapterReadingMode(), ($mode) => $mode == ReadingMode.WideStrip);
+}
+
+export function isStripReadingMode() {
+	return derived([isWideStrip(), isLongStrip()], ([$isWide, $isLong]) => $isLong || $isWide);
+}
 export function isOnZoomableImage() {
 	return derived(
-		getCurrentChapterReadingMode(),
-		($mode) => $mode == ReadingMode.DoublePage || $mode == ReadingMode.SinglePage
+		[isSinglePage(), isDoublePage()],
+		([$isSingle, $isDouble]) => $isDouble || $isSingle
 	);
 }
