@@ -5,24 +5,27 @@
 	import { getCurrentChapterReadingMode } from "../../contexts/currentChapterReadingMode";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getChapterImageContext } from "../../contexts/images";
-	import getChapterDoublePageCurrentPage from "../../readinMode/doublePage/utils/getChapterDoublePageCurrentPage";
+	import getChapterDoublePageCurrentPageIndex from "../../readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
+	import getChapterDoublePageIndexes from "../../readinMode/doublePage/utils/getChapterDoublePageIndexes";
 
 	function getCurrentPageIndex() {
 		try {
 			const readingMode = getCurrentChapterReadingMode();
 			const currentPage = getChapterCurrentPageContext();
-			const currentPageDouble = getChapterDoublePageCurrentPage(currentPage);
+			const currentPageDouble = getChapterDoublePageCurrentPageIndex(currentPage);
+			const currentPageIndexes = getChapterDoublePageIndexes();
 			return derived(
-				[readingMode, currentPage, currentPageDouble],
-				([$mode, $currentPage, $currentPageDouble]) => {
+				[readingMode, currentPage, currentPageDouble, currentPageIndexes],
+				([$mode, $currentPage, $currentPageDouble, $indexes]) => {
 					if ($mode == ReadingMode.DoublePage) {
-						if (isArray($currentPageDouble)) {
-							return `${$currentPageDouble[0]} - ${$currentPageDouble[1]}`;
+						const currentPageDoubleIndex = $indexes[$currentPageDouble];
+						if (isArray(currentPageDoubleIndex)) {
+							return `${currentPageDoubleIndex[0] + 1} - ${currentPageDoubleIndex[1] + 1} `;
 						} else {
-							return `${$currentPageDouble}`;
+							return `${currentPageDoubleIndex + 1}`;
 						}
 					} else {
-						return `${$currentPage}`;
+						return `${$currentPage + 1}`;
 					}
 				}
 			);
@@ -34,7 +37,7 @@
 		try {
 			const images = getChapterImageContext();
 			return derived(images, ($is) => {
-				return `${$is.length + 1}`;
+				return `${$is.length}`;
 			});
 		} catch (error) {
 			return readable("??");
