@@ -34,7 +34,7 @@
 		color: var(--text-color);
 		overflow-x: hidden;
 		transition-duration: 0.5s;
-		border-color: var(--mid-tone);
+		border-color: var(--accent-l2);
 		border-style: solid;
 		border-top: 0px;
 		border-bottom: 0px;
@@ -45,12 +45,12 @@
 	}
 	aside.left {
 		left: 0;
-		box-shadow: 1px 0px 1px var(--accent-l2);
+		box-shadow: 1px 0px 1px var(--accent);
 		border-left: 1px;
 	}
 	aside:not(.left) {
 		right: 0;
-		box-shadow: -1px 0px 1px var(--accent-l2);
+		box-shadow: -1px 0px 1px var(--accent);
 		border-right: 1px;
 	}
 	aside.fixed {
