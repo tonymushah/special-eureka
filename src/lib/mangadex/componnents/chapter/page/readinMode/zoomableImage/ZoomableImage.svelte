@@ -5,6 +5,7 @@
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
 	import { derived } from "svelte/store";
 	import { ImageFit, imageFitStore } from "./settings";
+	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
@@ -22,6 +23,11 @@
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
 	});
+	onMount(() =>
+		addListenerToResetZoomEventTarget(() => {
+			toZoomPanZoom?.reset({ animate: true });
+		})
+	);
 	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
 	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Height);
 	onMount(() => imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })));
