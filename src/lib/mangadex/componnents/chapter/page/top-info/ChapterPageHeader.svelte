@@ -65,7 +65,9 @@
 		border-color: var(--mid-tone);
 		padding-bottom: 10px;
 	}
-
+	section {
+		font-weight: 600;
+	}
 	section.buttons {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
