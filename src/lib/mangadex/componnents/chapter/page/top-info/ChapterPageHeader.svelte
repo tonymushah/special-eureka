@@ -5,6 +5,7 @@
 	import { route } from "$lib/ROUTES";
 	import { createEventDispatcher } from "svelte";
 	import ChapterPageHeaderCurrentPage from "./currentPage/ChapterPageHeaderCurrentPage.svelte";
+	import TopContent from "./TopContent.svelte";
 
 	const current = getCurrentChapterData();
 	const dispatch = createEventDispatcher<{
@@ -18,35 +19,7 @@
 </script>
 
 <header>
-	<section class="title">
-		<PaperclipIcon />
-		{#if $current.title != undefined && $current.chapterNumber != undefined}
-			Chapter {$current.chapterNumber} - {$current.title}
-		{:else if $current.chapterNumber != undefined}
-			Chapter {$current.chapterNumber}
-		{:else if $current.isOneshot}
-			Oneshot
-		{:else}
-			??
-		{/if}
-	</section>
-	<section class="title">
-		<BookIcon />
-		<div class="series">
-			{#if $current.series != undefined}
-				<Link
-					href={route("/mangadex/title/[id]", {
-						id: $current.series.id
-					})}
-					ext_href={`https://mangadex.org${route("/mangadex/title/[id]", {
-						id: $current.series.id
-					})}`}
-				>
-					{$current.series.title}
-				</Link>
-			{/if}
-		</div>
-	</section>
+	<TopContent />
 	<section class="buttons">
 		<div>
 			{#if $current.volume != undefined && $current.chapterNumber != undefined}
@@ -92,11 +65,7 @@
 		border-color: var(--mid-tone);
 		padding-bottom: 10px;
 	}
-	section.title {
-		display: flex;
-		gap: 5px;
-		font-weight: 800;
-	}
+
 	section.buttons {
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
