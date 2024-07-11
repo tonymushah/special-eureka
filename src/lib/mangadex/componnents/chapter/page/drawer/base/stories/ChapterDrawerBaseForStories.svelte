@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ChapterDrawer from "../ChapterDrawer.svelte";
+	import ChapterDrawer from "../ChapterDrawerBase.svelte";
 	let open = false;
 	let fixed = true;
 	let left = false;
