@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, type ComponentType } from "svelte";
 	import ButtonAccent from "./ButtonAccent.svelte";
 
 	export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" =
@@ -13,8 +13,21 @@
 	export let label: string;
 	export let style: string | undefined = undefined;
 	export let isBase = false;
+	export let icon: ComponentType | undefined = undefined;
 </script>
 
 <ButtonAccent on:click {variant} {style} {type} {isBase}>
-	{label}
+	<div>
+		<svelte:component this={icon} />
+		{label}
+	</div>
 </ButtonAccent>
+
+<style lang="scss">
+	div {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 5px;
+	}
+</style>
