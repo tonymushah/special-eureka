@@ -86,6 +86,9 @@
 		height: 100cqh;
 		.toZoom {
 			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-content: center;
 			div.double-image {
 				display: flex;
 				justify-content: center;
@@ -119,10 +122,10 @@
 				}
 			}
 			div.single-image {
+				width: 100%;
 				img {
-					object-fit: none;
-					width: max-content;
-					height: max-content;
+					object-fit: contain;
+					width: 100%;
 				}
 			}
 			div.single-image.fitWidth {
