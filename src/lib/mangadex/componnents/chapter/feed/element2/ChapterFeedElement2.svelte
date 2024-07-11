@@ -70,7 +70,7 @@
 	}>();
 </script>
 
-<div class="layout">
+<article class="layout">
 	<div
 		class="cover manga-content"
 		role="button"
@@ -148,10 +148,10 @@
 			{/if}
 		</div>
 	</div>
-</div>
+</article>
 
 <style lang="scss">
-	div.layout {
+	article.layout {
 		color: var(--text-color);
 		background-color: var(--accent-l1);
 		display: flex;

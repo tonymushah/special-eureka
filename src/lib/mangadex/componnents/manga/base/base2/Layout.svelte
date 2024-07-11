@@ -17,13 +17,13 @@
 	--button-hover={"var(--accent-l3-hover)"}
 	--button-active={"var(--accent-l-active)"}
 >
-	<div class="layout">
+	<article class="layout">
 		<slot />
-	</div>
+	</article>
 </ButtonBase>
 
 <style lang="scss">
-	div.layout {
+	article.layout {
 		min-width: 10em;
 		max-height: var(--max-height);
 		display: flex;

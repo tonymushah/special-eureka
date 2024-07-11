@@ -67,7 +67,7 @@
 	}>();
 </script>
 
-<div class="layout">
+<article class="layout">
 	<div class="body">
 		<div
 			class="top-body manga-content"
@@ -127,14 +127,14 @@
 			{/if}
 		</div>
 	</div>
-</div>
+</article>
 
 <style lang="scss">
 	hr {
 		margin: 0px;
 		background-color: var(--mid-tone);
 	}
-	div.layout {
+	article.layout {
 		color: var(--text-color);
 		background-color: var(--accent-l1);
 		display: flex;

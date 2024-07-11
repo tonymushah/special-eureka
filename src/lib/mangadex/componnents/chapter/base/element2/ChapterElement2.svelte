@@ -105,7 +105,7 @@
 </script>
 
 <div
-	role="document"
+	role="article"
 	class="layout"
 	bind:this={layout}
 	on:mouseenter={showTooltip}
