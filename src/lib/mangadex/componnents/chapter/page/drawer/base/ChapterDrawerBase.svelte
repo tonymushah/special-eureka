@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fade } from "svelte/transition";
+
 	export let open: boolean;
 	export let fixed: boolean = true;
 	export let left = false;
@@ -6,7 +8,7 @@
 
 <div class="container" class:fixed>
 	{#if left}
-		<aside class:open class:fixed class:left>
+		<aside class:open class:fixed class:left transition:fade>
 			<div class="inner">
 				<slot {open} {fixed} />
 			</div>
@@ -16,7 +18,7 @@
 		<slot name="content" />
 	</div>
 	{#if !left}
-		<aside class:open class:fixed>
+		<aside class:open class:fixed transition:fade>
 			<div class="inner">
 				<slot {open} {fixed} />
 			</div>
