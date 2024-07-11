@@ -59,7 +59,9 @@
 				??
 			{/if}
 		</div>
-		<div><ChapterPageHeaderCurrentPage /></div>
+		<div>
+			<ChapterPageHeaderCurrentPage />
+		</div>
 		<div
 			class="menu-button"
 			tabindex="0"
