@@ -3,14 +3,14 @@
 	import Aggregate from "@mangadex/componnents/manga/page/chapters/aggreate/Aggregate.svelte";
 </script>
 
-<div class="layout">
-	<div class="info">
+<article class="layout">
+	<section class="info">
 		<MangaPageInfo />
-	</div>
-	<div class="chapters">
+	</section>
+	<section class="chapters">
 		<Aggregate />
-	</div>
-</div>
+	</section>
+</article>
 
 <style lang="scss">
 	.layout {
