@@ -5,9 +5,13 @@ import type { Invalidator, Readable, Subscriber, Unsubscriber } from "svelte/sto
 export class CurrentChapterTitle {
 	title: string;
 	id: string;
-	constructor({ title, id }: { title: string; id: string }) {
+	isLongStrip: boolean = false;
+	constructor({ title, id, isLongStrip }: { title: string; id: string; isLongStrip?: boolean }) {
 		this.title = title;
 		this.id = id;
+		if (isLongStrip != undefined) {
+			this.isLongStrip = isLongStrip;
+		}
 	}
 }
 
