@@ -6,6 +6,7 @@
 	import { isDrawerOpen, isDrawerOpenWritable } from "./contexts/isDrawerOpen";
 	import { slide } from "svelte/transition";
 	import OpenMenuButton from "./open-menu/OpenMenuButton.svelte";
+	import ChapterReadingMode from "./readinMode/ChapterReadingMode.svelte";
 
 	const isFixed = isDrawerFixed();
 	const shouldShowHeader = derived(isFixed, (fixed) => {
@@ -38,11 +39,18 @@
 				/>
 			</div>
 		{/if}
+		<section class="content">
+			<ChapterReadingMode />
+		</section>
 	</ChapterDrawer>
 </article>
 
 <style lang="scss">
 	article {
+		max-width: 100%;
 		height: 100%;
+	}
+	section.content {
+		width: 100%;
 	}
 </style>
