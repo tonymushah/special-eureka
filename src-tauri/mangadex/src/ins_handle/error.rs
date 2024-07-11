@@ -1,10 +1,12 @@
 use reqwest::header::InvalidHeaderValue;
 use serde::{Serialize, Serializer};
 
+/*
 #[derive(Clone, serde::Serialize)]
 struct ExportPayload {
     message: String,
 }
+*/
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
