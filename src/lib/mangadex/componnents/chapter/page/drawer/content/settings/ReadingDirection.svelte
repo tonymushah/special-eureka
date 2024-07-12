@@ -4,6 +4,7 @@
 	import { isReadingDirectionModifiable as isModifiable } from "../../../contexts/currentChapterReadingMode";
 	import { ReadingDirection, readingDirection } from "../../../stores/readingDirection";
 	import Icon from "./reading-direction/Icon.svelte";
+	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
 	const isReadingDirectionModifiable = isModifiable();
 	const label = derived(readingDirection, ($direction) => {
 		if ($direction == ReadingDirection.Ltr) {
@@ -15,15 +16,17 @@
 </script>
 
 {#if $isReadingDirectionModifiable}
-	<ButtonAccentOnlyLabel
-		label={$label}
-		icon={Icon}
-		on:click={() => {
-			if ($readingDirection == ReadingDirection.Ltr) {
-				readingDirection.set(ReadingDirection.Rtl);
-			} else {
-				readingDirection.set(ReadingDirection.Ltr);
-			}
-		}}
-	/>
+	<SettingsTransitComp>
+		<ButtonAccentOnlyLabel
+			label={$label}
+			icon={Icon}
+			on:click={() => {
+				if ($readingDirection == ReadingDirection.Ltr) {
+					readingDirection.set(ReadingDirection.Rtl);
+				} else {
+					readingDirection.set(ReadingDirection.Ltr);
+				}
+			}}
+		/>
+	</SettingsTransitComp>
 {/if}
