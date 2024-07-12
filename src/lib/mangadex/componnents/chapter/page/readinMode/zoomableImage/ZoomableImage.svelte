@@ -96,12 +96,13 @@
 			justify-content: center;
 			align-content: center;
 			div.double-image {
-				display: flex;
-				justify-content: center;
+				display: grid;
+				height: 100%;
+				grid-template-rows: 2;
 				img {
-					object-fit: none;
-					width: max-content;
-					height: max-content;
+					grid-row: 1;
+					object-fit: contain;
+					width: 100%;
 				}
 			}
 			div.double-image.fitHeight {
