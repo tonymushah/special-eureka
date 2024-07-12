@@ -33,3 +33,10 @@ export function isOnZoomableImage() {
 		([$isSingle, $isDouble]) => $isDouble || $isSingle
 	);
 }
+
+export function isReadingDirectionModifiable() {
+	return derived(
+		[isOnZoomableImage(), isWideStrip()],
+		([isZoomable, isWide]) => isZoomable || isWide
+	);
+}
