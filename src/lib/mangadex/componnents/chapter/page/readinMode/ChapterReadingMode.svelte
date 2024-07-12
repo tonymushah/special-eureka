@@ -56,8 +56,7 @@
 
 <style lang="scss">
 	div:not(.none-selected, .wide) {
-		display: block;
-		container: inline-size;
+		display: contents;
 	}
 	div.none-selected {
 		display: flex;
