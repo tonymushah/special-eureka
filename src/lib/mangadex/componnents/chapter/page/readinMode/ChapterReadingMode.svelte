@@ -56,7 +56,8 @@
 
 <style lang="scss">
 	div:not(.none-selected, .wide) {
-		display: contents;
+		display: block;
+		container: inline-size;
 	}
 	div.none-selected {
 		display: flex;
@@ -71,8 +72,9 @@
 		transition-duration: 0.3s;
 		transition-property: width;
 		transition-timing-function: ease-in-out;
-		width: 100cqw;
+		width: 97.5cqw;
 		overflow-x: scroll;
+		container-type: inline-size;
 	}
 	div.wide.open {
 		width: calc(100cqw - 280px);
