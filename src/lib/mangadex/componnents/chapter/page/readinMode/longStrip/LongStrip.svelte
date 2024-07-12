@@ -115,7 +115,7 @@
 		}
 	}
 	.longstrip.innerOverflow {
-		max-height: 100%;
+		height: 100cqh;
 		overflow-y: scroll;
 	}
 </style>
