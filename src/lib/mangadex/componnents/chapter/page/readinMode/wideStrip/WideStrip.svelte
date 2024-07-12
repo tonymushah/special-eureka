@@ -147,8 +147,7 @@
 		display: flex;
 		flex-direction: row;
 		div {
-			height: 100%;
-			width: 100%;
+			display: flex;
 		}
 	}
 	.wide-strip.rtl {
@@ -156,7 +155,7 @@
 	}
 	.wide-strip.innerOverflow {
 		overflow-x: scroll;
-		width: 100cqw;
+		width: 100%;
 		height: 100cqh;
 	}
 	img {
