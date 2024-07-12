@@ -49,5 +49,6 @@
 <style lang="scss">
 	div {
 		height: 100vh;
+		overflow-y: hidden;
 	}
 </style>
