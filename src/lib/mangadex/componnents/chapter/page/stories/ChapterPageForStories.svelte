@@ -8,6 +8,7 @@
 	import { initCurrentChapterReadingMode } from "../contexts/currentChapterReadingMode";
 	import ChapterPage from "../ChapterPage.svelte";
 	import { initIsDrawerOpenWritable } from "../contexts/isDrawerOpen";
+	import { initLongStripImagesWidthContext } from "../readinMode/longStrip/utils/context/longstrip_images_width";
 
 	export let chapter: CurrentChapterData;
 	export let images: string[];
@@ -15,6 +16,9 @@
 	export let readingMode: ReadingMode = ReadingMode.SinglePage;
 	export let isFixed = false;
 	export let isMenuOpen = false;
+	export let longStripImageWidth = 0;
+	const lsImgWidth = initLongStripImagesWidthContext(writable(longStripImageWidth));
+	$: lsImgWidth.set(longStripImageWidth);
 	const is = initChapterImageContext(images);
 	$: {
 		is.set(images);
