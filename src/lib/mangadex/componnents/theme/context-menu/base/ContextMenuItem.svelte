@@ -50,8 +50,8 @@
 		cursor: pointer;
 	}
 	.icon {
-		width: var(--font-size);
-		height: var(--font-size);
+		width: var(--context-menu-font-size);
+		height: var(--context-menu-font-size);
 		display: flex;
 		align-self: center;
 		justify-content: center;
@@ -66,10 +66,10 @@
 		background-color: var(--accent-l3-active);
 	}
 	p.label {
-		font-size: var(--font-size);
+		font-size: var(--context-menu-font-size);
 	}
 	p {
 		margin: 0px;
-		font-weight: 800;
+		font-weight: 500;
 	}
 </style>

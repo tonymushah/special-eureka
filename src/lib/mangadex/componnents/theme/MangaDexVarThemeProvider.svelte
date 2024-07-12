@@ -51,6 +51,7 @@
 	--tag-padding={"2px 6px"}
 	--tag-font-size={"12px"}
 	--tag-font-weight={"600"}
+	--context-menu-font-size="16px"
 >
 	<slot />
 </SomeDiv>

@@ -4,5 +4,5 @@
 </script>
 
 <IconLayout>
-	<LinkIcon size="25px" />
+	<LinkIcon size="16" />
 </IconLayout>
