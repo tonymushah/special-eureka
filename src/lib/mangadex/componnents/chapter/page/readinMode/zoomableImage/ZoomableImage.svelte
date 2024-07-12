@@ -89,7 +89,7 @@
 <style lang="scss">
 	div.outer {
 		width: 100%;
-		height: 100cqh;
+		height: calc(100cqh - var(--to-remove-height));
 		.toZoom {
 			height: 100%;
 			display: flex;

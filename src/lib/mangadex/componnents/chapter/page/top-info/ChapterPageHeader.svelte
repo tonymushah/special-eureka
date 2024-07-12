@@ -1,9 +1,12 @@
+<script lang="ts" context="module">
+	export const headerHeight = writable<number>(0);
+</script>
+
 <script lang="ts">
-	import { BookIcon, CopyIcon, MenuIcon, PaperclipIcon } from "svelte-feather-icons";
+	import { createEventDispatcher, onDestroy } from "svelte";
+	import { MenuIcon } from "svelte-feather-icons";
+	import { writable } from "svelte/store";
 	import { getCurrentChapterData } from "../contexts/currentChapter";
-	import Link from "@mangadex/componnents/theme/links/Link.svelte";
-	import { route } from "$lib/ROUTES";
-	import { createEventDispatcher } from "svelte";
 	import ChapterPageHeaderCurrentPage from "./currentPage/ChapterPageHeaderCurrentPage.svelte";
 	import TopContent from "./TopContent.svelte";
 
@@ -16,9 +19,12 @@
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 	}>();
+	onDestroy(() => {
+		headerHeight.set(0);
+	});
 </script>
 
-<header>
+<header bind:clientHeight={$headerHeight}>
 	<TopContent />
 	<section class="buttons">
 		<div>

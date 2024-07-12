@@ -105,17 +105,19 @@
 
 <style lang="scss">
 	img {
-		max-width: 100%;
+		width: 100%;
 	}
 	.longstrip {
 		display: flex;
 		flex-direction: column;
 		.image {
 			display: flex;
+			width: 100%;
 		}
 	}
 	.longstrip.innerOverflow {
-		height: 100cqh;
+		height: calc(100cqh - var(--to-remove-height));
+		width: 100%;
 		overflow-y: scroll;
 	}
 </style>

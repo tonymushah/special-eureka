@@ -42,13 +42,12 @@
 	$: mode.set(readingMode);
 </script>
 
-<div>
+<main>
 	<ChapterPage />
-</div>
+</main>
 
 <style lang="scss">
-	div {
+	main {
 		height: 100vh;
-		overflow-y: hidden;
 	}
 </style>
