@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ImageFit from "./settings/ImageFit.svelte";
 	import ReadingDirection from "./settings/ReadingDirection.svelte";
 	import ReadingModeButton from "./settings/ReadingModeButton.svelte";
 	import ResetZoom from "./settings/ResetZoom.svelte";
@@ -8,6 +9,7 @@
 	<ReadingModeButton />
 	<ResetZoom />
 	<ReadingDirection />
+	<ImageFit />
 </section>
 
 <style lang="scss">
