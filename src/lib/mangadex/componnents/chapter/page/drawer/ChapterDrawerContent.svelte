@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Header from "./content/Header.svelte";
 	import Line from "./content/Line.svelte";
+	import Navigation from "./content/Navigation.svelte";
 	import Settings from "./content/Settings.svelte";
 	import TopInfo from "./content/TopInfo.svelte";
 
@@ -10,6 +11,8 @@
 <div class="content">
 	<Header bind:left />
 	<TopInfo />
+	<Line />
+	<Navigation />
 	<Line />
 	<Settings />
 </div>
