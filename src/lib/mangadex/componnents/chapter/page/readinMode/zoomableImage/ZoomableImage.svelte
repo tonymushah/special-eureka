@@ -117,7 +117,7 @@
 				}
 			}
 			div.double-image.fitWidth {
-				width: max-content;
+				width: 100%;
 				display: grid;
 				height: 100%;
 				grid-template-rows: 2;
