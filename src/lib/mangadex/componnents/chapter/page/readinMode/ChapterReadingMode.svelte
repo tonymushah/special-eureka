@@ -38,7 +38,9 @@
 
 <style lang="scss">
 	div:not(.none-selected) {
-		display: contents;
+		display: block;
+		height: 100cqh;
+		overflow: hidden;
 	}
 	div.none-selected {
 		display: flex;
