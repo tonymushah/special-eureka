@@ -18,7 +18,7 @@
 	const isShouldFixed = derived(isDrawerFixed(), ($fixed) => !$fixed);
 	const headerHeight_ = derived(headerHeight, ($h) => {
 		if ($h != 0) {
-			return $h + 15;
+			return $h + 17;
 		} else {
 			return 0;
 		}
