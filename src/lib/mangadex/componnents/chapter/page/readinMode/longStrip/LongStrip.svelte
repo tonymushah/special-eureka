@@ -104,15 +104,13 @@
 </div>
 
 <style lang="scss">
-	img {
-		width: 100%;
-	}
 	.longstrip {
 		display: flex;
 		flex-direction: column;
 		.image {
 			display: flex;
 			width: 100%;
+			justify-content: center;
 		}
 	}
 	.longstrip.innerOverflow {
