@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ImageFit from "./settings/ImageFit.svelte";
+	import LongstripImageWidth from "./settings/LongstripImageWidth.svelte";
 	import ReadingDirection from "./settings/ReadingDirection.svelte";
 	import ReadingModeButton from "./settings/ReadingModeButton.svelte";
 	import ResetZoom from "./settings/ResetZoom.svelte";
@@ -10,6 +11,7 @@
 	<ResetZoom />
 	<ReadingDirection />
 	<ImageFit />
+	<LongstripImageWidth />
 </section>
 
 <style lang="scss">
