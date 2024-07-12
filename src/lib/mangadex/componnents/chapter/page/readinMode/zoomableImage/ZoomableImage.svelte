@@ -109,11 +109,16 @@
 				display: flex;
 				height: 100%;
 				align-items: center;
+				justify-content: center;
+				max-width: 100%;
 				div {
 					height: 100%;
+					width: 100%;
 				}
 				img {
 					height: 100%;
+					max-width: 100%;
+					object-fit: contain;
 				}
 			}
 			div.double-image.fitWidth {
