@@ -95,7 +95,7 @@
 			display: flex;
 			justify-content: center;
 			align-content: center;
-			div.double-image {
+			div.double-image:not(.fitHeight, .fitWidth) {
 				display: grid;
 				height: 100%;
 				grid-template-rows: 2;
@@ -106,14 +106,14 @@
 				}
 			}
 			div.double-image.fitHeight {
-				display: grid;
+				display: flex;
 				height: 100%;
-				grid-template-rows: 2;
-				img {
-					grid-row: 1;
+				align-items: center;
+				div {
 					height: 100%;
-					object-fit: contain;
-					width: 100%;
+				}
+				img {
+					height: 100%;
 				}
 			}
 			div.double-image.fitWidth {
