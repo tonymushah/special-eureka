@@ -18,6 +18,7 @@
 {#if $isReadingDirectionModifiable}
 	<SettingsTransitComp>
 		<ButtonAccentOnlyLabel
+			oneLine
 			label={$label}
 			icon={Icon}
 			on:click={() => {

@@ -4,6 +4,7 @@
 	import { ReadingMode } from "@mangadex/gql/graphql";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import Icon from "./reading-mode/Icon.svelte";
+	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
 
 	const mode = getCurrentChapterReadingModeWritable();
 	const label = derived(mode, ($mode) => {
@@ -23,25 +24,28 @@
 	});
 </script>
 
-<ButtonAccentOnlyLabel
-	icon={Icon}
-	label={$label}
-	on:click={() => {
-		switch ($mode) {
-			case ReadingMode.SinglePage:
-				mode.set(ReadingMode.DoublePage);
-				break;
-			case ReadingMode.DoublePage:
-				mode.set(ReadingMode.LongStrip);
-				break;
-			case ReadingMode.LongStrip:
-				mode.set(ReadingMode.WideStrip);
-				break;
-			case ReadingMode.WideStrip:
-				mode.set(ReadingMode.SinglePage);
-				break;
-			default:
-				break;
-		}
-	}}
-/>
+<SettingsTransitComp>
+	<ButtonAccentOnlyLabel
+		icon={Icon}
+		label={$label}
+		oneLine
+		on:click={() => {
+			switch ($mode) {
+				case ReadingMode.SinglePage:
+					mode.set(ReadingMode.DoublePage);
+					break;
+				case ReadingMode.DoublePage:
+					mode.set(ReadingMode.LongStrip);
+					break;
+				case ReadingMode.LongStrip:
+					mode.set(ReadingMode.WideStrip);
+					break;
+				case ReadingMode.WideStrip:
+					mode.set(ReadingMode.SinglePage);
+					break;
+				default:
+					break;
+			}
+		}}
+	/>
+</SettingsTransitComp>

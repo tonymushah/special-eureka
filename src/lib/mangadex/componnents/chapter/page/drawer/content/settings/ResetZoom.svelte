@@ -10,6 +10,7 @@
 {#if $zoomable}
 	<SettingsTransitComp>
 		<ButtonAccentOnlyLabel
+			oneLine
 			on:click={() => {
 				resetZoom();
 			}}
