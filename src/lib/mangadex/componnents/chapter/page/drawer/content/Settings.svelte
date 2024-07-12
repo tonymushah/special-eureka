@@ -1,9 +1,11 @@
 <script lang="ts">
 	import ReadingDirection from "./settings/ReadingDirection.svelte";
+	import ReadingModeButton from "./settings/ReadingModeButton.svelte";
 	import ResetZoom from "./settings/ResetZoom.svelte";
 </script>
 
 <section>
+	<ReadingModeButton />
 	<ResetZoom />
 	<ReadingDirection />
 </section>
