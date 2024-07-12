@@ -1,7 +1,6 @@
 <script lang="ts">
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { isOnZoomableImage } from "../../../contexts/currentChapterReadingMode";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import { isOnZoomableImage } from "../../../contexts/currentChapterReadingMode";
 	import { resetZoom } from "../../../contexts/resetZoomEventTarget";
 	import ZoomOutIcon from "./reset-zoom/ZoomOutIcon.svelte";
 	const zoomable = isOnZoomableImage();
