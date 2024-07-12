@@ -13,13 +13,16 @@
 	export let label: string;
 	export let style: string | undefined = undefined;
 	export let isBase = false;
+	export let oneLine = false;
 	export let icon: ComponentType | undefined = undefined;
 </script>
 
 <ButtonAccent on:click {variant} {style} {type} {isBase}>
 	<div>
 		<svelte:component this={icon} />
-		{label}
+		<span class:oneLine>
+			{label}
+		</span>
 	</div>
 </ButtonAccent>
 
@@ -29,5 +32,10 @@
 		justify-content: center;
 		align-items: center;
 		gap: 5px;
+	}
+	.oneLine {
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
 	}
 </style>
