@@ -122,7 +122,7 @@
 <slot name="top" />
 
 <div
-	role="document"
+	role="article"
 	class="wide-strip"
 	class:rtl={$rtl}
 	class:innerOverflow
@@ -146,14 +146,20 @@
 	.wide-strip {
 		display: flex;
 		flex-direction: row;
+		div {
+			height: 100%;
+			width: 100%;
+		}
 	}
 	.wide-strip.rtl {
 		flex-direction: row-reverse;
 	}
 	.wide-strip.innerOverflow {
 		overflow-x: scroll;
+		width: 100cqw;
+		height: 100cqh;
 	}
 	img {
-		max-height: 100%;
+		height: 100%;
 	}
 </style>
