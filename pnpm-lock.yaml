@@ -74,6 +74,9 @@ importers:
       svelte-feather-icons:
         specifier: ^4.1.0
         version: 4.1.0
+      svelte-remixicon:
+        specifier: ^2.5.0
+        version: 2.5.0(svelte@4.2.18)
       swiper:
         specifier: ^11.1.4
         version: 11.1.4
@@ -5730,6 +5733,11 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  svelte-remixicon@2.5.0:
+    resolution: {integrity: sha512-7c3+Qu58+xNr9MmZdaGDYL9jEKaUG4dOtvBfpjfmDwniVCwvsfNeODLOqlAGPIRZhJYQ1A1U7WCvC+I8vVCyIw==}
+    peerDependencies:
+      svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
 
   svelte2tsx@0.7.13:
     resolution: {integrity: sha512-aObZ93/kGAiLXA/I/kP+x9FriZM+GboB/ReOIGmLNbVGEd2xC+aTCppm3mk1cc9I/z60VQf7b2QDxC3jOXu3yw==}
@@ -13048,6 +13056,10 @@ snapshots:
       postcss-load-config: 3.1.4(postcss@8.4.38)
       sass: 1.77.6
       typescript: 5.5.2
+
+  svelte-remixicon@2.5.0(svelte@4.2.18):
+    dependencies:
+      svelte: 4.2.18
 
   svelte2tsx@0.7.13(svelte@4.2.18)(typescript@5.5.2):
     dependencies:

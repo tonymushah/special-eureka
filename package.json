@@ -97,6 +97,7 @@
     "mizuki-urql-adapter": "^0.1.2",
     "panzoom": "^9.4.3",
     "svelte-feather-icons": "^4.1.0",
+    "svelte-remixicon": "^2.5.0",
     "swiper": "^11.1.4",
     "timeago.js": "^4.0.2",
     "toastify-js": "^1.12.0",
