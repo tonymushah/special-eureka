@@ -1,7 +1,5 @@
 <script lang="ts">
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
-	import { getChapterImageContext } from "@mangadex/componnents/chapter/page/contexts/images";
-	import getChapterDoublePageCurrentPage from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
 	import {
@@ -11,9 +9,9 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
-	import { isArray, times } from "lodash";
+	import { isArray } from "lodash";
 	import { derived, get } from "svelte/store";
-	import { fade, slide } from "svelte/transition";
+	import { slide } from "svelte/transition";
 	type Page = [number, number] | number;
 	const currentPageContext = getChapterCurrentPageContext();
 	const currentPageSelectedReadable = derived(
@@ -70,11 +68,9 @@
 </script>
 
 <div class="layout">
-	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<label use:melt={$label}> Choose page: </label>
 	<div class="input" use:melt={$trigger}>
 		<ButtonAccent>
-			{$selectedLabel}
+			Page: {$selectedLabel}
 		</ButtonAccent>
 	</div>
 </div>
@@ -134,9 +130,6 @@
 		li.isSelected:active {
 			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
 		}
-	}
-	label {
-		font-size: 14px;
 	}
 	.input {
 		display: grid;

@@ -50,11 +50,9 @@
 </script>
 
 <div class="layout">
-	<!-- svelte-ignore a11y-label-has-associated-control -->
-	<label use:melt={$label}> Choose page: </label>
 	<div class="input" use:melt={$trigger}>
 		<ButtonAccent>
-			{$selectedLabel}
+			Page: {$selectedLabel}
 		</ButtonAccent>
 	</div>
 </div>
@@ -80,6 +78,7 @@
 		height: 200px;
 	}
 	.layout {
+		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
@@ -114,9 +113,6 @@
 		li.isSelected:active {
 			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
 		}
-	}
-	label {
-		font-size: 14px;
 	}
 	.input {
 		display: grid;
