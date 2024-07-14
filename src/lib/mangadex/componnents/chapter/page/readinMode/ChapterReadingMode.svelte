@@ -12,6 +12,10 @@
 	import { isDrawerFixed } from "../contexts/isDrawerFixed";
 	import SomeDiv from "@mangadex/componnents/theme/SomeDiv.svelte";
 	import { headerHeight } from "../top-info/ChapterPageHeader.svelte";
+	import {
+		fireChapterNextEvent,
+		fireChapterPreviousEvent
+	} from "../contexts/previousNextEventTarget";
 
 	const mode = getCurrentChapterReadingMode();
 	const opened = derived([isDrawerOpen(), isDrawerFixed()], ([$open, $fixed]) => $open && $fixed);
@@ -30,7 +34,14 @@
 <SomeDiv --to-remove-height={toRemoveHeight}>
 	{#if $mode == ReadingMode.DoublePage}
 		<div transition:fade class:fixed={$isShouldFixed}>
-			<DoublePage />
+			<DoublePage
+				on:next={() => {
+					fireChapterNextEvent();
+				}}
+				on:previous={() => {
+					fireChapterPreviousEvent();
+				}}
+			/>
 		</div>
 	{:else if $mode == ReadingMode.LongStrip}
 		<div transition:fade class:fixed={$isShouldFixed}>
@@ -38,7 +49,14 @@
 		</div>
 	{:else if $mode == ReadingMode.SinglePage}
 		<div transition:fade class:fixed={$isShouldFixed}>
-			<SinglePage />
+			<SinglePage
+				on:next={() => {
+					fireChapterNextEvent();
+				}}
+				on:previous={() => {
+					fireChapterPreviousEvent();
+				}}
+			/>
 		</div>
 	{:else if $mode == ReadingMode.WideStrip}
 		<div class="wide" transition:fade class:open class:fixed={$isShouldFixed}>
