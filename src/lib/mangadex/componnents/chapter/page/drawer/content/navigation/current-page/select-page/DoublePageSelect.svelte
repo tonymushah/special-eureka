@@ -96,6 +96,7 @@
 		height: 200px;
 	}
 	.layout {
+		flex: 3;
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
