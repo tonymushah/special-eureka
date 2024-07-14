@@ -4,15 +4,21 @@
 </script>
 
 <div class="layout">
-	<PreviousNext>
-		<SelectPage />
-	</PreviousNext>
+	<div class="content">
+		<PreviousNext>
+			<SelectPage />
+		</PreviousNext>
+	</div>
 </div>
 
 <style lang="scss">
 	.layout {
 		display: flex;
-		flex-direction: row;
-		gap: 2px;
+		flex-direction: column;
+		.content {
+			display: flex;
+			flex-direction: row;
+			gap: 5px;
+		}
 	}
 </style>
