@@ -84,6 +84,7 @@
 		gap: 4px;
 	}
 	menu {
+		margin: 0px;
 		border-radius: 0.25em;
 		list-style: none;
 		background-color: var(--accent);
