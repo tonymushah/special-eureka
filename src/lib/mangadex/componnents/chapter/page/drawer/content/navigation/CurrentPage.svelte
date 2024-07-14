@@ -9,6 +9,7 @@
 <style lang="scss">
 	.layout {
 		display: flex;
-		flex-direction: column;
+		flex-direction: row;
+		gap: 2px;
 	}
 </style>
