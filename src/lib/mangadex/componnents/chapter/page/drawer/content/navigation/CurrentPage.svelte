@@ -1,9 +1,12 @@
 <script lang="ts">
 	import SelectPage from "./current-page/SelectPage.svelte";
+	import PreviousNext from "./PreviousNext.svelte";
 </script>
 
 <div class="layout">
-	<SelectPage />
+	<PreviousNext>
+		<SelectPage />
+	</PreviousNext>
 </div>
 
 <style lang="scss">
