@@ -1,9 +1,11 @@
 <script lang="ts">
+	import ChaptersNavigation from "./ChaptersNavigation.svelte";
 	import CurrentPage from "./navigation/CurrentPage.svelte";
 </script>
 
 <section>
 	<CurrentPage />
+	<ChaptersNavigation />
 </section>
 
 <style lang="scss">
