@@ -9,6 +9,7 @@
 	import ChapterPage from "../ChapterPage.svelte";
 	import { initIsDrawerOpenWritable } from "../contexts/isDrawerOpen";
 	import { initLongStripImagesWidthContext } from "../readinMode/longStrip/utils/context/longstrip_images_width";
+	import { initRelatedChapters, type RelatedChapters } from "../contexts/relatedChapters";
 
 	export let chapter: CurrentChapterData;
 	export let images: string[];
@@ -17,6 +18,7 @@
 	export let isFixed = false;
 	export let isMenuOpen = false;
 	export let longStripImageWidth = 0;
+	export let relatedChapters: RelatedChapters = [];
 	const lsImgWidth = initLongStripImagesWidthContext(writable(longStripImageWidth));
 	$: lsImgWidth.set(longStripImageWidth);
 	const is = initChapterImageContext(images);
@@ -40,6 +42,8 @@
 	$: c.set(chapter);
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
 	$: mode.set(readingMode);
+	const related = initRelatedChapters(writable(relatedChapters));
+	$: related.set(relatedChapters);
 </script>
 
 <main>
