@@ -74,14 +74,15 @@
 				break;
 		}
 	};
+	const variant = "2";
 </script>
 
-<ButtonAccent on:click={onPrevious}>
+<ButtonAccent {variant} on:click={onPrevious}>
 	<ArrowLeftIcon />
 </ButtonAccent>
 
 <slot />
 
-<ButtonAccent on:click={onNext}>
+<ButtonAccent {variant} on:click={onNext}>
 	<ArrowRightIcon />
 </ButtonAccent>

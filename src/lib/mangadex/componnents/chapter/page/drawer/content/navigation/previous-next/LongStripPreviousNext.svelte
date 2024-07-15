@@ -29,14 +29,15 @@
 			fireChapterPreviousEvent();
 		}
 	};
+	const variant = "2";
 </script>
 
-<ButtonAccent on:click={previous}>
+<ButtonAccent {variant} on:click={previous}>
 	<ArrowUpIcon />
 </ButtonAccent>
 
 <slot />
 
-<ButtonAccent on:click={next}>
+<ButtonAccent {variant} on:click={next}>
 	<ArrowDownIcon />
 </ButtonAccent>
