@@ -60,3 +60,18 @@ export function fireSelectChapterEvent(event: string | SelectChapterEvent) {
 		previousNextEventTarget.dispatchEvent(new SelectChapterEvent(event));
 	}
 }
+
+const REPORT_EVENT_KEY = "report";
+
+export function fireReportChapterEvent() {
+	previousNextEventTarget.dispatchEvent(new Event(REPORT_EVENT_KEY));
+}
+
+export function addListenerToReportChapterEventTarget(
+	callback: EventListenerOrEventListenerObject
+) {
+	previousNextEventTarget.addEventListener(REPORT_EVENT_KEY, callback);
+	return () => {
+		previousNextEventTarget.removeEventListener(REPORT_EVENT_KEY, callback);
+	};
+}
