@@ -11,7 +11,6 @@
 <div class="content">
 	<Header bind:left />
 	<TopInfo />
-	<Line />
 	<Navigation />
 	<Line />
 	<Settings />
@@ -21,6 +20,6 @@
 	.content {
 		display: flex;
 		flex-direction: column;
-		gap: 3px;
+		gap: 10px;
 	}
 </style>
