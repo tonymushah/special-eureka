@@ -15,10 +15,11 @@
 	export let isBase = false;
 	export let oneLine = false;
 	export let icon: ComponentType | undefined = undefined;
+	export let noCenter = false;
 </script>
 
 <ButtonAccent on:click {variant} {style} {type} {isBase}>
-	<div>
+	<div class:noCenter>
 		<svelte:component this={icon} />
 		<span class:oneLine>
 			{label}
@@ -32,6 +33,9 @@
 		justify-content: center;
 		align-items: center;
 		gap: 5px;
+	}
+	div.noCenter {
+		align-items: start;
 	}
 	.oneLine {
 		display: -webkit-box;
