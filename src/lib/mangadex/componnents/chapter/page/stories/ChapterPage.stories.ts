@@ -47,6 +47,6 @@ export const Default: Story = {
 		}),
 		currentPage: 0,
 		images: fuufuIjouChapter56,
-		relatedChapters: aggregate
+		relatedChapters: aggregate.toReversed()
 	}
 };
