@@ -11,6 +11,7 @@
 	<SettingsTransitComp>
 		<ButtonAccentOnlyLabel
 			oneLine
+			variant="3"
 			on:click={() => {
 				resetZoom();
 			}}

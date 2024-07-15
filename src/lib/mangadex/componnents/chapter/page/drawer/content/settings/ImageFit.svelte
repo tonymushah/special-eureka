@@ -26,6 +26,7 @@
 		<ButtonAccentOnlyLabel
 			icon={Icon}
 			oneLine
+			variant="3"
 			label={$label}
 			on:click={() => {
 				switch ($imageFitStore) {

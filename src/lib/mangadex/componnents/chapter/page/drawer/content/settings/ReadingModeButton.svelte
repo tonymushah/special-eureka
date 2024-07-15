@@ -26,6 +26,7 @@
 
 <SettingsTransitComp>
 	<ButtonAccentOnlyLabel
+		variant="3"
 		icon={Icon}
 		label={$label}
 		oneLine

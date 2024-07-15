@@ -19,6 +19,7 @@
 	<SettingsTransitComp>
 		<ButtonAccentOnlyLabel
 			oneLine
+			variant="3"
 			label={$label}
 			icon={Icon}
 			on:click={() => {
