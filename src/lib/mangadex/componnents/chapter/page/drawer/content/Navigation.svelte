@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ChaptersNavigation from "./ChaptersNavigation.svelte";
+	import ChaptersNavigation from "./navigation/ChaptersNavigation.svelte";
 	import CurrentPage from "./navigation/CurrentPage.svelte";
 </script>
 

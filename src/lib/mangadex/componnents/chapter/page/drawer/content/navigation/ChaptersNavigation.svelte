@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { hasRelatedChapters } from "../../contexts/relatedChapters";
+	import { hasRelatedChapters } from "../../../contexts/relatedChapters";
 	import ChapterSelect from "./chapters-navigation/ChapterSelect.svelte";
 	import PreviousNext from "./chapters-navigation/PreviousNext.svelte";
 	const hasRelated = hasRelatedChapters();

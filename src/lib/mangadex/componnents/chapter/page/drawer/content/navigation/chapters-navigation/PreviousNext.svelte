@@ -1,14 +1,14 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { isLongStrip } from "../../../contexts/currentChapterReadingMode";
+	import { isLongStrip } from "../../../../contexts/currentChapterReadingMode";
 	import {
 		fireChapterNextEvent,
 		fireChapterPreviousEvent
-	} from "../../../contexts/previousNextEventTarget";
+	} from "../../../../contexts/previousNextEventTarget";
 	import {
 		readingDirection as direction,
 		ReadingDirection
-	} from "../../../stores/readingDirection";
+	} from "../../../../stores/readingDirection";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	const isLong = isLongStrip();
 	$: next = function () {

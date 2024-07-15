@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { createPopover, melt, type SelectOption } from "@melt-ui/svelte";
-	import { getRelatedChapters, hasRelatedChapters } from "../../../contexts/relatedChapters";
+	import { getRelatedChapters, hasRelatedChapters } from "../../../../contexts/relatedChapters";
 	import { derived } from "svelte/store";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import { getCurrentChapterData } from "../../../contexts/currentChapter";
+	import { getCurrentChapterData } from "../../../../contexts/currentChapter";
 	import { slide } from "svelte/transition";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { fireSelectChapterEvent } from "../../../contexts/previousNextEventTarget";
+	import { fireSelectChapterEvent } from "../../../../contexts/previousNextEventTarget";
 	const hasRelated = hasRelatedChapters();
 	const {
 		elements: { content: menu, trigger, close },
