@@ -27,16 +27,16 @@
 					if (chapter == "none" || chapter.length == 0) {
 						label = "No label??";
 					} else {
-						label = `Chapter ${chapter}`;
+						label = `Ch. ${chapter}`;
 					}
 				} else {
-					label = `Volume ${volume} - Chapter ${chapter}`;
+					label = `Vol. ${volume} Ch. ${chapter}`;
 				}
 			} else if (chapter != undefined) {
 				if (chapter == "none" || chapter.length == 0) {
 					label = "No label??";
 				} else {
-					label = `Chapter ${chapter}`;
+					label = `Ch. ${chapter}`;
 				}
 			} else {
 				label = "No label??";
@@ -56,10 +56,10 @@
 <div class="layout">
 	<div class="input" use:melt={$trigger}>
 		<ButtonAccent>
-			{#if $current.title != undefined && $current.chapterNumber != undefined}
-				Chapter {$current.chapterNumber} - {$current.title}
+			{#if $current.chapterNumber != undefined && $current.volume != undefined}
+				Vol. {$current.volume} Ch. {$current.chapterNumber}
 			{:else if $current.chapterNumber != undefined}
-				Chapter {$current.chapterNumber}
+				Ch. {$current.chapterNumber}
 			{:else if $current.isOneshot}
 				Oneshot
 			{:else}
