@@ -25,7 +25,7 @@
 		}))
 	);
 	const {
-		elements: { trigger, menu, option, group, groupLabel, label },
+		elements: { trigger, menu, option },
 		states: { selectedLabel, open },
 		helpers: { isSelected }
 	} = createSelect<number>({
