@@ -10,6 +10,7 @@ import {
 	CurrentChapterUploader
 } from "../contexts/currentChapter";
 import fuufuIjouChapter56 from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/images";
+import aggregate from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/aggregate";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -45,6 +46,7 @@ export const Default: Story = {
 			})
 		}),
 		currentPage: 0,
-		images: fuufuIjouChapter56
+		images: fuufuIjouChapter56,
+		relatedChapters: aggregate
 	}
 };
