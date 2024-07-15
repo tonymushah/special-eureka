@@ -1,3 +1,6 @@
+<!--
+    BUG I don't know why the primary doesn't work
+-->
 <script lang="ts">
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
@@ -36,7 +39,7 @@
 		}))
 	);
 	const {
-		elements: { trigger, menu, option, group, groupLabel, label },
+		elements: { trigger, menu, option },
 		states: { selectedLabel, open },
 		helpers: { isSelected }
 	} = createSelect<Page>({
