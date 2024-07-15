@@ -38,8 +38,8 @@ export function generateContextStoresMethods<T>(key: string, customErrorMessage?
 	return {
 		init,
 		get,
-		getReadonly() {
-			return readonly(get());
+		getReadonly(defaultValue?: Writable<T>) {
+			return readonly(get(defaultValue));
 		}
 	};
 }
