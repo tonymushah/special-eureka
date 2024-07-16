@@ -47,4 +47,4 @@ jobs:
               run : mkdir build
             - name : Clippy checks
               run: |
-                  cargo clippy --manifest-path=./src-tauri/Cargo.toml
+                  cargo clippy --manifest-path=./Cargo.toml
