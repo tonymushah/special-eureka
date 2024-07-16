@@ -12,6 +12,7 @@ import {
 } from "../contexts/currentChapter";
 import fuufuIjouChapter56 from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/images";
 import aggregate from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/aggregate";
+import { UserRole } from "@mangadex/gql/graphql";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -33,7 +34,8 @@ export const Default: Story = {
 			chapterNumber: data.attributes.chapter,
 			uploader: new CurrentChapterUploader({
 				name: data.relationships[2].attributes.username ?? "",
-				id: data.relationships[2].id
+				id: data.relationships[2].id,
+				roles: [UserRole.RoleGroupMember, UserRole.RoleMember, UserRole.RoleGroupLeader]
 			}),
 			groups: [
 				new CurrentChapterGroup({
