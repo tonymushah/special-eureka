@@ -1,10 +1,12 @@
 <script lang="ts">
 	import GroupsUploaders from "./uploaders/GroupsUploaders.svelte";
+	import Uploader from "./uploaders/Uploader.svelte";
 </script>
 
 <section>
 	<p>Uploaded by</p>
 	<GroupsUploaders />
+	<Uploader />
 </section>
 
 <style lang="scss">
