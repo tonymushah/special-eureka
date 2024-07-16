@@ -3,6 +3,7 @@
 	import Line from "./content/Line.svelte";
 	import Navigation from "./content/Navigation.svelte";
 	import Settings from "./content/Settings.svelte";
+	import Thread from "./content/Thread.svelte";
 	import TopInfo from "./content/TopInfo.svelte";
 
 	export let left = false;
@@ -12,6 +13,8 @@
 	<Header bind:left />
 	<TopInfo />
 	<Navigation />
+	<Line />
+	<Thread />
 	<Line />
 	<Settings />
 </div>
