@@ -75,3 +75,18 @@ export function addListenerToReportChapterEventTarget(
 		previousNextEventTarget.removeEventListener(REPORT_EVENT_KEY, callback);
 	};
 }
+
+const THREAD_EVENT_KEY = "forums";
+
+export function fireChapterThreadEvent() {
+	previousNextEventTarget.dispatchEvent(new Event(THREAD_EVENT_KEY));
+}
+
+export function addListenerToChapterThreadEventTarget(
+	callback: EventListenerOrEventListenerObject
+) {
+	previousNextEventTarget.addEventListener(THREAD_EVENT_KEY, callback);
+	return () => {
+		previousNextEventTarget.removeEventListener(THREAD_EVENT_KEY, callback);
+	};
+}
