@@ -105,3 +105,16 @@ export function addListenerToChapterChangeGroupEventTarget(
 		previousNextEventTarget.removeEventListener(CHANGE_GROUP_EVENT_KEY, callback);
 	};
 }
+
+const HELP_EVENT_KEY = "help";
+
+export function fireChapterHelpEvent() {
+	previousNextEventTarget.dispatchEvent(new Event(HELP_EVENT_KEY));
+}
+
+export function addListenerToChapterHelpEventTarget(callback: EventListenerOrEventListenerObject) {
+	previousNextEventTarget.addEventListener(HELP_EVENT_KEY, callback);
+	return () => {
+		previousNextEventTarget.removeEventListener(HELP_EVENT_KEY, callback);
+	};
+}
