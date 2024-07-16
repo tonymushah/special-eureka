@@ -6,6 +6,7 @@ import { data } from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/d
 import {
 	CurrentChapterData,
 	CurrentChapterGroup,
+	CurrentChapterThread,
 	CurrentChapterTitle,
 	CurrentChapterUploader
 } from "../contexts/currentChapter";
@@ -43,6 +44,10 @@ export const Default: Story = {
 			series: new CurrentChapterTitle({
 				id: data.relationships[1].id,
 				title: data.relationships[1].attributes.title?.en ?? ""
+			}),
+			thread: new CurrentChapterThread({
+				threadUrl: "https://forums.mangadex.org/threads/1072794",
+				comments: 45
 			})
 		}),
 		currentPage: 0,
