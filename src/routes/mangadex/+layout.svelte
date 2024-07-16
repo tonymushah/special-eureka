@@ -13,6 +13,7 @@
 	import { onMount } from "svelte";
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 
 	setContextClient(client);
 	const sub_id = v4();
@@ -24,6 +25,9 @@
 		}
 	});
 	const theme = custom;
+	onMount(() =>
+		rtl.subscribe(($rtl) => isSidebarRtl.set($rtl.data?.watchSidebarDirection == Direction.Rtl))
+	);
 	$: loading = $navigating != null;
 </script>
 
