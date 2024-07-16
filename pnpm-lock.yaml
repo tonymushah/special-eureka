@@ -229,7 +229,7 @@ importers:
         specifier: ^0.6.2
         version: 0.6.2
       vitest:
-        specifier: ^2.0.0
+        specifier: ^2.0.3
         version: 2.0.3(@types/node@20.14.9)(less@4.2.0)(sass@1.77.6)
 
 packages:
