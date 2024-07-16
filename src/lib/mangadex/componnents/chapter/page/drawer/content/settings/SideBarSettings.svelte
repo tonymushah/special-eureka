@@ -8,6 +8,7 @@
 	} from "./sidebar/action";
 	import { derived } from "svelte/store";
 	import { onMount } from "svelte";
+	import Icon from "./sidebar/Icon.svelte";
 	const label = derived(sideBarActionType, ($action) => {
 		switch ($action) {
 			case SideBarActionType.Default:
@@ -23,4 +24,4 @@
 	onMount(() => registerListeners());
 </script>
 
-<ButtonAccentOnlyLabel variant="3" label={$label} on:click={toggleAction} />
+<ButtonAccentOnlyLabel icon={Icon} variant="3" label={$label} on:click={toggleAction} />
