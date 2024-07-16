@@ -5,6 +5,7 @@
 	import Settings from "./content/Settings.svelte";
 	import Thread from "./content/Thread.svelte";
 	import TopInfo from "./content/TopInfo.svelte";
+	import Uploaders from "./content/Uploaders.svelte";
 
 	export let left = false;
 </script>
@@ -15,6 +16,7 @@
 	<Navigation />
 	<Line />
 	<Thread />
+	<Uploaders />
 	<Line />
 	<Settings />
 </div>
