@@ -60,6 +60,7 @@ export class CurrentChapterData {
 	series?: CurrentChapterTitle;
 	uploader: CurrentChapterUploader;
 	groups: CurrentChapterGroup[] = [];
+	thread?: CurrentChapterThread;
 	constructor({
 		id,
 		uploader,
@@ -68,7 +69,8 @@ export class CurrentChapterData {
 		isOneshot,
 		series,
 		groups,
-		volume
+		volume,
+		thread
 	}: {
 		id: string;
 		uploader: CurrentChapterUploader;
@@ -78,6 +80,7 @@ export class CurrentChapterData {
 		series?: CurrentChapterTitle;
 		groups?: CurrentChapterGroup[];
 		volume?: string;
+		thread?: CurrentChapterThread;
 	}) {
 		this.id = id;
 		this.uploader = uploader;
@@ -98,6 +101,9 @@ export class CurrentChapterData {
 		}
 		if (volume != undefined) {
 			this.volume = volume;
+		}
+		if (thread != undefined) {
+			this.thread = thread;
 		}
 	}
 }
