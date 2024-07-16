@@ -60,6 +60,7 @@ export class CurrentChapterData {
 	uploader: CurrentChapterUploader;
 	groups: CurrentChapterGroup[] = [];
 	thread?: CurrentChapterThread;
+	canChangeGroups: boolean = false;
 	constructor({
 		id,
 		uploader,
@@ -69,7 +70,8 @@ export class CurrentChapterData {
 		series,
 		groups,
 		volume,
-		thread
+		thread,
+		canChangeGroups
 	}: {
 		id: string;
 		uploader: CurrentChapterUploader;
@@ -80,6 +82,7 @@ export class CurrentChapterData {
 		groups?: CurrentChapterGroup[];
 		volume?: string;
 		thread?: CurrentChapterThread;
+		canChangeGroups?: boolean;
 	}) {
 		this.id = id;
 		this.uploader = uploader;
@@ -103,6 +106,9 @@ export class CurrentChapterData {
 		}
 		if (thread != undefined) {
 			this.thread = thread;
+		}
+		if (canChangeGroups != undefined) {
+			this.canChangeGroups = canChangeGroups;
 		}
 	}
 }
