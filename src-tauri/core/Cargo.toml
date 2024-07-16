@@ -48,6 +48,8 @@ tokio.workspace = true
 anyhow.workspace = true
 window-shadows = "0.2"
 window-vibrancy = "0.4"
+tauri-plugin-store.workspace = true
+uuid.workspace = true
 
 [dependencies.mangadex]
 workspace = true

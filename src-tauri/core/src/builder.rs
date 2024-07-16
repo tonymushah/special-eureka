@@ -24,6 +24,6 @@ pub fn get_builder() -> Builder<Wry> {
             toggle_decoration
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
-        .plugin(tauri_plugin_speu_mangadex::init())
+        .plugin(mangadex::init())
         .setup(setup::setup)
 }
