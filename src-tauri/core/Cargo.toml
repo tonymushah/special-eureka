@@ -66,4 +66,4 @@ custom-protocol = ["tauri/custom-protocol"]
 
 [[bin]]
 name = "special-eureka"
-path = "./bin/main.rs"
+path = "../bin/main.rs"
