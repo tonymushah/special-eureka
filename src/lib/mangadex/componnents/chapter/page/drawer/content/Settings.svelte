@@ -4,6 +4,7 @@
 	import ReadingDirection from "./settings/ReadingDirection.svelte";
 	import ReadingModeButton from "./settings/ReadingModeButton.svelte";
 	import ResetZoom from "./settings/ResetZoom.svelte";
+	import SideBarSettings from "./settings/SideBarSettings.svelte";
 </script>
 
 <section>
@@ -12,6 +13,7 @@
 	<ReadingDirection />
 	<ImageFit />
 	<LongstripImageWidth />
+	<SideBarSettings />
 </section>
 
 <style lang="scss">
