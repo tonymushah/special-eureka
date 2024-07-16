@@ -6,6 +6,7 @@
 	import { getCurrentChapterData } from "../../contexts/currentChapter";
 	const label = derived(getCurrentChapterData(), ($current) => {
 		const thread = $current.thread;
+		console.log(`${thread?.comments} thread comments`);
 		if (thread == undefined) {
 			return "First to comment ;)";
 		} else if (thread.isEmpty) {
