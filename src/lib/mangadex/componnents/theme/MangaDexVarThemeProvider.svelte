@@ -2,6 +2,7 @@
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 
 	import SomeDiv from "./SomeDiv.svelte";
+	import ButtonFlexContentProvider from "./buttons/ButtonFlexContentProvider.svelte";
 	const theme_store = getMangaDexThemeContext();
 	export let fonts = "Poppins";
 </script>
@@ -53,5 +54,7 @@
 	--tag-font-weight={"600"}
 	--context-menu-font-size="14px"
 >
-	<slot />
+	<ButtonFlexContentProvider>
+		<slot />
+	</ButtonFlexContentProvider>
 </SomeDiv>
