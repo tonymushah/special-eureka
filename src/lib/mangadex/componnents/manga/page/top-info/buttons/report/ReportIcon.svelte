@@ -3,7 +3,7 @@
 </script>
 
 <div class="report-icon">
-	<FlagIcon size="24px" />
+	<FlagIcon size="24" />
 </div>
 
 <style lang="scss">
