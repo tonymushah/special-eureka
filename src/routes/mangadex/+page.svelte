@@ -7,36 +7,36 @@
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 </script>
 
-<div class="popular-titles">
+<section class="popular-titles">
 	<PopularTitles />
-</div>
+</section>
 
 <MidToneLine />
 
-<div class="latest-updates">
+<section class="latest-updates">
 	<LatestUpdates />
-</div>
+</section>
 
 <MidToneLine />
 
-<div class="staff-picks">
+<section class="staff-picks">
 	<StaffPicks />
-</div>
+</section>
 
 <MidToneLine />
 
-<div class="seasonal">
+<section class="seasonal">
 	<Seasonal />
-</div>
+</section>
 
 <MidToneLine />
 
-<div class="recently-added">
+<section class="recently-added">
 	<RecentlyAdded />
-</div>
+</section>
 
 <style lang="scss">
-	div.popular-titles {
+	section.popular-titles {
 		margin-top: 0.5em;
 	}
 </style>

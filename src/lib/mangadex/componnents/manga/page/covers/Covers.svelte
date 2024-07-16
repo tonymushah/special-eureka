@@ -115,9 +115,9 @@
 			<h3>Loading...</h3>
 		</div>
 	{/if}
-	<div class="covers">
+	<article class="covers">
 		<CoverContents bind:covers={coversData} />
-	</div>
+	</article>
 	{#if !isAtEnd && !isLoading}
 		<div bind:this={interObsEl}></div>
 	{/if}

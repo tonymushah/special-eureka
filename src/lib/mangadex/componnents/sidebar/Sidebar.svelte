@@ -4,27 +4,61 @@
 	import SidebarBody from "./SidebarBody.svelte";
 	import SidebarFooter from "./SidebarFooter.svelte";
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import { showSidebar } from "./states/showSidebar";
+	import { isSidebarFloating } from "./states/isSidebarFloating";
+	import { isSidebarRtl } from "./states/isRtl";
 </script>
 
-<aside
-	class:sidebar={true}
-	class:collapsed={$isOpen}
-	class:defaultDecoration={$isDefaultDecoration}
+<div
+	class="sidebar"
+	class:rtl={$isSidebarRtl}
+	class:show={$showSidebar}
+	class:float={$isSidebarFloating}
 >
-	<div class="header">
-		<SidebarHeader />
-	</div>
-	<div class="body">
-		<SidebarBody />
-	</div>
-	<div class="footer">
-		<SidebarFooter />
-	</div>
-</aside>
+	<aside class:collapsed={$isOpen} class:defaultDecoration={$isDefaultDecoration}>
+		<div class="header">
+			<SidebarHeader />
+		</div>
+		<div class="body">
+			<SidebarBody />
+		</div>
+		<div class="footer">
+			<SidebarFooter />
+		</div>
+	</aside>
+</div>
 
 <style lang="scss">
 	.sidebar {
+		display: none;
+	}
+	.sidebar.show {
+		display: contents;
+	}
+	.sidebar.show.float {
+		display: flex;
+		position: absolute;
+		top: 0;
+	}
+	.sidebar.show.float:not(.rtl) {
+		left: 0;
+	}
+	.sidebar.show.float:not(.rtl):hover {
+		aside.collapsed {
+			transform: translateX(-80px);
+		}
+	}
+	.sidebar.show.float.rtl {
+		right: 0;
+	}
+	.sidebar.show.float.rtl:hover {
+		aside.collapsed {
+			transform: translateX(80px);
+		}
+	}
+	aside {
 		transition: width ease-in-out 300ms;
+		transition: transform ease-in-out 300ms;
 		background-color: var(--accent-l1);
 		height: 94cqh;
 		width: 256px;
@@ -33,7 +67,7 @@
 		justify-content: space-between;
 		padding: 8px;
 	}
-	.sidebar.defaultDecoration {
+	aside.defaultDecoration {
 		height: 99vh;
 	}
 	.collapsed {

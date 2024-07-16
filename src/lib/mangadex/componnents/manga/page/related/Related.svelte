@@ -103,7 +103,7 @@
 	}
 </script>
 
-<div class="related">
+<article class="related">
 	{#if error}
 		<div class="error">
 			<h4>{error.name}</h4>
@@ -115,4 +115,4 @@
 	{:else}
 		<div class="404-not-found">Nothing was found... I guess</div>
 	{/each}
-</div>
+</article>

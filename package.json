@@ -25,7 +25,7 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^1",
+    "@chromatic-com/storybook": "^1.5.0",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/client-preset": "^4.3.0",
     "@melt-ui/pp": "^0.3.2",
@@ -97,6 +97,7 @@
     "mizuki-urql-adapter": "^0.1.2",
     "panzoom": "^9.4.3",
     "svelte-feather-icons": "^4.1.0",
+    "svelte-remixicon": "^2.5.0",
     "swiper": "^11.1.4",
     "timeago.js": "^4.0.2",
     "toastify-js": "^1.12.0",

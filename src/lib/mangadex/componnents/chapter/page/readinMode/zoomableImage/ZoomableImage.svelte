@@ -5,6 +5,7 @@
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
 	import { derived } from "svelte/store";
 	import { ImageFit, imageFitStore } from "./settings";
+	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
@@ -22,6 +23,11 @@
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
 	});
+	onMount(() =>
+		addListenerToResetZoomEventTarget(() => {
+			toZoomPanZoom?.reset({ animate: true });
+		})
+	);
 	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
 	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Height);
 	onMount(() => imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })));
@@ -83,28 +89,40 @@
 <style lang="scss">
 	div.outer {
 		width: 100%;
-		height: 100cqh;
+		height: calc(100cqh - var(--to-remove-height));
 		.toZoom {
 			height: 100%;
-			div.double-image {
-				display: flex;
-				justify-content: center;
+			display: flex;
+			justify-content: center;
+			align-content: center;
+			div.double-image:not(.fitHeight, .fitWidth) {
+				display: grid;
+				height: 100%;
+				grid-template-rows: 2;
 				img {
-					object-fit: none;
-					width: max-content;
-					height: max-content;
+					grid-row: 1;
+					object-fit: contain;
+					width: 100%;
 				}
 			}
 			div.double-image.fitHeight {
+				display: flex;
 				height: 100%;
 				align-items: center;
-				img {
-					object-fit: contain;
+				justify-content: center;
+				max-width: 100%;
+				div {
 					height: 100%;
+					width: 100%;
+				}
+				img {
+					height: 100%;
+					max-width: 100%;
+					object-fit: contain;
 				}
 			}
 			div.double-image.fitWidth {
-				width: max-content;
+				width: 100%;
 				display: grid;
 				height: 100%;
 				grid-template-rows: 2;
@@ -116,10 +134,10 @@
 				}
 			}
 			div.single-image {
+				width: 100%;
 				img {
-					object-fit: none;
-					width: max-content;
-					height: max-content;
+					object-fit: contain;
+					width: 100%;
 				}
 			}
 			div.single-image.fitWidth {

@@ -92,13 +92,13 @@
 		<TopInfoCover />
 	</div>
 	<div class="content">
-		<div class="top">
+		<section class="top">
 			<h1>{title}</h1>
 			{#if altTitle}
 				<h2>{altTitle}</h2>
 			{/if}
-		</div>
-		<div class="bottom">
+		</section>
+		<section class="bottom">
 			<TopInfoAuthors {authors} />
 			<TopInfoButtons
 				on:readingStatus={({ detail }) => {
@@ -145,12 +145,12 @@
 					/>
 				</div>
 			{/if}
-		</div>
+		</section>
 	</div>
 </TopInfoLayout>
 
 <style lang="scss">
-	div.top {
+	section.top {
 		h1 {
 			display: -webkit-box;
 			-webkit-line-clamp: 3;
@@ -169,7 +169,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		div.bottom {
+		section.bottom {
 			display: flex;
 			flex-direction: column;
 			height: 60%;

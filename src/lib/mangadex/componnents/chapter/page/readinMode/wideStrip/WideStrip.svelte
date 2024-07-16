@@ -33,7 +33,7 @@
 		}
 	);
 	function toCurrentPage(page: number) {
-		console.log(page);
+		//console.log(page);
 		const current = widestrip_root?.querySelector(`div[data-page=\"${page}\"]`);
 		if (current != null) {
 			current.scrollIntoView();
@@ -117,18 +117,54 @@
 			}
 		};
 	};
+	/*
+	const isDown = writable(false);
+	const startX = writable(0);
+	const scrollLeft = writable(0);
+	$: console.debug({
+		isDown: $isDown,
+		startX: $startX,
+		scrollLeft: $scrollLeft
+	});
+    on:mousedown={(e) => {
+		if (widestrip_root) {
+			isDown.set(true);
+			startX.set(e.clientX - widestrip_root.scrollLeft);
+			scrollLeft.set(widestrip_root.scrollLeft);
+		}
+	}}
+	on:mouseup={(e) => {
+		isDown.set(false);
+	}}
+	on:mousemove={(e) => {
+		if ($isDown && widestrip_root) {
+			e.preventDefault();
+			widestrip_root.scrollLeft -= $scrollLeft - $startX;
+		}
+	}}
+	on:mouseleave={(e) => {
+		isDown.set(false);
+	}}
+    */
 </script>
 
 <slot name="top" />
 
 <div
-	role="document"
+	role="button"
+	tabindex="0"
 	class="wide-strip"
 	class:rtl={$rtl}
 	class:innerOverflow
 	bind:this={widestrip_root}
-	on:drag|preventDefault={(e) => {
-		//console.log(e);
+	on:wheel|preventDefault={(e) => {
+		if (widestrip_root) {
+			if ($rtl) {
+				widestrip_root.scrollLeft -= e.deltaY;
+			} else {
+				widestrip_root.scrollLeft += e.deltaY;
+			}
+		}
 	}}
 >
 	<slot name="before" />
@@ -146,14 +182,21 @@
 	.wide-strip {
 		display: flex;
 		flex-direction: row;
+		div {
+			display: flex;
+			width: 100%;
+			height: 100%;
+		}
 	}
 	.wide-strip.rtl {
 		flex-direction: row-reverse;
 	}
 	.wide-strip.innerOverflow {
 		overflow-x: scroll;
+		width: 100%;
+		height: calc(100cqh - var(--to-remove-height));
 	}
 	img {
-		max-height: 100%;
+		height: 100%;
 	}
 </style>

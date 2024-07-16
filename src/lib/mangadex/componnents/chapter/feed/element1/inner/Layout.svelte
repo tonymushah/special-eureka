@@ -3,12 +3,12 @@
 	export let haveBeenRead: boolean = true;
 </script>
 
-<div class="layout" class:haveBeenRead>
+<article class="layout" class:haveBeenRead>
 	<slot />
-</div>
+</article>
 
 <style lang="scss">
-	div.layout {
+	article.layout {
 		color: text;
 		width: var(--layout-width);
 		display: flex;

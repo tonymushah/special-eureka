@@ -96,7 +96,7 @@
 <div class="longstrip" class:innerOverflow bind:this={longstrip_root}>
 	<slot name="top" />
 	{#each $images as image, page}
-		<div data-page={page} use:mount>
+		<div data-page={page} use:mount class="image">
 			<img data-page={page} src={image} alt={image} width="{$imageWidth}%" />
 		</div>
 	{/each}
@@ -104,11 +104,18 @@
 </div>
 
 <style lang="scss">
-	img {
-		max-width: 100%;
+	.longstrip {
+		display: flex;
+		flex-direction: column;
+		.image {
+			display: flex;
+			width: 100%;
+			justify-content: center;
+		}
 	}
 	.longstrip.innerOverflow {
-		max-height: 100%;
+		height: calc(100cqh - var(--to-remove-height));
+		width: 100%;
 		overflow-y: scroll;
 	}
 </style>

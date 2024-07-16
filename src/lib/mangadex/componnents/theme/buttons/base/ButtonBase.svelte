@@ -51,9 +51,9 @@
 		background-color: var(--button-color);
 		font-family: var(--fonts);
 		border: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		display: var(--button-display);
+		align-items: var(--button-align-items);
+		justify-content: var(--button-justify-content);
 	}
 	button.haveBorderRadius {
 		border-radius: 0.25rem;

@@ -1,17 +1,17 @@
 <script lang="ts">
+	import { ceil, isArray, random } from "lodash";
+	import { createEventDispatcher } from "svelte";
+	import { quadOut } from "svelte/easing";
 	import { derived } from "svelte/store";
+	import { blur } from "svelte/transition";
+	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
+	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
+	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import getChapterDoublePageCurrentPage from "./utils/getChapterDoublePageCurrentPage";
 	import getChapterDoublePageCurrentPageIndex from "./utils/getChapterDoublePageCurrentPageIndex";
-	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
-	import { createEventDispatcher } from "svelte";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
-	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
-	import { ceil, isArray, random } from "lodash";
-	import { blur, fade } from "svelte/transition";
-	import { quadIn, quadOut } from "svelte/easing";
-	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
-	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
 
 	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPage = getChapterDoublePageCurrentPage();

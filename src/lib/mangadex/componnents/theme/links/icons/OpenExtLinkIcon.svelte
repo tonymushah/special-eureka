@@ -4,5 +4,5 @@
 </script>
 
 <IconLayout>
-	<ExternalLinkIcon size="25px" />
+	<ExternalLinkIcon size="16" />
 </IconLayout>

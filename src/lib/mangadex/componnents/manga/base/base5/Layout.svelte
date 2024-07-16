@@ -3,7 +3,7 @@
 </script>
 
 <div
-	role="document"
+	role="article"
 	class="layout"
 	on:mouseenter={() => {
 		isHover = true;

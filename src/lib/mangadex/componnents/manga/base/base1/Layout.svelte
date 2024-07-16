@@ -18,13 +18,13 @@
 	--button-hover={"var(--accent-l3-hover)"}
 	--button-active={"var(--accent-l3-active)"}
 >
-	<div class="layout">
+	<article class="layout">
 		<slot />
-	</div>
+	</article>
 </ButtonBase>
 
 <style lang="scss">
-	div.layout {
+	article.layout {
 		width: var(--layout-width);
 		display: grid;
 		grid-template-areas: "cover content content";

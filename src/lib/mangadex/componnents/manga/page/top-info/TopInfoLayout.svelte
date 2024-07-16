@@ -5,7 +5,7 @@
 	$: coverImage = $coverImageStore ?? "";
 </script>
 
-<div class="layout-image" style={`background-image: url(${coverImage});`}>
+<article class="layout-image" style={`background-image: url(${coverImage});`}>
 	<div class="layout-color">
 		<div class="layout">
 			<div class="cover">
@@ -16,7 +16,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</article>
 
 <style lang="scss">
 	.layout-image {

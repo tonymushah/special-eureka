@@ -10,9 +10,9 @@
 </script>
 
 <ButtonBase on:click isBase={false} noPadding --button-color={"var(--main-background)"}>
-	<div class="layout">
+	<article class="layout">
 		<slot />
-	</div>
+	</article>
 </ButtonBase>
 
 <style lang="scss">

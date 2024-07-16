@@ -20,35 +20,37 @@
 </script>
 
 <div class="menu" use:melt={$menu}>
-	<SomeDiv --menu-item-padding={menu_padding} --font-size={font_size}>
-		<MangaDexVarThemeProvider>
-			{#each items as item, index}
-				{#if item}
-					<ContextMenuItem
-						icon={item.icon}
-						label={item.label}
-						tabindex={index}
-						on:click={async (e) => {
-							const onClick = item?.onClick;
-							if (onClick) {
-								const res = onClick(e);
-								if (typeof res == "object") {
-									await res;
+	<MangaDexVarThemeProvider>
+		<div class="inner">
+			<SomeDiv --menu-item-padding={menu_padding} --font-size={font_size}>
+				{#each items as item, index}
+					{#if item}
+						<ContextMenuItem
+							icon={item.icon}
+							label={item.label}
+							tabindex={index}
+							on:click={async (e) => {
+								const onClick = item?.onClick;
+								if (onClick) {
+									const res = onClick(e);
+									if (typeof res == "object") {
+										await res;
+									}
 								}
-							}
-							dispatch("menuItemClick", e.detail);
-						}}
-						isDisabled={item.disabled}
-						element={item_}
-					/>
-					{#if index < items.length - 1}
-						<hr use:melt={$separator} />
+								dispatch("menuItemClick", e.detail);
+							}}
+							isDisabled={item.disabled}
+							element={item_}
+						/>
+						{#if index < items.length - 1}
+							<hr use:melt={$separator} />
+						{/if}
 					{/if}
-				{/if}
-			{/each}
-			<div use:melt={$arrow} />
-		</MangaDexVarThemeProvider>
-	</SomeDiv>
+				{/each}
+				<div use:melt={$arrow} />
+			</SomeDiv>
+		</div>
+	</MangaDexVarThemeProvider>
 </div>
 
 <style lang="scss">
@@ -59,6 +61,12 @@
 		border-radius: 0.25em;
 		height: fit-content;
 		overflow: hidden;
+		z-index: 1;
+		.inner {
+			border-color: var(--mid-tone);
+			border-style: solid;
+			border-width: 1px;
+		}
 	}
 	hr {
 		width: 100%;

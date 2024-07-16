@@ -88,9 +88,8 @@
 	$: failed = $download_state == ChapterDownloadState.Failed;
 </script>
 
-<div
+<article
 	class="border"
-	role="article"
 	on:contextmenu={(e) => {
 		e.preventDefault();
 	}}
@@ -260,7 +259,7 @@
 			</div>
 		</div>
 	</div>
-</div>
+</article>
 
 <style lang="scss">
 	.buttons {
