@@ -32,10 +32,10 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		gap: 5px;
+		gap: 10px;
 	}
 	div.noCenter {
-		align-items: start;
+		justify-content: start;
 	}
 	.oneLine {
 		display: -webkit-box;
