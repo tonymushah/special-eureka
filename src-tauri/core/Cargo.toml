@@ -8,7 +8,6 @@ repository = "https://github.com/tonymushah/special-eureka"
 default-run = "special-eureka"
 edition = "2021"
 exclude = ["./examples"]
-resolver = "2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

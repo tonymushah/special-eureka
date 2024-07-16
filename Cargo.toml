@@ -1,6 +1,7 @@
 [workspace]
 members = ["./src-tauri/core", "./src-tauri/mangadex"]
 default-members = ["./src-tauri/core"]
+resolver = "2"
 
 [workspace.dependencies]
 serde_json = "1.0"
