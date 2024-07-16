@@ -27,3 +27,6 @@ branch = "v1"
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"
 package = "tauri-plugin-speu-mangadex"
+
+[profile.dev]
+opt-level = 3

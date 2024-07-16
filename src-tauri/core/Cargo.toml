@@ -53,9 +53,6 @@ uuid.workspace = true
 [dependencies.mangadex]
 workspace = true
 
-[profile.dev]
-opt-level = 3
-
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
