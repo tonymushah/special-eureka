@@ -32,7 +32,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		gap: 10px;
+		gap: 5px;
 	}
 	div.noCenter {
 		justify-content: start;
