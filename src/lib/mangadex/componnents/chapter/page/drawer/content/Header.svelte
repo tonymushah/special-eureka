@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { LockIcon, UnlockIcon, XIcon } from "svelte-feather-icons";
+	import { XIcon } from "svelte-feather-icons";
+	import { RiPushpinLine, RiUnpinLine } from "svelte-remixicon";
 	import { derived } from "svelte/store";
 	import { isDrawerFixedWritable } from "../../contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "../../contexts/isDrawerOpen";
@@ -38,9 +39,9 @@
 		}}
 	>
 		{#if $fixed_}
-			<UnlockIcon />
+			<RiPushpinLine />
 		{:else}
-			<LockIcon />
+			<RiUnpinLine />
 		{/if}
 	</div>
 </section>
