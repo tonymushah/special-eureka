@@ -92,7 +92,7 @@ importers:
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^1.5.0
-        version: 1.5.0(react@18.3.1)
+        version: 1.6.1(react@18.3.1)
       '@graphql-codegen/cli':
         specifier: ^5.0.2
         version: 5.0.2(@parcel/watcher@2.4.1)(@types/node@20.14.9)(enquirer@2.4.1)(graphql@16.9.0)(typescript@5.5.2)
@@ -913,8 +913,8 @@ packages:
     resolution: {integrity: sha512-XEFXSlxiG5td2EJRe8vOmRbaXVgfcBlszKujvVmWIK/UpywWljQCfzAv3RQCGujWQ1RD4YYWEAqDXfuJiy8f5Q==}
     engines: {node: '>=6.9.0'}
 
-  '@chromatic-com/storybook@1.5.0':
-    resolution: {integrity: sha512-LkLKv7SWu/6kGep1ft2HA1T/cm14wU0zoW71gE4cZRcgUoRQJtyhITFTLHrjqAxz6bVqNgqzQtd5oBZ2nK3L3g==}
+  '@chromatic-com/storybook@1.6.1':
+    resolution: {integrity: sha512-x1x1NB3j4xpfeSWKr96emc+7ZvfsvH+/WVb3XCjkB24PPbT8VZXb3mJSAQMrSzuQ8+eQE9kDogYHH9Fj3tb/Cw==}
     engines: {node: '>=16.0.0', yarn: '>=1.22.18'}
 
   '@codemirror/language@6.0.0':
@@ -3094,8 +3094,8 @@ packages:
     resolution: {integrity: sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==}
     engines: {node: '>=10'}
 
-  chromatic@11.5.4:
-    resolution: {integrity: sha512-+J+CopeUSyGUIQJsU6X7CfvSmeVBs0j6LZ9AgF4+XTjI4pFmUiUXsTc00rH9x9W1jCppOaqDXv2kqJJXGDK3mA==}
+  chromatic@11.5.5:
+    resolution: {integrity: sha512-YS0GJwegF0vpMbwZE68/xJlI4SlUGMqI78V2ATAF19YwTHaq8jGP1CPQGKUSlgWUhzPtyu3ELy6Dvv/owYljAg==}
     hasBin: true
     peerDependencies:
       '@chromatic-com/cypress': ^0.*.* || ^1.0.0
@@ -3754,8 +3754,8 @@ packages:
   filelist@1.0.4:
     resolution: {integrity: sha512-w1cEuf3S+DrLCQL7ET6kz+gmlJdbq9J7yXCSjK/OZCPA+qEN1WyF4ZAf0YYJa4/shHJra2t/d/r8SV4Ji+x+8Q==}
 
-  filesize@10.1.2:
-    resolution: {integrity: sha512-Dx770ai81ohflojxhU+oG+Z2QGvKdYxgEr9OSA8UVrqhwNHjfH9A8f5NKfg83fEH8ZFA5N5llJo5T3PIoZ4CRA==}
+  filesize@10.1.4:
+    resolution: {integrity: sha512-ryBwPIIeErmxgPnm6cbESAzXjuEFubs+yKYLBZvg3CaiNcmkJChoOGcBSrZ6IwkMwPABwPpVXE6IlNdGJJrvEg==}
     engines: {node: '>= 10.4.0'}
 
   fill-range@7.1.1:
@@ -7233,10 +7233,10 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@chromatic-com/storybook@1.5.0(react@18.3.1)':
+  '@chromatic-com/storybook@1.6.1(react@18.3.1)':
     dependencies:
-      chromatic: 11.5.4
-      filesize: 10.1.2
+      chromatic: 11.5.5
+      filesize: 10.1.4
       jsonfile: 6.1.0
       react-confetti: 6.1.0(react@18.3.1)
       strip-ansi: 7.1.0
@@ -10102,7 +10102,7 @@ snapshots:
 
   chownr@2.0.0: {}
 
-  chromatic@11.5.4: {}
+  chromatic@11.5.5: {}
 
   citty@0.1.6:
     dependencies:
@@ -10885,7 +10885,7 @@ snapshots:
     dependencies:
       minimatch: 5.1.6
 
-  filesize@10.1.2: {}
+  filesize@10.1.4: {}
 
   fill-range@7.1.1:
     dependencies:
