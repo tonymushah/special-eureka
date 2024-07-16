@@ -1,0 +1,28 @@
+[workspace]
+members = ["./src-tauri/core", "./src-tauri/mangadex"]
+default-members = ["./src-tauri/core"]
+
+[workspace.dependencies]
+serde_json = "1.0"
+tauri-build = { version = "1.5.1" }
+tauri = "1"
+tokio = "1"
+anyhow = "1"
+uuid = "1"
+serde = "1.0"
+thiserror = "1"
+reqwest = "0.12"
+bytes = "1"
+async-graphql = "7"
+time = "0.3"
+mizuki = "0.2"
+url = "2.5"
+
+[workspace.dependencies.tauri-plugin-store]
+git = "https://github.com/tauri-apps/plugins-workspace"
+#tag = "v0.1.0"
+branch = "v1"
+
+[workspace.dependencies.mangadex]
+path = "./src-tauri/mangadex"
+package = "tauri-plugin-speu-mangadex"

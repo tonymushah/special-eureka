@@ -13,12 +13,12 @@ resolver = "2"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.5.1", features = [] }
+tauri-build = { workspace = true, features = [] }
 
 [dependencies]
 serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.6.2", features = [ "window-start-dragging", "window-hide", "window-unminimize", "window-minimize", "window-maximize", "window-set-decorations", "window-unmaximize", "process-relaunch", "window-set-content-protected",
+serde = { workspace = true, features = ["derive"] }
+tauri = { workspace = true, features = [ "window-start-dragging", "window-hide", "window-unminimize", "window-minimize", "window-maximize", "window-set-decorations", "window-unmaximize", "process-relaunch", "window-set-content-protected",
     "os-all",
     "window-create",
     "window-close",
@@ -40,23 +40,17 @@ tauri = { version = "1.6.2", features = [ "window-start-dragging", "window-hide"
     "linux-protocol-headers",
     "config-json5"
 ] }
-tokio = "1"
+tokio.workspace = true
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-anyhow = "1"
+anyhow.workspace = true
 window-shadows = "0.2"
 window-vibrancy = "0.4"
-uuid = "1"
 
-[dependencies.tauri-plugin-store]
-git = "https://github.com/tauri-apps/plugins-workspace"
-#tag = "v0.1.0"
-branch = "v1"
-
-[dependencies.tauri-plugin-speu-mangadex]
-path = "./mangadex"
+[dependencies.mangadex]
+workspace = true
 
 [profile.dev]
 opt-level = 3
@@ -68,6 +62,3 @@ default = ["custom-protocol"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
-
-[workspace]
-members = ["./mangadex"]
