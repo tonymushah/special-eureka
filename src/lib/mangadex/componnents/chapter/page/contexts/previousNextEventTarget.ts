@@ -90,3 +90,18 @@ export function addListenerToChapterThreadEventTarget(
 		previousNextEventTarget.removeEventListener(THREAD_EVENT_KEY, callback);
 	};
 }
+
+const CHANGE_GROUP_EVENT_KEY = "change-group";
+
+export function fireChapterChangeGroupThreadEvent() {
+	previousNextEventTarget.dispatchEvent(new Event(CHANGE_GROUP_EVENT_KEY));
+}
+
+export function addListenerToChapterChangeGroupEventTarget(
+	callback: EventListenerOrEventListenerObject
+) {
+	previousNextEventTarget.addEventListener(CHANGE_GROUP_EVENT_KEY, callback);
+	return () => {
+		previousNextEventTarget.removeEventListener(CHANGE_GROUP_EVENT_KEY, callback);
+	};
+}
