@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChangeGroups from "./content/ChangeGroups.svelte";
 	import Header from "./content/Header.svelte";
 	import Line from "./content/Line.svelte";
 	import Navigation from "./content/Navigation.svelte";
@@ -17,6 +18,7 @@
 	<Line />
 	<Thread />
 	<Uploaders />
+	<ChangeGroups />
 	<Line />
 	<Settings />
 </div>
