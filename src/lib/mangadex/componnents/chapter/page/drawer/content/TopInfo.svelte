@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from "$lib/ROUTES";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
-	import { BookIcon, FileIcon } from "svelte-feather-icons";
+	import { BookOpenIcon, FileIcon } from "svelte-feather-icons";
 	import { getCurrentChapterData } from "../../contexts/currentChapter";
 
 	const current = getCurrentChapterData();
@@ -9,19 +9,7 @@
 
 <section>
 	<div class="title">
-		<FileIcon />
-		{#if $current.title != undefined && $current.chapterNumber != undefined}
-			Chapter {$current.chapterNumber} - {$current.title}
-		{:else if $current.chapterNumber != undefined}
-			Chapter {$current.chapterNumber}
-		{:else if $current.isOneshot}
-			Oneshot
-		{:else}
-			??
-		{/if}
-	</div>
-	<div class="title">
-		<BookIcon />
+		<BookOpenIcon />
 		<div class="series">
 			{#if $current.series != undefined}
 				<Link
@@ -36,6 +24,18 @@
 				</Link>
 			{/if}
 		</div>
+	</div>
+	<div class="title">
+		<FileIcon />
+		{#if $current.title != undefined && $current.chapterNumber != undefined}
+			Chapter {$current.chapterNumber} - {$current.title}
+		{:else if $current.chapterNumber != undefined}
+			Chapter {$current.chapterNumber}
+		{:else if $current.isOneshot}
+			Oneshot
+		{:else}
+			??
+		{/if}
 	</div>
 </section>
 
