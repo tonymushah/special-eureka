@@ -1,6 +1,5 @@
 import type { UserRole } from "@mangadex/gql/graphql";
 import { generateContextStoresMethods } from "@mangadex/utils/contexts";
-import type { Invalidator, Readable, Subscriber, Unsubscriber } from "svelte/store";
 
 export class CurrentChapterTitle {
 	title: string;
