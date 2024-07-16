@@ -33,7 +33,7 @@
 		}
 	);
 	function toCurrentPage(page: number) {
-		console.log(page);
+		//console.log(page);
 		const current = widestrip_root?.querySelector(`div[data-page=\"${page}\"]`);
 		if (current != null) {
 			current.scrollIntoView();
