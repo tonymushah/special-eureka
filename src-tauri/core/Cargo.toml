@@ -8,17 +8,16 @@ repository = "https://github.com/tonymushah/special-eureka"
 default-run = "special-eureka"
 edition = "2021"
 exclude = ["./examples"]
-resolver = "2"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.5.1", features = [] }
+tauri-build = { workspace = true, features = [] }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.6.2", features = [ "window-start-dragging", "window-hide", "window-unminimize", "window-minimize", "window-maximize", "window-set-decorations", "window-unmaximize", "process-relaunch", "window-set-content-protected",
+serde_json.workspace = true
+serde = { workspace = true, features = ["derive"] }
+tauri = { workspace = true, features = [ "window-start-dragging", "window-hide", "window-unminimize", "window-minimize", "window-maximize", "window-set-decorations", "window-unmaximize", "process-relaunch", "window-set-content-protected",
     "os-all",
     "window-create",
     "window-close",
@@ -40,26 +39,19 @@ tauri = { version = "1.6.2", features = [ "window-start-dragging", "window-hide"
     "linux-protocol-headers",
     "config-json5"
 ] }
-tokio = "1"
+tokio.workspace = true
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-anyhow = "1"
+anyhow.workspace = true
 window-shadows = "0.2"
 window-vibrancy = "0.4"
-uuid = "1"
+tauri-plugin-store.workspace = true
+uuid.workspace = true
 
-[dependencies.tauri-plugin-store]
-git = "https://github.com/tauri-apps/plugins-workspace"
-#tag = "v0.1.0"
-branch = "v1"
-
-[dependencies.tauri-plugin-speu-mangadex]
-path = "./mangadex"
-
-[profile.dev]
-opt-level = 3
+[dependencies.mangadex]
+workspace = true
 
 [features]
 # by default Tauri runs in production mode
@@ -69,5 +61,6 @@ default = ["custom-protocol"]
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
 
-[workspace]
-members = ["./mangadex"]
+[[bin]]
+name = "special-eureka"
+path = "../bin/main.rs"
