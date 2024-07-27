@@ -46,7 +46,7 @@ importers:
         version: 10.0.0
       '@urql/svelte':
         specifier: ^4.2.0
-        version: 4.2.0(@urql/core@5.0.4(graphql@16.9.0))(svelte@4.2.18)
+        version: 4.2.1(@urql/core@5.0.4(graphql@16.9.0))(svelte@4.2.18)
       fast-xml-parser:
         specifier: ^4.4.0
         version: 4.4.0
@@ -2505,11 +2505,11 @@ packages:
   '@urql/core@5.0.4':
     resolution: {integrity: sha512-gl86J6B6gWXvvkx5omZ+CaGiPQ0chCUGM0jBsm0zTtkDQPRqufv0NSUN6sp2JhGGtTOB0NR6Pd+w7XAVGGyUOA==}
 
-  '@urql/svelte@4.2.0':
-    resolution: {integrity: sha512-88mvnJ+x1Dh/rKrbo7T0C0UnfY1Tv7HEeEg+hMsrZVAqxFbzGR7mXBaZo0XL0AYrvhtGGWsK3l/+Sfj8OoKDSg==}
+  '@urql/svelte@4.2.1':
+    resolution: {integrity: sha512-tzjt5qElu6EF4ns+AWLUFvvGFH+bDGEgLStHQTBu76puQcMCW374MrjxWM9lKA6lfA7iUyu1KXkIRhxNy09l4Q==}
     peerDependencies:
       '@urql/core': ^5.0.0
-      svelte: ^3.0.0 || ^4.0.0
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@vitest/expect@1.6.0':
     resolution: {integrity: sha512-ixEvFVQjycy/oNgHjqsL6AZCDduC+tflRluaHIzKIsdbzkLn2U/iBnVeJwB6HsIjQBdfMR8Z0tRxKUsvFJEeWQ==}
@@ -8628,7 +8628,7 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@urql/svelte@4.2.0(@urql/core@5.0.4(graphql@16.9.0))(svelte@4.2.18)':
+  '@urql/svelte@4.2.1(@urql/core@5.0.4(graphql@16.9.0))(svelte@4.2.18)':
     dependencies:
       '@urql/core': 5.0.4(graphql@16.9.0)
       svelte: 4.2.18
