@@ -2,6 +2,7 @@ use std::{
     fs::{create_dir_all, File},
     io::{BufReader, BufWriter, Read, Write},
     path::PathBuf,
+    time::Duration,
 };
 
 use async_graphql::Context;
@@ -13,12 +14,10 @@ use crate::utils::{get_app_handle_from_async_graphql, get_mangadex_client_from_g
 
 fn get_favicon_file_path_from_cache(base_url: &Url, config: &Config) -> crate::Result<PathBuf> {
     let dir = app_cache_dir(config)
-        .ok_or(async_graphql::Error::new("Can't find app_cache_dir"))?
+        .ok_or(crate::Error::AppCacheDirNotFound)?
         .join("favicons");
     create_dir_all(&dir)?;
-    let domain = base_url
-        .domain()
-        .ok_or(async_graphql::Error::new("Can't get domain from url"))?;
+    let domain = base_url.domain().ok_or(crate::Error::DomainUrlNotFound)?;
     Ok(dir.join(domain))
 }
 
@@ -51,15 +50,21 @@ async fn get_favicon_online<R: Runtime>(base_url: &Url, ctx: &Context<'_>) -> cr
     let client_md = get_mangadex_client_from_graphql_context::<R>(ctx)?;
     let client_md_inner = client_md.get_http_client();
     let client_md_read = client_md_inner.read().await;
-    let client = &client_md_read.client;
-    let favicon = favicon_picker::get_favicons_from_url(client, base_url)
-        .await
-        .map_err(|e| async_graphql::Error::new(e.to_string()))?
-        .into_iter()
-        .next()
-        .ok_or_else(|| async_graphql::Error::new("Can't find the favicon.ico"))?
-        .get_image_bytes(client)
-        .await?;
+    let client = client_md_read.client.clone();
+    let client2 = client_md_read.client.clone();
+    let base_url = base_url.clone();
+
+    let favicon = tauri::async_runtime::block_on(tokio::time::timeout(
+        Duration::from_secs(5),
+        async move {
+            Ok::<_, crate::Error>(favicon_picker::get_favicons_from_url(&client, &base_url).await?)
+        },
+    ))??
+    .into_iter()
+    .next()
+    .ok_or(crate::Error::FaviconNotFound)?
+    .get_image_bytes(&client2)
+    .await?;
     Ok(favicon)
 }
 

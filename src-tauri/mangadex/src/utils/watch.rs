@@ -122,7 +122,10 @@ where
     }
 }
 
-pub type SendDataResult = Result<(), String>;
+#[derive(thiserror::Error, Debug)]
+pub enum SendDataError {}
+
+pub type SendDataResult = Result<(), SendDataError>;
 
 pub trait SendData<T>: Send + Sync + Clone {
     fn send_data(&self, data: T) -> SendDataResult;

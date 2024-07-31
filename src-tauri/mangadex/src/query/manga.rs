@@ -49,7 +49,7 @@ impl MangaQueries {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let state = {
             if olasw.manga_utils().with_id(id).is_there() {
                 DownloadState::Downloaded {

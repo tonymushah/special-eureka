@@ -37,7 +37,7 @@ impl ChapterPagesQuery {
         let read_off_state = off_state.read().await;
         let inner_off_state = read_off_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState not found"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let chapter_utils = inner_off_state.chapter_utils().with_id(id);
         let data: Vec<Url> = chapter_utils
             .get_data_images()

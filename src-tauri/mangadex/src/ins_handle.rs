@@ -1,4 +1,4 @@
-mod error;
+pub mod error;
 
 use crate::intelligent_notification_system::DownloadEntry;
 use crate::utils::get_indentifier;

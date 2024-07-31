@@ -55,7 +55,7 @@ impl CoverGetUniqueQuery {
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState is not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let data: Cover = app_state.cover_utils().with_id(id).get_data()?.into();
         let _ = watches.cover.send_offline(data.clone());
         Ok(data)

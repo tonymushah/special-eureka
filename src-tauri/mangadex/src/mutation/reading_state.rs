@@ -25,7 +25,7 @@ impl ReadingStateMutations {
         let state = match state {
             ReadingStateEnum::Previous => ReadingState::Previous,
             ReadingStateEnum::Current => {
-                ReadingState::Current(page.ok_or(Error::new("the page should be setted"))?)
+                ReadingState::Current(page.ok_or(Error::ChapterReadingSetPage)?)
             }
             ReadingStateEnum::Next => ReadingState::Next,
         };

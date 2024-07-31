@@ -40,7 +40,7 @@ impl GetUniqueChapterQuery {
         let read_off_state = off_state.read().await;
         let inner_off_state = read_off_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState not found"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let chapter: Chapter = inner_off_state
             .chapter_utils()
             .with_id(id)

@@ -37,7 +37,7 @@ impl MangaMutations {
         let mut olasw = offline_app_state_write
             .clone()
             .map(|a| a.app_state.clone())
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let _ = watches.manga.send_offline({
             let data: Manga = olasw
                 .manga_download(id)
@@ -102,7 +102,7 @@ impl MangaMutations {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .clone()
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         olasw.manga_utils().with_id(id).delete()?;
         Ok(true)
     }

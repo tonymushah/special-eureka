@@ -32,7 +32,7 @@ impl UploadQueries {
                         return Ok(None);
                     }
                 }
-                Err(Error::new_with_source(e))
+                Err(Error::MangadexApi(e))
             }
         }
     }

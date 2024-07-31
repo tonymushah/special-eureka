@@ -19,9 +19,7 @@ impl DownloadStateQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let oas_r = oas.read().await;
-        let app_state = oas_r
-            .as_ref()
-            .ok_or(Error::new("Offline AppState is not mounted"))?;
+        let app_state = oas_r.as_ref().ok_or(Error::OfflineAppStateNotLoaded)?;
         let state = {
             if app_state.chapter_utils().with_id(chapter_id).is_there() {
                 DownloadState::Downloaded {
@@ -48,9 +46,7 @@ impl DownloadStateQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let oas_r = oas.read().await;
-        let app_state = oas_r
-            .as_ref()
-            .ok_or(Error::new("Offline AppState is not mounted"))?;
+        let app_state = oas_r.as_ref().ok_or(Error::OfflineAppStateNotLoaded)?;
         let state = {
             if app_state.cover_utils().with_id(cover_id).is_there() {
                 DownloadState::Downloaded {
@@ -77,9 +73,7 @@ impl DownloadStateQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
         let oas_r = oas.read().await;
-        let app_state = oas_r
-            .as_ref()
-            .ok_or(Error::new("Offline AppState is not mounted"))?;
+        let app_state = oas_r.as_ref().ok_or(Error::OfflineAppStateNotLoaded)?;
         let state = {
             if app_state.manga_utils().with_id(manga_id).is_there() {
                 DownloadState::Downloaded {

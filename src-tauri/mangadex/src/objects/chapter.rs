@@ -100,7 +100,7 @@ impl Chapter {
                     .get(ctx, o.id)
                     .await?
                     .get_relationships()
-                    .ok_or(Error::new("Empty relationshipTable"))?
+                    .ok_or(Error::EmptyRelationshipTable)?
                     .into())
             }
         }

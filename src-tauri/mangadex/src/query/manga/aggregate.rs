@@ -75,7 +75,7 @@ impl MangaAggregateQueries {
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState is not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let mut res: MangaAggregate = app_state
             .manga_utils()
             .with_id(self.manga_id)

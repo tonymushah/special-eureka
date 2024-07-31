@@ -92,7 +92,7 @@ impl ChapterQueries {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
-            .ok_or(async_graphql::Error::new("Offline AppState Not loaded"))?;
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
         let state = {
             if olasw.chapter_utils().with_id(id).is_there() {
                 DownloadState::Downloaded {

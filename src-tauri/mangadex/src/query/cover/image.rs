@@ -5,7 +5,8 @@ use std::{
     path::PathBuf,
 };
 
-use async_graphql::{Context, Enum, ErrorExtensions, Result};
+use crate::Result;
+use async_graphql::{Context, Enum, ErrorExtensions};
 use bytes::Bytes;
 use mangadex_api::CDN_URL;
 use tauri::Runtime;
@@ -92,10 +93,7 @@ impl CoverImageQuery {
             file.flush()?;
             Ok(body)
         } else {
-            Err(
-                async_graphql::Error::new("Error when fetching the cover image")
-                    .extend_with(|_, e| e.set("code", response.status().as_u16())),
-            )
+            Err(crate::Error::CoverFetch)
         }
     }
     async fn get_offline<'a, R: Runtime>(&'a self, ctx: &'a Context<'a>) -> Result<Bytes> {
@@ -103,7 +101,7 @@ impl CoverImageQuery {
         let read = offline_app_state.read().await;
         let bytes = read
             .as_ref()
-            .ok_or(async_graphql::Error::new("Offline AppState is not loaded"))?
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?
             .cover_utils()
             .with_id(self.cover_id)
             .get_image_buf()?;

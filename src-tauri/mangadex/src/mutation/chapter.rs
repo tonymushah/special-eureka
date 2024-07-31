@@ -46,7 +46,7 @@ impl ChapterMutations {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .clone()
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         olasw.chapter_utils().with_id(id).delete()?;
         Ok(true)
     }
@@ -64,7 +64,7 @@ impl ChapterMutations {
         let mut olasw = offline_app_state_write
             .clone()
             .map(|a| a.app_state.clone())
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let chapter_download = olasw.chapter_download(id);
         let res = match quality {
             DownloadMode::Normal => chapter_download.download_chapter(&mut olasw).await,
