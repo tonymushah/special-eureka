@@ -44,7 +44,7 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
     }
     pub fn handle(&'a self) -> SchemeResponseResult<tauri::http::Response> {
         let body: Bytes = self.get_image()?;
-        Ok(tauri::http::ResponseBuilder::new()
+        tauri::http::ResponseBuilder::new()
             .header("access-control-allow-origin", "*")
             .status(StatusCode::OK)
             // TODO Add jpeg mimetype
@@ -60,6 +60,6 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
                 .as_str(),
             )
             .body(body.to_vec())
-            .map_err(|e| SchemeResponseError::InternalError(e))?)
+            .map_err(SchemeResponseError::InternalError)
     }
 }

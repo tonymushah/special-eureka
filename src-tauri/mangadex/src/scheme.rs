@@ -17,7 +17,7 @@ use self::{chapters::handle_chapters, covers::handle_covers};
 type SchemeResponse = Result<tauri::http::Response, Box<dyn std::error::Error>>;
 
 #[derive(Debug, Default)]
-enum SchemeResponseError {
+pub enum SchemeResponseError {
     BadRequest(Vec<u8>),
     NotFound(Vec<u8>),
     NotLoaded,
@@ -103,9 +103,9 @@ impl<E: IntoResponse> IntoResponse for Result<tauri::http::Response, E> {
 pub fn parse_uri(req: &Request) -> SchemeResponseResult<Url> {
     Ok(Url::parse(req.uri())?)
 }
-pub fn get_offline_app_state<'a, R: Runtime>(
-    app: &'a AppHandle<R>,
-) -> SchemeResponseResult<State<'a, OfflineAppState>> {
+pub fn get_offline_app_state<R: Runtime>(
+    app: &AppHandle<R>,
+) -> SchemeResponseResult<State<'_, OfflineAppState>> {
     app.try_state::<OfflineAppState>()
         .ok_or(SchemeResponseError::NotLoaded)
 }
@@ -120,7 +120,7 @@ pub fn register_scheme<R: Runtime>(
                 if uri.domain() == Some("chapter") {
                     handle_chapters(app, req).into_response()
                 } else if uri.domain() == Some("covers") {
-                    handle_covers(app, req)
+                    handle_covers(app, req).into_response()
                 } else {
                     SchemeResponseError::NotFound(
                         String::from("The given domain is not defined").into_bytes(),
