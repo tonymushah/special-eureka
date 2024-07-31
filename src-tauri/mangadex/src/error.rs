@@ -64,6 +64,8 @@ pub enum Error {
     MangaDexStoreNotFound,
     #[error(transparent)]
     Elapsed(#[from] tokio::time::error::Elapsed),
+    #[error(transparent)]
+    TokioJoinError(#[from] tokio::task::JoinError),
 }
 
 impl From<favicon_picker::error::Error> for Error {
