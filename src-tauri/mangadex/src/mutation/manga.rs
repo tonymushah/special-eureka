@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
     create::CreateMangaParam, create_relation::MangaCreateRelationParam, list::MangaListParams,
     submit_draft::SubmitMangaDraftParams, update::UpdateMangaParam,

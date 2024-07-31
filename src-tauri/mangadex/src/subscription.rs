@@ -1,7 +1,8 @@
 use std::sync::Arc;
 use std::sync::RwLock;
 
-use async_graphql::{Context, Result, Subscription};
+use crate::Result;
+use async_graphql::{Context, Subscription};
 use tauri::{EventHandler, Window, WindowEvent};
 use tokio::time::{sleep, Duration};
 use tokio_stream::Stream;

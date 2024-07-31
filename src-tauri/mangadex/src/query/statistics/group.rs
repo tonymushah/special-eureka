@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use uuid::Uuid;
 
 use crate::{

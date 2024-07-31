@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api::{
     utils::upload::{abandon_session, check_and_abandon_session_if_exists},
     v5::upload::upload_session_id::post::UploadImage,

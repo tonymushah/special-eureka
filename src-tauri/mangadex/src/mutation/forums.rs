@@ -1,4 +1,5 @@
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::forums::create::CreateForumThreadParams;
 
 use crate::utils::get_mangadex_client_from_graphql_context_with_auth_refresh;

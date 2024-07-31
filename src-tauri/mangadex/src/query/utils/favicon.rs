@@ -11,10 +11,7 @@ use url::Url;
 
 use crate::utils::{get_app_handle_from_async_graphql, get_mangadex_client_from_graphql_context};
 
-fn get_favicon_file_path_from_cache(
-    base_url: &Url,
-    config: &Config,
-) -> async_graphql::Result<PathBuf> {
+fn get_favicon_file_path_from_cache(base_url: &Url, config: &Config) -> crate::Result<PathBuf> {
     let dir = app_cache_dir(config)
         .ok_or(async_graphql::Error::new("Can't find app_cache_dir"))?
         .join("favicons");
@@ -28,7 +25,7 @@ fn get_favicon_file_path_from_cache(
 fn get_favicon_file_buf_read_from_cache(
     base_url: &Url,
     config: &Config,
-) -> async_graphql::Result<BufReader<File>> {
+) -> crate::Result<BufReader<File>> {
     Ok(BufReader::new(File::open(
         get_favicon_file_path_from_cache(base_url, config)?,
     )?))
@@ -37,23 +34,20 @@ fn get_favicon_file_buf_read_from_cache(
 fn get_favicon_file_buf_write_from_cache(
     base_url: &Url,
     config: &Config,
-) -> async_graphql::Result<BufWriter<File>> {
+) -> crate::Result<BufWriter<File>> {
     Ok(BufWriter::new(File::create(
         get_favicon_file_path_from_cache(base_url, config)?,
     )?))
 }
 
-fn get_favicon_from_cache(base_url: &Url, config: &Config) -> async_graphql::Result<Bytes> {
+fn get_favicon_from_cache(base_url: &Url, config: &Config) -> crate::Result<Bytes> {
     let mut reader = get_favicon_file_buf_read_from_cache(base_url, config)?;
     let mut buf = Vec::<u8>::new();
     reader.read_to_end(&mut buf)?;
     Ok(buf.into())
 }
 
-async fn get_favicon_online<R: Runtime>(
-    base_url: &Url,
-    ctx: &Context<'_>,
-) -> async_graphql::Result<Bytes> {
+async fn get_favicon_online<R: Runtime>(base_url: &Url, ctx: &Context<'_>) -> crate::Result<Bytes> {
     let client_md = get_mangadex_client_from_graphql_context::<R>(ctx)?;
     let client_md_inner = client_md.get_http_client();
     let client_md_read = client_md_inner.read().await;
@@ -69,10 +63,7 @@ async fn get_favicon_online<R: Runtime>(
     Ok(favicon)
 }
 
-pub async fn get_favicon<R: Runtime>(
-    base_url: &Url,
-    ctx: &Context<'_>,
-) -> async_graphql::Result<Bytes> {
+pub async fn get_favicon<R: Runtime>(base_url: &Url, ctx: &Context<'_>) -> crate::Result<Bytes> {
     let app = get_app_handle_from_async_graphql::<R>(ctx)?;
     if let Ok(res) = get_favicon_from_cache(base_url, app.config().as_ref()) {
         Ok(res)

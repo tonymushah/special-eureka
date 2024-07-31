@@ -1,4 +1,5 @@
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::read_marker::batch_read_marker::MarkChapterBatchParam;
 
 use crate::utils::{

@@ -30,7 +30,7 @@ impl Deref for AppStateInner {
 }
 
 impl AppStateInner {
-    pub async fn init<R: Runtime>(ctx: &Context<'_>) -> async_graphql::Result<Self> {
+    pub async fn init<R: Runtime>(ctx: &Context<'_>) -> crate::Result<Self> {
         let client = get_mangadex_client_from_graphql_context::<R>(ctx)?;
         let watches1 = get_watches_from_graphql_context::<R>(ctx)?.deref().clone();
         let watches2 = watches1.clone();

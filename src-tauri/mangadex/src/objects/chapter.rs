@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     v5::{ChapterAttributes as Attributes, ChapterObject},

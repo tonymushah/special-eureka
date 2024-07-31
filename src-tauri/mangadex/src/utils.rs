@@ -78,7 +78,7 @@ pub fn get_notification_handle_mut() -> Result<&'static mut String> {
 
 pub(crate) fn get_mangadex_client_from_graphql_context<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<State<'ctx, MangaDexClient>> {
+) -> crate::Result<State<'ctx, MangaDexClient>> {
     get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<MangaDexClient>()
         .ok_or(async_graphql::Error::new("MangaDexClient not found"))
@@ -86,7 +86,7 @@ pub(crate) fn get_mangadex_client_from_graphql_context<'ctx, R: Runtime>(
 
 pub(crate) fn get_watches_from_graphql_context<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<State<'ctx, Watches>> {
+) -> crate::Result<State<'ctx, Watches>> {
     get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<Watches>()
         .ok_or(async_graphql::Error::new("Watches not found"))
@@ -94,19 +94,19 @@ pub(crate) fn get_watches_from_graphql_context<'ctx, R: Runtime>(
 
 pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<&'ctx AppHandle<R>> {
+) -> crate::Result<&'ctx AppHandle<R>> {
     ctx.data::<AppHandle<R>>()
 }
 
 pub(crate) fn get_window_from_async_graphql<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<&'ctx Window<R>> {
+) -> crate::Result<&'ctx Window<R>> {
     ctx.data::<Window<R>>()
 }
 
 pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<State<'ctx, OfflineAppState>> {
+) -> crate::Result<State<'ctx, OfflineAppState>> {
     get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<OfflineAppState>()
         .ok_or(async_graphql::Error::new("OfflineAppState not found"))
@@ -114,7 +114,7 @@ pub(crate) fn get_offline_app_state<'ctx, R: Runtime>(
 
 pub(crate) fn get_last_time_token_when_fetched<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<State<'ctx, LastTimeTokenWhenFecthed>> {
+) -> crate::Result<State<'ctx, LastTimeTokenWhenFecthed>> {
     get_app_handle_from_async_graphql::<R>(ctx)?
         .try_state::<LastTimeTokenWhenFecthed>()
         .ok_or(async_graphql::Error::new(
@@ -124,7 +124,7 @@ pub(crate) fn get_last_time_token_when_fetched<'ctx, R: Runtime>(
 
 pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<State<'ctx, MangaDexClient>> {
+) -> crate::Result<State<'ctx, MangaDexClient>> {
     let client = get_mangadex_client_from_graphql_context::<R>(ctx)?;
     let last_time_fetched = get_last_time_token_when_fetched::<R>(ctx)?;
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
@@ -154,7 +154,7 @@ pub(crate) async fn get_mangadex_client_from_graphql_context_with_auth_refresh<'
 
 pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<bool> {
+) -> crate::Result<bool> {
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
@@ -168,7 +168,7 @@ pub(crate) async fn mount_offline_app_state<'ctx, R: Runtime>(
 
 pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<bool> {
+) -> crate::Result<bool> {
     let watches = get_watches_from_graphql_context::<R>(ctx)?;
     let offline_app_state = get_offline_app_state::<R>(ctx)?;
     let mut offline_app_state_write = offline_app_state.write().await;
@@ -182,7 +182,7 @@ pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
 
 pub(crate) async fn get_store<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
-) -> async_graphql::Result<State<'ctx, MangaDexStoreState<R>>> {
+) -> crate::Result<State<'ctx, MangaDexStoreState<R>>> {
     let app = get_app_handle_from_async_graphql::<R>(ctx)?;
     app.try_state::<MangaDexStoreState<R>>()
         .ok_or(Error::new("Unable to load the MangaDexStore"))

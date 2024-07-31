@@ -4,7 +4,8 @@ pub mod list;
 
 use std::{collections::HashMap, ops::Deref};
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
     aggregate::MangaAggregateParam, feed::MangaFeedParams, get_draft::GetMangaDraftParams,
     get_drafts::MangaDraftsParams, get_relation_list::MangaRelationParam, list::MangaListParams,

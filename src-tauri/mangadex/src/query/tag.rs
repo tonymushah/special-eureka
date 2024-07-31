@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
     v5::{Results, TagAttributes},
     ApiObject, ApiObjectNoRelationships,

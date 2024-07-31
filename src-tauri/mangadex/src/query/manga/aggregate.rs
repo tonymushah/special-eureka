@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
 use mangadex_desktop_api2::utils::manga_aggregate::MangaAggregateParams;
 use uuid::Uuid;

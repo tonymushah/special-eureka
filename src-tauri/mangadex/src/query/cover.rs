@@ -2,7 +2,8 @@ pub mod get_unique;
 pub mod image;
 pub mod list;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use bytes::Bytes;
 use mangadex_api_input_types::cover::list::CoverListParam;
 use mangadex_api_types_rust::RelationshipType;

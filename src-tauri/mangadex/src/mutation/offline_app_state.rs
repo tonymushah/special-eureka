@@ -1,4 +1,5 @@
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 
 use crate::utils::{mount_offline_app_state, unmount_offline_app_state};
 

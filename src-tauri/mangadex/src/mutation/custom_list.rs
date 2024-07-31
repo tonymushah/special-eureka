@@ -1,4 +1,5 @@
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::custom_list::{
     add_manga::CustomListAddMangaParam, create::CustomListCreateParam,
     remove_manga::CustomListRemoveMangaParam, update::CustomListUpdateParams,

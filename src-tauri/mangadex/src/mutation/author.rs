@@ -1,8 +1,9 @@
-use async_graphql::{Context, Object, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::author::{create::AuthorCreateParams, edit::AuthorEditParams};
 use mangadex_api_schema_rust::{v5::AuthorAttributes, ApiObjectNoRelationships};
 use uuid::Uuid;
 
+use crate::Result;
 use crate::{
     objects::author::Author,
     utils::{

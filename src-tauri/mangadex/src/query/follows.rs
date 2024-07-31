@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
     mangas::UserFollowedMangaParams, users::UserFollowedUserParams,

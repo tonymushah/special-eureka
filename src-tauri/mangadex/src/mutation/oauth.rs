@@ -1,6 +1,7 @@
 use std::ops::{Add, Deref};
 
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::v5::oauth::ClientInfo;
 use mangadex_api_types_rust::{Password, Username};

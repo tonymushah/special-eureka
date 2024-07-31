@@ -2,7 +2,8 @@ pub mod get_unique;
 pub mod list;
 pub mod pages;
 
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
