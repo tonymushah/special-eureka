@@ -6,7 +6,7 @@ use std::{
 };
 
 use crate::Result;
-use async_graphql::{Context, Enum, ErrorExtensions};
+use async_graphql::{Context, Enum};
 use bytes::Bytes;
 use mangadex_api::CDN_URL;
 use tauri::Runtime;
