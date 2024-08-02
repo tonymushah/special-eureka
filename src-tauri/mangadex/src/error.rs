@@ -72,6 +72,8 @@ pub enum Error {
     TryFromHandleCoversParamsToCache(
         #[from] crate::scheme::covers::TryFromHandleCoversParamsToCache,
     ),
+    #[error("Got an error while joining a thread")]
+    StdThreadJoinError,
 }
 
 impl From<favicon_picker::error::Error> for Error {

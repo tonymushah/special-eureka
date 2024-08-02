@@ -2,11 +2,11 @@ use std::{
     fs::{create_dir_all, File},
     io::{BufReader, BufWriter, Read, Write},
     path::PathBuf,
-    time::Duration,
 };
 
 use async_graphql::Context;
 use bytes::Bytes;
+use favicon_picker::Favicon;
 use tauri::{api::path::app_cache_dir, Config, Runtime};
 use url::Url;
 
@@ -54,12 +54,19 @@ async fn get_favicon_online<R: Runtime>(base_url: &Url, ctx: &Context<'_>) -> cr
     let client2 = client_md_read.client.clone();
     let base_url = base_url.clone();
 
-    let favicon = tauri::async_runtime::block_on(tokio::time::timeout(
-        Duration::from_secs(5),
-        async move {
-            Ok::<_, crate::Error>(favicon_picker::get_favicons_from_url(&client, &base_url).await?)
-        },
-    ))??
+    let favicon = tauri::async_runtime::spawn_blocking(move || {
+        std::thread::spawn(move || -> crate::Result<Vec<Favicon>> {
+            let rt = tokio::runtime::Runtime::new()?;
+            rt.block_on(async move {
+                Ok::<_, crate::Error>(
+                    favicon_picker::get_favicons_from_url(&client, &base_url).await?,
+                )
+            })
+        })
+        .join()
+        .map_err(|_| crate::Error::StdThreadJoinError)
+    })
+    .await???
     .into_iter()
     .next()
     .ok_or(crate::Error::FaviconNotFound)?
