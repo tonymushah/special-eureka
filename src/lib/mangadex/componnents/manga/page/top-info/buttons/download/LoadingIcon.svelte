@@ -3,7 +3,7 @@
 </script>
 
 <div class="loading-icon">
-	<RefreshCwIcon size="24px" />
+	<RefreshCwIcon size="24" />
 </div>
 
 <style lang="scss">

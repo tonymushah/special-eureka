@@ -3,7 +3,7 @@
 </script>
 
 <div class="trash-can">
-	<TrashIcon size="24px" />
+	<TrashIcon size="24" />
 </div>
 
 <style lang="scss">

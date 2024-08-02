@@ -39,9 +39,9 @@
 		}}
 	>
 		{#if $fixed_}
-			<RiPushpinLine size="24px" />
+			<RiPushpinLine size="24" />
 		{:else}
-			<RiUnpinLine size="24px" />
+			<RiUnpinLine size="24" />
 		{/if}
 	</div>
 </section>

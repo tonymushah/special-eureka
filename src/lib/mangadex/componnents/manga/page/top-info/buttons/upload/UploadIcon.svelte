@@ -3,7 +3,7 @@
 </script>
 
 <div class="upload-icon">
-	<UploadIcon size="24px" />
+	<UploadIcon size="24" />
 </div>
 
 <style lang="scss">
