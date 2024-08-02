@@ -78,6 +78,7 @@
 
 <style lang="scss">
 	div.title {
+		transition: color 300ms ease-in-out;
 		h2 {
 			display: -webkit-box;
 			margin: 2px;
@@ -86,7 +87,6 @@
 			overflow: hidden;
 			-webkit-box-orient: vertical;
 		}
-		transition: color 300ms ease-in-out;
 	}
 	div.title:hover {
 		color: var(--primary);
@@ -96,9 +96,6 @@
 		color: var(--primary-l1);
 	}
 	.content {
-		.content-top {
-			width: 100%;
-		}
 		display: flex;
 		margin: 1rem;
 		flex-direction: column;
@@ -107,6 +104,9 @@
 		height: 20em;
 		justify-content: space-between;
 		width: 100%;
+		.content-top {
+			width: 100%;
+		}
 	}
 	.tags {
 		display: flex;

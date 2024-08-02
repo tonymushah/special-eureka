@@ -40,10 +40,10 @@
 		border-style: solid;
 		border-top: 0px;
 		border-bottom: 0px;
+		overflow-y: scroll;
 		.inner {
 			padding: 10px;
 		}
-		overflow-y: scroll;
 	}
 	aside.left {
 		left: 0;

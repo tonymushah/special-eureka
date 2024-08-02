@@ -21,6 +21,12 @@
 		margin-right: 1em;
 	}
 	div.error {
+		background-color: color-mix(in srgb, var(--danger-l1) 50%, var(--main-background) 0%);
+		border-left: 10px;
+		border-radius: 0.25rem;
+		border-color: var(--danger-l2);
+		color: var(--text-color);
+		padding: 1em;
 		h3 {
 			margin: 0em;
 		}
@@ -32,11 +38,5 @@
 			flex-direction: row;
 			overflow: hidden;
 		}
-		background-color: color-mix(in srgb, var(--danger-l1) 50%, var(--main-background) 0%);
-		border-left: 10px;
-		border-radius: 0.25rem;
-		border-color: var(--danger-l2);
-		color: var(--text-color);
-		padding: 1em;
 	}
 </style>
