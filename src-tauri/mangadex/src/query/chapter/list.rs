@@ -1,6 +1,7 @@
 use std::ops::{Deref, DerefMut};
 
-use async_graphql::{Context, Error, InputObject, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, InputObject, Object};
 use mangadex_api_input_types::chapter::list::ChapterListParams;
 use mangadex_api_schema_rust::v5::ChapterCollection;
 use mangadex_desktop_api2::utils::{
@@ -94,7 +95,7 @@ impl ChapterListQueries {
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState is not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let chapter_utils = app_state.chapter_utils();
         let stream = Box::pin(
             chapter_utils.get_chapters_by_stream_id(Box::pin(

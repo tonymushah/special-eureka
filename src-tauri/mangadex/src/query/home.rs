@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ChapterSortOrder, MangaDexDateTime, MangaSortOrder, OrderDirection};
 use time::Duration;

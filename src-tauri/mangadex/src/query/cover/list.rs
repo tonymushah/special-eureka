@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::cover::list::CoverListParam;
 
 use crate::{
@@ -28,7 +29,7 @@ impl CoverListQuery {
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState is not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let res: CoverResults = app_state.cover_utils().list(params).await?.into();
         {
             let _res = res.clone();

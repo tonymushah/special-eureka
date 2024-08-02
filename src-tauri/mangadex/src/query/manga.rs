@@ -4,7 +4,8 @@ pub mod list;
 
 use std::{collections::HashMap, ops::Deref};
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
     aggregate::MangaAggregateParam, feed::MangaFeedParams, get_draft::GetMangaDraftParams,
     get_drafts::MangaDraftsParams, get_relation_list::MangaRelationParam, list::MangaListParams,
@@ -48,7 +49,7 @@ impl MangaQueries {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let state = {
             if olasw.manga_utils().with_id(id).is_there() {
                 DownloadState::Downloaded {

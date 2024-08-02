@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api::{
     utils::upload::{abandon_session, check_and_abandon_session_if_exists},
     v5::upload::upload_session_id::post::UploadImage,
@@ -24,6 +25,14 @@ use crate::{
         get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
     },
 };
+
+#[derive(Debug, thiserror::Error)]
+pub enum ChapterUploadError {
+    #[error("No files has been uploaded")]
+    NoFileUploaded,
+    #[error("Got {} errors while uploading files", .0.len())]
+    UploadFiles(Vec<mangadex_api_schema_rust::v5::error::MangaDexError_>),
+}
 
 #[derive(Debug, Clone, Copy)]
 pub struct UploadMutations;
@@ -81,18 +90,16 @@ impl UploadMutations {
             .send()
             .await?;
         if !res.errors.is_empty() {
-            return Err(Error::new_with_source(res.errors.first().cloned().ok_or(
-                Error::new("The error array is not empty but any error has been found"),
-            )?));
+            return Err(ChapterUploadError::UploadFiles(res.errors.clone()).into());
         }
         if res.data.is_empty() {
-            return Err(Error::new("No files has been uploaded"));
+            return Err(ChapterUploadError::NoFileUploaded.into());
         }
         let data: UploadSessionFile = res
             .data
             .first()
             .cloned()
-            .ok_or(Error::new("No files has been uploaded"))?
+            .ok_or(ChapterUploadError::NoFileUploaded)?
             .into();
         let _ = watches.upload_session_file.send_data(data.clone());
         Ok(data)

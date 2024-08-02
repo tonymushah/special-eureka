@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
 use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
 use mangadex_api_types_rust::RelationshipType;
@@ -53,7 +54,7 @@ impl CoverMutations {
         let mut olasw = offline_app_state_write
             .clone()
             .map(|a| a.app_state.clone())
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let data: Cover = olasw
             .cover_download(id)
@@ -89,7 +90,7 @@ impl CoverMutations {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .clone()
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         olasw.cover_utils().with_id(id).delete()?;
         Ok(true)
     }

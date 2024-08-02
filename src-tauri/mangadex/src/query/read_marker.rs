@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::v5::MangaReadMarkers;
 use uuid::Uuid;
 
@@ -50,7 +51,7 @@ impl ReadMarkerQueries {
             });
             Ok(res.data)
         } else {
-            Err(Error::new("Invalid Response : Expected `MangaReadMarkers::Ungrouped` found `MangaReadMarkers::Grouped`"))
+            Err(Error::GotReadMarkersGrouped)
         }
     }
     pub async fn manga_read_markers_grouped(
@@ -81,7 +82,7 @@ impl ReadMarkerQueries {
                 })
                 .collect())
         } else {
-            Err(Error::new("Invalid Response : Expected `MangaReadMarkers::Grouped` found `MangaReadMarkers::Ungrouped`"))
+            Err(Error::GotReadMarkersUnGrouped)
         }
     }
     pub async fn user_history(&self, ctx: &Context<'_>) -> Result<Vec<UserHistoryEntry>> {

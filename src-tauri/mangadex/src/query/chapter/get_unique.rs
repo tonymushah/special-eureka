@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
@@ -39,7 +40,7 @@ impl GetUniqueChapterQuery {
         let read_off_state = off_state.read().await;
         let inner_off_state = read_off_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState not found"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let chapter: Chapter = inner_off_state
             .chapter_utils()
             .with_id(id)

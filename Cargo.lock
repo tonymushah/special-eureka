@@ -4849,6 +4849,7 @@ dependencies = [
  "serde_json",
  "tauri",
  "tauri-plugin-store",
+ "tempfile",
  "thiserror",
  "time",
  "tokio",

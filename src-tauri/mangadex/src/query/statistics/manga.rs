@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use uuid::Uuid;
 
 use crate::{
@@ -31,9 +32,7 @@ impl MangaStatisticsQueries {
         let res = statistics
             .get_key_value(&id)
             .map(|(k, v)| -> Statistics { Statistics::from((*k, *v)) })
-            .ok_or(Error::new(
-                "Can't find the statistics for the given manga id",
-            ))?;
+            .ok_or(Error::CannotFindStatistics)?;
 
         let _ = watches.manga_statistics.send_data(res);
 

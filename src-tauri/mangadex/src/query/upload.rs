@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 
 use crate::{
     objects::upload::session::UploadSession,
@@ -31,7 +32,7 @@ impl UploadQueries {
                         return Ok(None);
                     }
                 }
-                Err(Error::new_with_source(e))
+                Err(Error::MangadexApi(e))
             }
         }
     }

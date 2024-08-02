@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use uuid::Uuid;
 
 use crate::{
@@ -29,9 +30,7 @@ impl GroupStatisticsQueries {
         let res = statistics
             .get_key_value(&id)
             .map(|(k, v)| -> Statistics { Statistics::from((*k, *v)) })
-            .ok_or(Error::new(
-                "Can't find the statistics for the given group id",
-            ))?;
+            .ok_or(Error::CannotFindStatistics)?;
         let _ = watches.statistics.send_data(res);
         Ok(res)
     }

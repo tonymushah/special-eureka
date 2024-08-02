@@ -1,6 +1,7 @@
 pub mod me;
 
-use async_graphql::{Context, Result, Subscription};
+use crate::Result;
+use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 use uuid::Uuid;
 

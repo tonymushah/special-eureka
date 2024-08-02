@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, InputObject, Object, Result};
+use crate::Result;
+use async_graphql::{Context, InputObject, Object};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::custom_list::get_user_lists::UserCustomListParams;
 use mangadex_api_schema_rust::v5::CustomListListResponse;

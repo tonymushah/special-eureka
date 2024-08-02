@@ -14,10 +14,10 @@ pub struct UtilsQuery;
 
 #[Object]
 impl UtilsQuery {
-    pub async fn favicon(&self, ctx: &Context<'_>, url: Url) -> async_graphql::Result<Bytes> {
+    pub async fn favicon(&self, ctx: &Context<'_>, url: Url) -> crate::Result<Bytes> {
         get_favicon::<tauri::Wry>(&url, ctx).await
     }
-    pub async fn str_to_language(&self, input: String) -> async_graphql::Result<Language> {
+    pub async fn str_to_language(&self, input: String) -> crate::Result<Language> {
         Ok(Language::from_str(&input)?)
     }
     pub async fn language_to_str(&self, language: Language) -> String {

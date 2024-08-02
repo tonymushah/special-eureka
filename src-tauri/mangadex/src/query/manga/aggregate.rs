@@ -1,6 +1,7 @@
 use std::ops::Deref;
 
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
 use mangadex_desktop_api2::utils::manga_aggregate::MangaAggregateParams;
 use uuid::Uuid;
@@ -74,7 +75,7 @@ impl MangaAggregateQueries {
         let offline_app_state = oas.read().await;
         let app_state = offline_app_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState is not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let mut res: MangaAggregate = app_state
             .manga_utils()
             .with_id(self.manga_id)

@@ -1,10 +1,10 @@
-use async_graphql::{Context, Result, SelectionField, SimpleObject};
+use async_graphql::{Context, SelectionField, SimpleObject};
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_schema_rust::v5::{ChapterObject, Results};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
 
-use crate::{objects::GetId, query::manga::list::MangaListQueries};
+use crate::{objects::GetId, query::manga::list::MangaListQueries, Result};
 
 use self::item::MangaChapterItem;
 

@@ -2,19 +2,20 @@ pub mod get_unique;
 pub mod image;
 pub mod list;
 
-use async_graphql::{Context, Error, Object, Result};
-use bytes::Bytes;
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::cover::list::CoverListParam;
 use mangadex_api_types_rust::RelationshipType;
 use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
+use url::Url;
 use uuid::Uuid;
 
 use crate::{
+    cache::cover::CoverImageQuality,
     objects::{
         cover::{lists::CoverResults, Cover},
         ExtractReferenceExpansionFromContext,
     },
-    query::cover::image::CoverImageQuality,
     utils::{
         download_state::DownloadState,
         get_offline_app_state, get_watches_from_graphql_context,
@@ -48,7 +49,7 @@ impl CoverQueries {
         cover_id: Uuid,
         filename: String,
         mode: Option<CoverImageQuality>,
-    ) -> Result<Bytes> {
+    ) -> Result<Url> {
         CoverImageQuery {
             manga_id,
             cover_id,
@@ -64,7 +65,7 @@ impl CoverQueries {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
-            .ok_or(Error::new("Offline AppState Not loaded"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let state = {
             if olasw.cover_utils().with_id(id).is_there() {
                 DownloadState::Downloaded {

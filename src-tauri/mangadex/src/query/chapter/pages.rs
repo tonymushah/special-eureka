@@ -1,4 +1,5 @@
-use async_graphql::{Context, Error, Object, Result};
+use crate::{error::Error, Result};
+use async_graphql::{Context, Object};
 use url::Url;
 use uuid::Uuid;
 
@@ -36,7 +37,7 @@ impl ChapterPagesQuery {
         let read_off_state = off_state.read().await;
         let inner_off_state = read_off_state
             .as_ref()
-            .ok_or(Error::new("Offline AppState not found"))?;
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
         let chapter_utils = inner_off_state.chapter_utils().with_id(id);
         let data: Vec<Url> = chapter_utils
             .get_data_images()
@@ -60,7 +61,7 @@ impl ChapterPagesQuery {
                 let ext = i.extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
                     let i = i.to_str()?;
-                    Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
+                    Url::parse(format!("mangadex://chapter/{id}/data-saver/{i}").as_str()).ok()
                 } else {
                     None
                 }

@@ -9,6 +9,8 @@ use mizuki::MizukiPlugin;
 use subscription::Subscriptions;
 
 pub mod app_state;
+pub mod cache;
+pub mod error;
 pub mod ins_handle;
 pub mod intelligent_notification_system;
 pub mod mutation;
@@ -23,6 +25,10 @@ pub mod utils;
 type Q = Query;
 type M = Mutation;
 type S = Subscriptions;
+
+pub(crate) type Result<T, E = error::Error> = std::result::Result<T, E>;
+
+pub use error::Error;
 
 pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
     mizuki::Builder::new(

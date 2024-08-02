@@ -2,7 +2,8 @@ pub mod get_unique;
 pub mod list;
 pub mod pages;
 
-use async_graphql::{Context, Object, Result};
+use crate::Result;
+use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
@@ -91,7 +92,7 @@ impl ChapterQueries {
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
-            .ok_or(async_graphql::Error::new("Offline AppState Not loaded"))?;
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
         let state = {
             if olasw.chapter_utils().with_id(id).is_there() {
                 DownloadState::Downloaded {
