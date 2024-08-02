@@ -66,6 +66,12 @@ pub enum Error {
     Elapsed(#[from] tokio::time::error::Elapsed),
     #[error(transparent)]
     TokioJoinError(#[from] tokio::task::JoinError),
+    #[error(transparent)]
+    TryFromCoverImageQuality(#[from] crate::cache::cover::TryFromCoverImageQualityError),
+    #[error(transparent)]
+    TryFromHandleCoversParamsToCache(
+        #[from] crate::scheme::covers::TryFromHandleCoversParamsToCache,
+    ),
 }
 
 impl From<favicon_picker::error::Error> for Error {

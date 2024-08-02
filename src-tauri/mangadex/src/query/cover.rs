@@ -11,11 +11,11 @@ use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{
+    cache::cover::CoverImageQuality,
     objects::{
         cover::{lists::CoverResults, Cover},
         ExtractReferenceExpansionFromContext,
     },
-    query::cover::image::CoverImageQuality,
     utils::{
         download_state::DownloadState,
         get_offline_app_state, get_watches_from_graphql_context,
