@@ -135,14 +135,6 @@ export const currentSp = () => {
   return record
 }
 
-function StringOrUndefined(val: any) {
-  if (val === undefined) {
-    return undefined
-  }
-
-  return String(val)
-}
-
 // route function helpers
 type NonFunctionKeys<T> = { [K in keyof T]: T[K] extends Function ? never : K }[keyof T]
 type FunctionKeys<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T]
@@ -150,6 +142,11 @@ type FunctionParams<T> = T extends (...args: infer P) => any ? P : never
 
 const AllObjs = { ...PAGES, ...ACTIONS, ...SERVERS, ...LINKS }
 type AllTypes = typeof AllObjs
+
+export type Routes = keyof AllTypes extends `${string}/${infer Route}` ? `/${Route}` : keyof AllTypes
+export const routes = [
+	...new Set(Object.keys(AllObjs).map((route) => /^\/.*|[^ ]?\/.*$/.exec(route)?.[0] ?? route)),
+] as Routes[]
 
 /**
  * To be used like this: 
