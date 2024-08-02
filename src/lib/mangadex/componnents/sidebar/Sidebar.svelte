@@ -45,7 +45,7 @@
 	}
 	.sidebar.show.float:not(.rtl):hover {
 		aside.collapsed {
-			transform: translateX(-80px);
+			translate: -80px 0px;
 		}
 	}
 	.sidebar.show.float.rtl {
@@ -53,12 +53,13 @@
 	}
 	.sidebar.show.float.rtl:hover {
 		aside.collapsed {
-			transform: translateX(80px);
+			translate: 80px 0px;
 		}
 	}
 	aside {
-		transition: width ease-in-out 300ms;
-		transition: transform ease-in-out 300ms;
+		transition:
+			width ease-in-out 300ms,
+			translate ease-in-out 300ms;
 		background-color: var(--accent-l1);
 		height: 94cqh;
 		width: 256px;
