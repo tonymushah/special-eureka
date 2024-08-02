@@ -593,7 +593,7 @@ export type CoverListParam = {
 export type CoverQueries = {
   __typename?: 'CoverQueries';
   get: Cover;
-  getImage: Scalars['Bytes']['output'];
+  getImage: Scalars['Url']['output'];
   isDownloaded: DownloadState;
   list: CoverResults;
 };

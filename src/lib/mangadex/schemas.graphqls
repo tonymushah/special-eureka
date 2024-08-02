@@ -450,7 +450,7 @@ input CoverListParam {
 type CoverQueries {
 	list(params: CoverListParam! = {limit: null, offset: null, mangaIds: [], coverIds: [], uploaderIds: [], locales: [], order: null}): CoverResults!
 	get(id: UUID!): Cover!
-	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Bytes!
+	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Url!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
