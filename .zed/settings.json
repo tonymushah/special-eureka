@@ -8,17 +8,27 @@
       }
     }
   },
+  "file_types": {
+    "JSONC": [
+      "*.json5"
+    ]
+  },
   "format_on_save": "language_server",
   "languages": {
     "TypeScript": {
       "code_actions_on_format": {
         "source.organizeImports": true
-      }
+      },
+      "format_on_save": "on"
     },
     "TSX": {
       "code_actions_on_format": {
         "source.organizeImports": true
-      }
+      },
+      "format_on_save": "on"
+    },
+    "Svelte": {
+      "format_on_save": "on",
     }
   }
 }
