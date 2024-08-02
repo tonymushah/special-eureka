@@ -4,10 +4,10 @@ pub mod list;
 
 use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
-use bytes::Bytes;
 use mangadex_api_input_types::cover::list::CoverListParam;
 use mangadex_api_types_rust::RelationshipType;
 use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
+use url::Url;
 use uuid::Uuid;
 
 use crate::{
@@ -49,7 +49,7 @@ impl CoverQueries {
         cover_id: Uuid,
         filename: String,
         mode: Option<CoverImageQuality>,
-    ) -> Result<Bytes> {
+    ) -> Result<Url> {
         CoverImageQuery {
             manga_id,
             cover_id,
