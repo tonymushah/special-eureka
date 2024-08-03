@@ -1476,6 +1476,7 @@ type Mutation {
 	upload: UploadMutations!
 	offlineAppState: OfflineAppStateMutations!
 	user: UserMutations!
+	userOption: UserOptionMutations!
 }
 
 type OauthMutations {
@@ -2026,6 +2027,13 @@ input UserListParam {
 type UserMutations {
 	follow(id: UUID!): Boolean!
 	unfollow(id: UUID!): Boolean!
+}
+
+type UserOptionMutations {
+	setReadingMode(mode: ReadingMode!): ReadingMode!
+	setPageDirection(direction: Direction!): Direction!
+	setSidebarDirection(direction: Direction!): Direction!
+	setChapterLanguages(languages: [Language!]!): [Language!]!
 }
 
 type UserQueries {
