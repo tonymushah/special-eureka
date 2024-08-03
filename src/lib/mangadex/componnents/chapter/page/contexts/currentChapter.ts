@@ -91,7 +91,9 @@ export class CurrentChapterData {
 		this.uploader = uploader;
 		this.translatedLanguage = translatedLanguage;
 		if (title != undefined) {
-			this.title = title;
+			if (title.length != 0) {
+				this.title = title;
+			}
 		}
 		if (chapterNumber != undefined) {
 			this.chapterNumber = chapterNumber;
