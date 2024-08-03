@@ -151,17 +151,24 @@
 
 <style lang="scss">
 	section.top {
+		display: grid;
+		margin-top: 18px;
+		gap: 16px;
 		h1 {
 			display: -webkit-box;
-			-webkit-line-clamp: 3;
+			-webkit-line-clamp: 1;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
+			font-size: 40px;
+			margin: 0px;
+			padding: 0px;
 		}
 		h2 {
 			display: -webkit-box;
 			-webkit-line-clamp: 2;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
+			margin: 0px;
 		}
 	}
 	div.content {
