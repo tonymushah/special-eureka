@@ -6,13 +6,15 @@
 	import { blur } from "svelte/transition";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import getChapterDoublePageCurrentPage from "./utils/getChapterDoublePageCurrentPage";
 	import getChapterDoublePageCurrentPageIndex from "./utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
 	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+	import { Direction } from "@mangadex/gql/graphql";
 
+	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPage = getChapterDoublePageCurrentPage();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
@@ -58,10 +60,10 @@
 		const direction = $readingDirection;
 		const onNext = function () {
 			switch (direction) {
-				case ReadingDirection.Ltr:
+				case Direction.Ltr:
 					next();
 					break;
-				case ReadingDirection.Rtl:
+				case Direction.Rtl:
 					previous();
 					break;
 				default:
@@ -70,10 +72,10 @@
 		};
 		const onPrevious = function () {
 			switch (direction) {
-				case ReadingDirection.Ltr:
+				case Direction.Ltr:
 					previous();
 					break;
-				case ReadingDirection.Rtl:
+				case Direction.Rtl:
 					next();
 					break;
 				default:

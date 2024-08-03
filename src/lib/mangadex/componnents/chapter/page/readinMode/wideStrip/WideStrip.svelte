@@ -4,11 +4,14 @@
 <script lang="ts">
 	import { derived, get, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { onMount } from "svelte";
 	import { delay } from "lodash";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+
+	const readingDirection = getCurrentChapterDirection();
 	let widestrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
 	const isFromIntersector = writable(false);

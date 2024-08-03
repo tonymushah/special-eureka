@@ -4,10 +4,12 @@
 	import { blur } from "svelte/transition";
 	import { getChapterImageContext } from "../../contexts/images";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 
+	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
 	const dispatch = createEventDispatcher<{
 		next: {};
