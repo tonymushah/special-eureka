@@ -74,6 +74,8 @@
 	import { initIsDrawerFixedWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
 	import { initCurrentChapterReadingMode } from "@mangadex/componnents/chapter/page/contexts/currentChapterReadingMode";
 	import readingModeWritable from "./layout-query/readingMode";
+	import { initCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+	import readingDirectionWritable from "./layout-query/pageDirection";
 
 	export let data: LayoutData;
 
@@ -84,11 +86,13 @@
 	const fixed = initIsDrawerFixedWritable(writable(false));
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
+
 	$: images.set(data.pages.data);
 	const currentChapterData = initCurrentChapterData(
 		writable(layoutDataToCurrentChapterData(data))
 	);
 	initCurrentChapterReadingMode(readingModeWritable);
+	initCurrentChapterDirection(readingDirectionWritable);
 	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
 	$: currentPage.set(data.currentPage);
 	$: currentChapterData.set(layoutDataToCurrentChapterData(data));
