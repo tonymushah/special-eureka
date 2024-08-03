@@ -2,4 +2,13 @@
 	import ChapterPage from "@mangadex/componnents/chapter/page/ChapterPage.svelte";
 </script>
 
-<ChapterPage />
+<main>
+	<ChapterPage />
+</main>
+
+<style lang="scss">
+	main {
+		margin: 16px;
+		height: 100vh;
+	}
+</style>
