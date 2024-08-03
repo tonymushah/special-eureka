@@ -6,6 +6,10 @@ import { error } from "@sveltejs/kit";
 const query = graphql(`
 	query getChapterPageData($id: UUID!) {
 		chapter {
+			pages(id: $id) {
+				data
+				dataSaver
+			}
 			get(id: $id) {
 				id
 				attributes {
@@ -43,17 +47,21 @@ const query = graphql(`
 	}
 `);
 
-export const load: LayoutLoad = async ({ params }) => {
-	console.log("Insert");
+export const load: LayoutLoad = async ({ params, url }) => {
+	const startPage = url.searchParams.get("startPage");
+	const currentPage = Math.abs(Number(startPage));
 	const { id } = params;
 	const client = await getClient();
 	const result = await client.query(query, {
 		id
 	});
 	if (result.data != undefined) {
+		const pages = result.data.chapter.pages;
 		const data = result.data.chapter.get;
 		return {
-			data
+			data,
+			pages,
+			currentPage: isNaN(currentPage) ? 0 : currentPage
 		};
 	} else if (result.error != undefined) {
 		error(500, {
