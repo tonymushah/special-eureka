@@ -39,21 +39,27 @@
 		display: flex;
 		position: absolute;
 		top: 0;
+		z-index: 10;
 	}
 	.sidebar.show.float:not(.rtl) {
 		left: 0;
 	}
-	.sidebar.show.float:not(.rtl):hover {
+	.sidebar.show.float:not(.rtl) {
 		aside.collapsed {
-			translate: -80px 0px;
+			translate: -90px 0px;
+		}
+	}
+	.sidebar.show.float:hover {
+		aside.collapsed {
+			translate: 0px 0px;
 		}
 	}
 	.sidebar.show.float.rtl {
 		right: 0;
 	}
-	.sidebar.show.float.rtl:hover {
+	.sidebar.show.float.rtl {
 		aside.collapsed {
-			translate: 80px 0px;
+			translate: 90px 0px;
 		}
 	}
 	aside {
