@@ -18,6 +18,7 @@ pub mod user;
 pub mod user_option;
 
 use async_graphql::Object;
+use user_option::UserOptionMutations;
 
 use self::{
     api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
@@ -76,5 +77,8 @@ impl Mutation {
     }
     pub async fn user(&self) -> UserMutations {
         UserMutations
+    }
+    pub async fn user_option(&self) -> UserOptionMutations {
+        UserOptionMutations
     }
 }
