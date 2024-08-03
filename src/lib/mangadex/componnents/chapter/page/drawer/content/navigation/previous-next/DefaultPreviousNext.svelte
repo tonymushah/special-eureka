@@ -5,12 +5,14 @@
 		fireChapterNextEvent,
 		fireChapterPreviousEvent
 	} from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
-	import {
-		readingDirection as direction,
-		ReadingDirection
-	} from "@mangadex/componnents/chapter/page/stores/readingDirection";
+
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+
+	const direction = getCurrentChapterDirection();
+
 	const currentChapterPage = getChapterCurrentPageContext();
 	const images_context = getChapterImageContext();
 	$: next = function () {

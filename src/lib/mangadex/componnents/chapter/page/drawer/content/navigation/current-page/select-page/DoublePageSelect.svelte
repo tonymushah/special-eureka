@@ -5,16 +5,17 @@
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
-	import {
-		ReadingDirection,
-		readingDirection
-	} from "@mangadex/componnents/chapter/page/stores/readingDirection";
+
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
 	import { isArray } from "lodash";
 	import { derived, get } from "svelte/store";
 	import { slide } from "svelte/transition";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+
+	const readingDirection = getCurrentChapterDirection();
 	type Page = [number, number] | number;
 	const currentPageContext = getChapterCurrentPageContext();
 	const currentPageSelectedReadable = derived(

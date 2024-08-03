@@ -3,16 +3,16 @@
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
 	import getChapterImagesAsDoublePage from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterImagesAsDoublePage";
-	import {
-		readingDirection as direction,
-		ReadingDirection
-	} from "@mangadex/componnents/chapter/page/stores/readingDirection";
+
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ceil, isArray, random } from "lodash";
 	import { createEventDispatcher } from "svelte";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 
+	const direction = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
