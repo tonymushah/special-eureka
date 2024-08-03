@@ -1,4 +1,4 @@
-import type { UserRole } from "@mangadex/gql/graphql";
+import type { Language, UserRole } from "@mangadex/gql/graphql";
 import { generateContextStoresMethods } from "@mangadex/utils/contexts";
 
 export class CurrentChapterTitle {
@@ -61,6 +61,7 @@ export class CurrentChapterData {
 	groups: CurrentChapterGroup[] = [];
 	thread?: CurrentChapterThread;
 	canChangeGroups: boolean = false;
+	translatedLanguage: Language;
 	constructor({
 		id,
 		uploader,
@@ -71,7 +72,8 @@ export class CurrentChapterData {
 		groups,
 		volume,
 		thread,
-		canChangeGroups
+		canChangeGroups,
+		translatedLanguage
 	}: {
 		id: string;
 		uploader: CurrentChapterUploader;
@@ -83,9 +85,11 @@ export class CurrentChapterData {
 		volume?: string;
 		thread?: CurrentChapterThread;
 		canChangeGroups?: boolean;
+		translatedLanguage: Language;
 	}) {
 		this.id = id;
 		this.uploader = uploader;
+		this.translatedLanguage = translatedLanguage;
 		if (title != undefined) {
 			this.title = title;
 		}

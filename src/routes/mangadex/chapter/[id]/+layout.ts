@@ -34,6 +34,7 @@ const query = graphql(`
 						id
 						attributes {
 							username
+							roles
 						}
 					}
 				}
@@ -51,7 +52,6 @@ export const load: LayoutLoad = async ({ params }) => {
 	});
 	if (result.data != undefined) {
 		const data = result.data.chapter.get;
-		console.log(data);
 		return {
 			data
 		};
