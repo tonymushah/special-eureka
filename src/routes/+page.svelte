@@ -15,6 +15,7 @@
 	</div>
 	<div class="links">
 		<p><a href={route("/mangadex")}>Mangadex Home</a></p>
+		<p><a href={route("/grid-test")}>Grid test</a></p>
 	</div>
 </div>
 
