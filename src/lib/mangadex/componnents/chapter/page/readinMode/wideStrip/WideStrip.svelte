@@ -153,30 +153,31 @@
 
 <slot name="top" />
 
-<div
-	role="button"
-	tabindex="0"
-	class="wide-strip"
-	class:rtl={$rtl}
-	class:innerOverflow
-	bind:this={widestrip_root}
-	on:wheel|preventDefault={(e) => {
-		if (widestrip_root) {
-			if ($rtl) {
-				widestrip_root.scrollLeft -= e.deltaY;
-			} else {
-				widestrip_root.scrollLeft += e.deltaY;
+<div class="wide-strip-outer" class:innerOverflow>
+	<div
+		role="button"
+		tabindex="0"
+		class="wide-strip"
+		class:rtl={$rtl}
+		bind:this={widestrip_root}
+		on:wheel|preventDefault={(e) => {
+			if (widestrip_root) {
+				if ($rtl) {
+					widestrip_root.scrollLeft -= e.deltaY;
+				} else {
+					widestrip_root.scrollLeft += e.deltaY;
+				}
 			}
-		}
-	}}
->
-	<slot name="before" />
-	{#each $images as image, page}
-		<div data-page={page} use:mount>
-			<img on:drag|preventDefault src={image} alt={image} data-page={page} />
-		</div>
-	{/each}
-	<slot name="after" />
+		}}
+	>
+		<slot name="before" />
+		{#each $images as image, page}
+			<div data-page={page} use:mount>
+				<img on:drag|preventDefault src={image} alt={image} data-page={page} />
+			</div>
+		{/each}
+		<slot name="after" />
+	</div>
 </div>
 
 <slot name="bottom" />
@@ -189,15 +190,21 @@
 			display: flex;
 			width: 100%;
 			height: 100%;
+			img {
+				height: 100%;
+			}
 		}
 	}
 	.wide-strip.rtl {
 		flex-direction: row-reverse;
 	}
-	.wide-strip.innerOverflow {
+	.wide-strip-outer.innerOverflow {
 		overflow-x: scroll;
 		width: 100%;
-		height: calc(100cqh - var(--to-remove-height));
+		height: 90%;
+	}
+	.wide-strip-outer:not(.innerOverflow) {
+		display: contents;
 	}
 	img {
 		height: 100%;

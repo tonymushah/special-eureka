@@ -8,7 +8,7 @@
 
 <style lang="scss">
 	main {
-		margin: 16px;
+		margin: 10px;
 		height: 100vh;
 	}
 </style>

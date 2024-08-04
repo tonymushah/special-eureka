@@ -20,32 +20,37 @@
 		<OpenMenuButton />
 	{/if}
 	<ChapterDrawer>
-		{#if $shouldShowHeader}
-			<div
-				class="header"
-				transition:slide={{
-					axis: "y"
-				}}
-			>
-				<ChapterPageHeader
-					on:menuClick={() => {
-						$open = !$open;
+		<div class="chap-d-content">
+			{#if $shouldShowHeader}
+				<div
+					class="header"
+					transition:slide={{
+						axis: "y"
 					}}
-					on:menuPress={({ detail: e }) => {
-						if (e.key == "Enter") {
+				>
+					<ChapterPageHeader
+						on:menuClick={() => {
 							$open = !$open;
-						}
-					}}
-				/>
-			</div>
-		{/if}
-		<section class="content">
-			<ChapterReadingMode />
-		</section>
+						}}
+						on:menuPress={({ detail: e }) => {
+							if (e.key == "Enter") {
+								$open = !$open;
+							}
+						}}
+					/>
+				</div>
+			{/if}
+			<section class="content">
+				<ChapterReadingMode />
+			</section>
+		</div>
 	</ChapterDrawer>
 </article>
 
 <style lang="scss">
+	div.chap-d-content {
+		display: content;
+	}
 	article {
 		max-width: 100%;
 		height: 100%;

@@ -3,7 +3,6 @@
 	import { isDrawerFixedWritable } from "../contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "../contexts/isDrawerOpen";
 	import ChapterDrawerBase from "./base/ChapterDrawerBase.svelte";
-	import { LayersIcon, LockIcon, UnlockIcon, XIcon, ZapOffIcon } from "svelte-feather-icons";
 	import ChapterDrawerContent from "./ChapterDrawerContent.svelte";
 
 	const open = isDrawerOpenWritable();

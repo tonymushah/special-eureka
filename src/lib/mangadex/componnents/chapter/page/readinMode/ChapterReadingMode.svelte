@@ -16,22 +16,23 @@
 		fireChapterNextEvent,
 		fireChapterPreviousEvent
 	} from "../contexts/previousNextEventTarget";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 
 	const mode = getCurrentChapterReadingMode();
 	const opened = derived([isDrawerOpen(), isDrawerFixed()], ([$open, $fixed]) => $open && $fixed);
 	const isShouldFixed = derived(isDrawerFixed(), ($fixed) => !$fixed);
-	const headerHeight_ = derived(headerHeight, ($h) => {
+	const headerHeight_ = derived([headerHeight, isDefaultDecoration], ([$h, decorated]) => {
 		if ($h != 0) {
-			return $h + 17;
+			return !decorated ? $h : $h + 30;
 		} else {
-			return 0;
+			return !decorated ? 0 : 30;
 		}
 	});
 	$: open = $opened;
 	$: toRemoveHeight = `${$headerHeight_}px`;
 </script>
 
-<SomeDiv --to-remove-height={toRemoveHeight}>
+<SomeDiv --to-remove-height={"0"}>
 	{#if $mode == ReadingMode.DoublePage}
 		<div transition:fade class:fixed={$isShouldFixed}>
 			<DoublePage
@@ -44,7 +45,7 @@
 			/>
 		</div>
 	{:else if $mode == ReadingMode.LongStrip}
-		<div transition:fade class:fixed={$isShouldFixed}>
+		<div class="" transition:fade class:fixed={$isShouldFixed}>
 			<LongStrip />
 		</div>
 	{:else if $mode == ReadingMode.SinglePage}
@@ -89,11 +90,7 @@
 		transition-duration: 0.3s;
 		transition-property: width;
 		transition-timing-function: ease-in-out;
-		width: 97.5cqw;
+		width: 100%;
 		overflow-x: scroll;
-		container-type: inline-size;
-	}
-	div.wide.open {
-		width: calc(100cqw - 280px);
 	}
 </style>

@@ -114,7 +114,7 @@
 		}
 	}
 	.longstrip.innerOverflow {
-		height: calc(100cqh - var(--to-remove-height));
+		height: 100%;
 		width: 100%;
 		overflow-y: scroll;
 	}
