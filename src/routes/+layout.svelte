@@ -26,6 +26,7 @@
 <div class="outer" class:defaultDecoration={$isDefaultDecoration}>
 	{#if !$isDefaultDecoration}
 		<div
+			class="decoration"
 			transition:slide={{
 				axis: "y"
 			}}
@@ -40,11 +41,21 @@
 
 <style lang="scss">
 	.outer {
-		width: 100%;
+		width: 100vw;
 		height: 100cqh;
 		overflow: hidden;
+		display: grid;
+		grid-template-areas:
+			"decoration decoration decoration"
+			"content content content"
+			"content content content"
+			"content content content";
+		.decoration {
+			grid-area: decoration;
+		}
 		.inner {
-			height: 100cqh;
+			grid-area: content;
+			height: -webkit-fill-available;
 		}
 	}
 	.outer.defaultDecoration {

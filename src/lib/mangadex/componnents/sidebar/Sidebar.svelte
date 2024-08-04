@@ -67,7 +67,7 @@
 			width ease-in-out 300ms,
 			translate ease-in-out 300ms;
 		background-color: var(--accent-l1);
-		height: 94cqh;
+		height: -webkit-fill-available;
 		width: 256px;
 		display: flex;
 		flex-direction: column;
