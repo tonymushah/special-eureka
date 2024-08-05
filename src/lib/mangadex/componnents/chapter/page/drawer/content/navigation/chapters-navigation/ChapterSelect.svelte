@@ -126,12 +126,6 @@
 		li.isSelected {
 			background-color: var(--primary);
 		}
-		li.isSelected:hover {
-			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-hover) 30%);
-		}
-		li.isSelected:active {
-			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
-		}
 	}
 	.input {
 		display: grid;
