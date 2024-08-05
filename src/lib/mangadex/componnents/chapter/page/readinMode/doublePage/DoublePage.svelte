@@ -99,16 +99,7 @@
 
 {#if $currentPage}
 	<div class="double-page">
-		{#key $currentPage}
-			<div
-				transition:blur={{
-					duration: 100,
-					easing: quadOut
-				}}
-			>
-				<ZoomableImage src={$currentPage} alt={$currentPage} />
-			</div>
-		{/key}
+		<ZoomableImage src={$currentPage} alt={$currentPage} />
 	</div>
 {/if}
 

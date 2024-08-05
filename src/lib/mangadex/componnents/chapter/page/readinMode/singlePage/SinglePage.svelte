@@ -85,11 +85,7 @@
 -->
 {#if current_page}
 	<div class="single-page">
-		{#key current_page}
-			<div>
-				<ZoomableImage src={current_page} alt={current_page} />
-			</div>
-		{/key}
+		<ZoomableImage src={current_page} alt={current_page} />
 	</div>
 {/if}
 
@@ -97,8 +93,5 @@
 	.single-page {
 		height: 100%;
 		display: contents;
-		div {
-			display: contents;
-		}
 	}
 </style>
