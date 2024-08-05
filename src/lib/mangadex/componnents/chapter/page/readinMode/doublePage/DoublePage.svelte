@@ -13,6 +13,7 @@
 	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 	import { Direction } from "@mangadex/gql/graphql";
+	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -27,6 +28,7 @@
 	}>();
 	$: next = function () {
 		if ($currentPageIndex < $images_length - 1) {
+			resetZoom();
 			currentChapterPage.update(() => {
 				const index = $images_indexes[$currentPageIndex + 1];
 				if (isArray(index)) {
@@ -41,6 +43,7 @@
 	};
 	$: previous = function () {
 		if ($currentPageIndex > 0) {
+			resetZoom();
 			currentChapterPage.update(() => {
 				const index = $images_indexes[$currentPageIndex - 1];
 				if (isArray(index)) {

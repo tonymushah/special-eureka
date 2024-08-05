@@ -10,6 +10,7 @@
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";
 
 	const direction = getCurrentChapterDirection();
 
@@ -17,6 +18,7 @@
 	const images_context = getChapterImageContext();
 	$: next = function () {
 		if ($currentChapterPage < $images_context.length - 1) {
+			resetZoom();
 			$currentChapterPage++;
 		} else {
 			fireChapterNextEvent();
@@ -24,6 +26,7 @@
 	};
 	$: previous = function () {
 		if ($currentChapterPage > 0) {
+			resetZoom();
 			$currentChapterPage--;
 		} else {
 			fireChapterPreviousEvent();

@@ -8,6 +8,7 @@
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -18,6 +19,7 @@
 	const images_context = getChapterImageContext();
 	$: next = function () {
 		if ($currentChapterPage < $images_context.length - 1) {
+			resetZoom();
 			$currentChapterPage++;
 		} else {
 			dispatch("next", {});
@@ -25,6 +27,7 @@
 	};
 	$: previous = function () {
 		if ($currentChapterPage > 0) {
+			resetZoom();
 			$currentChapterPage--;
 		} else {
 			dispatch("previous", {});

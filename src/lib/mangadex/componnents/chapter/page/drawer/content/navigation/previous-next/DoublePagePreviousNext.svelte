@@ -11,6 +11,7 @@
 	import { derived } from "svelte/store";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";
 
 	const direction = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -24,6 +25,7 @@
 	}>();
 	$: next = function () {
 		if ($currentPageIndex < $images_length - 1) {
+			resetZoom();
 			currentChapterPage.update(() => {
 				const index = $images_indexes[$currentPageIndex + 1];
 				if (isArray(index)) {
@@ -38,6 +40,7 @@
 	};
 	$: previous = function () {
 		if ($currentPageIndex > 0) {
+			resetZoom();
 			currentChapterPage.update(() => {
 				const index = $images_indexes[$currentPageIndex - 1];
 				if (isArray(index)) {
