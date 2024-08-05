@@ -20,6 +20,6 @@
 
 <style lang="scss">
 	.main {
-		display: content;
+		display: contents;
 	}
 </style>
