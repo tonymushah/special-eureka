@@ -11,9 +11,9 @@
 				? undefined
 				: data.attributes.title;
 		const chapterNumber =
-			data.attributes.volume == null || data.attributes.volume == undefined
+			data.attributes.chapter == null || data.attributes.chapter == undefined
 				? undefined
-				: data.attributes.volume;
+				: data.attributes.chapter;
 		const uploader = new CurrentChapterUploader({
 			id: data.relationships.user.id,
 			name: data.relationships.user.attributes.username,
@@ -88,6 +88,7 @@
 	const images = initChapterImageContext();
 
 	$: images.set(data.pages.data);
+	//$: console.log(data);
 	const currentChapterData = initCurrentChapterData(
 		writable(layoutDataToCurrentChapterData(data))
 	);
