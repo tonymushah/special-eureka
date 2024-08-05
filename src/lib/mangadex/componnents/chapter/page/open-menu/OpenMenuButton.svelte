@@ -8,35 +8,42 @@
 	export let left = false;
 </script>
 
-<button
-	class:left
-	on:click={() => {
-		$open = !$open;
-	}}
-	transition:fade
->
-	<MenuIcon />
-</button>
+<section class:left>
+	<button
+		on:click={() => {
+			$open = !$open;
+		}}
+		transition:fade
+	>
+		<MenuIcon />
+	</button>
+</section>
 
 <style lang="scss">
-	button {
-		right: 0;
+	section {
+		z-index: 10;
 		position: absolute;
+		transition:
+			opacity 200ms ease-in-out,
+			background-color 200ms ease-in-out;
+	}
+	section:not(.left) {
+		right: 0;
+	}
+	section.left {
+		left: 0;
+	}
+	button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		background-color: var(--primary-l1);
 		opacity: 0.4;
-		transition:
-			opacity 200ms ease-in-out,
-			background-color 200ms ease-in-out;
+
 		border: 1px;
 		border-radius: 0.25em;
-		z-index: 10;
 	}
-	button.left {
-		left: 0;
-	}
+
 	button:hover {
 		background-color: color-mix(in srgb, var(--primary-l1) 70%, transparent 30%);
 		opacity: 1;
