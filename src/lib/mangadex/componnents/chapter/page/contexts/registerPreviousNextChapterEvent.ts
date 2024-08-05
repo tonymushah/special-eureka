@@ -25,7 +25,6 @@ export default function registerPreviousNextChapterEvent(): UnlistenFn {
 			nextUnlisten();
 		}
 		nextUnlisten = addListenerToChapterNextEventTarget(() => {
-			console.log("next");
 			const next = np.next;
 			if (next) {
 				goto(
@@ -48,7 +47,6 @@ export default function registerPreviousNextChapterEvent(): UnlistenFn {
 			previousUnlisten();
 		}
 		previousUnlisten = addListenerToChapterPreviousEventTarget(() => {
-			console.log("prev");
 			const previous = np.previous;
 			if (previous) {
 				goto(
