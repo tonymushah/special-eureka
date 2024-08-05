@@ -162,10 +162,10 @@
 			align-items: end;
 			justify-content: center;
 			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
+			transition: opacity 200ms ease-in-out;
 			h4 {
 				color: var(--text-color);
 			}
-			transition: opacity 200ms ease-in-out;
 			//animation: title-hovered-reverse 200ms ease-in-out;
 			//animation-fill-mode: both;
 		}
