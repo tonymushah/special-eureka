@@ -52,9 +52,9 @@ export default function registerPreviousNextChapterEvent(): UnlistenFn {
 			const previous = np.previous;
 			if (previous) {
 				goto(
-					route("/mangadex/chapter/[id]", {
+					`${route("/mangadex/chapter/[id]", {
 						id: previous
-					})
+					})}?startPage=end`
 				);
 			} else if (currentTitleId) {
 				goto(

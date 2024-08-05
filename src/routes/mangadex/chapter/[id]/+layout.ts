@@ -2,7 +2,6 @@ import { graphql } from "@mangadex/gql";
 import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
-
 export const ssr = false;
 
 const query = graphql(`
@@ -49,9 +48,11 @@ const query = graphql(`
 	}
 `);
 
+// TODO add data-saver support
 export const load: LayoutLoad = async ({ params, url }) => {
 	const startPage = url.searchParams.get("startPage");
-	const currentPage = Math.abs(Number(startPage));
+	const isEnd = startPage == "end";
+
 	const { id } = params;
 	const client = await getClient();
 	const result = await client.query(query, {
@@ -59,7 +60,9 @@ export const load: LayoutLoad = async ({ params, url }) => {
 	});
 	if (result.data != undefined) {
 		const pages = result.data.chapter.pages;
+		const pagesL = pages.data.length;
 		const data = result.data.chapter.get;
+		const currentPage = isEnd ? pagesL - 1 : Math.abs(Number(startPage));
 		return {
 			data,
 			pages,
