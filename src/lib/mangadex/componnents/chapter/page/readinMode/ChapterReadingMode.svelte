@@ -90,7 +90,6 @@
 		transition-duration: 0.3s;
 		transition-property: width;
 		transition-timing-function: ease-in-out;
-		width: 100%;
-		overflow-x: scroll;
+		display: contents;
 	}
 </style>
