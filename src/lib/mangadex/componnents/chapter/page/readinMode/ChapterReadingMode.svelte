@@ -45,7 +45,7 @@
 			/>
 		</div>
 	{:else if $mode == ReadingMode.LongStrip}
-		<div transition:fade class:fixed={$isShouldFixed}>
+		<div class="long" transition:fade class:fixed={$isShouldFixed}>
 			<LongStrip />
 		</div>
 	{:else if $mode == ReadingMode.SinglePage}
@@ -74,7 +74,10 @@
 </SomeDiv>
 
 <style lang="scss">
-	div:not(.none-selected, .wide) {
+	div:not(.none-selected, .wide, .long) {
+		display: contents;
+	}
+	div.long {
 		display: contents;
 	}
 	div.none-selected {
@@ -87,9 +90,6 @@
 		}
 	}
 	div.wide {
-		transition-duration: 0.3s;
-		transition-property: width;
-		transition-timing-function: ease-in-out;
 		display: contents;
 	}
 </style>

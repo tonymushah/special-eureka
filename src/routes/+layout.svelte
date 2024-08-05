@@ -42,8 +42,7 @@
 <style lang="scss">
 	.outer {
 		width: 100vw;
-		height: 100cqh;
-		overflow: hidden;
+		height: 96vh;
 		display: grid;
 		grid-template-areas:
 			"decoration decoration decoration"
@@ -55,11 +54,10 @@
 		}
 		.inner {
 			grid-area: content;
-			height: -webkit-fill-available;
 		}
 	}
 	.outer.defaultDecoration {
-		height: 100vh;
+		height: 100cqh;
 	}
 	:global(body) {
 		margin: 0px;

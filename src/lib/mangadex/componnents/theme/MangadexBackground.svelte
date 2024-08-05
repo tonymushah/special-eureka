@@ -13,5 +13,6 @@
 <style lang="scss">
 	div {
 		background-color: var(--main-background);
+		height: -webkit-fill-available;
 	}
 </style>

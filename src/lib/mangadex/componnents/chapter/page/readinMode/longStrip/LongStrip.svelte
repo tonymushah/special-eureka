@@ -43,7 +43,9 @@
 				if (longstrip_root != undefined) {
 					const current = longstrip_root.querySelector(`div[data-page=\"${page}\"]`);
 					if (current != null) {
-						current.scrollIntoView();
+						current.scrollIntoView({
+							block: "nearest"
+						});
 					}
 				}
 			}

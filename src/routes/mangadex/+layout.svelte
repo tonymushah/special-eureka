@@ -75,12 +75,13 @@
 		display: flex;
 		color: var(--text-color);
 		width: 100%;
-		height: -webkit-fill-available;
+		height: 100%;
 		.sidebar {
 			width: fit-content;
 		}
 		.inner {
 			width: -webkit-fill-available;
+			height: -webkit-fill-available;
 		}
 	}
 	.provider.isRTL {

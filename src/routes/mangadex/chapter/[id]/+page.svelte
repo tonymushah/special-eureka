@@ -22,11 +22,11 @@
 </main>
 
 <style lang="scss">
-	main {
-		margin-top: 10px;
+	main:not(.notFixed) {
+		padding-top: 9px;
 	}
 	main.notFixed {
-		margin: 10px;
-		margin-top: 20px;
+		padding: 10px;
+		padding-top: 10px;
 	}
 </style>
