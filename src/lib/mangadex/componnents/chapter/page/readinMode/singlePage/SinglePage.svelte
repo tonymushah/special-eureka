@@ -86,12 +86,7 @@
 {#if current_page}
 	<div class="single-page">
 		{#key current_page}
-			<div
-				transition:blur={{
-					duration: 200,
-					easing: quintOut
-				}}
-			>
+			<div>
 				<ZoomableImage src={current_page} alt={current_page} />
 			</div>
 		{/key}
