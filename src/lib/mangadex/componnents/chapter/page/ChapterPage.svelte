@@ -49,11 +49,26 @@
 
 <style lang="scss">
 	div.chap-d-content {
-		display: content;
+		display: grid;
+		height: -webkit-fill-available;
+		width: 100%;
+		grid-template-areas:
+			"header header header header"
+			"content content content content"
+			"content content content content"
+			"content content content content";
+		div.header {
+			grid-area: header;
+		}
+		section.content {
+			grid-area: content;
+			height: -webkit-fill-available;
+			overflow: hidden;
+			display: grid;
+		}
 	}
 	article {
-		max-width: 100%;
-		height: 100%;
+		display: contents;
 	}
 	section.content {
 		width: 100%;

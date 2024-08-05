@@ -9,6 +9,5 @@
 <style lang="scss">
 	main {
 		margin: 10px;
-		height: 100vh;
 	}
 </style>

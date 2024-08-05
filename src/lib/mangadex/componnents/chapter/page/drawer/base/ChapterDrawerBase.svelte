@@ -28,19 +28,19 @@
 
 <style lang="scss">
 	aside {
-		height: 100%;
+		height: 100cqh;
 		width: 0;
 		z-index: 1;
 		top: 0;
 		background-color: var(--main-background);
 		color: var(--text-color);
 		overflow-x: hidden;
+		overflow-y: scroll;
 		transition-duration: 0.5s;
 		border-color: var(--accent-l2);
 		border-style: solid;
 		border-top: 0px;
 		border-bottom: 0px;
-		overflow-y: scroll;
 		.inner {
 			padding: 10px;
 		}

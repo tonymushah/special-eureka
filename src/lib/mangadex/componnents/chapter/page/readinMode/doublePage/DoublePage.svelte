@@ -111,3 +111,9 @@
 		{/key}
 	</div>
 {/if}
+
+<style lang="scss">
+	div {
+		display: contents;
+	}
+</style>

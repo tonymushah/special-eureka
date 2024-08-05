@@ -49,6 +49,7 @@
 		display: grid;
 	}
 	div.tooltip {
+		z-index: 10;
 		div.content {
 			border-radius: 0.5rem;
 			box-shadow:
@@ -64,6 +65,5 @@
 				color: var(--text-color);
 			}
 		}
-		z-index: 10;
 	}
 </style>

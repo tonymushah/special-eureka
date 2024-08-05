@@ -3,6 +3,8 @@ import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
 
+export const ssr = false;
+
 const query = graphql(`
 	query getChapterPageData($id: UUID!) {
 		chapter {

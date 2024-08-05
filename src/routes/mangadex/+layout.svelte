@@ -72,21 +72,19 @@
 
 <style lang="scss">
 	.provider {
-		display: grid;
+		display: flex;
 		color: var(--text-color);
+		width: 100%;
 		height: -webkit-fill-available;
 		.sidebar {
-			grid-area: sidebar;
+			width: fit-content;
 		}
 		.inner {
-			grid-area: content;
+			width: -webkit-fill-available;
 		}
 	}
-	.provider:not(.isRTL) {
-		grid-template-areas: "sidebar content content";
-	}
 	.provider.isRTL {
-		grid-template-areas: "content content sidebar";
+		flex-direction: row-reverse;
 	}
 	.provider::-webkit-scrollbar {
 		display: none;

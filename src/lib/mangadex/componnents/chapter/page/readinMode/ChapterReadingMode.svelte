@@ -45,7 +45,7 @@
 			/>
 		</div>
 	{:else if $mode == ReadingMode.LongStrip}
-		<div class="" transition:fade class:fixed={$isShouldFixed}>
+		<div transition:fade class:fixed={$isShouldFixed}>
 			<LongStrip />
 		</div>
 	{:else if $mode == ReadingMode.SinglePage}

@@ -99,4 +99,11 @@
 {/if}
 
 <style lang="scss">
+	.single-page {
+		height: 100%;
+		display: contents;
+		div {
+			display: contents;
+		}
+	}
 </style>
