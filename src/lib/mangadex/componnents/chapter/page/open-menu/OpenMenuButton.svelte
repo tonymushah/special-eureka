@@ -26,12 +26,15 @@
 		transition:
 			opacity 200ms ease-in-out,
 			background-color 200ms ease-in-out;
+		padding-top: 0.5em;
 	}
 	section:not(.left) {
 		right: 0;
+		padding-right: 1em;
 	}
 	section.left {
 		left: 0;
+		padding-left: 1em;
 	}
 	button {
 		display: flex;

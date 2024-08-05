@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { derived } from "svelte/store";
-	import { isDrawerFixed } from "./contexts/isDrawerFixed";
-	import ChapterPageHeader from "./top-info/ChapterPageHeader.svelte";
-	import ChapterDrawer from "./drawer/ChapterDrawer.svelte";
-	import { isDrawerOpen, isDrawerOpenWritable } from "./contexts/isDrawerOpen";
 	import { slide } from "svelte/transition";
-	import OpenMenuButton from "./open-menu/OpenMenuButton.svelte";
+	import { isDrawerFixed } from "./contexts/isDrawerFixed";
+	import { isDrawerOpenWritable } from "./contexts/isDrawerOpen";
+	import ChapterDrawer from "./drawer/ChapterDrawer.svelte";
 	import ChapterReadingMode from "./readinMode/ChapterReadingMode.svelte";
+	import ChapterPageHeader from "./top-info/ChapterPageHeader.svelte";
 
 	const isFixed = isDrawerFixed();
 	const shouldShowHeader = derived(isFixed, (fixed) => {
@@ -16,9 +15,6 @@
 </script>
 
 <article>
-	{#if $isFixed && !$open}
-		<OpenMenuButton />
-	{/if}
 	<ChapterDrawer>
 		<div class="chap-d-content">
 			{#if $shouldShowHeader}
