@@ -21,3 +21,31 @@ export const {
 export function hasRelatedChapters() {
 	return derived(getRelatedChapters(), ($related) => $related.length == 0);
 }
+
+export class RelatedNextPrevious {
+	next?: string;
+	previous?: string;
+	constructor({ next, previous }: { next?: string; previous?: string }) {
+		(this.next = next), (this.previous = previous);
+	}
+}
+
+export function getRelatedNextPrevious(
+	current: string,
+	related: RelatedChapters,
+	isReversed: boolean = false
+): RelatedNextPrevious {
+	const index = related.findIndex((rel) => rel.id == current);
+	if (index < 0) {
+		return new RelatedNextPrevious({});
+	} else {
+		const nextIndex = index + 1;
+		const previousIndex = index - 1;
+		const next = nextIndex < 0 ? undefined : related[nextIndex];
+		const previous = previousIndex < 0 ? undefined : related[previousIndex];
+		return new RelatedNextPrevious({
+			next: isReversed ? previous?.id : next?.id,
+			previous: isReversed ? next?.id : previous?.id
+		});
+	}
+}
