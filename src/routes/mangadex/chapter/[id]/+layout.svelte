@@ -88,7 +88,7 @@
 	const images = initChapterImageContext();
 
 	$: images.set(data.pages.data);
-	//$: console.log(data);
+	$: console.log(data);
 	const currentChapterData = initCurrentChapterData(
 		writable(layoutDataToCurrentChapterData(data))
 	);

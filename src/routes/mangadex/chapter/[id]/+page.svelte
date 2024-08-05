@@ -2,14 +2,17 @@
 	import ChapterPage from "@mangadex/componnents/chapter/page/ChapterPage.svelte";
 	import { isDrawerFixed } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
+	import registerPreviousNextChapterEvent from "@mangadex/componnents/chapter/page/contexts/registerPreviousNextChapterEvent";
 	import OpenMenuButton from "@mangadex/componnents/chapter/page/open-menu/OpenMenuButton.svelte";
 	import defaultBehavior from "@mangadex/componnents/sidebar/states/actions";
-	import { onDestroy } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 
 	const isFixed = isDrawerFixed();
 	const open = isDrawerOpenWritable();
+	const unregister = registerPreviousNextChapterEvent();
 	onDestroy(() => {
 		defaultBehavior();
+		unregister();
 	});
 </script>
 
