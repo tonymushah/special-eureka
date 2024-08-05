@@ -61,7 +61,7 @@
 	<div class="menu-outer" use:melt={$menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $options as { value, label }}
+				{#each $options as { value, label } (value)}
 					<li use:melt={$option({ value, label })} class:isSelected={$isSelected(value)}>
 						<h4>{label}</h4>
 					</li>
@@ -107,12 +107,6 @@
 		}
 		li.isSelected {
 			background-color: var(--primary);
-		}
-		li.isSelected:hover {
-			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-hover) 30%);
-		}
-		li.isSelected:active {
-			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
 		}
 	}
 	.input {
