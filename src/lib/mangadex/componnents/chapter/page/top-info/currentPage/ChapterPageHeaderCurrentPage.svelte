@@ -56,6 +56,6 @@
 
 <style lang="scss">
 	div {
-		display: content;
+		display: contents;
 	}
 </style>
