@@ -11,3 +11,5 @@ pub const SIDEBAR_DIRECTION: &str = "sidebar_direction";
 pub const READING_MODE: &str = "reading_mode";
 
 pub const CHAPTER_LANGUAGES: &str = "chapter_languages";
+
+pub const IMAGE_FIT: &str = "image_fit";
