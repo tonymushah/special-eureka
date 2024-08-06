@@ -347,6 +347,15 @@ impl Subscriptions {
             .listen_to_image_fit(ctx, sub_id)
             .await
     }
+    pub async fn watch_longstrip_image_width<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = f64> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_longstrip_image_width(ctx, sub_id)
+            .await
+    }
 }
 
 type InitWatchSubRes<'ctx, R> = Result<(
