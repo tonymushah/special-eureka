@@ -2,7 +2,7 @@ use std::{
     env::temp_dir,
     error::Error,
     fmt::Display,
-    fs::{create_dir_all, File},
+    fs::{create_dir_all, remove_dir_all, File},
     io::{BufReader, BufWriter, Read, Write},
     path::PathBuf,
 };
@@ -73,10 +73,15 @@ impl CoverImageCache {
             .map(|quality| format!("{}.{quality}.jpg", self.filename.clone()))
             .unwrap_or(self.filename.clone())
     }
-    fn get_cover_temp_dir() -> PathBuf {
+    pub fn get_cover_temp_dir() -> PathBuf {
         let path = temp_dir().join("special-eureka").join("covers");
         let _ = create_dir_all(&path);
         path
+    }
+    pub fn clear_cover_temp_dir() -> crate::Result<()> {
+        let path = Self::get_cover_temp_dir();
+        remove_dir_all(path)?;
+        Ok(())
     }
     fn get_cover_temp_image_path(&self) -> PathBuf {
         Self::get_cover_temp_dir().join(self.get_online_filename())
