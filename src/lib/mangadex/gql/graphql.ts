@@ -14,8 +14,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** The `Binary` scalar type represents binary data. */
-  Bytes: { input: any; output: any; }
   /** A scalar that can represent any JSON Object value. */
   JSONObject: { input: any; output: any; }
   MangaDexDateTime: { input: any; output: any; }
@@ -1187,6 +1185,12 @@ export type HomeQueriesRecentlyUploadedArgs = {
   params?: ChapterListParams;
 };
 
+export enum ImageFit {
+  Default = 'DEFAULT',
+  Heigth = 'HEIGTH',
+  Width = 'WIDTH'
+}
+
 export enum IncludeExternalUrl {
   Exclude = 'EXCLUDE',
   Include = 'INCLUDE'
@@ -2253,12 +2257,14 @@ export type Subscriptions = {
   watchCover: CoverAttributes;
   watchCustomList: CustomListAttributes;
   watchDownloadState: DownloadState;
+  watchImageFit: ImageFit;
   watchIsAppMounted: Scalars['Boolean']['output'];
   watchIsFollowingCustomList: Scalars['Boolean']['output'];
   watchIsFollowingGroup: Scalars['Boolean']['output'];
   watchIsFollowingManga: Scalars['Boolean']['output'];
   watchIsFollowingUser: Scalars['Boolean']['output'];
   watchIsLogged: Scalars['Boolean']['output'];
+  watchLongstripImageWidth: Scalars['Float']['output'];
   watchManga: GraphQlMangaAttributes;
   watchMangaReadingState?: Maybe<ReadingStatus>;
   watchMangaStatistics: MangaStatisticsAttributes;
@@ -2318,6 +2324,11 @@ export type SubscriptionsWatchDownloadStateArgs = {
 };
 
 
+export type SubscriptionsWatchImageFitArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
 export type SubscriptionsWatchIsAppMountedArgs = {
   subId: Scalars['UUID']['input'];
 };
@@ -2348,6 +2359,11 @@ export type SubscriptionsWatchIsFollowingUserArgs = {
 
 
 export type SubscriptionsWatchIsLoggedArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchLongstripImageWidthArgs = {
   subId: Scalars['UUID']['input'];
 };
 
@@ -2672,7 +2688,11 @@ export type UserMutationsUnfollowArgs = {
 
 export type UserOptionMutations = {
   __typename?: 'UserOptionMutations';
+  clearCoverImagesCaches: Scalars['Boolean']['output'];
+  clearFaviconCache: Scalars['Boolean']['output'];
   setChapterLanguages: Array<Language>;
+  setImageFit: ImageFit;
+  setLongstripImageWidth: Scalars['Float']['output'];
   setPageDirection: Direction;
   setReadingMode: ReadingMode;
   setSidebarDirection: Direction;
@@ -2681,6 +2701,16 @@ export type UserOptionMutations = {
 
 export type UserOptionMutationsSetChapterLanguagesArgs = {
   languages: Array<Language>;
+};
+
+
+export type UserOptionMutationsSetImageFitArgs = {
+  imageFit: ImageFit;
+};
+
+
+export type UserOptionMutationsSetLongstripImageWidthArgs = {
+  width: Scalars['Float']['input'];
 };
 
 
@@ -2786,7 +2816,7 @@ export type UserSortOrder =
 
 export type UtilsQuery = {
   __typename?: 'UtilsQuery';
-  favicon: Scalars['Bytes']['output'];
+  favicon: Scalars['Url']['output'];
   languageToStr: Scalars['String']['output'];
   strToLanguage: Language;
 };
