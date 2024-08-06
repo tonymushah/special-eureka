@@ -16,6 +16,7 @@ use self::{
     is_appstate_mounted::IsAppStateMountedWatch,
     is_following::IsFollowingWatch,
     is_logged::IsLoggedWatch,
+    longstrip_image_width::LongstripImageWidthWatch,
     manga::MangaWatch,
     manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
@@ -43,6 +44,7 @@ pub mod image_fit;
 pub mod is_appstate_mounted;
 pub mod is_following;
 pub mod is_logged;
+pub mod longstrip_image_width;
 pub mod manga;
 pub mod manga_reading_state;
 pub mod page_direction;
@@ -162,4 +164,5 @@ pub struct Watches {
     pub manga_reading_state: MangaReadingStateWatch,
     pub read_marker: ReadMarkerWatch,
     pub image_fit: ImageFitWatch,
+    pub longstrip_image_width: LongstripImageWidthWatch,
 }

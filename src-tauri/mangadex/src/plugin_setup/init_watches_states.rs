@@ -8,7 +8,10 @@ use crate::{
             image_fit::ImageFitStore,
             reading_mode::ReadingModeStore,
         },
-        structs::chapter_language::ChapterLanguagesStore,
+        structs::{
+            chapter_language::ChapterLanguagesStore,
+            longstrip_image_width::LongstripImageWidthStore,
+        },
         ExtractFromStore,
     },
     utils::watch::{SendData, Watches},
@@ -34,6 +37,9 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .image_fit
         .send_data(ImageFitStore::extract_from_store(store)?);
+    let _ = watches
+        .longstrip_image_width
+        .send_data(LongstripImageWidthStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }
