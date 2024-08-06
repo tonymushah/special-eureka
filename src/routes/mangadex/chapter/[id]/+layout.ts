@@ -54,9 +54,16 @@ export const load: LayoutLoad = async ({ params, url }) => {
 
 	const { id } = params;
 	const client = await getClient();
-	const result = await client.query(query, {
-		id
-	});
+	const result = await client.query(
+		query,
+		{
+			id
+		},
+		{
+			optimistic: true
+		}
+	);
+	console.log("Invoked layout data");
 	if (result.data != undefined) {
 		const pages = result.data.chapter.pages;
 		const pagesL = pages.data.length;
