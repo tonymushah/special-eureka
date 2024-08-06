@@ -1,8 +1,8 @@
 import { graphql } from "@mangadex/gql";
-import { Direction, ImageFit } from "@mangadex/gql/graphql";
+import { ImageFit } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { sub_end } from "@mangadex/utils";
-import { get, readable, writable, type Writable } from "svelte/store";
+import { get, readable, type Writable } from "svelte/store";
 import { v4 } from "uuid";
 
 const imageFitSub = graphql(`
