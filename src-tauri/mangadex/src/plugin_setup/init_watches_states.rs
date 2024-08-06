@@ -5,6 +5,7 @@ use crate::{
     store::types::{
         enums::{
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
+            image_fit::ImageFitStore,
             reading_mode::ReadingModeStore,
         },
         structs::chapter_language::ChapterLanguagesStore,
@@ -30,6 +31,9 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .sidebar_direction
         .send_data(SidebarDirectionStore::extract_from_store(store)?);
+    let _ = watches
+        .image_fit
+        .send_data(ImageFitStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }
