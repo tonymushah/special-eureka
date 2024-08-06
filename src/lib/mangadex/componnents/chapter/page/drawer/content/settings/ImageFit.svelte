@@ -1,19 +1,20 @@
 <script lang="ts">
+	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import { ImageFit } from "@mangadex/gql/graphql";
 	import { derived } from "svelte/store";
 	import { isOnZoomableImage } from "../../../contexts/currentChapterReadingMode";
-	import { ImageFit, imageFitStore } from "../../../readinMode/zoomableImage/settings";
-	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
-	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import { getCurrentChapterImageFitWritable } from "../../../contexts/imageFit";
 	import Icon from "./image-fit/Icon.svelte";
-
+	import SettingsTransitComp from "./utils/SettingsTransitComp.svelte";
 	const isZoomable = isOnZoomableImage();
+	const imageFitStore = getCurrentChapterImageFitWritable();
 	const label = derived(imageFitStore, ($fit) => {
 		switch ($fit) {
-			case ImageFit.None:
+			case ImageFit.Default:
 				return "Default";
 			case ImageFit.Width:
 				return "Fit Width";
-			case ImageFit.Height:
+			case ImageFit.Heigth:
 				return "Fit Height";
 			default:
 				return "None";
@@ -30,14 +31,14 @@
 			label={$label}
 			on:click={() => {
 				switch ($imageFitStore) {
-					case ImageFit.None:
+					case ImageFit.Default:
 						imageFitStore.set(ImageFit.Width);
 						break;
 					case ImageFit.Width:
-						imageFitStore.set(ImageFit.Height);
+						imageFitStore.set(ImageFit.Heigth);
 						break;
-					case ImageFit.Height:
-						imageFitStore.set(ImageFit.None);
+					case ImageFit.Heigth:
+						imageFitStore.set(ImageFit.Default);
 						break;
 					default:
 						break;

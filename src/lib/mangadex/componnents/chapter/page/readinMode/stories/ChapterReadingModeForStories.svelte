@@ -2,9 +2,10 @@
 	import { writable } from "svelte/store";
 	import { initChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { initChapterImageContext } from "../../contexts/images";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
-	import { ImageFit, imageFitStore } from "../zoomableImage/settings";
 	import Page from "../ChapterReadingMode.svelte";
+	import { Direction, ImageFit, Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { initCurrentChapterDirection } from "../../contexts/readingDirection";
+	import { initCurrentChapterImageFit } from "../../contexts/imageFit";
 	import { ReadingMode } from "@mangadex/gql/graphql";
 	import { initCurrentChapterReadingMode } from "../../contexts/currentChapterReadingMode";
 	import { initLongStripImagesWidthContext } from "../longStrip/utils/context/longstrip_images_width";
@@ -12,6 +13,14 @@
 	export let images: string[];
 	export let currentPage: number = 0;
 	export let readingMode: ReadingMode = ReadingMode.SinglePage;
+	export let imageFit = ImageFit.Default;
+	export let direction = Direction.Ltr;
+
+	const readingDirection = initCurrentChapterDirection(writable(direction));
+	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
+	$: readingDirection.set(direction);
+	$: imageFitStore.set(imageFit);
+
 	initChapterImageContext(images);
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
 	$: mode.set(readingMode);
@@ -50,17 +59,17 @@
 	<span> Image Fit: </span>
 	<button
 		on:click={() => {
-			$imageFitStore = ImageFit.None;
+			$imageFitStore = ImageFit.Default;
 		}}
-		class:active={$imageFitStore == ImageFit.None}
+		class:active={$imageFitStore == ImageFit.Default}
 	>
 		None
 	</button>
 	<button
 		on:click={() => {
-			$imageFitStore = ImageFit.Height;
+			$imageFitStore = ImageFit.Heigth;
 		}}
-		class:active={$imageFitStore == ImageFit.Height}
+		class:active={$imageFitStore == ImageFit.Heigth}
 	>
 		Height
 	</button>

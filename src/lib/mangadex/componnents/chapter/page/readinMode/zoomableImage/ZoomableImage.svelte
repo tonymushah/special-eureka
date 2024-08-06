@@ -4,12 +4,14 @@
 	import { onDestroy, onMount } from "svelte";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";
 	import { derived } from "svelte/store";
-	import { ImageFit, imageFitStore } from "./settings";
 	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
+	import { getCurrentChapterImageFit } from "../../contexts/imageFit";
+	import { ImageFit } from "@mangadex/gql/graphql";
 
 	export let src: string | [string, string];
 	export let alt: string | [string, string];
 
+	const imageFitStore = getCurrentChapterImageFit();
 	let toZoom: HTMLElement | undefined = undefined;
 	let toZoomPanZoom: PanzoomObject | undefined;
 	$: {
@@ -29,7 +31,7 @@
 		})
 	);
 	const shouldFitWidth = derived(imageFitStore, ($i) => $i == ImageFit.Width);
-	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Height);
+	const shouldFitHeight = derived(imageFitStore, ($i) => $i == ImageFit.Heigth);
 	onMount(() => imageFitStore.subscribe(() => toZoomPanZoom?.reset({ animate: true })));
 </script>
 
