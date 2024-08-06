@@ -1,7 +1,6 @@
 use std::str::FromStr;
 
 use async_graphql::{Context, Object};
-use bytes::Bytes;
 use mangadex_api_types_rust::Language;
 use url::Url;
 

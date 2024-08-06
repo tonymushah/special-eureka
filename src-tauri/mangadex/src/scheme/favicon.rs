@@ -34,5 +34,5 @@ pub fn handle_favicon<'a, R: Runtime>(
         .mimetype("image/*")
         .header("access-control-allow-origin", "*")
         .body(bytes.into())
-        .map_err(|e| SchemeResponseError::InternalError(e))
+        .map_err(SchemeResponseError::InternalError)
 }
