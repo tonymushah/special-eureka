@@ -1,6 +1,8 @@
 use tauri::{AppHandle, Runtime};
 use tauri_plugin_store::StoreBuilder;
-use types::enums::image_fit::ImageFitStore;
+use types::{
+    enums::image_fit::ImageFitStore, structs::longstrip_image_width::LongstripImageWidthStore,
+};
 
 use self::{
     keys::PATH,
@@ -29,8 +31,8 @@ pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result
         let b = ReadingModeStore::default_store(b)?;
         let b = SidebarDirectionStore::default_store(b)?;
         let b = ChapterLanguagesStore::default_store(b)?;
-
-        ImageFitStore::default_store(b)?
+        let b = ImageFitStore::default_store(b)?;
+        LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)
 }
