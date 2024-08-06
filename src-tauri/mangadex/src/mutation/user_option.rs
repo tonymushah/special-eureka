@@ -1,4 +1,7 @@
-use crate::Result;
+use crate::{
+    store::types::enums::image_fit::{ImageFit, ImageFitStore},
+    Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_types_rust::Language;
 
@@ -72,5 +75,14 @@ impl UserOptionMutations {
         inner.insert_and_save(&mut store_write)?;
         watches.chapter_languages.send_data(inner)?;
         Ok(ChapterLanguagesStore::extract_from_store(&store_write)?.into())
+    }
+    pub async fn set_image_fit(&self, ctx: &Context<'_>, image_fit: ImageFit) -> Result<ImageFit> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ImageFitStore::from(image_fit);
+        inner.insert_and_save(&mut store_write)?;
+        watches.image_fit.send_data(inner)?;
+        Ok(ImageFitStore::extract_from_store(&store_write)?.into())
     }
 }
