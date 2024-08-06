@@ -1,5 +1,8 @@
 use crate::{
-    store::types::enums::image_fit::{ImageFit, ImageFitStore},
+    store::types::{
+        enums::image_fit::{ImageFit, ImageFitStore},
+        structs::longstrip_image_width::LongstripImageWidthStore,
+    },
     Result,
 };
 use async_graphql::{Context, Object};
@@ -84,5 +87,14 @@ impl UserOptionMutations {
         inner.insert_and_save(&mut store_write)?;
         watches.image_fit.send_data(inner)?;
         Ok(ImageFitStore::extract_from_store(&store_write)?.into())
+    }
+    pub async fn set_longstrip_image_width(&self, ctx: &Context<'_>, width: f64) -> Result<f64> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = LongstripImageWidthStore::from(width);
+        inner.insert_and_save(&mut store_write)?;
+        watches.longstrip_image_width.send_data(inner)?;
+        Ok(LongstripImageWidthStore::extract_from_store(&store_write)?.into())
     }
 }
