@@ -38,6 +38,8 @@ const documents = {
     "\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tpages(id: $id) {\n\t\t\t\tdata\n\t\t\t\tdataSaver\n\t\t\t}\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.GetChapterPageDataDocument,
     "\n\tsubscription subToChapterImageFit($subId: UUID!) {\n\t\twatchImageFit(subId: $subId)\n\t}\n": types.SubToChapterImageFitDocument,
     "\n\tmutation updateChapterImageFit($imageFit: ImageFit!) {\n\t\tuserOption {\n\t\t\tsetImageFit(imageFit: $imageFit)\n\t\t}\n\t}\n": types.UpdateChapterImageFitDocument,
+    "\n\tsubscription subToChapterLongstripImageWidth($subId: UUID!) {\n\t\twatchLongstripImageWidth(subId: $subId)\n\t}\n": types.SubToChapterLongstripImageWidthDocument,
+    "\n\tmutation updateChapterLongstripImageWidth($width: Float!) {\n\t\tuserOption {\n\t\t\tsetLongstripImageWidth(width: $width)\n\t\t}\n\t}\n": types.UpdateChapterLongstripImageWidthDocument,
     "\n\tsubscription subToChapterReadingDirection($subId: UUID!) {\n\t\twatchPageDirection(subId: $subId)\n\t}\n": types.SubToChapterReadingDirectionDocument,
     "\n\tmutation updateChapterReadingDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetPageDirection(direction: $direction)\n\t\t}\n\t}\n": types.UpdateChapterReadingDirectionDocument,
     "\n\tsubscription subToChapterReadingMode($subId: UUID!) {\n\t\twatchReadingMode(subId: $subId)\n\t}\n": types.SubToChapterReadingModeDocument,
@@ -162,6 +164,14 @@ export function graphql(source: "\n\tsubscription subToChapterImageFit($subId: U
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation updateChapterImageFit($imageFit: ImageFit!) {\n\t\tuserOption {\n\t\t\tsetImageFit(imageFit: $imageFit)\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation updateChapterImageFit($imageFit: ImageFit!) {\n\t\tuserOption {\n\t\t\tsetImageFit(imageFit: $imageFit)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tsubscription subToChapterLongstripImageWidth($subId: UUID!) {\n\t\twatchLongstripImageWidth(subId: $subId)\n\t}\n"): (typeof documents)["\n\tsubscription subToChapterLongstripImageWidth($subId: UUID!) {\n\t\twatchLongstripImageWidth(subId: $subId)\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation updateChapterLongstripImageWidth($width: Float!) {\n\t\tuserOption {\n\t\t\tsetLongstripImageWidth(width: $width)\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation updateChapterLongstripImageWidth($width: Float!) {\n\t\tuserOption {\n\t\t\tsetLongstripImageWidth(width: $width)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

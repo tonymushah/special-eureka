@@ -78,13 +78,14 @@
 	import readingDirectionWritable from "./layout-query/pageDirection";
 	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
 	import imageFitWritable from "./layout-query/imageFit";
+	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
 
 	export let data: LayoutData;
 
 	const client = getContextClient();
 
 	const related = initRelatedChapters(writable([]));
-	const lsImgWidth = initLongStripImagesWidthContext(writable(0));
+	const lsImgWidth = initLongStripImagesWidthContext(longstripImageWidthWritable);
 	const fixed = initIsDrawerFixedWritable(writable(false));
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
