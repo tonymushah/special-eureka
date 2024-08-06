@@ -1,8 +1,10 @@
 use crate::{
+    cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     store::types::{
         enums::image_fit::{ImageFit, ImageFitStore},
         structs::longstrip_image_width::LongstripImageWidthStore,
     },
+    utils::get_app_handle_from_async_graphql,
     Result,
 };
 use async_graphql::{Context, Object};
@@ -96,5 +98,14 @@ impl UserOptionMutations {
         inner.insert_and_save(&mut store_write)?;
         watches.longstrip_image_width.send_data(inner)?;
         Ok(LongstripImageWidthStore::extract_from_store(&store_write)?.into())
+    }
+    pub async fn clear_cover_images_caches(&self) -> Result<bool> {
+        CoverImageCache::clear_cover_temp_dir()?;
+        Ok(true)
+    }
+    pub async fn clear_favicon_cache(&self, ctx: &Context<'_>) -> Result<bool> {
+        let app = get_app_handle_from_async_graphql::<tauri::Wry>(ctx)?;
+        clear_favicons_dir(app.config().as_ref())?;
+        Ok(true)
     }
 }
