@@ -76,6 +76,8 @@
 	import readingModeWritable from "./layout-query/readingMode";
 	import { initCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import readingDirectionWritable from "./layout-query/pageDirection";
+	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
+	import imageFitWritable from "./layout-query/imageFit";
 
 	export let data: LayoutData;
 
@@ -93,6 +95,7 @@
 	);
 	initCurrentChapterReadingMode(readingModeWritable);
 	initCurrentChapterDirection(readingDirectionWritable);
+	initCurrentChapterImageFit(imageFitWritable);
 	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
 	$: currentPage.set(data.currentPage);
 	$: currentChapterData.set(layoutDataToCurrentChapterData(data));
