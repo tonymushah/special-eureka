@@ -28,7 +28,6 @@
 <section class="seasonal">
 	<Seasonal />
 </section>
-
 <MidToneLine />
 
 <section class="recently-added">
