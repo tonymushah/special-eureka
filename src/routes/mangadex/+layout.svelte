@@ -80,7 +80,6 @@
 			width: fit-content;
 		}
 		.inner {
-			width: -webkit-fill-available;
 			height: -webkit-fill-available;
 		}
 	}
