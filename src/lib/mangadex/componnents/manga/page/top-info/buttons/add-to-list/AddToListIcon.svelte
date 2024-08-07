@@ -3,7 +3,7 @@
 </script>
 
 <div class="add-to-list">
-	<ListIcon size="24px" />
+	<ListIcon size="24" />
 </div>
 
 <style lang="scss">

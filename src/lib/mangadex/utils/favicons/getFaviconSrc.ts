@@ -11,17 +11,26 @@ const faviconQuery = graphql(`
 	}
 `);
 
-export function getFaviconSrc({ url, client }: { url: string, client: Client }): Readable<string | undefined> {
-    return derived(queryStore({
-        query: faviconQuery,
-        client,
-        variables: {
-            url: url
-        }
-    }), ($r) => {
-        const data = $r.data;
-        if (data) {
-            return bufToImageSrc(data.utils.favicon);
-        }
-    })
+export function getFaviconSrc({
+	url,
+	client
+}: {
+	url: string;
+	client: Client;
+}): Readable<string | undefined> {
+	return derived(
+		queryStore({
+			query: faviconQuery,
+			client,
+			variables: {
+				url: url
+			}
+		}),
+		($r) => {
+			const data = $r.data;
+			if (data) {
+				return data.utils.favicon;
+			}
+		}
+	);
 }

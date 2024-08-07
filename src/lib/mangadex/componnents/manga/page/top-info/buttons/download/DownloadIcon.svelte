@@ -3,7 +3,7 @@
 </script>
 
 <div class="download-icon">
-	<DownloadIcon size="24px" />
+	<DownloadIcon size="24" />
 </div>
 
 <style lang="scss">

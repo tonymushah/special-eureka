@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 
+use image_fit::ImageFitWatch;
 use uuid::Uuid;
 
 use crate::objects::{GetAttributes, GetId};
@@ -15,6 +16,7 @@ use self::{
     is_appstate_mounted::IsAppStateMountedWatch,
     is_following::IsFollowingWatch,
     is_logged::IsLoggedWatch,
+    longstrip_image_width::LongstripImageWidthWatch,
     manga::MangaWatch,
     manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
@@ -38,9 +40,11 @@ pub mod chapter_languages;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
+pub mod image_fit;
 pub mod is_appstate_mounted;
 pub mod is_following;
 pub mod is_logged;
+pub mod longstrip_image_width;
 pub mod manga;
 pub mod manga_reading_state;
 pub mod page_direction;
@@ -159,4 +163,6 @@ pub struct Watches {
     pub is_following: IsFollowingWatch,
     pub manga_reading_state: MangaReadingStateWatch,
     pub read_marker: ReadMarkerWatch,
+    pub image_fit: ImageFitWatch,
+    pub longstrip_image_width: LongstripImageWidthWatch,
 }

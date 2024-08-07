@@ -43,7 +43,9 @@
 				if (longstrip_root != undefined) {
 					const current = longstrip_root.querySelector(`div[data-page=\"${page}\"]`);
 					if (current != null) {
-						current.scrollIntoView();
+						current.scrollIntoView({
+							block: "nearest"
+						});
 					}
 				}
 			}
@@ -114,7 +116,7 @@
 		}
 	}
 	.longstrip.innerOverflow {
-		height: calc(100cqh - var(--to-remove-height));
+		height: 100%;
 		width: 100%;
 		overflow-y: scroll;
 	}

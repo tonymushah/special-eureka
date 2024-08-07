@@ -1,7 +1,6 @@
 use std::str::FromStr;
 
 use async_graphql::{Context, Object};
-use bytes::Bytes;
 use mangadex_api_types_rust::Language;
 use url::Url;
 
@@ -14,7 +13,7 @@ pub struct UtilsQuery;
 
 #[Object]
 impl UtilsQuery {
-    pub async fn favicon(&self, ctx: &Context<'_>, url: Url) -> crate::Result<Bytes> {
+    pub async fn favicon(&self, ctx: &Context<'_>, url: Url) -> crate::Result<Url> {
         get_favicon::<tauri::Wry>(&url, ctx).await
     }
     pub async fn str_to_language(&self, input: String) -> crate::Result<Language> {

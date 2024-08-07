@@ -23,6 +23,6 @@
 
 <style lang="scss">
 	.content {
-		display: content;
+		display: contents;
 	}
 </style>

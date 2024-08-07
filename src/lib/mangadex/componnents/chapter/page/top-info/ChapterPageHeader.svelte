@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher, onDestroy } from "svelte";
+	import { createEventDispatcher, onDestroy, onMount } from "svelte";
 	import { MenuIcon } from "svelte-feather-icons";
 	import { writable } from "svelte/store";
 	import { getCurrentChapterData } from "../contexts/currentChapter";
@@ -19,12 +19,19 @@
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 	}>();
+	let headerEl: HTMLElement | undefined;
+	onMount(() => {
+		const h = headerEl?.clientHeight;
+		if (h) {
+			headerHeight.set(h);
+		}
+	});
 	onDestroy(() => {
 		headerHeight.set(0);
 	});
 </script>
 
-<header bind:clientHeight={$headerHeight}>
+<header bind:this={headerEl}>
 	<TopContent />
 	<section class="buttons">
 		<div>

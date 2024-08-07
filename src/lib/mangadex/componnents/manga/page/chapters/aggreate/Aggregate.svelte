@@ -39,8 +39,13 @@
 		chapter: string | null | undefined;
 		title: string | null | undefined;
 	}): string | undefined {
+		console.log(`${chapter} - ${title}`);
 		if (typeof chapter == "string" && typeof title == "string") {
-			return `Chap. ${chapter} - ${title}`;
+			if (title.length == 0 || title == null) {
+				return `Chap. ${chapter}`;
+			} else {
+				return `Chap. ${chapter} - ${title}`;
+			}
 		} else if (typeof chapter == "string") {
 			return `Chap. ${chapter}`;
 		} else if (typeof title == "string") {
@@ -247,6 +252,7 @@
 	<div class="bottom">
 		{#each $aggregate as _, i}
 			<button
+				class="selector"
 				on:click={() => {
 					selectedIndex = i;
 				}}
@@ -272,31 +278,35 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		margin: 10px;
-		button {
+		.selector {
 			background-color: var(--accent);
 			padding: 5px 10px;
 			font-size: 18px;
 			color: var(--textColor);
 			font-family: var(--fonts);
 			border: none;
+			/**
+                BUG Background-color transition with color mix doesn't work proprely on Webkit GTK
+            */
 			transition:
-				background-color 300ms ease-in-out,
+				//background-color 300ms ease-in-out,
 				font-weight 300ms ease-in-out;
 		}
-		button:hover {
+		.selector:not(.selected):hover {
 			background-color: var(--accent-hover);
 		}
-		button:active {
+		.selector:not(.selected):active {
 			background-color: var(--accent-active);
 		}
-		button.selected {
+		.selector.selected {
 			background-color: var(--primary);
 			font-weight: 800;
 		}
-		button.selected:hover {
+		.selector.selected:hover {
 			background-color: color-mix(in srgb, var(--primary) 90%, transparent 10%);
+			//background-color: color-mix(in srgb, var(--primary) 90%, var(--main-background) 10%);
 		}
-		button.selected:active {
+		.selector.selected:active {
 			background-color: color-mix(in srgb, var(--primary) 80%, transparent 20%);
 		}
 	}

@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import { ReadingMode } from "@mangadex/gql/graphql";
+	import { Direction, ReadingMode } from "@mangadex/gql/graphql";
 	import { isArray } from "lodash";
 	import { derived, readable } from "svelte/store";
 	import { getCurrentChapterReadingMode } from "../../contexts/currentChapterReadingMode";
@@ -7,6 +7,7 @@
 	import { getChapterImageContext } from "../../contexts/images";
 	import getChapterDoublePageCurrentPageIndex from "../../readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "../../readinMode/doublePage/utils/getChapterDoublePageIndexes";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 
 	function getCurrentPageIndex() {
 		try {
@@ -14,13 +15,18 @@
 			const currentPage = getChapterCurrentPageContext();
 			const currentPageDouble = getChapterDoublePageCurrentPageIndex(currentPage);
 			const currentPageIndexes = getChapterDoublePageIndexes();
+			const readingDirection = getCurrentChapterDirection();
 			return derived(
-				[readingMode, currentPage, currentPageDouble, currentPageIndexes],
-				([$mode, $currentPage, $currentPageDouble, $indexes]) => {
+				[readingMode, currentPage, currentPageDouble, currentPageIndexes, readingDirection],
+				([$mode, $currentPage, $currentPageDouble, $indexes, $direction]) => {
 					if ($mode == ReadingMode.DoublePage) {
 						const currentPageDoubleIndex = $indexes[$currentPageDouble];
 						if (isArray(currentPageDoubleIndex)) {
-							return `${currentPageDoubleIndex[0] + 1} - ${currentPageDoubleIndex[1] + 1} `;
+							if ($direction == Direction.Ltr) {
+								return `${currentPageDoubleIndex[0] + 1} - ${currentPageDoubleIndex[1] + 1} `;
+							} else {
+								return `${currentPageDoubleIndex[1] + 1} - ${currentPageDoubleIndex[0] + 1} `;
+							}
 						} else {
 							return `${currentPageDoubleIndex + 1}`;
 						}
@@ -56,6 +62,6 @@
 
 <style lang="scss">
 	div {
-		display: content;
+		display: contents;
 	}
 </style>

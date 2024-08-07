@@ -11,11 +11,6 @@
 
 <style lang="scss">
 	.loader {
-		div {
-			background-color: color-mix(in srgb, var(--main-background) 70%, var(--mid-tone) 5%);
-			width: var(--width);
-			height: var(--height);
-		}
 		display: flex;
 		width: min-content;
 		background-image: linear-gradient(90deg, transparent, var(--mid-tone) 50%, transparent 80%);
@@ -27,6 +22,11 @@
 		animation-timing-function: linear;
 		animation-fill-mode: backwards;
 		animation-iteration-count: infinite;
+		div {
+			background-color: color-mix(in srgb, var(--main-background) 70%, var(--mid-tone) 5%);
+			width: var(--width);
+			height: var(--height);
+		}
 	}
 
 	@keyframes animloader {

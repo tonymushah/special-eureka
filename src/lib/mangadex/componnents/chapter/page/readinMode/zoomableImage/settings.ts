@@ -23,11 +23,3 @@ function genZoomSpeedValue(init: number): Writable<number> {
 
 // TODO integrate with Tauri backend
 export const zoomSpeedValue: Writable<number> = genZoomSpeedValue(1);
-
-export enum ImageFit {
-	Width,
-	Height,
-	None
-}
-
-export const imageFitStore = writable(ImageFit.None);

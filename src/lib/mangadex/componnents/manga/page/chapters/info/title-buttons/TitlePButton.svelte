@@ -38,9 +38,9 @@
 						});
 					}}
 				>
-					<h4>
+					<p>
 						{name}
-					</h4>
+					</p>
 				</ButtonBase>
 			{/each}
 		</div>
@@ -48,10 +48,13 @@
 {/if}
 
 <style lang="scss">
+	p {
+		margin: 1px;
+	}
 	h4 {
 		margin: 1px;
 		padding: 0px;
-		font-weight: 500;
+		font-weight: 800;
 	}
 	.outer {
 		display: flex;

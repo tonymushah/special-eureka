@@ -3,7 +3,7 @@
 </script>
 
 <div class="is-following-off">
-	<BellOffIcon size="24px" />
+	<BellOffIcon size="24" />
 </div>
 
 <style lang="scss">

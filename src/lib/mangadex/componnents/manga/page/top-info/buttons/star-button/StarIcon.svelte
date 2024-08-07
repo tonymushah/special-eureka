@@ -3,7 +3,7 @@
 </script>
 
 <div class="star-icon">
-	<StarIcon size="24px" />
+	<StarIcon size="24" />
 </div>
 
 <style lang="scss">

@@ -1,8 +1,10 @@
 pub mod chapters;
 pub mod covers;
+pub mod favicon;
 
 use std::error::Error;
 
+use favicon::handle_favicon;
 use tauri::{
     http::{status::StatusCode, MimeType, Request},
     plugin::{Builder, Plugin},
@@ -117,15 +119,19 @@ pub fn register_scheme<R: Runtime>(
     Builder::<R, ()>::new("mangadex-graphiql")
         .register_uri_scheme_protocol("mangadex", move |app, req| match parse_uri(req) {
             Ok(uri) => {
-                if uri.domain() == Some("chapter") {
-                    handle_chapters(app, req).into_response()
-                } else if uri.domain() == Some("covers") {
-                    handle_covers(app, req).into_response()
+                let not_found = SchemeResponseError::NotFound(
+                    String::from("The given domain is not defined").into_bytes(),
+                )
+                .into();
+                if let Some(domain) = uri.domain() {
+                    match domain {
+                        "chapter" => handle_chapters(app, req).into_response(),
+                        "covers" => handle_covers(app, req).into_response(),
+                        "favicons" => handle_favicon(app, req).into_response(),
+                        _ => not_found,
+                    }
                 } else {
-                    SchemeResponseError::NotFound(
-                        String::from("The given domain is not defined").into_bytes(),
-                    )
-                    .into()
+                    not_found
                 }
             }
             Err(error) => error.into(),

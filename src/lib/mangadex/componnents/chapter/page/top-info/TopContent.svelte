@@ -10,7 +10,11 @@
 <section class="title">
 	<FileIcon />
 	{#if $current.title != undefined && $current.chapterNumber != undefined}
-		Chapter {$current.chapterNumber} - {$current.title}
+		{#if $current.title.length != 0}
+			Chapter {$current.chapterNumber} - {$current.title}
+		{:else}
+			Chapter {$current.chapterNumber}
+		{/if}
 	{:else if $current.chapterNumber != undefined}
 		Chapter {$current.chapterNumber}
 	{:else if $current.isOneshot}

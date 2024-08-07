@@ -72,7 +72,7 @@ use crate::{
         },
         user::attributes::UserAttributes,
     },
-    store::types::enums::{direction::Direction, reading_mode::ReadingMode},
+    store::types::enums::{direction::Direction, image_fit::ImageFit, reading_mode::ReadingMode},
     utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
 
@@ -336,6 +336,24 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         ChapterReadMarkerSubscriptions
             .listen_by_id(ctx, chapter_id, sub_id)
+            .await
+    }
+    pub async fn watch_image_fit<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ImageFit> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_image_fit(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_longstrip_image_width<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = f64> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_longstrip_image_width(ctx, sub_id)
             .await
     }
 }

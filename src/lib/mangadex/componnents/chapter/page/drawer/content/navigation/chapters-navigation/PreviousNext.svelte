@@ -5,11 +5,11 @@
 		fireChapterNextEvent,
 		fireChapterPreviousEvent
 	} from "../../../../contexts/previousNextEventTarget";
-	import {
-		readingDirection as direction,
-		ReadingDirection
-	} from "../../../../stores/readingDirection";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+
+	const direction = getCurrentChapterDirection();
 	const isLong = isLongStrip();
 	$: next = function () {
 		fireChapterNextEvent();

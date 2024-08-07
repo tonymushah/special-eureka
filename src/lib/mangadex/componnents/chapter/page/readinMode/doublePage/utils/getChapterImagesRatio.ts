@@ -12,6 +12,10 @@ export default function getChapterImagesRatio(): Readable<Map<string, number>> {
 					return [img, await getImageRatio(img)];
 				})
 			).then((results) => {
+				update((inner) => {
+					inner.clear();
+					return inner;
+				});
 				results.forEach((res) => {
 					if (res.status == "fulfilled") {
 						update((inner) => {

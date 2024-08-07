@@ -1,9 +1,9 @@
 <script lang="ts">
-	import {
-		ReadingDirection,
-		readingDirection
-	} from "@mangadex/componnents/chapter/page/stores/readingDirection";
 	import { ArrowLeftCircleIcon, ArrowRightCircleIcon } from "svelte-feather-icons";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+
+	const readingDirection = getCurrentChapterDirection();
 </script>
 
 <div>

@@ -3,7 +3,7 @@
 </script>
 
 <div class="is-following">
-	<BellIcon size="24px" />
+	<BellIcon size="24" />
 </div>
 
 <style lang="scss">

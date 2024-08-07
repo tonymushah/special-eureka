@@ -6,13 +6,16 @@
 	import { blur } from "svelte/transition";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import getChapterDoublePageCurrentPage from "./utils/getChapterDoublePageCurrentPage";
 	import getChapterDoublePageCurrentPageIndex from "./utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
 	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+	import { Direction } from "@mangadex/gql/graphql";
+	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 
+	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPage = getChapterDoublePageCurrentPage();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
@@ -25,6 +28,7 @@
 	}>();
 	$: next = function () {
 		if ($currentPageIndex < $images_length - 1) {
+			resetZoom();
 			currentChapterPage.update(() => {
 				const index = $images_indexes[$currentPageIndex + 1];
 				if (isArray(index)) {
@@ -39,6 +43,7 @@
 	};
 	$: previous = function () {
 		if ($currentPageIndex > 0) {
+			resetZoom();
 			currentChapterPage.update(() => {
 				const index = $images_indexes[$currentPageIndex - 1];
 				if (isArray(index)) {
@@ -58,10 +63,10 @@
 		const direction = $readingDirection;
 		const onNext = function () {
 			switch (direction) {
-				case ReadingDirection.Ltr:
+				case Direction.Ltr:
 					next();
 					break;
-				case ReadingDirection.Rtl:
+				case Direction.Rtl:
 					previous();
 					break;
 				default:
@@ -70,10 +75,10 @@
 		};
 		const onPrevious = function () {
 			switch (direction) {
-				case ReadingDirection.Ltr:
+				case Direction.Ltr:
 					previous();
 					break;
-				case ReadingDirection.Rtl:
+				case Direction.Rtl:
 					next();
 					break;
 				default:
@@ -97,15 +102,12 @@
 
 {#if $currentPage}
 	<div class="double-page">
-		{#key $currentPage}
-			<div
-				transition:blur={{
-					duration: 100,
-					easing: quadOut
-				}}
-			>
-				<ZoomableImage src={$currentPage} alt={$currentPage} />
-			</div>
-		{/key}
+		<ZoomableImage src={$currentPage} alt={$currentPage} />
 	</div>
 {/if}
+
+<style lang="scss">
+	div {
+		display: contents;
+	}
+</style>

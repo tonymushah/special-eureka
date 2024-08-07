@@ -4,11 +4,14 @@
 <script lang="ts">
 	import { derived, get, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
-	import { ReadingDirection, readingDirection } from "../../stores/readingDirection";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { onMount } from "svelte";
 	import { delay } from "lodash";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+
+	const readingDirection = getCurrentChapterDirection();
 	let widestrip_root: HTMLDivElement | undefined;
 	const images = getChapterImageContext();
 	const isFromIntersector = writable(false);
@@ -184,8 +187,10 @@
 		flex-direction: row;
 		div {
 			display: flex;
-			width: 100%;
 			height: 100%;
+			img {
+				height: 100%;
+			}
 		}
 	}
 	.wide-strip.rtl {
@@ -194,7 +199,8 @@
 	.wide-strip.innerOverflow {
 		overflow-x: scroll;
 		width: 100%;
-		height: calc(100cqh - var(--to-remove-height));
+		height: 100%;
+		scroll-behavior: smooth;
 	}
 	img {
 		height: 100%;

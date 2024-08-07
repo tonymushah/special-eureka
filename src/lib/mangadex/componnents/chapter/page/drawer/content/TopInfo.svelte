@@ -9,7 +9,10 @@
 
 <section>
 	<div class="title">
-		<BookOpenIcon />
+		<div class="icon">
+			<BookOpenIcon size="24" />
+		</div>
+
 		<div class="series">
 			{#if $current.series != undefined}
 				<Link
@@ -26,7 +29,10 @@
 		</div>
 	</div>
 	<div class="title">
-		<FileIcon />
+		<div class="icon">
+			<FileIcon size="24" />
+		</div>
+
 		{#if $current.title != undefined && $current.chapterNumber != undefined}
 			Chapter {$current.chapterNumber} - {$current.title}
 		{:else if $current.chapterNumber != undefined}
@@ -40,6 +46,11 @@
 </section>
 
 <style lang="scss">
+	div.icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	section {
 		display: grid;
 		gap: 10px;

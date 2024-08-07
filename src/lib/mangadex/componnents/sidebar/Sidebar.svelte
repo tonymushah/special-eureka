@@ -39,28 +39,35 @@
 		display: flex;
 		position: absolute;
 		top: 0;
+		z-index: 10;
 	}
 	.sidebar.show.float:not(.rtl) {
 		left: 0;
 	}
-	.sidebar.show.float:not(.rtl):hover {
+	.sidebar.show.float:not(.rtl) {
 		aside.collapsed {
-			transform: translateX(-80px);
+			translate: -90px 0px;
+		}
+	}
+	.sidebar.show.float:hover {
+		aside.collapsed {
+			translate: 0px 0px;
 		}
 	}
 	.sidebar.show.float.rtl {
 		right: 0;
 	}
-	.sidebar.show.float.rtl:hover {
+	.sidebar.show.float.rtl {
 		aside.collapsed {
-			transform: translateX(80px);
+			translate: 90px 0px;
 		}
 	}
 	aside {
-		transition: width ease-in-out 300ms;
-		transition: transform ease-in-out 300ms;
+		transition:
+			width ease-in-out 300ms,
+			translate ease-in-out 300ms;
 		background-color: var(--accent-l1);
-		height: 94cqh;
+		height: -webkit-fill-available;
 		width: 256px;
 		display: flex;
 		flex-direction: column;

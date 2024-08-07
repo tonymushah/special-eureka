@@ -1,17 +1,11 @@
 <script lang="ts">
-	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
-	import { Direction } from "@mangadex/gql/graphql";
 	import { sidebarState as isOpen } from "@mangadex/stores";
-	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { v4 } from "uuid";
+	import { ChevronUpIcon } from "svelte-feather-icons";
+	import { slide } from "svelte/transition";
 	import HeaderChevronBase from "../header/HeaderChevronBase.svelte";
 	import MenuBase from "./MenuBase.svelte";
-	import MenuLabel from "./MenuLabel.svelte";
-	import { onDestroy } from "svelte";
-	import { sub_end } from "@mangadex/utils";
 	import MenuIcons from "./MenuIcons.svelte";
-	import { ChevronDownIcon, ChevronUpIcon } from "svelte-feather-icons";
-	import { slide } from "svelte/transition";
+	import MenuLabel from "./MenuLabel.svelte";
 	export let label: string;
 	$: collapsed = $isOpen;
 	let isMenuOpen = false;

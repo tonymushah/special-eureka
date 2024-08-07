@@ -56,6 +56,7 @@
 	import { route } from "$lib/ROUTES";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import ContextMenuLink from "@mangadex/componnents/theme/links/context-menu/ContextMenuLink.svelte";
+	import Layout from "./Layout.svelte";
 	type Group = {
 		id: string;
 		name: string;
@@ -94,8 +95,8 @@
 		e.preventDefault();
 	}}
 >
-	<div class="layout" class:haveBeenRead>
-		<div class="state">
+	<Layout {haveBeenRead}>
+		<svelte:fragment slot="state">
 			<div
 				class="buttons"
 				role="button"
@@ -144,8 +145,8 @@
 					</span>
 				</div>
 			{/if}
-		</div>
-		<div class="flag-reading-state">
+		</svelte:fragment>
+		<svelte:fragment slot="flag-reading-state">
 			<div>
 				<MangaDexFlagIcon bind:lang />
 			</div>
@@ -172,48 +173,43 @@
 					<EyeOffIcon />
 				{/if}
 			</div>
-		</div>
-		<div class="title-groups">
-			<ContextMenuLink
-				href={route("/mangadex/chapter/[id]", {
-					id
-				})}
-				ext_href={`https://mangadex.org/chapter/${id}`}
-			>
-				<a
+		</svelte:fragment>
+		<svelte:fragment slot="title-groups">
+			<div class="title-outer">
+				<Link
+					variant="base"
 					href={route("/mangadex/chapter/[id]", {
 						id
 					})}
+					ext_href={`https://mangadex.org/chapter/${id}`}
 				>
-					<h4>{title}</h4>
-				</a>
-			</ContextMenuLink>
+					<h4 class="title">{title}</h4>
+				</Link>
+			</div>
+
 			<div class="groups">
 				<UsersIcon />
 				{#if groups.length != 0}
 					{#each groups as { id, name }}
-						<ContextMenuLink
+						<Link
+							variant="base"
 							href={route("/mangadex/group/[id]", {
 								id
 							})}
 							ext_href={`https://mangadex.org/group/${id}`}
 						>
-							<a
-								href={route("/mangadex/group/[id]", {
-									id
-								})}
-							>
+							<span>
 								{name}
-							</a>
-						</ContextMenuLink>
+							</span>
+						</Link>
 					{/each}
 				{:else}
 					<i>No Groups</i>
 				{/if}
 			</div>
-		</div>
-		<div class="date-uploader">
-			<p>
+		</svelte:fragment>
+		<svelte:fragment slot="date-uploader">
+			<p class="upload-date">
 				<time datetime={upload_date.toDateString()} bind:this={timeago} />
 			</p>
 			<UserRolesComp roles={uploader.roles}>
@@ -226,8 +222,8 @@
 					{uploader.name}
 				</a>
 			</UserRolesComp>
-		</div>
-		<div class="reading-number-comments">
+		</svelte:fragment>
+		<svelte:fragment slot="reading-number-comments">
 			<div>N/A</div>
 			<div
 				class="comments buttons"
@@ -257,8 +253,8 @@
 					{/if}
 				</p>
 			</div>
-		</div>
-	</div>
+		</svelte:fragment>
+	</Layout>
 </article>
 
 <style lang="scss">
@@ -273,44 +269,26 @@
 		background-color: var(--accent-l1-active);
 	}
 	.border {
+		display: flex;
 		border-radius: 0.5rem;
 		border: 1px solid var(--accent-l3);
 	}
-	.layout {
-		display: flex;
-		flex-direction: row;
-		align-self: start;
-		column-gap: 20px;
-		color: var(--text-color);
-		padding: 5px;
-		transition: background-color 300ms ease-in-out;
-		border-radius: 0.5rem;
-	}
-	.layout:not(.haveBeenRead) {
-		border-style: solid;
-		border-width: 0px 0px 0px 5px;
-		border-color: var(--indication-blue);
-	}
-	.layout > div {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-	.title-groups h4 {
+	.title {
 		margin: 0px;
-		overflow: hidden;
-		text-wrap: nowrap;
 		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		width: 100%;
 	}
-	.title-groups {
-		flex-grow: 3;
+	.title-outer {
+		display: contents;
 	}
 	.groups {
 		display: flex;
 		gap: 5px;
 		flex-direction: row;
 	}
-	.groups > a {
+	.groups > span {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
@@ -320,42 +298,19 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-	.reading-number-comments {
-		align-items: center;
-		flex-grow: 0.15;
-	}
-	.flag-reading-state {
-		align-items: center;
-		gap: 5px;
-	}
-	.flag-reading-state > div {
-		width: 24px;
-		height: 24px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.state {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	.reading-number-comments > .comments {
+	.comments {
 		display: flex;
 		align-items: center;
 		justify-items: center;
 		gap: 1px;
 	}
-	.reading-number-comments > .comments > p {
+	.comments > p {
 		margin: 0px 5px;
 	}
-	.reading-number-comments > .comments > div {
+	.comments > div {
 		display: flex;
 		align-content: center;
 		justify-content: center;
-	}
-	.layout:hover {
-		background-color: var(--accent-hover);
 	}
 	a {
 		color: inherit;
@@ -365,11 +320,8 @@
 	a:hover {
 		color: var(--primary);
 	}
-	.date-uploader > p {
+	.upload-date {
 		margin: 0px;
-	}
-	.date-uploader {
-		flex-grow: 0.15;
 	}
 	.remove {
 		color: var(--status-red);

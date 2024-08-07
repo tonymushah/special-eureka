@@ -15,11 +15,11 @@
 <style lang="scss">
 	.layout {
 		display: grid;
+		column-gap: 10px;
 		grid-template-columns: repeat(3, 1fr);
 		.chapters {
 			grid-column: 2/4;
 		}
-		column-gap: 10px;
 	}
 	@media screen and (max-width: 1200px) {
 		.layout {

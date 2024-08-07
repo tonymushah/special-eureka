@@ -1,4 +1,4 @@
-use crate::Result;
+use crate::{store::types::enums::image_fit::ImageFit, Result};
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 use uuid::Uuid;
@@ -148,6 +148,80 @@ impl UserOptionSubscriptions {
                         if has_changed {
                             let borrow = {
                                 chapter_languages_sub.borrow().clone()
+                            };
+                            yield borrow;
+                        }
+                    }else {
+                        break;
+                    }
+                } else{
+                    break;
+                }
+                sub_sleep().await;
+            }
+            window.unlisten(unlisten);
+        })
+    }
+    pub async fn listen_to_image_fit<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ImageFit> + 'ctx> {
+        let (watches, should_end, unlisten, window, is_initial_loading) =
+            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
+        let image_fit_sub = watches.image_fit.subscribe();
+        Ok(stream! {
+            loop {
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
+                    let borrow = {
+                        *image_fit_sub.borrow()
+                    };
+                    yield borrow;
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
+                    if let Ok(has_changed) = image_fit_sub.has_changed() {
+                        if has_changed {
+                            let borrow = {
+                                *image_fit_sub.borrow()
+                            };
+                            yield borrow;
+                        }
+                    }else {
+                        break;
+                    }
+                } else{
+                    break;
+                }
+                sub_sleep().await;
+            }
+            window.unlisten(unlisten);
+        })
+    }
+    pub async fn listen_to_longstrip_image_width<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = f64> + 'ctx> {
+        let (watches, should_end, unlisten, window, is_initial_loading) =
+            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
+        let longstrip_image_width_sub = watches.longstrip_image_width.subscribe();
+        Ok(stream! {
+            loop {
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
+                    let borrow = {
+                        *longstrip_image_width_sub.borrow()
+                    };
+                    yield borrow;
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
+                    if let Ok(has_changed) = longstrip_image_width_sub.has_changed() {
+                        if has_changed {
+                            let borrow = {
+                                *longstrip_image_width_sub.borrow()
                             };
                             yield borrow;
                         }

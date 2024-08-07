@@ -29,6 +29,7 @@
 		rtl.subscribe(($rtl) => isSidebarRtl.set($rtl.data?.watchSidebarDirection == Direction.Rtl))
 	);
 	$: loading = $navigating != null;
+	$: isRTL = $rtl.data?.watchSidebarDirection == Direction.Rtl;
 </script>
 
 <div class="d-content">
@@ -40,10 +41,10 @@
 
 	<MangaDexThemeProvider {theme}>
 		<SetTitle />
-		<div class="provider">
-			{#if $rtl.data?.watchSidebarDirection == Direction.Ltr}
+		<div class="provider" class:isRTL>
+			<div class="sidebar">
 				<Sidebar />
-			{/if}
+			</div>
 			<div
 				class="inner"
 				class:loading
@@ -65,24 +66,31 @@
 			>
 				<slot />
 			</div>
-			{#if $rtl.data?.watchSidebarDirection == Direction.Rtl}
-				<Sidebar />
-			{/if}
 		</div>
 	</MangaDexThemeProvider>
 </div>
 
 <style lang="scss">
 	.provider {
-		width: 100%;
-		display: inline-flex;
+		display: flex;
 		color: var(--text-color);
+		width: 100%;
+		height: 100%;
+		.sidebar {
+			width: fit-content;
+		}
+		.inner {
+			width: -webkit-fill-available;
+			height: -webkit-fill-available;
+		}
+	}
+	.provider.isRTL {
+		flex-direction: row-reverse;
 	}
 	.provider::-webkit-scrollbar {
 		display: none;
 	}
 	.inner {
-		height: 97cqh;
 		scroll-behavior: smooth;
 		overflow-y: scroll;
 		width: 100%;
@@ -104,6 +112,9 @@
 		*::-webkit-scrollbar-track {
 			background-color: var(--accent);
 		}
+	}
+	.d-content {
+		display: contents;
 	}
 	.inner.defaultDecoration {
 		height: 100cqh;

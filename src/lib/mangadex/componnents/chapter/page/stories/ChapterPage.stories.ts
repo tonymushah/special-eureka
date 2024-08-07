@@ -12,7 +12,7 @@ import {
 } from "../contexts/currentChapter";
 import fuufuIjouChapter56 from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/images";
 import aggregate from "../readinMode/tests/bee8582d-dbed-4075-be3d-4361052d31c1/aggregate";
-import { UserRole } from "@mangadex/gql/graphql";
+import { Language, UserRole } from "@mangadex/gql/graphql";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -50,7 +50,8 @@ export const Default: Story = {
 			thread: new CurrentChapterThread({
 				threadUrl: "https://forums.mangadex.org/threads/1072794",
 				comments: 45
-			})
+			}),
+			translatedLanguage: Language.English
 		}),
 		currentPage: 0,
 		images: fuufuIjouChapter56,

@@ -3,7 +3,7 @@
 </script>
 
 <div class="read-icon">
-	<BookOpenIcon size="24px" />
+	<BookOpenIcon size="24" />
 </div>
 
 <style lang="scss">

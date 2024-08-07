@@ -198,11 +198,6 @@ input BeginUploadSessionParam {
 }
 
 
-"""
-The `Binary` scalar type represents binary data.
-"""
-scalar Bytes
-
 type CaptchaMutations {
 	solve(params: CaptchaSolveParams!): Boolean!
 }
@@ -450,7 +445,7 @@ input CoverListParam {
 type CoverQueries {
 	list(params: CoverListParam! = {limit: null, offset: null, mangaIds: [], coverIds: [], uploaderIds: [], locales: [], order: null}): CoverResults!
 	get(id: UUID!): Cover!
-	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Bytes!
+	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Url!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
@@ -907,6 +902,12 @@ type HomeQueries {
 	popularTitles(params: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): MangaResults!
 }
 
+
+enum ImageFit {
+	DEFAULT
+	WIDTH
+	HEIGTH
+}
 
 enum IncludeExternalUrl {
 	INCLUDE
@@ -1476,6 +1477,7 @@ type Mutation {
 	upload: UploadMutations!
 	offlineAppState: OfflineAppStateMutations!
 	user: UserMutations!
+	userOption: UserOptionMutations!
 }
 
 type OauthMutations {
@@ -1829,6 +1831,8 @@ type Subscriptions {
 	watchIsFollowingCustomList(customListId: UUID!, subId: UUID!): Boolean!
 	watchMangaReadingState(mangaId: UUID!, subId: UUID!): ReadingStatus
 	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
+	watchImageFit(subId: UUID!): ImageFit!
+	watchLongstripImageWidth(subId: UUID!): Float!
 }
 
 type Tag {
@@ -2028,6 +2032,17 @@ type UserMutations {
 	unfollow(id: UUID!): Boolean!
 }
 
+type UserOptionMutations {
+	setReadingMode(mode: ReadingMode!): ReadingMode!
+	setPageDirection(direction: Direction!): Direction!
+	setSidebarDirection(direction: Direction!): Direction!
+	setChapterLanguages(languages: [Language!]!): [Language!]!
+	setImageFit(imageFit: ImageFit!): ImageFit!
+	setLongstripImageWidth(width: Float!): Float!
+	clearCoverImagesCaches: Boolean!
+	clearFaviconCache: Boolean!
+}
+
 type UserQueries {
 	get(id: UUID!): User!
 	list(params: UserListParam! = {limit: null, offset: null, userIds: [], username: null, order: null}): UserResults!
@@ -2138,7 +2153,7 @@ input UserSortOrder @oneOf {
 scalar Username
 
 type UtilsQuery {
-	favicon(url: Url!): Bytes!
+	favicon(url: Url!): Url!
 	strToLanguage(input: String!): Language!
 	languageToStr(language: Language!): String!
 }
