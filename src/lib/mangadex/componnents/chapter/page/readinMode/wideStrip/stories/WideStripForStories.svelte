@@ -1,11 +1,15 @@
 <script lang="ts">
-	import { derived } from "svelte/store";
+	import { derived, writable } from "svelte/store";
 	import { initDefaultChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
-	import { ReadingDirection, readingDirection } from "../../../stores/readingDirection";
 	import Page from "../WideStrip.svelte";
+	import { Direction as ReadingDirection } from "@mangadex/gql";
+	import { initCurrentChapterDirection } from "../../../contexts/readingDirection";
 	export let images: string[];
 	export let currentPage: number = 0;
+	export let direction: ReadingDirection = ReadingDirection.Ltr;
+
+	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const currentChapterPage = initDefaultChapterCurrentPageContext();
 	$: {
 		currentChapterPage.set(currentPage);
