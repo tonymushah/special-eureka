@@ -49,11 +49,21 @@
 	div.publication {
 		display: flex;
 	}
+	@media (width < 900px) {
+		div.description {
+			line-clamp: 2;
+			-webkit-line-clamp: 2;
+		}
+	}
+	@media (width >= 900px) {
+		div.description {
+			line-clamp: 3;
+			-webkit-line-clamp: 3;
+		}
+	}
 	div.description {
 		font-size: 12px;
 		-webkit-box-orient: vertical;
-		line-clamp: 3;
-		-webkit-line-clamp: 3;
 		display: -webkit-box;
 		overflow: hidden;
 		margin: 2px;

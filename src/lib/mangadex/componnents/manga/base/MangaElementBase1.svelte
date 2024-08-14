@@ -14,9 +14,10 @@
 	export let title: string;
 	export let status: MangaStatus;
 	export let description: string;
+	export let withFull = false;
 </script>
 
-<Layout on:click --layout-width="19em">
+<Layout on:click --layout-width={withFull ? "100%" : "19em"}>
 	<Image {coverImage} {coverImageAlt} />
 	<Content {title} {status} {description} />
 </Layout>
