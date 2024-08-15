@@ -1491,6 +1491,12 @@ export type MangaListParams = {
   year?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export enum MangaListStyle {
+  Cover = 'COVER',
+  Grid = 'GRID',
+  Rows = 'ROWS'
+}
+
 export type MangaMutations = {
   __typename?: 'MangaMutations';
   create: MangaObject;
@@ -2266,6 +2272,7 @@ export type Subscriptions = {
   watchIsLogged: Scalars['Boolean']['output'];
   watchLongstripImageWidth: Scalars['Float']['output'];
   watchManga: GraphQlMangaAttributes;
+  watchMangaListStyle: MangaListStyle;
   watchMangaReadingState?: Maybe<ReadingStatus>;
   watchMangaStatistics: MangaStatisticsAttributes;
   watchPageDirection: Direction;
@@ -2370,6 +2377,11 @@ export type SubscriptionsWatchLongstripImageWidthArgs = {
 
 export type SubscriptionsWatchMangaArgs = {
   mangaId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchMangaListStyleArgs = {
   subId: Scalars['UUID']['input'];
 };
 
@@ -2693,6 +2705,7 @@ export type UserOptionMutations = {
   setChapterLanguages: Array<Language>;
   setImageFit: ImageFit;
   setLongstripImageWidth: Scalars['Float']['output'];
+  setMangaListStyle: MangaListStyle;
   setPageDirection: Direction;
   setReadingMode: ReadingMode;
   setSidebarDirection: Direction;
@@ -2711,6 +2724,11 @@ export type UserOptionMutationsSetImageFitArgs = {
 
 export type UserOptionMutationsSetLongstripImageWidthArgs = {
   width: Scalars['Float']['input'];
+};
+
+
+export type UserOptionMutationsSetMangaListStyleArgs = {
+  mangaListStyle: MangaListStyle;
 };
 
 
