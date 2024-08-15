@@ -6,6 +6,7 @@ use crate::{
         enums::{
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
+            manga_list_style::MangaListStyleStore,
             reading_mode::ReadingModeStore,
         },
         structs::{
@@ -40,6 +41,9 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .longstrip_image_width
         .send_data(LongstripImageWidthStore::extract_from_store(store)?);
+    let _ = watches
+        .manga_list_style
+        .send_data(MangaListStyleStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }
