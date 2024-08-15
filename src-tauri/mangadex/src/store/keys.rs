@@ -15,3 +15,5 @@ pub const CHAPTER_LANGUAGES: &str = "chapter_languages";
 pub const IMAGE_FIT: &str = "image_fit";
 
 pub const LONGSTRIP_IMAGE_WIDTH: &str = "longstrip_image_width";
+
+pub const MANGA_LIST_STYLE: &str = "manga-list-style";
