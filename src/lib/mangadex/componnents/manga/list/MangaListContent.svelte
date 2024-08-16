@@ -9,12 +9,11 @@
 </script>
 
 <script lang="ts">
-	import { getMangaListStyleContext } from "./contexts/style";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
-	import { blur } from "svelte/transition";
-	import MediumMangaList from "./medium/MediumMangaList.svelte";
-	import LongMangaList from "./long/LongMangaList.svelte";
+	import { getMangaListStyleContext } from "./contexts/style";
 	import CoverMangaList from "./cover/CoverMangaList.svelte";
+	import LongMangaList from "./long/LongMangaList.svelte";
+	import MediumMangaList from "./medium/MediumMangaList.svelte";
 
 	export let list: MangaListContentItemProps[] = [];
 	const style = getMangaListStyleContext();
@@ -22,16 +21,10 @@
 
 <div class="manga-list-content">
 	{#if $style == MangaListStyle.Grid}
-		<div transition:blur>
-			<MediumMangaList bind:list />
-		</div>
+		<MediumMangaList bind:list />
 	{:else if $style == MangaListStyle.Rows}
-		<div transition:blur>
-			<LongMangaList bind:list />
-		</div>
+		<LongMangaList bind:list />
 	{:else if $style == MangaListStyle.Cover}
-		<div transition:blur>
-			<CoverMangaList bind:list />
-		</div>
+		<CoverMangaList bind:list />
 	{/if}
 </div>

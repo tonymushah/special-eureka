@@ -10,6 +10,7 @@ import { range, random } from "lodash";
 import { v4 } from "uuid";
 import { honey_trap1 } from "@mangadex/test-data/images/honey-trap";
 import { data3 } from "@mangadex/componnents/tag/testDatas";
+import { fukkoi1 } from "@mangadex/test-data/images/fukkoi";
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
@@ -51,12 +52,29 @@ const elementsData = [{
         id: v4(),
         name: "Harem"
     }]
+}, {
+    coverImage: readable(fukkoi1),
+    coverImageAlt: "fuufu-ijou-koibito-miman",
+    title: "Fuufu Ijou, Koibito Miman",
+    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati aut, commodi quibusdam ipsam aspernatur maxime molestiae, dolorum ducimus ipsa corporis, optio eaque! Quidem rerum quod velit asperiores dolorem quisquam in!",
+    tags: [{
+        id: v4(),
+        name: "Romance",
+    }, {
+        id: v4(),
+        name: "School Life"
+    }, {
+        id: v4(),
+        name: "Drama"
+    }],
+    status: MangaStatus.Ongoing,
+    contentRating: ContentRating.Suggestive
 }]
 
 export const Default: Story = {
     args: {
         list: range(random(2, 10, false)).map(() => {
-            const elementData = elementsData[random(10) % 2];
+            const elementData = elementsData[random(10) % 3];
             return {
                 ...elementData,
                 id: v4()

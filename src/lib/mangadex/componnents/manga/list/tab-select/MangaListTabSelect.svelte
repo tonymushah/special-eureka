@@ -1,48 +1,44 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { getMangaListStyleContextWritable } from "../contexts/style";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
-	import { ColumnsIcon, GridIcon, ImageIcon, SidebarIcon } from "svelte-feather-icons";
-	import {
-		RiGalleryFill,
-		RiLineLine,
-		RiDashboardFill,
-		RiGalleryView,
-		RiLayoutColumnLine,
-		RiLayoutRowLine
-	} from "svelte-remixicon";
+	import { GridIcon } from "svelte-feather-icons";
+	import { RiLayoutColumnLine, RiLayoutRowLine } from "svelte-remixicon";
+	import { getMangaListStyleContextWritable } from "../contexts/style";
 
 	const style = getMangaListStyleContextWritable();
-	const size = "28";
+	const size = "20";
 </script>
 
 <div class="tab-select">
 	<ButtonAccent
-		isBase
 		on:click={() => {
 			style.set(MangaListStyle.Grid);
 		}}
 		variant={$style == MangaListStyle.Grid ? "4" : "1"}
 	>
-		<GridIcon {size} />
+		<div class="icon">
+			<GridIcon {size} />
+		</div>
 	</ButtonAccent>
 	<ButtonAccent
-		isBase
 		on:click={() => {
 			style.set(MangaListStyle.Rows);
 		}}
 		variant={$style == MangaListStyle.Rows ? "5" : "1"}
 	>
-		<RiLayoutRowLine {size} />
+		<div class="icon">
+			<RiLayoutRowLine {size} />
+		</div>
 	</ButtonAccent>
 	<ButtonAccent
-		isBase
 		on:click={() => {
 			style.set(MangaListStyle.Cover);
 		}}
 		variant={$style == MangaListStyle.Cover ? "5" : "1"}
 	>
-		<RiLayoutColumnLine {size} />
+		<div class="icon">
+			<RiLayoutColumnLine {size} />
+		</div>
 	</ButtonAccent>
 </div>
 
@@ -52,5 +48,11 @@
 		align-items: center;
 		justify-content: center;
 		gap: 5px;
+	}
+	.icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 6px;
 	}
 </style>
