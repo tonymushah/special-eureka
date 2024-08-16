@@ -10,7 +10,7 @@ import { v4 } from "uuid";
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/Cover",
+    title: "MangaDex/manga/list/style/Cover",
     component: List,
     tags: ["autodocs"]
 } satisfies Meta<List>;

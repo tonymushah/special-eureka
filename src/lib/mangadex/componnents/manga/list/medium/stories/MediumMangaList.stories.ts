@@ -11,7 +11,7 @@ import { v4 } from "uuid";
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/Medium",
+    title: "MangaDex/manga/list/style/Medium",
     component: MediumList,
     tags: ["autodocs"]
 } satisfies Meta<MediumList>;

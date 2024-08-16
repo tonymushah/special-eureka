@@ -13,7 +13,7 @@ import { data3 } from "@mangadex/componnents/tag/testDatas";
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/Long",
+    title: "MangaDex/manga/list/style/Long",
     component: List,
     tags: ["autodocs"]
 } satisfies Meta<List>;
