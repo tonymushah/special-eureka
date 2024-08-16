@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/Select",
+    title: "MangaDex/manga/list/misc/Select",
     component: ListSelect,
     tags: ["autodocs"]
 } satisfies Meta<ListSelect>;
