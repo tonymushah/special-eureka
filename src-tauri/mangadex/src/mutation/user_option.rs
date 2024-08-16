@@ -16,6 +16,7 @@ use crate::{
             direction::{
                 reading::ReadingDirectionStore, sidebar::SidebarDirectionStore, Direction,
             },
+            manga_list_style::{MangaListStyle, MangaListStyleStore},
             reading_mode::{ReadingMode, ReadingModeStore},
         },
         structs::chapter_language::ChapterLanguagesStore,
@@ -107,5 +108,18 @@ impl UserOptionMutations {
         let app = get_app_handle_from_async_graphql::<tauri::Wry>(ctx)?;
         clear_favicons_dir(app.config().as_ref())?;
         Ok(true)
+    }
+    pub async fn set_manga_list_style(
+        &self,
+        ctx: &Context<'_>,
+        manga_list_style: MangaListStyle,
+    ) -> Result<MangaListStyle> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = MangaListStyleStore::from(manga_list_style);
+        inner.insert_and_save(&mut store_write)?;
+        watches.manga_list_style.send_data(inner)?;
+        Ok(MangaListStyleStore::extract_from_store(&store_write)?.into())
     }
 }

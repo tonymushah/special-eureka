@@ -1223,6 +1223,12 @@ input MangaListParams {
 	group: UUID
 }
 
+enum MangaListStyle {
+	GRID
+	ROWS
+	COVER
+}
+
 type MangaMutations {
 	download(id: UUID!): DownloadState!
 	create(params: CreateMangaParam!): MangaObject!
@@ -1833,6 +1839,7 @@ type Subscriptions {
 	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
 	watchImageFit(subId: UUID!): ImageFit!
 	watchLongstripImageWidth(subId: UUID!): Float!
+	watchMangaListStyle(subId: UUID!): MangaListStyle!
 }
 
 type Tag {
@@ -2041,6 +2048,7 @@ type UserOptionMutations {
 	setLongstripImageWidth(width: Float!): Float!
 	clearCoverImagesCaches: Boolean!
 	clearFaviconCache: Boolean!
+	setMangaListStyle(mangaListStyle: MangaListStyle!): MangaListStyle!
 }
 
 type UserQueries {

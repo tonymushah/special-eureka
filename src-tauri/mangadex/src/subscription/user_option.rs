@@ -3,7 +3,9 @@ use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
-use crate::store::types::enums::{direction::Direction, reading_mode::ReadingMode};
+use crate::store::types::enums::{
+    direction::Direction, manga_list_style::MangaListStyle, reading_mode::ReadingMode,
+};
 use async_stream::stream;
 use mangadex_api_types_rust::Language;
 
@@ -222,6 +224,43 @@ impl UserOptionSubscriptions {
                         if has_changed {
                             let borrow = {
                                 *longstrip_image_width_sub.borrow()
+                            };
+                            yield borrow;
+                        }
+                    }else {
+                        break;
+                    }
+                } else{
+                    break;
+                }
+                sub_sleep().await;
+            }
+            window.unlisten(unlisten);
+        })
+    }
+    pub async fn listen_to_manga_list_style<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaListStyle> + 'ctx> {
+        let (watches, should_end, unlisten, window, is_initial_loading) =
+            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
+        let manga_list_style_sub = watches.manga_list_style.subscribe();
+        Ok(stream! {
+            loop {
+                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
+                    if let Ok(mut write) = is_initial_loading.write() {
+                        *write = false;
+                    }
+                    let borrow = {
+                        *manga_list_style_sub.borrow()
+                    };
+                    yield borrow;
+                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
+                    if let Ok(has_changed) = manga_list_style_sub.has_changed() {
+                        if has_changed {
+                            let borrow = {
+                                *manga_list_style_sub.borrow()
                             };
                             yield borrow;
                         }

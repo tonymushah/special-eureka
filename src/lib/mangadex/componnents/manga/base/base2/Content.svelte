@@ -29,9 +29,10 @@
 	<div class="top-body">
 		<div class="title"><p>{title}</p></div>
 		<div class="publication">
-			<DefaultSpan --font-size="12px"
-				>Publication : <PublicationStatusTag {status} /></DefaultSpan
-			>
+			<DefaultSpan --font-size="12px">
+				<span class="pub-tag">Publication :</span>
+				<PublicationStatusTag {status} />
+			</DefaultSpan>
 		</div>
 	</div>
 	<div class="bottom-body">
@@ -68,14 +69,20 @@
 		height: 1.5em;
 		overflow: hidden;
 	}
+	@media (width < 600px) {
+		.pub-tag {
+			display: none;
+		}
+	}
 	div.title > p {
 		margin: 0px;
-		font-size: 23px;
+		font-size: 20px;
 		-webkit-box-orient: vertical;
-		line-clamp: 2;
-		-webkit-line-clamp: 2;
+		line-clamp: 1;
+		-webkit-line-clamp: 1;
 		display: -webkit-box;
-		font-weight: 800;
+		overflow: hidden;
+		font-weight: 700;
 	}
 	div.top-body {
 		gap: 10px;
@@ -99,10 +106,6 @@
 		overflow: hidden;
 		margin-top: 0.5em;
 	}
-	/*div.description {
-		height: 5em;
-		overflow: hidden;
-	}*/
 	div.publication {
 		align-self: center;
 	}
