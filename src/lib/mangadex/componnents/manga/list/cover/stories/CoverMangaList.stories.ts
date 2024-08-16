@@ -27,7 +27,7 @@ const item_data = {
 
 export const Default: Story = {
     args: {
-        data: range(random(2, 10, false)).map(() => ({
+        list: range(random(2, 10, false)).map(() => ({
             ...item_data,
             id: v4()
         }))

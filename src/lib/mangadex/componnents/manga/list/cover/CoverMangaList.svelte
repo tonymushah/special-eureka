@@ -11,11 +11,11 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 
-	export let data: CoverMangaListItemProps[] = [];
+	export let list: CoverMangaListItemProps[] = [];
 </script>
 
 <section class="cover-list">
-	{#each data as item}
+	{#each list as item}
 		<MangaElementBase3
 			{...item}
 			on:click={() => {
