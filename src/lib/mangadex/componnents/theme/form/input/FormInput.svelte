@@ -3,7 +3,7 @@
 
     export let type: HTMLInputTypeAttribute = "text";
     export let value: any = ""
-    export let name: string | null | undefined;
+    export let name: string | null | undefined = undefined;
 </script>
 
 <input {type} {value} {name}/>
