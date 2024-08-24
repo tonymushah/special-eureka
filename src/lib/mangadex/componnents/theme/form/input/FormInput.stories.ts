@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "../../MangadexThemeProviderForStory.s
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/theme/form/text-input",
+    title: "MangaDex/theme/form/Input",
     component: MidtoneLine,
     tags: ["autodocs"]
 } satisfies Meta<MidtoneLine>;
