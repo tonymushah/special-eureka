@@ -36,4 +36,9 @@
 		//border-style: dashed;
 		outline: none;
 	}
+	input:-internal-autofill-selected {
+		appearance: none;
+		background-color: var(--accent-l1) !important;
+		color: var(--text-color) !important;
+	}
 </style>
