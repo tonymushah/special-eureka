@@ -1,6 +1,8 @@
 use async_graphql::{InputObject, SimpleObject};
 use serde::{Deserialize, Serialize};
 
+pub mod profiles;
+
 #[derive(Debug, Clone, Deserialize, Serialize, SimpleObject, InputObject)]
 #[graphql(input_name = "AccentInput")]
 pub struct Accent {
