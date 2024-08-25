@@ -9,7 +9,7 @@ use tauri::Runtime;
 
 use super::MangaDexTheme as Theme;
 use crate::store::{
-    keys::THEME_PROFILE,
+    keys::{THEME_PROFILE, THEME_PROFILE_KEY},
     types::{DefaulStore, ExtractFromStore, StoreCrud},
 };
 
@@ -105,6 +105,75 @@ where
     ) -> Result<tauri_plugin_store::StoreBuilder<R>, tauri_plugin_store::Error> {
         Ok(store_builder.default(
             THEME_PROFILE.to_string(),
+            serde_json::to_value(Self::default())?,
+        ))
+    }
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+pub struct ThemeProfileDefaultKey(Option<String>);
+
+impl Deref for ThemeProfileDefaultKey {
+    type Target = Option<String>;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl DerefMut for ThemeProfileDefaultKey {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+
+impl<'de, R> ExtractFromStore<'de, R> for ThemeProfileDefaultKey
+where
+    R: Runtime,
+{
+    fn extract_from_store(
+        store: &tauri_plugin_store::Store<R>,
+    ) -> Result<Self, tauri_plugin_store::Error> {
+        if let Some(info) = store.get(THEME_PROFILE_KEY) {
+            let client: Self = serde_json::from_value(info.clone())?;
+            Ok(client)
+        } else {
+            Ok(Self::default())
+        }
+    }
+}
+
+impl<R> StoreCrud<R> for ThemeProfileDefaultKey
+where
+    R: Runtime,
+{
+    fn insert(
+        &self,
+        store: &mut tauri_plugin_store::Store<R>,
+    ) -> Result<(), tauri_plugin_store::Error> {
+        store.insert(
+            THEME_PROFILE_KEY.to_string(),
+            serde_json::to_value(self.clone())?,
+        )?;
+        Ok(())
+    }
+    fn delete(
+        &self,
+        store: &mut tauri_plugin_store::Store<R>,
+    ) -> Result<(), tauri_plugin_store::Error> {
+        store.delete(THEME_PROFILE_KEY)?;
+        Ok(())
+    }
+}
+
+impl<R> DefaulStore<R> for ThemeProfileDefaultKey
+where
+    R: Runtime,
+{
+    fn default_store(
+        store_builder: tauri_plugin_store::StoreBuilder<R>,
+    ) -> Result<tauri_plugin_store::StoreBuilder<R>, tauri_plugin_store::Error> {
+        Ok(store_builder.default(
+            THEME_PROFILE_KEY.to_string(),
             serde_json::to_value(Self::default())?,
         ))
     }

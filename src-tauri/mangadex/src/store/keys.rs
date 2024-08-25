@@ -17,3 +17,5 @@ pub const IMAGE_FIT: &str = "image_fit";
 pub const LONGSTRIP_IMAGE_WIDTH: &str = "longstrip_image_width";
 
 pub const THEME_PROFILE: &str = "theme_profile";
+
+pub const THEME_PROFILE_KEY: &str = "theme_profile_key";
