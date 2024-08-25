@@ -11,6 +11,7 @@ use crate::{
         structs::{
             chapter_language::ChapterLanguagesStore,
             longstrip_image_width::LongstripImageWidthStore,
+            theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
         },
         ExtractFromStore,
     },
@@ -40,6 +41,12 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .longstrip_image_width
         .send_data(LongstripImageWidthStore::extract_from_store(store)?);
+    let _ = watches
+        .themes
+        .send_data(ThemeProfiles::extract_from_store(store)?);
+    let _ = watches
+        .theme_default_key
+        .send_data(ThemeProfileDefaultKey::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }

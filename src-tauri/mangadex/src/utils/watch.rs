@@ -28,6 +28,7 @@ use self::{
     sidebar_direction::SideBarDirectionWatch,
     statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
     tag::TagWatch,
+    theme::{key::ThemeProfileDefaultKeyWatch, ThemeProfilesWatch},
     upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
     user::UserWatch,
     user_me::UserMeWatch,
@@ -56,6 +57,7 @@ pub mod scanlation_group;
 pub mod sidebar_direction;
 pub mod statistics;
 pub mod tag;
+pub mod theme;
 pub mod upload;
 pub mod user;
 pub mod user_me;
@@ -165,4 +167,6 @@ pub struct Watches {
     pub read_marker: ReadMarkerWatch,
     pub image_fit: ImageFitWatch,
     pub longstrip_image_width: LongstripImageWidthWatch,
+    pub themes: ThemeProfilesWatch,
+    pub theme_default_key: ThemeProfileDefaultKeyWatch,
 }
