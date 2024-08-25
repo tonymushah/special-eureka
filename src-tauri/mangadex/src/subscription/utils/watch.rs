@@ -51,7 +51,7 @@ where
     pub fn new(recv: Receiver<T>, window: Window<R>, sub_id: Uuid) -> Self {
         let cancel_token = CancellationToken::new();
         {
-            let window_event_cancel_token = cancel_token.child_token();
+            let window_event_cancel_token = cancel_token.clone();
             window.on_window_event(move |e| {
                 if let WindowEvent::Destroyed = e {
                     window_event_cancel_token.cancel();
@@ -59,7 +59,7 @@ where
             });
         }
         let sub_id_handler = {
-            let window_event_cancel_token = cancel_token.child_token();
+            let window_event_cancel_token = cancel_token.clone();
             window.listen("sub_end", move |e| {
                 if let Some(id) =
                     e.payload()
