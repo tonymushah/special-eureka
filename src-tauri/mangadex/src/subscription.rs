@@ -28,6 +28,7 @@ pub mod tag;
 pub mod upload;
 pub mod user;
 pub mod user_option;
+pub mod utils;
 
 use mangadex_api_types_rust::Language;
 use mangadex_api_types_rust::ReadingStatus;
