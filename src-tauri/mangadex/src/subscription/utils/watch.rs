@@ -1,3 +1,4 @@
+use async_graphql::Context as GQLContext;
 use tauri::{EventHandler, Runtime, Window, WindowEvent};
 use tokio::{select, sync::watch::Receiver};
 use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
@@ -8,6 +9,10 @@ use std::{
     future::Future,
     pin::Pin,
     task::{Context, Poll},
+};
+
+use crate::utils::{
+    get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches,
 };
 
 pub struct WatchSubscriptionStream<R, T>
@@ -83,6 +88,19 @@ where
             cancel_token,
             sub_id_handler,
         }
+    }
+
+    pub fn from_async_graphql_context<F>(
+        ctx: &GQLContext<'_>,
+        sub_id: Uuid,
+        provider: F,
+    ) -> crate::Result<Self>
+    where
+        F: FnOnce(&Watches) -> Receiver<T>,
+    {
+        let window = get_window_from_async_graphql::<R>(ctx)?.clone();
+        let watches = get_watches_from_graphql_context::<R>(ctx)?;
+        Ok(Self::new(provider(&watches), window, sub_id))
     }
 }
 
