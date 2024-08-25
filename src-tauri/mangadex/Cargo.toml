@@ -35,6 +35,7 @@ bytes.workspace = true
 async-stream = "0"
 favicon-picker = "1.0.0"
 tempfile = "3.10.1"
+tokio-util = "0.7.11"
 
 [dependencies.mangadex-desktop-api2]
 version = "0.6.0-alpha.6"
