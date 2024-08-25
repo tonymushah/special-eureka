@@ -69,7 +69,6 @@ use crate::{
         user::attributes::UserAttributes,
     },
     store::types::enums::{direction::Direction, image_fit::ImageFit, reading_mode::ReadingMode},
-    utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
 
 #[derive(Debug, Clone, Copy)]
