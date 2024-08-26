@@ -1,3 +1,33 @@
+type Accent {
+	default: String!
+	hover: String!
+	active: String!
+}
+
+input AccentInput {
+	default: String!
+	hover: String!
+	active: String!
+}
+
+type Accents {
+	default: Accent!
+	l1: Accent!
+	l2: Accent!
+	l3: Accent!
+	l4: Accent!
+	l5: Accent!
+}
+
+input AccentsInput {
+	default: AccentInput!
+	l1: AccentInput!
+	l2: AccentInput!
+	l3: AccentInput!
+	l4: AccentInput!
+	l5: AccentInput!
+}
+
 type ApiClient {
 	id: UUID!
 	attributes: ApiClientAttributes!
@@ -197,6 +227,16 @@ input BeginUploadSessionParam {
 	mangaId: UUID!
 }
 
+
+type ButtonAccentColor {
+	default: String!
+	alternate: String!
+}
+
+input ButtonAccentInput {
+	default: String!
+	alternate: String!
+}
 
 type CaptchaMutations {
 	solve(params: CaptchaSolveParams!): Boolean!
@@ -409,6 +449,14 @@ enum ContentRating {
 	PORNOGRAPHIC
 	SAFE
 	SUGGESTIVE
+}
+
+type Contrast {
+	l1: String!
+}
+
+input ContrastInput {
+	l1: String!
 }
 
 type Cover {
@@ -691,6 +739,18 @@ enum CustomListVisibility {
 	PRIVATE
 }
 
+type DangerColor {
+	default: String!
+	l1: String!
+	l2: String!
+}
+
+input DangerColorInput {
+	default: String!
+	l1: String!
+	l2: String!
+}
+
 input DeleteImageParam {
 	sessionId: UUID!
 	sessionFileId: UUID!
@@ -929,6 +989,14 @@ enum IncludeFutureUpdates {
 	EXCLUDE
 }
 
+type IndicatorColor {
+	blue: String!
+}
+
+input IndicatorColorInput {
+	blue: String!
+}
+
 type InfrastructureQueries {
 	ping: Boolean!
 }
@@ -1094,6 +1162,34 @@ input MangaCreateRelationParam {
 scalar MangaDexDateTime
 
 scalar MangaDexDuration
+
+type MangaDexTheme {
+	textColor: String!
+	mainBackground: String!
+	accents: Accents!
+	midTone: String!
+	contrast: Contrast!
+	scrollbar: ScrollbarColor!
+	button: ButtonAccentColor!
+	primary: PrimaryColor!
+	status: StatusColor!
+	indication: IndicatorColor!
+	danger: DangerColor!
+}
+
+input MangaDexThemeInput {
+	textColor: String!
+	mainBackground: String!
+	accents: AccentsInput!
+	midTone: String!
+	contrast: ContrastInput!
+	scrollbar: ScrollbarColorInput!
+	button: ButtonAccentInput!
+	primary: PrimaryColorInput!
+	status: StatusColorInput!
+	indication: IndicatorColorInput!
+	danger: DangerColorInput!
+}
 
 input MangaDraftsParams {
 	limit: Int
@@ -1513,6 +1609,18 @@ scalar Password
 
 scalar PathBuf
 
+type PrimaryColor {
+	primary: String!
+	primary1: String!
+	primary2: String!
+}
+
+input PrimaryColorInput {
+	primary: String!
+	primary1: String!
+	primary2: String!
+}
+
 type Query {
 	manga: MangaQueries!
 	apiClient: ApiClientQueries!
@@ -1779,6 +1887,16 @@ type ScanlationGroupResults {
 	total: Int!
 }
 
+type ScrollbarColor {
+	default: String!
+	hovered: String!
+}
+
+input ScrollbarColorInput {
+	default: String!
+	hovered: String!
+}
+
 type Statistics {
 	id: UUID!
 	comments: StatisticsComments
@@ -1794,6 +1912,24 @@ type StatisticsQueries {
 	chapter: ChapterStatisticsQueries!
 	group: GroupStatisticsQueries!
 	manga: MangaStatisticsQueries!
+}
+
+type StatusColor {
+	red: String!
+	green: String!
+	yellow: String!
+	blue: String!
+	grey: String!
+	purple: String!
+}
+
+input StatusColorInput {
+	red: String!
+	green: String!
+	yellow: String!
+	blue: String!
+	grey: String!
+	purple: String!
 }
 
 
@@ -1833,6 +1969,9 @@ type Subscriptions {
 	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
 	watchImageFit(subId: UUID!): ImageFit!
 	watchLongstripImageWidth(subId: UUID!): Float!
+	watchThemesProfile(subId: UUID!): [ThemeProfileEntry!]!
+	watchThemeProfileDefault(subId: UUID!): MangaDexTheme!
+	watchThemeProfileDefaultName(subId: UUID!): String
 }
 
 type Tag {
@@ -1878,6 +2017,16 @@ Determines the behavior of tag interaction when including or excluding tags in t
 enum TagSearchMode {
 	AND
 	OR
+}
+
+type ThemeProfileEntry {
+	name: String!
+	value: MangaDexTheme!
+}
+
+input ThemeProfileEntryInput {
+	name: String!
+	value: MangaDexThemeInput!
 }
 
 """
@@ -2041,6 +2190,11 @@ type UserOptionMutations {
 	setLongstripImageWidth(width: Float!): Float!
 	clearCoverImagesCaches: Boolean!
 	clearFaviconCache: Boolean!
+	setDefaultThemeProfile(name: String): String
+	setThemeProfile(name: String!, theme: MangaDexThemeInput): MangaDexTheme!
+	deleteThemeProfile(name: String!): MangaDexTheme
+	clearThemesProfiles: Boolean!
+	setThemeProfiles(entries: [ThemeProfileEntryInput!]!): Int!
 }
 
 type UserQueries {
