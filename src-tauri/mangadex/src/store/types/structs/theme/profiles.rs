@@ -113,6 +113,12 @@ where
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct ThemeProfileDefaultKey(Option<String>);
 
+impl ThemeProfileDefaultKey {
+    pub fn into_inner(self) -> Option<String> {
+        self.0
+    }
+}
+
 impl Deref for ThemeProfileDefaultKey {
     type Target = Option<String>;
     fn deref(&self) -> &Self::Target {
