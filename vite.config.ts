@@ -17,7 +17,7 @@ export default defineConfig({
 		port: 9305,
 		strictPort: true,
 		fs: {
-			deny: ["**/src-tauri/**", ".env", ".env.*", "*.crt", "*.pem", "**/target/**"]
+			deny: ["**/src-tauri/**", ".env", ".env.*", "*.crt", "*.pem", "**/target/**", "**/data/**"]
 		}
 	},
 	// to access the Tauri environment variables set by the CLI with information about the current target
