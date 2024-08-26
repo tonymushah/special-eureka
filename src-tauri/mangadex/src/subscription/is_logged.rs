@@ -15,12 +15,8 @@ impl IsLoggedSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.is_logged.subscribe(),
-            )?,
-        )
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.is_logged.subscribe()
+        })
     }
 }
