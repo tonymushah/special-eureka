@@ -1,3 +1,5 @@
+use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
+use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
@@ -349,6 +351,33 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = f64> + 'ctx> {
         UserOptionSubscriptions
             .listen_to_longstrip_image_width(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_themes_profile<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<ThemeProfileEntry>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_theme_profiles(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_theme_profile_default<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaDexTheme> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_theme_profile_default(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_theme_profile_default_name<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_theme_profile_default_name(ctx, sub_id)
             .await
     }
 }

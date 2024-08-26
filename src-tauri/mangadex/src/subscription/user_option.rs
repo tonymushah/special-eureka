@@ -1,7 +1,16 @@
-use crate::{store::types::enums::image_fit::ImageFit, Result};
+use crate::{
+    store::types::{
+        enums::image_fit::ImageFit,
+        structs::theme::{profiles::ThemeProfileEntry, MangaDexTheme},
+    },
+    utils::get_watches_from_graphql_context,
+    Result,
+};
 use async_graphql::{Context, Subscription};
+use async_stream::stream;
 use mangadex_api_types_rust::Language;
-use tokio_stream::Stream;
+use tokio::select;
+use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;
 
 use crate::store::types::enums::{direction::Direction, reading_mode::ReadingMode};
@@ -65,6 +74,86 @@ impl UserOptionSubscriptions {
     ) -> Result<impl Stream<Item = f64> + 'ctx> {
         WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
             w.longstrip_image_width.subscribe()
+        })
+    }
+    pub async fn listen_to_theme_profiles<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<ThemeProfileEntry>> + 'ctx> {
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.themes.subscribe(),
+            )?
+            .map(|w| w.get_entries()),
+        )
+    }
+    pub async fn listen_to_theme_profile_default_name<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.theme_default_key.subscribe(),
+            )?
+            .map(|e| e.into_inner()),
+        )
+    }
+    pub async fn listen_to_theme_profile_default<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaDexTheme> + 'ctx> {
+        let (themes_recv, default_name_recv) = {
+            let watch = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            (
+                watch.themes.subscribe(),
+                watch.theme_default_key.subscribe(),
+            )
+        };
+        let mut themes_stream =
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.themes.subscribe(),
+            )?;
+        let mut default_name_stream = Box::pin(
+            self.listen_to_theme_profile_default_name(ctx, sub_id)
+                .await?,
+        );
+        Ok(stream! {
+            loop {
+                select! {
+                    Some(m_key) = default_name_stream.next() => {
+                        if let Some(key) = m_key {
+                            let theme = {
+                                themes_recv.borrow().get(&key).cloned()
+                            };
+                            yield theme.unwrap_or_default();
+                        } else {
+                            yield MangaDexTheme::default();
+                        }
+                    }
+                    Some(themes) = themes_stream.next() => {
+                        let m_key = {
+                            (*default_name_recv.borrow()).clone()
+                        };
+                        if let Some(key) = m_key.into_inner() {
+                            yield themes.get(&key).cloned().unwrap_or_default();
+                        } else {
+                            yield MangaDexTheme::default();
+                        }
+                    }
+                    else => {
+                        break;
+                    }
+                }
+            }
         })
     }
 }
