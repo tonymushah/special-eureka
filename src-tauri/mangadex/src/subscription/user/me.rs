@@ -5,7 +5,7 @@ use uuid::Uuid;
 
 use crate::objects::user::attributes::UserAttributes;
 
-use crate::subscription::utils::WatchSubscriptionStream;
+use crate::subscription::utils::{OptionFlattenStream, WatchSubscriptionStream};
 
 #[derive(Debug, Clone, Copy)]
 pub struct UserMeSubscriptions;
@@ -23,7 +23,8 @@ impl UserMeSubscriptions {
                 sub_id,
                 |w| w.user_me.subscribe(),
             )?
-            .filter_map(|data| data.map(|u| u.attributes)),
+            .option_flatten()
+            .map(|data| data.attributes),
         )
     }
 }

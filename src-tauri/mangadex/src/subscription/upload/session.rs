@@ -1,11 +1,11 @@
 use crate::Result;
 use async_graphql::{Context, Subscription};
-use tokio_stream::{Stream, StreamExt};
+use tokio_stream::Stream;
 use uuid::Uuid;
 
 use crate::objects::upload::session::attributes::UploadSessionAttributes;
 
-use crate::subscription::utils::WatchSubscriptionStream;
+use crate::subscription::utils::{FilterWatchOptionDataById, WatchSubscriptionStream};
 
 #[derive(Debug, Clone, Copy)]
 pub struct UploadSessionSubscriptions;
@@ -24,10 +24,7 @@ impl UploadSessionSubscriptions {
                 sub_id,
                 |w| w.upload_session.subscribe(),
             )?
-            .filter_map(move |v| {
-                v.filter(|data| data.id == upload_session_id)
-                    .map(|data| data.attributes)
-            }),
+            .option_filter_by_id(upload_session_id),
         )
     }
 }

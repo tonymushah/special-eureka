@@ -35,3 +35,33 @@ where
         self.filter_map(move |v| v.filter(|data| data.id == id).map(|data| data.attributes))
     }
 }
+
+pub trait OptionFlattenStream: Stream {
+    type OutputItem;
+    fn option_flatten(self) -> impl Stream<Item = Self::OutputItem>;
+}
+
+impl<S, T> OptionFlattenStream for S
+where
+    S: Stream<Item = Option<T>>,
+{
+    type OutputItem = T;
+    fn option_flatten(self) -> impl Stream<Item = Self::OutputItem> {
+        self.filter_map(|v| v)
+    }
+}
+
+pub trait ResultFlattenStream: Stream {
+    type OutputItem;
+    fn result_flatten(self) -> impl Stream<Item = Self::OutputItem>;
+}
+
+impl<S, T, E> ResultFlattenStream for S
+where
+    S: Stream<Item = Result<T, E>>,
+{
+    type OutputItem = T;
+    fn result_flatten(self) -> impl Stream<Item = Self::OutputItem> {
+        self.filter_map(|v| v.ok())
+    }
+}

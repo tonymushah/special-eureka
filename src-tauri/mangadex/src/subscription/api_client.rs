@@ -1,11 +1,11 @@
 use crate::Result;
 use async_graphql::{Context, Subscription};
-use tokio_stream::{Stream, StreamExt};
+use tokio_stream::Stream;
 use uuid::Uuid;
 
 use crate::objects::api_client::attributes::ApiClientAttributes;
 
-use super::utils::WatchSubscriptionStream;
+use super::utils::{FilterWatchOptionDataById, WatchSubscriptionStream};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ApiClientSubscriptions;
@@ -24,7 +24,7 @@ impl ApiClientSubscriptions {
                 sub_id,
                 |w| w.api_client.subscribe(),
             )?
-            .filter_map(move |data| data.filter(|i| i.id == api_client_id).map(|i| i.attributes)),
+            .option_filter_by_id(api_client_id),
         )
     }
 }
