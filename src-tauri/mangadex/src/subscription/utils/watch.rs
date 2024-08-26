@@ -84,7 +84,7 @@ where
         };
         Self {
             window,
-            recv: WatchStream::from_changes(recv),
+            recv: WatchStream::new(recv),
             cancel_token,
             sub_id_handler,
         }
