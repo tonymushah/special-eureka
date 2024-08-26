@@ -3,7 +3,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use async_graphql::SimpleObject;
+use async_graphql::{SimpleObject, InputObject};
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 
@@ -31,6 +31,17 @@ impl DerefMut for ThemeProfiles {
     }
 }
 
+impl From<Vec<ThemeProfileEntry>> for ThemeProfiles {
+    fn from(value: Vec<ThemeProfileEntry>) -> Self {
+        Self(
+            value
+                .into_iter()
+                .map(|entry| (entry.name, entry.value))
+                .collect(),
+        )
+    }
+}
+
 impl ThemeProfiles {
     pub fn get_entries(&self) -> Vec<ThemeProfileEntry> {
         self.iter()
@@ -42,7 +53,8 @@ impl ThemeProfiles {
     }
 }
 
-#[derive(Debug, Clone, SimpleObject)]
+#[derive(Debug, Clone, SimpleObject, InputObject)]
+#[graphql(input_name = "ThemeProfileEntryInput")]
 pub struct ThemeProfileEntry {
     pub name: String,
     pub value: Theme,
@@ -112,6 +124,12 @@ where
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]
 pub struct ThemeProfileDefaultKey(Option<String>);
+
+impl From<Option<String>> for ThemeProfileDefaultKey {
+    fn from(value: Option<String>) -> Self {
+        Self(value)
+    }
+}
 
 impl ThemeProfileDefaultKey {
     pub fn into_inner(self) -> Option<String> {

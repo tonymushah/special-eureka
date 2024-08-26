@@ -2,7 +2,13 @@ use crate::{
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     store::types::{
         enums::image_fit::{ImageFit, ImageFitStore},
-        structs::longstrip_image_width::LongstripImageWidthStore,
+        structs::{
+            longstrip_image_width::LongstripImageWidthStore,
+            theme::{
+                profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
+                MangaDexTheme,
+            },
+        },
     },
     utils::get_app_handle_from_async_graphql,
     Result,
@@ -107,5 +113,72 @@ impl UserOptionMutations {
         let app = get_app_handle_from_async_graphql::<tauri::Wry>(ctx)?;
         clear_favicons_dir(app.config().as_ref())?;
         Ok(true)
+    }
+    pub async fn set_default_theme_profile(
+        &self,
+        ctx: &Context<'_>,
+        name: Option<String>,
+    ) -> Result<Option<String>> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ThemeProfileDefaultKey::from(name);
+        inner.insert_and_save(&mut store_write)?;
+        watches.theme_default_key.send_data(inner)?;
+        Ok(ThemeProfileDefaultKey::extract_from_store(&store_write)?.into_inner())
+    }
+    pub async fn set_theme_profile(
+        &self,
+        ctx: &Context<'_>,
+        name: String,
+        theme: Option<MangaDexTheme>,
+    ) -> Result<MangaDexTheme> {
+        let theme = theme.unwrap_or_default();
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
+        (*inner).insert(name, theme.clone());
+        inner.insert_and_save(&mut store_write)?;
+        watches.themes.send_data(inner)?;
+        Ok(theme)
+    }
+    pub async fn delete_theme_profile(
+        &self,
+        ctx: &Context<'_>,
+        name: String,
+    ) -> Result<Option<MangaDexTheme>> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
+        let theme = (*inner).remove(&name);
+        inner.insert_and_save(&mut store_write)?;
+        watches.themes.send_data(inner)?;
+        Ok(theme)
+    }
+    pub async fn clear_themes_profiles(&self, ctx: &Context<'_>) -> Result<bool> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
+        (*inner).clear();
+        inner.insert_and_save(&mut store_write)?;
+        watches.themes.send_data(inner)?;
+        Ok(true)
+    }
+    pub async fn set_theme_profiles(
+        &self,
+        ctx: &Context<'_>,
+        entries: Vec<ThemeProfileEntry>,
+    ) -> Result<usize> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ThemeProfiles::from(entries);
+        inner.insert_and_save(&mut store_write)?;
+        let len = inner.len();
+        watches.themes.send_data(inner)?;
+        Ok(len)
     }
 }
