@@ -1,12 +1,11 @@
 use crate::Result;
 use async_graphql::{Context, Subscription};
-use tokio_stream::Stream;
+use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;
 
 use crate::objects::user::attributes::UserAttributes;
-use async_stream::stream;
 
-use crate::subscription::{init_watch_subscription, sub_sleep};
+use crate::subscription::utils::WatchSubscriptionStream;
 
 #[derive(Debug, Clone, Copy)]
 pub struct UserMeSubscriptions;
@@ -18,40 +17,13 @@ impl UserMeSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let cover_sub = watches.user_me.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        cover_sub.borrow().as_ref().cloned()
-                    };
-                    if let Some(data) = borrow {
-                        yield data.attributes.clone()
-                    }
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = cover_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                cover_sub.borrow().as_ref().cloned()
-                            };
-                            if let Some(data) = borrow {
-                                yield data.attributes.clone()
-                            }
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
-        })
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.user_me.subscribe(),
+            )?
+            .filter_map(|data| data.map(|u| u.attributes)),
+        )
     }
 }
