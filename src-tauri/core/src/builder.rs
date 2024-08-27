@@ -16,6 +16,16 @@ pub fn get_builder() -> Builder<Wry> {
         .menu(menu::get_menu())
         .on_menu_event(menu::on_menu_event);
     builder
+        /* 
+            .register_uri_scheme_protocol("tony", |_app, req| {
+                println!("{:#?}", req);
+                tauri::http::ResponseBuilder::new()
+                    .header("access-control-allow-origin", "*")
+                    .status(tauri::http::status::StatusCode::OK)
+                    .mimetype(tauri::http::MimeType::Txt.to_string().as_str())
+                    .body(b"some string".to_vec())
+            })
+        */
         .system_tray(tray::get_tray())
         .on_system_tray_event(tray::on_system_tray_event)
         .invoke_handler(tauri::generate_handler![

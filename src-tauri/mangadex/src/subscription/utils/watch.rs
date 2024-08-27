@@ -39,6 +39,7 @@ where
     T: Clone + 'static + Send + Sync,
 {
     fn drop(&mut self) {
+        // println!("unlisten");
         self.window.unlisten(self.sub_id_handler);
     }
 }
@@ -54,6 +55,7 @@ where
             let window_event_cancel_token = cancel_token.clone();
             window.on_window_event(move |e| {
                 if let WindowEvent::Destroyed = e {
+                    // println!("Destroyed");
                     window_event_cancel_token.cancel();
                 }
             });
@@ -77,6 +79,7 @@ where
                         })
                 {
                     if id == sub_id {
+                        // println!("sub_end");
                         window_event_cancel_token.cancel();
                     }
                 }
@@ -117,12 +120,15 @@ where
         let res = async {
             select! {
                 _ = cancel_token.cancelled_owned() => {
+                    // println!("end");
                     None
                 }
                 res = recv_stream => {
+                    // println!("new value");
                     res
                 }
                 else => {
+                    // println!("end");
                     None
                 }
             }
