@@ -10,6 +10,7 @@ use subscription::Subscriptions;
 
 pub mod app_state;
 pub mod cache;
+pub mod constants;
 pub mod error;
 pub mod ins_handle;
 pub mod intelligent_notification_system;

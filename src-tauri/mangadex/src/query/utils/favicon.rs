@@ -9,7 +9,8 @@ pub async fn get_favicon<R: Runtime>(base_url: &Url, ctx: &Context<'_>) -> crate
     crate::cache::favicon::get_favicon(base_url, app).await?;
     Ok(Url::parse(
         format!(
-            "mangadex://favicons/{}",
+            "{}favicons/{}",
+            crate::constants::PROTOCOL,
             base_url
                 .domain()
                 .map(String::from)
