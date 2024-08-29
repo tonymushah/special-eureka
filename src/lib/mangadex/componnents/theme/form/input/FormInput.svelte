@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { HTMLInputTypeAttribute } from "svelte/elements";
 
-	export let type: HTMLInputTypeAttribute = "text";
+	export let type: "text" | "number" | "email" | "url" | "file" | "color" = "text";
 	export let value: any = "";
 	export let name: string | null | undefined = undefined;
 	export let placeholder: string | null | undefined = undefined;
@@ -9,17 +9,19 @@
 	export let widthFull = false;
 </script>
 
-<input
-	{disabled}
-	{type}
-	{value}
-	{name}
-	class:widthFull
-	{placeholder}
-	on:change={(e) => {
-		value = e.currentTarget.value;
-	}}
-/>
+{#if type == "color"}
+	<input {disabled} type="color" bind:value {name} class:widthFull {placeholder} />
+{:else if type == "email"}
+	<input {disabled} type="email" bind:value {name} class:widthFull {placeholder} />
+{:else if type == "file"}
+	<input {disabled} type="file" bind:value {name} class:widthFull {placeholder} />
+{:else if type == "number"}
+	<input {disabled} type="number" bind:value {name} class:widthFull {placeholder} />
+{:else if type == "url"}
+	<input {disabled} type="url" bind:value {name} class:widthFull {placeholder} />
+{:else}
+	<input {disabled} bind:value {name} class:widthFull {placeholder} />
+{/if}
 
 <style lang="scss">
 	input {
