@@ -4,10 +4,11 @@
 	export let type: HTMLInputTypeAttribute = "text";
 	export let value: any = "";
 	export let name: string | null | undefined = undefined;
+	export let placeholder: string | null | undefined = undefined;
 	export let widthFull = false;
 </script>
 
-<input {type} {value} {name} class:widthFull />
+<input {type} {value} {name} class:widthFull {placeholder} />
 
 <style lang="scss">
 	input {
