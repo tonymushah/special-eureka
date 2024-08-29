@@ -5,10 +5,21 @@
 	export let value: any = "";
 	export let name: string | null | undefined = undefined;
 	export let placeholder: string | null | undefined = undefined;
+	export let disabled = false;
 	export let widthFull = false;
 </script>
 
-<input {type} {value} {name} class:widthFull {placeholder} />
+<input
+	{disabled}
+	{type}
+	{value}
+	{name}
+	class:widthFull
+	{placeholder}
+	on:change={(e) => {
+		value = e.currentTarget.value;
+	}}
+/>
 
 <style lang="scss">
 	input {
