@@ -18,7 +18,7 @@
 	}
 </script>
 
-<div class="layout">
+<section class="layout">
 	<Title type={3}>Publication Status</Title>
 	<div class="content">
 		<button
@@ -74,7 +74,7 @@
 			Cancelled
 		</button>
 	</div>
-</div>
+</section>
 
 <style lang="scss">
 	.layout {

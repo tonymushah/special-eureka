@@ -18,7 +18,7 @@
 	}
 </script>
 
-<div class="layout">
+<section class="layout">
 	<Title type={3}>Content Rating</Title>
 	<div class="content">
 		<button
@@ -74,7 +74,7 @@
 			Pornographic
 		</button>
 	</div>
-</div>
+</section>
 
 <style lang="scss">
 	.layout {

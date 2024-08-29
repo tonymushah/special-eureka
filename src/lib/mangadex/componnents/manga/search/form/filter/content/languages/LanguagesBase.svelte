@@ -43,7 +43,7 @@
 	});
 </script>
 
-<div class="layout">
+<section class="layout">
 	<Title type={3}>{title}</Title>
 	<div class="content">
 		<button
@@ -65,7 +65,7 @@
 			{/if}
 		</button>
 	</div>
-</div>
+</section>
 
 {#if $open}
 	<div class="menu-outer" use:melt={$menu}>

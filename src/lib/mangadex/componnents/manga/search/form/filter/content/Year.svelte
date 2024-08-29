@@ -6,12 +6,12 @@
 	const year = getMangaSearchYearContextStoreWritable();
 </script>
 
-<div class="layout">
+<section class="layout">
 	<Title type={3}>Year</Title>
 	<div class="content">
 		<FormInput bind:value={$year} placeholder="Publication Year" type="number" />
 	</div>
-</div>
+</section>
 
 <style lang="scss">
 	.layout {

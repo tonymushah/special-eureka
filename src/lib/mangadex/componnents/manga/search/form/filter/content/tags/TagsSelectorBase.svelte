@@ -25,7 +25,7 @@
 </script>
 
 {#if !$isGroupedEmpty}
-	<div class="layout">
+	<section class="layout">
 		<Title type={3}>{title}</Title>
 		<div class="content">
 			{#each $grouped as tag}
@@ -49,7 +49,7 @@
 				</button>
 			{/each}
 		</div>
-	</div>
+	</section>
 {/if}
 
 <style lang="scss">

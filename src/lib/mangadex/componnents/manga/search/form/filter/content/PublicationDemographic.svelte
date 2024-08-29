@@ -18,7 +18,7 @@
 	}
 </script>
 
-<div class="layout">
+<section class="layout">
 	<Title type={3}>Demographic</Title>
 	<div class="content">
 		<button
@@ -87,7 +87,7 @@
 			Shounen
 		</button>
 	</div>
-</div>
+</section>
 
 <style lang="scss">
 	.layout {
