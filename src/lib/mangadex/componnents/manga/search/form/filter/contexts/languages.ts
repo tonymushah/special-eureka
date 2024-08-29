@@ -2,7 +2,7 @@ import type { Language } from "@mangadex/gql/graphql"
 import { generateContextStoresMethods } from "@mangadex/utils/contexts"
 import { derived, get, type Writable } from "svelte/store"
 
-type MangaSearchLanguages = {
+export type MangaSearchLanguages = {
     originalLanguage: Language[],
     excludedOriginalLanguage: Language[],
     availableTranslatedLanguage: Language[]
