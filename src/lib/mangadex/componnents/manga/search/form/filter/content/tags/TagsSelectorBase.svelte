@@ -1,15 +1,17 @@
 <script lang="ts">
+	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { TagGroup } from "@mangadex/gql/graphql";
+	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
+	import { MinusIcon, PlusIcon } from "svelte-feather-icons";
+	import { bounceInOut } from "svelte/easing";
+	import { derived, readonly } from "svelte/store";
+	import { fade } from "svelte/transition";
 	import {
 		getMangaSearchTagOptionsContextStoreWritable,
 		groupTagOption,
-		toggleTagOption,
-		TagOptionState
+		TagOptionState,
+		toggleTagOption
 	} from "../../contexts/tags";
-	import { derived, readonly } from "svelte/store";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { PlusIcon, MinusIcon } from "svelte-feather-icons";
-	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
 
 	export let title: string;
 	export let group: TagGroup;
@@ -36,7 +38,13 @@
 					on:contextmenu|preventDefault={() => toggle(tag.id, true)}
 				>
 					{#if tag.state != TagOptionState.NONE}
-						<div class="icon">
+						<div
+							class="icon"
+							transition:fade={{
+								easing: bounceInOut,
+								duration: 400
+							}}
+						>
 							{#if tag.state == TagOptionState.EXCLUDE}
 								<MinusIcon />
 							{:else if tag.state == TagOptionState.INCLUDE}
