@@ -78,6 +78,6 @@ export interface AuthorSearchFetcherResultData {
     next: () => Promise<AuthorSearchFetcherResultData>,
 };
 
-export type AuthorSearchFetcher = (name: string) => Promise<AuthorSearchFetcher>
+export type AuthorSearchFetcher = (name: string) => Promise<AuthorSearchFetcherResultData>
 
 export const { init: initMangaSearchAuthorSearchFetcher, get: getMangaSearchAuthorSearchFetcher } = generateContextMethods<AuthorSearchFetcher>("MANGA_SEARCH_AUTHOR_S_FETCH");
