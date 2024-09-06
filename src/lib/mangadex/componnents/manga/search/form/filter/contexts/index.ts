@@ -7,6 +7,7 @@ import { initMangaSearchContentRatingContextStore } from "./contentRating"
 import { initMangaSearchPublicationDemographicContextStore } from "./publicationDemographic"
 import { initMangaSearchPublicationStatusContextStore } from "./publicationStatus"
 import { initMangaSearchYearContextStore } from "./year"
+import { defaultTagModes, initMangaSearchTagModeContext, type TagModes } from "./tagModes"
 
 export type MangaSearchFilterParams = {
     contentRating: ContentRating[],
@@ -14,7 +15,8 @@ export type MangaSearchFilterParams = {
     demographic: Demographic[],
     status: MangaStatus[],
     tags: TagOptions,
-    year: number | null
+    year: number | null,
+    tagModes: TagModes
 }
 
 export function defaultMangaFilterParams(): MangaSearchFilterParams {
@@ -24,7 +26,8 @@ export function defaultMangaFilterParams(): MangaSearchFilterParams {
         demographic: [],
         status: [],
         tags: new Map(),
-        year: null
+        year: null,
+        tagModes: defaultTagModes()
     }
 }
 
@@ -157,6 +160,26 @@ export function init(init_: Writable<MangaSearchFilterParams>) {
             },
         })
     })();
+    const tagModes = (() => {
+        const derived_ = derived(store, ($s) => $s.tagModes)
+        return initMangaSearchTagModeContext({
+            subscribe(run, invalidate) {
+                return derived_.subscribe(run, invalidate);
+            },
+            set(value) {
+                init_.update((v) => {
+                    v.tagModes = value;
+                    return v;
+                })
+            },
+            update(updater) {
+                init_.update((v) => {
+                    v.tagModes = updater(v.tagModes);
+                    return v;
+                })
+            },
+        })
+    })();
     return {
         contentRating,
         languages,
@@ -164,6 +187,7 @@ export function init(init_: Writable<MangaSearchFilterParams>) {
         status,
         tags,
         year,
-        store
+        store,
+        tagModes
     }
 }

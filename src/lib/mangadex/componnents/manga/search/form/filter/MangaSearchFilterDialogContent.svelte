@@ -3,6 +3,7 @@
 	import Languages from "./content/Languages.svelte";
 	import PublicationDemographic from "./content/PublicationDemographic.svelte";
 	import PublicationStatus from "./content/PublicationStatus.svelte";
+	import TagMode from "./content/TagMode.svelte";
 	import Tags from "./content/Tags.svelte";
 	import Year from "./content/Year.svelte";
 </script>
@@ -22,6 +23,10 @@
 		<Tags />
 	</div>
 
+	<div class="tag-modes">
+		<TagMode />
+	</div>
+
 	<div class="languages">
 		<Languages />
 	</div>
@@ -39,5 +44,9 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		gap: 5px;
+	}
+	.tag-modes {
+		margin-top: 5px;
+		margin-bottom: 5px;
 	}
 </style>

@@ -2,7 +2,7 @@ import { TagSearchMode } from "@mangadex/gql/graphql"
 import { generateContextStoresMethods } from "@mangadex/utils/contexts"
 import { derived, get, type Readable, type Writable } from "svelte/store"
 
-type TagModes = {
+export type TagModes = {
     include: TagSearchMode,
     exclude: TagSearchMode
 }
