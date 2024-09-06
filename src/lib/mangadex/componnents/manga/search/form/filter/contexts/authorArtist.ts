@@ -81,3 +81,19 @@ export interface AuthorSearchFetcherResultData {
 export type AuthorSearchFetcher = (name: string) => Promise<AuthorSearchFetcherResultData>
 
 export const { init: initMangaSearchAuthorSearchFetcher, get: getMangaSearchAuthorSearchFetcher } = generateContextMethods<AuthorSearchFetcher>("MANGA_SEARCH_AUTHOR_S_FETCH");
+
+/**
+ * A `naive` implementation for `AuthorSearchFetcherResultData` interface
+ */
+export class NaiveAuthorSearchFetcherResultData implements AuthorSearchFetcherResultData {
+    constructor(data: Tag[]) {
+        this.data = data;
+    }
+    data: Tag[];
+    hasNext() {
+        return false;
+    }
+    async next(): Promise<AuthorSearchFetcherResultData> {
+        throw new Error("`hasNext` already told you that there is no next data available anymore! Are you a moron?")
+    }
+}
