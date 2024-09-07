@@ -6,7 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 
 const meta = {
     decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/AuthorSearch/Base",
+    title: "MangaDex/manga/search/Form/Dialog/Content/AuthorArtists/Search/Base",
     component: AuthorSearchBaseForm,
     tags: ["autodocs"]
 } satisfies Meta<AuthorSearchBaseForm>;
