@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AuthorArtists from "./content/AuthorArtists.svelte";
 	import ContentRating from "./content/ContentRating.svelte";
 	import Languages from "./content/Languages.svelte";
 	import PublicationDemographic from "./content/PublicationDemographic.svelte";
@@ -9,7 +10,11 @@
 </script>
 
 <article>
-	<div class="top">
+	<div class="flexed author-artists">
+		<AuthorArtists />
+	</div>
+
+	<div class="flexed top">
 		<ContentRating />
 
 		<PublicationDemographic />
@@ -19,7 +24,7 @@
 		<Year />
 	</div>
 
-	<div class="tags">
+	<div class="flexed tags">
 		<Tags />
 	</div>
 
@@ -27,19 +32,13 @@
 		<TagMode />
 	</div>
 
-	<div class="languages">
+	<div class="flexed languages">
 		<Languages />
 	</div>
 </article>
 
 <style lang="scss">
-	.top {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
-		gap: 5px;
-	}
-	.tags {
+	.flexed {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;

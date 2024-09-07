@@ -8,6 +8,7 @@ import { initMangaSearchPublicationDemographicContextStore } from "./publication
 import { initMangaSearchPublicationStatusContextStore } from "./publicationStatus"
 import { initMangaSearchYearContextStore } from "./year"
 import { defaultTagModes, initMangaSearchTagModeContext, type TagModes } from "./tagModes"
+import { defaultAuthorArtistOptions, initMangaSearchAuthorArtistsOptions, type AuthorArtistOptions } from "./authorArtist"
 
 export type MangaSearchFilterParams = {
     contentRating: ContentRating[],
@@ -16,7 +17,8 @@ export type MangaSearchFilterParams = {
     status: MangaStatus[],
     tags: TagOptions,
     year: number | null,
-    tagModes: TagModes
+    tagModes: TagModes,
+    authorArtists: AuthorArtistOptions
 }
 
 export function defaultMangaFilterParams(): MangaSearchFilterParams {
@@ -27,7 +29,8 @@ export function defaultMangaFilterParams(): MangaSearchFilterParams {
         status: [],
         tags: new Map(),
         year: null,
-        tagModes: defaultTagModes()
+        tagModes: defaultTagModes(),
+        authorArtists: defaultAuthorArtistOptions()
     }
 }
 
@@ -180,6 +183,26 @@ export function init(init_: Writable<MangaSearchFilterParams>) {
             },
         })
     })();
+    const authorArtists = (() => {
+        const derived_ = derived(store, ($s) => $s.authorArtists);
+        return initMangaSearchAuthorArtistsOptions({
+            subscribe(run, invalidate) {
+                return derived_.subscribe(run, invalidate);
+            },
+            set(value) {
+                init_.update((v) => {
+                    v.authorArtists = value;
+                    return v;
+                })
+            },
+            update(updater) {
+                init_.update((v) => {
+                    v.authorArtists = updater(v.authorArtists);
+                    return v;
+                })
+            },
+        })
+    })()
     return {
         contentRating,
         languages,
@@ -188,6 +211,7 @@ export function init(init_: Writable<MangaSearchFilterParams>) {
         tags,
         year,
         store,
-        tagModes
+        tagModes,
+        authorArtists
     }
 }
