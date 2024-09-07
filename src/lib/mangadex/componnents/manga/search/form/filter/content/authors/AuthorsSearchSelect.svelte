@@ -239,6 +239,9 @@
 				margin: 0px;
 			}
 		}
+		li[data-highlighted] {
+			background-color: var(--accent-hover);
+		}
 		li:not(.isSelected):hover {
 			background-color: var(--accent-hover);
 		}
