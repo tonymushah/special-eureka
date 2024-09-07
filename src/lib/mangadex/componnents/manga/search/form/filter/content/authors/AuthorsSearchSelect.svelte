@@ -110,17 +110,38 @@
 		}
 	}
 	function next() {
-		debounceFunc?.cancel();
-		debounceFunc = debounce(() => {
-			if (!$isFetching && nextFetch != undefined && typeof nextFetch == "function") {
-				$isFetching = true;
-				handleASFRDPromise(nextFetch());
-			}
-		}, 350);
-		debounceFunc();
+		if (!$isFetching && nextFetch != undefined && typeof nextFetch == "function") {
+			$isFetching = true;
+			handleASFRDPromise(nextFetch());
+		}
 	}
-	$: console.debug($tags);
-	$: console.debug(`Is fetching author ${$isFetching}`);
+	let toObserve: HTMLElement | undefined = undefined;
+	let obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
+		entries.forEach((entry) => {
+			if (entry.intersectionRatio <= 0) return;
+			next();
+		});
+	}, 500);
+	const obs = new IntersectionObserver(
+		(entries, obs_) => {
+			obs_debounce_func.cancel();
+			obs_debounce_func(entries, obs_);
+		},
+		{
+			threshold: 1.0
+		}
+	);
+	$: {
+		if (toObserve) {
+			obs.unobserve(toObserve);
+			obs.observe(toObserve);
+		}
+	}
+	onDestroy(() => {
+		obs.disconnect();
+	});
+	// $: console.debug($tags);
+	// $: console.debug(`Is fetching author ${$isFetching}`);
 </script>
 
 <div class="layout">
@@ -150,6 +171,9 @@
 						<h4>{author.value}</h4>
 					</li>
 				{/each}
+				{#if !$isFetching && hasNext}
+					<div bind:this={toObserve} />
+				{/if}
 			</menu>
 		</MangaDexVarThemeProvider>
 	</div>
