@@ -92,6 +92,7 @@
 		max-width: 20em;
 		display: flex;
 		flex-wrap: wrap;
+		align-items: center;
 	}
 	.menu-outer {
 		display: flex;
@@ -99,10 +100,9 @@
 		height: 200px;
 	}
 	.layout {
-		flex: 3;
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
+		gap: 10px;
 	}
 	menu {
 		margin: 0px;
