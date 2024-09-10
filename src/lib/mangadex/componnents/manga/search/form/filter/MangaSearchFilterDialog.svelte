@@ -4,8 +4,17 @@
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { RiCloseLine } from "svelte-remixicon";
+	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
+	import { createEventDispatcher } from "svelte";
 
 	export let dialog_bind: HTMLDialogElement | undefined = undefined;
+	export let requireValidation: boolean = false;
+	const dispatch = createEventDispatcher<{
+		validate: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
+	}>();
 </script>
 
 <dialog
@@ -29,6 +38,19 @@
 	<main>
 		<MangaSearchFilterDialogContent />
 	</main>
+	{#if requireValidation}
+		<footer>
+			<PrimaryButton
+				on:click={({ detail }) => {
+					dispatch("validate", detail);
+				}}
+			>
+				<div class="accept-inner">
+					<Title type={4}>Accept</Title>
+				</div>
+			</PrimaryButton>
+		</footer>
+	{/if}
 </dialog>
 
 <style lang="scss">
@@ -46,6 +68,19 @@
 		.exit {
 			display: flex;
 		}
+	}
+	footer {
+		margin-top: 10px;
+		display: flex;
+		justify-content: right;
+	}
+	.accept-inner {
+		--padding-x: 8px;
+		--padding-y: 4px;
+		padding-left: var(--padding-x);
+		padding-right: var(--padding-x);
+		padding-bottom: var(--padding-y);
+		padding-top: var(--padding-y);
 	}
 	dialog::backdrop {
 		backdrop-filter: blur(5px);

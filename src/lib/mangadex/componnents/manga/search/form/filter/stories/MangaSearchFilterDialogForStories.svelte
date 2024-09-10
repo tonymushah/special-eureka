@@ -42,6 +42,7 @@
 	});
 	const { store } = init(writable(options));
 	let dialog_bind: HTMLDialogElement | undefined = undefined;
+	export let requireValidation: boolean = false;
 </script>
 
 <ButtonAccentOnlyLabel
@@ -51,4 +52,10 @@
 	}}
 />
 
-<MangaSearchFilterDialog bind:dialog_bind />
+<MangaSearchFilterDialog
+	bind:dialog_bind
+	on:validate={() => {
+		dialog_bind?.close();
+	}}
+	{requireValidation}
+/>
