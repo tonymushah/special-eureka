@@ -63,7 +63,8 @@
 	} = createCombobox<string, true>({
 		selected: tagWritableToComboboxOptionWritable(store),
 		forceVisible: true,
-		multiple: true
+		multiple: true,
+		portal: "dialog"
 	});
 	const {
 		elements: { root, tag, deleteTrigger, edit, input: inputTags },
@@ -246,13 +247,14 @@
 		display: flex;
 		flex-direction: column;
 		height: 200px;
+		z-index: 10000;
 	}
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
 		list-style: none;
 		background-color: var(--accent);
-		z-index: 10;
+
 		overflow-y: scroll;
 		color: var(--text-color);
 		padding-left: 0em;
