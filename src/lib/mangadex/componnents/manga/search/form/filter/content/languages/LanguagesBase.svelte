@@ -116,14 +116,14 @@
 		li {
 			padding-left: 1em;
 			transition: background-color 200ms ease-in-out;
+			display: flex;
+			gap: 10px;
 			h4 {
 				margin: 0px;
 				overflow: hidden;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 			}
-			display: flex;
-			gap: 10px;
 		}
 		li:not(.isSelected):hover {
 			background-color: var(--accent-hover);
