@@ -2,7 +2,7 @@
 	import DefaultSpan from "@mangadex/componnents/theme/texts/span/DefaultSpan.svelte";
 	import type { MangaStatus } from "@mangadex/gql/graphql";
 	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
-	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import Description from "./content/Description.svelte";
 
 	export let title: string;
 	export let status: MangaStatus;
@@ -17,9 +17,7 @@
 		<DefaultSpan --font-size="12px">Publication : <PublicationStatusTag {status} /></DefaultSpan
 		>
 	</div>
-	<div class="description">
-		<Markdown source={description} />
-	</div>
+	<Description {description} />
 </div>
 
 <style lang="scss">
@@ -48,24 +46,5 @@
 	}
 	div.publication {
 		display: flex;
-	}
-	@media (width < 900px) {
-		div.description {
-			line-clamp: 2;
-			-webkit-line-clamp: 2;
-		}
-	}
-	@media (width >= 900px) {
-		div.description {
-			line-clamp: 3;
-			-webkit-line-clamp: 3;
-		}
-	}
-	div.description {
-		font-size: 12px;
-		-webkit-box-orient: vertical;
-		display: -webkit-box;
-		overflow: hidden;
-		margin: 2px;
 	}
 </style>
