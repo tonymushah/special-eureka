@@ -5,21 +5,21 @@ import { derived } from "svelte/store";
 import bufToImageSrc from "../bufToImageSrc";
 
 export default function get_cover_art({
-	cover_id,
-	manga_id,
-	filename,
-	client,
-	mode
+    cover_id,
+    manga_id,
+    filename,
+    client,
+    mode
 }: {
-	cover_id: string;
-	manga_id: string;
-	filename: string;
-	client: Client;
-	mode?: CoverImageQuality;
+    cover_id: string;
+    manga_id: string;
+    filename: string;
+    client: Client;
+    mode?: CoverImageQuality;
 }) {
-	const store = queryStore({
-		client,
-		query: graphql(`
+    const store = queryStore({
+        client,
+        query: graphql(`
 			query coverImage(
 				$cover_id: UUID!
 				$manga_id: UUID!
@@ -36,15 +36,19 @@ export default function get_cover_art({
 				}
 			}
 		`),
-		variables: {
-			cover_id,
-			manga_id,
-			filename,
-			mode
-		}
-	});
-	return derived(store, ($s) => {
-		const url: string | undefined = $s.data?.cover.getImage;
-		return url;
-	});
+        variables: {
+            cover_id,
+            manga_id,
+            filename,
+            mode
+        }
+    });
+    return derived(store, ($s, set) => {
+        const url: string | undefined = $s.data?.cover.getImage;
+        if (url) {
+            fetch(url).then(() => {
+                set(url)
+            }).catch(console.error);
+        }
+    });
 }
