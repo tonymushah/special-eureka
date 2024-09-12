@@ -13,7 +13,7 @@
 				.map(() => ".")
 				.join("");
 			current_number += 1;
-		}, 100);
+		}, 500);
 		return () => clearInterval(interval);
 	});
 </script>

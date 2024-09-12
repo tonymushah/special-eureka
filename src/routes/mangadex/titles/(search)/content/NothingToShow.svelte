@@ -19,5 +19,5 @@
 </script>
 
 <p>
-	N{oo}mething t{oo} sh{oo}w
+	N{oo}thing t{oo} sh{oo}w
 </p>
