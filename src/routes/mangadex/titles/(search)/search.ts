@@ -91,7 +91,7 @@ export default async function executeSearchQuery(client: Client, params: MangaLi
                 }),
                 offset: data.offset,
                 limit: data.limit,
-                total: data.limit
+                total: data.total
             };
         }
         if (result.error) {
@@ -129,7 +129,7 @@ export default async function executeSearchQuery(client: Client, params: MangaLi
                 }),
                 offset: data.offset,
                 limit: data.limit,
-                total: data.limit
+                total: data.total
             };
         }
         if (result.error) {
