@@ -1,8 +1,7 @@
 import { graphql } from "@mangadex/gql";
 import type { CoverImageQuality } from "@mangadex/gql/graphql";
 import { Client, queryStore } from "@urql/svelte";
-import { derived } from "svelte/store";
-import bufToImageSrc from "../bufToImageSrc";
+import { derived, type Readable } from "svelte/store";
 
 export default function get_cover_art({
     cover_id,
@@ -16,7 +15,7 @@ export default function get_cover_art({
     filename: string;
     client: Client;
     mode?: CoverImageQuality;
-}) {
+}): Readable<string | undefined> {
     const store = queryStore({
         client,
         query: graphql(`
