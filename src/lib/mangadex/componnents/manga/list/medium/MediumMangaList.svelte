@@ -20,7 +20,7 @@
 			withFull
 			on:click={() => {
 				goto(
-					route("/mangadex/list/[id]", {
+					route("/mangadex/title/[id]", {
 						id: data.id
 					})
 				);
