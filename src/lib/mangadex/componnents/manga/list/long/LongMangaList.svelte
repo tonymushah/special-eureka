@@ -33,6 +33,7 @@
 					})
 				);
 			}}
+			--button-justify-content="start"
 		/>
 	{/each}
 </section>
