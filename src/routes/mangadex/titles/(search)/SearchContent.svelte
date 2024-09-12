@@ -8,6 +8,9 @@
 	import { derived, get, writable, type Readable } from "svelte/store";
 	import type { IMangaSearchResult } from "./search";
 	import executeSearchQuery from "./search";
+	import Fetching from "./content/Fetching.svelte";
+	import HasNext from "./content/HasNext.svelte";
+	import NothingToShow from "./content/NothingToShow.svelte";
 	let isFetching = false;
 	const client = getContextClient();
 	const titles = writable<MangaListContentItemProps[]>([]);
@@ -84,8 +87,25 @@
 		}
 	}
 	$: console.log(`isFetching: ${isFetching}`);
+	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 
 <MangaList list={$titles}></MangaList>
 
-<div bind:this={to_obserce_bind}>Infinite scroll WoOoOoOoO!</div>
+<div class="observer-trigger" bind:this={to_obserce_bind}>
+	{#if isFetching}
+		<Fetching />
+	{:else if $hasNext}
+		<HasNext />
+	{:else}
+		<NothingToShow />
+	{/if}
+</div>
+
+<style lang="scss">
+	.observer-trigger {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>
