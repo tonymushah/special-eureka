@@ -44,7 +44,7 @@ export class GQLAuthorFetcherResultData implements AuthorSearchFetcherResultData
         }
     }
     hasNext(): boolean {
-        return this.params.offset > this.params.total || this.params.offset < 0
+        return this.params.offset < this.params.total && this.params.offset >= 0
     }
     async next(): Promise<AuthorSearchFetcherResultData> {
         const res = await this.client.query(query, {
