@@ -30,11 +30,11 @@ export function toMangaListParams(params: MangaSearchParams): MangaListParams {
         status: params.filter.status,
         year: params.filter.year,
         includedTags: tags.filter(([, data]) => {
-            return data.state != TagOptionState.INCLUDE
+            return data.state == TagOptionState.INCLUDE
         }).map(([id]) => id),
         title: params.title,
         excludedTags: tags.filter(([, data]) => {
-            return data.state != TagOptionState.EXCLUDE
+            return data.state == TagOptionState.EXCLUDE
         }).map(([id]) => id),
         originalLanguage: params.filter.languages.originalLanguage,
     }
