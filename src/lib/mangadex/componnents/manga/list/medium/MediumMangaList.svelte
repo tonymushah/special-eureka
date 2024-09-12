@@ -31,18 +31,23 @@
 
 <style lang="scss">
 	@media (width > 1200px) {
-		.medium {
-			grid-template-columns: repeat(4, 1fr);
+		:root {
+			--medium-column: 4;
 		}
 	}
 	@media (850px < width <= 1200px) {
-		.medium {
-			grid-template-columns: repeat(3, 1fr);
+		:root {
+			--medium-column: 3;
 		}
 	}
 	@media (550px < width <= 850px) {
-		.medium {
-			grid-template-columns: repeat(2, 1fr);
+		:root {
+			--medium-column: 2;
+		}
+	}
+	@media (width <= 550px) {
+		:root {
+			--medium-column: 1;
 		}
 	}
 	.medium {
@@ -50,5 +55,6 @@
 		container-name: list;
 		container-type: initial;
 		gap: 10px;
+		grid-template-columns: repeat(var(--medium-column), calc(98% / var(--medium-column)));
 	}
 </style>
