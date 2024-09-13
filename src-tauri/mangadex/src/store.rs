@@ -13,6 +13,7 @@ use self::{
     types::{
         enums::{
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
+            manga_list_style::MangaListStyleStore,
             reading_mode::ReadingModeStore,
         },
         structs::{
@@ -36,6 +37,8 @@ pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result
         let b = SidebarDirectionStore::default_store(b)?;
         let b = ChapterLanguagesStore::default_store(b)?;
         let b = ImageFitStore::default_store(b)?;
+        let b = LongstripImageWidthStore::default_store(b)?;
+        let b = MangaListStyleStore::default_store(b)?;
         let b = ThemeProfiles::default_store(b)?;
         let b = ThemeProfileDefaultKey::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?

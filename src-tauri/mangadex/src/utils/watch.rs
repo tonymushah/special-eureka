@@ -18,6 +18,7 @@ use self::{
     is_logged::IsLoggedWatch,
     longstrip_image_width::LongstripImageWidthWatch,
     manga::MangaWatch,
+    manga_list_style::MangaListStyleWatch,
     manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
     rating::RatingWatch,
@@ -47,6 +48,7 @@ pub mod is_following;
 pub mod is_logged;
 pub mod longstrip_image_width;
 pub mod manga;
+pub mod manga_list_style;
 pub mod manga_reading_state;
 pub mod page_direction;
 pub mod rating;
@@ -167,6 +169,7 @@ pub struct Watches {
     pub read_marker: ReadMarkerWatch,
     pub image_fit: ImageFitWatch,
     pub longstrip_image_width: LongstripImageWidthWatch,
+    pub manga_list_style: MangaListStyleWatch,
     pub themes: ThemeProfilesWatch,
     pub theme_default_key: ThemeProfileDefaultKeyWatch,
 }

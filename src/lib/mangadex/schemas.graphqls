@@ -1319,6 +1319,12 @@ input MangaListParams {
 	group: UUID
 }
 
+enum MangaListStyle {
+	GRID
+	ROWS
+	COVER
+}
+
 type MangaMutations {
 	download(id: UUID!): DownloadState!
 	create(params: CreateMangaParam!): MangaObject!
@@ -1969,6 +1975,7 @@ type Subscriptions {
 	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
 	watchImageFit(subId: UUID!): ImageFit!
 	watchLongstripImageWidth(subId: UUID!): Float!
+	watchMangaListStyle(subId: UUID!): MangaListStyle!
 	watchThemesProfile(subId: UUID!): [ThemeProfileEntry!]!
 	watchThemeProfileDefault(subId: UUID!): MangaDexTheme!
 	watchThemeProfileDefaultName(subId: UUID!): String
@@ -2190,6 +2197,7 @@ type UserOptionMutations {
 	setLongstripImageWidth(width: Float!): Float!
 	clearCoverImagesCaches: Boolean!
 	clearFaviconCache: Boolean!
+	setMangaListStyle(mangaListStyle: MangaListStyle!): MangaListStyle!
 	setDefaultThemeProfile(name: String): String
 	setThemeProfile(name: String!, theme: MangaDexThemeInput): MangaDexTheme!
 	deleteThemeProfile(name: String!): MangaDexTheme

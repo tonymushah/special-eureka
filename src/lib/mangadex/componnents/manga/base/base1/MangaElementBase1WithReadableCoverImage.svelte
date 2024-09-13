@@ -16,10 +16,11 @@
 	export let title: string;
 	export let status: MangaStatus;
 	export let description: string;
+	export let withFull = false;
 	$: src = $coverImage;
 </script>
 
-<Layout on:click --layout-width="19em">
+<Layout on:click --layout-width={withFull ? "100%" : "19em"}>
 	{#if src}
 		<Image bind:coverImage={src} {coverImageAlt} />
 	{:else}

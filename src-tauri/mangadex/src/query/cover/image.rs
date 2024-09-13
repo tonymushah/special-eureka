@@ -41,8 +41,15 @@ impl CoverImageQuery {
         cache.is_in_cache()
     }
     fn get_url(&self) -> Result<Url> {
-        let mut url =
-            Url::parse(format!("mangadex://covers/{}/{}", self.cover_id, &self.filename).as_str())?;
+        let mut url = Url::parse(
+            format!(
+                "{}covers/{}/{}",
+                crate::constants::PROTOCOL,
+                self.cover_id,
+                &self.filename
+            )
+            .as_str(),
+        )?;
         url.query_pairs_mut()
             .append_pair("mangaId", self.manga_id.to_string().as_str());
         if let Some(quality) = self.mode {
