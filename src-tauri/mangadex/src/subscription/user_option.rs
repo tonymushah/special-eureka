@@ -1,15 +1,23 @@
-use crate::{store::types::enums::image_fit::ImageFit, Result};
+use crate::{
+    store::types::{
+        enums::image_fit::ImageFit,
+        structs::theme::{profiles::ThemeProfileEntry, MangaDexTheme},
+    },
+    utils::get_watches_from_graphql_context,
+    Result,
+};
 use async_graphql::{Context, Subscription};
-use tokio_stream::Stream;
+use async_stream::stream;
+use mangadex_api_types_rust::Language;
+use tokio::select;
+use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;
 
 use crate::store::types::enums::{
     direction::Direction, manga_list_style::MangaListStyle, reading_mode::ReadingMode,
 };
-use async_stream::stream;
-use mangadex_api_types_rust::Language;
 
-use crate::subscription::{init_watch_subscription, sub_sleep};
+use super::utils::WatchSubscriptionStream;
 
 #[derive(Debug, Clone, Copy)]
 pub struct UserOptionSubscriptions;
@@ -21,36 +29,8 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Direction> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let page_direction_sub = watches.page_direction.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        *page_direction_sub.borrow()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = page_direction_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                *page_direction_sub.borrow()
-                            };
-                            yield borrow;
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.page_direction.subscribe()
         })
     }
     pub async fn listen_to_sidebar_direction<'ctx>(
@@ -58,36 +38,8 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Direction> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let sidebar_direction_sub = watches.sidebar_direction.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        *sidebar_direction_sub.borrow()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = sidebar_direction_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                *sidebar_direction_sub.borrow()
-                            };
-                            yield borrow;
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.sidebar_direction.subscribe()
         })
     }
     pub async fn listen_to_reading_mode<'ctx>(
@@ -95,36 +47,8 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let reading_mode_sub = watches.reading_mode.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        *reading_mode_sub.borrow()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = reading_mode_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                *reading_mode_sub.borrow()
-                            };
-                            yield borrow;
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.reading_mode.subscribe()
         })
     }
     pub async fn listen_to_chapter_languages<'ctx>(
@@ -132,36 +56,8 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let chapter_languages_sub = watches.chapter_languages.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        chapter_languages_sub.borrow().clone()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = chapter_languages_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                chapter_languages_sub.borrow().clone()
-                            };
-                            yield borrow;
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.chapter_languages.subscribe()
         })
     }
     pub async fn listen_to_image_fit<'ctx>(
@@ -169,36 +65,8 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = ImageFit> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let image_fit_sub = watches.image_fit.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        *image_fit_sub.borrow()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = image_fit_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                *image_fit_sub.borrow()
-                            };
-                            yield borrow;
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.image_fit.subscribe()
         })
     }
     pub async fn listen_to_longstrip_image_width<'ctx>(
@@ -206,36 +74,88 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = f64> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let longstrip_image_width_sub = watches.longstrip_image_width.subscribe();
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.longstrip_image_width.subscribe()
+        })
+    }
+    pub async fn listen_to_theme_profiles<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<ThemeProfileEntry>> + 'ctx> {
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.themes.subscribe(),
+            )?
+            .map(|w| w.get_entries()),
+        )
+    }
+    pub async fn listen_to_theme_profile_default_name<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.theme_default_key.subscribe(),
+            )?
+            .map(|e| e.into_inner()),
+        )
+    }
+    pub async fn listen_to_theme_profile_default<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaDexTheme> + 'ctx> {
+        let (themes_recv, default_name_recv) = {
+            let watch = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            (
+                watch.themes.subscribe(),
+                watch.theme_default_key.subscribe(),
+            )
+        };
+        let mut themes_stream =
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.themes.subscribe(),
+            )?;
+        let mut default_name_stream = Box::pin(
+            self.listen_to_theme_profile_default_name(ctx, sub_id)
+                .await?,
+        );
         Ok(stream! {
             loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        *longstrip_image_width_sub.borrow()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = longstrip_image_width_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                *longstrip_image_width_sub.borrow()
+                select! {
+                    Some(m_key) = default_name_stream.next() => {
+                        if let Some(key) = m_key {
+                            let theme = {
+                                themes_recv.borrow().get(&key).cloned()
                             };
-                            yield borrow;
+                            yield theme.unwrap_or_default();
+                        } else {
+                            yield MangaDexTheme::default();
                         }
-                    }else {
+                    }
+                    Some(themes) = themes_stream.next() => {
+                        let m_key = {
+                            (*default_name_recv.borrow()).clone()
+                        };
+                        if let Some(key) = m_key.into_inner() {
+                            yield themes.get(&key).cloned().unwrap_or_default();
+                        } else {
+                            yield MangaDexTheme::default();
+                        }
+                    }
+                    else => {
                         break;
                     }
-                } else{
-                    break;
                 }
-                sub_sleep().await;
             }
-            window.unlisten(unlisten);
         })
     }
     pub async fn listen_to_manga_list_style<'ctx>(
@@ -243,36 +163,8 @@ impl UserOptionSubscriptions {
         ctx: &'ctx Context<'ctx>,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaListStyle> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let manga_list_style_sub = watches.manga_list_style.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        *manga_list_style_sub.borrow()
-                    };
-                    yield borrow;
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = manga_list_style_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                *manga_list_style_sub.borrow()
-                            };
-                            yield borrow;
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.manga_list_style.subscribe()
         })
     }
 }

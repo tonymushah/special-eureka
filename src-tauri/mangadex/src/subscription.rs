@@ -1,10 +1,7 @@
-use std::sync::Arc;
-use std::sync::RwLock;
-
+use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
+use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
 use async_graphql::{Context, Subscription};
-use tauri::{EventHandler, Window, WindowEvent};
-use tokio::time::{sleep, Duration};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -28,6 +25,7 @@ pub mod tag;
 pub mod upload;
 pub mod user;
 pub mod user_option;
+pub mod utils;
 
 use mangadex_api_types_rust::Language;
 use mangadex_api_types_rust::ReadingStatus;
@@ -76,7 +74,6 @@ use crate::{
         direction::Direction, image_fit::ImageFit, manga_list_style::MangaListStyle,
         reading_mode::ReadingMode,
     },
-    utils::{get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches},
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -368,66 +365,31 @@ impl Subscriptions {
             .listen_to_manga_list_style(ctx, sub_id)
             .await
     }
-}
-
-type InitWatchSubRes<'ctx, R> = Result<(
-    tauri::State<'ctx, Watches>,
-    Arc<RwLock<bool>>,
-    EventHandler,
-    &'ctx Window<R>,
-    Arc<RwLock<bool>>,
-)>;
-
-pub fn init_watch_subscription<'ctx, R: tauri::Runtime>(
-    ctx: &'ctx Context<'ctx>,
-    sub_id: Uuid,
-) -> InitWatchSubRes<'ctx, R> {
-    let should_end = Arc::new(RwLock::new(false));
-    let should_end_un = should_end.clone();
-    let should_end_un_n = should_end.clone();
-    let watches = get_watches_from_graphql_context::<R>(ctx)?;
-    let window = get_window_from_async_graphql::<R>(ctx)?;
-    window.on_window_event(move |e| {
-        let should_end_un_n = should_end_un_n.clone();
-        if let WindowEvent::Destroyed = e {
-            if let Ok(mut write) = should_end_un_n.write() {
-                *write = true;
-            };
-        }
-    });
-    let unlisten = window.listen("sub_end", move |e| {
-        /*#[cfg(debug_assertions)]
-        println!("{:#?}", e);*/
-        let should_end_un = should_end_un.clone();
-        if let Some(id) = e
-            .payload()
-            .map(|p| p.trim().replace('\"', ""))
-            .and_then(|payload| {
-                Uuid::parse_str(&payload)
-                    /*
-                        .map_err(|er| {
-                            #[cfg(debug_assertions)]
-                            eprintln!("{:#?}", er);
-                            er
-                        })
-                    */
-                    .ok()
-            })
-        {
-            if let Ok(mut write) = should_end_un.write() {
-                *write = id == sub_id;
-            };
-        }
-    });
-    Ok((
-        watches,
-        should_end,
-        unlisten,
-        window,
-        Arc::new(RwLock::new(true)),
-    ))
-}
-
-pub async fn sub_sleep() {
-    sleep(Duration::from_millis(100)).await
+    pub async fn watch_themes_profile<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<ThemeProfileEntry>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_theme_profiles(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_theme_profile_default<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaDexTheme> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_theme_profile_default(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_theme_profile_default_name<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_theme_profile_default_name(ctx, sub_id)
+            .await
+    }
 }

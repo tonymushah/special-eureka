@@ -1,7 +1,11 @@
 use tauri::{AppHandle, Runtime};
 use tauri_plugin_store::StoreBuilder;
 use types::{
-    enums::image_fit::ImageFitStore, structs::longstrip_image_width::LongstripImageWidthStore,
+    enums::image_fit::ImageFitStore,
+    structs::{
+        longstrip_image_width::LongstripImageWidthStore,
+        theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
+    },
 };
 
 use self::{
@@ -34,7 +38,10 @@ pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result
         let b = ChapterLanguagesStore::default_store(b)?;
         let b = ImageFitStore::default_store(b)?;
         let b = LongstripImageWidthStore::default_store(b)?;
-        MangaListStyleStore::default_store(b)?
+        let b = MangaListStyleStore::default_store(b)?;
+        let b = ThemeProfiles::default_store(b)?;
+        let b = ThemeProfileDefaultKey::default_store(b)?;
+        LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)
 }

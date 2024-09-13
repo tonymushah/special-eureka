@@ -36,6 +36,38 @@ export type Scalars = {
   Username: { input: any; output: any; }
 };
 
+export type Accent = {
+  __typename?: 'Accent';
+  active: Scalars['String']['output'];
+  default: Scalars['String']['output'];
+  hover: Scalars['String']['output'];
+};
+
+export type AccentInput = {
+  active: Scalars['String']['input'];
+  default: Scalars['String']['input'];
+  hover: Scalars['String']['input'];
+};
+
+export type Accents = {
+  __typename?: 'Accents';
+  default: Accent;
+  l1: Accent;
+  l2: Accent;
+  l3: Accent;
+  l4: Accent;
+  l5: Accent;
+};
+
+export type AccentsInput = {
+  default: AccentInput;
+  l1: AccentInput;
+  l2: AccentInput;
+  l3: AccentInput;
+  l4: AccentInput;
+  l5: AccentInput;
+};
+
 export type ApiClient = {
   __typename?: 'ApiClient';
   attributes: ApiClientAttributes;
@@ -299,6 +331,17 @@ export type BeginUploadSessionParam = {
   mangaId: Scalars['UUID']['input'];
 };
 
+export type ButtonAccentColor = {
+  __typename?: 'ButtonAccentColor';
+  alternate: Scalars['String']['output'];
+  default: Scalars['String']['output'];
+};
+
+export type ButtonAccentInput = {
+  alternate: Scalars['String']['input'];
+  default: Scalars['String']['input'];
+};
+
 export type CaptchaMutations = {
   __typename?: 'CaptchaMutations';
   solve: Scalars['Boolean']['output'];
@@ -554,6 +597,15 @@ export enum ContentRating {
   Safe = 'SAFE',
   Suggestive = 'SUGGESTIVE'
 }
+
+export type Contrast = {
+  __typename?: 'Contrast';
+  l1: Scalars['String']['output'];
+};
+
+export type ContrastInput = {
+  l1: Scalars['String']['input'];
+};
 
 export type Cover = {
   __typename?: 'Cover';
@@ -890,6 +942,19 @@ export enum CustomListVisibility {
   Public = 'PUBLIC'
 }
 
+export type DangerColor = {
+  __typename?: 'DangerColor';
+  default: Scalars['String']['output'];
+  l1: Scalars['String']['output'];
+  l2: Scalars['String']['output'];
+};
+
+export type DangerColorInput = {
+  default: Scalars['String']['input'];
+  l1: Scalars['String']['input'];
+  l2: Scalars['String']['input'];
+};
+
 export type DeleteImageParam = {
   sessionFileId: Scalars['UUID']['input'];
   sessionId: Scalars['UUID']['input'];
@@ -1211,6 +1276,15 @@ export enum IncludeFutureUpdates {
   Include = 'INCLUDE'
 }
 
+export type IndicatorColor = {
+  __typename?: 'IndicatorColor';
+  blue: Scalars['String']['output'];
+};
+
+export type IndicatorColorInput = {
+  blue: Scalars['String']['input'];
+};
+
 export type InfrastructureQueries = {
   __typename?: 'InfrastructureQueries';
   ping: Scalars['Boolean']['output'];
@@ -1386,6 +1460,35 @@ export type MangaCreateRelationParam = {
   mangaId: Scalars['UUID']['input'];
   relation: MangaRelation;
   targetManga: Scalars['UUID']['input'];
+};
+
+export type MangaDexTheme = {
+  __typename?: 'MangaDexTheme';
+  accents: Accents;
+  button: ButtonAccentColor;
+  contrast: Contrast;
+  danger: DangerColor;
+  indication: IndicatorColor;
+  mainBackground: Scalars['String']['output'];
+  midTone: Scalars['String']['output'];
+  primary: PrimaryColor;
+  scrollbar: ScrollbarColor;
+  status: StatusColor;
+  textColor: Scalars['String']['output'];
+};
+
+export type MangaDexThemeInput = {
+  accents: AccentsInput;
+  button: ButtonAccentInput;
+  contrast: ContrastInput;
+  danger: DangerColorInput;
+  indication: IndicatorColorInput;
+  mainBackground: Scalars['String']['input'];
+  midTone: Scalars['String']['input'];
+  primary: PrimaryColorInput;
+  scrollbar: ScrollbarColorInput;
+  status: StatusColorInput;
+  textColor: Scalars['String']['input'];
 };
 
 export type MangaDraftsParams = {
@@ -1899,6 +2002,19 @@ export enum OrderDirection {
   Descending = 'DESCENDING'
 }
 
+export type PrimaryColor = {
+  __typename?: 'PrimaryColor';
+  primary: Scalars['String']['output'];
+  primary1: Scalars['String']['output'];
+  primary2: Scalars['String']['output'];
+};
+
+export type PrimaryColorInput = {
+  primary: Scalars['String']['input'];
+  primary1: Scalars['String']['input'];
+  primary2: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   apiClient: ApiClientQueries;
@@ -2229,6 +2345,17 @@ export type ScanlationGroupResults = {
   total: Scalars['Int']['output'];
 };
 
+export type ScrollbarColor = {
+  __typename?: 'ScrollbarColor';
+  default: Scalars['String']['output'];
+  hovered: Scalars['String']['output'];
+};
+
+export type ScrollbarColorInput = {
+  default: Scalars['String']['input'];
+  hovered: Scalars['String']['input'];
+};
+
 export type Statistics = {
   __typename?: 'Statistics';
   comments?: Maybe<StatisticsComments>;
@@ -2247,6 +2374,25 @@ export type StatisticsQueries = {
   chapter: ChapterStatisticsQueries;
   group: GroupStatisticsQueries;
   manga: MangaStatisticsQueries;
+};
+
+export type StatusColor = {
+  __typename?: 'StatusColor';
+  blue: Scalars['String']['output'];
+  green: Scalars['String']['output'];
+  grey: Scalars['String']['output'];
+  purple: Scalars['String']['output'];
+  red: Scalars['String']['output'];
+  yellow: Scalars['String']['output'];
+};
+
+export type StatusColorInput = {
+  blue: Scalars['String']['input'];
+  green: Scalars['String']['input'];
+  grey: Scalars['String']['input'];
+  purple: Scalars['String']['input'];
+  red: Scalars['String']['input'];
+  yellow: Scalars['String']['input'];
 };
 
 export type SubmitMangaDraftParams = {
@@ -2283,6 +2429,9 @@ export type Subscriptions = {
   watchSidebarDirection: Direction;
   watchStatistics: StatisticsComments;
   watchTag: TagAttributes;
+  watchThemeProfileDefault: MangaDexTheme;
+  watchThemeProfileDefaultName?: Maybe<Scalars['String']['output']>;
+  watchThemesProfile: Array<ThemeProfileEntry>;
   watchUploadSession: UploadSessionAttributes;
   watchUploadSessionFile: UploadSessionFileAttributes;
   watchUser: UserAttributes;
@@ -2443,6 +2592,21 @@ export type SubscriptionsWatchTagArgs = {
 };
 
 
+export type SubscriptionsWatchThemeProfileDefaultArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchThemeProfileDefaultNameArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchThemesProfileArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
 export type SubscriptionsWatchUploadSessionArgs = {
   subId: Scalars['UUID']['input'];
   uploadSessionId: Scalars['UUID']['input'];
@@ -2512,6 +2676,17 @@ export enum TagSearchMode {
   And = 'AND',
   Or = 'OR'
 }
+
+export type ThemeProfileEntry = {
+  __typename?: 'ThemeProfileEntry';
+  name: Scalars['String']['output'];
+  value: MangaDexTheme;
+};
+
+export type ThemeProfileEntryInput = {
+  name: Scalars['String']['input'];
+  value: MangaDexThemeInput;
+};
 
 export type UpdateMangaParam = {
   altTitles?: InputMaybe<Array<Scalars['JSONObject']['input']>>;
@@ -2702,18 +2877,33 @@ export type UserOptionMutations = {
   __typename?: 'UserOptionMutations';
   clearCoverImagesCaches: Scalars['Boolean']['output'];
   clearFaviconCache: Scalars['Boolean']['output'];
+  clearThemesProfiles: Scalars['Boolean']['output'];
+  deleteThemeProfile?: Maybe<MangaDexTheme>;
   setChapterLanguages: Array<Language>;
+  setDefaultThemeProfile?: Maybe<Scalars['String']['output']>;
   setImageFit: ImageFit;
   setLongstripImageWidth: Scalars['Float']['output'];
   setMangaListStyle: MangaListStyle;
   setPageDirection: Direction;
   setReadingMode: ReadingMode;
   setSidebarDirection: Direction;
+  setThemeProfile: MangaDexTheme;
+  setThemeProfiles: Scalars['Int']['output'];
+};
+
+
+export type UserOptionMutationsDeleteThemeProfileArgs = {
+  name: Scalars['String']['input'];
 };
 
 
 export type UserOptionMutationsSetChapterLanguagesArgs = {
   languages: Array<Language>;
+};
+
+
+export type UserOptionMutationsSetDefaultThemeProfileArgs = {
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2744,6 +2934,17 @@ export type UserOptionMutationsSetReadingModeArgs = {
 
 export type UserOptionMutationsSetSidebarDirectionArgs = {
   direction: Direction;
+};
+
+
+export type UserOptionMutationsSetThemeProfileArgs = {
+  name: Scalars['String']['input'];
+  theme?: InputMaybe<MangaDexThemeInput>;
+};
+
+
+export type UserOptionMutationsSetThemeProfilesArgs = {
+  entries: Array<ThemeProfileEntryInput>;
 };
 
 export type UserQueries = {

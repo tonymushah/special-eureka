@@ -19,7 +19,7 @@ serde_json.workspace = true
 mangadex-api = { version = "3.3", default-features = false, features = [
     "rw-multi-thread",
     "serialize",
-    "utils"
+    "utils",
 ] }
 mangadex-api-schema-rust = { version = "0.9", default-features = false, features = [
     "serialize",
@@ -29,12 +29,13 @@ mangadex-api-types-rust = { version = "0.9", default-features = false, features 
 ] }
 async-graphql.workspace = true
 convert_case = "0.6"
-tokio-stream = { version = "0" }
+tokio-stream = { version = "0", features = ["sync"] }
 regex = "1"
 bytes.workspace = true
 async-stream = "0"
 favicon-picker = "1.0.0"
 tempfile = "3.10.1"
+tokio-util = "0.7.11"
 
 [dependencies.mangadex-desktop-api2]
 version = "0.6.0-alpha.6"

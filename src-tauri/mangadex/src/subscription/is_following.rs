@@ -1,13 +1,11 @@
 use crate::Result;
 use async_graphql::{Context, Subscription};
-use tokio_stream::Stream;
+use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;
 
 use mangadex_api_types_rust::RelationshipType;
 
-use async_stream::stream;
-
-use super::{init_watch_subscription, sub_sleep};
+use super::utils::{FilterWatchOptionDataById, WatchSubscriptionStream};
 
 #[derive(Debug, Clone, Copy)]
 pub struct IsFollowingSubscriptions;
@@ -20,45 +18,16 @@ impl IsFollowingSubscriptions {
         manga_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let is_following_sub = watches.is_following.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        is_following_sub.borrow().as_ref().copied()
-                    };
-                    if let Some(data) = borrow {
-                        if data.attributes.type_ == RelationshipType::Manga && data.id == manga_id {
-                            yield data.attributes.data
-                        }
-                    }
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = is_following_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                is_following_sub.borrow().as_ref().copied()
-                            };
-                            if let Some(data) = borrow {
-                                if data.attributes.type_ == RelationshipType::Manga && data.id == manga_id {
-                                    yield data.attributes.data
-                                }
-                            }
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
-        })
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.is_following.subscribe(),
+            )?
+            .option_filter_by_id(manga_id)
+            .filter(|data| data.type_ == RelationshipType::Manga)
+            .map(|data| data.data),
+        )
     }
     pub async fn listen_by_group_id<'ctx>(
         &'ctx self,
@@ -66,45 +35,16 @@ impl IsFollowingSubscriptions {
         group_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let is_following_sub = watches.is_following.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        is_following_sub.borrow().as_ref().copied()
-                    };
-                    if let Some(data) = borrow {
-                        if data.attributes.type_ == RelationshipType::ScanlationGroup && data.id == group_id {
-                            yield data.attributes.data
-                        }
-                    }
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = is_following_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                is_following_sub.borrow().as_ref().copied()
-                            };
-                            if let Some(data) = borrow {
-                                if data.attributes.type_ == RelationshipType::ScanlationGroup && data.id == group_id {
-                                    yield data.attributes.data
-                                }
-                            }
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
-        })
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.is_following.subscribe(),
+            )?
+            .option_filter_by_id(group_id)
+            .filter(|data| data.type_ == RelationshipType::ScanlationGroup)
+            .map(|data| data.data),
+        )
     }
     pub async fn listen_by_user_id<'ctx>(
         &'ctx self,
@@ -112,45 +52,16 @@ impl IsFollowingSubscriptions {
         user_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let is_following_sub = watches.is_following.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        is_following_sub.borrow().as_ref().copied()
-                    };
-                    if let Some(data) = borrow {
-                        if data.attributes.type_ == RelationshipType::User && data.id == user_id {
-                            yield data.attributes.data
-                        }
-                    }
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = is_following_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                is_following_sub.borrow().as_ref().copied()
-                            };
-                            if let Some(data) = borrow {
-                                if data.attributes.type_ == RelationshipType::User && data.id == user_id {
-                                    yield data.attributes.data
-                                }
-                            }
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
-        })
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.is_following.subscribe(),
+            )?
+            .option_filter_by_id(user_id)
+            .filter(|data| data.type_ == RelationshipType::User)
+            .map(|data| data.data),
+        )
     }
     pub async fn listen_by_custom_list_id<'ctx>(
         &'ctx self,
@@ -158,44 +69,15 @@ impl IsFollowingSubscriptions {
         custom_list_id: Uuid,
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        let (watches, should_end, unlisten, window, is_initial_loading) =
-            init_watch_subscription::<tauri::Wry>(ctx, sub_id)?;
-        let is_following_sub = watches.is_following.subscribe();
-        Ok(stream! {
-            loop {
-                if is_initial_loading.read().map(|read| *read).unwrap_or(false) {
-                    if let Ok(mut write) = is_initial_loading.write() {
-                        *write = false;
-                    }
-                    let borrow = {
-                        is_following_sub.borrow().as_ref().copied()
-                    };
-                    if let Some(data) = borrow {
-                        if data.attributes.type_ == RelationshipType::CustomList && data.id == custom_list_id {
-                            yield data.attributes.data
-                        }
-                    }
-                } else if !should_end.read().map(|read| *read).unwrap_or(true) {
-                    if let Ok(has_changed) = is_following_sub.has_changed() {
-                        if has_changed {
-                            let borrow = {
-                                is_following_sub.borrow().as_ref().copied()
-                            };
-                            if let Some(data) = borrow {
-                                if data.attributes.type_ == RelationshipType::CustomList && data.id == custom_list_id {
-                                    yield data.attributes.data
-                                }
-                            }
-                        }
-                    }else {
-                        break;
-                    }
-                } else{
-                    break;
-                }
-                sub_sleep().await;
-            }
-            window.unlisten(unlisten);
-        })
+        Ok(
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
+                ctx,
+                sub_id,
+                |w| w.is_following.subscribe(),
+            )?
+            .option_filter_by_id(custom_list_id)
+            .filter(|data| data.type_ == RelationshipType::CustomList)
+            .map(|data| data.data),
+        )
     }
 }
