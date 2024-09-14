@@ -7,7 +7,7 @@ import { GqlThemeToITheme, IThemeToGqlThemeInput } from "../convert";
 import { sub_end } from "@mangadex/utils";
 
 export const subscription = graphql(`
-    subscription themeProfileSubscription($subID: UUID!) {
+    subscription defaultThemeProfileSubscription($subID: UUID!) {
         watchThemeProfileDefault(subId: $subID) {
             textColor
             mainBackground
