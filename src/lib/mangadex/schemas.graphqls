@@ -2198,6 +2198,7 @@ type UserOptionMutations {
 	clearCoverImagesCaches: Boolean!
 	clearFaviconCache: Boolean!
 	setMangaListStyle(mangaListStyle: MangaListStyle!): MangaListStyle!
+	updateDefaultTheme(theme: MangaDexThemeInput): MangaDexTheme!
 	setDefaultThemeProfile(name: String): String
 	setThemeProfile(name: String!, theme: MangaDexThemeInput): MangaDexTheme!
 	deleteThemeProfile(name: String!): MangaDexTheme
