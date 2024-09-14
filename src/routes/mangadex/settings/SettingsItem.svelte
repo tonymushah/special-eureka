@@ -48,9 +48,9 @@
 		border: 3px solid var(--mid-tone);
 		padding: 8px;
 		transition:
-			box-shadow 400ms ease-in-out,
-			background-color 400ms ease-in-out,
-			transform 300ms ease-in-out;
+			box-shadow 200ms ease-in-out,
+			background-color 200ms ease-in-out,
+			transform 200ms ease-in-out;
 		box-shadow: 0 var(--button-dept) 0 var(--mid-tone);
 	}
 	.icon {
@@ -58,7 +58,7 @@
 		justify-content: center;
 		align-items: center;
 		width: 100%;
-		transition: color 500ms ease-in-out;
+		transition: color 400ms ease-in-out;
 	}
 	section:hover {
 		background-color: var(--accent-l1-hover);
