@@ -138,14 +138,14 @@
 	.colors-editor {
 		display: grid;
 		@media (width >= 550px) {
+			grid-template-columns: repeat(2, calc(100% / 2));
+			gap: 10px;
 			.picker {
 				border-width: 0px;
 				border-right-width: 2px;
 				border-color: var(--mid-tone);
 				border-style: solid;
 			}
-			grid-template-columns: repeat(2, calc(100% / 2));
-			gap: 10px;
 		}
 		@media (width < 550px) {
 			.result {
