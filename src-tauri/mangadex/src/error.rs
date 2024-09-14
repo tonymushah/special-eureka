@@ -74,6 +74,8 @@ pub enum Error {
     ),
     #[error("Got an error while joining a thread")]
     StdThreadJoinError,
+    #[error("No default theme selected")]
+    NoDefaultThemeSelected,
 }
 
 impl From<favicon_picker::error::Error> for Error {
