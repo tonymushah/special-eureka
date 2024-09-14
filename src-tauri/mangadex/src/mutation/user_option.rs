@@ -128,6 +128,24 @@ impl UserOptionMutations {
         watches.manga_list_style.send_data(inner)?;
         Ok(MangaListStyleStore::extract_from_store(&store_write)?.into())
     }
+    pub async fn update_default_theme(
+        &self,
+        ctx: &Context<'_>,
+        theme: Option<MangaDexTheme>,
+    ) -> Result<MangaDexTheme> {
+        let theme = theme.unwrap_or_default();
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let name = (*ThemeProfileDefaultKey::extract_from_store(&store_write)?)
+            .clone()
+            .ok_or(crate::Error::NoDefaultThemeSelected)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
+        (*inner).insert(name, theme.clone());
+        inner.insert_and_save(&mut store_write)?;
+        watches.themes.send_data(inner)?;
+        Ok(theme)
+    }
     pub async fn set_default_theme_profile(
         &self,
         ctx: &Context<'_>,
