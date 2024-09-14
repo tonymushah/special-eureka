@@ -5,6 +5,7 @@ import { v4 } from "uuid";
 import { client } from "@mangadex/gql/urql";
 import { GqlThemeToITheme, IThemeToGqlThemeInput } from "../convert";
 import { sub_end } from "@mangadex/utils";
+import { subscriptionStore } from "@urql/svelte";
 
 export const subscription = graphql(`
     subscription themeProfilesSubscription($subID: UUID!) {
@@ -175,8 +176,11 @@ const sub_read = readable(new Map<string, IMangadexTheme>(), (set) => {
         subID
     }).subscribe((res) => {
         const data = res.data;
+        console.log("new theme getted")
         if (data) {
-            set(new Map(data.watchThemesProfile.map((entry) => ([entry.name, GqlThemeToITheme(entry.value)]))))
+            set(new Map(data.watchThemesProfile.sort((a, b) => {
+                return a.name.localeCompare(b.name)
+            }).map((entry) => ([entry.name, GqlThemeToITheme(entry.value)]))))
         }
     })
     return () => {
@@ -193,7 +197,7 @@ const themes: Writable<Map<string, IMangadexTheme>> = {
                 value: IThemeToGqlThemeInput(value),
                 name
             }))
-        })
+        }).toPromise().then(console.debug).catch(console.error)
     },
     update(updater) {
         client.mutation(mutation, {
@@ -201,7 +205,7 @@ const themes: Writable<Map<string, IMangadexTheme>> = {
                 value: IThemeToGqlThemeInput(value),
                 name
             }))
-        })
+        }).toPromise().then(console.debug).catch(console.error)
     },
 }
 
@@ -215,14 +219,14 @@ export function theme(name: string): Writable<IMangadexTheme | undefined> {
             client.mutation(singleUpdateMutation, {
                 name,
                 theme: value ? IThemeToGqlThemeInput(value) : undefined
-            })
+            }).toPromise().then(console.debug).catch(console.error)
         },
         update(updater) {
             const value = updater(get(sub_read_derived));
             client.mutation(singleUpdateMutation, {
                 name,
                 theme: value ? IThemeToGqlThemeInput(value) : undefined
-            })
+            }).toPromise().then(console.debug).catch(console.error)
         },
     }
 }

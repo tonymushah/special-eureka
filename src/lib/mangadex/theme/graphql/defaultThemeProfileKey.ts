@@ -23,6 +23,7 @@ const readable_sub = readable<string | undefined>(undefined, (set) => {
     const sub = client.subscription(subscription, {
         subID
     }).subscribe((v) => {
+        console.log("default theme key update");
         const data = v.data?.watchThemeProfileDefaultName;
         set(data == null ? undefined : data);
     })
@@ -39,12 +40,12 @@ const defaultThemeProfileKey: Writable<string | undefined> = {
     set(value) {
         client.mutation(mutation, {
             key: value
-        })
+        }).toPromise().then(console.debug).catch(console.error)
     },
     update(updater) {
         client.mutation(mutation, {
             key: updater(get(readable_sub))
-        })
+        }).toPromise().then(console.debug).catch(console.error)
     },
 }
 

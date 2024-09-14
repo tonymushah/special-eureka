@@ -181,12 +181,12 @@ const defaultTheme: Writable<MangadexTheme> = {
     set(value) {
         client.mutation(mutation, {
             theme: IThemeToGqlThemeInput(value)
-        })
+        }).toPromise().then(console.debug).catch(console.error)
     },
     update(updater) {
         client.mutation(mutation, {
             theme: IThemeToGqlThemeInput(updater(get(readSub)))
-        })
+        }).toPromise().then(console.debug).catch(console.error)
     },
 }
 
