@@ -4,6 +4,7 @@
 	import Home from "./body/Home.svelte";
 	import OfflineServer from "./body/OfflineServer.svelte";
 	import Search from "./body/Search.svelte";
+	import Settings from "./body/Settings.svelte";
 	import Titles from "./body/Titles.svelte";
 </script>
 
@@ -18,3 +19,5 @@
 <Search />
 
 <Graphql />
+
+<Settings />

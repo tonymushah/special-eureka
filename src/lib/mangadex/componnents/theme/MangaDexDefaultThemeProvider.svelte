@@ -1,21 +1,20 @@
 <script lang="ts">
-	import { type MangadexTheme } from "@mangadex/theme";
-	import SomeDiv from "./SomeDiv.svelte";
+	import defaultTheme from "@mangadex/theme/graphql/defaultTheme";
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
-	import { writable } from "svelte/store";
 	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
-	import Toaster from "./toast/Toaster.svelte";
+	import { writable } from "svelte/store";
 	import MangaDexVarThemeProvider from "./MangaDexVarThemeProvider.svelte";
+	import MangadexBackground from "./MangadexBackground.svelte";
+	import Toaster from "./toast/Toaster.svelte";
 
-	export let theme: MangadexTheme;
 	export let fonts = "Poppins";
-	const theme_store = writable(theme);
-	$: theme_store.set(theme);
-    $: setMangaDexThemeContextWritable(theme_store);
+	$: setMangaDexThemeContextWritable(defaultTheme);
 	$: setMangaDexFontsContext(writable(fonts));
 </script>
 
 <MangaDexVarThemeProvider>
 	<Toaster />
-	<slot />
+	<MangadexBackground>
+		<slot />
+	</MangadexBackground>
 </MangaDexVarThemeProvider>

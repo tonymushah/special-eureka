@@ -40,6 +40,7 @@
 		position: absolute;
 		top: 0;
 		z-index: 10;
+		height: 100vh;
 	}
 	.sidebar.show.float:not(.rtl) {
 		left: 0;

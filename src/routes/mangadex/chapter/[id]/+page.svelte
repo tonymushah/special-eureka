@@ -28,7 +28,7 @@
 
 <style lang="scss">
 	main:not(.notFixed) {
-		padding-top: 9px;
+		padding-top: 0px;
 	}
 	main.notFixed {
 		padding: 10px;
