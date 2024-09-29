@@ -5,11 +5,16 @@
 <section style="background-image: url({profileBanner});">
 	<div class="gradient">
 		<div class="backdrop-filter">
-			<div class="left">
-				<slot name="left" />
+			<div class="top">
+				<div class="left">
+					<slot name="left" />
+				</div>
+				<div class="right">
+					<slot name="right" />
+				</div>
 			</div>
-			<div class="right">
-				<slot name="right" />
+			<div class="bottom">
+				<slot name="bottom" />
 			</div>
 		</div>
 	</div>
@@ -22,6 +27,7 @@
 		background-position: 0px -200px;
 		color: var(--text-color);
 		min-height: 8em;
+		background-position: center;
 	}
 	.gradient {
 		background: linear-gradient(
@@ -32,20 +38,37 @@
 		);
 		height: 100%;
 	}
+	@media (width < 800px) {
+		:root {
+			--right-grow: 2;
+		}
+		.top {
+			gap: 0.5em;
+		}
+	}
+	@media (width >= 800px) {
+		:root {
+			--right-grow: 4;
+		}
+		.top {
+			gap: 1em;
+		}
+	}
 	.backdrop-filter {
 		backdrop-filter: blur(2px);
 		-webkit-backdrop-filter: blur(2px);
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		gap: 1em;
-		height: 100%;
-		.left {
-			padding: 0.5em;
-			flex-grow: 0;
-		}
-		.right {
-			flex-grow: 4;
+		.top {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+
+			height: 100%;
+			.left {
+				flex-grow: 0;
+			}
+			.right {
+				flex-grow: var(--right-grow);
+			}
 		}
 	}
 </style>

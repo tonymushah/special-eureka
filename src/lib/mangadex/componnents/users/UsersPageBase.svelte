@@ -16,7 +16,7 @@
 		<div class="cover">
 			<img alt={profilePictureAlt} src={profilePicture} />
 		</div>
-		<div class="bottom-left">
+		<div class="bottom">
 			<slot name="left" />
 		</div>
 	</article>
@@ -25,26 +25,64 @@
 			<h1>
 				{title}
 			</h1>
-			<Markdown bind:source={description} />
 		</div>
 		<div class="bottom">
+			<Markdown bind:source={description} />
 			<slot name="right" />
 		</div>
+	</article>
+	<article class="bottom" slot="bottom">
+		<slot name="left" />
+		<Markdown bind:source={description} />
+		<slot name="right" />
 	</article>
 </UsersPageBaseLayout>
 
 <style lang="scss">
-	@media (width < 500px) {
+	@media (width< 500px) {
+		div.bottom {
+			display: none;
+		}
+		article.bottom {
+			display: block;
+		}
+	}
+	@media (width >= 500px) {
+		div.bottom {
+			display: block;
+		}
+		article.bottom {
+			display: none;
+		}
+	}
+	@media (250px > width) {
 		:root {
 			--img-size: 3em;
+		}
+		img {
+			padding: 0.2em;
+		}
+	}
+	@media (250px <= width < 500px) {
+		:root {
+			--img-size: 3em;
+		}
+		h1 {
+			font-size: 1em;
+		}
+		img {
+			padding: 0.4em;
 		}
 	}
 	@media (500px <= width < 800px) {
 		:root {
-			--img-size: 6em;
+			--img-size: 8em;
 		}
 		h1 {
 			font-size: 1.2em;
+		}
+		img {
+			padding: 0.6em;
 		}
 	}
 	@media (800px <= width < 1200px) {
@@ -54,6 +92,9 @@
 		h1 {
 			font-size: 2em;
 		}
+		img {
+			padding: 0.8em;
+		}
 	}
 	@media (width > 1200px) {
 		:root {
@@ -61,6 +102,9 @@
 		}
 		h1 {
 			font-size: 2em;
+		}
+		img {
+			padding: 1em;
 		}
 	}
 	.cover {
@@ -78,5 +122,8 @@
 		width: var(--img-size);
 		height: var(--img-size);
 		aspect-ratio: 1/1;
+	}
+	article.bottom {
+		padding: 0.5em;
 	}
 </style>
