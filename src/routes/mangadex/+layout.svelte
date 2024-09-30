@@ -1,19 +1,20 @@
 <script lang="ts">
+	import { navigating } from "$app/stores";
 	import Sidebar from "$lib/mangadex/componnents/sidebar/Sidebar.svelte";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 	import "@fontsource-variable/josefin-sans/index.css";
 	import "@fontsource/poppins/latin.css";
-	import MangaDexThemeProvider from "@mangadex/componnents/theme/MangaDexThemeProvider.svelte";
+	import MangaDexContextDataProvider from "@mangadex/componnents/MangaDexContextDataProvider.svelte";
+	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
+	import MangaDexDefaultThemeProvider from "@mangadex/componnents/theme/MangaDexDefaultThemeProvider.svelte";
+	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
-	import { custom } from "@mangadex/theme";
+	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { v4 } from "uuid";
-	import { navigating } from "$app/stores";
-	import { onMount } from "svelte";
-	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
-	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 
 	setContextClient(client);
 	const sub_id = v4();
@@ -24,10 +25,13 @@
 			sub_id
 		}
 	});
-	const theme = custom;
 	onMount(() =>
 		rtl.subscribe(($rtl) => isSidebarRtl.set($rtl.data?.watchSidebarDirection == Direction.Rtl))
 	);
+
+	onDestroy(() => {
+		sub_end(sub_id);
+	});
 	$: loading = $navigating != null;
 	$: isRTL = $rtl.data?.watchSidebarDirection == Direction.Rtl;
 </script>
@@ -38,36 +42,37 @@
 			display: none;
 		}
 	</style>
-
-	<MangaDexThemeProvider {theme}>
-		<SetTitle />
-		<div class="provider" class:isRTL>
-			<div class="sidebar">
-				<Sidebar />
+	<MangaDexContextDataProvider>
+		<MangaDexDefaultThemeProvider>
+			<SetTitle />
+			<div class="provider" class:isRTL>
+				<div class="sidebar">
+					<Sidebar />
+				</div>
+				<div
+					class="inner"
+					class:loading
+					class:defaultDecoration={$isDefaultDecoration}
+					role="button"
+					tabindex="0"
+					on:keydown={(e) => {
+						if (loading) {
+							e.stopPropagation();
+							e.preventDefault();
+						}
+					}}
+					on:click={(e) => {
+						if (loading) {
+							e.stopPropagation();
+							e.preventDefault();
+						}
+					}}
+				>
+					<slot />
+				</div>
 			</div>
-			<div
-				class="inner"
-				class:loading
-				class:defaultDecoration={$isDefaultDecoration}
-				role="button"
-				tabindex="0"
-				on:keydown={(e) => {
-					if (loading) {
-						e.stopPropagation();
-						e.preventDefault();
-					}
-				}}
-				on:click={(e) => {
-					if (loading) {
-						e.stopPropagation();
-						e.preventDefault();
-					}
-				}}
-			>
-				<slot />
-			</div>
-		</div>
-	</MangaDexThemeProvider>
+		</MangaDexDefaultThemeProvider>
+	</MangaDexContextDataProvider>
 </div>
 
 <style lang="scss">

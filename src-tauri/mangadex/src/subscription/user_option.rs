@@ -13,7 +13,9 @@ use tokio::select;
 use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;
 
-use crate::store::types::enums::{direction::Direction, reading_mode::ReadingMode};
+use crate::store::types::enums::{
+    direction::Direction, manga_list_style::MangaListStyle, reading_mode::ReadingMode,
+};
 
 use super::utils::WatchSubscriptionStream;
 
@@ -154,6 +156,15 @@ impl UserOptionSubscriptions {
                     }
                 }
             }
+        })
+    }
+    pub async fn listen_to_manga_list_style<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaListStyle> + 'ctx> {
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.manga_list_style.subscribe()
         })
     }
 }

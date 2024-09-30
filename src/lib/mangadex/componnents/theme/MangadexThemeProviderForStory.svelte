@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { custom } from "@mangadex/theme";
-	import MangadexThemeProviderBase from "./MangadexThemeProviderBase.svelte";
-	const theme = custom;
-	import { mockWindows, clearMocks, mockIPC } from "@tauri-apps/api/mocks";
-	import { onMount } from "svelte";
-	import { setContextClient } from "@urql/svelte";
 	import { client } from "@mangadex/gql/urql";
+	import { custom as theme } from "@mangadex/theme";
+	import { setContextClient } from "@urql/svelte";
+	import MangadexThemeProviderBase from "./MangadexThemeProviderBase.svelte";
 	/*
     onMount(() => {
 		mockWindows("main");

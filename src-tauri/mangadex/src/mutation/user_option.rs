@@ -22,6 +22,7 @@ use crate::{
             direction::{
                 reading::ReadingDirectionStore, sidebar::SidebarDirectionStore, Direction,
             },
+            manga_list_style::{MangaListStyle, MangaListStyleStore},
             reading_mode::{ReadingMode, ReadingModeStore},
         },
         structs::chapter_language::ChapterLanguagesStore,
@@ -113,6 +114,37 @@ impl UserOptionMutations {
         let app = get_app_handle_from_async_graphql::<tauri::Wry>(ctx)?;
         clear_favicons_dir(app.config().as_ref())?;
         Ok(true)
+    }
+    pub async fn set_manga_list_style(
+        &self,
+        ctx: &Context<'_>,
+        manga_list_style: MangaListStyle,
+    ) -> Result<MangaListStyle> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = MangaListStyleStore::from(manga_list_style);
+        inner.insert_and_save(&mut store_write)?;
+        watches.manga_list_style.send_data(inner)?;
+        Ok(MangaListStyleStore::extract_from_store(&store_write)?.into())
+    }
+    pub async fn update_default_theme(
+        &self,
+        ctx: &Context<'_>,
+        theme: Option<MangaDexTheme>,
+    ) -> Result<MangaDexTheme> {
+        let theme = theme.unwrap_or_default();
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let name = (*ThemeProfileDefaultKey::extract_from_store(&store_write)?)
+            .clone()
+            .ok_or(crate::Error::NoDefaultThemeSelected)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
+        (*inner).insert(name, theme.clone());
+        inner.insert_and_save(&mut store_write)?;
+        watches.themes.send_data(inner)?;
+        Ok(theme)
     }
     pub async fn set_default_theme_profile(
         &self,

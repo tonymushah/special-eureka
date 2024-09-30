@@ -9,6 +9,8 @@
 	import { ReadingMode } from "@mangadex/gql/graphql";
 	import { initCurrentChapterReadingMode } from "../../contexts/currentChapterReadingMode";
 	import { initLongStripImagesWidthContext } from "../longStrip/utils/context/longstrip_images_width";
+	import { initIsDrawerOpenWritable } from "../../contexts/isDrawerOpen";
+	import { initIsDrawerFixedWritable } from "../../contexts/isDrawerFixed";
 
 	export let images: string[];
 	export let currentPage: number = 0;
@@ -18,6 +20,8 @@
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
+	initIsDrawerOpenWritable(writable(false));
+	initIsDrawerFixedWritable(writable(true));
 	$: readingDirection.set(direction);
 	$: imageFitStore.set(imageFit);
 

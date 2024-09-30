@@ -70,7 +70,10 @@ use crate::{
         },
         user::attributes::UserAttributes,
     },
-    store::types::enums::{direction::Direction, image_fit::ImageFit, reading_mode::ReadingMode},
+    store::types::enums::{
+        direction::Direction, image_fit::ImageFit, manga_list_style::MangaListStyle,
+        reading_mode::ReadingMode,
+    },
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -351,6 +354,15 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = f64> + 'ctx> {
         UserOptionSubscriptions
             .listen_to_longstrip_image_width(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_manga_list_style<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaListStyle> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_manga_list_style(ctx, sub_id)
             .await
     }
     pub async fn watch_themes_profile<'ctx>(

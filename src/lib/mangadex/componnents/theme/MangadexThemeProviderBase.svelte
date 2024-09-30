@@ -9,8 +9,9 @@
 
 	export let theme: MangadexTheme;
 	export let fonts = "Poppins";
-	$: theme_store = writable(theme);
-	$: setMangaDexThemeContextWritable(theme_store);
+	const theme_store = writable(theme);
+	$: theme_store.set(theme);
+    $: setMangaDexThemeContextWritable(theme_store);
 	$: setMangaDexFontsContext(writable(fonts));
 </script>
 

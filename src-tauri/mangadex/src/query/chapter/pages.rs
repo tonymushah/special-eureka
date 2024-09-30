@@ -47,7 +47,10 @@ impl ChapterPagesQuery {
                 let ext = i.extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
                     let i = i.to_str()?;
-                    Url::parse(format!("mangadex://chapter/{id}/data/{i}").as_str()).ok()
+                    Url::parse(
+                        format!("{}chapter/{id}/data/{i}", crate::constants::PROTOCOL).as_str(),
+                    )
+                    .ok()
                 } else {
                     None
                 }
@@ -61,7 +64,11 @@ impl ChapterPagesQuery {
                 let ext = i.extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
                     let i = i.to_str()?;
-                    Url::parse(format!("mangadex://chapter/{id}/data-saver/{i}").as_str()).ok()
+                    Url::parse(
+                        format!("{}chapter/{id}/data-saver/{i}", crate::constants::PROTOCOL)
+                            .as_str(),
+                    )
+                    .ok()
                 } else {
                     None
                 }
