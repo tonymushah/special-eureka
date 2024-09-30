@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { kebabCase } from "lodash";
 	import UsersPageBaseLayout from "./UsersPageBaseLayout.svelte";
-	import Title from "../theme/texts/title/Title.svelte";
-	import Markdown from "../markdown/Markdown.svelte";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 
 	export let profilePicture: string;
 	export let profileBanner: string;
