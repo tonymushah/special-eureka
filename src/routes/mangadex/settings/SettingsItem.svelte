@@ -22,7 +22,7 @@
 	<div class="icon">
 		<svelte:component this={icon} />
 	</div>
-	<Title type={2}>{title}</Title>
+	<h2>{title}</h2>
 	<p>{description}</p>
 </section>
 
@@ -37,6 +37,16 @@
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+	}
+	h2 {
+		text-align: center;
+		display: -webkit-box;
+		text-wrap: nowrap;
+		text-overflow: ellipsis;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		margin: 0px;
+		width: 100%;
 	}
 	section {
 		display: flex;
