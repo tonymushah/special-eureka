@@ -22,13 +22,17 @@
 		</div>
 		<div class="main-bg-text">
 			<section class="bg">
-				<ColorPicker bind:hex={$theme.mainBackground} label="Main Background" />
+				<ColorPicker
+					position="responsive"
+					bind:hex={$theme.mainBackground}
+					label="Main Background"
+				/>
 			</section>
 			<section class="text">
-				<ColorPicker bind:hex={$theme.textColor} label="Text Color" />
+				<ColorPicker position="responsive" bind:hex={$theme.textColor} label="Text Color" />
 			</section>
 			<section class="midtone">
-				<ColorPicker bind:hex={$theme.mid_tone} label="Midtone" />
+				<ColorPicker position="responsive" bind:hex={$theme.mid_tone} label="Midtone" />
 			</section>
 		</div>
 		<MidToneLine />
@@ -52,8 +56,16 @@
 			<Title type={3}>Buttons</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Default" bind:hex={$theme.button.default} />
-					<ColorPicker label="Alternate" bind:hex={$theme.button.alternate} />
+					<ColorPicker
+						position="responsive"
+						label="Default"
+						bind:hex={$theme.button.default}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Alternate"
+						bind:hex={$theme.button.alternate}
+					/>
 				</article>
 				<article class="result">
 					<Buttons />
@@ -64,8 +76,16 @@
 			<Title type={3}>Scrollbar</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Default" bind:hex={$theme.scrollbar.default} />
-					<ColorPicker label="Hovered" bind:hex={$theme.scrollbar.hovered} />
+					<ColorPicker
+						position="responsive"
+						label="Default"
+						bind:hex={$theme.scrollbar.default}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Hovered"
+						bind:hex={$theme.scrollbar.hovered}
+					/>
 				</article>
 			</div>
 		</div>
@@ -73,12 +93,24 @@
 			<Title type={3}>Status</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Red" bind:hex={$theme.status.red} />
-					<ColorPicker label="Green" bind:hex={$theme.status.green} />
-					<ColorPicker label="Yellow" bind:hex={$theme.status.yellow} />
-					<ColorPicker label="Blue" bind:hex={$theme.status.blue} />
-					<ColorPicker label="Grey" bind:hex={$theme.status.grey} />
-					<ColorPicker label="Purple" bind:hex={$theme.status.purple} />
+					<ColorPicker position="responsive" label="Red" bind:hex={$theme.status.red} />
+					<ColorPicker
+						position="responsive"
+						label="Green"
+						bind:hex={$theme.status.green}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Yellow"
+						bind:hex={$theme.status.yellow}
+					/>
+					<ColorPicker position="responsive" label="Blue" bind:hex={$theme.status.blue} />
+					<ColorPicker position="responsive" label="Grey" bind:hex={$theme.status.grey} />
+					<ColorPicker
+						position="responsive"
+						label="Purple"
+						bind:hex={$theme.status.purple}
+					/>
 				</article>
 				<article class="result">
 					<StatusColorsResult />
@@ -89,9 +121,21 @@
 			<Title type={3}>Primary</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Default" bind:hex={$theme.primary.primary} />
-					<ColorPicker label="Variant 1" bind:hex={$theme.primary.primary1} />
-					<ColorPicker label="Variant 2" bind:hex={$theme.primary.primary2} />
+					<ColorPicker
+						position="responsive"
+						label="Default"
+						bind:hex={$theme.primary.primary}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Variant 1"
+						bind:hex={$theme.primary.primary1}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Variant 2"
+						bind:hex={$theme.primary.primary2}
+					/>
 				</article>
 				<article class="result">
 					<PrimaryButtons />
@@ -102,7 +146,11 @@
 			<Title type={3}>Indication</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Blue" bind:hex={$theme.indication.blue} />
+					<ColorPicker
+						position="responsive"
+						label="Blue"
+						bind:hex={$theme.indication.blue}
+					/>
 				</article>
 				<article class="result">
 					<IndicationBadges />
@@ -113,9 +161,21 @@
 			<Title type={3}>Danger</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Default" bind:hex={$theme.danger.default} />
-					<ColorPicker label="Variant 1" bind:hex={$theme.danger.l1} />
-					<ColorPicker label="Variant 2" bind:hex={$theme.danger.l2} />
+					<ColorPicker
+						position="responsive"
+						label="Default"
+						bind:hex={$theme.danger.default}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Variant 1"
+						bind:hex={$theme.danger.l1}
+					/>
+					<ColorPicker
+						position="responsive"
+						label="Variant 2"
+						bind:hex={$theme.danger.l2}
+					/>
 				</article>
 				<article class="result">
 					<DangerButtons />
@@ -126,7 +186,11 @@
 			<Title type={3}>Contrast</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<ColorPicker label="Variant 1" bind:hex={$theme.contrast.l1} />
+					<ColorPicker
+						position="responsive"
+						label="Variant 1"
+						bind:hex={$theme.contrast.l1}
+					/>
 				</article>
 				<article class="result"></article>
 			</div>
