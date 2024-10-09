@@ -92,6 +92,7 @@ impl OauthMutations {
         client_secret: String,
     ) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client_info = ClientInfo {
             client_id,
             client_secret,
@@ -101,14 +102,17 @@ impl OauthMutations {
         let mut store_write = store.write().await;
         let cis: ClientInfoStore = client_info.into();
         cis.insert_and_save(&mut store_write)?;
+        watches.client_info.send_data(cis.inner())?;
         Ok(true)
     }
     pub async fn clear_client_info(&self, ctx: &Context<'_>) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         client.clear_client_info().await?;
         let store = get_store::<tauri::Wry>(ctx).await?;
         let mut store_write = store.write().await;
         ClientInfoStore::extract_from_store(&store_write)?.delete_and_save(&mut store_write)?;
+        watches.client_info.send_data(None)?;
         Ok(true)
     }
     pub async fn logout(&self, ctx: &Context<'_>) -> Result<bool> {

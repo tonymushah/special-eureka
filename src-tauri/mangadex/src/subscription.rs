@@ -1,7 +1,9 @@
+use crate::objects::oauth::ClientInfo;
 use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
 use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
 use async_graphql::{Context, Subscription};
+use oauth::OauthSubscriptions;
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -16,6 +18,7 @@ pub mod is_following;
 pub mod is_logged;
 pub mod manga;
 pub mod manga_reading_state;
+pub mod oauth;
 pub mod rating;
 pub mod read_marker;
 pub mod reading_state;
@@ -391,5 +394,12 @@ impl Subscriptions {
         UserOptionSubscriptions
             .listen_to_theme_profile_default_name(ctx, sub_id)
             .await
+    }
+    pub async fn watch_client_info<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Option<ClientInfo>> + 'ctx> {
+        OauthSubscriptions.listen(ctx, sub_id).await
     }
 }

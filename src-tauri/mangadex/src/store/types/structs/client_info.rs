@@ -26,6 +26,12 @@ impl DerefMut for ClientInfoStore {
     }
 }
 
+impl ClientInfoStore {
+    pub fn inner(self) -> Option<ClientInfo> {
+        self.0
+    }
+}
+
 impl From<Option<ClientInfo>> for ClientInfoStore {
     fn from(value: Option<ClientInfo>) -> Self {
         Self(value)

@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 
+use client_info::ClientInfoWatch;
 use image_fit::ImageFitWatch;
 use uuid::Uuid;
 
@@ -39,6 +40,7 @@ pub mod api_client;
 pub mod author;
 pub mod chapter;
 pub mod chapter_languages;
+pub mod client_info;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
@@ -172,4 +174,5 @@ pub struct Watches {
     pub manga_list_style: MangaListStyleWatch,
     pub themes: ThemeProfilesWatch,
     pub theme_default_key: ThemeProfileDefaultKeyWatch,
+    pub client_info: ClientInfoWatch,
 }
