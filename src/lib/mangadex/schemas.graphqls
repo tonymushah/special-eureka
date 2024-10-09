@@ -1979,6 +1979,7 @@ type Subscriptions {
 	watchThemesProfile(subId: UUID!): [ThemeProfileEntry!]!
 	watchThemeProfileDefault(subId: UUID!): MangaDexTheme!
 	watchThemeProfileDefaultName(subId: UUID!): String
+	watchClientInfo(subId: UUID!): ClientInfo
 }
 
 type Tag {

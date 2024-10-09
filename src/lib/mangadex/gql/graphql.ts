@@ -2406,6 +2406,7 @@ export type Subscriptions = {
   watchAuthor: AuthorAttributes;
   watchChapter: ChapterAttributes;
   watchChapterLanguages: Array<Language>;
+  watchClientInfo?: Maybe<ClientInfo>;
   watchCover: CoverAttributes;
   watchCustomList: CustomListAttributes;
   watchDownloadState: DownloadState;
@@ -2458,6 +2459,11 @@ export type SubscriptionsWatchChapterArgs = {
 
 
 export type SubscriptionsWatchChapterLanguagesArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchClientInfoArgs = {
   subId: Scalars['UUID']['input'];
 };
 
