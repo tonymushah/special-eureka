@@ -96,7 +96,9 @@
 	}}
 >
 	<div>
-		<FormInput widthFull name="name" placeholder="The New Theme Profile Name" />
+		<FormInput widthFull inputProps={{
+			name:"name", placeholder:"The New Theme Profile Name"
+		}}  />
 	</div>
 
 	<PrimaryButton type="submit">

@@ -9,7 +9,7 @@
 <section class="layout">
 	<Title type={3}>Year</Title>
 	<div class="content">
-		<FormInput bind:value={$year} placeholder="Publication Year" type="number" />
+		<FormInput bind:value={$year} inputProps={{placeholder:"Publication Year",type:"number"}} />
 	</div>
 </section>
 
