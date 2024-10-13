@@ -41,21 +41,25 @@
 	<Title>Advanced Titles Search</Title>
 </section>
 
-<MangaSearchForm
-	bind:realTime
-	defaultParams={$defaultParams}
-	on:change={({ detail }) => {
-		if (realTime) {
-			currentSearchParams.set(detail);
-		}
-	}}
-	on:submit={({ detail }) => {
-		if (!realTime) {
-			currentSearchParams.set(detail);
-		}
-	}}
-/>
+<section class="form-search">
+	<MangaSearchForm
+		bind:realTime
+		defaultParams={$defaultParams}
+		on:change={({ detail }) => {
+			if (realTime) {
+				currentSearchParams.set(detail);
+			}
+		}}
+		on:submit={({ detail }) => {
+			if (!realTime) {
+				currentSearchParams.set(detail);
+			}
+		}}
+	/>
+</section>
 
 <MidToneLine />
 
-<SearchContent params={listParams} {offlineStore} />
+<section class="content">
+	<SearchContent params={listParams} {offlineStore} />
+</section>
