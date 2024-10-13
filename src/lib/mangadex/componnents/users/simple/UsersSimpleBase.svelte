@@ -80,6 +80,9 @@
 >
 	<img alt="{camelCase(name)}-profile-picture" src={profilePicture} />
 	<p>{name}</p>
+	<div class="right">
+		<slot />
+	</div>
 </button>
 
 <style lang="scss">
@@ -120,5 +123,8 @@
 		background-color: var(--accent-active);
 		box-shadow: none;
 		transform: translateY(var(--outer-border));
+	}
+	.right {
+		align-self: flex-end;
 	}
 </style>
