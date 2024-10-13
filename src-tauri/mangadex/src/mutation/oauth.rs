@@ -45,7 +45,7 @@ impl OauthMutations {
     ) -> Result<bool> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        if let Ok(res) = client
+        match client
             .oauth()
             .login()
             .username(username)
@@ -53,20 +53,23 @@ impl OauthMutations {
             .send()
             .await
         {
-            Self::refetch_me_data(watches.deref().clone(), client.deref().clone());
-            let last_time_fetched = get_last_time_token_when_fetched::<tauri::Wry>(ctx)?;
-            let mut last_time_fetched_write = last_time_fetched.write().await;
-            let _ = last_time_fetched_write
-                .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
-            let store = get_store::<tauri::Wry>(ctx).await?;
-            let mut store_write = store.write().await;
-            let rf_token_store: RefreshTokenStore = res.into();
-            rf_token_store.insert_and_save(&mut store_write)?;
-            let _ = watches.is_logged.send_data(true);
-            Ok(true)
-        } else {
-            let _ = watches.is_logged.send_data(false);
-            Ok(false)
+            Ok(res) => {
+                Self::refetch_me_data(watches.deref().clone(), client.deref().clone());
+                let last_time_fetched = get_last_time_token_when_fetched::<tauri::Wry>(ctx)?;
+                let mut last_time_fetched_write = last_time_fetched.write().await;
+                let _ = last_time_fetched_write
+                    .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
+                let store = get_store::<tauri::Wry>(ctx).await?;
+                let mut store_write = store.write().await;
+                let rf_token_store: RefreshTokenStore = res.into();
+                rf_token_store.insert_and_save(&mut store_write)?;
+                let _ = watches.is_logged.send_data(true);
+                Ok(true)
+            }
+            Err(e) => {
+                let _ = watches.is_logged.send_data(false);
+                Err(e.into())
+            }
         }
     }
     pub async fn refresh(&self, ctx: &Context<'_>) -> Result<bool> {
