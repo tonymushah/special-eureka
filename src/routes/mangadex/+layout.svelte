@@ -86,6 +86,7 @@
 		}
 		.inner {
 			height: -webkit-fill-available;
+			padding-bottom: 16px;
 		}
 	}
 	.provider.isRTL {
