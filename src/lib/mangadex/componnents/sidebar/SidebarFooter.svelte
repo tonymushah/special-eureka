@@ -28,6 +28,9 @@
 				{}
 			)
 			.toPromise();
+		if (me.error) {
+			console.error(me.error);
+		}
 		initial_user_name = me.data?.user.me.attributes.username;
 		isRefreshing = false;
 	}
@@ -38,17 +41,13 @@
 	$: label = $userMe?.name ?? "Login";
 </script>
 
-<Menu bind:label>
-	<div
-		slot="icon"
-		role="button"
-		tabindex="0"
-		on:keypress={(e) => {}}
-		class:isRefreshing
-		on:click={async () => {
-			await loadUserMe();
-		}}
-	>
+<Menu
+	bind:label
+	on:click={async () => {
+		await loadUserMe();
+	}}
+>
+	<div slot="icon" role="button" tabindex="0" on:keypress={(e) => {}} class:isRefreshing>
 		{#if isRefreshing}
 			<UserIcon size="24" />
 		{:else if $isLogged}
