@@ -6,11 +6,11 @@
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable, type Readable } from "svelte/store";
-	import type { IMangaSearchResult } from "./search";
 	import executeSearchQuery from "./search";
 	import Fetching from "./content/Fetching.svelte";
 	import HasNext from "./content/HasNext.svelte";
 	import NothingToShow from "./content/NothingToShow.svelte";
+	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	let isFetching = false;
 	const client = getContextClient();
 	const titles = writable<MangaListContentItemProps[]>([]);
@@ -19,7 +19,9 @@
 	export let offlineStore: Readable<boolean>;
 	const p_p_offline = derived([params, offlineStore], (merged) => merged);
 	let debounce_func: DebouncedFunc<() => Promise<void>> | undefined = undefined;
-	const currentResult = writable<IMangaSearchResult | undefined>(undefined);
+	const currentResult = writable<AbstractSearchResult<MangaListContentItemProps> | undefined>(
+		undefined
+	);
 	onMount(() =>
 		p_p_offline.subscribe(([p, offline]) => {
 			debounce_func?.flush();
