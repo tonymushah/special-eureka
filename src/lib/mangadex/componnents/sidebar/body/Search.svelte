@@ -3,11 +3,15 @@
 	import SubMenu from "../base/SubMenu.svelte";
 	import SubMenuItem from "../base/SubMenuItem.svelte";
 	import { route } from "$lib/ROUTES";
+	import { isLogged } from "@mangadex/utils/auth";
 </script>
 
 <SubMenu label="Search">
 	<SearchIcon slot="icon" size="24" />
-	<SubMenuItem label="Manga" href={route("/mangadex/titles")} />
-	<SubMenuItem label="Author" />
-	<SubMenuItem label="Groups" />
+	<SubMenuItem label="Titles" href={route("/mangadex/titles")} />
+	<SubMenuItem label="Authors" href={route("/mangadex/author")} />
+	<SubMenuItem label="Groups" href={route("/mangadex/group")} />
+	{#if $isLogged}
+		<SubMenuItem label="Users" href={route("/mangadex/user")} />
+	{/if}
 </SubMenu>
