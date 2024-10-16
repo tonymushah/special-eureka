@@ -111,6 +111,11 @@
 		>
 			<p class="titles-number">
 				{author.titles}
+				{#if author.titles > 1}
+					titles
+				{:else}
+					title
+				{/if}
 			</p>
 		</UsersSimpleBase>
 	{/each}
