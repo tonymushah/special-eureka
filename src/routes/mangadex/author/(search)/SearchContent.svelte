@@ -107,7 +107,12 @@
 					})
 				);
 			}}
-		/>
+			profilePicture={author.profilePicture}
+		>
+			<p class="titles-number">
+				{author.titles}
+			</p>
+		</UsersSimpleBase>
 	{/each}
 </div>
 
@@ -132,5 +137,8 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		gap: 8px;
+	}
+	.titles-number {
+		margin: 0px;
 	}
 </style>
