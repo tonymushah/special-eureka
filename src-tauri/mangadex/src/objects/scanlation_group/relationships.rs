@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
+use async_graphql::{Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
     v5::{RelatedAttributes, Relationship, UserAttributes},
     ApiObjectNoRelationships,
@@ -27,8 +27,9 @@ impl From<Vec<Relationship>> for ScanlationGroupRelationships {
 
 #[Object]
 impl ScanlationGroupRelationships {
-    pub async fn leader(&self) -> GraphQLResult<User> {
-        self.iter()
+    pub async fn leader(&self) -> GraphQLResult<Option<User>> {
+        Ok(self
+            .iter()
             .find(|e| e.type_ == RelationshipType::Leader)
             .map(
                 |value| -> Result<
@@ -49,8 +50,7 @@ impl ScanlationGroupRelationships {
                 },
             )
             .and_then(|inner| inner.ok())
-            .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from)
-            .ok_or(GraphQLError::new("Related Uploader or User not found"))
+            .map(<User as From<ApiObjectNoRelationships<UserAttributes>>>::from))
     }
     pub async fn members(&self) -> Vec<User> {
         self.iter()

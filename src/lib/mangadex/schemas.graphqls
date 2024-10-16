@@ -1909,7 +1909,7 @@ type ScanlationGroupQueries {
 }
 
 type ScanlationGroupRelationships {
-	leader: User!
+	leader: User
 	members: [User!]!
 }
 

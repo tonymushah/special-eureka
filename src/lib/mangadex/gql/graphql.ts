@@ -2368,7 +2368,7 @@ export type ScanlationGroupQueriesListArgs = {
 
 export type ScanlationGroupRelationships = {
   __typename?: 'ScanlationGroupRelationships';
-  leader: User;
+  leader?: Maybe<User>;
   members: Array<User>;
 };
 
