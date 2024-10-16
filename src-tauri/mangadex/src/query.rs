@@ -32,8 +32,9 @@ use self::{
     feed::FeedQueries, follows::FollowsQueries, home::HomeQueries,
     infrastructure::InfrastructureQueries, legacy::LegacyQueries, manga::MangaQueries,
     oauth::OauthQueries, offline_app_state::OfflineAppStateQueries, rating::RatingQueries,
-    read_marker::ReadMarkerQueries, report::ReportQueries, statistics::StatisticsQueries,
-    tag::TagQueries, upload::UploadQueries, user::UserQueries, utils::UtilsQuery,
+    read_marker::ReadMarkerQueries, report::ReportQueries,
+    scanlation_group::ScanlationGroupQueries, statistics::StatisticsQueries, tag::TagQueries,
+    upload::UploadQueries, user::UserQueries, utils::UtilsQuery,
 };
 
 pub struct Query;
@@ -105,5 +106,8 @@ impl Query {
     }
     pub async fn utils(&self) -> UtilsQuery {
         UtilsQuery
+    }
+    pub async fn scanlation_group(&self) -> ScanlationGroupQueries {
+        ScanlationGroupQueries
     }
 }

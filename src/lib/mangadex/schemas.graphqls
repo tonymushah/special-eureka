@@ -949,6 +949,15 @@ type GraphQLMangaAttributes {
 	version: Int!
 }
 
+input GroupSortOrder @oneOf {
+	createdAt: OrderDirection
+	followedCount: OrderDirection
+	latestUploadedChapter: OrderDirection
+	name: OrderDirection
+	relevance: OrderDirection
+	updatedAt: OrderDirection
+}
+
 type GroupStatisticsQueries {
 	get(id: UUID!): Statistics!
 	list(ids: [UUID!]!): [Statistics!]!
@@ -1650,6 +1659,7 @@ type Query {
 	home: HomeQueries!
 	downloadState: DownloadStateQueries!
 	utils: UtilsQuery!
+	scanlationGroup: ScanlationGroupQueries!
 }
 
 type RatingItem {
@@ -1873,12 +1883,29 @@ type ScanlationGroupAttributes {
 	updatedAt: MangaDexDateTime!
 }
 
+input ScanlationGroupListParams {
+	limit: Int
+	offset: Int
+	groupIds: [UUID!]! = []
+	name: String
+	"""
+	Language the scanlation primarily translates or uploads works into.
+	"""
+	focusedLanguage: Language
+	order: GroupSortOrder
+}
+
 type ScanlationGroupMutation {
 	create(params: CreateScalantionGroupParam!): ScanlationGroup!
 	edit(params: EditScanlationGroupParam!): ScanlationGroup!
 	delete(id: UUID!): Boolean!
 	follow(id: UUID!): Boolean!
 	unfollow(id: UUID!): Boolean!
+}
+
+type ScanlationGroupQueries {
+	list(params: ScanlationGroupListParams! = {limit: null, offset: null, groupIds: [], name: null, focusedLanguage: null, order: null}): ScanlationGroupResults!
+	getUnique(id: UUID!): ScanlationGroup!
 }
 
 type ScanlationGroupRelationships {

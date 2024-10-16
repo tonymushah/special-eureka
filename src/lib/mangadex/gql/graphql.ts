@@ -1210,6 +1210,14 @@ export type GraphQlMangaAttributes = {
   year?: Maybe<Scalars['Int']['output']>;
 };
 
+export type GroupSortOrder =
+  { createdAt: OrderDirection; followedCount?: never; latestUploadedChapter?: never; name?: never; relevance?: never; updatedAt?: never; }
+  |  { createdAt?: never; followedCount: OrderDirection; latestUploadedChapter?: never; name?: never; relevance?: never; updatedAt?: never; }
+  |  { createdAt?: never; followedCount?: never; latestUploadedChapter: OrderDirection; name?: never; relevance?: never; updatedAt?: never; }
+  |  { createdAt?: never; followedCount?: never; latestUploadedChapter?: never; name: OrderDirection; relevance?: never; updatedAt?: never; }
+  |  { createdAt?: never; followedCount?: never; latestUploadedChapter?: never; name?: never; relevance: OrderDirection; updatedAt?: never; }
+  |  { createdAt?: never; followedCount?: never; latestUploadedChapter?: never; name?: never; relevance?: never; updatedAt: OrderDirection; };
+
 export type GroupStatisticsQueries = {
   __typename?: 'GroupStatisticsQueries';
   get: Statistics;
@@ -2034,6 +2042,7 @@ export type Query = {
   rating: RatingQueries;
   readMarker: ReadMarkerQueries;
   report: ReportQueries;
+  scanlationGroup: ScanlationGroupQueries;
   statistics: StatisticsQueries;
   tag: TagQueries;
   upload: UploadQueries;
@@ -2297,6 +2306,16 @@ export type ScanlationGroupAttributes = {
   website?: Maybe<Scalars['Url']['output']>;
 };
 
+export type ScanlationGroupListParams = {
+  /** Language the scanlation primarily translates or uploads works into. */
+  focusedLanguage?: InputMaybe<Language>;
+  groupIds?: Array<Scalars['UUID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<GroupSortOrder>;
+};
+
 export type ScanlationGroupMutation = {
   __typename?: 'ScanlationGroupMutation';
   create: ScanlationGroup;
@@ -2329,6 +2348,22 @@ export type ScanlationGroupMutationFollowArgs = {
 
 export type ScanlationGroupMutationUnfollowArgs = {
   id: Scalars['UUID']['input'];
+};
+
+export type ScanlationGroupQueries = {
+  __typename?: 'ScanlationGroupQueries';
+  getUnique: ScanlationGroup;
+  list: ScanlationGroupResults;
+};
+
+
+export type ScanlationGroupQueriesGetUniqueArgs = {
+  id: Scalars['UUID']['input'];
+};
+
+
+export type ScanlationGroupQueriesListArgs = {
+  params?: ScanlationGroupListParams;
 };
 
 export type ScanlationGroupRelationships = {
