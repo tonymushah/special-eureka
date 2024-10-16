@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import { camelCase } from "lodash";
-
-	export let profilePicture: string;
+	import BeeDexRaw from "@mangadex/assets/Bee Dex Raw.jpg";
+	export let profilePicture: string = BeeDexRaw;
 	export let name: string;
 	export let element: AnyMeltElement = emptyMeltElement;
 	export let _this: HTMLButtonElement | undefined = undefined;
