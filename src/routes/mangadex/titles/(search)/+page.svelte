@@ -2,7 +2,6 @@
 	import MangaSearchForm from "@mangadex/componnents/manga/search/form/MangaSearchForm.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import SearchContent from "./SearchContent.svelte";
-	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import type { PageData } from "./$types";
 	import defaultMangaSearchParams, {
 		toMangaListParams,
@@ -58,8 +57,12 @@
 	/>
 </section>
 
-<MidToneLine />
-
 <section class="content">
 	<SearchContent params={listParams} {offlineStore} />
 </section>
+
+<style lang="scss">
+	.content {
+		margin-top: 12px;
+	}
+</style>
