@@ -7,9 +7,9 @@
 	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable, type Readable } from "svelte/store";
 	import executeSearchQuery from "./search";
-	import Fetching from "./content/Fetching.svelte";
-	import HasNext from "./content/HasNext.svelte";
-	import NothingToShow from "./content/NothingToShow.svelte";
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
+	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
+	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	let isFetching = false;
 	const client = getContextClient();
