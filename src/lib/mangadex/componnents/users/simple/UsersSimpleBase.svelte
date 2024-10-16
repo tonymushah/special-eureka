@@ -125,6 +125,6 @@
 		transform: translateY(var(--outer-border));
 	}
 	.right {
-		align-self: flex-end;
+		justify-content: end;
 	}
 </style>
