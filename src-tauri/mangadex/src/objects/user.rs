@@ -1,13 +1,21 @@
-use async_graphql::Object;
+use async_graphql::{Context, Object, Result as GraphQLResult};
+use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
-    v5::{UserAttributes as Attributes, UserObject},
+    v5::{Relationship, UserAttributes as Attributes, UserObject},
     ApiObjectNoRelationships,
 };
+use mangadex_api_types_rust::ReferenceExpansionResource;
+use relationships::UserRelationships;
 use uuid::Uuid;
+
+use crate::query::user::UserQueries;
 
 use self::attributes::UserAttributes;
 
-use super::{GetAttributes, GetId};
+use super::{
+    ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, ExtractRelationships,
+    GetAttributes, GetId,
+};
 
 pub mod attributes;
 pub mod lists;
@@ -65,6 +73,15 @@ impl GetAttributes for User {
     }
 }
 
+impl ExtractRelationships for User {
+    fn get_relationships(&self) -> Option<Vec<Relationship>> {
+        match self {
+            Self::WithRelationship(o) => Some(o.relationships.clone()),
+            Self::WithoutRelationship(_) => None,
+        }
+    }
+}
+
 #[Object]
 impl User {
     pub async fn id(&self) -> Uuid {
@@ -73,4 +90,34 @@ impl User {
     pub async fn attributes(&self) -> UserAttributes {
         self.get_attributes()
     }
+    pub async fn relationships<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> GraphQLResult<UserRelationships> {
+        match self {
+            User::WithRelationship(o) => Ok(UserRelationships(o.relationships.clone())),
+            User::WithoutRelationship(o) => Ok(UserRelationships(
+                UserQueries
+                    .get(ctx, o.id)
+                    .await?
+                    .get_relationships()
+                    .ok_or(crate::Error::EmptyRelationshipTable)?,
+            )),
+        }
+    }
 }
+
+impl ExtractReferenceExpansion<'_> for User {
+    fn exctract(field: async_graphql::SelectionField<'_>) -> Vec<ReferenceExpansionResource> {
+        let mut includes: Vec<ReferenceExpansionResource> = Vec::new();
+        field.selection_set().for_each(|f| {
+            if f.name().to_case(Case::Snake).as_str() == "groups" {
+                includes.push(ReferenceExpansionResource::ScanlationGroup);
+            }
+        });
+        includes.dedup();
+        includes
+    }
+}
+
+impl ExtractReferenceExpansionFromContext<'_> for User {}

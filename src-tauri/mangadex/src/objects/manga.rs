@@ -6,7 +6,7 @@ pub mod manga_reading_status;
 pub mod related;
 pub mod relationships;
 
-use async_graphql::{Context, Error, Object, Result as GraphQLResult};
+use async_graphql::{Context, Object, Result as GraphQLResult};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
     v5::{MangaAttributes, MangaObject as MangaData, Relationship},
@@ -99,7 +99,7 @@ impl MangaObject {
                 .get(ctx)
                 .await?
                 .get_relationships()
-                .ok_or(Error::new("Empty Relationship table"))?,
+                .ok_or(crate::Error::EmptyRelationshipTable)?,
             }),
         }
     }

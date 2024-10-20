@@ -76,6 +76,8 @@ pub enum Error {
     StdThreadJoinError,
     #[error("No default theme selected")]
     NoDefaultThemeSelected,
+    #[error("This method or function is not implemented yet")]
+    Unimplemented,
 }
 
 impl From<favicon_picker::error::Error> for Error {
