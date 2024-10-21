@@ -2164,6 +2164,7 @@ scalar Url
 type User {
 	id: UUID!
 	attributes: UserAttributes!
+	relationships: UserRelationships!
 }
 
 type UserAttributes {
@@ -2238,6 +2239,10 @@ type UserQueries {
 	get(id: UUID!): User!
 	list(params: UserListParam! = {limit: null, offset: null, userIds: [], username: null, order: null}): UserResults!
 	me: User!
+}
+
+type UserRelationships {
+	groups: [ScanlationGroup!]!
 }
 
 type UserReport {

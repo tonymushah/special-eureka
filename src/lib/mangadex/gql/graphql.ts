@@ -2849,6 +2849,7 @@ export type User = {
   __typename?: 'User';
   attributes: UserAttributes;
   id: Scalars['UUID']['output'];
+  relationships: UserRelationships;
 };
 
 export type UserAttributes = {
@@ -3009,6 +3010,11 @@ export type UserQueriesGetArgs = {
 
 export type UserQueriesListArgs = {
   params?: UserListParam;
+};
+
+export type UserRelationships = {
+  __typename?: 'UserRelationships';
+  groups: Array<ScanlationGroup>;
 };
 
 export type UserReport = {
