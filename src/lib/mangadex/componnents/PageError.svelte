@@ -29,8 +29,7 @@
 <style lang="scss">
 	.error {
 		display: flex;
-		width: 100cqw;
-		height: 100cqh;
+		height: -webkit-fill-available;
 		justify-content: center;
 		align-items: center;
 		flex-direction: column;
