@@ -4,11 +4,31 @@
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import UserRoleBadge from "@mangadex/componnents/user/UserRoleBadge.svelte";
 	import { writeText } from "@tauri-apps/api/clipboard";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import { ExternalLinkIcon, FlagIcon, BookmarkIcon } from "svelte-feather-icons";
+	import { open as shellOpen } from "@tauri-apps/api/shell";
 
 	export let data: LayoutData;
 </script>
 
 <UsersPageBase title={data.username}>
+	<div slot="left" class="buttons">
+		<PrimaryButton isBase>
+			<p><BookmarkIcon />Follow</p>
+		</PrimaryButton>
+		<ButtonAccent
+			isBase
+			on:click={() => {
+				shellOpen(`https://mangadex.org/user/${data.id}`);
+			}}
+		>
+			<p><ExternalLinkIcon /> Open in browser</p>
+		</ButtonAccent>
+		<ButtonAccent isBase>
+			<p><FlagIcon />Report</p>
+		</ButtonAccent>
+	</div>
 	<div slot="right">
 		<p>
 			User ID: <span
@@ -39,6 +59,20 @@
 </UsersPageBase>
 
 <style lang="scss">
+	.buttons {
+		display: grid;
+		gap: 10px;
+		margin: 10px;
+		p {
+			display: flex;
+			gap: 8px;
+			margin: 0px;
+			font-weight: 700;
+			font-size: 1.125em;
+			align-items: center;
+			justify-content: center;
+		}
+	}
 	.roles {
 		display: flex;
 		gap: 0.5em;
