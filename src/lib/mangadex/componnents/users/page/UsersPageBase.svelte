@@ -2,11 +2,13 @@
 	import { kebabCase } from "lodash";
 	import UsersPageBaseLayout from "./UsersPageBaseLayout.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import profilePictureDef from "./images/story-profile-picture.jpg";
+	import profileBannerDef from "./images/story-profile-banner.jpg";
 
-	export let profilePicture: string;
-	export let profileBanner: string;
+	export let profilePicture: string = profilePictureDef;
+	export let profileBanner: string = profileBannerDef;
 	export let title: string;
-	export let description: string;
+	export let description: string = "";
 	$: profilePictureAlt = `profile-picture-${kebabCase(title)}`;
 </script>
 

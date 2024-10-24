@@ -33,7 +33,7 @@
 		color: var(--status-blue);
 	}
 	.contributor {
-		color: var(--status-green);
+		color: var(--indication-blue);
 	}
 	.vip {
 		color: var(--status-yellow);
