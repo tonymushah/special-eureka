@@ -65,7 +65,9 @@
 		article.bottom {
 			display: flex;
 			div.left {
-				width: calc(var(--img-size) + var(--img-padding));
+				--left-width: calc(var(--img-size) + var(--img-padding));
+				min-width: var(--left-width);
+				max-width: var(--left-width);
 			}
 			div.top {
 				display: none;
