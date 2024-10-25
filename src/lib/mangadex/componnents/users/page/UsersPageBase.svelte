@@ -17,95 +17,116 @@
 		<div class="cover">
 			<img alt={profilePictureAlt} src={profilePicture} />
 		</div>
-		<div class="bottom">
-			<slot name="left" />
-		</div>
 	</article>
-	<article slot="right">
+	<article class="right" slot="right">
 		<div class="top">
 			<h1>
 				{title}
 			</h1>
 		</div>
 		<div class="bottom">
-			<Markdown bind:source={description} />
-			<slot name="right" />
+			<slot name="top-right" />
 		</div>
 	</article>
 	<article class="bottom" slot="bottom">
-		<slot name="left" />
-		<Markdown bind:source={description} />
-		<slot name="right" />
+		<div class="top">
+			<slot name="top-right" />
+		</div>
+		<div class="left">
+			<slot name="left" />
+		</div>
+		<div class="right">
+			<Markdown bind:source={description} />
+			<slot name="right" />
+		</div>
 	</article>
 </UsersPageBaseLayout>
 
 <style lang="scss">
 	@media (width< 500px) {
-		div.bottom {
-			display: none;
+		article.right {
+			div.bottom {
+				display: none;
+			}
 		}
+
 		article.bottom {
-			display: block;
+			div.top {
+				display: block;
+			}
 		}
 	}
 	@media (width >= 500px) {
-		div.bottom {
-			display: block;
+		article.right {
+			div.bottom {
+				display: block;
+			}
 		}
 		article.bottom {
-			display: none;
+			display: flex;
+			div.left {
+				width: calc(var(--img-size) + var(--img-padding));
+			}
+			div.top {
+				display: none;
+			}
 		}
 	}
 	@media (250px > width) {
 		:root {
 			--img-size: 3em;
+			--img-padding: 0.2em;
 		}
 		img {
-			padding: 0.2em;
+			padding: var(--img-padding);
 		}
 	}
 	@media (250px <= width < 500px) {
 		:root {
 			--img-size: 3em;
+			--img-padding: 0.4em;
 		}
 		h1 {
 			font-size: 1em;
 		}
 		img {
-			padding: 0.4em;
+			padding: var(--img-padding);
 		}
 	}
 	@media (500px <= width < 800px) {
 		:root {
 			--img-size: 8em;
+			--img-padding: 0.6em;
 		}
 		h1 {
 			font-size: 1.2em;
 		}
 		img {
-			padding: 0.6em;
+			padding: var(--img-padding);
 		}
 	}
 	@media (800px <= width < 1200px) {
 		:root {
 			--img-size: 10em;
+			--img-padding: 0.8em;
 		}
 		h1 {
 			font-size: 2em;
 		}
 		img {
-			padding: 0.8em;
+			padding: var(--img-padding);
 		}
 	}
 	@media (width > 1200px) {
 		:root {
 			--img-size: 12em;
+			--img-padding: 1em;
 		}
 		h1 {
 			font-size: 2em;
 		}
 		img {
-			padding: 1em;
+			padding: var(--img-padding);
 		}
 	}
 	.cover {

@@ -13,12 +13,12 @@
 					<slot name="right" />
 				</div>
 			</div>
-			<div class="bottom">
-				<slot name="bottom" />
-			</div>
 		</div>
 	</div>
 </section>
+<div class="bottom">
+	<slot name="bottom" />
+</div>
 
 <style lang="scss">
 	section {
@@ -26,7 +26,6 @@
 		background-size: cover;
 		background-position: 0px -200px;
 		color: var(--text-color);
-		min-height: 8em;
 		background-position: center;
 	}
 	.gradient {

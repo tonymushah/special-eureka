@@ -8,6 +8,7 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ExternalLinkIcon, FlagIcon, BookmarkIcon } from "svelte-feather-icons";
 	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import NavTab from "./NavTab.svelte";
 
 	export let data: LayoutData;
 </script>
@@ -29,7 +30,7 @@
 			<p><FlagIcon />Report</p>
 		</ButtonAccent>
 	</div>
-	<div slot="right">
+	<div slot="top-right">
 		<p>
 			User ID: <span
 				on:keydown={() => {}}
@@ -54,11 +55,21 @@
 				<UserRoleBadge {role} />
 			{/each}
 		</section>
-		<slot />
+	</div>
+	<div slot="right">
+		<section class="nav-tab">
+			<NavTab id={data.id} />
+		</section>
+		<section class="content">
+			<slot />
+		</section>
 	</div>
 </UsersPageBase>
 
 <style lang="scss">
+	.nav-tab {
+		margin-top: 0.5em;
+	}
 	.buttons {
 		display: grid;
 		gap: 10px;
@@ -76,9 +87,13 @@
 	.roles {
 		display: flex;
 		gap: 0.5em;
+		flex-wrap: wrap;
 	}
 	.copiable:hover {
 		text-decoration: underline;
 		cursor: pointer;
+	}
+	.content {
+		margin-top: 8px;
 	}
 </style>
