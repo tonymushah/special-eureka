@@ -11,7 +11,47 @@
 	import PrimaryButtons from "./result/PrimaryButtons.svelte";
 	import IndicationBadges from "./result/IndicationBadges.svelte";
 	import DangerButtons from "./result/DangerButtons.svelte";
-	const theme = getMangaDexThemeContextWritable();
+	import { onMount } from "svelte";
+	import { derived, type Updater, type Writable } from "svelte/store";
+	import { custom, type MangadexTheme } from "@mangadex/theme";
+	import { debounce } from "lodash";
+	const theme_ = getMangaDexThemeContextWritable();
+	const debounce_set = debounce(
+		(value: MangadexTheme) => {
+			console.log(`editor theme set (custom = ${value == custom})`);
+			theme_.set(value);
+		},
+		300,
+		{
+			leading: true,
+			trailing: false
+		}
+	);
+	const debounce_update = debounce(
+		(updater: Updater<MangadexTheme>) => {
+			console.log("editor theme update");
+			theme_.update(updater);
+		},
+		300,
+		{
+			leading: true,
+			trailing: false
+		}
+	);
+	const theme: Writable<MangadexTheme> = {
+		subscribe(run, invalidate) {
+			return derived([theme_], ([$t]) => $t ?? custom).subscribe(run, invalidate);
+		},
+		set(value) {
+			debounce_set(value);
+		},
+		update(updater) {
+			debounce_update(updater);
+		}
+	};
+	onMount(() => {
+		console.log("editor mount");
+	});
 </script>
 
 <ColorPickerThemeVarProvider>
