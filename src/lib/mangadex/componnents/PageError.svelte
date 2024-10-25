@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
+	import PrimaryButton from "./theme/buttons/PrimaryButton.svelte";
+	import { AlignLeftIcon, ArrowLeftIcon, RefreshCcwIcon } from "svelte-feather-icons";
+	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	let isTitleHovered = false;
 	export let message: string | undefined = undefined;
 </script>
@@ -24,6 +27,30 @@
 			<p>{message}</p>
 		</div>
 	{/if}
+	<div class="buttons">
+		<PrimaryButton
+			isBase
+			on:click={() => {
+				history.back();
+			}}
+		>
+			<h3>
+				<ArrowLeftIcon />
+				Previous Page
+			</h3>
+		</PrimaryButton>
+		<ButtonAccent
+			isBase
+			on:click={() => {
+				location.reload();
+			}}
+		>
+			<h3>
+				<RefreshCcwIcon />
+				Refresh
+			</h3>
+		</ButtonAccent>
+	</div>
 </div>
 
 <style lang="scss">
@@ -37,6 +64,18 @@
 		background-color: color-mix(in srgb, var(--danger-l1) 50%, transparent 50%);
 		h2 {
 			margin: 0px;
+		}
+	}
+	.buttons {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 8px;
+		h3 {
+			margin: 0px;
+			display: flex;
+			align-items: center;
+			gap: 12px;
 		}
 	}
 </style>
