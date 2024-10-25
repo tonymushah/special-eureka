@@ -1,6 +1,7 @@
 import { graphql } from "@mangadex/gql";
 import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
+import { error } from "@sveltejs/kit"
 
 const query = graphql(`
     query userPageQuery($id: UUID!) {
@@ -43,7 +44,9 @@ export const load: LayoutLoad = async function ({ params }) {
         id
     }).toPromise();
     if (res.error) {
-        throw res.error
+        error(500, {
+            message: res.error.message
+        });
     }
     if (res.data) {
         const data = res.data;
@@ -59,5 +62,7 @@ export const load: LayoutLoad = async function ({ params }) {
             }))
         }
     }
-    throw new Error("No result data got");
+    error(500, {
+        message: "No data??"
+    });
 }
