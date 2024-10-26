@@ -1,7 +1,10 @@
 use tauri::{AppHandle, Runtime};
 use tauri_plugin_store::StoreBuilder;
 use types::{
-    enums::{chapter_feed_style::ChapterFeedStyleStore, image_fit::ImageFitStore},
+    enums::{
+        chapter_feed_style::ChapterFeedStyleStore, image_fit::ImageFitStore,
+        pagination_style::PaginationStyleStore,
+    },
     structs::{
         longstrip_image_width::LongstripImageWidthStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
@@ -42,6 +45,7 @@ pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result
         let b = ThemeProfiles::default_store(b)?;
         let b = ThemeProfileDefaultKey::default_store(b)?;
         let b = ChapterFeedStyleStore::default_store(b)?;
+        let b = PaginationStyleStore::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)

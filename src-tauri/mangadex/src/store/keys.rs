@@ -23,3 +23,5 @@ pub const THEME_PROFILE: &str = "theme_profile";
 pub const THEME_PROFILE_KEY: &str = "theme_profile_key";
 
 pub const CHAPTER_FEED_STYLE: &str = "chapter_feed_style";
+
+pub const PAGINATION_STYLE: &str = "pagination_style";
