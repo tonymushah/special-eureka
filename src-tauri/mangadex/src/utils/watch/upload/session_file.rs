@@ -23,7 +23,7 @@ type AONRUploadSessionFile = ApiObjectNoRelationships<Attributes>;
 pub struct UploadSessionFileWatch(Arc<Inner>);
 
 impl Deref for UploadSessionFileWatch {
-    type Target = Arc<Inner>;
+    type Target = Inner;
     fn deref(&self) -> &Self::Target {
         &self.0
     }

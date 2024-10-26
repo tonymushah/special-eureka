@@ -1,12 +1,16 @@
 use async_graphql::Context as GQLContext;
 use tauri::{EventHandler, Runtime, Window, WindowEvent};
-use tokio::{select, sync::watch::Receiver};
+use tokio::{
+    select,
+    sync::watch::{Receiver, Sender},
+};
 use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
 use tokio_util::sync::CancellationToken;
 use uuid::Uuid;
 
 use std::{
     future::Future,
+    ops::Deref,
     pin::Pin,
     task::{Context, Poll},
 };
@@ -104,6 +108,19 @@ where
         let window = get_window_from_async_graphql::<R>(ctx)?.clone();
         let watches = get_watches_from_graphql_context::<R>(ctx)?;
         Ok(Self::new(provider(&watches), window, sub_id))
+    }
+    pub fn from_async_graphql_context_watch_as_ref<W>(
+        ctx: &GQLContext<'_>,
+        sub_id: Uuid,
+    ) -> crate::Result<Self>
+    where
+        W: Deref<Target = Sender<T>>,
+        Watches: AsRef<W>,
+    {
+        let window = get_window_from_async_graphql::<R>(ctx)?.clone();
+        let watches = get_watches_from_graphql_context::<R>(ctx)?;
+        let to_use: &W = watches.as_ref();
+        Ok(Self::new(to_use.subscribe(), window, sub_id))
     }
 }
 
