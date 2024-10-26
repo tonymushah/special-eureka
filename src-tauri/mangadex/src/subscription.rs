@@ -1,4 +1,5 @@
 use crate::objects::oauth::ClientInfo;
+use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
 use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
 use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
@@ -401,5 +402,14 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Option<ClientInfo>> + 'ctx> {
         OauthSubscriptions.listen(ctx, sub_id).await
+    }
+    pub async fn watch_chapter_feed_style<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ChapterFeedStyle> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_chapter_feed_style(ctx, sub_id)
+            .await
     }
 }

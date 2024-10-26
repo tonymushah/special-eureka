@@ -1,6 +1,6 @@
 use crate::{
     store::types::{
-        enums::image_fit::ImageFit,
+        enums::{chapter_feed_style::ChapterFeedStyle, image_fit::ImageFit},
         structs::theme::{profiles::ThemeProfileEntry, MangaDexTheme},
     },
     utils::get_watches_from_graphql_context,
@@ -165,6 +165,15 @@ impl UserOptionSubscriptions {
     ) -> Result<impl Stream<Item = MangaListStyle> + 'ctx> {
         WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
             w.manga_list_style.subscribe()
+        })
+    }
+    pub async fn listen_to_chapter_feed_style<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = ChapterFeedStyle> + 'ctx> {
+        WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(ctx, sub_id, |w| {
+            w.chapter_feed_style.subscribe()
         })
     }
 }

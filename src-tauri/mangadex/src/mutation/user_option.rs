@@ -1,7 +1,10 @@
 use crate::{
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     store::types::{
-        enums::image_fit::{ImageFit, ImageFitStore},
+        enums::{
+            chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
+            image_fit::{ImageFit, ImageFitStore},
+        },
         structs::{
             longstrip_image_width::LongstripImageWidthStore,
             theme::{
@@ -212,5 +215,18 @@ impl UserOptionMutations {
         let len = inner.len();
         watches.themes.send_data(inner)?;
         Ok(len)
+    }
+    pub async fn set_chapter_feed_style(
+        &self,
+        ctx: &Context<'_>,
+        style: ChapterFeedStyle,
+    ) -> Result<ChapterFeedStyle> {
+        let store = get_store::<tauri::Wry>(ctx).await?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ChapterFeedStyleStore::from(style);
+        inner.insert_and_save(&mut store_write)?;
+        watches.chapter_feed_style.send_data(inner)?;
+        Ok(ChapterFeedStyleStore::extract_from_store(&store_write)?.into())
     }
 }
