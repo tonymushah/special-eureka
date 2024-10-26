@@ -8,6 +8,7 @@ use crate::{
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
             manga_list_style::MangaListStyleStore,
+            pagination_style::PaginationStyleStore,
             reading_mode::ReadingModeStore,
         },
         structs::{
@@ -59,6 +60,9 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .chapter_feed_style
         .send_data(ChapterFeedStyleStore::extract_from_store(store)?);
+    let _ = watches
+        .pagination_style
+        .send_data(PaginationStyleStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }

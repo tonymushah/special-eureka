@@ -3,6 +3,7 @@ use std::fmt::Debug;
 use chapter_feed_style::ChapterFeedStyleWatch;
 use client_info::ClientInfoWatch;
 use image_fit::ImageFitWatch;
+use pagination_style::PaginationStyleWatch;
 use uuid::Uuid;
 
 use crate::objects::{GetAttributes, GetId};
@@ -55,6 +56,7 @@ pub mod manga;
 pub mod manga_list_style;
 pub mod manga_reading_state;
 pub mod page_direction;
+pub mod pagination_style;
 pub mod rating;
 pub mod read_marker;
 pub mod reading_mode;
@@ -178,4 +180,5 @@ pub struct Watches {
     pub theme_default_key: ThemeProfileDefaultKeyWatch,
     pub client_info: ClientInfoWatch,
     pub chapter_feed_style: ChapterFeedStyleWatch,
+    pub pagination_style: PaginationStyleWatch,
 }
