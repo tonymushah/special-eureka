@@ -1,6 +1,5 @@
 use std::{ops::Deref, sync::Arc, time::Duration};
 
-use async_graphql::Context;
 use mangadex_api_schema_rust::{
     v5::{ChapterAttributes, CoverAttributes, MangaAttributes},
     ApiObjectNoRelationships,
@@ -8,10 +7,10 @@ use mangadex_api_schema_rust::{
 use mangadex_desktop_api2::{utils::ExtractData, AppState};
 use tauri::{
     async_runtime::{spawn, JoinHandle},
-    Runtime,
+    Manager, Runtime,
 };
 
-use crate::utils::{get_mangadex_client_from_graphql_context, get_watches_from_graphql_context};
+use crate::utils::traits_utils::MangadexTauriManagerExt;
 
 #[derive(Clone)]
 pub struct AppStateInner {
@@ -30,9 +29,13 @@ impl Deref for AppStateInner {
 }
 
 impl AppStateInner {
-    pub async fn init<R: Runtime>(ctx: &Context<'_>) -> crate::Result<Self> {
-        let client = get_mangadex_client_from_graphql_context::<R>(ctx)?;
-        let watches1 = get_watches_from_graphql_context::<R>(ctx)?.deref().clone();
+    pub async fn init<R, M>(app: &M) -> crate::Result<Self>
+    where
+        R: Runtime,
+        M: Manager<R> + Sync,
+    {
+        let client = app.get_mangadex_client()?;
+        let watches1 = app.get_watches()?.deref().clone();
         let watches2 = watches1.clone();
         let watches3 = watches2.clone();
         let mut app_state = AppState::init().await?;

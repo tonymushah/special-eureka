@@ -78,6 +78,10 @@ pub enum Error {
     NoDefaultThemeSelected,
     #[error("This method or function is not implemented yet")]
     Unimplemented,
+    #[error("Cannot access at the Tauri App Handle from the GraphQL Context")]
+    NoAccessAppHandleGQLCtx,
+    #[error("Cannot access at the Tauri Window Handle from the GraphQL Context")]
+    NoAccessWindowGQLCtx,
 }
 
 impl From<favicon_picker::error::Error> for Error {
