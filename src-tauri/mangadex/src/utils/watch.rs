@@ -1,5 +1,6 @@
 use std::fmt::Debug;
 
+use chapter_feed_style::ChapterFeedStyleWatch;
 use client_info::ClientInfoWatch;
 use image_fit::ImageFitWatch;
 use uuid::Uuid;
@@ -39,6 +40,7 @@ use self::{
 pub mod api_client;
 pub mod author;
 pub mod chapter;
+pub mod chapter_feed_style;
 pub mod chapter_languages;
 pub mod client_info;
 pub mod cover;
@@ -175,4 +177,5 @@ pub struct Watches {
     pub themes: ThemeProfilesWatch,
     pub theme_default_key: ThemeProfileDefaultKeyWatch,
     pub client_info: ClientInfoWatch,
+    pub chapter_feed_style: ChapterFeedStyleWatch,
 }

@@ -4,6 +4,7 @@ use tauri_plugin_store::Store;
 use crate::{
     store::types::{
         enums::{
+            chapter_feed_style::ChapterFeedStyleStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
             manga_list_style::MangaListStyleStore,
@@ -55,6 +56,9 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .client_info
         .send_data(ClientInfoStore::extract_from_store(store)?.inner());
+    let _ = watches
+        .chapter_feed_style
+        .send_data(ChapterFeedStyleStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }
