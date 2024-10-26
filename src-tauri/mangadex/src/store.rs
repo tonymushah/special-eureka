@@ -1,4 +1,4 @@
-use tauri::{AppHandle, Runtime};
+use tauri::{AppHandle, Runtime /*Manager */};
 use tauri_plugin_store::StoreBuilder;
 use types::{
     enums::{
@@ -9,8 +9,10 @@ use types::{
         longstrip_image_width::LongstripImageWidthStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
+    // ExtractFromStore, StoreCrud,
 };
 
+/// use crate::utils::watch::{SendData, Watches};
 use self::{
     keys::PATH,
     types::{
@@ -50,3 +52,17 @@ pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result
     };
     Ok(builder)
 }
+
+// TODO implement this for refactorization
+/*
+pub trait Storable<'de, R, T>: Sized
+where
+    R: Runtime,
+    Watches: AsRef<Self::Watch>,
+{
+    type Store: ExtractFromStore<'de, R> + StoreCrud<R> + DefaulStore<R> + From<Self>;
+    type Watch: SendData<T>;
+    type ReceiverType;
+    fn subscribe<M: Manager<R>>(app: M) -> crate::Result<Receiver<Self::ReceiverType>>;
+}
+*/
