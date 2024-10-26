@@ -59,7 +59,7 @@ impl OauthMutations {
                 let mut last_time_fetched_write = last_time_fetched.write().await;
                 let _ = last_time_fetched_write
                     .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
-                let store = get_store::<tauri::Wry>(ctx).await?;
+                let store = get_store::<tauri::Wry>(ctx)?;
                 let mut store_write = store.write().await;
                 let rf_token_store: RefreshTokenStore = res.into();
                 rf_token_store.insert_and_save(&mut store_write)?;
@@ -101,7 +101,7 @@ impl OauthMutations {
             client_secret,
         };
         client.set_client_info(&client_info).await?;
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let cis: ClientInfoStore = client_info.into();
         cis.insert_and_save(&mut store_write)?;
@@ -112,7 +112,7 @@ impl OauthMutations {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         client.clear_client_info().await?;
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         ClientInfoStore::extract_from_store(&store_write)?.delete_and_save(&mut store_write)?;
         watches.client_info.send_data(None)?;
@@ -125,7 +125,7 @@ impl OauthMutations {
         let last_time_fetched = get_last_time_token_when_fetched::<tauri::Wry>(ctx)?;
         let mut last_time_fetched_write = last_time_fetched.write().await;
         let _ = last_time_fetched_write.take();
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         RefreshTokenStore::extract_from_store(&store_write)?.delete_and_save(&mut store_write)?;
         let _ = watches.is_logged.send_data(false);

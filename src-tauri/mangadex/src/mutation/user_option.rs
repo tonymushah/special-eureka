@@ -4,6 +4,7 @@ use crate::{
         enums::{
             chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
             image_fit::{ImageFit, ImageFitStore},
+            pagination_style::{PaginationStyle, PaginationStyleStore},
         },
         structs::{
             longstrip_image_width::LongstripImageWidthStore,
@@ -44,7 +45,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         mode: ReadingMode,
     ) -> Result<ReadingMode> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ReadingModeStore::from(mode);
@@ -57,7 +58,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         direction: Direction,
     ) -> Result<Direction> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ReadingDirectionStore::from(direction);
@@ -70,7 +71,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         direction: Direction,
     ) -> Result<Direction> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = SidebarDirectionStore::from(direction);
@@ -83,7 +84,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         languages: Vec<Language>,
     ) -> Result<Vec<Language>> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ChapterLanguagesStore::from(languages);
@@ -92,7 +93,7 @@ impl UserOptionMutations {
         Ok(ChapterLanguagesStore::extract_from_store(&store_write)?.into())
     }
     pub async fn set_image_fit(&self, ctx: &Context<'_>, image_fit: ImageFit) -> Result<ImageFit> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ImageFitStore::from(image_fit);
@@ -101,7 +102,7 @@ impl UserOptionMutations {
         Ok(ImageFitStore::extract_from_store(&store_write)?.into())
     }
     pub async fn set_longstrip_image_width(&self, ctx: &Context<'_>, width: f64) -> Result<f64> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = LongstripImageWidthStore::from(width);
@@ -123,7 +124,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         manga_list_style: MangaListStyle,
     ) -> Result<MangaListStyle> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = MangaListStyleStore::from(manga_list_style);
@@ -137,7 +138,7 @@ impl UserOptionMutations {
         theme: Option<MangaDexTheme>,
     ) -> Result<MangaDexTheme> {
         let theme = theme.unwrap_or_default();
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let name = (*ThemeProfileDefaultKey::extract_from_store(&store_write)?)
             .clone()
@@ -154,7 +155,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         name: Option<String>,
     ) -> Result<Option<String>> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ThemeProfileDefaultKey::from(name);
@@ -169,7 +170,7 @@ impl UserOptionMutations {
         theme: Option<MangaDexTheme>,
     ) -> Result<MangaDexTheme> {
         let theme = theme.unwrap_or_default();
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
@@ -183,7 +184,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         name: String,
     ) -> Result<Option<MangaDexTheme>> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
@@ -193,7 +194,7 @@ impl UserOptionMutations {
         Ok(theme)
     }
     pub async fn clear_themes_profiles(&self, ctx: &Context<'_>) -> Result<bool> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut inner = ThemeProfiles::extract_from_store(&store_write)?;
@@ -207,7 +208,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         entries: Vec<ThemeProfileEntry>,
     ) -> Result<usize> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ThemeProfiles::from(entries);
@@ -221,12 +222,25 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         style: ChapterFeedStyle,
     ) -> Result<ChapterFeedStyle> {
-        let store = get_store::<tauri::Wry>(ctx).await?;
+        let store = get_store::<tauri::Wry>(ctx)?;
         let mut store_write = store.write().await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let inner = ChapterFeedStyleStore::from(style);
         inner.insert_and_save(&mut store_write)?;
         watches.chapter_feed_style.send_data(inner)?;
         Ok(ChapterFeedStyleStore::extract_from_store(&store_write)?.into())
+    }
+    pub async fn set_pagination_style(
+        &self,
+        ctx: &Context<'_>,
+        style: PaginationStyle,
+    ) -> Result<PaginationStyle> {
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let mut store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = PaginationStyleStore::from(style);
+        inner.insert_and_save(&mut store_write)?;
+        watches.pagination_style.send_data(inner)?;
+        Ok(PaginationStyleStore::extract_from_store(&store_write)?.into())
     }
 }

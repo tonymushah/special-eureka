@@ -1,5 +1,6 @@
 use crate::objects::oauth::ClientInfo;
 use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
+use crate::store::types::enums::pagination_style::PaginationStyle;
 use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
 use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
@@ -410,6 +411,15 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = ChapterFeedStyle> + 'ctx> {
         UserOptionSubscriptions
             .listen_to_chapter_feed_style(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_pagination_style<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = PaginationStyle> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_pagination_style(ctx, sub_id)
             .await
     }
 }

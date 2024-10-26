@@ -179,7 +179,7 @@ pub(crate) async fn unmount_offline_app_state<'ctx, R: Runtime>(
     Ok(true)
 }
 
-pub(crate) async fn get_store<'ctx, R: Runtime>(
+pub(crate) fn get_store<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, MangaDexStoreState<R>>> {
     let app = get_app_handle_from_async_graphql::<R>(ctx)?;
