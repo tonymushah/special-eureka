@@ -7,14 +7,14 @@ use tauri_plugin_store::{Error, Store, StoreBuilder};
 pub mod enums;
 pub mod structs;
 
-pub(crate) trait ExtractFromStore<'de, R>: std::marker::Sized + Deserialize<'de>
+pub trait ExtractFromStore<'de, R>: std::marker::Sized + Deserialize<'de>
 where
     R: Runtime,
 {
     fn extract_from_store(store: &Store<R>) -> Result<Self, Error>;
 }
 
-pub(crate) trait StoreCrud<R>: Serialize
+pub trait StoreCrud<R>: Serialize
 where
     R: Runtime,
 {
@@ -32,7 +32,7 @@ where
     }
 }
 
-pub(crate) trait DefaulStore<R>
+pub trait DefaulStore<R>
 where
     R: Runtime,
 {
