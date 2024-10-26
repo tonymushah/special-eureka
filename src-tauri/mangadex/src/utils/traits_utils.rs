@@ -11,7 +11,7 @@ use crate::{
 
 use super::{store::MangaDexStoreState, watch::Watches};
 
-pub trait MangadexTauriManagerExt<R>: Manager<R> + Sync
+pub trait MangadexTauriManagerExt<R>: Manager<R>
 where
     R: Runtime,
 {
@@ -36,7 +36,10 @@ where
     }
     fn get_mangadex_client_with_auth_refresh(
         &self,
-    ) -> impl Future<Output = crate::Result<State<'_, MangaDexClient>>> + Send {
+    ) -> impl Future<Output = crate::Result<State<'_, MangaDexClient>>> + Send
+    where
+        Self: Sync,
+    {
         async {
             let client = self.get_mangadex_client()?;
             let last_time_fetched = self.get_last_time_token_when_fetched()?;
@@ -65,7 +68,10 @@ where
             Ok(client)
         }
     }
-    fn unmount_offline_app_state(&self) -> impl Future<Output = crate::Result<()>> + Send {
+    fn unmount_offline_app_state(&self) -> impl Future<Output = crate::Result<()>> + Send
+    where
+        Self: Sync,
+    {
         async {
             let watches = self.get_watches()?;
             let offline_app_state = self.get_offline_app_state()?;
@@ -80,7 +86,7 @@ where
     }
     fn mount_offline_app_state(&self) -> impl Future<Output = crate::Result<()>> + Send
     where
-        Self: std::marker::Sized,
+        Self: Sized + Sync,
     {
         async {
             let watches = self.get_watches()?;
@@ -99,7 +105,7 @@ where
 impl<R, M> MangadexTauriManagerExt<R> for M
 where
     R: Runtime,
-    M: Manager<R> + Sync,
+    M: Manager<R>,
 {
 }
 
