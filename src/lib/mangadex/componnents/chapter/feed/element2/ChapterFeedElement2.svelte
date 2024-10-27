@@ -5,30 +5,11 @@
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 	import { createEventDispatcher, onMount } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import type { Writable } from "svelte/store";
+	import type { Readable, Writable } from "svelte/store";
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-
-	type Group = {
-		id: string;
-		name: string;
-	};
-	type Uploader = {
-		id: string;
-		roles: UserRole[];
-		name: string;
-	};
-	type Chapter = {
-		chapterId: string;
-		title: string | undefined;
-		lang: Language;
-		groups: Group[];
-		uploader: Uploader;
-		upload_date: Date;
-		haveBeenRead: boolean;
-		download_state: Writable<ChapterDownloadState>;
-		comments: number;
-	};
-	export let coverImage: string;
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import type { Chapter } from "..";
+	export let coverImage: Readable<string | undefined>;
 	export let coverImageAlt: string;
 	export let title: string;
 	export let mangaId: string;
@@ -90,7 +71,11 @@
 			});
 		}}
 	>
-		<img src={coverImage} alt={coverImageAlt} />
+		{#if $coverImage}
+			<img src={$coverImage} alt={coverImageAlt} />
+		{:else}
+			<Skeleton height="16em" width="10em" />
+		{/if}
 	</div>
 	<div class="body">
 		<div
@@ -171,12 +156,12 @@
 		transition: height 300ms ease-in-out;
 	}
 	div.cover > img {
-		height: 15em;
+		height: 16em;
 		object-fit: cover;
 		width: 10em;
 	}
 	div.cover {
-		height: 15em;
+		height: 16em;
 	}
 	div.title > p {
 		margin: 0px;

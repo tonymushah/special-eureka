@@ -1,32 +1,11 @@
 <script lang="ts">
-	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import type { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
-	import { createEventDispatcher, onMount } from "svelte";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import type { Readable } from "svelte/store";
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import type { Language } from "@mangadex/gql/graphql";
+	import { createEventDispatcher, onMount } from "svelte";
+	import type { Chapter } from "..";
+	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 
-	type Group = {
-		id: string;
-		name: string;
-	};
-	type Uploader = {
-		id: string;
-		roles: UserRole[];
-		name: string;
-	};
-	type Chapter = {
-		chapterId: string;
-		title: string | undefined;
-		lang: Language;
-		groups: Group[];
-		uploader: Uploader;
-		upload_date: Date;
-		haveBeenRead: boolean;
-		download_state: Readable<ChapterDownloadState>;
-		comments: number;
-	};
 	export let title: string;
 	export let mangaId: string;
 	export let mangaLang: Language | undefined = undefined;

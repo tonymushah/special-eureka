@@ -8,7 +8,7 @@ import { v4 } from "uuid";
 import testData from "../../base/element1/test-data.json";
 import { Language } from "@mangadex/gql/graphql";
 import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-import { writable } from "svelte/store";
+import { readable, writable } from "svelte/store";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -47,7 +47,7 @@ const testChapter = {
 export const Default: Story = {
 	args: {
 		mangaId: v4(),
-		coverImage: fukkoi1,
+		coverImage: readable(fukkoi1),
 		coverImageAlt: "fuufu-ijou-koibito-miman",
 		title: "Fuufu Ijou, Koibito Miman",
 		mangaLang: Language.Japanese,
