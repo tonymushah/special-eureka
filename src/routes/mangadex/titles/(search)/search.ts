@@ -80,7 +80,8 @@ export default async function executeSearchQuery(client: Client, params: MangaLi
                         tags: v.attributes.tags.map((tag) => ({
                             id: tag.id,
                             name: get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
-                        }))
+                        })),
+                        language: v.attributes.originalLanguage
                     }
                 }),
                 offset: data.offset,

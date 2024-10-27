@@ -5,6 +5,7 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import type { Readable } from "svelte/store";
+	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 
 	type Group = {
 		id: string;
@@ -28,6 +29,7 @@
 	};
 	export let title: string;
 	export let mangaId: string;
+	export let mangaLang: Language | undefined = undefined;
 	export let chapters: Chapter[];
 	let isCollapsed = true;
 	let canCollaspe = false;
@@ -86,7 +88,14 @@
 				});
 			}}
 		>
-			<div class="title"><p>{title}</p></div>
+			<div class="title">
+				<p>
+					{#if mangaLang}
+						<FlagIcon lang={mangaLang} />
+					{/if}
+					{title}
+				</p>
+			</div>
 		</div>
 		<hr />
 		<div class="bottom-body">

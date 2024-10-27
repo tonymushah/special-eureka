@@ -50,6 +50,7 @@ export const Default: Story = {
 		coverImage: fukkoi1,
 		coverImageAlt: "fuufu-ijou-koibito-miman",
 		title: "Fuufu Ijou, Koibito Miman",
+		mangaLang: Language.Japanese,
 		chapters: [
 			testChapter,
 			testChapter,

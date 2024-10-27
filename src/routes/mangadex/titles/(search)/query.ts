@@ -13,8 +13,9 @@ export const defaultQuery = graphql(`
                         description
                         year
                         title
-                            status
+                        status
                         state
+                        originalLanguage
                         tags {
                             id 
                             attributes {
@@ -51,8 +52,9 @@ export const offlineQuery = graphql(`
                         description
                         year
                         title
-                            status
+                        status
                         state
+                        originalLanguage
                         tags {
                             id 
                             attributes {
