@@ -273,6 +273,11 @@ type ChapterAttributes {
 	version: Int!
 }
 
+enum ChapterFeedStyle {
+	COVER_FULL
+	COVER_LESS
+}
+
 input ChapterListParams {
 	limit: Int
 	offset: Int
@@ -1620,6 +1625,11 @@ enum OrderDirection {
 	DESCENDING
 }
 
+enum PaginationStyle {
+	INFINITE_SCROLL
+	PAGED
+}
+
 scalar Password
 
 scalar PathBuf
@@ -2007,6 +2017,8 @@ type Subscriptions {
 	watchThemeProfileDefault(subId: UUID!): MangaDexTheme!
 	watchThemeProfileDefaultName(subId: UUID!): String
 	watchClientInfo(subId: UUID!): ClientInfo
+	watchChapterFeedStyle(subId: UUID!): ChapterFeedStyle!
+	watchPaginationStyle(subId: UUID!): PaginationStyle!
 }
 
 type Tag {
@@ -2233,6 +2245,8 @@ type UserOptionMutations {
 	deleteThemeProfile(name: String!): MangaDexTheme
 	clearThemesProfiles: Boolean!
 	setThemeProfiles(entries: [ThemeProfileEntryInput!]!): Int!
+	setChapterFeedStyle(style: ChapterFeedStyle!): ChapterFeedStyle!
+	setPaginationStyle(style: PaginationStyle!): PaginationStyle!
 }
 
 type UserQueries {

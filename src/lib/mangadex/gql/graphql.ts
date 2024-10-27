@@ -386,6 +386,11 @@ export type ChapterAttributes = {
   volume?: Maybe<Scalars['String']['output']>;
 };
 
+export enum ChapterFeedStyle {
+  CoverFull = 'COVER_FULL',
+  CoverLess = 'COVER_LESS'
+}
+
 export type ChapterListParams = {
   chapterIds?: Array<Scalars['UUID']['input']>;
   /** Chapter number in the series or volume. */
@@ -2010,6 +2015,11 @@ export enum OrderDirection {
   Descending = 'DESCENDING'
 }
 
+export enum PaginationStyle {
+  InfiniteScroll = 'INFINITE_SCROLL',
+  Paged = 'PAGED'
+}
+
 export type PrimaryColor = {
   __typename?: 'PrimaryColor';
   primary: Scalars['String']['output'];
@@ -2440,6 +2450,7 @@ export type Subscriptions = {
   watchApiClient: ApiClientAttributes;
   watchAuthor: AuthorAttributes;
   watchChapter: ChapterAttributes;
+  watchChapterFeedStyle: ChapterFeedStyle;
   watchChapterLanguages: Array<Language>;
   watchClientInfo?: Maybe<ClientInfo>;
   watchCover: CoverAttributes;
@@ -2458,6 +2469,7 @@ export type Subscriptions = {
   watchMangaReadingState?: Maybe<ReadingStatus>;
   watchMangaStatistics: MangaStatisticsAttributes;
   watchPageDirection: Direction;
+  watchPaginationStyle: PaginationStyle;
   watchRating: RatingItemAttributes;
   watchReadMarker: Scalars['Boolean']['output'];
   watchReadingMode: ReadingMode;
@@ -2489,6 +2501,11 @@ export type SubscriptionsWatchAuthorArgs = {
 
 export type SubscriptionsWatchChapterArgs = {
   chapterId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchChapterFeedStyleArgs = {
   subId: Scalars['UUID']['input'];
 };
 
@@ -2589,6 +2606,11 @@ export type SubscriptionsWatchMangaStatisticsArgs = {
 
 
 export type SubscriptionsWatchPageDirectionArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchPaginationStyleArgs = {
   subId: Scalars['UUID']['input'];
 };
 
@@ -2921,12 +2943,14 @@ export type UserOptionMutations = {
   clearFaviconCache: Scalars['Boolean']['output'];
   clearThemesProfiles: Scalars['Boolean']['output'];
   deleteThemeProfile?: Maybe<MangaDexTheme>;
+  setChapterFeedStyle: ChapterFeedStyle;
   setChapterLanguages: Array<Language>;
   setDefaultThemeProfile?: Maybe<Scalars['String']['output']>;
   setImageFit: ImageFit;
   setLongstripImageWidth: Scalars['Float']['output'];
   setMangaListStyle: MangaListStyle;
   setPageDirection: Direction;
+  setPaginationStyle: PaginationStyle;
   setReadingMode: ReadingMode;
   setSidebarDirection: Direction;
   setThemeProfile: MangaDexTheme;
@@ -2937,6 +2961,11 @@ export type UserOptionMutations = {
 
 export type UserOptionMutationsDeleteThemeProfileArgs = {
   name: Scalars['String']['input'];
+};
+
+
+export type UserOptionMutationsSetChapterFeedStyleArgs = {
+  style: ChapterFeedStyle;
 };
 
 
@@ -2967,6 +2996,11 @@ export type UserOptionMutationsSetMangaListStyleArgs = {
 
 export type UserOptionMutationsSetPageDirectionArgs = {
   direction: Direction;
+};
+
+
+export type UserOptionMutationsSetPaginationStyleArgs = {
+  style: PaginationStyle;
 };
 
 
