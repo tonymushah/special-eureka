@@ -1,3 +1,4 @@
+// TODO Add pagination methods
 export default abstract class AbstractSearchResult<T> {
     data: T[];
     abstract hasNext(): boolean;
