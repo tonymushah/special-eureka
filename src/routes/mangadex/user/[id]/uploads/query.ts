@@ -1,10 +1,11 @@
 import { graphql } from "@mangadex/gql";
 
 export const query = graphql(`
-    query userUploadsFeed($user: UUID!, $translatedLanguages: [Language!]! = [], $offset: Int, $limit: Int, $order: ChapterSortOrder! = {publishAt: DESCENDING}) {
+    query userUploadsFeed($user: UUID!, $translatedLanguages: [Language!]! = [], $offset: Int, $limit: Int, $order: ChapterSortOrder! = {publishAt: DESCENDING}, $mangaListParams: MangaListParams) {
         chapter {
             listWithGroupByManga(
                 chapterListParams: {offset: $offset, limit: $limit, translatedLanguages: $translatedLanguages, uploaders: [$user], order: $order}
+                mangaListParams: $mangaListParams
             ) {
                 limit
                 offset
