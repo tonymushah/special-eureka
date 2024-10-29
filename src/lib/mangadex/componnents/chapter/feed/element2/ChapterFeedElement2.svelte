@@ -156,9 +156,11 @@
 		transition: height 300ms ease-in-out;
 	}
 	div.cover > img {
-		height: 16em;
+		height: 15em;
 		object-fit: cover;
 		width: 10em;
+		padding: 0.5em;
+		border-radius: 0.55em;
 	}
 	div.cover {
 		height: 16em;
