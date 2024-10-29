@@ -2,11 +2,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import type {
-		AuthorListParams,
-		ScanlationGroupListParams,
-		UserListParam
-	} from "@mangadex/gql/graphql";
+	import type { UserListParam } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy, onMount } from "svelte";
@@ -15,10 +11,9 @@
 
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
+	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
-	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 
 	let isFetching = false;
 	const client = getContextClient();
