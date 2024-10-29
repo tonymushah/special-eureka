@@ -33,6 +33,8 @@ const documents = {
     "\n    subscription rtlSidebarSub($sub_id: UUID!) {\n        watchSidebarDirection(subId: $sub_id)\n    }\n": types.RtlSidebarSubDocument,
     "\n    subscription userMe($sub_id: UUID!) {\n        watchUserMe(subId: $sub_id) {\n            username\n            roles\n        }\n    }\n": types.UserMeDocument,
     "\n    subscription isLogged($sub_id: UUID!) {\n        watchIsLogged(subId: $sub_id)\n    }  \n": types.IsLoggedDocument,
+    "\n    subscription chapterFeedStyleSub($subId: UUID!) {\n        watchChapterFeedStyle(subId: $subId)\n    }\n": types.ChapterFeedStyleSubDocument,
+    "\n    mutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n        userOption {\n            setChapterFeedStyle(style: $style)\n        }\n    }\n": types.UpdateChapterFeedStyleDocument,
     "\n    subscription currentClientInfo($subId: UUID!){\n        watchClientInfo(subId: $subId) {\n            clientSecret \n            clientId\n        }\n    }\n": types.CurrentClientInfoDocument,
     "\n    mutation setAuthClient($clientId: String!, $clientSecret: String!) {\n        oauth {\n            setClientInfo(clientId: $clientId, clientSecret: $clientSecret)\n        }\n    }\n": types.SetAuthClientDocument,
     "\n    mutation resetAuthClient {\n        oauth {\n            clearClientInfo\n        }\n    }\n": types.ResetAuthClientDocument,
@@ -167,6 +169,14 @@ export function graphql(source: "\n    subscription userMe($sub_id: UUID!) {\n  
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n    subscription isLogged($sub_id: UUID!) {\n        watchIsLogged(subId: $sub_id)\n    }  \n"): (typeof documents)["\n    subscription isLogged($sub_id: UUID!) {\n        watchIsLogged(subId: $sub_id)\n    }  \n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    subscription chapterFeedStyleSub($subId: UUID!) {\n        watchChapterFeedStyle(subId: $subId)\n    }\n"): (typeof documents)["\n    subscription chapterFeedStyleSub($subId: UUID!) {\n        watchChapterFeedStyle(subId: $subId)\n    }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n    mutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n        userOption {\n            setChapterFeedStyle(style: $style)\n        }\n    }\n"): (typeof documents)["\n    mutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n        userOption {\n            setChapterFeedStyle(style: $style)\n        }\n    }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
