@@ -2,7 +2,7 @@ import { graphql } from "@mangadex/gql"
 import { sub_end } from "@mangadex/utils"
 import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState"
 import type { Client } from "@urql/svelte"
-import { writable, type Writable } from "svelte/store"
+import { readable, type Readable } from "svelte/store"
 import { v4 } from "uuid"
 
 type GetChapterDownloadStateParams = {
@@ -46,8 +46,8 @@ export function DownloadStateToChapterDownloadState(data: {
 }
 
 
-export default function getChapterDownloadState({ id, client }: GetChapterDownloadStateParams): Writable<ChapterDownloadState> {
-    const store = writable<ChapterDownloadState>(ChapterDownloadState.NotDownloaded, (set) => {
+export default function getChapterDownloadState({ id, client }: GetChapterDownloadStateParams): Readable<ChapterDownloadState> {
+    const store = readable<ChapterDownloadState>(ChapterDownloadState.NotDownloaded, (set) => {
         client.query(isChapterDownloadedQuery, {
             id
         }).toPromise().then((r) => {
