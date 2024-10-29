@@ -36,7 +36,8 @@ export const query = graphql(`
                             volume
                             translatedLanguage
                             externalUrl
-                            publishAt
+                            createdAt
+                            readableAt
                         }
                         relationships {
                             scanlationGroups {
