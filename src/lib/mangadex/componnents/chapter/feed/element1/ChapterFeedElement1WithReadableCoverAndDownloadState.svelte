@@ -72,7 +72,7 @@
 		{groups}
 		{upload_date}
 		{uploader}
-		download_state={$download_state}
+		{download_state}
 		on:download
 		on:downloadKeyPress
 		on:mangaClick
