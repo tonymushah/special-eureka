@@ -14,6 +14,7 @@
 	class:rtl={$isSidebarRtl}
 	class:show={$showSidebar}
 	class:float={$isSidebarFloating}
+	class:defaultDecoration={$isDefaultDecoration}
 >
 	<aside class:collapsed={$isOpen} class:defaultDecoration={$isDefaultDecoration}>
 		<div class="header">
@@ -33,13 +34,13 @@
 		display: none;
 	}
 	.sidebar.show {
-		display: contents;
+		display: flex;
+		height: 100%;
 	}
 	.sidebar.show.float {
-		display: flex;
 		position: absolute;
-		top: 0;
 		z-index: 10;
+		top: 0;
 		height: 100vh;
 	}
 	.sidebar.show.float:not(.rtl) {
@@ -68,16 +69,19 @@
 			width ease-in-out 300ms,
 			translate ease-in-out 300ms;
 		background-color: var(--accent-l1);
-		height: -webkit-fill-available;
 		width: 256px;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 8px;
 	}
+	aside {
+		//height: 100%;
+	}
+	/*
 	aside.defaultDecoration {
 		height: 99vh;
-	}
+	}*/
 	.collapsed {
 		width: 80px;
 	}
