@@ -41,8 +41,8 @@
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	let layout: HTMLDivElement;
-	let tooltip: HTMLDivElement;
-	let arrowElement: HTMLDivElement;
+	let tooltip: HTMLDivElement | undefined = undefined;
+	let arrowElement: HTMLDivElement | undefined = undefined;
 	const dispatch = createEventDispatcher<{
 		download: MouseEnvDiv & {
 			id: string;
@@ -52,49 +52,55 @@
 		};
 	}>();
 	async function update() {
-		const { x, y, placement, middlewareData } = await computePosition(layout, tooltip, {
-			placement: "bottom",
-			middleware: [
-				offset(6),
-				flip(),
-				shift({
-					padding: 5
-				}),
-				arrow({
-					element: arrowElement
-				})
-			]
-		});
-		Object.assign(tooltip.style, {
-			left: `${x}px`,
-			top: `${y}px`
-		});
-		const arrow_ = middlewareData.arrow;
-		if (arrow_) {
-			const { x: arrowX, y: arrowY } = arrow_;
-			const staticSide = {
-				top: "bottom",
-				right: "left",
-				bottom: "top",
-				left: "right"
-			}[placement.split("-")[0]];
-
-			Object.assign(arrowElement.style, {
-				left: arrowX != null ? `${arrowX}px` : "",
-				top: arrowY != null ? `${arrowY}px` : "",
-				right: "",
-				bottom: "",
-				[staticSide]: "-4px"
+		if (layout && tooltip && arrowElement) {
+			const { x, y, placement, middlewareData } = await computePosition(layout, tooltip, {
+				placement: "bottom",
+				middleware: [
+					offset(6),
+					flip(),
+					shift({
+						padding: 5
+					}),
+					arrow({
+						element: arrowElement
+					})
+				]
 			});
+			Object.assign(tooltip.style, {
+				left: `${x}px`,
+				top: `${y}px`
+			});
+			const arrow_ = middlewareData.arrow;
+			if (arrow_) {
+				const { x: arrowX, y: arrowY } = arrow_;
+				const staticSide = {
+					top: "bottom",
+					right: "left",
+					bottom: "top",
+					left: "right"
+				}[placement.split("-")[0]];
+
+				Object.assign(arrowElement.style, {
+					left: arrowX != null ? `${arrowX}px` : "",
+					top: arrowY != null ? `${arrowY}px` : "",
+					right: "",
+					bottom: "",
+					[staticSide]: "-4px"
+				});
+			}
 		}
 	}
 	function showTooltip() {
-		tooltip.style.display = "block";
-		update();
+		if (tooltip) {
+			tooltip.style.display = "block";
+			update();
+		}
 	}
 
 	function hideTooltip() {
-		tooltip.style.display = "";
+		if (tooltip) {
+			tooltip.style.display = "";
+		}
 	}
 	onMount(() => {
 		timeRender(timeago);
