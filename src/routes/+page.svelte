@@ -28,7 +28,7 @@
 		flex-direction: column;
 		flex-wrap: wrap;
 		width: 100vw;
-		height: 100vh;
+		height: -webkit-fill-available;
 		text-align: center;
 		.alert {
 			display: flex;
