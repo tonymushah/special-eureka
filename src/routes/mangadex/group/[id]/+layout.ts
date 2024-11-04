@@ -24,6 +24,8 @@ const query = graphql(`
                     exLicensed
                     publishDelay
                     createdAt
+                    description
+                    discord
                 }
                 relationships {
                     leader {
@@ -48,6 +50,21 @@ const query = graphql(`
                 total
             }
         }
+        statistics {
+            group {
+                get(id: $id) {
+                    comments {
+                        threadUrl
+                        repliesCount
+                    }
+                }
+            }
+        }
+        chapter {
+            list(params: {groups: [$id]}) {
+                total
+            }
+        }
     }
 `);
 
@@ -61,6 +78,9 @@ export const load: LayoutLoad = async function ({ params }) {
     if (res.data) {
         const data = res.data;
         const groupData = data.scanlationGroup.getUnique;
+        const mangaListData = data.manga.list;
+        const groupStatisticsData = data.statistics.group.get;
+        const chapterListData = data.chapter.list;
         const leader = (() => {
             const inner_leader = groupData.relationships.leader;
             if (inner_leader)
@@ -69,9 +89,10 @@ export const load: LayoutLoad = async function ({ params }) {
                     name: inner_leader.attributes.username,
                     roles: inner_leader.attributes.roles
                 }
-        })()
+        })();
         return {
             id: groupData.id,
+            description: groupData.attributes.description,
             website: groupData.attributes.website,
             twitter: groupData.attributes.twitter,
             name: groupData.attributes.name,
@@ -92,7 +113,11 @@ export const load: LayoutLoad = async function ({ params }) {
                 id: member.id,
                 name: member.attributes.username,
                 roles: member.attributes.roles
-            }))
+            })),
+            titles: mangaListData.total,
+            uploads: chapterListData.total,
+            comments: groupStatisticsData.comments,
+            discord: groupData.attributes.discord
         }
     }
     error(500, "No data??");
