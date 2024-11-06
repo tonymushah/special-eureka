@@ -102,6 +102,7 @@
 		on:click={() => {
 			if (links.twitter) shellOpen(links.twitter);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -122,6 +123,7 @@
 		on:click={() => {
 			if (links.pixiv) shellOpen(links.pixiv);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -142,6 +144,7 @@
 		on:click={() => {
 			if (links.melonBook) shellOpen(links.melonBook);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -162,6 +165,7 @@
 		on:click={() => {
 			if (links.fanBox) shellOpen(links.fanBox);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -182,6 +186,7 @@
 		on:click={() => {
 			if (links.booth) shellOpen(links.booth);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -202,6 +207,7 @@
 		on:click={() => {
 			if (links.nicoVideo) shellOpen(links.nicoVideo);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -222,6 +228,7 @@
 		on:click={() => {
 			if (links.skeb) shellOpen(links.skeb);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -242,6 +249,7 @@
 		on:click={() => {
 			if (links.fantia) shellOpen(links.fantia);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -262,6 +270,7 @@
 		on:click={() => {
 			if (links.tumblr) shellOpen(links.tumblr);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -282,6 +291,7 @@
 		on:click={() => {
 			if (links.youtube) shellOpen(links.youtube);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -302,6 +312,7 @@
 		on:click={() => {
 			if (links.weibo) shellOpen(links.weibo);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -322,6 +333,7 @@
 		on:click={() => {
 			if (links.naver) shellOpen(links.naver);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -342,6 +354,7 @@
 		on:click={() => {
 			if (links.website) shellOpen(links.website);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -362,8 +375,17 @@
 		align-items: center;
 		justify-content: center;
 		gap: 5px;
-		margin: 2px;
+		display: flex;
+		gap: 8px;
+		margin: 0px;
+		font-weight: 700;
+		font-size: 1.125em;
+		align-items: center;
+		justify-content: center;
 		.icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			img {
 				width: 20px;
 				height: 20px;

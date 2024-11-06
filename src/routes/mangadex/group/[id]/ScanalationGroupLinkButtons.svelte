@@ -51,6 +51,7 @@
 		on:click={() => {
 			if (twitter) shellOpen(twitter);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -71,6 +72,7 @@
 		on:click={() => {
 			if (website) shellOpen(website);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -91,6 +93,7 @@
 		on:click={() => {
 			if (mangaUpdates) shellOpen(mangaUpdates);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -111,6 +114,7 @@
 		on:click={() => {
 			if (mangaUpdates) shellOpen(mangaUpdates);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -131,6 +135,7 @@
 		on:click={() => {
 			if (discord) shellOpen(discord);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -147,6 +152,7 @@
 		on:click={() => {
 			if (ircChannel) writeText(ircChannel);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -163,6 +169,7 @@
 		on:click={() => {
 			if (ircServer) writeText(ircServer);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -179,6 +186,7 @@
 		on:click={() => {
 			if (email) writeText(email);
 		}}
+		isBase
 	>
 		<div class="button-inner">
 			<div class="icon">
@@ -196,7 +204,17 @@
 		justify-content: center;
 		gap: 5px;
 		margin: 2px;
+		display: flex;
+		gap: 8px;
+		margin: 0px;
+		font-weight: 700;
+		font-size: 1.125em;
+		align-items: center;
+		justify-content: center;
 		.icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 			img {
 				width: 20px;
 				height: 20px;
