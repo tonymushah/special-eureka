@@ -9,18 +9,14 @@
 	import { render as timeRender, cancel as timeCancel } from "timeago.js";
 	import { onDestroy, onMount } from "svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
+	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 
-	let timeAgo: HTMLTimeElement;
-	onMount(() => {
-		if (timeAgo) timeRender(timeAgo);
-	});
-	onDestroy(() => {
-		if (timeAgo) timeCancel(timeAgo);
-	});
 	export let data: LayoutData;
 	$: description = data.description ?? undefined;
 	$: console.log(`duration: ${data.publishDelay}`);
-	$: createdSince = new Date(data.createdAt);
+	$: console.log(`since: ${data.createdAt}`);
+	$: createdSince = data.createdAt;
+	//$: console.log(`since date: ${createdSince}`);
 </script>
 
 <UsersPageBase title={data.name} {description}>
@@ -49,7 +45,7 @@
 			email={data.email ?? undefined}
 		/>
 	</div>
-	<div slot="top-right">
+	<div slot="top-right" class="info">
 		<p>
 			Group ID: <span
 				on:keydown={() => {}}
@@ -77,18 +73,18 @@
 		</section>
 		<section class="state">
 			<p>
-				State: {#if data.locked}Locked{:else}Unlocked{/if},{#if data.official}
-					Official,
+				State: {#if data.locked}Locked{:else}Unlocked{/if}{#if data.official}
+					, Official
 				{/if}
 				{#if data.verified}
-					Verified,
+					, Verified
 				{/if}
 				{#if data.exLicensed}
 					exLicensed
 				{/if}
 			</p>
 			<p>
-				Created since <time datetime={createdSince.toDateString()} bind:this={timeAgo} />
+				Created <TimeAgo date={createdSince} />
 			</p>
 		</section>
 	</div>
@@ -100,6 +96,13 @@
 </UsersPageBase>
 
 <style lang="scss">
+	.info {
+		section {
+			p {
+				margin: 4px 0px;
+			}
+		}
+	}
 	.buttons {
 		display: grid;
 		gap: 10px;

@@ -37,25 +37,18 @@
 </script>
 
 <script lang="ts">
+	import { route } from "$lib/ROUTES";
+	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
+	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
+	import Link from "@mangadex/componnents/theme/links/Link.svelte";
+	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import {
-		DeleteIcon,
-		EyeIcon,
-		EyeOffIcon,
-		MessageSquareIcon,
-		UsersIcon
-	} from "svelte-feather-icons";
-	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-	import { createEventDispatcher, onDestroy, onMount } from "svelte";
-	import { render as timeRender, cancel as timeCancel } from "timeago.js";
+	import { createEventDispatcher } from "svelte";
+	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
 	import type { Readable } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
-	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
-	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
-	import { route } from "$lib/ROUTES";
-	import Link from "@mangadex/componnents/theme/links/Link.svelte";
-	import ContextMenuLink from "@mangadex/componnents/theme/links/context-menu/ContextMenuLink.svelte";
 	import Layout from "./Layout.svelte";
 	type Group = {
 		id: string;
@@ -75,15 +68,9 @@
 	export let haveBeenRead: boolean = true;
 	export let download_state: Readable<ChapterDownloadState>;
 	export let comments: number | undefined = undefined;
-	let timeago: HTMLTimeElement;
 
 	const dispatch = createChapterEl1EventDispatcher();
-	onMount(() => {
-		if (timeago) timeRender(timeago);
-	});
-	onDestroy(() => {
-		if (timeago) timeCancel(timeago);
-	});
+
 	$: downloaded = $download_state == ChapterDownloadState.Downloaded;
 	$: downloading = $download_state == ChapterDownloadState.Downloading;
 	$: failed = $download_state == ChapterDownloadState.Failed;
@@ -210,7 +197,7 @@
 		</svelte:fragment>
 		<svelte:fragment slot="date-uploader">
 			<p class="upload-date">
-				<time datetime={upload_date.toDateString()} bind:this={timeago} />
+				<TimeAgo date={upload_date} />
 			</p>
 			<UserRolesComp roles={uploader.roles}>
 				<a

@@ -108,27 +108,6 @@
 	</ButtonAccent>
 {/if}
 
-{#if mangaUpdates}
-	<ButtonAccent
-		variant="3"
-		on:click={() => {
-			if (mangaUpdates) shellOpen(mangaUpdates);
-		}}
-		isBase
-	>
-		<div class="button-inner">
-			<div class="icon">
-				{#if $mangaUpdatesFavicon}
-					<img src={$mangaUpdatesFavicon} alt={mangaUpdates} />
-				{:else}
-					<ExternalLinkIcon size="20" />
-				{/if}
-			</div>
-			<h4>MangaUpdates</h4>
-		</div>
-	</ButtonAccent>
-{/if}
-
 {#if discord}
 	<ButtonAccent
 		variant="3"

@@ -149,5 +149,8 @@
 	}
 	article.bottom {
 		padding: 0.5em;
+		.right {
+			width: -webkit-fill-available;
+		}
 	}
 </style>

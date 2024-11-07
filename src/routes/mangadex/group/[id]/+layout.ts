@@ -107,7 +107,7 @@ export const load: LayoutLoad = async function ({ params }) {
             verified: groupData.attributes.verified,
             exLicensed: groupData.attributes.exLicensed,
             publishDelay: groupData.attributes.publishDelay,
-            createdAt: groupData.attributes.createdAt,
+            createdAt: new Date(groupData.attributes.createdAt),
             leader,
             members: groupData.relationships.members.map((member) => ({
                 id: member.id,
