@@ -14,6 +14,8 @@
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import ChapterFeedList from "@mangadex/componnents/chapter/feed/list/ChapterFeedList.svelte";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
+	import { goto } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 
 	export let userId: Readable<string>;
 	let isFetching = false;
@@ -100,7 +102,18 @@
 </script>
 
 <div class="result">
-	<ChapterFeedList bind:list={$feed} style={chapterFeedStyle} />
+	<ChapterFeedList
+		bind:list={$feed}
+		style={chapterFeedStyle}
+		on:mangaClick={(e) => {
+			const id = e.detail.id;
+			goto(
+				route("/mangadex/title/[id]", {
+					id
+				})
+			);
+		}}
+	/>
 </div>
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
@@ -119,10 +132,10 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.result {
+	/*.result {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
 		gap: 8px;
-	}
+	}*/
 </style>
