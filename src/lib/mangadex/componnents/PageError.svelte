@@ -78,4 +78,7 @@
 			gap: 12px;
 		}
 	}
+	.message {
+		width: 90%;
+	}
 </style>
