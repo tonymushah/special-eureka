@@ -24,13 +24,13 @@ pub mod relationships;
 
 #[derive(Clone, Debug)]
 pub enum Chapter {
-    WithRelationship(ChapterObject),
+    WithRelationship(Box<ChapterObject>),
     WithoutRelationship(Box<ApiObjectNoRelationships<Attributes>>),
 }
 
 impl From<ChapterObject> for Chapter {
     fn from(value: ChapterObject) -> Self {
-        Self::WithRelationship(value)
+        Self::WithRelationship(Box::new(value))
     }
 }
 
