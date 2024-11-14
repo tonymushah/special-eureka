@@ -27,6 +27,8 @@
 					</div>
 				{/if}
 			</UsersSimpleBase>
+		{:else}
+			<p>No one</p>
 		{/each}
 	</div>
 </main>

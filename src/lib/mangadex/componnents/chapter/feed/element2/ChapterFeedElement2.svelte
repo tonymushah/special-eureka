@@ -173,6 +173,7 @@
 		-webkit-line-clamp: 2;
 		display: -webkit-box;
 		font-weight: 800;
+		overflow: hidden;
 	}
 	div.top-body {
 		gap: 10px;
