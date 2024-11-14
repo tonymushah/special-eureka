@@ -112,7 +112,8 @@ export const load: LayoutLoad = async function ({ params }) {
             members: groupData.relationships.members.map((member) => ({
                 id: member.id,
                 name: member.attributes.username,
-                roles: member.attributes.roles
+                roles: member.attributes.roles,
+                isLeader: member.id == leader?.id
             })),
             titles: mangaListData.total,
             uploads: chapterListData.total,
