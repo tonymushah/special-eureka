@@ -1,15 +1,14 @@
 <script lang="ts">
-	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
-	import type { LayoutData } from "./$types";
-	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { open as shellOpen } from "@tauri-apps/api/shell";
-	import { writeText } from "@tauri-apps/api/clipboard";
-	import { render as timeRender, cancel as timeCancel } from "timeago.js";
-	import { onDestroy, onMount } from "svelte";
-	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
+	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
+	import { writeText } from "@tauri-apps/api/clipboard";
+	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
+	import type { LayoutData } from "./$types";
+	import NavTab from "./NavTab.svelte";
+	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
 
 	export let data: LayoutData;
 	$: description = data.description ?? undefined;
@@ -89,6 +88,9 @@
 		</section>
 	</div>
 	<div slot="right">
+		<section class="nav-tab">
+			<NavTab id={data.id} />
+		</section>
 		<section class="content">
 			<slot />
 		</section>
