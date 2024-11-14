@@ -4,13 +4,16 @@ use tauri_plugin_store::Store;
 use crate::{
     store::types::{
         enums::{
+            chapter_feed_style::ChapterFeedStyleStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
             manga_list_style::MangaListStyleStore,
+            pagination_style::PaginationStyleStore,
             reading_mode::ReadingModeStore,
         },
         structs::{
             chapter_language::ChapterLanguagesStore,
+            client_info::ClientInfoStore,
             longstrip_image_width::LongstripImageWidthStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
         },
@@ -51,6 +54,15 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .theme_default_key
         .send_data(ThemeProfileDefaultKey::extract_from_store(store)?);
+    let _ = watches
+        .client_info
+        .send_data(ClientInfoStore::extract_from_store(store)?.inner());
+    let _ = watches
+        .chapter_feed_style
+        .send_data(ChapterFeedStyleStore::extract_from_store(store)?);
+    let _ = watches
+        .pagination_style
+        .send_data(PaginationStyleStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }

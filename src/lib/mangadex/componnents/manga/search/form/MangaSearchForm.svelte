@@ -100,7 +100,9 @@
 	}}
 >
 	<div class="input">
-		<FormInput name="title" widthFull bind:value={$titleParams} />
+		<FormInput inputProps={{
+				name: "title"
+			}} widthFull bind:value={$titleParams} />
 	</div>
 	<div class="buttons">
 		<ButtonAccent

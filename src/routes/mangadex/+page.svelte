@@ -38,4 +38,7 @@
 	section.popular-titles {
 		margin-top: 0.5em;
 	}
+	section.recently-added {
+		padding-bottom: 0.5em;
+	}
 </style>

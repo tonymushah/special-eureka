@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ContentRating, type MangaStatus } from "@mangadex/gql/graphql";
+	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
 	import { createEventDispatcher } from "svelte";
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
@@ -8,12 +8,14 @@
 	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
+	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 
 	export let title: string;
 	export let status: MangaStatus;
 	export let description: string;
 	export let tags: Tag[];
 	export let contentRating: ContentRating = ContentRating.Safe;
+	export let language: Language | undefined = undefined;
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -27,7 +29,13 @@
 
 <div class="body">
 	<div class="top-body">
-		<div class="title"><p>{title}</p></div>
+		<div class="title">
+			<p>
+				{#if language}
+					<FlagIcon lang={language} />
+				{/if}{title}
+			</p>
+		</div>
 		<div class="publication">
 			<DefaultSpan --font-size="12px">
 				<span class="pub-tag">Publication :</span>

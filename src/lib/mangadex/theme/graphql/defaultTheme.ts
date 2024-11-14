@@ -1,10 +1,11 @@
 import { graphql } from "@mangadex/gql";
-import { get, readable, type Writable } from "svelte/store";
+import { get, readable, type Updater, type Writable } from "svelte/store";
 import { custom, type MangadexTheme } from "..";
 import { client } from "@mangadex/gql/urql";
 import { v4 } from "uuid";
 import { GqlThemeToITheme, IThemeToGqlThemeInput } from "../convert";
 import { sub_end } from "@mangadex/utils";
+import { debounce } from "lodash";
 
 export const subscription = graphql(`
     subscription defaultThemeProfileSubscription($subID: UUID!) {
@@ -158,7 +159,7 @@ export const mutation = graphql(`
     }
 `);
 
-const readSub = readable(custom, (set) => {
+const readSub = readable<MangadexTheme>(custom, (set) => {
     const subID = v4();
     const unsub = client.subscription(subscription, {
         subID
@@ -174,19 +175,33 @@ const readSub = readable(custom, (set) => {
     }
 })
 
+const debounce_defaultTheme_set = debounce((value: MangadexTheme) => {
+    if (value != custom) {
+        console.log("theme update")
+        client.mutation(mutation, {
+            theme: IThemeToGqlThemeInput(value)
+        }).toPromise().then(console.debug).catch(console.error)
+    }
+}, 150)
+
+const debounce_defaultTheme_update = debounce((updater: Updater<MangadexTheme>) => {
+    const value = updater(get(readSub));
+    if (value != custom) {
+        client.mutation(mutation, {
+            theme: IThemeToGqlThemeInput(value)
+        }).toPromise().then(console.debug).catch(console.error)
+    }
+}, 150)
+
 const defaultTheme: Writable<MangadexTheme> = {
     subscribe(run, invalidate) {
         return readSub.subscribe(run, invalidate)
     },
     set(value) {
-        client.mutation(mutation, {
-            theme: IThemeToGqlThemeInput(value)
-        }).toPromise().then(console.debug).catch(console.error)
+        debounce_defaultTheme_set(value)
     },
     update(updater) {
-        client.mutation(mutation, {
-            theme: IThemeToGqlThemeInput(updater(get(readSub)))
-        }).toPromise().then(console.debug).catch(console.error)
+        debounce_defaultTheme_update(updater)
     },
 }
 

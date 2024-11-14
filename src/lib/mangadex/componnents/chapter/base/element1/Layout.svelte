@@ -22,6 +22,7 @@
 
 <style lang="scss">
 	.layout {
+		background-color: var(--chapter-layout, transparent);
 		display: grid;
 		grid-template-areas: "state flag-reading-state title-groups title-groups title-groups title-groups date-uploader reading-number-comments";
 		column-gap: 20px;
@@ -50,6 +51,12 @@
 			grid-area: reading-number-comments;
 			align-items: center;
 		}
+	}
+	.layout:hover {
+		background-color: var(--chapter-layout-hover, transparent);
+	}
+	.layout:active {
+		background-color: var(--chapter-layout-active, transparent);
 	}
 	.layout:not(.haveBeenRead) {
 		border-style: solid;

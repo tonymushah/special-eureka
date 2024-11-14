@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/svelte";
 
 import { data3 } from "@mangadex/componnents/tag/testDatas";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
-import { ContentRating, MangaStatus } from "@mangadex/gql/graphql";
+import { ContentRating, Language, MangaStatus } from "@mangadex/gql/graphql";
 import { honey_trap1 } from "@mangadex/test-data/images/honey-trap";
 import MangaBase2 from "./MangaElementBase2.svelte";
 
@@ -30,6 +30,7 @@ export const Default: Story = {
 			id: v.id,
 			name: v.attributes.name.en
 		})),
-		contentRating: ContentRating.Erotica
+		contentRating: ContentRating.Erotica,
+		language: Language.Japanese
 	}
 };

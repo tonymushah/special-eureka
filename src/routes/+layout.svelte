@@ -8,7 +8,7 @@
 	import { slide } from "svelte/transition";
 	import { register } from "swiper/element/bundle";
 	import "toastify-js/src/toastify.css";
-
+	let decorationHeigth: number | undefined = undefined;
 	const unlistens: UnlistenFn[] = [];
 	onMount(async () => {
 		register();
@@ -21,15 +21,17 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
+	$: decoHg = decorationHeigth ?? 0;
 </script>
 
-<div class="outer" class:defaultDecoration={$isDefaultDecoration}>
+<div class="outer" class:defaultDecoration={$isDefaultDecoration} style="--decoH: {decoHg}px">
 	{#if !$isDefaultDecoration}
 		<div
 			class="decoration"
 			transition:slide={{
 				axis: "y"
 			}}
+			bind:clientHeight={decorationHeigth}
 		>
 			<WindowDecoration />
 		</div>
@@ -59,7 +61,7 @@
 	}
 	.outer:not(.defaultDecoration) {
 		.inner {
-			height: 96vh;
+			height: calc(100vh - var(--decoH));
 		}
 	}
 	.outer.defaultDecoration {

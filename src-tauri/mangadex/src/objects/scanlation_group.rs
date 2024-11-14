@@ -20,13 +20,13 @@ pub mod relationships;
 
 #[derive(Clone, Debug)]
 pub enum ScanlationGroup {
-    WithRelationship(GroupObject),
+    WithRelationship(Box<GroupObject>),
     WithoutRelationship(Box<ApiObjectNoRelationships<Attributes>>),
 }
 
 impl From<GroupObject> for ScanlationGroup {
     fn from(value: GroupObject) -> Self {
-        ScanlationGroup::WithRelationship(value)
+        ScanlationGroup::WithRelationship(Box::new(value))
     }
 }
 

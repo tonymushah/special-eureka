@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ContentRating, type MangaStatus } from "@mangadex/gql/graphql";
+	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { createEventDispatcher } from "svelte";
 	import Content from "./base2/Content.svelte";
@@ -13,7 +13,7 @@
 	export let description: string;
 	export let tags: Tag[];
 	export let contentRating: ContentRating = ContentRating.Safe;
-
+	export let language: Language | undefined = undefined;
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -27,5 +27,5 @@
 
 <Layout on:click --max-height="11em">
 	<Image {coverImage} {coverImageAlt} />
-	<Content on:tagClick {title} {status} {description} {tags} {contentRating} />
+	<Content on:tagClick {title} {status} {description} {tags} {contentRating} {language} />
 </Layout>

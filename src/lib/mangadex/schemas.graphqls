@@ -273,6 +273,11 @@ type ChapterAttributes {
 	version: Int!
 }
 
+enum ChapterFeedStyle {
+	COVER_FULL
+	COVER_LESS
+}
+
 input ChapterListParams {
 	limit: Int
 	offset: Int
@@ -949,6 +954,15 @@ type GraphQLMangaAttributes {
 	version: Int!
 }
 
+input GroupSortOrder @oneOf {
+	createdAt: OrderDirection
+	followedCount: OrderDirection
+	latestUploadedChapter: OrderDirection
+	name: OrderDirection
+	relevance: OrderDirection
+	updatedAt: OrderDirection
+}
+
 type GroupStatisticsQueries {
 	get(id: UUID!): Statistics!
 	list(ids: [UUID!]!): [Statistics!]!
@@ -1611,6 +1625,11 @@ enum OrderDirection {
 	DESCENDING
 }
 
+enum PaginationStyle {
+	INFINITE_SCROLL
+	PAGED
+}
+
 scalar Password
 
 scalar PathBuf
@@ -1650,6 +1669,7 @@ type Query {
 	home: HomeQueries!
 	downloadState: DownloadStateQueries!
 	utils: UtilsQuery!
+	scanlationGroup: ScanlationGroupQueries!
 }
 
 type RatingItem {
@@ -1873,6 +1893,18 @@ type ScanlationGroupAttributes {
 	updatedAt: MangaDexDateTime!
 }
 
+input ScanlationGroupListParams {
+	limit: Int
+	offset: Int
+	groupIds: [UUID!]! = []
+	name: String
+	"""
+	Language the scanlation primarily translates or uploads works into.
+	"""
+	focusedLanguage: Language
+	order: GroupSortOrder
+}
+
 type ScanlationGroupMutation {
 	create(params: CreateScalantionGroupParam!): ScanlationGroup!
 	edit(params: EditScanlationGroupParam!): ScanlationGroup!
@@ -1881,8 +1913,13 @@ type ScanlationGroupMutation {
 	unfollow(id: UUID!): Boolean!
 }
 
+type ScanlationGroupQueries {
+	list(params: ScanlationGroupListParams! = {limit: null, offset: null, groupIds: [], name: null, focusedLanguage: null, order: null}): ScanlationGroupResults!
+	getUnique(id: UUID!): ScanlationGroup!
+}
+
 type ScanlationGroupRelationships {
-	leader: User!
+	leader: User
 	members: [User!]!
 }
 
@@ -1979,6 +2016,9 @@ type Subscriptions {
 	watchThemesProfile(subId: UUID!): [ThemeProfileEntry!]!
 	watchThemeProfileDefault(subId: UUID!): MangaDexTheme!
 	watchThemeProfileDefaultName(subId: UUID!): String
+	watchClientInfo(subId: UUID!): ClientInfo
+	watchChapterFeedStyle(subId: UUID!): ChapterFeedStyle!
+	watchPaginationStyle(subId: UUID!): PaginationStyle!
 }
 
 type Tag {
@@ -2136,6 +2176,7 @@ scalar Url
 type User {
 	id: UUID!
 	attributes: UserAttributes!
+	relationships: UserRelationships!
 }
 
 type UserAttributes {
@@ -2204,12 +2245,18 @@ type UserOptionMutations {
 	deleteThemeProfile(name: String!): MangaDexTheme
 	clearThemesProfiles: Boolean!
 	setThemeProfiles(entries: [ThemeProfileEntryInput!]!): Int!
+	setChapterFeedStyle(style: ChapterFeedStyle!): ChapterFeedStyle!
+	setPaginationStyle(style: PaginationStyle!): PaginationStyle!
 }
 
 type UserQueries {
 	get(id: UUID!): User!
 	list(params: UserListParam! = {limit: null, offset: null, userIds: [], username: null, order: null}): UserResults!
 	me: User!
+}
+
+type UserRelationships {
+	groups: [ScanlationGroup!]!
 }
 
 type UserReport {

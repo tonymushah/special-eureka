@@ -1,6 +1,9 @@
-use std::fmt::Debug;
+use std::{convert::AsRef, fmt::Debug};
 
+use chapter_feed_style::ChapterFeedStyleWatch;
+use client_info::ClientInfoWatch;
 use image_fit::ImageFitWatch;
+use pagination_style::PaginationStyleWatch;
 use uuid::Uuid;
 
 use crate::objects::{GetAttributes, GetId};
@@ -38,7 +41,9 @@ use self::{
 pub mod api_client;
 pub mod author;
 pub mod chapter;
+pub mod chapter_feed_style;
 pub mod chapter_languages;
+pub mod client_info;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
@@ -51,6 +56,7 @@ pub mod manga;
 pub mod manga_list_style;
 pub mod manga_reading_state;
 pub mod page_direction;
+pub mod pagination_style;
 pub mod rating;
 pub mod read_marker;
 pub mod reading_mode;
@@ -139,6 +145,7 @@ pub trait SendData<T>: Send + Sync + Clone {
     fn send_data(&self, data: T) -> SendDataResult;
 }
 
+/*
 #[derive(Debug, Clone, Default)]
 pub struct Watches {
     pub api_client: ApiClientWatch,
@@ -172,4 +179,63 @@ pub struct Watches {
     pub manga_list_style: MangaListStyleWatch,
     pub themes: ThemeProfilesWatch,
     pub theme_default_key: ThemeProfileDefaultKeyWatch,
+    pub client_info: ClientInfoWatch,
+    pub chapter_feed_style: ChapterFeedStyleWatch,
+    pub pagination_style: PaginationStyleWatch,
+}
+*/
+
+macro_rules! watches_implementation {
+    ($($name:ident => $t:ty,)*) => {
+        #[derive(Debug, Clone, Default)]
+        pub struct Watches {
+            $(
+                pub $name: $t,
+            )*
+        }
+        $(
+            impl AsRef<$t> for Watches {
+                fn as_ref(&self) -> &$t {
+                    &self.$name
+                }
+            }
+        )*
+    };
+}
+
+watches_implementation! {
+    api_client => ApiClientWatch,
+    author => AuthorWatch,
+    chapter => ChapterWatch,
+    cover => CoverWatch,
+    custom_list => CustomListWatch,
+    manga => MangaWatch,
+    rating => RatingWatch,
+    scanlation_group => ScanlationGroupWatch,
+    statistics => StatisticsWatch,
+    manga_statistics => MangaStatisticsWatch,
+    tag => TagWatch,
+    upload_session => UploadSessionWatch,
+    upload_session_file => UploadSessionFileWatch,
+    user => UserWatch,
+    user_me => UserMeWatch,
+    is_logged => IsLoggedWatch,
+    page_direction => PageDirectionWatch,
+    reading_mode => ReadingModeWatch,
+    sidebar_direction => SideBarDirectionWatch,
+    chapter_languages => ChapterLanguagesWatch,
+    is_appstate_mounted => IsAppStateMountedWatch,
+    download_state => DownloadStateWatch,
+    reading_state => ReadingStateWatch,
+    is_following => IsFollowingWatch,
+    manga_reading_state => MangaReadingStateWatch,
+    read_marker => ReadMarkerWatch,
+    image_fit => ImageFitWatch,
+    longstrip_image_width => LongstripImageWidthWatch,
+    manga_list_style => MangaListStyleWatch,
+    themes => ThemeProfilesWatch,
+    theme_default_key => ThemeProfileDefaultKeyWatch,
+    client_info => ClientInfoWatch,
+    chapter_feed_style => ChapterFeedStyleWatch,
+    pagination_style => PaginationStyleWatch,
 }

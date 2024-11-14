@@ -45,16 +45,18 @@
 				<PrimaryButton>
 					<div class="inner-button">
 						<p>{profile.name}</p>
-						<DangerButton
-							on:click={(e) => {
-								e.stopPropagation();
-								deleteTheme(profile.name);
-							}}
-						>
-							<div class="delete-icon">
-								<XCircleIcon />
-							</div>
-						</DangerButton>
+						<div>
+							<DangerButton
+								on:click={(e) => {
+									e.stopPropagation();
+									deleteTheme(profile.name);
+								}}
+							>
+								<div class="delete-icon">
+									<XCircleIcon />
+								</div>
+							</DangerButton>
+						</div>
 					</div>
 				</PrimaryButton>
 			{:else}
@@ -65,16 +67,18 @@
 				>
 					<div class="inner-button">
 						<p>{profile.name}</p>
-						<DangerButton
-							on:click={(e) => {
-								e.stopPropagation();
-								deleteTheme(profile.name);
-							}}
-						>
-							<div class="delete-icon">
-								<XCircleIcon />
-							</div>
-						</DangerButton>
+						<div>
+							<DangerButton
+								on:click={(e) => {
+									e.stopPropagation();
+									deleteTheme(profile.name);
+								}}
+							>
+								<div class="delete-icon">
+									<XCircleIcon />
+								</div>
+							</DangerButton>
+						</div>
 					</div>
 				</ButtonAccent>
 			{/if}
@@ -96,7 +100,13 @@
 	}}
 >
 	<div>
-		<FormInput widthFull name="name" placeholder="The New Theme Profile Name" />
+		<FormInput
+			widthFull
+			inputProps={{
+				name: "name",
+				placeholder: "The New Theme Profile Name"
+			}}
+		/>
 	</div>
 
 	<PrimaryButton type="submit">
@@ -107,12 +117,15 @@
 <style lang="scss">
 	.inner-button {
 		display: flex;
-		gap: 5px;
+		gap: 12px;
 		margin: 0px 10px;
+		align-items: center;
 		.delete-icon {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			width: min-content;
+			padding: 0.25em 0.125em;
 		}
 	}
 	form {

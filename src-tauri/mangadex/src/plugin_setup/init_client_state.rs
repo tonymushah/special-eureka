@@ -20,7 +20,7 @@ pub fn init_client_state<R: Runtime>(
     app: &tauri::AppHandle<R>,
     store: &Store<R>,
 ) -> tauri::plugin::Result<()> {
-    let watches = app.state::<Watches>();
+    let app_clone = app.clone();
     let cis = ClientInfoStore::extract_from_store(store)?;
     let r_token_store = RefreshTokenStore::extract_from_store(store)?;
     let last_time_fetched: LastTimeTokenWhenFecthed = Default::default();
@@ -40,14 +40,12 @@ pub fn init_client_state<R: Runtime>(
             Some(i.clone().into())
         }
     }) {
-        tauri::async_runtime::block_on(async move {
+        tauri::async_runtime::spawn(async move {
+            let client = app_clone.state::<MangaDexClient>();
+            let watches = app_clone.state::<Watches>();
             client.set_auth_tokens(&auth_tokens).await?;
 
-            if let Ok(Ok(res)) = tokio::time::timeout(Duration::from_secs(5), async {
-                client.oauth().refresh().send().await
-            })
-            .await
-            {
+            if let Ok(res) = client.oauth().refresh().send().await {
                 let mut last_time_fetched_write = ltf.write().await;
                 let _ = last_time_fetched_write
                     .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
@@ -58,7 +56,7 @@ pub fn init_client_state<R: Runtime>(
                 let _ = watches.is_logged.send_data(false);
             }
             Ok::<(), mangadex_api_types_rust::error::Error>(())
-        })?;
+        });
     }
     app.manage(last_time_fetched);
     Ok(())

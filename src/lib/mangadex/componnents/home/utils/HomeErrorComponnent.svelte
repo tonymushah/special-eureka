@@ -23,8 +23,10 @@
 	div.error {
 		background-color: color-mix(in srgb, var(--danger-l1) 50%, var(--main-background) 0%);
 		border-left: 10px;
-		border-radius: 0.25rem;
-		border-color: var(--danger-l2);
+		background-color: color-mix(in srgb, var(--danger) 70%, transparent 30%);
+		border-radius: 8px;
+		border: solid 3px var(--mid-tone);
+		box-shadow: 0px 3px 0px var(--mid-tone);
 		color: var(--text-color);
 		padding: 1em;
 		h3 {

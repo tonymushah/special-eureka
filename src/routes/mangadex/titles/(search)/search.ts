@@ -4,12 +4,7 @@ import type { Client } from "@urql/svelte";
 import { defaultQuery, offlineQuery } from "./query";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-
-export interface IMangaSearchResult {
-    data: MangaListContentItemProps[],
-    hasNext(): boolean;
-    next(): Promise<IMangaSearchResult>;
-}
+import AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 
 type MangaSearchResultConstuctorParams = {
     data: MangaListContentItemProps[];
@@ -21,19 +16,18 @@ type MangaSearchResultConstuctorParams = {
     total: number
 };
 
-export class MangaSearchResult implements IMangaSearchResult {
+export class MangaSearchResult extends AbstractSearchResult<MangaListContentItemProps> {
     client: Client;
     params: MangaListParams;
     offline: boolean;
     offset: number;
     limit: number;
     total: number;
-    data: MangaListContentItemProps[];
     constructor({ data, client, params, offline = false, offset, limit, total }: MangaSearchResultConstuctorParams) {
+        super(data);
         this.client = client;
         this.params = params;
         this.offline = offline;
-        this.data = data;
         this.limit = limit;
         this.offset = offset;
         this.total = total
@@ -41,7 +35,7 @@ export class MangaSearchResult implements IMangaSearchResult {
     hasNext(): boolean {
         return this.offset < this.total && this.offset >= 0;
     }
-    next(): Promise<IMangaSearchResult> {
+    next(): Promise<AbstractSearchResult<MangaListContentItemProps>> {
         return executeSearchQuery(this.client, {
             ...this.params,
             offset: this.offset + this.limit,
@@ -57,7 +51,7 @@ type SomeRes = {
     total: number;
 }
 
-export default async function executeSearchQuery(client: Client, params: MangaListParams, offline: boolean = false): Promise<IMangaSearchResult> {
+export default async function executeSearchQuery(client: Client, params: MangaListParams, offline: boolean = false): Promise<AbstractSearchResult<MangaListContentItemProps>> {
     let res: SomeRes | undefined = undefined;
     if (offline) {
         const result = await client.query(offlineQuery, {
@@ -86,7 +80,8 @@ export default async function executeSearchQuery(client: Client, params: MangaLi
                         tags: v.attributes.tags.map((tag) => ({
                             id: tag.id,
                             name: get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
-                        }))
+                        })),
+                        language: v.attributes.originalLanguage
                     }
                 }),
                 offset: data.offset,

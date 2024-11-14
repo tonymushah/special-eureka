@@ -113,14 +113,11 @@ pub fn get_ins_handle_mut() -> Result<&'static mut DownloadEntry<Uuid>> {
 
 pub fn reset_ins_handle() -> Result<()> {
     unsafe {
-        match INS_CHAPTER.take() {
-            None => {
-                return Err(Error::Io(std::io::Error::new(
-                    std::io::ErrorKind::NotFound,
-                    "INS CHAPTER handle not found",
-                )))
-            }
-            Some(_) => (),
+        if INS_CHAPTER.take().is_none() {
+            return Err(Error::Io(std::io::Error::new(
+                std::io::ErrorKind::NotFound,
+                "INS CHAPTER handle not found",
+            )));
         }
     }
     init_ins_chapter_handle()?;

@@ -20,13 +20,13 @@ use super::{
 
 #[derive(Clone, Debug)]
 pub enum Author {
-    WithRel(AuthorObject),
+    WithRel(Box<AuthorObject>),
     WithoutRel(Box<ApiObjectNoRelationships<Attributes>>),
 }
 
 impl From<AuthorObject> for Author {
     fn from(value: AuthorObject) -> Self {
-        Self::WithRel(value)
+        Self::WithRel(Box::new(value))
     }
 }
 

@@ -1,3 +1,4 @@
+use crate::utils::watch::upload::session_file::UploadSessionFileWatch;
 use crate::Result;
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
@@ -18,11 +19,9 @@ impl UploadSessionFileSubscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = UploadSessionFileAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |watches| watches.upload_session_file.subscribe(),
-            )?
+            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context_watch_as_ref::<
+                UploadSessionFileWatch,
+            >(ctx, sub_id)?
             .option_filter_by_id(upload_session_file_id),
         )
     }

@@ -45,7 +45,7 @@
 	<MangaDexContextDataProvider>
 		<MangaDexDefaultThemeProvider>
 			<SetTitle />
-			<div class="provider" class:isRTL>
+			<div class="provider" class:isRTL class:defaultDecoration={$isDefaultDecoration}>
 				<div class="sidebar">
 					<Sidebar />
 				</div>

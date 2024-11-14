@@ -44,7 +44,7 @@ impl UserRelationships {
         if let Some(rel_field) = ctx
             .field()
             .selection_set()
-            .find(|f| f.name() == "relationship")
+            .find(|f| f.name() == "relationships")
         {
             rel_field.selection_set().for_each(|f| match f.name() {
                 "leader" => {

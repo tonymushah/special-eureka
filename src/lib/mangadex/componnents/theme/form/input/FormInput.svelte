@@ -1,69 +1,14 @@
 <script lang="ts">
 	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
-	import type { HTMLInputTypeAttribute } from "svelte/elements";
+	import type { HTMLInputAttributes } from "svelte/elements";
 
-	export let type: "text" | "number" | "email" | "url" | "file" | "color" = "text";
+	export let inputProps: HTMLInputAttributes = {};
 	export let value: any = "";
-	export let name: string | null | undefined = undefined;
-	export let placeholder: string | null | undefined = undefined;
-	export let disabled = false;
 	export let widthFull = false;
 	export let element: AnyMeltElement = emptyMeltElement;
 </script>
 
-{#if type == "color"}
-	<input
-		{disabled}
-		type="color"
-		use:melt={$element}
-		bind:value
-		{name}
-		class:widthFull
-		{placeholder}
-	/>
-{:else if type == "email"}
-	<input
-		{disabled}
-		type="email"
-		use:melt={$element}
-		bind:value
-		{name}
-		class:widthFull
-		{placeholder}
-	/>
-{:else if type == "file"}
-	<input
-		{disabled}
-		type="file"
-		use:melt={$element}
-		bind:value
-		{name}
-		class:widthFull
-		{placeholder}
-	/>
-{:else if type == "number"}
-	<input
-		{disabled}
-		type="number"
-		use:melt={$element}
-		bind:value
-		{name}
-		class:widthFull
-		{placeholder}
-	/>
-{:else if type == "url"}
-	<input
-		{disabled}
-		type="url"
-		use:melt={$element}
-		bind:value
-		{name}
-		class:widthFull
-		{placeholder}
-	/>
-{:else}
-	<input {disabled} use:melt={$element} bind:value {name} class:widthFull {placeholder} />
-{/if}
+<input {...inputProps} use:melt={$element} bind:value class:widthFull />
 
 <style lang="scss">
 	input {

@@ -1,9 +1,12 @@
-<script>
+<script lang="ts">
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 
 	import SomeDiv from "./SomeDiv.svelte";
 	import ButtonFlexContentProvider from "./buttons/ButtonFlexContentProvider.svelte";
-	const theme_store = getMangaDexThemeContext();
+	import { custom } from "@mangadex/theme";
+	import { derived } from "svelte/store";
+	const theme_store_ = getMangaDexThemeContext();
+	const theme_store = derived([theme_store_], ([$t]) => $t ?? custom);
 	export let fonts = "Poppins";
 </script>
 
