@@ -131,7 +131,7 @@ importers:
         version: 8.3.1(storybook@8.3.1)(svelte@4.2.19)
       '@storybook/sveltekit':
         specifier: ^8.3.1
-        version: 8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)
+        version: 8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@3.1.4(postcss@8.4.47))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)
       '@storybook/test':
         specifier: ^8.3.1
         version: 8.3.1(storybook@8.3.1)
@@ -3639,10 +3639,6 @@ packages:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
     engines: {node: '>=10'}
 
-  lilconfig@3.1.2:
-    resolution: {integrity: sha512-eop+wDAvpItUys0FWkHIKeC9ybYrTGbU41U5K7+bttZZeohvnY7M9dZ5kB21GNWiFT2q1OoPTvncPCgSOVO5ow==}
-    engines: {node: '>=14'}
-
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
@@ -4192,24 +4188,6 @@ packages:
       postcss:
         optional: true
       ts-node:
-        optional: true
-
-  postcss-load-config@6.0.1:
-    resolution: {integrity: sha512-oPtTM4oerL+UXmx+93ytZVN82RrlY/wPUV8IeDxFrzIjXOLF1pN+EmKPLbubvKHT2HC20xXsCAH2Z+CKV6Oz/g==}
-    engines: {node: '>= 18'}
-    peerDependencies:
-      jiti: '>=1.21.0'
-      postcss: '>=8.0.9'
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      jiti:
-        optional: true
-      postcss:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
         optional: true
 
   postcss-safe-parser@6.0.0:
@@ -7098,7 +7076,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
       storybook: 8.3.1
 
-  '@storybook/svelte-vite@8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)':
+  '@storybook/svelte-vite@8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@3.1.4(postcss@8.4.47))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)':
     dependencies:
       '@storybook/builder-vite': 8.3.1(storybook@8.3.1)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)
       '@storybook/svelte': 8.3.1(storybook@8.3.1)(svelte@4.2.19)
@@ -7106,7 +7084,7 @@ snapshots:
       magic-string: 0.30.11
       storybook: 8.3.1
       svelte: 4.2.19
-      svelte-preprocess: 5.1.4(@babel/core@7.25.2)(less@4.2.0)(postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1))(postcss@8.4.47)(sass@1.79.1)(svelte@4.2.19)(typescript@5.6.2)
+      svelte-preprocess: 5.1.4(@babel/core@7.25.2)(less@4.2.0)(postcss-load-config@3.1.4(postcss@8.4.47))(postcss@8.4.47)(sass@1.79.1)(svelte@4.2.19)(typescript@5.6.2)
       sveltedoc-parser: 4.2.1
       ts-dedent: 2.2.0
       vite: 5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)
@@ -7141,12 +7119,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@storybook/sveltekit@8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)':
+  '@storybook/sveltekit@8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@3.1.4(postcss@8.4.47))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)':
     dependencies:
       '@storybook/addon-actions': 8.3.1(storybook@8.3.1)
       '@storybook/builder-vite': 8.3.1(storybook@8.3.1)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)
       '@storybook/svelte': 8.3.1(storybook@8.3.1)(svelte@4.2.19)
-      '@storybook/svelte-vite': 8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)
+      '@storybook/svelte-vite': 8.3.1(@babel/core@7.25.2)(@sveltejs/vite-plugin-svelte@3.1.2(svelte@4.2.19)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)))(less@4.2.0)(postcss-load-config@3.1.4(postcss@8.4.47))(postcss@8.4.47)(sass@1.79.1)(storybook@8.3.1)(svelte@4.2.19)(typescript@5.6.2)(vite@5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1))(webpack-sources@3.2.3)
       storybook: 8.3.1
       svelte: 4.2.19
       vite: 5.4.6(@types/node@22.5.5)(less@4.2.0)(sass@1.79.1)
@@ -9157,9 +9135,6 @@ snapshots:
 
   lilconfig@2.1.0: {}
 
-  lilconfig@3.1.2:
-    optional: true
-
   lines-and-columns@1.2.4: {}
 
   linkify-it@5.0.0:
@@ -9846,15 +9821,6 @@ snapshots:
     optionalDependencies:
       postcss: 8.4.47
 
-  postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1):
-    dependencies:
-      lilconfig: 3.1.2
-    optionalDependencies:
-      jiti: 1.21.6
-      postcss: 8.4.47
-      yaml: 2.5.1
-    optional: true
-
   postcss-safe-parser@6.0.0(postcss@8.4.47):
     dependencies:
       postcss: 8.4.47
@@ -10387,7 +10353,7 @@ snapshots:
       marked: 5.1.2
       svelte: 4.2.19
 
-  svelte-preprocess@5.1.4(@babel/core@7.25.2)(less@4.2.0)(postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1))(postcss@8.4.47)(sass@1.79.1)(svelte@4.2.19)(typescript@5.6.2):
+  svelte-preprocess@5.1.4(@babel/core@7.25.2)(less@4.2.0)(postcss-load-config@3.1.4(postcss@8.4.47))(postcss@8.4.47)(sass@1.79.1)(svelte@4.2.19)(typescript@5.6.2):
     dependencies:
       '@types/pug': 2.0.10
       detect-indent: 6.1.0
@@ -10399,7 +10365,7 @@ snapshots:
       '@babel/core': 7.25.2
       less: 4.2.0
       postcss: 8.4.47
-      postcss-load-config: 6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1)
+      postcss-load-config: 3.1.4(postcss@8.4.47)
       sass: 1.79.1
       typescript: 5.6.2
 
