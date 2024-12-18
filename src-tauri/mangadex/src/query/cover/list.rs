@@ -1,6 +1,5 @@
 use std::{ops::Deref, pin::Pin};
 
-use crate::{error::Error, utils::Collection, Result};
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::{
     AsyncIntoSorted, CoverDataPullAsyncTrait, IntoParamedFilteredStream,
@@ -10,11 +9,13 @@ use mangadex_api_schema_rust::v5::{CoverCollection, CoverObject};
 use tokio_stream::Stream;
 
 use crate::{
+    error::Error,
     objects::cover::lists::CoverResults,
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        get_watches_from_graphql_context, source::SendMultiSourceData, Collection,
     },
+    Result,
 };
 
 #[derive(Clone, Debug)]
