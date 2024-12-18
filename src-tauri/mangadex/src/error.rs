@@ -86,6 +86,14 @@ pub enum Error {
     NoAccessWindowGQLCtx,
     #[error(transparent)]
     ActixMailbox(#[from] actix::MailboxError),
+    #[error("{0}")]
+    Unknown(String),
+}
+
+impl Error {
+    pub fn msg(msg: String) -> Self {
+        Self::Unknown(msg)
+    }
 }
 
 impl From<favicon_picker::error::Error> for Error {
