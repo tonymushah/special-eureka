@@ -1,7 +1,15 @@
 use std::ops::{Deref, DerefMut};
 
-use crate::{error::Error, Result};
+use crate::{
+    error::Error,
+    subscription::utils::{OptionFlattenStream, ResultFlattenStream},
+    utils::Collection,
+    Result,
+};
 use async_graphql::{Context, InputObject, Object};
+use eureka_mmanager::prelude::{
+    AsyncIsIn, ChapterDataPullAsyncTrait, GetManagerStateData, IntoParamedFilteredStream,
+};
 use mangadex_api_input_types::chapter::list::ChapterListParams;
 use mangadex_api_schema_rust::v5::ChapterCollection;
 
@@ -15,7 +23,7 @@ use crate::{
     },
 };
 
-#[derive(Debug, InputObject, Clone)]
+#[derive(Debug, InputObject, Clone, Copy)]
 pub struct GetAllChapterParams {
     pub include_fails: bool,
     pub only_fails: bool,
@@ -26,15 +34,6 @@ impl Default for GetAllChapterParams {
         Self {
             include_fails: true,
             only_fails: false,
-        }
-    }
-}
-
-impl From<GetAllChapterParams> for OfflineGetAllChapter {
-    fn from(value: GetAllChapterParams) -> Self {
-        Self {
-            include_fails: value.include_fails,
-            only_fails: value.only_fails,
         }
     }
 }
@@ -93,16 +92,29 @@ impl ChapterListQueries {
         let app_state = offline_app_state
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let chapter_utils = app_state.chapter_utils();
-        let stream = Box::pin(
-            chapter_utils.get_chapters_by_stream_id(Box::pin(
-                chapter_utils
-                    .get_all_chapter(Some(params.into()), app_state.deref())
-                    .await?,
-            )),
-        );
+        let app_state_data = app_state.app_state.clone();
+        let stream = StreamExt::then(app_state.get_chapters().await?, move |chapter_data| {
+            let app_state_data = app_state_data.clone();
+            async move {
+                let history = app_state_data.get_history().await?;
+                let is_in = history.is_in(&chapter_data).await.unwrap_or_default();
+                let res = match (is_in, params.include_fails, params.only_fails) {
+                    (true, true, true) => None,
+                    (true, true, false) => Some(chapter_data),
+                    (true, false, true) => Some(chapter_data),
+                    (true, false, false) => None,
+                    (false, true, true) => Some(chapter_data),
+                    (false, true, false) => Some(chapter_data),
+                    (false, false, true) => None,
+                    (false, false, false) => None,
+                };
+                Ok::<_, crate::Error>(res)
+            }
+        })
+        .result_flatten()
+        .option_flatten();
         let res: ChapterCollection = Collection::from_async_stream(
-            stream.filter(|item| filter(item, self)),
+            IntoParamedFilteredStream::to_filtered_into(stream, self.0.clone()),
             self.limit.map(|l| l as usize).unwrap_or_else(|| {
                 if self.chapter_ids.is_empty() {
                     10
@@ -112,7 +124,7 @@ impl ChapterListQueries {
             }),
             self.offset.unwrap_or_default() as usize,
         )
-        .await?
+        .await
         .try_into()?;
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
