@@ -8,6 +8,8 @@ pub enum Error {
     Tauri(#[from] tauri::Error),
     #[error("MangaDex Eureka Manager SDK Error: {0}")]
     MangadexEurekaManager(#[from] eureka_mmanager::Error),
+    #[error("MangaDex Eureka Manager SDK Error: {0}")]
+    MangadexEurekaManagerOwned(#[from] eureka_mmanager::OwnedError),
     #[error("Tauri Plugin Store Error: {0}")]
     TauriStore(#[from] tauri_plugin_store::Error),
     #[error("I/O Error: {0}")]
@@ -82,6 +84,8 @@ pub enum Error {
     NoAccessAppHandleGQLCtx,
     #[error("Cannot access at the Tauri Window Handle from the GraphQL Context")]
     NoAccessWindowGQLCtx,
+    #[error(transparent)]
+    ActixMailbox(#[from] actix::MailboxError),
 }
 
 impl From<favicon_picker::error::Error> for Error {
