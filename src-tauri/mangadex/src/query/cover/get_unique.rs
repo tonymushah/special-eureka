@@ -1,7 +1,6 @@
 use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
 use mangadex_api_types_rust::ReferenceExpansionResource;
-use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{

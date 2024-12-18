@@ -6,7 +6,6 @@ use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{

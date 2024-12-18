@@ -1,6 +1,5 @@
 use crate::scheme::{get_offline_app_state, SchemeResponseError, SchemeResponseResult};
 use bytes::{BufMut, Bytes, BytesMut};
-use mangadex_desktop_api2::utils::chapter::ChapterUtilsWithID;
 use std::{
     io::{self, Write},
     path::Path,

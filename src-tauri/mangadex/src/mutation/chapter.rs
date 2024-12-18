@@ -4,7 +4,6 @@ use mangadex_api::utils::download::chapter::DownloadMode as MDDownloadMode;
 use mangadex_api_input_types::chapter::edit::ChapterUpdateParams;
 use mangadex_api_schema_rust::{v5::ChapterAttributes, ApiObjectNoRelationships};
 use mangadex_api_types_rust::RelationshipType;
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{

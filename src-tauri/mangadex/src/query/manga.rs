@@ -12,7 +12,6 @@ use mangadex_api_input_types::manga::{
     random::MangaRandomParams,
 };
 use mangadex_api_types_rust::{MangaRelation, ReadingStatus, RelationshipType};
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{

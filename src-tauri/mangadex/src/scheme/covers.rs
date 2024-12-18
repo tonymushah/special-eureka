@@ -1,7 +1,6 @@
 use std::io::{self, Write};
 
 use bytes::{Buf, BufMut, Bytes, BytesMut};
-use mangadex_desktop_api2::utils::cover::CoverUtilsWithId;
 use regex::Regex;
 use tauri::{
     http::{status::StatusCode, Request},

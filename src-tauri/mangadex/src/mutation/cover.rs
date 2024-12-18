@@ -3,7 +3,6 @@ use async_graphql::{Context, Object};
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
 use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
 use mangadex_api_types_rust::RelationshipType;
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use uuid::Uuid;
 
 use crate::{

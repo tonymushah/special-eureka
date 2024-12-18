@@ -6,7 +6,6 @@ use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::cover::list::CoverListParam;
 use mangadex_api_types_rust::RelationshipType;
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
 use url::Url;
 use uuid::Uuid;
 

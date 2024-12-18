@@ -4,10 +4,7 @@ use crate::{error::Error, Result};
 use async_graphql::{Context, InputObject, Object};
 use mangadex_api_input_types::chapter::list::ChapterListParams;
 use mangadex_api_schema_rust::v5::ChapterCollection;
-use mangadex_desktop_api2::utils::{
-    chapter::{filter::filter, GetAllChapter as OfflineGetAllChapter},
-    collection::Collection,
-};
+
 use tokio_stream::StreamExt;
 
 use crate::{
