@@ -11,8 +11,8 @@ pub enum DownloadState {
 impl DownloadState {
     pub async fn is_downloaded(&self) -> bool {
         match self {
-            _ => false,
             DownloadState::Downloaded { .. } => true,
+            _ => false,
         }
     }
     pub async fn has_failed(&self) -> bool {
