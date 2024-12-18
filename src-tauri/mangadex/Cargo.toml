@@ -37,6 +37,7 @@ favicon-picker = "1.0.0"
 tempfile = "3.10.1"
 tokio-util = "0.7.11"
 emdx = "0.1"
+actix.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.1"

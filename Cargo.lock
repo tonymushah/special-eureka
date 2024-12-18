@@ -5176,6 +5176,7 @@ dependencies = [
 name = "tauri-plugin-speu-mangadex"
 version = "0.3.0"
 dependencies = [
+ "actix",
  "async-graphql",
  "async-stream",
  "bytes",

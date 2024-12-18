@@ -7,7 +7,7 @@ pub enum Error {
     #[error("Tauri Internal Error: {0}")]
     Tauri(#[from] tauri::Error),
     #[error("MangaDex Eureka Manager SDK Error: {0}")]
-    MangadexEurekaManager(#[from] mangadex_desktop_api2::Error),
+    MangadexEurekaManager(#[from] eureka_mmanager::Error),
     #[error("Tauri Plugin Store Error: {0}")]
     TauriStore(#[from] tauri_plugin_store::Error),
     #[error("I/O Error: {0}")]
