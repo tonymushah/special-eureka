@@ -4,14 +4,14 @@ pub mod list;
 
 use std::{collections::HashMap, ops::Deref};
 
-use crate::{error::Error, Result};
+use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
     aggregate::MangaAggregateParam, feed::MangaFeedParams, get_draft::GetMangaDraftParams,
     get_drafts::MangaDraftsParams, get_relation_list::MangaRelationParam, list::MangaListParams,
     random::MangaRandomParams,
 };
-use mangadex_api_types_rust::{MangaRelation, ReadingStatus, RelationshipType};
+use mangadex_api_types_rust::{MangaRelation, ReadingStatus};
 use uuid::Uuid;
 
 use crate::{
@@ -24,12 +24,9 @@ use crate::{
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
     utils::{
-        download_state::DownloadState,
-        get_mangadex_client_from_graphql_context,
-        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context,
-        source::SendMultiSourceData,
-        watch::{SendData, WatcherInnerData},
+        download_state::DownloadState, get_mangadex_client_from_graphql_context,
+        get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_watches_from_graphql_context, source::SendMultiSourceData, watch::SendData,
     },
 };
 
@@ -37,39 +34,15 @@ use self::{
     aggregate::MangaAggregateQueries, get_unique::MangaGetUniqueQueries, list::MangaListQueries,
 };
 
+use super::download_state::DownloadStateQueries;
+
 #[derive(Debug, Clone, Copy)]
 pub struct MangaQueries;
 
 #[Object]
 impl MangaQueries {
     pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let offline_app_state_write = ola.read().await;
-        let olasw = offline_app_state_write
-            .as_ref()
-            .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let state = {
-            if olasw.manga_utils().with_id(id).is_there() {
-                DownloadState::Downloaded {
-                    has_failed: olasw
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::Manga,
-                            &olasw.dir_options,
-                        )
-                        .await?
-                        .is_in(id)?,
-                }
-            } else {
-                DownloadState::NotDownloaded
-            }
-        };
-        let _ = watches.download_state.send_data(WatcherInnerData {
-            id,
-            attributes: state,
-        });
-        Ok(state)
+        DownloadStateQueries.manga(ctx, id).await
     }
     pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<Manga> {
         MangaGetUniqueQueries {
