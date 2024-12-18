@@ -1,7 +1,12 @@
-use crate::scheme::{get_offline_app_state, SchemeResponseError, SchemeResponseResult};
+use crate::{
+    scheme::{SchemeResponseError, SchemeResponseResult},
+    utils::traits_utils::MangadexTauriManagerExt,
+};
 use bytes::{BufMut, Bytes, BytesMut};
+use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
 use std::{
     io::{self, Write},
+    ops::Deref,
     path::Path,
 };
 use tauri::{api::http::StatusCode, AppHandle, Runtime};
@@ -17,25 +22,25 @@ pub struct ChaptersHandlerOffline<'a, R: Runtime> {
 }
 
 impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
-    fn chapter_util(&'a self) -> SchemeResponseResult<ChapterUtilsWithID> {
-        let offline_app_state = get_offline_app_state(self.app_handle)?;
-        let app_state_read = offline_app_state.blocking_read();
-        let app_state = app_state_read
-            .as_ref()
-            .ok_or(SchemeResponseError::NotLoaded)?;
-        let chapter_util = app_state.chapter_utils().with_id(self.chapter_id);
-        Ok(chapter_util)
-    }
     fn get_image(&'a self) -> SchemeResponseResult<Bytes> {
-        let chapter_util = self.chapter_util()?;
+        let inner__ = self
+            .app_handle
+            .get_offline_app_state()?
+            .deref()
+            .deref()
+            .clone();
+        let state = tauri::async_runtime::block_on(inner__.read_owned());
+        let inner_state = state.as_ref().ok_or(SchemeResponseError::NotLoaded)?;
         let mut buf = BytesMut::new().writer();
         let mut file = match self.mode {
-            ChapterMode::Data => chapter_util
-                .get_data_image(self.filename.clone())
-                .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
-            ChapterMode::DataSaver => chapter_util
-                .get_data_saver_image(self.filename.clone())
-                .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
+            ChapterMode::Data => tauri::async_runtime::block_on(
+                inner_state.get_chapter_image(self.chapter_id, self.filename.clone()),
+            )
+            .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
+            ChapterMode::DataSaver => tauri::async_runtime::block_on(
+                inner_state.get_chapter_image_data_saver(self.chapter_id, self.filename.clone()),
+            )
+            .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
         };
         io::copy(&mut file, &mut buf)?;
         buf.flush()?;
