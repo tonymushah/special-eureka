@@ -88,6 +88,8 @@ pub enum Error {
     ActixMailbox(#[from] actix::MailboxError),
     #[error("{0}")]
     Unknown(String),
+    #[error(transparent)]
+    WaitForFinished(#[from] eureka_mmanager::download::state::WaitForFinishedError),
 }
 
 impl Error {
