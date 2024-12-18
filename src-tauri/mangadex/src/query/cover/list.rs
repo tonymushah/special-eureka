@@ -39,12 +39,12 @@ impl CoverListQuery {
             let res: CoverCollection = Collection::from_async_stream(
                 {
                     let mut stream: Pin<Box<dyn Stream<Item = CoverObject> + Send>> =
-                        if self.params.manga_ids.is_empty() {
+                        if self.params.cover_ids.is_empty() {
                             Box::pin(app_state.get_covers().await?)
                         } else {
                             Box::pin(
                                 app_state
-                                    .get_covers_by_ids(self.params.manga_ids.clone().into_iter())
+                                    .get_covers_by_ids(self.params.cover_ids.clone().into_iter())
                                     .await?,
                             )
                         };
