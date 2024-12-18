@@ -13,7 +13,7 @@ pub enum Error {
     #[error("an io error occured {0}")]
     Io(#[from] std::io::Error),
     #[error("An internal manager error occures : {0}")]
-    InternalServer(#[from] mangadex_desktop_api2::Error),
+    InternalServer(#[from] eureka_mmanager::Error),
     #[error("Internal Tauri Error : {0}")]
     Tauri(#[from] tauri::Error),
     #[error("Serde json serialization error : {0}")]
