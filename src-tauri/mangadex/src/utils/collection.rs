@@ -53,6 +53,9 @@ where
     pub fn get_data(&self) -> &Vec<T> {
         &self.data
     }
+    pub fn get_data_mut(&mut self) -> &mut Vec<T> {
+        &mut self.data
+    }
     pub fn get_total(&self) -> usize {
         self.total
     }
@@ -62,14 +65,14 @@ where
     pub fn get_limit(&self) -> usize {
         self.limit
     }
-    pub fn convert_to<S, F>(&self, f: F) -> crate::Result<Collection<S>>
+    pub fn convert_to<S, F>(self, f: F) -> crate::Result<Collection<S>>
     where
         F: Fn(T) -> S,
         S: Clone,
         S: serde::Serialize,
     {
         Ok(Collection {
-            data: self.data.iter().cloned().map(f).collect(),
+            data: self.data.into_iter().map(f).collect(),
             offset: self.offset,
             limit: self.limit,
             total: self.total,
