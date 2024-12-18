@@ -8,11 +8,14 @@ use crate::app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use self::{store::MangaDexStoreState, watch::Watches};
 static mut INDENTIFIER: OnceCell<String> = OnceCell::new();
 
+pub mod collection;
 pub mod download_state;
 pub mod source;
 pub mod store;
 pub mod traits_utils;
 pub mod watch;
+
+pub use collection::Collection;
 
 use traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
 
