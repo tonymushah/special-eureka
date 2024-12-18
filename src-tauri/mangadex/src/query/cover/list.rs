@@ -40,18 +40,12 @@ impl CoverListQuery {
                 {
                     let mut stream: Pin<Box<dyn Stream<Item = CoverObject> + Send>> =
                         if self.params.manga_ids.is_empty() {
-                            Box::pin(
-                                app_state
-                                    .get_covers()
-                                    .await?
-                                    .to_filtered_into(params.clone()),
-                            )
+                            Box::pin(app_state.get_covers().await?)
                         } else {
                             Box::pin(
                                 app_state
                                     .get_covers_by_ids(self.params.manga_ids.clone().into_iter())
-                                    .await?
-                                    .to_filtered_into(params.clone()),
+                                    .await?,
                             )
                         };
                     stream = if let Some(order) = self.params.order.clone() {
@@ -59,7 +53,7 @@ impl CoverListQuery {
                     } else {
                         stream
                     };
-                    stream
+                    stream.to_filtered_into(params.clone())
                 },
                 self.params.limit.unwrap_or(10) as usize,
                 self.params.offset.unwrap_or_default() as usize,
