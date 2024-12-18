@@ -2,6 +2,7 @@ use std::ops::Deref;
 
 use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
+use eureka_mmanager::prelude::{AsyncIntoMangaAggreagate, ChapterDataPullAsyncTrait};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;
 use uuid::Uuid;
 
@@ -76,17 +77,10 @@ impl MangaAggregateQueries {
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         let mut res: MangaAggregate = app_state
-            .manga_utils()
-            .with_id(self.manga_id)
-            .aggregate_manga_chapter(
-                MangaAggregateParams {
-                    translated_language: self.translated_language.clone(),
-                    groups: self.groups.clone(),
-                    ..Default::default()
-                },
-                app_state.deref(),
-            )
+            .get_chapters()
             .await?
+            .aggregate(self.0.clone())
+            .await
             .into();
         if is_reversed {
             res.reverse()
