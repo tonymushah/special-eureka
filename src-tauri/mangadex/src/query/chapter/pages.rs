@@ -1,5 +1,8 @@
+use std::path::Path;
+
 use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
+use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
 use url::Url;
 use uuid::Uuid;
 
@@ -38,15 +41,14 @@ impl ChapterPagesQuery {
         let inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let chapter_utils = inner_off_state.chapter_utils().with_id(id);
-        let data: Vec<Url> = chapter_utils
-            .get_data_images()
-            .unwrap_or_default()
-            .into_iter()
+        let at_home = inner_off_state.get_chapter_images(id).await?;
+        let data: Vec<Url> = at_home
+            .data
+            .iter()
             .flat_map(|i| {
-                let ext = i.extension().and_then(|e| e.to_str())?;
+                let ext = Path::new(i).extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
-                    let i = i.to_str()?;
+                    let i = i.as_str();
                     Url::parse(
                         format!("{}chapter/{id}/data/{i}", crate::constants::PROTOCOL).as_str(),
                     )
@@ -56,14 +58,13 @@ impl ChapterPagesQuery {
                 }
             })
             .collect();
-        let data_saver: Vec<Url> = chapter_utils
-            .get_data_saver_images()
-            .unwrap_or_default()
-            .into_iter()
+        let data_saver: Vec<Url> = at_home
+            .data_saver
+            .iter()
             .flat_map(|i| {
-                let ext = i.extension().and_then(|e| e.to_str())?;
+                let ext = Path::new(i).extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
-                    let i = i.to_str()?;
+                    let i = i.as_str();
                     Url::parse(
                         format!("{}chapter/{id}/data-saver/{i}", crate::constants::PROTOCOL)
                             .as_str(),
