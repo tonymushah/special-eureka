@@ -1,6 +1,10 @@
-use std::io::{self, Write};
+use std::{
+    io::{self, BufReader, Write},
+    ops::Deref,
+};
 
 use bytes::{Buf, BufMut, Bytes, BytesMut};
+use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use regex::Regex;
 use tauri::{
     http::{status::StatusCode, Request},
@@ -8,7 +12,7 @@ use tauri::{
 };
 use uuid::Uuid;
 
-use crate::{cache::cover::CoverImageCache, scheme::get_offline_app_state};
+use crate::{cache::cover::CoverImageCache, utils::traits_utils::MangadexTauriManagerExt};
 
 use super::{parse_uri, SchemeResponseError, SchemeResponseResult};
 
@@ -104,22 +108,21 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
         let cache: CoverImageCache = self.param.clone().try_into()?;
         cache.get_from_cache()
     }
-    fn cover_utils(&self) -> SchemeResponseResult<CoverUtilsWithId> {
-        let offline_app_state = get_offline_app_state(self.app)?;
-        let app_state_read = offline_app_state.blocking_read();
-        let app_state = app_state_read
-            .as_ref()
-            .ok_or(SchemeResponseError::NotLoaded)?;
-        // let mut to_res = Vec::<u8>::new();
-        Ok(app_state.cover_utils().with_id(self.param.cover_id))
-    }
+
     pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response> {
         let mut buf = BytesMut::new().writer();
         if let Ok(cache) = self.get_from_cache() {
             io::copy(&mut (cache.reader()), &mut buf)?;
         } else {
-            let cover_utils = self.cover_utils()?;
-            io::copy(&mut cover_utils.get_image_buf_reader()?, &mut buf)?;
+            let inner__ = self.app.get_offline_app_state()?.deref().deref().clone();
+            let state = tauri::async_runtime::block_on(inner__.read_owned());
+            let inner_state = state.as_ref().ok_or(SchemeResponseError::NotLoaded)?;
+            io::copy(
+                &mut BufReader::new(tauri::async_runtime::block_on(
+                    inner_state.get_cover_image(self.param.cover_id),
+                )?),
+                &mut buf,
+            )?;
         }
 
         buf.flush()?;
