@@ -1,5 +1,6 @@
 use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
+use eureka_mmanager::prelude::*;
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
@@ -40,11 +41,7 @@ impl GetUniqueChapterQuery {
         let inner_off_state = read_off_state
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let chapter: Chapter = inner_off_state
-            .chapter_utils()
-            .with_id(id)
-            .get_data()?
-            .into();
+        let chapter: Chapter = inner_off_state.get_chapter(id).await?.into();
         let _ = watches.chapter.send_offline(chapter.clone());
         Ok(chapter)
     }
