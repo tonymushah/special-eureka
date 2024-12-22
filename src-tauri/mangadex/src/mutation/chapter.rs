@@ -4,9 +4,7 @@ use actix::prelude::*;
 use async_graphql::{Context, Enum, Object};
 use eureka_mmanager::{
     download::{
-        chapter::{task::DownloadMode as MDM, ChapterDownloadMessage},
-        cover::CoverDownloadMessage,
-        manga::MangaDownloadMessage,
+        chapter::ChapterDownloadMessage, cover::CoverDownloadMessage, manga::MangaDownloadMessage,
         state::DownloadMessageState,
     },
     history::service::messages::is_in::IsInMessage,
@@ -24,11 +22,8 @@ use crate::{
     ins_handle::{add_in_chapter_failed, add_in_chapter_queue, add_in_chapter_success},
     objects::chapter::Chapter,
     utils::{
-        download_state::DownloadState,
-        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context,
-        source::SendMultiSourceData,
-        watch::{SendData, WatcherInnerData},
+        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
     },
 };
 
@@ -168,7 +163,7 @@ impl ChapterMutations {
             Ok(state)
         } else {
             add_in_chapter_success(id)?;
-            let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            //let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
             let data: Chapter = olasw.get_chapter(id).await?.into();
             let _ = watches.chapter.send_offline(data.clone());
             Ok(state)
