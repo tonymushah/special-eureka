@@ -42,7 +42,7 @@ pub struct MangaMutations;
 #[Object]
 impl MangaMutations {
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
-        // let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
@@ -101,7 +101,8 @@ impl MangaMutations {
         })
         .await;
         let state = DownloadStateQueries.manga(ctx, id).await?;
-        let _manga = res??;
+        let manga = res??;
+        let _ = watches.manga.send_offline(Into::<Manga>::into(manga));
         Ok(state)
     }
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
