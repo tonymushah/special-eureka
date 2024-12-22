@@ -1,18 +1,26 @@
-use crate::{error::Error, Result};
+use crate::{
+    error::Error,
+    objects::manga::MangaObject as SelfMangaObject,
+    query::download_state::DownloadStateQueries,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
+};
+use actix::Addr;
 use async_graphql::{Context, Object};
+use eureka_mmanager::prelude::DeleteDataAsyncTrait;
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
-use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{
+    v5::{CoverAttributes, RelatedAttributes},
+    ApiObjectNoRelationships,
+};
 use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
 use crate::{
     objects::cover::Cover,
     utils::{
-        download_state::DownloadState,
-        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
-        get_watches_from_graphql_context,
-        source::SendMultiSourceData,
-        watch::{SendData, WatcherInnerData},
+        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
+        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
     },
 };
 
@@ -48,40 +56,89 @@ impl CoverMutations {
         Ok(true)
     }
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
+        let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
-        let mut olasw = offline_app_state_write
+        let olasw = offline_app_state_write
             .clone()
             .map(|a| a.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let data: Cover = olasw
-            .cover_download(id)
-            .download(&mut olasw)
-            .await?
-            .data
-            .into();
-        let state = {
-            if olasw.cover_utils().with_id(id).is_there() {
-                DownloadState::Downloaded {
-                    has_failed: olasw
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::CoverArt,
-                            &olasw.dir_options,
-                        )
-                        .await?
-                        .is_in(id)?,
-                }
-            } else {
-                DownloadState::NotDownloaded
+        let manager = olasw.clone();
+        let res = tauri::async_runtime::spawn(async move {
+            use eureka_mmanager::{
+                download::{
+                    cover::CoverDownloadMessage, manga::MangaDownloadMessage,
+                    state::DownloadMessageState,
+                },
+                history::service::messages::is_in::IsInMessage,
+                prelude::{
+                    AsyncCanBeWaited, CoverDownloadManager, DownloadManager, GetManager,
+                    GetManagerStateData, HistoryEntry, MangaDownloadManager,
+                },
+            };
+            use log::{info, trace};
+
+            let watches = tauri_handle.get_watches()?;
+            trace!("Downloading Cover {id}");
+            let dirs =
+                <Addr<DownloadManager> as GetManagerStateData>::get_dir_options(&manager).await?;
+            let (cover, manga) = {
+                let manga_manager =
+                    <Addr<DownloadManager> as GetManager<CoverDownloadManager>>::get(&manager)
+                        .await?;
+                let mut task = manga_manager
+                    .send(CoverDownloadMessage::new(id).state(DownloadMessageState::Downloading))
+                    .await?;
+                let data = task.wait().await?.await?;
+                info!(
+                    "downloaded cover {} = {:?}",
+                    data.id, data.attributes.file_name
+                );
+                let cover = data
+                    .find_first_relationships(RelationshipType::Manga)
+                    .ok_or(Error::msg(format!(
+                        "Cannot find the title for cover art {}",
+                        id,
+                    )))?
+                    .clone();
+                (data, cover)
+            };
+            if !dirs
+                .send(IsInMessage(HistoryEntry::new(
+                    manga.id,
+                    RelationshipType::Manga,
+                )))
+                .await?
+            {
+                trace!("Downloading title {}", manga.id);
+                let manga_manager =
+                    <Addr<DownloadManager> as GetManager<MangaDownloadManager>>::get(&manager)
+                        .await?;
+                let mut task = manga_manager
+                    .send(
+                        MangaDownloadMessage::new(manga.id)
+                            .state(DownloadMessageState::Downloading),
+                    )
+                    .await?;
+                watches
+                    .manga
+                    .send_offline(Into::<SelfMangaObject>::into(task.wait().await?.await?));
+                info!(
+                    "downloaded title {} = {:?}",
+                    manga.id,
+                    manga.attributes.and_then(|attr| {
+                        let RelatedAttributes::Manga(manga) = attr else {
+                            return None;
+                        };
+                        manga.title.values().next().cloned()
+                    })
+                );
             }
-        };
-        let _ = watches.download_state.send_data(WatcherInnerData {
-            id,
-            attributes: state,
-        });
-        let _ = watches.cover.send_offline(data.clone());
+            Ok::<_, Error>(cover)
+        })
+        .await;
+        let state = DownloadStateQueries.cover(ctx, id).await?;
+        res??;
         Ok(state)
     }
     pub async fn remove(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
@@ -90,7 +147,7 @@ impl CoverMutations {
         let olasw = offline_app_state_write
             .clone()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        olasw.cover_utils().with_id(id).delete()?;
+        olasw.app_state.delete_cover(id).await?;
         Ok(true)
     }
 }
