@@ -1,3 +1,4 @@
+use actix::System;
 use tauri::{App, Manager, Runtime};
 #[cfg(any(windows, target_os = "macos"))]
 use window_shadows::set_shadow;
@@ -12,6 +13,9 @@ type SetupResult = Result<(), Box<dyn std::error::Error>>;
 
 pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
     app.manage(LastFocusedWindow::<R>::default());
+    if let Some(system) = System::try_current() {
+        app.manage(system);
+    }
     #[cfg(any(windows, target_os = "macos"))]
     if let Some(splashscreen) = app.get_window("splashscreen") {
         set_shadow(&splashscreen, true).unwrap();
