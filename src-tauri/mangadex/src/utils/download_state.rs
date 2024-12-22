@@ -10,10 +10,7 @@ pub enum DownloadState {
 #[Object]
 impl DownloadState {
     pub async fn is_downloaded(&self) -> bool {
-        match self {
-            DownloadState::Downloaded { .. } => true,
-            _ => false,
-        }
+        matches!(self, DownloadState::Downloaded { .. })
     }
     pub async fn has_failed(&self) -> bool {
         match self {
