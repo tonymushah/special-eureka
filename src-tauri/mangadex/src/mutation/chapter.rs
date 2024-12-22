@@ -1,4 +1,9 @@
-use crate::{error::Error, query::download_state::DownloadStateQueries, Result};
+use crate::{
+    error::Error,
+    objects::{cover::Cover, manga::MangaObject as SelfMangaObject},
+    query::download_state::DownloadStateQueries,
+    Result,
+};
 
 use actix::prelude::*;
 use async_graphql::{Context, Enum, Object};
@@ -22,8 +27,11 @@ use crate::{
     ins_handle::{add_in_chapter_failed, add_in_chapter_queue, add_in_chapter_success},
     objects::chapter::Chapter,
     utils::{
-        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
+        download_state::DownloadState,
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context,
+        source::SendMultiSourceData,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
 };
 
@@ -64,6 +72,7 @@ impl ChapterMutations {
         id: Uuid,
         #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
     ) -> Result<DownloadState> {
+        let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola: tauri::State<'_, crate::app_state::OfflineAppState> =
             get_offline_app_state::<tauri::Wry>(ctx)?;
@@ -75,6 +84,7 @@ impl ChapterMutations {
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         let olasw_ = olasw.clone();
         let res = spawn(async move {
+            let watches = tauri_handle.get_watches()?;
             let mode: MDDownloadMode = quality.into();
             let manager = olasw_;
             trace!("Downloading title {id}");
@@ -121,6 +131,9 @@ impl ChapterMutations {
                         )
                         .await?;
                     let data = task.wait().await?.await?;
+                    let _ = watches
+                        .manga
+                        .send_offline(Into::<SelfMangaObject>::into(data.clone()));
                     info!(
                         "downloaded title {} = {:?}",
                         data.id,
@@ -150,7 +163,9 @@ impl ChapterMutations {
                                 .state(DownloadMessageState::Downloading),
                         )
                         .await?;
-                    task.wait().await?.await?;
+                    let _ = watches
+                        .cover
+                        .send_offline(Into::<Cover>::into(task.wait().await?.await?));
                     info!("Downloaded {} cover art", cover.id);
                 }
             }

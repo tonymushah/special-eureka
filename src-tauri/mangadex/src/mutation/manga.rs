@@ -1,6 +1,12 @@
 use std::collections::HashMap;
 
-use crate::{error::Error, query::download_state::DownloadStateQueries, Result};
+use crate::{
+    error::Error,
+    objects::cover::Cover,
+    query::download_state::DownloadStateQueries,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
+};
 use actix::Addr;
 use async_graphql::{Context, Object};
 use eureka_mmanager::{
@@ -42,6 +48,7 @@ pub struct MangaMutations;
 #[Object]
 impl MangaMutations {
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
+        let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
@@ -53,6 +60,7 @@ impl MangaMutations {
         let res = tauri::async_runtime::spawn(async move {
             use log::{info, trace};
             trace!("Downloading title {id}");
+            let watches = tauri_handle.get_watches()?;
             let dirs =
                 <Addr<DownloadManager> as GetManagerStateData>::get_dir_options(&manager).await?;
             let (manga, cover) = {
@@ -94,7 +102,9 @@ impl MangaMutations {
                             .state(DownloadMessageState::Downloading),
                     )
                     .await?;
-                task.wait().await?.await?;
+                watches
+                    .cover
+                    .send_offline(Into::<Cover>::into(task.wait().await?.await?));
                 info!("Downloaded {} cover art", cover.id);
             }
             Ok::<_, Error>(manga)
