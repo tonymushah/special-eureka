@@ -120,7 +120,7 @@ impl CoverMutations {
                             .state(DownloadMessageState::Downloading),
                     )
                     .await?;
-                watches
+                let _ = watches
                     .manga
                     .send_offline(Into::<SelfMangaObject>::into(task.wait().await?.await?));
                 info!(

@@ -63,7 +63,7 @@ impl AppStateInner {
                         let sub_inner = sub.borrow().as_ref().cloned();
                         if let Some(data) = sub_inner {
                             let data: ApiObjectNoRelationships<ChapterAttributes> = data.into();
-                            app_state1
+                            let _ = app_state1
                                 .verify_and_push(Into::<ChapterObject>::into(data))
                                 .await;
                         }
@@ -81,7 +81,7 @@ impl AppStateInner {
                         let sub_inner = sub.borrow().as_ref().cloned();
                         if let Some(data) = sub_inner {
                             let data: ApiObjectNoRelationships<MangaAttributes> = data.into();
-                            app_state2
+                            let _ = app_state2
                                 .verify_and_push(Into::<MangaObject>::into(data))
                                 .await;
                         }
@@ -99,7 +99,7 @@ impl AppStateInner {
                         let sub_inner = sub.borrow().as_ref().cloned();
                         if let Some(data) = sub_inner {
                             let data: ApiObjectNoRelationships<CoverAttributes> = data.into();
-                            app_state3
+                            let _ = app_state3
                                 .verify_and_push(Into::<CoverObject>::into(data))
                                 .await;
                         }

@@ -102,7 +102,7 @@ impl MangaMutations {
                             .state(DownloadMessageState::Downloading),
                     )
                     .await?;
-                watches
+                let _ = watches
                     .cover
                     .send_offline(Into::<Cover>::into(task.wait().await?.await?));
                 info!("Downloaded {} cover art", cover.id);
