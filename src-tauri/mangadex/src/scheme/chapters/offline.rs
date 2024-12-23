@@ -29,18 +29,27 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
             .deref()
             .deref()
             .clone();
-        let state = tauri::async_runtime::block_on(inner__.read_owned());
-        let inner_state = state.as_ref().ok_or(SchemeResponseError::NotLoaded)?;
+        let state = crate::utils::block_on(inner__.read_owned());
+        let inner_state = state
+            .as_ref()
+            .ok_or(SchemeResponseError::NotLoaded)?
+            .clone();
         let mut buf = BytesMut::new().writer();
-        let mut file = match self.mode {
-            ChapterMode::Data => tauri::async_runtime::block_on(
-                inner_state.get_chapter_image(self.chapter_id, self.filename.clone()),
-            )
-            .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
-            ChapterMode::DataSaver => tauri::async_runtime::block_on(
-                inner_state.get_chapter_image_data_saver(self.chapter_id, self.filename.clone()),
-            )
-            .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
+        let mut file = {
+            let chapter_id = self.chapter_id;
+            let filename = self.filename.clone();
+            match self.mode {
+                ChapterMode::Data => crate::utils::block_on(async move {
+                    inner_state.get_chapter_image(chapter_id, filename).await
+                })
+                .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
+                ChapterMode::DataSaver => crate::utils::block_on(async move {
+                    inner_state
+                        .get_chapter_image_data_saver(chapter_id, filename.clone())
+                        .await
+                })
+                .map_err(|_| not_found_chapter_image(self.chapter_id, &self.filename))?,
+            }
         };
         io::copy(&mut file, &mut buf)?;
         buf.flush()?;

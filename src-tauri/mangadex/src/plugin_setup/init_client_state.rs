@@ -26,9 +26,9 @@ pub fn init_client_state<R: Runtime>(
     let last_time_fetched: LastTimeTokenWhenFecthed = Default::default();
     let ltf = last_time_fetched.clone();
     let client = app.state::<MangaDexClient>();
-    let _ci = client.clone();
+    let _ci = (*client).clone();
     if let Some(info) = cis.as_ref().map(|i| -> Info { i.clone().into() }) {
-        tauri::async_runtime::block_on(async move {
+        crate::utils::block_on(async move {
             _ci.set_client_info(&info).await?;
             Ok::<(), mangadex_api_types_rust::error::Error>(())
         })?;

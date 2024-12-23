@@ -42,15 +42,18 @@ impl AppStateInner {
         let watches1 = app.get_watches()?.deref().clone();
         let watches2 = watches1.clone();
         let watches3 = watches2.clone();
+        println!("starting..,");
         // TODO import dir option from runtime
         let app_state = DownloadManager::new(
             DirsOptions::new_from_data_dir("./data").start(),
             client.deref().clone(),
         )
         .start();
+        println!("Started!");
         let app_state1 = app_state.clone();
         let app_state2 = app_state.clone();
         let app_state3 = app_state.clone();
+
         Ok(Self {
             app_state,
             chapter_listen: Arc::new(spawn(async move {

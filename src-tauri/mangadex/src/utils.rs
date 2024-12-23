@@ -1,6 +1,6 @@
 use mangadex_api::MangaDexClient;
 use once_cell::sync::OnceCell;
-use std::io::Result;
+use std::{future::Future, io::Result};
 use tauri::{AppHandle, Runtime, State, Window};
 
 use crate::app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
@@ -143,4 +143,14 @@ pub(crate) fn get_store<'ctx, R: Runtime>(
     ctx: &async_graphql::Context<'ctx>,
 ) -> crate::Result<State<'ctx, MangaDexStoreState<R>>> {
     get_app_handle_from_async_graphql::<R>(ctx)?.get_mangadex_store()
+}
+
+pub fn block_on<F>(fut: F) -> F::Output
+where
+    F: Future + Send + 'static,
+    F::Output: Send + 'static,
+{
+    std::thread::spawn(move || tauri::async_runtime::block_on(fut))
+        .join()
+        .unwrap()
 }

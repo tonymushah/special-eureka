@@ -115,14 +115,20 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
             io::copy(&mut (cache.reader()), &mut buf)?;
         } else {
             let inner__ = self.app.get_offline_app_state()?.deref().deref().clone();
-            let state = tauri::async_runtime::block_on(inner__.read_owned());
-            let inner_state = state.as_ref().ok_or(SchemeResponseError::NotLoaded)?;
-            io::copy(
-                &mut BufReader::new(tauri::async_runtime::block_on(
-                    inner_state.get_cover_image(self.param.cover_id),
-                )?),
-                &mut buf,
-            )?;
+            let state = crate::utils::block_on(inner__.read_owned());
+            let inner_state = state
+                .as_ref()
+                .ok_or(SchemeResponseError::NotLoaded)?
+                .clone();
+            {
+                let id = self.param.cover_id;
+                io::copy(
+                    &mut BufReader::new(crate::utils::block_on(async move {
+                        inner_state.get_cover_image(id).await
+                    })?),
+                    &mut buf,
+                )?;
+            }
         }
 
         buf.flush()?;

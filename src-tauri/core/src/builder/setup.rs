@@ -14,6 +14,7 @@ type SetupResult = Result<(), Box<dyn std::error::Error>>;
 pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
     app.manage(LastFocusedWindow::<R>::default());
     if let Some(system) = System::try_current() {
+        println!("has sys!");
         app.manage(system);
     }
     #[cfg(any(windows, target_os = "macos"))]
