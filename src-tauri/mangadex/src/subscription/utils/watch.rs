@@ -1,11 +1,10 @@
 use async_graphql::Context as GQLContext;
-use tauri::{EventHandler, Runtime, Window, WindowEvent};
+use tauri::{Runtime, Window};
 use tokio::{
     select,
     sync::watch::{Receiver, Sender},
 };
 use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
-use tokio_util::sync::CancellationToken;
 use uuid::Uuid;
 
 use std::{
@@ -19,17 +18,27 @@ use crate::utils::{
     get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches,
 };
 
+use super::cancel_token::WindowCancellationToken;
+
 pub struct WatchSubscriptionStream<R, T>
 where
     R: Runtime,
     T: Clone + 'static + Send + Sync,
 {
-    window: Window<R>,
+    win_cancel_token: WindowCancellationToken<R>,
     recv: WatchStream<T>,
-    cancel_token: CancellationToken,
-    sub_id_handler: EventHandler,
     _recv: Receiver<T>,
-    sub_id: Uuid,
+}
+
+impl<R, T> Deref for WatchSubscriptionStream<R, T>
+where
+    R: Runtime,
+    T: Clone + 'static + Send + Sync,
+{
+    type Target = WindowCancellationToken<R>;
+    fn deref(&self) -> &Self::Target {
+        &self.win_cancel_token
+    }
 }
 
 impl<R, T> Unpin for WatchSubscriptionStream<R, T>
@@ -39,17 +48,6 @@ where
 {
 }
 
-impl<R, T> Drop for WatchSubscriptionStream<R, T>
-where
-    R: Runtime,
-    T: Clone + 'static + Send + Sync,
-{
-    fn drop(&mut self) {
-        // println!("unlisten");
-        self.window.unlisten(self.sub_id_handler);
-    }
-}
-
 impl<R, T> Clone for WatchSubscriptionStream<R, T>
 where
     R: Runtime,
@@ -57,7 +55,7 @@ where
 {
     /// Create a separate watch subscription stream but stops when the window is destroyed or
     fn clone(&self) -> Self {
-        Self::new(self._recv.clone(), self.window.clone(), self.sub_id)
+        Self::new(self._recv.clone(), self.window().clone(), self.sub_id())
     }
 }
 impl<R, T> WatchSubscriptionStream<R, T>
@@ -66,48 +64,10 @@ where
     T: Clone + 'static + Send + Sync,
 {
     pub fn new(recv: Receiver<T>, window: Window<R>, sub_id: Uuid) -> Self {
-        let cancel_token = CancellationToken::new();
-        {
-            let window_event_cancel_token = cancel_token.clone();
-            window.on_window_event(move |e| {
-                if let WindowEvent::Destroyed = e {
-                    // println!("Destroyed");
-                    window_event_cancel_token.cancel();
-                }
-            });
-        }
-        let sub_id_handler = {
-            let window_event_cancel_token = cancel_token.clone();
-            window.listen("sub_end", move |e| {
-                if let Some(id) =
-                    e.payload()
-                        .map(|p| p.trim().replace('\"', ""))
-                        .and_then(|payload| {
-                            Uuid::parse_str(&payload)
-                                /*
-                                    .map_err(|er| {
-                                        #[cfg(debug_assertions)]
-                                        eprintln!("{:#?}", er);
-                                        er
-                                    })
-                                */
-                                .ok()
-                        })
-                {
-                    if id == sub_id {
-                        // println!("sub_end");
-                        window_event_cancel_token.cancel();
-                    }
-                }
-            })
-        };
         Self {
-            window,
             recv: WatchStream::new(recv.clone()),
-            cancel_token,
-            sub_id_handler,
             _recv: recv,
-            sub_id,
+            win_cancel_token: WindowCancellationToken::new(window, sub_id),
         }
     }
 
@@ -136,9 +96,6 @@ where
         let to_use: &W = watches.as_ref();
         Ok(Self::new(to_use.subscribe(), window, sub_id))
     }
-    pub fn cancel_token(&self) -> CancellationToken {
-        self.cancel_token.clone()
-    }
 }
 
 impl<R, T> Stream for WatchSubscriptionStream<R, T>
@@ -149,7 +106,7 @@ where
     type Item = T;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        let cancel_token = self.cancel_token.child_token();
+        let cancel_token = self.cancel_token().child_token();
         let recv_stream = self.recv.next();
         let res = async {
             select! {
