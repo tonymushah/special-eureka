@@ -53,7 +53,7 @@ impl MangaMutations {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .clone()
+            .as_ref()
             .map(|a| a.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         let manager = olasw.clone();
@@ -147,9 +147,10 @@ impl MangaMutations {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .clone()
+            .as_ref()
+            .map(|a| a.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let _res = olasw.app_state.delete_manga(id).await?;
+        let _res = olasw.delete_manga(id).await?;
         Ok(true)
     }
     pub async fn follow(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {

@@ -1,3 +1,5 @@
+pub mod chapter;
+
 use crate::Result;
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;

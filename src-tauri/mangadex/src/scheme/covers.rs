@@ -118,8 +118,8 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
             let state = crate::utils::block_on(inner__.read_owned());
             let inner_state = state
                 .as_ref()
-                .ok_or(SchemeResponseError::NotLoaded)?
-                .clone();
+                .map(|e| e.app_state.clone())
+                .ok_or(SchemeResponseError::NotLoaded)?;
             {
                 let id = self.param.cover_id;
                 io::copy(

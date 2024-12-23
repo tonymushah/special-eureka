@@ -79,7 +79,7 @@ impl ChapterMutations {
         add_in_chapter_queue(id)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .clone()
+            .as_ref()
             .map(|a| a.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         let olasw_ = olasw.clone();

@@ -16,7 +16,7 @@ use tauri::{
 
 use crate::utils::traits_utils::{MangaDexActixArbiterHandleExt, MangadexTauriManagerExt};
 
-#[derive(Clone)]
+#[derive(Debug)]
 pub struct AppStateInner {
     pub app_state: Addr<DownloadManager>,
     cover_listen: Arc<JoinHandle<()>>,

@@ -32,8 +32,9 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
         let state = crate::utils::block_on(inner__.read_owned());
         let inner_state = state
             .as_ref()
-            .ok_or(SchemeResponseError::NotLoaded)?
-            .clone();
+            .map(|e| e.app_state.clone())
+            .ok_or(SchemeResponseError::NotLoaded)?;
+
         let mut buf = BytesMut::new().writer();
         let mut file = {
             let chapter_id = self.chapter_id;
