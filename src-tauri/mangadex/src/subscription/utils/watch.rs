@@ -28,6 +28,8 @@ where
     recv: WatchStream<T>,
     cancel_token: CancellationToken,
     sub_id_handler: EventHandler,
+    _recv: Receiver<T>,
+    sub_id: Uuid,
 }
 
 impl<R, T> Unpin for WatchSubscriptionStream<R, T>
@@ -48,6 +50,16 @@ where
     }
 }
 
+impl<R, T> Clone for WatchSubscriptionStream<R, T>
+where
+    R: Runtime,
+    T: Clone + 'static + Send + Sync,
+{
+    /// Create a separate watch subscription stream but stops when the window is destroyed or
+    fn clone(&self) -> Self {
+        Self::new(self._recv.clone(), self.window.clone(), self.sub_id)
+    }
+}
 impl<R, T> WatchSubscriptionStream<R, T>
 where
     R: Runtime,
@@ -91,9 +103,11 @@ where
         };
         Self {
             window,
-            recv: WatchStream::new(recv),
+            recv: WatchStream::new(recv.clone()),
             cancel_token,
             sub_id_handler,
+            _recv: recv,
+            sub_id,
         }
     }
 
@@ -121,6 +135,9 @@ where
         let watches = get_watches_from_graphql_context::<R>(ctx)?;
         let to_use: &W = watches.as_ref();
         Ok(Self::new(to_use.subscribe(), window, sub_id))
+    }
+    pub fn cancel_token(&self) -> CancellationToken {
+        self.cancel_token.clone()
     }
 }
 
