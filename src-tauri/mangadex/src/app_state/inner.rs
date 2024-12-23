@@ -14,7 +14,7 @@ use tauri::{
     Manager, Runtime,
 };
 
-use crate::utils::traits_utils::MangadexTauriManagerExt;
+use crate::utils::traits_utils::{MangaDexActixArbiterHandleExt, MangadexTauriManagerExt};
 
 #[derive(Clone)]
 pub struct AppStateInner {
@@ -38,17 +38,25 @@ impl AppStateInner {
         R: Runtime,
         M: Manager<R> + Sync,
     {
-        let client = app.get_mangadex_client()?;
+        let system = app.get_actix_system()?;
+        let client = app.get_mangadex_client()?.deref().clone();
         let watches1 = app.get_watches()?.deref().clone();
         let watches2 = watches1.clone();
         let watches3 = watches2.clone();
         println!("starting..,");
         // TODO import dir option from runtime
-        let app_state = DownloadManager::new(
-            DirsOptions::new_from_data_dir("./data").start(),
-            client.deref().clone(),
-        )
-        .start();
+
+        let app_state = system
+            .arbiter()
+            .spawn_fn_with_data(move || {
+                println!("loading...");
+                let manager =
+                    DownloadManager::new(DirsOptions::new_from_data_dir("./data").start(), client)
+                        .start();
+                println!("Loaded!");
+                manager
+            })
+            .await?;
         println!("Started!");
         let app_state1 = app_state.clone();
         let app_state2 = app_state.clone();

@@ -1,6 +1,10 @@
+use actix::{ArbiterHandle, System};
 use mangadex_api::MangaDexClient;
 use tauri::{AppHandle, Manager, Runtime, State, Window};
-use tokio::time::{Duration, Instant};
+use tokio::{
+    sync::oneshot::channel as oneshot,
+    time::{Duration, Instant},
+};
 
 use std::future::Future;
 
@@ -30,6 +34,10 @@ where
     ) -> crate::Result<State<'_, LastTimeTokenWhenFecthed>> {
         self.try_state()
             .ok_or(crate::Error::LastTimeTokenWhenFecthedNotFound)
+    }
+    fn get_actix_system(&self) -> crate::Result<State<'_, System>> {
+        self.try_state()
+            .ok_or(crate::Error::ActixSystemNotRegistered)
     }
     fn get_mangadex_store(&self) -> crate::Result<State<'_, MangaDexStoreState<R>>> {
         self.try_state().ok_or(crate::Error::MangaDexStoreNotFound)
@@ -122,5 +130,51 @@ impl<'a, 'ctx> MangadexAsyncGraphQLContextExt<'a, 'ctx> for async_graphql::Conte
     fn get_window<R: Runtime>(&'a self) -> crate::Result<&'ctx Window<R>> {
         self.data::<Window<R>>()
             .map_err(|_| crate::Error::NoAccessWindowGQLCtx)
+    }
+}
+
+pub trait MangaDexActixArbiterHandleExt: Sync {
+    fn spawn_with_data<F>(&self, task: F) -> impl Future<Output = crate::Result<F::Output>> + Send
+    where
+        F: Future + Send + 'static,
+        F::Output: Send + 'static;
+    fn spawn_fn_with_data<F, T>(&self, task: F) -> impl Future<Output = crate::Result<T>> + Send
+    where
+        F: FnOnce() -> T + Send + 'static,
+        T: Send + 'static;
+}
+
+impl MangaDexActixArbiterHandleExt for ArbiterHandle {
+    async fn spawn_fn_with_data<F, T>(&self, task: F) -> crate::Result<T>
+    where
+        F: FnOnce() -> T + Send + 'static,
+        T: Send + 'static,
+    {
+        let (rx, tx) = oneshot::<T>();
+        println!("Spawning...");
+        self.spawn_fn(move || {
+            println!("executing task...");
+            let res = task();
+            println!("executed!");
+            let _ = rx.send(res);
+        });
+        tx.await
+            .map_err(|_| crate::Error::SpawnDataResultMissingActixArbiter)
+    }
+    async fn spawn_with_data<F>(&self, task: F) -> crate::Result<F::Output>
+    where
+        F: Future + Send + 'static,
+        F::Output: Send + 'static,
+    {
+        let (rx, tx) = oneshot::<F::Output>();
+        println!("Spawning...");
+        self.spawn(async move {
+            println!("executing task...");
+            let res = task.await;
+            println!("executed!");
+            let _ = rx.send(res);
+        });
+        tx.await
+            .map_err(|_| crate::Error::SpawnDataResultMissingActixArbiter)
     }
 }

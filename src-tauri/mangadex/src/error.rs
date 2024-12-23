@@ -90,6 +90,12 @@ pub enum Error {
     Unknown(String),
     #[error(transparent)]
     WaitForFinished(#[from] eureka_mmanager::download::state::WaitForFinishedError),
+    #[error("the `actix::System` registry is not registred in the Tauri App State")]
+    ActixSystemNotRegistered,
+    #[error("the `actix::System` Arbiter is dead X(")]
+    DeadActixArbiter,
+    #[error("No data was received when receiving the result from an Actix arbiter handle task")]
+    SpawnDataResultMissingActixArbiter,
 }
 
 impl Error {
