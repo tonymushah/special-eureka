@@ -1,22 +1,26 @@
 use actix::System;
 use builder::get_builder;
+use runtime::RuntimeGuard;
 use states::last_focused_window::LastFocusedWindow;
 use tauri::{Manager, WindowEvent, Wry};
 use tokio::runtime::Builder as RuntimeBuilder;
 
 pub(crate) mod builder;
 pub(crate) mod commands;
+pub(crate) mod runtime;
 pub(crate) mod states;
 
 pub fn run() {
-    let system_runner = System::with_tokio_rt(|| {
+    let runtime_guard = RuntimeGuard::new(|| {
         RuntimeBuilder::new_multi_thread()
-            .enable_all()
+            .enable_io()
             .build()
             .unwrap()
-    });
+    })
+    .unwrap();
     let context = tauri::generate_context!();
-    tauri::async_runtime::set(system_runner.runtime().tokio_runtime().handle().clone());
+    System::set_current(runtime_guard.sys().clone());
+    tauri::async_runtime::set(runtime_guard.handle().clone());
 
     match get_builder().build(context) {
         Ok(app) => app.run(|app_handle, e| {
@@ -40,4 +44,5 @@ pub fn run() {
             panic!("{}", error.to_string());
         }
     };
+    runtime_guard.cleanup().unwrap();
 }
