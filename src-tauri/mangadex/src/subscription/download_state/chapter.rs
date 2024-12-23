@@ -1,5 +1,5 @@
 use crate::{
-    subscription::utils::WatchSubscriptionStream,
+    subscription::utils::{cancel_token::WindowCancellationToken, WatchSubscriptionStream},
     utils::{
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
         watch::is_appstate_mounted::IsAppStateMountedWatch,
@@ -121,10 +121,48 @@ impl ChapterDownloadState {
     }
 }
 
+/// TODO implement to Subscriptions
 pub struct ChapterDownloadSubs;
 
 #[Subscription]
 impl ChapterDownloadSubs {
+    pub async fn listen_to_chapter_tasks<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
+        let window = ctx.get_window::<tauri::Wry>()?.clone();
+        let maybe_offline = (*window.get_offline_app_state()?).clone();
+        let offline_read = maybe_offline
+            .read()
+            .await
+            .as_ref()
+            .map(|e| e.app_state.clone())
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
+        let manager =
+            <Addr<DownloadManager> as GetManager<ChapterDownloadManager>>::get(&offline_read)
+                .await?;
+        let notify = manager.notify().await?;
+        let cancel_tok = WindowCancellationToken::new(window, sub_id);
+        let stream = stream! {
+            let cancel_tok = cancel_tok;
+            let token = cancel_tok.cancel_token();
+            loop {
+                select! {
+                    _ = token.cancelled() => {
+                        break;
+                    },
+                    _ = notify.notified() => {
+                        if let Ok(tasks) = manager.tasks_id().await {
+                            yield tasks
+                        }
+                    },
+                    else => break
+                }
+            }
+        };
+        Ok(stream)
+    }
     pub async fn listen_to_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
