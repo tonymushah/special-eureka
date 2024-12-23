@@ -1305,9 +1305,12 @@ export type InfrastructureQueries = {
 
 /** Languages supported by MangaDex. */
 export enum Language {
+  Afrikaans = 'AFRIKAANS',
   Albanian = 'ALBANIAN',
   Arabic = 'ARABIC',
   Azerbaijani = 'AZERBAIJANI',
+  Basque = 'BASQUE',
+  Belarusian = 'BELARUSIAN',
   Bengali = 'BENGALI',
   Bulgarian = 'BULGARIAN',
   Burmese = 'BURMESE',
@@ -1315,6 +1318,7 @@ export enum Language {
   ChineseRomanized = 'CHINESE_ROMANIZED',
   ChineseSimplified = 'CHINESE_SIMPLIFIED',
   ChineseTraditional = 'CHINESE_TRADITIONAL',
+  Chuvash = 'CHUVASH',
   Croatian = 'CROATIAN',
   Czech = 'CZECH',
   Danish = 'DANISH',
@@ -1332,9 +1336,11 @@ export enum Language {
   Hindi = 'HINDI',
   Hungarian = 'HUNGARIAN',
   Indonesian = 'INDONESIAN',
+  Irish = 'IRISH',
   Italian = 'ITALIAN',
   Japanese = 'JAPANESE',
   JapaneseRomanized = 'JAPANESE_ROMANIZED',
+  Javanese = 'JAVANESE',
   Jp = 'JP',
   Kazakh = 'KAZAKH',
   Korean = 'KOREAN',
@@ -1356,6 +1362,7 @@ export enum Language {
   Russian = 'RUSSIAN',
   SerboCroatian = 'SERBO_CROATIAN',
   Slovak = 'SLOVAK',
+  Slovenian = 'SLOVENIAN',
   SpanishCastilian = 'SPANISH_CASTILIAN',
   SpanishLatinAmerican = 'SPANISH_LATIN_AMERICAN',
   Swedish = 'SWEDISH',
@@ -1365,6 +1372,8 @@ export enum Language {
   Turkish = 'TURKISH',
   Ukrainian = 'UKRAINIAN',
   Unknown = 'UNKNOWN',
+  Urdu = 'URDU',
+  Uzbek = 'UZBEK',
   Vietnamese = 'VIETNAMESE'
 }
 
@@ -3076,7 +3085,7 @@ export type UserResults = {
 
 /**
  * User roles that define what a user has permission to do.
- * More details at : https://api.mangadex.org/docs/static-data/#user-roles-enum
+ * More details at : <https://api.mangadex.org/docs/static-data/#user-roles-enum>
  */
 export enum UserRole {
   /** MangaDex admins */
@@ -3108,6 +3117,8 @@ export enum UserRole {
   RolePublicRelations = 'ROLE_PUBLIC_RELATIONS',
   /** Staff */
   RoleStaff = 'ROLE_STAFF',
+  /** MangaDex Supporter */
+  RoleSupporter = 'ROLE_SUPPORTER',
   /** Accounts that haven't had their email address verified yet */
   RoleUnverified = 'ROLE_UNVERIFIED',
   /** A normal account */

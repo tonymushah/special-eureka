@@ -1027,7 +1027,10 @@ Languages supported by MangaDex.
 enum Language {
 	ARABIC
 	AZERBAIJANI
+	AFRIKAANS
 	ALBANIAN
+	BASQUE
+	BELARUSIAN
 	BENGALI
 	BULGARIAN
 	BURMESE
@@ -1035,6 +1038,7 @@ enum Language {
 	CHINESE_ROMANIZED
 	CHINESE_SIMPLIFIED
 	CHINESE_TRADITIONAL
+	CHUVASH
 	CROATIAN
 	CZECH
 	DANISH
@@ -1052,9 +1056,11 @@ enum Language {
 	HINDI
 	HUNGARIAN
 	INDONESIAN
+	IRISH
 	ITALIAN
 	JAPANESE
 	JAPANESE_ROMANIZED
+	JAVANESE
 	JP
 	KAZAKH
 	KOREAN
@@ -1076,6 +1082,7 @@ enum Language {
 	RUSSIAN
 	SERBO_CROATIAN
 	SLOVAK
+	SLOVENIAN
 	SPANISH_CASTILIAN
 	SPANISH_LATIN_AMERICAN
 	SWEDISH
@@ -1084,6 +1091,8 @@ enum Language {
 	THAI
 	TURKISH
 	UKRAINIAN
+	URDU
+	UZBEK
 	VIETNAMESE
 	UNKNOWN
 }
@@ -2281,7 +2290,7 @@ type UserResults {
 
 """
 User roles that define what a user has permission to do.
-More details at : https://api.mangadex.org/docs/static-data/#user-roles-enum
+More details at : <https://api.mangadex.org/docs/static-data/#user-roles-enum>
 """
 enum UserRole {
 	"""
@@ -2353,6 +2362,10 @@ enum UserRole {
 	Important people that in one way or another helped MangaDex
 	"""
 	ROLE_VIP
+	"""
+	MangaDex Supporter
+	"""
+	ROLE_SUPPORTER
 	UNKNOWN
 }
 
