@@ -70,7 +70,11 @@ impl AppStateInner {
                         break;
                     }
                     if sub.has_changed().unwrap_or(false) {
-                        let sub_inner = sub.borrow().as_ref().cloned();
+                        let sub_inner = sub
+                            .borrow()
+                            .as_ref()
+                            .cloned()
+                            .filter(|a| a.attributes.is_online());
                         if let Some(data) = sub_inner {
                             let data: ApiObjectNoRelationships<ChapterAttributes> = data.into();
                             let _ = app_state1
@@ -88,7 +92,11 @@ impl AppStateInner {
                         break;
                     }
                     if sub.has_changed().unwrap_or(false) {
-                        let sub_inner = sub.borrow().as_ref().cloned();
+                        let sub_inner = sub
+                            .borrow()
+                            .as_ref()
+                            .cloned()
+                            .filter(|a| a.attributes.is_online());
                         if let Some(data) = sub_inner {
                             let data: ApiObjectNoRelationships<MangaAttributes> = data.into();
                             let _ = app_state2
@@ -106,7 +114,11 @@ impl AppStateInner {
                         break;
                     }
                     if sub.has_changed().unwrap_or(false) {
-                        let sub_inner = sub.borrow().as_ref().cloned();
+                        let sub_inner = sub
+                            .borrow()
+                            .as_ref()
+                            .cloned()
+                            .filter(|a| a.attributes.is_online());
                         if let Some(data) = sub_inner {
                             let data: ApiObjectNoRelationships<CoverAttributes> = data.into();
                             let _ = app_state3
