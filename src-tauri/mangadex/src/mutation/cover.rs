@@ -7,7 +7,10 @@ use crate::{
 };
 use actix::Addr;
 use async_graphql::{Context, Object};
-use eureka_mmanager::prelude::DeleteDataAsyncTrait;
+use eureka_mmanager::{
+    download::cover::CoverDownloadMessage,
+    prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetCoverDownloadManager, TaskManagerAddr},
+};
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
 use mangadex_api_schema_rust::{
     v5::{CoverAttributes, RelatedAttributes},
@@ -149,6 +152,22 @@ impl CoverMutations {
             .map(|e| e.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         olasw.delete_cover(id).await?;
+        Ok(true)
+    }
+    pub async fn cancel_download(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .map(|e| e.app_state.clone())
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
+        olasw
+            .get_cover_manager()
+            .await?
+            .new_task(CoverDownloadMessage::new(id))
+            .await?
+            .cancel()
+            .await?;
         Ok(true)
     }
 }
