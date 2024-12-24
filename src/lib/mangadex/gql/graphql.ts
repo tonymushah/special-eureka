@@ -386,10 +386,35 @@ export type ChapterAttributes = {
   volume?: Maybe<Scalars['String']['output']>;
 };
 
+export type ChapterDownloadState = {
+  __typename?: 'ChapterDownloadState';
+  downloading?: Maybe<ChapterDownloadingState>;
+  error?: Maybe<Scalars['String']['output']>;
+  isCanceled: Scalars['Boolean']['output'];
+  isDone: Scalars['Boolean']['output'];
+  isOfflineAppStateNotLoaded: Scalars['Boolean']['output'];
+  isPending: Scalars['Boolean']['output'];
+};
+
+export type ChapterDownloadingState = {
+  __typename?: 'ChapterDownloadingState';
+  fetchingImage?: Maybe<ChapterImageFetchingStatus>;
+  isFetchingAtHomeData: Scalars['Boolean']['output'];
+  isFetchingData: Scalars['Boolean']['output'];
+  isPreloading: Scalars['Boolean']['output'];
+};
+
 export enum ChapterFeedStyle {
   CoverFull = 'COVER_FULL',
   CoverLess = 'COVER_LESS'
 }
+
+export type ChapterImageFetchingStatus = {
+  __typename?: 'ChapterImageFetchingStatus';
+  filename: Scalars['String']['output'];
+  index: Scalars['Int']['output'];
+  len: Scalars['Int']['output'];
+};
 
 export type ChapterListParams = {
   chapterIds?: Array<Scalars['UUID']['input']>;
@@ -433,11 +458,17 @@ export type ChapterListParams = {
 
 export type ChapterMutations = {
   __typename?: 'ChapterMutations';
+  cancelDownload: Scalars['Boolean']['output'];
   delete: Scalars['Boolean']['output'];
   download: DownloadState;
   /** Remove the chapter from the current device or offline */
   remove: Scalars['Boolean']['output'];
   update: Chapter;
+};
+
+
+export type ChapterMutationsCancelDownloadArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 
@@ -629,6 +660,22 @@ export type CoverAttributes = {
   version: Scalars['Int']['output'];
   volume?: Maybe<Scalars['String']['output']>;
 };
+
+export type CoverDownloadState = {
+  __typename?: 'CoverDownloadState';
+  downloading?: Maybe<CoverDownloadingState>;
+  error?: Maybe<Scalars['String']['output']>;
+  isCanceled: Scalars['Boolean']['output'];
+  isDone: Scalars['Boolean']['output'];
+  isOfflineAppStateNotLoaded: Scalars['Boolean']['output'];
+  isPending: Scalars['Boolean']['output'];
+};
+
+export enum CoverDownloadingState {
+  FetchingData = 'FETCHING_DATA',
+  FetchingImage = 'FETCHING_IMAGE',
+  Preloading = 'PRELOADING'
+}
 
 export enum CoverImageQuality {
   V256 = 'V256',
@@ -1513,6 +1560,21 @@ export type MangaDexThemeInput = {
   textColor: Scalars['String']['input'];
 };
 
+export enum MangaDonwloadingState {
+  FetchingData = 'FETCHING_DATA',
+  Preloading = 'PRELOADING'
+}
+
+export type MangaDownloadState = {
+  __typename?: 'MangaDownloadState';
+  downloading?: Maybe<MangaDonwloadingState>;
+  error?: Maybe<Scalars['String']['output']>;
+  isCanceled: Scalars['Boolean']['output'];
+  isDone: Scalars['Boolean']['output'];
+  isOfflineAppStateNotLoaded: Scalars['Boolean']['output'];
+  isPending: Scalars['Boolean']['output'];
+};
+
 export type MangaDraftsParams = {
   includes?: Array<ReferenceExpansionResource>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -1624,6 +1686,7 @@ export enum MangaListStyle {
 
 export type MangaMutations = {
   __typename?: 'MangaMutations';
+  cancelDownload: Scalars['Boolean']['output'];
   create: MangaObject;
   createRelation: Array<MangaRelated>;
   delete: Scalars['Boolean']['output'];
@@ -1635,6 +1698,11 @@ export type MangaMutations = {
   submitDraft: MangaObject;
   unfollow: Scalars['Boolean']['output'];
   updateReadingStatus: Scalars['Boolean']['output'];
+};
+
+
+export type MangaMutationsCancelDownloadArgs = {
+  id: Scalars['UUID']['input'];
 };
 
 
@@ -2459,10 +2527,14 @@ export type Subscriptions = {
   watchApiClient: ApiClientAttributes;
   watchAuthor: AuthorAttributes;
   watchChapter: ChapterAttributes;
+  watchChapterDownloadState: ChapterDownloadState;
   watchChapterFeedStyle: ChapterFeedStyle;
   watchChapterLanguages: Array<Language>;
+  watchChaptersTasksList: Array<Scalars['UUID']['output']>;
   watchClientInfo?: Maybe<ClientInfo>;
   watchCover: CoverAttributes;
+  watchCoverDownloadState: CoverDownloadState;
+  watchCoverTasksList: Array<Scalars['UUID']['output']>;
   watchCustomList: CustomListAttributes;
   watchDownloadState: DownloadState;
   watchImageFit: ImageFit;
@@ -2474,9 +2546,11 @@ export type Subscriptions = {
   watchIsLogged: Scalars['Boolean']['output'];
   watchLongstripImageWidth: Scalars['Float']['output'];
   watchManga: GraphQlMangaAttributes;
+  watchMangaDownloadState: MangaDownloadState;
   watchMangaListStyle: MangaListStyle;
   watchMangaReadingState?: Maybe<ReadingStatus>;
   watchMangaStatistics: MangaStatisticsAttributes;
+  watchMangaTasksList: Array<Scalars['UUID']['output']>;
   watchPageDirection: Direction;
   watchPaginationStyle: PaginationStyle;
   watchRating: RatingItemAttributes;
@@ -2514,12 +2588,23 @@ export type SubscriptionsWatchChapterArgs = {
 };
 
 
+export type SubscriptionsWatchChapterDownloadStateArgs = {
+  chapterId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
 export type SubscriptionsWatchChapterFeedStyleArgs = {
   subId: Scalars['UUID']['input'];
 };
 
 
 export type SubscriptionsWatchChapterLanguagesArgs = {
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchChaptersTasksListArgs = {
   subId: Scalars['UUID']['input'];
 };
 
@@ -2531,6 +2616,17 @@ export type SubscriptionsWatchClientInfoArgs = {
 
 export type SubscriptionsWatchCoverArgs = {
   coverId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchCoverDownloadStateArgs = {
+  coverId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchCoverTasksListArgs = {
   subId: Scalars['UUID']['input'];
 };
 
@@ -2597,6 +2693,12 @@ export type SubscriptionsWatchMangaArgs = {
 };
 
 
+export type SubscriptionsWatchMangaDownloadStateArgs = {
+  mangaId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
 export type SubscriptionsWatchMangaListStyleArgs = {
   subId: Scalars['UUID']['input'];
 };
@@ -2610,6 +2712,11 @@ export type SubscriptionsWatchMangaReadingStateArgs = {
 
 export type SubscriptionsWatchMangaStatisticsArgs = {
   mangaId: Scalars['UUID']['input'];
+  subId: Scalars['UUID']['input'];
+};
+
+
+export type SubscriptionsWatchMangaTasksListArgs = {
   subId: Scalars['UUID']['input'];
 };
 

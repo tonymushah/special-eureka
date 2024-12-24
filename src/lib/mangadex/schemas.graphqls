@@ -273,9 +273,31 @@ type ChapterAttributes {
 	version: Int!
 }
 
+type ChapterDownloadState {
+	isPending: Boolean!
+	isDone: Boolean!
+	isCanceled: Boolean!
+	isOfflineAppStateNotLoaded: Boolean!
+	error: String
+	downloading: ChapterDownloadingState
+}
+
+type ChapterDownloadingState {
+	isPreloading: Boolean!
+	isFetchingData: Boolean!
+	fetchingImage: ChapterImageFetchingStatus
+	isFetchingAtHomeData: Boolean!
+}
+
 enum ChapterFeedStyle {
 	COVER_FULL
 	COVER_LESS
+}
+
+type ChapterImageFetchingStatus {
+	filename: String!
+	index: Int!
+	len: Int!
 }
 
 input ChapterListParams {
@@ -344,6 +366,7 @@ type ChapterMutations {
 	"""
 	remove(id: UUID!): Boolean!
 	download(id: UUID!, quality: DownloadMode! = NORMAL): DownloadState!
+	cancelDownload(id: UUID!): Boolean!
 }
 
 type ChapterPages {
@@ -478,6 +501,21 @@ type CoverAttributes {
 	createdAt: MangaDexDateTime!
 	updatedAt: MangaDexDateTime
 	version: Int!
+}
+
+type CoverDownloadState {
+	isPending: Boolean!
+	isDone: Boolean!
+	isCanceled: Boolean!
+	isOfflineAppStateNotLoaded: Boolean!
+	error: String
+	downloading: CoverDownloadingState
+}
+
+enum CoverDownloadingState {
+	PRELOADING
+	FETCHING_DATA
+	FETCHING_IMAGE
 }
 
 enum CoverImageQuality {
@@ -1214,6 +1252,20 @@ input MangaDexThemeInput {
 	danger: DangerColorInput!
 }
 
+enum MangaDonwloadingState {
+	PRELOADING
+	FETCHING_DATA
+}
+
+type MangaDownloadState {
+	isPending: Boolean!
+	isDone: Boolean!
+	isCanceled: Boolean!
+	isOfflineAppStateNotLoaded: Boolean!
+	error: String
+	downloading: MangaDonwloadingState
+}
+
 input MangaDraftsParams {
 	limit: Int
 	"""
@@ -1360,6 +1412,7 @@ type MangaMutations {
 	submitDraft(params: SubmitMangaDraftParams!): MangaObject!
 	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams! = {limit: null, offset: null, title: null, authorOrArtist: null, authors: [], artists: [], year: null, includedTags: [], includedTagsMode: null, excludedTags: [], excludedTagsMode: null, status: [], originalLanguage: [], excludedOriginalLanguage: [], availableTranslatedLanguage: [], publicationDemographic: [], mangaIds: [], contentRating: [], createdAtSince: null, updatedAtSince: null, order: null, hasAvailableChapters: null, group: null}): [MangaRelated!]!
 	deleteRelation(id: UUID!, targetManga: UUID!): Boolean!
+	cancelDownload(id: UUID!): Boolean!
 }
 
 type MangaObject {
@@ -2028,6 +2081,12 @@ type Subscriptions {
 	watchClientInfo(subId: UUID!): ClientInfo
 	watchChapterFeedStyle(subId: UUID!): ChapterFeedStyle!
 	watchPaginationStyle(subId: UUID!): PaginationStyle!
+	watchChapterDownloadState(subId: UUID!, chapterId: UUID!): ChapterDownloadState!
+	watchChaptersTasksList(subId: UUID!): [UUID!]!
+	watchCoverDownloadState(subId: UUID!, coverId: UUID!): CoverDownloadState!
+	watchCoverTasksList(subId: UUID!): [UUID!]!
+	watchMangaDownloadState(subId: UUID!, mangaId: UUID!): MangaDownloadState!
+	watchMangaTasksList(subId: UUID!): [UUID!]!
 }
 
 type Tag {
