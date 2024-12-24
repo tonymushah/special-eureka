@@ -96,6 +96,8 @@ pub enum Error {
     DeadActixArbiter,
     #[error("No data was received when receiving the result from an Actix arbiter handle task")]
     SpawnDataResultMissingActixArbiter,
+    #[error("MangaDex Eureka Manager SDK Error: {0}")]
+    EurekaManagerCore(#[from] eureka_mmanager_core::Error),
 }
 
 impl Error {

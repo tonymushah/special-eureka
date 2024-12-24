@@ -5183,6 +5183,7 @@ dependencies = [
  "convert_case 0.6.0",
  "emdx",
  "eureka-mmanager",
+ "eureka-mmanager-core",
  "favicon-picker",
  "log",
  "mangadex-api",

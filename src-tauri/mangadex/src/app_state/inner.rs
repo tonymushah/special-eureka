@@ -45,14 +45,13 @@ impl AppStateInner {
         let watches3 = watches2.clone();
         println!("starting..,");
         // TODO import dir option from runtime
-
+        let dirs = DirsOptions::new_from_data_dir("./data");
+        dirs.verify_and_init()?;
         let app_state = system
             .arbiter()
             .spawn_fn_with_data(move || {
                 println!("loading...");
-                let manager =
-                    DownloadManager::new(DirsOptions::new_from_data_dir("./data").start(), client)
-                        .start();
+                let manager = DownloadManager::new(dirs.start(), client).start();
                 println!("Loaded!");
                 manager
             })
