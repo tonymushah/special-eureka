@@ -121,7 +121,6 @@ impl ChapterDownloadState {
     }
 }
 
-/// TODO implement to Subscriptions
 pub struct ChapterDownloadSubs;
 
 #[Subscription]
