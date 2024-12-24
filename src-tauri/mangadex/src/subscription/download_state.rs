@@ -1,4 +1,5 @@
 pub mod chapter;
+pub mod cover;
 
 use crate::Result;
 use async_graphql::{Context, Subscription};

@@ -7,6 +7,7 @@ use crate::Result;
 use async_graphql::{Context, Subscription};
 use download_state::chapter::ChapterDownloadState;
 use download_state::chapter::ChapterDownloadSubs;
+use download_state::cover::{CoverDownloadState, CoverDownloadSubs};
 use oauth::OauthSubscriptions;
 use tokio_stream::Stream;
 use uuid::Uuid;
@@ -442,5 +443,22 @@ impl Subscriptions {
         ChapterDownloadSubs
             .listen_to_chapter_tasks(ctx, sub_id)
             .await
+    }
+    pub async fn watch_cover_download_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+        cover_id: Uuid,
+    ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
+        CoverDownloadSubs
+            .listen_to_download_state(ctx, cover_id, sub_id)
+            .await
+    }
+    pub async fn watch_cover_tasks_list<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
+        CoverDownloadSubs.listen_to_cover_tasks(ctx, sub_id).await
     }
 }
