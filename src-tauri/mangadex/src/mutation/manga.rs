@@ -15,8 +15,9 @@ use eureka_mmanager::{
     },
     history::service::messages::is_in::IsInMessage,
     prelude::{
-        AsyncCanBeWaited, CoverDownloadManager, DeleteDataAsyncTrait, GetManager,
-        GetManagerStateData, HistoryEntry, MangaDownloadManager,
+        AsyncCanBeWaited, AsyncCancelable, CoverDownloadManager, DeleteDataAsyncTrait, GetManager,
+        GetManagerStateData, GetMangaDownloadManager, HistoryEntry, MangaDownloadManager,
+        TaskManagerAddr,
     },
     DownloadManager,
 };
@@ -264,6 +265,22 @@ impl MangaMutations {
             .id(target_manga)
             .delete()
             .send()
+            .await?;
+        Ok(true)
+    }
+    pub async fn cancel_download(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .map(|e| e.app_state.clone())
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
+        olasw
+            .get_manga_manager()
+            .await?
+            .new_task(MangaDownloadMessage::new(id))
+            .await?
+            .cancel()
             .await?;
         Ok(true)
     }
