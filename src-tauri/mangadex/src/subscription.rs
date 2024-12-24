@@ -8,6 +8,7 @@ use async_graphql::{Context, Subscription};
 use download_state::chapter::ChapterDownloadState;
 use download_state::chapter::ChapterDownloadSubs;
 use download_state::cover::{CoverDownloadState, CoverDownloadSubs};
+use download_state::manga::{MangaDownloadState, MangaDownloadSubs};
 use oauth::OauthSubscriptions;
 use tokio_stream::Stream;
 use uuid::Uuid;
@@ -460,5 +461,22 @@ impl Subscriptions {
         sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
         CoverDownloadSubs.listen_to_cover_tasks(ctx, sub_id).await
+    }
+    pub async fn watch_manga_download_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+        manga_id: Uuid,
+    ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
+        MangaDownloadSubs
+            .listen_to_download_state(ctx, manga_id, sub_id)
+            .await
+    }
+    pub async fn watch_manga_tasks_list<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
+        MangaDownloadSubs.listen_to_manga_tasks(ctx, sub_id).await
     }
 }
