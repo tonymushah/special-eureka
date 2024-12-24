@@ -5,6 +5,8 @@ use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
 use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
 use async_graphql::{Context, Subscription};
+use download_state::chapter::ChapterDownloadState;
+use download_state::chapter::ChapterDownloadSubs;
 use oauth::OauthSubscriptions;
 use tokio_stream::Stream;
 use uuid::Uuid;
@@ -420,6 +422,25 @@ impl Subscriptions {
     ) -> Result<impl Stream<Item = PaginationStyle> + 'ctx> {
         UserOptionSubscriptions
             .listen_to_pagination_style(ctx, sub_id)
+            .await
+    }
+    pub async fn watch_chapter_download_state<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+        chapter_id: Uuid,
+    ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
+        ChapterDownloadSubs
+            .listen_to_download_state(ctx, chapter_id, sub_id)
+            .await
+    }
+    pub async fn watch_chapters_tasks_list<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+        sub_id: Uuid,
+    ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
+        ChapterDownloadSubs
+            .listen_to_chapter_tasks(ctx, sub_id)
             .await
     }
 }
