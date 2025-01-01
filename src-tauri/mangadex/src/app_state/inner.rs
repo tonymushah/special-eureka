@@ -1,4 +1,4 @@
-use std::{ops::Deref, sync::Arc, time::Duration};
+use std::{ops::Deref, sync::Arc};
 
 use actix::prelude::*;
 use eureka_mmanager::{prelude::PushActorAddr, DirsOptions, DownloadManager};
@@ -64,12 +64,9 @@ impl AppStateInner {
         Ok(Self {
             app_state,
             chapter_listen: Arc::new(spawn(async move {
-                let sub = watches1.chapter.subscribe();
+                let mut sub = watches1.chapter.subscribe();
                 loop {
-                    if watches1.chapter.is_closed() {
-                        break;
-                    }
-                    if sub.has_changed().unwrap_or(false) {
+                    if sub.changed().await.is_ok() {
                         let sub_inner = sub
                             .borrow()
                             .as_ref()
@@ -81,17 +78,15 @@ impl AppStateInner {
                                 .verify_and_push(Into::<ChapterObject>::into(data))
                                 .await;
                         }
+                    } else {
+                        break;
                     }
-                    tokio::time::sleep(Duration::from_millis(500)).await;
                 }
             })),
             manga_listen: Arc::new(spawn(async move {
-                let sub = watches2.manga.subscribe();
+                let mut sub = watches2.manga.subscribe();
                 loop {
-                    if watches2.manga.is_closed() {
-                        break;
-                    }
-                    if sub.has_changed().unwrap_or(false) {
+                    if sub.changed().await.is_ok() {
                         let sub_inner = sub
                             .borrow()
                             .as_ref()
@@ -103,17 +98,15 @@ impl AppStateInner {
                                 .verify_and_push(Into::<MangaObject>::into(data))
                                 .await;
                         }
+                    } else {
+                        break;
                     }
-                    tokio::time::sleep(Duration::from_millis(500)).await;
                 }
             })),
             cover_listen: Arc::new(spawn(async move {
-                let sub = watches3.cover.subscribe();
+                let mut sub = watches3.cover.subscribe();
                 loop {
-                    if watches3.cover.is_closed() {
-                        break;
-                    }
-                    if sub.has_changed().unwrap_or(false) {
+                    if sub.changed().await.is_ok() {
                         let sub_inner = sub
                             .borrow()
                             .as_ref()
@@ -125,8 +118,9 @@ impl AppStateInner {
                                 .verify_and_push(Into::<CoverObject>::into(data))
                                 .await;
                         }
+                    } else {
+                        break;
                     }
-                    tokio::time::sleep(Duration::from_millis(500)).await;
                 }
             })),
         })
