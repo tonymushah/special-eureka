@@ -46,9 +46,10 @@ impl ChapterPagesQuery {
             .data
             .iter()
             .flat_map(|i| {
-                let ext = Path::new(i).extension().and_then(|e| e.to_str())?;
+                let path = Path::new(i);
+                let ext = path.extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
-                    let i = i.as_str();
+                    let i = path.file_name().and_then(|e| e.to_str())?;
                     Url::parse(
                         format!("{}chapter/{id}/data/{i}", crate::constants::PROTOCOL).as_str(),
                     )
@@ -62,9 +63,10 @@ impl ChapterPagesQuery {
             .data_saver
             .iter()
             .flat_map(|i| {
-                let ext = Path::new(i).extension().and_then(|e| e.to_str())?;
+                let path = Path::new(i);
+                let ext = path.extension().and_then(|e| e.to_str())?;
                 if ext != "json" {
-                    let i = i.as_str();
+                    let i = path.file_name().and_then(|e| e.to_str())?;
                     Url::parse(
                         format!("{}chapter/{id}/data-saver/{i}", crate::constants::PROTOCOL)
                             .as_str(),
