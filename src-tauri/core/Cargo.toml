@@ -17,49 +17,21 @@ tauri-build = { workspace = true, features = [] }
 [dependencies]
 serde_json.workspace = true
 serde = { workspace = true, features = ["derive"] }
-tauri = { workspace = true, features = [
-    "window-start-dragging",
-    "window-hide",
-    "window-unminimize",
-    "window-minimize",
-    "window-maximize",
-    "window-set-decorations",
-    "window-unmaximize",
-    "process-relaunch",
-    "window-set-content-protected",
-    "os-all",
-    "window-create",
-    "window-close",
-    "window-center",
-    "window-show",
-    "clipboard-write-text",
-    "dialog-message",
-    "global-shortcut-all",
-    "http-all",
-    "notification-all",
-    "path-all",
-    "process-exit",
-    "reqwest-client",
-    "shell-open",
-    "system-tray",
-    "updater",
-    "window-set-fullscreen",
-    "window-set-title",
-    "linux-protocol-headers",
-    "config-json5"
-] }
+tauri = { workspace = true, features = ["unstable"] }
 tokio.workspace = true
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 anyhow.workspace = true
-window-shadows = "0.2"
-window-vibrancy = "0.4"
+window-vibrancy = "0.5"
 tauri-plugin-store.workspace = true
 uuid.workspace = true
 actix.workspace = true
-tauri-plugin-shell = "2"
+tauri-plugin-opener.workspace = true
+tauri-plugin-deep-link.workspace = true
+tauri-plugin-notification.workspace = true
+tauri-plugin-clipboard-manager.workspace = true
 
 [dependencies.mangadex]
 workspace = true

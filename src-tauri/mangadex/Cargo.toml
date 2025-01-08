@@ -6,7 +6,10 @@ description = "The tauri plugin behind the Mangadex Part of special-eureka"
 edition = "2021"
 rust-version = "1.70"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
-link = "mangadex-desktop-api"
+links = "mangadex-desktop-api"
+
+[build-dependencies]
+mizuki-build.workspace = true
 
 [dependencies]
 tauri = { workspace = true }
@@ -40,6 +43,7 @@ tokio-util = "0.7.11"
 emdx = "0.1"
 actix.workspace = true
 eureka-mmanager-core = "0.1"
+tauri-plugin-notification.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.1"

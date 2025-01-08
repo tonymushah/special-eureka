@@ -21,9 +21,24 @@ mizuki-build = "1"
 url = "2.5"
 actix = "0.13"
 
+[workspace.dependencies.tauri-plugin-notification]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[workspace.dependencies.tauri-plugin-deep-link]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[workspace.dependencies.tauri-plugin-opener]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[workspace.dependencies.tauri-plugin-clipboard-manager]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
 [workspace.dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"
-#tag = "v0.1.0"
 branch = "v2"
 
 [workspace.dependencies.mangadex]
