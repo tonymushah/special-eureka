@@ -3,6 +3,7 @@ use crate::{
     Result,
 };
 use async_graphql::Context;
+use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use tauri::Runtime;
 use url::Url;
 use uuid::Uuid;
@@ -32,9 +33,9 @@ impl CoverImageQuery {
         Ok(read
             .as_ref()
             .ok_or(crate::Error::OfflineAppStateNotLoaded)?
-            .cover_utils()
-            .with_id(self.cover_id)
-            .is_image_there())
+            .get_cover_image(self.cover_id)
+            .await
+            .is_ok())
     }
     fn is_in_cache(&self) -> bool {
         let cache: CoverImageCache = self.clone().into();

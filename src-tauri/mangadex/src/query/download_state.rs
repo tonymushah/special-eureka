@@ -1,7 +1,9 @@
-use crate::{error::Error, Result};
+use crate::Result;
 use async_graphql::{Context, Object};
-use mangadex_api_types_rust::RelationshipType;
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
+use eureka_mmanager::prelude::{
+    AsyncIsIn, ChapterDataPullAsyncTrait, CoverDataPullAsyncTrait, GetManagerStateData,
+    MangaDataPullAsyncTrait,
+};
 use uuid::Uuid;
 
 use crate::utils::{
@@ -17,20 +19,15 @@ pub struct DownloadStateQueries;
 impl DownloadStateQueries {
     pub async fn chapter(&self, ctx: &Context<'_>, chapter_id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let oas_r = oas.read().await;
-        let app_state = oas_r.as_ref().ok_or(Error::OfflineAppStateNotLoaded)?;
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
         let state = {
-            if app_state.chapter_utils().with_id(chapter_id).is_there() {
+            if let Ok(chapter) = olasw.get_chapter(chapter_id).await {
                 DownloadState::Downloaded {
-                    has_failed: app_state
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::Chapter,
-                            &app_state.dir_options,
-                        )
-                        .await?
-                        .is_in(chapter_id)?,
+                    has_failed: olasw.get_history().await?.is_in(&chapter).await?,
                 }
             } else {
                 DownloadState::NotDownloaded
@@ -44,20 +41,15 @@ impl DownloadStateQueries {
     }
     pub async fn cover(&self, ctx: &Context<'_>, cover_id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let oas_r = oas.read().await;
-        let app_state = oas_r.as_ref().ok_or(Error::OfflineAppStateNotLoaded)?;
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
         let state = {
-            if app_state.cover_utils().with_id(cover_id).is_there() {
+            if let Ok(chapter) = olasw.get_cover(cover_id).await {
                 DownloadState::Downloaded {
-                    has_failed: app_state
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::CoverArt,
-                            &app_state.dir_options,
-                        )
-                        .await?
-                        .is_in(cover_id)?,
+                    has_failed: olasw.get_history().await?.is_in(&chapter).await?,
                 }
             } else {
                 DownloadState::NotDownloaded
@@ -71,20 +63,15 @@ impl DownloadStateQueries {
     }
     pub async fn manga(&self, ctx: &Context<'_>, manga_id: Uuid) -> Result<DownloadState> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let oas = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let oas_r = oas.read().await;
-        let app_state = oas_r.as_ref().ok_or(Error::OfflineAppStateNotLoaded)?;
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
         let state = {
-            if app_state.manga_utils().with_id(manga_id).is_there() {
+            if let Ok(manga) = olasw.get_manga(manga_id).await {
                 DownloadState::Downloaded {
-                    has_failed: app_state
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::Manga,
-                            &app_state.dir_options,
-                        )
-                        .await?
-                        .is_in(manga_id)?,
+                    has_failed: olasw.get_history().await?.is_in(&manga).await?,
                 }
             } else {
                 DownloadState::NotDownloaded

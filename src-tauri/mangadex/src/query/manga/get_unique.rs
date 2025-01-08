@@ -1,7 +1,7 @@
 use crate::{Error, Result};
 use async_graphql::Context;
+use eureka_mmanager::prelude::MangaDataPullAsyncTrait;
 use mangadex_api_types_rust::ReferenceExpansionResource;
-use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{
@@ -78,7 +78,7 @@ impl MangaGetUniqueQueries {
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         Ok({
-            let data: Manga = olasw.manga_utils().with_id(self.into()).get_data()?.into();
+            let data: Manga = olasw.get_manga(self.into()).await?.into();
             let _ = watches.manga.send_offline(data.clone());
             data
         })

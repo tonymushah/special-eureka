@@ -1,7 +1,7 @@
 use crate::{error::Error, Result};
 use async_graphql::{Context, Object};
+use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use mangadex_api_types_rust::ReferenceExpansionResource;
-use mangadex_desktop_api2::utils::ExtractData;
 use uuid::Uuid;
 
 use crate::{
@@ -56,7 +56,7 @@ impl CoverGetUniqueQuery {
         let app_state = offline_app_state
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let data: Cover = app_state.cover_utils().with_id(id).get_data()?.into();
+        let data: Cover = app_state.get_cover(id).await?.into();
         let _ = watches.cover.send_offline(data.clone());
         Ok(data)
     }

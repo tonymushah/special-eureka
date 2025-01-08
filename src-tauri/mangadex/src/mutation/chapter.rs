@@ -1,10 +1,26 @@
-use crate::{error::Error, Result};
+use crate::{
+    error::Error,
+    objects::{cover::Cover, manga::MangaObject as SelfMangaObject},
+    query::download_state::DownloadStateQueries,
+    Result,
+};
+
+use actix::prelude::*;
 use async_graphql::{Context, Enum, Object};
+use eureka_mmanager::{
+    download::{
+        chapter::ChapterDownloadMessage, cover::CoverDownloadMessage, manga::MangaDownloadMessage,
+        state::DownloadMessageState,
+    },
+    history::service::messages::is_in::IsInMessage,
+    prelude::*,
+};
+use log::{info, trace};
 use mangadex_api::utils::download::chapter::DownloadMode as MDDownloadMode;
 use mangadex_api_input_types::chapter::edit::ChapterUpdateParams;
 use mangadex_api_schema_rust::{v5::ChapterAttributes, ApiObjectNoRelationships};
 use mangadex_api_types_rust::RelationshipType;
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
+use tauri::async_runtime::spawn;
 use uuid::Uuid;
 
 use crate::{
@@ -15,7 +31,7 @@ use crate::{
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
         get_watches_from_graphql_context,
         source::SendMultiSourceData,
-        watch::{SendData, WatcherInnerData},
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
 };
 
@@ -45,9 +61,9 @@ impl ChapterMutations {
         let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
-            .clone()
+            .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        olasw.chapter_utils().with_id(id).delete()?;
+        olasw.delete_chapter(id).await?;
         Ok(true)
     }
     pub async fn download(
@@ -56,54 +72,133 @@ impl ChapterMutations {
         id: Uuid,
         #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
     ) -> Result<DownloadState> {
+        let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola: tauri::State<'_, crate::app_state::OfflineAppState> =
             get_offline_app_state::<tauri::Wry>(ctx)?;
         add_in_chapter_queue(id)?;
         let offline_app_state_write = ola.read().await;
-        let mut olasw = offline_app_state_write
-            .clone()
+        let olasw = offline_app_state_write
+            .as_ref()
             .map(|a| a.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let chapter_download = olasw.chapter_download(id);
-        let res = match quality {
-            DownloadMode::Normal => chapter_download.download_chapter(&mut olasw).await,
-            DownloadMode::DataSaver => {
-                chapter_download
-                    .download_chapter_data_saver(&mut olasw)
-                    .await
-            }
-        };
-        let state = {
-            if olasw.chapter_utils().with_id(id).is_there() {
-                DownloadState::Downloaded {
-                    has_failed: olasw
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::Chapter,
-                            &olasw.dir_options,
+        let olasw_ = olasw.clone();
+        let res = spawn(async move {
+            let watches = tauri_handle.get_watches()?;
+            let mode: MDDownloadMode = quality.into();
+            let manager = olasw_;
+            trace!("Downloading title {id}");
+            let dirs =
+                <Addr<DownloadManager> as GetManagerStateData>::get_dir_options(&manager).await?;
+            let (chapter, manga) = {
+                let chapter_manager =
+                    <Addr<DownloadManager> as GetManager<ChapterDownloadManager>>::get(&manager)
+                        .await?;
+                let mut task = chapter_manager
+                    .send(
+                        ChapterDownloadMessage::new(id)
+                            .state(DownloadMessageState::Downloading)
+                            .mode(mode),
+                    )
+                    .await?;
+                let data = task.wait().await?.await?;
+                info!(
+                    "downloaded chapter {} = {:?}",
+                    data.id, data.attributes.title
+                );
+                let rel = data
+                    .find_first_relationships(RelationshipType::Manga)
+                    .ok_or(Error::msg(format!("Cannot find the chapter {} title", id)))?
+                    .clone();
+                (data, rel)
+            };
+            if !dirs
+                .send(IsInMessage(HistoryEntry::new(
+                    manga.id,
+                    RelationshipType::Manga,
+                )))
+                .await?
+            {
+                let cover = {
+                    trace!("Downloading title {}", manga.id);
+                    let manga_manager =
+                        <Addr<DownloadManager> as GetManager<MangaDownloadManager>>::get(&manager)
+                            .await?;
+                    let mut task = manga_manager
+                        .send(
+                            MangaDownloadMessage::new(manga.id)
+                                .state(DownloadMessageState::Downloading),
                         )
-                        .await?
-                        .is_in(id)?,
+                        .await?;
+                    let data = task.wait().await?.await?;
+                    let _ = watches
+                        .manga
+                        .send_offline(Into::<SelfMangaObject>::into(data.clone()));
+                    info!(
+                        "downloaded title {} = {:?}",
+                        data.id,
+                        data.attributes.title.values().next()
+                    );
+                    data.find_first_relationships(RelationshipType::CoverArt)
+                        .ok_or(Error::msg(format!(
+                            "Cannot find the title {} cover art",
+                            manga.id
+                        )))?
+                        .clone()
+                };
+                if !dirs
+                    .send(IsInMessage(HistoryEntry::new(
+                        cover.id,
+                        RelationshipType::CoverArt,
+                    )))
+                    .await?
+                {
+                    trace!("Downloading {} cover art", cover.id);
+                    let cover_manager =
+                        <Addr<DownloadManager> as GetManager<CoverDownloadManager>>::get(&manager)
+                            .await?;
+                    let mut task = cover_manager
+                        .send(
+                            CoverDownloadMessage::new(cover.id)
+                                .state(DownloadMessageState::Downloading),
+                        )
+                        .await?;
+                    let _ = watches
+                        .cover
+                        .send_offline(Into::<Cover>::into(task.wait().await?.await?));
+                    info!("Downloaded {} cover art", cover.id);
                 }
-            } else {
-                DownloadState::NotDownloaded
             }
-        };
-        let _ = watches.download_state.send_data(WatcherInnerData {
-            id,
-            attributes: state,
-        });
+            Ok::<_, Error>(chapter)
+        })
+        .await?;
+        let state = DownloadStateQueries.chapter(ctx, id).await?;
         if let Err(_err) = res {
             add_in_chapter_failed(id)?;
             Ok(state)
         } else {
             add_in_chapter_success(id)?;
-            let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-            let data: Chapter = olasw.chapter_utils().with_id(id).get_data()?.into();
+            //let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            let data: Chapter = olasw.get_chapter(id).await?.into();
             let _ = watches.chapter.send_offline(data.clone());
             Ok(state)
         }
+    }
+    pub async fn cancel_download(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
+        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
+        let offline_app_state_write = ola.read().await;
+        let olasw = offline_app_state_write
+            .as_ref()
+            .map(|a| a.app_state.clone())
+            .ok_or(Error::OfflineAppStateNotLoaded)?;
+        olasw
+            .get_chapter_manager()
+            .await?
+            .new_task(ChapterDownloadMessage::new(id))
+            .await?
+            .cancel()
+            .await?;
+        Ok(true)
     }
 }
 

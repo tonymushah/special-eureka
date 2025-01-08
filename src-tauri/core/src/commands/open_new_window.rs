@@ -9,7 +9,11 @@ pub fn open_new_window_sync<R: Runtime>(window: &Window<R>, url: Option<Url>) ->
         tauri::WindowUrl::External(current_url),
     )
     .title(window.title().unwrap_or(String::from("Special Eureka")))
-    .decorations(window.is_decorated().unwrap_or(true))
+    .decorations(if cfg!(target_os = "linux") {
+        true
+    } else {
+        window.is_decorated().unwrap_or(true)
+    })
     .build()?;
     Ok(())
 }

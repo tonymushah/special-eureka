@@ -5,8 +5,7 @@ pub mod pages;
 use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
-use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
-use mangadex_desktop_api2::{settings::file_history::IsIn, utils::ExtractData};
+use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
@@ -15,17 +14,15 @@ use crate::{
         manga_chapter_group::{group_results, MangaChapterGroup},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
-    utils::{
-        download_state::DownloadState,
-        get_offline_app_state, get_watches_from_graphql_context,
-        watch::{SendData, WatcherInnerData},
-    },
+    utils::download_state::DownloadState,
 };
 
 use get_unique::GetUniqueChapterQuery;
 use list::{ChapterListQueries, GetAllChapterParams};
 
 use self::pages::ChapterPagesQuery;
+
+use super::download_state::DownloadStateQueries;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ChapterQueries;
@@ -87,32 +84,6 @@ impl ChapterQueries {
         .await
     }
     pub async fn is_downloaded(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let offline_app_state_write = ola.read().await;
-        let olasw = offline_app_state_write
-            .as_ref()
-            .ok_or(crate::Error::OfflineAppStateNotLoaded)?;
-        let state = {
-            if olasw.chapter_utils().with_id(id).is_there() {
-                DownloadState::Downloaded {
-                    has_failed: olasw
-                        .history
-                        .get_history_w_file_by_rel_or_init(
-                            RelationshipType::Chapter,
-                            &olasw.dir_options,
-                        )
-                        .await?
-                        .is_in(id)?,
-                }
-            } else {
-                DownloadState::NotDownloaded
-            }
-        };
-        let _ = watches.download_state.send_data(WatcherInnerData {
-            id,
-            attributes: state,
-        });
-        Ok(state)
+        DownloadStateQueries.chapter(ctx, id).await
     }
 }

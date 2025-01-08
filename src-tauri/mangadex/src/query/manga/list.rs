@@ -1,14 +1,23 @@
-use std::ops::{Deref, DerefMut};
+use std::{
+    ops::{Deref, DerefMut},
+    pin::Pin,
+};
 
 use crate::{Error, Result};
+
 use async_graphql::Context;
+use eureka_mmanager::prelude::{
+    AsyncIntoSorted, IntoParamedFilteredStream, MangaDataPullAsyncTrait,
+};
 use mangadex_api_input_types::manga::list::MangaListParams;
+use mangadex_api_schema_rust::v5::{MangaCollection, MangaObject};
+use tokio_stream::Stream;
 
 use crate::{
     objects::manga::lists::MangaResults,
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData,
+        get_watches_from_graphql_context, source::SendMultiSourceData, Collection,
     },
 };
 
@@ -56,10 +65,36 @@ impl MangaListQueries {
         let olasw = offline_app_state_write
             .as_ref()
             .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let manga_utils = olasw.manga_utils();
+
         let params = self.deref().clone();
         Ok({
-            let res: MangaResults = manga_utils.get_downloaded_manga(params).await?.into();
+            let res: MangaResults = {
+                let res: MangaCollection = Collection::from_async_stream(
+                    {
+                        let mut stream: Pin<Box<dyn Stream<Item = MangaObject> + Send>> =
+                            if params.manga_ids.is_empty() {
+                                Box::pin(olasw.get_manga_list().await?)
+                            } else {
+                                Box::pin(
+                                    olasw
+                                        .get_manga_list_by_ids(params.manga_ids.clone().into_iter())
+                                        .await?,
+                                )
+                            };
+                        stream = if let Some(order) = params.order.clone() {
+                            Box::pin(tokio_stream::iter(stream.to_sorted(order).await))
+                        } else {
+                            stream
+                        };
+                        stream.to_filtered_into(params.clone())
+                    },
+                    params.limit.unwrap_or(10) as usize,
+                    params.offset.unwrap_or_default() as usize,
+                )
+                .await
+                .try_into()?;
+                res.into()
+            };
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {

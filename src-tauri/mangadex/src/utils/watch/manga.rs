@@ -41,7 +41,7 @@ where
         self.send_data(
             (
                 data.get_id(),
-                MultiSourceData::online(data.get_attributes()),
+                MultiSourceData::offline(data.get_attributes()),
             )
                 .into(),
         )
@@ -50,7 +50,7 @@ where
         self.send_data(
             (
                 data.get_id(),
-                MultiSourceData::offline(data.get_attributes()),
+                MultiSourceData::online(data.get_attributes()),
             )
                 .into(),
         )

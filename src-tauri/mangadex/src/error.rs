@@ -7,7 +7,9 @@ pub enum Error {
     #[error("Tauri Internal Error: {0}")]
     Tauri(#[from] tauri::Error),
     #[error("MangaDex Eureka Manager SDK Error: {0}")]
-    MangadexEurekaManager(#[from] mangadex_desktop_api2::Error),
+    MangadexEurekaManager(#[from] eureka_mmanager::Error),
+    #[error("MangaDex Eureka Manager SDK Error: {0}")]
+    MangadexEurekaManagerOwned(#[from] eureka_mmanager::OwnedError),
     #[error("Tauri Plugin Store Error: {0}")]
     TauriStore(#[from] tauri_plugin_store::Error),
     #[error("I/O Error: {0}")]
@@ -82,6 +84,26 @@ pub enum Error {
     NoAccessAppHandleGQLCtx,
     #[error("Cannot access at the Tauri Window Handle from the GraphQL Context")]
     NoAccessWindowGQLCtx,
+    #[error(transparent)]
+    ActixMailbox(#[from] actix::MailboxError),
+    #[error("{0}")]
+    Unknown(String),
+    #[error(transparent)]
+    WaitForFinished(#[from] eureka_mmanager::download::state::WaitForFinishedError),
+    #[error("the `actix::System` registry is not registred in the Tauri App State")]
+    ActixSystemNotRegistered,
+    #[error("the `actix::System` Arbiter is dead X(")]
+    DeadActixArbiter,
+    #[error("No data was received when receiving the result from an Actix arbiter handle task")]
+    SpawnDataResultMissingActixArbiter,
+    #[error("MangaDex Eureka Manager SDK Error: {0}")]
+    EurekaManagerCore(#[from] eureka_mmanager_core::Error),
+}
+
+impl Error {
+    pub fn msg(msg: String) -> Self {
+        Self::Unknown(msg)
+    }
 }
 
 impl From<favicon_picker::error::Error> for Error {

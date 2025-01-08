@@ -1,3 +1,4 @@
+pub mod cancel_token;
 pub mod watch;
 
 use tokio_stream::{Stream, StreamExt};
