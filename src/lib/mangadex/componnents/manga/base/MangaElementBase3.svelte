@@ -8,9 +8,13 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let coverImage: string;
-	export let coverImageAlt: string;
-	export let title: string;
+	interface Props {
+		coverImage: string;
+		coverImageAlt: string;
+		title: string;
+	}
+
+	let { coverImage, coverImageAlt, title }: Props = $props();
 </script>
 
 <Layout --element-w="10em" --element-h="15em">

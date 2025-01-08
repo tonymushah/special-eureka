@@ -15,6 +15,11 @@
 	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
 	import { v4 } from "uuid";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	setContextClient(client);
 	const sub_id = v4();
@@ -32,8 +37,8 @@
 	onDestroy(() => {
 		sub_end(sub_id);
 	});
-	$: loading = $navigating != null;
-	$: isRTL = $rtl.data?.watchSidebarDirection == Direction.Rtl;
+	let loading = $derived($navigating != null);
+	let isRTL = $derived($rtl.data?.watchSidebarDirection == Direction.Rtl);
 </script>
 
 <div class="d-content">
@@ -55,20 +60,20 @@
 					class:defaultDecoration={$isDefaultDecoration}
 					role="button"
 					tabindex="0"
-					on:keydown={(e) => {
+					onkeydown={(e) => {
 						if (loading) {
 							e.stopPropagation();
 							e.preventDefault();
 						}
 					}}
-					on:click={(e) => {
+					onclick={(e) => {
 						if (loading) {
 							e.stopPropagation();
 							e.preventDefault();
 						}
 					}}
 				>
-					<slot />
+					{@render children?.()}
 				</div>
 			</div>
 		</MangaDexDefaultThemeProvider>

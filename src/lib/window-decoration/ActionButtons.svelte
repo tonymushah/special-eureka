@@ -1,25 +1,32 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { MaximizeIcon, MinimizeIcon, MinusIcon, XIcon } from "svelte-feather-icons";
-	import { appWindow } from "@tauri-apps/api/window";
-	export let isMaximize: boolean;
-	export let isMaximized: () => Promise<void>;
+	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+const appWindow = getCurrentWebviewWindow()
+	interface Props {
+		isMaximize: boolean;
+		isMaximized: () => Promise<void>;
+	}
+
+	let { isMaximize, isMaximized }: Props = $props();
 </script>
 
 <div class="actions-icons">
 	<button
 		class="min"
-		on:click={() => {
+		onclick={() => {
 			appWindow.minimize();
 		}}
-		on:contextmenu|preventDefault={() => {
+		oncontextmenu={preventDefault(() => {
 			appWindow.hide();
-		}}
+		})}
 	>
 		<MinusIcon />
 	</button>
 	<button
 		class="max"
-		on:click={async () => {
+		onclick={async () => {
 			await appWindow.toggleMaximize();
 			isMaximized();
 		}}
@@ -32,7 +39,7 @@
 	</button>
 	<button
 		class="close"
-		on:click={async () => {
+		onclick={async () => {
 			await appWindow.close();
 		}}
 	>

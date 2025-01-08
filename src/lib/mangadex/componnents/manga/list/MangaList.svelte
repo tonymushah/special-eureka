@@ -4,15 +4,20 @@
 	import type { MangaListContentItemProps } from "./MangaListContent.svelte";
 	import MangaListTabSelect from "./tab-select/MangaListTabSelect.svelte";
 
-	export let list: MangaListContentItemProps[] = [];
+	interface Props {
+		list?: MangaListContentItemProps[];
+		children?: import('svelte').Snippet;
+	}
+
+	let { list = $bindable([]), children }: Props = $props();
 </script>
 
 <article>
 	<div class="tab-title">
 		<div class="tab-additional-content">
-			<slot>
+			{#if children}{@render children()}{:else}
 				<span>:3</span>
-			</slot>
+			{/if}
 		</div>
 		<MangaListTabSelect />
 	</div>

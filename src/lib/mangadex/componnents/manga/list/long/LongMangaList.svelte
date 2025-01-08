@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { ComponentProps } from "svelte";
 
 	export type LongMangaListItemProps = ComponentProps<MangaElementBase2> & {
@@ -11,7 +11,11 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 
-	export let list: LongMangaListItemProps[] = [];
+	interface Props {
+		list?: LongMangaListItemProps[];
+	}
+
+	let { list = [] }: Props = $props();
 </script>
 
 <section class="long-list">

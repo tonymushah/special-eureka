@@ -1,5 +1,6 @@
-import { appWindow } from "@tauri-apps/api/window";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { writable, type Readable } from "svelte/store";
+const appWindow = getCurrentWebviewWindow()
 
 const isDefaultDecoration = writable(true, (set) => {
     appWindow.isDecorated().then(set);

@@ -2,7 +2,7 @@
 	import { range } from "lodash";
 	import { onMount } from "svelte";
 	const DOT_LIMIT = 6;
-	let dots = "";
+	let dots = $state("");
 	onMount(() => {
 		let current_number = 0;
 		const interval = setInterval(() => {

@@ -1,11 +1,20 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import ProgressBar from "@mangadex/componnents/theme/progress/ProgressBar.svelte";
 
-	export let distribution: number;
-	export let total: number;
-	export let value: number;
+	interface Props {
+		distribution: number;
+		total: number;
+		value: number;
+	}
 
-	$: progress = (value / total) * 100;
+	let { distribution, total, value }: Props = $props();
+
+	let progress;
+	run(() => {
+		progress = (value / total) * 100;
+	});
 </script>
 
 <div class="distribution-item">

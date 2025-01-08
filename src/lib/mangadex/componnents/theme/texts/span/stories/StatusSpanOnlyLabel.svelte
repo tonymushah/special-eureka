@@ -1,8 +1,12 @@
 <script lang="ts">
 	import StatusSpan from "../StatusSpan.svelte";
 
-	export let type: "red" | "green" | "yellow" | "blue" | "gray" | "purple";
-	export let innerText: string;
+	interface Props {
+		type: "red" | "green" | "yellow" | "blue" | "gray" | "purple";
+		innerText: string;
+	}
+
+	let { type, innerText }: Props = $props();
 </script>
 
 <StatusSpan {type}>

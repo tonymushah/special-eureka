@@ -9,20 +9,24 @@
 		};
 	}>();
 
-	export let comments: number;
-	let isMillify = false;
-	$: comments_ = isMillify ? millify(comments) : comments;
+	interface Props {
+		comments: number;
+	}
+
+	let { comments }: Props = $props();
+	let isMillify = $state(false);
+	let comments_ = $derived(isMillify ? millify(comments) : comments);
 </script>
 
 <button
 	class="comments"
-	on:mouseenter={() => {
+	onmouseenter={() => {
 		isMillify = false;
 	}}
-	on:mouseleave={() => {
+	onmouseleave={() => {
 		isMillify = true;
 	}}
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("click", e);
 	}}
 >

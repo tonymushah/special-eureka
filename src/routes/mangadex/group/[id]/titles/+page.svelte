@@ -1,11 +1,19 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import SearchContent from "@mangadex/routes/titles/(search)/SearchContent.svelte";
 	import type { PageData } from "./$types";
 	import { derived, readable, writable } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	const groupId = writable<string>(data.id);
-	$: groupId.set(data.id);
+	run(() => {
+		groupId.set(data.id);
+	});
 	const offlineStore = readable(false);
 
 	const listParams = derived([groupId], ([$id]) => {

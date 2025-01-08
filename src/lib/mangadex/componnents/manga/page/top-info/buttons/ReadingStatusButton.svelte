@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import getText from "@mangadex/utils/manga/readingStatus/getText";
 	import { createEventDispatcher } from "svelte";
@@ -16,15 +18,18 @@
 		readingStatus: ReadingStatusEventDetail;
 	}>();
 
-	let dialog: HTMLDialogElement | undefined = undefined;
+	let dialog: HTMLDialogElement | undefined = $state(undefined);
 	function openDialog() {
 		if (dialog) {
 			dialog.showModal();
 		}
 	}
 
-	$: readingStatusText = getText($readingStatus) ?? "Add to Library";
-	$: isFollowing = $isFollowingStore;
+	let readingStatusText = $derived(getText($readingStatus) ?? "Add to Library");
+	let isFollowing;
+	run(() => {
+		isFollowing = $isFollowingStore;
+	});
 </script>
 
 <PrimaryButton

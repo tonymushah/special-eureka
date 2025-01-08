@@ -5,5 +5,7 @@
 </script>
 
 <Menu label="Home" href={route("/mangadex")}>
-	<HomeIcon slot="icon" size="24" />
+	{#snippet icon()}
+		<HomeIcon  size="24" />
+	{/snippet}
 </Menu>

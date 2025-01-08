@@ -3,8 +3,12 @@
 	import Title from "../texts/title/Title.svelte";
 	import ColorPicker from "svelte-awesome-color-picker";
 
-	export let accent: Accent;
-	export let title: string;
+	interface Props {
+		accent: Accent;
+		title: string;
+	}
+
+	let { accent = $bindable(), title }: Props = $props();
 </script>
 
 <section>

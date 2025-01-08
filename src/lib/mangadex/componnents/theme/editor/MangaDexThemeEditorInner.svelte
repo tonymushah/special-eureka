@@ -15,6 +15,11 @@
 	import { derived, type Updater, type Writable } from "svelte/store";
 	import { custom, type MangadexTheme } from "@mangadex/theme";
 	import { debounce } from "lodash";
+	interface Props {
+		profile?: import('svelte').Snippet;
+	}
+
+	let { profile }: Props = $props();
 	const theme_ = getMangaDexThemeContextWritable();
 	const debounce_set = debounce(
 		(value: MangadexTheme) => {
@@ -58,7 +63,7 @@
 	<div class="colors">
 		<div class="title">
 			<Title type={2}>Theme Editor</Title>
-			<slot name="profile"></slot>
+			{@render profile?.()}
 		</div>
 		<div class="main-bg-text">
 			<section class="bg">

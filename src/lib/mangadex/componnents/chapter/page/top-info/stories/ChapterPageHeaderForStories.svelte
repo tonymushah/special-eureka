@@ -1,12 +1,20 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { writable } from "svelte/store";
 	import { initCurrentChapterData, type CurrentChapterData } from "../../contexts/currentChapter";
 	import ChapterPageHeader from "../ChapterPageHeader.svelte";
 
-	export let currentChapter: CurrentChapterData;
+	interface Props {
+		currentChapter: CurrentChapterData;
+	}
+
+	let { currentChapter }: Props = $props();
 	const c = writable(currentChapter);
 	initCurrentChapterData(c);
-	$: c.set(currentChapter);
+	run(() => {
+		c.set(currentChapter);
+	});
 </script>
 
 <ChapterPageHeader />

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { createEventDispatcher } from "svelte";
-	export let mangaId: string;
+	interface Props {
+		mangaId: string;
+	}
+
+	let { mangaId }: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -21,13 +25,13 @@
 <div
 	tabindex="-1"
 	role="button"
-	on:keypress={(e) => {
+	onkeypress={(e) => {
 		dispatch("mangaKeyClick", {
 			...e,
 			id: mangaId
 		});
 	}}
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("mangaClick", {
 			...e,
 			id: mangaId

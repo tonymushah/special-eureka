@@ -2,12 +2,17 @@
 	import { type MangadexTheme } from "@mangadex/theme";
 	import MangadexBackground from "./MangadexBackground.svelte";
 	import MangadexThemeProviderBase from "./MangadexThemeProviderBase.svelte";
-	export let theme: MangadexTheme;
-	export let fonts = "Poppins";
+	interface Props {
+		theme: MangadexTheme;
+		fonts?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { theme, fonts = "Poppins", children }: Props = $props();
 </script>
 
 <MangadexThemeProviderBase {theme} {fonts}>
 	<MangadexBackground>
-		<slot />
+		{@render children?.()}
 	</MangadexBackground>
 </MangadexThemeProviderBase>

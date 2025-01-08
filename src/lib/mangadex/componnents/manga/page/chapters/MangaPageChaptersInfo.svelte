@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { AltTitleItem } from "./info/alt-titles/MangaAltTitles.svelte";
 	import type { LinkItem } from "./info/links/MangaLinksBase.svelte";
 	import type { TitlePButtonItem } from "./info/title-buttons/TitlePButton.svelte";
@@ -26,14 +26,27 @@
 			key: T;
 		};
 	}>();
-	export let idsKeysItem: IdKeyedItem<T>[];
-	export let links: MangaLinksItem[];
-	export let altTitles: AltTitleItem[];
-	export let altTitlesBoxTitle: string = "Alternative Titles";
+	interface Props {
+		idsKeysItem: IdKeyedItem<T>[];
+		links: MangaLinksItem[];
+		altTitles: AltTitleItem[];
+		altTitlesBoxTitle?: string;
+		top?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		idsKeysItem,
+		links,
+		altTitles = $bindable(),
+		altTitlesBoxTitle = "Alternative Titles",
+		top,
+		children
+	}: Props = $props();
 </script>
 
 <div class="infos">
-	<slot name="top" />
+	{@render top?.()}
 	{#if idsKeysItem.length > 0}
 		<div class="flex-row">
 			{#each idsKeysItem as { key, title, items } (key)}
@@ -63,7 +76,7 @@
 		</div>
 	{/if}
 
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">

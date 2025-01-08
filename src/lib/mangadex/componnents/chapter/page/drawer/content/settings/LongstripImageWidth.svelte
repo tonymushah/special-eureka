@@ -67,7 +67,7 @@
 			<div class="slider-container">
 				<span use:melt={$root} class="slider-root">
 					<span class="slider-range-outer">
-						<span use:melt={$range} class="slider-range" />
+						<span use:melt={$range} class="slider-range"></span>
 					</span>
 					<span use:melt={$thumbs[0]} use:melt={$trigger} class="slider-thumbs"> </span>
 				</span>
@@ -80,7 +80,7 @@
 	<div class="tooltip" use:melt={$content} transition:fade={{ duration: 100 }}>
 		<MangaDexVarThemeProvider>
 			<div class="tooltip-content">
-				<div use:melt={$arrow} />
+				<div use:melt={$arrow}></div>
 				<h4>{$tooltipContent}%</h4>
 			</div>
 		</MangaDexVarThemeProvider>

@@ -1,21 +1,30 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { LayoutData } from "./$types";
 	import PostLayout from "./PostLayout.svelte";
 
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data = $bindable(), children }: Props = $props();
 	function isLayoutDataValid({ data, pages, currentPage }: LayoutData): boolean {
 		if (data != null && data != undefined && pages != undefined && currentPage != undefined) {
 			return true;
 		}
 		return false;
 	}
-	$: console.debug(data);
-	$: isDataValid = isLayoutDataValid(data);
+	run(() => {
+		console.debug(data);
+	});
+	let isDataValid = $derived(isLayoutDataValid(data));
 </script>
 
 {#if isDataValid}
 	<PostLayout bind:data>
-		<slot />
+		{@render children?.()}
 	</PostLayout>
 {:else}
 	<article>

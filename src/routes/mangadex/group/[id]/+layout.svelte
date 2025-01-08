@@ -1,56 +1,70 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
-	import { writeText } from "@tauri-apps/api/clipboard";
-	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { open as shellOpen } from "@tauri-apps/plugin-shell";
 	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
 
-	export let data: LayoutData;
-	$: description = data.description ?? undefined;
-	$: console.log(`duration: ${data.publishDelay}`);
-	$: console.log(`since: ${data.createdAt}`);
-	$: createdSince = data.createdAt;
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
+	let description = $derived(data.description ?? undefined);
+	run(() => {
+		console.log(`duration: ${data.publishDelay}`);
+	});
+	run(() => {
+		console.log(`since: ${data.createdAt}`);
+	});
+	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
 </script>
 
 <UsersPageBase title={data.name} {description}>
-	<div slot="left" class="buttons">
-		<PrimaryButton isBase>
-			<p><BookmarkIcon />Follow</p>
-		</PrimaryButton>
-		<ButtonAccent
-			isBase
-			on:click={() => {
-				shellOpen(`https://mangadex.org/user/${data.id}`);
-			}}
-		>
-			<p><ExternalLinkIcon /> Open in browser</p>
-		</ButtonAccent>
-		<ButtonAccent isBase>
-			<p><FlagIcon />Report</p>
-		</ButtonAccent>
-		<ScanalationGroupLinkButtons
-			website={data.website ?? undefined}
-			twitter={data.twitter ?? undefined}
-			ircChannel={data.ircChannel ?? undefined}
-			ircServer={data.ircServer ?? undefined}
-			mangaUpdates={data.mangaUpdates ?? undefined}
-			discord={data.discord ?? undefined}
-			email={data.email ?? undefined}
-		/>
-	</div>
+	{#snippet left()}
+		<div  class="buttons">
+			<PrimaryButton isBase>
+				<p><BookmarkIcon />Follow</p>
+			</PrimaryButton>
+			<ButtonAccent
+				isBase
+				on:click={() => {
+					shellOpen(`https://mangadex.org/user/${data.id}`);
+				}}
+			>
+				<p><ExternalLinkIcon /> Open in browser</p>
+			</ButtonAccent>
+			<ButtonAccent isBase>
+				<p><FlagIcon />Report</p>
+			</ButtonAccent>
+			<ScanalationGroupLinkButtons
+				website={data.website ?? undefined}
+				twitter={data.twitter ?? undefined}
+				ircChannel={data.ircChannel ?? undefined}
+				ircServer={data.ircServer ?? undefined}
+				mangaUpdates={data.mangaUpdates ?? undefined}
+				discord={data.discord ?? undefined}
+				email={data.email ?? undefined}
+			/>
+		</div>
+	{/snippet}
+	<!-- @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
 	<div slot="top-right" class="info">
 		<p>
 			Group ID: <span
-				on:keydown={() => {}}
+				onkeydown={() => {}}
 				role="button"
 				tabindex={0}
-				on:click={() => {
+				onclick={() => {
 					writeText(data.id);
 				}}
 				class="copiable">{data.id}</span
@@ -87,14 +101,16 @@
 			</p>
 		</section>
 	</div>
-	<div slot="right">
-		<section class="nav-tab">
-			<NavTab id={data.id} />
-		</section>
-		<section class="content">
-			<slot />
-		</section>
-	</div>
+	{#snippet right()}
+		<div >
+			<section class="nav-tab">
+				<NavTab id={data.id} />
+			</section>
+			<section class="content">
+				{@render children?.()}
+			</section>
+		</div>
+	{/snippet}
 </UsersPageBase>
 
 <style lang="scss">

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import TopTitle from "./utils/TopTitle.svelte";
 	import query from "./recently-added/query";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
@@ -15,10 +17,13 @@
 		variable: {}
 	});
 	const isFetching = recently_added_query_store.isFetching;
-	$: fetching = $isFetching;
+	let fetching;
+	run(() => {
+		fetching = $isFetching;
+	});
 
-	$: error = $recently_added_query_store?.error;
-	$: data = $recently_added_query_store?.data;
+	let error = $derived($recently_added_query_store?.error);
+	let data = $derived($recently_added_query_store?.data);
 	onMount(async () => {
 		await recently_added_query_store.execute();
 	});

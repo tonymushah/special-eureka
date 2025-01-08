@@ -1,3 +1,19 @@
+<!-- @migration-task Error while migrating Svelte code: can't migrate `$: next = function () {
+		if ($currentPageIndex < $images_length - 1) {
+			resetZoom();
+			currentChapterPage.update(() => {
+				const index = $images_indexes[$currentPageIndex + 1];
+				if (isArray(index)) {
+					return index[ceil(random(0, 1))];
+				} else {
+					return index;
+				}
+			});
+		} else {
+			dispatch("next", {});
+		}
+	};` to `$derived` because there's a variable named derived.
+     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { ceil, isArray, random } from "lodash";
 	import { createEventDispatcher } from "svelte";

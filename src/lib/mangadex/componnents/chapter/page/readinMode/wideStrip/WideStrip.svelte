@@ -2,6 +2,9 @@
     TODO Add drag support for scrolling
 -->
 <script lang="ts">
+	import { run, preventDefault, createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { derived, get, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
@@ -12,7 +15,7 @@
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 
 	const readingDirection = getCurrentChapterDirection();
-	let widestrip_root: HTMLDivElement | undefined;
+	let widestrip_root: HTMLDivElement | undefined = $state();
 	const images = getChapterImageContext();
 	const isFromIntersector = writable(false);
 	let shouldIgnore = false;
@@ -51,9 +54,23 @@
 			}
 		});
 	});
-	export let innerOverflow = true;
+	interface Props {
+		innerOverflow?: boolean;
+		top?: import('svelte').Snippet;
+		before?: import('svelte').Snippet;
+		after?: import('svelte').Snippet;
+		bottom?: import('svelte').Snippet;
+	}
 
-	let toObserve: Element[] = [];
+	let {
+		innerOverflow = true,
+		top,
+		before,
+		after,
+		bottom
+	}: Props = $props();
+
+	let toObserve: Element[] = $state([]);
 	// TODO Add support with the intersection observer API
 	const interObserver = new IntersectionObserver(
 		(entries) => {
@@ -83,9 +100,11 @@
 			root: widestrip_root
 		}
 	);
-	$: toObserve.forEach((e) => {
-		interObserver.unobserve(e);
-		interObserver.observe(e);
+	run(() => {
+		toObserve.forEach((e) => {
+			interObserver.unobserve(e);
+			interObserver.observe(e);
+		});
 	});
 	const rtl = derived(readingDirection, ($readingDirection) => {
 		toObserve.forEach((entry) => {
@@ -151,7 +170,7 @@
     */
 </script>
 
-<slot name="top" />
+{@render top?.()}
 
 <div
 	role="button"
@@ -160,7 +179,7 @@
 	class:rtl={$rtl}
 	class:innerOverflow
 	bind:this={widestrip_root}
-	on:wheel|preventDefault={(e) => {
+	onwheel={preventDefault((e) => {
 		if (widestrip_root) {
 			if ($rtl) {
 				widestrip_root.scrollLeft -= e.deltaY;
@@ -168,18 +187,18 @@
 				widestrip_root.scrollLeft += e.deltaY;
 			}
 		}
-	}}
+	})}
 >
-	<slot name="before" />
+	{@render before?.()}
 	{#each $images as image, page}
 		<div data-page={page} use:mount>
-			<img on:drag|preventDefault src={image} alt={image} data-page={page} />
+			<img ondrag={preventDefault(bubble('drag'))} src={image} alt={image} data-page={page} />
 		</div>
 	{/each}
-	<slot name="after" />
+	{@render after?.()}
 </div>
 
-<slot name="bottom" />
+{@render bottom?.()}
 
 <style lang="scss">
 	.wide-strip {

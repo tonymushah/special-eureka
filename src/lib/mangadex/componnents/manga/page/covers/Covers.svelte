@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import { getContextClient } from "@urql/svelte";
@@ -13,10 +15,10 @@
 	const id = data!.id;
 	const client = getContextClient();
 	const imagesStore = getCoversImageStoreContext();
-	let isLoading = false;
+	let isLoading = $state(false);
 	let currentOffset = 0;
-	let isAtEnd = false;
-	let coversData: CoverInput[] = [];
+	let isAtEnd = $state(false);
+	let coversData: CoverInput[] = $state([]);
 	async function fetchCovers() {
 		if (isAtEnd) {
 			throw new Error("No next data can be fetched");
@@ -83,12 +85,12 @@
 	const interObs = new IntersectionObserver(async (o, s) => {
 		if (!isLoading) await fetch();
 	});
-	let interObsEl: HTMLDivElement | undefined = undefined;
-	$: {
+	let interObsEl: HTMLDivElement | undefined = $state(undefined);
+	run(() => {
 		if (interObsEl) {
 			interObs.observe(interObsEl);
 		}
-	}
+	});
 
 	onMount(async () => {
 		await fetch();
@@ -96,8 +98,8 @@
 	onDestroy(() => {
 		interObs.disconnect();
 	});
-	$: isDataEmpty = coversData.length == 0;
-	$: isInitialLoading = isLoading && isDataEmpty;
+	let isDataEmpty = $derived(coversData.length == 0);
+	let isInitialLoading = $derived(isLoading && isDataEmpty);
 </script>
 
 {#if isInitialLoading}

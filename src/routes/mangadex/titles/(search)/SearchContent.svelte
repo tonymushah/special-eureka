@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import MangaList from "@mangadex/componnents/manga/list/MangaList.svelte";
 	import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
@@ -11,12 +13,16 @@
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	let isFetching = false;
+	let isFetching = $state(false);
 	const client = getContextClient();
 	const titles = writable<MangaListContentItemProps[]>([]);
 	const debounce_wait = 450;
-	export let params: Readable<MangaListParams>;
-	export let offlineStore: Readable<boolean>;
+	interface Props {
+		params: Readable<MangaListParams>;
+		offlineStore: Readable<boolean>;
+	}
+
+	let { params, offlineStore }: Props = $props();
 	const p_p_offline = derived([params, offlineStore], (merged) => merged);
 	let debounce_func: DebouncedFunc<() => Promise<void>> | undefined = undefined;
 	const currentResult = writable<AbstractSearchResult<MangaListContentItemProps> | undefined>(
@@ -81,14 +87,16 @@
 		debounce_func?.cancel();
 		observer.disconnect();
 	});
-	let to_obserce_bind: HTMLElement | undefined = undefined;
-	$: {
+	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
+	run(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
-	}
-	$: console.log(`isFetching: ${isFetching}`);
+	});
+	run(() => {
+		console.log(`isFetching: ${isFetching}`);
+	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 

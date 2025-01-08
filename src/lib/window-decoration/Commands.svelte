@@ -1,12 +1,13 @@
 <script>
 	import openNewWindow from "$lib/commands/openNewWindow";
 	import toggleDecoration from "$lib/commands/toggleDecoration";
-	import { appWindow } from "@tauri-apps/api/window";
+	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+const appWindow = getCurrentWebviewWindow()
 </script>
 
 <button
 	class="flex-center"
-	on:click={async () => {
+	onclick={async () => {
 		await appWindow.emit("redirect", "/");
 	}}
 >
@@ -14,7 +15,7 @@
 </button>
 <button
 	class="flex-center"
-	on:click={async () => {
+	onclick={async () => {
 		await openNewWindow();
 	}}
 >
@@ -22,7 +23,7 @@
 </button>
 <button
 	class="flex-center"
-	on:click={async () => {
+	onclick={async () => {
 		await toggleDecoration();
 	}}
 >

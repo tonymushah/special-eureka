@@ -9,19 +9,24 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "default" | "l1" | "l2" = "default";
+	interface Props {
+		type?: "default" | "l1" | "l2";
+		children?: import('svelte').Snippet;
+	}
+
+	let { type = "default", children }: Props = $props();
 </script>
 
 {#if type == "l1"}
 	<L1 on:click>
-		<slot />
+		{@render children?.()}
 	</L1>
 {:else if type == "l2"}
 	<L2 on:click>
-		<slot />
+		{@render children?.()}
 	</L2>
 {:else}
 	<Default on:click>
-		<slot />
+		{@render children?.()}
 	</Default>
 {/if}

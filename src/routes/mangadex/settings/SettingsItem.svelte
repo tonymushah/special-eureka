@@ -3,24 +3,35 @@
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { ComponentType } from "svelte";
 
-	export let icon: ComponentType;
-	export let title: string;
-	export let description: string;
-	export let href: string;
+	interface Props {
+		icon: ComponentType;
+		title: string;
+		description: string;
+		href: string;
+	}
+
+	let {
+		icon,
+		title,
+		description,
+		href
+	}: Props = $props();
+
+	const SvelteComponent = $derived(icon);
 </script>
 
 <section
 	role="button"
 	tabindex="0"
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		if (e.key == "Enter") {
 			goto(href);
 		}
 	}}
-	on:click={() => goto(href)}
+	onclick={() => goto(href)}
 >
 	<div class="icon">
-		<svelte:component this={icon} />
+		<SvelteComponent />
 	</div>
 	<h2>{title}</h2>
 	<p>{description}</p>

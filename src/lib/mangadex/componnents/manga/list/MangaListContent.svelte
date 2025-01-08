@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { CoverMangaListItemProps } from "./cover/CoverMangaList.svelte";
 	import type { LongMangaListItemProps } from "./long/LongMangaList.svelte";
 	import type { MediumMangaListElementProps } from "./medium/MediumMangaList.svelte";
@@ -15,7 +15,11 @@
 	import LongMangaList from "./long/LongMangaList.svelte";
 	import MediumMangaList from "./medium/MediumMangaList.svelte";
 
-	export let list: MangaListContentItemProps[] = [];
+	interface Props {
+		list?: MangaListContentItemProps[];
+	}
+
+	let { list = $bindable([]) }: Props = $props();
 	const style = getMangaListStyleContext();
 </script>
 

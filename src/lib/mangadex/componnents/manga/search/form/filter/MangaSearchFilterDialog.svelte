@@ -8,8 +8,12 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import { createEventDispatcher } from "svelte";
 
-	export let dialog_bind: HTMLDialogElement | undefined = undefined;
-	export let requireValidation: boolean = false;
+	interface Props {
+		dialog_bind?: HTMLDialogElement | undefined;
+		requireValidation?: boolean;
+	}
+
+	let { dialog_bind = $bindable(undefined), requireValidation = false }: Props = $props();
 	const dispatch = createEventDispatcher<{
 		validate: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -19,7 +23,7 @@
 
 <dialog
 	bind:this={dialog_bind}
-	on:cancel={(e) => {
+	oncancel={(e) => {
 		e.currentTarget.close();
 	}}
 >

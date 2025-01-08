@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { writable } from "svelte/store";
 	import { initChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
@@ -7,15 +9,28 @@
 	import { initCurrentChapterDirection } from "../../../contexts/readingDirection";
 	import { initCurrentChapterImageFit } from "../../../contexts/imageFit";
 
-	export let images: string[];
-	export let currentPage: number = 0;
-	export let direction: ReadingDirection = ReadingDirection.Ltr;
-	export let imageFit = ImageFit.Default;
+	interface Props {
+		images: string[];
+		currentPage?: number;
+		direction?: ReadingDirection;
+		imageFit?: any;
+	}
+
+	let {
+		images,
+		currentPage = 0,
+		direction = ReadingDirection.Ltr,
+		imageFit = ImageFit.Default
+	}: Props = $props();
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
-	$: readingDirection.set(direction);
-	$: imageFitStore.set(imageFit);
+	run(() => {
+		readingDirection.set(direction);
+	});
+	run(() => {
+		imageFitStore.set(imageFit);
+	});
 	initChapterCurrentPageContext(writable(currentPage));
 	initChapterImageContext(images);
 </script>
@@ -30,7 +45,7 @@
 		{/if}
 	</span>
 	<button
-		on:click={() => {
+		onclick={() => {
 			switch ($readingDirection) {
 				case ReadingDirection.Ltr:
 					readingDirection.set(ReadingDirection.Rtl);
@@ -50,7 +65,7 @@
 <div class="image-fit">
 	<span> Image Fit: </span>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Default;
 		}}
 		class:active={$imageFitStore == ImageFit.Default}
@@ -58,7 +73,7 @@
 		None
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Heigth;
 		}}
 		class:active={$imageFitStore == ImageFit.Heigth}
@@ -66,7 +81,7 @@
 		Height
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Width;
 		}}
 		class:active={$imageFitStore == ImageFit.Width}

@@ -7,39 +7,50 @@
 	import Red from "./status/Red.svelte";
 	import Yellow from "./status/Yellow.svelte";
 	import type { StatusColor } from "@mangadex/utils/types/status";
-	export let color: StatusColor;
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "reset" | "submit" | "button" = "button";
-	export let style: string | undefined = undefined;
-	export let isBase = false;
+	interface Props {
+		color: StatusColor;
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		isBase?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		color,
+		type = "button",
+		style = undefined,
+		isBase = false,
+		children
+	}: Props = $props();
 </script>
 
 {#if color == "blue"}
 	<Blue on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Blue>
 {:else if color == "gray"}
 	<Gray on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Gray>
 {:else if color == "green"}
 	<Green on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Green>
 {:else if color == "purple"}
 	<Purple on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Purple>
 {:else if color == "red"}
 	<Red on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Red>
 {:else if color == "yellow"}
 	<Yellow on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Yellow>
 {/if}

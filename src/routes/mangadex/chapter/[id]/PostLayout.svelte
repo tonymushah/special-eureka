@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	// TODO Add oneshot support
 	function layoutDataToCurrentChapterData({ data }: LayoutData): CurrentChapterData {
 		const id: string = data.id;
@@ -48,6 +48,8 @@
 </script>
 
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { LayoutData } from "./$types";
 	import { writable } from "svelte/store";
 	import {
@@ -80,7 +82,12 @@
 	import imageFitWritable from "./layout-query/imageFit";
 	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
 
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
 
 	const client = getContextClient();
 
@@ -90,7 +97,9 @@
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
 
-	$: images.set(data.pages.data);
+	run(() => {
+		images.set(data.pages.data);
+	});
 	const currentChapterData = initCurrentChapterData(
 		writable(layoutDataToCurrentChapterData(data))
 	);
@@ -98,9 +107,13 @@
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
 	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
-	$: currentPage.set(data.currentPage);
-	$: currentChapterData.set(layoutDataToCurrentChapterData(data));
-	$: {
+	run(() => {
+		currentPage.set(data.currentPage);
+	});
+	run(() => {
+		currentChapterData.set(layoutDataToCurrentChapterData(data));
+	});
+	run(() => {
 		client
 			.query(relatedChaptersQuery, {
 				groups: data.data.relationships.scanlationGroups.map((g) => g.id),
@@ -122,8 +135,8 @@
 				}
 			})
 			.catch(console.error);
-	}
-	$: {
+	});
+	run(() => {
 		client
 			.query(chapterPageThread, {
 				id: data.data.id
@@ -145,7 +158,7 @@
 				}
 			})
 			.catch(console.error);
-	}
+	});
 </script>
 
-<slot />
+{@render children?.()}

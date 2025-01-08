@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type MangaAggregateData = Volume[];
 	export type Volume = {
 		volume: string;
@@ -11,6 +11,8 @@
 </script>
 
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { onMount, type ComponentProps, createEventDispatcher } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
@@ -21,10 +23,14 @@
 
 	const dispatch = createEventDispatcher<ChapterEl1Events>();
 
-	export let volumes: MangaAggregateData;
+	interface Props {
+		volumes: MangaAggregateData;
+	}
+
+	let { volumes }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
-	let data: ComponentProps<VolumeAccordion>[] = [];
-	$: {
+	let data: ComponentProps<VolumeAccordion>[] = $state([]);
+	run(() => {
 		const store = $chaptersStore;
 		data = volumes.map((volume) => {
 			return {
@@ -45,7 +51,7 @@
 				})
 			};
 		});
-	}
+	});
 </script>
 
 <Volumes

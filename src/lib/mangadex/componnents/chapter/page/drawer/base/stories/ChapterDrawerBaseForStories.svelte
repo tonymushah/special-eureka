@@ -1,8 +1,8 @@
 <script lang="ts">
 	import ChapterDrawer from "../ChapterDrawerBase.svelte";
-	let open = false;
-	let fixed = true;
-	let left = false;
+	let open = $state(false);
+	let fixed = $state(true);
+	let left = $state(false);
 </script>
 
 <div class="container">
@@ -23,49 +23,51 @@
 				inventore, soluta eius praesentium maiores vel animi nemo?
 			</p>
 		</div>
-		<div class="content" class:left slot="content">
-			<div class="buttons" class:left>
-				<button
-					on:click={() => {
+		{#snippet content()}
+				<div class="content" class:left >
+				<div class="buttons" class:left>
+					<button
+						onclick={() => {
 						open = !open;
 					}}
-				>
-					{#if open}
-						Close
-					{:else}
-						Open
-					{/if}
-				</button>
-				<button
-					on:click={() => {
+					>
+						{#if open}
+							Close
+						{:else}
+							Open
+						{/if}
+					</button>
+					<button
+						onclick={() => {
 						fixed = !fixed;
 					}}
-				>
-					{#if fixed}
-						Fixed
-					{:else}
-						Not Fixed
-					{/if}
-				</button>
-				<button
-					on:click={() => {
+					>
+						{#if fixed}
+							Fixed
+						{:else}
+							Not Fixed
+						{/if}
+					</button>
+					<button
+						onclick={() => {
 						left = !left;
 					}}
-				>
-					{#if left}
-						Left
-					{:else}
-						Right
-					{/if}
-				</button>
-			</div>
+					>
+						{#if left}
+							Left
+						{:else}
+							Right
+						{/if}
+					</button>
+				</div>
 
-			<p>
-				Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam dolor delectus saepe
-				ex laboriosam nihil dignissimos, fuga, dolorum aliquid quod ullam aut natus officiis
-				quis omnis similique molestiae suscipit corporis.
-			</p>
-		</div>
+				<p>
+					Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam dolor delectus saepe
+					ex laboriosam nihil dignissimos, fuga, dolorum aliquid quod ullam aut natus officiis
+					quis omnis similique molestiae suscipit corporis.
+				</p>
+			</div>
+			{/snippet}
 	</ChapterDrawer>
 </div>
 

@@ -5,12 +5,16 @@
 
 	const open = isDrawerOpenWritable();
 
-	export let left = false;
+	interface Props {
+		left?: boolean;
+	}
+
+	let { left = false }: Props = $props();
 </script>
 
 <section class:left>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$open = !$open;
 		}}
 		transition:fade

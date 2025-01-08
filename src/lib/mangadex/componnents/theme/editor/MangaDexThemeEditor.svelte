@@ -1,12 +1,21 @@
-<script>
+<script lang="ts">
 	import MangaDexThemeEditorInner from "./MangaDexThemeEditorInner.svelte";
+	interface Props {
+		profile?: import('svelte').Snippet;
+	}
+
+	let { profile }: Props = $props();
+
+	const profile_render = $derived(profile);
 </script>
 
 <div class="editor">
 	<MangaDexThemeEditorInner>
-		<svelte:fragment slot="profile">
-			<slot name="profile" />
-		</svelte:fragment>
+		{#snippet profile()}
+			
+				{@render profile_render?.()}
+			
+			{/snippet}
 	</MangaDexThemeEditorInner>
 </div>
 

@@ -23,7 +23,7 @@
 	<div class="content">
 		<button
 			class:ongoing={$selected.includes(MangaStatus.Ongoing)}
-			on:click={() => toggleStatus(MangaStatus.Ongoing)}
+			onclick={() => toggleStatus(MangaStatus.Ongoing)}
 		>
 			<div class="icon">
 				{#if $selected.includes(MangaStatus.Ongoing)}
@@ -36,7 +36,7 @@
 		</button>
 		<button
 			class:completed={$selected.includes(MangaStatus.Completed)}
-			on:click={() => toggleStatus(MangaStatus.Completed)}
+			onclick={() => toggleStatus(MangaStatus.Completed)}
 		>
 			<div class="icon">
 				{#if $selected.includes(MangaStatus.Completed)}
@@ -49,7 +49,7 @@
 		</button>
 		<button
 			class:hiatus={$selected.includes(MangaStatus.Hiatus)}
-			on:click={() => toggleStatus(MangaStatus.Hiatus)}
+			onclick={() => toggleStatus(MangaStatus.Hiatus)}
 		>
 			<div class="icon">
 				{#if $selected.includes(MangaStatus.Hiatus)}
@@ -62,7 +62,7 @@
 		</button>
 		<button
 			class:cancelled={$selected.includes(MangaStatus.Cancelled)}
-			on:click={() => toggleStatus(MangaStatus.Cancelled)}
+			onclick={() => toggleStatus(MangaStatus.Cancelled)}
 		>
 			<div class="icon">
 				{#if $selected.includes(MangaStatus.Cancelled)}

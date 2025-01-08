@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { createEventDispatcher } from "svelte";
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
@@ -10,10 +12,17 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	$: cover = $coverImage;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+	}
+
+	let { coverImage, coverImageAlt, title }: Props = $props();
+	let cover;
+	run(() => {
+		cover = $coverImage;
+	});
 </script>
 
 <Layout

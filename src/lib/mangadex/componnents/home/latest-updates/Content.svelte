@@ -8,8 +8,12 @@
 	import { getContextClient } from "@urql/svelte";
 	import getChapterDownloadState from "./getChapterDownloadState";
 	const client = getContextClient();
-	export let chapters: RecentlyAddedHomeQuery;
-	$: data = chapters.home.recentlyUploaded.data.map((c) => ({
+	interface Props {
+		chapters: RecentlyAddedHomeQuery;
+	}
+
+	let { chapters }: Props = $props();
+	let data = $derived(chapters.home.recentlyUploaded.data.map((c) => ({
 		mangaId: c.relationships.manga.id,
 		chapterId: c.id,
 		download_state: getChapterDownloadState({
@@ -53,11 +57,11 @@
 				? ` ${c.attributes.title}`
 				: ""
 		}`
-	}));
-	$: halfwayThrough = Math.floor(data.length / 2);
+	})));
+	let halfwayThrough = $derived(Math.floor(data.length / 2));
 
-	$: data1 = data.slice(0, halfwayThrough);
-	$: data2 = data.slice(halfwayThrough, data.length);
+	let data1 = $derived(data.slice(0, halfwayThrough));
+	let data2 = $derived(data.slice(halfwayThrough, data.length));
 </script>
 
 <div class="content">

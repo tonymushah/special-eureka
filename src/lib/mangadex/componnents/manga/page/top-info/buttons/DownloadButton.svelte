@@ -18,7 +18,7 @@
 		};
 	}>();
 
-	$: state = $stateStore;
+	let state = $derived($stateStore);
 </script>
 
 {#if state == ChapterDownloadState.Downloaded}

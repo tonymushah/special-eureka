@@ -3,16 +3,20 @@
 	import NoteInner from "./note/NoteInner.svelte";
 	import StarIcon from "./note/StarIcon.svelte";
 
-	export let average: number;
-	export let inner: TopMangaStatsInner;
-	let target: HTMLButtonElement | undefined = undefined;
-	let isOpen = false;
-	$: _average = average.toFixed(2);
+	interface Props {
+		average: number;
+		inner: TopMangaStatsInner;
+	}
+
+	let { average, inner = $bindable() }: Props = $props();
+	let target: HTMLButtonElement | undefined = $state(undefined);
+	let isOpen = $state(false);
+	let _average = $derived(average.toFixed(2));
 </script>
 
 <button
 	class="note"
-	on:click={() => {
+	onclick={() => {
 		isOpen = !isOpen;
 	}}
 	bind:this={target}

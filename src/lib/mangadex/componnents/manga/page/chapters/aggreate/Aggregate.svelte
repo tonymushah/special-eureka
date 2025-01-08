@@ -1,3 +1,5 @@
+<!-- @migration-task Error while migrating Svelte code: can't migrate `$: selected = $isReversed ? $aggregateReverse[selectedIndex] : $aggregate[selectedIndex];` to `$derived` because there's a variable named derived.
+     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
@@ -17,7 +19,7 @@
 	import AggregateContent from "./AggregateContent.svelte";
 	import lodash from "lodash";
 	import { fade } from "svelte/transition";
-	import { open } from "@tauri-apps/api/shell";
+	import { open } from "@tauri-apps/plugin-shell";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();

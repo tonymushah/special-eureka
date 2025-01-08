@@ -61,11 +61,11 @@
 		query: latest_updates_query,
 		variable: {}
 	});
-	$: chapters = $latest_updates_query_store?.data;
+	let chapters = $derived($latest_updates_query_store?.data);
 	const latest_updates_fetching = latest_updates_query_store.isFetching;
 
-	$: global_fetching = $latest_updates_fetching;
-	$: error = $latest_updates_query_store?.error;
+	let global_fetching = $derived($latest_updates_fetching);
+	let error = $derived($latest_updates_query_store?.error);
 
 	//const
 	//let isFetching =

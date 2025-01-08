@@ -7,7 +7,9 @@
 </script>
 
 <SubMenu label="Search">
-	<SearchIcon slot="icon" size="24" />
+	{#snippet icon()}
+		<SearchIcon  size="24" />
+	{/snippet}
 	<SubMenuItem label="Titles" href={route("/mangadex/titles")} />
 	<SubMenuItem label="Authors" href={route("/mangadex/author")} />
 	<SubMenuItem label="Groups" href={route("/mangadex/group")} />

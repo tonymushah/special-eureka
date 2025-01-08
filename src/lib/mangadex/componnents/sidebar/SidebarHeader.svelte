@@ -10,12 +10,12 @@
 <div
 	role="button"
 	tabindex="0"
-	on:keypress={({ key }) => {
+	onkeypress={({ key }) => {
 		if (key == "Enter") {
 			toggle();
 		}
 	}}
-	on:click={() => {
+	onclick={() => {
 		toggle();
 	}}
 >

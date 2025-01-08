@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import TopTitle from "./utils/TopTitle.svelte";
 	import query from "./seasonal/query";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
@@ -14,10 +16,13 @@
 		query,
 		variable: {}
 	});
-	$: error = $query_store?.error;
-	$: data = $query_store?.data;
+	let error = $derived($query_store?.error);
+	let data = $derived($query_store?.data);
 	const isFetching = query_store.isFetching;
-	$: fetching = $isFetching;
+	let fetching;
+	run(() => {
+		fetching = $isFetching;
+	});
 	onMount(async () => {
 		await query_store.execute();
 	});

@@ -2,11 +2,15 @@
 	import type { MangaStatus } from "@mangadex/gql/graphql";
 	import getText from "@mangadex/utils/manga/status/getText";
 	import get_manga_status_color from "@mangadex/utils/manga/status/get_color";
-	export let status: MangaStatus;
-	export let year: number | undefined = undefined;
+	interface Props {
+		status: MangaStatus;
+		year?: number | undefined;
+	}
 
-	$: color = get_manga_status_color(status);
-	$: text = getText(status);
+	let { status, year = undefined }: Props = $props();
+
+	let color = $derived(get_manga_status_color(status));
+	let text = $derived(getText(status));
 </script>
 
 <div class="manga-status">

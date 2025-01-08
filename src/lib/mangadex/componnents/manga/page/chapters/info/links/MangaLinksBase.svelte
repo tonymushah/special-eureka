@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { Readable } from "svelte/store";
 
 	export type LinkItem = {
@@ -11,8 +11,12 @@
 <script lang="ts">
 	import MangaLinkButton from "./MangaLinkButton.svelte";
 
-	export let title: string;
-	export let items: LinkItem[];
+	interface Props {
+		title: string;
+		items: LinkItem[];
+	}
+
+	let { title, items }: Props = $props();
 </script>
 
 <div class="outer">

@@ -10,14 +10,27 @@
 		id: string;
 		name: string;
 	};
-	export let index: number = -1;
-	export let coverImage: string;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let authors: Author[];
+	interface Props {
+		index?: number;
+		coverImage: string;
+		coverImageAlt: string;
+		title: string;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		authors: Author[];
+	}
+
+	let {
+		index = -1,
+		coverImage,
+		coverImageAlt,
+		title,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		authors
+	}: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
@@ -31,8 +44,8 @@
 			id: string;
 		};
 	}>();
-	let isCoverLoading = true;
-	let isCoverError = false;
+	let isCoverLoading = $state(true);
+	let isCoverError = $state(false);
 	onMount(() => {
 		let img = new Image();
 		img.addEventListener("load", (e) => {
@@ -47,13 +60,14 @@
 </script>
 
 <Layout {coverImage}>
+	<!-- @migration-task: migrate this slot by hand, `no-index` is an invalid identifier -->
 	<NoIndex {index} slot="no-index" />
 	<div
 		class="cover"
 		role="button"
-		on:keydown={(e) => {}}
+		onkeydown={(e) => {}}
 		tabindex="0"
-		on:click={(e) => {
+		onclick={(e) => {
 			dispatch("click", e);
 		}}
 	>

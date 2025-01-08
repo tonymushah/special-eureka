@@ -5,7 +5,9 @@
 </script>
 
 <SubMenu label="Titles">
-    <BookIcon slot="icon" size="24"/>
+    {#snippet icon()}
+        <BookIcon  size="24"/>
+    {/snippet}
     <SubMenuItem label="Offline Library"/>
     <SubMenuItem label="Latest Updates"/>
     <SubMenuItem label="Random"/>

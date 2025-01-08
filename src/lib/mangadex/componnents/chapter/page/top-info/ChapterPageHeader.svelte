@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export const headerHeight = writable<number>(0);
 </script>
 
@@ -19,7 +19,7 @@
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 	}>();
-	let headerEl: HTMLElement | undefined;
+	let headerEl: HTMLElement | undefined = $state();
 	onMount(() => {
 		const h = headerEl?.clientHeight;
 		if (h) {
@@ -52,10 +52,10 @@
 			class="menu-button"
 			tabindex="0"
 			role="button"
-			on:click={(e) => {
+			onclick={(e) => {
 				dispatch("menuClick", e);
 			}}
-			on:keydown={(e) => {
+			onkeydown={(e) => {
 				dispatch("menuPress", e);
 			}}
 		>

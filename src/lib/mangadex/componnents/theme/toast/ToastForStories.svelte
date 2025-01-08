@@ -2,9 +2,13 @@
 	import ButtonAccent from "../buttons/ButtonAccent.svelte";
 	import { addToast } from "./Toaster.svelte";
 
-	export let title: string;
-	export let description: string;
-	export let color: string;
+	interface Props {
+		title: string;
+		description: string;
+		color: string;
+	}
+
+	let { title, description, color }: Props = $props();
 	function toast() {
 		addToast({
 			data: {

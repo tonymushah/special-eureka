@@ -1,21 +1,25 @@
 <script lang="ts">
 	import millify from "millify";
 	import BookMarkIcon from "./bookmark/BookMarkIcon.svelte";
-	export let bookmarks: number;
-	let shouldSuspend = false;
-	let isMillify = true;
-	$: bookmarks_ = isMillify ? millify(bookmarks) : bookmarks;
+	interface Props {
+		bookmarks: number;
+	}
+
+	let { bookmarks }: Props = $props();
+	let shouldSuspend = $state(false);
+	let isMillify = $state(true);
+	let bookmarks_ = $derived(isMillify ? millify(bookmarks) : bookmarks);
 </script>
 
 <button
 	class="bookmarks"
-	on:mouseenter={() => {
+	onmouseenter={() => {
 		if (!shouldSuspend) isMillify = false;
 	}}
-	on:mouseleave={() => {
+	onmouseleave={() => {
 		if (!shouldSuspend) isMillify = true;
 	}}
-	on:click={() => {
+	onclick={() => {
 		shouldSuspend = !shouldSuspend;
 	}}
 >

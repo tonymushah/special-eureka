@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run as run_1, preventDefault } from 'svelte/legacy';
+
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
@@ -10,9 +12,13 @@
 	import MangaSearchFilterDialog from "./filter/MangaSearchFilterDialog.svelte";
 	import { createEventDispatcher, onDestroy } from "svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
-	export let realTime = false;
-	export let defaultParams: MangaSearchParams = defaultMangaSearchParams();
-	let dialog_bind: HTMLDialogElement | undefined = undefined;
+	interface Props {
+		realTime?: boolean;
+		defaultParams?: MangaSearchParams;
+	}
+
+	let { realTime = $bindable(false), defaultParams = defaultMangaSearchParams() }: Props = $props();
+	let dialog_bind: HTMLDialogElement | undefined = $state(undefined);
 	const params = writable(defaultParams);
 	const titleParams: Writable<string | undefined> = (() => {
 		const title_params_derived = derived(params, ($p) => $p.title);
@@ -54,7 +60,9 @@
 			}
 		};
 	})();
-	$: params.set(defaultParams);
+	run_1(() => {
+		params.set(defaultParams);
+	});
 	const dispatch = createEventDispatcher<{
 		submit: MangaSearchParams;
 		change: MangaSearchParams;
@@ -95,9 +103,9 @@
 </script>
 
 <form
-	on:submit|preventDefault={() => {
+	onsubmit={preventDefault(() => {
 		dispatch("submit", $params);
-	}}
+	})}
 >
 	<div class="input">
 		<FormInput inputProps={{
@@ -146,9 +154,9 @@
 	</div>
 	<article
 		class="buttons"
-		on:contextmenu|preventDefault={() => {
+		oncontextmenu={preventDefault(() => {
 			realTime = !realTime;
-		}}
+		})}
 	>
 		{#if realTime}
 			<ButtonAccent variant="accent" isBase type="submit">

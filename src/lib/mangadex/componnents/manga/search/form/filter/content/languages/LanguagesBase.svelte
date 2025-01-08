@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
@@ -9,8 +11,12 @@
 	import { derived, get, type Writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 
-	export let title: string;
-	export let selecteds: Writable<Language[]>;
+	interface Props {
+		title: string;
+		selecteds: Writable<Language[]>;
+	}
+
+	let { title, selecteds }: Props = $props();
 	let selecteds_options = derived(selecteds, ($s) => {
 		return $s.map<SelectOption<Language>>((ss) => ({
 			value: ss
@@ -48,9 +54,9 @@
 	<div class="content">
 		<button
 			use:melt={$trigger}
-			on:contextmenu|preventDefault={() => {
+			oncontextmenu={preventDefault(() => {
 				selecteds.set([]);
-			}}
+			})}
 		>
 			{#if $selected}
 				{#each $selected as s}

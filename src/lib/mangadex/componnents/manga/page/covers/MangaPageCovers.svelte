@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type MangaCoversItem = {
 		coverImage: Readable<string | undefined>;
 		title: string;
@@ -13,15 +13,24 @@
 </script>
 
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import CoverImage from "./CoverImage.svelte";
 	import type { Readable } from "svelte/store";
 
-	export let items: MangaCoversItems;
-	export let variant: Variant = Variant.None;
-	export let fixedWidth_: boolean = false;
-	$: flex = variant == Variant.Flex;
-	$: grid = variant == Variant.Grid;
-	$: fixedWidth = flex || fixedWidth_;
+	interface Props {
+		items: MangaCoversItems;
+		variant?: Variant;
+		fixedWidth_?: boolean;
+	}
+
+	let { items, variant = Variant.None, fixedWidth_ = false }: Props = $props();
+	let flex = $derived(variant == Variant.Flex);
+	let grid = $derived(variant == Variant.Grid);
+	let fixedWidth;
+	run(() => {
+		fixedWidth = flex || fixedWidth_;
+	});
 </script>
 
 <div class:flex class:grid>

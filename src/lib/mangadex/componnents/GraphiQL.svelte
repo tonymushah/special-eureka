@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "graphiql/graphiql.min.css";
-	import { type Root } from "react-dom/client";
+	import type { Root } from "react-dom/client";
 	import { onDestroy, onMount } from "svelte";
 	import { invoke } from "@tauri-apps/api";
 	import type { Fetcher } from "@graphiql/toolkit";
@@ -14,7 +14,7 @@
 		return JSON.parse(stringData);
 	};
 
-	let divRoot: HTMLElement | undefined;
+	let divRoot: HTMLElement | undefined = $state();
 	let root: Root | undefined;
 
 	onMount(async function () {
@@ -39,10 +39,11 @@
 	});
 </script>
 
-<div bind:this={divRoot} />
+<div bind:this={divRoot}></div>
 
 <style>
 	div {
-		height: 99cqh;
+		height: -webkit-fill-available;
+		display: grid;
 	}
 </style>

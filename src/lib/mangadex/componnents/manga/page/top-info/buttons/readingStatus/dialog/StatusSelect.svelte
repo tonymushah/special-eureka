@@ -5,11 +5,15 @@
 	import type { Writable } from "svelte/store";
 	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
 
-	let target: HTMLDivElement | undefined = undefined;
-	export let readingStatus: Writable<ReadingStatus | undefined>;
-	let isOpen: boolean = false;
+	let target: HTMLDivElement | undefined = $state(undefined);
+	interface Props {
+		readingStatus: Writable<ReadingStatus | undefined>;
+	}
 
-	$: status = getText($readingStatus) ?? "None";
+	let { readingStatus }: Props = $props();
+	let isOpen: boolean = $state(false);
+
+	let status = $derived(getText($readingStatus) ?? "None");
 </script>
 
 <div class="outer-button" bind:this={target}>

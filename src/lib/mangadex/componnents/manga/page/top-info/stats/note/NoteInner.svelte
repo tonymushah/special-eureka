@@ -1,13 +1,19 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { computePosition, flip } from "@floating-ui/dom";
 	import type { TopMangaStatsInner } from "..";
 	import DistributionItem from "./DistributionItem.svelte";
 
-	export let inner: TopMangaStatsInner;
-	export let target: HTMLElement | undefined;
-	export let isOpen: boolean = false;
+	interface Props {
+		inner: TopMangaStatsInner;
+		target: HTMLElement | undefined;
+		isOpen?: boolean;
+	}
 
-	let info: HTMLDivElement | undefined;
+	let { inner, target, isOpen = $bindable(false) }: Props = $props();
+
+	let info: HTMLDivElement | undefined = $state();
 
 	async function open() {
 		if (target && info) {
@@ -21,11 +27,13 @@
 			});
 		}
 	}
-	$: if (isOpen) {
-		open().catch(() => {
-			isOpen = false;
-		});
-	}
+	run(() => {
+		if (isOpen) {
+			open().catch(() => {
+				isOpen = false;
+			});
+		}
+	});
 	function getTotal(inner: TopMangaStatsInner) {
 		return (
 			inner[1] +
@@ -40,7 +48,10 @@
 			inner[10]
 		);
 	}
-	$: total = getTotal(inner);
+	let total;
+	run(() => {
+		total = getTotal(inner);
+	});
 </script>
 
 <div class="distribution-info" class:isOpen bind:this={info}>

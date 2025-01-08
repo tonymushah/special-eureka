@@ -1,6 +1,10 @@
 <script lang="ts">
-	export let coverImage: string;
-	export let coverImageAlt: string;
+	interface Props {
+		coverImage: string;
+		coverImageAlt: string;
+	}
+
+	let { coverImage, coverImageAlt }: Props = $props();
 </script>
 
 <div class="cover">

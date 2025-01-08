@@ -5,7 +5,9 @@
 </script>
 
 <SubMenu label="Follows">
-    <BookmarkIcon slot="icon" size="24"/>
+    {#snippet icon()}
+        <BookmarkIcon  size="24"/>
+    {/snippet}
     <SubMenuItem label="Updates"/>
     <SubMenuItem label="Online Library"/>
     <SubMenuItem label="MDList"/>

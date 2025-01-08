@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { WebviewWindow, appWindow } from "@tauri-apps/api/window";
+	import { WebviewWindow, getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	import ContextMenu from "../../context-menu/ContextMenu.svelte";
 	import OpenLinkIcon from "../icons/OpenLinkIcon.svelte";
 	import OpenNewWindowIcon from "../icons/OpenNewWindowIcon.svelte";
@@ -12,8 +12,9 @@
 	import { Direction, RtlSidebarSubDocument } from "@mangadex/gql/graphql";
 	import { sub_end } from "@mangadex/utils";
 	import OpenExtLinkIcon from "../icons/OpenExtLinkIcon.svelte";
-	import { open } from "@tauri-apps/api/shell";
+	import { open } from "@tauri-apps/plugin-shell";
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+const appWindow = getCurrentWebviewWindow()
 	const client = getContextClient();
 	const sub_id = v4();
 	const rtl_sidebar_query = subscriptionStore({
@@ -23,16 +24,21 @@
 			sub_id
 		}
 	});
-	export let href: string;
-	export let ext_href: string | undefined = undefined;
+	interface Props {
+		href: string;
+		ext_href?: string | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let { href, ext_href = undefined, children }: Props = $props();
 
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 		sub_end(sub_id);
 	});
-	$: decorated = $isDefaultDecoration;
-	$: items = [
+	let decorated = $derived($isDefaultDecoration);
+	let items = $derived([
 		{
 			icon: OpenLinkIcon,
 			label: "Open",
@@ -91,9 +97,9 @@
 					}
 				}
 			: undefined
-	];
+	]);
 </script>
 
 <ContextMenu {items}>
-	<slot />
+	{@render children?.()}
 </ContextMenu>

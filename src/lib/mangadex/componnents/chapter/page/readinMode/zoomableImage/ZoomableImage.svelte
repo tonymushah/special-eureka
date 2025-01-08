@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run, preventDefault } from 'svelte/legacy';
+
 	import isAltKeyPressed from "$lib/window-decoration/stores/isAltKeyPressed";
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
@@ -8,19 +10,23 @@
 	import { getCurrentChapterImageFit } from "../../contexts/imageFit";
 	import { ImageFit } from "@mangadex/gql/graphql";
 
-	export let src: string | [string, string];
-	export let alt: string | [string, string];
+	interface Props {
+		src: string | [string, string];
+		alt: string | [string, string];
+	}
+
+	let { src, alt }: Props = $props();
 
 	const imageFitStore = getCurrentChapterImageFit();
-	let toZoom: HTMLElement | undefined = undefined;
-	let toZoomPanZoom: PanzoomObject | undefined;
-	$: {
+	let toZoom: HTMLElement | undefined = $state(undefined);
+	let toZoomPanZoom: PanzoomObject | undefined = $state();
+	run(() => {
 		if (toZoom) {
 			toZoomPanZoom = panzoom(toZoom, {
 				animate: true
 			});
 		}
-	}
+	});
 	onDestroy(() => {
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
@@ -36,7 +42,7 @@
 </script>
 
 <svelte:window
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		if (e.key == $resetZoomKey) {
 			toZoomPanZoom?.reset({ animate: true });
 		}
@@ -46,7 +52,7 @@
 <div
 	role="none"
 	class="outer"
-	on:wheel|preventDefault={(e) => {
+	onwheel={preventDefault((e) => {
 		const zoomElement = toZoomPanZoom;
 		if (zoomElement) {
 			let scale = zoomElement.getScale();
@@ -58,7 +64,7 @@
 				animate: true
 			});
 		}
-	}}
+	})}
 >
 	<div class="toZoom" bind:this={toZoom}>
 		{#if Array.isArray(src) && Array.isArray(alt)}

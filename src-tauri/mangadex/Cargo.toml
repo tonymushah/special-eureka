@@ -6,9 +6,10 @@ description = "The tauri plugin behind the Mangadex Part of special-eureka"
 edition = "2021"
 rust-version = "1.70"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
+link = "mangadex-desktop-api"
 
 [dependencies]
-tauri = { workspace = true, features = ["notification-all"] }
+tauri = { workspace = true }
 serde.workspace = true
 tokio.workspace = true
 thiserror.workspace = true

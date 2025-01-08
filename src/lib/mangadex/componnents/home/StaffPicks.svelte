@@ -1,3 +1,5 @@
+<!-- @migration-task Error while migrating Svelte code: can't migrate `$: error = $query_store?.error;` to `$derived` because there's a variable named derived.
+     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import TopTitle from "./utils/TopTitle.svelte";
 	import query from "./staff-picks/query";

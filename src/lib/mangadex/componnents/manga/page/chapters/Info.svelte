@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type SimpleItems = {
 		id: string;
 		name: string;
@@ -199,6 +199,8 @@
 </script>
 
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { type MangaLinks } from "@mangadex/gql/graphql";
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
@@ -214,17 +216,33 @@
 		Format,
 		Content
 	}
-	export let authors: SimpleItems[] = [];
-	export let artists: SimpleItems[] = [];
-	export let genres: SimpleItems[] = [];
-	export let themes: SimpleItems[] = [];
-	export let demographic: SimpleItems[] = [];
-	export let format: SimpleItems[] = [];
-	export let content: SimpleItems[] = [];
-	export let links: MangaLinks | undefined = undefined;
-	export let altTitles: AltTitleItem[] = [];
+	interface Props {
+		authors?: SimpleItems[];
+		artists?: SimpleItems[];
+		genres?: SimpleItems[];
+		themes?: SimpleItems[];
+		demographic?: SimpleItems[];
+		format?: SimpleItems[];
+		content?: SimpleItems[];
+		links?: MangaLinks | undefined;
+		altTitles?: AltTitleItem[];
+		children?: import('svelte').Snippet;
+	}
 
-	$: tBButtons = [
+	let {
+		authors = [],
+		artists = [],
+		genres = [],
+		themes = [],
+		demographic = [],
+		format = [],
+		content = [],
+		links = undefined,
+		altTitles = $bindable([]),
+		children
+	}: Props = $props();
+
+	let tBButtons = $derived([
 		{
 			key: TitleKey.Author,
 			title: authors.length > 1 ? "Authors" : "Author",
@@ -260,10 +278,13 @@
 			title: content.length > 1 ? "Contents" : "Content",
 			items: content
 		}
-	];
-	$: toUseLinks = propsToUseLink(links ?? { hasNoLinks: true });
+	]);
+	let toUseLinks;
+	run(() => {
+		toUseLinks = propsToUseLink(links ?? { hasNoLinks: true });
+	});
 </script>
 
 <MangaPageChaptersInfo bind:altTitles idsKeysItem={tBButtons} bind:links={toUseLinks}>
-	<slot />
+	{@render children?.()}
 </MangaPageChaptersInfo>

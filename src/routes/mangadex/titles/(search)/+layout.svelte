@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { initMangaSearchAuthorSearchFetcher } from "@mangadex/componnents/manga/search/form/filter/contexts/authorArtist";
 	import gqlAuthorFetcher from "@mangadex/componnents/manga/search/form/filter/contexts/authorArtist/gql";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	initMangaSearchAuthorSearchFetcher(gqlAuthorFetcher);
 </script>
 
 <div>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">

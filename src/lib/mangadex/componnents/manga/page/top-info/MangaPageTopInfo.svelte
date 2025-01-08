@@ -56,26 +56,45 @@
 		};
 	}>();
 
-	export let id: string;
-	export let title: string;
-	export let altTitle: string | undefined = undefined;
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let authors: Author[];
-	export let tags: Tag[];
-	export let status: MangaStatus;
-	export let year: number | undefined = undefined;
-	export let reading_status: Readable<ReadingStatus | undefined> = writable<
+	interface Props {
+		id: string;
+		title: string;
+		altTitle?: string | undefined;
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		authors: Author[];
+		tags: Tag[];
+		status: MangaStatus;
+		year?: number | undefined;
+		reading_status?: Readable<ReadingStatus | undefined>;
+		isFollowing?: Readable<boolean | undefined>;
+		rating?: Readable<number | undefined>;
+		downloadState?: Readable<ChapterDownloadState>;
+		stats?: TopMangaStatistics | undefined;
+	}
+
+	let {
+		id,
+		title,
+		altTitle = undefined,
+		coverImage,
+		coverImageAlt,
+		authors,
+		tags = $bindable(),
+		status = $bindable(),
+		year = $bindable(undefined),
+		reading_status = writable<
 		ReadingStatus | undefined
-	>(undefined);
-	export let isFollowing: Readable<boolean | undefined> = writable<boolean | undefined>(
+	>(undefined),
+		isFollowing = writable<boolean | undefined>(
 		undefined
-	);
-	export let rating: Readable<number | undefined> = writable<number | undefined>(undefined);
-	export let downloadState: Readable<ChapterDownloadState> = writable(
+	),
+		rating = writable<number | undefined>(undefined),
+		downloadState = writable(
 		ChapterDownloadState.NotDownloaded
-	);
-	export let stats: TopMangaStatistics | undefined = undefined;
+	),
+		stats = $bindable(undefined)
+	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
 	setTopMangaTitleContextStore(title);
@@ -88,9 +107,11 @@
 </script>
 
 <TopInfoLayout>
-	<div class="cover-image" slot="cover">
-		<TopInfoCover />
-	</div>
+	{#snippet cover()}
+		<div class="cover-image" >
+			<TopInfoCover />
+		</div>
+	{/snippet}
 	<div class="content">
 		<section class="top">
 			<h1>{title}</h1>

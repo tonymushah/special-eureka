@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
@@ -7,31 +9,40 @@
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
 
-	let isHovered = false;
-	let coverImageInstance: HTMLImageElement | undefined = undefined;
-	let zoom: Zoom | undefined = undefined;
+	let isHovered = $state(false);
+	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
+	let zoom: Zoom | undefined = $state(undefined);
 	const theme = getMangaDexThemeContext();
-	$: {
+	run(() => {
 		zoom = mediumZoom(coverImageInstance, {
 			background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
 		});
-	}
+	});
 	onDestroy(() => {
 		zoom?.close();
 	});
 
-	export let coverImage: Readable<string | undefined>;
-	export let fixedWidth: boolean = true;
-	export let alt: string;
-	export let title: string;
-	$: src = $coverImage;
-	let container: HTMLDivElement | undefined = undefined;
-	let sW = "var(--cover-w)";
-	let sH = "var(--cover-h)";
-	let skR: UnlistenFn = () => {};
-	$: isImageLoaded = src != undefined;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		fixedWidth?: boolean;
+		alt: string;
+		title: string;
+	}
 
-	$: {
+	let {
+		coverImage,
+		fixedWidth = true,
+		alt,
+		title
+	}: Props = $props();
+	let src = $derived($coverImage);
+	let container: HTMLDivElement | undefined = $state(undefined);
+	let sW = $state("var(--cover-w)");
+	let sH = $state("var(--cover-h)");
+	let skR: UnlistenFn = $state(() => {});
+	let isImageLoaded = $derived(src != undefined);
+
+	run(() => {
 		if (fixedWidth == false && container != undefined) {
 			skR();
 			let e = () => {
@@ -48,7 +59,7 @@
 			sW = "var(--cover-w)";
 			sH = "var(--cover-h)";
 		}
-	}
+	});
 	onDestroy(() => {
 		skR();
 	});
@@ -56,7 +67,7 @@
 
 <div
 	class="cover"
-	on:mouseenter={() => {
+	onmouseenter={() => {
 		isHovered = true;
 	}}
 	role="button"
@@ -66,21 +77,21 @@
 	class:isImageLoaded
 	data-title={title}
 	bind:this={container}
-	on:click={async () => {
+	onclick={async () => {
 		await zoom?.toggle();
 	}}
-	on:focusin={() => {
+	onfocusin={() => {
 		isHovered = true;
 	}}
-	on:focusout={() => {
+	onfocusout={() => {
 		isHovered = false;
 	}}
-	on:keydown={async ({ key }) => {
+	onkeydown={async ({ key }) => {
 		if (key == "Enter") {
 			await zoom?.toggle();
 		}
 	}}
-	on:mouseleave={() => {
+	onmouseleave={() => {
 		isHovered = false;
 	}}
 >

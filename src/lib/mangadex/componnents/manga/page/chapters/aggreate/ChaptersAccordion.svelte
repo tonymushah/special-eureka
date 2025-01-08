@@ -5,13 +5,17 @@
 	import Accordion from "@mangadex/componnents/theme/accordion/Accordion.svelte";
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 
-	export let title: string;
-	export let chapters: ComponentProps<ChapterElement1>[];
-	export let isOpen: boolean = false;
+	interface Props {
+		title: string;
+		chapters: ComponentProps<ChapterElement1>[];
+		isOpen?: boolean;
+	}
+
+	let { title, chapters, isOpen = false }: Props = $props();
 
 	const dispatch = createChapterEl1EventDispatcher();
-	$: isSingle = chapters.length == 1;
-	$: isEmpty = chapters.length == 0;
+	let isSingle = $derived(chapters.length == 1);
+	let isEmpty = $derived(chapters.length == 0);
 </script>
 
 {#if isSingle}

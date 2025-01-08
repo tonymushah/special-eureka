@@ -6,12 +6,21 @@
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 
-	export let title: string;
-	export let mangaId: string;
-	export let mangaLang: Language | undefined = undefined;
-	export let chapters: Chapter[];
-	let isCollapsed = true;
-	let canCollaspe = false;
+	interface Props {
+		title: string;
+		mangaId: string;
+		mangaLang?: Language | undefined;
+		chapters: Chapter[];
+	}
+
+	let {
+		title,
+		mangaId,
+		mangaLang = undefined,
+		chapters
+	}: Props = $props();
+	let isCollapsed = $state(true);
+	let canCollaspe = $state(false);
 	function setDisplayedChapters() {
 		if (chapters.length > 3) {
 			canCollaspe = true;
@@ -54,13 +63,13 @@
 			class="top-body manga-content"
 			role="button"
 			tabindex="0"
-			on:click={(e) => {
+			onclick={(e) => {
 				dispatch("mangaClick", {
 					...e,
 					id: mangaId
 				});
 			}}
-			on:keypress={(e) => {
+			onkeypress={(e) => {
 				dispatch("mangaKeyPress", {
 					...e,
 					id: mangaId

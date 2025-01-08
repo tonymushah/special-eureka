@@ -1,10 +1,15 @@
 <script lang="ts">
-	export let type: "blue" = "blue";
-	$: blue = type == "blue";
+	interface Props {
+		type?: "blue";
+		children?: import('svelte').Snippet;
+	}
+
+	let { type = "blue", children }: Props = $props();
+	let blue = $derived(type == "blue");
 </script>
 
 <span class:blue>
-	<slot />
+	{@render children?.()}
 </span>
 
 <style lang="scss">

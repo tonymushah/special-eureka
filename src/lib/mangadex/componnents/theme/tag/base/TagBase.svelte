@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -8,11 +13,11 @@
 </script>
 
 <button
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("click", e);
 	}}
 >
-	<slot />
+	{@render children?.()}
 </button>
 
 <style lang="scss">

@@ -3,7 +3,11 @@
 	import ExtLink from "@mangadex/componnents/theme/links/ExtLink.svelte";
 	import SvelteMarkdown from "svelte-markdown";
 	import Heading from "./Heading.svelte";
-	export let description: string;
+	interface Props {
+		description: string;
+	}
+
+	let { description }: Props = $props();
 </script>
 
 <div class="description">

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { createEventDispatcher } from "svelte";
@@ -16,18 +18,35 @@
 		roles: UserRole[];
 		name: string;
 	};
-	export let mangaId: string;
-	export let chapterId: string;
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let mangaTitle: string;
-	export let chapterTitle: string | undefined = undefined;
-	export let lang: Language;
-	export let groups: Group[] = [];
-	export let uploader: Uploader;
-	export let upload_date: Date;
-	export let haveBeenRead: boolean = true;
-	export let download_state: ChapterDownloadState;
+	interface Props {
+		mangaId: string;
+		chapterId: string;
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		mangaTitle: string;
+		chapterTitle?: string | undefined;
+		lang: Language;
+		groups?: Group[];
+		uploader: Uploader;
+		upload_date: Date;
+		haveBeenRead?: boolean;
+		download_state: ChapterDownloadState;
+	}
+
+	let {
+		mangaId,
+		chapterId,
+		coverImage,
+		coverImageAlt,
+		mangaTitle,
+		chapterTitle = undefined,
+		lang,
+		groups = [],
+		uploader,
+		upload_date,
+		haveBeenRead = $bindable(true),
+		download_state
+	}: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -48,7 +67,10 @@
 			id: string;
 		};
 	}>();
-	$: image_ = $coverImage;
+	let image_;
+	run(() => {
+		image_ = $coverImage;
+	});
 </script>
 
 <Layout bind:haveBeenRead>

@@ -4,9 +4,13 @@
 	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
 	import Description from "./content/Description.svelte";
 
-	export let title: string;
-	export let status: MangaStatus;
-	export let description: string;
+	interface Props {
+		title: string;
+		status: MangaStatus;
+		description: string;
+	}
+
+	let { title, status, description }: Props = $props();
 </script>
 
 <div class="content">

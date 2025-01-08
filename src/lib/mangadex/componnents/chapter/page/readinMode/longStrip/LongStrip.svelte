@@ -6,9 +6,15 @@
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
 
-	export let innerOverflow = true;
+	interface Props {
+		innerOverflow?: boolean;
+		top?: import('svelte').Snippet;
+		bottom?: import('svelte').Snippet;
+	}
+
+	let { innerOverflow = true, top, bottom }: Props = $props();
 	const currentChapterPage = getChapterCurrentPageContext();
-	let longstrip_root: HTMLDivElement | undefined;
+	let longstrip_root: HTMLDivElement | undefined = $state();
 	const images = getChapterImageContext();
 	const imageWidth = derived(getLongStripImagesWidthContext(), ($width) => {
 		if ($width == 0) {
@@ -96,13 +102,13 @@
 </script>
 
 <div class="longstrip" class:innerOverflow bind:this={longstrip_root}>
-	<slot name="top" />
+	{@render top?.()}
 	{#each $images as image, page}
 		<div data-page={page} use:mount class="image">
 			<img data-page={page} src={image} alt={image} width="{$imageWidth}%" />
 		</div>
 	{/each}
-	<slot name="bottom" />
+	{@render bottom?.()}
 </div>
 
 <style lang="scss">

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { createEventDispatcher } from "svelte";
@@ -10,14 +12,27 @@
 		id: string;
 		name: string;
 	};
-	export let index: number = -1;
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let authors: Author[];
+	interface Props {
+		index?: number;
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		authors: Author[];
+	}
+
+	let {
+		index = -1,
+		coverImage,
+		coverImageAlt,
+		title,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		authors
+	}: Props = $props();
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
@@ -32,7 +47,10 @@
 		};
 	}>();
 	const image = derived(coverImage, (v) => v);
-	$: image_ = $image ?? "";
+	let image_;
+	run(() => {
+		image_ = $image ?? "";
+	});
 </script>
 
 {#if $image}

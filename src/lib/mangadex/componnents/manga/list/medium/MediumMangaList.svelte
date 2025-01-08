@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type MediumMangaListElementProps = ComponentProps<MangaElementBase1> & {
 		id: string;
 	};
@@ -10,7 +10,11 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 
-	export let list: MediumMangaListElementProps[] = [];
+	interface Props {
+		list?: MediumMangaListElementProps[];
+	}
+
+	let { list = [] }: Props = $props();
 </script>
 
 <section class="medium">

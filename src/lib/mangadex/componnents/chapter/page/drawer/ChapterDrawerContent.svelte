@@ -9,7 +9,11 @@
 	import TopInfo from "./content/TopInfo.svelte";
 	import Uploaders from "./content/Uploaders.svelte";
 
-	export let left = false;
+	interface Props {
+		left?: boolean;
+	}
+
+	let { left = $bindable(false) }: Props = $props();
 </script>
 
 <div class="content">

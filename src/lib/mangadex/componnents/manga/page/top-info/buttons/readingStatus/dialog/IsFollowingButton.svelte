@@ -5,7 +5,11 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import IsFollowingIconOff from "./isFollowing/IsFollowingIconOff.svelte";
 
-	export let isFollowing: Writable<boolean>;
+	interface Props {
+		isFollowing: Writable<boolean>;
+	}
+
+	let { isFollowing }: Props = $props();
 	function toggle() {
 		isFollowing.set(!$isFollowing);
 	}

@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { Language } from "@mangadex/gql/graphql";
 
 	export type AltTitleItem = {
@@ -11,7 +11,11 @@
 	import AltTitle from "./AltTitle.svelte";
 	import type { Readable } from "svelte/store";
 
-	export let titles: AltTitleItem[];
+	interface Props {
+		titles: AltTitleItem[];
+	}
+
+	let { titles }: Props = $props();
 </script>
 
 <div class="alt-titles">

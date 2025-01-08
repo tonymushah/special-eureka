@@ -7,15 +7,15 @@
 	import getText from "./star-button/getText";
 	import { getTopMangaRatingContextStore } from "../context";
 
-	let isOpen = false;
-	let target: HTMLDivElement | undefined = undefined;
+	let isOpen = $state(false);
+	let target: HTMLDivElement | undefined = $state(undefined);
 
 	const ratingStore = getTopMangaRatingContextStore();
 	const dispatch = createEventDispatcher<{
 		select: number;
 	}>();
 
-	$: rating = $ratingStore;
+	let rating = $derived($ratingStore);
 
 	function toggle() {
 		isOpen = !isOpen;

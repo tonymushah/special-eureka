@@ -12,7 +12,11 @@
 		id: string;
 		name: string;
 	};
-	export let tags: Tag[];
+	interface Props {
+		tags: Tag[];
+	}
+
+	let { tags }: Props = $props();
 </script>
 
 <div>

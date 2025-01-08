@@ -23,7 +23,7 @@
 	<div class="content">
 		<button
 			class:selected={$selected.includes(Demographic.None)}
-			on:click={() => toggleDemographic(Demographic.None)}
+			onclick={() => toggleDemographic(Demographic.None)}
 		>
 			<div class="icon">
 				{#if $selected.includes(Demographic.None)}
@@ -36,7 +36,7 @@
 		</button>
 		<button
 			class:selected={$selected.includes(Demographic.Josei)}
-			on:click={() => toggleDemographic(Demographic.Josei)}
+			onclick={() => toggleDemographic(Demographic.Josei)}
 		>
 			<div class="icon">
 				{#if $selected.includes(Demographic.Josei)}
@@ -49,7 +49,7 @@
 		</button>
 		<button
 			class:selected={$selected.includes(Demographic.Seinen)}
-			on:click={() => toggleDemographic(Demographic.Seinen)}
+			onclick={() => toggleDemographic(Demographic.Seinen)}
 		>
 			<div class="icon">
 				{#if $selected.includes(Demographic.Seinen)}
@@ -62,7 +62,7 @@
 		</button>
 		<button
 			class:selected={$selected.includes(Demographic.Shoujo)}
-			on:click={() => toggleDemographic(Demographic.Shoujo)}
+			onclick={() => toggleDemographic(Demographic.Shoujo)}
 		>
 			<div class="icon">
 				{#if $selected.includes(Demographic.Shoujo)}
@@ -75,7 +75,7 @@
 		</button>
 		<button
 			class:selected={$selected.includes(Demographic.Shounen)}
-			on:click={() => toggleDemographic(Demographic.Shounen)}
+			onclick={() => toggleDemographic(Demographic.Shounen)}
 		>
 			<div class="icon">
 				{#if $selected.includes(Demographic.Shounen)}

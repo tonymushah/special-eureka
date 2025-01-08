@@ -5,7 +5,7 @@
 	const coverStore = getTopCoverContextStore();
 	const alt = getTopCoverAltContextStore();
 
-	$: coverImage = $coverStore;
+	let coverImage = $derived($coverStore);
 </script>
 
 {#if coverImage}

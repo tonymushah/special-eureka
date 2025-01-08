@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { graphql } from "@mangadex/gql";
 	import { isLogged, userMe } from "@mangadex/utils/auth";
 	import { getContextClient } from "@urql/svelte";
@@ -7,7 +9,7 @@
 	import Menu from "./base/Menu.svelte";
 	const client = getContextClient();
 	let initial_user_name: string | undefined = undefined;
-	let isRefreshing = false;
+	let isRefreshing = $state(false);
 	async function loadUserMe() {
 		isRefreshing = true;
 		const me = await client
@@ -38,7 +40,10 @@
 		await loadUserMe();
 	});
 
-	$: label = $userMe?.name ?? "Login";
+	let label;
+	run(() => {
+		label = $userMe?.name ?? "Login";
+	});
 </script>
 
 <Menu
@@ -47,15 +52,17 @@
 		await loadUserMe();
 	}}
 >
-	<div slot="icon" role="button" tabindex="0" on:keypress={(e) => {}} class:isRefreshing>
-		{#if isRefreshing}
-			<UserIcon size="24" />
-		{:else if $isLogged}
-			<UserCheckIcon size="24" />
-		{:else}
-			<UserXIcon size="24" />
-		{/if}
-	</div>
+	{#snippet icon()}
+		<div  role="button" tabindex="0" onkeypress={(e) => {}} class:isRefreshing>
+			{#if isRefreshing}
+				<UserIcon size="24" />
+			{:else if $isLogged}
+				<UserCheckIcon size="24" />
+			{:else}
+				<UserXIcon size="24" />
+			{/if}
+		</div>
+	{/snippet}
 </Menu>
 
 <style lang="scss">

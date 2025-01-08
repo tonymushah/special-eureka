@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { fade } from "svelte/transition";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 </script>
 
 <div transition:fade>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">

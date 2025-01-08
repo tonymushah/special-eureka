@@ -74,10 +74,11 @@
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 8px;
+		height: -webkit-fill-available;
 	}
-	aside {
-		//height: 100%;
-	}
+	/*aside {
+		height: 100%;
+	}*/
 	/*
 	aside.defaultDecoration {
 		height: 99vh;

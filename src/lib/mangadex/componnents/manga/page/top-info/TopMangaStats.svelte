@@ -9,7 +9,11 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let stats: TopMangaStatistics;
+	interface Props {
+		stats: TopMangaStatistics;
+	}
+
+	let { stats = $bindable() }: Props = $props();
 </script>
 
 <div class="stats">

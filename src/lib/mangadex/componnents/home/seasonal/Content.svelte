@@ -10,7 +10,11 @@
 	import type { SwiperContainer } from "swiper/element";
 
 	const client = getContextClient();
-	export let data: SeasonalQuery;
+	interface Props {
+		data: SeasonalQuery;
+	}
+
+	let { data }: Props = $props();
 	type SeasonalTitle = {
 		id: string;
 		title: string;
@@ -20,7 +24,7 @@
 	function getLangData(title: Record<string, string>): string {
 		return get_value_from_title_and_random_if_undefined(title, "en") ?? "";
 	}
-	$: seasonal = data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
+	let seasonal = $derived(data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
 		id: t.id,
 		title: getLangData(t.attributes.title),
 		coverImage: get_cover_art({
@@ -31,9 +35,9 @@
 			client
 		}),
 		coverImageAlt: t.relationships.coverArt.id
-	}));
+	})));
 
-	let swiper_container: SwiperContainer | undefined = undefined;
+	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
 		const swiperParams = {

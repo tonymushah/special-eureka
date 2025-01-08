@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { getContextClient } from "@urql/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy, onMount } from "svelte";
@@ -15,8 +17,12 @@
 	import { route } from "$lib/ROUTES";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 
-	export let groupId: Readable<string>;
-	let isFetching = false;
+	interface Props {
+		groupId: Readable<string>;
+	}
+
+	let { groupId }: Props = $props();
+	let isFetching = $state(false);
 	const client = getContextClient();
 	const feed = writable<ChapterFeedListItemExt[]>([]);
 	const debounce_wait = 450;
@@ -88,14 +94,16 @@
 		debounce_func?.cancel();
 		observer.disconnect();
 	});
-	let to_obserce_bind: HTMLElement | undefined = undefined;
-	$: {
+	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
+	run(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
-	}
-	$: console.log(`isFetching: ${isFetching}`);
+	});
+	run(() => {
+		console.log(`isFetching: ${isFetching}`);
+	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 

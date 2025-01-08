@@ -1,22 +1,24 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { getTopCoverAltContextStore, getTopCoverContextStore } from "./context";
 	import mediumZoom, { type Zoom } from "medium-zoom";
 	import { onDestroy } from "svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	const theme = getMangaDexThemeContext();
-	let coverImageInstance: HTMLImageElement | undefined = undefined;
-	let zoom: Zoom | undefined = undefined;
-	$: {
+	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
+	let zoom: Zoom | undefined = $state(undefined);
+	run(() => {
 		zoom = mediumZoom(coverImageInstance, {
 			background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
 		});
-	}
+	});
 	onDestroy(() => {
 		zoom?.close();
 	});
 	const coverImageStore = getTopCoverContextStore();
-	$: coverImage = $coverImageStore;
+	let coverImage = $derived($coverImageStore);
 	const alt = getTopCoverAltContextStore();
 </script>
 

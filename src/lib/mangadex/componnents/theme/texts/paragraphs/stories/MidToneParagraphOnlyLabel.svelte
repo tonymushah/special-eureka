@@ -1,6 +1,10 @@
 <script lang="ts">
     import MidToneParagraph from "../MidToneParagraph.svelte";
-    export let innerText: string;
+    interface Props {
+        innerText: string;
+    }
+
+    let { innerText }: Props = $props();
 </script>
 
 <MidToneParagraph>

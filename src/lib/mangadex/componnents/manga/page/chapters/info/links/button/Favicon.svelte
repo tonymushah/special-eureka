@@ -1,6 +1,10 @@
 <script lang="ts">
-	export let icon: string | undefined = undefined;
-	export let alt: string;
+	interface Props {
+		icon?: string | undefined;
+		alt: string;
+	}
+
+	let { icon = undefined, alt }: Props = $props();
 </script>
 
 {#if icon != undefined}

@@ -2,15 +2,24 @@
 	import { createEventDispatcher } from "svelte";
 	import MidToneButton from "./MidToneButton.svelte";
 
-	export let type: "reset" | "submit" | "button" = "button";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let style: string | undefined = undefined;
-	export let label: string;
-	export let isBase = false;
+	interface Props {
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		label: string;
+		isBase?: boolean;
+	}
+
+	let {
+		type = "button",
+		style = undefined,
+		label,
+		isBase = false
+	}: Props = $props();
 </script>
 
 <MidToneButton {type} {style} on:click {isBase}>

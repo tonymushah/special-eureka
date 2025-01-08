@@ -1,18 +1,23 @@
 <script lang="ts">
-	export let isHover: boolean;
+	interface Props {
+		isHover: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let { isHover = $bindable(), children }: Props = $props();
 </script>
 
 <div
 	role="article"
 	class="layout"
-	on:mouseenter={() => {
+	onmouseenter={() => {
 		isHover = true;
 	}}
-	on:mouseleave={() => {
+	onmouseleave={() => {
 		isHover = false;
 	}}
 >
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">

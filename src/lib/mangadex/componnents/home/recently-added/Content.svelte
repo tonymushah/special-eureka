@@ -9,7 +9,11 @@
 	import MangaElementBase4 from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 
-	export let data: RecentlyAddedHomeQueryQuery;
+	interface Props {
+		data: RecentlyAddedHomeQueryQuery;
+	}
+
+	let { data }: Props = $props();
 	const client = getContextClient();
 	type Title = {
 		id: string;
@@ -20,7 +24,7 @@
 	function getLangData(title: Record<string, string>): string {
 		return get_value_from_title_and_random_if_undefined(title, "en") ?? "";
 	}
-	$: titles = data.home.recentlyAdded.data.map<Title>((t) => ({
+	let titles = $derived(data.home.recentlyAdded.data.map<Title>((t) => ({
 		id: t.id,
 		title: getLangData(t.attributes.title),
 		coverImage: get_cover_art({
@@ -31,9 +35,9 @@
 			client
 		}),
 		coverImageAlt: t.relationships.coverArt.id
-	}));
+	})));
 
-	let swiper_container: SwiperContainer | undefined = undefined;
+	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
 		const swiperParams = {

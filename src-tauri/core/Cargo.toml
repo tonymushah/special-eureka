@@ -59,6 +59,7 @@ window-vibrancy = "0.4"
 tauri-plugin-store.workspace = true
 uuid.workspace = true
 actix.workspace = true
+tauri-plugin-shell = "2"
 
 [dependencies.mangadex]
 workspace = true

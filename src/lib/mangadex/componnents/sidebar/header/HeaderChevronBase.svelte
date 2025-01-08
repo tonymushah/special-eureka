@@ -7,8 +7,12 @@
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
 	import { v4 } from "uuid";
-	export let isRight: boolean = false;
-	export let size = "24";
+	interface Props {
+		isRight?: boolean;
+		size?: string;
+	}
+
+	let { isRight = false, size = "24" }: Props = $props();
 	const sub_id = v4();
 	const rtl_sub = subscriptionStore({
 		client: getContextClient(),
@@ -34,10 +38,10 @@
 <div
 	tabindex="0"
 	role="button"
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		dispatch("keydown", e);
 	}}
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("click", e);
 	}}
 >

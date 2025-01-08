@@ -1,87 +1,101 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import { camelCase } from "lodash";
 	import BeeDexRaw from "@mangadex/assets/Bee Dex Raw.jpg";
-	export let profilePicture: string = BeeDexRaw;
-	export let name: string;
-	export let element: AnyMeltElement = emptyMeltElement;
-	export let _this: HTMLButtonElement | undefined = undefined;
+	interface Props {
+		profilePicture?: string;
+		name: string;
+		element?: AnyMeltElement;
+		_this?: HTMLButtonElement | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		profilePicture = BeeDexRaw,
+		name,
+		element = emptyMeltElement,
+		_this = $bindable(undefined),
+		children
+	}: Props = $props();
 </script>
 
 <button
 	bind:this={_this}
 	use:melt={$element}
-	on:abort
-	on:blur
-	on:canplay
-	on:canplaythrough
-	on:change
-	on:click
-	on:contextmenu
-	on:dblclick
-	on:drag
-	on:dragend
-	on:dragenter
-	on:dragleave
-	on:dragover
-	on:dragstart
-	on:drop
-	on:durationchange
-	on:emptied
-	on:ended
-	on:error
-	on:focus
-	on:input
-	on:introend
-	on:introstart
-	on:invalid
-	on:keydown
-	on:keypress
-	on:keyup
-	on:load
-	on:loadeddata
-	on:loadedmetadata
-	on:loadstart
-	on:mousedown
-	on:mouseenter
-	on:mouseleave
-	on:mousemove
-	on:mouseout
-	on:mouseover
-	on:mouseup
-	on:outroend
-	on:outrostart
-	on:pause
-	on:play
-	on:playing
-	on:pointercancel
-	on:pointerdown
-	on:pointerenter
-	on:pointerleave
-	on:pointermove
-	on:pointerout
-	on:pointerover
-	on:pointerup
-	on:progress
-	on:ratechange
-	on:reset
-	on:resize
-	on:scroll
-	on:seeked
-	on:seeking
-	on:select
-	on:stalled
-	on:submit
-	on:suspend
-	on:timeupdate
-	on:visibilitychange
-	on:volumechange
-	on:waiting
+	onabort={bubble('abort')}
+	onblur={bubble('blur')}
+	oncanplay={bubble('canplay')}
+	oncanplaythrough={bubble('canplaythrough')}
+	onchange={bubble('change')}
+	onclick={bubble('click')}
+	oncontextmenu={bubble('contextmenu')}
+	ondblclick={bubble('dblclick')}
+	ondrag={bubble('drag')}
+	ondragend={bubble('dragend')}
+	ondragenter={bubble('dragenter')}
+	ondragleave={bubble('dragleave')}
+	ondragover={bubble('dragover')}
+	ondragstart={bubble('dragstart')}
+	ondrop={bubble('drop')}
+	ondurationchange={bubble('durationchange')}
+	onemptied={bubble('emptied')}
+	onended={bubble('ended')}
+	onerror={bubble('error')}
+	onfocus={bubble('focus')}
+	oninput={bubble('input')}
+	onintroend={bubble('introend')}
+	onintrostart={bubble('introstart')}
+	oninvalid={bubble('invalid')}
+	onkeydown={bubble('keydown')}
+	onkeypress={bubble('keypress')}
+	onkeyup={bubble('keyup')}
+	onload={bubble('load')}
+	onloadeddata={bubble('loadeddata')}
+	onloadedmetadata={bubble('loadedmetadata')}
+	onloadstart={bubble('loadstart')}
+	onmousedown={bubble('mousedown')}
+	onmouseenter={bubble('mouseenter')}
+	onmouseleave={bubble('mouseleave')}
+	onmousemove={bubble('mousemove')}
+	onmouseout={bubble('mouseout')}
+	onmouseover={bubble('mouseover')}
+	onmouseup={bubble('mouseup')}
+	onoutroend={bubble('outroend')}
+	onoutrostart={bubble('outrostart')}
+	onpause={bubble('pause')}
+	onplay={bubble('play')}
+	onplaying={bubble('playing')}
+	onpointercancel={bubble('pointercancel')}
+	onpointerdown={bubble('pointerdown')}
+	onpointerenter={bubble('pointerenter')}
+	onpointerleave={bubble('pointerleave')}
+	onpointermove={bubble('pointermove')}
+	onpointerout={bubble('pointerout')}
+	onpointerover={bubble('pointerover')}
+	onpointerup={bubble('pointerup')}
+	onprogress={bubble('progress')}
+	onratechange={bubble('ratechange')}
+	onreset={bubble('reset')}
+	onresize={bubble('resize')}
+	onscroll={bubble('scroll')}
+	onseeked={bubble('seeked')}
+	onseeking={bubble('seeking')}
+	onselect={bubble('select')}
+	onstalled={bubble('stalled')}
+	onsubmit={bubble('submit')}
+	onsuspend={bubble('suspend')}
+	ontimeupdate={bubble('timeupdate')}
+	onvisibilitychange={bubble('visibilitychange')}
+	onvolumechange={bubble('volumechange')}
+	onwaiting={bubble('waiting')}
 >
 	<img alt="{camelCase(name)}-profile-picture" src={profilePicture} />
 	<p>{name}</p>
 	<div class="right">
-		<slot />
+		{@render children?.()}
 	</div>
 </button>
 

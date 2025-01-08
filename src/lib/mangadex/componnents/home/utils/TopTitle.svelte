@@ -4,8 +4,12 @@
 	import { createEventDispatcher } from "svelte";
 	import { RefreshCwIcon } from "svelte-feather-icons";
 
-	export let label: string;
-	export let fetching: boolean;
+	interface Props {
+		label: string;
+		fetching: boolean;
+	}
+
+	let { label, fetching }: Props = $props();
 	const dispacther = createEventDispatcher<{
 		refresh: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

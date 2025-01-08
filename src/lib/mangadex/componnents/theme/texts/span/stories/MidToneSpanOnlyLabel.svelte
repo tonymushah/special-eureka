@@ -1,6 +1,10 @@
 <script lang="ts">
     import MidToneSpan from "../MidToneSpan.svelte";
-    export let innerText: string;
+    interface Props {
+        innerText: string;
+    }
+
+    let { innerText }: Props = $props();
 </script>
 
 <MidToneSpan>

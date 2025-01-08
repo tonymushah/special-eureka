@@ -33,7 +33,7 @@
 	onDestroy(() => {
 		sub_end(sub_id);
 	});
-	let isLoading = false;
+	let isLoading = $state(false);
 	const mount = async () => {
 		if (!isLoading) {
 			isLoading = true;
@@ -71,8 +71,8 @@
 			isLoading = false;
 		}
 	};
-	$: isEnabled = $offline_server_state_sub.data?.watchIsAppMounted;
-	$: isDisabled = !isEnabled;
+	let isEnabled = $derived($offline_server_state_sub.data?.watchIsAppMounted);
+	let isDisabled = $derived(!isEnabled);
 </script>
 
 <a
@@ -80,7 +80,7 @@
 	class:isDisabled
 	class:isEnabled
 	class:isLoading
-	on:click={async () => {
+	onclick={async () => {
 		if (!isLoading) {
 			if ($offline_server_state_sub.data?.watchIsAppMounted == true) {
 				await unmount();

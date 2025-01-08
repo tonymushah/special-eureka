@@ -6,14 +6,27 @@
 	import Image from "./base2/Image.svelte";
 	import Layout from "./base2/Layout.svelte";
 
-	export let coverImage: string;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let status: MangaStatus;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let language: Language | undefined = undefined;
+	interface Props {
+		coverImage: string;
+		coverImageAlt: string;
+		title: string;
+		status: MangaStatus;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		language?: Language | undefined;
+	}
+
+	let {
+		coverImage,
+		coverImageAlt,
+		title,
+		status,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		language = undefined
+	}: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

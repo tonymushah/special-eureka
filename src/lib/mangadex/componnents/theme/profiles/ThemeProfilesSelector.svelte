@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
 	import { derived } from "svelte/store";
 	import Title from "../texts/title/Title.svelte";
@@ -89,7 +91,7 @@
 </div>
 
 <form
-	on:submit|preventDefault={(e) => {
+	onsubmit={preventDefault((e) => {
 		const data = new FormData(e.currentTarget);
 		const name = data.get("name");
 		if (typeof name == "string") {
@@ -97,7 +99,7 @@
 				addNew(name);
 			}
 		}
-	}}
+	})}
 >
 	<div>
 		<FormInput

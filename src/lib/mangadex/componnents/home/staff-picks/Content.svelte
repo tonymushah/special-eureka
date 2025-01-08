@@ -5,8 +5,12 @@
 	import { onMount } from "svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
 
-	export let mangas: StaffPicksTitle[];
-	let swiper_container: SwiperContainer | undefined = undefined;
+	interface Props {
+		mangas: StaffPicksTitle[];
+	}
+
+	let { mangas }: Props = $props();
+	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
 		const swiperParams = {

@@ -1,18 +1,24 @@
 <script lang="ts">
 	import { getTopCoverContextStore } from "./context";
+	interface Props {
+		cover?: import('svelte').Snippet;
+		children?: import('svelte').Snippet;
+	}
+
+	let { cover, children }: Props = $props();
 
 	const coverImageStore = getTopCoverContextStore();
-	$: coverImage = $coverImageStore ?? "";
+	let coverImage = $derived($coverImageStore ?? "");
 </script>
 
 <article class="layout-image" style={`background-image: url(${coverImage});`}>
 	<div class="layout-color">
 		<div class="layout">
 			<div class="cover">
-				<slot name="cover" />
+				{@render cover?.()}
 			</div>
 			<div class="content">
-				<slot />
+				{@render children?.()}
 			</div>
 		</div>
 	</div>

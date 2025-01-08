@@ -2,16 +2,26 @@
 	import { createEventDispatcher } from "svelte";
 	import StatusButton from "./StatusButton.svelte";
 	import type { StatusColor } from "@mangadex/utils/types/status";
-	export let color: StatusColor;
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "reset" | "submit" | "button" = "button";
-	export let style: string | undefined = undefined;
-	export let label: string;
-	export let isBase = false;
+	interface Props {
+		color: StatusColor;
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		label: string;
+		isBase?: boolean;
+	}
+
+	let {
+		color,
+		type = "button",
+		style = undefined,
+		label,
+		isBase = false
+	}: Props = $props();
 </script>
 
 <StatusButton {isBase} {color} {type} on:click {style}>

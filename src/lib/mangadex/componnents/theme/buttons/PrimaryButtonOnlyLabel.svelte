@@ -2,16 +2,26 @@
 	import { createEventDispatcher } from "svelte";
 	import PrimaryButton from "./PrimaryButton.svelte";
 
-	export let variant: "default" | "1" | "2" = "default";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "reset" | "submit" | "button" = "button";
-	export let label: string;
-	export let style: string | undefined = undefined;
-	export let isBase = false;
+	interface Props {
+		variant?: "default" | "1" | "2";
+		type?: "reset" | "submit" | "button";
+		label: string;
+		style?: string | undefined;
+		isBase?: boolean;
+	}
+
+	let {
+		variant = "default",
+		type = "button",
+		label,
+		style = undefined,
+		isBase = false
+	}: Props = $props();
 </script>
 
 <PrimaryButton on:click {variant} {style} {type} {isBase}>

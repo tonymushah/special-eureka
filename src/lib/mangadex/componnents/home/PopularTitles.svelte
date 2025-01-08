@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { graphql } from "@mangadex/gql";
 	import { CoverImageQuality } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
@@ -58,9 +60,12 @@
 	onMount(async () => {
 		await popular_titles_query.execute();
 	});
-	$: fetching = $_isFetching;
-	$: error = $popular_titles_query?.error;
-	$: popular_titles = $popular_titles_query?.data?.home.popularTitles.data.map((manga) => ({
+	let fetching;
+	run(() => {
+		fetching = $_isFetching;
+	});
+	let error = $derived($popular_titles_query?.error);
+	let popular_titles = $derived($popular_titles_query?.data?.home.popularTitles.data.map((manga) => ({
 		id: manga.id,
 		title: get_value_from_title_and_random_if_undefined(manga.attributes.title, "en") ?? "",
 		description:
@@ -84,7 +89,7 @@
 				name: author_artist.attributes.name
 			})
 		)
-	}));
+	})));
 </script>
 
 <TopTitle

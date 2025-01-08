@@ -2,10 +2,19 @@
 	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import type { HTMLInputAttributes } from "svelte/elements";
 
-	export let inputProps: HTMLInputAttributes = {};
-	export let value: any = "";
-	export let widthFull = false;
-	export let element: AnyMeltElement = emptyMeltElement;
+	interface Props {
+		inputProps?: HTMLInputAttributes;
+		value?: any;
+		widthFull?: boolean;
+		element?: AnyMeltElement;
+	}
+
+	let {
+		inputProps = {},
+		value = $bindable(""),
+		widthFull = false,
+		element = emptyMeltElement
+	}: Props = $props();
 </script>
 
 <input {...inputProps} use:melt={$element} bind:value class:widthFull />

@@ -1,8 +1,17 @@
 <script lang="ts">
-	export let height: string = "100px";
-	export let width: string = "360px";
-	export let duration: string = "1s";
-	export let border_radius: string = "0px";
+	interface Props {
+		height?: string;
+		width?: string;
+		duration?: string;
+		border_radius?: string;
+	}
+
+	let {
+		height = "100px",
+		width = "360px",
+		duration = "1s",
+		border_radius = "0px"
+	}: Props = $props();
 </script>
 
 <span class="loader" style="animation-duration: {duration}; --width: {width}; --height: {height};">

@@ -5,7 +5,11 @@
 	import { RiLayoutRowLine } from "svelte-remixicon";
 	import type { Writable } from "svelte/store";
 
-	export let style: Writable<ChapterFeedStyle>;
+	interface Props {
+		style: Writable<ChapterFeedStyle>;
+	}
+
+	let { style }: Props = $props();
 	const size = "20";
 </script>
 

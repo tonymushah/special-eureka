@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { AltTitleItem } from "@mangadex/componnents/manga/page/chapters/info/alt-titles/MangaAltTitles.svelte";
 	import Info, { type SimpleItems } from "@mangadex/componnents/manga/page/chapters/Info.svelte";
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
@@ -101,15 +103,42 @@
 			return links;
 		}
 	}
-	$: altTitles = buildAtlTitles(data?.attributes.altTitles ?? []);
-	$: genres = getGenres(data);
-	$: themes = getThemes(data);
-	$: demographic = getDemographic(data);
-	$: format = getFormat(data);
-	$: content = getContent(data);
-	$: links = getLinks(data);
-	$: lastVolume = data?.attributes.lastVolume;
-	$: lastChapter = data?.attributes.lastChapter;
+	let altTitles;
+	run(() => {
+		altTitles = buildAtlTitles(data?.attributes.altTitles ?? []);
+	});
+	let genres;
+	run(() => {
+		genres = getGenres(data);
+	});
+	let themes;
+	run(() => {
+		themes = getThemes(data);
+	});
+	let demographic;
+	run(() => {
+		demographic = getDemographic(data);
+	});
+	let format;
+	run(() => {
+		format = getFormat(data);
+	});
+	let content;
+	run(() => {
+		content = getContent(data);
+	});
+	let links;
+	run(() => {
+		links = getLinks(data);
+	});
+	let lastVolume;
+	run(() => {
+		lastVolume = data?.attributes.lastVolume;
+	});
+	let lastChapter;
+	run(() => {
+		lastChapter = data?.attributes.lastChapter;
+	});
 </script>
 
 <Info

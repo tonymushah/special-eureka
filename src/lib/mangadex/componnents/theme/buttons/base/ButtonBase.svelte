@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
-	export let type: "reset" | "submit" | "button" = "button";
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -12,19 +11,34 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let with_active: boolean = false;
-	export let with_hover: boolean = false;
-	export let style: string | undefined = undefined;
-	export let isBase = false;
-	export let haveBorderRadius = true;
-	export let noPadding = false;
+	interface Props {
+		type?: "reset" | "submit" | "button";
+		with_active?: boolean;
+		with_hover?: boolean;
+		style?: string | undefined;
+		isBase?: boolean;
+		haveBorderRadius?: boolean;
+		noPadding?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		type = "button",
+		with_active = false,
+		with_hover = false,
+		style = undefined,
+		isBase = false,
+		haveBorderRadius = true,
+		noPadding = false,
+		children
+	}: Props = $props();
 </script>
 
 <button
-	on:mouseover={(e) => {
+	onmouseover={(e) => {
 		dispatch("mouseover", e);
 	}}
-	on:focus={(e) => {
+	onfocus={(e) => {
 		dispatch("focus", e);
 	}}
 	{style}
@@ -33,12 +47,12 @@
 	class:with-active={with_active}
 	class:with-hover={with_hover}
 	class:noPadding
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("click", e);
 	}}
 	{type}
 >
-	<slot />
+	{@render children?.()}
 </button>
 
 <style lang="scss">

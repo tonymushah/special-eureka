@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import type { ContentRating } from "@mangadex/gql/graphql";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	import type { Readable } from "svelte/store";
@@ -6,16 +8,16 @@
 	import MangaPopularElement from "../../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
-	let swiper_container: SwiperContainer | undefined = undefined;
-	let current_page_: number | undefined = undefined;
-	$: {
+	let swiper_container: SwiperContainer | undefined = $state(undefined);
+	let current_page_: number | undefined = $state(undefined);
+	run(() => {
 		if (swiper_container) {
 			current_page_ = swiper_container.swiper.activeIndex;
 			swiper_container.swiper.on("slideChange", (s) => {
 				current_page_ = s.activeIndex;
 			});
 		}
-	}
+	});
 	type PopularTitles = {
 		id: string;
 		title: string;
@@ -32,8 +34,12 @@
 			name: string;
 		}[];
 	};
-	export let popular_titles: PopularTitles[];
-	$: current_page = (current_page_ ?? 0) + 1;
+	interface Props {
+		popular_titles: PopularTitles[];
+	}
+
+	let { popular_titles }: Props = $props();
+	let current_page = $derived((current_page_ ?? 0) + 1);
 </script>
 
 <div class="result">

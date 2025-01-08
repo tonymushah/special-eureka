@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { getContextClient } from "@urql/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy, onMount } from "svelte";
@@ -16,8 +18,12 @@
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import { goto } from "$app/navigation";
 
-	export let userId: Readable<string>;
-	let isFetching = false;
+	interface Props {
+		userId: Readable<string>;
+	}
+
+	let { userId }: Props = $props();
+	let isFetching = $state(false);
 	const client = getContextClient();
 	const lists = writable<UserCustomListItemData[]>([]);
 	const debounce_wait = 450;
@@ -89,14 +95,16 @@
 		debounce_func?.cancel();
 		observer.disconnect();
 	});
-	let to_obserce_bind: HTMLElement | undefined = undefined;
-	$: {
+	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
+	run(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
-	}
-	$: console.log(`isFetching: ${isFetching}`);
+	});
+	run(() => {
+		console.log(`isFetching: ${isFetching}`);
+	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 

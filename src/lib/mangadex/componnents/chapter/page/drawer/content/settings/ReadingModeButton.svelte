@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import { derived } from "svelte/store";
 	import { getCurrentChapterReadingModeWritable } from "../../../contexts/currentChapterReadingMode";
 	import { ReadingMode } from "@mangadex/gql/graphql";
@@ -50,7 +52,7 @@
 		role="menu"
 		tabindex="0"
 		class="outer"
-		on:contextmenu|preventDefault={() => {
+		oncontextmenu={preventDefault(() => {
 			switch ($mode) {
 				case ReadingMode.SinglePage:
 					mode.set(ReadingMode.DoublePage);
@@ -67,7 +69,7 @@
 				default:
 					break;
 			}
-		}}
+		})}
 		use:melt={$trigger}
 	>
 		<ButtonAccentOnlyLabel variant="3" icon={Icon} label={$label} oneLine />
@@ -80,7 +82,7 @@
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onm-click={() => {
 						mode.set(ReadingMode.SinglePage);
 					}}
 					class:isSelected={$mode == ReadingMode.SinglePage}
@@ -92,7 +94,7 @@
 				</li>
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onm-click={() => {
 						mode.set(ReadingMode.DoublePage);
 					}}
 					class:isSelected={$mode == ReadingMode.DoublePage}
@@ -104,7 +106,7 @@
 				</li>
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onm-click={() => {
 						mode.set(ReadingMode.LongStrip);
 					}}
 					class:isSelected={$mode == ReadingMode.LongStrip}
@@ -116,7 +118,7 @@
 				</li>
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onm-click={() => {
 						mode.set(ReadingMode.WideStrip);
 					}}
 					class:isSelected={$mode == ReadingMode.WideStrip}

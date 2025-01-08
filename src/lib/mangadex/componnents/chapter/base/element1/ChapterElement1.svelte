@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -59,35 +59,50 @@
 		roles: UserRole[];
 		name: string;
 	};
-	export let id: string;
-	export let title: string | undefined = undefined;
-	export let lang: Language;
-	export let groups: Group[] = [];
-	export let uploader: Uploader;
-	export let upload_date: Date;
-	export let haveBeenRead: boolean = true;
-	export let download_state: Readable<ChapterDownloadState>;
-	export let comments: number | undefined = undefined;
+	interface Props {
+		id: string;
+		title?: string | undefined;
+		lang: Language;
+		groups?: Group[];
+		uploader: Uploader;
+		upload_date: Date;
+		haveBeenRead?: boolean;
+		download_state: Readable<ChapterDownloadState>;
+		comments?: number | undefined;
+	}
+
+	let {
+		id,
+		title = undefined,
+		lang = $bindable(),
+		groups = [],
+		uploader,
+		upload_date,
+		haveBeenRead = true,
+		download_state,
+		comments = undefined
+	}: Props = $props();
 
 	const dispatch = createChapterEl1EventDispatcher();
 
-	$: downloaded = $download_state == ChapterDownloadState.Downloaded;
-	$: downloading = $download_state == ChapterDownloadState.Downloading;
-	$: failed = $download_state == ChapterDownloadState.Failed;
+	let downloaded = $derived($download_state == ChapterDownloadState.Downloaded);
+	let downloading = $derived($download_state == ChapterDownloadState.Downloading);
+	let failed = $derived($download_state == ChapterDownloadState.Failed);
 </script>
 
 <article
 	class="border"
-	on:contextmenu={(e) => {
+	oncontextmenu={(e) => {
 		e.preventDefault();
 	}}
 >
 	<Layout {haveBeenRead}>
-		<svelte:fragment slot="state">
-			<div
-				class="buttons"
-				role="button"
-				on:click={(e) => {
+		{#snippet state()}
+			
+				<div
+					class="buttons"
+					role="button"
+					onclick={(e) => {
 					if ($download_state != ChapterDownloadState.Downloading) {
 						dispatch("download", {
 							...e,
@@ -95,20 +110,20 @@
 						});
 					}
 				}}
-				on:keypress={(e) => {
+					onkeypress={(e) => {
 					dispatch("downloadKeyPress", {
 						...e,
 						id
 					});
 				}}
-				tabindex={0}
-			>
-				<DownloadStateComp {download_state} />
-			</div>
-			{#if (failed || downloaded) && !downloading}
-				<div
-					class="buttons remove"
-					on:click={(e) => {
+					tabindex={0}
+				>
+					<DownloadStateComp {download_state} />
+				</div>
+				{#if (failed || downloaded) && !downloading}
+					<div
+						class="buttons remove"
+						onclick={(e) => {
 						if ($download_state != ChapterDownloadState.Downloading) {
 							dispatch("remove", {
 								...e,
@@ -116,7 +131,7 @@
 							});
 						}
 					}}
-					on:keypress={(e) => {
+						onkeypress={(e) => {
 						if ($download_state != ChapterDownloadState.Downloading) {
 							dispatch("removeKeyPress", {
 								...e,
@@ -124,30 +139,32 @@
 							});
 						}
 					}}
-					tabindex={0}
-					role="button"
-				>
-					<span>
-						<TrashIcon />
-					</span>
-				</div>
-			{/if}
-		</svelte:fragment>
-		<svelte:fragment slot="flag-reading-state">
+						tabindex={0}
+						role="button"
+					>
+						<span>
+							<TrashIcon />
+						</span>
+					</div>
+				{/if}
+			
+			{/snippet}
+		<!-- @migration-task: migrate this slot by hand, `flag-reading-state` is an invalid identifier -->
+	<svelte:fragment slot="flag-reading-state">
 			<div>
 				<MangaDexFlagIcon bind:lang />
 			</div>
 			<div
 				class="buttons"
 				role="button"
-				on:click={(e) => {
+				onclick={(e) => {
 					dispatch("read", {
 						...e,
 						id
 					});
 				}}
 				tabindex={1}
-				on:keypress={(e) => {
+				onkeypress={(e) => {
 					dispatch("readKeyPress", {
 						...e,
 						id
@@ -161,7 +178,8 @@
 				{/if}
 			</div>
 		</svelte:fragment>
-		<svelte:fragment slot="title-groups">
+		<!-- @migration-task: migrate this slot by hand, `title-groups` is an invalid identifier -->
+	<svelte:fragment slot="title-groups">
 			<div class="title-outer">
 				<Link
 					variant="base"
@@ -195,7 +213,8 @@
 				{/if}
 			</div>
 		</svelte:fragment>
-		<svelte:fragment slot="date-uploader">
+		<!-- @migration-task: migrate this slot by hand, `date-uploader` is an invalid identifier -->
+	<svelte:fragment slot="date-uploader">
 			<p class="upload-date">
 				<TimeAgo date={upload_date} />
 			</p>
@@ -210,18 +229,19 @@
 				</a>
 			</UserRolesComp>
 		</svelte:fragment>
-		<svelte:fragment slot="reading-number-comments">
+		<!-- @migration-task: migrate this slot by hand, `reading-number-comments` is an invalid identifier -->
+	<svelte:fragment slot="reading-number-comments">
 			<div>N/A</div>
 			<div
 				class="comments buttons"
 				role="button"
-				on:click={(e) => {
+				onclick={(e) => {
 					dispatch("comments", {
 						...e,
 						id
 					});
 				}}
-				on:keypress={(e) => {
+				onkeypress={(e) => {
 					dispatch("commentsKeyPress", {
 						...e,
 						id

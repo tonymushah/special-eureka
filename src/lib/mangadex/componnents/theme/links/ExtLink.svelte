@@ -1,24 +1,29 @@
 <script lang="ts">
-	import { open } from "@tauri-apps/api/shell";
+	import { open } from "@tauri-apps/plugin-shell";
 
-	export let href: string;
+	interface Props {
+		href: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { href, children }: Props = $props();
 </script>
 
 <span
 	role="link"
 	tabindex="0"
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		if (document.activeElement === e.currentTarget) {
 			if (e.key == "Enter") {
 				open(href);
 			}
 		}
 	}}
-	on:click={(e) => {
+	onclick={(e) => {
 		open(href);
 	}}
 >
-	<slot />
+	{@render children?.()}
 </span>
 
 <style lang="scss">

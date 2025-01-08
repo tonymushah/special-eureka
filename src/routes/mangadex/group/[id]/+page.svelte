@@ -5,7 +5,11 @@
 	import { route } from "$lib/ROUTES";
 	import { RiVipCrown2Fill } from "svelte-remixicon";
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <main>

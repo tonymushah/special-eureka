@@ -13,27 +13,31 @@
 			return pathname;
 		}
 	});
-	export let id: string;
-	export let hasRelation = false;
 	const dispatch = createEventDispatcher<{
 		comment: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let comments: number | undefined = undefined;
+	interface Props {
+		id: string;
+		hasRelation?: boolean;
+		comments?: number | undefined;
+	}
+
+	let { id, hasRelation = false, comments = undefined }: Props = $props();
 </script>
 
 <nav>
 	<button
 		class:active={$path == route("/mangadex/title/[id]", { id })}
-		on:click={() => {
+		onclick={() => {
 			goto(route("/mangadex/title/[id]", { id }));
 		}}
 	>
 		Chapters
 	</button>
 	<button
-		on:click={(e) => {
+		onclick={(e) => {
 			dispatch("comment", e);
 		}}
 	>
@@ -43,7 +47,7 @@
 	</button>
 	<button
 		class:active={$path == route("/mangadex/title/[id]/covers", { id })}
-		on:click={() => {
+		onclick={() => {
 			goto(route("/mangadex/title/[id]/covers", { id }));
 		}}
 	>
@@ -52,7 +56,7 @@
 	{#if hasRelation}
 		<button
 			class:active={$path == route("/mangadex/title/[id]/related", { id })}
-			on:click={() => {
+			onclick={() => {
 				goto(route("/mangadex/title/[id]/related", { id }));
 			}}
 		>

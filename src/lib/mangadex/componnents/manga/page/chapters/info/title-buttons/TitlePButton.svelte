@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type TitlePButtonItem = {
 		name: string;
 		id: string;
@@ -9,9 +9,13 @@
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
 
-	export let key: T;
-	export let title: string;
-	export let items: TitlePButtonItem[];
+	interface Props {
+		key: T;
+		title: string;
+		items: TitlePButtonItem[];
+	}
+
+	let { key, title, items }: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

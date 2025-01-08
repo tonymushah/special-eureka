@@ -4,8 +4,12 @@
 	let isLoadingImage = true;
 	let isError = false;
 	let isSuccess = false;
-	export let coverImage: string;
-	export let coverImageAlt: string;
+	interface Props {
+		coverImage: string;
+		coverImageAlt: string;
+	}
+
+	let { coverImage, coverImageAlt }: Props = $props();
 	onMount(() => {
 		let timer: number | undefined = undefined;
 		const img = new Image();

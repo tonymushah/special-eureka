@@ -8,8 +8,12 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let color: StatusColor;
-	export let label: string;
+	interface Props {
+		color: StatusColor;
+		label: string;
+	}
+
+	let { color, label }: Props = $props();
 </script>
 
 <StatusBadge on:click {color}>

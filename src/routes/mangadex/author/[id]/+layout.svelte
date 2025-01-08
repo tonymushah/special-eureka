@@ -2,35 +2,43 @@
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
 	import type { LayoutData } from "./$types";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { writeText } from "@tauri-apps/api/clipboard";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import { open as shellOpen } from "@tauri-apps/plugin-shell";
 	import { ExternalLinkIcon } from "svelte-feather-icons";
 	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
 
-	export let data: LayoutData;
-	$: description = get_value_from_title_and_random_if_undefined(data.biography, "en");
+	interface Props {
+		data: LayoutData;
+		children?: import('svelte').Snippet;
+	}
+
+	let { data, children }: Props = $props();
+	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
 </script>
 
 <UsersPageBase title={data.name} {description}>
-	<div slot="left" class="buttons">
-		<ButtonAccent
-			isBase
-			on:click={() => {
-				shellOpen(`https://mangadex.org/user/${data.id}`);
-			}}
-		>
-			<p><ExternalLinkIcon /> Open in browser</p>
-		</ButtonAccent>
-		<AuthorLinkButtons links={data.links} />
-	</div>
+	{#snippet left()}
+		<div  class="buttons">
+			<ButtonAccent
+				isBase
+				on:click={() => {
+					shellOpen(`https://mangadex.org/user/${data.id}`);
+				}}
+			>
+				<p><ExternalLinkIcon /> Open in browser</p>
+			</ButtonAccent>
+			<AuthorLinkButtons links={data.links} />
+		</div>
+	{/snippet}
+	<!-- @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
 	<div slot="top-right">
 		<p>
 			Author ID: <span
-				on:keydown={() => {}}
+				onkeydown={() => {}}
 				role="button"
 				tabindex={0}
-				on:click={() => {
+				onclick={() => {
 					writeText(data.id);
 				}}
 				class="copiable">{data.id}</span
@@ -45,11 +53,13 @@
 			</p>
 		</section>
 	</div>
-	<div slot="right">
-		<section class="content">
-			<slot />
-		</section>
-	</div>
+	{#snippet right()}
+		<div >
+			<section class="content">
+				{@render children?.()}
+			</section>
+		</div>
+	{/snippet}
 </UsersPageBase>
 
 <style lang="scss">

@@ -1,14 +1,24 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
 	import ButtonBase from "../base/ButtonBase.svelte";
-	export let type: "reset" | "submit" | "button" = "button";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let style: string | undefined = undefined;
-	export let isBase = false;
+	interface Props {
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		isBase?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		type = "button",
+		style = undefined,
+		isBase = false,
+		children
+	}: Props = $props();
 </script>
 
 <ButtonBase
@@ -22,5 +32,5 @@
 	{type}
 	{isBase}
 >
-	<slot />
+	{@render children?.()}
 </ButtonBase>

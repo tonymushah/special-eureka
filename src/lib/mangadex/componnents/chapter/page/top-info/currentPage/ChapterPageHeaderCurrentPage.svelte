@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import { Direction, ReadingMode } from "@mangadex/gql/graphql";
 	import { isArray } from "lodash";
 	import { derived, readable } from "svelte/store";

@@ -7,7 +7,11 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let label: string;
+	interface Props {
+		label: string;
+	}
+
+	let { label }: Props = $props();
 </script>
 
 <MidToneBadge on:click>

@@ -1,8 +1,12 @@
 <script lang="ts">
 	import IndicationSpan from "../IndicationSpan.svelte";
 
-	export let type: "blue" = "blue";
-	export let innerText: string;
+	interface Props {
+		type?: "blue";
+		innerText: string;
+	}
+
+	let { type = "blue", innerText }: Props = $props();
 </script>
 
 <IndicationSpan {type}>

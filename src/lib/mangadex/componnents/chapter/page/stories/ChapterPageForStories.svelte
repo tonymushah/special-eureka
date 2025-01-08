@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { writable } from "svelte/store";
 	import { initCurrentChapterData, type CurrentChapterData } from "../contexts/currentChapter";
 	import { initChapterCurrentPageContext } from "../contexts/currentPage";
@@ -13,46 +15,73 @@
 	import { initCurrentChapterDirection } from "../contexts/readingDirection";
 	import { initCurrentChapterImageFit } from "../contexts/imageFit";
 
-	export let chapter: CurrentChapterData;
-	export let images: string[];
-	export let currentPage: number = 0;
-	export let readingMode: ReadingMode = ReadingMode.SinglePage;
-	export let isFixed = false;
-	export let isMenuOpen = false;
-	export let longStripImageWidth = 0;
-	export let relatedChapters: RelatedChapters = [];
-	export let direction = Direction.Ltr;
-	export let imageFit = ImageFit.Default;
+	interface Props {
+		chapter: CurrentChapterData;
+		images: string[];
+		currentPage?: number;
+		readingMode?: ReadingMode;
+		isFixed?: boolean;
+		isMenuOpen?: boolean;
+		longStripImageWidth?: number;
+		relatedChapters?: RelatedChapters;
+		direction?: any;
+		imageFit?: any;
+	}
+
+	let {
+		chapter,
+		images,
+		currentPage = 0,
+		readingMode = ReadingMode.SinglePage,
+		isFixed = false,
+		isMenuOpen = false,
+		longStripImageWidth = 0,
+		relatedChapters = [],
+		direction = Direction.Ltr,
+		imageFit = ImageFit.Default
+	}: Props = $props();
 
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
-	$: imageFitStore.set(imageFit);
+	run(() => {
+		imageFitStore.set(imageFit);
+	});
 	const lsImgWidth = initLongStripImagesWidthContext(writable(longStripImageWidth));
-	$: lsImgWidth.set(longStripImageWidth);
+	run(() => {
+		lsImgWidth.set(longStripImageWidth);
+	});
 	const is = initChapterImageContext(images);
-	$: {
+	run(() => {
 		is.set(images);
-	}
+	});
 	const current = initChapterCurrentPageContext(writable(currentPage));
-	$: {
+	run(() => {
 		current.set(currentPage);
-	}
+	});
 	const fixed = initIsDrawerFixedWritable(writable(isFixed));
-	$: {
+	run(() => {
 		fixed.set(isFixed);
-	}
+	});
 	const opened = initIsDrawerOpenWritable(writable(isMenuOpen));
-	$: {
+	run(() => {
 		opened.set(isMenuOpen);
-	}
+	});
 	const c = writable(chapter);
 	initCurrentChapterData(c);
-	$: c.set(chapter);
+	run(() => {
+		c.set(chapter);
+	});
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
-	$: mode.set(readingMode);
+	run(() => {
+		mode.set(readingMode);
+	});
 	const related = initRelatedChapters(writable(relatedChapters));
-	$: related.set(relatedChapters);
+	run(() => {
+		related.set(relatedChapters);
+	});
 	const pageDirection = initCurrentChapterDirection(writable(direction));
-	$: pageDirection.set(direction);
+	run(() => {
+		pageDirection.set(direction);
+	});
 </script>
 
 <main>
