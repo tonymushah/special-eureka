@@ -1,25 +1,16 @@
 <script lang="ts">
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
-	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { onDestroy } from "svelte";
-	import { v4 } from "uuid";
 	import { isContextSidebarCollapsed } from "./CollapsedProvider.svelte";
-	const sub_id = v4();
 	const rlt_sub = subscriptionStore({
 		client: getContextClient(),
 		query: sideDirGQLDoc,
-		variables: {
-			sub_id
-		}
-	});
-	onDestroy(() => {
-		sub_end(sub_id);
+		variables: {}
 	});
 	interface Props {
 		collapsed?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { collapsed = isContextSidebarCollapsed(), children }: Props = $props();

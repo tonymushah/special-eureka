@@ -9,7 +9,7 @@
 		fetching: boolean;
 	}
 
-	let { label, fetching }: Props = $props();
+	let { label, fetching = $bindable() }: Props = $props();
 	const dispacther = createEventDispatcher<{
 		refresh: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

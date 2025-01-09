@@ -23,7 +23,7 @@
 		},
         "deep-link": {
             "desktop": {
-                "scheme": ["special-eureka"]
+                "schemes": ["special-eureka"]
             }
         }
 	},

@@ -11,32 +11,25 @@
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
-	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
 	import { v4 } from "uuid";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
 
 	setContextClient(client);
-	const sub_id = v4();
 	const rtl = subscriptionStore({
 		client: getContextClient(),
 		query: sideDirGQLDoc,
-		variables: {
-			sub_id
-		}
+		variables: {}
 	});
 	onMount(() =>
 		rtl.subscribe(($rtl) => isSidebarRtl.set($rtl.data?.watchSidebarDirection == Direction.Rtl))
 	);
 
-	onDestroy(() => {
-		sub_end(sub_id);
-	});
 	let loading = $derived($navigating != null);
 	let isRTL = $derived($rtl.data?.watchSidebarDirection == Direction.Rtl);
 </script>

@@ -10,24 +10,20 @@
 	import Toastify from "toastify-js";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { Direction, RtlSidebarSubDocument } from "@mangadex/gql/graphql";
-	import { sub_end } from "@mangadex/utils";
 	import OpenExtLinkIcon from "../icons/OpenExtLinkIcon.svelte";
-	import { open } from "@tauri-apps/plugin-shell";
+	import { openUrl } from "@tauri-apps/plugin-opener";
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
-const appWindow = getCurrentWebviewWindow()
+	const appWindow = getCurrentWebviewWindow();
 	const client = getContextClient();
-	const sub_id = v4();
 	const rtl_sidebar_query = subscriptionStore({
 		client,
 		query: RtlSidebarSubDocument,
-		variables: {
-			sub_id
-		}
+		variables: {}
 	});
 	interface Props {
 		href: string;
 		ext_href?: string | undefined;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { href, ext_href = undefined, children }: Props = $props();
@@ -35,7 +31,6 @@ const appWindow = getCurrentWebviewWindow()
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
-		sub_end(sub_id);
 	});
 	let decorated = $derived($isDefaultDecoration);
 	let items = $derived([
@@ -50,7 +45,7 @@ const appWindow = getCurrentWebviewWindow()
 			icon: OpenNewWindowIcon,
 			label: "Open in a new Window",
 			async onClick() {
-				const window = new WebviewWindow(v4(), {
+				const window = new WebviewWindow(`main-${v4()}`, {
 					url: href,
 					decorations: decorated
 				});

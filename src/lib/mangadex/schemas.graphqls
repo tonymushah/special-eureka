@@ -2044,49 +2044,49 @@ input SubmitMangaDraftParams {
 }
 
 type Subscriptions {
-	watchApiClient(apiClientId: UUID!, subId: UUID!): ApiClientAttributes!
-	watchAuthor(authorId: UUID!, subId: UUID!): AuthorAttributes!
-	watchChapter(chapterId: UUID!, subId: UUID!): ChapterAttributes!
-	watchCover(coverId: UUID!, subId: UUID!): CoverAttributes!
-	watchCustomList(customListId: UUID!, subId: UUID!): CustomListAttributes!
-	watchManga(mangaId: UUID!, subId: UUID!): GraphQLMangaAttributes!
-	watchRating(mangaId: UUID!, subId: UUID!): RatingItemAttributes!
-	watchStatistics(id: UUID!, subId: UUID!): StatisticsComments!
-	watchMangaStatistics(mangaId: UUID!, subId: UUID!): MangaStatisticsAttributes!
-	watchTag(tagId: UUID!, subId: UUID!): TagAttributes!
-	watchUploadSession(uploadSessionId: UUID!, subId: UUID!): UploadSessionAttributes!
-	watchUploadSessionFile(uploadSessionFileId: UUID!, subId: UUID!): UploadSessionFileAttributes!
-	watchUser(userId: UUID!, subId: UUID!): UserAttributes!
-	watchUserMe(subId: UUID!): UserAttributes!
-	watchSidebarDirection(subId: UUID!): Direction!
-	watchPageDirection(subId: UUID!): Direction!
-	watchReadingMode(subId: UUID!): ReadingMode!
-	watchChapterLanguages(subId: UUID!): [Language!]!
-	watchIsAppMounted(subId: UUID!): Boolean!
-	watchIsLogged(subId: UUID!): Boolean!
-	watchDownloadState(objectId: UUID!, subId: UUID!): DownloadState!
-	watchReadingState(chapterId: UUID!, subId: UUID!): ReadingState!
-	watchIsFollowingManga(mangaId: UUID!, subId: UUID!): Boolean!
-	watchIsFollowingGroup(groupId: UUID!, subId: UUID!): Boolean!
-	watchIsFollowingUser(userId: UUID!, subId: UUID!): Boolean!
-	watchIsFollowingCustomList(customListId: UUID!, subId: UUID!): Boolean!
-	watchMangaReadingState(mangaId: UUID!, subId: UUID!): ReadingStatus
-	watchReadMarker(chapterId: UUID!, subId: UUID!): Boolean!
-	watchImageFit(subId: UUID!): ImageFit!
-	watchLongstripImageWidth(subId: UUID!): Float!
-	watchMangaListStyle(subId: UUID!): MangaListStyle!
-	watchThemesProfile(subId: UUID!): [ThemeProfileEntry!]!
-	watchThemeProfileDefault(subId: UUID!): MangaDexTheme!
-	watchThemeProfileDefaultName(subId: UUID!): String
-	watchClientInfo(subId: UUID!): ClientInfo
-	watchChapterFeedStyle(subId: UUID!): ChapterFeedStyle!
-	watchPaginationStyle(subId: UUID!): PaginationStyle!
-	watchChapterDownloadState(subId: UUID!, chapterId: UUID!): ChapterDownloadState!
-	watchChaptersTasksList(subId: UUID!): [UUID!]!
-	watchCoverDownloadState(subId: UUID!, coverId: UUID!): CoverDownloadState!
-	watchCoverTasksList(subId: UUID!): [UUID!]!
-	watchMangaDownloadState(subId: UUID!, mangaId: UUID!): MangaDownloadState!
-	watchMangaTasksList(subId: UUID!): [UUID!]!
+	watchApiClient(apiClientId: UUID!): ApiClientAttributes!
+	watchAuthor(authorId: UUID!): AuthorAttributes!
+	watchChapter(chapterId: UUID!): ChapterAttributes!
+	watchCover(coverId: UUID!): CoverAttributes!
+	watchCustomList(customListId: UUID!): CustomListAttributes!
+	watchManga(mangaId: UUID!): GraphQLMangaAttributes!
+	watchRating(mangaId: UUID!): RatingItemAttributes!
+	watchStatistics(id: UUID!): StatisticsComments!
+	watchMangaStatistics(mangaId: UUID!): MangaStatisticsAttributes!
+	watchTag(tagId: UUID!): TagAttributes!
+	watchUploadSession(uploadSessionId: UUID!): UploadSessionAttributes!
+	watchUploadSessionFile(uploadSessionFileId: UUID!): UploadSessionFileAttributes!
+	watchUser(userId: UUID!): UserAttributes!
+	watchUserMe: UserAttributes!
+	watchSidebarDirection: Direction!
+	watchPageDirection: Direction!
+	watchReadingMode: ReadingMode!
+	watchChapterLanguages: [Language!]!
+	watchIsAppMounted: Boolean!
+	watchIsLogged: Boolean!
+	watchDownloadState(objectId: UUID!): DownloadState!
+	watchReadingState(chapterId: UUID!): ReadingState!
+	watchIsFollowingManga(mangaId: UUID!): Boolean!
+	watchIsFollowingGroup(groupId: UUID!): Boolean!
+	watchIsFollowingUser(userId: UUID!): Boolean!
+	watchIsFollowingCustomList(customListId: UUID!): Boolean!
+	watchMangaReadingState(mangaId: UUID!): ReadingStatus
+	watchReadMarker(chapterId: UUID!): Boolean!
+	watchImageFit: ImageFit!
+	watchLongstripImageWidth: Float!
+	watchMangaListStyle: MangaListStyle!
+	watchThemesProfile: [ThemeProfileEntry!]!
+	watchThemeProfileDefault: MangaDexTheme!
+	watchThemeProfileDefaultName: String
+	watchClientInfo: ClientInfo
+	watchChapterFeedStyle: ChapterFeedStyle!
+	watchPaginationStyle: PaginationStyle!
+	watchChapterDownloadState(chapterId: UUID!): ChapterDownloadState!
+	watchChaptersTasksList: [UUID!]!
+	watchCoverDownloadState(coverId: UUID!): CoverDownloadState!
+	watchCoverTasksList: [UUID!]!
+	watchMangaDownloadState(mangaId: UUID!): MangaDownloadState!
+	watchMangaTasksList: [UUID!]!
 }
 
 type Tag {

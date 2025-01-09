@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import TopTitle from "./utils/TopTitle.svelte";
 	import query from "./recently-added/query";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
@@ -17,10 +15,6 @@
 		variable: {}
 	});
 	const isFetching = recently_added_query_store.isFetching;
-	let fetching;
-	run(() => {
-		fetching = $isFetching;
-	});
 
 	let error = $derived($recently_added_query_store?.error);
 	let data = $derived($recently_added_query_store?.data);
@@ -31,12 +25,12 @@
 
 <TopTitle
 	on:refresh={async () => {
-		if (!fetching) {
+		if (!$isFetching) {
 			await recently_added_query_store.execute();
 		}
 	}}
 	label={"Recently Added"}
-	bind:fetching
+	bind:fetching={$isFetching}
 />
 
 {#if data}

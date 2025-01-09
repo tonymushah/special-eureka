@@ -1,28 +1,19 @@
 <script lang="ts">
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
-	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { createEventDispatcher, onDestroy } from "svelte";
+	import { createEventDispatcher } from "svelte";
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
-	import { v4 } from "uuid";
 	interface Props {
 		isRight?: boolean;
 		size?: string;
 	}
 
 	let { isRight = false, size = "24" }: Props = $props();
-	const sub_id = v4();
 	const rtl_sub = subscriptionStore({
 		client: getContextClient(),
-		query: sideDirGQLDoc,
-		variables: {
-			sub_id
-		}
-	});
-	onDestroy(() => {
-		sub_end(sub_id);
+		query: sideDirGQLDoc
 	});
 	const rtl = derived(rtl_sub, ($r) => $r.data?.watchSidebarDirection == Direction.Rtl);
 	const dispatch = createEventDispatcher<{

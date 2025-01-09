@@ -1,13 +1,12 @@
 import { graphql } from "@mangadex/gql";
 import { ImageFit } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { sub_end } from "@mangadex/utils";
 import { get, readable, type Writable } from "svelte/store";
 import { v4 } from "uuid";
 
 const imageFitSub = graphql(`
-	subscription subToChapterImageFit($subId: UUID!) {
-		watchImageFit(subId: $subId)
+	subscription subToChapterImageFit {
+		watchImageFit
 	}
 `);
 
@@ -20,20 +19,14 @@ const imageFitMutation = graphql(`
 `);
 
 const base = readable(ImageFit.Default, (set, update) => {
-	const sub_id = v4();
-	const unsub = client
-		.subscription(imageFitSub, {
-			subId: sub_id
-		})
-		.subscribe((res) => {
-			const imageFit = res.data?.watchImageFit;
-			if (imageFit) {
-				set(imageFit);
-			}
-		});
+	const unsub = client.subscription(imageFitSub, {}).subscribe((res) => {
+		const imageFit = res.data?.watchImageFit;
+		if (imageFit) {
+			set(imageFit);
+		}
+	});
 	return () => {
 		unsub.unsubscribe();
-		sub_end(sub_id);
 	};
 });
 

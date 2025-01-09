@@ -1,16 +1,12 @@
 <script lang="ts">
-	import Toast from "toastify-js";
 	import { graphql } from "@mangadex/gql";
-	import { sub_end } from "@mangadex/utils";
-	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
-	import { getContextClient, mutationStore, queryStore, subscriptionStore } from "@urql/svelte";
-	import { onDestroy } from "svelte";
-	import { ServerIcon } from "svelte-feather-icons";
-	import { v4 } from "uuid";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
+	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
+	import { getContextClient, subscriptionStore } from "@urql/svelte";
+	import { ServerIcon } from "svelte-feather-icons";
+	import Toast from "toastify-js";
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
-	const sub_id = v4();
 	const toast = Toast({
 		position: "right",
 		gravity: "bottom",
@@ -22,16 +18,11 @@
 	const offline_server_state_sub = subscriptionStore({
 		client,
 		query: graphql(/* GraphQL */ `
-			subscription serverIconState($sub_id: UUID!) {
-				watchIsAppMounted(subId: $sub_id)
+			subscription serverIconState {
+				watchIsAppMounted
 			}
 		`),
-		variables: {
-			sub_id
-		}
-	});
-	onDestroy(() => {
-		sub_end(sub_id);
+		variables: {}
 	});
 	let isLoading = $state(false);
 	const mount = async () => {

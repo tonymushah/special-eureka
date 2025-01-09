@@ -11,6 +11,7 @@
         "clipboard-manager:default",
 		"mangadex-desktop-api:allow-graphql",
 		"mangadex-desktop-api:allow-subscriptions",
-        "opener:default"
+        "opener:default",
+        "notification:default"
 	]
 }
