@@ -38,6 +38,12 @@ importers:
       '@tauri-apps/api':
         specifier: '2'
         version: 2.2.0
+      '@tauri-apps/plugin-clipboard-manager':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-opener':
+        specifier: ^2.2.3
+        version: 2.2.3
       '@urql/svelte':
         specifier: '4'
         version: 4.2.1(@urql/core@5.0.6(graphql@16.9.0))(svelte@5.17.1)
@@ -59,6 +65,9 @@ importers:
       millify:
         specifier: ^6.1.0
         version: 6.1.0
+      mizuki-graphiql-fetcher:
+        specifier: ^1.0.0
+        version: 1.0.0(@types/node@22.5.5)(graphql-ws@5.16.0(graphql@16.9.0))
       mizuki-urql-adapter:
         specifier: '1'
         version: 1.0.0(graphql@16.9.0)
@@ -1054,6 +1063,15 @@ packages:
     resolution: {integrity: sha512-VqqQrvkMwgbGhj7J5907yfuAy5B1OCgOTIPi7gtRneG1jYmnqvSxi8Yrmu0B8G8fZxkxKVsYi8dE8EtsOBrTGQ==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0 || ^17.0.0-alpha.2
+      graphql-ws: '>= 4.5.0'
+    peerDependenciesMeta:
+      graphql-ws:
+        optional: true
+
+  '@graphiql/toolkit@0.11.1':
+    resolution: {integrity: sha512-G02te70/oYYna5UhbH6TXwNxeQyWa+ChlPonUrKwC5Ot9ItraGJ9yUU4sS+YRaA+EvkzNoHG79XcW2k1QaAMiw==}
+    peerDependencies:
+      graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
       graphql-ws: '>= 4.5.0'
     peerDependenciesMeta:
       graphql-ws:
@@ -2259,6 +2277,12 @@ packages:
     resolution: {integrity: sha512-5fVEdP4t4BT0ymvXZAM78kB0S/TaiRDLDoSRWGxVy1e7XCwuKyST5m6ybeyw/h/soK/91tbf+W3xXXy7XzkT4A==}
     engines: {node: '>= 10'}
     hasBin: true
+
+  '@tauri-apps/plugin-clipboard-manager@2.2.0':
+    resolution: {integrity: sha512-sIBrW/HioKq2vqomwwcU/Y8ygAv3DlS32yKPBX5XijCc0IyQKiDxYpGqmvE9DC5Y0lNJ/G53dfS961B31wjJ1g==}
+
+  '@tauri-apps/plugin-opener@2.2.3':
+    resolution: {integrity: sha512-QZDtGwqs2ssjc+GbHzTFlN0gtgXR7B1dcphIJ3vBrX+PXOdI58hP82TyT2rbH2myBVj2uWkyqKhM8FbbGopqng==}
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -4195,6 +4219,9 @@ packages:
 
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
+
+  mizuki-graphiql-fetcher@1.0.0:
+    resolution: {integrity: sha512-wsPrQRamRe6r3MMh7xSr+HE7jinZuZ5sGJ2uI99N4zL9mBKxR94rTpSvO+Ntl8R3mMisBF3Pi14d+UU1Ysm5Rg==}
 
   mizuki-urql-adapter@1.0.0:
     resolution: {integrity: sha512-vjcd5GWFsniVkIMfgKXc+ZDywkBBs29C8e9TDlOlnFCbt911irKN86wqm9LuZQlVeMCqd/VbFc4zBTAUofsrOQ==}
@@ -6260,6 +6287,16 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
+  '@graphiql/toolkit@0.11.1(@types/node@22.5.5)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)':
+    dependencies:
+      '@n1ru4l/push-pull-async-iterable-iterator': 3.2.0
+      graphql: 16.9.0
+      meros: 1.3.0(@types/node@22.5.5)
+    optionalDependencies:
+      graphql-ws: 5.16.0(graphql@16.9.0)
+    transitivePeerDependencies:
+      - '@types/node'
+
   '@graphql-codegen/add@5.0.3(graphql@16.9.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
@@ -7714,6 +7751,14 @@ snapshots:
       '@tauri-apps/cli-win32-arm64-msvc': 2.2.2
       '@tauri-apps/cli-win32-ia32-msvc': 2.2.2
       '@tauri-apps/cli-win32-x64-msvc': 2.2.2
+
+  '@tauri-apps/plugin-clipboard-manager@2.2.0':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
+
+  '@tauri-apps/plugin-opener@2.2.3':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
 
   '@testing-library/dom@10.4.0':
     dependencies:
@@ -10055,6 +10100,15 @@ snapshots:
       brace-expansion: 2.0.1
 
   minimist@1.2.8: {}
+
+  mizuki-graphiql-fetcher@1.0.0(@types/node@22.5.5)(graphql-ws@5.16.0(graphql@16.9.0)):
+    dependencies:
+      '@graphiql/toolkit': 0.11.1(@types/node@22.5.5)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)
+      '@tauri-apps/api': 2.2.0
+      graphql: 16.9.0
+    transitivePeerDependencies:
+      - '@types/node'
+      - graphql-ws
 
   mizuki-urql-adapter@1.0.0(graphql@16.9.0):
     dependencies:
