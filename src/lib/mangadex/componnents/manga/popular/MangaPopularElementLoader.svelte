@@ -1,15 +1,11 @@
 <script lang="ts">
-	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
-	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
-	import { ContentRating, type MangaStatus } from "@mangadex/gql/graphql";
+	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher, onMount } from "svelte";
+	import { createEventDispatcher } from "svelte";
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
-	import AuthorLink from "./authors/AuthorLink.svelte";
 	type Author = {
 		id: string;
 		name: string;
@@ -47,8 +43,10 @@
 </script>
 
 <Layout coverImage="">
-	<!-- TODO @migration-task: migrate this slot by hand, `no-index` is an invalid identifier -->
-	<NoIndex {index} slot="no-index" />
+	{#snippet nOindex()}
+		<NoIndex {index} />
+	{/snippet}
+
 	<div
 		class="cover"
 		role="button"
