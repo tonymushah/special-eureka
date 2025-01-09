@@ -1,4 +1,3 @@
-<!-- TODO @migration-task Error while migrating Svelte code: This migration would change the name of a slot making the component unusable -->
 <script lang="ts">
 	import { kebabCase } from "lodash";
 	import UsersPageBaseLayout from "./UsersPageBaseLayout.svelte";
@@ -13,17 +12,17 @@
 		title: string;
 		description?: string;
 		topRight?: Snippet;
-		left?: Snippet;
-		right?: Snippet;
+		_left?: Snippet;
+		_right?: Snippet;
 	}
 	let {
-		profilePicture = profileBannerDef,
+		profilePicture = profilePictureDef,
 		profileBanner = profileBannerDef,
 		title,
 		description = "",
 		topRight,
-		left,
-		right
+		_left,
+		_right
 	}: Props = $props();
 	let profilePictureAlt = $derived(`profile-picture-${kebabCase(title)}`);
 </script>
@@ -54,11 +53,11 @@
 				{@render topRight?.()}
 			</div>
 			<div class="left">
-				{@render left?.()}
+				{@render _left?.()}
 			</div>
 			<div class="right">
 				<Markdown source={description} />
-				{@render right?.()}
+				{@render _right?.()}
 			</div>
 		</article>
 	{/snippet}
