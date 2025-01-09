@@ -1,16 +1,26 @@
-<!-- TODO @migration-task Error while migrating Svelte code: This migration would change the name of a slot making the component unusable -->
 <script lang="ts">
-	export let coverImage: string;
+	import type { Snippet } from "svelte";
+
+	interface Props {
+		coverImage: string;
+		nOindex?: Snippet;
+		children?: Snippet;
+	}
+	let { coverImage = $bindable(), nOindex, children }: Props = $props();
 </script>
 
 <div class="layout-image" style={`background-image: url(${coverImage});`}>
 	<div class="layout-color">
 		<div class="layout">
 			<div class="no-index">
-				<slot name="no-index" />
+				{#if nOindex}
+					{@render nOindex()}
+				{/if}
 			</div>
 			<div class="content">
-				<slot />
+				{#if children}
+					{@render children()}
+				{/if}
 			</div>
 		</div>
 	</div>
