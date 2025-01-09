@@ -98,11 +98,10 @@
 >
 	<Layout {haveBeenRead}>
 		{#snippet state()}
-			
-				<div
-					class="buttons"
-					role="button"
-					onclick={(e) => {
+			<div
+				class="buttons"
+				role="button"
+				onclick={(e) => {
 					if ($download_state != ChapterDownloadState.Downloading) {
 						dispatch("download", {
 							...e,
@@ -110,20 +109,20 @@
 						});
 					}
 				}}
-					onkeypress={(e) => {
+				onkeypress={(e) => {
 					dispatch("downloadKeyPress", {
 						...e,
 						id
 					});
 				}}
-					tabindex={0}
-				>
-					<DownloadStateComp {download_state} />
-				</div>
-				{#if (failed || downloaded) && !downloading}
-					<div
-						class="buttons remove"
-						onclick={(e) => {
+				tabindex={0}
+			>
+				<DownloadStateComp {download_state} />
+			</div>
+			{#if (failed || downloaded) && !downloading}
+				<div
+					class="buttons remove"
+					onclick={(e) => {
 						if ($download_state != ChapterDownloadState.Downloading) {
 							dispatch("remove", {
 								...e,
@@ -131,7 +130,7 @@
 							});
 						}
 					}}
-						onkeypress={(e) => {
+					onkeypress={(e) => {
 						if ($download_state != ChapterDownloadState.Downloading) {
 							dispatch("removeKeyPress", {
 								...e,
@@ -139,18 +138,17 @@
 							});
 						}
 					}}
-						tabindex={0}
-						role="button"
-					>
-						<span>
-							<TrashIcon />
-						</span>
-					</div>
-				{/if}
-			
-			{/snippet}
-		<!-- @migration-task: migrate this slot by hand, `flag-reading-state` is an invalid identifier -->
-	<svelte:fragment slot="flag-reading-state">
+					tabindex={0}
+					role="button"
+				>
+					<span>
+						<TrashIcon />
+					</span>
+				</div>
+			{/if}
+		{/snippet}
+		<!-- TODO @migration-task: migrate this slot by hand, `flag-reading-state` is an invalid identifier -->
+		<svelte:fragment slot="flag-reading-state">
 			<div>
 				<MangaDexFlagIcon bind:lang />
 			</div>
@@ -178,8 +176,8 @@
 				{/if}
 			</div>
 		</svelte:fragment>
-		<!-- @migration-task: migrate this slot by hand, `title-groups` is an invalid identifier -->
-	<svelte:fragment slot="title-groups">
+		<!-- TODO @migration-task: migrate this slot by hand, `title-groups` is an invalid identifier -->
+		<svelte:fragment slot="title-groups">
 			<div class="title-outer">
 				<Link
 					variant="base"
@@ -213,8 +211,8 @@
 				{/if}
 			</div>
 		</svelte:fragment>
-		<!-- @migration-task: migrate this slot by hand, `date-uploader` is an invalid identifier -->
-	<svelte:fragment slot="date-uploader">
+		<!-- TODO @migration-task: migrate this slot by hand, `date-uploader` is an invalid identifier -->
+		<svelte:fragment slot="date-uploader">
 			<p class="upload-date">
 				<TimeAgo date={upload_date} />
 			</p>
@@ -229,8 +227,8 @@
 				</a>
 			</UserRolesComp>
 		</svelte:fragment>
-		<!-- @migration-task: migrate this slot by hand, `reading-number-comments` is an invalid identifier -->
-	<svelte:fragment slot="reading-number-comments">
+		<!-- TODO @migration-task: migrate this slot by hand, `reading-number-comments` is an invalid identifier -->
+		<svelte:fragment slot="reading-number-comments">
 			<div>N/A</div>
 			<div
 				class="comments buttons"

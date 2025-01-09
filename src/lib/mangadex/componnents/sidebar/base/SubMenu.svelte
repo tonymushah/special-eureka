@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from "svelte/legacy";
 
 	import { sidebarState as isOpen } from "@mangadex/stores";
 	import { ChevronUpIcon } from "svelte-feather-icons";
@@ -37,8 +37,8 @@
 	});
 	interface Props {
 		label: string;
-		icon?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		icon?: import("svelte").Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { label, icon, children }: Props = $props();
@@ -74,12 +74,12 @@
 		<MenuBase bind:collapsed>
 			<MenuIcons>
 				{#snippet icon()}
-								<div  class="icon" class:collapsed>
+					<div class="icon" class:collapsed>
 						{@render icon_render?.()}
 					</div>
-							{/snippet}
-				<!-- @migration-task: migrate this slot by hand, `suffix-icon` is an invalid identifier -->
-	<div slot="suffix-icon" class="suffix-icon" class:collapsed class:isMenuOpen>
+				{/snippet}
+				<!-- TODO @migration-task: migrate this slot by hand, `suffix-icon` is an invalid identifier -->
+				<div slot="suffix-icon" class="suffix-icon" class:collapsed class:isMenuOpen>
 					{#if collapsed}
 						<HeaderChevronBase size="16" />
 					{:else}

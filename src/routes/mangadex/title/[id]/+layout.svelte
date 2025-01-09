@@ -1,4 +1,4 @@
-<!-- @migration-task Error while migrating Svelte code: can't migrate `$: layoutData = data.layoutData!;` to `$derived` because there's a variable named derived.
+<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: layoutData = data.layoutData!;` to `$derived` because there's a variable named derived.
      Rename the variable and try again or migrate by hand. -->
 <script lang="ts" context="module">
 	const contextKey = "title-layout-data";

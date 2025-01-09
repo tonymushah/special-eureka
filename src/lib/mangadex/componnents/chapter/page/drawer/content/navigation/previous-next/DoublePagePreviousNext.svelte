@@ -1,4 +1,4 @@
-<!-- @migration-task Error while migrating Svelte code: can't migrate `$: next = function () {
+<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: next = function () {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
 			currentChapterPage.update(() => {

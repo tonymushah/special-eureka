@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from "svelte/legacy";
 
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
@@ -14,7 +14,7 @@
 
 	interface Props {
 		data: LayoutData;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { data, children }: Props = $props();
@@ -31,7 +31,7 @@
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet left()}
-		<div  class="buttons">
+		<div class="buttons">
 			<PrimaryButton isBase>
 				<p><BookmarkIcon />Follow</p>
 			</PrimaryButton>
@@ -57,7 +57,7 @@
 			/>
 		</div>
 	{/snippet}
-	<!-- @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
+	<!-- TODO @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
 	<div slot="top-right" class="info">
 		<p>
 			Group ID: <span
@@ -102,7 +102,7 @@
 		</section>
 	</div>
 	{#snippet right()}
-		<div >
+		<div>
 			<section class="nav-tab">
 				<NavTab id={data.id} />
 			</section>

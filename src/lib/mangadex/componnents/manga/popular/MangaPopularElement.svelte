@@ -60,7 +60,7 @@
 </script>
 
 <Layout {coverImage}>
-	<!-- @migration-task: migrate this slot by hand, `no-index` is an invalid identifier -->
+	<!-- TODO @migration-task: migrate this slot by hand, `no-index` is an invalid identifier -->
 	<NoIndex {index} slot="no-index" />
 	<div
 		class="cover"

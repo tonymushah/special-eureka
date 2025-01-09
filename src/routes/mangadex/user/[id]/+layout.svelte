@@ -12,7 +12,7 @@
 
 	interface Props {
 		data: LayoutData;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { data, children }: Props = $props();
@@ -20,7 +20,7 @@
 
 <UsersPageBase title={data.username}>
 	{#snippet left()}
-		<div  class="buttons">
+		<div class="buttons">
 			<PrimaryButton isBase>
 				<p><BookmarkIcon />Follow</p>
 			</PrimaryButton>
@@ -37,7 +37,7 @@
 			</ButtonAccent>
 		</div>
 	{/snippet}
-	<!-- @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
+	<!-- TODO @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
 	<div slot="top-right">
 		<p>
 			User ID: <span
@@ -65,7 +65,7 @@
 		</section>
 	</div>
 	{#snippet right()}
-		<div >
+		<div>
 			<section class="nav-tab">
 				<NavTab id={data.id} />
 			</section>

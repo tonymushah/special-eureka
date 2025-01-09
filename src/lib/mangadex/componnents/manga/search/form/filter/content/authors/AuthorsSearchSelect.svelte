@@ -1,4 +1,4 @@
-<!-- @migration-task Error while migrating Svelte code: can't migrate `$: hasNext = nextFetch != undefined && typeof nextFetch == "function";` to `$derived` because there's a variable named derived.
+<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: hasNext = nextFetch != undefined && typeof nextFetch == "function";` to `$derived` because there's a variable named derived.
      Rename the variable and try again or migrate by hand. -->
 <script lang="ts" context="module">
 	function tagToComboboxOption(tag: Tag): ComboboxOption<string> {
