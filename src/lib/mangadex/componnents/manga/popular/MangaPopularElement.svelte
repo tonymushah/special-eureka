@@ -60,8 +60,10 @@
 </script>
 
 <Layout {coverImage}>
-	<!-- TODO @migration-task: migrate this slot by hand, `no-index` is an invalid identifier -->
-	<NoIndex {index} slot="no-index" />
+	{#snippet nOindex()}
+		<NoIndex {index} />
+	{/snippet}
+
 	<div
 		class="cover"
 		role="button"
