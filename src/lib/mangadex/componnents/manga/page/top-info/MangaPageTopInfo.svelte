@@ -143,12 +143,12 @@
 			/>
 			<div class="tag-status">
 				<TagComponnentsFlex
-					bind:tags
+					{tags}
 					on:click={({ detail }) => {
 						dispatch("tag", detail);
 					}}
 				/>
-				<MangaStatusComp bind:status bind:year />
+				<MangaStatusComp {status} {year} />
 			</div>
 			{#if stats != undefined}
 				<div class="stats">
