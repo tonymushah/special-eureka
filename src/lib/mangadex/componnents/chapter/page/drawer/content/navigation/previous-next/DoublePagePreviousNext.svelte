@@ -1,19 +1,3 @@
-<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: next = function () {
-		if ($currentPageIndex < $images_length - 1) {
-			resetZoom();
-			currentChapterPage.update(() => {
-				const index = $images_indexes[$currentPageIndex + 1];
-				if (isArray(index)) {
-					return index[ceil(random(0, 1))];
-				} else {
-					return index;
-				}
-			});
-		} else {
-			dispatch("next", {});
-		}
-	};` to `$derived` because there's a variable named derived.
-     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
@@ -39,7 +23,7 @@
 		next: {};
 		previous: {};
 	}>();
-	$: next = function () {
+	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
 			currentChapterPage.update(() => {
@@ -53,8 +37,8 @@
 		} else {
 			dispatch("next", {});
 		}
-	};
-	$: previous = function () {
+	}
+	function previous() {
 		if ($currentPageIndex > 0) {
 			resetZoom();
 			currentChapterPage.update(() => {
@@ -68,8 +52,8 @@
 		} else {
 			dispatch("previous", {});
 		}
-	};
-	$: onNext = function () {
+	}
+	function onNext() {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				next();
@@ -80,8 +64,8 @@
 			default:
 				break;
 		}
-	};
-	$: onPrevious = function () {
+	}
+	function onPrevious() {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				previous();
@@ -92,7 +76,7 @@
 			default:
 				break;
 		}
-	};
+	}
 	const variant = "2";
 </script>
 
