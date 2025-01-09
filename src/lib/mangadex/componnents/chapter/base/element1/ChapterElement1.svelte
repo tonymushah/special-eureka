@@ -147,8 +147,7 @@
 				</div>
 			{/if}
 		{/snippet}
-		<!-- TODO @migration-task: migrate this slot by hand, `flag-reading-state` is an invalid identifier -->
-		<svelte:fragment slot="flag-reading-state">
+		{#snippet flagReadingState()}
 			<div>
 				<MangaDexFlagIcon bind:lang />
 			</div>
@@ -175,9 +174,8 @@
 					<EyeOffIcon />
 				{/if}
 			</div>
-		</svelte:fragment>
-		<!-- TODO @migration-task: migrate this slot by hand, `title-groups` is an invalid identifier -->
-		<svelte:fragment slot="title-groups">
+		{/snippet}
+		{#snippet titleGroups()}
 			<div class="title-outer">
 				<Link
 					variant="base"
@@ -210,9 +208,8 @@
 					<i>No Groups</i>
 				{/if}
 			</div>
-		</svelte:fragment>
-		<!-- TODO @migration-task: migrate this slot by hand, `date-uploader` is an invalid identifier -->
-		<svelte:fragment slot="date-uploader">
+		{/snippet}
+		{#snippet dateUploader()}
 			<p class="upload-date">
 				<TimeAgo date={upload_date} />
 			</p>
@@ -226,9 +223,8 @@
 					{uploader.name}
 				</a>
 			</UserRolesComp>
-		</svelte:fragment>
-		<!-- TODO @migration-task: migrate this slot by hand, `reading-number-comments` is an invalid identifier -->
-		<svelte:fragment slot="reading-number-comments">
+		{/snippet}
+		{#snippet readingNumberComments()}
 			<div>N/A</div>
 			<div
 				class="comments buttons"
@@ -258,7 +254,7 @@
 					{/if}
 				</p>
 			</div>
-		</svelte:fragment>
+		{/snippet}
 	</Layout>
 </article>
 
