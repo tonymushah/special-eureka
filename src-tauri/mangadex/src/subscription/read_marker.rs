@@ -14,14 +14,11 @@ impl ChapterReadMarkerSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.read_marker.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.read_marker.subscribe()
+            })?
             .option_filter_by_id(chapter_id),
         )
     }

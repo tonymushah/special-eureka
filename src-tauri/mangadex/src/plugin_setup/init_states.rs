@@ -6,9 +6,8 @@ use crate::{
 
 use super::{init_client_state::init_client_state, init_watches_states::init_watches_states};
 
-pub fn init_states<R: Runtime>(app: &tauri::AppHandle<R>) -> tauri::plugin::Result<()> {
-    let mut store = get_store_builder(app.app_handle())?.build();
-    let _ = store.load();
+pub fn init_states<R: Runtime>(app: &tauri::AppHandle<R>) -> crate::PluginSetupResult<()> {
+    let mut store = get_store_builder(app.clone())?.build()?;
     init_watches_states(app, &store)?;
     init_client_state(app, &store)?;
     app.manage(OfflineAppState::default());

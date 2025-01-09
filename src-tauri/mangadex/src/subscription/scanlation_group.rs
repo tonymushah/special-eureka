@@ -16,14 +16,11 @@ impl ScanlationGroupSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         scanlation_group_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ScanlationGroupAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.scanlation_group.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.scanlation_group.subscribe()
+            })?
             .option_filter_by_id(scanlation_group_id),
         )
     }

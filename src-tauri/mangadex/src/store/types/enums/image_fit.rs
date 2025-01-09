@@ -69,16 +69,16 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(IMAGE_FIT.to_string(), serde_json::to_value(self.clone())?)?;
+        store.set(IMAGE_FIT.to_string(), serde_json::to_value(self.clone())?);
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(IMAGE_FIT)?;
+        store.delete(IMAGE_FIT);
         Ok(())
     }
 }

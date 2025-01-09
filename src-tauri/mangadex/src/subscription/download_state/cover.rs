@@ -1,5 +1,5 @@
 use crate::{
-    subscription::utils::{cancel_token::WindowCancellationToken, WatchSubscriptionStream},
+    subscription::utils::WatchSubscriptionStream,
     utils::{
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
         watch::is_appstate_mounted::IsAppStateMountedWatch,
@@ -101,7 +101,7 @@ impl CoverDownloadSubs {
     pub async fn listen_to_cover_tasks<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
         let maybe_offline = (*window.get_offline_app_state()?).clone();
@@ -114,15 +114,9 @@ impl CoverDownloadSubs {
         let manager =
             <Addr<DownloadManager> as GetManager<CoverDownloadManager>>::get(&offline_read).await?;
         let notify = manager.notify().await?;
-        let cancel_tok = WindowCancellationToken::new(window, sub_id);
         let stream = stream! {
-            let cancel_tok = cancel_tok;
-            let token = cancel_tok.cancel_token();
             loop {
                 select! {
-                    _ = token.cancelled() => {
-                        break;
-                    },
                     _ = notify.notified() => {
                         if let Ok(tasks) = manager.tasks_id().await {
                             yield tasks
@@ -138,23 +132,19 @@ impl CoverDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
-        let mut is_mounted =
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context_watch_as_ref::<
-                IsAppStateMountedWatch,
-            >(ctx, sub_id)?;
-        let cancel_token = is_mounted.cancel_token();
+        let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
+            IsAppStateMountedWatch,
+            tauri::Wry,
+        >(ctx)?;
         let (tx, rx) = watch::<Option<Addr<DownloadManager>>>(None);
         let maybe_offline = (*window.get_offline_app_state()?).clone();
         let stream = stream! {
             let mut is_readed = false;
             loop {
                 select! {
-                    _ = cancel_token.clone().cancelled_owned() => {
-                        break;
-                    }
                     Some(mounted) = is_mounted.next() => {
                         if mounted {
                             let olar = maybe_offline.read().await;

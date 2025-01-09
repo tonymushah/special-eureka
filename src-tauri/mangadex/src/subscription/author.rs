@@ -16,12 +16,9 @@ impl AuthorSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         author_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = AuthorAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx,
                 |w| w.author.subscribe(),
             )?
             .option_filter_by_id(author_id),

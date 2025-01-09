@@ -116,7 +116,7 @@ impl UserOptionMutations {
     }
     pub async fn clear_favicon_cache(&self, ctx: &Context<'_>) -> Result<bool> {
         let app = get_app_handle_from_async_graphql::<tauri::Wry>(ctx)?;
-        clear_favicons_dir(app.config().as_ref())?;
+        clear_favicons_dir(app)?;
         Ok(true)
     }
     pub async fn set_manga_list_style(

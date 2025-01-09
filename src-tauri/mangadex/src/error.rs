@@ -14,8 +14,6 @@ pub enum Error {
     TauriStore(#[from] tauri_plugin_store::Error),
     #[error("I/O Error: {0}")]
     Io(#[from] std::io::Error),
-    #[error("INS Error {0}")]
-    INS(#[from] crate::ins_handle::error::Error),
     #[error("Offline AppState is not loaded")]
     OfflineAppStateNotLoaded,
     #[error("Infallible but failed... haha! :D")]
@@ -98,6 +96,14 @@ pub enum Error {
     SpawnDataResultMissingActixArbiter,
     #[error("MangaDex Eureka Manager SDK Error: {0}")]
     EurekaManagerCore(#[from] eureka_mmanager_core::Error),
+    #[error(transparent)]
+    Notification(#[from] tauri_plugin_notification::Error),
+    #[error("Cannot access at the Tauri Webview Handle from the GraphQL Context")]
+    NoAccessWebviewGQLCtx,
+    #[error("Cannot access at the Subscription Cancel Token from the GraphQL Context")]
+    NoAccessSubCancelTokenGQLCtx,
+    #[error("Cannot access at the chapter notification queue")]
+    NoAccessChapterINSHandle,
 }
 
 impl Error {

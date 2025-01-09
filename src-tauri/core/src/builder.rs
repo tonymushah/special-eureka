@@ -16,10 +16,10 @@ pub fn get_builder() -> Builder<Wry> {
         .menu(menu::get_menu())
         .on_menu_event(menu::on_menu_event);
     builder
-        /* 
+        /*
             .register_uri_scheme_protocol("tony", |_app, req| {
                 println!("{:#?}", req);
-                tauri::http::ResponseBuilder::new()
+                tauri::http::Response::builder()
                     .header("access-control-allow-origin", "*")
                     .status(tauri::http::status::StatusCode::OK)
                     .mimetype(tauri::http::MimeType::Txt.to_string().as_str())

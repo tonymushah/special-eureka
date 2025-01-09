@@ -25,7 +25,7 @@ use crate::{
 pub fn init_watches_states<R: Runtime>(
     app: &tauri::AppHandle<R>,
     store: &Store<R>,
-) -> tauri::plugin::Result<()> {
+) -> crate::PluginSetupResult<()> {
     let watches = Watches::default();
     let _ = watches
         .reading_mode

@@ -24,11 +24,13 @@ use ins_handle::ins_handle;
 use register_mangadex_client::register_mangadex_client;
 use register_uri_scheme_protocol::register_uri_scheme_protocol;
 
+pub type PluginSetupResult<T> = Result<T, Box<dyn std::error::Error>>;
+
 pub fn setup<R: Runtime>(
     app: &AppHandle<R>,
     config: Value,
     schema: &Schema<Q, M, S>,
-) -> tauri::plugin::Result<()> {
+) -> crate::PluginSetupResult<()> {
     let plug_config: PluginConfig = serde_json::from_value(config.clone())?;
     #[cfg(debug_assertions)]
     export_sdl(schema, &plug_config)?;

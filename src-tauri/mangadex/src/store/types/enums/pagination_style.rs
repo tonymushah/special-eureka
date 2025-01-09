@@ -68,19 +68,19 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(
+        store.set(
             PAGINATION_STYLE.to_string(),
             serde_json::to_value(self.clone())?,
-        )?;
+        );
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(PAGINATION_STYLE)?;
+        store.delete(PAGINATION_STYLE);
         Ok(())
     }
 }

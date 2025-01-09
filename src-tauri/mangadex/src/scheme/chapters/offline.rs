@@ -4,12 +4,13 @@ use crate::{
 };
 use bytes::{BufMut, Bytes, BytesMut};
 use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
+use reqwest::header::CONTENT_TYPE;
 use std::{
     io::{self, Write},
     ops::Deref,
     path::Path,
 };
-use tauri::{api::http::StatusCode, AppHandle, Runtime};
+use tauri::{http::StatusCode, AppHandle, Runtime};
 use uuid::Uuid;
 
 use super::{not_found_chapter_image, ChapterMode};
@@ -56,13 +57,14 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
         buf.flush()?;
         Ok(buf.into_inner().freeze())
     }
-    pub fn handle(&'a self) -> SchemeResponseResult<tauri::http::Response> {
+    pub fn handle(&'a self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
         let body: Bytes = self.get_image()?;
-        tauri::http::ResponseBuilder::new()
+        tauri::http::Response::builder()
             .header("access-control-allow-origin", "*")
             .status(StatusCode::OK)
             // TODO Add jpeg mimetype
-            .mimetype(
+            .header(
+                CONTENT_TYPE,
                 format!(
                     "image/{}",
                     Path::new(&self.filename)
@@ -74,6 +76,6 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
                 .as_str(),
             )
             .body(body.to_vec())
-            .map_err(SchemeResponseError::InternalError)
+            .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
     }
 }

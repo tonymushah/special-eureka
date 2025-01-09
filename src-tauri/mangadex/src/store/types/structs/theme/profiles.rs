@@ -3,7 +3,7 @@ use std::{
     ops::{Deref, DerefMut},
 };
 
-use async_graphql::{SimpleObject, InputObject};
+use async_graphql::{InputObject, SimpleObject};
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 
@@ -91,19 +91,19 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(
+        store.set(
             THEME_PROFILE.to_string(),
             serde_json::to_value(self.clone())?,
-        )?;
+        );
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(THEME_PROFILE)?;
+        store.delete(THEME_PROFILE);
         Ok(())
     }
 }
@@ -172,19 +172,19 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(
+        store.set(
             THEME_PROFILE_KEY.to_string(),
             serde_json::to_value(self.clone())?,
-        )?;
+        );
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(THEME_PROFILE_KEY)?;
+        store.delete(THEME_PROFILE_KEY);
         Ok(())
     }
 }

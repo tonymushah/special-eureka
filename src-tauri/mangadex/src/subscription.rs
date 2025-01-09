@@ -94,389 +94,333 @@ impl Subscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         api_client_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ApiClientAttributes> + 'ctx> {
         ApiClientSubscriptions
-            .listen_by_id(ctx, api_client_id, sub_id)
+            .listen_by_id(ctx, api_client_id)
             .await
     }
     pub async fn watch_author<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         author_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = AuthorAttributes> + 'ctx> {
-        AuthorSubscriptions
-            .listen_by_id(ctx, author_id, sub_id)
-            .await
+        AuthorSubscriptions.listen_by_id(ctx, author_id).await
     }
     pub async fn watch_chapter<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ChapterAttributes> + 'ctx> {
-        ChapterSubscriptions
-            .listen_by_id(ctx, chapter_id, sub_id)
-            .await
+        ChapterSubscriptions.listen_by_id(ctx, chapter_id).await
     }
     pub async fn watch_cover<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = CoverAttributes> + 'ctx> {
-        CoverSubscriptions.listen_by_id(ctx, cover_id, sub_id).await
+        CoverSubscriptions.listen_by_id(ctx, cover_id).await
     }
     pub async fn watch_custom_list<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         custom_list_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = CustomListAttributes> + 'ctx> {
         CustomListSubscriptions
-            .listen_by_id(ctx, custom_list_id, sub_id)
+            .listen_by_id(ctx, custom_list_id)
             .await
     }
     pub async fn watch_manga<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaAttributes> + 'ctx> {
-        MangaSubscriptions.listen_by_id(ctx, manga_id, sub_id).await
+        MangaSubscriptions.listen_by_id(ctx, manga_id).await
     }
     pub async fn watch_rating<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = RatingItemAttributes> + 'ctx> {
-        RatingSubscriptions
-            .listen_by_id(ctx, manga_id, sub_id)
-            .await
+        RatingSubscriptions.listen_by_id(ctx, manga_id).await
     }
     pub async fn watch_statistics<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = StatisticsComments> + 'ctx> {
-        StatisticsSubscriptions.listen_by_id(ctx, id, sub_id).await
+        StatisticsSubscriptions.listen_by_id(ctx, id).await
     }
     pub async fn watch_manga_statistics<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaStatisticsAttributes> + 'ctx> {
         MangaStatisticsSubscriptions
-            .listen_by_id(ctx, manga_id, sub_id)
+            .listen_by_id(ctx, manga_id)
             .await
     }
     pub async fn watch_tag<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         tag_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = TagAttributes> + 'ctx> {
-        TagSubscriptions.listen_by_id(ctx, tag_id, sub_id).await
+        TagSubscriptions.listen_by_id(ctx, tag_id).await
     }
     pub async fn watch_upload_session<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         upload_session_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = UploadSessionAttributes> + 'ctx> {
         UploadSessionSubscriptions
-            .listen_by_id(ctx, upload_session_id, sub_id)
+            .listen_by_id(ctx, upload_session_id)
             .await
     }
     pub async fn watch_upload_session_file<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         upload_session_file_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = UploadSessionFileAttributes> + 'ctx> {
         UploadSessionFileSubscriptions
-            .listen_by_id(ctx, upload_session_file_id, sub_id)
+            .listen_by_id(ctx, upload_session_file_id)
             .await
     }
     pub async fn watch_user<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         user_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
-        UserSubscriptions.listen_by_id(ctx, user_id, sub_id).await
+        UserSubscriptions.listen_by_id(ctx, user_id).await
     }
     pub async fn watch_user_me<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
-        UserMeSubscriptions.listen(ctx, sub_id).await
+        UserMeSubscriptions.listen(ctx).await
     }
     pub async fn watch_sidebar_direction<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Direction> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_sidebar_direction(ctx, sub_id)
+            .listen_to_sidebar_direction(ctx)
             .await
     }
     pub async fn watch_page_direction<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Direction> + 'ctx> {
-        UserOptionSubscriptions
-            .listen_to_page_direction(ctx, sub_id)
-            .await
+        UserOptionSubscriptions.listen_to_page_direction(ctx).await
     }
     pub async fn watch_reading_mode<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ReadingMode> + 'ctx> {
-        UserOptionSubscriptions
-            .listen_to_reading_mode(ctx, sub_id)
-            .await
+        UserOptionSubscriptions.listen_to_reading_mode(ctx).await
     }
     pub async fn watch_chapter_languages<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Language>> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_chapter_languages(ctx, sub_id)
+            .listen_to_chapter_languages(ctx)
             .await
     }
     pub async fn watch_is_app_mounted<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        IsAppStateMountedSubscriptions.listen(ctx, sub_id).await
+        IsAppStateMountedSubscriptions.listen(ctx).await
     }
     pub async fn watch_is_logged<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        IsLoggedSubscriptions.listen(ctx, sub_id).await
+        IsLoggedSubscriptions.listen(ctx).await
     }
     pub async fn watch_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         object_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = DownloadState> + 'ctx> {
         DownloadStateSubscriptions
-            .listen_by_id(ctx, object_id, sub_id)
+            .listen_by_id(ctx, object_id)
             .await
     }
     pub async fn watch_reading_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ReadingState> + 'ctx> {
         ReadingStateSubscriptions
-            .listen_by_id(ctx, chapter_id, sub_id)
+            .listen_by_id(ctx, chapter_id)
             .await
     }
     pub async fn watch_is_following_manga<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsFollowingSubscriptions
-            .listen_by_manga_id(ctx, manga_id, sub_id)
+            .listen_by_manga_id(ctx, manga_id)
             .await
     }
     pub async fn watch_is_following_group<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         group_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsFollowingSubscriptions
-            .listen_by_group_id(ctx, group_id, sub_id)
+            .listen_by_group_id(ctx, group_id)
             .await
     }
     pub async fn watch_is_following_user<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         user_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsFollowingSubscriptions
-            .listen_by_user_id(ctx, user_id, sub_id)
+            .listen_by_user_id(ctx, user_id)
             .await
     }
     pub async fn watch_is_following_custom_list<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         custom_list_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         IsFollowingSubscriptions
-            .listen_by_custom_list_id(ctx, custom_list_id, sub_id)
+            .listen_by_custom_list_id(ctx, custom_list_id)
             .await
     }
     pub async fn watch_manga_reading_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Option<ReadingStatus>> + 'ctx> {
         MangaReadingStatusSubscriptions
-            .listen_by_id(ctx, manga_id, sub_id)
+            .listen_by_id(ctx, manga_id)
             .await
     }
     pub async fn watch_read_marker<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         ChapterReadMarkerSubscriptions
-            .listen_by_id(ctx, chapter_id, sub_id)
+            .listen_by_id(ctx, chapter_id)
             .await
     }
     pub async fn watch_image_fit<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ImageFit> + 'ctx> {
-        UserOptionSubscriptions
-            .listen_to_image_fit(ctx, sub_id)
-            .await
+        UserOptionSubscriptions.listen_to_image_fit(ctx).await
     }
     pub async fn watch_longstrip_image_width<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = f64> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_longstrip_image_width(ctx, sub_id)
+            .listen_to_longstrip_image_width(ctx)
             .await
     }
     pub async fn watch_manga_list_style<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaListStyle> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_manga_list_style(ctx, sub_id)
+            .listen_to_manga_list_style(ctx)
             .await
     }
     pub async fn watch_themes_profile<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<ThemeProfileEntry>> + 'ctx> {
-        UserOptionSubscriptions
-            .listen_to_theme_profiles(ctx, sub_id)
-            .await
+        UserOptionSubscriptions.listen_to_theme_profiles(ctx).await
     }
     pub async fn watch_theme_profile_default<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = MangaDexTheme> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_theme_profile_default(ctx, sub_id)
+            .listen_to_theme_profile_default(ctx)
             .await
     }
     pub async fn watch_theme_profile_default_name<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_theme_profile_default_name(ctx, sub_id)
+            .listen_to_theme_profile_default_name(ctx)
             .await
     }
     pub async fn watch_client_info<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Option<ClientInfo>> + 'ctx> {
-        OauthSubscriptions.listen(ctx, sub_id).await
+        OauthSubscriptions.listen(ctx).await
     }
     pub async fn watch_chapter_feed_style<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ChapterFeedStyle> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_chapter_feed_style(ctx, sub_id)
+            .listen_to_chapter_feed_style(ctx)
             .await
     }
     pub async fn watch_pagination_style<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = PaginationStyle> + 'ctx> {
         UserOptionSubscriptions
-            .listen_to_pagination_style(ctx, sub_id)
+            .listen_to_pagination_style(ctx)
             .await
     }
     pub async fn watch_chapter_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
+
         chapter_id: Uuid,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
         ChapterDownloadSubs
-            .listen_to_download_state(ctx, chapter_id, sub_id)
+            .listen_to_download_state(ctx, chapter_id)
             .await
     }
     pub async fn watch_chapters_tasks_list<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
-        ChapterDownloadSubs
-            .listen_to_chapter_tasks(ctx, sub_id)
-            .await
+        ChapterDownloadSubs.listen_to_chapter_tasks(ctx).await
     }
     pub async fn watch_cover_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
+
         cover_id: Uuid,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         CoverDownloadSubs
-            .listen_to_download_state(ctx, cover_id, sub_id)
+            .listen_to_download_state(ctx, cover_id)
             .await
     }
     pub async fn watch_cover_tasks_list<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
-        CoverDownloadSubs.listen_to_cover_tasks(ctx, sub_id).await
+        CoverDownloadSubs.listen_to_cover_tasks(ctx).await
     }
     pub async fn watch_manga_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
+
         manga_id: Uuid,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
         MangaDownloadSubs
-            .listen_to_download_state(ctx, manga_id, sub_id)
+            .listen_to_download_state(ctx, manga_id)
             .await
     }
     pub async fn watch_manga_tasks_list<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
-        MangaDownloadSubs.listen_to_manga_tasks(ctx, sub_id).await
+        MangaDownloadSubs.listen_to_manga_tasks(ctx).await
     }
 }

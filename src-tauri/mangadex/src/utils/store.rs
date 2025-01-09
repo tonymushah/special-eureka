@@ -13,7 +13,7 @@ impl<R: Runtime> MangaDexStoreState<R> {
     pub fn new(store: MangaDexStore<R>) -> Self {
         Self(Arc::new(RwLock::new(store)))
     }
-    pub fn new_from_store(store: Store<R>) -> Self {
+    pub fn new_from_store(store: Arc<Store<R>>) -> Self {
         Self::new(MangaDexStore(store))
     }
 }

@@ -19,7 +19,9 @@ fn not_found_chapter_image(chapter_id: Uuid, filename: &str) -> SchemeResponseEr
     )
 }
 
-fn get_chapters_params(req: &Request) -> SchemeResponseResult<(Uuid, ChapterMode, String)> {
+fn get_chapters_params(
+    req: &Request<Vec<u8>>,
+) -> SchemeResponseResult<(Uuid, ChapterMode, String)> {
     let regex = Regex::new(
         r"(?x)/(?P<chapter_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<mode>data|data-saver)/(?P<filename>\w*.*)",
     )?;
@@ -48,8 +50,8 @@ fn get_chapters_params(req: &Request) -> SchemeResponseResult<(Uuid, ChapterMode
 
 pub fn handle_chapters<'a, R: Runtime>(
     app: &'a AppHandle<R>,
-    req: &'a Request,
-) -> SchemeResponseResult<tauri::http::Response> {
+    req: &'a Request<Vec<u8>>,
+) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
     let (chapter_id, mode, filename) = get_chapters_params(req)?;
     ChaptersHandlerOffline {
         chapter_id,

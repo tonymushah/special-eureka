@@ -59,19 +59,19 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(
+        store.set(
             SIDEBAR_DIRECTION.to_string(),
             serde_json::to_value(self.clone())?,
-        )?;
+        );
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(SIDEBAR_DIRECTION)?;
+        store.delete(SIDEBAR_DIRECTION);
         Ok(())
     }
 }

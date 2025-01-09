@@ -73,16 +73,16 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(CLIENT_INFO.to_string(), serde_json::to_value(self.clone())?)?;
+        store.set(CLIENT_INFO.to_string(), serde_json::to_value(self.clone())?);
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(CLIENT_INFO)?;
+        store.delete(CLIENT_INFO);
         Ok(())
     }
 }
@@ -94,6 +94,6 @@ where
     fn default_store(
         store_builder: tauri_plugin_store::StoreBuilder<R>,
     ) -> Result<tauri_plugin_store::StoreBuilder<R>, tauri_plugin_store::Error> {
-        Ok(store_builder.default(CLIENT_INFO.to_string(), None::<bool>.into()))
+        Ok(store_builder.default(CLIENT_INFO.to_string(), None::<bool>))
     }
 }
