@@ -74,7 +74,6 @@
 						{@render icon_render?.()}
 					</div>
 				{/snippet}
-				<!-- TODO @migration-task: migrate this slot by hand, `suffix-icon` is an invalid identifier -->
 				{#snippet suffixIcon()}
 					<div class="suffix-icon" class:collapsed class:isMenuOpen>
 						{#if collapsed}
