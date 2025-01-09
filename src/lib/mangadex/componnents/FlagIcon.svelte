@@ -8,7 +8,7 @@
 		lang: Language;
 	}
 
-	let { square = false, lang }: Props = $props();
+	let { square = false, lang = $bindable() }: Props = $props();
 	let lang_code = $derived(language_to_flag_icon(lang));
 	let fis = $derived(square);
 </script>
