@@ -4,7 +4,7 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { open as shellOpen } from "@tauri-apps/plugin-shell";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { ExternalLinkIcon } from "svelte-feather-icons";
 	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
 
@@ -18,7 +18,7 @@
 </script>
 
 <UsersPageBase title={data.name} {description}>
-	{#snippet left()}
+	{#snippet _left()}
 		<div class="buttons">
 			<ButtonAccent
 				isBase
@@ -31,29 +31,31 @@
 			<AuthorLinkButtons links={data.links} />
 		</div>
 	{/snippet}
-	<!-- TODO @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
-	<div slot="top-right">
-		<p>
-			Author ID: <span
-				onkeydown={() => {}}
-				role="button"
-				tabindex={0}
-				onclick={() => {
-					writeText(data.id);
-				}}
-				class="copiable">{data.id}</span
-			>
-		</p>
-		<section class="uploads">
+	{#snippet topRight()}
+		<div>
 			<p>
-				{data.titles}
-				<span>
-					work{#if data.titles > 1}s{/if}
-				</span>
+				Author ID: <span
+					onkeydown={() => {}}
+					role="button"
+					tabindex={0}
+					onclick={() => {
+						writeText(data.id);
+					}}
+					class="copiable">{data.id}</span
+				>
 			</p>
-		</section>
-	</div>
-	{#snippet right()}
+			<section class="uploads">
+				<p>
+					{data.titles}
+					<span>
+						work{#if data.titles > 1}s{/if}
+					</span>
+				</p>
+			</section>
+		</div>
+	{/snippet}
+
+	{#snippet _right()}
 		<div>
 			<section class="content">
 				{@render children?.()}
