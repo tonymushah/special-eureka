@@ -1,17 +1,12 @@
 <script lang="ts">
 	interface Props {
 		profileBanner: string;
-		left?: import('svelte').Snippet;
-		right?: import('svelte').Snippet;
-		bottom?: import('svelte').Snippet;
+		left?: import("svelte").Snippet;
+		right?: import("svelte").Snippet;
+		bottom?: import("svelte").Snippet;
 	}
 
-	let {
-		profileBanner,
-		left,
-		right,
-		bottom
-	}: Props = $props();
+	let { profileBanner = $bindable(), left, right, bottom }: Props = $props();
 </script>
 
 <section style="background-image: url({profileBanner});">
