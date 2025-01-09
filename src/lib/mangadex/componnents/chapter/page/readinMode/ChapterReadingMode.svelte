@@ -1,5 +1,3 @@
-<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: open = $opened;` to `$derived` because there's a variable named derived.
-     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import { ReadingMode } from "@mangadex/gql/graphql";
 	import { getCurrentChapterReadingMode } from "../contexts/currentChapterReadingMode";
@@ -9,7 +7,7 @@
 	import SinglePage from "./singlePage/SinglePage.svelte";
 	import WideStrip from "./wideStrip/WideStrip.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { derived } from "svelte/store";
+	import { derived as der } from "svelte/store";
 	import { isDrawerOpen } from "../contexts/isDrawerOpen";
 	import { isDrawerFixed } from "../contexts/isDrawerFixed";
 	import SomeDiv from "@mangadex/componnents/theme/SomeDiv.svelte";
@@ -21,17 +19,17 @@
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 
 	const mode = getCurrentChapterReadingMode();
-	const opened = derived([isDrawerOpen(), isDrawerFixed()], ([$open, $fixed]) => $open && $fixed);
-	const isShouldFixed = derived(isDrawerFixed(), ($fixed) => !$fixed);
-	const headerHeight_ = derived([headerHeight, isDefaultDecoration], ([$h, decorated]) => {
+	const opened = der([isDrawerOpen(), isDrawerFixed()], ([$open, $fixed]) => $open && $fixed);
+	const isShouldFixed = der(isDrawerFixed(), ($fixed) => !$fixed);
+	const headerHeight_ = der([headerHeight, isDefaultDecoration], ([$h, decorated]) => {
 		if ($h != 0) {
 			return !decorated ? $h : $h + 30;
 		} else {
 			return !decorated ? 0 : 30;
 		}
 	});
-	$: open = $opened;
-	$: toRemoveHeight = `${$headerHeight_}px`;
+	let open = $derived($opened);
+	let toRemoveHeight = $derived(`${$headerHeight_}px`);
 </script>
 
 <SomeDiv --to-remove-height={"0"}>
