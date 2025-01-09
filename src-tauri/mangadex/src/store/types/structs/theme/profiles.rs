@@ -69,7 +69,7 @@ impl Default for ThemeProfileEntry {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ThemeProfiles
+impl<R> ExtractFromStore<'_, R> for ThemeProfiles
 where
     R: Runtime,
 {
@@ -150,7 +150,7 @@ impl DerefMut for ThemeProfileDefaultKey {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ThemeProfileDefaultKey
+impl<R> ExtractFromStore<'_, R> for ThemeProfileDefaultKey
 where
     R: Runtime,
 {

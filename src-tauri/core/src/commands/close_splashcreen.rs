@@ -1,16 +1,18 @@
-use tauri::Manager;
+use tauri::{Emitter, Manager, Runtime};
 
 #[tauri::command]
-pub async fn close_splashscreen(window: tauri::Window) -> Result<(), String> {
-    let main = window
-        .get_window("main")
+pub async fn close_splashscreen<R: Runtime>(
+    webview: tauri::WebviewWindow<R>,
+) -> Result<(), String> {
+    let main = webview
+        .get_webview_window("main")
         .ok_or(String::from("the main window is not found"))?;
     // Close splashscreen
-    window
-        .emit_all("splash", "closing...")
+    webview
+        .emit("splash", "closing...")
         .map_err(|e| e.to_string())?;
     tokio::time::sleep(std::time::Duration::from_secs(10)).await;
-    if let Some(splashscreen) = window.get_window("splashscreen") {
+    if let Some(splashscreen) = webview.get_webview_window("splashscreen") {
         splashscreen.close().map_err(|e| e.to_string())?;
     }
     // Show main window

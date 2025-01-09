@@ -37,7 +37,7 @@ impl From<ReadingDirectionStore> for Direction {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ReadingDirectionStore
+impl<R> ExtractFromStore<'_, R> for ReadingDirectionStore
 where
     R: Runtime,
 {

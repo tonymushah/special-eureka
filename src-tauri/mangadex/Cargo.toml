@@ -4,7 +4,7 @@ version = "0.3.0"
 authors = ["You"]
 description = "The tauri plugin behind the Mangadex Part of special-eureka"
 edition = "2021"
-rust-version = "1.70"
+rust-version = "1.77"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 links = "mangadex-desktop-api"
 

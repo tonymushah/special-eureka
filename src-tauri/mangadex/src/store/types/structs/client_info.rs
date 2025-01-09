@@ -51,7 +51,7 @@ impl From<Info> for ClientInfoStore {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ClientInfoStore
+impl<R> ExtractFromStore<'_, R> for ClientInfoStore
 where
     R: Runtime,
 {

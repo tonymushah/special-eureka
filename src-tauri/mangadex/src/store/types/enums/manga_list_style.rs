@@ -47,7 +47,7 @@ impl From<MangaListStyleStore> for MangaListStyle {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for MangaListStyleStore
+impl<R> ExtractFromStore<'_, R> for MangaListStyleStore
 where
     R: Runtime,
 {

@@ -5,6 +5,8 @@ use states::last_focused_window::LastFocusedWindow;
 use tauri::{Manager, WindowEvent, Wry};
 use tokio::runtime::Builder as RuntimeBuilder;
 
+use std::sync::{Arc, Mutex};
+
 pub(crate) mod builder;
 pub(crate) mod commands;
 pub(crate) mod runtime;
@@ -21,15 +23,14 @@ pub fn run() {
     let context = tauri::generate_context!();
     System::set_current(runtime_guard.sys().clone());
     tauri::async_runtime::set(runtime_guard.handle().clone());
-
+    let runtime_guard = Arc::new(Mutex::new(Some(runtime_guard)));
     match get_builder().build(context) {
-        Ok(app) => app.run(|app_handle, e| {
-            if let tauri::RunEvent::WindowEvent {
+        Ok(app) => app.run(move |app_handle, e| match e {
+            tauri::RunEvent::WindowEvent {
                 label,
                 event: WindowEvent::Focused(is_focused),
                 ..
-            } = e
-            {
+            } => {
                 if is_focused {
                     let last_focused_window_state = app_handle.state::<LastFocusedWindow<Wry>>();
                     if let Ok(mut write) = last_focused_window_state.write() {
@@ -39,10 +40,17 @@ pub fn run() {
                     };
                 }
             }
+            tauri::RunEvent::Exit => {
+                if let Ok(mut lock) = runtime_guard.lock() {
+                    if let Some(runtime) = lock.take() {
+                        runtime.cleanup().unwrap()
+                    }
+                }
+            }
+            _ => {}
         }),
         Err(error) => {
             panic!("{}", error.to_string());
         }
     };
-    runtime_guard.cleanup().unwrap();
 }

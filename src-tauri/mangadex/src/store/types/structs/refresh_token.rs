@@ -68,7 +68,7 @@ impl DerefMut for RefreshTokenStore {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for RefreshTokenStore
+impl<R> ExtractFromStore<'_, R> for RefreshTokenStore
 where
     R: Runtime,
 {

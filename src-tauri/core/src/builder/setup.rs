@@ -9,13 +9,21 @@ use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 use crate::states::last_focused_window::LastFocusedWindow;
 
+use super::menu::set_menu_window;
+
 type SetupResult = Result<(), Box<dyn std::error::Error>>;
 
 pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
+    #[cfg(desktop)]
+    app.handle()
+        .plugin(tauri_plugin_updater::Builder::new().build())?;
     app.manage(LastFocusedWindow::<R>::default());
     if let Some(system) = System::try_current() {
         println!("has sys!");
         app.manage(system);
+    }
+    if let Some(main) = app.get_window("main") {
+        let _ = set_menu_window(&main);
     }
     #[cfg(any(windows, target_os = "macos"))]
     if let Some(splashscreen) = app.get_window("splashscreen") {

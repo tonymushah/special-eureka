@@ -37,7 +37,7 @@ impl From<SidebarDirectionStore> for Direction {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for SidebarDirectionStore
+impl<R> ExtractFromStore<'_, R> for SidebarDirectionStore
 where
     R: Runtime,
 {

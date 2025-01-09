@@ -17,7 +17,7 @@ tauri-build = { workspace = true, features = [] }
 [dependencies]
 serde_json.workspace = true
 serde = { workspace = true, features = ["derive"] }
-tauri = { workspace = true, features = ["unstable"] }
+tauri = { workspace = true, features = ["unstable", "tray-icon"] }
 tokio.workspace = true
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
@@ -32,6 +32,9 @@ tauri-plugin-opener.workspace = true
 tauri-plugin-deep-link.workspace = true
 tauri-plugin-notification.workspace = true
 tauri-plugin-clipboard-manager.workspace = true
+
+[target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
+tauri-plugin-updater = "2.0.0"
 
 [dependencies.mangadex]
 workspace = true

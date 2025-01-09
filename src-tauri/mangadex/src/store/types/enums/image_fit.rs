@@ -47,7 +47,7 @@ impl From<ImageFitStore> for ImageFit {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ImageFitStore
+impl<R> ExtractFromStore<'_, R> for ImageFitStore
 where
     R: Runtime,
 {

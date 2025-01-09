@@ -49,7 +49,7 @@ impl From<ReadingModeStore> for ReadingMode {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ReadingModeStore
+impl<R> ExtractFromStore<'_, R> for ReadingModeStore
 where
     R: Runtime,
 {

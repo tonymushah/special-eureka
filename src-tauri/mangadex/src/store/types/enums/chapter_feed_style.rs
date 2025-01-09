@@ -46,7 +46,7 @@ impl From<ChapterFeedStyleStore> for ChapterFeedStyle {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ChapterFeedStyleStore
+impl<R> ExtractFromStore<'_, R> for ChapterFeedStyleStore
 where
     R: Runtime,
 {

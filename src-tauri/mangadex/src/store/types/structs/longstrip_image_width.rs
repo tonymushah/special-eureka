@@ -35,7 +35,7 @@ impl From<LongstripImageWidthStore> for f64 {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for LongstripImageWidthStore
+impl<R> ExtractFromStore<'_, R> for LongstripImageWidthStore
 where
     R: Runtime,
 {

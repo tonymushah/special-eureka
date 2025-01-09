@@ -35,7 +35,7 @@ impl From<ChapterLanguagesStore> for Vec<Language> {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ChapterLanguagesStore
+impl<R> ExtractFromStore<'_, R> for ChapterLanguagesStore
 where
     R: Runtime,
 {

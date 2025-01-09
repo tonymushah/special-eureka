@@ -46,7 +46,7 @@ impl From<PaginationStyleStore> for PaginationStyle {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for PaginationStyleStore
+impl<R> ExtractFromStore<'_, R> for PaginationStyleStore
 where
     R: Runtime,
 {

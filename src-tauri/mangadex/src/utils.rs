@@ -35,6 +35,7 @@ pub(crate) fn get_app_handle_from_async_graphql<'ctx, R: Runtime>(
     ctx.get_app_handle()
 }
 
+#[allow(dead_code)]
 pub(crate) fn get_window_from_async_graphql<'ctx, R: Runtime>(
     ctx: &'ctx async_graphql::Context<'ctx>,
 ) -> crate::Result<&'ctx Window<R>> {

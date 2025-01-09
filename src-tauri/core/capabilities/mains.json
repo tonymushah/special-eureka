@@ -6,10 +6,11 @@
 	"windows": ["main", "main-*"],
 	"permissions": [
 		"core:default",
-		"core:window:default",
 		"core:window:allow-start-dragging",
 		"core:event:default",
+        "clipboard-manager:default",
 		"mangadex-desktop-api:allow-graphql",
-		"mangadex-desktop-api:allow-subscriptions"
+		"mangadex-desktop-api:allow-subscriptions",
+        "opener:default"
 	]
 }
