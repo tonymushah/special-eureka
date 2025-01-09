@@ -1,27 +1,39 @@
-<!-- TODO @migration-task Error while migrating Svelte code: This migration would change the name of a slot making the component unusable -->
 <script lang="ts">
 	import { sidebarState as isOpen } from "@mangadex/stores";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, type Snippet } from "svelte";
 	import MenuBase from "./MenuBase.svelte";
 	import MenuIcons from "./MenuIcons.svelte";
 	import MenuLabel from "./MenuLabel.svelte";
 	import MenuLink from "./MenuLink.svelte";
-	export let label: string;
-	export let href: string | undefined = undefined;
+	interface Props {
+		label: string;
+		href?: string;
+		icon?: Snippet;
+		suffixIcon?: Snippet;
+	}
+	let { label, href, icon, suffixIcon }: Props = $props();
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLAnchorElement;
 		};
 	}>();
-	$: collapsed = $isOpen;
+	let collapsed = $derived($isOpen);
 </script>
 
 <MenuLink {href} on:click>
-	<MenuBase bind:collapsed>
+	<MenuBase {collapsed}>
 		<MenuIcons>
-			<slot name="icon" slot="icon" />
-			<slot name="suffix-icon" slot="suffix-icon" />
-			<MenuLabel {label} bind:collapsed />
+			{#snippet icon()}
+				{#if icon}
+					{@render icon()}
+				{/if}
+			{/snippet}
+			{#snippet suffixIcon()}
+				{#if suffixIcon}
+					{@render suffixIcon()}
+				{/if}
+			{/snippet}
+			<MenuLabel {label} {collapsed} />
 		</MenuIcons>
 	</MenuBase>
 </MenuLink>
