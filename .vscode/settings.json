@@ -52,5 +52,6 @@
     "git.ignoreLimitWarning": true,
     "files.watcherExclude": {
         "**/target": true
-    }
+    },
+    "todo-tree.tree.scanMode": "workspace only"
 }
