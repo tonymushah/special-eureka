@@ -1,63 +1,23 @@
-<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: hasNext = nextFetch != undefined && typeof nextFetch == "function";` to `$derived` because there's a variable named derived.
-     Rename the variable and try again or migrate by hand. -->
-<script lang="ts" context="module">
-	function tagToComboboxOption(tag: Tag): ComboboxOption<string> {
-		return {
-			value: tag.id,
-			label: tag.value
-		};
-	}
-	function comboBoxOptionToTag(option: ComboboxOption<string>): Tag {
-		return {
-			value: option.label ?? option.value,
-			id: option.value
-		};
-	}
-	function tagWritableToComboboxOptionWritable(
-		store: Writable<Tag[]>
-	): Writable<ComboboxOption<string>[]> {
-		const derived_ = derived(store, ($s) => {
-			return $s.map((v) => tagToComboboxOption(v));
-		});
-		return {
-			subscribe(run, invalidate) {
-				return derived_.subscribe(run, invalidate);
-			},
-			set(value) {
-				store.set(value.map((v) => comboBoxOptionToTag(v)));
-			},
-			update(updater) {
-				store.update((inner) => {
-					return updater(inner.map((v) => tagToComboboxOption(v))).map((v) =>
-						comboBoxOptionToTag(v)
-					);
-				});
-			}
-		};
-	}
-</script>
-
 <script lang="ts">
-	import {
-		createCombobox,
-		createTagsInput,
-		melt,
-		type ComboboxOption,
-		type Tag
-	} from "@melt-ui/svelte";
-	import { derived, get, writable, type Writable } from "svelte/store";
+	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
+	import { createCombobox, createTagsInput, melt, type Tag } from "@melt-ui/svelte";
+	import { debounce, type DebouncedFunc } from "lodash";
+	import { onDestroy } from "svelte";
+	import { XIcon } from "svelte-feather-icons";
+	import { get, writable, type Writable } from "svelte/store";
+	import { slide } from "svelte/transition";
 	import {
 		getMangaSearchAuthorSearchFetcher,
 		type AuthorSearchFetcherResultData
 	} from "../../contexts/authorArtist";
-	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
-	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import { slide } from "svelte/transition";
-	import { XIcon } from "svelte-feather-icons";
-	import { debounce, type DebouncedFunc } from "lodash";
-	import { onDestroy } from "svelte";
+	import { tagWritableToComboboxOptionWritable } from "./utils";
 
-	export let store: Writable<Tag[]>;
+	interface Props {
+		store: Writable<Tag[]>;
+	}
+
+	let { store }: Props = $props();
 	const {
 		elements: { input, menu, option, label },
 		states: { open, inputValue, touchedInput },
@@ -77,10 +37,10 @@
 	});
 	const authorFetch = getMangaSearchAuthorSearchFetcher();
 	const currentAuthorSearch = writable<Tag[]>([]);
-	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = undefined;
-	$: hasNext = nextFetch != undefined && typeof nextFetch == "function";
+	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = $state(undefined);
+	let hasNext = $derived(nextFetch != undefined && typeof nextFetch == "function");
 	const isFetching = writable(false);
-	let debounceFunc: DebouncedFunc<(...args: any) => any> | undefined = undefined;
+	let debounceFunc: DebouncedFunc<(...args: any) => any> | undefined = $state(undefined);
 	onDestroy(() => {
 		debounceFunc?.cancel();
 	});
@@ -98,7 +58,7 @@
 			})
 			.finally(() => isFetching.set(false));
 	}
-	$: {
+	$effect(() => {
 		if ($touchedInput) {
 			debounceFunc?.cancel();
 			debounceFunc = debounce(() => {
@@ -111,20 +71,22 @@
 			}, 350);
 			debounceFunc();
 		}
-	}
+	});
 	function next() {
 		if (!$isFetching && nextFetch != undefined && typeof nextFetch == "function") {
 			$isFetching = true;
 			handleASFRDPromise(nextFetch());
 		}
 	}
-	let toObserve: HTMLElement | undefined = undefined;
-	let obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
-		entries.forEach((entry) => {
-			if (entry.intersectionRatio <= 0) return;
-			next();
-		});
-	}, 500);
+	let toObserve: HTMLElement | undefined = $state(undefined);
+	let obs_debounce_func = $state(
+		debounce<IntersectionObserverCallback>((entries, obs) => {
+			entries.forEach((entry) => {
+				if (entry.intersectionRatio <= 0) return;
+				next();
+			});
+		}, 500)
+	);
 	const obs = new IntersectionObserver(
 		(entries, obs_) => {
 			obs_debounce_func.cancel();
@@ -134,12 +96,12 @@
 			threshold: 1.0
 		}
 	);
-	$: {
+	$effect(() => {
 		if (toObserve) {
 			obs.unobserve(toObserve);
 			obs.observe(toObserve);
 		}
-	}
+	});
 	onDestroy(() => {
 		obs.disconnect();
 	});
