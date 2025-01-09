@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from "svelte/legacy";
 
 	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import { onMount, type ComponentProps } from "svelte";
 	import CategorizedTitles from "./CategorizedTitles.svelte";
 	import { getContextClient } from "@urql/svelte";

@@ -74,7 +74,7 @@
 	}
 
 	let {
-		id,
+		id = $bindable(),
 		title,
 		altTitle = undefined,
 		coverImage,
@@ -83,16 +83,10 @@
 		tags = $bindable(),
 		status = $bindable(),
 		year = $bindable(undefined),
-		reading_status = writable<
-		ReadingStatus | undefined
-	>(undefined),
-		isFollowing = writable<boolean | undefined>(
-		undefined
-	),
+		reading_status = writable<ReadingStatus | undefined>(undefined),
+		isFollowing = writable<boolean | undefined>(undefined),
 		rating = writable<number | undefined>(undefined),
-		downloadState = writable(
-		ChapterDownloadState.NotDownloaded
-	),
+		downloadState = writable(ChapterDownloadState.NotDownloaded),
 		stats = $bindable(undefined)
 	}: Props = $props();
 
@@ -108,7 +102,7 @@
 
 <TopInfoLayout>
 	{#snippet cover()}
-		<div class="cover-image" >
+		<div class="cover-image">
 			<TopInfoCover />
 		</div>
 	{/snippet}

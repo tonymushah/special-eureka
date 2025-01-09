@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from "svelte/legacy";
 
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import { getContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";

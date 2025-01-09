@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
+	import { run } from "svelte/legacy";
 
 	import type { AltTitleItem } from "@mangadex/componnents/manga/page/chapters/info/alt-titles/MangaAltTitles.svelte";
 	import Info, { type SimpleItems } from "@mangadex/componnents/manga/page/chapters/Info.svelte";
@@ -10,7 +10,7 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
 	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 
 	const { queryResult: data } = getTitleLayoutData();
 	const client = getContextClient();

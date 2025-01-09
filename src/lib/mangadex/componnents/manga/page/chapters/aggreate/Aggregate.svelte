@@ -1,6 +1,6 @@
 <!-- TODO update code -->
 <script lang="ts">
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import mangaAggregateQuery, {
 		getMangaAggregateChapterQuery,

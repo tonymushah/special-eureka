@@ -1,24 +1,12 @@
-<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: layoutData = data.layoutData!;` to `$derived` because there's a variable named derived.
-     Rename the variable and try again or migrate by hand. -->
-<script lang="ts" context="module">
-	const contextKey = "title-layout-data";
-	export function getTitleLayoutData(): LayoutData {
-		return getContext(contextKey);
-	}
-	function setTitleLayoutData(data: LayoutData) {
-		setContext(contextKey, data);
-	}
-</script>
-
 <script lang="ts">
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { LayoutData } from "./$types";
-	import { derived } from "svelte/store";
+	import { derived as der } from "svelte/store";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
-	import { open } from "@tauri-apps/api/shell";
+	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
-	import { getContext, setContext } from "svelte";
+	import { type Snippet } from "svelte";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
 	import { page } from "$app/stores";
 	import { route } from "$lib/ROUTES";
@@ -26,13 +14,20 @@
 	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
 	import { initCoverImageStoreContext } from "@mangadex/componnents/manga/page/covers/utils/coverImageStoreContext";
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
+	import { setTitleLayoutData } from "./layout.context";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
-	export let data: LayoutData;
-	$: setTitleLayoutData(data);
+	interface Props {
+		data: LayoutData;
+		children?: Snippet;
+	}
+	let { data, children }: Props = $props();
+	$effect(() => {
+		setTitleLayoutData(data);
+	});
 	const statsStore = data.statsQueryStore!;
-	const stats = derived(statsStore, ($stats) => {
+	const stats = der(statsStore, ($stats) => {
 		const _data = $stats.data?.statistics.manga.get;
 		if (_data) {
 			return {
@@ -55,7 +50,7 @@
 			} satisfies TopMangaStatisticsStoreData;
 		}
 	});
-	const isOnInfoPage = derived(
+	const isOnInfoPage = der(
 		page,
 		($page) =>
 			$page.url.pathname ==
@@ -66,9 +61,9 @@
 	initChapterStoreContext();
 	initCoverImageStoreContext();
 	initRelatedTitlesStoreContext();
-	$: layoutData = data.layoutData!;
-	$: description = layoutData.description;
-	$: hasRelation = data.queryResult!.relationships.manga.length > 0;
+	let layoutData = $derived(data.layoutData!);
+	let description = $derived(layoutData.description);
+	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
 </script>
 
 <MangaPageTopInfo
@@ -93,7 +88,7 @@
 	<div class="top">
 		{#if description}
 			<div class="description">
-				<Markdown bind:source={description} />
+				<Markdown source={description} />
 			</div>
 		{/if}
 		{#if $isOnInfoPage}
@@ -104,8 +99,8 @@
 	</div>
 
 	<MangaNavBar
-		bind:id={layoutData.id}
-		bind:hasRelation
+		id={layoutData.id}
+		{hasRelation}
 		comments={$stats?.comments}
 		on:comment={() => {
 			if ($stats != undefined) {
@@ -113,7 +108,7 @@
 			}
 		}}
 	/>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">
