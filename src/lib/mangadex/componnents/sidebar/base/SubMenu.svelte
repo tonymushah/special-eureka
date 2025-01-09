@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import { sidebarState as isOpen } from "@mangadex/stores";
 	import { ChevronUpIcon } from "svelte-feather-icons";
 	import { fade, slide } from "svelte/transition";
@@ -15,7 +13,7 @@
 	let buttonRef: HTMLDivElement | undefined = $state(undefined);
 	let floatingRef: HTMLDivElement | undefined = $state(undefined);
 	let cleanup: () => void = $state(noop);
-	run(() => {
+	$effect(() => {
 		if (buttonRef != undefined && floatingRef != undefined) {
 			cleanup = autoUpdate(buttonRef, floatingRef, () => {
 				if (buttonRef != undefined && floatingRef != undefined) {
@@ -42,12 +40,10 @@
 	}
 
 	let { label, icon, children }: Props = $props();
-	let collapsed;
-	run(() => {
-		collapsed = $isOpen;
-	});
+	let collapsed = $derived($isOpen);
+
 	let isMenuOpen = $state(false);
-	run(() => {
+	$effect(() => {
 		if (!isMenuOpen && collapsed) {
 			cleanup();
 		}
@@ -71,7 +67,7 @@
 			isMenuOpen = !isMenuOpen;
 		}}
 	>
-		<MenuBase bind:collapsed>
+		<MenuBase {collapsed}>
 			<MenuIcons>
 				{#snippet icon()}
 					<div class="icon" class:collapsed>
@@ -79,14 +75,17 @@
 					</div>
 				{/snippet}
 				<!-- TODO @migration-task: migrate this slot by hand, `suffix-icon` is an invalid identifier -->
-				<div slot="suffix-icon" class="suffix-icon" class:collapsed class:isMenuOpen>
-					{#if collapsed}
-						<HeaderChevronBase size="16" />
-					{:else}
-						<ChevronUpIcon size="24" />
-					{/if}
-				</div>
-				<MenuLabel {label} bind:collapsed />
+				{#snippet suffixIcon()}
+					<div class="suffix-icon" class:collapsed class:isMenuOpen>
+						{#if collapsed}
+							<HeaderChevronBase size="16" />
+						{:else}
+							<ChevronUpIcon size="24" />
+						{/if}
+					</div>
+				{/snippet}
+
+				<MenuLabel {label} {collapsed} />
 			</MenuIcons>
 		</MenuBase>
 	</div>
