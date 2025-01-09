@@ -2,10 +2,10 @@
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	interface Props {
 		haveBeenRead?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
-	let { haveBeenRead = true, children }: Props = $props();
+	let { haveBeenRead = $bindable(true), children }: Props = $props();
 </script>
 
 <article class="layout" class:haveBeenRead>
