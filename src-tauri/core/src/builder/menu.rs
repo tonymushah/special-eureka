@@ -58,6 +58,11 @@ pub fn set_menu_window<R: Runtime>(window: &Window<R>) -> tauri::Result<()> {
     } else {
         menu.append_items(&[&home_menu, &new_window, &toggle_deco])?;
     }
+    #[cfg(not(target_os = "macos"))]
+    let _ = menu.set_as_window_menu(window)?;
+    #[cfg(target_os = "macos")]
+    let _ = menu.set_as_app_menu()?;
+
     window.on_menu_event(move |app, event| {
         if event.id == home_menu.id() {
             let _ = app.emit_to(

@@ -22,8 +22,8 @@ pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
         println!("has sys!");
         app.manage(system);
     }
-    if let Some(main) = app.get_window("main") {
-        let _ = set_menu_window(&main);
+    if let Some(main) = app.get_webview_window("main") {
+        let _ = set_menu_window(&main.as_ref().window());
     }
     #[cfg(any(windows, target_os = "macos"))]
     if let Some(splashscreen) = app.get_window("splashscreen") {
