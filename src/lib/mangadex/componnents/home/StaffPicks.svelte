@@ -1,5 +1,3 @@
-<!-- TODO @migration-task Error while migrating Svelte code: can't migrate `$: error = $query_store?.error;` to `$derived` because there's a variable named derived.
-     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import TopTitle from "./utils/TopTitle.svelte";
 	import query from "./staff-picks/query";
@@ -7,7 +5,7 @@
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import { onMount } from "svelte";
 	import type { StaffPicksTitle } from "./staff-picks";
-	import { derived } from "svelte/store";
+	import { derived as der } from "svelte/store";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import { CoverImageQuality } from "@mangadex/gql/graphql";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
@@ -20,7 +18,7 @@
 		query,
 		variable: {}
 	});
-	const data_store = derived(query_store, ($store) => {
+	const data_store = der(query_store, ($store) => {
 		const id: string = $store?.data?.home.staffPicks.id;
 		const mangas =
 			$query_store?.data?.home.staffPicks.relationships.titles.map<StaffPicksTitle>((t) => {
@@ -55,17 +53,17 @@
 		}
 	});
 	const isFetching = query_store.isFetching;
-	$: fetching = $isFetching;
+	let fetching = $derived($isFetching);
 	onMount(async () => {
 		await query_store.execute();
 	});
-	$: error = $query_store?.error;
-	$: staffPicks = $data_store;
+	let error = $derived($query_store?.error);
+	let staffPicks = $derived($data_store);
 </script>
 
 <TopTitle
 	label="Staff Picks"
-	bind:fetching
+	{fetching}
 	on:refresh={async () => {
 		if (!fetching) {
 			await query_store.execute();

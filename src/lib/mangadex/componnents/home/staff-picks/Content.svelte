@@ -9,7 +9,7 @@
 		mangas: StaffPicksTitle[];
 	}
 
-	let { mangas }: Props = $props();
+	let { mangas = $bindable() }: Props = $props();
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
