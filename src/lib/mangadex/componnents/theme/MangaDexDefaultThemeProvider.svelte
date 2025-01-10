@@ -13,10 +13,10 @@
 	}
 
 	let { fonts = "Poppins", children }: Props = $props();
-	$effect(() => {
+	$effect.pre(() => {
 		setMangaDexThemeContextWritable(defaultTheme);
 	});
-	$effect(() => {
+	$effect.pre(() => {
 		setMangaDexFontsContext(writable(fonts));
 	});
 </script>

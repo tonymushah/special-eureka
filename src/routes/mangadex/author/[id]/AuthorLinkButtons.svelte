@@ -11,7 +11,7 @@
 		TwitterIcon,
 		YoutubeIcon
 	} from "svelte-feather-icons";
-	import { open as shellOpen } from "@tauri-apps/plugin-shell";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { RiTumblrLine, RiWeiboLine } from "svelte-remixicon";
 
 	const client = getContextClient();
@@ -20,84 +20,110 @@
 	}
 
 	let { links }: Props = $props();
-	let twitter = $derived(links.twitter
-		? getFaviconSrc({
-				client,
-				url: links.twitter
-			})
-		: readable(undefined));
-	let pixiv = $derived(links.pixiv
-		? getFaviconSrc({
-				client,
-				url: links.pixiv
-			})
-		: readable(undefined));
-	let melonBook = $derived(links.melonBook
-		? getFaviconSrc({
-				client,
-				url: links.melonBook
-			})
-		: readable(undefined));
-	let fanbox = $derived(links.fanBox
-		? getFaviconSrc({
-				client,
-				url: links.fanBox
-			})
-		: readable(undefined));
-	let booth = $derived(links.booth
-		? getFaviconSrc({
-				client,
-				url: links.booth
-			})
-		: readable(undefined));
-	let nicoVideo = $derived(links.nicoVideo
-		? getFaviconSrc({
-				client,
-				url: links.nicoVideo
-			})
-		: readable(undefined));
-	let skeb = $derived(links.skeb
-		? getFaviconSrc({
-				client,
-				url: links.skeb
-			})
-		: readable(undefined));
-	let fantia = $derived(links.fantia
-		? getFaviconSrc({
-				client,
-				url: links.fantia
-			})
-		: readable(undefined));
-	let tumblr = $derived(links.tumblr
-		? getFaviconSrc({
-				client,
-				url: links.tumblr
-			})
-		: readable(undefined));
-	let youtube = $derived(links.youtube
-		? getFaviconSrc({
-				client,
-				url: links.youtube
-			})
-		: readable(undefined));
-	let weibo = $derived(links.weibo
-		? getFaviconSrc({
-				client,
-				url: links.weibo
-			})
-		: readable(undefined));
-	let naver = $derived(links.naver
-		? getFaviconSrc({
-				client,
-				url: links.naver
-			})
-		: readable(undefined));
-	let website = $derived(links.website
-		? getFaviconSrc({
-				client,
-				url: links.website
-			})
-		: readable(undefined));
+	let twitter = $derived(
+		links.twitter
+			? getFaviconSrc({
+					client,
+					url: links.twitter
+				})
+			: readable(undefined)
+	);
+	let pixiv = $derived(
+		links.pixiv
+			? getFaviconSrc({
+					client,
+					url: links.pixiv
+				})
+			: readable(undefined)
+	);
+	let melonBook = $derived(
+		links.melonBook
+			? getFaviconSrc({
+					client,
+					url: links.melonBook
+				})
+			: readable(undefined)
+	);
+	let fanbox = $derived(
+		links.fanBox
+			? getFaviconSrc({
+					client,
+					url: links.fanBox
+				})
+			: readable(undefined)
+	);
+	let booth = $derived(
+		links.booth
+			? getFaviconSrc({
+					client,
+					url: links.booth
+				})
+			: readable(undefined)
+	);
+	let nicoVideo = $derived(
+		links.nicoVideo
+			? getFaviconSrc({
+					client,
+					url: links.nicoVideo
+				})
+			: readable(undefined)
+	);
+	let skeb = $derived(
+		links.skeb
+			? getFaviconSrc({
+					client,
+					url: links.skeb
+				})
+			: readable(undefined)
+	);
+	let fantia = $derived(
+		links.fantia
+			? getFaviconSrc({
+					client,
+					url: links.fantia
+				})
+			: readable(undefined)
+	);
+	let tumblr = $derived(
+		links.tumblr
+			? getFaviconSrc({
+					client,
+					url: links.tumblr
+				})
+			: readable(undefined)
+	);
+	let youtube = $derived(
+		links.youtube
+			? getFaviconSrc({
+					client,
+					url: links.youtube
+				})
+			: readable(undefined)
+	);
+	let weibo = $derived(
+		links.weibo
+			? getFaviconSrc({
+					client,
+					url: links.weibo
+				})
+			: readable(undefined)
+	);
+	let naver = $derived(
+		links.naver
+			? getFaviconSrc({
+					client,
+					url: links.naver
+				})
+			: readable(undefined)
+	);
+	let website = $derived(
+		links.website
+			? getFaviconSrc({
+					client,
+					url: links.website
+				})
+			: readable(undefined)
+	);
 </script>
 
 {#if links.twitter}

@@ -38,7 +38,12 @@
 			},
 			"appimage": {
 				"bundleMediaFramework": false
-			}
+			},
+            "rpm": {
+                "epoch": 0,
+                "files": {},
+                "release": "1"
+            }
 		},
 		"externalBin": [],
 		"icon": [

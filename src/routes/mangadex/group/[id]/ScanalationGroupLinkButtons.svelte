@@ -9,7 +9,7 @@
 		YoutubeIcon
 	} from "svelte-feather-icons";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
-	import { open as shellOpen } from "@tauri-apps/plugin-shell";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { getContextClient } from "@urql/svelte";
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
@@ -37,24 +37,30 @@
 	}: Props = $props();
 
 	const client = getContextClient();
-	let websiteFavicon = $derived(website
-		? getFaviconSrc({
-				client,
-				url: website
-			})
-		: readable(undefined));
-	let twitterFavicon = $derived(twitter
-		? getFaviconSrc({
-				client,
-				url: twitter
-			})
-		: readable(undefined));
-	let mangaUpdatesFavicon = $derived(mangaUpdates
-		? getFaviconSrc({
-				client,
-				url: mangaUpdates
-			})
-		: readable(undefined));
+	let websiteFavicon = $derived(
+		website
+			? getFaviconSrc({
+					client,
+					url: website
+				})
+			: readable(undefined)
+	);
+	let twitterFavicon = $derived(
+		twitter
+			? getFaviconSrc({
+					client,
+					url: twitter
+				})
+			: readable(undefined)
+	);
+	let mangaUpdatesFavicon = $derived(
+		mangaUpdates
+			? getFaviconSrc({
+					client,
+					url: mangaUpdates
+				})
+			: readable(undefined)
+	);
 </script>
 
 {#if twitter}

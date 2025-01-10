@@ -5,8 +5,8 @@
 	import type { Snippet } from "svelte";
 
 	interface Props {
-		icon?: Snippet;
-		suffixIcon?: Snippet;
+		_icon?: Snippet;
+		_suffixIcon?: Snippet;
 		children?: Snippet;
 	}
 	const rlt_sub = subscriptionStore({
@@ -14,28 +14,30 @@
 		query: sideDirGQLDoc,
 		variables: {}
 	});
-	let { icon, suffixIcon, children }: Props = $props();
+	let { _icon, _suffixIcon, children }: Props = $props();
 	let rtl = $derived($rlt_sub.data?.watchSidebarDirection == Direction.Rtl);
 </script>
 
 {#if !rtl}
 	<div class="icon">
-		{@render icon?.()}
+		{@render _icon?.()}
 	</div>
 {:else}
 	<div class="suffix-icon">
-		{@render suffixIcon?.()}
+		{@render _suffixIcon?.()}
 	</div>
 {/if}
 
-{@render children?.()}
+{#if children}
+	{@render children()}
+{/if}
 
 {#if rtl}
-	<div class="suffix-icon">
-		{@render suffixIcon?.()}
+	<div class="icon">
+		{@render _icon?.()}
 	</div>
 {:else}
-	<div class="icon">
-		{@render icon?.()}
+	<div class="suffix-icon">
+		{@render _suffixIcon?.()}
 	</div>
 {/if}

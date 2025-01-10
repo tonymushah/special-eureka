@@ -6,6 +6,6 @@
 
 <Menu label="Home" href={route("/mangadex")}>
 	{#snippet icon()}
-		<HomeIcon  size="24" />
+		<HomeIcon size="24" />
 	{/snippet}
 </Menu>

@@ -23,17 +23,17 @@
 <MenuLink {href} on:click>
 	<MenuBase {collapsed}>
 		<MenuIcons>
-			{#snippet icon()}
+			{#snippet _icon()}
 				{#if icon}
 					{@render icon()}
 				{/if}
 			{/snippet}
-			{#snippet suffixIcon()}
+			<MenuLabel {label} {collapsed} />
+			{#snippet _suffixIcon()}
 				{#if suffixIcon}
 					{@render suffixIcon()}
 				{/if}
 			{/snippet}
-			<MenuLabel {label} {collapsed} />
 		</MenuIcons>
 	</MenuBase>
 </MenuLink>

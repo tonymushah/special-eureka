@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { open } from "@tauri-apps/plugin-shell";
+	import { openUrl as open } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		href: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { href, children }: Props = $props();

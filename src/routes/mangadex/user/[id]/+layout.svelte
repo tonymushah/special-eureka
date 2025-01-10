@@ -7,7 +7,7 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ExternalLinkIcon, FlagIcon, BookmarkIcon } from "svelte-feather-icons";
-	import { open as shellOpen } from "@tauri-apps/plugin-shell";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import NavTab from "./NavTab.svelte";
 
 	interface Props {
@@ -19,7 +19,7 @@
 </script>
 
 <UsersPageBase title={data.username}>
-	{#snippet left()}
+	{#snippet _left()}
 		<div class="buttons">
 			<PrimaryButton isBase>
 				<p><BookmarkIcon />Follow</p>
@@ -37,34 +37,35 @@
 			</ButtonAccent>
 		</div>
 	{/snippet}
-	<!-- TODO @migration-task: migrate this slot by hand, `top-right` is an invalid identifier -->
-	<div slot="top-right">
-		<p>
-			User ID: <span
-				onkeydown={() => {}}
-				role="button"
-				tabindex={0}
-				onclick={() => {
-					writeText(data.id);
-				}}
-				class="copiable">{data.id}</span
-			>
-		</p>
-		<section class="uploads">
+	{#snippet topRight()}
+		<div>
 			<p>
-				{data.uploads}
-				<span>
-					upload{#if data.uploads > 1}s{/if}
-				</span>
+				User ID: <span
+					onkeydown={() => {}}
+					role="button"
+					tabindex={0}
+					onclick={() => {
+						writeText(data.id);
+					}}
+					class="copiable">{data.id}</span
+				>
 			</p>
-		</section>
-		<section class="roles">
-			{#each data.roles as role}
-				<UserRoleBadge {role} />
-			{/each}
-		</section>
-	</div>
-	{#snippet right()}
+			<section class="uploads">
+				<p>
+					{data.uploads}
+					<span>
+						upload{#if data.uploads > 1}s{/if}
+					</span>
+				</p>
+			</section>
+			<section class="roles">
+				{#each data.roles as role}
+					<UserRoleBadge {role} />
+				{/each}
+			</section>
+		</div>
+	{/snippet}
+	{#snippet _right()}
 		<div>
 			<section class="nav-tab">
 				<NavTab id={data.id} />

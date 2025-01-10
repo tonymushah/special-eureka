@@ -69,12 +69,12 @@
 	>
 		<MenuBase {collapsed}>
 			<MenuIcons>
-				{#snippet icon()}
+				{#snippet _icon()}
 					<div class="icon" class:collapsed>
 						{@render icon_render?.()}
 					</div>
 				{/snippet}
-				{#snippet suffixIcon()}
+				{#snippet _suffixIcon()}
 					<div class="suffix-icon" class:collapsed class:isMenuOpen>
 						{#if collapsed}
 							<HeaderChevronBase size="16" />
