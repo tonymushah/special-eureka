@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import getText from "@mangadex/utils/manga/readingStatus/getText";
 	import { createEventDispatcher } from "svelte";
@@ -26,10 +24,7 @@
 	}
 
 	let readingStatusText = $derived(getText($readingStatus) ?? "Add to Library");
-	let isFollowing;
-	run(() => {
-		isFollowing = $isFollowingStore;
-	});
+	let isFollowing = $derived($isFollowingStore);
 </script>
 
 <PrimaryButton
@@ -47,8 +42,8 @@
 </PrimaryButton>
 
 <Dialog
-	bind:status={$readingStatus}
-	bind:isFollowing
+	status={$readingStatus}
+	{isFollowing}
 	bind:dialog
 	on:readingStatus={({ detail }) => {
 		dispatch("readingStatus", detail);

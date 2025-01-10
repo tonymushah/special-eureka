@@ -5,18 +5,12 @@
 		alt: string;
 	};
 	type MangaCoversItems = MangaCoversItem[];
-	export enum Variant {
-		Flex,
-		Grid,
-		None
-	}
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import CoverImage from "./CoverImage.svelte";
 	import type { Readable } from "svelte/store";
+	import { Variant } from "./MangaPageCovers.utils";
 
 	interface Props {
 		items: MangaCoversItems;
@@ -24,18 +18,19 @@
 		fixedWidth_?: boolean;
 	}
 
-	let { items, variant = Variant.None, fixedWidth_ = false }: Props = $props();
+	let {
+		items = $bindable(),
+		variant = $bindable(Variant.None),
+		fixedWidth_ = false
+	}: Props = $props();
 	let flex = $derived(variant == Variant.Flex);
 	let grid = $derived(variant == Variant.Grid);
-	let fixedWidth;
-	run(() => {
-		fixedWidth = flex || fixedWidth_;
-	});
+	let fixedWidth = $derived(flex || fixedWidth_);
 </script>
 
 <div class:flex class:grid>
 	{#each items as { coverImage, title, alt } (title)}
-		<CoverImage {coverImage} {title} {alt} bind:fixedWidth />
+		<CoverImage {coverImage} {title} {alt} {fixedWidth} />
 	{/each}
 </div>
 

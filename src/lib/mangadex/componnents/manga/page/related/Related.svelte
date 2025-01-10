@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import { onMount, type ComponentProps } from "svelte";
@@ -74,7 +72,7 @@
 			});
 		}
 	});
-	run(() => {
+	$effect(() => {
 		const data = $store;
 		let res: ComponentProps<CategorizedTitles>[] = [];
 		relatedTitles.forEach((v, k) => {

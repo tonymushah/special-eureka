@@ -199,23 +199,14 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { type MangaLinks } from "@mangadex/gql/graphql";
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
 	import MangaPageChaptersInfo, { type MangaLinksItem } from "./MangaPageChaptersInfo.svelte";
 	import type { AltTitleItem } from "./info/alt-titles/MangaAltTitles.svelte";
 	import type { LinkItem } from "./info/links/MangaLinksBase.svelte";
-	enum TitleKey {
-		Author,
-		Artist,
-		Genres,
-		Themes,
-		Demographic,
-		Format,
-		Content
-	}
+	import { TitleKey } from "./Info.utils";
+
 	interface Props {
 		authors?: SimpleItems[];
 		artists?: SimpleItems[];
@@ -226,7 +217,7 @@
 		content?: SimpleItems[];
 		links?: MangaLinks | undefined;
 		altTitles?: AltTitleItem[];
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let {
@@ -279,12 +270,9 @@
 			items: content
 		}
 	]);
-	let toUseLinks;
-	run(() => {
-		toUseLinks = propsToUseLink(links ?? { hasNoLinks: true });
-	});
+	let toUseLinks = $derived(propsToUseLink(links ?? { hasNoLinks: true }));
 </script>
 
-<MangaPageChaptersInfo bind:altTitles idsKeysItem={tBButtons} bind:links={toUseLinks}>
+<MangaPageChaptersInfo bind:altTitles idsKeysItem={tBButtons} links={toUseLinks}>
 	{@render children?.()}
 </MangaPageChaptersInfo>

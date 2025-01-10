@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import Layout from "./Layout.svelte";
 	import Content from "./Content.svelte";
 	import { createEventDispatcher } from "svelte";
@@ -20,15 +18,11 @@
 	}
 
 	let { coverImage, coverImageAlt, title }: Props = $props();
-	let coverImage_;
-	run(() => {
-		coverImage_ = $coverImage;
-	});
 </script>
 
 <Layout on:click --w-base={"9.5em"} --img-h={"12.5em"}>
-	{#if coverImage_}
-		<CoverImage bind:coverImage={coverImage_} {coverImageAlt} />
+	{#if $coverImage}
+		<CoverImage coverImage={$coverImage} {coverImageAlt} />
 	{:else}
 		<Skeleton width={"var(--w-base)"} height={"var(--img-h)"} />
 	{/if}

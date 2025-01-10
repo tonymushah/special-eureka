@@ -11,8 +11,6 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { onMount, type ComponentProps, createEventDispatcher } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
@@ -30,7 +28,7 @@
 	let { volumes }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
 	let data: ComponentProps<VolumeAccordion>[] = $state([]);
-	run(() => {
+	$effect(() => {
 		const store = $chaptersStore;
 		data = volumes.map((volume) => {
 			return {
@@ -56,7 +54,7 @@
 
 <Volumes
 	openStart
-	bind:volumes={data}
+	volumes={data}
 	on:download={({ detail }) => {
 		dispatch("download", detail);
 	}}

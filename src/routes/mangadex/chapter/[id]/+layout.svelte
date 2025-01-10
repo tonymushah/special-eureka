@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import type { LayoutData } from "./$types";
 	import PostLayout from "./PostLayout.svelte";
 
 	interface Props {
 		data: LayoutData;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { data = $bindable(), children }: Props = $props();
@@ -16,7 +14,7 @@
 		}
 		return false;
 	}
-	run(() => {
+	$effect(() => {
 		console.debug(data);
 	});
 	let isDataValid = $derived(isLayoutDataValid(data));

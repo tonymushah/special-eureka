@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import MangaSearchForm from "@mangadex/componnents/manga/search/form/MangaSearchForm.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import SearchContent from "./SearchContent.svelte";
@@ -18,7 +16,7 @@
 
 	let { data }: Props = $props();
 	const defaultParams = writable(defaultMangaSearchParams());
-	run(() => {
+	$effect(() => {
 		defaultParams.update((p) => {
 			data.tags?.forEach((tag) => {
 				p.filter.tags.set(tag.id, {

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
 	import type { Readable } from "svelte/store";
@@ -11,15 +9,12 @@
 	}
 
 	let { locale, title }: Props = $props();
-	let lang;
-	run(() => {
-		lang = $locale;
-	});
+	let lang = $derived($locale);
 </script>
 
 <div class="alt-title">
 	{#if lang}
-		<FlagIcon bind:lang />
+		<FlagIcon {lang} />
 	{/if}
 	<h4>{title}</h4>
 </div>

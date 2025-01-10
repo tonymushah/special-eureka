@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run, preventDefault } from 'svelte/legacy';
-
 	import isAltKeyPressed from "$lib/window-decoration/stores/isAltKeyPressed";
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
@@ -20,7 +18,7 @@
 	const imageFitStore = getCurrentChapterImageFit();
 	let toZoom: HTMLElement | undefined = $state(undefined);
 	let toZoomPanZoom: PanzoomObject | undefined = $state();
-	run(() => {
+	$effect(() => {
 		if (toZoom) {
 			toZoomPanZoom = panzoom(toZoom, {
 				animate: true
@@ -52,7 +50,8 @@
 <div
 	role="none"
 	class="outer"
-	onwheel={preventDefault((e) => {
+	onwheel={(e) => {
+		e.preventDefault();
 		const zoomElement = toZoomPanZoom;
 		if (zoomElement) {
 			let scale = zoomElement.getScale();
@@ -64,7 +63,7 @@
 				animate: true
 			});
 		}
-	})}
+	}}
 >
 	<div class="toZoom" bind:this={toZoom}>
 		{#if Array.isArray(src) && Array.isArray(alt)}
@@ -119,10 +118,10 @@
 				align-items: center;
 				justify-content: center;
 				max-width: 100%;
-				div {
+				/*div {
 					height: 100%;
 					width: 100%;
-				}
+				}*/
 				img {
 					height: 100%;
 					max-width: 100%;

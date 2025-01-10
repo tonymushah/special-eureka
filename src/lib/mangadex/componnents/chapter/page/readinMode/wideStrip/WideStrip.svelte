@@ -2,13 +2,13 @@
     TODO Add drag support for scrolling
 -->
 <script lang="ts">
-	import { run, preventDefault, createBubbler } from 'svelte/legacy';
+	import { preventDefault, createBubbler } from "svelte/legacy";
 
 	const bubble = createBubbler();
-	import { derived, get, writable, type Readable } from "svelte/store";
+	import { derived as der, get, writable, type Readable } from "svelte/store";
 	import { getChapterImageContext } from "../../contexts/images";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
-	import { onMount } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { delay } from "lodash";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
@@ -32,7 +32,7 @@
 		}
 	}
 	const currentChapterPage = getChapterCurrentPageContext();
-	const currentChapter: Readable<[number, boolean]> = derived(
+	const currentChapter: Readable<[number, boolean]> = der(
 		[currentChapterPage, isFromIntersector],
 		([$page, $fromInter]) => {
 			return [$page, $fromInter] satisfies [number, boolean];
@@ -56,57 +56,53 @@
 	});
 	interface Props {
 		innerOverflow?: boolean;
-		top?: import('svelte').Snippet;
-		before?: import('svelte').Snippet;
-		after?: import('svelte').Snippet;
-		bottom?: import('svelte').Snippet;
+		top?: import("svelte").Snippet;
+		before?: import("svelte").Snippet;
+		after?: import("svelte").Snippet;
+		bottom?: import("svelte").Snippet;
 	}
 
-	let {
-		innerOverflow = true,
-		top,
-		before,
-		after,
-		bottom
-	}: Props = $props();
+	let { innerOverflow = true, top, before, after, bottom }: Props = $props();
 
 	let toObserve: Element[] = $state([]);
 	// TODO Add support with the intersection observer API
-	const interObserver = new IntersectionObserver(
-		(entries) => {
-			// console.debug(entries.length);
-			const entry = entries.reduce((previous, current) => {
-				if (previous.intersectionRatio < current.intersectionRatio) {
-					return current;
-				} else {
-					return previous;
-				}
-			});
-			/*const isInitialLoading = entry.target.getAttribute("data-initial-loading");
+	let interObserver = $derived(
+		new IntersectionObserver(
+			(entries) => {
+				// console.debug(entries.length);
+				const entry = entries.reduce((previous, current) => {
+					if (previous.intersectionRatio < current.intersectionRatio) {
+						return current;
+					} else {
+						return previous;
+					}
+				});
+				/*const isInitialLoading = entry.target.getAttribute("data-initial-loading");
 			if (isInitialLoading == "true") {
 				entry.target.setAttribute("data-initial-loading", "false");
 			} else {*/
-			const page = entry.target.getAttribute("data-page");
-			if (page != null) {
-				if (entry.isIntersecting /*&& entry.intersectionRatio > 0*/) {
-					fromIntersector(() => {
-						currentChapterPage.set(Number(page));
-					});
+				const page = entry.target.getAttribute("data-page");
+				if (page != null) {
+					if (entry.isIntersecting /*&& entry.intersectionRatio > 0*/) {
+						fromIntersector(() => {
+							currentChapterPage.set(Number(page));
+						});
+					}
 				}
+				//}
+			},
+			{
+				root: widestrip_root
 			}
-			//}
-		},
-		{
-			root: widestrip_root
-		}
+		)
 	);
-	run(() => {
+	$effect(() => {
 		toObserve.forEach((e) => {
 			interObserver.unobserve(e);
 			interObserver.observe(e);
 		});
 	});
-	const rtl = derived(readingDirection, ($readingDirection) => {
+	const rtl = der(readingDirection, ($readingDirection) => {
 		toObserve.forEach((entry) => {
 			interObserver.unobserve(entry);
 			entry.setAttribute("data-initial-loading", "true");
@@ -139,6 +135,9 @@
 			}
 		};
 	};
+	onDestroy(() => {
+		interObserver.disconnect();
+	});
 	/*
 	const isDown = writable(false);
 	const startX = writable(0);
@@ -179,7 +178,8 @@
 	class:rtl={$rtl}
 	class:innerOverflow
 	bind:this={widestrip_root}
-	onwheel={preventDefault((e) => {
+	onwheel={(e) => {
+		e.preventDefault();
 		if (widestrip_root) {
 			if ($rtl) {
 				widestrip_root.scrollLeft -= e.deltaY;
@@ -187,12 +187,12 @@
 				widestrip_root.scrollLeft += e.deltaY;
 			}
 		}
-	})}
+	}}
 >
 	{@render before?.()}
 	{#each $images as image, page}
 		<div data-page={page} use:mount>
-			<img ondrag={preventDefault(bubble('drag'))} src={image} alt={image} data-page={page} />
+			<img ondrag={preventDefault(bubble("drag"))} src={image} alt={image} data-page={page} />
 		</div>
 	{/each}
 	{@render after?.()}

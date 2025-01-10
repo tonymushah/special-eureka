@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import defaultTheme from "@mangadex/theme/graphql/defaultTheme";
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
 	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
@@ -11,14 +9,14 @@
 
 	interface Props {
 		fonts?: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { fonts = "Poppins", children }: Props = $props();
-	run(() => {
+	$effect(() => {
 		setMangaDexThemeContextWritable(defaultTheme);
 	});
-	run(() => {
+	$effect(() => {
 		setMangaDexFontsContext(writable(fonts));
 	});
 </script>

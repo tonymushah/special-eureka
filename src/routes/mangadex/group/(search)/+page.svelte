@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run, preventDefault } from 'svelte/legacy';
+	import { preventDefault } from "svelte/legacy";
 
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
@@ -12,7 +12,7 @@
 	let realTime = $state(false);
 	let inputName = $state("");
 	const groupName = writable<string | undefined>(undefined);
-	run(() => {
+	$effect(() => {
 		if (realTime) {
 			groupName.set(inputName);
 		}

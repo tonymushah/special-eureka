@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
@@ -13,10 +11,12 @@
 	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
 	let zoom: Zoom | undefined = $state(undefined);
 	const theme = getMangaDexThemeContext();
-	run(() => {
-		zoom = mediumZoom(coverImageInstance, {
-			background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
-		});
+	$effect(() => {
+		if (coverImageInstance) {
+			zoom = mediumZoom(coverImageInstance, {
+				background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
+			});
+		}
 	});
 	onDestroy(() => {
 		zoom?.close();
@@ -29,12 +29,7 @@
 		title: string;
 	}
 
-	let {
-		coverImage,
-		fixedWidth = true,
-		alt,
-		title
-	}: Props = $props();
+	let { coverImage, fixedWidth = true, alt, title }: Props = $props();
 	let src = $derived($coverImage);
 	let container: HTMLDivElement | undefined = $state(undefined);
 	let sW = $state("var(--cover-w)");
@@ -42,7 +37,7 @@
 	let skR: UnlistenFn = $state(() => {});
 	let isImageLoaded = $derived(src != undefined);
 
-	run(() => {
+	$effect(() => {
 		if (fixedWidth == false && container != undefined) {
 			skR();
 			let e = () => {
@@ -98,7 +93,7 @@
 	{#if src}
 		<img {alt} {src} bind:this={coverImageInstance} />
 	{:else}
-		<Skeleton bind:width={sW} bind:height={sH} />
+		<Skeleton width={sW} height={sH} />
 	{/if}
 	{#if fixedWidth}
 		<div class="title" class:isHovered>

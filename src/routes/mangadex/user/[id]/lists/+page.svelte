@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { readonly, writable } from "svelte/store";
 	import type { PageData } from "./$types";
 	import SearchContent from "./SearchContent.svelte";
@@ -10,7 +8,7 @@
 
 	let { data }: Props = $props();
 	const idWritable = writable(data.id);
-	run(() => {
+	$effect(() => {
 		idWritable.set(data.id);
 	});
 	const id = readonly(idWritable);

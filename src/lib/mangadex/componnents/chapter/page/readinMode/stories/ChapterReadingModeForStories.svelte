@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { writable } from "svelte/store";
 	import { initChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { initChapterImageContext } from "../../contexts/images";
@@ -23,27 +21,27 @@
 	}
 
 	let {
-		images,
-		currentPage = 0,
-		readingMode = ReadingMode.SinglePage,
-		imageFit = ImageFit.Default,
-		direction = Direction.Ltr
+		images = $bindable(),
+		currentPage = $bindable(0),
+		readingMode = $bindable(ReadingMode.SinglePage),
+		imageFit = $bindable(ImageFit.Default),
+		direction = $bindable(Direction.Ltr)
 	}: Props = $props();
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
 	initIsDrawerOpenWritable(writable(false));
 	initIsDrawerFixedWritable(writable(true));
-	run(() => {
+	$effect(() => {
 		readingDirection.set(direction);
 	});
-	run(() => {
+	$effect(() => {
 		imageFitStore.set(imageFit);
 	});
 
 	initChapterImageContext(images);
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
-	run(() => {
+	$effect(() => {
 		mode.set(readingMode);
 	});
 	initChapterCurrentPageContext(writable(currentPage));

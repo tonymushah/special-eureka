@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import { getContextClient } from "@urql/svelte";
@@ -86,7 +84,7 @@
 		if (!isLoading) await fetch();
 	});
 	let interObsEl: HTMLDivElement | undefined = $state(undefined);
-	run(() => {
+	$effect(() => {
 		if (interObsEl) {
 			interObs.observe(interObsEl);
 		}
@@ -118,7 +116,7 @@
 		</div>
 	{/if}
 	<article class="covers">
-		<CoverContents bind:covers={coversData} />
+		<CoverContents covers={coversData} />
 	</article>
 	{#if !isAtEnd && !isLoading}
 		<div bind:this={interObsEl}></div>

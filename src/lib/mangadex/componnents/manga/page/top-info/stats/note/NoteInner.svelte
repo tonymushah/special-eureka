@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { computePosition, flip } from "@floating-ui/dom";
 	import type { TopMangaStatsInner } from "..";
 	import DistributionItem from "./DistributionItem.svelte";
@@ -27,7 +25,7 @@
 			});
 		}
 	}
-	run(() => {
+	$effect(() => {
 		if (isOpen) {
 			open().catch(() => {
 				isOpen = false;
@@ -48,23 +46,20 @@
 			inner[10]
 		);
 	}
-	let total;
-	run(() => {
-		total = getTotal(inner);
-	});
+	let total = $derived(getTotal(inner));
 </script>
 
 <div class="distribution-info" class:isOpen bind:this={info}>
-	<DistributionItem bind:total distribution={10} value={inner[10]} />
-	<DistributionItem bind:total distribution={9} value={inner[9]} />
-	<DistributionItem bind:total distribution={8} value={inner[8]} />
-	<DistributionItem bind:total distribution={7} value={inner[7]} />
-	<DistributionItem bind:total distribution={6} value={inner[6]} />
-	<DistributionItem bind:total distribution={5} value={inner[5]} />
-	<DistributionItem bind:total distribution={4} value={inner[4]} />
-	<DistributionItem bind:total distribution={3} value={inner[3]} />
-	<DistributionItem bind:total distribution={2} value={inner[2]} />
-	<DistributionItem bind:total distribution={1} value={inner[1]} />
+	<DistributionItem {total} distribution={10} value={inner[10]} />
+	<DistributionItem {total} distribution={9} value={inner[9]} />
+	<DistributionItem {total} distribution={8} value={inner[8]} />
+	<DistributionItem {total} distribution={7} value={inner[7]} />
+	<DistributionItem {total} distribution={6} value={inner[6]} />
+	<DistributionItem {total} distribution={5} value={inner[5]} />
+	<DistributionItem {total} distribution={4} value={inner[4]} />
+	<DistributionItem {total} distribution={3} value={inner[3]} />
+	<DistributionItem {total} distribution={2} value={inner[2]} />
+	<DistributionItem {total} distribution={1} value={inner[1]} />
 </div>
 
 <style lang="scss">

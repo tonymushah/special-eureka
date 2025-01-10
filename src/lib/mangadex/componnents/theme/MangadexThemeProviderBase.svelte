@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { type MangadexTheme } from "@mangadex/theme";
-	import SomeDiv from "./SomeDiv.svelte";
 	import { setMangaDexThemeContextWritable } from "@mangadex/utils/contexts";
 	import { writable } from "svelte/store";
 	import { setMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
@@ -12,18 +9,18 @@
 	interface Props {
 		theme: MangadexTheme;
 		fonts?: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { theme, fonts = "Poppins", children }: Props = $props();
 	const theme_store = writable(theme);
-	run(() => {
+	$effect(() => {
 		theme_store.set(theme);
 	});
-    run(() => {
+	$effect(() => {
 		setMangaDexThemeContextWritable(theme_store);
 	});
-	run(() => {
+	$effect(() => {
 		setMangaDexFontsContext(writable(fonts));
 	});
 </script>

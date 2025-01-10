@@ -18,6 +18,7 @@
 		item_?: AnyMeltElement;
 		separator?: AnyMeltElement;
 		arrow?: AnyMeltElement;
+		tabindex?: number;
 	}
 
 	let {
@@ -27,7 +28,8 @@
 		menu = emptyMeltElement,
 		item_ = emptyMeltElement,
 		separator = emptyMeltElement,
-		arrow = emptyMeltElement
+		arrow = emptyMeltElement,
+		tabindex = 0
 	}: Props = $props();
 </script>
 
@@ -40,7 +42,7 @@
 						<ContextMenuItem
 							icon={item.icon}
 							label={item.label}
-							tabindex={index}
+							{tabindex}
 							on:click={async (e) => {
 								const onClick = item?.onClick;
 								if (onClick) {

@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import TopTitle from "./utils/TopTitle.svelte";
 	import query from "./seasonal/query";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
@@ -19,10 +17,7 @@
 	let error = $derived($query_store?.error);
 	let data = $derived($query_store?.data);
 	const isFetching = query_store.isFetching;
-	let fetching;
-	run(() => {
-		fetching = $isFetching;
-	});
+	let fetching = $derived($isFetching);
 	onMount(async () => {
 		await query_store.execute();
 	});
@@ -30,7 +25,7 @@
 
 <TopTitle
 	label="Seasonal"
-	bind:fetching
+	{fetching}
 	on:refresh={async () => {
 		if (!fetching) {
 			await query_store.execute();

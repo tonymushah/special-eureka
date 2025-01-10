@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { getTopCoverAltContextStore, getTopCoverContextStore } from "./context";
 	import mediumZoom, { type Zoom } from "medium-zoom";
@@ -9,7 +7,7 @@
 	const theme = getMangaDexThemeContext();
 	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
 	let zoom: Zoom | undefined = $state(undefined);
-	run(() => {
+	$effect(() => {
 		zoom = mediumZoom(coverImageInstance, {
 			background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
 		});

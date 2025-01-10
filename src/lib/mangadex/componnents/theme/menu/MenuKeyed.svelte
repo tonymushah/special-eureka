@@ -1,6 +1,4 @@
 <script lang="ts" generics="T">
-	import { run } from 'svelte/legacy';
-
 	import SomeDiv from "../SomeDiv.svelte";
 
 	import { createEventDispatcher } from "svelte";
@@ -24,9 +22,8 @@
 		};
 	}>();
 
-	let menuItems;
-	run(() => {
-		menuItems = items.map<Item>((i) => ({
+	let menuItems = $derived(
+		items.map<Item>((i) => ({
 			onClick(e) {
 				console.log(i.key);
 				dispatch("onSelect", {
@@ -37,8 +34,8 @@
 			},
 			icon: i.icon ?? SomeDiv,
 			label: i.label
-		}));
-	});
+		}))
+	);
 </script>
 
-<Menu {target} bind:isOpen bind:items={menuItems} />
+<Menu {target} bind:isOpen items={menuItems} />

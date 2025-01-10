@@ -5,7 +5,7 @@
 	import "@fontsource-variable/noto-sans-jp";
 	import "@fontsource/pacifico";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-const appWindow = getCurrentWebviewWindow()
+	const appWindow = getCurrentWebviewWindow();
 
 	export type ButtonStyles = {
 		default: string;
@@ -65,8 +65,6 @@ const appWindow = getCurrentWebviewWindow()
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import DragRegion from "./DragRegion.svelte";
 	import { onDestroy, onMount } from "svelte";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
@@ -96,7 +94,7 @@ const appWindow = getCurrentWebviewWindow()
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	run(() => {
+	$effect(() => {
 		appWindow.setTitle($title);
 	});
 	const textColor = derived(style, ($style) => $style.textColor);
@@ -159,7 +157,7 @@ const appWindow = getCurrentWebviewWindow()
 				<Commands />
 			</div>
 		{/if}
-		<ActionButtons bind:isMaximize {isMaximized} />
+		<ActionButtons {isMaximize} {isMaximized} />
 	</div>
 </DragRegion>
 

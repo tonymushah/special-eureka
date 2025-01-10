@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { XIcon as CloseIcon } from "svelte-feather-icons";
 	import CoverImage from "./dialog/CoverImage.svelte";
@@ -26,14 +24,9 @@
 
 	let { status = undefined, isFollowing = false, dialog = $bindable() }: Props = $props();
 
-	let selectedStatus;
-	run(() => {
-		selectedStatus = writable<ReadingStatus | undefined>(status);
-	});
-	let selectedIsFollowing;
-	run(() => {
-		selectedIsFollowing = writable(isFollowing);
-	});
+	let selectedStatus = $derived(writable<ReadingStatus | undefined>(status));
+
+	let selectedIsFollowing = $derived(writable(isFollowing));
 
 	function closeDialog() {
 		if (dialog) {
@@ -58,8 +51,8 @@
 				<h3>{title}</h3>
 				<h4>Reading Status</h4>
 				<div class="form">
-					<StatusSelect bind:readingStatus={selectedStatus} />
-					<IsFollowingButton bind:isFollowing={selectedIsFollowing} />
+					<StatusSelect readingStatus={selectedStatus} />
+					<IsFollowingButton isFollowing={selectedIsFollowing} />
 				</div>
 			</div>
 			<div class="bottom">

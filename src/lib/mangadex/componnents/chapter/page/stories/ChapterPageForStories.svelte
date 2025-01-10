@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { writable } from "svelte/store";
 	import { initCurrentChapterData, type CurrentChapterData } from "../contexts/currentChapter";
 	import { initChapterCurrentPageContext } from "../contexts/currentPage";
@@ -29,57 +27,57 @@
 	}
 
 	let {
-		chapter,
-		images,
-		currentPage = 0,
-		readingMode = ReadingMode.SinglePage,
-		isFixed = false,
-		isMenuOpen = false,
-		longStripImageWidth = 0,
-		relatedChapters = [],
-		direction = Direction.Ltr,
-		imageFit = ImageFit.Default
+		chapter = $bindable(),
+		images = $bindable(),
+		currentPage = $bindable(0),
+		readingMode = $bindable(ReadingMode.SinglePage),
+		isFixed = $bindable(false),
+		isMenuOpen = $bindable(false),
+		longStripImageWidth = $bindable(0),
+		relatedChapters = $bindable([]),
+		direction = $bindable(Direction.Ltr),
+		imageFit = $bindable(ImageFit.Default)
 	}: Props = $props();
 
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
-	run(() => {
+	$effect(() => {
 		imageFitStore.set(imageFit);
 	});
 	const lsImgWidth = initLongStripImagesWidthContext(writable(longStripImageWidth));
-	run(() => {
+	$effect(() => {
 		lsImgWidth.set(longStripImageWidth);
 	});
 	const is = initChapterImageContext(images);
-	run(() => {
+	$effect(() => {
 		is.set(images);
 	});
 	const current = initChapterCurrentPageContext(writable(currentPage));
-	run(() => {
+	$effect(() => {
 		current.set(currentPage);
 	});
 	const fixed = initIsDrawerFixedWritable(writable(isFixed));
-	run(() => {
+	$effect(() => {
 		fixed.set(isFixed);
 	});
 	const opened = initIsDrawerOpenWritable(writable(isMenuOpen));
-	run(() => {
+	$effect(() => {
 		opened.set(isMenuOpen);
 	});
 	const c = writable(chapter);
 	initCurrentChapterData(c);
-	run(() => {
+	$effect(() => {
 		c.set(chapter);
 	});
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
-	run(() => {
+	$effect(() => {
 		mode.set(readingMode);
 	});
 	const related = initRelatedChapters(writable(relatedChapters));
-	run(() => {
+	$effect(() => {
 		related.set(relatedChapters);
 	});
 	const pageDirection = initCurrentChapterDirection(writable(direction));
-	run(() => {
+	$effect(() => {
 		pageDirection.set(direction);
 	});
 </script>

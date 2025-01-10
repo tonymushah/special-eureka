@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { computePosition, flip } from "@floating-ui/dom";
 	import type { Item } from "../context-menu/base";
 	import ContextMenuBase from "../context-menu/base/ContextMenuBase.svelte";
@@ -12,7 +10,7 @@
 	}
 
 	let { target, isOpen = $bindable(false), items = $bindable([]) }: Props = $props();
-	let menu: HTMLDivElement = $state();
+	let menu: HTMLDivElement | undefined = $state();
 
 	async function openMenu() {
 		if (target && menu) {
@@ -27,7 +25,7 @@
 		}
 	}
 
-	run(() => {
+	$effect(() => {
 		if (isOpen) {
 			openMenu().catch(() => {
 				isOpen = false;
@@ -37,7 +35,7 @@
 </script>
 
 <div class="menu" class:isOpen bind:this={menu}>
-	<ContextMenuBase bind:items tabindex={0} />
+	<ContextMenuBase {items} tabindex={0} />
 </div>
 
 <style lang="scss">

@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { createEventDispatcher } from "svelte";
-	import { derived, type Readable } from "svelte/store";
+	import { derived as der, type Readable } from "svelte/store";
 	import MangaPopularElement from "./MangaPopularElement.svelte";
 	import MangaPopularElementLoader from "./MangaPopularElementLoader.svelte";
 
@@ -46,11 +44,8 @@
 			id: string;
 		};
 	}>();
-	const image = derived(coverImage, (v) => v);
-	let image_;
-	run(() => {
-		image_ = $image ?? "";
-	});
+	const image = der(coverImage, (v) => v);
+	let image_ = $derived($image ?? "");
 </script>
 
 {#if $image}
@@ -58,7 +53,7 @@
 		on:authorClick
 		on:click
 		on:tagClick
-		bind:coverImage={image_}
+		coverImage={image_}
 		{index}
 		{coverImageAlt}
 		{tags}

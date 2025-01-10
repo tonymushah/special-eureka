@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { writable } from "svelte/store";
 	import { initCurrentChapterData, type CurrentChapterData } from "../../contexts/currentChapter";
 	import ChapterPageHeader from "../ChapterPageHeader.svelte";
@@ -9,10 +7,10 @@
 		currentChapter: CurrentChapterData;
 	}
 
-	let { currentChapter }: Props = $props();
+	let { currentChapter = $bindable() }: Props = $props();
 	const c = writable(currentChapter);
 	initCurrentChapterData(c);
-	run(() => {
+	$effect(() => {
 		c.set(currentChapter);
 	});
 </script>

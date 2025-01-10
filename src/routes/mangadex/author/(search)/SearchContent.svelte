@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
@@ -92,13 +90,13 @@
 		observer.disconnect();
 	});
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
-	run(() => {
+	$effect(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
 	});
-	run(() => {
+	$effect(() => {
 		console.log(`isFetching: ${isFetching}`);
 	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());

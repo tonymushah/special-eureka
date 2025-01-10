@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import ProgressBar from "@mangadex/componnents/theme/progress/ProgressBar.svelte";
 
 	interface Props {
@@ -11,10 +9,7 @@
 
 	let { distribution, total, value }: Props = $props();
 
-	let progress;
-	run(() => {
-		progress = (value / total) * 100;
-	});
+	let progress = $derived((value / total) * 100);
 </script>
 
 <div class="distribution-item">
@@ -22,7 +17,7 @@
 		{distribution}
 	</div>
 	<div class="progress">
-		<ProgressBar variant="rounded" lineColor="var(--primary)" bind:progress />
+		<ProgressBar variant="rounded" lineColor="var(--primary)" {progress} />
 	</div>
 	<div class="value">
 		({value})

@@ -48,8 +48,6 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import type { LayoutData } from "./$types";
 	import { writable } from "svelte/store";
 	import {
@@ -84,10 +82,10 @@
 
 	interface Props {
 		data: LayoutData;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
-	let { data, children }: Props = $props();
+	let { data = $bindable(), children }: Props = $props();
 
 	const client = getContextClient();
 
@@ -97,7 +95,7 @@
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
 
-	run(() => {
+	$effect(() => {
 		images.set(data.pages.data);
 	});
 	const currentChapterData = initCurrentChapterData(
@@ -107,13 +105,13 @@
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
 	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
-	run(() => {
+	$effect(() => {
 		currentPage.set(data.currentPage);
 	});
-	run(() => {
+	$effect(() => {
 		currentChapterData.set(layoutDataToCurrentChapterData(data));
 	});
-	run(() => {
+	$effect(() => {
 		client
 			.query(relatedChaptersQuery, {
 				groups: data.data.relationships.scanlationGroups.map((g) => g.id),
@@ -136,7 +134,7 @@
 			})
 			.catch(console.error);
 	});
-	run(() => {
+	$effect(() => {
 		client
 			.query(chapterPageThread, {
 				id: data.data.id

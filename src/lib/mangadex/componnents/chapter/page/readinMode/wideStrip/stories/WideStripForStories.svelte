@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
-	import { derived, writable } from "svelte/store";
+	import { derived as der, writable } from "svelte/store";
 	import { initDefaultChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
 	import Page from "../WideStrip.svelte";
@@ -13,14 +11,18 @@
 		direction?: ReadingDirection;
 	}
 
-	let { images, currentPage = 0, direction = ReadingDirection.Ltr }: Props = $props();
+	let {
+		images = $bindable(),
+		currentPage = $bindable(0),
+		direction = $bindable(ReadingDirection.Ltr)
+	}: Props = $props();
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const currentChapterPage = initDefaultChapterCurrentPageContext();
-	run(() => {
+	$effect(() => {
 		currentChapterPage.set(currentPage);
 	});
-	const currentPageDerived = derived(currentChapterPage, (page) => page + 1);
+	const currentPageDerived = der(currentChapterPage, (page) => page + 1);
 	initChapterImageContext(images);
 </script>
 

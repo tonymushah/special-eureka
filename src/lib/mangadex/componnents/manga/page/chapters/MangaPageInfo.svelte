@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import type { AltTitleItem } from "@mangadex/componnents/manga/page/chapters/info/alt-titles/MangaAltTitles.svelte";
 	import Info, { type SimpleItems } from "@mangadex/componnents/manga/page/chapters/Info.svelte";
 	import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
@@ -103,46 +101,27 @@
 			return links;
 		}
 	}
-	let altTitles;
-	run(() => {
-		altTitles = buildAtlTitles(data?.attributes.altTitles ?? []);
-	});
-	let genres;
-	run(() => {
-		genres = getGenres(data);
-	});
-	let themes;
-	run(() => {
-		themes = getThemes(data);
-	});
-	let demographic;
-	run(() => {
-		demographic = getDemographic(data);
-	});
-	let format;
-	run(() => {
-		format = getFormat(data);
-	});
-	let content;
-	run(() => {
-		content = getContent(data);
-	});
-	let links;
-	run(() => {
-		links = getLinks(data);
-	});
-	let lastVolume;
-	run(() => {
-		lastVolume = data?.attributes.lastVolume;
-	});
-	let lastChapter;
-	run(() => {
-		lastChapter = data?.attributes.lastChapter;
-	});
+	let altTitles = $derived(buildAtlTitles(data?.attributes.altTitles ?? []));
+
+	let genres = $derived(getGenres(data));
+
+	let themes = $derived(getThemes(data));
+
+	let demographic = $derived(getDemographic(data));
+
+	let format = $derived(getFormat(data));
+
+	let content = $derived(getContent(data));
+
+	let links = $derived(getLinks(data));
+
+	let lastVolume = $derived(data?.attributes.lastVolume);
+
+	let lastChapter = $derived(data?.attributes.lastChapter);
 </script>
 
 <Info
-	bind:altTitles
+	{altTitles}
 	authors={data?.relationships.authors.map((a) => ({
 		id: a.id,
 		name: a.attributes.name
@@ -151,12 +130,12 @@
 		id: a.id,
 		name: a.attributes.name
 	}))}
-	bind:genres
-	bind:links
-	bind:themes
-	bind:demographic
-	bind:format
-	bind:content
+	{genres}
+	{links}
+	{themes}
+	{demographic}
+	{format}
+	{content}
 >
-	<LatestChapter bind:volume={lastVolume} bind:chapter={lastChapter} />
+	<LatestChapter volume={lastVolume} chapter={lastChapter} />
 </Info>

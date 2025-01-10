@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { MangaListStyle } from "@mangadex/gql/graphql";
 	import type { MangaListContentItemProps } from "../MangaListContent.svelte";
 	import { initMangaListStyleContext } from "../contexts/style";
@@ -12,9 +10,9 @@
 		style?: MangaListStyle;
 	}
 
-	let { list = $bindable([]), style = MangaListStyle.Grid }: Props = $props();
+	let { list = $bindable([]), style = $bindable(MangaListStyle.Grid) }: Props = $props();
 	const mangaListStyle = initMangaListStyleContext(writable(style));
-	run(() => {
+	$effect(() => {
 		mangaListStyle.set(style);
 	});
 </script>

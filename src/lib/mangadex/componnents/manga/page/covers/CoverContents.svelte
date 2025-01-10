@@ -10,9 +10,7 @@
 </script>
 
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
-	import MangaPageCovers, { Variant } from "./MangaPageCovers.svelte";
+	import MangaPageCovers from "./MangaPageCovers.svelte";
 	import type { MangaCoversItem } from "./MangaPageCovers.svelte";
 
 	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
@@ -24,7 +22,7 @@
 	let { covers }: Props = $props();
 	const images = getCoversImageStoreContext();
 	let data: MangaCoversItem[] = $state([]);
-	run(() => {
+	$effect(() => {
 		const store = $images;
 		const res: MangaCoversItem[] = [];
 		covers.forEach((cover) => {
@@ -41,4 +39,4 @@
 	});
 </script>
 
-<MangaPageCovers bind:items={data} />
+<MangaPageCovers items={data} />

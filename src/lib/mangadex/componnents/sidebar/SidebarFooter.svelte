@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { graphql } from "@mangadex/gql";
 	import { isLogged, userMe } from "@mangadex/utils/auth";
 	import { getContextClient } from "@urql/svelte";
@@ -40,20 +38,17 @@
 		await loadUserMe();
 	});
 
-	let label;
-	run(() => {
-		label = $userMe?.name ?? "Login";
-	});
+	let label = $derived($userMe?.name ?? "Login");
 </script>
 
 <Menu
-	bind:label
+	{label}
 	on:click={async () => {
 		await loadUserMe();
 	}}
 >
 	{#snippet icon()}
-		<div  role="button" tabindex="0" onkeypress={(e) => {}} class:isRefreshing>
+		<div role="button" tabindex="0" onkeypress={(e) => {}} class:isRefreshing>
 			{#if isRefreshing}
 				<UserIcon size="24" />
 			{:else if $isLogged}

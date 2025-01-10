@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import MangaList from "@mangadex/componnents/manga/list/MangaList.svelte";
 	import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
@@ -88,13 +86,13 @@
 		observer.disconnect();
 	});
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
-	run(() => {
+	$effect(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
 	});
-	run(() => {
+	$effect(() => {
 		console.log(`isFetching: ${isFetching}`);
 	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());

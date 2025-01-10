@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { run as run_1, preventDefault } from 'svelte/legacy';
+	import { preventDefault } from "svelte/legacy";
 
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
@@ -17,7 +17,8 @@
 		defaultParams?: MangaSearchParams;
 	}
 
-	let { realTime = $bindable(false), defaultParams = defaultMangaSearchParams() }: Props = $props();
+	let { realTime = $bindable(false), defaultParams = defaultMangaSearchParams() }: Props =
+		$props();
 	let dialog_bind: HTMLDialogElement | undefined = $state(undefined);
 	const params = writable(defaultParams);
 	const titleParams: Writable<string | undefined> = (() => {
@@ -60,7 +61,7 @@
 			}
 		};
 	})();
-	run_1(() => {
+	$effect(() => {
 		params.set(defaultParams);
 	});
 	const dispatch = createEventDispatcher<{
@@ -108,9 +109,13 @@
 	})}
 >
 	<div class="input">
-		<FormInput inputProps={{
+		<FormInput
+			inputProps={{
 				name: "title"
-			}} widthFull bind:value={$titleParams} />
+			}}
+			widthFull
+			bind:value={$titleParams}
+		/>
 	</div>
 	<div class="buttons">
 		<ButtonAccent

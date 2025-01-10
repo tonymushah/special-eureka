@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import SearchContent from "@mangadex/routes/titles/(search)/SearchContent.svelte";
 	import type { PageData } from "./$types";
 	import { derived, readable, writable } from "svelte/store";
@@ -11,7 +9,7 @@
 
 	let { data }: Props = $props();
 	const groupId = writable<string>(data.id);
-	run(() => {
+	$effect(() => {
 		groupId.set(data.id);
 	});
 	const offlineStore = readable(false);

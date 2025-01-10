@@ -1,12 +1,10 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import type { MangaStatus } from "@mangadex/gql/graphql";
 	import { createEventDispatcher } from "svelte";
 	import Content from "./Content.svelte";
 	import Image from "./Image.svelte";
 	import Layout from "./Layout.svelte";
-	import type { Readable } from "svelte/store";
+	import { type Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -30,15 +28,12 @@
 		description,
 		withFull = false
 	}: Props = $props();
-	let src;
-	run(() => {
-		src = $coverImage;
-	});
+	let src = $derived($coverImage);
 </script>
 
 <Layout on:click --layout-width={withFull ? "100%" : "19em"}>
 	{#if src}
-		<Image bind:coverImage={src} {coverImageAlt} />
+		<Image coverImage={src} {coverImageAlt} />
 	{:else}
 		<Skeleton width="100px" height="160px" />
 	{/if}

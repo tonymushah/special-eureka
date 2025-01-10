@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import type { ContentRating } from "@mangadex/gql/graphql";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	import type { Readable } from "svelte/store";
@@ -10,7 +8,7 @@
 	import openTitle from "@mangadex/utils/links/title/[id]";
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	let current_page_: number | undefined = $state(undefined);
-	run(() => {
+	$effect(() => {
 		if (swiper_container) {
 			current_page_ = swiper_container.swiper.activeIndex;
 			swiper_container.swiper.on("slideChange", (s) => {
