@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { createEventDispatcher } from "svelte";
@@ -67,21 +65,12 @@
 			id: string;
 		};
 	}>();
-	let image_;
-	run(() => {
-		image_ = $coverImage;
-	});
+	let image_ = $derived($coverImage);
 </script>
 
 <Layout bind:haveBeenRead>
 	{#if image_}
-		<CoverImage
-			bind:coverImage={image_}
-			{coverImageAlt}
-			{mangaId}
-			on:mangaClick
-			on:mangaKeyClick
-		/>
+		<CoverImage coverImage={image_} {coverImageAlt} {mangaId} on:mangaClick on:mangaKeyClick />
 	{:else}
 		<LoaderImage {mangaId} on:mangaClick on:mangaKeyClick />
 	{/if}
