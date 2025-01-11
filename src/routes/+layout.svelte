@@ -9,11 +9,11 @@
 	import { register } from "swiper/element/bundle";
 	import "toastify-js/src/toastify.css";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
-const appWindow = getCurrentWebviewWindow()
+	const appWindow = getCurrentWebviewWindow();
 	let decorationHeigth: number | undefined = $state(undefined);
 	const unlistens: UnlistenFn[] = [];
 	onMount(async () => {

@@ -2,7 +2,7 @@
 	import openNewWindow from "$lib/commands/openNewWindow";
 	import toggleDecoration from "$lib/commands/toggleDecoration";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-const appWindow = getCurrentWebviewWindow()
+	const appWindow = getCurrentWebviewWindow();
 </script>
 
 <button
@@ -20,14 +20,6 @@ const appWindow = getCurrentWebviewWindow()
 	}}
 >
 	New Window
-</button>
-<button
-	class="flex-center"
-	onclick={async () => {
-		await toggleDecoration();
-	}}
->
-	Toggle Decoration
 </button>
 
 <style lang="scss">

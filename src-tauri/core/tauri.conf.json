@@ -86,7 +86,7 @@
 				"theme": "Light",
 				"label": "main",
 				"url": "index.html",
-				"decorations": true,
+				"decorations": false,
 				"useHttpsScheme": true
 			}
 		],

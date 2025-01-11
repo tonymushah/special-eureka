@@ -7,6 +7,7 @@ use crate::commands::{
     open_new_window::open_new_window_sync, toggle_decoration::toggle_decoration,
 };
 
+#[allow(dead_code)]
 pub fn set_menu_window<R: Runtime>(window: &Window<R>) -> tauri::Result<()> {
     let menu = Menu::new(window)?;
     let home_menu = MenuItem::new(window, "Home", true, None::<&str>)?;
