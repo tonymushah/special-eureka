@@ -10,6 +10,7 @@
 	import { noop } from "lodash";
 	import { onDestroy } from "svelte";
 	import CollapsedProvider from "./CollapsedProvider.svelte";
+	import { isSidebarRtl } from "../states/isRtl";
 	let buttonRef: HTMLDivElement | undefined = $state(undefined);
 	let floatingRef: HTMLDivElement | undefined = $state(undefined);
 	let cleanup: () => void = $state(noop);
@@ -51,7 +52,7 @@
 	onDestroy(() => {
 		cleanup();
 	});
-
+	let rtl = $derived($isSidebarRtl);
 	const icon_render = $derived(icon);
 </script>
 
@@ -70,14 +71,14 @@
 		<MenuBase {collapsed}>
 			<MenuIcons>
 				{#snippet _icon()}
-					<div class="icon" class:collapsed>
+					<div class="icon" class:collapsed class:rtl>
 						{@render icon_render?.()}
 					</div>
 				{/snippet}
 				{#snippet _suffixIcon()}
-					<div class="suffix-icon" class:collapsed class:isMenuOpen>
+					<div class="suffix-icon" class:collapsed class:isMenuOpen class:rtl>
 						{#if collapsed}
-							<HeaderChevronBase size="16" />
+							<HeaderChevronBase size="24" />
 						{:else}
 							<ChevronUpIcon size="24" />
 						{/if}
@@ -113,8 +114,16 @@
 		animation-timing-function: ease-in-out;
 		animation-fill-mode: forwards;
 	}
-	.icon.collapsed {
+	.icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.icon.collapsed:not(.rtl) {
 		padding-left: 16px;
+	}
+	.icon.collapsed.rtl {
+		padding-right: 16px;
 	}
 	.suffix-icon {
 		transition: rotate 200ms ease-in-out;

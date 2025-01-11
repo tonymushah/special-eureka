@@ -8,12 +8,8 @@
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import MangaDexDefaultThemeProvider from "@mangadex/componnents/theme/MangaDexDefaultThemeProvider.svelte";
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
-	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
-	import { Direction } from "@mangadex/gql/graphql";
 	import { client } from "@mangadex/gql/urql";
-	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
-	import { onDestroy, onMount } from "svelte";
-	import { v4 } from "uuid";
+	import { setContextClient } from "@urql/svelte";
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
@@ -21,17 +17,9 @@
 	let { children }: Props = $props();
 
 	setContextClient(client);
-	const rtl = subscriptionStore({
-		client: getContextClient(),
-		query: sideDirGQLDoc,
-		variables: {}
-	});
-	onMount(() =>
-		rtl.subscribe(($rtl) => isSidebarRtl.set($rtl.data?.watchSidebarDirection == Direction.Rtl))
-	);
 
 	let loading = $derived($navigating != null);
-	let isRTL = $derived($rtl.data?.watchSidebarDirection == Direction.Rtl);
+	let isRTL = $derived($isSidebarRtl);
 </script>
 
 <div class="d-content">

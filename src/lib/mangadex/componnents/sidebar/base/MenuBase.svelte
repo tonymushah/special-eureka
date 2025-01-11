@@ -31,9 +31,14 @@
 		padding-top: 8px;
 		padding-bottom: 8px;
 		display: flex;
-		animation-name: base-in;
 		transition: background-color 300ms ease-in-out;
 		flex-direction: row;
+	}
+	.base:not(.rtl) {
+		animation-name: base-in;
+	}
+	.base.rtl {
+		animation-name: base-in-rtl;
 	}
 	.base:hover {
 		background-color: var(--accent-l1-hover);
@@ -41,14 +46,19 @@
 	.base.collapsed {
 		animation-name: base-out;
 	}
-	.base.rtl {
-		flex-direction: row-reverse;
-	}
 	@keyframes base-out {
 		to {
 			padding-left: 0px;
+			padding-right: 0px;
 			align-items: center;
 			justify-content: center;
+		}
+	}
+	@keyframes base-in-rtl {
+		to {
+			padding-right: 25px;
+			align-items: initial;
+			justify-content: initial;
 		}
 	}
 	@keyframes base-in {

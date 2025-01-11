@@ -16,6 +16,9 @@
 	});
 	let { _icon, _suffixIcon, children }: Props = $props();
 	let rtl = $derived($rlt_sub.data?.watchSidebarDirection == Direction.Rtl);
+	$effect(() => {
+		console.log(rtl);
+	});
 </script>
 
 {#if !rtl}
