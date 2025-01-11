@@ -19,6 +19,9 @@
 		grid-template-columns: repeat(3, 1fr);
 		.chapters {
 			grid-column: 2/4;
+			--chapter-layout: var(--accent-l3);
+			--chapter-layout-hover: var(--accent-l3-hover);
+			--chapter-layout-active: var(--accent-l3-active);
 		}
 	}
 	@media screen and (max-width: 1200px) {
