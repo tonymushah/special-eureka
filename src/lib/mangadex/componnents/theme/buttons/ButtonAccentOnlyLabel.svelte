@@ -33,7 +33,10 @@
 <ButtonAccent on:click {variant} {style} {type} {isBase}>
 	{@const SvelteComponent = icon}
 	<div class:noCenter>
-		<SvelteComponent />
+		{#if SvelteComponent}
+			<SvelteComponent />
+		{/if}
+
 		<span class:oneLine>
 			{label}
 		</span>

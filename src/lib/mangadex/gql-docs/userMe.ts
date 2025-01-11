@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 
 export const userMeSubDoc = graphql(`
 	subscription userMe {

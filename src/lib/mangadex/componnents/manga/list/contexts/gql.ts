@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 import { MangaListStyle } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { get, readable, type Writable } from "svelte/store";

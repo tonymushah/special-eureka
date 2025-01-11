@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { melt, type AnyMeltElement, emptyMeltElement } from "@melt-ui/svelte";
-	import { SvelteComponent, createEventDispatcher, type ComponentType } from "svelte";
+	import { createEventDispatcher, type ComponentType } from "svelte";
 	interface Props {
 		icon: ComponentType;
 		label: string;
@@ -47,7 +47,9 @@
 	class="menu-item"
 	class:isDisabled
 >
-	<SvelteComponent_1 class="icon" />
+	{#if SvelteComponent_1}
+		<SvelteComponent_1 class="icon" />
+	{/if}
 	<p class="label">{label}</p>
 </div>
 

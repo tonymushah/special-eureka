@@ -20,7 +20,7 @@
 
 <div class="alt-titles">
 	{#each titles as { title, locale } (title)}
-		<AltTitle bind:title bind:locale />
+		<AltTitle {title} {locale} />
 	{/each}
 </div>
 

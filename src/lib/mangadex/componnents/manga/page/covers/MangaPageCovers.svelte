@@ -18,11 +18,7 @@
 		fixedWidth_?: boolean;
 	}
 
-	let {
-		items = $bindable(),
-		variant = $bindable(Variant.None),
-		fixedWidth_ = false
-	}: Props = $props();
+	let { items, variant = $bindable(Variant.None), fixedWidth_ = false }: Props = $props();
 	let flex = $derived(variant == Variant.Flex);
 	let grid = $derived(variant == Variant.Grid);
 	let fixedWidth = $derived(flex || fixedWidth_);

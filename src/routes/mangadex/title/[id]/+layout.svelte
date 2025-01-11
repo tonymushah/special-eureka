@@ -23,7 +23,7 @@
 		children?: Snippet;
 	}
 	let { data, children }: Props = $props();
-	$effect(() => {
+	$effect.pre(() => {
 		setTitleLayoutData(data);
 	});
 	const statsStore = data.statsQueryStore!;

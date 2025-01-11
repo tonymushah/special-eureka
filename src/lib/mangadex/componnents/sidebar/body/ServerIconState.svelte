@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { ServerIcon } from "svelte-feather-icons";
 	import Toast from "toastify-js";
+	import { serverIconStateQuery } from "./server-icon-state";
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
 	const toast = Toast({
@@ -17,11 +17,7 @@
 	});
 	const offline_server_state_sub = subscriptionStore({
 		client,
-		query: graphql(/* GraphQL */ `
-			subscription serverIconState {
-				watchIsAppMounted
-			}
-		`),
+		query: serverIconStateQuery,
 		variables: {}
 	});
 	let isLoading = $state(false);

@@ -22,7 +22,8 @@
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
-	const { queryResult: data } = getTitleLayoutData();
+	const __res = getTitleLayoutData();
+	const data = __res.queryResult;
 	const query = specialQueryStore({
 		query: mangaAggregateQuery,
 		client,
@@ -157,7 +158,7 @@
 		}));
 	});
 	const isReversed = writable(false);
-	let selectedIndex = 0;
+	let selectedIndex = $state(0);
 	onMount(async () => {
 		unlistens.push(
 			query.subscribe((e) => {

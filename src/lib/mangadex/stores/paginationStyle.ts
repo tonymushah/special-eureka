@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 import { PaginationStyle } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import type { Client } from "@urql/svelte";

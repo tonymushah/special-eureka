@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 
 const relatedChaptersQuery = graphql(`
 	query getChapterRelated($mangaId: UUID!, $langs: Language!, $groups: [UUID!]!) {

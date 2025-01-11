@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 
 const query = graphql(/* GraphQL */ `
 	query recentlyAddedHomeQuery {

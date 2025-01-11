@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 import { Client, queryStore } from "@urql/svelte";
 import { derived, type Readable } from "svelte/store";
 import bufToImageSrc from "../bufToImageSrc";

@@ -10,7 +10,8 @@
 	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 
-	const { queryResult: data } = getTitleLayoutData();
+	const __res = getTitleLayoutData();
+	const data = __res.queryResult;
 	const client = getContextClient();
 	function buildAtlTitles(altTitle: Record<string, string>[]): AltTitleItem[] {
 		let map = manga_altTitle_to_lang_map(altTitle);

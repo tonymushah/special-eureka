@@ -34,7 +34,7 @@
 	let container: HTMLDivElement | undefined = $state(undefined);
 	let sW = $state("var(--cover-w)");
 	let sH = $state("var(--cover-h)");
-	let skR: UnlistenFn = $state(() => {});
+	let skR: UnlistenFn = () => {};
 	let isImageLoaded = $derived(src != undefined);
 
 	$effect(() => {
@@ -105,7 +105,7 @@
 <style lang="scss">
 	:root {
 		--cover-w: 11em;
-		--cover-h: 16em;
+		--cover-h: 11em;
 	}
 	.cover:not(.fixedWidth) {
 		width: 100%;
@@ -118,7 +118,7 @@
 		}
 		img {
 			width: 100%;
-			height: 50cqh;
+			// height: 50cqh;
 			object-fit: cover;
 		}
 	}

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { slide } from "svelte/transition";
 	import PrimaryButton from "./theme/buttons/PrimaryButton.svelte";
-	import { AlignLeftIcon, ArrowLeftIcon, RefreshCcwIcon } from "svelte-feather-icons";
+	import { ArrowLeftIcon, RefreshCcwIcon } from "svelte-feather-icons";
 	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	let isTitleHovered = $state(false);
 	interface Props {
@@ -84,5 +84,8 @@
 	}
 	.message {
 		width: 90%;
+		p {
+			text-align: center;
+		}
 	}
 </style>

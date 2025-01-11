@@ -10,12 +10,7 @@
 		href: string;
 	}
 
-	let {
-		icon,
-		title,
-		description,
-		href
-	}: Props = $props();
+	let { icon, title, description, href }: Props = $props();
 
 	const SvelteComponent = $derived(icon);
 </script>
@@ -31,7 +26,9 @@
 	onclick={() => goto(href)}
 >
 	<div class="icon">
-		<SvelteComponent />
+		{#if SvelteComponent}
+			<SvelteComponent />
+		{/if}
 	</div>
 	<h2>{title}</h2>
 	<p>{description}</p>

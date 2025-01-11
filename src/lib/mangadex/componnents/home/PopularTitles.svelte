@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql";
+	import { graphql } from "@mangadex/gql/exports";
 	import { CoverImageQuality } from "@mangadex/gql/graphql";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
@@ -11,47 +11,13 @@
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import { popular_title_query } from "./popular-titles";
 
 	const client = getContextClient();
-	const query = graphql(`
-		query homePopularTitle {
-			home {
-				popularTitles {
-					data {
-						id
-						attributes {
-							title
-							tags {
-								id
-								attributes {
-									name
-								}
-							}
-							contentRating
-							description
-						}
-						relationships {
-							authorArtists {
-								id
-								attributes {
-									name
-								}
-							}
-							coverArt {
-								id
-								attributes {
-									fileName
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`);
+
 	const popular_titles_query = specialQueryStore({
 		client,
-		query,
+		query: popular_title_query,
 		variable: {}
 	});
 	const _isFetching = popular_titles_query.isFetching;

@@ -19,7 +19,7 @@
 		isBase?: boolean;
 		haveBorderRadius?: boolean;
 		noPadding?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let {
@@ -64,7 +64,12 @@
 		color: var(--text-color);
 		background-color: var(--button-color);
 		font-family: var(--fonts);
-		border: 0;
+		border: var(--mid-tone) solid 3px;
+		box-shadow: 0px 3px 0px var(--mid-tone);
+		transition:
+			border,
+			box-shadow,
+			transform 100ms ease-in-out;
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
@@ -76,7 +81,8 @@
 		padding: 0px;
 	}
 	button.isBase {
-		border-color: var(--button-active);
+		border-color: var(--button-active, var(--mid-tone));
+		box-shadow: 0px 3px 0px var(--button-active, var(--mid-tone));
 		min-height: 3em;
 		min-width: 3em;
 		padding-left: 0.75rem;
@@ -87,6 +93,10 @@
 	}
 	button:hover {
 		cursor: pointer;
+	}
+	button:active {
+		box-shadow: none;
+		transform: translateY(3px);
 	}
 	button.with-active:active {
 		background-color: var(--button-active);

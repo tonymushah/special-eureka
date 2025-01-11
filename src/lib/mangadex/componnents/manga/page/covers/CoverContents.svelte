@@ -21,8 +21,7 @@
 
 	let { covers }: Props = $props();
 	const images = getCoversImageStoreContext();
-	let data: MangaCoversItem[] = $state([]);
-	$effect(() => {
+	let data: MangaCoversItem[] = $derived.by(() => {
 		const store = $images;
 		const res: MangaCoversItem[] = [];
 		covers.forEach((cover) => {
@@ -35,7 +34,7 @@
 					coverImage: image
 				});
 		});
-		data = res;
+		return res;
 	});
 </script>
 

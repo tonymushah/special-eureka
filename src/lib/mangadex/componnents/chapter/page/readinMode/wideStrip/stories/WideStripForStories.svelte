@@ -3,7 +3,7 @@
 	import { initDefaultChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
 	import Page from "../WideStrip.svelte";
-	import { Direction as ReadingDirection } from "@mangadex/gql";
+	import { Direction as ReadingDirection } from "@mangadex/gql/exports";
 	import { initCurrentChapterDirection } from "../../../contexts/readingDirection";
 	interface Props {
 		images: string[];
