@@ -17,8 +17,10 @@
 		defaultParams?: MangaSearchParams;
 	}
 
-	let { realTime = $bindable(false), defaultParams = defaultMangaSearchParams() }: Props =
-		$props();
+	let {
+		realTime = $bindable(false),
+		defaultParams = $bindable(defaultMangaSearchParams())
+	}: Props = $props();
 	let dialog_bind: HTMLDialogElement | undefined = $state(undefined);
 	const params = writable(defaultParams);
 	const titleParams: Writable<string | undefined> = (() => {

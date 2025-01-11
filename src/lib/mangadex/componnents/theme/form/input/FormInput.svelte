@@ -11,7 +11,7 @@
 
 	let {
 		inputProps = {},
-		value = $bindable(""),
+		value = $bindable(undefined),
 		widthFull = false,
 		element = emptyMeltElement
 	}: Props = $props();

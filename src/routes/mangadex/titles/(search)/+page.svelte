@@ -14,7 +14,7 @@
 		data: PageData;
 	}
 
-	let { data }: Props = $props();
+	let { data = $bindable() }: Props = $props();
 	const defaultParams = writable(defaultMangaSearchParams());
 	$effect(() => {
 		defaultParams.update((p) => {
@@ -47,7 +47,7 @@
 <section class="form-search">
 	<MangaSearchForm
 		bind:realTime
-		defaultParams={$defaultParams}
+		bind:defaultParams={$defaultParams}
 		on:change={({ detail }) => {
 			if (realTime) {
 				currentSearchParams.set(detail);
