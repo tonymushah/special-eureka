@@ -6,6 +6,7 @@
 	import ChapterDrawer from "./drawer/ChapterDrawer.svelte";
 	import ChapterReadingMode from "./readinMode/ChapterReadingMode.svelte";
 	import ChapterPageHeader from "./top-info/ChapterPageHeader.svelte";
+	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 
 	const isFixed = isDrawerFixed();
 	const shouldShowHeader = derived(isFixed, (fixed) => {
@@ -15,7 +16,7 @@
 </script>
 
 <article>
-	<ChapterDrawer>
+	<ChapterDrawer left={$isSidebarRtl}>
 		<div class="chap-d-content">
 			{#if $shouldShowHeader}
 				<div

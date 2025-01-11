@@ -10,16 +10,16 @@
 	const fixed_ = derived(fixed, (f) => !f);
 	interface Props {
 		left?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
-	let { left = $bindable(false), children }: Props = $props();
+	let { left, children }: Props = $props();
 </script>
 
-<ChapterDrawerBase bind:open={$open} fixed={$fixed_} bind:left>
-	<ChapterDrawerContent bind:left />
+<ChapterDrawerBase open={$open} fixed={$fixed_} {left}>
+	<ChapterDrawerContent {left} />
 	{#snippet content()}
-		<div class="main" >
+		<div class="main">
 			{@render children?.()}
 		</div>
 	{/snippet}

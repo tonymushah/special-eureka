@@ -5,24 +5,18 @@
 		open: boolean;
 		fixed?: boolean;
 		left?: boolean;
-		children?: import('svelte').Snippet<[any]>;
-		content?: import('svelte').Snippet;
+		children?: import("svelte").Snippet<[any]>;
+		content?: import("svelte").Snippet;
 	}
 
-	let {
-		open,
-		fixed = true,
-		left = false,
-		children,
-		content
-	}: Props = $props();
+	let { open, fixed = true, left = false, children, content }: Props = $props();
 </script>
 
 <div class="container" class:fixed>
 	{#if left}
 		<aside class:open class:fixed class:left transition:fade>
 			<div class="inner">
-				{@render children?.({ open, fixed, })}
+				{@render children?.({ open, fixed })}
 			</div>
 		</aside>
 	{/if}
@@ -32,7 +26,7 @@
 	{#if !left}
 		<aside class:open class:fixed transition:fade>
 			<div class="inner">
-				{@render children?.({ open, fixed, })}
+				{@render children?.({ open, fixed })}
 			</div>
 		</aside>
 	{/if}
@@ -69,6 +63,8 @@
 	}
 	aside.fixed {
 		position: absolute;
+		margin-top: 29px;
+		height: calc(100cqh - 29px);
 	}
 	.content {
 		transition-duration: 0.5s;

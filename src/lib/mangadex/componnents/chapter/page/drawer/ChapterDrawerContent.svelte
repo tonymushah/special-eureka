@@ -13,11 +13,11 @@
 		left?: boolean;
 	}
 
-	let { left = $bindable(false) }: Props = $props();
+	let { left }: Props = $props();
 </script>
 
 <div class="content">
-	<Header bind:left />
+	<Header {left} />
 	<TopInfo />
 	<Navigation />
 	<Line />
