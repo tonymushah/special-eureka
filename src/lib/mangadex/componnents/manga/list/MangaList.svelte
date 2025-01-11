@@ -6,10 +6,10 @@
 
 	interface Props {
 		list?: MangaListContentItemProps[];
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
-	let { list = $bindable([]), children }: Props = $props();
+	let { list, children }: Props = $props();
 </script>
 
 <article>
@@ -22,7 +22,7 @@
 		<MangaListTabSelect />
 	</div>
 	<MidToneLine />
-	<MangaListContent bind:list />
+	<MangaListContent {list} />
 </article>
 
 <style lang="scss">

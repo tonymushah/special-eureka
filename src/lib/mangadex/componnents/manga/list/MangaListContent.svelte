@@ -19,16 +19,16 @@
 		list?: MangaListContentItemProps[];
 	}
 
-	let { list = $bindable([]) }: Props = $props();
+	let { list }: Props = $props();
 	const style = getMangaListStyleContext();
 </script>
 
 <div class="manga-list-content">
 	{#if $style == MangaListStyle.Grid}
-		<MediumMangaList bind:list />
+		<MediumMangaList {list} />
 	{:else if $style == MangaListStyle.Rows}
-		<LongMangaList bind:list />
+		<LongMangaList {list} />
 	{:else if $style == MangaListStyle.Cover}
-		<CoverMangaList bind:list />
+		<CoverMangaList {list} />
 	{/if}
 </div>
