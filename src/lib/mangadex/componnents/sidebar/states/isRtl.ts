@@ -1,6 +1,6 @@
 import { Direction, graphql, RtlSidebarSubDocument } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
-import { derived, readable, type Writable } from "svelte/store";
+import { derived, get, readable, type Writable } from "svelte/store";
 
 const __isSidebarRtl = readable(Direction.Ltr, (set) => {
 	const sub = client.subscription(RtlSidebarSubDocument, {}).subscribe((res) => {
@@ -25,6 +25,21 @@ export const isSidebarRtl: Writable<boolean> = {
 	subscribe(run, invalidate) {
 		return _isSidebarRtl.subscribe(run, invalidate);
 	},
-	set(value) {},
-	update(updater) {}
+	set(value) {
+		client
+			.mutation(mutation, {
+				direction: value ? Direction.Rtl : Direction.Ltr
+			})
+			.toPromise()
+			.catch(console.error);
+	},
+	update(updater) {
+		const value = updater(get(_isSidebarRtl));
+		client
+			.mutation(mutation, {
+				direction: value ? Direction.Rtl : Direction.Ltr
+			})
+			.toPromise()
+			.catch(console.error);
+	}
 };

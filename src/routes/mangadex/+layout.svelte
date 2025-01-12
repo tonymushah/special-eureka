@@ -10,12 +10,22 @@
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
 	import { client } from "@mangadex/gql/urql";
 	import { setContextClient } from "@urql/svelte";
+	import { onDestroy, onMount } from "svelte";
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
-
+	onMount(async () => {
+		const { mangadexTitleBar } = await import("@mangadex/titlebar");
+		await mangadexTitleBar();
+	});
+	onDestroy(async () => {
+		const { defaultBehavior } = await import(
+			"$lib/window-decoration/stores/decorations.svelte"
+		);
+		defaultBehavior();
+	});
 	setContextClient(client);
 
 	let loading = $derived($navigating != null);
