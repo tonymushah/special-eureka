@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
+	// import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { createEventDispatcher } from "svelte";
@@ -20,7 +20,7 @@
 	// $: console.log(`fetching ${fetching}`);
 </script>
 
-<div class="title with-margin" class:rtl={$isSidebarRtl}>
+<div class="title with-margin">
 	<Title>{label}</Title>
 	<span class="button" class:fetching>
 		<ButtonAccent
@@ -50,10 +50,12 @@
 		z-index: 3;
 		position: relative;
 	}
+	/*
 	div.title.rtl {
 		flex-direction: row-reverse;
 		justify-content: end;
 	}
+    */
 	.fetching {
 		cursor: not-allowed;
 	}

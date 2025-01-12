@@ -6,7 +6,7 @@ import type {
 	OperationResult
 } from "@urql/svelte";
 import type { SpecialQueryResult } from ".";
-import { writable } from "svelte/store";
+import { readonly, writable } from "svelte/store";
 
 type SpecialQueryInput<Data, Variables extends AnyVariables> = {
 	client: Client;
@@ -26,6 +26,10 @@ export default function specialQueryStore<
 		const res = await input.client
 			.query(input.query, input.variable, input.context)
 			.toPromise()
+			.catch((err) => {
+				console.error(err);
+				throw err;
+			})
 			.finally(() => {
 				isFetching.set(false);
 			});
@@ -34,6 +38,6 @@ export default function specialQueryStore<
 	return {
 		...store,
 		execute,
-		isFetching
+		isFetching: readonly(isFetching)
 	};
 }
