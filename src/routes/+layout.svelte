@@ -30,7 +30,11 @@
 	let decoHg = $derived(decorationHeigth ?? 0);
 </script>
 
-<div class="outer" class:defaultDecoration={$isDefaultDecoration} style="--decoH: {decoHg}px">
+<div
+	class="outer rem0asd"
+	class:defaultDecoration={$isDefaultDecoration}
+	style="--decoH: {decoHg}px"
+>
 	{#if !$isDefaultDecoration}
 		<div
 			class="decoration"
@@ -65,7 +69,7 @@
 			overflow-x: hidden;
 		}
 	}
-	.outer:not(.defaultDecoration) {
+	.outer.rem0asd:not(.defaultDecoration) {
 		.inner {
 			height: calc(100vh - var(--decoH));
 		}

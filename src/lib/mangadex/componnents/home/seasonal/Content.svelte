@@ -24,18 +24,20 @@
 	function getLangData(title: Record<string, string>): string {
 		return get_value_from_title_and_random_if_undefined(title, "en") ?? "";
 	}
-	let seasonal = $derived(data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
-		id: t.id,
-		title: getLangData(t.attributes.title),
-		coverImage: get_cover_art({
-			cover_id: t.relationships.coverArt.id,
-			manga_id: t.id,
-			mode: CoverImageQuality.V256,
-			filename: t.relationships.coverArt.attributes.fileName,
-			client
-		}),
-		coverImageAlt: t.relationships.coverArt.id
-	})));
+	let seasonal = $derived(
+		data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
+			id: t.id,
+			title: getLangData(t.attributes.title),
+			coverImage: get_cover_art({
+				cover_id: t.relationships.coverArt.id,
+				manga_id: t.id,
+				mode: CoverImageQuality.V256,
+				filename: t.relationships.coverArt.attributes.fileName,
+				client
+			}),
+			coverImageAlt: t.relationships.coverArt.id
+		}))
+	);
 
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
@@ -91,5 +93,8 @@
 <style lang="scss">
 	.result {
 		margin: 1em;
+	}
+	swiper-slide {
+		padding-bottom: 10px;
 	}
 </style>
