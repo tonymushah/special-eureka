@@ -16,7 +16,7 @@ export async function mangadexTitleBar() {
 	);
 	defaultBehavior();
 	titleBarButtons.set(TOGGLE_SIDEBAR_KEY, {
-		title: "Toggle Sidebar Direction",
+		title: "Sidebar Direction",
 		onclick: TOGGLE_SIDEBAR_HANDLER
 	});
 }
