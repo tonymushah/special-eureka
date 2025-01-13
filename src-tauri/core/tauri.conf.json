@@ -10,7 +10,7 @@
 		"mangadex-desktop-api": {
 			"sdlExportPath": "../../src/lib/mangadex/schemas.graphqls",
 			"userAgent": "special-eureka/{{current_version}}",
-			"timeout": 30
+			"timeout": "15s"
 		},
 		"updater": {
 			"windows": {
