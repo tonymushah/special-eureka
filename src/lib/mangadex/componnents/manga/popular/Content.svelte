@@ -19,19 +19,13 @@
 		authors: Author[];
 	}
 
-	let {
-		title,
-		description,
-		tags,
-		contentRating = ContentRating.Safe,
-		authors
-	}: Props = $props();
+	let { title, description, tags, contentRating = ContentRating.Safe, authors }: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
+			currentTarget: EventTarget & HTMLButtonElement;
 			id: string;
 		};
 		tagClick: MouseEvent & {
@@ -80,7 +74,13 @@
 	<div class="authors">
 		{#if authors}
 			{#each authors as { id, name }}
-				<AuthorLink {id} {name} />
+				<AuthorLink
+					{id}
+					{name}
+					on:click={({ detail }) => {
+						dispatch("authorClick", detail);
+					}}
+				/>
 			{/each}
 		{/if}
 	</div>

@@ -6,6 +6,8 @@
 	import MangaPopularElement from "../../manga/popular/MangaPopulatElementWithReadableCoverImage.svelte";
 	import ButtonAccent from "../../theme/buttons/ButtonAccent.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
+	import { goto } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	let current_page_: number | undefined = $state(undefined);
 	$effect(() => {
@@ -54,6 +56,21 @@
 					{authors}
 					on:click={() => {
 						openTitle(id);
+					}}
+					on:authorClick={({ detail }) => {
+						console.debug(detail);
+						goto(
+							route("/mangadex/author/[id]", {
+								id: detail.id
+							})
+						);
+					}}
+					on:tagClick={({ detail }) => {
+						goto(
+							route("/mangadex/tag/[id]", {
+								id: detail.id
+							})
+						);
 					}}
 					{description}
 				/>

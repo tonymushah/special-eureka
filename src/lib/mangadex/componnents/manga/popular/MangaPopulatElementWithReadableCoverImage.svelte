@@ -36,7 +36,7 @@
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
+			currentTarget: EventTarget & HTMLButtonElement;
 			id: string;
 		};
 		tagClick: MouseEvent & {
