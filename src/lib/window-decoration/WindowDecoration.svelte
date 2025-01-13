@@ -56,11 +56,13 @@
 			backgroundOnHover: "#ddd"
 		});
 	}
-	export function setDefault() {
+	export async function setDefault() {
 		setDefaultLogo();
 		setDefaultTitle();
 		setDefaultFonts();
 		setDefaultStyles();
+		const { defaultBehavior } = await import("./stores/decorations.svelte");
+		defaultBehavior();
 	}
 </script>
 
