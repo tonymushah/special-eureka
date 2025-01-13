@@ -206,6 +206,8 @@
 	import type { AltTitleItem } from "./info/alt-titles/MangaAltTitles.svelte";
 	import type { LinkItem } from "./info/links/MangaLinksBase.svelte";
 	import { TitleKey } from "./Info.utils";
+	import { goto } from "$app/navigation";
+	import { route, routes } from "$lib/ROUTES";
 
 	interface Props {
 		authors?: SimpleItems[];
@@ -273,6 +275,66 @@
 	let toUseLinks = $derived(propsToUseLink(links ?? { hasNoLinks: true }));
 </script>
 
-<MangaPageChaptersInfo bind:altTitles idsKeysItem={tBButtons} links={toUseLinks}>
+<MangaPageChaptersInfo
+	bind:altTitles
+	idsKeysItem={tBButtons}
+	links={toUseLinks}
+	on:titlePButton={({ detail }) => {
+		const { key, id } = detail;
+		switch (key) {
+			case TitleKey.Author:
+				goto(
+					route("/mangadex/author/[id]", {
+						id: id
+					})
+				);
+				break;
+			case TitleKey.Artist:
+				goto(
+					route("/mangadex/author/[id]", {
+						id: id
+					})
+				);
+				break;
+			case TitleKey.Genres:
+				goto(
+					route("/mangadex/tag/[id]", {
+						id: id
+					})
+				);
+				break;
+			case TitleKey.Themes:
+				goto(
+					route("/mangadex/tag/[id]", {
+						id: id
+					})
+				);
+				break;
+			case TitleKey.Demographic:
+				goto(
+					route("/mangadex/tag/[id]", {
+						id: id
+					})
+				);
+				break;
+			case TitleKey.Format:
+				goto(
+					route("/mangadex/tag/[id]", {
+						id: id
+					})
+				);
+				break;
+			case TitleKey.Content:
+				goto(
+					route("/mangadex/tag/[id]", {
+						id: id
+					})
+				);
+				break;
+			default:
+				break;
+		}
+	}}
+>
 	{@render children?.()}
 </MangaPageChaptersInfo>
