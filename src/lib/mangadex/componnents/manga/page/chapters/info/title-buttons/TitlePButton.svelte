@@ -68,9 +68,6 @@
 			flex-direction: row;
 			flex-wrap: wrap;
 			gap: 5px;
-			h4 {
-				margin: 2px;
-			}
 		}
 	}
 </style>
