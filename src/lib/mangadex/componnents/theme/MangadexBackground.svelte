@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
-const appWindow = getCurrentWebviewWindow()
+	const appWindow = getCurrentWebviewWindow();
 
 	const contextMenuCallBack = async (e: MouseEvent) => {
 		await appWindow.emit("close-context-menu");

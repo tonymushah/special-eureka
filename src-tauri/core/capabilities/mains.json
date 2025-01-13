@@ -20,6 +20,7 @@
         "core:window:allow-set-theme",
 		"core:event:default",
         "clipboard-manager:default",
+        "clipboard-manager:allow-write-text",
 		"mangadex-desktop-api:allow-graphql",
 		"mangadex-desktop-api:allow-subscriptions",
         "opener:default",
