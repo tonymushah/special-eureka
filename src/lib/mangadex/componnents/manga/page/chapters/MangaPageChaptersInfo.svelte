@@ -31,8 +31,8 @@
 		links: MangaLinksItem[];
 		altTitles: AltTitleItem[];
 		altTitlesBoxTitle?: string;
-		top?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		top?: import("svelte").Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let {
@@ -72,7 +72,7 @@
 	{#if altTitles.length > 0}
 		<div class="alt-titles-outer">
 			<h4>{altTitlesBoxTitle}</h4>
-			<MangaAltTitles bind:titles={altTitles} />
+			<MangaAltTitles titles={altTitles} />
 		</div>
 	{/if}
 
