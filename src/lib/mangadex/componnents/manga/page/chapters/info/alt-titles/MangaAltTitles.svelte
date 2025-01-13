@@ -19,7 +19,7 @@
 </script>
 
 <div class="alt-titles">
-	{#each titles as { title, locale } (title)}
+	{#each titles as { title, locale }}
 		<AltTitle {title} {locale} />
 	{/each}
 </div>
