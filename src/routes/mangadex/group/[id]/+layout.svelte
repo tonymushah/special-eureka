@@ -36,7 +36,7 @@
 			<ButtonAccent
 				isBase
 				on:click={() => {
-					shellOpen(`https://mangadex.org/user/${data.id}`);
+					shellOpen(`https://mangadex.org/group/${data.id}`);
 				}}
 			>
 				<p><ExternalLinkIcon /> Open in browser</p>
