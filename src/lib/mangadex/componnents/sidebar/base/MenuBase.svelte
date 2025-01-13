@@ -17,13 +17,13 @@
 	let rtl = $derived($rlt_sub.data?.watchSidebarDirection == Direction.Rtl);
 </script>
 
-<div class:base={true} class:collapsed class:rtl>
+<div class="base" class:collapsed class:rtl>
 	{@render children?.()}
 </div>
 
 <style lang="scss">
 	div {
-		animation-duration: 300ms;
+		animation-duration: var(--sidebar-transition-duration);
 		animation-timing-function: ease-in-out;
 		animation-fill-mode: forwards;
 	}
