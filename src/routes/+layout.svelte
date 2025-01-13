@@ -46,7 +46,7 @@
 			<WindowDecoration />
 		</div>
 	{/if}
-	<div class="inner">
+	<div class="inner redad">
 		{@render children?.()}
 	</div>
 </div>
@@ -70,7 +70,7 @@
 		}
 	}
 	.outer.rem0asd:not(.defaultDecoration) {
-		.inner {
+		.inner.redad {
 			height: calc(100vh - var(--decoH));
 		}
 	}
