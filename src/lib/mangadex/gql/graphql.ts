@@ -1541,6 +1541,7 @@ export type MangaDexTheme = {
   mainBackground: Scalars['String']['output'];
   midTone: Scalars['String']['output'];
   primary: PrimaryColor;
+  scheme?: Maybe<ThemeScheme>;
   scrollbar: ScrollbarColor;
   status: StatusColor;
   textColor: Scalars['String']['output'];
@@ -1555,6 +1556,7 @@ export type MangaDexThemeInput = {
   mainBackground: Scalars['String']['input'];
   midTone: Scalars['String']['input'];
   primary: PrimaryColorInput;
+  scheme?: InputMaybe<ThemeScheme>;
   scrollbar: ScrollbarColorInput;
   status: StatusColorInput;
   textColor: Scalars['String']['input'];
@@ -2747,6 +2749,11 @@ export type ThemeProfileEntryInput = {
   name: Scalars['String']['input'];
   value: MangaDexThemeInput;
 };
+
+export enum ThemeScheme {
+  Dark = 'DARK',
+  Light = 'LIGHT'
+}
 
 export type UpdateMangaParam = {
   altTitles?: InputMaybe<Array<Scalars['JSONObject']['input']>>;

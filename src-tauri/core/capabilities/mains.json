@@ -17,6 +17,7 @@
         "core:window:allow-unmaximize",
         "core:window:allow-set-title",
         "core:window:allow-theme",
+        "core:window:allow-set-theme",
 		"core:event:default",
         "clipboard-manager:default",
 		"mangadex-desktop-api:allow-graphql",

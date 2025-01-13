@@ -1236,6 +1236,7 @@ type MangaDexTheme {
 	status: StatusColor!
 	indication: IndicatorColor!
 	danger: DangerColor!
+	scheme: ThemeScheme
 }
 
 input MangaDexThemeInput {
@@ -1250,6 +1251,7 @@ input MangaDexThemeInput {
 	status: StatusColorInput!
 	indication: IndicatorColorInput!
 	danger: DangerColorInput!
+	scheme: ThemeScheme
 }
 
 enum MangaDonwloadingState {
@@ -2142,6 +2144,11 @@ type ThemeProfileEntry {
 input ThemeProfileEntryInput {
 	name: String!
 	value: MangaDexThemeInput!
+}
+
+enum ThemeScheme {
+	LIGHT
+	DARK
 }
 
 """
