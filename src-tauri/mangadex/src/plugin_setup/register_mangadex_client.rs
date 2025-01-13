@@ -29,10 +29,13 @@ pub fn register_mangadex_client<R: Runtime>(
     if let Some(timeout) = config.timeout {
         cli_builder = cli_builder.timeout(*timeout);
     }
+
     let rate_limit = ServiceBuilder::new()
         .layer(BufferLayer::new(1024))
         .layer(Into::<RateLimitLayer>::into(config.ratelimit.clone()));
     cli_builder = cli_builder.connector_layer(rate_limit);
-    app.manage(MangaDexClient::new(cli_builder.build()?));
+    app.manage(MangaDexClient::new(tauri::async_runtime::block_on(
+        async { cli_builder.build() },
+    )?));
     Ok(())
 }
