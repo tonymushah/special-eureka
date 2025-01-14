@@ -472,6 +472,46 @@ input CommitUploadSessionParam {
 	publishAt: MangaDexDateTime = null
 }
 
+type ContentProfile {
+	originalLanguages: [Language!]!
+	publicationDemographic: [Demographic!]!
+	includedTags: [UUID!]!
+	includedTagsMode: TagSearchMode
+	excludedTags: [UUID!]!
+	excludedTagsMode: TagSearchMode
+	status: [MangaStatus!]!
+	excludedOriginalLanguage: [Language!]!
+	translatedLanguages: [Language!]!
+	contentRating: [ContentRating!]!
+	excludedGroups: [UUID!]!
+	excludedUploaders: [UUID!]!
+}
+
+type ContentProfileEntry {
+	name: String!
+	value: ContentProfile!
+}
+
+input ContentProfileEntryInput {
+	name: String!
+	value: ContentProfileInput!
+}
+
+input ContentProfileInput {
+	originalLanguages: [Language!]! = []
+	publicationDemographic: [Demographic!]! = []
+	includedTags: [UUID!]! = []
+	includedTagsMode: TagSearchMode
+	excludedTags: [UUID!]! = []
+	excludedTagsMode: TagSearchMode
+	status: [MangaStatus!]! = []
+	excludedOriginalLanguage: [Language!]! = []
+	translatedLanguages: [Language!]! = []
+	contentRating: [ContentRating!]! = []
+	excludedGroups: [UUID!]! = []
+	excludedUploaders: [UUID!]! = []
+}
+
 enum ContentRating {
 	EROTICA
 	PORNOGRAPHIC
@@ -2089,6 +2129,9 @@ type Subscriptions {
 	watchCoverTasksList: [UUID!]!
 	watchMangaDownloadState(mangaId: UUID!): MangaDownloadState!
 	watchMangaTasksList: [UUID!]!
+	watchContentProfiles: [ContentProfileEntry!]!
+	watchContentProfileDefaultName: String
+	watchContentProfileDefault: ContentProfile!
 }
 
 type Tag {
@@ -2322,6 +2365,12 @@ type UserOptionMutations {
 	setThemeProfiles(entries: [ThemeProfileEntryInput!]!): Int!
 	setChapterFeedStyle(style: ChapterFeedStyle!): ChapterFeedStyle!
 	setPaginationStyle(style: PaginationStyle!): PaginationStyle!
+	updateDefaultContentProfile(profile: ContentProfileInput): ContentProfile!
+	setDefaultContentProfileKey(name: String): String
+	setContentProfile(name: String!, profile: ContentProfileInput): ContentProfile!
+	deleteContentProfile(name: String!): ContentProfile
+	clearContentProfiles: Boolean!
+	setContentProfiles(entries: [ContentProfileEntryInput!]!): Int!
 }
 
 type UserQueries {

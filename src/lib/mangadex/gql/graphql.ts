@@ -627,6 +627,48 @@ export type CommitUploadSessionParam = {
   volume?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ContentProfile = {
+  __typename?: 'ContentProfile';
+  contentRating: Array<ContentRating>;
+  excludedGroups: Array<Scalars['UUID']['output']>;
+  excludedOriginalLanguage: Array<Language>;
+  excludedTags: Array<Scalars['UUID']['output']>;
+  excludedTagsMode?: Maybe<TagSearchMode>;
+  excludedUploaders: Array<Scalars['UUID']['output']>;
+  includedTags: Array<Scalars['UUID']['output']>;
+  includedTagsMode?: Maybe<TagSearchMode>;
+  originalLanguages: Array<Language>;
+  publicationDemographic: Array<Demographic>;
+  status: Array<MangaStatus>;
+  translatedLanguages: Array<Language>;
+};
+
+export type ContentProfileEntry = {
+  __typename?: 'ContentProfileEntry';
+  name: Scalars['String']['output'];
+  value: ContentProfile;
+};
+
+export type ContentProfileEntryInput = {
+  name: Scalars['String']['input'];
+  value: ContentProfileInput;
+};
+
+export type ContentProfileInput = {
+  contentRating?: Array<ContentRating>;
+  excludedGroups?: Array<Scalars['UUID']['input']>;
+  excludedOriginalLanguage?: Array<Language>;
+  excludedTags?: Array<Scalars['UUID']['input']>;
+  excludedTagsMode?: InputMaybe<TagSearchMode>;
+  excludedUploaders?: Array<Scalars['UUID']['input']>;
+  includedTags?: Array<Scalars['UUID']['input']>;
+  includedTagsMode?: InputMaybe<TagSearchMode>;
+  originalLanguages?: Array<Language>;
+  publicationDemographic?: Array<Demographic>;
+  status?: Array<MangaStatus>;
+  translatedLanguages?: Array<Language>;
+};
+
 export enum ContentRating {
   Erotica = 'EROTICA',
   Pornographic = 'PORNOGRAPHIC',
@@ -2534,6 +2576,9 @@ export type Subscriptions = {
   watchChapterLanguages: Array<Language>;
   watchChaptersTasksList: Array<Scalars['UUID']['output']>;
   watchClientInfo?: Maybe<ClientInfo>;
+  watchContentProfileDefault: ContentProfile;
+  watchContentProfileDefaultName?: Maybe<Scalars['String']['output']>;
+  watchContentProfiles: Array<ContentProfileEntry>;
   watchCover: CoverAttributes;
   watchCoverDownloadState: CoverDownloadState;
   watchCoverTasksList: Array<Scalars['UUID']['output']>;
@@ -2943,12 +2988,17 @@ export type UserMutationsUnfollowArgs = {
 
 export type UserOptionMutations = {
   __typename?: 'UserOptionMutations';
+  clearContentProfiles: Scalars['Boolean']['output'];
   clearCoverImagesCaches: Scalars['Boolean']['output'];
   clearFaviconCache: Scalars['Boolean']['output'];
   clearThemesProfiles: Scalars['Boolean']['output'];
+  deleteContentProfile?: Maybe<ContentProfile>;
   deleteThemeProfile?: Maybe<MangaDexTheme>;
   setChapterFeedStyle: ChapterFeedStyle;
   setChapterLanguages: Array<Language>;
+  setContentProfile: ContentProfile;
+  setContentProfiles: Scalars['Int']['output'];
+  setDefaultContentProfileKey?: Maybe<Scalars['String']['output']>;
   setDefaultThemeProfile?: Maybe<Scalars['String']['output']>;
   setImageFit: ImageFit;
   setLongstripImageWidth: Scalars['Float']['output'];
@@ -2959,7 +3009,13 @@ export type UserOptionMutations = {
   setSidebarDirection: Direction;
   setThemeProfile: MangaDexTheme;
   setThemeProfiles: Scalars['Int']['output'];
+  updateDefaultContentProfile: ContentProfile;
   updateDefaultTheme: MangaDexTheme;
+};
+
+
+export type UserOptionMutationsDeleteContentProfileArgs = {
+  name: Scalars['String']['input'];
 };
 
 
@@ -2975,6 +3031,22 @@ export type UserOptionMutationsSetChapterFeedStyleArgs = {
 
 export type UserOptionMutationsSetChapterLanguagesArgs = {
   languages: Array<Language>;
+};
+
+
+export type UserOptionMutationsSetContentProfileArgs = {
+  name: Scalars['String']['input'];
+  profile?: InputMaybe<ContentProfileInput>;
+};
+
+
+export type UserOptionMutationsSetContentProfilesArgs = {
+  entries: Array<ContentProfileEntryInput>;
+};
+
+
+export type UserOptionMutationsSetDefaultContentProfileKeyArgs = {
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -3026,6 +3098,11 @@ export type UserOptionMutationsSetThemeProfileArgs = {
 
 export type UserOptionMutationsSetThemeProfilesArgs = {
   entries: Array<ThemeProfileEntryInput>;
+};
+
+
+export type UserOptionMutationsUpdateDefaultContentProfileArgs = {
+  profile?: InputMaybe<ContentProfileInput>;
 };
 
 
