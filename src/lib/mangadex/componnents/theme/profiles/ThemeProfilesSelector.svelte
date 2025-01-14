@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from "svelte/legacy";
 
 	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
 	import { derived } from "svelte/store";
@@ -42,6 +42,7 @@
 			--primary={profile.value.primary.primary}
 			--text-color={profile.value.textColor}
 			--danger={profile.value.danger.default}
+			--mid-tone={profile.value.mid_tone}
 		>
 			{#if $defaultThemeProfileKey == profile.name}
 				<PrimaryButton>

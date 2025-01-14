@@ -16,7 +16,7 @@
 	import { custom, type MangadexTheme } from "@mangadex/theme";
 	import { debounce } from "lodash";
 	interface Props {
-		profile?: import('svelte').Snippet;
+		profile?: import("svelte").Snippet;
 	}
 
 	let { profile }: Props = $props();
@@ -85,12 +85,114 @@
 			<Title type={3}>Accents</Title>
 			<div class="colors-editor">
 				<article class="picker">
-					<AccentColorPickers title="Default" bind:accent={$theme.accents.default} />
-					<AccentColorPickers title="Accent L1" bind:accent={$theme.accents.l1} />
-					<AccentColorPickers title="Accent L2" bind:accent={$theme.accents.l2} />
-					<AccentColorPickers title="Accent L3" bind:accent={$theme.accents.l3} />
-					<AccentColorPickers title="Accent L4" bind:accent={$theme.accents.l4} />
-					<AccentColorPickers title="Accent L5" bind:accent={$theme.accents.l5} />
+					<AccentColorPickers
+						title="Default"
+						accent={{
+							subscribe: derived(theme, ($theme) => $theme.accents.default).subscribe,
+							set(value) {
+								theme.update(($theme) => {
+									$theme.accents.default = value;
+									return $theme;
+								});
+							},
+							update(updater) {
+								theme.update(($theme) => {
+									$theme.accents.default = updater($theme.accents.default);
+									return $theme;
+								});
+							}
+						}}
+					/>
+					<AccentColorPickers
+						title="Accent L1"
+						accent={{
+							subscribe: derived(theme, ($theme) => $theme.accents.l1).subscribe,
+							set(value) {
+								theme.update(($theme) => {
+									$theme.accents.l1 = value;
+									return $theme;
+								});
+							},
+							update(updater) {
+								theme.update(($theme) => {
+									$theme.accents.l1 = updater($theme.accents.l1);
+									return $theme;
+								});
+							}
+						}}
+					/>
+					<AccentColorPickers
+						title="Accent L2"
+						accent={{
+							subscribe: derived(theme, ($theme) => $theme.accents.l2).subscribe,
+							set(value) {
+								theme.update(($theme) => {
+									$theme.accents.l2 = value;
+									return $theme;
+								});
+							},
+							update(updater) {
+								theme.update(($theme) => {
+									$theme.accents.l2 = updater($theme.accents.l2);
+									return $theme;
+								});
+							}
+						}}
+					/>
+					<AccentColorPickers
+						title="Accent L3"
+						accent={{
+							subscribe: derived(theme, ($theme) => $theme.accents.l3).subscribe,
+							set(value) {
+								theme.update(($theme) => {
+									$theme.accents.l3 = value;
+									return $theme;
+								});
+							},
+							update(updater) {
+								theme.update(($theme) => {
+									$theme.accents.l3 = updater($theme.accents.l3);
+									return $theme;
+								});
+							}
+						}}
+					/>
+					<AccentColorPickers
+						title="Accent L4"
+						accent={{
+							subscribe: derived(theme, ($theme) => $theme.accents.l4).subscribe,
+							set(value) {
+								theme.update(($theme) => {
+									$theme.accents.l4 = value;
+									return $theme;
+								});
+							},
+							update(updater) {
+								theme.update(($theme) => {
+									$theme.accents.l4 = updater($theme.accents.l4);
+									return $theme;
+								});
+							}
+						}}
+					/>
+					<AccentColorPickers
+						title="Accent L5"
+						accent={{
+							subscribe: derived(theme, ($theme) => $theme.accents.l5).subscribe,
+							set(value) {
+								theme.update(($theme) => {
+									$theme.accents.l5 = value;
+									return $theme;
+								});
+							},
+							update(updater) {
+								theme.update(($theme) => {
+									$theme.accents.l5 = updater($theme.accents.l5);
+									return $theme;
+								});
+							}
+						}}
+					/>
 				</article>
 				<article class="result">
 					<AccentButtons />
