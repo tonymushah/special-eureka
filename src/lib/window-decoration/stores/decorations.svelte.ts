@@ -12,7 +12,14 @@ export type TitleBarButton = {
 
 export const HOME_BUTTON_HANDLER: MouseEventHandler<HTMLButtonElement> = async () => {
 	const appWindow = getCurrentWebviewWindow();
-	await appWindow.emit("redirect", "/");
+	await appWindow.emitTo(
+		{
+			kind: "WebviewWindow",
+			label: appWindow.label
+		},
+		"redirect",
+		"/"
+	);
 };
 
 export const NEW_WINDOW_HANDLER: MouseEventHandler<HTMLButtonElement> = async () => {
