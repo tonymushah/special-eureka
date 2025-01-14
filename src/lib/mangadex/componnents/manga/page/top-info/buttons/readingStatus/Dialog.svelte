@@ -35,7 +35,7 @@
 	}
 </script>
 
-<dialog bind:this={dialog}>
+<dialog bind:this={dialog} class="manga-search-filter">
 	<div class="title">
 		<p>Add to Library</p>
 		<ButtonAccent on:click={closeDialog}>

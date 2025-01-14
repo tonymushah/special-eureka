@@ -65,7 +65,8 @@ export class GQLAuthorFetcherResultData implements AuthorSearchFetcherResultData
 					id: v.id,
 					value: v.attributes.name
 				})),
-				this.nextParams()
+				this.nextParams(),
+				this.client
 			);
 		} else {
 			throw new Error("No data and no erro, what is happening??");
@@ -94,7 +95,8 @@ const gqlAuthorFetcher: AuthorSearchFetcher = async function (name: string) {
 				offset: data.author.list.offset,
 				limit: data.author.list.limit,
 				total: data.author.list.total
-			}
+			},
+			mangadexClient
 		);
 	} else {
 		throw new Error("No data and no erro, what is happening??");

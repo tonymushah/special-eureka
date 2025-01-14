@@ -12,6 +12,7 @@
 		type AuthorSearchFetcherResultData
 	} from "../../contexts/authorArtist";
 	import { tagWritableToComboboxOptionWritable } from "./utils";
+	import AuthorsSearchSelectMenu from "./AuthorsSearchSelectMenu.svelte";
 
 	interface Props {
 		store: Writable<Tag[]>;
@@ -26,6 +27,12 @@
 		selected: tagWritableToComboboxOptionWritable(store),
 		forceVisible: true,
 		multiple: true,
+		positioning: {
+			placement: "top",
+			fitViewport: true,
+			sameWidth: true
+			// strategy: "fixed"
+		},
 		portal: "dialog"
 	});
 	const {
@@ -40,60 +47,59 @@
 	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = $state(undefined);
 	let hasNext = $derived(nextFetch != undefined && typeof nextFetch == "function");
 	const isFetching = writable(false);
-	let debounceFunc: DebouncedFunc<(...args: any) => any> | undefined = $state(undefined);
+	const start: DebouncedFunc<(...args: any) => any> = debounce(() => {
+		if (!get(isFetching)) {
+			currentAuthorSearch.set([]);
+			isFetching.set(true);
+			handleASFRDPromise(authorFetch($inputValue));
+		}
+	}, 350);
 	onDestroy(() => {
-		debounceFunc?.cancel();
+		start?.cancel();
 	});
-	async function handleASFRDPromise(prom: Promise<AuthorSearchFetcherResultData>) {
+	const handleASFRDPromise = debounce(async function (
+		prom: Promise<AuthorSearchFetcherResultData>
+	) {
 		await prom
 			.then((result) => {
 				currentAuthorSearch.update(($as) => {
 					return [...$as, ...result.data];
 				});
 				if (result.hasNext()) {
-					nextFetch = result.next;
+					nextFetch = () => result.next();
 				} else {
 					nextFetch = undefined;
 				}
 			})
 			.finally(() => isFetching.set(false));
-	}
+	}, 300);
 	$effect(() => {
 		if ($touchedInput) {
-			debounceFunc?.cancel();
-			debounceFunc = debounce(() => {
-				if (!get(isFetching)) {
-					console.log("should fetch");
-					currentAuthorSearch.set([]);
-					$isFetching = true;
-					handleASFRDPromise(authorFetch($inputValue));
-				}
-			}, 350);
-			debounceFunc();
+			start?.cancel();
+			start();
 		}
 	});
-	function next() {
-		if (!$isFetching && nextFetch != undefined && typeof nextFetch == "function") {
-			$isFetching = true;
-			handleASFRDPromise(nextFetch());
+	const next = debounce(function () {
+		if (!get(isFetching) && nextFetch != undefined && typeof nextFetch == "function") {
+			isFetching.set(true);
+			handleASFRDPromise?.(nextFetch());
 		}
-	}
+	}, 300);
 	let toObserve: HTMLElement | undefined = $state(undefined);
-	let obs_debounce_func = $state(
-		debounce<IntersectionObserverCallback>((entries, obs) => {
-			entries.forEach((entry) => {
-				if (entry.intersectionRatio <= 0) return;
-				next();
-			});
-		}, 500)
-	);
+	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
+		entries.forEach((entry) => {
+			if (entry.intersectionRatio <= 0) return;
+			next();
+		});
+	}, 500);
+
 	const obs = new IntersectionObserver(
 		(entries, obs_) => {
 			obs_debounce_func.cancel();
 			obs_debounce_func(entries, obs_);
 		},
 		{
-			threshold: 1.0
+			threshold: 0.2
 		}
 	);
 	$effect(() => {
@@ -104,6 +110,8 @@
 	});
 	onDestroy(() => {
 		obs.disconnect();
+		next.cancel();
+		handleASFRDPromise.cancel();
 	});
 	// $: console.debug($tags);
 	// $: console.debug(`Is fetching author ${$isFetching}`);
@@ -124,25 +132,16 @@
 	</div>
 </div>
 
-{#if $open}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $currentAuthorSearch as author (author.id)}
-					<li
-						use:melt={$option({ value: author.id, label: author.value })}
-						class:isSelected={$isSelected(author.id)}
-					>
-						<h4>{author.value}</h4>
-					</li>
-				{/each}
-				{#if !$isFetching && hasNext}
-					<div bind:this={toObserve} />
-				{/if}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
+<AuthorsSearchSelectMenu
+	{menu}
+	bind:toObserve
+	{open}
+	{currentAuthorSearch}
+	{isFetching}
+	{isSelected}
+	{option}
+	{hasNext}
+/>
 
 <style lang="scss">
 	.layout {
@@ -206,40 +205,5 @@
 	}
 	.tag:active {
 		background-color: var(--accent-l1-active);
-	}
-	.menu-outer {
-		display: flex;
-		flex-direction: column;
-		height: 200px;
-		z-index: 10000;
-	}
-	menu {
-		margin: 0px;
-		border-radius: 0.25em;
-		list-style: none;
-		background-color: var(--accent);
-
-		overflow-y: scroll;
-		color: var(--text-color);
-		padding-left: 0em;
-		li {
-			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
-			h4 {
-				margin: 0px;
-			}
-		}
-		li[data-highlighted] {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):hover {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):active {
-			background-color: var(--accent-active);
-		}
-		li.isSelected {
-			background-color: var(--primary);
-		}
 	}
 </style>
