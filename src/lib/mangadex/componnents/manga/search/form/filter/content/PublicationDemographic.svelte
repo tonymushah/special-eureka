@@ -26,7 +26,7 @@
 			onclick={() => toggleDemographic(Demographic.None)}
 		>
 			<div class="icon">
-				{#if $selected.includes(Demographic.None)}
+				{#if !$selected.includes(Demographic.None)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -39,7 +39,7 @@
 			onclick={() => toggleDemographic(Demographic.Josei)}
 		>
 			<div class="icon">
-				{#if $selected.includes(Demographic.Josei)}
+				{#if !$selected.includes(Demographic.Josei)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -52,7 +52,7 @@
 			onclick={() => toggleDemographic(Demographic.Seinen)}
 		>
 			<div class="icon">
-				{#if $selected.includes(Demographic.Seinen)}
+				{#if !$selected.includes(Demographic.Seinen)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -65,7 +65,7 @@
 			onclick={() => toggleDemographic(Demographic.Shoujo)}
 		>
 			<div class="icon">
-				{#if $selected.includes(Demographic.Shoujo)}
+				{#if !$selected.includes(Demographic.Shoujo)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -78,7 +78,7 @@
 			onclick={() => toggleDemographic(Demographic.Shounen)}
 		>
 			<div class="icon">
-				{#if $selected.includes(Demographic.Shounen)}
+				{#if !$selected.includes(Demographic.Shounen)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />

@@ -26,7 +26,7 @@
 			onclick={() => toggleStatus(MangaStatus.Ongoing)}
 		>
 			<div class="icon">
-				{#if $selected.includes(MangaStatus.Ongoing)}
+				{#if !$selected.includes(MangaStatus.Ongoing)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -39,7 +39,7 @@
 			onclick={() => toggleStatus(MangaStatus.Completed)}
 		>
 			<div class="icon">
-				{#if $selected.includes(MangaStatus.Completed)}
+				{#if !$selected.includes(MangaStatus.Completed)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -52,7 +52,7 @@
 			onclick={() => toggleStatus(MangaStatus.Hiatus)}
 		>
 			<div class="icon">
-				{#if $selected.includes(MangaStatus.Hiatus)}
+				{#if !$selected.includes(MangaStatus.Hiatus)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -65,7 +65,7 @@
 			onclick={() => toggleStatus(MangaStatus.Cancelled)}
 		>
 			<div class="icon">
-				{#if $selected.includes(MangaStatus.Cancelled)}
+				{#if !$selected.includes(MangaStatus.Cancelled)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />

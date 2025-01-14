@@ -26,7 +26,7 @@
 			onclick={() => toggleContentRating(ContentRating.Safe)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Safe)}
+				{#if !$selected.includes(ContentRating.Safe)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -39,7 +39,7 @@
 			onclick={() => toggleContentRating(ContentRating.Suggestive)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Suggestive)}
+				{#if !$selected.includes(ContentRating.Suggestive)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -52,7 +52,7 @@
 			onclick={() => toggleContentRating(ContentRating.Erotica)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Erotica)}
+				{#if !$selected.includes(ContentRating.Erotica)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -65,7 +65,7 @@
 			onclick={() => toggleContentRating(ContentRating.Pornographic)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Pornographic)}
+				{#if !$selected.includes(ContentRating.Pornographic)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />

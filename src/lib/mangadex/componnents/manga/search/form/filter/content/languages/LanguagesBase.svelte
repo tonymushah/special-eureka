@@ -11,8 +11,21 @@
 	interface Props {
 		title: string;
 		selecteds: Writable<Language[]>;
+		placement?:
+			| "top"
+			| "top-start"
+			| "top-end"
+			| "right"
+			| "right-start"
+			| "right-end"
+			| "bottom"
+			| "bottom-start"
+			| "bottom-end"
+			| "left"
+			| "left-start"
+			| "left-end";
 	}
-	let { title, selecteds }: Props = $props();
+	let { title, selecteds, placement = "top" }: Props = $props();
 	const selecteds_options = der(selecteds, ($s) => {
 		return $s.map<SelectOption<Language>>((ss) => ({
 			value: ss
@@ -25,7 +38,7 @@
 	} = createSelect<Language, true>({
 		forceVisible: true,
 		positioning: {
-			placement: "top",
+			placement,
 			fitViewport: true,
 			sameWidth: true
 			// strategy: "fixed"
