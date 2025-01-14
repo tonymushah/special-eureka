@@ -30,7 +30,7 @@
 			sameWidth: true
 			// strategy: "fixed"
 		},
-		portal: "dialog.manga-search-dialog",
+		portal: "dialog",
 		multiple: true,
 		selected: {
 			subscribe(run, invalidate) {
