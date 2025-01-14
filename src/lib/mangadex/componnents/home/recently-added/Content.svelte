@@ -8,6 +8,7 @@
 	import type { SwiperContainer } from "swiper/element";
 	import MangaElementBase4 from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
+	import type { SwiperOptions } from "swiper/types";
 
 	interface Props {
 		data: RecentlyAddedHomeQueryQuery;
@@ -42,7 +43,7 @@
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
-		const swiperParams = {
+		const swiperParams: SwiperOptions = {
 			slidesPerView: "auto",
 			breakpoints: {
 				640: {
@@ -55,6 +56,7 @@
 					slidesPerView: 6
 				}
 			},
+			mousewheel: true,
 			freeMode: true,
 			on: {
 				init() {

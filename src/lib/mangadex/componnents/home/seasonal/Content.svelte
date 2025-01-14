@@ -8,6 +8,7 @@
 	import { onMount } from "svelte";
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
+	import type { SwiperOptions } from "swiper/types";
 
 	const client = getContextClient();
 	interface Props {
@@ -42,7 +43,7 @@
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
-		const swiperParams = {
+		const swiperParams: SwiperOptions = {
 			slidesPerView: "auto",
 			breakpoints: {
 				640: {
@@ -55,6 +56,7 @@
 					slidesPerView: 6
 				}
 			},
+			mousewheel: true,
 			freeMode: true,
 			on: {
 				init() {

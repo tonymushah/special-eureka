@@ -4,6 +4,7 @@
 	import type { SwiperContainer } from "swiper/element";
 	import { onMount } from "svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
+	import type { SwiperOptions } from "swiper/types";
 
 	interface Props {
 		mangas: StaffPicksTitle[];
@@ -13,7 +14,7 @@
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
-		const swiperParams = {
+		const swiperParams: SwiperOptions = {
 			slidesPerView: 1,
 			breakpoints: {
 				640: {
@@ -26,6 +27,7 @@
 					slidesPerView: 4
 				}
 			},
+			mousewheel: true,
 			freeMode: true,
 			on: {
 				init() {
