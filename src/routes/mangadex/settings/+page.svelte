@@ -5,7 +5,8 @@
 	import ThemeIcon from "./(icons)/ThemeIcon.svelte";
 	import type { ComponentProps } from "svelte";
 	import AuthIcon from "./(icons)/AuthIcon.svelte";
-	let settings: ComponentProps<SettingsItem>[] = [
+	import ContentIcon from "./(icons)/ContentIcon.svelte";
+	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
 			title: "Themes",
 			description: "Add, Edit, Delete theme profiles to edit MangaDex Colors and more!",
@@ -17,6 +18,12 @@
 			description: "Log in or out from MangaDex",
 			href: route("/mangadex/settings/auth"),
 			icon: AuthIcon
+		},
+		{
+			title: "Content Profile",
+			description: "Add, edit, Delete content profile to edit Mangadex contents",
+			href: route("/mangadex/settings/content-profiles"),
+			icon: ContentIcon
 		}
 	];
 </script>
