@@ -22,7 +22,8 @@
         "editor.formatOnSave": true
     },
     "[svelte]": {
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "svelte.svelte-vscode",
     },
     "rust-analyzer.showUnlinkedFileNotification": false,
     "evenBetterToml.schema.associations": {
