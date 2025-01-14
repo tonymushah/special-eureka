@@ -7,6 +7,10 @@ use crate::{
             pagination_style::{PaginationStyle, PaginationStyleStore},
         },
         structs::{
+            content::{
+                profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
+                ContentProfile,
+            },
             longstrip_image_width::LongstripImageWidthStore,
             theme::{
                 profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
@@ -242,5 +246,90 @@ impl UserOptionMutations {
         inner.insert_and_save(&store_write)?;
         watches.pagination_style.send_data(inner)?;
         Ok(PaginationStyleStore::extract_from_store(&store_write)?.into())
+    }
+    pub async fn update_default_content_profile(
+        &self,
+        ctx: &Context<'_>,
+        profile: Option<ContentProfile>,
+    ) -> Result<ContentProfile> {
+        let profile = profile.unwrap_or_default();
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_write = store.write().await;
+        let name = (*ContentProfileDefaultKey::extract_from_store(&store_write)?)
+            .clone()
+            .ok_or(crate::Error::NoDefaultContentProfileSelected)?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ContentProfiles::extract_from_store(&store_write)?;
+        (*inner).insert(name, profile.clone());
+        inner.insert_and_save(&store_write)?;
+        watches.content_profiles.send_data(inner)?;
+        Ok(profile)
+    }
+    pub async fn set_default_content_profile_key(
+        &self,
+        ctx: &Context<'_>,
+        name: Option<String>,
+    ) -> Result<Option<String>> {
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ContentProfileDefaultKey::from(name);
+        inner.insert_and_save(&store_write)?;
+        watches.content_profiles_default_key.send_data(inner)?;
+        Ok(ContentProfileDefaultKey::extract_from_store(&store_write)?.into_inner())
+    }
+    pub async fn set_content_profile(
+        &self,
+        ctx: &Context<'_>,
+        name: String,
+        profile: Option<ContentProfile>,
+    ) -> Result<ContentProfile> {
+        let profile = profile.unwrap_or_default();
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ContentProfiles::extract_from_store(&store_write)?;
+        (*inner).insert(name, profile.clone());
+        inner.insert_and_save(&store_write)?;
+        watches.content_profiles.send_data(inner)?;
+        Ok(profile)
+    }
+    pub async fn delete_content_profile(
+        &self,
+        ctx: &Context<'_>,
+        name: String,
+    ) -> Result<Option<ContentProfile>> {
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ContentProfiles::extract_from_store(&store_write)?;
+        let content = (*inner).remove(&name);
+        inner.insert_and_save(&store_write)?;
+        watches.content_profiles.send_data(inner)?;
+        Ok(content)
+    }
+    pub async fn clear_content_profiles(&self, ctx: &Context<'_>) -> Result<bool> {
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut inner = ContentProfiles::extract_from_store(&store_write)?;
+        (*inner).clear();
+        inner.insert_and_save(&store_write)?;
+        watches.content_profiles.send_data(inner)?;
+        Ok(true)
+    }
+    pub async fn set_content_profiles(
+        &self,
+        ctx: &Context<'_>,
+        entries: Vec<ContentProfileEntry>,
+    ) -> Result<usize> {
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_write = store.write().await;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let inner = ContentProfiles::from(entries);
+        inner.insert_and_save(&store_write)?;
+        let len = inner.len();
+        watches.content_profiles.send_data(inner)?;
+        Ok(len)
     }
 }

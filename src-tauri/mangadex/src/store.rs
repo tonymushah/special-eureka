@@ -8,6 +8,7 @@ use types::{
         pagination_style::PaginationStyleStore,
     },
     structs::{
+        content::profiles::{ContentProfileDefaultKey, ContentProfiles},
         longstrip_image_width::LongstripImageWidthStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
@@ -52,6 +53,8 @@ pub fn get_store_builder<R: Runtime>(
         let b = ThemeProfileDefaultKey::default_store(b)?;
         let b = ChapterFeedStyleStore::default_store(b)?;
         let b = PaginationStyleStore::default_store(b)?;
+        let b = ContentProfiles::default_store(b)?;
+        let b = ContentProfileDefaultKey::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)

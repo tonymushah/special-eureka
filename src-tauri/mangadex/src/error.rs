@@ -104,6 +104,8 @@ pub enum Error {
     NoAccessSubCancelTokenGQLCtx,
     #[error("Cannot access at the chapter notification queue")]
     NoAccessChapterINSHandle,
+    #[error("No default Content Profile selected")]
+    NoDefaultContentProfileSelected,
 }
 
 impl Error {

@@ -1,6 +1,8 @@
 use crate::objects::oauth::ClientInfo;
 use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
 use crate::store::types::enums::pagination_style::PaginationStyle;
+use crate::store::types::structs::content::profiles::ContentProfileEntry;
+use crate::store::types::structs::content::ContentProfile;
 use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
 use crate::store::types::structs::theme::MangaDexTheme;
 use crate::Result;
@@ -422,5 +424,29 @@ impl Subscriptions {
         ctx: &'ctx Context<'ctx>,
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
         MangaDownloadSubs.listen_to_manga_tasks(ctx).await
+    }
+    pub async fn watch_content_profiles<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = Vec<ContentProfileEntry>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_content_profiles(ctx)
+            .await
+    }
+    pub async fn watch_content_profile_default_name<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_content_profile_default_name(ctx)
+            .await
+    }
+    pub async fn watch_content_profile_default<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = ContentProfile> + 'ctx> {
+        UserOptionSubscriptions
+            .listen_to_content_profile_default(ctx)
+            .await
     }
 }

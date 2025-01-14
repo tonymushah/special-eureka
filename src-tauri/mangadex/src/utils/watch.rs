@@ -13,6 +13,7 @@ use self::{
     author::AuthorWatch,
     chapter::ChapterWatch,
     chapter_languages::ChapterLanguagesWatch,
+    content::{key::ContentProfileDefaultKeyWatch, ContentProfilesWatch},
     cover::CoverWatch,
     custom_list::CustomListWatch,
     download_state::DownloadStateWatch,
@@ -44,6 +45,7 @@ pub mod chapter;
 pub mod chapter_feed_style;
 pub mod chapter_languages;
 pub mod client_info;
+pub mod content;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
@@ -238,4 +240,6 @@ watches_implementation! {
     client_info => ClientInfoWatch,
     chapter_feed_style => ChapterFeedStyleWatch,
     pagination_style => PaginationStyleWatch,
+    content_profiles => ContentProfilesWatch,
+    content_profiles_default_key => ContentProfileDefaultKeyWatch,
 }

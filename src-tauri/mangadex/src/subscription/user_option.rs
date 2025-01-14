@@ -4,7 +4,10 @@ use crate::{
             chapter_feed_style::ChapterFeedStyle, image_fit::ImageFit,
             pagination_style::PaginationStyle,
         },
-        structs::theme::{profiles::ThemeProfileEntry, MangaDexTheme},
+        structs::{
+            content::{profiles::ContentProfileEntry, ContentProfile},
+            theme::{profiles::ThemeProfileEntry, MangaDexTheme},
+        },
     },
     utils::get_watches_from_graphql_context,
     Result,
@@ -165,6 +168,75 @@ impl UserOptionSubscriptions {
     ) -> Result<impl Stream<Item = PaginationStyle> + 'ctx> {
         WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
             w.pagination_style.subscribe()
+        })
+    }
+    pub async fn listen_to_content_profiles<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = Vec<ContentProfileEntry>> + 'ctx> {
+        Ok(
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.content_profiles.subscribe()
+            })?
+            .map(|w| w.get_entries()),
+        )
+    }
+    pub async fn listen_to_content_profile_default_name<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = Option<String>> + 'ctx> {
+        Ok(
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.content_profiles_default_key.subscribe()
+            })?
+            .map(|e| e.into_inner()),
+        )
+    }
+    pub async fn listen_to_content_profile_default<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = ContentProfile> + 'ctx> {
+        let (content_profike_recv, default_name_recv) = {
+            let watch = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            (
+                watch.content_profiles.subscribe(),
+                watch.content_profiles_default_key.subscribe(),
+            )
+        };
+        let mut themes_stream = WatchSubscriptionStream::<_>::from_async_graphql_context::<
+            _,
+            tauri::Wry,
+        >(ctx, |w| w.content_profiles.subscribe())?;
+        let mut default_name_stream =
+            Box::pin(self.listen_to_content_profile_default_name(ctx).await?);
+        Ok(stream! {
+            loop {
+                select! {
+                    Some(m_key) = default_name_stream.next() => {
+                        if let Some(key) = m_key {
+                            let theme = {
+                                content_profike_recv.borrow().get(&key).cloned()
+                            };
+                            yield theme.unwrap_or_default();
+                        } else {
+                            yield ContentProfile::default();
+                        }
+                    }
+                    Some(themes) = themes_stream.next() => {
+                        let m_key = {
+                            (*default_name_recv.borrow()).clone()
+                        };
+                        if let Some(key) = m_key.into_inner() {
+                            yield themes.get(&key).cloned().unwrap_or_default();
+                        } else {
+                            yield ContentProfile::default();
+                        }
+                    }
+                    else => {
+                        break;
+                    }
+                }
+            }
         })
     }
 }

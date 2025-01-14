@@ -14,6 +14,7 @@ use crate::{
         structs::{
             chapter_language::ChapterLanguagesStore,
             client_info::ClientInfoStore,
+            content::profiles::{ContentProfileDefaultKey, ContentProfiles},
             longstrip_image_width::LongstripImageWidthStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
         },
@@ -63,6 +64,12 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .pagination_style
         .send_data(PaginationStyleStore::extract_from_store(store)?);
+    let _ = watches
+        .content_profiles
+        .send_data(ContentProfiles::extract_from_store(store)?);
+    let _ = watches
+        .content_profiles_default_key
+        .send_data(ContentProfileDefaultKey::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }
