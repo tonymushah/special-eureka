@@ -4,9 +4,9 @@
 
 	interface Props {
 		title: string;
-		titles: (ComponentProps<MangaElementBase1> & {
-		id: string;
-	})[];
+		titles: (ComponentProps<typeof MangaElementBase1> & {
+			id: string;
+		})[];
 	}
 
 	let { title, titles }: Props = $props();

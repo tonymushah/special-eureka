@@ -27,7 +27,7 @@
 
 	let { volumes }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
-	let data: ComponentProps<VolumeAccordion>[] = $state([]);
+	let data: ComponentProps<typeof VolumeAccordion>[] = $state([]);
 	$effect(() => {
 		const store = $chaptersStore;
 		data = volumes.map((volume) => {
@@ -35,7 +35,7 @@
 				title: volume.volume,
 				volumeContent: volume.chapters.map((chapter) => {
 					const ids = chapter.ids;
-					let chapters: ComponentProps<ChapterElement1>[] = [];
+					let chapters: ComponentProps<typeof ChapterElement1>[] = [];
 					ids.forEach((id) => {
 						const res = store.get(id);
 						if (res) {

@@ -7,7 +7,7 @@
 
 	interface Props {
 		title: string;
-		chapters: ComponentProps<ChapterElement1>[];
+		chapters: ComponentProps<typeof ChapterElement1>[];
 		isOpen?: boolean;
 	}
 

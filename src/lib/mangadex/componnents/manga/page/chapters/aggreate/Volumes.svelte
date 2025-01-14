@@ -4,7 +4,7 @@
 	import { createChapterEl1EventDispatcher } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 
 	interface Props {
-		volumes: ComponentProps<VolumeAccordion>[];
+		volumes: ComponentProps<typeof VolumeAccordion>[];
 		openStart?: boolean;
 	}
 

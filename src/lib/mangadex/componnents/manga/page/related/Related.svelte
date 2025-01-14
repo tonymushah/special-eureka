@@ -14,7 +14,7 @@
 	const store = getRelatedTitlesStoreContext();
 	const titles = getTitleLayoutData().queryResult?.relationships.manga;
 	const relatedTitles = new Map<MangaRelation, string[]>();
-	let categories: ComponentProps<CategorizedTitles>[] = $state([]);
+	let categories: ComponentProps<typeof CategorizedTitles>[] = $state([]);
 	let isLoading = false;
 	let error: Error | undefined = $state();
 	async function fetch() {
@@ -74,7 +74,7 @@
 	});
 	$effect(() => {
 		const data = $store;
-		let res: ComponentProps<CategorizedTitles>[] = [];
+		let res: ComponentProps<typeof CategorizedTitles>[] = [];
 		relatedTitles.forEach((v, k) => {
 			let title: RelatedTitle[] = [];
 			v.forEach((t) => {

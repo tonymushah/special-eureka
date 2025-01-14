@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	import type { ComponentProps } from "svelte";
 
-	export type LongMangaListItemProps = ComponentProps<MangaElementBase2> & {
+	export type LongMangaListItemProps = ComponentProps<typeof MangaElementBase2> & {
 		id: string;
 	};
 </script>

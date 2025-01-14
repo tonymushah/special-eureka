@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	export type MediumMangaListElementProps = ComponentProps<MangaElementBase1> & {
+	export type MediumMangaListElementProps = ComponentProps<typeof MangaElementBase1> & {
 		id: string;
 	};
 </script>

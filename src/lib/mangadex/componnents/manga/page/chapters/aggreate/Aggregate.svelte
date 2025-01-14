@@ -65,7 +65,7 @@
 		if (result.error) {
 			throw result.error;
 		}
-		const chapters = result.data?.chapter.list.data.map<ComponentProps<ChapterElement1>>(
+		const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 			(c) => {
 				const title = chapterTitle({
 					chapter: c.attributes.chapter,

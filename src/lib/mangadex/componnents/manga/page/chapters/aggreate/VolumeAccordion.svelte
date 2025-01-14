@@ -6,7 +6,7 @@
 
 	interface Props {
 		title: string;
-		volumeContent: ComponentProps<Chapters>[];
+		volumeContent: ComponentProps<typeof Chapters>[];
 		isOpen?: boolean;
 	}
 

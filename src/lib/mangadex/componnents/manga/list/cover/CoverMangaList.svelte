@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	import type { ComponentProps } from "svelte";
 
-	export type CoverMangaListItemProps = ComponentProps<MangaElementBase3> & {
+	export type CoverMangaListItemProps = ComponentProps<typeof MangaElementBase3> & {
 		id: string;
 	};
 </script>
