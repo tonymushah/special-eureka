@@ -70,7 +70,7 @@
 		page,
 		($page) =>
 			$page.url.pathname ==
-			route("/mangadex/list/[id]", {
+			route("/mangadex/title/[id]", {
 				id: data.layoutData?.id ?? v4()
 			})
 	);
@@ -104,12 +104,12 @@
 	/>
 
 	<div class="out-top">
+		{#if description != undefined && $isOnInfoPage}
+			<div class="description">
+				<Markdown source={description} />
+			</div>
+		{/if}
 		<div class="top">
-			{#if description}
-				<div class="description">
-					<Markdown source={description} />
-				</div>
-			{/if}
 			{#if $isOnInfoPage}
 				<div class="info">
 					<MangaPageInfo />
@@ -138,8 +138,14 @@
 	.top {
 		display: none;
 	}
+	.info {
+		display: none;
+	}
 	@media screen and (max-width: 1200px) {
 		.top {
+			display: block;
+		}
+		.info {
 			display: block;
 		}
 	}
