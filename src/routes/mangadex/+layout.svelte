@@ -8,9 +8,11 @@
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import MangaDexDefaultThemeProvider from "@mangadex/componnents/theme/MangaDexDefaultThemeProvider.svelte";
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
+	import defaultProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { client } from "@mangadex/gql/urql";
 	import { setContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
+	import { get } from "svelte/store";
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
@@ -19,6 +21,9 @@
 	onMount(async () => {
 		const { mangadexTitleBar } = await import("@mangadex/titlebar");
 		await mangadexTitleBar();
+	});
+	onMount(() => {
+		get(defaultProfile);
 	});
 	onDestroy(async () => {
 		const { defaultBehavior } = await import(

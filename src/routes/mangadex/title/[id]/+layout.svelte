@@ -15,6 +15,7 @@
 	import { initCoverImageStoreContext } from "@mangadex/componnents/manga/page/covers/utils/coverImageStoreContext";
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
 	import { setTitleLayoutData } from "./layout.context";
+	import ConflictLayout from "./ConflictLayout.svelte";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -26,6 +27,21 @@
 	$effect.pre(() => {
 		setTitleLayoutData(data);
 	});
+	let hasConflict = $derived.by(() => {
+		const conflicts = data.conflicts;
+		if (
+			conflicts.contentRating != undefined ||
+			conflicts.originalLanguage != undefined ||
+			conflicts.publicationDemographic != undefined ||
+			conflicts.status != undefined ||
+			conflicts.tags.length != 0
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+	let ingnoreConflict = $state(false);
 	const statsStore = data.statsQueryStore!;
 	const stats = der(statsStore, ($stats) => {
 		const _data = $stats.data?.statistics.manga.get;
@@ -66,50 +82,54 @@
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
 </script>
 
-<MangaPageTopInfo
-	bind:id={layoutData.id}
-	title={layoutData.title ?? ""}
-	altTitle={layoutData.altTitle}
-	coverImage={layoutData.coverImage}
-	coverImageAlt={layoutData.coverImageAlt}
-	authors={layoutData.authors}
-	tags={layoutData.tags}
-	status={layoutData.status}
-	year={layoutData.year ?? undefined}
-	stats={$stats}
-	on:comments={() => {
-		if ($stats != undefined) {
-			open($stats?.threadUrl);
-		}
-	}}
-/>
-
-<div class="out-top">
-	<div class="top">
-		{#if description}
-			<div class="description">
-				<Markdown source={description} />
-			</div>
-		{/if}
-		{#if $isOnInfoPage}
-			<div class="info">
-				<MangaPageInfo />
-			</div>
-		{/if}
-	</div>
-
-	<MangaNavBar
-		id={layoutData.id}
-		{hasRelation}
-		comments={$stats?.comments}
-		on:comment={() => {
+{#if hasConflict && !ingnoreConflict}
+	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
+{:else}
+	<MangaPageTopInfo
+		bind:id={layoutData.id}
+		title={layoutData.title ?? ""}
+		altTitle={layoutData.altTitle}
+		coverImage={layoutData.coverImage}
+		coverImageAlt={layoutData.coverImageAlt}
+		authors={layoutData.authors}
+		tags={layoutData.tags}
+		status={layoutData.status}
+		year={layoutData.year ?? undefined}
+		stats={$stats}
+		on:comments={() => {
 			if ($stats != undefined) {
 				open($stats?.threadUrl);
 			}
 		}}
 	/>
-	{@render children?.()}
-</div>
+
+	<div class="out-top">
+		<div class="top">
+			{#if description}
+				<div class="description">
+					<Markdown source={description} />
+				</div>
+			{/if}
+			{#if $isOnInfoPage}
+				<div class="info">
+					<MangaPageInfo />
+				</div>
+			{/if}
+		</div>
+
+		<MangaNavBar
+			id={layoutData.id}
+			{hasRelation}
+			comments={$stats?.comments}
+			on:comment={() => {
+				if ($stats != undefined) {
+					open($stats?.threadUrl);
+				}
+			}}
+		/>
+		{@render children?.()}
+	</div>
+{/if}
 
 <style lang="scss">
 	div.out-top {

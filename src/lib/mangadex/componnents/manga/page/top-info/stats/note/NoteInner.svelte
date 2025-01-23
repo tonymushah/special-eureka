@@ -9,7 +9,7 @@
 		isOpen?: boolean;
 	}
 
-	let { inner, target, isOpen = $bindable(false) }: Props = $props();
+	let { inner = $bindable(), target = $bindable(), isOpen = $bindable(false) }: Props = $props();
 
 	let info: HTMLDivElement | undefined = $state();
 
