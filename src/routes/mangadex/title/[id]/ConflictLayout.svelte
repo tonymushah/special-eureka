@@ -99,11 +99,23 @@
 		align-items: center;
 		flex-wrap: wrap;
 		gap: 8px;
+		margin: 10px;
 		h3 {
 			margin: 0px;
 			display: flex;
 			align-items: center;
 			gap: 12px;
+		}
+	}
+	.conflicts {
+		display: flex;
+		gap: 8px;
+		flex-wrap: wrap;
+		section {
+			h3 {
+				margin: 0px;
+				text-decoration: underline;
+			}
 		}
 	}
 </style>
