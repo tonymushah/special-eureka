@@ -106,6 +106,8 @@ pub enum Error {
     NoAccessChapterINSHandle,
     #[error("No default Content Profile selected")]
     NoDefaultContentProfileSelected,
+    #[error("End stream")]
+    EndStream,
 }
 
 impl Error {

@@ -23,7 +23,7 @@
 		await mangadexTitleBar();
 	});
 	onMount(() => {
-		get(defaultProfile);
+		return defaultProfile.subscribe(() => {});
 	});
 	onDestroy(async () => {
 		const { defaultBehavior } = await import(

@@ -1,5 +1,10 @@
 import { allTagsQuery } from "@mangadex/gql-docs/allTags";
-import { ContentRating, CoverImageQuality, TagSearchMode } from "@mangadex/gql/graphql";
+import {
+	ContentRating,
+	CoverImageQuality,
+	TagSearchMode,
+	type ContentProfile
+} from "@mangadex/gql/graphql";
 import getClient from "@mangadex/gql/urql/getClient";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
@@ -11,13 +16,11 @@ import { queryStore } from "@urql/svelte";
 import type { LayoutLoad } from "./$types";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
-import { get } from "svelte/store";
+import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
 
 export const load: LayoutLoad = async function ({ params }) {
 	const client = await getClient();
-	const { default: defaultProfile } = await import(
-		"@mangadex/content-profile/graphql/defaultProfile"
-	);
+
 	const tags = await client.query(allTagsQuery, {}).then((res) => {
 		if (res.data) {
 			return new Map(
@@ -53,7 +56,18 @@ export const load: LayoutLoad = async function ({ params }) {
 			});
 		} else if (queryRes.data != undefined) {
 			const data = queryRes.data.manga.get;
-			const $profile = get(defaultProfile);
+			const $profile = await client
+				.query(defaultProfileQuery, {})
+				.toPromise()
+				.then((res) => {
+					if (res.data) {
+						return res.data.userOption.getDefaultContentProfile;
+					}
+					if (res.error) {
+						throw res.error;
+					}
+					throw new Error("Can't do anything");
+				});
 			const tags = data.attributes.tags.map<Tag>((t) => ({
 				id: t.id,
 				name: t.attributes.name.en

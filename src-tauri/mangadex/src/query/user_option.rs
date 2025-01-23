@@ -1,8 +1,12 @@
 use std::ops::Deref;
 
-use crate::Result;
+use crate::{
+    store::types::structs::content::ContentProfile,
+    subscription::user_option::UserOptionSubscriptions, Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_types_rust::Language;
+use tokio_stream::StreamExt;
 
 use crate::{
     store::types::{
@@ -54,5 +58,12 @@ impl UserOptionQueries {
         let cls = ChapterLanguagesStore::extract_from_store(store_read.deref())?;
         let _ = watches.chapter_languages.send_data(cls.clone());
         Ok(cls.into())
+    }
+    pub async fn get_default_content_profile(&self, ctx: &Context<'_>) -> Result<ContentProfile> {
+        let stream = UserOptionSubscriptions
+            .listen_to_content_profile_default(ctx)
+            .await?;
+        let mut stream = Box::pin(stream);
+        stream.next().await.ok_or(crate::Error::EndStream)
     }
 }

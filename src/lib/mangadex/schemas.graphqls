@@ -1774,6 +1774,7 @@ type Query {
 	downloadState: DownloadStateQueries!
 	utils: UtilsQuery!
 	scanlationGroup: ScanlationGroupQueries!
+	userOption: UserOptionQueries!
 }
 
 type RatingItem {
@@ -2371,6 +2372,14 @@ type UserOptionMutations {
 	deleteContentProfile(name: String!): ContentProfile
 	clearContentProfiles: Boolean!
 	setContentProfiles(entries: [ContentProfileEntryInput!]!): Int!
+}
+
+type UserOptionQueries {
+	getReadingMode: ReadingMode!
+	getPageDirection: Direction!
+	getSidebarDirection: Direction!
+	getChapterLanguages: [Language!]!
+	getDefaultContentProfile: ContentProfile!
 }
 
 type UserQueries {
