@@ -5,7 +5,7 @@
 	import TagComponnent from "./TagComponnent.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import is_tag_danger from "@mangadex/utils/tags/is_tag_danger";
-	let to_show: Tag[] = $state();
+	let to_show: Tag[] = $state([]);
 	let more = 0;
 	import { createEventDispatcher } from "svelte";
 	interface Props {
