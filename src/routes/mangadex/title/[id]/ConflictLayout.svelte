@@ -8,7 +8,8 @@
 	import { route } from "$lib/ROUTES";
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import MangaStatus from "@mangadex/componnents/manga/page/top-info/MangaStatus.svelte";
-	import { startCase } from "lodash";
+	import { lowerCase, startCase } from "lodash";
+	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
 
 	interface Props {
 		ingnoreConflict: boolean;
@@ -19,7 +20,7 @@
 </script>
 
 <div class="error">
-	<h2>This title has conflicts width your current content profile.</h2>
+	<h2>This title has conflicts with your current content profile.</h2>
 	<div class="conflicts">
 		{#if conflicts.tags.length != 0}
 			<section>
@@ -42,7 +43,7 @@
 				<h3>Original Language</h3>
 				<div class="lang">
 					<FlagIcon lang={conflicts.originalLanguage} />
-					<span>{startCase(conflicts.originalLanguage)}</span>
+					<span>{startCase(lowerCase(conflicts.originalLanguage))}</span>
 				</div>
 			</section>
 		{/if}
@@ -54,7 +55,13 @@
 		{#if conflicts.publicationDemographic}
 			<section>
 				<h3>Publication Demographic</h3>
-				<p>{startCase(conflicts.publicationDemographic)}</p>
+				<p>{startCase(lowerCase(conflicts.publicationDemographic))}</p>
+			</section>
+		{/if}
+		{#if conflicts.contentRating}
+			<section>
+				<h3>Content Rating</h3>
+				<ContentRatingTag contentRating={conflicts.contentRating} />
 			</section>
 		{/if}
 	</div>

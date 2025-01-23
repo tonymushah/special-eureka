@@ -11,7 +11,12 @@
 		setTopMangaIdContextStore
 	} from "./context";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import type { MangaStatus, ReadingState, ReadingStatus } from "@mangadex/gql/graphql";
+	import {
+		ContentRating,
+		type MangaStatus,
+		type ReadingState,
+		type ReadingStatus
+	} from "@mangadex/gql/graphql";
 	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopInfoCover from "./TopInfoCover.svelte";
 	import type { Author } from "./index";
@@ -25,6 +30,7 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import type { TopMangaStatistics } from "./stats";
 	import TopMangaStats from "./TopMangaStats.svelte";
+	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -71,6 +77,7 @@
 		rating?: Readable<number | undefined>;
 		downloadState?: Readable<ChapterDownloadState>;
 		stats?: TopMangaStatistics | undefined;
+		contentRating?: ContentRating;
 	}
 
 	let {
@@ -87,7 +94,8 @@
 		isFollowing = writable<boolean | undefined>(undefined),
 		rating = writable<number | undefined>(undefined),
 		downloadState = writable(ChapterDownloadState.NotDownloaded),
-		stats = $bindable(undefined)
+		stats = $bindable(undefined),
+		contentRating = ContentRating.Safe
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
@@ -142,6 +150,7 @@
 				}}
 			/>
 			<div class="tag-status">
+				<ContentRatingTag {contentRating} />
 				<TagComponnentsFlex
 					{tags}
 					on:click={({ detail }) => {
