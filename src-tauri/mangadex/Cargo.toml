@@ -46,6 +46,7 @@ eureka-mmanager-core = "0.1"
 tauri-plugin-notification.workspace = true
 tower = { workspace = true, features = ["limit", "buffer"] }
 duration-string = { version = "0.5", features = ["serde"] }
+impl-trait-for-tuples = "0.2"
 
 [dependencies.eureka-mmanager]
 version = "0.1"

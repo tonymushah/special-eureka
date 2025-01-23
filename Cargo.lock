@@ -2446,6 +2446,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "impl-trait-for-tuples"
+version = "0.2.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a0eb5a3343abf848c0984fe4604b2b105da9539376e24fc0a3b0007411ae4fd9"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.96",
+]
+
+[[package]]
 name = "indexmap"
 version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5165,6 +5176,7 @@ dependencies = [
  "eureka-mmanager",
  "eureka-mmanager-core",
  "favicon-picker",
+ "impl-trait-for-tuples",
  "log",
  "mangadex-api",
  "mangadex-api-input-types",
