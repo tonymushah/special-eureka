@@ -1,18 +1,41 @@
+import { allTagsQuery } from "@mangadex/gql-docs/allTags";
+import { ContentRating, CoverImageQuality, TagSearchMode } from "@mangadex/gql/graphql";
+import getClient from "@mangadex/gql/urql/getClient";
+import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
+import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
+import type { Tag } from "@mangadex/utils/types/Tag";
+import { error } from "@sveltejs/kit";
+import { queryStore } from "@urql/svelte";
 import type { LayoutLoad } from "./$types";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
-import { error } from "@sveltejs/kit";
-import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-import manga_altTitle_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-altTitle-to-lang-map";
-import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
-import type { Tag } from "@mangadex/utils/types/Tag";
-import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
-import { CoverImageQuality } from "@mangadex/gql/graphql";
-import { queryStore } from "@urql/svelte";
-import getClient from "@mangadex/gql/urql/getClient";
+import { get } from "svelte/store";
 
 export const load: LayoutLoad = async function ({ params }) {
 	const client = await getClient();
+	const { default: defaultProfile } = await import(
+		"@mangadex/content-profile/graphql/defaultProfile"
+	);
+	const tags = await client.query(allTagsQuery, {}).then((res) => {
+		if (res.data) {
+			return new Map(
+				res.data.tag.list.data.map((tag) => [
+					tag.id as string,
+					get_value_from_title_and_random_if_undefined(tag.attributes.name, "en") ?? ""
+				])
+			);
+		} else if (res.error) {
+			error(500, {
+				message: res.error.message
+			});
+		} else {
+			error(500, {
+				message: "Query not executed"
+			});
+		}
+	});
 	const { id } = params;
 	if (id != null) {
 		const queryRes = await client.query(
@@ -30,6 +53,57 @@ export const load: LayoutLoad = async function ({ params }) {
 			});
 		} else if (queryRes.data != undefined) {
 			const data = queryRes.data.manga.get;
+			const $profile = get(defaultProfile);
+			const tags = data.attributes.tags.map<Tag>((t) => ({
+				id: t.id,
+				name: t.attributes.name.en
+			}));
+			const conflicts = (() => {
+				const originalLanguage = data.attributes.originalLanguage;
+				const status = data.attributes.status;
+				const publicationDemographic =
+					data.attributes.publicationDemographic != null
+						? data.attributes.publicationDemographic
+						: undefined;
+				const contentRating =
+					data.attributes.contentRating != null ||
+					data.attributes.contentRating != undefined
+						? data.attributes.contentRating
+						: ContentRating.Safe;
+				const excludedTags = tags.filter((tag) =>
+					$profile.excludedTags.some((t) => t == tag.id)
+				);
+
+				return {
+					tags: excludedTags,
+					originalLanguage:
+						($profile.originalLanguages.some((value) => originalLanguage == value) ==
+							false ||
+							$profile.excludedOriginalLanguage.some(
+								(value) => originalLanguage == value
+							) == true) &&
+						$profile.originalLanguages.length != 0 &&
+						$profile.excludedOriginalLanguage.length != 0
+							? originalLanguage
+							: undefined,
+					status:
+						$profile.status.some((value) => value == status) == false &&
+						$profile.status.length != 0
+							? status
+							: undefined,
+					publicationDemographic:
+						$profile.publicationDemographic.some(
+							(value) => value == publicationDemographic
+						) == false && $profile.publicationDemographic.length != 0
+							? publicationDemographic
+							: undefined,
+					contentRating:
+						$profile.contentRating.some((value) => value == contentRating) == false &&
+						$profile.contentRating.length != 0
+							? contentRating
+							: undefined
+				};
+			})();
 			return {
 				queryResult: data,
 				layoutData: {
@@ -42,10 +116,7 @@ export const load: LayoutLoad = async function ({ params }) {
 						manga_altTitle_to_lang_map(data.attributes.altTitles),
 						"en"
 					),
-					tags: data.attributes.tags.map<Tag>((t) => ({
-						id: t.id,
-						name: t.attributes.name.en
-					})),
+					tags,
 					state: data.attributes.state,
 					status: data.attributes.status,
 					authors: data.relationships.authorArtists.map((a) => ({
@@ -72,7 +143,8 @@ export const load: LayoutLoad = async function ({ params }) {
 					variables: {
 						id
 					}
-				})
+				}),
+				conflicts
 			};
 		} else {
 			error(404, {
