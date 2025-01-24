@@ -49,42 +49,70 @@ pub struct ContentProfile {
     pub excluded_uploaders: Vec<Uuid>,
 }
 
-pub trait FeedContent {
+pub trait Feedable {
     fn feed(self, content_profile: &ContentProfile) -> Self;
 }
 
 #[impl_for_tuples(10)]
-impl FeedContent for Tuple {
+impl Feedable for Tuple {
     fn feed(mut self, content_profile: &ContentProfile) -> Self {
         for_tuples!(#( self.Tuple = Tuple.feed(content_profile); )*);
         self
     }
 }
 
-pub fn feed_from_manager<R, M, TF>(manager: &M, to_feed: TF) -> crate::Result<TF>
+pub trait ContentFeeder<F: Feedable> {
+    type Error;
+    fn get_content_profile(&self) -> Result<ContentProfile, Self::Error>;
+    fn try_feed(&self, feedable: F) -> Result<F, Self::Error> {
+        let content_profile = self.get_content_profile()?;
+        Ok(feedable.feed(&content_profile))
+    }
+    fn feed(&self, feedable: F) -> F {
+        let content_profile = self.get_content_profile().unwrap_or_default();
+        feedable.feed(&content_profile)
+    }
+}
+
+impl<F, R> ContentFeeder<F> for tauri::AppHandle<R>
 where
+    F: Feedable,
     R: Runtime,
-    M: Manager<R>,
-    TF: FeedContent,
 {
-    let content_profile: ContentProfile = {
-        let watches = manager.get_watches()?;
+    type Error = crate::Error;
+    fn get_content_profile(&self) -> Result<ContentProfile, Self::Error> {
+        let watches = self.get_watches()?;
         let content_profiles_ref = watches.content_profiles.borrow();
         let content_profile_key_ref = watches.content_profiles_default_key.borrow();
-        if let Some(key) = content_profile_key_ref.as_ref() {
+        let ctt_profile = if let Some(key) = content_profile_key_ref.as_ref() {
             content_profiles_ref.get(key).cloned().unwrap_or_default()
         } else {
             Default::default()
-        }
-    };
-    Ok(to_feed.feed(&content_profile))
+        };
+        Ok(ctt_profile)
+    }
 }
 
-pub fn feed_from_gql_ctx<R, TF>(ctx: &async_graphql::Context<'_>, to_feed: TF) -> crate::Result<TF>
+pub fn try_feed_from_gql_ctx<R, TF>(
+    ctx: &async_graphql::Context<'_>,
+    to_feed: TF,
+) -> crate::Result<TF>
 where
     R: Runtime,
-    TF: FeedContent,
+    TF: Feedable,
 {
     let app_handle = ctx.get_app_handle::<R>()?;
-    feed_from_manager(app_handle, to_feed)
+    app_handle.try_feed(to_feed)
+}
+
+pub fn feed_from_gql_ctx<R, TF>(ctx: &async_graphql::Context<'_>, to_feed: TF) -> TF
+where
+    R: Runtime,
+    TF: Feedable,
+{
+    if let Ok(app_handle) = ctx.get_app_handle::<R>() {
+        app_handle.feed(to_feed)
+    } else {
+        to_feed.feed(&Default::default())
+    }
 }

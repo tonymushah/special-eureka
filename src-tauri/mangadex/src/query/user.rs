@@ -29,7 +29,7 @@ impl UserQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: UserListParam,
+        params: Option<UserListParam>,
     ) -> Result<UserResults> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
@@ -37,7 +37,7 @@ impl UserQueries {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
 
-        let res: UserResults = params.send(&client).await?.into();
+        let res: UserResults = params.unwrap_or_default().send(&client).await?.into();
 
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {

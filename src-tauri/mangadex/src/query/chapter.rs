@@ -2,7 +2,10 @@ pub mod get_unique;
 pub mod list;
 pub mod pages;
 
-use crate::Result;
+use crate::{
+    store::types::structs::content::feed_from_gql_ctx,
+    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -32,12 +35,12 @@ impl ChapterQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: ChapterListParams,
+        params: Option<ChapterListParams>,
         offline_params: Option<GetAllChapterParams>,
     ) -> Result<ChapterResults> {
-        let mut params = params;
+        let mut params = params.unwrap_or_default();
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        ChapterListQueries(params)
+        ChapterListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
             .default(ctx, offline_params)
             .await
     }
@@ -65,17 +68,18 @@ impl ChapterQueries {
     pub async fn list_with_group_by_manga(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] chapter_list_params: ChapterListParams,
-        #[graphql(default)] manga_list_params: MangaListParams,
+        chapter_list_params: Option<ChapterListParams>,
+        manga_list_params: Option<MangaListParams>,
     ) -> Result<MangaChapterGroup> {
-        let mut chapter_list_params: ChapterListParams = chapter_list_params;
-        let mut manga_list_params: MangaListParams = manga_list_params;
+        let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
+        let mut manga_list_params: MangaListParams =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, manga_list_params.unwrap_or_default());
         chapter_list_params.includes =
             MangaChapterGroup::get_chapter_references_expansions_from_context(ctx);
         manga_list_params.includes =
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
         group_results(
-            ChapterListQueries(chapter_list_params)
+            ChapterListQueries::new(chapter_list_params, ctx.get_app_handle::<tauri::Wry>()?)
                 ._default(ctx, None)
                 .await?,
             ctx,

@@ -1,6 +1,9 @@
 use std::ops::Deref;
 
-use crate::Result;
+use crate::{
+    store::types::structs::content::feed_from_gql_ctx,
+    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ChapterSortOrder, MangaDexDateTime, MangaSortOrder, OrderDirection};
@@ -57,21 +60,23 @@ impl HomeQueries {
     pub async fn recently_uploaded(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: ChapterListParams,
+        params: Option<ChapterListParams>,
     ) -> Result<ChapterResults> {
-        let mut params: ChapterListParams = params;
+        let mut params: ChapterListParams = params.unwrap_or_default();
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(ChapterSortOrder::ReadableAt(OrderDirection::Descending));
         params.chapter_ids.clear();
         params.chapters.clear();
-        ChapterListQueries(params).default(ctx, None).await
+        ChapterListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+            .default(ctx, None)
+            .await
     }
     pub async fn recently_added(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: MangaListParams,
+        params: Option<MangaListParams>,
     ) -> Result<MangaResults> {
-        let mut params: MangaListParams = params;
+        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
@@ -94,9 +99,9 @@ impl HomeQueries {
     pub async fn popular_titles(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: MangaListParams,
+        params: Option<MangaListParams>,
     ) -> Result<MangaResults> {
-        let mut params: MangaListParams = params;
+        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();

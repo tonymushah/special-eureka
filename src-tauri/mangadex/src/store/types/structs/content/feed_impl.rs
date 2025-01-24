@@ -9,9 +9,9 @@ use mangadex_api_input_types::{
     },
 };
 
-use super::FeedContent;
+use super::Feedable;
 
-impl FeedContent for MangaListParams {
+impl Feedable for MangaListParams {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.original_language.is_empty() {
             self.original_language = content_profile.original_languages.clone();
@@ -47,7 +47,7 @@ impl FeedContent for MangaListParams {
     }
 }
 
-impl FeedContent for ChapterListParams {
+impl Feedable for ChapterListParams {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.content_rating.is_empty() {
             self.content_rating = content_profile.content_rating.clone();
@@ -71,7 +71,7 @@ impl FeedContent for ChapterListParams {
     }
 }
 
-impl FeedContent for MangaAggregateParam {
+impl Feedable for MangaAggregateParam {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.translated_language.is_empty() {
             self.translated_language = content_profile.translated_languages.clone();
@@ -80,7 +80,7 @@ impl FeedContent for MangaAggregateParam {
     }
 }
 
-impl FeedContent for MangaRandomParams {
+impl Feedable for MangaRandomParams {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.included_tags.is_empty() {
             self.included_tags = content_profile.included_tags.clone();
@@ -101,7 +101,7 @@ impl FeedContent for MangaRandomParams {
     }
 }
 
-impl FeedContent for MangaFeedParams {
+impl Feedable for MangaFeedParams {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.content_rating.is_empty() {
             self.content_rating = content_profile.content_rating.clone();
@@ -128,7 +128,7 @@ impl FeedContent for MangaFeedParams {
     }
 }
 
-impl FeedContent for CustomListMangaFeedParams {
+impl Feedable for CustomListMangaFeedParams {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.content_rating.is_empty() {
             self.content_rating = content_profile.content_rating.clone();
@@ -155,7 +155,7 @@ impl FeedContent for CustomListMangaFeedParams {
     }
 }
 
-impl FeedContent for FollowedMangaFeedParams {
+impl Feedable for FollowedMangaFeedParams {
     fn feed(mut self, content_profile: &super::ContentProfile) -> Self {
         if self.excluded_groups.is_empty() {
             self.excluded_groups = content_profile.excluded_groups.clone();

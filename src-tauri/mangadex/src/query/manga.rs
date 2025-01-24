@@ -4,7 +4,10 @@ pub mod list;
 
 use std::{collections::HashMap, ops::Deref};
 
-use crate::Result;
+use crate::{
+    store::types::structs::content::feed_from_gql_ctx,
+    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
     aggregate::MangaAggregateParam, feed::MangaFeedParams, get_draft::GetMangaDraftParams,
@@ -57,33 +60,37 @@ impl MangaQueries {
     pub async fn list(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: MangaListParams,
+        params: Option<MangaListParams>,
     ) -> Result<MangaResults> {
-        let mut params = params;
+        let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         if params.limit.is_none() && !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        MangaListQueries(params).list(ctx).await
+        MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+            .list(ctx)
+            .await
     }
     pub async fn list_offline(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: MangaListParams,
+        params: Option<MangaListParams>,
     ) -> Result<MangaResults> {
-        let mut params = params;
+        let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         if params.limit.is_none() && !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        MangaListQueries(params).list_offline(ctx).await
+        MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+            .list_offline(ctx)
+            .await
     }
     pub async fn random(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: MangaRandomParams,
+        params: Option<MangaRandomParams>,
     ) -> Result<Manga> {
-        let mut params = params;
+        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let includes = &mut params.includes;
@@ -176,9 +183,10 @@ impl MangaQueries {
         &self,
         ctx: &Context<'_>,
         params: MangaRelationParam,
-        #[graphql(default)] list_params: MangaListParams,
+        list_params: Option<MangaListParams>,
     ) -> Result<Vec<MangaRelated>> {
-        let mut list_params = list_params;
+        let mut list_params =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, list_params.unwrap_or_default());
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let rels: HashMap<Uuid, MangaRelation> = params
             .send(&client)

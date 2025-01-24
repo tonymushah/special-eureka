@@ -5,6 +5,7 @@ use std::{
 
 use crate::{
     error::Error,
+    store::types::structs::content::ContentFeeder,
     subscription::utils::{OptionFlattenStream, ResultFlattenStream},
     utils::Collection,
     Result,
@@ -47,7 +48,7 @@ use crate::objects::chapter::lists::ChapterResults;
 type Param = ChapterListParams;
 
 #[derive(Debug, Clone)]
-pub struct ChapterListQueries(pub Param);
+pub struct ChapterListQueries(Param);
 
 impl Deref for ChapterListQueries {
     type Target = Param;
@@ -77,6 +78,15 @@ impl From<ChapterListQueries> for Param {
 impl From<&ChapterListQueries> for Param {
     fn from(value: &ChapterListQueries) -> Self {
         value.0.clone()
+    }
+}
+
+impl ChapterListQueries {
+    pub fn new<CF: ContentFeeder<ChapterListParams>>(
+        params: ChapterListParams,
+        feeder: &CF,
+    ) -> Self {
+        Self(feeder.feed(params))
     }
 }
 

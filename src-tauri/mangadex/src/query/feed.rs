@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use crate::Result;
+use crate::{store::types::structs::content::feed_from_gql_ctx, Result};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{
     feed::{
@@ -29,9 +29,9 @@ impl FeedQueries {
     pub async fn user_logged_manga_feed(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: FollowedMangaFeedParams,
+        params: Option<FollowedMangaFeedParams>,
     ) -> Result<ChapterResults> {
-        let mut params: FollowedMangaFeedParams = params;
+        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -52,11 +52,13 @@ impl FeedQueries {
     pub async fn user_logged_manga_feed_grouped(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] feed_params: FollowedMangaFeedParams,
-        #[graphql(default)] manga_list_params: MangaListParams,
+        feed_params: Option<FollowedMangaFeedParams>,
+        manga_list_params: Option<MangaListParams>,
     ) -> Result<MangaChapterGroup> {
-        let mut feed_params: FollowedMangaFeedParams = feed_params;
-        let mut manga_list_params: MangaListParams = manga_list_params;
+        let mut feed_params: FollowedMangaFeedParams =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params.unwrap_or_default());
+        let mut manga_list_params: MangaListParams =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, manga_list_params.unwrap_or_default());
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -87,7 +89,7 @@ impl FeedQueries {
         ctx: &Context<'_>,
         params: CustomListMangaFeedParams,
     ) -> Result<ChapterResults> {
-        let mut params: CustomListMangaFeedParams = params;
+        let mut params: CustomListMangaFeedParams = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -109,10 +111,12 @@ impl FeedQueries {
         &self,
         ctx: &Context<'_>,
         feed_params: CustomListMangaFeedParams,
-        #[graphql(default)] manga_list_params: MangaListParams,
+        manga_list_params: Option<MangaListParams>,
     ) -> Result<MangaChapterGroup> {
-        let mut feed_params: CustomListMangaFeedParams = feed_params;
-        let mut manga_list_params: MangaListParams = manga_list_params;
+        let mut feed_params: CustomListMangaFeedParams =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
+        let mut manga_list_params: MangaListParams =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, manga_list_params.unwrap_or_default());
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
