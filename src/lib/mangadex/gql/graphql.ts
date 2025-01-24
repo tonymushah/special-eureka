@@ -302,7 +302,7 @@ export type AuthorQueriesGetArgs = {
 
 
 export type AuthorQueriesListArgs = {
-  params?: AuthorListParams;
+  params?: InputMaybe<AuthorListParams>;
 };
 
 export type AuthorRelationships = {
@@ -520,13 +520,13 @@ export type ChapterQueriesIsDownloadedArgs = {
 
 export type ChapterQueriesListArgs = {
   offlineParams?: InputMaybe<GetAllChapterParams>;
-  params?: ChapterListParams;
+  params?: InputMaybe<ChapterListParams>;
 };
 
 
 export type ChapterQueriesListWithGroupByMangaArgs = {
-  chapterListParams?: ChapterListParams;
-  mangaListParams?: MangaListParams;
+  chapterListParams?: InputMaybe<ChapterListParams>;
+  mangaListParams?: InputMaybe<MangaListParams>;
 };
 
 
@@ -1159,18 +1159,18 @@ export type FeedQueriesCustomListFeedArgs = {
 
 export type FeedQueriesCustomListFeedGroupedArgs = {
   feedParams: CustomListMangaFeedParams;
-  mangaListParams?: MangaListParams;
+  mangaListParams?: InputMaybe<MangaListParams>;
 };
 
 
 export type FeedQueriesUserLoggedMangaFeedArgs = {
-  params?: FollowedMangaFeedParams;
+  params?: InputMaybe<FollowedMangaFeedParams>;
 };
 
 
 export type FeedQueriesUserLoggedMangaFeedGroupedArgs = {
-  feedParams?: FollowedMangaFeedParams;
-  mangaListParams?: MangaListParams;
+  feedParams?: InputMaybe<FollowedMangaFeedParams>;
+  mangaListParams?: InputMaybe<MangaListParams>;
 };
 
 export type FollowedMangaFeedParams = {
@@ -1339,17 +1339,17 @@ export type HomeQueries = {
 
 
 export type HomeQueriesPopularTitlesArgs = {
-  params?: MangaListParams;
+  params?: InputMaybe<MangaListParams>;
 };
 
 
 export type HomeQueriesRecentlyAddedArgs = {
-  params?: MangaListParams;
+  params?: InputMaybe<MangaListParams>;
 };
 
 
 export type HomeQueriesRecentlyUploadedArgs = {
-  params?: ChapterListParams;
+  params?: InputMaybe<ChapterListParams>;
 };
 
 export enum ImageFit {
@@ -1756,7 +1756,7 @@ export type MangaMutationsCreateArgs = {
 
 
 export type MangaMutationsCreateRelationArgs = {
-  mangaListParams?: MangaListParams;
+  mangaListParams?: InputMaybe<MangaListParams>;
   params: MangaCreateRelationParam;
 };
 
@@ -1867,17 +1867,17 @@ export type MangaQueriesIsDownloadedArgs = {
 
 
 export type MangaQueriesListArgs = {
-  params?: MangaListParams;
+  params?: InputMaybe<MangaListParams>;
 };
 
 
 export type MangaQueriesListOfflineArgs = {
-  params?: MangaListParams;
+  params?: InputMaybe<MangaListParams>;
 };
 
 
 export type MangaQueriesRandomArgs = {
-  params?: MangaRandomParams;
+  params?: InputMaybe<MangaRandomParams>;
 };
 
 
@@ -1887,7 +1887,7 @@ export type MangaQueriesReadingStatusArgs = {
 
 
 export type MangaQueriesRelationListArgs = {
-  listParams?: MangaListParams;
+  listParams?: InputMaybe<MangaListParams>;
   params: MangaRelationParam;
 };
 
@@ -3134,7 +3134,7 @@ export type UserQueriesGetArgs = {
 
 
 export type UserQueriesListArgs = {
-  params?: UserListParam;
+  params?: InputMaybe<UserListParam>;
 };
 
 export type UserRelationships = {
