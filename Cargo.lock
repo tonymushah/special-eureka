@@ -1445,9 +1445,9 @@ checksum = "a5d9305ccc6942a704f4335694ecd3de2ea531b114ac2d51f5f843750787a92f"
 
 [[package]]
 name = "eureka-mmanager"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c2576ff716225428c67e0e393a2bec0dc191969c580461066fa35403d229ad4"
+checksum = "0131be729401a2db0479538eaecea886be7160ccd744d9370e1c5aea067083e9"
 dependencies = [
  "actix",
  "bytes",
@@ -1464,15 +1464,16 @@ dependencies = [
  "thiserror 1.0.69",
  "tokio",
  "tokio-stream",
+ "tokio-util",
  "url",
  "uuid",
 ]
 
 [[package]]
 name = "eureka-mmanager-core"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e3cc8c770ff171309879abb3376580f1a413e21cab39f2ebe53655600c854099"
+checksum = "d8c0925a0116bf94f8edcd116d77338de65dd6494fded407751b59d8aff8b911"
 dependencies = [
  "actix",
  "bytes",
