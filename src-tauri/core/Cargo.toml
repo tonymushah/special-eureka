@@ -24,7 +24,6 @@ tokio.workspace = true
 # sentry-tauri = "0.2"
 #tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 anyhow.workspace = true
-window-vibrancy = "0.5"
 tauri-plugin-store.workspace = true
 uuid.workspace = true
 actix.workspace = true

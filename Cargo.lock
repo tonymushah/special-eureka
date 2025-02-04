@@ -4860,7 +4860,6 @@ dependencies = [
  "tauri-plugin-updater",
  "tokio",
  "uuid",
- "window-vibrancy",
 ]
 
 [[package]]
