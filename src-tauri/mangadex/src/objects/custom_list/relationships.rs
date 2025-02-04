@@ -10,6 +10,7 @@ use uuid::Uuid;
 
 use crate::{
     objects::{manga::MangaObject, user::User, ExtractReferenceExpansion},
+    query::user_option::UserOptionQueries,
     utils::get_mangadex_client_from_graphql_context,
 };
 
@@ -66,12 +67,44 @@ impl CustomListRelationships {
                 None::<()>
             });
         includes.dedup();
+        let content_profile = UserOptionQueries.get_default_content_profile(ctx).await?;
         Ok(req
             .includes(includes)
             .send()
             .await?
             .data
             .iter()
+            .filter(|data| {
+                if !content_profile.is_empty() {
+                    let attributes = &data.attributes;
+
+                    (!content_profile.content_rating.is_empty()
+                        && content_profile.content_rating.contains(
+                            &attributes
+                                .content_rating
+                                .unwrap_or(mangadex_api_types_rust::ContentRating::Safe),
+                        ))
+                        || (!content_profile.excluded_original_language.is_empty()
+                            && !content_profile
+                                .excluded_original_language
+                                .contains(&attributes.original_language))
+                        || (!content_profile.excluded_tags.is_empty()
+                            && !content_profile
+                                .excluded_tags
+                                .iter()
+                                .any(|i| attributes.tags.iter().any(|t| t.id == *i)))
+                        || (!content_profile.publication_demographic.is_empty()
+                            && attributes
+                                .publication_demographic
+                                .iter()
+                                .any(|d| content_profile.publication_demographic.contains(d)))
+                        || (!content_profile.status.is_empty()
+                            && content_profile.status.contains(&attributes.status))
+                    // || (!content_profile.translated_languages.is_empty() && attributes.available_translated_ content_profile.translated_languages)
+                } else {
+                    true
+                }
+            })
             .map(|d| <MangaObject as From<ApiObject<MangaAttributes>>>::from(d.clone()))
             .collect::<Vec<MangaObject>>())
     }

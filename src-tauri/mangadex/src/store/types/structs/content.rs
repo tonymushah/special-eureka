@@ -5,7 +5,7 @@ use async_graphql::{InputObject, SimpleObject};
 use impl_trait_for_tuples::impl_for_tuples;
 use mangadex_api_types_rust::{ContentRating, Demographic, Language, MangaStatus, TagSearchMode};
 use serde::{Deserialize, Serialize};
-use tauri::{Manager, Runtime};
+use tauri::Runtime;
 use uuid::Uuid;
 
 use crate::utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
@@ -47,6 +47,21 @@ pub struct ContentProfile {
     #[serde(default)]
     #[graphql(default)]
     pub excluded_uploaders: Vec<Uuid>,
+}
+
+impl ContentProfile {
+    pub fn is_empty(&self) -> bool {
+        self.original_languages.is_empty()
+            && self.excluded_original_language.is_empty()
+            && self.publication_demographic.is_empty()
+            && self.included_tags.is_empty()
+            && self.excluded_tags.is_empty()
+            && self.status.is_empty()
+            && self.translated_languages.is_empty()
+            && self.content_rating.is_empty()
+            && self.excluded_groups.is_empty()
+            && self.excluded_uploaders.is_empty()
+    }
 }
 
 pub trait Feedable {
