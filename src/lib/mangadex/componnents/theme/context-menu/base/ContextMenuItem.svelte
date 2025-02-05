@@ -1,29 +1,42 @@
 <script lang="ts">
 	import { melt, type AnyMeltElement, emptyMeltElement } from "@melt-ui/svelte";
-	import { SvelteComponent, createEventDispatcher, type ComponentType } from "svelte";
-	export let icon: ComponentType;
-	export let label: string;
-	export let key: string | undefined = undefined;
-	export let tabindex: number;
-	export let isDisabled: boolean = false;
-	export let element: AnyMeltElement = emptyMeltElement;
-	let isFocused = false;
+	import { createEventDispatcher, type ComponentType } from "svelte";
+	interface Props {
+		icon: ComponentType;
+		label: string;
+		key?: string | undefined;
+		tabindex: number;
+		isDisabled?: boolean;
+		element?: AnyMeltElement;
+	}
+
+	let {
+		icon,
+		label,
+		key = undefined,
+		tabindex,
+		isDisabled = false,
+		element = emptyMeltElement
+	}: Props = $props();
+	let isFocused = $state(false);
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 	}>();
+
+	const SvelteComponent_1 = $derived(icon);
 </script>
 
 <div
 	use:melt={$element}
 	role="button"
-	on:m-click={(e) => {
+	onm-click={(e) => {
 		if (!isDisabled) {
 			dispatch("click", e);
 		}
 	}}
-	on:keypress={(e) => {
+	onkeypress={(e) => {
 		if (e.key == key) {
 			isFocused = true;
 		} else {
@@ -34,7 +47,9 @@
 	class="menu-item"
 	class:isDisabled
 >
-	<svelte:component this={icon} class="icon" />
+	{#if SvelteComponent_1}
+		<SvelteComponent_1 class="icon" />
+	{/if}
 	<p class="label">{label}</p>
 </div>
 

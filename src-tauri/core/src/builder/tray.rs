@@ -1,55 +1,56 @@
 use tauri::{
-    CustomMenuItem, Manager, Runtime, SystemTray, SystemTrayEvent, SystemTrayMenu,
-    SystemTrayMenuItem,
+    menu::{Menu, MenuItem},
+    tray::{MouseButton, TrayIconEvent},
+    AppHandle, Manager, Runtime,
 };
 
-use crate::states::last_focused_window::LastFocusedWindow;
+use crate::{
+    commands::open_new_window::{open_new_window_sync, open_new_window_sync_from_app},
+    states::last_focused_window::LastFocusedWindow,
+};
 
-pub fn get_tray() -> SystemTray {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let hide = CustomMenuItem::new("hide".to_string(), "Hide");
-    let tray_menu = SystemTrayMenu::new()
-        .add_item(quit)
-        .add_native_item(SystemTrayMenuItem::Separator)
-        .add_item(hide);
-    SystemTray::new().with_menu(tray_menu)
-}
-
-pub fn on_system_tray_event<R: Runtime>(app: &tauri::AppHandle<R>, event: SystemTrayEvent) {
-    if let SystemTrayEvent::MenuItemClick { ref id, .. } = event {
-        if id.as_str() == "quit" {
-            app.exit(0);
-        }
-    }
-    if app.get_window("splashscreen").is_none() {
-        let last_focused_window_state = app.state::<LastFocusedWindow<R>>();
-        if let Ok(read) = last_focused_window_state.read() {
-            if let Some(window) = read.as_ref() {
-                let some_fn = || -> tauri::Result<()> {
-                    if let SystemTrayEvent::MenuItemClick { id, .. } = event {
-                        let item_handle = app.tray_handle().get_item(&id);
-                        if id.as_str() == "hide" {
-                            if window.is_visible()? {
-                                item_handle.set_title("Show")?;
-                                window.hide()?;
-                            } else {
-                                item_handle.set_title("Hide")?;
-                                window.show()?;
-                                window.set_focus()?;
-                            }
-                        }
-                    } else if let SystemTrayEvent::LeftClick { .. } = event {
-                        let item_handle = app.tray_handle().get_item("hide");
-                        item_handle.set_title("Hide")?;
-                        window.show()?;
-                        window.set_focus()?;
+pub fn on_tray<R: Runtime>(app: &AppHandle<R>, event: TrayIconEvent) {
+    if let Some(tray) = app.tray_by_id(event.id()) {
+        (|| {
+            let Ok(quit) = MenuItem::new(app, "Quit", true, None::<&str>) else {
+                return;
+            };
+            let Ok(new_window) = MenuItem::new(app, "Open a new window", true, None::<&str>) else {
+                return;
+            };
+            let Ok(menu) = Menu::with_items(app, &[&quit, &new_window]) else {
+                return;
+            };
+            if tray.set_menu(Some(menu)).is_ok() {
+                tray.on_menu_event(move |app, event| {
+                    if event.id() == quit.id() {
+                        app.exit(0);
                     }
-                    Ok(())
-                };
-                if let Err(e) = some_fn() {
-                    let _ = app.emit_all("system-tray-error", e.to_string());
-                }
+                    if event.id == new_window.id()
+                        && app.get_webview_window("splashcreen").is_none()
+                    {
+                        let last_wrap = app.state::<LastFocusedWindow<R>>();
+                        if let Some(last) = last_wrap
+                            .read()
+                            .ok()
+                            .and_then(|e| e.as_ref().map(|w| w.label().to_string()))
+                            .and_then(|label| app.get_webview_window(&label))
+                        {
+                            let _ = open_new_window_sync(&last, None);
+                        } else {
+                            let _ = open_new_window_sync_from_app(app, None);
+                        }
+                    }
+                });
             }
-        };
+        })();
+    }
+    if let TrayIconEvent::Click { button, .. } = &event {
+        if *button == MouseButton::Left {
+            let last_wrap = app.state::<LastFocusedWindow<R>>();
+            if let Ok(last) = last_wrap.read() {
+                let _ = last.as_ref().and_then(|l| l.set_focus().ok());
+            };
+        }
     }
 }

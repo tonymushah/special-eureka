@@ -1,7 +1,11 @@
 <script lang="ts">
 	import Title from "./Title.svelte";
-	export let innerText: string;
-	export let type: 1 | 2 | 3 | 4 | 5 | 6 = 2;
+	interface Props {
+		innerText: string;
+		type?: 1 | 2 | 3 | 4 | 5 | 6;
+	}
+
+	let { innerText, type = 2 }: Props = $props();
 </script>
 
 <Title {type}>

@@ -1,33 +1,12 @@
 <script>
-	import openNewWindow from "$lib/commands/openNewWindow";
-	import toggleDecoration from "$lib/commands/toggleDecoration";
-	import { appWindow } from "@tauri-apps/api/window";
+	import { titleBarButtons } from "./stores/decorations.svelte";
 </script>
 
-<button
-	class="flex-center"
-	on:click={async () => {
-		await appWindow.emit("redirect", "/");
-	}}
->
-	Home
-</button>
-<button
-	class="flex-center"
-	on:click={async () => {
-		await openNewWindow();
-	}}
->
-	New Window
-</button>
-<button
-	class="flex-center"
-	on:click={async () => {
-		await toggleDecoration();
-	}}
->
-	Toggle Decoration
-</button>
+{#each titleBarButtons.entries() as [key, button] (key)}
+	<button class="flex-center" onclick={button.onclick}>
+		{button.title}
+	</button>
+{/each}
 
 <style lang="scss">
 	.flex-center {

@@ -19,7 +19,7 @@ use crate::{
 pub fn init_client_state<R: Runtime>(
     app: &tauri::AppHandle<R>,
     store: &Store<R>,
-) -> tauri::plugin::Result<()> {
+) -> crate::PluginSetupResult<()> {
     let app_clone = app.clone();
     let cis = ClientInfoStore::extract_from_store(store)?;
     let r_token_store = RefreshTokenStore::extract_from_store(store)?;

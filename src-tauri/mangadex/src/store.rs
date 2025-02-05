@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use tauri::{AppHandle, Runtime /*Manager */};
 use tauri_plugin_store::StoreBuilder;
 use types::{
@@ -6,6 +8,7 @@ use types::{
         pagination_style::PaginationStyleStore,
     },
     structs::{
+        content::profiles::{ContentProfileDefaultKey, ContentProfiles},
         longstrip_image_width::LongstripImageWidthStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
@@ -32,9 +35,11 @@ use self::{
 pub mod keys;
 pub mod types;
 
-pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result<StoreBuilder<R>> {
+pub fn get_store_builder<R: Runtime>(
+    app: AppHandle<R>,
+) -> crate::PluginSetupResult<StoreBuilder<R>> {
     let builder = {
-        let b = StoreBuilder::new(app, PATH.parse()?);
+        let b = StoreBuilder::new(&app, PATH.parse::<PathBuf>()?);
         let b = ClientInfoStore::default_store(b)?;
         let b = RefreshTokenStore::default_store(b)?;
         let b = ReadingDirectionStore::default_store(b)?;
@@ -48,6 +53,8 @@ pub fn get_store_builder<R: Runtime>(app: AppHandle<R>) -> tauri::plugin::Result
         let b = ThemeProfileDefaultKey::default_store(b)?;
         let b = ChapterFeedStyleStore::default_store(b)?;
         let b = PaginationStyleStore::default_store(b)?;
+        let b = ContentProfiles::default_store(b)?;
+        let b = ContentProfileDefaultKey::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)

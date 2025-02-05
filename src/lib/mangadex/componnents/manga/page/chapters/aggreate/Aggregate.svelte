@@ -1,5 +1,6 @@
+<!-- TODO update code -->
 <script lang="ts">
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import mangaAggregateQuery, {
 		getMangaAggregateChapterQuery,
@@ -12,16 +13,17 @@
 	import chapterStores, { getChapterStoreContext } from "./utils/chapterStores";
 	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
-	import { derived, writable } from "svelte/store";
+	import { derived as der, writable } from "svelte/store";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
 	import lodash from "lodash";
 	import { fade } from "svelte/transition";
-	import { open } from "@tauri-apps/api/shell";
+	import { openUrl as open } from "@tauri-apps/plugin-opener";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
-	const { queryResult: data } = getTitleLayoutData();
+	const __res = getTitleLayoutData();
+	const data = __res.queryResult;
 	const query = specialQueryStore({
 		query: mangaAggregateQuery,
 		client,
@@ -29,7 +31,7 @@
 			id: data!.id
 		}
 	});
-	const threadUrls = new Map<string, string>();
+	let threadUrls = $state(new Map<string, string>());
 	let unlistens: UnlistenFn[] = [];
 	const isFetching = query.isFetching;
 	function chapterTitle({
@@ -63,7 +65,7 @@
 		if (result.error) {
 			throw result.error;
 		}
-		const chapters = result.data?.chapter.list.data.map<ComponentProps<ChapterElement1>>(
+		const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 			(c) => {
 				const title = chapterTitle({
 					chapter: c.attributes.chapter,
@@ -119,7 +121,7 @@
 		});
 		return ret;
 	}
-	const aggregate = derived(query, (q) => {
+	const aggregate = der(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
 			chapter: MangaAggregateData;
 			id: string;
@@ -146,7 +148,7 @@
 			return [];
 		}
 	});
-	const aggregateReverse = derived(aggregate, (a) => {
+	const aggregateReverse = der(aggregate, (a) => {
 		return a.toReversed().map<{ chapter: MangaAggregateData; id: string }>((vs) => ({
 			id: vs.id,
 			chapter: vs.chapter.toReversed().map((cs) => ({
@@ -156,7 +158,7 @@
 		}));
 	});
 	const isReversed = writable(false);
-	let selectedIndex = 0;
+	let selectedIndex = $state(0);
 	onMount(async () => {
 		unlistens.push(
 			query.subscribe((e) => {
@@ -201,7 +203,9 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	$: selected = $isReversed ? $aggregateReverse[selectedIndex] : $aggregate[selectedIndex];
+	let selected = $derived(
+		$isReversed ? $aggregateReverse[selectedIndex] : $aggregate[selectedIndex]
+	);
 </script>
 
 <div class="aggregate">

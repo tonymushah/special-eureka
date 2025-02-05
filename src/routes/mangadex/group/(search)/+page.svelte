@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from "svelte/legacy";
+
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
@@ -7,14 +9,14 @@
 	import { SearchIcon } from "svelte-feather-icons";
 	import { readonly, writable } from "svelte/store";
 	import SearchContent from "./SearchContent.svelte";
-	let realTime = false;
-	let inputName = "";
+	let realTime = $state(false);
+	let inputName = $state("");
 	const groupName = writable<string | undefined>(undefined);
-	$: {
+	$effect(() => {
 		if (realTime) {
 			groupName.set(inputName);
 		}
-	}
+	});
 </script>
 
 <section class="title">
@@ -23,11 +25,11 @@
 
 <section>
 	<form
-		on:submit|preventDefault={() => {
+		onsubmit={preventDefault(() => {
 			if (!realTime) {
 				groupName.set(inputName);
 			}
-		}}
+		})}
 	>
 		<div class="input">
 			<FormInput
@@ -40,9 +42,9 @@
 		</div>
 		<article
 			class="buttons"
-			on:contextmenu|preventDefault={() => {
+			oncontextmenu={preventDefault(() => {
 				realTime = !realTime;
-			}}
+			})}
 		>
 			{#if realTime}
 				<ButtonAccent variant="accent" isBase type="submit">

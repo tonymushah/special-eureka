@@ -5,8 +5,8 @@ resolver = "2"
 
 [workspace.dependencies]
 serde_json = "1.0"
-tauri-build = { version = "1.5.1" }
-tauri = "1"
+tauri-build = { version = "2" }
+tauri = "2"
 tokio = "1"
 anyhow = "1"
 uuid = "1"
@@ -16,14 +16,31 @@ reqwest = "0.12"
 bytes = "1"
 async-graphql = "7"
 time = "0.3"
-mizuki = "0.2"
+mizuki = "1"
+mizuki-build = "1"
 url = "2.5"
 actix = "0.13"
+tower = "0.5"
+
+[workspace.dependencies.tauri-plugin-notification]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[workspace.dependencies.tauri-plugin-deep-link]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[workspace.dependencies.tauri-plugin-opener]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
+[workspace.dependencies.tauri-plugin-clipboard-manager]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
 
 [workspace.dependencies.tauri-plugin-store]
 git = "https://github.com/tauri-apps/plugins-workspace"
-#tag = "v0.1.0"
-branch = "v1"
+branch = "v2"
 
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"

@@ -12,9 +12,13 @@
 		};
 	}>();
 
-	export let id: string;
-	export let name: string;
-	let isDanger = false;
+	interface Props {
+		id: string;
+		name: string;
+	}
+
+	let { id, name }: Props = $props();
+	let isDanger = $state(false);
 	onMount(() => {
 		isDanger = is_tag_danger(id);
 	});

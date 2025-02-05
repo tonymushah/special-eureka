@@ -1,8 +1,12 @@
 <script lang="ts">
 	import Accordion from "../Accordion.svelte";
 
-	export let withBorder = false;
-	export let titleBorder = false;
+	interface Props {
+		withBorder?: boolean;
+		titleBorder?: boolean;
+	}
+
+	let { withBorder = $bindable(false), titleBorder = $bindable(false) }: Props = $props();
 </script>
 
 <Accordion title="Some Accordion" bind:withBorder bind:titleBorder>

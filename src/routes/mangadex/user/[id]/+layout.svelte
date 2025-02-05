@@ -3,67 +3,78 @@
 	import type { LayoutData } from "./$types";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import UserRoleBadge from "@mangadex/componnents/user/UserRoleBadge.svelte";
-	import { writeText } from "@tauri-apps/api/clipboard";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { ExternalLinkIcon, FlagIcon, BookmarkIcon } from "svelte-feather-icons";
-	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import NavTab from "./NavTab.svelte";
 
-	export let data: LayoutData;
+	interface Props {
+		data: LayoutData;
+		children?: import("svelte").Snippet;
+	}
+
+	let { data, children }: Props = $props();
 </script>
 
 <UsersPageBase title={data.username}>
-	<div slot="left" class="buttons">
-		<PrimaryButton isBase>
-			<p><BookmarkIcon />Follow</p>
-		</PrimaryButton>
-		<ButtonAccent
-			isBase
-			on:click={() => {
-				shellOpen(`https://mangadex.org/user/${data.id}`);
-			}}
-		>
-			<p><ExternalLinkIcon /> Open in browser</p>
-		</ButtonAccent>
-		<ButtonAccent isBase>
-			<p><FlagIcon />Report</p>
-		</ButtonAccent>
-	</div>
-	<div slot="top-right">
-		<p>
-			User ID: <span
-				on:keydown={() => {}}
-				role="button"
-				tabindex={0}
+	{#snippet _left()}
+		<div class="buttons">
+			<PrimaryButton isBase>
+				<p><BookmarkIcon />Follow</p>
+			</PrimaryButton>
+			<ButtonAccent
+				isBase
 				on:click={() => {
-					writeText(data.id);
+					shellOpen(`https://mangadex.org/user/${data.id}`);
 				}}
-				class="copiable">{data.id}</span
 			>
-		</p>
-		<section class="uploads">
+				<p><ExternalLinkIcon /> Open in browser</p>
+			</ButtonAccent>
+			<ButtonAccent isBase>
+				<p><FlagIcon />Report</p>
+			</ButtonAccent>
+		</div>
+	{/snippet}
+	{#snippet topRight()}
+		<div>
 			<p>
-				{data.uploads}
-				<span>
-					upload{#if data.uploads > 1}s{/if}
-				</span>
+				User ID: <span
+					onkeydown={() => {}}
+					role="button"
+					tabindex={0}
+					onclick={() => {
+						writeText(data.id);
+					}}
+					class="copiable">{data.id}</span
+				>
 			</p>
-		</section>
-		<section class="roles">
-			{#each data.roles as role}
-				<UserRoleBadge {role} />
-			{/each}
-		</section>
-	</div>
-	<div slot="right">
-		<section class="nav-tab">
-			<NavTab id={data.id} />
-		</section>
-		<section class="content">
-			<slot />
-		</section>
-	</div>
+			<section class="uploads">
+				<p>
+					{data.uploads}
+					<span>
+						upload{#if data.uploads > 1}s{/if}
+					</span>
+				</p>
+			</section>
+			<section class="roles">
+				{#each data.roles as role}
+					<UserRoleBadge {role} />
+				{/each}
+			</section>
+		</div>
+	{/snippet}
+	{#snippet _right()}
+		<div>
+			<section class="nav-tab">
+				<NavTab id={data.id} />
+			</section>
+			<section class="content">
+				{@render children?.()}
+			</section>
+		</div>
+	{/snippet}
 </UsersPageBase>
 
 <style lang="scss">

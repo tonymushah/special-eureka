@@ -4,9 +4,11 @@
 	import { writable } from "svelte/store";
 	import MangaListTabSelect from "../MangaListTabSelect.svelte";
 
-	export let style = MangaListStyle.Grid;
+	let { style = $bindable(MangaListStyle.Grid) } = $props();
 	const styleContext = initMangaListStyleContext(writable(style));
-	$: styleContext.set(style);
+	$effect(() => {
+		styleContext.set(style);
+	});
 </script>
 
 <MangaListTabSelect />

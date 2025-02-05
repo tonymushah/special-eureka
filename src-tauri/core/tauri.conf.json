@@ -1,0 +1,106 @@
+{
+	"$schema": "../../node_modules/@tauri-apps/cli/config.schema.json",
+	"build": {
+		"beforeBuildCommand": "pnpm run vite:build",
+		"beforeDevCommand": "pnpm run vite:dev",
+		"frontendDist": "../../build",
+		"devUrl": "http://localhost:9305"
+	},
+	"plugins": {
+		"mangadex-desktop-api": {
+			"sdlExportPath": "../../src/lib/mangadex/schemas.graphqls",
+			"userAgent": "special-eureka/{{current_version}}",
+			"timeout": "15s"
+		},
+		"updater": {
+			"windows": {
+				"installMode": "basicUi"
+			},
+			"pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEU5RkM0NjNGRkE3RTE4MEQKUldRTkdINzZQMGI4NlRBVDF5OUgvaVRyQ1RyU3Rocmw3U0lQYVlNZ002bytsVmwyZWRBNTJpa3YK",
+			"endpoints": [
+				"https://raw.githubusercontent.com/tonymushah/special-eureka/master/.tauri/update.json"
+			]
+		},
+        "deep-link": {
+            "desktop": {
+                "schemes": ["special-eureka"]
+            }
+        }
+	},
+	"bundle": {
+		"active": true,
+		"category": "Lifestyle",
+		"copyright": "",
+		"targets": "all",
+		"linux": {
+			"deb": {
+				"depends": []
+			},
+			"appimage": {
+				"bundleMediaFramework": false
+			},
+            "rpm": {
+                "epoch": 0,
+                "files": {},
+                "release": "1"
+            }
+		},
+		"externalBin": [],
+		"icon": [
+			"icons/32x32.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico"
+		],
+		"windows": {
+			"certificateThumbprint": null,
+			"digestAlgorithm": "sha256",
+			"timestampUrl": ""
+		},
+		"longDescription": "This app is a desktop-mangareader built in Tauri and React, with ❤ and tears by Tony Mushah. Feel free to use it!",
+		"macOS": {
+			"entitlements": null,
+			"exceptionDomain": "",
+			"frameworks": [],
+			"providerShortName": null,
+			"signingIdentity": null
+		},
+		"resources": [],
+		"shortDescription": "Special Eureka",
+		"createUpdaterArtifacts": "v1Compatible"
+	},
+	"productName": "Special-Eureka",
+	"mainBinaryName": "Special-Eureka",
+	"identifier": "mg.tonymushah.special-eureka",
+	"app": {
+		"withGlobalTauri": false,
+		"windows": [
+			{
+				"fullscreen": false,
+				"height": 600,
+				"resizable": true,
+				"title": "Special Eureka",
+				"width": 800,
+				"minWidth": 500,
+				"theme": "Light",
+				"label": "main",
+				"url": "index.html",
+				"decorations": false,
+				"useHttpsScheme": true
+			}
+		],
+		"security": {
+			"csp": null,
+			"pattern": {
+				"use": "brownfield"
+			}
+		},
+		"trayIcon": {
+            "id": "main",
+			"tooltip": "Special Eureka",
+			"showMenuOnLeftClick": false,
+			"iconPath": "./icons/icon.png"
+		}
+	}
+}

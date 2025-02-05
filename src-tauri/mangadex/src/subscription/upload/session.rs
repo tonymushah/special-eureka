@@ -16,14 +16,11 @@ impl UploadSessionSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         upload_session_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = UploadSessionAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.upload_session.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.upload_session.subscribe()
+            })?
             .option_filter_by_id(upload_session_id),
         )
     }

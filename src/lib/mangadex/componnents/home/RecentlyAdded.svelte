@@ -15,10 +15,9 @@
 		variable: {}
 	});
 	const isFetching = recently_added_query_store.isFetching;
-	$: fetching = $isFetching;
 
-	$: error = $recently_added_query_store?.error;
-	$: data = $recently_added_query_store?.data;
+	let error = $derived($recently_added_query_store?.error);
+	let data = $derived($recently_added_query_store?.data);
 	onMount(async () => {
 		await recently_added_query_store.execute();
 	});
@@ -26,12 +25,12 @@
 
 <TopTitle
 	on:refresh={async () => {
-		if (!fetching) {
+		if (!$isFetching) {
 			await recently_added_query_store.execute();
 		}
 	}}
 	label={"Recently Added"}
-	bind:fetching
+	bind:fetching={$isFetching}
 />
 
 {#if data}

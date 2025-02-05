@@ -7,11 +7,16 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let variant: "blue" = "blue";
+	interface Props {
+		variant?: "blue";
+		children?: import('svelte').Snippet;
+	}
+
+	let { variant = "blue", children }: Props = $props();
 </script>
 
 {#if variant == "blue"}
 	<Blue on:click>
-		<slot />
+		{@render children?.()}
 	</Blue>
 {/if}

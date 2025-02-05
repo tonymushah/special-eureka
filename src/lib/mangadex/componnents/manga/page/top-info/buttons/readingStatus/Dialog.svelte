@@ -16,12 +16,17 @@
 		readingStatus: ReadingStatusEventDetail;
 	}>();
 
-	export let status: ReadingStatus | undefined = undefined;
-	export let isFollowing: boolean = false;
-	export let dialog: HTMLDialogElement | undefined;
+	interface Props {
+		status?: ReadingStatus | undefined;
+		isFollowing?: boolean;
+		dialog: HTMLDialogElement | undefined;
+	}
 
-	$: selectedStatus = writable<ReadingStatus | undefined>(status);
-	$: selectedIsFollowing = writable(isFollowing);
+	let { status = undefined, isFollowing = false, dialog = $bindable() }: Props = $props();
+
+	let selectedStatus = $derived(writable<ReadingStatus | undefined>(status));
+
+	let selectedIsFollowing = $derived(writable(isFollowing));
 
 	function closeDialog() {
 		if (dialog) {
@@ -30,7 +35,7 @@
 	}
 </script>
 
-<dialog bind:this={dialog}>
+<dialog bind:this={dialog} class="manga-search-filter">
 	<div class="title">
 		<p>Add to Library</p>
 		<ButtonAccent on:click={closeDialog}>
@@ -46,8 +51,8 @@
 				<h3>{title}</h3>
 				<h4>Reading Status</h4>
 				<div class="form">
-					<StatusSelect bind:readingStatus={selectedStatus} />
-					<IsFollowingButton bind:isFollowing={selectedIsFollowing} />
+					<StatusSelect readingStatus={selectedStatus} />
+					<IsFollowingButton isFollowing={selectedIsFollowing} />
 				</div>
 			</div>
 			<div class="bottom">

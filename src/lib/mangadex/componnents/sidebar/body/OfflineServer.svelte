@@ -5,5 +5,7 @@
 </script>
 
 <Menu label="Offline Server">
-    <ServerIconState slot="icon" />
+    {#snippet icon()}
+		<ServerIconState  />
+	{/snippet}
 </Menu>

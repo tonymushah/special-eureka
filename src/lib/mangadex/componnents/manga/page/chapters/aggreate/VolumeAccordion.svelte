@@ -4,9 +4,13 @@
 	import Accordion from "@mangadex/componnents/theme/accordion/Accordion.svelte";
 	import { createChapterEl1EventDispatcher } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 
-	export let title: string;
-	export let volumeContent: ComponentProps<Chapters>[];
-	export let isOpen: boolean = false;
+	interface Props {
+		title: string;
+		volumeContent: ComponentProps<typeof Chapters>[];
+		isOpen?: boolean;
+	}
+
+	let { title, volumeContent, isOpen = false }: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};

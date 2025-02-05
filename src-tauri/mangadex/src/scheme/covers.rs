@@ -6,6 +6,7 @@ use std::{
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use regex::Regex;
+use reqwest::header::CONTENT_TYPE;
 use tauri::{
     http::{status::StatusCode, Request},
     AppHandle, Runtime,
@@ -46,9 +47,9 @@ impl TryFrom<HandleCoversParams> for CoverImageCache {
     }
 }
 
-impl TryFrom<&Request> for HandleCoversParams {
+impl TryFrom<&Request<Vec<u8>>> for HandleCoversParams {
     type Error = SchemeResponseError;
-    fn try_from(value: &Request) -> Result<Self, Self::Error> {
+    fn try_from(value: &Request<Vec<u8>>) -> Result<Self, Self::Error> {
         let uri = parse_uri(value)?;
         let regex = Regex::new(
             r"(?x)/(?P<cover_id>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?P<filename>\w*.*)",
@@ -109,7 +110,7 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
         cache.get_from_cache()
     }
 
-    pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response> {
+    pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
         let mut buf = BytesMut::new().writer();
         if let Ok(cache) = self.get_from_cache() {
             io::copy(&mut (cache.reader()), &mut buf)?;
@@ -132,19 +133,19 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
         }
 
         buf.flush()?;
-        tauri::http::ResponseBuilder::new()
+        tauri::http::Response::builder()
             .header("access-control-allow-origin", "*")
             .status(StatusCode::OK)
-            .mimetype("image/*")
+            .header(CONTENT_TYPE, "image/*")
             .body(buf.into_inner().into())
-            .map_err(SchemeResponseError::InternalError)
+            .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
     }
 }
 
 pub fn handle_covers<'a, R: Runtime>(
     app: &'a AppHandle<R>,
-    req: &'a Request,
-) -> SchemeResponseResult<tauri::http::Response> {
+    req: &'a Request<Vec<u8>>,
+) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
     let param: HandleCoversParams = req.try_into()?;
     CoverImagesOfflineHandler::new(&param, app).handle()
 }

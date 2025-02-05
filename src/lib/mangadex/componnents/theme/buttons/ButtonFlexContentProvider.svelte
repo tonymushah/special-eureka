@@ -1,9 +1,19 @@
 <script lang="ts">
 	import SomeDiv from "../SomeDiv.svelte";
 
-	export let alignItems = "center";
-	export let display = "flex";
-	export let justifyContent = "center";
+	interface Props {
+		alignItems?: string;
+		display?: string;
+		justifyContent?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		alignItems = "center",
+		display = "flex",
+		justifyContent = "center",
+		children
+	}: Props = $props();
 </script>
 
 <SomeDiv
@@ -11,5 +21,5 @@
 	--button-display={display}
 	--button-justify-content={justifyContent}
 >
-	<slot />
+	{@render children?.()}
 </SomeDiv>

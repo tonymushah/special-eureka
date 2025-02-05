@@ -13,12 +13,21 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let description: string;
-	let isHover = false;
-	$: image = $coverImage;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+		description: string;
+	}
+
+	let {
+		coverImage,
+		coverImageAlt,
+		title,
+		description
+	}: Props = $props();
+	let isHover = $state(false);
+	let image = $derived($coverImage);
 </script>
 
 <Layout bind:isHover>

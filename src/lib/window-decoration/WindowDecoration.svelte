@@ -1,10 +1,11 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import { derived, writable } from "svelte/store";
 	import defaultLogo from "./app-icon.png";
 	// Supports weights 100-900
 	import "@fontsource-variable/noto-sans-jp";
 	import "@fontsource/pacifico";
-	import { appWindow } from "@tauri-apps/api/window";
+	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+	const appWindow = getCurrentWebviewWindow();
 
 	export type ButtonStyles = {
 		default: string;
@@ -55,11 +56,13 @@
 			backgroundOnHover: "#ddd"
 		});
 	}
-	export function setDefault() {
+	export async function setDefault() {
 		setDefaultLogo();
 		setDefaultTitle();
 		setDefaultFonts();
 		setDefaultStyles();
+		const { defaultBehavior } = await import("./stores/decorations.svelte");
+		defaultBehavior();
 	}
 </script>
 
@@ -72,9 +75,9 @@
 	import { slide } from "svelte/transition";
 	import Commands from "./Commands.svelte";
 
-	let isMaximize = false;
+	let isMaximize = $state(false);
 	let unlistens: UnlistenFn[] = [];
-	let showCommands: boolean = false;
+	let showCommands: boolean = $state(false);
 	async function isMaximized() {
 		isMaximize = await appWindow.isMaximized();
 	}
@@ -93,7 +96,9 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	$: appWindow.setTitle($title);
+	$effect(() => {
+		appWindow.setTitle($title);
+	});
 	const textColor = derived(style, ($style) => $style.textColor);
 	const background = derived(style, ($s) => $s.background);
 	const backgroundOnHover = derived(style, ($style) => $style.backgroundOnHover);
@@ -135,10 +140,10 @@
 	<div
 		class="title-bar"
 		role="banner"
-		on:mouseenter={() => {
+		onmouseenter={() => {
 			showCommands = true;
 		}}
-		on:mouseleave={() => {
+		onmouseleave={() => {
 			showCommands = false;
 		}}
 		data-tauri-drag-region
@@ -154,7 +159,7 @@
 				<Commands />
 			</div>
 		{/if}
-		<ActionButtons bind:isMaximize {isMaximized} />
+		<ActionButtons {isMaximize} {isMaximized} />
 	</div>
 </DragRegion>
 

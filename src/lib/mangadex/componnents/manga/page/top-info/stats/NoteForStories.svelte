@@ -2,8 +2,12 @@
 	import type { TopMangaStatsInner } from ".";
 	import Note from "./Note.svelte";
 
-	export let average: number;
-	export let inner: TopMangaStatsInner;
+	interface Props {
+		average: number;
+		inner: TopMangaStatsInner;
+	}
+
+	let { average = $bindable(), inner = $bindable() }: Props = $props();
 </script>
 
 <div class="center">

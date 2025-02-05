@@ -1,19 +1,20 @@
-import { appWindow } from "@tauri-apps/api/window";
-import { writable, type Readable } from "svelte/store";
+import toggleDecoration from "$lib/commands/toggleDecoration";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { readable, type Readable } from "svelte/store";
+const appWindow = getCurrentWebviewWindow();
 
-const isDefaultDecoration = writable(true, (set) => {
-    appWindow.isDecorated().then(set);
-    const unlisten = appWindow.listen<boolean>("decoration", () => {
-        appWindow.isDecorated().then(set);
-    })
-    return () => {
-        unlisten.then((u) => u());
-    }
+const isDefaultDecoration = readable(true, (set) => {
+	appWindow.isDecorated().then(set);
+	const unlisten = appWindow.listen<boolean>("decoration", () => {
+		appWindow.isDecorated().then(set);
+	});
+	return () => {
+		unlisten.then((u) => u());
+	};
 });
 
 export async function setDecoration(isDecorated: boolean) {
-    await appWindow.setDecorations(isDecorated);
-    await appWindow.emit("decoration");
+	await toggleDecoration(isDecorated);
 }
 
 export default isDefaultDecoration satisfies Readable<boolean>;

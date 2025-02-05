@@ -8,8 +8,13 @@
 	import type { SwiperContainer } from "swiper/element";
 	import MangaElementBase4 from "@mangadex/componnents/manga/base/base4/MangaElementBase4WithReadableCoverImage.svelte";
 	import openTitle from "@mangadex/utils/links/title/[id]";
+	import type { SwiperOptions } from "swiper/types";
 
-	export let data: RecentlyAddedHomeQueryQuery;
+	interface Props {
+		data: RecentlyAddedHomeQueryQuery;
+	}
+
+	let { data }: Props = $props();
 	const client = getContextClient();
 	type Title = {
 		id: string;
@@ -20,23 +25,25 @@
 	function getLangData(title: Record<string, string>): string {
 		return get_value_from_title_and_random_if_undefined(title, "en") ?? "";
 	}
-	$: titles = data.home.recentlyAdded.data.map<Title>((t) => ({
-		id: t.id,
-		title: getLangData(t.attributes.title),
-		coverImage: get_cover_art({
-			cover_id: t.relationships.coverArt.id,
-			manga_id: t.id,
-			mode: CoverImageQuality.V256,
-			filename: t.relationships.coverArt.attributes.fileName,
-			client
-		}),
-		coverImageAlt: t.relationships.coverArt.id
-	}));
+	let titles = $derived(
+		data.home.recentlyAdded.data.map<Title>((t) => ({
+			id: t.id,
+			title: getLangData(t.attributes.title),
+			coverImage: get_cover_art({
+				cover_id: t.relationships.coverArt.id,
+				manga_id: t.id,
+				mode: CoverImageQuality.V256,
+				filename: t.relationships.coverArt.attributes.fileName,
+				client
+			}),
+			coverImageAlt: t.relationships.coverArt.id
+		}))
+	);
 
-	let swiper_container: SwiperContainer | undefined = undefined;
+	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
-		const swiperParams = {
+		const swiperParams: SwiperOptions = {
 			slidesPerView: "auto",
 			breakpoints: {
 				640: {
@@ -49,6 +56,7 @@
 					slidesPerView: 6
 				}
 			},
+			mousewheel: true,
 			freeMode: true,
 			on: {
 				init() {
@@ -87,5 +95,8 @@
 <style lang="scss">
 	.result {
 		margin: 1em;
+	}
+	swiper-slide {
+		padding-bottom: 10px;
 	}
 </style>

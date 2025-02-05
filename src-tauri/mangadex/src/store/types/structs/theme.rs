@@ -1,5 +1,6 @@
-use async_graphql::{InputObject, SimpleObject};
+use async_graphql::{Enum, InputObject, SimpleObject};
 use serde::{Deserialize, Serialize};
+use tauri::Theme;
 
 pub mod profiles;
 
@@ -179,6 +180,31 @@ impl Default for Contrast {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Enum, Serialize, Deserialize)]
+pub enum ThemeScheme {
+    Light,
+    Dark,
+}
+
+impl From<Theme> for ThemeScheme {
+    fn from(value: Theme) -> Self {
+        match value {
+            Theme::Light => Self::Light,
+            Theme::Dark => Self::Dark,
+            _ => Self::Dark,
+        }
+    }
+}
+
+impl From<ThemeScheme> for Theme {
+    fn from(value: ThemeScheme) -> Self {
+        match value {
+            ThemeScheme::Light => Theme::Light,
+            ThemeScheme::Dark => Theme::Dark,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Deserialize, Serialize, SimpleObject, InputObject)]
 #[graphql(input_name = "MangaDexThemeInput")]
 pub struct MangaDexTheme {
@@ -193,6 +219,7 @@ pub struct MangaDexTheme {
     pub status: StatusColor,
     pub indication: IndicatorColor,
     pub danger: DangerColor,
+    pub scheme: Option<ThemeScheme>,
 }
 
 impl Default for MangaDexTheme {
@@ -209,6 +236,7 @@ impl Default for MangaDexTheme {
             status: Default::default(),
             indication: Default::default(),
             danger: Default::default(),
+            scheme: Default::default(),
         }
     }
 }

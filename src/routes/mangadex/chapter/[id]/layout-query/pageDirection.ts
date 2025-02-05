@@ -1,13 +1,12 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 import { Direction } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { sub_end } from "@mangadex/utils";
-import { get, readable, writable, type Writable } from "svelte/store";
+import { get, readable, type Writable } from "svelte/store";
 import { v4 } from "uuid";
 
 const readingDirectionSub = graphql(`
-	subscription subToChapterReadingDirection($subId: UUID!) {
-		watchPageDirection(subId: $subId)
+	subscription subToChapterReadingDirection {
+		watchPageDirection
 	}
 `);
 
@@ -21,19 +20,14 @@ const readingDirectionMutation = graphql(`
 
 const base = readable(Direction.Ltr, (set, update) => {
 	const sub_id = v4();
-	const unsub = client
-		.subscription(readingDirectionSub, {
-			subId: sub_id
-		})
-		.subscribe((res) => {
-			const direction = res.data?.watchPageDirection;
-			if (direction) {
-				set(direction);
-			}
-		});
+	const unsub = client.subscription(readingDirectionSub, {}).subscribe((res) => {
+		const direction = res.data?.watchPageDirection;
+		if (direction) {
+			set(direction);
+		}
+	});
 	return () => {
 		unsub.unsubscribe();
-		sub_end(sub_id);
 	};
 });
 

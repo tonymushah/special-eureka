@@ -7,16 +7,31 @@
 	import MangaPageTopInfo from "../MangaPageTopInfo.svelte";
 	import type { TopMangaStatistics } from "../stats";
 
-	export let id: string;
-	export let title: string;
-	export let altTitle: string | undefined = undefined;
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let authors: Author[];
-	export let tags: Tag[];
-	export let status: MangaStatus;
-	export let year: number | undefined = undefined;
-	export let stats: TopMangaStatistics | undefined = undefined;
+	interface Props {
+		id: string;
+		title: string;
+		altTitle?: string | undefined;
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		authors: Author[];
+		tags: Tag[];
+		status: MangaStatus;
+		year?: number | undefined;
+		stats?: TopMangaStatistics | undefined;
+	}
+
+	let {
+		id,
+		title,
+		altTitle = undefined,
+		coverImage,
+		coverImageAlt,
+		authors,
+		tags,
+		status,
+		year = undefined,
+		stats = undefined
+	}: Props = $props();
 	let reading_status: Writable<ReadingStatus | undefined> = writable<ReadingStatus | undefined>(
 		undefined
 	);

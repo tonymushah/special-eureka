@@ -5,5 +5,7 @@
 </script>
 
 <Menu label="Settings" href={route("/mangadex/settings")}>
-	<SettingsIcon slot="icon" size="24" />
+	{#snippet icon()}
+		<SettingsIcon  size="24" />
+	{/snippet}
 </Menu>

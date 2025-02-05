@@ -8,9 +8,12 @@
 		};
 	}>();
 
-	export let label: string;
-	export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" =
-		"default";
+	interface Props {
+		label: string;
+		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
+	}
+
+	let { label, variant = "default" }: Props = $props();
 </script>
 
 <AccentBadge on:click {variant}>

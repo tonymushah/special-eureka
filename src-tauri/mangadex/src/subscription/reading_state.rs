@@ -16,14 +16,11 @@ impl ReadingStateSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ReadingState> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.reading_state.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.reading_state.subscribe()
+            })?
             .option_filter_by_id(chapter_id),
         )
     }

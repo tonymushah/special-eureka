@@ -5,18 +5,18 @@
 	import { onDestroy } from "svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	const theme = getMangaDexThemeContext();
-	let coverImageInstance: HTMLImageElement | undefined = undefined;
-	let zoom: Zoom | undefined = undefined;
-	$: {
+	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
+	let zoom: Zoom | undefined = $state(undefined);
+	$effect(() => {
 		zoom = mediumZoom(coverImageInstance, {
 			background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
 		});
-	}
+	});
 	onDestroy(() => {
 		zoom?.close();
 	});
 	const coverImageStore = getTopCoverContextStore();
-	$: coverImage = $coverImageStore;
+	let coverImage = $derived($coverImageStore);
 	const alt = getTopCoverAltContextStore();
 </script>
 

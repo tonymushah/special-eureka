@@ -16,12 +16,10 @@ impl MangaReadingStatusSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = Option<ReadingStatus>> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
                 |w| w.manga_reading_state.subscribe(),
             )?
             .option_filter_by_id(manga_id),

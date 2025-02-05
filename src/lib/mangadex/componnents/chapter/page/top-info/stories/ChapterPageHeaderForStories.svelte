@@ -3,10 +3,16 @@
 	import { initCurrentChapterData, type CurrentChapterData } from "../../contexts/currentChapter";
 	import ChapterPageHeader from "../ChapterPageHeader.svelte";
 
-	export let currentChapter: CurrentChapterData;
+	interface Props {
+		currentChapter: CurrentChapterData;
+	}
+
+	let { currentChapter = $bindable() }: Props = $props();
 	const c = writable(currentChapter);
 	initCurrentChapterData(c);
-	$: c.set(currentChapter);
+	$effect(() => {
+		c.set(currentChapter);
+	});
 </script>
 
 <ChapterPageHeader />

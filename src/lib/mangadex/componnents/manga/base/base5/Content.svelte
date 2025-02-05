@@ -13,9 +13,13 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let title: string;
-	export let description: string;
-	export let isHover: boolean;
+	interface Props {
+		title: string;
+		description: string;
+		isHover: boolean;
+	}
+
+	let { title, description, isHover }: Props = $props();
 </script>
 
 <div class="title has-transition" class:isHover>

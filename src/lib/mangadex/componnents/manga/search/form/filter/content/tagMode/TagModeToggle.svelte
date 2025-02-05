@@ -4,15 +4,19 @@
 	import { tagModeWritableToBoolWritable } from "../../contexts/tagModes";
 	import { createToggle, melt } from "@melt-ui/svelte";
 
-	export let writableTag: Writable<TagSearchMode>;
-	export let trueValue = TagSearchMode.And;
-	$: toUse = tagModeWritableToBoolWritable(writableTag, trueValue);
+	interface Props {
+		writableTag: Writable<TagSearchMode>;
+		trueValue?: any;
+	}
 
-	$: toggle = createToggle({
+	let { writableTag, trueValue = TagSearchMode.And }: Props = $props();
+	let toUse = $derived(tagModeWritableToBoolWritable(writableTag, trueValue));
+
+	let toggle = $derived(createToggle({
 		pressed: toUse
-	});
-	$: root = toggle.elements.root;
-	$: pressed = toggle.states.pressed;
+	}));
+	let root = $derived(toggle.elements.root);
+	let pressed = $derived(toggle.states.pressed);
 </script>
 
 <button use:melt={$root}>

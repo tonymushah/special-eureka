@@ -5,7 +5,11 @@
 	import { isDrawerFixedWritable } from "../../contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "../../contexts/isDrawerOpen";
 
-	export let left = false;
+	interface Props {
+		left?: boolean;
+	}
+
+	let { left = false }: Props = $props();
 	const open = isDrawerOpenWritable();
 	const fixed = isDrawerFixedWritable();
 	const fixed_ = derived(fixed, (f) => !f);
@@ -15,10 +19,10 @@
 	<div
 		role="button"
 		tabindex="0"
-		on:click={() => {
+		onclick={() => {
 			$open = !$open;
 		}}
-		on:keydown={(e) => {
+		onkeydown={(e) => {
 			if (e.key == "Enter") {
 				$open = !$open;
 			}
@@ -29,10 +33,10 @@
 	<div
 		role="button"
 		tabindex="0"
-		on:click={() => {
+		onclick={() => {
 			$fixed = !$fixed;
 		}}
-		on:keydown={(e) => {
+		onkeydown={(e) => {
 			if (e.key == "Enter") {
 				$fixed = !$fixed;
 			}

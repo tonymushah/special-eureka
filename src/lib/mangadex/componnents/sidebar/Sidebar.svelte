@@ -30,6 +30,9 @@
 </div>
 
 <style lang="scss">
+	:root {
+		--sidebar-transition-duration: 100ms;
+	}
 	.sidebar {
 		display: none;
 	}
@@ -66,18 +69,19 @@
 	}
 	aside {
 		transition:
-			width ease-in-out 300ms,
-			translate ease-in-out 300ms;
+			width ease-in-out var(--sidebar-transition-duration),
+			translate ease-in-out var(--sidebar-transition-duration);
 		background-color: var(--accent-l1);
 		width: 256px;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 8px;
+		height: -webkit-fill-available;
 	}
-	aside {
-		//height: 100%;
-	}
+	/*aside {
+		height: 100%;
+	}*/
 	/*
 	aside.defaultDecoration {
 		height: 99vh;

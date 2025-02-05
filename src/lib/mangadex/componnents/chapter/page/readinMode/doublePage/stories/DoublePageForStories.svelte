@@ -6,15 +6,28 @@
 	import { ImageFit, Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { initCurrentChapterDirection } from "../../../contexts/readingDirection";
 	import { initCurrentChapterImageFit } from "../../../contexts/imageFit";
-	export let images: string[];
-	export let currentPage: number = 0;
-	export let direction: ReadingDirection = ReadingDirection.Ltr;
-	export let imageFit = ImageFit.Default;
+	interface Props {
+		images: string[];
+		currentPage?: number;
+		direction?: ReadingDirection;
+		imageFit?: any;
+	}
+
+	let {
+		images = $bindable(),
+		currentPage = $bindable(0),
+		direction = $bindable(ReadingDirection.Ltr),
+		imageFit = $bindable(ImageFit.Default)
+	}: Props = $props();
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
-	$: readingDirection.set(direction);
-	$: imageFitStore.set(imageFit);
+	$effect(() => {
+		readingDirection.set(direction);
+	});
+	$effect(() => {
+		imageFitStore.set(imageFit);
+	});
 	initChapterImageContext(images);
 	initChapterCurrentPageContext(writable(currentPage));
 </script>
@@ -29,7 +42,7 @@
 		{/if}
 	</span>
 	<button
-		on:click={() => {
+		onclick={() => {
 			switch ($readingDirection) {
 				case ReadingDirection.Ltr:
 					readingDirection.set(ReadingDirection.Rtl);
@@ -49,7 +62,7 @@
 <div class="image-fit">
 	<span> Image Fit: </span>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Default;
 		}}
 		class:active={$imageFitStore == ImageFit.Default}
@@ -57,7 +70,7 @@
 		None
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Heigth;
 		}}
 		class:active={$imageFitStore == ImageFit.Heigth}
@@ -65,7 +78,7 @@
 		Height
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Width;
 		}}
 		class:active={$imageFitStore == ImageFit.Width}

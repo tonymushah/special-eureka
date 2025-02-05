@@ -1,17 +1,32 @@
 <script lang="ts">
+	import { preventDefault } from "svelte/legacy";
+
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import { language_list } from "@mangadex/utils/lang/list";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
-	import { startCase } from "lodash";
-	import { derived, get, type Writable } from "svelte/store";
-	import { slide } from "svelte/transition";
+	import { derived as der, get, type Writable } from "svelte/store";
+	import LanguagesBaseMenu from "./LanguagesBaseMenu.svelte";
 
-	export let title: string;
-	export let selecteds: Writable<Language[]>;
-	let selecteds_options = derived(selecteds, ($s) => {
+	interface Props {
+		title: string;
+		selecteds: Writable<Language[]>;
+		placement?:
+			| "top"
+			| "top-start"
+			| "top-end"
+			| "right"
+			| "right-start"
+			| "right-end"
+			| "bottom"
+			| "bottom-start"
+			| "bottom-end"
+			| "left"
+			| "left-start"
+			| "left-end";
+	}
+	let { title, selecteds, placement = "top" }: Props = $props();
+	const selecteds_options = der(selecteds, ($s) => {
 		return $s.map<SelectOption<Language>>((ss) => ({
 			value: ss
 		}));
@@ -23,10 +38,12 @@
 	} = createSelect<Language, true>({
 		forceVisible: true,
 		positioning: {
-			placement: "bottom",
+			placement,
 			fitViewport: true,
 			sameWidth: true
+			// strategy: "fixed"
 		},
+		portal: "dialog",
 		multiple: true,
 		selected: {
 			subscribe(run, invalidate) {
@@ -41,6 +58,13 @@
 			}
 		}
 	});
+	$effect(() => {
+		if ($open) {
+			console.log("open");
+		} else {
+			console.log("not open");
+		}
+	});
 </script>
 
 <section class="layout">
@@ -48,9 +72,10 @@
 	<div class="content">
 		<button
 			use:melt={$trigger}
-			on:contextmenu|preventDefault={() => {
+			oncontextmenu={preventDefault(() => {
 				selecteds.set([]);
-			}}
+			})}
+			aria-label={title}
 		>
 			{#if $selected}
 				{#each $selected as s}
@@ -67,24 +92,7 @@
 	</div>
 </section>
 
-{#if $open}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each language_list.map((e) => {
-					return { value: e, label: startCase(e) };
-				}) as { value, label } (value)}
-					<li use:melt={$option({ value, label })} class:isSelected={$isSelected(value)}>
-						<div class="icon">
-							<FlagIcon lang={value} />
-						</div>
-						<h4>{label}</h4>
-					</li>
-				{/each}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
+<LanguagesBaseMenu {open} {menu} {option} {isSelected} />
 
 <style lang="scss">
 	button {
@@ -94,47 +102,12 @@
 		flex-wrap: wrap;
 		align-items: center;
 	}
-	.menu-outer {
-		display: flex;
-		flex-direction: column;
-		height: 200px;
-	}
 	.layout {
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 	}
-	menu {
-		margin: 0px;
-		border-radius: 0.25em;
-		list-style: none;
-		background-color: var(--accent);
-		z-index: 10;
-		overflow-y: scroll;
-		color: var(--text-color);
-		padding-left: 0em;
-		li {
-			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
-			display: flex;
-			gap: 10px;
-			h4 {
-				margin: 0px;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-			}
-		}
-		li:not(.isSelected):hover {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):active {
-			background-color: var(--accent-active);
-		}
-		li.isSelected {
-			background-color: var(--primary);
-		}
-	}
+
 	.layout {
 		display: grid;
 		gap: 5px;

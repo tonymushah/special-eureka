@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { CoverMangaListItemProps } from "./cover/CoverMangaList.svelte";
 	import type { LongMangaListItemProps } from "./long/LongMangaList.svelte";
 	import type { MediumMangaListElementProps } from "./medium/MediumMangaList.svelte";
@@ -15,16 +15,20 @@
 	import LongMangaList from "./long/LongMangaList.svelte";
 	import MediumMangaList from "./medium/MediumMangaList.svelte";
 
-	export let list: MangaListContentItemProps[] = [];
+	interface Props {
+		list?: MangaListContentItemProps[];
+	}
+
+	let { list }: Props = $props();
 	const style = getMangaListStyleContext();
 </script>
 
 <div class="manga-list-content">
 	{#if $style == MangaListStyle.Grid}
-		<MediumMangaList bind:list />
+		<MediumMangaList {list} />
 	{:else if $style == MangaListStyle.Rows}
-		<LongMangaList bind:list />
+		<LongMangaList {list} />
 	{:else if $style == MangaListStyle.Cover}
-		<CoverMangaList bind:list />
+		<CoverMangaList {list} />
 	{/if}
 </div>

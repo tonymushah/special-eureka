@@ -1,7 +1,11 @@
 <script lang="ts">
 	import PrimarySpan from "@mangadex/componnents/theme/texts/span/PrimarySpan.svelte";
 
-	export let index: number = -1;
+	interface Props {
+		index?: number;
+	}
+
+	let { index = -1 }: Props = $props();
 </script>
 
 <div>

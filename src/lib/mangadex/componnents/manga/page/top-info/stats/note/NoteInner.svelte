@@ -3,11 +3,15 @@
 	import type { TopMangaStatsInner } from "..";
 	import DistributionItem from "./DistributionItem.svelte";
 
-	export let inner: TopMangaStatsInner;
-	export let target: HTMLElement | undefined;
-	export let isOpen: boolean = false;
+	interface Props {
+		inner: TopMangaStatsInner;
+		target: HTMLElement | undefined;
+		isOpen?: boolean;
+	}
 
-	let info: HTMLDivElement | undefined;
+	let { inner = $bindable(), target = $bindable(), isOpen = $bindable(false) }: Props = $props();
+
+	let info: HTMLDivElement | undefined = $state();
 
 	async function open() {
 		if (target && info) {
@@ -21,11 +25,13 @@
 			});
 		}
 	}
-	$: if (isOpen) {
-		open().catch(() => {
-			isOpen = false;
-		});
-	}
+	$effect(() => {
+		if (isOpen) {
+			open().catch(() => {
+				isOpen = false;
+			});
+		}
+	});
 	function getTotal(inner: TopMangaStatsInner) {
 		return (
 			inner[1] +
@@ -40,20 +46,20 @@
 			inner[10]
 		);
 	}
-	$: total = getTotal(inner);
+	let total = $derived(getTotal(inner));
 </script>
 
 <div class="distribution-info" class:isOpen bind:this={info}>
-	<DistributionItem bind:total distribution={10} value={inner[10]} />
-	<DistributionItem bind:total distribution={9} value={inner[9]} />
-	<DistributionItem bind:total distribution={8} value={inner[8]} />
-	<DistributionItem bind:total distribution={7} value={inner[7]} />
-	<DistributionItem bind:total distribution={6} value={inner[6]} />
-	<DistributionItem bind:total distribution={5} value={inner[5]} />
-	<DistributionItem bind:total distribution={4} value={inner[4]} />
-	<DistributionItem bind:total distribution={3} value={inner[3]} />
-	<DistributionItem bind:total distribution={2} value={inner[2]} />
-	<DistributionItem bind:total distribution={1} value={inner[1]} />
+	<DistributionItem {total} distribution={10} value={inner[10]} />
+	<DistributionItem {total} distribution={9} value={inner[9]} />
+	<DistributionItem {total} distribution={8} value={inner[8]} />
+	<DistributionItem {total} distribution={7} value={inner[7]} />
+	<DistributionItem {total} distribution={6} value={inner[6]} />
+	<DistributionItem {total} distribution={5} value={inner[5]} />
+	<DistributionItem {total} distribution={4} value={inner[4]} />
+	<DistributionItem {total} distribution={3} value={inner[3]} />
+	<DistributionItem {total} distribution={2} value={inner[2]} />
+	<DistributionItem {total} distribution={1} value={inner[1]} />
 </div>
 
 <style lang="scss">

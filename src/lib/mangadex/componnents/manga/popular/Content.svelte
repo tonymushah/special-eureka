@@ -11,17 +11,21 @@
 		id: string;
 		name: string;
 	};
-	export let title: string;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let authors: Author[];
+	interface Props {
+		title: string;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		authors: Author[];
+	}
+
+	let { title, description, tags, contentRating = ContentRating.Safe, authors }: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
+			currentTarget: EventTarget & HTMLButtonElement;
 			id: string;
 		};
 		tagClick: MouseEvent & {
@@ -36,9 +40,9 @@
 		<div
 			class="title"
 			role="button"
-			on:keydown={(e) => {}}
+			onkeydown={(e) => {}}
 			tabindex="0"
-			on:click={(e) => {
+			onclick={(e) => {
 				dispatch("click", e);
 			}}
 		>
@@ -70,7 +74,13 @@
 	<div class="authors">
 		{#if authors}
 			{#each authors as { id, name }}
-				<AuthorLink {id} {name} />
+				<AuthorLink
+					{id}
+					{name}
+					on:click={({ detail }) => {
+						dispatch("authorClick", detail);
+					}}
+				/>
 			{/each}
 		{/if}
 	</div>

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from "svelte/legacy";
+
 	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
 	import { derived } from "svelte/store";
 	import Title from "../texts/title/Title.svelte";
@@ -40,6 +42,7 @@
 			--primary={profile.value.primary.primary}
 			--text-color={profile.value.textColor}
 			--danger={profile.value.danger.default}
+			--mid-tone={profile.value.mid_tone}
 		>
 			{#if $defaultThemeProfileKey == profile.name}
 				<PrimaryButton>
@@ -89,7 +92,7 @@
 </div>
 
 <form
-	on:submit|preventDefault={(e) => {
+	onsubmit={preventDefault((e) => {
 		const data = new FormData(e.currentTarget);
 		const name = data.get("name");
 		if (typeof name == "string") {
@@ -97,7 +100,7 @@
 				addNew(name);
 			}
 		}
-	}}
+	})}
 >
 	<div>
 		<FormInput

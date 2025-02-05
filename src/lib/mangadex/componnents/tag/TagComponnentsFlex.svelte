@@ -1,6 +1,6 @@
 <script lang="ts">
 	import TagComponnents from "./TagComponnents.svelte";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, type Snippet } from "svelte";
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -12,11 +12,19 @@
 		id: string;
 		name: string;
 	};
-	export let tags: Tag[];
+	interface Props {
+		tags: Tag[];
+		pre?: Snippet;
+		post?: Snippet;
+	}
+
+	let { tags, pre, post }: Props = $props();
 </script>
 
 <div>
+	{@render pre?.()}
 	<TagComponnents on:click {tags} />
+	{@render post?.()}
 </div>
 
 <style lang="scss">

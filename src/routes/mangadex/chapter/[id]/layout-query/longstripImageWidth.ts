@@ -1,13 +1,10 @@
-import { graphql } from "@mangadex/gql";
-import { ImageFit } from "@mangadex/gql/graphql";
+import { graphql } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
-import { sub_end } from "@mangadex/utils";
 import { get, readable, type Writable } from "svelte/store";
-import { v4 } from "uuid";
 
 const longstripImageWidthSub = graphql(`
-	subscription subToChapterLongstripImageWidth($subId: UUID!) {
-		watchLongstripImageWidth(subId: $subId)
+	subscription subToChapterLongstripImageWidth {
+		watchLongstripImageWidth
 	}
 `);
 
@@ -20,20 +17,14 @@ const longstripImageWidthMutation = graphql(`
 `);
 
 const base = readable(0, (set, update) => {
-	const sub_id = v4();
-	const unsub = client
-		.subscription(longstripImageWidthSub, {
-			subId: sub_id
-		})
-		.subscribe((res) => {
-			const width = res.data?.watchLongstripImageWidth;
-			if (width) {
-				set(width);
-			}
-		});
+	const unsub = client.subscription(longstripImageWidthSub, {}).subscribe((res) => {
+		const width = res.data?.watchLongstripImageWidth;
+		if (width) {
+			set(width);
+		}
+	});
 	return () => {
 		unsub.unsubscribe();
-		sub_end(sub_id);
 	};
 });
 

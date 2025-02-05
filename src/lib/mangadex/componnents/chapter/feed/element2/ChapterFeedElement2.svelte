@@ -9,14 +9,25 @@
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import type { Chapter } from "..";
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let mangaId: string;
-	export let chapters: Chapter[];
-	export let mangaLang: Language | undefined = undefined;
-	let isCollapsed = true;
-	let canCollaspe = false;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+		mangaId: string;
+		chapters: Chapter[];
+		mangaLang?: Language | undefined;
+	}
+
+	let {
+		coverImage,
+		coverImageAlt,
+		title,
+		mangaId,
+		chapters,
+		mangaLang = undefined
+	}: Props = $props();
+	let isCollapsed = $state(true);
+	let canCollaspe = $state(false);
 	function setDisplayedChapters() {
 		if (chapters.length > 3) {
 			canCollaspe = true;
@@ -58,13 +69,13 @@
 		class="cover manga-content"
 		role="button"
 		tabindex="0"
-		on:click={(e) => {
+		onclick={(e) => {
 			dispatch("mangaClick", {
 				...e,
 				id: mangaId
 			});
 		}}
-		on:keypress={(e) => {
+		onkeypress={(e) => {
 			dispatch("mangaKeyPress", {
 				...e,
 				id: mangaId
@@ -82,13 +93,13 @@
 			class="top-body manga-content"
 			role="button"
 			tabindex="0"
-			on:click={(e) => {
+			onclick={(e) => {
 				dispatch("mangaClick", {
 					...e,
 					id: mangaId
 				});
 			}}
-			on:keypress={(e) => {
+			onkeypress={(e) => {
 				dispatch("mangaKeyPress", {
 					...e,
 					id: mangaId

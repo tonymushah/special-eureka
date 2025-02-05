@@ -1,4 +1,4 @@
-use std::ops::{Deref, DerefMut};
+use std::{ops::Deref, sync::Arc};
 
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
@@ -18,14 +18,14 @@ pub trait StoreCrud<R>: Serialize
 where
     R: Runtime,
 {
-    fn insert(&self, store: &mut Store<R>) -> Result<(), Error>;
-    fn insert_and_save(&self, store: &mut Store<R>) -> Result<(), Error> {
+    fn insert(&self, store: &Store<R>) -> Result<(), Error>;
+    fn insert_and_save(&self, store: &Store<R>) -> Result<(), Error> {
         self.insert(store)?;
         store.save()?;
         Ok(())
     }
-    fn delete(&self, store: &mut Store<R>) -> Result<(), Error>;
-    fn delete_and_save(&self, store: &mut Store<R>) -> Result<(), Error> {
+    fn delete(&self, store: &Store<R>) -> Result<(), Error>;
+    fn delete_and_save(&self, store: &Store<R>) -> Result<(), Error> {
         self.delete(store)?;
         store.save()?;
         Ok(())
@@ -40,17 +40,11 @@ where
 }
 
 #[derive(Clone)]
-pub struct MangaDexStore<R: Runtime>(pub(crate) Store<R>);
+pub struct MangaDexStore<R: Runtime>(pub(crate) Arc<Store<R>>);
 
 impl<R: Runtime> Deref for MangaDexStore<R> {
     type Target = Store<R>;
     fn deref(&self) -> &Self::Target {
         &self.0
-    }
-}
-
-impl<R: Runtime> DerefMut for MangaDexStore<R> {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.0
     }
 }

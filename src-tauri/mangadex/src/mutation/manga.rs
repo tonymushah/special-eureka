@@ -4,6 +4,7 @@ use crate::{
     error::Error,
     objects::cover::Cover,
     query::download_state::DownloadStateQueries,
+    store::types::structs::content::feed_from_gql_ctx,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     Result,
 };
@@ -221,9 +222,10 @@ impl MangaMutations {
         &self,
         ctx: &Context<'_>,
         params: MangaCreateRelationParam,
-        #[graphql(default)] manga_list_params: MangaListParams,
+        manga_list_params: Option<MangaListParams>,
     ) -> Result<Vec<MangaRelated>> {
-        let mut manga_list_params = manga_list_params;
+        let mut manga_list_params =
+            feed_from_gql_ctx::<tauri::Wry, _>(ctx, manga_list_params.unwrap_or_default());
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let related_list: HashMap<Uuid, MangaRelation> = params

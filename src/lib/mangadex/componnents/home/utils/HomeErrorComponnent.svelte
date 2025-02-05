@@ -1,8 +1,12 @@
 <script lang="ts">
 	import type { CombinedError } from "@urql/svelte";
 
-	export let error: CombinedError;
-	export let label: string;
+	interface Props {
+		error: CombinedError;
+		label: string;
+	}
+
+	let { error, label }: Props = $props();
 </script>
 
 <div class="error with-margin">

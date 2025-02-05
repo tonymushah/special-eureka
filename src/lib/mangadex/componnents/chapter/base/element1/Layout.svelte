@@ -1,22 +1,49 @@
 <script lang="ts">
-	export let haveBeenRead: boolean;
+	import type { Snippet } from "svelte";
+
+	interface Props {
+		haveBeenRead: boolean;
+		state?: Snippet;
+		flagReadingState?: Snippet;
+		titleGroups?: Snippet;
+		dateUploader?: Snippet;
+		readingNumberComments?: Snippet;
+	}
+	let {
+		haveBeenRead = $bindable(),
+		state,
+		flagReadingState,
+		titleGroups,
+		dateUploader,
+		readingNumberComments
+	}: Props = $props();
 </script>
 
 <div class="layout" class:haveBeenRead>
 	<div class="state">
-		<slot name="state" />
+		{#if state}
+			{@render state()}
+		{/if}
 	</div>
 	<div class="flag-reading-state">
-		<slot name="flag-reading-state" />
+		{#if flagReadingState}
+			{@render flagReadingState()}
+		{/if}
 	</div>
 	<div class="title-groups">
-		<slot name="title-groups" />
+		{#if titleGroups}
+			{@render titleGroups()}
+		{/if}
 	</div>
 	<div class="date-uploader">
-		<slot name="date-uploader" />
+		{#if dateUploader}
+			{@render dateUploader()}
+		{/if}
 	</div>
 	<div class="reading-number-comments">
-		<slot name="reading-number-comments" />
+		{#if readingNumberComments}
+			{@render readingNumberComments()}
+		{/if}
 	</div>
 </div>
 

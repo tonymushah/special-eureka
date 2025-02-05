@@ -1,30 +1,34 @@
 <script lang="ts">
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import { getContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
 	import { fade, slide } from "svelte/transition";
 	import type { CoverInput } from "./CoverContents.svelte";
-	import CoverContents from "./CoverContents.svelte";
+	import CoverContents from "./CoverContents__.svelte";
 	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
 	import getMangaCoversQuery from "./utils/query";
+	import { debounce, type DebouncedFunc } from "lodash";
+	import { get, writable, derived as der } from "svelte/store";
 
-	const { layoutData: data } = getTitleLayoutData();
+	const d = getTitleLayoutData();
+	const data = d.layoutData;
 	const id = data!.id;
 	const client = getContextClient();
 	const imagesStore = getCoversImageStoreContext();
-	let isLoading = false;
-	let currentOffset = 0;
-	let isAtEnd = false;
-	let coversData: CoverInput[] = [];
-	async function fetchCovers() {
-		if (isAtEnd) {
+	const isLoading = writable(false);
+	const currentOffset = writable(0);
+	const isAtEnd = writable(false);
+	const coversData = writable<CoverInput[]>([]);
+	const fetchCovers = debounce(async function () {
+		if (get(isAtEnd)) {
 			throw new Error("No next data can be fetched");
 		}
+		console.debug("run");
 		const res = await client
 			.query(getMangaCoversQuery, {
 				id,
-				offset: currentOffset
+				offset: get(currentOffset)
 			})
 			.toPromise();
 		if (res.error) {
@@ -62,73 +66,64 @@
 				})
 			);
 			if (covers.length > 0) {
-				if (currentOffset == 0) {
-					coversData = covers;
+				if (get(currentOffset) == 0) {
+					coversData.set(covers);
 				} else {
-					coversData = [...coversData, ...covers];
+					coversData.update((cs) => {
+						cs.push(...covers);
+						return cs;
+					});
 				}
-				const nextOffset = currentOffset + list.limit;
+				const nextOffset = get(currentOffset) + list.limit;
 				if (nextOffset >= list.total) {
-					isAtEnd = true;
+					isAtEnd.set(true);
 				} else {
-					currentOffset = nextOffset;
+					currentOffset.set(nextOffset);
+				}
+			}
+		}
+	}, 300);
+	async function fetch() {
+		if (!get(isLoading) && !get(isAtEnd)) {
+			isLoading.set(true);
+			if (fetchCovers) {
+				const res = fetchCovers();
+				try {
+					if (res != undefined) {
+						await res;
+					}
+				} finally {
+					isLoading.set(false);
 				}
 			}
 		}
 	}
-	async function fetch() {
-		isLoading = true;
-		await fetchCovers().finally(() => (isLoading = false));
-	}
-	const interObs = new IntersectionObserver(async (o, s) => {
-		if (!isLoading) await fetch();
-	});
-	let interObsEl: HTMLDivElement | undefined = undefined;
-	$: {
-		if (interObsEl) {
-			interObs.observe(interObsEl);
-		}
-	}
-
 	onMount(async () => {
 		await fetch();
 	});
+	const interObs = new IntersectionObserver(async (o, s) => {
+		o.forEach((_o) => {
+			if (_o.isIntersecting) {
+				fetch();
+			}
+		});
+	});
+	let interObsEl: HTMLDivElement | undefined = $state(undefined);
+	$effect.pre(() => {
+		if (interObsEl) {
+			interObs.observe(interObsEl);
+		}
+	});
+
 	onDestroy(() => {
 		interObs.disconnect();
 	});
-	$: isDataEmpty = coversData.length == 0;
-	$: isInitialLoading = isLoading && isDataEmpty;
+	const isDataEmpty = der(coversData, ($coversData) => $coversData.length == 0);
+	const isInitialLoading = der(
+		[isLoading, isDataEmpty],
+		([isLoading, isDataEmpty]) => isLoading && isDataEmpty
+	);
 </script>
 
-{#if isInitialLoading}
-	<div class="init-loading" transition:fade>
-		<h3>Loading...</h3>
-	</div>
-{:else if !isDataEmpty}
-	{#if isLoading}
-		<div
-			class="init-loading"
-			transition:slide={{
-				axis: "y"
-			}}
-		>
-			<h3>Loading...</h3>
-		</div>
-	{/if}
-	<article class="covers">
-		<CoverContents bind:covers={coversData} />
-	</article>
-	{#if !isAtEnd && !isLoading}
-		<div bind:this={interObsEl}></div>
-	{/if}
-{/if}
-
-<style lang="scss">
-	.covers {
-		margin-top: 10px;
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-		width: 100%;
-		gap: 10px;
-	}
-</style>
+<CoverContents {isDataEmpty} {isLoading} {isInitialLoading} {coversData} />
+<div bind:this={interObsEl}></div>

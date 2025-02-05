@@ -1,24 +1,19 @@
 <script lang="ts">
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
-	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { createEventDispatcher, onDestroy } from "svelte";
+	import { createEventDispatcher } from "svelte";
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
-	import { v4 } from "uuid";
-	export let isRight: boolean = false;
-	export let size = "24";
-	const sub_id = v4();
+	interface Props {
+		isRight?: boolean;
+		size?: string;
+	}
+
+	let { isRight = false, size = "24" }: Props = $props();
 	const rtl_sub = subscriptionStore({
 		client: getContextClient(),
-		query: sideDirGQLDoc,
-		variables: {
-			sub_id
-		}
-	});
-	onDestroy(() => {
-		sub_end(sub_id);
+		query: sideDirGQLDoc
 	});
 	const rtl = derived(rtl_sub, ($r) => $r.data?.watchSidebarDirection == Direction.Rtl);
 	const dispatch = createEventDispatcher<{
@@ -34,10 +29,10 @@
 <div
 	tabindex="0"
 	role="button"
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		dispatch("keydown", e);
 	}}
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("click", e);
 	}}
 >
@@ -53,3 +48,11 @@
 		<ChevronRightIcon {size} />
 	{/if}
 </div>
+
+<style lang="scss">
+	div {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>

@@ -10,12 +10,23 @@
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 
-	export let title: string;
-	export let status: MangaStatus;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let language: Language | undefined = undefined;
+	interface Props {
+		title: string;
+		status: MangaStatus;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		language?: Language | undefined;
+	}
+
+	let {
+		title,
+		status,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		language = undefined
+	}: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

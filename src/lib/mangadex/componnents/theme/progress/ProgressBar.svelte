@@ -1,11 +1,21 @@
 <script lang="ts">
-	export let lineColor: string;
-	export let backgroundColor: string = "var(--contrast-l1)";
-	export let progress: number;
-	export let height: string = "12px";
-	export let variant: "rounded" | "solid" = "solid";
+	interface Props {
+		lineColor: string;
+		backgroundColor?: string;
+		progress: number;
+		height?: string;
+		variant?: "rounded" | "solid";
+	}
 
-	$: rounded = variant == "rounded";
+	let {
+		lineColor,
+		backgroundColor = "var(--contrast-l1)",
+		progress,
+		height = "12px",
+		variant = "solid"
+	}: Props = $props();
+
+	let rounded = $derived(variant == "rounded");
 </script>
 
 <div
@@ -13,7 +23,7 @@
 	class:rounded
 	style="--progress-height: {height}; background-color: {backgroundColor};"
 >
-	<div class="line" class:rounded style="background-color: {lineColor}; width: {progress}%;" />
+	<div class="line" class:rounded style="background-color: {lineColor}; width: {progress}%;"></div>
 </div>
 
 <style lang="scss">

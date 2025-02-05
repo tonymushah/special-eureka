@@ -3,10 +3,14 @@
 	import type { Item } from "../context-menu/base";
 	import ContextMenuBase from "../context-menu/base/ContextMenuBase.svelte";
 
-	export let target: HTMLElement | undefined;
-	export let isOpen: boolean = false;
-	export let items: Item[] = [];
-	let menu: HTMLDivElement;
+	interface Props {
+		target: HTMLElement | undefined;
+		isOpen?: boolean;
+		items?: Item[];
+	}
+
+	let { target, isOpen = $bindable(false), items = $bindable([]) }: Props = $props();
+	let menu: HTMLDivElement | undefined = $state();
 
 	async function openMenu() {
 		if (target && menu) {
@@ -21,15 +25,17 @@
 		}
 	}
 
-	$: if (isOpen) {
-		openMenu().catch(() => {
-			isOpen = false;
-		});
-	}
+	$effect(() => {
+		if (isOpen) {
+			openMenu().catch(() => {
+				isOpen = false;
+			});
+		}
+	});
 </script>
 
 <div class="menu" class:isOpen bind:this={menu}>
-	<ContextMenuBase bind:items tabindex={0} />
+	<ContextMenuBase {items} tabindex={0} />
 </div>
 
 <style lang="scss">

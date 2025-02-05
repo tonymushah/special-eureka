@@ -7,7 +7,12 @@
 	import { derived } from "svelte/store";
 	const theme_store_ = getMangaDexThemeContext();
 	const theme_store = derived([theme_store_], ([$t]) => $t ?? custom);
-	export let fonts = "Poppins";
+	interface Props {
+		fonts?: string;
+		children?: import('svelte').Snippet;
+	}
+
+	let { fonts = "Poppins", children }: Props = $props();
 </script>
 
 <SomeDiv
@@ -58,6 +63,6 @@
 	--context-menu-font-size="14px"
 >
 	<ButtonFlexContentProvider>
-		<slot />
+		{@render children?.()}
 	</ButtonFlexContentProvider>
 </SomeDiv>

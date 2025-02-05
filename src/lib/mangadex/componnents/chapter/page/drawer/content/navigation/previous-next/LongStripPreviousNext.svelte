@@ -12,23 +12,28 @@
 		ArrowRightIcon,
 		ArrowUpIcon
 	} from "svelte-feather-icons";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	const currentChapterPage = getChapterCurrentPageContext();
 	const images_context = getChapterImageContext();
-	$: next = function () {
+	let next = $derived(function () {
 		if ($currentChapterPage < $images_context.length - 1) {
 			$currentChapterPage++;
 		} else {
 			fireChapterNextEvent();
 		}
-	};
-	$: previous = function () {
+	});
+	let previous = $derived(function () {
 		if ($currentChapterPage > 0) {
 			$currentChapterPage--;
 		} else {
 			fireChapterPreviousEvent();
 		}
-	};
+	});
 	const variant = "2";
 </script>
 
@@ -36,7 +41,7 @@
 	<ArrowUpIcon />
 </ButtonAccent>
 
-<slot />
+{@render children?.()}
 
 <ButtonAccent {variant} on:click={next}>
 	<ArrowDownIcon />

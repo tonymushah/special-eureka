@@ -8,9 +8,14 @@
 	import { onMount } from "svelte";
 	import type { Readable } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
+	import type { SwiperOptions } from "swiper/types";
 
 	const client = getContextClient();
-	export let data: SeasonalQuery;
+	interface Props {
+		data: SeasonalQuery;
+	}
+
+	let { data }: Props = $props();
 	type SeasonalTitle = {
 		id: string;
 		title: string;
@@ -20,23 +25,25 @@
 	function getLangData(title: Record<string, string>): string {
 		return get_value_from_title_and_random_if_undefined(title, "en") ?? "";
 	}
-	$: seasonal = data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
-		id: t.id,
-		title: getLangData(t.attributes.title),
-		coverImage: get_cover_art({
-			cover_id: t.relationships.coverArt.id,
-			manga_id: t.id,
-			mode: CoverImageQuality.V256,
-			filename: t.relationships.coverArt.attributes.fileName,
-			client
-		}),
-		coverImageAlt: t.relationships.coverArt.id
-	}));
+	let seasonal = $derived(
+		data.home.seasonal.relationships.titles.map<SeasonalTitle>((t) => ({
+			id: t.id,
+			title: getLangData(t.attributes.title),
+			coverImage: get_cover_art({
+				cover_id: t.relationships.coverArt.id,
+				manga_id: t.id,
+				mode: CoverImageQuality.V256,
+				filename: t.relationships.coverArt.attributes.fileName,
+				client
+			}),
+			coverImageAlt: t.relationships.coverArt.id
+		}))
+	);
 
-	let swiper_container: SwiperContainer | undefined = undefined;
+	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	onMount(() => {
 		// swiper parameters
-		const swiperParams = {
+		const swiperParams: SwiperOptions = {
 			slidesPerView: "auto",
 			breakpoints: {
 				640: {
@@ -49,6 +56,7 @@
 					slidesPerView: 6
 				}
 			},
+			mousewheel: true,
 			freeMode: true,
 			on: {
 				init() {
@@ -87,5 +95,8 @@
 <style lang="scss">
 	.result {
 		margin: 1em;
+	}
+	swiper-slide {
+		padding-bottom: 10px;
 	}
 </style>

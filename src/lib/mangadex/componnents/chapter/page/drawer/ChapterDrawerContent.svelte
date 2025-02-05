@@ -9,11 +9,15 @@
 	import TopInfo from "./content/TopInfo.svelte";
 	import Uploaders from "./content/Uploaders.svelte";
 
-	export let left = false;
+	interface Props {
+		left?: boolean;
+	}
+
+	let { left }: Props = $props();
 </script>
 
 <div class="content">
-	<Header bind:left />
+	<Header {left} />
 	<TopInfo />
 	<Navigation />
 	<Line />

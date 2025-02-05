@@ -4,42 +4,63 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import profilePictureDef from "./images/story-profile-picture.jpg";
 	import profileBannerDef from "./images/story-profile-banner.jpg";
+	import type { Snippet } from "svelte";
 
-	export let profilePicture: string = profilePictureDef;
-	export let profileBanner: string = profileBannerDef;
-	export let title: string;
-	export let description: string = "";
-	$: profilePictureAlt = `profile-picture-${kebabCase(title)}`;
+	interface Props {
+		profilePicture?: string;
+		profileBanner?: string;
+		title: string;
+		description?: string;
+		topRight?: Snippet;
+		_left?: Snippet;
+		_right?: Snippet;
+	}
+	let {
+		profilePicture = profilePictureDef,
+		profileBanner = profileBannerDef,
+		title,
+		description = "",
+		topRight,
+		_left,
+		_right
+	}: Props = $props();
+	let profilePictureAlt = $derived(`profile-picture-${kebabCase(title)}`);
 </script>
 
-<UsersPageBaseLayout bind:profileBanner>
-	<article slot="left">
-		<div class="cover">
-			<img alt={profilePictureAlt} src={profilePicture} />
-		</div>
-	</article>
-	<article class="right" slot="right">
-		<div class="top">
-			<h1>
-				{title}
-			</h1>
-		</div>
-		<div class="bottom">
-			<slot name="top-right" />
-		</div>
-	</article>
-	<article class="bottom" slot="bottom">
-		<div class="top">
-			<slot name="top-right" />
-		</div>
-		<div class="left">
-			<slot name="left" />
-		</div>
-		<div class="right">
-			<Markdown bind:source={description} />
-			<slot name="right" />
-		</div>
-	</article>
+<UsersPageBaseLayout {profileBanner}>
+	{#snippet left()}
+		<article>
+			<div class="cover">
+				<img alt={profilePictureAlt} src={profilePicture} />
+			</div>
+		</article>
+	{/snippet}
+	{#snippet right()}
+		<article class="right">
+			<div class="top">
+				<h1>
+					{title}
+				</h1>
+			</div>
+			<div class="bottom">
+				{@render topRight?.()}
+			</div>
+		</article>
+	{/snippet}
+	{#snippet bottom()}
+		<article class="bottom">
+			<div class="top">
+				{@render topRight?.()}
+			</div>
+			<div class="left">
+				{@render _left?.()}
+			</div>
+			<div class="right">
+				<Markdown source={description} />
+				{@render _right?.()}
+			</div>
+		</article>
+	{/snippet}
 </UsersPageBaseLayout>
 
 <style lang="scss">

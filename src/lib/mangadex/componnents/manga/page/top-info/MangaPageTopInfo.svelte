@@ -11,7 +11,12 @@
 		setTopMangaIdContextStore
 	} from "./context";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import type { MangaStatus, ReadingState, ReadingStatus } from "@mangadex/gql/graphql";
+	import {
+		ContentRating,
+		type MangaStatus,
+		type ReadingState,
+		type ReadingStatus
+	} from "@mangadex/gql/graphql";
 	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopInfoCover from "./TopInfoCover.svelte";
 	import type { Author } from "./index";
@@ -25,6 +30,7 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import type { TopMangaStatistics } from "./stats";
 	import TopMangaStats from "./TopMangaStats.svelte";
+	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -56,26 +62,41 @@
 		};
 	}>();
 
-	export let id: string;
-	export let title: string;
-	export let altTitle: string | undefined = undefined;
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let authors: Author[];
-	export let tags: Tag[];
-	export let status: MangaStatus;
-	export let year: number | undefined = undefined;
-	export let reading_status: Readable<ReadingStatus | undefined> = writable<
-		ReadingStatus | undefined
-	>(undefined);
-	export let isFollowing: Readable<boolean | undefined> = writable<boolean | undefined>(
-		undefined
-	);
-	export let rating: Readable<number | undefined> = writable<number | undefined>(undefined);
-	export let downloadState: Readable<ChapterDownloadState> = writable(
-		ChapterDownloadState.NotDownloaded
-	);
-	export let stats: TopMangaStatistics | undefined = undefined;
+	interface Props {
+		id: string;
+		title: string;
+		altTitle?: string | undefined;
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		authors: Author[];
+		tags: Tag[];
+		status: MangaStatus;
+		year?: number | undefined;
+		reading_status?: Readable<ReadingStatus | undefined>;
+		isFollowing?: Readable<boolean | undefined>;
+		rating?: Readable<number | undefined>;
+		downloadState?: Readable<ChapterDownloadState>;
+		stats?: TopMangaStatistics | undefined;
+		contentRating?: ContentRating;
+	}
+
+	let {
+		id = $bindable(),
+		title,
+		altTitle = undefined,
+		coverImage,
+		coverImageAlt,
+		authors,
+		tags = $bindable(),
+		status = $bindable(),
+		year = $bindable(undefined),
+		reading_status = writable<ReadingStatus | undefined>(undefined),
+		isFollowing = writable<boolean | undefined>(undefined),
+		rating = writable<number | undefined>(undefined),
+		downloadState = writable(ChapterDownloadState.NotDownloaded),
+		stats = $bindable(undefined),
+		contentRating = ContentRating.Safe
+	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
 	setTopMangaTitleContextStore(title);
@@ -88,9 +109,11 @@
 </script>
 
 <TopInfoLayout>
-	<div class="cover-image" slot="cover">
-		<TopInfoCover />
-	</div>
+	{#snippet cover()}
+		<div class="cover-image">
+			<TopInfoCover />
+		</div>
+	{/snippet}
 	<div class="content">
 		<section class="top">
 			<h1>{title}</h1>
@@ -127,13 +150,14 @@
 				}}
 			/>
 			<div class="tag-status">
+				<ContentRatingTag {contentRating} />
 				<TagComponnentsFlex
-					bind:tags
+					{tags}
 					on:click={({ detail }) => {
 						dispatch("tag", detail);
 					}}
 				/>
-				<MangaStatusComp bind:status bind:year />
+				<MangaStatusComp {status} {year} />
 			</div>
 			{#if stats != undefined}
 				<div class="stats">

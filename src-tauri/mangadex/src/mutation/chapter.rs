@@ -24,7 +24,7 @@ use tauri::async_runtime::spawn;
 use uuid::Uuid;
 
 use crate::{
-    ins_handle::{add_in_chapter_failed, add_in_chapter_queue, add_in_chapter_success},
+    ins_handle,
     objects::chapter::Chapter,
     utils::{
         download_state::DownloadState,
@@ -73,18 +73,20 @@ impl ChapterMutations {
         #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
     ) -> Result<DownloadState> {
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
+        let tauri_handle_ = tauri_handle.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let ola: tauri::State<'_, crate::app_state::OfflineAppState> =
             get_offline_app_state::<tauri::Wry>(ctx)?;
-        add_in_chapter_queue(id)?;
+        ins_handle::add_in_queue(&tauri_handle, id)?;
         let offline_app_state_write = ola.read().await;
         let olasw = offline_app_state_write
             .as_ref()
             .map(|a| a.app_state.clone())
             .ok_or(Error::OfflineAppStateNotLoaded)?;
         let olasw_ = olasw.clone();
+
         let res = spawn(async move {
-            let watches = tauri_handle.get_watches()?;
+            let watches = tauri_handle_.get_watches()?;
             let mode: MDDownloadMode = quality.into();
             let manager = olasw_;
             trace!("Downloading title {id}");
@@ -174,10 +176,10 @@ impl ChapterMutations {
         .await?;
         let state = DownloadStateQueries.chapter(ctx, id).await?;
         if let Err(_err) = res {
-            add_in_chapter_failed(id)?;
+            ins_handle::add_in_failed(&tauri_handle, id)?;
             Ok(state)
         } else {
-            add_in_chapter_success(id)?;
+            ins_handle::add_in_success(&tauri_handle, id)?;
             //let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
             let data: Chapter = olasw.get_chapter(id).await?.into();
             let _ = watches.chapter.send_offline(data.clone());

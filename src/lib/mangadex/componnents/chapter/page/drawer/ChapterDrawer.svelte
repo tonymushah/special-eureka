@@ -8,14 +8,21 @@
 	const open = isDrawerOpenWritable();
 	const fixed = isDrawerFixedWritable();
 	const fixed_ = derived(fixed, (f) => !f);
-	export let left = false;
+	interface Props {
+		left?: boolean;
+		children?: import("svelte").Snippet;
+	}
+
+	let { left, children }: Props = $props();
 </script>
 
-<ChapterDrawerBase bind:open={$open} fixed={$fixed_} bind:left>
-	<ChapterDrawerContent bind:left />
-	<div class="main" slot="content">
-		<slot />
-	</div>
+<ChapterDrawerBase open={$open} fixed={$fixed_} {left}>
+	<ChapterDrawerContent {left} />
+	{#snippet content()}
+		<div class="main">
+			{@render children?.()}
+		</div>
+	{/snippet}
 </ChapterDrawerBase>
 
 <style lang="scss">

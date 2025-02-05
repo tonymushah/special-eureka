@@ -3,7 +3,7 @@ use std::{
     pin::Pin,
 };
 
-use crate::{Error, Result};
+use crate::{store::types::structs::content::ContentFeeder, Error, Result};
 
 use async_graphql::Context;
 use eureka_mmanager::prelude::{
@@ -22,7 +22,7 @@ use crate::{
 };
 
 #[derive(Debug, Clone)]
-pub struct MangaListQueries(pub MangaListParams);
+pub struct MangaListQueries(MangaListParams);
 
 impl Deref for MangaListQueries {
     type Target = MangaListParams;
@@ -56,6 +56,9 @@ impl From<&MangaListQueries> for MangaListParams {
 }
 
 impl MangaListQueries {
+    pub fn new<CF: ContentFeeder<MangaListParams>>(param: MangaListParams, feeder: &CF) -> Self {
+        Self(feeder.feed(param))
+    }
     pub async fn list_offline(&self, ctx: &Context<'_>) -> Result<MangaResults> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()

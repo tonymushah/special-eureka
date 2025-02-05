@@ -6,6 +6,7 @@
 	import registerSelectChapterEvent from "@mangadex/componnents/chapter/page/contexts/registerSelectChapterEvent";
 	import OpenMenuButton from "@mangadex/componnents/chapter/page/open-menu/OpenMenuButton.svelte";
 	import defaultBehavior from "@mangadex/componnents/sidebar/states/actions";
+	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import { onDestroy, onMount } from "svelte";
 
 	const isFixed = isDrawerFixed();
@@ -19,7 +20,7 @@
 </script>
 
 {#if $isFixed && !$open}
-	<OpenMenuButton />
+	<OpenMenuButton left={$isSidebarRtl} />
 {/if}
 
 <main class:notFixed={!$isFixed}>

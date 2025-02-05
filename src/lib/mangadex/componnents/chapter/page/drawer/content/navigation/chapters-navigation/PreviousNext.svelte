@@ -8,16 +8,21 @@
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	const direction = getCurrentChapterDirection();
 	const isLong = isLongStrip();
-	$: next = function () {
+	let next = $derived(function () {
 		fireChapterNextEvent();
-	};
-	$: previous = function () {
+	});
+	let previous = $derived(function () {
 		fireChapterPreviousEvent();
-	};
-	$: onNext = function () {
+	});
+	let onNext = $derived(function () {
 		if (!$isLong) {
 			switch ($direction) {
 				case ReadingDirection.Ltr:
@@ -32,8 +37,8 @@
 		} else {
 			next();
 		}
-	};
-	$: onPrevious = function () {
+	});
+	let onPrevious = $derived(function () {
 		if (!$isLong) {
 			switch ($direction) {
 				case ReadingDirection.Ltr:
@@ -48,7 +53,7 @@
 		} else {
 			previous();
 		}
-	};
+	});
 	const variant = "2";
 </script>
 
@@ -56,7 +61,7 @@
 	<ArrowLeftIcon />
 </ButtonAccent>
 
-<slot />
+{@render children?.()}
 
 <ButtonAccent {variant} on:click={onNext}>
 	<ArrowRightIcon />

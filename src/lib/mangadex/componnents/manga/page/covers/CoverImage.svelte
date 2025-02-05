@@ -7,31 +7,37 @@
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
 
-	let isHovered = false;
-	let coverImageInstance: HTMLImageElement | undefined = undefined;
-	let zoom: Zoom | undefined = undefined;
+	let isHovered = $state(false);
+	let coverImageInstance: HTMLImageElement | undefined = $state(undefined);
+	let zoom: Zoom | undefined = $state(undefined);
 	const theme = getMangaDexThemeContext();
-	$: {
-		zoom = mediumZoom(coverImageInstance, {
-			background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
-		});
-	}
+	$effect(() => {
+		if (coverImageInstance) {
+			zoom = mediumZoom(coverImageInstance, {
+				background: `color-mix(in srgb, ${$theme.mainBackground} 80%, transparent)`
+			});
+		}
+	});
 	onDestroy(() => {
 		zoom?.close();
 	});
 
-	export let coverImage: Readable<string | undefined>;
-	export let fixedWidth: boolean = true;
-	export let alt: string;
-	export let title: string;
-	$: src = $coverImage;
-	let container: HTMLDivElement | undefined = undefined;
-	let sW = "var(--cover-w)";
-	let sH = "var(--cover-h)";
-	let skR: UnlistenFn = () => {};
-	$: isImageLoaded = src != undefined;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		fixedWidth?: boolean;
+		alt: string;
+		title: string;
+	}
 
-	$: {
+	let { coverImage, fixedWidth = true, alt, title }: Props = $props();
+	let src = $derived($coverImage);
+	let container: HTMLDivElement | undefined = $state(undefined);
+	let sW = $state("var(--cover-w)");
+	let sH = $state("var(--cover-h)");
+	let skR: UnlistenFn = () => {};
+	let isImageLoaded = $derived(src != undefined);
+
+	$effect(() => {
 		if (fixedWidth == false && container != undefined) {
 			skR();
 			let e = () => {
@@ -48,7 +54,7 @@
 			sW = "var(--cover-w)";
 			sH = "var(--cover-h)";
 		}
-	}
+	});
 	onDestroy(() => {
 		skR();
 	});
@@ -56,7 +62,7 @@
 
 <div
 	class="cover"
-	on:mouseenter={() => {
+	onmouseenter={() => {
 		isHovered = true;
 	}}
 	role="button"
@@ -66,28 +72,28 @@
 	class:isImageLoaded
 	data-title={title}
 	bind:this={container}
-	on:click={async () => {
+	onclick={async () => {
 		await zoom?.toggle();
 	}}
-	on:focusin={() => {
+	onfocusin={() => {
 		isHovered = true;
 	}}
-	on:focusout={() => {
+	onfocusout={() => {
 		isHovered = false;
 	}}
-	on:keydown={async ({ key }) => {
+	onkeydown={async ({ key }) => {
 		if (key == "Enter") {
 			await zoom?.toggle();
 		}
 	}}
-	on:mouseleave={() => {
+	onmouseleave={() => {
 		isHovered = false;
 	}}
 >
 	{#if src}
 		<img {alt} {src} bind:this={coverImageInstance} />
 	{:else}
-		<Skeleton bind:width={sW} bind:height={sH} />
+		<Skeleton width={sW} height={sH} />
 	{/if}
 	{#if fixedWidth}
 		<div class="title" class:isHovered>
@@ -99,7 +105,7 @@
 <style lang="scss">
 	:root {
 		--cover-w: 11em;
-		--cover-h: 16em;
+		--cover-h: 11em;
 	}
 	.cover:not(.fixedWidth) {
 		width: 100%;
@@ -112,7 +118,7 @@
 		}
 		img {
 			width: 100%;
-			height: 50cqh;
+			// height: 50cqh;
 			object-fit: cover;
 		}
 	}

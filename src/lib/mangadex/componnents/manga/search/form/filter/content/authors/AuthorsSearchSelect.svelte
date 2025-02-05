@@ -1,61 +1,24 @@
-<script lang="ts" context="module">
-	function tagToComboboxOption(tag: Tag): ComboboxOption<string> {
-		return {
-			value: tag.id,
-			label: tag.value
-		};
-	}
-	function comboBoxOptionToTag(option: ComboboxOption<string>): Tag {
-		return {
-			value: option.label ?? option.value,
-			id: option.value
-		};
-	}
-	function tagWritableToComboboxOptionWritable(
-		store: Writable<Tag[]>
-	): Writable<ComboboxOption<string>[]> {
-		const derived_ = derived(store, ($s) => {
-			return $s.map((v) => tagToComboboxOption(v));
-		});
-		return {
-			subscribe(run, invalidate) {
-				return derived_.subscribe(run, invalidate);
-			},
-			set(value) {
-				store.set(value.map((v) => comboBoxOptionToTag(v)));
-			},
-			update(updater) {
-				store.update((inner) => {
-					return updater(inner.map((v) => tagToComboboxOption(v))).map((v) =>
-						comboBoxOptionToTag(v)
-					);
-				});
-			}
-		};
-	}
-</script>
-
 <script lang="ts">
-	import {
-		createCombobox,
-		createTagsInput,
-		melt,
-		type ComboboxOption,
-		type Tag
-	} from "@melt-ui/svelte";
-	import { derived, get, writable, type Writable } from "svelte/store";
+	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
+	import { createCombobox, createTagsInput, melt, type Tag } from "@melt-ui/svelte";
+	import { debounce, type DebouncedFunc } from "lodash";
+	import { onDestroy } from "svelte";
+	import { XIcon } from "svelte-feather-icons";
+	import { get, writable, type Writable } from "svelte/store";
+	import { slide } from "svelte/transition";
 	import {
 		getMangaSearchAuthorSearchFetcher,
 		type AuthorSearchFetcherResultData
 	} from "../../contexts/authorArtist";
-	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
-	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import { slide } from "svelte/transition";
-	import { XIcon } from "svelte-feather-icons";
-	import { debounce, type DebouncedFunc } from "lodash";
-	import { onDestroy } from "svelte";
+	import { tagWritableToComboboxOptionWritable } from "./utils";
+	import AuthorsSearchSelectMenu from "./AuthorsSearchSelectMenu.svelte";
 
-	export let store: Writable<Tag[]>;
+	interface Props {
+		store: Writable<Tag[]>;
+	}
+
+	let { store }: Props = $props();
 	const {
 		elements: { input, menu, option, label },
 		states: { open, inputValue, touchedInput },
@@ -64,6 +27,12 @@
 		selected: tagWritableToComboboxOptionWritable(store),
 		forceVisible: true,
 		multiple: true,
+		positioning: {
+			placement: "top",
+			fitViewport: true,
+			sameWidth: true
+			// strategy: "fixed"
+		},
 		portal: "dialog"
 	});
 	const {
@@ -75,71 +44,74 @@
 	});
 	const authorFetch = getMangaSearchAuthorSearchFetcher();
 	const currentAuthorSearch = writable<Tag[]>([]);
-	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = undefined;
-	$: hasNext = nextFetch != undefined && typeof nextFetch == "function";
+	let nextFetch: (() => Promise<AuthorSearchFetcherResultData>) | undefined = $state(undefined);
+	let hasNext = $derived(nextFetch != undefined && typeof nextFetch == "function");
 	const isFetching = writable(false);
-	let debounceFunc: DebouncedFunc<(...args: any) => any> | undefined = undefined;
+	const start: DebouncedFunc<(...args: any) => any> = debounce(() => {
+		if (!get(isFetching)) {
+			currentAuthorSearch.set([]);
+			isFetching.set(true);
+			handleASFRDPromise(authorFetch($inputValue));
+		}
+	}, 350);
 	onDestroy(() => {
-		debounceFunc?.cancel();
+		start?.cancel();
 	});
-	async function handleASFRDPromise(prom: Promise<AuthorSearchFetcherResultData>) {
+	const handleASFRDPromise = debounce(async function (
+		prom: Promise<AuthorSearchFetcherResultData>
+	) {
 		await prom
 			.then((result) => {
 				currentAuthorSearch.update(($as) => {
 					return [...$as, ...result.data];
 				});
 				if (result.hasNext()) {
-					nextFetch = result.next;
+					nextFetch = () => result.next();
 				} else {
 					nextFetch = undefined;
 				}
 			})
 			.finally(() => isFetching.set(false));
-	}
-	$: {
+	}, 300);
+	$effect(() => {
 		if ($touchedInput) {
-			debounceFunc?.cancel();
-			debounceFunc = debounce(() => {
-				if (!get(isFetching)) {
-					console.log("should fetch");
-					currentAuthorSearch.set([]);
-					$isFetching = true;
-					handleASFRDPromise(authorFetch($inputValue));
-				}
-			}, 350);
-			debounceFunc();
+			start?.cancel();
+			start();
 		}
-	}
-	function next() {
-		if (!$isFetching && nextFetch != undefined && typeof nextFetch == "function") {
-			$isFetching = true;
-			handleASFRDPromise(nextFetch());
+	});
+	const next = debounce(function () {
+		if (!get(isFetching) && nextFetch != undefined && typeof nextFetch == "function") {
+			isFetching.set(true);
+			handleASFRDPromise?.(nextFetch());
 		}
-	}
-	let toObserve: HTMLElement | undefined = undefined;
-	let obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
+	}, 300);
+	let toObserve: HTMLElement | undefined = $state(undefined);
+	const obs_debounce_func = debounce<IntersectionObserverCallback>((entries, obs) => {
 		entries.forEach((entry) => {
 			if (entry.intersectionRatio <= 0) return;
 			next();
 		});
 	}, 500);
+
 	const obs = new IntersectionObserver(
 		(entries, obs_) => {
 			obs_debounce_func.cancel();
 			obs_debounce_func(entries, obs_);
 		},
 		{
-			threshold: 1.0
+			threshold: 0.2
 		}
 	);
-	$: {
+	$effect(() => {
 		if (toObserve) {
 			obs.unobserve(toObserve);
 			obs.observe(toObserve);
 		}
-	}
+	});
 	onDestroy(() => {
 		obs.disconnect();
+		next.cancel();
+		handleASFRDPromise.cancel();
 	});
 	// $: console.debug($tags);
 	// $: console.debug(`Is fetching author ${$isFetching}`);
@@ -160,25 +132,16 @@
 	</div>
 </div>
 
-{#if $open}
-	<div class="menu-outer" use:melt={$menu}>
-		<MangaDexVarThemeProvider>
-			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $currentAuthorSearch as author (author.id)}
-					<li
-						use:melt={$option({ value: author.id, label: author.value })}
-						class:isSelected={$isSelected(author.id)}
-					>
-						<h4>{author.value}</h4>
-					</li>
-				{/each}
-				{#if !$isFetching && hasNext}
-					<div bind:this={toObserve} />
-				{/if}
-			</menu>
-		</MangaDexVarThemeProvider>
-	</div>
-{/if}
+<AuthorsSearchSelectMenu
+	{menu}
+	bind:toObserve
+	{open}
+	{currentAuthorSearch}
+	{isFetching}
+	{isSelected}
+	{option}
+	{hasNext}
+/>
 
 <style lang="scss">
 	.layout {
@@ -242,40 +205,5 @@
 	}
 	.tag:active {
 		background-color: var(--accent-l1-active);
-	}
-	.menu-outer {
-		display: flex;
-		flex-direction: column;
-		height: 200px;
-		z-index: 10000;
-	}
-	menu {
-		margin: 0px;
-		border-radius: 0.25em;
-		list-style: none;
-		background-color: var(--accent);
-
-		overflow-y: scroll;
-		color: var(--text-color);
-		padding-left: 0em;
-		li {
-			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
-			h4 {
-				margin: 0px;
-			}
-		}
-		li[data-highlighted] {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):hover {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):active {
-			background-color: var(--accent-active);
-		}
-		li.isSelected {
-			background-color: var(--primary);
-		}
 	}
 </style>

@@ -5,13 +5,17 @@
 	import get_manga_status_color from "@mangadex/utils/manga/status/get_color";
 	import type { StatusColor } from "@mangadex/utils/types/status";
 	import { onMount } from "svelte";
-	export let status: MangaStatus;
-	let color: StatusColor = "gray";
-	export let showText = true;
+	let color: StatusColor = $state("gray");
+	interface Props {
+		status: MangaStatus;
+		showText?: boolean;
+	}
+
+	let { status, showText = true }: Props = $props();
 	onMount(() => {
 		color = get_manga_status_color(status);
 	});
-	$: _status = make_first_upper_case(status.toLowerCase());
+	let _status = $derived(make_first_upper_case(status.toLowerCase()));
 </script>
 
 <StatusBadge {color}>

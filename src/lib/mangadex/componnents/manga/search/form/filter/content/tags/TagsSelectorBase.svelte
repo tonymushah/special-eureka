@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { TagGroup } from "@mangadex/gql/graphql";
 	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
@@ -13,8 +15,12 @@
 		toggleTagOption
 	} from "../../contexts/tags";
 
-	export let title: string;
-	export let group: TagGroup;
+	interface Props {
+		title: string;
+		group: TagGroup;
+	}
+
+	let { title, group }: Props = $props();
 	const options = getMangaSearchTagOptionsContextStoreWritable();
 	const grouped = groupTagOption(readonly(options), group);
 	function toggle(id: string, inverted?: boolean) {
@@ -34,8 +40,8 @@
 				<button
 					class:included={tag.state == TagOptionState.INCLUDE}
 					class:excluded={tag.state == TagOptionState.EXCLUDE}
-					on:click={() => toggle(tag.id)}
-					on:contextmenu|preventDefault={() => toggle(tag.id, true)}
+					onclick={() => toggle(tag.id)}
+					oncontextmenu={preventDefault(() => toggle(tag.id, true))}
 				>
 					{#if tag.state != TagOptionState.NONE}
 						<div

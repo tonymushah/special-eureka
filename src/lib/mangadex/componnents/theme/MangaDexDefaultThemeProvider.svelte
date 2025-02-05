@@ -7,14 +7,23 @@
 	import MangadexBackground from "./MangadexBackground.svelte";
 	import Toaster from "./toast/Toaster.svelte";
 
-	export let fonts = "Poppins";
-	$: setMangaDexThemeContextWritable(defaultTheme);
-	$: setMangaDexFontsContext(writable(fonts));
+	interface Props {
+		fonts?: string;
+		children?: import("svelte").Snippet;
+	}
+
+	let { fonts = "Poppins", children }: Props = $props();
+	$effect.pre(() => {
+		setMangaDexThemeContextWritable(defaultTheme);
+	});
+	$effect.pre(() => {
+		setMangaDexFontsContext(writable(fonts));
+	});
 </script>
 
 <MangaDexVarThemeProvider>
 	<Toaster />
 	<MangadexBackground>
-		<slot />
+		{@render children?.()}
 	</MangadexBackground>
 </MangaDexVarThemeProvider>

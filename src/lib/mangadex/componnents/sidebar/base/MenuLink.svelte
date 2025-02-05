@@ -1,18 +1,26 @@
 <script lang="ts">
+	import { createBubbler } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import { page } from "$app/stores";
 	import { createEventDispatcher } from "svelte";
 
-    export let href: string | undefined = undefined;
+	interface Props {
+		href?: string | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let { href = undefined, children }: Props = $props();
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLAnchorElement;
 		};
 	}>();
-    $: active = $page.url.pathname == href;
+    let active = $derived($page.url.pathname == href);
 </script>
 
-<a class:active {href} on:click>
-    <slot/>
+<a class:active {href} onclick={bubble('click')}>
+    {@render children?.()}
 </a>
 
 <style lang="scss">

@@ -3,7 +3,11 @@
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import type { Author } from ".";
 
-	export let authors: Author[];
+	interface Props {
+		authors: Author[];
+	}
+
+	let { authors }: Props = $props();
 </script>
 
 <div class="authors">

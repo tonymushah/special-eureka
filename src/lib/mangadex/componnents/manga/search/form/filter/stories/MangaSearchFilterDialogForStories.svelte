@@ -41,8 +41,12 @@
 		};
 	});
 	const { store } = init(writable(options));
-	let dialog_bind: HTMLDialogElement | undefined = undefined;
-	export let requireValidation: boolean = false;
+	let dialog_bind: HTMLDialogElement | undefined = $state(undefined);
+	interface Props {
+		requireValidation?: boolean;
+	}
+
+	let { requireValidation = false }: Props = $props();
 </script>
 
 <ButtonAccentOnlyLabel

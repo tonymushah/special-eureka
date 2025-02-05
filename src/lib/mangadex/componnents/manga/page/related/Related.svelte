@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import { onMount, type ComponentProps } from "svelte";
 	import CategorizedTitles from "./CategorizedTitles.svelte";
 	import { getContextClient } from "@urql/svelte";
@@ -14,9 +14,9 @@
 	const store = getRelatedTitlesStoreContext();
 	const titles = getTitleLayoutData().queryResult?.relationships.manga;
 	const relatedTitles = new Map<MangaRelation, string[]>();
-	let categories: ComponentProps<CategorizedTitles>[] = [];
+	let categories: ComponentProps<typeof CategorizedTitles>[] = $state([]);
 	let isLoading = false;
-	let error: Error | undefined;
+	let error: Error | undefined = $state();
 	async function fetch() {
 		const ids = titles?.map<string>((t) => t.id);
 		if (ids) {
@@ -72,9 +72,9 @@
 			});
 		}
 	});
-	$: {
+	$effect(() => {
 		const data = $store;
-		let res: ComponentProps<CategorizedTitles>[] = [];
+		let res: ComponentProps<typeof CategorizedTitles>[] = [];
 		relatedTitles.forEach((v, k) => {
 			let title: RelatedTitle[] = [];
 			v.forEach((t) => {
@@ -100,7 +100,7 @@
 		if (res.length > 0) {
 			categories = res;
 		}
-	}
+	});
 </script>
 
 <article class="related">

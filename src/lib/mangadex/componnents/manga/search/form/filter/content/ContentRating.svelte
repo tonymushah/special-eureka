@@ -23,10 +23,10 @@
 	<div class="content">
 		<button
 			class:selected={$selected.includes(ContentRating.Safe)}
-			on:click={() => toggleContentRating(ContentRating.Safe)}
+			onclick={() => toggleContentRating(ContentRating.Safe)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Safe)}
+				{#if !$selected.includes(ContentRating.Safe)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -36,10 +36,10 @@
 		</button>
 		<button
 			class:selected={$selected.includes(ContentRating.Suggestive)}
-			on:click={() => toggleContentRating(ContentRating.Suggestive)}
+			onclick={() => toggleContentRating(ContentRating.Suggestive)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Suggestive)}
+				{#if !$selected.includes(ContentRating.Suggestive)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -49,10 +49,10 @@
 		</button>
 		<button
 			class:selected={$selected.includes(ContentRating.Erotica)}
-			on:click={() => toggleContentRating(ContentRating.Erotica)}
+			onclick={() => toggleContentRating(ContentRating.Erotica)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Erotica)}
+				{#if !$selected.includes(ContentRating.Erotica)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />
@@ -62,10 +62,10 @@
 		</button>
 		<button
 			class:selected={$selected.includes(ContentRating.Pornographic)}
-			on:click={() => toggleContentRating(ContentRating.Pornographic)}
+			onclick={() => toggleContentRating(ContentRating.Pornographic)}
 		>
 			<div class="icon">
-				{#if $selected.includes(ContentRating.Pornographic)}
+				{#if !$selected.includes(ContentRating.Pornographic)}
 					<MinusIcon />
 				{:else}
 					<PlusIcon />

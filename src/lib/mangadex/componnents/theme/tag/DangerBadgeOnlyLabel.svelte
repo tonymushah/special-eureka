@@ -8,8 +8,12 @@
 		};
 	}>();
 
-	export let type: "default" | "l1" | "l2" = "default";
-	export let label: string;
+	interface Props {
+		type?: "default" | "l1" | "l2";
+		label: string;
+	}
+
+	let { type = "default", label }: Props = $props();
 </script>
 
 <DangerBadge on:click {type}>

@@ -1,6 +1,11 @@
 <script lang="ts">
 	import TagBase from "../base/TagBase.svelte";
 	import { createEventDispatcher } from "svelte";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -10,5 +15,5 @@
 </script>
 
 <TagBase on:click --tag-color="var(--status-red)">
-	<slot />
+	{@render children?.()}
 </TagBase>

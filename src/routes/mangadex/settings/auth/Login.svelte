@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { preventDefault } from 'svelte/legacy';
+
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import clientInfo from "@mangadex/stores/clientInfo";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
@@ -8,14 +10,14 @@
 	import { onDestroy } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { slide } from "svelte/transition";
-	let error: Error | undefined = undefined;
-	let isErrorOpen = false;
-	let isFetching = false;
+	let error: Error | undefined = $state(undefined);
+	let isErrorOpen = $state(false);
+	let isFetching = $state(false);
 	function setError(err: Error) {
 		error = err;
 		isErrorOpen = true;
 	}
-	let debounce_fun: DebouncedFunc<() => void> | undefined = undefined;
+	let debounce_fun: DebouncedFunc<() => void> | undefined = $state(undefined);
 	onDestroy(() => {
 		debounce_fun?.cancel();
 	});
@@ -39,7 +41,7 @@
 		</article>
 	{/if}
 	<form
-		on:submit|preventDefault={(e) => {
+		onsubmit={preventDefault((e) => {
 			let form = new FormData(e.currentTarget);
 			if (isFetching == false) {
 				isFetching = true;
@@ -83,7 +85,7 @@
 				});
 				debounce_fun();
 			}
-		}}
+		})}
 	>
 		<div>
 			<h3>Client ID</h3>

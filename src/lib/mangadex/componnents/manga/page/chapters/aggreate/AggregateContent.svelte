@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type MangaAggregateData = Volume[];
 	export type Volume = {
 		volume: string;
@@ -21,17 +21,21 @@
 
 	const dispatch = createEventDispatcher<ChapterEl1Events>();
 
-	export let volumes: MangaAggregateData;
+	interface Props {
+		volumes: MangaAggregateData;
+	}
+
+	let { volumes }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
-	let data: ComponentProps<VolumeAccordion>[] = [];
-	$: {
+	let data: ComponentProps<typeof VolumeAccordion>[] = $state([]);
+	$effect(() => {
 		const store = $chaptersStore;
 		data = volumes.map((volume) => {
 			return {
 				title: volume.volume,
 				volumeContent: volume.chapters.map((chapter) => {
 					const ids = chapter.ids;
-					let chapters: ComponentProps<ChapterElement1>[] = [];
+					let chapters: ComponentProps<typeof ChapterElement1>[] = [];
 					ids.forEach((id) => {
 						const res = store.get(id);
 						if (res) {
@@ -45,12 +49,12 @@
 				})
 			};
 		});
-	}
+	});
 </script>
 
 <Volumes
 	openStart
-	bind:volumes={data}
+	volumes={data}
 	on:download={({ detail }) => {
 		dispatch("download", detail);
 	}}

@@ -5,10 +5,16 @@
 	import { writable } from "svelte/store";
 	import MangaList from "../MangaList.svelte";
 
-	export let list: MangaListContentItemProps[] = [];
-	export let style: MangaListStyle = MangaListStyle.Grid;
+	interface Props {
+		list?: MangaListContentItemProps[];
+		style?: MangaListStyle;
+	}
+
+	let { list = $bindable([]), style = $bindable(MangaListStyle.Grid) }: Props = $props();
 	const mangaListStyle = initMangaListStyleContext(writable(style));
-	$: mangaListStyle.set(style);
+	$effect(() => {
+		mangaListStyle.set(style);
+	});
 </script>
 
 <MangaList bind:list />

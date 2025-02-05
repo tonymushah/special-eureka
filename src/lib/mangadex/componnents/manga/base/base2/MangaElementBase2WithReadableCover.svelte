@@ -8,15 +8,28 @@
 	import type { Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let status: MangaStatus;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let language: Language | undefined = undefined;
-	$: src = $coverImage;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+		status: MangaStatus;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		language?: Language | undefined;
+	}
+
+	let {
+		coverImage,
+		coverImageAlt,
+		title,
+		status,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		language = undefined
+	}: Props = $props();
+	let src = $derived($coverImage);
 
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {

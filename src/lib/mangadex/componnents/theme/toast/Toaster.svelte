@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	export type ToastData = {
 		title: string;
 		description: string;
@@ -26,7 +26,7 @@
 				<div>
 					<h3 use:melt={$title(id)}>
 						{data.title}
-						<span style:color={data.color} />
+						<span style:color={data.color}></span>
 					</h3>
 					<div use:melt={$description(id)}>
 						{data.description}

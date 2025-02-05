@@ -103,4 +103,9 @@ impl<T: Clone + PartialEq> DownloadEntry<T> {
     pub fn is_empty(&self) -> bool {
         self.queue.is_empty()
     }
+    pub fn clear(&mut self) {
+        self.success.clear();
+        self.failed.clear();
+        self.success.clear();
+    }
 }

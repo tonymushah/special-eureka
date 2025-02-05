@@ -5,11 +5,15 @@
 	import TagComponnent from "./TagComponnent.svelte";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import is_tag_danger from "@mangadex/utils/tags/is_tag_danger";
-	export let limit: number = 0;
-	export let tags: Tag[];
-	let to_show: Tag[];
+	let to_show: Tag[] = $state([]);
 	let more = 0;
 	import { createEventDispatcher } from "svelte";
+	interface Props {
+		limit?: number;
+		tags: Tag[];
+	}
+
+	let { limit = 0, tags }: Props = $props();
 
 	createEventDispatcher<{
 		click: MouseEvent & {

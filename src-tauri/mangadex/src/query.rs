@@ -25,6 +25,7 @@ pub mod user_option;
 pub mod utils;
 
 use async_graphql::Object;
+use user_option::UserOptionQueries;
 
 use self::{
     api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
@@ -109,5 +110,8 @@ impl Query {
     }
     pub async fn scanlation_group(&self) -> ScanlationGroupQueries {
         ScanlationGroupQueries
+    }
+    pub async fn user_option(&self) -> UserOptionQueries {
+        UserOptionQueries
     }
 }

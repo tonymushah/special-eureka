@@ -8,41 +8,59 @@
 		TwitterIcon,
 		YoutubeIcon
 	} from "svelte-feather-icons";
-	import { writeText } from "@tauri-apps/api/clipboard";
-	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { getContextClient } from "@urql/svelte";
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { readable } from "svelte/store";
 	import { RiDiscordFill } from "svelte-remixicon";
 
-	export let website: string | undefined = undefined;
-	export let twitter: string | undefined = undefined;
-	export let ircServer: string | undefined = undefined;
-	export let ircChannel: string | undefined = undefined;
-	export let mangaUpdates: string | undefined = undefined;
-	export let discord: string | undefined = undefined;
-	export let email: string | undefined = undefined;
+	interface Props {
+		website?: string | undefined;
+		twitter?: string | undefined;
+		ircServer?: string | undefined;
+		ircChannel?: string | undefined;
+		mangaUpdates?: string | undefined;
+		discord?: string | undefined;
+		email?: string | undefined;
+	}
+
+	let {
+		website = undefined,
+		twitter = undefined,
+		ircServer = undefined,
+		ircChannel = undefined,
+		mangaUpdates = undefined,
+		discord = undefined,
+		email = undefined
+	}: Props = $props();
 
 	const client = getContextClient();
-	$: websiteFavicon = website
-		? getFaviconSrc({
-				client,
-				url: website
-			})
-		: readable(undefined);
-	$: twitterFavicon = twitter
-		? getFaviconSrc({
-				client,
-				url: twitter
-			})
-		: readable(undefined);
-	$: mangaUpdatesFavicon = mangaUpdates
-		? getFaviconSrc({
-				client,
-				url: mangaUpdates
-			})
-		: readable(undefined);
+	let websiteFavicon = $derived(
+		website
+			? getFaviconSrc({
+					client,
+					url: website
+				})
+			: readable(undefined)
+	);
+	let twitterFavicon = $derived(
+		twitter
+			? getFaviconSrc({
+					client,
+					url: twitter
+				})
+			: readable(undefined)
+	);
+	let mangaUpdatesFavicon = $derived(
+		mangaUpdates
+			? getFaviconSrc({
+					client,
+					url: mangaUpdates
+				})
+			: readable(undefined)
+	);
 </script>
 
 {#if twitter}

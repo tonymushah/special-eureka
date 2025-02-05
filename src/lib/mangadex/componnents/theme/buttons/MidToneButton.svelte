@@ -2,16 +2,26 @@
 	import ButtonBase from "./base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
 
-	export let type: "reset" | "submit" | "button" = "button";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let style: string | undefined = undefined;
-	export let isBase = false;
+	interface Props {
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		isBase?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		type = "button",
+		style = undefined,
+		isBase = false,
+		children
+	}: Props = $props();
 </script>
 
 <ButtonBase --button-color={"var(--mid-tone)"} {style} on:click {type} {isBase}>
-	<slot />
+	{@render children?.()}
 </ButtonBase>

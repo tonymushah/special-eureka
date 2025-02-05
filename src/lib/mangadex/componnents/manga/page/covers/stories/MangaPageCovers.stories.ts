@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/svelte";
 import "@fontsource/poppins/latin.css";
 
-import MangaPageCovers, { Variant } from "../MangaPageCovers.svelte";
+import MangaPageCovers from "../MangaPageCovers.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { writable } from "svelte/store";
 import { v4 } from "uuid";
 import { volume1, volume3, volume5 } from "@mangadex/test-data/images/uncategorized-1";
+import { Variant } from "../MangaPageCovers.utils";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],

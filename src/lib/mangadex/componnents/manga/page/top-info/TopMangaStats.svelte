@@ -9,15 +9,19 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let stats: TopMangaStatistics;
+	interface Props {
+		stats: TopMangaStatistics;
+	}
+
+	let { stats = $bindable() }: Props = $props();
 </script>
 
 <div class="stats">
-	<Note bind:average={stats.average} bind:inner={stats.inner} />
-	<BookmarkButton bind:bookmarks={stats.follows} />
+	<Note average={stats.average} bind:inner={stats.inner} />
+	<BookmarkButton bookmarks={stats.follows} />
 	{#if stats.comments}
 		<CommentsButton
-			bind:comments={stats.comments}
+			comments={stats.comments}
 			on:click={({ detail }) => {
 				dispatch("commentClick", detail);
 			}}

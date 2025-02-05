@@ -28,6 +28,7 @@ type M = Mutation;
 type S = Subscriptions;
 
 pub(crate) type Result<T, E = error::Error> = std::result::Result<T, E>;
+pub(crate) use plugin_setup::PluginSetupResult;
 
 pub use error::Error;
 

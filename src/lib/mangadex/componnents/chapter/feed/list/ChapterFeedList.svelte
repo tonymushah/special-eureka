@@ -7,19 +7,24 @@
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
 
-	export let list: ChapterFeedListItem[] = [];
-	export let style: Writable<ChapterFeedStyle>;
-	$: coverfull = $style == ChapterFeedStyle.CoverFull;
-	$: coverless = $style == ChapterFeedStyle.CoverLess;
-	$: isEmpty = list.length == 0;
+	interface Props {
+		list?: ChapterFeedListItem[];
+		style: Writable<ChapterFeedStyle>;
+		children?: import('svelte').Snippet;
+	}
+
+	let { list = [], style, children }: Props = $props();
+	let coverfull = $derived($style == ChapterFeedStyle.CoverFull);
+	let coverless = $derived($style == ChapterFeedStyle.CoverLess);
+	let isEmpty = $derived(list.length == 0);
 </script>
 
 <section>
 	<div class="tab-title">
 		<div class="tab-additional-content">
-			<slot>
+			{#if children}{@render children()}{:else}
 				<span>:3</span>
-			</slot>
+			{/if}
 		</div>
 		<ChapterFeedListSelector {style} />
 	</div>

@@ -13,31 +13,36 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let color: StatusColor;
+	interface Props {
+		color: StatusColor;
+		children?: import('svelte').Snippet;
+	}
+
+	let { color, children }: Props = $props();
 </script>
 
 {#if color == "blue"}
 	<Blue on:click>
-		<slot />
+		{@render children?.()}
 	</Blue>
 {:else if color == "gray"}
 	<Gray on:click>
-		<slot />
+		{@render children?.()}
 	</Gray>
 {:else if color == "green"}
 	<Green on:click>
-		<slot />
+		{@render children?.()}
 	</Green>
 {:else if color == "purple"}
 	<Purple on:click>
-		<slot />
+		{@render children?.()}
 	</Purple>
 {:else if color == "red"}
 	<Red on:click>
-		<slot />
+		{@render children?.()}
 	</Red>
 {:else if color == "yellow"}
 	<Yellow on:click>
-		<slot />
+		{@render children?.()}
 	</Yellow>
 {/if}

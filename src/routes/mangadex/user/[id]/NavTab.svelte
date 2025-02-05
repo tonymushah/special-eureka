@@ -12,13 +12,17 @@
 			return pathname;
 		}
 	});
-	export let id: string;
+	interface Props {
+		id: string;
+	}
+
+	let { id }: Props = $props();
 </script>
 
 <nav>
 	<button
 		class:active={$path == route("/mangadex/user/[id]", { id })}
-		on:click={() => {
+		onclick={() => {
 			goto(route("/mangadex/user/[id]", { id }));
 		}}
 	>
@@ -26,7 +30,7 @@
 	</button>
 	<button
 		class:active={$path == route("/mangadex/user/[id]/uploads", { id })}
-		on:click={() => {
+		onclick={() => {
 			goto(route("/mangadex/user/[id]/uploads", { id }));
 		}}
 	>
@@ -34,7 +38,7 @@
 	</button>
 	<button
 		class:active={$path == route("/mangadex/user/[id]/lists", { id })}
-		on:click={() => {
+		onclick={() => {
 			goto(route("/mangadex/user/[id]/lists", { id }));
 		}}
 	>

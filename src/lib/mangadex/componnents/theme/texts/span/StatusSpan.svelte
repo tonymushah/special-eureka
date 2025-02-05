@@ -1,17 +1,22 @@
 <script lang="ts">
 	import type { StatusColor } from "@mangadex/utils/types/status";
 
-	export let type: StatusColor;
-	$: red = type == "red";
-	$: green = type == "green";
-	$: yellow = type == "yellow";
-	$: blue = type == "blue";
-	$: gray = type == "gray";
-	$: purple = type == "purple";
+	interface Props {
+		type: StatusColor;
+		children?: import('svelte').Snippet;
+	}
+
+	let { type, children }: Props = $props();
+	let red = $derived(type == "red");
+	let green = $derived(type == "green");
+	let yellow = $derived(type == "yellow");
+	let blue = $derived(type == "blue");
+	let gray = $derived(type == "gray");
+	let purple = $derived(type == "purple");
 </script>
 
 <span class:blue class:gray class:green class:purple class:red class:yellow>
-	<slot />
+	{@render children?.()}
 </span>
 
 <style lang="scss">

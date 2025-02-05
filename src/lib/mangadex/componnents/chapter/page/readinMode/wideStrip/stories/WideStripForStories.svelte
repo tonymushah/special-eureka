@@ -1,27 +1,35 @@
 <script lang="ts">
-	import { derived, writable } from "svelte/store";
+	import { derived as der, writable } from "svelte/store";
 	import { initDefaultChapterCurrentPageContext } from "../../../contexts/currentPage";
 	import { initChapterImageContext } from "../../../contexts/images";
 	import Page from "../WideStrip.svelte";
-	import { Direction as ReadingDirection } from "@mangadex/gql";
+	import { Direction as ReadingDirection } from "@mangadex/gql/exports";
 	import { initCurrentChapterDirection } from "../../../contexts/readingDirection";
-	export let images: string[];
-	export let currentPage: number = 0;
-	export let direction: ReadingDirection = ReadingDirection.Ltr;
+	interface Props {
+		images: string[];
+		currentPage?: number;
+		direction?: ReadingDirection;
+	}
+
+	let {
+		images = $bindable(),
+		currentPage = $bindable(0),
+		direction = $bindable(ReadingDirection.Ltr)
+	}: Props = $props();
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const currentChapterPage = initDefaultChapterCurrentPageContext();
-	$: {
+	$effect(() => {
 		currentChapterPage.set(currentPage);
-	}
-	const currentPageDerived = derived(currentChapterPage, (page) => page + 1);
+	});
+	const currentPageDerived = der(currentChapterPage, (page) => page + 1);
 	initChapterImageContext(images);
 </script>
 
 <p>
 	Current Page: {$currentPageDerived}
 	<button
-		on:click={() => {
+		onclick={() => {
 			if ($readingDirection == ReadingDirection.Ltr) {
 				$currentChapterPage--;
 			} else {
@@ -30,7 +38,7 @@
 		}}>{"<-"}</button
 	>
 	<button
-		on:click={() => {
+		onclick={() => {
 			if ($readingDirection == ReadingDirection.Ltr) {
 				$currentChapterPage++;
 			} else {
@@ -52,7 +60,7 @@
 </p>
 
 <button
-	on:click={() => {
+	onclick={() => {
 		switch ($readingDirection) {
 			case ReadingDirection.Ltr:
 				readingDirection.set(ReadingDirection.Rtl);

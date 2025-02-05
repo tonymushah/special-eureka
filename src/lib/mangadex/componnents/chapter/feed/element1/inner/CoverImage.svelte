@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
-	export let mangaId: string;
-	export let coverImage: string;
-	export let coverImageAlt: string;
+	interface Props {
+		mangaId: string;
+		coverImage: string;
+		coverImageAlt: string;
+	}
+
+	let { mangaId, coverImage, coverImageAlt }: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -22,13 +26,13 @@
 <div
 	tabindex="-1"
 	role="button"
-	on:keypress={(e) => {
+	onkeypress={(e) => {
 		dispatch("mangaKeyClick", {
 			...e,
 			id: mangaId
 		});
 	}}
-	on:click={(e) => {
+	onclick={(e) => {
 		dispatch("mangaClick", {
 			...e,
 			id: mangaId

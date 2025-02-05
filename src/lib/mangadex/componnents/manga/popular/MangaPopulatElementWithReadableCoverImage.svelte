@@ -2,7 +2,7 @@
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { createEventDispatcher } from "svelte";
-	import { derived, type Readable } from "svelte/store";
+	import { derived as der, type Readable } from "svelte/store";
 	import MangaPopularElement from "./MangaPopularElement.svelte";
 	import MangaPopularElementLoader from "./MangaPopularElementLoader.svelte";
 
@@ -10,20 +10,33 @@
 		id: string;
 		name: string;
 	};
-	export let index: number = -1;
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let authors: Author[];
+	interface Props {
+		index?: number;
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		authors: Author[];
+	}
+
+	let {
+		index = -1,
+		coverImage,
+		coverImageAlt,
+		title,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		authors
+	}: Props = $props();
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
+			currentTarget: EventTarget & HTMLButtonElement;
 			id: string;
 		};
 		tagClick: MouseEvent & {
@@ -31,8 +44,8 @@
 			id: string;
 		};
 	}>();
-	const image = derived(coverImage, (v) => v);
-	$: image_ = $image ?? "";
+	const image = der(coverImage, (v) => v);
+	let image_ = $derived($image ?? "");
 </script>
 
 {#if $image}
@@ -40,7 +53,7 @@
 		on:authorClick
 		on:click
 		on:tagClick
-		bind:coverImage={image_}
+		coverImage={image_}
 		{index}
 		{coverImageAlt}
 		{tags}

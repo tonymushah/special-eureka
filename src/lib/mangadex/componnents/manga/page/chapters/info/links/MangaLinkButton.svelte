@@ -1,12 +1,16 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	import { open } from "@tauri-apps/api/shell";
+	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import type { Readable } from "svelte/store";
 	import Favicon from "./button/Favicon.svelte";
 
-	export let href: string;
-	export let title: string;
-	export let icon: Readable<string | undefined>;
+	interface Props {
+		href: string;
+		title: string;
+		icon: Readable<string | undefined>;
+	}
+
+	let { href, title, icon }: Props = $props();
 </script>
 
 <ButtonBase

@@ -1,7 +1,11 @@
 <script lang="ts">
 	import IndicationParagraph from "../IndicationParagraph.svelte";
-	export let type: "blue" = "blue";
-	export let innerText: string;
+	interface Props {
+		type?: "blue";
+		innerText: string;
+	}
+
+	let { type = "blue", innerText }: Props = $props();
 </script>
 
 <IndicationParagraph {type}>

@@ -15,8 +15,12 @@
 	import { route } from "$lib/ROUTES";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 
-	export let groupId: Readable<string>;
-	let isFetching = false;
+	interface Props {
+		groupId: Readable<string>;
+	}
+
+	let { groupId }: Props = $props();
+	let isFetching = $state(false);
 	const client = getContextClient();
 	const feed = writable<ChapterFeedListItemExt[]>([]);
 	const debounce_wait = 450;
@@ -88,20 +92,22 @@
 		debounce_func?.cancel();
 		observer.disconnect();
 	});
-	let to_obserce_bind: HTMLElement | undefined = undefined;
-	$: {
+	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
+	$effect(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
-	}
-	$: console.log(`isFetching: ${isFetching}`);
+	});
+	$effect(() => {
+		console.log(`isFetching: ${isFetching}`);
+	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 
 <div class="result">
 	<ChapterFeedList
-		bind:list={$feed}
+		list={$feed}
 		style={chapterFeedStyle}
 		on:mangaClick={(e) => {
 			const id = e.detail.id;

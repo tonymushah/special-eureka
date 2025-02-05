@@ -18,14 +18,11 @@ impl UserSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         user_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = UserAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.user.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.user.subscribe()
+            })?
             .option_filter_by_id(user_id),
         )
     }

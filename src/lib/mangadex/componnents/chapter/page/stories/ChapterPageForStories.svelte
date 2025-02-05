@@ -13,46 +13,73 @@
 	import { initCurrentChapterDirection } from "../contexts/readingDirection";
 	import { initCurrentChapterImageFit } from "../contexts/imageFit";
 
-	export let chapter: CurrentChapterData;
-	export let images: string[];
-	export let currentPage: number = 0;
-	export let readingMode: ReadingMode = ReadingMode.SinglePage;
-	export let isFixed = false;
-	export let isMenuOpen = false;
-	export let longStripImageWidth = 0;
-	export let relatedChapters: RelatedChapters = [];
-	export let direction = Direction.Ltr;
-	export let imageFit = ImageFit.Default;
+	interface Props {
+		chapter: CurrentChapterData;
+		images: string[];
+		currentPage?: number;
+		readingMode?: ReadingMode;
+		isFixed?: boolean;
+		isMenuOpen?: boolean;
+		longStripImageWidth?: number;
+		relatedChapters?: RelatedChapters;
+		direction?: any;
+		imageFit?: any;
+	}
+
+	let {
+		chapter = $bindable(),
+		images = $bindable(),
+		currentPage = $bindable(0),
+		readingMode = $bindable(ReadingMode.SinglePage),
+		isFixed = $bindable(false),
+		isMenuOpen = $bindable(false),
+		longStripImageWidth = $bindable(0),
+		relatedChapters = $bindable([]),
+		direction = $bindable(Direction.Ltr),
+		imageFit = $bindable(ImageFit.Default)
+	}: Props = $props();
 
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
-	$: imageFitStore.set(imageFit);
+	$effect(() => {
+		imageFitStore.set(imageFit);
+	});
 	const lsImgWidth = initLongStripImagesWidthContext(writable(longStripImageWidth));
-	$: lsImgWidth.set(longStripImageWidth);
+	$effect(() => {
+		lsImgWidth.set(longStripImageWidth);
+	});
 	const is = initChapterImageContext(images);
-	$: {
+	$effect(() => {
 		is.set(images);
-	}
+	});
 	const current = initChapterCurrentPageContext(writable(currentPage));
-	$: {
+	$effect(() => {
 		current.set(currentPage);
-	}
+	});
 	const fixed = initIsDrawerFixedWritable(writable(isFixed));
-	$: {
+	$effect(() => {
 		fixed.set(isFixed);
-	}
+	});
 	const opened = initIsDrawerOpenWritable(writable(isMenuOpen));
-	$: {
+	$effect(() => {
 		opened.set(isMenuOpen);
-	}
+	});
 	const c = writable(chapter);
 	initCurrentChapterData(c);
-	$: c.set(chapter);
+	$effect(() => {
+		c.set(chapter);
+	});
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
-	$: mode.set(readingMode);
+	$effect(() => {
+		mode.set(readingMode);
+	});
 	const related = initRelatedChapters(writable(relatedChapters));
-	$: related.set(relatedChapters);
+	$effect(() => {
+		related.set(relatedChapters);
+	});
 	const pageDirection = initCurrentChapterDirection(writable(direction));
-	$: pageDirection.set(direction);
+	$effect(() => {
+		pageDirection.set(direction);
+	});
 </script>
 
 <main>

@@ -2,10 +2,14 @@
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
 
-	export let title: string;
-	export let titles: (ComponentProps<MangaElementBase1> & {
-		id: string;
-	})[];
+	interface Props {
+		title: string;
+		titles: (ComponentProps<typeof MangaElementBase1> & {
+			id: string;
+		})[];
+	}
+
+	let { title, titles }: Props = $props();
 	const dispatch = createEventDispatcher<{
 		titles: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;

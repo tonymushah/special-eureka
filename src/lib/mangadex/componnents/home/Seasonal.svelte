@@ -14,10 +14,10 @@
 		query,
 		variable: {}
 	});
-	$: error = $query_store?.error;
-	$: data = $query_store?.data;
+	let error = $derived($query_store?.error);
+	let data = $derived($query_store?.data);
 	const isFetching = query_store.isFetching;
-	$: fetching = $isFetching;
+	let fetching = $derived($isFetching);
 	onMount(async () => {
 		await query_store.execute();
 	});
@@ -25,7 +25,7 @@
 
 <TopTitle
 	label="Seasonal"
-	bind:fetching
+	{fetching}
 	on:refresh={async () => {
 		if (!fetching) {
 			await query_store.execute();

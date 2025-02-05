@@ -11,15 +11,18 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let coverImage: Readable<string | undefined>;
-	export let coverImageAlt: string;
-	export let title: string;
-	$: coverImage_ = $coverImage;
+	interface Props {
+		coverImage: Readable<string | undefined>;
+		coverImageAlt: string;
+		title: string;
+	}
+
+	let { coverImage, coverImageAlt, title }: Props = $props();
 </script>
 
 <Layout on:click --w-base={"9.5em"} --img-h={"12.5em"}>
-	{#if coverImage_}
-		<CoverImage bind:coverImage={coverImage_} {coverImageAlt} />
+	{#if $coverImage}
+		<CoverImage coverImage={$coverImage} {coverImageAlt} />
 	{:else}
 		<Skeleton width={"var(--w-base)"} height={"var(--img-h)"} />
 	{/if}

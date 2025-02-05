@@ -1,11 +1,7 @@
 use async_graphql::Context as GQLContext;
-use tauri::{Runtime, Window};
-use tokio::{
-    select,
-    sync::watch::{Receiver, Sender},
-};
+use tauri::Runtime;
+use tokio::sync::watch::{Receiver, Sender};
 use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
-use uuid::Uuid;
 
 use std::{
     future::Future,
@@ -14,116 +10,71 @@ use std::{
     task::{Context, Poll},
 };
 
-use crate::utils::{
-    get_watches_from_graphql_context, get_window_from_async_graphql, watch::Watches,
-};
+use crate::utils::{get_watches_from_graphql_context, watch::Watches};
 
-use super::cancel_token::WindowCancellationToken;
-
-pub struct WatchSubscriptionStream<R, T>
+pub struct WatchSubscriptionStream<T>
 where
-    R: Runtime,
     T: Clone + 'static + Send + Sync,
 {
-    win_cancel_token: WindowCancellationToken<R>,
     recv: WatchStream<T>,
     _recv: Receiver<T>,
 }
 
-impl<R, T> Deref for WatchSubscriptionStream<R, T>
-where
-    R: Runtime,
-    T: Clone + 'static + Send + Sync,
-{
-    type Target = WindowCancellationToken<R>;
-    fn deref(&self) -> &Self::Target {
-        &self.win_cancel_token
-    }
-}
+impl<T> Unpin for WatchSubscriptionStream<T> where T: Clone + 'static + Send + Sync {}
 
-impl<R, T> Unpin for WatchSubscriptionStream<R, T>
+impl<T> Clone for WatchSubscriptionStream<T>
 where
-    R: Runtime,
-    T: Clone + 'static + Send + Sync,
-{
-}
-
-impl<R, T> Clone for WatchSubscriptionStream<R, T>
-where
-    R: Runtime,
     T: Clone + 'static + Send + Sync,
 {
     /// Create a separate watch subscription stream but stops when the window is destroyed or
     fn clone(&self) -> Self {
-        Self::new(self._recv.clone(), self.window().clone(), self.sub_id())
+        Self::new(self._recv.clone())
     }
 }
-impl<R, T> WatchSubscriptionStream<R, T>
+impl<T> WatchSubscriptionStream<T>
 where
-    R: Runtime,
     T: Clone + 'static + Send + Sync,
 {
-    pub fn new(recv: Receiver<T>, window: Window<R>, sub_id: Uuid) -> Self {
+    pub fn new(recv: Receiver<T>) -> Self {
         Self {
             recv: WatchStream::new(recv.clone()),
             _recv: recv,
-            win_cancel_token: WindowCancellationToken::new(window, sub_id),
         }
     }
 
-    pub fn from_async_graphql_context<F>(
+    pub fn from_async_graphql_context<F, R>(
         ctx: &GQLContext<'_>,
-        sub_id: Uuid,
         provider: F,
     ) -> crate::Result<Self>
     where
+        R: Runtime,
         F: FnOnce(&Watches) -> Receiver<T>,
     {
-        let window = get_window_from_async_graphql::<R>(ctx)?.clone();
         let watches = get_watches_from_graphql_context::<R>(ctx)?;
-        Ok(Self::new(provider(&watches), window, sub_id))
+        Ok(Self::new(provider(&watches)))
     }
-    pub fn from_async_graphql_context_watch_as_ref<W>(
+    pub fn from_async_graphql_context_watch_as_ref<W, R>(
         ctx: &GQLContext<'_>,
-        sub_id: Uuid,
     ) -> crate::Result<Self>
     where
+        R: Runtime,
         W: Deref<Target = Sender<T>>,
         Watches: AsRef<W>,
     {
-        let window = get_window_from_async_graphql::<R>(ctx)?.clone();
         let watches = get_watches_from_graphql_context::<R>(ctx)?;
         let to_use: &W = watches.as_ref();
-        Ok(Self::new(to_use.subscribe(), window, sub_id))
+        Ok(Self::new(to_use.subscribe()))
     }
 }
 
-impl<R, T> Stream for WatchSubscriptionStream<R, T>
+impl<T> Stream for WatchSubscriptionStream<T>
 where
-    R: Runtime,
     T: Clone + 'static + Send + Sync,
 {
     type Item = T;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        let cancel_token = self.cancel_token().child_token();
-        let recv_stream = self.recv.next();
-        let res = async {
-            select! {
-                _ = cancel_token.cancelled_owned() => {
-                    // println!("end");
-                    None
-                }
-                res = recv_stream => {
-                    // println!("new value");
-                    res
-                }
-                else => {
-                    // println!("end");
-                    None
-                }
-            }
-        };
+        let res = self.recv.next();
         Box::pin(res).as_mut().poll(cx)
     }
 }

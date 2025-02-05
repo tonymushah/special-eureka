@@ -10,13 +10,27 @@
 			currentTarget: EventTarget & HTMLDivElement;
 		};
 	}>();
-	export let items: (Item | undefined)[];
-	export let font_size: string = "var(--font-size)";
-	export let menu_padding: string = "0.5em";
-	export let menu: AnyMeltElement = emptyMeltElement;
-	export let item_: AnyMeltElement = emptyMeltElement;
-	export let separator: AnyMeltElement = emptyMeltElement;
-	export let arrow: AnyMeltElement = emptyMeltElement;
+	interface Props {
+		items: (Item | undefined)[];
+		font_size?: string;
+		menu_padding?: string;
+		menu?: AnyMeltElement;
+		item_?: AnyMeltElement;
+		separator?: AnyMeltElement;
+		arrow?: AnyMeltElement;
+		tabindex?: number;
+	}
+
+	let {
+		items,
+		font_size = "var(--font-size)",
+		menu_padding = "0.5em",
+		menu = emptyMeltElement,
+		item_ = emptyMeltElement,
+		separator = emptyMeltElement,
+		arrow = emptyMeltElement,
+		tabindex = 0
+	}: Props = $props();
 </script>
 
 <div class="menu" use:melt={$menu}>
@@ -28,7 +42,7 @@
 						<ContextMenuItem
 							icon={item.icon}
 							label={item.label}
-							tabindex={index}
+							{tabindex}
 							on:click={async (e) => {
 								const onClick = item?.onClick;
 								if (onClick) {
@@ -47,7 +61,7 @@
 						{/if}
 					{/if}
 				{/each}
-				<div use:melt={$arrow} />
+				<div use:melt={$arrow}></div>
 			</SomeDiv>
 		</div>
 	</MangaDexVarThemeProvider>

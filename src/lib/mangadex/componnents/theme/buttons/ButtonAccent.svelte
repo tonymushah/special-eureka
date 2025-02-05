@@ -9,48 +9,58 @@
 	import Accent from "./accents/Accent.svelte";
 	import AccentAlt from "./accents/AccentAlt.svelte";
 
-	export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" =
-		"default";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "reset" | "submit" | "button" = "button";
-	export let style: string | undefined = undefined;
-	export let isBase = false;
+	interface Props {
+		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		isBase?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		variant = "default",
+		type = "button",
+		style = undefined,
+		isBase = false,
+		children
+	}: Props = $props();
 </script>
 
 {#if variant == "1"}
 	<L1 on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L1>
 {:else if variant == "2"}
 	<L2 on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L2>
 {:else if variant == "3"}
 	<L3 on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L3>
 {:else if variant == "4"}
 	<L4 on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L4>
 {:else if variant == "5"}
 	<L5 on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L5>
 {:else if variant == "accent"}
 	<Accent on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Accent>
 {:else if variant == "accent-alt"}
 	<AccentAlt on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</AccentAlt>
 {:else}
 	<Default on:click {style} {type} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Default>
 {/if}

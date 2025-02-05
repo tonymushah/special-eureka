@@ -3,9 +3,15 @@
 	import type { PageData } from "./$types";
 	import { derived, readable, writable } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	const authorId = writable<string>(data.id);
-	$: authorId.set(data.id);
+	$effect(() => {
+		authorId.set(data.id);
+	});
 	const offlineStore = readable(false);
 
 	const listParams = derived([authorId], ([$id]) => {

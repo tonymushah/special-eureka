@@ -27,23 +27,35 @@
 		roles: UserRole[];
 		name: string;
 	};
-	export let id: string;
-	export let chapterTitle: string | undefined = undefined;
-	export let lang: Language;
-	export let groups: Group[] = [];
-	export let uploader: Uploader;
-	export let upload_date: Date;
-	export let download_state: Readable<ChapterDownloadState>;
-	let timeago: HTMLTimeElement;
+	interface Props {
+		id: string;
+		chapterTitle?: string | undefined;
+		lang: Language;
+		groups?: Group[];
+		uploader: Uploader;
+		upload_date: Date;
+		download_state: Readable<ChapterDownloadState>;
+	}
+
+	let {
+		id,
+		chapterTitle = undefined,
+		lang = $bindable(),
+		groups = [],
+		uploader,
+		upload_date,
+		download_state
+	}: Props = $props();
+	let timeago: HTMLTimeElement = $state();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	type KeyboardEnvDiv = KeyboardEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
-	let layout: HTMLDivElement;
-	let tooltip: HTMLDivElement | undefined = undefined;
-	let arrowElement: HTMLDivElement | undefined = undefined;
+	let layout: HTMLDivElement = $state();
+	let tooltip: HTMLDivElement | undefined = $state(undefined);
+	let arrowElement: HTMLDivElement | undefined = $state(undefined);
 	const dispatch = createEventDispatcher<{
 		download: MouseEnvDiv & {
 			id: string;
@@ -115,15 +127,15 @@
 	role="article"
 	class="layout"
 	bind:this={layout}
-	on:mouseenter={showTooltip}
-	on:mouseleave={hideTooltip}
-	on:focus={showTooltip}
-	on:blur={hideTooltip}
+	onmouseenter={showTooltip}
+	onmouseleave={hideTooltip}
+	onfocus={showTooltip}
+	onblur={hideTooltip}
 >
 	<div
 		class="state buttons"
 		role="button"
-		on:click={(e) => {
+		onclick={(e) => {
 			if ($download_state != ChapterDownloadState.Downloading) {
 				dispatch("download", {
 					...e,
@@ -131,7 +143,7 @@
 				});
 			}
 		}}
-		on:keypress={(e) => {
+		onkeypress={(e) => {
 			dispatch("downloadKeyPress", {
 				...e,
 				id
@@ -157,7 +169,7 @@
 			<a href={`/mangadex/chapter/${id}`}><h4>{chapterTitle}</h4></a>
 		</div>
 		<p>
-			<time datetime={upload_date.toDateString()} bind:this={timeago} />
+			<time datetime={upload_date.toDateString()} bind:this={timeago}></time>
 		</p>
 	</div>
 </div>
@@ -181,7 +193,7 @@
 			{uploader.name}
 		</a>
 	</div>
-	<div class="arrow" bind:this={arrowElement} />
+	<div class="arrow" bind:this={arrowElement}></div>
 </div>
 
 <style lang="scss">

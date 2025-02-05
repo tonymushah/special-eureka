@@ -35,7 +35,7 @@ impl From<LongstripImageWidthStore> for f64 {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for LongstripImageWidthStore
+impl<R> ExtractFromStore<'_, R> for LongstripImageWidthStore
 where
     R: Runtime,
 {
@@ -57,19 +57,19 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(
+        store.set(
             LONGSTRIP_IMAGE_WIDTH.to_string(),
             serde_json::to_value(*self)?,
-        )?;
+        );
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(LONGSTRIP_IMAGE_WIDTH)?;
+        store.delete(LONGSTRIP_IMAGE_WIDTH);
         Ok(())
     }
 }

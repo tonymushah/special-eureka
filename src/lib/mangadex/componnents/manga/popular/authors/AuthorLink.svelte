@@ -7,8 +7,12 @@
 			id: string;
 		};
 	}>();
-	export let name: string;
-	export let id: string;
+	interface Props {
+		name: string;
+		id: string;
+	}
+
+	let { name, id }: Props = $props();
 </script>
 
 <ButtonBase

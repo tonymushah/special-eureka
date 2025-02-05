@@ -1,26 +1,32 @@
 <script lang="ts">
 	import { fade } from "svelte/transition";
 
-	export let open: boolean;
-	export let fixed: boolean = true;
-	export let left = false;
+	interface Props {
+		open: boolean;
+		fixed?: boolean;
+		left?: boolean;
+		children?: import("svelte").Snippet<[any]>;
+		content?: import("svelte").Snippet;
+	}
+
+	let { open, fixed = true, left = false, children, content }: Props = $props();
 </script>
 
 <div class="container" class:fixed>
 	{#if left}
 		<aside class:open class:fixed class:left transition:fade>
 			<div class="inner">
-				<slot {open} {fixed} />
+				{@render children?.({ open, fixed })}
 			</div>
 		</aside>
 	{/if}
 	<div class="content" class:open class:fixed>
-		<slot name="content" />
+		{@render content?.()}
 	</div>
 	{#if !left}
 		<aside class:open class:fixed transition:fade>
 			<div class="inner">
-				<slot {open} {fixed} />
+				{@render children?.({ open, fixed })}
 			</div>
 		</aside>
 	{/if}
@@ -57,6 +63,8 @@
 	}
 	aside.fixed {
 		position: absolute;
+		margin-top: 29px;
+		height: calc(100cqh - 29px);
 	}
 	.content {
 		transition-duration: 0.5s;

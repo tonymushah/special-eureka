@@ -15,11 +15,15 @@
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 
-	let isFetching = false;
+	let isFetching = $state(false);
 	const client = getContextClient();
 	const users = writable<UserListItemData[]>([]);
 	const debounce_wait = 450;
-	export let userName: Readable<string | undefined>;
+	interface Props {
+		userName: Readable<string | undefined>;
+	}
+
+	let { userName }: Props = $props();
 	const params = derived([userName], ([$userName]) => {
 		return {
 			username: $userName
@@ -86,14 +90,16 @@
 		debounce_func?.cancel();
 		observer.disconnect();
 	});
-	let to_obserce_bind: HTMLElement | undefined = undefined;
-	$: {
+	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
+	$effect(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
-	}
-	$: console.log(`isFetching: ${isFetching}`);
+	});
+	$effect(() => {
+		console.log(`isFetching: ${isFetching}`);
+	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 

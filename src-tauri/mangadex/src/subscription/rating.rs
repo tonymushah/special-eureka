@@ -16,14 +16,11 @@ impl RatingSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = RatingItemAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.rating.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.rating.subscribe()
+            })?
             .option_filter_by_id(manga_id),
         )
     }

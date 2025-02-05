@@ -1,11 +1,15 @@
 <script lang="ts">
 	import ProgressBar from "@mangadex/componnents/theme/progress/ProgressBar.svelte";
 
-	export let distribution: number;
-	export let total: number;
-	export let value: number;
+	interface Props {
+		distribution: number;
+		total: number;
+		value: number;
+	}
 
-	$: progress = (value / total) * 100;
+	let { distribution, total, value }: Props = $props();
+
+	let progress = $derived((value / total) * 100);
 </script>
 
 <div class="distribution-item">
@@ -13,7 +17,7 @@
 		{distribution}
 	</div>
 	<div class="progress">
-		<ProgressBar variant="rounded" lineColor="var(--primary)" bind:progress />
+		<ProgressBar variant="rounded" lineColor="var(--primary)" {progress} />
 	</div>
 	<div class="value">
 		({value})

@@ -8,32 +8,33 @@
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import MangaDexDefaultThemeProvider from "@mangadex/componnents/theme/MangaDexDefaultThemeProvider.svelte";
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
-	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
-	import { Direction } from "@mangadex/gql/graphql";
+	import defaultProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { client } from "@mangadex/gql/urql";
-	import { sub_end } from "@mangadex/utils";
-	import { getContextClient, setContextClient, subscriptionStore } from "@urql/svelte";
+	import { setContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
-	import { v4 } from "uuid";
+	import { get } from "svelte/store";
+	interface Props {
+		children?: import("svelte").Snippet;
+	}
 
+	let { children }: Props = $props();
+	onMount(async () => {
+		const { mangadexTitleBar } = await import("@mangadex/titlebar");
+		await mangadexTitleBar();
+	});
+	onMount(() => {
+		return defaultProfile.subscribe(() => {});
+	});
+	onDestroy(async () => {
+		const { defaultBehavior } = await import(
+			"$lib/window-decoration/stores/decorations.svelte"
+		);
+		defaultBehavior();
+	});
 	setContextClient(client);
-	const sub_id = v4();
-	const rtl = subscriptionStore({
-		client: getContextClient(),
-		query: sideDirGQLDoc,
-		variables: {
-			sub_id
-		}
-	});
-	onMount(() =>
-		rtl.subscribe(($rtl) => isSidebarRtl.set($rtl.data?.watchSidebarDirection == Direction.Rtl))
-	);
 
-	onDestroy(() => {
-		sub_end(sub_id);
-	});
-	$: loading = $navigating != null;
-	$: isRTL = $rtl.data?.watchSidebarDirection == Direction.Rtl;
+	let loading = $derived($navigating != null);
+	let isRTL = $derived($isSidebarRtl);
 </script>
 
 <div class="d-content">
@@ -55,20 +56,20 @@
 					class:defaultDecoration={$isDefaultDecoration}
 					role="button"
 					tabindex="0"
-					on:keydown={(e) => {
+					onkeydown={(e) => {
 						if (loading) {
 							e.stopPropagation();
 							e.preventDefault();
 						}
 					}}
-					on:click={(e) => {
+					onclick={(e) => {
 						if (loading) {
 							e.stopPropagation();
 							e.preventDefault();
 						}
 					}}
 				>
-					<slot />
+					{@render children?.()}
 				</div>
 			</div>
 		</MangaDexDefaultThemeProvider>

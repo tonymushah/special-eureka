@@ -1,33 +1,17 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql";
+	import { graphql } from "@mangadex/gql/exports";
 	import { isLogged, userMe } from "@mangadex/utils/auth";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
 	import { UserCheckIcon, UserIcon, UserXIcon } from "svelte-feather-icons";
 	import Menu from "./base/Menu.svelte";
+	import { userMeOnSidebarFooterQuery } from "./footer";
 	const client = getContextClient();
-	let initial_user_name: string | undefined = undefined;
-	let isRefreshing = false;
+	let initial_user_name: string | undefined = $state(undefined);
+	let isRefreshing = $state(false);
 	async function loadUserMe() {
 		isRefreshing = true;
-		const me = await client
-			.query(
-				graphql(/* GraphQL */ `
-					query userMeOnSidebarFooter {
-						user {
-							me {
-								id
-								attributes {
-									username
-									roles
-								}
-							}
-						}
-					}
-				`),
-				{}
-			)
-			.toPromise();
+		const me = await client.query(userMeOnSidebarFooterQuery, {}).toPromise();
 		if (me.error) {
 			console.error(me.error);
 		}
@@ -38,24 +22,26 @@
 		await loadUserMe();
 	});
 
-	$: label = $userMe?.name ?? "Login";
+	let label = $derived($userMe?.name ?? "Login");
 </script>
 
 <Menu
-	bind:label
+	{label}
 	on:click={async () => {
 		await loadUserMe();
 	}}
 >
-	<div slot="icon" role="button" tabindex="0" on:keypress={(e) => {}} class:isRefreshing>
-		{#if isRefreshing}
-			<UserIcon size="24" />
-		{:else if $isLogged}
-			<UserCheckIcon size="24" />
-		{:else}
-			<UserXIcon size="24" />
-		{/if}
-	</div>
+	{#snippet icon()}
+		<div role="button" tabindex="0" onkeypress={(e) => {}} class:isRefreshing>
+			{#if isRefreshing}
+				<UserIcon size="24" />
+			{:else if $isLogged}
+				<UserCheckIcon size="24" />
+			{:else}
+				<UserXIcon size="24" />
+			{/if}
+		</div>
+	{/snippet}
 </Menu>
 
 <style lang="scss">

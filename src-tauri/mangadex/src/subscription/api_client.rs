@@ -16,14 +16,11 @@ impl ApiClientSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         api_client_id: Uuid,
-        sub_id: Uuid,
     ) -> Result<impl Stream<Item = ApiClientAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
-                |w| w.api_client.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.api_client.subscribe()
+            })?
             .option_filter_by_id(api_client_id),
         )
     }

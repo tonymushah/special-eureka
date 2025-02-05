@@ -1,16 +1,22 @@
 <script lang="ts">
+	// import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { createEventDispatcher } from "svelte";
 	import { RefreshCwIcon } from "svelte-feather-icons";
 
-	export let label: string;
-	export let fetching: boolean;
+	interface Props {
+		label: string;
+		fetching: boolean;
+	}
+
+	let { label, fetching = $bindable() }: Props = $props();
 	const dispacther = createEventDispatcher<{
 		refresh: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
+
 	// $: console.log(`fetching ${fetching}`);
 </script>
 
@@ -33,6 +39,7 @@
 	.with-margin {
 		margin-left: 1em;
 		margin-right: 1em;
+		margin-bottom: 0.5em;
 	}
 	div.title {
 		display: flex;
@@ -43,6 +50,12 @@
 		z-index: 3;
 		position: relative;
 	}
+	/*
+	div.title.rtl {
+		flex-direction: row-reverse;
+		justify-content: end;
+	}
+    */
 	.fetching {
 		cursor: not-allowed;
 	}

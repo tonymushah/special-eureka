@@ -1,21 +1,15 @@
 <script lang="ts">
 	import "graphiql/graphiql.min.css";
-	import { type Root } from "react-dom/client";
+	import type { Root } from "react-dom/client";
 	import { onDestroy, onMount } from "svelte";
-	import { invoke } from "@tauri-apps/api";
 	import type { Fetcher } from "@graphiql/toolkit";
 	import { pluginName } from "@mangadex/const";
+	import createFetcher from "mizuki-graphiql-fetcher";
 
-	const fetcher: Fetcher = async (params) => {
-		let [stringData, _] = await invoke<[string, boolean]>(
-			`plugin:${pluginName}|graphql`,
-			params
-		);
-		return JSON.parse(stringData);
-	};
+	const fetcher: Fetcher = createFetcher(pluginName);
 
-	let divRoot: HTMLElement | undefined;
-	let root: Root | undefined;
+	let divRoot: HTMLElement | undefined = $state();
+	let root: Root | undefined = $state();
 
 	onMount(async function () {
 		const { createRoot } = await import("react-dom/client");
@@ -39,10 +33,11 @@
 	});
 </script>
 
-<div bind:this={divRoot} />
+<div bind:this={divRoot}></div>
 
 <style>
 	div {
-		height: 99cqh;
+		height: -webkit-fill-available;
+		display: grid;
 	}
 </style>

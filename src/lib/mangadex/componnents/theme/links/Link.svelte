@@ -1,15 +1,25 @@
 <script lang="ts">
 	import ContextMenuLink from "./context-menu/ContextMenuLink.svelte";
-	export let variant: "primary" | "base" = "primary";
-	export let href: string;
-	export let ext_href: string | undefined = undefined;
-	$: primary = variant == "primary";
-	$: base = variant == "base";
+	interface Props {
+		variant?: "primary" | "base";
+		href: string;
+		ext_href?: string | undefined;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		variant = "primary",
+		href,
+		ext_href = undefined,
+		children
+	}: Props = $props();
+	let primary = $derived(variant == "primary");
+	let base = $derived(variant == "base");
 </script>
 
 <ContextMenuLink {href} {ext_href}>
 	<a {href} class:primary class:base>
-		<slot />
+		{@render children?.()}
 	</a>
 </ContextMenuLink>
 

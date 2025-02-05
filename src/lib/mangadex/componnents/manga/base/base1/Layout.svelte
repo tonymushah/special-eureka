@@ -1,6 +1,11 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -19,7 +24,7 @@
 	--button-active={"var(--accent-l3-active)"}
 >
 	<article class="layout">
-		<slot />
+		{@render children?.()}
 	</article>
 </ButtonBase>
 

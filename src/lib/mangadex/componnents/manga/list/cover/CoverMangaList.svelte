@@ -1,7 +1,7 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { ComponentProps } from "svelte";
 
-	export type CoverMangaListItemProps = ComponentProps<MangaElementBase3> & {
+	export type CoverMangaListItemProps = ComponentProps<typeof MangaElementBase3> & {
 		id: string;
 	};
 </script>
@@ -11,7 +11,11 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 
-	export let list: CoverMangaListItemProps[] = [];
+	interface Props {
+		list?: CoverMangaListItemProps[];
+	}
+
+	let { list = [] }: Props = $props();
 </script>
 
 <section class="cover-list">

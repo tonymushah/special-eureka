@@ -1,12 +1,26 @@
 <script lang="ts">
+	import type { Snippet } from "svelte";
 	import { ChevronDownIcon } from "svelte-feather-icons";
 	import { slide } from "svelte/transition";
 
-	export let title: string;
-	export let isOpen: boolean = false;
-	export let key: string = "Enter";
-	export let withBorder = false;
-	export let titleBorder = false;
+	interface Props {
+		title: string;
+		isOpen?: boolean;
+		key?: string;
+		withBorder?: boolean;
+		titleBorder?: boolean;
+		titleSlot?: Snippet;
+		children?: Snippet;
+	}
+	let {
+		title,
+		isOpen = $bindable(false),
+		key = "Enter",
+		withBorder = false,
+		titleBorder = false,
+		titleSlot,
+		children
+	}: Props = $props();
 	function toggle() {
 		isOpen = !isOpen;
 	}
@@ -15,10 +29,10 @@
 <div class="accordion" class:isOpen class:withBorder>
 	<div
 		role="button"
-		on:click={() => {
+		onclick={() => {
 			toggle();
 		}}
-		on:keydown={({ key: keyDown }) => {
+		onkeydown={({ key: keyDown }) => {
 			if (keyDown == key) {
 				toggle();
 			}
@@ -27,18 +41,20 @@
 		class="title"
 		class:withBorder
 	>
-		<slot name="title">
+		{#if titleSlot}
+			{@render titleSlot()}
+		{:else}
 			<div class="default" class:titleBorder>
 				<p>{title}</p>
 				<div class="chevron" class:isOpen>
 					<ChevronDownIcon />
 				</div>
 			</div>
-		</slot>
+		{/if}
 	</div>
 	{#if isOpen}
 		<div transition:slide class="content">
-			<slot />
+			{@render children?.()}
 		</div>
 	{/if}
 </div>

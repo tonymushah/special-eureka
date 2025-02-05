@@ -3,12 +3,18 @@
 	import WindowDecoration from "$lib/window-decoration/WindowDecoration.svelte";
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
-	import { appWindow } from "@tauri-apps/api/window";
+	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	import { onDestroy, onMount } from "svelte";
 	import { slide } from "svelte/transition";
 	import { register } from "swiper/element/bundle";
 	import "toastify-js/src/toastify.css";
-	let decorationHeigth: number | undefined = undefined;
+	interface Props {
+		children?: import("svelte").Snippet;
+	}
+
+	let { children }: Props = $props();
+	const appWindow = getCurrentWebviewWindow();
+	let decorationHeigth: number | undefined = $state(undefined);
 	const unlistens: UnlistenFn[] = [];
 	onMount(async () => {
 		register();
@@ -21,10 +27,14 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	$: decoHg = decorationHeigth ?? 0;
+	let decoHg = $derived(decorationHeigth ?? 0);
 </script>
 
-<div class="outer" class:defaultDecoration={$isDefaultDecoration} style="--decoH: {decoHg}px">
+<div
+	class="outer rem0asd"
+	class:defaultDecoration={$isDefaultDecoration}
+	style="--decoH: {decoHg}px"
+>
 	{#if !$isDefaultDecoration}
 		<div
 			class="decoration"
@@ -36,8 +46,8 @@
 			<WindowDecoration />
 		</div>
 	{/if}
-	<div class="inner">
-		<slot />
+	<div class="inner redad">
+		{@render children?.()}
 	</div>
 </div>
 
@@ -59,8 +69,8 @@
 			overflow-x: hidden;
 		}
 	}
-	.outer:not(.defaultDecoration) {
-		.inner {
+	.outer.rem0asd:not(.defaultDecoration) {
+		.inner.redad {
 			height: calc(100vh - var(--decoH));
 		}
 	}

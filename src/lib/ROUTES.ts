@@ -14,56 +14,57 @@ const PAGES = {
   "/mangadex": `/mangadex`,
   "/mangadex/author": `/mangadex/author`,
   "/mangadex/author/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/author/${params.id}`
+    return `/mangadex/author/${params['id']}`
   },
   "/mangadex/chapter/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/chapter/${params.id}`
+    return `/mangadex/chapter/${params['id']}`
   },
   "/mangadex/graphiql": `/mangadex/graphiql`,
   "/mangadex/group": `/mangadex/group`,
   "/mangadex/group/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/group/${params.id}`
+    return `/mangadex/group/${params['id']}`
   },
   "/mangadex/group/[id]/titles": (params: { id: (string | number) }) => {
-    return `/mangadex/group/${params.id}/titles`
+    return `/mangadex/group/${params['id']}/titles`
   },
   "/mangadex/group/[id]/uploads": (params: { id: (string | number) }) => {
-    return `/mangadex/group/${params.id}/uploads`
+    return `/mangadex/group/${params['id']}/uploads`
   },
   "/mangadex/group/new": `/mangadex/group/new`,
   "/mangadex/list": `/mangadex/list`,
   "/mangadex/list/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/list/${params.id}`
+    return `/mangadex/list/${params['id']}`
   },
   "/mangadex/list/new": `/mangadex/list/new`,
   "/mangadex/login": `/mangadex/login`,
   "/mangadex/settings": `/mangadex/settings`,
   "/mangadex/settings/auth": `/mangadex/settings/auth`,
+  "/mangadex/settings/content-profiles": `/mangadex/settings/content-profiles`,
   "/mangadex/settings/themes": `/mangadex/settings/themes`,
   "/mangadex/tag/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/tag/${params.id}`
+    return `/mangadex/tag/${params['id']}`
   },
   "/mangadex/title/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/title/${params.id}`
+    return `/mangadex/title/${params['id']}`
   },
   "/mangadex/title/[id]/covers": (params: { id: (string | number) }) => {
-    return `/mangadex/title/${params.id}/covers`
+    return `/mangadex/title/${params['id']}/covers`
   },
   "/mangadex/title/[id]/related": (params: { id: (string | number) }) => {
-    return `/mangadex/title/${params.id}/related`
+    return `/mangadex/title/${params['id']}/related`
   },
   "/mangadex/titles": `/mangadex/titles`,
   "/mangadex/titles/feed": `/mangadex/titles/feed`,
   "/mangadex/upload": `/mangadex/upload`,
   "/mangadex/user": `/mangadex/user`,
   "/mangadex/user/[id]": (params: { id: (string | number) }) => {
-    return `/mangadex/user/${params.id}`
+    return `/mangadex/user/${params['id']}`
   },
   "/mangadex/user/[id]/lists": (params: { id: (string | number) }) => {
-    return `/mangadex/user/${params.id}/lists`
+    return `/mangadex/user/${params['id']}/lists`
   },
   "/mangadex/user/[id]/uploads": (params: { id: (string | number) }) => {
-    return `/mangadex/user/${params.id}/uploads`
+    return `/mangadex/user/${params['id']}/uploads`
   },
   "/mangadex/user/me": `/mangadex/user/me`,
   "/mangadex/user/me/lists": `/mangadex/user/me/lists`,
@@ -96,7 +97,10 @@ type ParamValue = string | number | undefined
 /**
  * Append search params to a string
  */
-export const appendSp = (sp?: Record<string, ParamValue | ParamValue[]>, prefix: '?' | '&' = '?') => {
+export const appendSp = (
+  sp?: Record<string, ParamValue | ParamValue[]>,
+  prefix: '?' | '&' = '?',
+) => {
   if (sp === undefined) return ''
 
   const params = new URLSearchParams()
@@ -106,7 +110,12 @@ export const appendSp = (sp?: Record<string, ParamValue | ParamValue[]>, prefix:
     }
   }
 
+  let anchor = ''
   for (const [name, val] of Object.entries(sp)) {
+    if (name === '__KIT_ROUTES_ANCHOR__' && val !== undefined) {
+      anchor = `#${val}`
+      continue
+    }
     if (Array.isArray(val)) {
       for (const v of val) {
         append(name, v)
@@ -117,8 +126,8 @@ export const appendSp = (sp?: Record<string, ParamValue | ParamValue[]>, prefix:
   }
 
   const formatted = params.toString()
-  if (formatted) {
-    return `${prefix}${formatted}`
+  if (formatted || anchor) {
+    return `${prefix}${formatted}${anchor}`.replace('?#', '#')
   }
   return ''
 }
@@ -177,7 +186,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 *
 * Full example:
 * ```ts
-* import type { KIT_ROUTES } from './ROUTES'
+* import type { KIT_ROUTES } from '$lib/ROUTES'
 * import { kitRoutes } from 'vite-plugin-kit-routes'
 *
 * kitRoutes<KIT_ROUTES>({
@@ -188,9 +197,9 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/grid-test': never, '/mangadex': never, '/mangadex/author': never, '/mangadex/author/[id]': 'id', '/mangadex/chapter/[id]': 'id', '/mangadex/graphiql': never, '/mangadex/group': never, '/mangadex/group/[id]': 'id', '/mangadex/group/[id]/titles': 'id', '/mangadex/group/[id]/uploads': 'id', '/mangadex/group/new': never, '/mangadex/list': never, '/mangadex/list/[id]': 'id', '/mangadex/list/new': never, '/mangadex/login': never, '/mangadex/settings': never, '/mangadex/settings/auth': never, '/mangadex/settings/themes': never, '/mangadex/tag/[id]': 'id', '/mangadex/title/[id]': 'id', '/mangadex/title/[id]/covers': 'id', '/mangadex/title/[id]/related': 'id', '/mangadex/titles': never, '/mangadex/titles/feed': never, '/mangadex/upload': never, '/mangadex/user': never, '/mangadex/user/[id]': 'id', '/mangadex/user/[id]/lists': 'id', '/mangadex/user/[id]/uploads': 'id', '/mangadex/user/me': never, '/mangadex/user/me/lists': never, '/mangadex/user/me/uploads': never }
+  PAGES: { '/': never, '/grid-test': never, '/mangadex': never, '/mangadex/author': never, '/mangadex/author/[id]': 'id', '/mangadex/chapter/[id]': 'id', '/mangadex/graphiql': never, '/mangadex/group': never, '/mangadex/group/[id]': 'id', '/mangadex/group/[id]/titles': 'id', '/mangadex/group/[id]/uploads': 'id', '/mangadex/group/new': never, '/mangadex/list': never, '/mangadex/list/[id]': 'id', '/mangadex/list/new': never, '/mangadex/login': never, '/mangadex/settings': never, '/mangadex/settings/auth': never, '/mangadex/settings/content-profiles': never, '/mangadex/settings/themes': never, '/mangadex/tag/[id]': 'id', '/mangadex/title/[id]': 'id', '/mangadex/title/[id]/covers': 'id', '/mangadex/title/[id]/related': 'id', '/mangadex/titles': never, '/mangadex/titles/feed': never, '/mangadex/upload': never, '/mangadex/user': never, '/mangadex/user/[id]': 'id', '/mangadex/user/[id]/lists': 'id', '/mangadex/user/[id]/uploads': 'id', '/mangadex/user/me': never, '/mangadex/user/me/lists': never, '/mangadex/user/me/uploads': never }
   SERVERS: Record<string, never>
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>
-  Params: { id: never }
+  Params: { 'id': never }
 }

@@ -8,9 +8,10 @@
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
 	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/+layout.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 
-	const { queryResult: data } = getTitleLayoutData();
+	const __res = getTitleLayoutData();
+	const data = __res.queryResult;
 	const client = getContextClient();
 	function buildAtlTitles(altTitle: Record<string, string>[]): AltTitleItem[] {
 		let map = manga_altTitle_to_lang_map(altTitle);
@@ -101,19 +102,27 @@
 			return links;
 		}
 	}
-	$: altTitles = buildAtlTitles(data?.attributes.altTitles ?? []);
-	$: genres = getGenres(data);
-	$: themes = getThemes(data);
-	$: demographic = getDemographic(data);
-	$: format = getFormat(data);
-	$: content = getContent(data);
-	$: links = getLinks(data);
-	$: lastVolume = data?.attributes.lastVolume;
-	$: lastChapter = data?.attributes.lastChapter;
+	let altTitles = $derived(buildAtlTitles(data?.attributes.altTitles ?? []));
+
+	let genres = $derived(getGenres(data));
+
+	let themes = $derived(getThemes(data));
+
+	let demographic = $derived(getDemographic(data));
+
+	let format = $derived(getFormat(data));
+
+	let content = $derived(getContent(data));
+
+	let links = $derived(getLinks(data));
+
+	let lastVolume = $derived(data?.attributes.lastVolume);
+
+	let lastChapter = $derived(data?.attributes.lastChapter);
 </script>
 
 <Info
-	bind:altTitles
+	{altTitles}
 	authors={data?.relationships.authors.map((a) => ({
 		id: a.id,
 		name: a.attributes.name
@@ -122,12 +131,12 @@
 		id: a.id,
 		name: a.attributes.name
 	}))}
-	bind:genres
-	bind:links
-	bind:themes
-	bind:demographic
-	bind:format
-	bind:content
+	{genres}
+	{links}
+	{themes}
+	{demographic}
+	{format}
+	{content}
 >
-	<LatestChapter bind:volume={lastVolume} bind:chapter={lastChapter} />
+	<LatestChapter volume={lastVolume} chapter={lastChapter} />
 </Info>

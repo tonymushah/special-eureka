@@ -11,28 +11,33 @@
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	const direction = getCurrentChapterDirection();
 
 	const currentChapterPage = getChapterCurrentPageContext();
 	const images_context = getChapterImageContext();
-	$: next = function () {
+	let next = $derived(function () {
 		if ($currentChapterPage < $images_context.length - 1) {
 			resetZoom();
 			$currentChapterPage++;
 		} else {
 			fireChapterNextEvent();
 		}
-	};
-	$: previous = function () {
+	});
+	let previous = $derived(function () {
 		if ($currentChapterPage > 0) {
 			resetZoom();
 			$currentChapterPage--;
 		} else {
 			fireChapterPreviousEvent();
 		}
-	};
-	$: onNext = function () {
+	});
+	let onNext = $derived(function () {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				next();
@@ -43,8 +48,8 @@
 			default:
 				break;
 		}
-	};
-	$: onPrevious = function () {
+	});
+	let onPrevious = $derived(function () {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				previous();
@@ -55,7 +60,7 @@
 			default:
 				break;
 		}
-	};
+	});
 	const variant = "2";
 </script>
 
@@ -63,7 +68,7 @@
 	<ArrowLeftIcon />
 </ButtonAccent>
 
-<slot />
+{@render children?.()}
 
 <ButtonAccent {variant} on:click={onNext}>
 	<ArrowRightIcon />

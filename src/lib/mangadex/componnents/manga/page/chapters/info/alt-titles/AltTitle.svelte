@@ -3,14 +3,18 @@
 	import type { Language } from "@mangadex/gql/graphql";
 	import type { Readable } from "svelte/store";
 
-	export let locale: Readable<Language | undefined>;
-	export let title: string;
-	$: lang = $locale;
+	interface Props {
+		locale: Readable<Language | undefined>;
+		title: string;
+	}
+
+	let { locale, title }: Props = $props();
+	let lang = $derived($locale);
 </script>
 
 <div class="alt-title">
 	{#if lang}
-		<FlagIcon bind:lang />
+		<FlagIcon {lang} />
 	{/if}
 	<h4>{title}</h4>
 </div>

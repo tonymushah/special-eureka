@@ -12,22 +12,38 @@
 	import { initIsDrawerOpenWritable } from "../../contexts/isDrawerOpen";
 	import { initIsDrawerFixedWritable } from "../../contexts/isDrawerFixed";
 
-	export let images: string[];
-	export let currentPage: number = 0;
-	export let readingMode: ReadingMode = ReadingMode.SinglePage;
-	export let imageFit = ImageFit.Default;
-	export let direction = Direction.Ltr;
+	interface Props {
+		images: string[];
+		currentPage?: number;
+		readingMode?: ReadingMode;
+		imageFit?: any;
+		direction?: any;
+	}
+
+	let {
+		images = $bindable(),
+		currentPage = $bindable(0),
+		readingMode = $bindable(ReadingMode.SinglePage),
+		imageFit = $bindable(ImageFit.Default),
+		direction = $bindable(Direction.Ltr)
+	}: Props = $props();
 
 	const readingDirection = initCurrentChapterDirection(writable(direction));
 	const imageFitStore = initCurrentChapterImageFit(writable(imageFit));
 	initIsDrawerOpenWritable(writable(false));
 	initIsDrawerFixedWritable(writable(true));
-	$: readingDirection.set(direction);
-	$: imageFitStore.set(imageFit);
+	$effect(() => {
+		readingDirection.set(direction);
+	});
+	$effect(() => {
+		imageFitStore.set(imageFit);
+	});
 
 	initChapterImageContext(images);
 	const mode = initCurrentChapterReadingMode(writable(readingMode));
-	$: mode.set(readingMode);
+	$effect(() => {
+		mode.set(readingMode);
+	});
 	initChapterCurrentPageContext(writable(currentPage));
 	initLongStripImagesWidthContext(writable(0));
 </script>
@@ -42,7 +58,7 @@
 		{/if}
 	</span>
 	<button
-		on:click={() => {
+		onclick={() => {
 			switch ($readingDirection) {
 				case ReadingDirection.Ltr:
 					readingDirection.set(ReadingDirection.Rtl);
@@ -62,7 +78,7 @@
 <div class="image-fit">
 	<span> Image Fit: </span>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Default;
 		}}
 		class:active={$imageFitStore == ImageFit.Default}
@@ -70,7 +86,7 @@
 		None
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Heigth;
 		}}
 		class:active={$imageFitStore == ImageFit.Heigth}
@@ -78,7 +94,7 @@
 		Height
 	</button>
 	<button
-		on:click={() => {
+		onclick={() => {
 			$imageFitStore = ImageFit.Width;
 		}}
 		class:active={$imageFitStore == ImageFit.Width}

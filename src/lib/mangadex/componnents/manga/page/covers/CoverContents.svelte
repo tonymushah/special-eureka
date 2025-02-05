@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { Language } from "@mangadex/gql/graphql";
 
 	export type CoverInput = {
@@ -10,15 +10,18 @@
 </script>
 
 <script lang="ts">
-	import MangaPageCovers, { Variant } from "./MangaPageCovers.svelte";
+	import MangaPageCovers from "./MangaPageCovers.svelte";
 	import type { MangaCoversItem } from "./MangaPageCovers.svelte";
 
 	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
 
-	export let covers: CoverInput[];
+	interface Props {
+		covers: CoverInput[];
+	}
+
+	let { covers }: Props = $props();
 	const images = getCoversImageStoreContext();
-	let data: MangaCoversItem[] = [];
-	$: {
+	let data: MangaCoversItem[] = $derived.by(() => {
 		const store = $images;
 		const res: MangaCoversItem[] = [];
 		covers.forEach((cover) => {
@@ -31,8 +34,8 @@
 					coverImage: image
 				});
 		});
-		data = res;
-	}
+		return res;
+	});
 </script>
 
-<MangaPageCovers bind:items={data} />
+<MangaPageCovers items={data} />

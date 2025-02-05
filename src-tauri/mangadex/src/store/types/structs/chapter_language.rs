@@ -35,7 +35,7 @@ impl From<ChapterLanguagesStore> for Vec<Language> {
     }
 }
 
-impl<'de, R> ExtractFromStore<'de, R> for ChapterLanguagesStore
+impl<R> ExtractFromStore<'_, R> for ChapterLanguagesStore
 where
     R: Runtime,
 {
@@ -57,19 +57,19 @@ where
 {
     fn insert(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.insert(
+        store.set(
             CHAPTER_LANGUAGES.to_string(),
             serde_json::to_value(self.clone())?,
-        )?;
+        );
         Ok(())
     }
     fn delete(
         &self,
-        store: &mut tauri_plugin_store::Store<R>,
+        store: &tauri_plugin_store::Store<R>,
     ) -> Result<(), tauri_plugin_store::Error> {
-        store.delete(CHAPTER_LANGUAGES)?;
+        store.delete(CHAPTER_LANGUAGES);
         Ok(())
     }
 }

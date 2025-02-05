@@ -23,7 +23,7 @@
 		next: {};
 		previous: {};
 	}>();
-	$: next = function () {
+	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
 			currentChapterPage.update(() => {
@@ -37,8 +37,8 @@
 		} else {
 			dispatch("next", {});
 		}
-	};
-	$: previous = function () {
+	}
+	function previous() {
 		if ($currentPageIndex > 0) {
 			resetZoom();
 			currentChapterPage.update(() => {
@@ -52,8 +52,8 @@
 		} else {
 			dispatch("previous", {});
 		}
-	};
-	$: onNext = function () {
+	}
+	function onNext() {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				next();
@@ -64,8 +64,8 @@
 			default:
 				break;
 		}
-	};
-	$: onPrevious = function () {
+	}
+	function onPrevious() {
 		switch ($direction) {
 			case ReadingDirection.Ltr:
 				previous();
@@ -76,7 +76,7 @@
 			default:
 				break;
 		}
-	};
+	}
 	const variant = "2";
 </script>
 

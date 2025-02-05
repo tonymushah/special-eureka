@@ -11,12 +11,16 @@
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	let isFetching = false;
+	let isFetching = $state(false);
 	const client = getContextClient();
 	const titles = writable<MangaListContentItemProps[]>([]);
 	const debounce_wait = 450;
-	export let params: Readable<MangaListParams>;
-	export let offlineStore: Readable<boolean>;
+	interface Props {
+		params: Readable<MangaListParams>;
+		offlineStore: Readable<boolean>;
+	}
+
+	let { params, offlineStore }: Props = $props();
 	const p_p_offline = derived([params, offlineStore], (merged) => merged);
 	let debounce_func: DebouncedFunc<() => Promise<void>> | undefined = undefined;
 	const currentResult = writable<AbstractSearchResult<MangaListContentItemProps> | undefined>(
@@ -74,21 +78,23 @@
 			}
 		},
 		{
-			threshold: 1.0
+			threshold: 0.2
 		}
 	);
 	onDestroy(() => {
 		debounce_func?.cancel();
 		observer.disconnect();
 	});
-	let to_obserce_bind: HTMLElement | undefined = undefined;
-	$: {
+	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
+	$effect(() => {
 		if (to_obserce_bind) {
 			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
-	}
-	$: console.log(`isFetching: ${isFetching}`);
+	});
+	$effect(() => {
+		console.log(`isFetching: ${isFetching}`);
+	});
 	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 

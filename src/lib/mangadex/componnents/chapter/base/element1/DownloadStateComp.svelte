@@ -2,10 +2,14 @@
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "svelte-feather-icons";
 	import type { Readable } from "svelte/store";
-	export let download_state: Readable<ChapterDownloadState>;
-	$: downloaded = $download_state == ChapterDownloadState.Downloaded;
-	$: downloading = $download_state == ChapterDownloadState.Downloading;
-	$: failed = $download_state == ChapterDownloadState.Failed;
+	interface Props {
+		download_state: Readable<ChapterDownloadState>;
+	}
+
+	let { download_state }: Props = $props();
+	let downloaded = $derived($download_state == ChapterDownloadState.Downloaded);
+	let downloading = $derived($download_state == ChapterDownloadState.Downloading);
+	let failed = $derived($download_state == ChapterDownloadState.Failed);
 </script>
 
 <span class:downloaded class:downloading class:failed>

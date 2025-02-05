@@ -5,10 +5,15 @@
 	import { initLongStripImagesWidthContext } from "../utils/context/longstrip_images_width";
 	import { createSlider, melt } from "@melt-ui/svelte";
 	import { initChapterCurrentPageContext } from "../../../contexts/currentPage";
-	//import { onMount } from "svelte";
-	export let imageWidth = writable(100);
-	export let images: string[];
-	export let currentPage: number = 0;
+	
+	interface Props {
+		//import { onMount } from "svelte";
+		imageWidth?: any;
+		images: string[];
+		currentPage?: number;
+	}
+
+	let { imageWidth = writable(100), images, currentPage = 0 }: Props = $props();
 	/* const page = */ initChapterCurrentPageContext(writable(currentPage));
 	//onMount(() => page.subscribe(console.debug));
 	const derivedImageWidth: Readable<number[]> & {
@@ -59,9 +64,9 @@
 
 <span use:melt={$root} class="slider-root">
 	<span class="slider-range-outer">
-		<span use:melt={$range} class="slider-range" />
+		<span use:melt={$range} class="slider-range"></span>
 	</span>
-	<span use:melt={$thumbs[0]} class="slider-thumbs" />
+	<span use:melt={$thumbs[0]} class="slider-thumbs"></span>
 </span>
 
 <LongStrip />

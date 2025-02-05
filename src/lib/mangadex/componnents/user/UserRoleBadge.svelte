@@ -7,21 +7,25 @@
 	import StatusButtonOnlyLabel from "../theme/buttons/StatusButtonOnlyLabel.svelte";
 	import StatusBadge from "../theme/tag/StatusBadge.svelte";
 
-	export let role: UserRole;
-	$: staff =
-		role == UserRole.RoleStaff ||
+	interface Props {
+		role: UserRole;
+	}
+
+	let { role }: Props = $props();
+	let staff =
+		$derived(role == UserRole.RoleStaff ||
 		role == UserRole.RoleDeveloper ||
 		role == UserRole.RoleDesigner ||
 		role == UserRole.RolePublicRelations ||
 		role == UserRole.RoleGlobalModerator ||
 		role == UserRole.RoleForumModerator ||
-		role == UserRole.RoleAdmin;
-	$: contributor = role == UserRole.RoleContributor;
-	$: powerUploader = role == UserRole.RolePowerUploader;
-	$: groupLeader = role == UserRole.RoleGroupLeader;
-	$: mdHome = role == UserRole.RoleMdAtHome;
-	$: vip = role == UserRole.RoleVip;
-	$: label = startCase(camelCase(role.replace("ROLE_", "")));
+		role == UserRole.RoleAdmin);
+	let contributor = $derived(role == UserRole.RoleContributor);
+	let powerUploader = $derived(role == UserRole.RolePowerUploader);
+	let groupLeader = $derived(role == UserRole.RoleGroupLeader);
+	let mdHome = $derived(role == UserRole.RoleMdAtHome);
+	let vip = $derived(role == UserRole.RoleVip);
+	let label = $derived(startCase(camelCase(role.replace("ROLE_", ""))));
 </script>
 
 {#if staff}

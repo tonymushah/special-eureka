@@ -1,25 +1,30 @@
 <script lang="ts">
 	import { UserRole } from "@mangadex/gql/graphql";
 
-	export let roles: UserRole[] = [];
-	$: staff =
-		roles.includes(UserRole.RoleStaff) ||
+	interface Props {
+		roles?: UserRole[];
+		children?: import('svelte').Snippet;
+	}
+
+	let { roles = [], children }: Props = $props();
+	let staff =
+		$derived(roles.includes(UserRole.RoleStaff) ||
 		roles.includes(UserRole.RoleDeveloper) ||
 		roles.includes(UserRole.RoleDesigner) ||
 		roles.includes(UserRole.RolePublicRelations) ||
 		roles.includes(UserRole.RoleGlobalModerator) ||
 		roles.includes(UserRole.RoleForumModerator) ||
 		roles.includes(UserRole.RoleAdmin) ||
-		roles.includes(UserRole.RolePublicRelations);
-	$: contributor = roles.includes(UserRole.RoleContributor);
-	$: powerUploader = roles.includes(UserRole.RolePowerUploader);
-	$: groupLeader = roles.includes(UserRole.RoleGroupLeader);
-	$: mdHome = roles.includes(UserRole.RoleMdAtHome);
-	$: vip = roles.includes(UserRole.RoleVip);
+		roles.includes(UserRole.RolePublicRelations));
+	let contributor = $derived(roles.includes(UserRole.RoleContributor));
+	let powerUploader = $derived(roles.includes(UserRole.RolePowerUploader));
+	let groupLeader = $derived(roles.includes(UserRole.RoleGroupLeader));
+	let mdHome = $derived(roles.includes(UserRole.RoleMdAtHome));
+	let vip = $derived(roles.includes(UserRole.RoleVip));
 </script>
 
 <div class:groupLeader class:powerUploader class:mdHome class:contributor class:vip class:staff>
-	<slot />
+	{@render children?.()}
 </div>
 
 <style lang="scss">

@@ -1,5 +1,12 @@
 <script lang="ts">
-	export let profileBanner: string;
+	interface Props {
+		profileBanner: string;
+		left?: import("svelte").Snippet;
+		right?: import("svelte").Snippet;
+		bottom?: import("svelte").Snippet;
+	}
+
+	let { profileBanner = $bindable(), left, right, bottom }: Props = $props();
 </script>
 
 <section style="background-image: url({profileBanner});">
@@ -7,17 +14,17 @@
 		<div class="backdrop-filter">
 			<div class="top">
 				<div class="left">
-					<slot name="left" />
+					{@render left?.()}
 				</div>
 				<div class="right">
-					<slot name="right" />
+					{@render right?.()}
 				</div>
 			</div>
 		</div>
 	</div>
 </section>
 <div class="bottom">
-	<slot name="bottom" />
+	{@render bottom?.()}
 </div>
 
 <style lang="scss">

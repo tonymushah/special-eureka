@@ -1,19 +1,17 @@
 <script lang="ts">
+	import { Direction } from "@mangadex/gql/graphql";
 	import { ceil, isArray, random } from "lodash";
 	import { createEventDispatcher } from "svelte";
-	import { quadOut } from "svelte/easing";
 	import { derived } from "svelte/store";
-	import { blur } from "svelte/transition";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import getChapterDoublePageCurrentPage from "./utils/getChapterDoublePageCurrentPage";
 	import getChapterDoublePageCurrentPageIndex from "./utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
 	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
-	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
-	import { Direction } from "@mangadex/gql/graphql";
-	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -26,7 +24,7 @@
 		next: {};
 		previous: {};
 	}>();
-	$: next = function () {
+	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
 			currentChapterPage.update(() => {
@@ -40,8 +38,8 @@
 		} else {
 			dispatch("next", {});
 		}
-	};
-	$: previous = function () {
+	}
+	function previous() {
 		if ($currentPageIndex > 0) {
 			resetZoom();
 			currentChapterPage.update(() => {
@@ -55,7 +53,7 @@
 		} else {
 			dispatch("previous", {});
 		}
-	};
+	}
 </script>
 
 <svelte:window

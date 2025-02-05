@@ -1,6 +1,11 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -11,7 +16,7 @@
 
 <ButtonBase on:click isBase={false} noPadding --button-color={"var(--main-background)"}>
 	<article class="layout">
-		<slot />
+		{@render children?.()}
 	</article>
 </ButtonBase>
 

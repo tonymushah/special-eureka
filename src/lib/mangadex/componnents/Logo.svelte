@@ -1,7 +1,11 @@
 <script lang="ts">
-    export let colorBase = "#ff6740"
-    export let width = "40";
-    export let height = "34";
+	interface Props {
+		colorBase?: string;
+		width?: string;
+		height?: string;
+	}
+
+	let { colorBase = "#ff6740", width = "40", height = "34" }: Props = $props();
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" {width} {height} fill="none" viewBox="0 0 40 34">

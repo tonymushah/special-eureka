@@ -9,8 +9,12 @@
 	import Accent from "./accents/Accent.svelte";
 	import AccentAlt from "./accents/AccentAlt.svelte";
 
-	export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" =
-		"default";
+	interface Props {
+		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
+		children?: import('svelte').Snippet;
+	}
+
+	let { variant = "default", children }: Props = $props();
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -20,34 +24,34 @@
 
 {#if variant == "1"}
 	<L1 on:click>
-		<slot />
+		{@render children?.()}
 	</L1>
 {:else if variant == "2"}
 	<L2 on:click>
-		<slot />
+		{@render children?.()}
 	</L2>
 {:else if variant == "3"}
 	<L3 on:click>
-		<slot />
+		{@render children?.()}
 	</L3>
 {:else if variant == "4"}
 	<L4 on:click>
-		<slot />
+		{@render children?.()}
 	</L4>
 {:else if variant == "5"}
 	<L5 on:click>
-		<slot />
+		{@render children?.()}
 	</L5>
 {:else if variant == "accent"}
 	<Accent on:click>
-		<slot />
+		{@render children?.()}
 	</Accent>
 {:else if variant == "accent-alt"}
 	<AccentAlt on:click>
-		<slot />
+		{@render children?.()}
 	</AccentAlt>
 {:else}
 	<Default on:click>
-		<slot />
+		{@render children?.()}
 	</Default>
 {/if}

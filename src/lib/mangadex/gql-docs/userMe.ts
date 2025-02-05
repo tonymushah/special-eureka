@@ -1,16 +1,16 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 
 export const userMeSubDoc = graphql(`
-    subscription userMe($sub_id: UUID!) {
-        watchUserMe(subId: $sub_id) {
-            username
-            roles
-        }
-    }
+	subscription userMe {
+		watchUserMe {
+			username
+			roles
+		}
+	}
 `);
 
 export const isLoggedSubDoc = graphql(`
-    subscription isLogged($sub_id: UUID!) {
-        watchIsLogged(subId: $sub_id)
-    }  
+	subscription isLogged {
+		watchIsLogged
+	}
 `);

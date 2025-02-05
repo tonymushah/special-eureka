@@ -1,42 +1,46 @@
 <script lang="ts">
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
-	import { sub_end } from "@mangadex/utils";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { onDestroy } from "svelte";
-	import { v4 } from "uuid";
-	const sub_id = v4();
+	import type { Snippet } from "svelte";
+
+	interface Props {
+		_icon?: Snippet;
+		_suffixIcon?: Snippet;
+		children?: Snippet;
+	}
 	const rlt_sub = subscriptionStore({
 		client: getContextClient(),
 		query: sideDirGQLDoc,
-		variables: {
-			sub_id
-		}
+		variables: {}
 	});
-	onDestroy(() => {
-		sub_end(sub_id);
+	let { _icon, _suffixIcon, children }: Props = $props();
+	let rtl = $derived($rlt_sub.data?.watchSidebarDirection == Direction.Rtl);
+	$effect(() => {
+		console.log(rtl);
 	});
-	$: rtl = $rlt_sub.data?.watchSidebarDirection == Direction.Rtl;
 </script>
 
 {#if !rtl}
 	<div class="icon">
-		<slot name="icon" />
+		{@render _icon?.()}
 	</div>
 {:else}
 	<div class="suffix-icon">
-		<slot name="suffix-icon" />
+		{@render _suffixIcon?.()}
 	</div>
 {/if}
 
-<slot />
+{#if children}
+	{@render children()}
+{/if}
 
 {#if rtl}
 	<div class="icon">
-		<slot name="icon" />
+		{@render _icon?.()}
 	</div>
 {:else}
 	<div class="suffix-icon">
-		<slot name="suffix-icon" />
+		{@render _suffixIcon?.()}
 	</div>
 {/if}

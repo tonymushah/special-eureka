@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql";
+	import { graphql } from "@mangadex/gql/exports";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
@@ -7,65 +7,19 @@
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import TopTitle from "./utils/TopTitle.svelte";
+	import { latest_updates_query } from "./latest-updates";
 	const client = getContextClient();
-	const latest_updates_query = graphql(/* GraphQL */ `
-		query recentlyAddedHome {
-			home {
-				recentlyUploaded {
-					data {
-						id
-						attributes {
-							title
-							pages
-							translatedLanguage
-							readableAt
-							chapter
-							volume
-						}
-						relationships {
-							scanlationGroups {
-								id
-								attributes {
-									name
-								}
-							}
-							user {
-								id
-								attributes {
-									username
-									roles
-								}
-							}
-							manga {
-								id
-								attributes {
-									title
-								}
-								relationships {
-									coverArt {
-										id
-										attributes {
-											fileName
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	`);
+
 	const latest_updates_query_store = specialQueryStore({
 		client,
 		query: latest_updates_query,
 		variable: {}
 	});
-	$: chapters = $latest_updates_query_store?.data;
+	let chapters = $derived($latest_updates_query_store?.data);
 	const latest_updates_fetching = latest_updates_query_store.isFetching;
 
-	$: global_fetching = $latest_updates_fetching;
-	$: error = $latest_updates_query_store?.error;
+	let global_fetching = $derived($latest_updates_fetching);
+	let error = $derived($latest_updates_query_store?.error);
 
 	//const
 	//let isFetching =

@@ -17,23 +17,23 @@
 		previous: {};
 	}>();
 	const images_context = getChapterImageContext();
-	$: next = function () {
+	let next = $derived(function () {
 		if ($currentChapterPage < $images_context.length - 1) {
 			resetZoom();
 			$currentChapterPage++;
 		} else {
 			dispatch("next", {});
 		}
-	};
-	$: previous = function () {
+	});
+	let previous = $derived(function () {
 		if ($currentChapterPage > 0) {
 			resetZoom();
 			$currentChapterPage--;
 		} else {
 			dispatch("previous", {});
 		}
-	};
-	$: current_page = $images_context.at($currentChapterPage);
+	});
+	let current_page = $derived($images_context.at($currentChapterPage));
 	/*
 	$: previous_p = $images_context[$currentChapterPage - 1];
 	$: next_p = $images_context[$currentChapterPage + 1];
@@ -43,7 +43,7 @@
 </script>
 
 <svelte:window
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		const direction = $readingDirection;
 		const onNext = function () {
 			switch (direction) {

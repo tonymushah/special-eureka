@@ -4,27 +4,38 @@
 	import L2 from "./danger/L2.svelte";
 	import Default from "./danger/Default.svelte";
 
-	export let variant: "default" | "1" | "2" = "default";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "reset" | "submit" | "button" = "button";
-	export let style: string | undefined = undefined;
-	export let isBase = false;
+	interface Props {
+		variant?: "default" | "1" | "2";
+		type?: "reset" | "submit" | "button";
+		style?: string | undefined;
+		isBase?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		variant = "default",
+		type = "button",
+		style = undefined,
+		isBase = false,
+		children
+	}: Props = $props();
 </script>
 
 {#if variant == "1"}
 	<L1 on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L1>
 {:else if variant == "2"}
 	<L2 on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</L2>
 {:else}
 	<Default on:click {type} {style} {isBase}>
-		<slot />
+		{@render children?.()}
 	</Default>
 {/if}

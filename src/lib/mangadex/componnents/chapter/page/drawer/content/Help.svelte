@@ -30,7 +30,7 @@
 	<div class="tooltip" use:melt={$content} transition:fade={{ duration: 100 }}>
 		<MangaDexVarThemeProvider>
 			<div class="content">
-				<arrow use:melt={$arrow} />
+				<arrow use:melt={$arrow}></arrow>
 				<p class="px-4 py-1 text-magnum-700">
 					It's the manual or whatever I will show there
 				</p>

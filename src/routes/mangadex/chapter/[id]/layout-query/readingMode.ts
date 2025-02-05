@@ -1,13 +1,11 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 import { ReadingMode } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { sub_end } from "@mangadex/utils";
 import { get, readable, writable, type Writable } from "svelte/store";
-import { v4 } from "uuid";
 
 const readingModeSub = graphql(`
-	subscription subToChapterReadingMode($subId: UUID!) {
-		watchReadingMode(subId: $subId)
+	subscription subToChapterReadingMode {
+		watchReadingMode
 	}
 `);
 
@@ -20,20 +18,14 @@ const readingModeMutation = graphql(`
 `);
 
 const base = readable(ReadingMode.SinglePage, (set, update) => {
-	const sub_id = v4();
-	const unsub = client
-		.subscription(readingModeSub, {
-			subId: sub_id
-		})
-		.subscribe((res) => {
-			const mode = res.data?.watchReadingMode;
-			if (mode) {
-				set(mode);
-			}
-		});
+	const unsub = client.subscription(readingModeSub, {}).subscribe((res) => {
+		const mode = res.data?.watchReadingMode;
+		if (mode) {
+			set(mode);
+		}
+	});
 	return () => {
 		unsub.unsubscribe();
-		sub_end(sub_id);
 	};
 });
 

@@ -2,7 +2,7 @@
 	import { range } from "lodash";
 	import { onMount } from "svelte";
 	const OO_LIMIT = 6;
-	let oo = "";
+	let oo = $state("");
 	onMount(() => {
 		let current_number = 1;
 		const interval = setInterval(() => {

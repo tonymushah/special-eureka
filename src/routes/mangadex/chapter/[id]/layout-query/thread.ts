@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 
 const chapterPageThread = graphql(`
 	query chapterPageThread($id: UUID!) {

@@ -50,7 +50,8 @@
 		role="menu"
 		tabindex="0"
 		class="outer"
-		on:contextmenu|preventDefault={() => {
+		oncontextmenu={(e) => {
+			e.preventDefault();
 			switch ($mode) {
 				case ReadingMode.SinglePage:
 					mode.set(ReadingMode.DoublePage);
@@ -78,11 +79,15 @@
 	<div class="menu-outer" use:melt={$menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
+				<!-- svelte-ignore a11y_no_noninteractive_element_to_interactive_role -->
 				<li
+					role="button"
+					tabindex="0"
 					use:melt={$close}
-					on:m-click={() => {
+					onclick={() => {
 						mode.set(ReadingMode.SinglePage);
 					}}
+					onkeypress={() => {}}
 					class:isSelected={$mode == ReadingMode.SinglePage}
 				>
 					<div class="icon">
@@ -90,9 +95,10 @@
 					</div>
 					<h4>Single Page</h4>
 				</li>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onclick={() => {
 						mode.set(ReadingMode.DoublePage);
 					}}
 					class:isSelected={$mode == ReadingMode.DoublePage}
@@ -102,9 +108,10 @@
 					</div>
 					<h4>Double Page</h4>
 				</li>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onclick={() => {
 						mode.set(ReadingMode.LongStrip);
 					}}
 					class:isSelected={$mode == ReadingMode.LongStrip}
@@ -114,9 +121,10 @@
 					</div>
 					<h4>Longstrip</h4>
 				</li>
+				<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 				<li
 					use:melt={$close}
-					on:m-click={() => {
+					onclick={() => {
 						mode.set(ReadingMode.WideStrip);
 					}}
 					class:isSelected={$mode == ReadingMode.WideStrip}

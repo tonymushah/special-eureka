@@ -1,4 +1,4 @@
-import { graphql } from "@mangadex/gql";
+import { graphql } from "@mangadex/gql/exports";
 import { client } from "@mangadex/gql/urql";
 
 export const loginMutation = graphql(`

@@ -2,25 +2,41 @@
 	import { createEventDispatcher, type ComponentType } from "svelte";
 	import ButtonAccent from "./ButtonAccent.svelte";
 
-	export let variant: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt" =
-		"default";
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let type: "reset" | "submit" | "button" = "button";
-	export let label: string;
-	export let style: string | undefined = undefined;
-	export let isBase = false;
-	export let oneLine = false;
-	export let icon: ComponentType | undefined = undefined;
-	export let noCenter = false;
+	interface Props {
+		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
+		type?: "reset" | "submit" | "button";
+		label: string;
+		style?: string | undefined;
+		isBase?: boolean;
+		oneLine?: boolean;
+		icon?: ComponentType | undefined;
+		noCenter?: boolean;
+	}
+
+	let {
+		variant = "default",
+		type = "button",
+		label,
+		style = undefined,
+		isBase = false,
+		oneLine = false,
+		icon = undefined,
+		noCenter = false
+	}: Props = $props();
 </script>
 
 <ButtonAccent on:click {variant} {style} {type} {isBase}>
+	{@const SvelteComponent = icon}
 	<div class:noCenter>
-		<svelte:component this={icon} />
+		{#if SvelteComponent}
+			<SvelteComponent />
+		{/if}
+
 		<span class:oneLine>
 			{label}
 		</span>
@@ -41,6 +57,7 @@
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 1;
+		line-clamp: 1;
 		overflow: hidden;
 	}
 </style>

@@ -3,6 +3,11 @@
 	import { custom as theme } from "@mangadex/theme";
 	import { setContextClient } from "@urql/svelte";
 	import MangadexThemeProviderBase from "./MangadexThemeProviderBase.svelte";
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 	/*
     onMount(() => {
 		mockWindows("main");
@@ -23,5 +28,5 @@
 </script>
 
 <MangadexThemeProviderBase {theme}>
-	<slot />
+	{@render children?.()}
 </MangadexThemeProviderBase>

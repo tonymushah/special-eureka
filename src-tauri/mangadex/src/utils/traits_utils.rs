@@ -1,10 +1,12 @@
 use actix::{ArbiterHandle, System};
 use mangadex_api::MangaDexClient;
-use tauri::{AppHandle, Manager, Runtime, State, Window};
+use mizuki::AsyncGQLContextExt;
+use tauri::{AppHandle, Manager, Runtime, State, Webview, Window};
 use tokio::{
     sync::oneshot::channel as oneshot,
     time::{Duration, Instant},
 };
+use tokio_util::sync::CancellationToken;
 
 use std::future::Future;
 
@@ -117,19 +119,28 @@ where
 {
 }
 
-pub trait MangadexAsyncGraphQLContextExt<'a, 'b> {
-    fn get_app_handle<R: Runtime>(&'a self) -> crate::Result<&'b AppHandle<R>>;
-    fn get_window<R: Runtime>(&'a self) -> crate::Result<&'b Window<R>>;
+pub trait MangadexAsyncGraphQLContextExt {
+    fn get_app_handle<R: Runtime>(&self) -> crate::Result<&AppHandle<R>>;
+    fn get_window<R: Runtime>(&self) -> crate::Result<&Window<R>>;
+    fn get_webview<R: Runtime>(&self) -> crate::Result<&Webview<R>>;
+    fn get_subscription_cancel_token<R: Runtime>(&self) -> crate::Result<&CancellationToken>;
 }
 
-impl<'a, 'ctx> MangadexAsyncGraphQLContextExt<'a, 'ctx> for async_graphql::Context<'ctx> {
-    fn get_app_handle<R: Runtime>(&'a self) -> crate::Result<&'ctx AppHandle<R>> {
-        self.data::<AppHandle<R>>()
-            .map_err(|_| crate::Error::NoAccessAppHandleGQLCtx)
+impl MangadexAsyncGraphQLContextExt for async_graphql::Context<'_> {
+    fn get_app_handle<R: Runtime>(&self) -> crate::Result<&AppHandle<R>> {
+        self.app_handle::<R>()
+            .ok_or(crate::Error::NoAccessAppHandleGQLCtx)
     }
-    fn get_window<R: Runtime>(&'a self) -> crate::Result<&'ctx Window<R>> {
-        self.data::<Window<R>>()
-            .map_err(|_| crate::Error::NoAccessWindowGQLCtx)
+    fn get_window<R: Runtime>(&self) -> crate::Result<&Window<R>> {
+        self.window::<R>().ok_or(crate::Error::NoAccessWindowGQLCtx)
+    }
+    fn get_subscription_cancel_token<R: Runtime>(&self) -> crate::Result<&CancellationToken> {
+        self.cancel_token()
+            .ok_or(crate::Error::NoAccessSubCancelTokenGQLCtx)
+    }
+    fn get_webview<R: Runtime>(&self) -> crate::Result<&Webview<R>> {
+        self.webview::<R>()
+            .ok_or(crate::Error::NoAccessWebviewGQLCtx)
     }
 }
 

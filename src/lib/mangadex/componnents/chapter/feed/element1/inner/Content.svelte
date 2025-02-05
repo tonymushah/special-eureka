@@ -13,15 +13,29 @@
 		roles: UserRole[];
 		name: string;
 	};
-	export let mangaId: string;
-	export let chapterId: string;
-	export let mangaTitle: string;
-	export let chapterTitle: string | undefined = undefined;
-	export let lang: Language;
-	export let groups: Group[] = [];
-	export let uploader: Uploader;
-	export let upload_date: Date;
-	export let download_state: Readable<ChapterDownloadState>;
+	interface Props {
+		mangaId: string;
+		chapterId: string;
+		mangaTitle: string;
+		chapterTitle?: string | undefined;
+		lang: Language;
+		groups?: Group[];
+		uploader: Uploader;
+		upload_date: Date;
+		download_state: Readable<ChapterDownloadState>;
+	}
+
+	let {
+		mangaId,
+		chapterId,
+		mangaTitle,
+		chapterTitle = undefined,
+		lang,
+		groups = [],
+		uploader,
+		upload_date,
+		download_state
+	}: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -48,14 +62,14 @@
 	<div
 		tabindex="0"
 		role="button"
-		on:keypress={(e) => {
+		onkeypress={(e) => {
 			dispatch("mangaKeyClick", {
 				...e,
 				id: mangaId
 			});
 		}}
 		class="manga-title"
-		on:click={(e) => {
+		onclick={(e) => {
 			dispatch("mangaClick", {
 				...e,
 				id: mangaId

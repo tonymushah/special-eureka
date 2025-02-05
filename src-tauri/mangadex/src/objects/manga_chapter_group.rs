@@ -4,7 +4,10 @@ use mangadex_api_schema_rust::v5::{ChapterObject, Results};
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
 
-use crate::{objects::GetId, query::manga::list::MangaListQueries, Result};
+use crate::{
+    objects::GetId, query::manga::list::MangaListQueries,
+    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+};
 
 use self::item::MangaChapterItem;
 
@@ -97,7 +100,9 @@ pub async fn group_results(
     println!("{:#?}", manga_list_params.manga_ids);
     manga_list_params.offset = Some(0_u32);
     manga_list_params.limit = Some(manga_list_params.manga_ids.len().try_into()?);
-    let mangas = MangaListQueries(manga_list_params).list(ctx).await?;
+    let mangas = MangaListQueries::new(manga_list_params, ctx.get_app_handle::<tauri::Wry>()?)
+        .list(ctx)
+        .await?;
     Ok(MangaChapterGroup {
         data: manga_ids_chapter_group
             .into_iter()

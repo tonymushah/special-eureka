@@ -16,12 +16,10 @@ impl IsFollowingSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
                 |w| w.is_following.subscribe(),
             )?
             .option_filter_by_id(manga_id)
@@ -33,12 +31,10 @@ impl IsFollowingSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         group_id: Uuid,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
                 |w| w.is_following.subscribe(),
             )?
             .option_filter_by_id(group_id)
@@ -50,12 +46,10 @@ impl IsFollowingSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         user_id: Uuid,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
                 |w| w.is_following.subscribe(),
             )?
             .option_filter_by_id(user_id)
@@ -67,12 +61,10 @@ impl IsFollowingSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         custom_list_id: Uuid,
-        sub_id: Uuid,
+         
     ) -> Result<impl Stream<Item = bool> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<tauri::Wry, _>::from_async_graphql_context(
-                ctx,
-                sub_id,
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
                 |w| w.is_following.subscribe(),
             )?
             .option_filter_by_id(custom_list_id)

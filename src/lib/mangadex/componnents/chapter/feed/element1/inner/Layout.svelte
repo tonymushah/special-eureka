@@ -1,10 +1,15 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	export let haveBeenRead: boolean = true;
+	interface Props {
+		haveBeenRead?: boolean;
+		children?: import("svelte").Snippet;
+	}
+
+	let { haveBeenRead = $bindable(true), children }: Props = $props();
 </script>
 
 <article class="layout" class:haveBeenRead>
-	<slot />
+	{@render children?.()}
 </article>
 
 <style lang="scss">

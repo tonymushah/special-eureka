@@ -7,8 +7,12 @@
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
 	}>();
-	export let variant: "blue" = "blue";
-	export let label: string;
+	interface Props {
+		variant?: "blue";
+		label: string;
+	}
+
+	let { variant = "blue", label }: Props = $props();
 </script>
 
 <IndicationBadge on:click {variant}>

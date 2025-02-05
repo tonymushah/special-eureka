@@ -22,7 +22,8 @@
         "editor.formatOnSave": true
     },
     "[svelte]": {
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "svelte.svelte-vscode",
     },
     "rust-analyzer.showUnlinkedFileNotification": false,
     "evenBetterToml.schema.associations": {
@@ -49,5 +50,9 @@
         "*.json5": "jsonc"
     },
     "explorerExclude.backup": {},
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "files.watcherExclude": {
+        "**/target": true
+    },
+    "todo-tree.tree.scanMode": "workspace only"
 }

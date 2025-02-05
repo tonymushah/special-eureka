@@ -1,25 +1,32 @@
 <script lang="ts">
-	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
-	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
-	import { ContentRating, type MangaStatus } from "@mangadex/gql/graphql";
+	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher, onMount } from "svelte";
+	import { createEventDispatcher } from "svelte";
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
-	import AuthorLink from "./authors/AuthorLink.svelte";
 	type Author = {
 		id: string;
 		name: string;
 	};
-	export let index: number = -1;
-	export let title: string;
-	export let description: string;
-	export let tags: Tag[];
-	export let contentRating: ContentRating = ContentRating.Safe;
-	export let authors: Author[];
+	interface Props {
+		index?: number;
+		title: string;
+		description: string;
+		tags: Tag[];
+		contentRating?: ContentRating;
+		authors: Author[];
+	}
+
+	let {
+		index = -1,
+		title,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		authors
+	}: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLDivElement;
@@ -36,13 +43,16 @@
 </script>
 
 <Layout coverImage="">
-	<NoIndex {index} slot="no-index" />
+	{#snippet nOindex()}
+		<NoIndex {index} />
+	{/snippet}
+
 	<div
 		class="cover"
 		role="button"
-		on:keydown={(e) => {}}
+		onkeydown={(e) => {}}
 		tabindex="0"
-		on:click={(e) => {
+		onclick={(e) => {
 			dispatch("click", e);
 		}}
 	>

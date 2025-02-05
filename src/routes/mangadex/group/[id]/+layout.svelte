@@ -3,98 +3,115 @@
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
-	import { writeText } from "@tauri-apps/api/clipboard";
-	import { open as shellOpen } from "@tauri-apps/api/shell";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { BookmarkIcon, ExternalLinkIcon, FlagIcon } from "svelte-feather-icons";
 	import type { LayoutData } from "./$types";
 	import NavTab from "./NavTab.svelte";
 	import ScanalationGroupLinkButtons from "./ScanalationGroupLinkButtons.svelte";
 
-	export let data: LayoutData;
-	$: description = data.description ?? undefined;
-	$: console.log(`duration: ${data.publishDelay}`);
-	$: console.log(`since: ${data.createdAt}`);
-	$: createdSince = data.createdAt;
+	interface Props {
+		data: LayoutData;
+		children?: import("svelte").Snippet;
+	}
+
+	let { data, children }: Props = $props();
+	let description = $derived(data.description ?? undefined);
+	$effect(() => {
+		console.log(`duration: ${data.publishDelay}`);
+	});
+	$effect(() => {
+		console.log(`since: ${data.createdAt}`);
+	});
+	let createdSince = $derived(data.createdAt);
 	//$: console.log(`since date: ${createdSince}`);
 </script>
 
 <UsersPageBase title={data.name} {description}>
-	<div slot="left" class="buttons">
-		<PrimaryButton isBase>
-			<p><BookmarkIcon />Follow</p>
-		</PrimaryButton>
-		<ButtonAccent
-			isBase
-			on:click={() => {
-				shellOpen(`https://mangadex.org/user/${data.id}`);
-			}}
-		>
-			<p><ExternalLinkIcon /> Open in browser</p>
-		</ButtonAccent>
-		<ButtonAccent isBase>
-			<p><FlagIcon />Report</p>
-		</ButtonAccent>
-		<ScanalationGroupLinkButtons
-			website={data.website ?? undefined}
-			twitter={data.twitter ?? undefined}
-			ircChannel={data.ircChannel ?? undefined}
-			ircServer={data.ircServer ?? undefined}
-			mangaUpdates={data.mangaUpdates ?? undefined}
-			discord={data.discord ?? undefined}
-			email={data.email ?? undefined}
-		/>
-	</div>
-	<div slot="top-right" class="info">
-		<p>
-			Group ID: <span
-				on:keydown={() => {}}
-				role="button"
-				tabindex={0}
+	{#snippet _left()}
+		<div class="buttons">
+			<PrimaryButton isBase>
+				<p><BookmarkIcon />Follow</p>
+			</PrimaryButton>
+			<ButtonAccent
+				isBase
 				on:click={() => {
-					writeText(data.id);
+					shellOpen(`https://mangadex.org/group/${data.id}`);
 				}}
-				class="copiable">{data.id}</span
 			>
-		</p>
-		<section class="uploads">
+				<p><ExternalLinkIcon /> Open in browser</p>
+			</ButtonAccent>
+			<ButtonAccent isBase>
+				<p><FlagIcon />Report</p>
+			</ButtonAccent>
+			<ScanalationGroupLinkButtons
+				website={data.website ?? undefined}
+				twitter={data.twitter ?? undefined}
+				ircChannel={data.ircChannel ?? undefined}
+				ircServer={data.ircServer ?? undefined}
+				mangaUpdates={data.mangaUpdates ?? undefined}
+				discord={data.discord ?? undefined}
+				email={data.email ?? undefined}
+			/>
+		</div>
+	{/snippet}
+
+	{#snippet topRight()}
+		<div class="info">
 			<p>
-				{data.titles}
-				<span>
-					title{#if data.titles > 1}s{/if} scanlated
-				</span>
+				Group ID: <span
+					onkeydown={() => {}}
+					role="button"
+					tabindex={0}
+					onclick={() => {
+						writeText(data.id);
+					}}
+					class="copiable">{data.id}</span
+				>
 			</p>
-			<p>
-				{data.uploads}
-				<span>
-					upload{#if data.uploads > 1}s{/if}
-				</span>
-			</p>
-		</section>
-		<section class="state">
-			<p>
-				State: {#if data.locked}Locked{:else}Unlocked{/if}{#if data.official}
-					, Official
-				{/if}
-				{#if data.verified}
-					, Verified
-				{/if}
-				{#if data.exLicensed}
-					exLicensed
-				{/if}
-			</p>
-			<p>
-				Created <TimeAgo date={createdSince} />
-			</p>
-		</section>
-	</div>
-	<div slot="right">
-		<section class="nav-tab">
-			<NavTab id={data.id} />
-		</section>
-		<section class="content">
-			<slot />
-		</section>
-	</div>
+			<section class="uploads">
+				<p>
+					{data.titles}
+					<span>
+						title{#if data.titles > 1}s{/if} scanlated
+					</span>
+				</p>
+				<p>
+					{data.uploads}
+					<span>
+						upload{#if data.uploads > 1}s{/if}
+					</span>
+				</p>
+			</section>
+			<section class="state">
+				<p>
+					State: {#if data.locked}Locked{:else}Unlocked{/if}{#if data.official}
+						, Official
+					{/if}
+					{#if data.verified}
+						, Verified
+					{/if}
+					{#if data.exLicensed}
+						exLicensed
+					{/if}
+				</p>
+				<p>
+					Created <TimeAgo date={createdSince} />
+				</p>
+			</section>
+		</div>
+	{/snippet}
+
+	{#snippet _right()}
+		<div>
+			<section class="nav-tab">
+				<NavTab id={data.id} />
+			</section>
+			<section class="content">
+				{@render children?.()}
+			</section>
+		</div>
+	{/snippet}
 </UsersPageBase>
 
 <style lang="scss">

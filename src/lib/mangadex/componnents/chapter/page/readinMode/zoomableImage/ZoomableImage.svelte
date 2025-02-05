@@ -8,19 +8,23 @@
 	import { getCurrentChapterImageFit } from "../../contexts/imageFit";
 	import { ImageFit } from "@mangadex/gql/graphql";
 
-	export let src: string | [string, string];
-	export let alt: string | [string, string];
+	interface Props {
+		src: string | [string, string];
+		alt: string | [string, string];
+	}
+
+	let { src, alt }: Props = $props();
 
 	const imageFitStore = getCurrentChapterImageFit();
-	let toZoom: HTMLElement | undefined = undefined;
-	let toZoomPanZoom: PanzoomObject | undefined;
-	$: {
+	let toZoom: HTMLElement | undefined = $state(undefined);
+	let toZoomPanZoom: PanzoomObject | undefined = $state();
+	$effect(() => {
 		if (toZoom) {
 			toZoomPanZoom = panzoom(toZoom, {
 				animate: true
 			});
 		}
-	}
+	});
 	onDestroy(() => {
 		toZoomPanZoom?.reset({ animate: true });
 		toZoomPanZoom?.destroy();
@@ -36,7 +40,7 @@
 </script>
 
 <svelte:window
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		if (e.key == $resetZoomKey) {
 			toZoomPanZoom?.reset({ animate: true });
 		}
@@ -46,7 +50,8 @@
 <div
 	role="none"
 	class="outer"
-	on:wheel|preventDefault={(e) => {
+	onwheel={(e) => {
+		e.preventDefault();
 		const zoomElement = toZoomPanZoom;
 		if (zoomElement) {
 			let scale = zoomElement.getScale();
@@ -113,10 +118,10 @@
 				align-items: center;
 				justify-content: center;
 				max-width: 100%;
-				div {
+				/*div {
 					height: 100%;
 					width: 100%;
-				}
+				}*/
 				img {
 					height: 100%;
 					max-width: 100%;

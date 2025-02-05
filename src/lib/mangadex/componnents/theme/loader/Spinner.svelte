@@ -1,13 +1,17 @@
 <script lang="ts">
-	export let size = "48px";
-	export let color = "var(--text-color)";
-	export let strokeSize = "5px";
+	interface Props {
+		size?: string;
+		color?: string;
+		strokeSize?: string;
+	}
+
+	let { size = "48px", color = "var(--text-color)", strokeSize = "5px" }: Props = $props();
 </script>
 
 <span
 	class="loader"
 	style={`width: ${size}; height: ${size}; --spinner-color: ${color}; --spinner-stroke-size: ${strokeSize};`}
-/>
+></span>
 
 <style lang="scss">
 	.loader {

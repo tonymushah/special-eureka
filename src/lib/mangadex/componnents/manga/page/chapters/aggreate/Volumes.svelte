@@ -3,8 +3,12 @@
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import { createChapterEl1EventDispatcher } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 
-	export let volumes: ComponentProps<VolumeAccordion>[];
-	export let openStart = false;
+	interface Props {
+		volumes: ComponentProps<typeof VolumeAccordion>[];
+		openStart?: boolean;
+	}
+
+	let { volumes, openStart = false }: Props = $props();
 
 	const dispatch = createChapterEl1EventDispatcher();
 </script>
