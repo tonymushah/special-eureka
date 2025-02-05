@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from "svelte/legacy";
 
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import clientInfo from "@mangadex/stores/clientInfo";
@@ -17,9 +17,45 @@
 		error = err;
 		isErrorOpen = true;
 	}
-	let debounce_fun: DebouncedFunc<() => void> | undefined = $state(undefined);
+	const debounce_fun = debounce((form: FormData) => {
+		const client_id = form.get("client-id");
+		const client_secret = form.get("client-secret");
+		if (typeof client_id == "string" && typeof client_secret == "string") {
+			if (client_id.length != 0 && client_secret.length != 0) {
+				clientInfo.set({
+					clientId: client_id,
+					clientSecret: client_secret
+				});
+			} else {
+				clientInfo.set(undefined);
+			}
+		} else {
+			clientInfo.set(undefined);
+		}
+		const username = form.get("username-mail");
+		const password = form.get("password");
+		if (typeof username == "string" && typeof password == "string") {
+			login(username, password)
+				.catch((e) => {
+					if (e instanceof Error) {
+						setError(e);
+					} else {
+						setError(
+							new Error("Unknown login error", {
+								cause: e
+							})
+						);
+					}
+				})
+				.finally(() => {
+					isFetching = false;
+				});
+		} else {
+			isFetching = false;
+		}
+	});
 	onDestroy(() => {
-		debounce_fun?.cancel();
+		debounce_fun?.flush();
 	});
 </script>
 
@@ -41,51 +77,15 @@
 		</article>
 	{/if}
 	<form
-		onsubmit={preventDefault((e) => {
+		onsubmit={(e) => {
+			e.preventDefault();
 			let form = new FormData(e.currentTarget);
 			if (isFetching == false) {
 				isFetching = true;
-				debounce_fun?.cancel();
-				debounce_fun = debounce(() => {
-					const client_id = form.get("client-id");
-					const client_secret = form.get("client-secret");
-					if (typeof client_id == "string" && typeof client_secret == "string") {
-						if (client_id.length != 0 && client_secret.length != 0) {
-							clientInfo.set({
-								clientId: client_id,
-								clientSecret: client_secret
-							});
-						} else {
-							clientInfo.set(undefined);
-						}
-					} else {
-						clientInfo.set(undefined);
-					}
-					const username = form.get("username-mail");
-					const password = form.get("password");
-					if (typeof username == "string" && typeof password == "string") {
-						login(username, password)
-							.catch((e) => {
-								if (e instanceof Error) {
-									setError(e);
-								} else {
-									setError(
-										new Error("Unknown login error", {
-											cause: e
-										})
-									);
-								}
-							})
-							.finally(() => {
-								isFetching = false;
-							});
-					} else {
-						isFetching = false;
-					}
-				});
-				debounce_fun();
+				debounce_fun.cancel();
+				debounce_fun(form);
 			}
-		})}
+		}}
 	>
 		<div>
 			<h3>Client ID</h3>
@@ -130,7 +130,7 @@
 			/>
 		</div>
 		<div class="buttons">
-			<PrimaryButton type="submit">
+			<PrimaryButton type="submit" disabled={isFetching}>
 				<p>Log in</p>
 			</PrimaryButton>
 			<DangerButton
@@ -138,6 +138,7 @@
 				on:click={() => {
 					$clientInfo = undefined;
 				}}
+				disabled={isFetching}
 			>
 				<p>Clear personal client information</p>
 			</DangerButton>

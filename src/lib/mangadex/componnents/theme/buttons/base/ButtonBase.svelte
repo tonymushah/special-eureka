@@ -20,6 +20,7 @@
 		haveBorderRadius?: boolean;
 		noPadding?: boolean;
 		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
@@ -30,7 +31,8 @@
 		isBase = false,
 		haveBorderRadius = true,
 		noPadding = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 
@@ -50,6 +52,7 @@
 	onclick={(e) => {
 		dispatch("click", e);
 	}}
+	{disabled}
 	{type}
 >
 	{@render children?.()}
