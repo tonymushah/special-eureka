@@ -94,6 +94,7 @@
     "fast-xml-parser": "^4.5.1",
     "flag-icons": "^7.3.2",
     "graphiql": "^3.8.3",
+    "hotkeys-js": "^3.13.9",
     "lodash": "^4.17.21",
     "medium-zoom": "^1.1.0",
     "millify": "^6.1.0",
