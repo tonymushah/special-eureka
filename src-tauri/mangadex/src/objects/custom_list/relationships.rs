@@ -100,7 +100,11 @@ impl CustomListRelationships {
                                 .any(|d| content_profile.publication_demographic.contains(d)))
                         || (!content_profile.status.is_empty()
                             && content_profile.status.contains(&attributes.status))
-                    // || (!content_profile.translated_languages.is_empty() && attributes.available_translated_ content_profile.translated_languages)
+                        || (!content_profile.translated_languages.is_empty()
+                            && attributes
+                                .available_translated_languages
+                                .iter()
+                                .any(|lang| content_profile.translated_languages.contains(lang)))
                 } else {
                     true
                 }
