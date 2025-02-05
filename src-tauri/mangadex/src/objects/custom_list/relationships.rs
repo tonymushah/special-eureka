@@ -5,7 +5,7 @@ use mangadex_api_schema_rust::{
     v5::{MangaAttributes, Relationship},
     ApiObject,
 };
-use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
+use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType, TagSearchMode};
 use uuid::Uuid;
 
 use crate::{
@@ -78,33 +78,113 @@ impl CustomListRelationships {
                 if !content_profile.is_empty() {
                     let attributes = &data.attributes;
 
-                    (!content_profile.content_rating.is_empty()
-                        && content_profile.content_rating.contains(
+                    let content_rating = if !content_profile.content_rating.is_empty() {
+                        content_profile.content_rating.contains(
                             &attributes
                                 .content_rating
                                 .unwrap_or(mangadex_api_types_rust::ContentRating::Safe),
-                        ))
-                        || (!content_profile.excluded_original_language.is_empty()
-                            && !content_profile
+                        )
+                    } else {
+                        false
+                    };
+
+                    let excluded_original_languages =
+                        if !content_profile.excluded_original_language.is_empty() {
+                            !content_profile
                                 .excluded_original_language
-                                .contains(&attributes.original_language))
-                        || (!content_profile.excluded_tags.is_empty()
-                            && !content_profile
+                                .contains(&attributes.original_language)
+                        } else {
+                            true
+                        };
+
+                    let excluded_tags = if !content_profile.excluded_tags.is_empty() {
+                        match content_profile
+                            .excluded_tags_mode
+                            .unwrap_or(TagSearchMode::Or)
+                        {
+                            TagSearchMode::Or => !content_profile
                                 .excluded_tags
                                 .iter()
-                                .any(|i| attributes.tags.iter().any(|t| t.id == *i)))
-                        || (!content_profile.publication_demographic.is_empty()
-                            && attributes
+                                .any(|i| attributes.tags.iter().any(|t| t.id == *i)),
+                            TagSearchMode::And => !attributes
+                                .tags
+                                .iter()
+                                .filter(|t| {
+                                    content_profile.excluded_tags.iter().any(|i| t.id == *i)
+                                })
+                                .all(|t| content_profile.excluded_tags.iter().any(|i| t.id == *i)),
+                        }
+                    } else {
+                        true
+                    };
+
+                    let publication_demographic =
+                        if !content_profile.publication_demographic.is_empty() {
+                            attributes
                                 .publication_demographic
                                 .iter()
-                                .any(|d| content_profile.publication_demographic.contains(d)))
-                        || (!content_profile.status.is_empty()
-                            && content_profile.status.contains(&attributes.status))
-                        || (!content_profile.translated_languages.is_empty()
-                            && attributes
+                                .any(|d| content_profile.publication_demographic.contains(d))
+                        } else {
+                            true
+                        };
+
+                    let status = if !content_profile.status.is_empty() {
+                        content_profile.status.contains(&attributes.status)
+                    } else {
+                        true
+                    };
+
+                    let translated_languages = {
+                        if !content_profile.translated_languages.is_empty() {
+                            attributes
                                 .available_translated_languages
                                 .iter()
-                                .any(|lang| content_profile.translated_languages.contains(lang)))
+                                .filter(|lang| content_profile.translated_languages.contains(*lang))
+                                .all(|lang| content_profile.translated_languages.contains(lang))
+                        } else {
+                            true
+                        }
+                    };
+
+                    let original_languages = {
+                        if !content_profile.original_languages.is_empty() {
+                            content_profile
+                                .original_languages
+                                .contains(&attributes.original_language)
+                        } else {
+                            true
+                        }
+                    };
+
+                    let included_tags = if !content_profile.included_tags.is_empty() {
+                        match content_profile
+                            .included_tags_mode
+                            .unwrap_or(TagSearchMode::And)
+                        {
+                            TagSearchMode::Or => content_profile
+                                .included_tags
+                                .iter()
+                                .any(|i| attributes.tags.iter().any(|t| t.id == *i)),
+                            TagSearchMode::And => attributes
+                                .tags
+                                .iter()
+                                .filter(|t| {
+                                    content_profile.included_tags.iter().any(|i| t.id == *i)
+                                })
+                                .all(|t| content_profile.included_tags.iter().any(|i| t.id == *i)),
+                        }
+                    } else {
+                        true
+                    };
+
+                    content_rating
+                        && excluded_original_languages
+                        && excluded_tags
+                        && publication_demographic
+                        && status
+                        && translated_languages
+                        && included_tags
+                        && original_languages
                 } else {
                     true
                 }
