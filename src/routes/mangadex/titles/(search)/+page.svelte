@@ -7,9 +7,10 @@
 		toMangaListParams,
 		type MangaSearchParams
 	} from "@mangadex/componnents/manga/search/form/state";
-	import { derived, writable } from "svelte/store";
+	import { derived, get, writable } from "svelte/store";
 	import { TagOptionState } from "@mangadex/componnents/manga/search/form/filter/contexts/tags";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	interface Props {
 		data: PageData;
 	}
@@ -24,6 +25,21 @@
 					name: tag.name,
 					group: tag.group
 				});
+			});
+			const defaultProfile = get(defaultContentProfile);
+			defaultProfile.excludedTags.forEach((tag) => {
+				const inner_tag = p.filter.tags.get(tag);
+				if (inner_tag) {
+					inner_tag.state = TagOptionState.EXCLUDE;
+					p.filter.tags.set(tag, inner_tag);
+				}
+			});
+			defaultProfile.includedTags.forEach((tag) => {
+				const inner_tag = p.filter.tags.get(tag);
+				if (inner_tag) {
+					inner_tag.state = TagOptionState.INCLUDE;
+					p.filter.tags.set(tag, inner_tag);
+				}
 			});
 			return p;
 		});

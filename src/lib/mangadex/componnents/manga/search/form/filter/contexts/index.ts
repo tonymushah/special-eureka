@@ -1,4 +1,4 @@
-import type { ContentRating, Demographic, MangaStatus } from "@mangadex/gql/graphql"
+import { TagSearchMode, type ContentRating, type Demographic, type MangaStatus } from "@mangadex/gql/graphql"
 import { defaultMangaSearchLanguages, initMangaSearchLanguagesContextStore, type MangaSearchLanguages } from "./languages"
 import { initMangaSearchTagOptionsContextStore, type TagOptions } from "./tags"
 import { generateContextStoresMethods } from "@mangadex/utils/contexts"
@@ -9,6 +9,7 @@ import { initMangaSearchPublicationStatusContextStore } from "./publicationStatu
 import { initMangaSearchYearContextStore } from "./year"
 import { defaultTagModes, initMangaSearchTagModeContext, type TagModes } from "./tagModes"
 import { defaultAuthorArtistOptions, initMangaSearchAuthorArtistsOptions, type AuthorArtistOptions } from "./authorArtist"
+import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile"
 
 export type MangaSearchFilterParams = {
     contentRating: ContentRating[],
@@ -22,14 +23,26 @@ export type MangaSearchFilterParams = {
 }
 
 export function defaultMangaFilterParams(): MangaSearchFilterParams {
+    const contentProfile = get(defaultContentProfile);
     return {
-        contentRating: [],
-        languages: defaultMangaSearchLanguages(),
-        demographic: [],
-        status: [],
+        contentRating: contentProfile.contentRating,
+        languages: (() => {
+            return {
+                availableTranslatedLanguage: contentProfile.translatedLanguages,
+                originalLanguage: contentProfile.originalLanguages,
+                excludedOriginalLanguage: contentProfile.excludedOriginalLanguage
+            }
+        })(),
+        demographic: contentProfile.publicationDemographic,
+        status: contentProfile.status,
         tags: new Map(),
         year: null,
-        tagModes: defaultTagModes(),
+        tagModes: (() => {
+            return {
+                include: contentProfile.includedTagsMode ?? TagSearchMode.And,
+                exclude: contentProfile.excludedTagsMode ?? TagSearchMode.Or
+            }
+        })(),
         authorArtists: defaultAuthorArtistOptions()
     }
 }
