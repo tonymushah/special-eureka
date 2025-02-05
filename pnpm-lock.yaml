@@ -94,8 +94,8 @@ importers:
         version: 10.0.0
     devDependencies:
       '@chromatic-com/storybook':
-        specifier: ^2.0.2
-        version: 2.0.2(react@18.3.1)
+        specifier: ^3.0.0
+        version: 3.2.4(react@18.3.1)(storybook@8.5.3(prettier@3.4.2))
       '@graphql-codegen/cli':
         specifier: ^5.0.4
         version: 5.0.4(@babel/core@7.26.7)(@parcel/watcher@2.5.1)(@types/node@22.13.1)(enquirer@2.4.1)(graphql@16.10.0)(typescript@5.7.3)
@@ -528,9 +528,11 @@ packages:
     resolution: {integrity: sha512-t8kDRGrKXyp6+tjUh7hw2RLyclsW4TRoRvRHtSyAX9Bb5ldlFh+90YAYY6awRXrlB4G5G2izNeGySpATlFzmOg==}
     engines: {node: '>=6.9.0'}
 
-  '@chromatic-com/storybook@2.0.2':
-    resolution: {integrity: sha512-7bPIliISedeIpnVKbzktysFYW5n56bN91kxuOj1XXKixmjbUHRUMvcXd4K2liN6MiR5ZqJtmtcPsZ6CebbGlEA==}
+  '@chromatic-com/storybook@3.2.4':
+    resolution: {integrity: sha512-5/bOOYxfwZ2BktXeqcCpOVAoR6UCoeART5t9FVy22hoo8F291zOuX4y3SDgm10B1GVU/ZTtJWPT2X9wZFlxYLg==}
     engines: {node: '>=16.0.0', yarn: '>=1.22.18'}
+    peerDependencies:
+      storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
   '@codemirror/language@6.10.2':
     resolution: {integrity: sha512-kgbTYTo0Au6dCSc/TFy7fK3fpJmgHDv1sG1KNQKJXVi+xBTEeBPY/M30YXiU6mMXeH+YIDLsbrT4ZwNRdtF+SA==}
@@ -5281,12 +5283,13 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@chromatic-com/storybook@2.0.2(react@18.3.1)':
+  '@chromatic-com/storybook@3.2.4(react@18.3.1)(storybook@8.5.3(prettier@3.4.2))':
     dependencies:
       chromatic: 11.25.2
       filesize: 10.1.6
       jsonfile: 6.1.0
       react-confetti: 6.2.2(react@18.3.1)
+      storybook: 8.5.3(prettier@3.4.2)
       strip-ansi: 7.1.0
     transitivePeerDependencies:
       - '@chromatic-com/cypress'
