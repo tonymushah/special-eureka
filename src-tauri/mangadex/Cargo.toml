@@ -32,7 +32,7 @@ mangadex-api-types-rust = { version = "0.10", default-features = false, features
     "async-graphql",
 ] }
 async-graphql.workspace = true
-convert_case = "0.6"
+convert_case = "0.7"
 tokio-stream = { version = "0", features = ["sync"] }
 regex = "1"
 bytes.workspace = true
