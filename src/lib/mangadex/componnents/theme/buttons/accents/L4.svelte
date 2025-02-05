@@ -10,14 +10,16 @@
 		type?: "reset" | "submit" | "button";
 		style?: string | undefined;
 		isBase?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
 		type = "button",
 		style = undefined,
 		isBase = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 

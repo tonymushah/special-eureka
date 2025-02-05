@@ -19,7 +19,8 @@
 		type?: "reset" | "submit" | "button";
 		style?: string | undefined;
 		isBase?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
@@ -27,40 +28,41 @@
 		type = "button",
 		style = undefined,
 		isBase = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 
 {#if variant == "1"}
-	<L1 on:click {style} {type} {isBase}>
+	<L1 on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</L1>
 {:else if variant == "2"}
-	<L2 on:click {style} {type} {isBase}>
+	<L2 on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</L2>
 {:else if variant == "3"}
-	<L3 on:click {style} {type} {isBase}>
+	<L3 on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</L3>
 {:else if variant == "4"}
-	<L4 on:click {style} {type} {isBase}>
+	<L4 on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</L4>
 {:else if variant == "5"}
-	<L5 on:click {style} {type} {isBase}>
+	<L5 on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</L5>
 {:else if variant == "accent"}
-	<Accent on:click {style} {type} {isBase}>
+	<Accent on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</Accent>
 {:else if variant == "accent-alt"}
-	<AccentAlt on:click {style} {type} {isBase}>
+	<AccentAlt {disabled} on:click {style} {type} {isBase}>
 		{@render children?.()}
 	</AccentAlt>
 {:else}
-	<Default on:click {style} {type} {isBase}>
+	<Default on:click {disabled} {style} {type} {isBase}>
 		{@render children?.()}
 	</Default>
 {/if}
