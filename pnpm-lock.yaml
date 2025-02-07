@@ -238,8 +238,8 @@ importers:
         specifier: ^6.0.11
         version: 6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)
       vite-plugin-kit-routes:
-        specifier: ^0.7.6
-        version: 0.7.6(@sveltejs/kit@2.17.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)))(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)))
+        specifier: ^0.8.0
+        version: 0.8.1(@sveltejs/kit@2.17.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)))(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)))
       vitest:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.13.1)(less@4.2.2)(sass@1.83.4)
@@ -4698,8 +4698,8 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
-  vite-plugin-kit-routes@0.7.6:
-    resolution: {integrity: sha512-ONeCGO1+OXF8Jd5qPBNkvU4qlDQMWoANax4T2hr0Z/STOHf0QAniAuNJxlNbbigUXdDcUyaMbmJSa1gYONE0sw==}
+  vite-plugin-kit-routes@0.8.1:
+    resolution: {integrity: sha512-9lf+OmhR9fNPajP9ufRDo3t2W9xQSz7aFx2WlfrTN9xdjgMQndi/SgNynVDwEpversEFWVLBV741YOGdGKT7eQ==}
     engines: {node: ^16.14 || >=18}
     peerDependencies:
       '@sveltejs/kit': ^2.4.0
@@ -9942,7 +9942,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-kit-routes@0.7.6(@sveltejs/kit@2.17.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)))(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0))):
+  vite-plugin-kit-routes@0.8.1(@sveltejs/kit@2.17.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0)))(svelte@5.19.9)(vite@6.1.0(@types/node@22.13.1)(jiti@2.4.2)(less@4.2.2)(sass@1.83.4)(yaml@2.7.0))):
     dependencies:
       '@kitql/helpers': 0.8.11
       '@kitql/internals': 0.10.2
