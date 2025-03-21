@@ -33,11 +33,13 @@
         "**/.git": true,
         "**/.svn": true,
         "**/.hg": true,
-        "**/CVS": true,
         "**/.DS_Store": true,
         "**/Thumbs.db": true,
+        "**/CVS": true,
         "src-tauri/target": true,
-        "src-tauri/data": true
+        "src-tauri/data": true,
+        "src/lib/mangadex": true,
+        "src/routes/mangadex": true
     },
     "[jsonc]": {
         "editor.quickSuggestions": {
