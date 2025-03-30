@@ -1408,9 +1408,9 @@ checksum = "a5d9305ccc6942a704f4335694ecd3de2ea531b114ac2d51f5f843750787a92f"
 
 [[package]]
 name = "eureka-mmanager"
-version = "0.1.2"
+version = "0.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0131be729401a2db0479538eaecea886be7160ccd744d9370e1c5aea067083e9"
+checksum = "b6dad824b1bc73e9032b250a0084397d500fcdb34f8fcf534aa7f2e47213994a"
 dependencies = [
  "actix",
  "bytes",
