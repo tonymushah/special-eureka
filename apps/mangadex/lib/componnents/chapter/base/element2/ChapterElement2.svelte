@@ -1,23 +1,18 @@
 <script lang="ts">
+	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
+	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
+	import { createEventDispatcher } from "svelte";
 	import {
 		CheckIcon,
 		DownloadCloudIcon,
 		DownloadIcon,
-		EyeIcon,
-		EyeOffIcon,
-		MessageSquareIcon,
 		UserIcon,
 		UsersIcon,
 		XIcon
 	} from "svelte-feather-icons";
-	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-	import { createEventDispatcher, onDestroy, onMount } from "svelte";
-	import { render as timeRender, cancel as timeCancel } from "timeago.js";
-	import Layout from "@mangadex/componnents/manga/base/base1/Layout.svelte";
-	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
-	import type { Readable } from "svelte/store";
+	import { cancel as timeCancel, render as timeRender } from "timeago.js";
 	type Group = {
 		id: string;
 		name: string;
@@ -34,7 +29,6 @@
 		groups?: Group[];
 		uploader: Uploader;
 		upload_date: Date;
-		download_state: Readable<ChapterDownloadState>;
 	}
 
 	let {
@@ -43,17 +37,16 @@
 		lang = $bindable(),
 		groups = [],
 		uploader,
-		upload_date,
-		download_state
+		upload_date
 	}: Props = $props();
-	let timeago: HTMLTimeElement = $state();
+	let timeago: HTMLTimeElement | undefined = $state();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	type KeyboardEnvDiv = KeyboardEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
-	let layout: HTMLDivElement = $state();
+	let layout: HTMLDivElement | undefined = $state();
 	let tooltip: HTMLDivElement | undefined = $state(undefined);
 	let arrowElement: HTMLDivElement | undefined = $state(undefined);
 	const dispatch = createEventDispatcher<{
@@ -115,47 +108,65 @@
 			tooltip.style.display = "";
 		}
 	}
-	onMount(() => {
-		timeRender(timeago);
+	$effect(() => {
+		if (timeago) timeRender(timeago);
+		return () => {
+			if (timeago) timeCancel(timeago);
+		};
 	});
-	onDestroy(() => {
-		timeCancel(timeago);
-	});
+
+	/// TODO implement quality
+	const download_state_inner = new ChapterDownload(id);
+
+	const download_state = download_state_inner.state();
+
+	const isDownloading = download_state_inner.is_downloading();
+
+	const hasFailed = download_state_inner.has_failed();
+
+	const is_downloaded = download_state_inner.is_downloaded();
+
+	async function handle_download_event() {
+		if ($isDownloading) {
+			await download_state_inner.cancel();
+		} else {
+			if ($is_downloaded) {
+				await download_state_inner.remove();
+			} else {
+				await download_state_inner.download();
+			}
+		}
+	}
 </script>
 
 <div
 	role="article"
-	class="layout"
+	class="layout chapter-element"
 	bind:this={layout}
 	onmouseenter={showTooltip}
 	onmouseleave={hideTooltip}
 	onfocus={showTooltip}
 	onblur={hideTooltip}
+	data-chapter-id={id}
 >
 	<div
 		class="state buttons"
 		role="button"
-		onclick={(e) => {
-			if ($download_state != ChapterDownloadState.Downloading) {
-				dispatch("download", {
-					...e,
-					id
-				});
-			}
+		onclick={async (e) => {
+			await handle_download_event();
 		}}
-		onkeypress={(e) => {
-			dispatch("downloadKeyPress", {
-				...e,
-				id
-			});
+		onkeypress={async (e) => {
+			if (e.key == "Enter") {
+				await handle_download_event();
+			}
 		}}
 		tabindex={0}
 	>
-		{#if $download_state == ChapterDownloadState.Downloaded}
+		{#if $is_downloaded}
 			<CheckIcon />
-		{:else if $download_state == ChapterDownloadState.Downloading}
+		{:else if $isDownloading}
 			<DownloadCloudIcon />
-		{:else if $download_state == ChapterDownloadState.Failed}
+		{:else if $hasFailed}
 			<XIcon />
 		{:else}
 			<DownloadIcon />

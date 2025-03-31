@@ -171,4 +171,26 @@ export class ChapterDownload {
 			id: this.chapterId
 		}).toPromise();
 	}
+	public has_failed() {
+		return derived(this.state(), (result) => {
+			switch (result) {
+				case ChapterDownloadState.Error | ChapterDownloadState.Canceled:
+					return true;
+
+				default:
+					return false;
+			}
+		})
+	}
+	public is_downloaded() {
+		return derived(this.state(), (result) => {
+			switch (result) {
+				case ChapterDownloadState.Done:
+					return true;
+
+				default:
+					return false;
+			}
+		})
+	}
 }
