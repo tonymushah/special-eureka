@@ -22,7 +22,6 @@
 		groups?: Group[];
 		uploader: Uploader;
 		upload_date: Date;
-		download_state: Readable<ChapterDownloadState>;
 	}
 
 	let {
@@ -33,8 +32,7 @@
 		lang,
 		groups = [],
 		uploader,
-		upload_date,
-		download_state
+		upload_date
 	}: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -81,7 +79,6 @@
 	<div class="chapter">
 		<ChapterElement2
 			{lang}
-			{download_state}
 			{upload_date}
 			id={chapterId}
 			on:download

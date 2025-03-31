@@ -1,14 +1,14 @@
 <script lang="ts">
-	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	interface Props {
 		haveBeenRead?: boolean;
+		mangaId: string;
 		children?: import("svelte").Snippet;
 	}
 
-	let { haveBeenRead = $bindable(true), children }: Props = $props();
+	let { haveBeenRead = $bindable(true), children, mangaId }: Props = $props();
 </script>
 
-<article class="layout" class:haveBeenRead>
+<article class="layout manga-element" class:haveBeenRead data-manga-id={mangaId}>
 	{@render children?.()}
 </article>
 
