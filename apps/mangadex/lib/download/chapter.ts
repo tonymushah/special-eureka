@@ -1,7 +1,7 @@
 import { graphql } from "@mangadex/gql";
 import type { DownloadMode } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
-import { subscriptionStore } from "@urql/svelte";
+import { queryStore, subscriptionStore } from "@urql/svelte";
 import { derived, type Readable } from "svelte/store";
 
 const download_mutation = graphql(`
@@ -52,7 +52,16 @@ const remove_chapter_mutation = graphql(`
 		}
 	}
 `);
-
+const chapterOfflineState = graphql(`
+	query chapterDownloadStateQ($id: UUID!) {
+		downloadState {
+			chapter(chapterId: $id) {
+				isDownloaded
+				hasFailed
+			}
+		}
+	}
+`);
 export enum ChapterDownloadState {
 	Pending,
 	Done,
@@ -62,19 +71,49 @@ export enum ChapterDownloadState {
 	Preloading,
 	FetchingAtHomeData,
 	FetchingImages,
-	FetchingData
+	FetchingData,
+	Removing
 }
 
 export class ChapterDownload {
 	private chapterId: string;
 	private mode?: DownloadMode;
+	protected isPresentInner: Readable<boolean>;
+	private reexecute: () => void;
+	protected hasFailedInner: Readable<boolean>
 	/**
 	 *
 	 */
 	constructor(chapterId: string, mode?: DownloadMode) {
 		this.chapterId = chapterId,
 			this.mode = mode;
+		const is_present = queryStore({
+			client,
+			query: chapterOfflineState,
+			variables: {
+				id: chapterId
+			}
+		});
+		this.isPresentInner = derived(is_present, (result) => {
+			return result.data?.downloadState.chapter.isDownloaded == true
+		})
+		this.reexecute = () => {
+			is_present.reexecute({
+				url: ""
+			})
+		}
+		this.hasFailedInner = derived(is_present, (result) => {
+			return result.data?.downloadState.chapter.hasFailed == true
+		})
 	}
+	private get isPresent(): Readable<boolean> {
+		return this.isPresentInner
+	}
+
+	private get hasFailed(): Readable<boolean> {
+		return this.hasFailedInner
+	}
+
 	public set quality(val: DownloadMode) {
 		this.mode = val
 	}
@@ -91,7 +130,7 @@ export class ChapterDownload {
 		})
 	}
 	public state(): Readable<ChapterDownloadState> {
-		return derived(this.sub_raw_state(), (result) => {
+		return derived([this.sub_raw_state(), this.hasFailed, this.isPresent], ([result, hasFailed, isPresent]) => {
 			if (result.data) {
 				const data = result.data.watchChapterDownloadState;
 				if (data.downloading) {
@@ -109,7 +148,7 @@ export class ChapterDownload {
 					return ChapterDownloadState.Error
 				} else if (data.isCanceled) {
 					return ChapterDownloadState.Canceled
-				} else if (data.isDone) {
+				} else if (data.isDone && isPresent) {
 					return ChapterDownloadState.Done
 				} else if (data.isOfflineAppStateNotLoaded) {
 					return ChapterDownloadState.OfflineAppStateNotLoaded
@@ -119,7 +158,13 @@ export class ChapterDownload {
 			} else if (result.error) {
 				return ChapterDownloadState.Error;
 			} else {
-				return ChapterDownloadState.Pending;
+				if (hasFailed) {
+					return ChapterDownloadState.Error
+				} else if (isPresent) {
+					return ChapterDownloadState.Done
+				} else {
+					return ChapterDownloadState.Pending;
+				}
 			}
 		})
 	}
@@ -141,6 +186,9 @@ export class ChapterDownload {
 	public static remove_chapter_mutation() {
 		return remove_chapter_mutation
 	}
+	public static chapter_offline_state() {
+		return chapterOfflineState
+	}
 	public images_state() {
 		return derived(this.sub_raw_state(), (result) => {
 			result.data?.watchChapterDownloadState.downloading?.fetchingImage
@@ -156,20 +204,26 @@ export class ChapterDownload {
 		})
 	}
 	public async download() {
-		return await client.mutation(ChapterDownload.download_mutation(), {
+		const res = await client.mutation(ChapterDownload.download_mutation(), {
 			id: this.chapterId,
 			quality: this.mode
 		}).toPromise();
+		this.reexecute()
+		return res;
 	}
 	public async cancel() {
-		return await client.mutation(ChapterDownload.cancel_dowload_mutation(), {
+		const res = await client.mutation(ChapterDownload.cancel_dowload_mutation(), {
 			id: this.chapterId
 		}).toPromise();
+		this.reexecute();
+		return res;
 	}
 	public async remove() {
-		return await client.mutation(ChapterDownload.remove_chapter_mutation(), {
+		const res = await client.mutation(ChapterDownload.remove_chapter_mutation(), {
 			id: this.chapterId
 		}).toPromise();
+		this.reexecute();
+		return res;
 	}
 	public has_failed() {
 		return derived(this.state(), (result) => {
