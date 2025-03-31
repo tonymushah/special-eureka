@@ -1,5 +1,9 @@
 <script lang="ts">
-	import GraphiQl from "@mangadex/componnents/GraphiQL.svelte";
+	const graphiQL = import("@mangadex/componnents/GraphiQL.svelte").then((g) => g.default);
 </script>
 
-<GraphiQl />
+{#await graphiQL}
+	<p>Loading...</p>
+{:then GraphiQL}
+	<svelte:component this={GraphiQL} />
+{/await}
