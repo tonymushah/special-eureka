@@ -20,7 +20,9 @@ export async function mangadexTitleBar() {
 		title: "Sidebar Direction",
 		onclick: TOGGLE_SIDEBAR_HANDLER
 	});
+	/*
 	const { logo, title } = await import("$lib/window-decoration/WindowDecoration.svelte");
 	logo.set(mangadexLogo);
 	title.set("MangaDex | Special Eureka")
+	*/
 }
