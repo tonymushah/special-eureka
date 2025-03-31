@@ -85,6 +85,7 @@ export default async function executeSearchQuery(
 				data: data.data.map<MangaListContentItemProps>((v) => {
 					const contentRating = v.attributes.contentRating;
 					return {
+						mangaId: v.id,
 						id: v.id,
 						coverImage: get_cover_art({
 							cover_id: v.relationships.coverArt.id,
@@ -138,6 +139,7 @@ export default async function executeSearchQuery(
 				data: data.data.map<MangaListContentItemProps>((v) => {
 					const contentRating = v.attributes.contentRating;
 					return {
+						mangaId: v.id,
 						id: v.id,
 						coverImage: get_cover_art({
 							cover_id: v.relationships.coverArt.id,
