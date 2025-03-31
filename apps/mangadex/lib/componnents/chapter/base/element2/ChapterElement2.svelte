@@ -131,11 +131,7 @@
 		if ($isDownloading) {
 			await download_state_inner.cancel();
 		} else {
-			if ($is_downloaded) {
-				await download_state_inner.remove();
-			} else {
-				await download_state_inner.download();
-			}
+			await download_state_inner.download();
 		}
 	});
 </script>

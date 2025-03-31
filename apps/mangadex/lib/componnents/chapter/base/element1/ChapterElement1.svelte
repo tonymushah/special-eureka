@@ -119,11 +119,7 @@
 		if (downloading) {
 			await chapter_download_inner.cancel();
 		} else {
-			if (downloaded) {
-				await chapter_download_inner.remove();
-			} else {
-				await chapter_download_inner.download();
-			}
+			await chapter_download_inner.download();
 		}
 	});
 </script>
