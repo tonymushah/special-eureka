@@ -7,9 +7,32 @@
 	}
 
 	let { download_state }: Props = $props();
-	let downloaded = $derived($download_state == ChapterDownloadState.Downloaded);
-	let downloading = $derived($download_state == ChapterDownloadState.Downloading);
-	let failed = $derived($download_state == ChapterDownloadState.Failed);
+	let downloaded = $derived($download_state == ChapterDownloadState.Done);
+	let downloading = $derived.by(() => {
+		switch ($download_state) {
+			case ChapterDownloadState.FetchingAtHomeData |
+				ChapterDownloadState.FetchingData |
+				ChapterDownloadState.FetchingImages |
+				ChapterDownloadState.Preloading:
+				return true;
+				break;
+
+			default:
+				return false;
+				break;
+		}
+	});
+	let failed = $derived.by(() => {
+		switch ($download_state) {
+			case ChapterDownloadState.Error | ChapterDownloadState.Canceled:
+				return true;
+				break;
+
+			default:
+				return false;
+				break;
+		}
+	});
 </script>
 
 <span class:downloaded class:downloading class:failed>

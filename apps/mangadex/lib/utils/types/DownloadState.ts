@@ -1,6 +1,3 @@
-export enum ChapterDownloadState {
-	NotDownloaded,
-	Failed,
-	Downloaded,
-	Downloading
-}
+import { ChapterDownloadState as State } from "@mangadex/download/chapter"
+
+export { State as ChapterDownloadState };

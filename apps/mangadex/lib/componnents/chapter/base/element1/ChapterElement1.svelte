@@ -50,6 +50,7 @@
 	import type { Readable } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
+	import { ChapterDownload } from "@mangadex/download/chapter";
 	type Group = {
 		id: string;
 		name: string;
@@ -67,7 +68,6 @@
 		uploader: Uploader;
 		upload_date: Date;
 		haveBeenRead?: boolean;
-		download_state: Readable<ChapterDownloadState>;
 		comments?: number | undefined;
 	}
 
@@ -79,22 +79,49 @@
 		uploader,
 		upload_date,
 		haveBeenRead = true,
-		download_state,
 		comments = undefined
 	}: Props = $props();
 
 	const dispatch = createChapterEl1EventDispatcher();
+	// TODO implement quality
+	const chapter_download_inner = new ChapterDownload(id);
+	const download_state = chapter_download_inner.state();
+	let downloaded = $derived.by(() => {
+		$download_state == ChapterDownloadState.Done;
+	});
+	let downloading = $derived.by(() => {
+		switch ($download_state) {
+			case ChapterDownloadState.FetchingAtHomeData |
+				ChapterDownloadState.FetchingData |
+				ChapterDownloadState.FetchingImages |
+				ChapterDownloadState.Preloading:
+				return true;
+				break;
 
-	let downloaded = $derived($download_state == ChapterDownloadState.Downloaded);
-	let downloading = $derived($download_state == ChapterDownloadState.Downloading);
-	let failed = $derived($download_state == ChapterDownloadState.Failed);
+			default:
+				return false;
+				break;
+		}
+	});
+	let failed = $derived.by(() => {
+		switch ($download_state) {
+			case ChapterDownloadState.Error | ChapterDownloadState.Canceled:
+				return true;
+				break;
+
+			default:
+				return false;
+				break;
+		}
+	});
 </script>
 
 <article
-	class="border"
+	class="border chapter-element"
 	oncontextmenu={(e) => {
 		e.preventDefault();
 	}}
+	data-chapter-id={id}
 >
 	<Layout {haveBeenRead}>
 		{#snippet state()}
@@ -102,11 +129,10 @@
 				class="buttons"
 				role="button"
 				onclick={(e) => {
-					if ($download_state != ChapterDownloadState.Downloading) {
-						dispatch("download", {
-							...e,
-							id
-						});
+					if (downloading) {
+						chapter_download_inner.cancel();
+					} else {
+						chapter_download_inner.download();
 					}
 				}}
 				onkeypress={(e) => {
@@ -122,20 +148,12 @@
 			{#if (failed || downloaded) && !downloading}
 				<div
 					class="buttons remove"
-					onclick={(e) => {
-						if ($download_state != ChapterDownloadState.Downloading) {
-							dispatch("remove", {
-								...e,
-								id
-							});
-						}
+					onclick={async (e) => {
+						await chapter_download_inner.remove();
 					}}
-					onkeypress={(e) => {
-						if ($download_state != ChapterDownloadState.Downloading) {
-							dispatch("removeKeyPress", {
-								...e,
-								id
-							});
+					onkeypress={async (e) => {
+						if (e.key == "Enter") {
+							await chapter_download_inner.remove();
 						}
 					}}
 					tabindex={0}
