@@ -3,6 +3,7 @@
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
+	import { debounce } from "lodash";
 	import { createEventDispatcher } from "svelte";
 	import {
 		CheckIcon,
@@ -126,7 +127,7 @@
 
 	const is_downloaded = download_state_inner.is_downloaded();
 
-	async function handle_download_event() {
+	const handle_download_event = debounce(async function () {
 		if ($isDownloading) {
 			await download_state_inner.cancel();
 		} else {
@@ -136,7 +137,7 @@
 				await download_state_inner.download();
 			}
 		}
-	}
+	});
 </script>
 
 <div

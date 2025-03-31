@@ -51,6 +51,7 @@
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
 	import { ChapterDownload } from "@mangadex/download/chapter";
+	import { debounce } from "lodash";
 	type Group = {
 		id: string;
 		name: string;
@@ -87,7 +88,7 @@
 	const chapter_download_inner = new ChapterDownload(id);
 	const download_state = chapter_download_inner.state();
 	let downloaded = $derived.by(() => {
-		$download_state == ChapterDownloadState.Done;
+		return $download_state == ChapterDownloadState.Done;
 	});
 	let downloading = $derived.by(() => {
 		switch ($download_state) {
@@ -114,6 +115,17 @@
 				break;
 		}
 	});
+	const handle_download_event = debounce(async () => {
+		if (downloading) {
+			await chapter_download_inner.cancel();
+		} else {
+			if (downloaded) {
+				await chapter_download_inner.remove();
+			} else {
+				await chapter_download_inner.download();
+			}
+		}
+	});
 </script>
 
 <article
@@ -128,18 +140,18 @@
 			<div
 				class="buttons"
 				role="button"
-				onclick={(e) => {
-					if (downloading) {
-						chapter_download_inner.cancel();
-					} else {
-						chapter_download_inner.download();
-					}
+				onclick={async (e) => {
+					dispatch("download", { ...e, id });
+					await handle_download_event();
 				}}
-				onkeypress={(e) => {
+				onkeypress={async (e) => {
 					dispatch("downloadKeyPress", {
 						...e,
 						id
 					});
+					if (e.key == "Enter") {
+						await handle_download_event();
+					}
 				}}
 				tabindex={0}
 			>
