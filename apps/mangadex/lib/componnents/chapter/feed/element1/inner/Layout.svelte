@@ -29,4 +29,7 @@
 		border-width: 0px 0px 0px 5px;
 		border-color: var(--indication-blue);
 	}
+	.manga-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+	}
 </style>

@@ -360,4 +360,7 @@
 	.comments:hover {
 		color: var(--primary);
 	}
+	.chapter-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+	}
 </style>

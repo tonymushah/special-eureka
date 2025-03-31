@@ -225,4 +225,7 @@
 		background-color: var(--mid-tone);
 		padding: 0px;
 	}
+	.manga-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+	}
 </style>
