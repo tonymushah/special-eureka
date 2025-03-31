@@ -1,15 +1,16 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
 
 const config: CodegenConfig = {
-    schema: "./apps/mangadex/lib/schemas.graphqls",
+    schema: "./src/lib/mangadex/schemas.graphqls",
     documents: [
-        // "./src/lib/mangadex/**/*.svelte",
-        "./apps/mangadex/**/*.ts",
-        // "src/routes/mangadex/**/*.svelte",
+        "./src/lib/mangadex/**/*.svelte",
+    		"./src/lib/mangadex/**/*.ts",
+    		"./src/routes/mangadex/**/*.svelte",
+    		"./src/routes/mangadex/**/*.ts",
     ],
     ignoreNoDocuments: false, // for better experience with the watcher
     generates: {
-        "./apps/mangadex/lib/gql/": {
+        "./src/lib/mangadex/gql/": {
             preset: "client",
             config: {
                 useTypeImports: true

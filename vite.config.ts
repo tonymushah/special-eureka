@@ -1,6 +1,6 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
-import { kitRoutes } from "./.vite/routes";
+import { kitRoutes } from "vite-plugin-kit-routes";
 
 export default defineConfig({
     plugins: [sveltekit(), kitRoutes()],
@@ -31,7 +31,7 @@ export default defineConfig({
             ]
         },
         watch: {
-            ignored: ["**/src-tauri/**", "**/target/**", "**/data/**"]
+            ignored: [`${searchForWorkspaceRoot(process.cwd())}/src-tauri`, `${searchForWorkspaceRoot(process.cwd())}/target`, `${searchForWorkspaceRoot(process.cwd())}/data`]
         }
     },
     // to access the Tauri environment variables set by the CLI with information about the current target

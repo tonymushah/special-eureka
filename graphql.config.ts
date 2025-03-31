@@ -4,11 +4,13 @@ const config: IGraphQLConfig = {
     projects: {
         mangadex: {
             documents: [
-                "./apps/mangadex/**/*.svelte",
-                "./apps/mangadex/**/*.ts"
+                "./src/lib/mangadex/**/*.svelte",
+                "./src/lib/mangadex/**/*.ts",
+                "./src/lib/mangadex/**/*.svelte",
+                "./src/lib/mangadex/**/*.ts"
             ],
-            schemaPath: "./apps/mangadex/lib/schemas.graphqls",
-            includes: ["./apps/mangadex/**/*"]
+            schemaPath: "./src/lib/mangadex/schemas.graphqls",
+            includes: ["./src/lib/mangadex/**/*.ts", "./src/lib/mangadex/**/*.svelte", "./src/routes/mangadex/**/*.ts", "./src/routes/mangadex/**/*.svelte"]
         }
     },
     excludes: ["./src-tauri/*", "./.svelte-kit/*"]
