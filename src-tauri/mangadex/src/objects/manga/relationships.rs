@@ -127,7 +127,8 @@ impl MangaRelationships {
                 },
             )
             .collect::<Vec<ApiObjectNoRelationships<AuthorAttributes>>>();
-        getted.dedup_by(|a, b| a.id == b.id);
+        getted.sort_by_key(|a| a.id);
+        getted.dedup_by_key(|a| a.id);
         getted
             .iter()
             .map(|e| <Author as From<ApiObjectNoRelationships<AuthorAttributes>>>::from(e.clone()))
