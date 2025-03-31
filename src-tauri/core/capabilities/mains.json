@@ -24,6 +24,7 @@
 		"mangadex-desktop-api:allow-graphql",
 		"mangadex-desktop-api:allow-subscriptions",
         "opener:default",
-        "notification:default"
+        "notification:default",
+		"core:window:allow-create"
 	]
 }

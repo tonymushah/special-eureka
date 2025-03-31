@@ -63,6 +63,9 @@
 								fontFamily: "Popins"
 							}
 						});
+						unlistens.push(() => {
+							toast.hideToast();
+						});
 					})
 				);
 				unlistens.push(
@@ -79,6 +82,9 @@
 								fontFamily: "Popins"
 							}
 						});
+						unlistens.push(() => {
+							toast.hideToast();
+						});
 					})
 				);
 			}
@@ -88,7 +94,7 @@
 					icon: OpenExtLinkIcon,
 					label: "Open External Link",
 					async onClick() {
-						if (ext_href) open(ext_href);
+						if (ext_href) openUrl(ext_href);
 					}
 				}
 			: undefined
