@@ -4,6 +4,7 @@ import type { Meta, StoryObj } from "@storybook/svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import { fukkoi1 } from "@mangadex/test-data/images/fukkoi";
 import MangaBase5 from "./MangaElementBase5.svelte";
+import { v4 } from "uuid";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -18,6 +19,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: {
+		mangaId: v4(),
 		coverImage: fukkoi1,
 		coverImageAlt: "fuufu-ijou-koibito-miman",
 		title: "Fuufu Ijou, Koibito Miman",

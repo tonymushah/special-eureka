@@ -16,18 +16,14 @@
 		coverImageAlt: string;
 		title: string;
 		description: string;
+		mangaId: string;
 	}
 
-	let {
-		coverImage,
-		coverImageAlt,
-		title,
-		description
-	}: Props = $props();
+	let { coverImage, coverImageAlt, title, description, mangaId }: Props = $props();
 	let isHover = $state(false);
 </script>
 
-<Layout bind:isHover>
+<Layout bind:isHover {mangaId}>
 	<img src={coverImage} alt={coverImageAlt} />
 	<Content {title} {description} {isHover} on:moreInfoClick on:readClick />
 </Layout>

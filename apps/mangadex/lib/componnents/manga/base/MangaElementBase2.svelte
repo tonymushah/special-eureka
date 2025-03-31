@@ -15,6 +15,7 @@
 		tags: Tag[];
 		contentRating?: ContentRating;
 		language?: Language | undefined;
+		mangaId: string;
 	}
 
 	let {
@@ -25,7 +26,8 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		language = undefined
+		language = undefined,
+		mangaId
 	}: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
@@ -38,7 +40,7 @@
 	}>();
 </script>
 
-<Layout on:click --max-height="11em">
+<Layout on:click --max-height="11em" {mangaId}>
 	<Image {coverImage} {coverImageAlt} />
 	<Content on:tagClick {title} {status} {description} {tags} {contentRating} {language} />
 </Layout>

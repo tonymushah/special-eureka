@@ -14,9 +14,10 @@
 		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 		title: string;
+		mangaId: string;
 	}
 
-	let { coverImage, coverImageAlt, title }: Props = $props();
+	let { coverImage, coverImageAlt, title, mangaId }: Props = $props();
 </script>
 
 <Layout
@@ -25,6 +26,7 @@
 	on:click={({ detail }) => {
 		dispatch("click", detail);
 	}}
+	{mangaId}
 >
 	{#if $coverImage}
 		<Image coverImage={$coverImage} {coverImageAlt} />

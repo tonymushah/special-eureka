@@ -16,6 +16,7 @@
 		status: MangaStatus;
 		description: string;
 		withFull?: boolean;
+		mangaId: string;
 	}
 
 	let {
@@ -24,11 +25,12 @@
 		title,
 		status,
 		description,
-		withFull = false
+		withFull = false,
+		mangaId
 	}: Props = $props();
 </script>
 
-<Layout on:click --layout-width={withFull ? "100%" : "19em"}>
+<Layout on:click --layout-width={withFull ? "100%" : "19em"} {mangaId}>
 	<Image {coverImage} {coverImageAlt} />
 	<Content {title} {status} {description} />
 </Layout>

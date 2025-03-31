@@ -17,6 +17,7 @@
 		tags: Tag[];
 		contentRating?: ContentRating;
 		language?: Language | undefined;
+		mangaId: string;
 	}
 
 	let {
@@ -27,7 +28,8 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		language = undefined
+		language = undefined,
+		mangaId
 	}: Props = $props();
 	let src = $derived($coverImage);
 
@@ -42,7 +44,7 @@
 	}>();
 </script>
 
-<Layout on:click --max-height="11em">
+<Layout on:click --max-height="11em" {mangaId}>
 	{#if src}
 		<Image coverImage={src} {coverImageAlt} />
 	{:else}
