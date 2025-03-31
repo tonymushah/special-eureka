@@ -62,11 +62,11 @@
 				<PrimaryButton
 					isBase
 					on:click={() => {
-						closeDialog();
 						dispatch("readingStatus", {
 							readingStatus: $selectedStatus,
 							isFollowing: $selectedIsFollowing
 						});
+						closeDialog();
 					}}
 				>
 					<div class="buttons">Add</div>
@@ -81,7 +81,8 @@
 		background-color: var(--main-background);
 		color: var(--text-color);
 		width: 75vw;
-		border: none;
+		border: 2px solid var(--primary);
+		border-radius: 3px;
 	}
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
