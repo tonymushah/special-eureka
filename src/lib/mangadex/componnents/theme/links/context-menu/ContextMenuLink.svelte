@@ -63,8 +63,13 @@
 								fontFamily: "Popins"
 							}
 						});
+						toast.showToast();
 						unlistens.push(() => {
-							toast.hideToast();
+							try {
+								toast.hideToast();
+							} catch (error) {
+								console.warn(error);
+							}
 						});
 					})
 				);
@@ -82,8 +87,13 @@
 								fontFamily: "Popins"
 							}
 						});
+						toast.showToast();
 						unlistens.push(() => {
-							toast.hideToast();
+							try {
+								toast.hideToast();
+							} catch (error) {
+								console.warn(error);
+							}
 						});
 					})
 				);
