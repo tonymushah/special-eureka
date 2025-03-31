@@ -96,7 +96,7 @@ where
             data,
             limit,
             offset,
-            total: total + 1,
+            total,
         }
     }
 }
