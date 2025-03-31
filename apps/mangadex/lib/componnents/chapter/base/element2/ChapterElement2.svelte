@@ -153,9 +153,11 @@
 		class="state buttons"
 		role="button"
 		onclick={async (e) => {
+			dispatch("download", { ...e, id });
 			await handle_download_event();
 		}}
 		onkeypress={async (e) => {
+			dispatch("downloadKeyPress", { ...e, id });
 			if (e.key == "Enter") {
 				await handle_download_event();
 			}
