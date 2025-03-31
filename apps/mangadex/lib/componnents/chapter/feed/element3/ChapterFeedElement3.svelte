@@ -13,12 +13,7 @@
 		chapters: Chapter[];
 	}
 
-	let {
-		title,
-		mangaId,
-		mangaLang = undefined,
-		chapters
-	}: Props = $props();
+	let { title, mangaId, mangaLang = undefined, chapters }: Props = $props();
 	let isCollapsed = $state(true);
 	let canCollaspe = $state(false);
 	function setDisplayedChapters() {
@@ -57,7 +52,7 @@
 	}>();
 </script>
 
-<article class="layout">
+<article class="layout manga-element" data-manga-id={mangaId}>
 	<div class="body">
 		<div
 			class="top-body manga-content"
@@ -88,7 +83,7 @@
 		<hr />
 		<div class="bottom-body">
 			<div class="chapters" class:isCollapsed>
-				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, download_state, comments }}
+				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, comments }}
 					<ChapterElement1
 						on:download
 						on:downloadKeyPress
@@ -101,7 +96,6 @@
 						{upload_date}
 						{uploader}
 						{haveBeenRead}
-						{download_state}
 						{comments}
 					/>
 				{/each}
