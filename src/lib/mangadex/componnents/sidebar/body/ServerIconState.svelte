@@ -5,6 +5,7 @@
 	import { ServerIcon } from "svelte-feather-icons";
 	import Toast from "toastify-js";
 	import { serverIconStateQuery } from "./server-icon-state";
+	import { onDestroy } from "svelte";
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
 	const toast = Toast({
@@ -14,6 +15,13 @@
 			fontFamily: "Poppins"
 		},
 		close: true
+	});
+	onDestroy(() => {
+		try {
+			toast.hideToast();
+		} catch (e) {
+			console.error(e);
+		}
 	});
 	const offline_server_state_sub = subscriptionStore({
 		client,
