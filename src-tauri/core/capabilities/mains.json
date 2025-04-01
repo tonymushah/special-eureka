@@ -25,7 +25,7 @@
 		"mangadex-desktop-api:allow-subscriptions",
         "opener:default",
         "notification:default",
-		"core:window:allow-create",
+		"core:webview:allow-create-webview-window",
 		"dialog:allow-open"
 	]
 }

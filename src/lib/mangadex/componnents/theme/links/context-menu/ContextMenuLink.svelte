@@ -75,6 +75,7 @@
 				);
 				unlistens.push(
 					await window.once<string>("tauri://error", (e) => {
+						console.warn(e);
 						const toast = Toastify({
 							text: `Error when creating a new window ${e}`,
 							gravity: "bottom",
