@@ -35,9 +35,9 @@
 			dialog.showModal();
 		}
 	}
-	let isShiftDown = $state(false);
+	let canSelect = $state(false);
 	$effect(() => {
-		if (container && isShiftDown) {
+		if (container && canSelect) {
 			const selecto = new Selecto({
 				container,
 				selectableTargets: [".manga-element", ".chapter-element"],
@@ -96,13 +96,14 @@
 
 <svelte:window
 	onkeydown={(e) => {
-		if (e.key == "Shift") {
-			isShiftDown = true;
+		// TODO refactor this into a global store
+		if (e.key == "Control") {
+			canSelect = true;
 		}
 	}}
 	onkeyup={(e) => {
-		if (e.key == "Shift") {
-			isShiftDown = false;
+		if (e.key == "Control") {
+			canSelect = false;
 		}
 	}}
 />

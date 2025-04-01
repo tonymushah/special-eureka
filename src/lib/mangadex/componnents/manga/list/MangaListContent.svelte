@@ -36,9 +36,9 @@
 			dialog.showModal();
 		}
 	}
-	let isShiftDown = $state(false);
+	let canSelect = $state(false);
 	$effect(() => {
-		if (container && isShiftDown) {
+		if (container && canSelect) {
 			const selecto = new Selecto({
 				container,
 				selectableTargets: [".manga-element", ".chapter-element"],
@@ -49,15 +49,19 @@
 				preventClickEventOnDragStart: true,
 				hitRate: 50,
 				scrollOptions: {
-					container: "#mangadex-scroll-container"
+					container: "#mangadex-scroll-container",
+					useScroll: true
 				}
 			});
 			selecto
 				.on("dragStart", () => {
+					selecto
+						.findSelectableTargets()
+						.forEach((e) => e.removeAttribute("data-selecto-selected"));
 					selectedChapters = [];
 					selectedMangas = [];
 				})
-				.on("selectStart", (ev) => {
+				.on("select", (ev) => {
 					ev.added.forEach((element) => {
 						element.setAttribute("data-selecto-selected", "");
 					});
@@ -97,13 +101,14 @@
 
 <svelte:window
 	onkeydown={(e) => {
-		if (e.key == "Shift") {
-			isShiftDown = true;
+		console.log(e.key);
+		if (e.key == "Control") {
+			canSelect = true;
 		}
 	}}
 	onkeyup={(e) => {
-		if (e.key == "Shift") {
-			isShiftDown = false;
+		if (e.key == "Control") {
+			canSelect = false;
 		}
 	}}
 />
