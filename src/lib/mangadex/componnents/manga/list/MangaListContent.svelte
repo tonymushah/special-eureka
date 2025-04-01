@@ -46,7 +46,8 @@
 				preventDefault: true,
 				preventRightClick: true,
 				preventClickEventOnDrag: true,
-				preventClickEventOnDragStart: true
+				preventClickEventOnDragStart: true,
+				hitRate: 50
 			});
 			selecto
 				.on("dragStart", () => {
