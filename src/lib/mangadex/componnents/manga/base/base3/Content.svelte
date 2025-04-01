@@ -19,7 +19,7 @@
 		display: flex;
 		align-items: end;
 		opacity: 1;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent-l3) 100%);
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--content-bg) 100%);
 		border-radius: 0.25rem;
 		transition: opacity 300ms ease-in-out;
 		justify-content: center;

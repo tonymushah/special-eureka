@@ -36,8 +36,9 @@
 		border-radius: 0.25rem;
 	}
 	.manga-element:global([data-selecto-selected]) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
-		border-radius: 3px;
-		border: 2px solid var(--primary);
+		--content-bg: color-mix(in srgb, var(--primary) 75%, var(--accent-l3) 25%);
+	}
+	.manga-element:global(:not([data-selecto-selected])) {
+		--content-bg: var(--accent-l3);
 	}
 </style>
