@@ -47,7 +47,10 @@
 				preventRightClick: true,
 				preventClickEventOnDrag: true,
 				preventClickEventOnDragStart: true,
-				hitRate: 50
+				hitRate: 50,
+				scrollOptions: {
+					container: "#mangadex-scroll-container"
+				}
 			});
 			selecto
 				.on("dragStart", () => {

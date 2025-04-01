@@ -55,6 +55,7 @@
 					</div>
 					<div
 						class="inner"
+						id="mangadex-scroll-container"
 						class:loading
 						class:defaultDecoration={$isDefaultDecoration}
 						role="button"
