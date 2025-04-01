@@ -210,7 +210,13 @@
 					})}
 					ext_href={`https://mangadex.org/chapter/${id}`}
 				>
-					<h4 class="title">{title}</h4>
+					<h4 class="title" class:empty={title == undefined}>
+						{#if title}
+							{title}
+						{:else}
+							Oneshot
+						{/if}
+					</h4>
 				</Link>
 			</div>
 
@@ -306,6 +312,9 @@
 		white-space: nowrap;
 		overflow: hidden;
 		width: 100%;
+	}
+	.title.empty {
+		font-style: italic;
 	}
 	.title-outer {
 		display: contents;
