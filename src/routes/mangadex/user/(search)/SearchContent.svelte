@@ -6,7 +6,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy, onMount } from "svelte";
-	import { derived, writable, type Readable } from "svelte/store";
+	import { derived, get, writable, type Readable } from "svelte/store";
 	import executeSearchQuery, { type UserListItemData } from "./search";
 
 	import { goto } from "$app/navigation";
@@ -14,11 +14,9 @@
 	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
+	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 
-	let isFetching = $state(false);
 	const client = getContextClient();
-	const users = writable<UserListItemData[]>([]);
-	const debounce_wait = 450;
 	interface Props {
 		userName: Readable<string | undefined>;
 	}
@@ -29,78 +27,98 @@
 			username: $userName
 		} satisfies UserListParam;
 	});
-	let debounce_func: DebouncedFunc<() => Promise<void>> | undefined = undefined;
-	const currentResult = writable<AbstractSearchResult<UserListItemData> | undefined>(undefined);
-	onMount(() =>
-		params.subscribe(($params) => {
-			debounce_func?.flush();
-			currentResult.set(undefined);
-
-			debounce_func = debounce(async () => {
-				isFetching = true;
-				try {
-					const res = await executeSearchQuery(client, $params);
-					currentResult.set(res);
-				} finally {
-					isFetching = false;
+	interface InfiniteQueryData {
+		data: UserListItemData[];
+		offset: number;
+		limit: number;
+		total: number;
+	}
+	const infiniteQuery = createInfiniteQuery(
+		derived(params, ($params) => {
+			return {
+				queryKey: ["author-search", $params],
+				initialPageParam: $params,
+				getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+					const next_offset = lastPage.limit + lastPage.offset;
+					if (next_offset > lastPage.total) {
+						return null;
+					} else {
+						return {
+							...lastPageParam,
+							limit: lastPage.limit,
+							offset: next_offset
+						};
+					}
+				},
+				async queryFn({ pageParam }) {
+					const res = await executeSearchQuery(client, pageParam);
+					return {
+						data: res.data,
+						...res.paginationData
+					};
+				},
+				getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
+					const next_offset = firstPage.limit - firstPage.offset;
+					if (next_offset < 0) {
+						return null;
+					} else {
+						return {
+							...firstPageParam,
+							limit: firstPage.limit,
+							offset: next_offset
+						};
+					}
 				}
-			}, debounce_wait);
-			debounce_func();
+			} satisfies CreateInfiniteQueryOptions<
+				InfiniteQueryData,
+				Error,
+				InfiniteQueryData,
+				InfiniteQueryData,
+				[string, UserListParam],
+				UserListParam
+			>;
 		})
 	);
-	onMount(() =>
-		currentResult.subscribe((inner) => {
-			console.log("changed current result", inner);
-			if (inner) {
-				users.update((ts) => {
-					ts.push(...inner.data);
-					return ts;
-				});
-			} else {
-				users.set([]);
-			}
-		})
-	);
+	const users = derived(infiniteQuery, (result) => {
+		if (result.isLoading) {
+			return [];
+		}
+		return Array.from(
+			new Set(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).values()
+		);
+	});
+	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
+	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);
+	const fetchNext = debounce(async function () {
+		const inf = get(infiniteQuery);
+		return await inf.fetchNextPage();
+	});
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!isFetching && $currentResult?.hasNext()) {
+			if (!$isFetching && $hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
-						debounce_func?.flush();
-						console.log("should fetch next");
-						debounce_func = debounce(async () => {
-							isFetching = true;
-							try {
-								const res = await $currentResult.next();
-								currentResult.set(res);
-							} finally {
-								isFetching = false;
-							}
-						}, debounce_wait);
-						debounce_func();
+						fetchNext();
 					}
 				});
 			}
 		},
 		{
-			threshold: 0.2
+			threshold: 1.0
 		}
 	);
-	onDestroy(() => {
-		debounce_func?.cancel();
-		observer.disconnect();
-	});
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
 		if (to_obserce_bind) {
-			observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
+			return () => {
+				if (to_obserce_bind) observer.unobserve(to_obserce_bind);
+			};
 		}
 	});
-	$effect(() => {
-		console.log(`isFetching: ${isFetching}`);
+	onDestroy(() => {
+		observer.disconnect();
 	});
-	const hasNext = derived(currentResult, ($currentResult) => $currentResult?.hasNext());
 </script>
 
 <div class="result">

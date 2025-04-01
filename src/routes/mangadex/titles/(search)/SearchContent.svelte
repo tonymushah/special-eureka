@@ -145,9 +145,6 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
-	$effect(() => {
-		console.log(`isFetching: ${isFetching}`);
-	});
 </script>
 
 <MangaList list={$titles}></MangaList>
