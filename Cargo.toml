@@ -42,6 +42,10 @@ branch = "v2"
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 
+[workspace.dependencies.tauri-plugin-dialog]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"
 package = "tauri-plugin-speu-mangadex"

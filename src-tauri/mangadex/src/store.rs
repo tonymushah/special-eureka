@@ -10,6 +10,7 @@ use types::{
     structs::{
         content::profiles::{ContentProfileDefaultKey, ContentProfiles},
         longstrip_image_width::LongstripImageWidthStore,
+        offline_config::OfflineConfigStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
     // ExtractFromStore, StoreCrud,
@@ -55,6 +56,7 @@ pub fn get_store_builder<R: Runtime>(
         let b = PaginationStyleStore::default_store(b)?;
         let b = ContentProfiles::default_store(b)?;
         let b = ContentProfileDefaultKey::default_store(b)?;
+        let b = OfflineConfigStore::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)

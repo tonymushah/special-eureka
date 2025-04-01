@@ -29,3 +29,5 @@ pub const PAGINATION_STYLE: &str = "pagination_style";
 pub const CONTENT_PROFILE: &str = "content_profile";
 
 pub const CONTENT_PROFILE_KEY: &str = "content_profile_key";
+
+pub const OFFLINE_CONFIG: &str = "offline_config";
