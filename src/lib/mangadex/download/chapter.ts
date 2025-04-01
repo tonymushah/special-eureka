@@ -2,7 +2,9 @@ import { graphql } from "@mangadex/gql";
 import type { DownloadMode } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
 import { queryStore, subscriptionStore } from "@urql/svelte";
-import { derived, type Readable } from "svelte/store";
+import { derived, get, readonly, writable, type Readable, type Writable } from "svelte/store";
+import { mangadexQueryClient } from "..";
+import { createMutation, createQuery } from "@tanstack/svelte-query";
 
 const download_mutation = graphql(`
 	mutation downloadChapterMutation($id: UUID!, $quality: DownloadMode) {
@@ -80,32 +82,45 @@ export class ChapterDownload {
 	private mode?: DownloadMode;
 	protected isPresentInner: Readable<boolean>;
 	private reexecute: () => void;
-	protected hasFailedInner: Readable<boolean>
+	protected hasFailedInner: Readable<boolean>;
+	private isRemoving_: Writable<boolean>;
 	/**
 	 *
 	 */
 	constructor(chapterId: string, mode?: DownloadMode) {
 		this.chapterId = chapterId,
 			this.mode = mode;
-		const is_present = queryStore({
-			client,
-			query: chapterOfflineState,
-			variables: {
-				id: chapterId
-			}
-		});
+		const query = createQuery({
+			queryKey: ["chapter", chapterId, "offline-presence"],
+			async queryFn() {
+				return await client.query(chapterOfflineState, {
+					id: chapterId
+				}).toPromise();
+			},
+			refetchOnWindowFocus: true
+		}, mangadexQueryClient)
+		const is_present = derived(query, (res) => res.data);
 		this.isPresentInner = derived(is_present, (result) => {
-			return result.data?.downloadState.chapter.isDownloaded == true
+			return result?.data?.downloadState.chapter.isDownloaded == true
 		})
 		this.reexecute = () => {
-			is_present.reexecute({
-				url: ""
-			})
+			get(query).refetch();
 		}
 		this.hasFailedInner = derived(is_present, (result) => {
-			return result.data?.downloadState.chapter.hasFailed == true
+			return result?.data?.downloadState.chapter.hasFailed == true
+		})
+		this.isRemoving_ = writable(false);
+		const rexec = this.reexecute;
+
+		window.addEventListener("focus", () => {
+			rexec()
 		})
 	}
+
+	public get isRemoving(): Readable<boolean> {
+		return readonly(this.isRemoving_)
+	}
+
 	private get isPresent(): Readable<boolean> {
 		return this.isPresentInner
 	}
@@ -209,10 +224,19 @@ export class ChapterDownload {
 		return res;
 	}
 	public async cancel() {
-		const res = await client.mutation(ChapterDownload.cancel_dowload_mutation(), {
-			id: this.chapterId
-		}).toPromise();
-		this.reexecute();
+		let id = this.chapterId;
+		const rexec = this.reexecute;
+		const res = createMutation({
+			mutationKey: ["chapter-removing", id],
+			async mutationFn() {
+				return await client.mutation(ChapterDownload.cancel_dowload_mutation(), {
+					id
+				}).toPromise()
+			},
+			onSettled(data, error, variables, context) {
+				rexec();
+			},
+		}, mangadexQueryClient)
 		return res;
 	}
 	public async remove() {
