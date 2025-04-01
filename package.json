@@ -93,6 +93,7 @@
     "@tanstack/svelte-query": "^5.71.0",
     "@tauri-apps/api": "^2.4.0",
     "@tauri-apps/plugin-clipboard-manager": "^2.2.2",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
     "@tauri-apps/plugin-opener": "^2.2.6",
     "@urql/svelte": "^4.2.3",
     "fast-xml-parser": "^4.5.3",
