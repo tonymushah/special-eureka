@@ -46,4 +46,11 @@
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
 	}
+	.title {
+		justify-content: space-between;
+		display: flex;
+		p {
+			margin: 0px;
+		}
+	}
 </style>

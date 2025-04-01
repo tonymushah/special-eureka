@@ -152,19 +152,16 @@ export class ChapterDownload {
 					return ChapterDownloadState.Done
 				} else if (data.isOfflineAppStateNotLoaded) {
 					return ChapterDownloadState.OfflineAppStateNotLoaded
-				} else {
-					return ChapterDownloadState.Pending
 				}
 			} else if (result.error) {
 				return ChapterDownloadState.Error;
+			}
+			if (hasFailed) {
+				return ChapterDownloadState.Error
+			} else if (isPresent) {
+				return ChapterDownloadState.Done
 			} else {
-				if (hasFailed) {
-					return ChapterDownloadState.Error
-				} else if (isPresent) {
-					return ChapterDownloadState.Done
-				} else {
-					return ChapterDownloadState.Pending;
-				}
+				return ChapterDownloadState.Pending;
 			}
 		})
 	}
