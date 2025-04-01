@@ -22,16 +22,14 @@
 
 <dialog bind:this={dialog}>
 	<div class="title">
-		<p>Add to Library</p>
+		<p>
+			You have selected {mangasLen} title{#if mangasLen > 1}s{/if} and {chaptersLen} chapter{#if chaptersLen > 1}s{/if}.
+		</p>
 		<ButtonAccent on:click={closeDialog}>
 			<CloseIcon />
 		</ButtonAccent>
 	</div>
-	<div class="body">
-		<p>
-			You have selected {mangasLen} title{#if mangasLen > 1}s{/if} and {chaptersLen} chapter{#if chaptersLen > 1}s{/if}.
-		</p>
-	</div>
+	<div class="body"></div>
 </dialog>
 
 <style lang="scss">
@@ -51,6 +49,8 @@
 		display: flex;
 		p {
 			margin: 0px;
+			font-weight: 800;
+			font-size: large;
 		}
 	}
 </style>
