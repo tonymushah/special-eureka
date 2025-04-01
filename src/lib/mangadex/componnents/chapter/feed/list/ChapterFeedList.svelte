@@ -2,6 +2,7 @@
 	/*
 	 TODO implement selecto
 	 */
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
 	import { type Writable } from "svelte/store";
@@ -9,10 +10,6 @@
 	import ChapterFeedElement2 from "../element2/ChapterFeedElement2.svelte";
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
-	import Selecto from "selecto";
-	import { validate } from "uuid";
-	import ChapterFeedSelectoDialog from "@mangadex/componnents/selecto/ChapterFeedSelectoDialog.svelte";
-	import { uniq } from "lodash";
 
 	interface Props {
 		list?: ChapterFeedListItem[];
@@ -27,92 +24,9 @@
 	let container: HTMLElement | undefined = $state();
 	let selectedMangas: string[] = $state([]);
 	let selectedChapters: string[] = $state([]);
-	let selected_mangas = $derived(uniq(selectedMangas));
-	let selected_chapters = $derived(uniq(selectedChapters));
-	let dialog: HTMLDialogElement | undefined = $state(undefined);
-	function openDialog() {
-		if (dialog) {
-			dialog.showModal();
-		}
-	}
-	let canSelect = $state(false);
-	$effect(() => {
-		if (container && canSelect) {
-			const selecto = new Selecto({
-				container,
-				selectableTargets: [".manga-element", ".chapter-element"],
-				toggleContinueSelect: "alt",
-				preventDefault: true,
-				preventRightClick: true,
-				preventClickEventOnDrag: true,
-				preventClickEventOnDragStart: true,
-				hitRate: 50,
-				scrollOptions: {
-					container: "#mangadex-scroll-container"
-				}
-			});
-			selecto
-				.on("dragStart", () => {
-					selectedChapters = [];
-					selectedMangas = [];
-				})
-				.on("selectStart", (ev) => {
-					ev.added.forEach((element) => {
-						element.setAttribute("data-selecto-selected", "");
-					});
-					ev.removed.forEach((element) => {
-						element.removeAttribute("data-selecto-selected");
-					});
-				})
-				.on("selectEnd", (ev) => {
-					ev.afterAdded.forEach((element) => {
-						element.setAttribute("data-selecto-selected", "");
-					});
-					ev.afterRemoved.forEach((element) => {
-						element.removeAttribute("data-selecto-selected");
-					});
-					ev.selected.forEach((element) => {
-						const maybeChapterId = element.getAttribute("data-chapter-id");
-						if (maybeChapterId != null) {
-							if (validate(maybeChapterId)) selectedChapters.push(maybeChapterId);
-						}
-						const maybeMangaId = element.getAttribute("data-manga-id");
-						if (maybeMangaId != null) {
-							if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
-						}
-					});
-					openDialog();
-				});
-
-			return () => {
-				selecto
-					.findSelectableTargets()
-					.forEach((e) => e.removeAttribute("data-selecto-selected"));
-				selecto.destroy();
-			};
-		}
-	});
 </script>
 
-<svelte:window
-	onkeydown={(e) => {
-		// TODO refactor this into a global store
-		if (e.key == "Control") {
-			canSelect = true;
-		}
-	}}
-	onkeyup={(e) => {
-		if (e.key == "Control") {
-			canSelect = false;
-		}
-	}}
-/>
-
-<ChapterFeedSelectoDialog
-	bind:dialog
-	selectedChapters={selected_chapters}
-	selectedMangas={selected_mangas}
-/>
+<ChapterFeedSelecto bind:container bind:selectedChapters bind:selectedMangas />
 
 <section>
 	<div class="tab-title">
