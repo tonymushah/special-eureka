@@ -51,7 +51,8 @@
 	.layout {
 		background-color: var(--chapter-layout, transparent);
 		display: grid;
-		grid-template-areas: "state flag-reading-state title-groups title-groups title-groups title-groups date-uploader reading-number-comments";
+		grid-template-areas: "state flag-reading-state title-groups date-uploader reading-number-comments";
+		grid-template-columns: 25px 25px auto 100px 100px;
 		column-gap: 20px;
 		color: var(--text-color);
 		padding: 5px;
