@@ -181,7 +181,8 @@ export default async function executeSearchQuery(
 									tag.attributes.name,
 									"en"
 								) ?? ""
-						}))
+						})),
+						language: v.attributes.originalLanguage
 					};
 				}),
 				offset: data.offset,
