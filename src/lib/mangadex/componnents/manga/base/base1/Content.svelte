@@ -38,15 +38,13 @@
 		-webkit-box-orient: vertical;
 	}
 	div.content {
-		padding-left: 12px;
 		grid-area: content;
 		text-overflow: ellipsis;
 		text-align: start;
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		//flex-direction: column;
 		align-items: start;
-		justify-items: center;
-		gap: 8px;
+		justify-content: center;
 	}
 	div.publication {
 		display: flex;

@@ -42,6 +42,7 @@
 		background-color: var(--accent-l3);
 		border: var(--mid-tone) solid 3px;
 		box-shadow: 0px 3px 0px var(--mid-tone);
+		column-gap: 10px;
 	}
 	@media (width < 900px) {
 		article.layout {
