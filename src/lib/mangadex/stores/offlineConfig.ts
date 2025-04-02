@@ -60,4 +60,4 @@ export const mutationStore = createMutation({
 		get(queryStore).refetch()
 	},
 	mutationFn: updateCfg
-});
+}, mangadexQueryClient);
