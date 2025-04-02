@@ -36,7 +36,7 @@
 			value,
 			label: isArray(value)
 				? `${value[$dir == ReadingDirection.Ltr ? 0 : 1] + 1} - ${value[$dir == ReadingDirection.Ltr ? 1 : 0] + 1}`
-				: `${value}`
+				: `${value + 1}`
 		}))
 	);
 	const {

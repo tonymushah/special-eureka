@@ -96,6 +96,9 @@
 				break;
 		}
 	}}
+	onfocus={() => {
+		resetZoom();
+	}}
 />
 
 {#if $currentPage}

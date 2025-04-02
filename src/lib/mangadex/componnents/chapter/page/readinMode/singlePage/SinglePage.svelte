@@ -82,6 +82,9 @@
 				break;
 		}
 	}}
+	onfocus={() => {
+		resetZoom();
+	}}
 />
 <!--
 

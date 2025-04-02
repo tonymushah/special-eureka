@@ -5,7 +5,7 @@
 	import LongStripPreviousNext from "./previous-next/LongStripPreviousNext.svelte";
 	import DefaultPreviousNext from "./previous-next/DefaultPreviousNext.svelte";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
@@ -14,7 +14,7 @@
 </script>
 
 {#if $readingMode == ReadingMode.DoublePage}
-	<DoublePagePreviousNext>
+	<DoublePagePreviousNext on:next on:previous>
 		{@render children?.()}
 	</DoublePagePreviousNext>
 {:else if $readingMode == ReadingMode.LongStrip}
