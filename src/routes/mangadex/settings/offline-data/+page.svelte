@@ -8,6 +8,7 @@
 	import { open as dialogOpen } from "@tauri-apps/plugin-dialog";
 	import { openPath } from "@tauri-apps/plugin-opener";
 	import { derived, get } from "svelte/store";
+	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
 	const dataDir = derived(queryStore, (qS) => qS.data?.userOption.getOfflineConfig.dataDir);
 	const chaptersDir = derived(
@@ -66,10 +67,16 @@
 {/if}
 
 {#if $isMounted}
-	<WarningComponent
-		label="The offline data is mounted"
-		message="Please disable it to update the directories path"
-	/>
+	<div
+		transition:slide={{
+			axis: "y"
+		}}
+	>
+		<WarningComponent
+			label="The offline data is mounted"
+			message="Please disable it to update the directories path"
+		/>
+	</div>
 {/if}
 
 <section>
