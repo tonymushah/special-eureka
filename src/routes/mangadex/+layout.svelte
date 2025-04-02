@@ -13,7 +13,6 @@
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { setContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
-	import { get } from "svelte/store";
 	import { mangadexQueryClient } from "@mangadex/index";
 	interface Props {
 		children?: import("svelte").Snippet;
