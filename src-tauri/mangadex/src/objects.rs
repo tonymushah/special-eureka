@@ -13,6 +13,7 @@ pub mod legacy_id_mapping;
 pub mod manga;
 pub mod manga_chapter_group;
 pub mod oauth;
+pub mod offline_config;
 pub mod rating;
 pub mod read_marker;
 pub mod report;

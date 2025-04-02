@@ -1,7 +1,7 @@
 use std::ops::Deref;
 
 use crate::{
-    store::types::structs::content::ContentProfile,
+    objects::offline_config::OfflineConfigObject, store::types::structs::content::ContentProfile,
     subscription::user_option::UserOptionSubscriptions, Result,
 };
 use async_graphql::{Context, Object};
@@ -65,5 +65,8 @@ impl UserOptionQueries {
             .await?;
         let mut stream = Box::pin(stream);
         stream.next().await.ok_or(crate::Error::EndStream)
+    }
+    pub async fn get_offline_config(&self, _ctx: &Context<'_>) -> OfflineConfigObject {
+        OfflineConfigObject
     }
 }

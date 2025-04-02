@@ -5,7 +5,7 @@ use crate::store::{
 use eureka_mmanager::DirsOptions;
 use serde::{Deserialize, Serialize};
 use std::ops::{Deref, DerefMut};
-use tauri::Runtime;
+use tauri::{Manager, Runtime};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct OfflineConfig {
@@ -78,5 +78,23 @@ where
         store_builder: tauri_plugin_store::StoreBuilder<R>,
     ) -> Result<tauri_plugin_store::StoreBuilder<R>, tauri_plugin_store::Error> {
         Ok(store_builder.default(KEY.to_string(), None::<()>))
+    }
+}
+
+impl OfflineConfigStore {
+    pub fn get_dir_options<R: Runtime, M: Manager<R>>(
+        &self,
+        app: &M,
+    ) -> crate::Result<DirsOptions> {
+        let dirs_options = self
+            .as_ref()
+            .map(|s| s.dir_options.clone())
+            .or_else(|| {
+                dirs::data_dir()
+                    .map(|p| p.join(&app.config().identifier))
+                    .map(DirsOptions::new_from_data_dir)
+            })
+            .unwrap_or(DirsOptions::new_from_data_dir(std::path::absolute("data")?));
+        Ok(dirs_options)
     }
 }
