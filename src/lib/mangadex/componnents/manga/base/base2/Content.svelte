@@ -25,7 +25,7 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		language = undefined
+		language
 	}: Props = $props();
 	const dispatch = createEventDispatcher<{
 		click: MouseEvent & {
@@ -36,6 +36,9 @@
 			id: string;
 		};
 	}>();
+	$effect(() => {
+		console.debug(language);
+	});
 </script>
 
 <div class="body">
@@ -44,7 +47,8 @@
 			<p>
 				{#if language}
 					<FlagIcon lang={language} />
-				{/if}{title}
+				{/if}
+				{title}
 			</p>
 		</div>
 		<div class="publication">
@@ -105,16 +109,32 @@
 	}
 	div.top-body {
 		gap: 10px;
-		display: flex;
+		display: grid;
+		grid-template-areas: "title publication";
 		flex-direction: row;
-		justify-items: center;
 		align-items: start;
+		grid-template-columns: auto 160px;
+		.title {
+			grid-area: title;
+		}
+		.publication {
+			grid-area: publication;
+		}
 	}
 	div.body {
-		display: flex;
-		flex-direction: column;
+		display: grid;
 		margin: 10px;
 		gap: 10px;
+		grid-template-areas: "top" "bottom";
+		grid-template-rows: 30px auto;
+		flex-grow: 1;
+		align-items: center;
+		.top-body {
+			grid-area: top;
+		}
+		.bottom-body {
+			grid-area: bottom;
+		}
 	}
 	div.description {
 		text-align: left;
@@ -124,8 +144,5 @@
 		display: -webkit-box;
 		overflow: hidden;
 		margin-top: 0.5em;
-	}
-	div.publication {
-		align-self: center;
 	}
 </style>
