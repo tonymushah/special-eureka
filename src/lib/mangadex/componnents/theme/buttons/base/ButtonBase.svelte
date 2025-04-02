@@ -79,10 +79,18 @@
 		justify-content: var(--button-justify-content);
 	}
 	button:disabled {
-		background: linear-gradient(225deg, var(--main-background) 0%, var(--button-color) 100%);
+		background: linear-gradient(
+			225deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
+			var(--button-color) 100%
+		);
 	}
 	button:hover:disabled {
-		background: linear-gradient(45deg, var(--main-background) 0%, var(--button-color) 100%);
+		background: linear-gradient(
+			45deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 05%) 0% 0%,
+			var(--button-color) 100%
+		);
 	}
 	button.haveBorderRadius {
 		border-radius: 0.25rem;
