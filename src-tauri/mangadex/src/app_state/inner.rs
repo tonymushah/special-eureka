@@ -1,7 +1,7 @@
 use std::{ops::Deref, sync::Arc};
 
 use actix::prelude::*;
-use eureka_mmanager::{prelude::PushActorAddr, DirsOptions, DownloadManager};
+use eureka_mmanager::{prelude::PushActorAddr, DownloadManager};
 use mangadex_api_schema_rust::{
     v5::{
         ChapterAttributes, ChapterObject, CoverAttributes, CoverObject, MangaAttributes,
