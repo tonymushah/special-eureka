@@ -61,29 +61,39 @@ impl MangaQueries {
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
+        exclude_content_profile: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         if params.limit.is_none() && !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
-            .list(ctx)
-            .await
+        MangaListQueries::new_with_exclude_feed(
+            params,
+            exclude_content_profile.unwrap_or_default(),
+            ctx.get_app_handle::<tauri::Wry>()?,
+        )
+        .list(ctx)
+        .await
     }
     pub async fn list_offline(
         &self,
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
+        exclude_content_profile: Option<bool>,
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         if params.limit.is_none() && !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
-        MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
-            .list_offline(ctx)
-            .await
+        MangaListQueries::new_with_exclude_feed(
+            params,
+            exclude_content_profile.unwrap_or_default(),
+            ctx.get_app_handle::<tauri::Wry>()?,
+        )
+        .list_offline(ctx)
+        .await
     }
     pub async fn random(
         &self,

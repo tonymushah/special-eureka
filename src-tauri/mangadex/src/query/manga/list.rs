@@ -56,6 +56,17 @@ impl From<&MangaListQueries> for MangaListParams {
 }
 
 impl MangaListQueries {
+    pub fn new_with_exclude_feed<CF: ContentFeeder<MangaListParams>>(
+        param: MangaListParams,
+        exclude_content_profile: bool,
+        feeder: &CF,
+    ) -> Self {
+        if !exclude_content_profile {
+            Self(feeder.feed(param))
+        } else {
+            Self(param)
+        }
+    }
     pub fn new<CF: ContentFeeder<MangaListParams>>(param: MangaListParams, feeder: &CF) -> Self {
         Self(feeder.feed(param))
     }
