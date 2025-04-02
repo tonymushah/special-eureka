@@ -14,7 +14,12 @@ use tauri::{
     Manager, Runtime,
 };
 
-use crate::utils::traits_utils::{MangaDexActixArbiterHandleExt, MangadexTauriManagerExt};
+use crate::{
+    store::{
+        types::structs::offline_config::OfflineConfigStore, TauriManagerMangadexStoreExtractor,
+    },
+    utils::traits_utils::{MangaDexActixArbiterHandleExt, MangadexTauriManagerExt},
+};
 
 #[derive(Debug)]
 pub struct AppStateInner {
@@ -44,8 +49,11 @@ impl AppStateInner {
         let watches2 = watches1.clone();
         let watches3 = watches2.clone();
         println!("starting..,");
-        // TODO import dir option from runtime
-        let dirs = DirsOptions::new_from_data_dir("./data");
+        // [x] import dir option from runtime
+        let dirs = {
+            let store = app.extract::<OfflineConfigStore>().await?;
+            store.get_dir_options(app)?
+        };
         dirs.verify_and_init()?;
         let app_state = system
             .arbiter()

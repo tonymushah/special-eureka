@@ -113,7 +113,7 @@ where
     {
         async {
             let store = self.get_mangadex_store()?;
-            let store_read = store.read().await;
+            let store_read = store.write().await;
             store_data.insert(&*store_read)?;
             Ok(())
         }
@@ -124,7 +124,7 @@ where
     {
         async {
             let store = self.get_mangadex_store()?;
-            let store_read = store.read().await;
+            let store_read = store.write().await;
             store_data.insert_and_save(&*store_read)?;
             Ok(())
         }
@@ -135,7 +135,7 @@ where
     {
         async {
             let store = self.get_mangadex_store()?;
-            let store_read = store.read().await;
+            let store_read = store.write().await;
             store_data.delete(&*store_read)?;
             Ok(())
         }
@@ -146,7 +146,7 @@ where
     {
         async {
             let store = self.get_mangadex_store()?;
-            let store_read = store.read().await;
+            let store_read = store.write().await;
             store_data.delete_and_save(&*store_read)?;
             Ok(())
         }
