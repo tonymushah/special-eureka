@@ -91,10 +91,12 @@ impl OfflineConfigStore {
             .map(|s| s.dir_options.clone())
             .or_else(|| {
                 dirs::data_dir()
-                    .map(|p| p.join(&app.config().identifier))
+                    .map(|p| p.join(&app.config().identifier).join("mangadex"))
                     .map(DirsOptions::new_from_data_dir)
             })
-            .unwrap_or(DirsOptions::new_from_data_dir(std::path::absolute("data")?));
+            .unwrap_or(DirsOptions::new_from_data_dir(std::path::absolute(
+                "mangadex",
+            )?));
         Ok(dirs_options)
     }
 }
