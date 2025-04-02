@@ -51,6 +51,8 @@ type Documents = {
     "\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n": typeof types.IsLoggedDocument,
     "\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n": typeof types.ChapterFeedStyleSubDocument,
     "\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n": typeof types.UpdateChapterFeedStyleDocument,
+    "\n\tsubscription chapterQualitySubscription {\n\t\twatchChapterQuality\n\t}\n": typeof types.ChapterQualitySubscriptionDocument,
+    "\n\tmutation chapterQualityMutation($quality: DownloadMode) {\n\t\tuserOption {\n\t\t\tsetChapterQuality(quality: $quality)\n\t\t}\n\t}\n": typeof types.ChapterQualityMutationDocument,
     "\n\tsubscription currentClientInfo {\n\t\twatchClientInfo {\n\t\t\tclientSecret\n\t\t\tclientId\n\t\t}\n\t}\n": typeof types.CurrentClientInfoDocument,
     "\n\tmutation setAuthClient($clientId: String!, $clientSecret: String!) {\n\t\toauth {\n\t\t\tsetClientInfo(clientId: $clientId, clientSecret: $clientSecret)\n\t\t}\n\t}\n": typeof types.SetAuthClientDocument,
     "\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n": typeof types.ResetAuthClientDocument,
@@ -135,6 +137,8 @@ const documents: Documents = {
     "\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n": types.IsLoggedDocument,
     "\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n": types.ChapterFeedStyleSubDocument,
     "\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n": types.UpdateChapterFeedStyleDocument,
+    "\n\tsubscription chapterQualitySubscription {\n\t\twatchChapterQuality\n\t}\n": types.ChapterQualitySubscriptionDocument,
+    "\n\tmutation chapterQualityMutation($quality: DownloadMode) {\n\t\tuserOption {\n\t\t\tsetChapterQuality(quality: $quality)\n\t\t}\n\t}\n": types.ChapterQualityMutationDocument,
     "\n\tsubscription currentClientInfo {\n\t\twatchClientInfo {\n\t\t\tclientSecret\n\t\t\tclientId\n\t\t}\n\t}\n": types.CurrentClientInfoDocument,
     "\n\tmutation setAuthClient($clientId: String!, $clientSecret: String!) {\n\t\toauth {\n\t\t\tsetClientInfo(clientId: $clientId, clientSecret: $clientSecret)\n\t\t}\n\t}\n": types.SetAuthClientDocument,
     "\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n": types.ResetAuthClientDocument,
@@ -344,6 +348,14 @@ export function graphql(source: "\n\tsubscription chapterFeedStyleSub {\n\t\twat
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tsubscription chapterQualitySubscription {\n\t\twatchChapterQuality\n\t}\n"): (typeof documents)["\n\tsubscription chapterQualitySubscription {\n\t\twatchChapterQuality\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation chapterQualityMutation($quality: DownloadMode) {\n\t\tuserOption {\n\t\t\tsetChapterQuality(quality: $quality)\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation chapterQualityMutation($quality: DownloadMode) {\n\t\tuserOption {\n\t\t\tsetChapterQuality(quality: $quality)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

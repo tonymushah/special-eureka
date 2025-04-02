@@ -2397,7 +2397,7 @@ type UserOptionMutations {
 	clearContentProfiles: Boolean!
 	setContentProfiles(entries: [ContentProfileEntryInput!]!): Int!
 	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
-	setChapterQuality(quality: DownloadMode): OfflineConfigObject!
+	setChapterQuality(quality: DownloadMode): DownloadMode!
 }
 
 type UserOptionQueries {

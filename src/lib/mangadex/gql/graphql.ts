@@ -3016,7 +3016,7 @@ export type UserOptionMutations = {
   deleteThemeProfile?: Maybe<MangaDexTheme>;
   setChapterFeedStyle: ChapterFeedStyle;
   setChapterLanguages: Array<Language>;
-  setChapterQuality: OfflineConfigObject;
+  setChapterQuality: DownloadMode;
   setContentProfile: ContentProfile;
   setContentProfiles: Scalars['Int']['output'];
   setDefaultContentProfileKey?: Maybe<Scalars['String']['output']>;
@@ -3507,6 +3507,18 @@ export type UpdateChapterFeedStyleMutationVariables = Exact<{
 
 export type UpdateChapterFeedStyleMutation = { __typename?: 'Mutation', userOption: { __typename?: 'UserOptionMutations', setChapterFeedStyle: ChapterFeedStyle } };
 
+export type ChapterQualitySubscriptionSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ChapterQualitySubscriptionSubscription = { __typename?: 'Subscriptions', watchChapterQuality: DownloadMode };
+
+export type ChapterQualityMutationMutationVariables = Exact<{
+  quality?: InputMaybe<DownloadMode>;
+}>;
+
+
+export type ChapterQualityMutationMutation = { __typename?: 'Mutation', userOption: { __typename?: 'UserOptionMutations', setChapterQuality: DownloadMode } };
+
 export type CurrentClientInfoSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -3852,6 +3864,8 @@ export const UserMeDocument = {"kind":"Document","definitions":[{"kind":"Operati
 export const IsLoggedDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"isLogged"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchIsLogged"}}]}}]} as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;
 export const ChapterFeedStyleSubDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"chapterFeedStyleSub"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchChapterFeedStyle"}}]}}]} as unknown as DocumentNode<ChapterFeedStyleSubSubscription, ChapterFeedStyleSubSubscriptionVariables>;
 export const UpdateChapterFeedStyleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateChapterFeedStyle"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"style"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ChapterFeedStyle"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userOption"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setChapterFeedStyle"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"style"},"value":{"kind":"Variable","name":{"kind":"Name","value":"style"}}}]}]}}]}}]} as unknown as DocumentNode<UpdateChapterFeedStyleMutation, UpdateChapterFeedStyleMutationVariables>;
+export const ChapterQualitySubscriptionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"chapterQualitySubscription"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchChapterQuality"}}]}}]} as unknown as DocumentNode<ChapterQualitySubscriptionSubscription, ChapterQualitySubscriptionSubscriptionVariables>;
+export const ChapterQualityMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"chapterQualityMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"quality"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DownloadMode"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userOption"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setChapterQuality"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"quality"},"value":{"kind":"Variable","name":{"kind":"Name","value":"quality"}}}]}]}}]}}]} as unknown as DocumentNode<ChapterQualityMutationMutation, ChapterQualityMutationMutationVariables>;
 export const CurrentClientInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"subscription","name":{"kind":"Name","value":"currentClientInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"watchClientInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientSecret"}},{"kind":"Field","name":{"kind":"Name","value":"clientId"}}]}}]}}]} as unknown as DocumentNode<CurrentClientInfoSubscription, CurrentClientInfoSubscriptionVariables>;
 export const SetAuthClientDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"setAuthClient"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"clientId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"clientSecret"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oauth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"setClientInfo"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"clientId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"clientId"}}},{"kind":"Argument","name":{"kind":"Name","value":"clientSecret"},"value":{"kind":"Variable","name":{"kind":"Name","value":"clientSecret"}}}]}]}}]}}]} as unknown as DocumentNode<SetAuthClientMutation, SetAuthClientMutationVariables>;
 export const ResetAuthClientDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"resetAuthClient"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"oauth"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clearClientInfo"}}]}}]}}]} as unknown as DocumentNode<ResetAuthClientMutation, ResetAuthClientMutationVariables>;
