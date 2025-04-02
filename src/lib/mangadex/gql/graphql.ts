@@ -479,7 +479,7 @@ export type ChapterMutationsDeleteArgs = {
 
 export type ChapterMutationsDownloadArgs = {
   id: Scalars['UUID']['input'];
-  quality?: DownloadMode;
+  quality?: InputMaybe<DownloadMode>;
 };
 
 
@@ -2130,6 +2130,24 @@ export type OfflineAppStateQueries = {
   isMounted: Scalars['Boolean']['output'];
 };
 
+export type OfflineConfigInput = {
+  chaptersDirectory?: InputMaybe<Scalars['String']['input']>;
+  coversDirectory?: InputMaybe<Scalars['String']['input']>;
+  dataDirectory: Scalars['String']['input'];
+  mangasDirectory?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type OfflineConfigObject = {
+  __typename?: 'OfflineConfigObject';
+  /** Often relative to [`Self::data_dir`] */
+  chaptersDir: Scalars['String']['output'];
+  /** Often relative to [`Self::data_dir`] */
+  coversDir: Scalars['String']['output'];
+  dataDir: Scalars['String']['output'];
+  /** Often relative to [`Self::data_dir`] */
+  mangasDir: Scalars['String']['output'];
+};
+
 /** "Order by" directions for manga results. */
 export enum OrderDirection {
   Ascending = 'ASCENDING',
@@ -2575,6 +2593,7 @@ export type Subscriptions = {
   watchChapterDownloadState: ChapterDownloadState;
   watchChapterFeedStyle: ChapterFeedStyle;
   watchChapterLanguages: Array<Language>;
+  watchChapterQuality: DownloadMode;
   watchChaptersTasksList: Array<Scalars['UUID']['output']>;
   watchClientInfo?: Maybe<ClientInfo>;
   watchContentProfileDefault: ContentProfile;
@@ -2997,6 +3016,7 @@ export type UserOptionMutations = {
   deleteThemeProfile?: Maybe<MangaDexTheme>;
   setChapterFeedStyle: ChapterFeedStyle;
   setChapterLanguages: Array<Language>;
+  setChapterQuality: OfflineConfigObject;
   setContentProfile: ContentProfile;
   setContentProfiles: Scalars['Int']['output'];
   setDefaultContentProfileKey?: Maybe<Scalars['String']['output']>;
@@ -3004,6 +3024,7 @@ export type UserOptionMutations = {
   setImageFit: ImageFit;
   setLongstripImageWidth: Scalars['Float']['output'];
   setMangaListStyle: MangaListStyle;
+  setOfflineConfig: OfflineConfigObject;
   setPageDirection: Direction;
   setPaginationStyle: PaginationStyle;
   setReadingMode: ReadingMode;
@@ -3032,6 +3053,11 @@ export type UserOptionMutationsSetChapterFeedStyleArgs = {
 
 export type UserOptionMutationsSetChapterLanguagesArgs = {
   languages: Array<Language>;
+};
+
+
+export type UserOptionMutationsSetChapterQualityArgs = {
+  quality?: InputMaybe<DownloadMode>;
 };
 
 
@@ -3068,6 +3094,11 @@ export type UserOptionMutationsSetLongstripImageWidthArgs = {
 
 export type UserOptionMutationsSetMangaListStyleArgs = {
   mangaListStyle: MangaListStyle;
+};
+
+
+export type UserOptionMutationsSetOfflineConfigArgs = {
+  cfg: OfflineConfigInput;
 };
 
 
@@ -3115,6 +3146,7 @@ export type UserOptionQueries = {
   __typename?: 'UserOptionQueries';
   getChapterLanguages: Array<Language>;
   getDefaultContentProfile: ContentProfile;
+  getOfflineConfig: OfflineConfigObject;
   getPageDirection: Direction;
   getReadingMode: ReadingMode;
   getSidebarDirection: Direction;

@@ -365,7 +365,7 @@ type ChapterMutations {
 	Remove the chapter from the current device or offline
 	"""
 	remove(id: UUID!): Boolean!
-	download(id: UUID!, quality: DownloadMode! = NORMAL): DownloadState!
+	download(id: UUID!, quality: DownloadMode): DownloadState!
 	cancelDownload(id: UUID!): Boolean!
 }
 
@@ -1721,6 +1721,29 @@ type OfflineAppStateQueries {
 	isMounted: Boolean!
 }
 
+input OfflineConfigInput {
+	dataDirectory: String!
+	chaptersDirectory: String
+	mangasDirectory: String
+	coversDirectory: String
+}
+
+type OfflineConfigObject {
+	dataDir: String!
+	"""
+	Often relative to [`Self::data_dir`]
+	"""
+	chaptersDir: String!
+	"""
+	Often relative to [`Self::data_dir`]
+	"""
+	mangasDir: String!
+	"""
+	Often relative to [`Self::data_dir`]
+	"""
+	coversDir: String!
+}
+
 """
 "Order by" directions for manga results.
 """
@@ -2133,6 +2156,7 @@ type Subscriptions {
 	watchContentProfiles: [ContentProfileEntry!]!
 	watchContentProfileDefaultName: String
 	watchContentProfileDefault: ContentProfile!
+	watchChapterQuality: DownloadMode!
 }
 
 type Tag {
@@ -2372,6 +2396,8 @@ type UserOptionMutations {
 	deleteContentProfile(name: String!): ContentProfile
 	clearContentProfiles: Boolean!
 	setContentProfiles(entries: [ContentProfileEntryInput!]!): Int!
+	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
+	setChapterQuality(quality: DownloadMode): OfflineConfigObject!
 }
 
 type UserOptionQueries {
@@ -2380,6 +2406,7 @@ type UserOptionQueries {
 	getSidebarDirection: Direction!
 	getChapterLanguages: [Language!]!
 	getDefaultContentProfile: ContentProfile!
+	getOfflineConfig: OfflineConfigObject!
 }
 
 type UserQueries {
