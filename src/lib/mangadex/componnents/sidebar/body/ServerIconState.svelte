@@ -6,16 +6,20 @@
 	import Toast from "toastify-js";
 	import { onDestroy } from "svelte";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { isSidebarRtl } from "../states/isRtl";
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
-	const toast = Toast({
-		position: "right",
-		gravity: "bottom",
-		style: {
-			fontFamily: "Poppins"
-		},
-		close: true
-	});
+	let toast = $derived(
+		Toast({
+			position: $isSidebarRtl ? "left" : "right",
+			gravity: "bottom",
+			style: {
+				fontFamily: "Poppins"
+			},
+
+			close: true
+		})
+	);
 	onDestroy(() => {
 		try {
 			toast.hideToast();
@@ -29,6 +33,11 @@
 			isLoading = true;
 			const res = await _mount(client);
 			const error = res.error;
+			try {
+				toast.hideToast();
+			} catch (e) {
+				console.warn(e);
+			}
 			if (error) {
 				error.graphQLErrors.forEach((e) => console.error(e));
 				toast.options.text = "Error on loading offline data";
