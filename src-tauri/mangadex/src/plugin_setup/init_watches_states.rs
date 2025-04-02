@@ -5,6 +5,7 @@ use crate::{
     store::types::{
         enums::{
             chapter_feed_style::ChapterFeedStyleStore,
+            chapter_quality::ChapterQualityStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
             manga_list_style::MangaListStyleStore,
@@ -70,6 +71,9 @@ pub fn init_watches_states<R: Runtime>(
     let _ = watches
         .content_profiles_default_key
         .send_data(ContentProfileDefaultKey::extract_from_store(store)?);
+    let _ = watches
+        .chapter_quality
+        .send_data(ChapterQualityStore::extract_from_store(store)?);
     app.manage(watches);
     Ok(())
 }

@@ -1,15 +1,15 @@
 use crate::{
     store::types::{
         enums::{
-            chapter_feed_style::ChapterFeedStyle, image_fit::ImageFit,
-            pagination_style::PaginationStyle,
+            chapter_feed_style::ChapterFeedStyle, chapter_quality::DownloadMode,
+            image_fit::ImageFit, pagination_style::PaginationStyle,
         },
         structs::{
             content::{profiles::ContentProfileEntry, ContentProfile},
             theme::{profiles::ThemeProfileEntry, MangaDexTheme},
         },
     },
-    utils::get_watches_from_graphql_context,
+    utils::{get_watches_from_graphql_context, watch::chapter_quality::ChapterQualityWatch},
     Result,
 };
 use async_graphql::{Context, Subscription};
@@ -238,5 +238,14 @@ impl UserOptionSubscriptions {
                 }
             }
         })
+    }
+    pub async fn listen_to_chapter_quality<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = DownloadMode> + 'ctx> {
+        WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
+            ChapterQualityWatch,
+            tauri::Wry,
+        >(ctx)
     }
 }

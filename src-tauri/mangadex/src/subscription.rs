@@ -1,5 +1,6 @@
 use crate::objects::oauth::ClientInfo;
 use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
+use crate::store::types::enums::chapter_quality::DownloadMode;
 use crate::store::types::enums::pagination_style::PaginationStyle;
 use crate::store::types::structs::content::profiles::ContentProfileEntry;
 use crate::store::types::structs::content::ContentProfile;
@@ -448,5 +449,11 @@ impl Subscriptions {
         UserOptionSubscriptions
             .listen_to_content_profile_default(ctx)
             .await
+    }
+    pub async fn watch_chapter_quality<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = DownloadMode> + 'ctx> {
+        UserOptionSubscriptions.listen_to_chapter_quality(ctx).await
     }
 }

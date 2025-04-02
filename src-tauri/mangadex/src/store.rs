@@ -4,8 +4,8 @@ use tauri::{AppHandle, Manager, Runtime /*Manager */};
 use tauri_plugin_store::StoreBuilder;
 use types::{
     enums::{
-        chapter_feed_style::ChapterFeedStyleStore, image_fit::ImageFitStore,
-        pagination_style::PaginationStyleStore,
+        chapter_feed_style::ChapterFeedStyleStore, chapter_quality::ChapterQualityStore,
+        image_fit::ImageFitStore, pagination_style::PaginationStyleStore,
     },
     structs::{
         content::profiles::{ContentProfileDefaultKey, ContentProfiles},
@@ -59,6 +59,7 @@ pub fn get_store_builder<R: Runtime>(
         let b = ContentProfiles::default_store(b)?;
         let b = ContentProfileDefaultKey::default_store(b)?;
         let b = OfflineConfigStore::default_store(b)?;
+        let b = ChapterQualityStore::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)

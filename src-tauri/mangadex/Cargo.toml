@@ -50,6 +50,7 @@ impl-trait-for-tuples = "0.2"
 dirs.workspace = true
 enum-repr.workspace = true
 enum-kinds.workspace = true
+serde_repr.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.1"

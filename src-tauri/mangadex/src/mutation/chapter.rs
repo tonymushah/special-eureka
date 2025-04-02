@@ -5,8 +5,9 @@ use crate::{
     Result,
 };
 
+use crate::store::types::enums::chapter_quality::DownloadMode;
 use actix::prelude::*;
-use async_graphql::{Context, Enum, Object};
+use async_graphql::{Context, Object};
 use eureka_mmanager::{
     download::{
         chapter::ChapterDownloadMessage, cover::CoverDownloadMessage, manga::MangaDownloadMessage,
@@ -70,7 +71,7 @@ impl ChapterMutations {
         &self,
         ctx: &Context<'_>,
         id: Uuid,
-        #[graphql(default_with = "default_download_quality()")] quality: DownloadMode,
+        quality: Option<DownloadMode>,
     ) -> Result<DownloadState> {
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let tauri_handle_ = tauri_handle.clone();
@@ -87,7 +88,7 @@ impl ChapterMutations {
 
         let res = spawn(async move {
             let watches = tauri_handle_.get_watches()?;
-            let mode: MDDownloadMode = quality.into();
+            let mode: MDDownloadMode = quality.unwrap_or_default().into();
             let manager = olasw_;
             trace!("Downloading title {id}");
             let dirs =
@@ -202,32 +203,4 @@ impl ChapterMutations {
             .await?;
         Ok(true)
     }
-}
-
-#[derive(Clone, Enum, Copy, PartialEq, Eq, PartialOrd, Ord)]
-pub enum DownloadMode {
-    Normal,
-    DataSaver,
-}
-
-impl From<MDDownloadMode> for DownloadMode {
-    fn from(value: MDDownloadMode) -> Self {
-        match value {
-            MDDownloadMode::Normal => Self::Normal,
-            MDDownloadMode::DataSaver => Self::DataSaver,
-        }
-    }
-}
-
-impl From<DownloadMode> for MDDownloadMode {
-    fn from(value: DownloadMode) -> Self {
-        match value {
-            DownloadMode::Normal => Self::Normal,
-            DownloadMode::DataSaver => Self::DataSaver,
-        }
-    }
-}
-
-fn default_download_quality() -> DownloadMode {
-    DownloadMode::Normal
 }

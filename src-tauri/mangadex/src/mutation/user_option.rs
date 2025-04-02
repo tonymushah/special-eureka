@@ -5,6 +5,7 @@ use crate::{
         types::{
             enums::{
                 chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
+                chapter_quality::{ChapterQualityStore, DownloadMode},
                 image_fit::{ImageFit, ImageFitStore},
                 pagination_style::{PaginationStyle, PaginationStyleStore},
             },
@@ -346,6 +347,19 @@ impl UserOptionMutations {
         let mut store = app.extract::<OfflineConfigStore>().await?;
         store.replace((&cfg).into());
         app.insert_and_save(&store).await?;
+        Ok(OfflineConfigObject)
+    }
+    pub async fn set_chapter_quality(
+        &self,
+        ctx: &Context<'_>,
+        quality: Option<DownloadMode>,
+    ) -> Result<OfflineConfigObject> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ChapterQualityStore>().await?;
+        *store = quality.unwrap_or_default();
+        app.insert_and_save(&store).await?;
+        watches.chapter_quality.send_data(store)?;
         Ok(OfflineConfigObject)
     }
 }
