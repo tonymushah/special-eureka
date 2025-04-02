@@ -56,7 +56,7 @@
 		color: var(--text-color);
 		padding: 5px;
 		transition: background-color 300ms ease-in-out;
-		border-radius: 0.5rem;
+		border-radius: 0.15rem;
 		width: -webkit-fill-available;
 		.state {
 			grid-area: state;
