@@ -62,7 +62,7 @@
 	button {
 		font-size: var(--font-size);
 		transition:
-			background-color 200ms ease-in-out,
+			background-color,
 			filter 200ms ease-in-out;
 		color: var(--text-color);
 		background-color: var(--button-color);
@@ -73,7 +73,7 @@
 			border,
 			box-shadow,
 			transform,
-			background 100ms ease-in-out;
+			100ms ease-in-out;
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);

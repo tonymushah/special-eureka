@@ -6,7 +6,7 @@
 	import Layout from "./base1/Layout.svelte";
 	createEventDispatcher<{
 		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
+			currentTarget: EventTarget & HTMLElement;
 		};
 	}>();
 	interface Props {

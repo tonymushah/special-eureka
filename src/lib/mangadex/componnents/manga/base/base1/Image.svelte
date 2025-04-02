@@ -58,8 +58,8 @@
 		grid-area: cover;
 	}
 	div.cover-image > img {
-		height: 160px;
-		width: 100px;
+		height: 100%;
+		width: 100%;
 		object-fit: cover;
 	}
 </style>
