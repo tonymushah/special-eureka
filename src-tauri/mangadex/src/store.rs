@@ -1,6 +1,6 @@
-use std::path::PathBuf;
+use std::{future::Future, path::PathBuf};
 
-use tauri::{AppHandle, Runtime /*Manager */};
+use tauri::{AppHandle, Manager, Runtime /*Manager */};
 use tauri_plugin_store::StoreBuilder;
 use types::{
     enums::{
@@ -13,6 +13,8 @@ use types::{
         offline_config::OfflineConfigStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
+    ExtractFromStore,
+    StoreCrud,
     // ExtractFromStore, StoreCrud,
 };
 
@@ -75,3 +77,85 @@ where
     fn subscribe<M: Manager<R>>(app: M) -> crate::Result<Receiver<Self::ReceiverType>>;
 }
 */
+
+pub trait TauriManagerMangadexStoreExtractor<R>:
+    Manager<R> + crate::utils::traits_utils::MangadexTauriManagerExt<R> + Sync
+where
+    R: Runtime,
+{
+    fn extract<SD>(&self) -> impl Future<Output = crate::Result<SD>> + Send
+    where
+        SD: for<'de> ExtractFromStore<'de, R>,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.read().await;
+            Ok(SD::extract_from_store(&*store_read)?)
+        }
+    }
+}
+
+impl<R, M> TauriManagerMangadexStoreExtractor<R> for M
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+}
+
+pub trait TauriManagerMangadexStoreCrud<R>:
+    Manager<R> + crate::utils::traits_utils::MangadexTauriManagerExt<R> + Sync
+where
+    R: Runtime,
+{
+    fn insert<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.read().await;
+            store_data.insert(&*store_read)?;
+            Ok(())
+        }
+    }
+    fn insert_and_save<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.read().await;
+            store_data.insert_and_save(&*store_read)?;
+            Ok(())
+        }
+    }
+    fn delete<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.read().await;
+            store_data.delete(&*store_read)?;
+            Ok(())
+        }
+    }
+    fn delete_and_save<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.read().await;
+            store_data.delete_and_save(&*store_read)?;
+            Ok(())
+        }
+    }
+}
+
+impl<R, M> TauriManagerMangadexStoreCrud<R> for M
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+}
