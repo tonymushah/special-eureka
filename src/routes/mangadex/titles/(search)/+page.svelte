@@ -4,6 +4,7 @@
 	import SearchContent from "./SearchContent.svelte";
 	import type { PageData } from "./$types";
 	import defaultMangaSearchParams, {
+		mangaSearchParamsFromContentProfile,
 		toMangaListParams,
 		type MangaSearchParams
 	} from "@mangadex/componnents/manga/search/form/state";
@@ -11,6 +12,7 @@
 	import { TagOptionState } from "@mangadex/componnents/manga/search/form/filter/contexts/tags";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import { onMount } from "svelte";
 	interface Props {
 		data: PageData;
 	}
@@ -18,30 +20,32 @@
 	let { data = $bindable() }: Props = $props();
 	const defaultParams = writable(defaultMangaSearchParams());
 	$effect(() => {
-		defaultParams.update((p) => {
-			data.tags?.forEach((tag) => {
-				p.filter.tags.set(tag.id, {
-					state: TagOptionState.NONE,
-					name: tag.name,
-					group: tag.group
+		return defaultContentProfile.subscribe((defaultProfile) => {
+			defaultParams.update((p) => {
+				p = mangaSearchParamsFromContentProfile(defaultProfile);
+				data.tags?.forEach((tag) => {
+					p.filter.tags.set(tag.id, {
+						state: TagOptionState.NONE,
+						name: tag.name,
+						group: tag.group
+					});
 				});
+				defaultProfile.excludedTags.forEach((tag) => {
+					const inner_tag = p.filter.tags.get(tag);
+					if (inner_tag) {
+						inner_tag.state = TagOptionState.EXCLUDE;
+						p.filter.tags.set(tag, inner_tag);
+					}
+				});
+				defaultProfile.includedTags.forEach((tag) => {
+					const inner_tag = p.filter.tags.get(tag);
+					if (inner_tag) {
+						inner_tag.state = TagOptionState.INCLUDE;
+						p.filter.tags.set(tag, inner_tag);
+					}
+				});
+				return p;
 			});
-			const defaultProfile = get(defaultContentProfile);
-			defaultProfile.excludedTags.forEach((tag) => {
-				const inner_tag = p.filter.tags.get(tag);
-				if (inner_tag) {
-					inner_tag.state = TagOptionState.EXCLUDE;
-					p.filter.tags.set(tag, inner_tag);
-				}
-			});
-			defaultProfile.includedTags.forEach((tag) => {
-				const inner_tag = p.filter.tags.get(tag);
-				if (inner_tag) {
-					inner_tag.state = TagOptionState.INCLUDE;
-					p.filter.tags.set(tag, inner_tag);
-				}
-			});
-			return p;
 		});
 	});
 	const currentSearchParams = writable<MangaSearchParams | undefined>(
