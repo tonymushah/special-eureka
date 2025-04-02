@@ -1466,8 +1466,8 @@ type MangaObject {
 type MangaQueries {
 	isDownloaded(id: UUID!): DownloadState!
 	get(id: UUID!): MangaObject!
-	list(params: MangaListParams): MangaResults!
-	listOffline(params: MangaListParams): MangaResults!
+	list(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
+	listOffline(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!

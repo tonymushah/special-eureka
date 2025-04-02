@@ -79,13 +79,15 @@ type SomeRes = {
 export default async function executeSearchQuery(
 	client: Client,
 	params: MangaListParams,
-	offline: boolean = false
+	offline: boolean = false,
+	excludeContentProfile?: boolean
 ): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 	let res: SomeRes | undefined = undefined;
 	if (offline) {
 		const result = await client
 			.query(offlineQuery, {
-				params
+				params,
+				excludeContentProfile
 			})
 			.toPromise();
 		if (result.data) {
@@ -139,7 +141,8 @@ export default async function executeSearchQuery(
 	} else {
 		const result = await client
 			.query(defaultQuery, {
-				params
+				params,
+				excludeContentProfile
 			})
 			.toPromise();
 		if (result.data) {

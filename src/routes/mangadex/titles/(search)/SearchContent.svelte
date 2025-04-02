@@ -18,9 +18,10 @@
 	interface Props {
 		params: Readable<MangaListParams>;
 		offlineStore: Readable<boolean>;
+		excludeContentProfile?: boolean;
 	}
 
-	let { params, offlineStore }: Props = $props();
+	let { params, offlineStore, excludeContentProfile }: Props = $props();
 	const p_p_offline = derived([params, offlineStore], (merged) => merged);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
@@ -54,7 +55,7 @@
 					}
 				},
 				async queryFn({ pageParam: [p, offline] }) {
-					const res = await executeSearchQuery(client, p, offline);
+					const res = await executeSearchQuery(client, p, offline, excludeContentProfile);
 					return {
 						data: res.data,
 						...res.paginationData

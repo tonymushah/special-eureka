@@ -44,10 +44,23 @@
 			return p;
 		});
 	});
-	const currentSearchParams = writable<MangaSearchParams | undefined>(undefined);
-	const listParams = derived(currentSearchParams, ($p) => {
+	const currentSearchParams = writable<MangaSearchParams | undefined>(
+		undefined,
+		(set, _update) => {
+			return defaultParams.subscribe((params) => {
+				set(params);
+			});
+		}
+	);
+	const preListParams = derived(currentSearchParams, ($p) => {
 		if ($p) {
 			return toMangaListParams($p);
+		}
+	});
+	const isEmpty = derived(preListParams, ($p) => $p == undefined);
+	const listParams = derived(preListParams, ($p) => {
+		if ($p) {
+			return $p;
 		} else {
 			return {} satisfies MangaListParams;
 		}
@@ -78,7 +91,9 @@
 </section>
 
 <section class="content">
-	<SearchContent params={listParams} {offlineStore} />
+	{#if !$isEmpty}
+		<SearchContent params={listParams} {offlineStore} excludeContentProfile />
+	{/if}
 </section>
 
 <style lang="scss">
