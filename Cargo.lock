@@ -5487,6 +5487,7 @@ dependencies = [
  "async-stream",
  "bytes",
  "convert_case 0.6.0",
+ "dirs",
  "duration-string",
  "emdx",
  "eureka-mmanager",

@@ -21,6 +21,7 @@ mizuki-build = "1"
 url = "2.5"
 actix = "0.13"
 tower = "0.5"
+dirs = "6"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"
