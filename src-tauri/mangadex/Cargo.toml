@@ -48,6 +48,8 @@ tower = { workspace = true, features = ["limit", "buffer"] }
 duration-string = { version = "0.5", features = ["serde"] }
 impl-trait-for-tuples = "0.2"
 dirs.workspace = true
+enum-repr.workspace = true
+enum-kinds.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.1"
