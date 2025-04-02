@@ -4,8 +4,8 @@
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { ServerIcon } from "svelte-feather-icons";
 	import Toast from "toastify-js";
-	import { serverIconStateQuery } from "./server-icon-state";
 	import { onDestroy } from "svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
 	const toast = Toast({
@@ -22,11 +22,6 @@
 		} catch (e) {
 			console.error(e);
 		}
-	});
-	const offline_server_state_sub = subscriptionStore({
-		client,
-		query: serverIconStateQuery,
-		variables: {}
 	});
 	let isLoading = $state(false);
 	const mount = async () => {
@@ -66,7 +61,7 @@
 			isLoading = false;
 		}
 	};
-	let isEnabled = $derived($offline_server_state_sub.data?.watchIsAppMounted);
+	let isEnabled = $derived($isMounted);
 	let isDisabled = $derived(!isEnabled);
 </script>
 
@@ -77,7 +72,7 @@
 	class:isLoading
 	onclick={async () => {
 		if (!isLoading) {
-			if ($offline_server_state_sub.data?.watchIsAppMounted == true) {
+			if ($isMounted) {
 				await unmount();
 			} else {
 				await mount();
