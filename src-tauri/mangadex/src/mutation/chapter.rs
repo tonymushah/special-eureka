@@ -2,6 +2,9 @@ use crate::{
     error::Error,
     objects::{cover::Cover, manga::MangaObject as SelfMangaObject},
     query::download_state::DownloadStateQueries,
+    store::{
+        types::enums::chapter_quality::ChapterQualityStore, TauriManagerMangadexStoreExtractor,
+    },
     Result,
 };
 
@@ -73,6 +76,11 @@ impl ChapterMutations {
         id: Uuid,
         quality: Option<DownloadMode>,
     ) -> Result<DownloadState> {
+        let quality = quality.unwrap_or({
+            let app = ctx.get_app_handle::<tauri::Wry>()?;
+            app.extract::<ChapterQualityStore>().await?.into()
+        });
+
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let tauri_handle_ = tauri_handle.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
@@ -88,7 +96,7 @@ impl ChapterMutations {
 
         let res = spawn(async move {
             let watches = tauri_handle_.get_watches()?;
-            let mode: MDDownloadMode = quality.unwrap_or_default().into();
+            let mode: MDDownloadMode = quality.into();
             let manager = olasw_;
             trace!("Downloading title {id}");
             let dirs =
