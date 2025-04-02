@@ -21,11 +21,11 @@
 				"https://raw.githubusercontent.com/tonymushah/special-eureka/master/.tauri/update.json"
 			]
 		},
-        "deep-link": {
-            "desktop": {
-                "schemes": ["special-eureka"]
-            }
-        }
+		"deep-link": {
+			"desktop": {
+				"schemes": ["special-eureka"]
+			}
+		}
 	},
 	"bundle": {
 		"active": true,
@@ -39,11 +39,11 @@
 			"appimage": {
 				"bundleMediaFramework": false
 			},
-            "rpm": {
-                "epoch": 0,
-                "files": {},
-                "release": "1"
-            }
+			"rpm": {
+				"epoch": 0,
+				"files": {},
+				"release": "1"
+			}
 		},
 		"externalBin": [],
 		"windows": {
@@ -61,7 +61,16 @@
 		},
 		"resources": [],
 		"shortDescription": "Special Eureka",
-		"createUpdaterArtifacts": "v1Compatible"
+		"createUpdaterArtifacts": "v1Compatible",
+		"icon": [
+			"icons/32x32.png",
+			"icons/64x64.png",
+			"icons/128x128.png",
+			"icons/128x128@2x.png",
+			"icons/icon.icns",
+			"icons/icon.ico",
+			"icons/icon.png"
+		]
 	},
 	"productName": "Special-Eureka",
 	"mainBinaryName": "Special-Eureka",
@@ -90,7 +99,7 @@
 			}
 		},
 		"trayIcon": {
-            "id": "main",
+			"id": "main",
 			"tooltip": "Special Eureka",
 			"showMenuOnLeftClick": false,
 			"iconPath": "./icons/icon.png"
