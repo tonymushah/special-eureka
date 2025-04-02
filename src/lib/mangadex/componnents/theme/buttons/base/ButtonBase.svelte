@@ -72,16 +72,17 @@
 		transition:
 			border,
 			box-shadow,
-			transform 100ms ease-in-out;
+			transform,
+			background 100ms ease-in-out;
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
 	}
 	button:disabled {
-		background: linear-gradient(45deg, var(--main-background) 0%, var(--button-color) 100%);
+		background: linear-gradient(225deg, var(--main-background) 0%, var(--button-color) 100%);
 	}
 	button:hover:disabled {
-		background: linear-gradient(225deg, var(--main-background) 0%, var(--button-color) 100%);
+		background: linear-gradient(45deg, var(--main-background) 0%, var(--button-color) 100%);
 	}
 	button.haveBorderRadius {
 		border-radius: 0.25rem;
