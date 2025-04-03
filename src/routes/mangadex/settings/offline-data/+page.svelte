@@ -6,7 +6,7 @@
 	import { mutationStore, queryStore } from "@mangadex/stores/offlineConfig";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import { open as dialogOpen } from "@tauri-apps/plugin-dialog";
-	import { openPath } from "@tauri-apps/plugin-opener";
+	import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { derived, get } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
@@ -86,7 +86,7 @@
 			class:disabled={$disabled}
 			onclick={() => {
 				if ($dataDir) {
-					openPath($dataDir).catch(console.warn);
+					revealItemInDir($dataDir).catch(console.warn);
 				}
 			}}
 			href={`#${v4()}`}>{$dataDir}</a
@@ -116,7 +116,7 @@
 			class:disabled={$disabled}
 			onclick={() => {
 				if ($mangasDir) {
-					openPath($mangasDir);
+					revealItemInDir($mangasDir);
 				}
 			}}
 			href={`#${v4()}`}>{$mangasDir}</a
@@ -147,7 +147,7 @@
 			class:disabled={$disabled}
 			onclick={() => {
 				if ($chaptersDir) {
-					openPath($chaptersDir);
+					revealItemInDir($chaptersDir);
 				}
 			}}
 			href={`#${v4()}`}>{$chaptersDir}</a
@@ -178,7 +178,7 @@
 			class:disabled={$disabled}
 			onclick={() => {
 				if ($coversDir) {
-					openPath($coversDir);
+					revealItemInDir($coversDir);
 				}
 			}}
 			href={`#${v4()}`}>{$coversDir}</a
