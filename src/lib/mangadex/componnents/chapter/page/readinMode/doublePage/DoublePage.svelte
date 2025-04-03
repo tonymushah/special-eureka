@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Direction } from "@mangadex/gql/graphql";
-	import { ceil, isArray, random } from "lodash";
+	import { ceil, isArray, noop, random } from "lodash";
 	import { createEventDispatcher, onMount } from "svelte";
 	import { derived } from "svelte/store";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
@@ -24,12 +24,12 @@
 		next: {};
 		previous: {};
 	}>();
-	onMount(() => {
-		return images_indexes.subscribe(() => {});
-	});
-	onMount(() => images.subscribe(() => {}));
-	onMount(() => currentChapterPage.subscribe(() => {}));
-	onMount(() => currentPageIndex.subscribe(() => {}));
+	/// BUG or more like shit code xd
+	/// Required or else the component may not work proprely
+	onMount(() => images_indexes.subscribe(noop));
+	onMount(() => images.subscribe(noop));
+	onMount(() => currentChapterPage.subscribe(noop));
+	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
