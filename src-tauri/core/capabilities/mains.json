@@ -26,6 +26,7 @@
         "opener:default",
         "notification:default",
 		"core:webview:allow-create-webview-window",
-		"dialog:allow-open"
+		"dialog:allow-open",
+		"opener:deny-open-path"
 	]
 }
