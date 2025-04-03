@@ -37,9 +37,7 @@
 			list-style: none;
 			padding: 0;
 			margin: 0;
-			display: flex;
-			align-items: center;
-			flex-direction: column;
+			display: grid;
 			li.no-group {
 				font-style: italic;
 			}

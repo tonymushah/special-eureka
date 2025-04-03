@@ -76,7 +76,7 @@
 				{#each $options as { value, label }}
 					<li
 						use:melt={$close}
-						onm-click={() => {
+						on:m-click={() => {
 							fireSelectChapterEvent(value);
 						}}
 						class:isSelected={$isSelected(value)}

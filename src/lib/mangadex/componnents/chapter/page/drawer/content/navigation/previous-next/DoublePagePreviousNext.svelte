@@ -26,12 +26,14 @@
 	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
-			currentChapterPage.update(() => {
+			currentChapterPage.update((i) => {
 				const index = $images_indexes[$currentPageIndex + 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
-				} else {
+				} else if (typeof index == "number" && !isNaN(index)) {
 					return index;
+				} else {
+					return i;
 				}
 			});
 		} else {
@@ -41,12 +43,14 @@
 	function previous() {
 		if ($currentPageIndex > 0) {
 			resetZoom();
-			currentChapterPage.update(() => {
+			currentChapterPage.update((i) => {
 				const index = $images_indexes[$currentPageIndex - 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
-				} else {
+				} else if (typeof index == "number" && !isNaN(index)) {
 					return index;
+				} else {
+					return i;
 				}
 			});
 		} else {
