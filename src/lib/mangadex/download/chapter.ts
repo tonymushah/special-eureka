@@ -203,7 +203,7 @@ export class ChapterDownload {
 	}
 	public images_state() {
 		return derived(this.sub_raw_state(), (result) => {
-			result.data?.watchChapterDownloadState.downloading?.fetchingImage
+			return result.data?.watchChapterDownloadState.downloading?.fetchingImage
 		})
 	}
 	public error() {

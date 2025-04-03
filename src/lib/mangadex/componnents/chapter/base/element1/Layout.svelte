@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -8,6 +9,7 @@
 		titleGroups?: Snippet;
 		dateUploader?: Snippet;
 		readingNumberComments?: Snippet;
+		id: string;
 	}
 	let {
 		haveBeenRead = $bindable(),
@@ -15,11 +17,31 @@
 		flagReadingState,
 		titleGroups,
 		dateUploader,
-		readingNumberComments
+		readingNumberComments,
+		id
 	}: Props = $props();
+	const chapterDownload = new ChapterDownload(id);
+	const istate = chapterDownload.images_state();
+	let [left, right, hasImages] = $derived.by(() => {
+		let state = $istate;
+		if (state) {
+			return [
+				`${(state.index * 100) / state.len}%`,
+				`${100 - (state.index * 100) / state.len}%`,
+				true
+			];
+		} else {
+			return ["0%", "100%", false];
+		}
+	});
 </script>
 
-<div class="layout" class:haveBeenRead>
+<div
+	class="layout"
+	class:haveBeenRead
+	class:hasImages
+	style="--status-left: {left}; --status-right: {right};"
+>
 	<div class="state">
 		{#if state}
 			{@render state()}
@@ -48,6 +70,13 @@
 </div>
 
 <style lang="scss">
+	.layout.hasImages {
+		background: linear-gradient(
+			45deg,
+			color-mix(in srgb, var(--primary) 65%, var(--chapter-layout) 45%) var(--status-left),
+			var(--chapter-layout) var(--status-right)
+		);
+	}
 	.layout {
 		background-color: var(--chapter-layout, transparent);
 		display: grid;

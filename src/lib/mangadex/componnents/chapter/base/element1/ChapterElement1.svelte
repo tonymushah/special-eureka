@@ -131,7 +131,7 @@
 	}}
 	data-chapter-id={id}
 >
-	<Layout {haveBeenRead}>
+	<Layout {haveBeenRead} {id}>
 		{#snippet state()}
 			<div
 				class="buttons"
