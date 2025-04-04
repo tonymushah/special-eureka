@@ -1,7 +1,12 @@
+use std::sync::Arc;
+
 use actix::WeakAddr;
 use eureka_mmanager::DownloadManager;
 use tauri::{Manager, Runtime};
-use tokio::sync::watch::{self, Receiver};
+use tokio::sync::{
+    watch::{self, Receiver},
+    RwLock,
+};
 use tokio_stream::StreamExt;
 
 use crate::{
@@ -44,4 +49,24 @@ pub fn weak_download_manager_watch<R: Runtime, M: Manager<R> + Clone + Send + 's
         }
     });
     Ok(rx)
+}
+
+pub fn weak_download_manager<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
+    app: &M,
+) -> crate::Result<Arc<RwLock<Option<WeakAddr<DownloadManager>>>>> {
+    let maybe_manager = Arc::new(RwLock::new(None::<WeakAddr<DownloadManager>>));
+    {
+        let maybe_manager = Arc::downgrade(&maybe_manager);
+        let mut wrx_stream = WatchSubscriptionStream::new(weak_download_manager_watch(app)?);
+        tokio::spawn(async move {
+            while let Some(weak_manager) = wrx_stream.next().await {
+                if let Some(maybe_manager) = maybe_manager.upgrade() {
+                    *maybe_manager.write().await = weak_manager;
+                } else {
+                    break;
+                }
+            }
+        });
+    }
+    Ok(maybe_manager)
 }

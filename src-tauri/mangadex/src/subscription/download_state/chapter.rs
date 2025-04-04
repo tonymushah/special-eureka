@@ -1,7 +1,7 @@
 use std::{sync::Arc, time::Duration};
 
 use crate::{
-    app_state::watch::weak_download_manager_watch,
+    app_state::watch::weak_download_manager,
     subscription::utils::WatchSubscriptionStream,
     utils::{
         abort::AbortHandleGuard,
@@ -10,7 +10,7 @@ use crate::{
     },
     Result,
 };
-use actix::{Addr, WeakAddr};
+use actix::Addr;
 use async_graphql::{Context, Object, SimpleObject, Subscription};
 use async_stream::stream;
 use eureka_mmanager::{
@@ -138,19 +138,10 @@ fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'sta
     app: &M,
     id: Uuid,
 ) -> crate::Result<Receiver<ChapterDownloadState>> {
-    let maybe_manager = Arc::new(RwLock::new(None::<WeakAddr<DownloadManager>>));
+    let maybe_manager = weak_download_manager(app)?;
     let (tx, rx) = watch(ChapterDownloadState::Pending);
     let mut is_mounted_stream =
         WatchSubscriptionStream::<_>::from_tauri_manager::<IsAppStateMountedWatch, _, _>(app)?;
-    {
-        let maybe_manager = maybe_manager.clone();
-        let mut wrx_stream = WatchSubscriptionStream::new(weak_download_manager_watch(app)?);
-        tokio::spawn(async move {
-            while let Some(weak_manager) = wrx_stream.next().await {
-                *maybe_manager.write().await = weak_manager;
-            }
-        });
-    }
     tokio::spawn(async move {
         let is_readed = Arc::new(RwLock::new(false));
         loop {
