@@ -1,5 +1,6 @@
 use std::io::Result;
 
+/// Refactor this into an hash map with an enum
 #[derive(Clone)]
 pub struct DownloadEntry<T: Clone + PartialEq> {
     queue: Vec<T>,
@@ -93,7 +94,7 @@ impl<T: Clone + PartialEq> DownloadEntry<T> {
         }
         Ok(())
     }
-    pub fn is_all_finished(&mut self) -> bool {
+    pub fn is_all_finished(&self) -> bool {
         if self.get_finished_len() == 0 && self.get_queue_len() == 0 {
             false
         } else {
