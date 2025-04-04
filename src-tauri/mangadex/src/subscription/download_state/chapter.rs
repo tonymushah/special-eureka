@@ -231,7 +231,7 @@ fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'sta
             if matches!(to_send, ChapterDownloadState::OfflineAppStateNotLoaded) {
                 *is_readed.write().await = false;
             }
-            println!("{id} - {:?}", to_send);
+            // println!("{id} - {:?}", to_send);
             if tx.send(to_send).is_err() {
                 break;
             }
