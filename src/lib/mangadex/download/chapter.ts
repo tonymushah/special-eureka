@@ -128,6 +128,9 @@ export class ChapterDownload {
 					["chapter", id, "download-state", "subscription"],
 					() => res
 				);
+				if (res.data?.watchChapterDownloadState.isDone) {
+					invalidateChapterOfflinePresence(id).catch(console.warn)
+				}
 			})
 			return () => {
 				sub.unsubscribe()
@@ -193,7 +196,7 @@ export class ChapterDownload {
 						return ChapterDownloadState.Error
 					} else if (data.isCanceled) {
 						return ChapterDownloadState.Canceled
-					} else if (data.isDone && isPresent) {
+					} else if (data.isDone) {
 						return ChapterDownloadState.Done
 					} else if (data.isOfflineAppStateNotLoaded) {
 						return ChapterDownloadState.OfflineAppStateNotLoaded
@@ -223,10 +226,15 @@ export class ChapterDownload {
 	public is_downloading() {
 		return derived(this.state(), (result) => {
 			switch (result) {
-				case ChapterDownloadState.FetchingAtHomeData | ChapterDownloadState.Preloading | ChapterDownloadState.FetchingImages | ChapterDownloadState.FetchingData:
+				case ChapterDownloadState.FetchingAtHomeData:
 					return true
 					break;
-
+				case ChapterDownloadState.Preloading:
+					return true
+				case ChapterDownloadState.FetchingImages:
+					return true
+				case ChapterDownloadState.FetchingData:
+					return true
 				default:
 					return false
 					break;
@@ -273,6 +281,7 @@ export class ChapterDownload {
 					id,
 					quality
 				}).toPromise();
+				return res;
 			},
 			onSettled(data, error, variables, context) {
 				rexec()
