@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Snippet } from "svelte";
+	import { derived as storeDerived } from "svelte/store";
 
 	interface Props {
 		haveBeenRead: boolean;
@@ -22,25 +23,42 @@
 	}: Props = $props();
 	const chapterDownload = new ChapterDownload(id);
 	const istate = chapterDownload.images_state();
-	let [left, right, hasImages] = $derived.by(() => {
-		let state = $istate;
-		if (state) {
-			return [
-				`${(state.index * 100) / state.len}%`,
-				`${100 - (state.index * 100) / state.len}%`,
-				true
-			];
-		} else {
-			return ["0%", "100%", false];
+	const is_downloaded = chapterDownload.is_downloaded();
+
+	const download_state_images = storeDerived(
+		[istate, is_downloaded],
+		([_state, $is_downloaded]) => {
+			let [left, right, hasImages] = (() => {
+				let _state = $istate;
+
+				if (_state && !$is_downloaded) {
+					return [
+						`${(_state.index * 100) / _state.len}%`,
+						`${100 - (_state.index * 100) / _state.len}%`,
+						true
+					];
+				} else {
+					return ["0%", "100%", false];
+				}
+			})();
+			return {
+				left,
+				right,
+				hasImages
+			};
 		}
+	);
+
+	$effect(() => {
+		console.debug($download_state_images);
 	});
 </script>
 
 <div
 	class="layout"
 	class:haveBeenRead
-	class:hasImages
-	style="--status-left: {left}; --status-right: {right};"
+	class:hasImages={$download_state_images.hasImages}
+	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
 >
 	<div class="state">
 		{#if state}
@@ -72,8 +90,8 @@
 <style lang="scss">
 	.layout.hasImages {
 		background: linear-gradient(
-			45deg,
-			color-mix(in srgb, var(--primary) 65%, var(--chapter-layout) 45%) var(--status-left),
+			90deg,
+			color-mix(in srgb, var(--primary) 50%, var(--chapter-layout) 50%) var(--status-left),
 			var(--chapter-layout) var(--status-right)
 		);
 	}

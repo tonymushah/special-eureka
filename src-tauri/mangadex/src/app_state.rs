@@ -1,4 +1,5 @@
 pub mod inner;
+pub mod watch;
 
 use std::{ops::Deref, sync::Arc};
 

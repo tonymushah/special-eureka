@@ -17,6 +17,7 @@
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
+	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
 	let { children }: Props = $props();
 	onMount(async () => {
@@ -78,6 +79,7 @@
 			</MangaDexDefaultThemeProvider>
 		</MangaDexContextDataProvider>
 	</div>
+	<SvelteQueryDevtools />
 </QueryClientProvider>
 
 <style lang="scss">

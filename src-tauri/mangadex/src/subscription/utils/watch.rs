@@ -1,6 +1,6 @@
 use async_graphql::Context as GQLContext;
-use tauri::Runtime;
-use tokio::sync::watch::{Receiver, Sender};
+use tauri::{Manager, Runtime};
+use tokio::sync::watch::{Receiver, Ref, Sender};
 use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
 
 use std::{
@@ -10,7 +10,9 @@ use std::{
     task::{Context, Poll},
 };
 
-use crate::utils::{get_watches_from_graphql_context, watch::Watches};
+use crate::utils::{
+    get_watches_from_graphql_context, traits_utils::MangadexTauriManagerExt, watch::Watches,
+};
 
 pub struct WatchSubscriptionStream<T>
 where
@@ -41,7 +43,15 @@ where
             _recv: recv,
         }
     }
-
+    pub fn from_changes(self) -> Self {
+        Self {
+            recv: WatchStream::from_changes(self._recv.clone()),
+            _recv: self._recv,
+        }
+    }
+    pub fn any_changes(self) -> Self {
+        Self::new(self._recv)
+    }
     pub fn from_async_graphql_context<F, R>(
         ctx: &GQLContext<'_>,
         provider: F,
@@ -64,6 +74,20 @@ where
         let watches = get_watches_from_graphql_context::<R>(ctx)?;
         let to_use: &W = watches.as_ref();
         Ok(Self::new(to_use.subscribe()))
+    }
+    pub fn from_tauri_manager<W, R, M>(manager: &M) -> crate::Result<Self>
+    where
+        W: Deref<Target = Sender<T>>,
+        Watches: AsRef<W>,
+        R: Runtime,
+        M: Manager<R>,
+    {
+        let watches = manager.get_watches()?;
+        let to_use: &W = watches.as_ref();
+        Ok(Self::new(to_use.subscribe()))
+    }
+    pub fn current_value(&self) -> Ref<'_, T> {
+        self._recv.borrow()
     }
 }
 

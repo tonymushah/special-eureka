@@ -45,9 +45,9 @@
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onDestroy } from "svelte";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
-	import type { Readable } from "svelte/store";
+	import { derived, type Readable } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
 	import { ChapterDownload } from "@mangadex/download/chapter";
@@ -86,42 +86,24 @@
 	const dispatch = createChapterEl1EventDispatcher();
 	// TODO implement quality
 	const chapter_download_inner = new ChapterDownload(id);
-	const download_state = chapter_download_inner.state();
-	let downloaded = $derived.by(() => {
-		return $download_state == ChapterDownloadState.Done;
-	});
-	let downloading = $derived.by(() => {
-		switch ($download_state) {
-			case ChapterDownloadState.FetchingAtHomeData |
-				ChapterDownloadState.FetchingData |
-				ChapterDownloadState.FetchingImages |
-				ChapterDownloadState.Preloading:
-				return true;
-				break;
-
-			default:
-				return false;
-				break;
-		}
-	});
-	let failed = $derived.by(() => {
-		switch ($download_state) {
-			case ChapterDownloadState.Error | ChapterDownloadState.Canceled:
-				return true;
-				break;
-
-			default:
-				return false;
-				break;
-		}
-	});
+	const [downloading, downloaded, failed] = [
+		chapter_download_inner.is_downloading(),
+		chapter_download_inner.is_downloaded(),
+		chapter_download_inner.has_failed()
+	];
 	const handle_download_event = debounce(async () => {
-		if (downloading) {
+		if ($downloading) {
 			await chapter_download_inner.cancel();
 		} else {
 			await chapter_download_inner.download();
 		}
 	});
+	const showTrashButton = derived(
+		[failed, downloaded, downloading],
+		([$failed, $downloaded, $downloading]) => {
+			return ($failed || $downloaded) && !$downloading;
+		}
+	);
 </script>
 
 <article
@@ -151,9 +133,9 @@
 				}}
 				tabindex={0}
 			>
-				<DownloadStateComp {download_state} />
+				<DownloadStateComp {id} />
 			</div>
-			{#if (failed || downloaded) && !downloading}
+			{#if $showTrashButton}
 				<div
 					class="buttons remove"
 					onclick={async (e) => {
