@@ -1,6 +1,10 @@
+use std::{sync::Arc, time::Duration};
+
 use crate::{
+    app_state::watch::weak_download_manager,
     subscription::utils::WatchSubscriptionStream,
     utils::{
+        abort::AbortHandleGuard,
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
         watch::is_appstate_mounted::IsAppStateMountedWatch,
     },
@@ -22,10 +26,19 @@ use eureka_mmanager::{
     prelude::AsyncSubscribe,
     DownloadManager, Error as ManagerError, OwnedError,
 };
-use tokio::{select, sync::watch::channel as watch};
+use tauri::{Manager, Runtime};
+use tokio::{
+    select,
+    sync::{
+        watch::{channel as watch, Receiver},
+        RwLock,
+    },
+    time::sleep,
+};
 use tokio_stream::{Stream, StreamExt};
 use uuid::Uuid;
 
+#[derive(Debug, Clone)]
 pub enum MangaDownloadState {
     Pending,
     Downloading(DownloadingState),
@@ -92,6 +105,114 @@ impl MangaDownloadState {
     }
 }
 
+fn get_manga_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
+    app: &M,
+    id: Uuid,
+) -> crate::Result<Receiver<MangaDownloadState>> {
+    let maybe_manager = weak_download_manager(app)?;
+    let (tx, rx) = watch(MangaDownloadState::Pending);
+    let mut is_mounted_stream =
+        WatchSubscriptionStream::<_>::from_tauri_manager::<IsAppStateMountedWatch, _, _>(app)?;
+    tokio::spawn(async move {
+        let is_readed = Arc::new(RwLock::new(false));
+        loop {
+            let maybe_manager = maybe_manager.clone();
+            let is_readed = is_readed.clone();
+            let handle = {
+                let is_readed = is_readed.clone();
+                tokio::spawn(async move {
+                    if let Some(manager) = maybe_manager
+                        .read()
+                        .await
+                        .as_ref()
+                        .and_then(|w| w.upgrade())
+                    {
+                        let to_send: MangaDownloadState = {
+                            match GetManager::<MangaDownloadManager>::get(&manager).await {
+                                Ok(manager) => {
+                                    match manager.new_task(MangaDownloadMessage::new(id)).await {
+                                        Ok(task) => {
+                                            // Drop the manager preventing it from not dropping on other places
+                                            drop(manager);
+                                            match task.subscribe().await {
+                                                Ok(mut sub) => {
+                                                    // Drop the task because we don't need it anymore
+                                                    drop(task);
+                                                    if *is_readed.read().await {
+                                                        if sub.changed().await.is_err() {
+                                                            return None;
+                                                        }
+                                                    } else {
+                                                        *is_readed.write().await = true;
+                                                    }
+                                                    let data: MangaDownloadState =
+                                                        { (*sub.borrow()).clone().into() };
+                                                    data
+                                                }
+                                                Err(err) => MangaDownloadState::Error(err.into()),
+                                            }
+                                        }
+                                        Err(err) => MangaDownloadState::Error(
+                                            ManagerError::MailBox(err).into(),
+                                        ),
+                                    }
+                                }
+                                Err(err) => {
+                                    MangaDownloadState::Error(ManagerError::MailBox(err).into())
+                                }
+                            }
+                        };
+
+                        Some(to_send)
+                    } else {
+                        None
+                    }
+                })
+            };
+            let _abort = AbortHandleGuard::new(handle.abort_handle());
+            let to_send = select! {
+                Some(is_mounted) = is_mounted_stream.next() => {
+                    if is_mounted {
+                        continue;
+                    }else {
+                        MangaDownloadState::OfflineAppStateNotLoaded
+                    }
+                },
+                join_res = handle => {
+                    match join_res {
+                        Ok(Some(res)) => res,
+                        Ok(None) => MangaDownloadState::OfflineAppStateNotLoaded,
+                        Err(err) => {
+                            eprintln!("{:?}", err);
+                            continue;
+                        },
+                    }
+                },
+                else => break
+            };
+            if matches!(to_send, MangaDownloadState::OfflineAppStateNotLoaded) {
+                *is_readed.write().await = false;
+            }
+            // Prevent from sending the same data to the channel
+            if matches!(
+                (&to_send, &*tx.borrow()),
+                (
+                    MangaDownloadState::OfflineAppStateNotLoaded,
+                    MangaDownloadState::OfflineAppStateNotLoaded,
+                )
+            ) {
+                sleep(Duration::from_millis(500)).await;
+                continue;
+            }
+            // println!("{id} - {:?}", to_send);
+            if tx.send(to_send).is_err() {
+                break;
+            }
+        }
+    });
+    Ok(rx)
+}
+
 pub struct MangaDownloadSubs;
 
 #[Subscription]
@@ -131,6 +252,10 @@ impl MangaDownloadSubs {
         manga_id: Uuid,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
+        Ok(WatchSubscriptionStream::new(get_manga_download_state_rx(
+            &window, manga_id,
+        )?))
+        /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
             tauri::Wry,
@@ -189,5 +314,6 @@ impl MangaDownloadSubs {
             }
         };
         Ok(stream)
+        */
     }
 }

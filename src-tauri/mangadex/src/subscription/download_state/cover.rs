@@ -196,18 +196,20 @@ fn get_cover_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'stati
                 *is_readed.write().await = false;
             }
             // Prevent from sending the same data to the channel
-            if let (
-                CoverDownloadState::OfflineAppStateNotLoaded,
-                CoverDownloadState::OfflineAppStateNotLoaded,
-            ) = (&to_send, &*tx.borrow())
-            {
+            if matches!(
+                (&to_send, &*tx.borrow()),
+                (
+                    CoverDownloadState::OfflineAppStateNotLoaded,
+                    CoverDownloadState::OfflineAppStateNotLoaded,
+                )
+            ) {
+                sleep(Duration::from_millis(500)).await;
                 continue;
             }
             // println!("{id} - {:?}", to_send);
             if tx.send(to_send).is_err() {
                 break;
             }
-            sleep(Duration::from_millis(500)).await;
         }
     });
     Ok(rx)
