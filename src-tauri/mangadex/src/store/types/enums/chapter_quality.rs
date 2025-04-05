@@ -5,6 +5,7 @@ use enum_repr::EnumRepr;
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
+use eureka_mmanager::download::chapter::task::DownloadMode as ManagerDownloadMode;
 use mangadex_api::utils::download::chapter::DownloadMode as MDDownloadMode;
 use tauri::Runtime;
 
@@ -43,6 +44,15 @@ impl From<MDDownloadMode> for DownloadMode {
 }
 
 impl From<DownloadMode> for MDDownloadMode {
+    fn from(value: DownloadMode) -> Self {
+        match value {
+            DownloadMode::Normal => Self::Normal,
+            DownloadMode::DataSaver => Self::DataSaver,
+        }
+    }
+}
+
+impl From<DownloadMode> for ManagerDownloadMode {
     fn from(value: DownloadMode) -> Self {
         match value {
             DownloadMode::Normal => Self::Normal,
