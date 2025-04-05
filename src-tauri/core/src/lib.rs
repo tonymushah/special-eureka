@@ -14,7 +14,7 @@ pub(crate) mod states;
 
 pub fn run() {
     let runtime_guard = RuntimeGuard::new(|| {
-        RuntimeBuilder::new_multi_thread()
+        RuntimeBuilder::new_current_thread()
             .enable_all()
             .build()
             .unwrap()

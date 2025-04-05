@@ -101,6 +101,7 @@
 				open($stats?.threadUrl);
 			}
 		}}
+		contentRating={layoutData.contentRating ?? undefined}
 	/>
 
 	<div class="out-top">

@@ -48,10 +48,6 @@
 			};
 		}
 	);
-
-	$effect(() => {
-		console.debug($download_state_images);
-	});
 </script>
 
 <div

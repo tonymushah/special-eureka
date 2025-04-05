@@ -150,13 +150,16 @@
 				}}
 			/>
 			<div class="tag-status">
-				<ContentRatingTag {contentRating} />
 				<TagComponnentsFlex
 					{tags}
 					on:click={({ detail }) => {
 						dispatch("tag", detail);
 					}}
-				/>
+				>
+					{#snippet pre()}
+						<ContentRatingTag {contentRating} />
+					{/snippet}
+				</TagComponnentsFlex>
 				<MangaStatusComp {status} {year} />
 			</div>
 			{#if stats != undefined}

@@ -235,7 +235,7 @@ fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'sta
                 sleep(Duration::from_millis(500)).await;
                 continue;
             }
-            // println!("{id} - {:?}", to_send);
+            println!("{id} - {:?}", to_send);
             if tx.send(to_send).is_err() {
                 break;
             }
