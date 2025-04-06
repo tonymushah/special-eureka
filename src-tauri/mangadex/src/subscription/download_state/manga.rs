@@ -1,13 +1,8 @@
-use std::{sync::Arc, time::Duration};
-
 use crate::{
-    app_state::watch::weak_download_manager,
     subscription::utils::WatchSubscriptionStream,
     utils::{
-        abort::AbortHandleGuard,
-        download::{get_next_task_value, NextTaskValue},
+        download_state_rx::{get_download_state_rx, NextTaskValue},
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-        watch::is_appstate_mounted::IsAppStateMountedWatch,
     },
     Result,
 };
@@ -28,15 +23,8 @@ use eureka_mmanager::{
     DownloadManager, OwnedError,
 };
 use tauri::{Manager, Runtime};
-use tokio::{
-    select,
-    sync::{
-        watch::{channel as watch, Receiver},
-        RwLock,
-    },
-    time::sleep,
-};
-use tokio_stream::{Stream, StreamExt};
+use tokio::{select, sync::watch::Receiver};
+use tokio_stream::Stream;
 use uuid::Uuid;
 
 #[derive(Debug, Clone)]
@@ -68,6 +56,22 @@ impl NextTaskValue for MangaDownloadState {
     }
     fn pending() -> Self {
         Self::Pending
+    }
+
+    fn is_pending(&self) -> bool {
+        matches!(self, Self::Pending)
+    }
+
+    fn is_done(&self) -> bool {
+        matches!(self, Self::Done)
+    }
+
+    fn is_canceled(&self) -> bool {
+        matches!(self, Self::Canceled)
+    }
+
+    fn is_offline_app_state_not_loaded(&self) -> bool {
+        matches!(self, Self::OfflineAppStateNotLoaded)
     }
 }
 
@@ -132,62 +136,7 @@ fn get_manga_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'stati
     app: &M,
     id: Uuid,
 ) -> crate::Result<Receiver<MangaDownloadState>> {
-    let maybe_manager = weak_download_manager(app)?;
-    let (tx, rx) = watch(MangaDownloadState::Pending);
-    let mut is_mounted_stream =
-        WatchSubscriptionStream::<_>::from_tauri_manager::<IsAppStateMountedWatch, _, _>(app)?;
-    tokio::spawn(async move {
-        let is_readed = Arc::new(RwLock::new(false));
-        loop {
-            let maybe_manager = maybe_manager.clone();
-            let is_readed = is_readed.clone();
-            let handle = get_next_task_value::<MangaDownloadManager, MangaDownloadTask, _>(
-                maybe_manager,
-                is_readed.clone(),
-                id,
-            );
-            let _abort = AbortHandleGuard::new(handle.abort_handle());
-            let to_send = select! {
-                Some(is_mounted) = is_mounted_stream.next() => {
-                    if is_mounted {
-                        continue;
-                    }else {
-                        MangaDownloadState::OfflineAppStateNotLoaded
-                    }
-                },
-                join_res = handle => {
-                    match join_res {
-                        Ok(Some(res)) => res,
-                        Ok(None) => MangaDownloadState::OfflineAppStateNotLoaded,
-                        Err(err) => {
-                            eprintln!("{:?}", err);
-                            continue;
-                        },
-                    }
-                },
-                else => break
-            };
-            if matches!(to_send, MangaDownloadState::OfflineAppStateNotLoaded) {
-                *is_readed.write().await = false;
-            }
-            // Prevent from sending the same data to the channel
-            if matches!(
-                (&to_send, &*tx.borrow()),
-                (
-                    MangaDownloadState::OfflineAppStateNotLoaded,
-                    MangaDownloadState::OfflineAppStateNotLoaded,
-                )
-            ) {
-                sleep(Duration::from_millis(500)).await;
-                continue;
-            }
-            // println!("{id} - {:?}", to_send);
-            if tx.send(to_send).is_err() {
-                break;
-            }
-        }
-    });
-    Ok(rx)
+    get_download_state_rx::<MangaDownloadManager, MangaDownloadTask, _, R, M>(app, id)
 }
 
 pub struct MangaDownloadSubs;
