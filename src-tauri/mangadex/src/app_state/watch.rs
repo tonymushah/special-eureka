@@ -51,9 +51,11 @@ pub fn weak_download_manager_watch<R: Runtime, M: Manager<R> + Clone + Send + 's
     Ok(rx)
 }
 
+type ArcRwLock<T> = Arc<RwLock<T>>;
+
 pub fn weak_download_manager<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
     app: &M,
-) -> crate::Result<Arc<RwLock<Option<WeakAddr<DownloadManager>>>>> {
+) -> crate::Result<ArcRwLock<Option<WeakAddr<DownloadManager>>>> {
     let maybe_manager = Arc::new(RwLock::new(None::<WeakAddr<DownloadManager>>));
     {
         let maybe_manager = Arc::downgrade(&maybe_manager);

@@ -5,6 +5,7 @@ use crate::{
     subscription::utils::WatchSubscriptionStream,
     utils::{
         abort::AbortHandleGuard,
+        download::{get_next_task_value, NextTaskValue},
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
         watch::is_appstate_mounted::IsAppStateMountedWatch,
     },
@@ -18,13 +19,13 @@ use eureka_mmanager::{
     download::{
         cover::{
             task::{CoverDownloadTaskState, CoverDownloadingState as DownloadingState},
-            CoverDownloadManager, CoverDownloadMessage,
+            CoverDownloadManager,
         },
         traits::managers::TaskManagerAddr,
         GetManager,
     },
-    prelude::AsyncSubscribe,
-    DownloadManager, Error as ManagerError, OwnedError,
+    prelude::CoverDownloadTask,
+    DownloadManager, OwnedError,
 };
 use tauri::{Manager, Runtime};
 use tokio::{
@@ -46,6 +47,34 @@ pub enum CoverDownloadState {
     Canceled,
     Error(OwnedError),
     OfflineAppStateNotLoaded,
+}
+
+impl NextTaskValue for CoverDownloadState {
+    type DownloadingState = DownloadingState;
+
+    fn pending() -> Self {
+        Self::Pending
+    }
+
+    fn downloading(value: Self::DownloadingState) -> Self {
+        Self::Downloading(value)
+    }
+
+    fn error(error: OwnedError) -> Self {
+        Self::Error(error)
+    }
+
+    fn done() -> Self {
+        Self::Done
+    }
+
+    fn canceled() -> Self {
+        Self::Canceled
+    }
+
+    fn offline_app_state_not_loaded() -> Self {
+        Self::OfflineAppStateNotLoaded
+    }
 }
 
 impl From<CoverDownloadTaskState> for CoverDownloadState {
@@ -120,57 +149,11 @@ fn get_cover_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'stati
         loop {
             let maybe_manager = maybe_manager.clone();
             let is_readed = is_readed.clone();
-            let handle = {
-                let is_readed = is_readed.clone();
-                tokio::spawn(async move {
-                    if let Some(manager) = maybe_manager
-                        .read()
-                        .await
-                        .as_ref()
-                        .and_then(|w| w.upgrade())
-                    {
-                        let to_send: CoverDownloadState = {
-                            match GetManager::<CoverDownloadManager>::get(&manager).await {
-                                Ok(manager) => {
-                                    match manager.new_task(CoverDownloadMessage::new(id)).await {
-                                        Ok(task) => {
-                                            // Drop the manager preventing it from not dropping on other places
-                                            drop(manager);
-                                            match task.subscribe().await {
-                                                Ok(mut sub) => {
-                                                    // Drop the task because we don't need it anymore
-                                                    drop(task);
-                                                    if *is_readed.read().await {
-                                                        if sub.changed().await.is_err() {
-                                                            return None;
-                                                        }
-                                                    } else {
-                                                        *is_readed.write().await = true;
-                                                    }
-                                                    let data: CoverDownloadState =
-                                                        { (*sub.borrow()).clone().into() };
-                                                    data
-                                                }
-                                                Err(err) => CoverDownloadState::Error(err.into()),
-                                            }
-                                        }
-                                        Err(err) => CoverDownloadState::Error(
-                                            ManagerError::MailBox(err).into(),
-                                        ),
-                                    }
-                                }
-                                Err(err) => {
-                                    CoverDownloadState::Error(ManagerError::MailBox(err).into())
-                                }
-                            }
-                        };
-
-                        Some(to_send)
-                    } else {
-                        None
-                    }
-                })
-            };
+            let handle = get_next_task_value::<CoverDownloadManager, CoverDownloadTask, _>(
+                maybe_manager,
+                is_readed.clone(),
+                id,
+            );
             let _abort = AbortHandleGuard::new(handle.abort_handle());
             let to_send = select! {
                 Some(is_mounted) = is_mounted_stream.next() => {
