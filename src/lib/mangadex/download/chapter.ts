@@ -91,6 +91,8 @@ export const invalidateChapterOfflinePresence = debounce(async (id: string) => {
 	});
 })
 
+type ChapterSubOpType = OperationResult<ChapterDownloadStateSubscription, ChapterDownloadStateSubscriptionVariables>;
+
 export class ChapterDownload {
 	private chapterId: string;
 	private mode?: DownloadMode;
@@ -98,7 +100,7 @@ export class ChapterDownload {
 	private reexecute: () => void;
 	protected hasFailedInner: Readable<boolean>;
 	private isRemoving_: Writable<boolean>;
-	protected sub_op: Readable<OperationResult<ChapterDownloadStateSubscription, ChapterDownloadStateSubscriptionVariables> | undefined>;
+	protected sub_op: Readable<ChapterSubOpType | undefined>;
 	/**
 	 *
 	 */
@@ -116,7 +118,7 @@ export class ChapterDownload {
 				}).toPromise();
 			},
 		}, mangadexQueryClient);
-		this.sub_op = readable<OperationResult<ChapterDownloadStateSubscription, ChapterDownloadStateSubscriptionVariables> | undefined>(undefined, (set) => {
+		this.sub_op = readable<ChapterSubOpType | undefined>(undefined, (set) => {
 			const mount_sub = isMounted.subscribe(() => {
 				invalidateChapterOfflinePresence(id)?.catch(console.warn);
 			});
@@ -173,7 +175,7 @@ export class ChapterDownload {
 		return this.sub_op;
 	}
 	public state(): Readable<ChapterDownloadState> {
-		const stores: [Readable<OperationResult<ChapterDownloadStateSubscription, ChapterDownloadStateSubscriptionVariables> | undefined>, Readable<boolean>, Readable<boolean>, Readable<boolean>] = [this.sub_raw_state(), this.hasFailed, this.isPresent, this.isRemoving];
+		const stores: [Readable<ChapterSubOpType | undefined>, Readable<boolean>, Readable<boolean>, Readable<boolean>] = [this.sub_raw_state(), this.hasFailed, this.isPresent, this.isRemoving];
 		return derived(stores, ([result, hasFailed, isPresent, removing]) => {
 			const res = (() => {
 				if (removing) {
@@ -287,7 +289,7 @@ export class ChapterDownload {
 				rexec()
 			},
 		}, mangadexQueryClient)
-		get(res).mutateAsync()
+		await get(res).mutateAsync()
 		return res;
 	}
 	public async remove() {
