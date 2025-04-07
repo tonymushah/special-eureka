@@ -84,7 +84,7 @@ export function offlinePresenceQueryKey(id: string) {
 	return ["chapter", id, "offline-presence"];
 }
 
-export const invalidateChapterOfflinePresence = (async (id: string) => {
+export const invalidateChapterOfflinePresence = debounce(async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
 	await mangadexQueryClient.invalidateQueries({
 		queryKey
@@ -118,7 +118,7 @@ export class ChapterDownload {
 		}, mangadexQueryClient);
 		this.sub_op = readable<OperationResult<ChapterDownloadStateSubscription, ChapterDownloadStateSubscriptionVariables> | undefined>(undefined, (set) => {
 			const mount_sub = isMounted.subscribe(() => {
-				invalidateChapterOfflinePresence(id).catch(console.warn);
+				invalidateChapterOfflinePresence(id)?.catch(console.warn);
 			});
 			const sub = client.subscription(subscription, {
 				id
@@ -129,7 +129,7 @@ export class ChapterDownload {
 					() => res
 				);
 				if (res.data?.watchChapterDownloadState.isDone) {
-					invalidateChapterOfflinePresence(id).catch(console.warn)
+					invalidateChapterOfflinePresence(id)?.catch(console.warn)
 				}
 			})
 			return () => {
@@ -290,14 +290,14 @@ export class ChapterDownload {
 		get(res).mutateAsync()
 		return res;
 	}
-	public async cancel() {
+	public async remove() {
 		let id = this.chapterId;
 		const rexec = this.reexecute;
 		const removing = this.isRemoving_;
 		const res = createMutation({
 			mutationKey: ["chapter-removing", id],
 			async mutationFn() {
-				return await client.mutation(ChapterDownload.cancel_dowload_mutation(), {
+				return await client.mutation(ChapterDownload.remove_chapter_mutation(), {
 					id
 				}).toPromise()
 			},
@@ -311,8 +311,8 @@ export class ChapterDownload {
 		}, mangadexQueryClient)
 		return res;
 	}
-	public async remove() {
-		const res = await client.mutation(ChapterDownload.remove_chapter_mutation(), {
+	public async cancel() {
+		const res = await client.mutation(ChapterDownload.cancel_dowload_mutation(), {
 			id: this.chapterId
 		}).toPromise();
 		this.reexecute();
