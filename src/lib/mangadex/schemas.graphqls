@@ -558,6 +558,23 @@ enum CoverDownloadingState {
 	FETCHING_IMAGE
 }
 
+input CoverEditParam {
+	coverOrMangaId: UUID!
+	"""
+	0-8 characters in length.
+	"""
+	volume: String!
+	"""
+	0-512 characters in length.
+	"""
+	description: String = null
+	locale: Language = null
+	"""
+	>= 1
+	"""
+	version: Int!
+}
+
 enum CoverImageQuality {
 	V512
 	V256
@@ -571,6 +588,15 @@ input CoverListParam {
 	uploaderIds: [UUID!]! = []
 	locales: [Language!]! = []
 	order: CoverSortOrder
+}
+
+type CoverMutations {
+	upload(params: CoverUploadParam!): Cover!
+	edit(params: CoverEditParam!): Cover!
+	delete(id: UUID!): Boolean!
+	download(id: UUID!): DownloadState!
+	remove(id: UUID!): Boolean!
+	cancelDownload(id: UUID!): Boolean!
 }
 
 type CoverQueries {
@@ -596,6 +622,21 @@ input CoverSortOrder @oneOf {
 	createdAt: OrderDirection
 	updatedAt: OrderDirection
 	volume: OrderDirection
+}
+
+input CoverUploadParam {
+	mangaId: UUID!
+	file: PathBuf!
+	"""
+	Volume number the cover is associated with.
+	
+	* Nullable
+	* <= 8 characters
+	* Pattern: `^(0|[1-9]\\d*)((\\.\\d+){1,2})?[a-z]?$`
+	"""
+	volume: String = null
+	description: String! = ""
+	locale: Language!
 }
 
 input CreateForumThreadParams {
@@ -1698,6 +1739,7 @@ type Mutation {
 	offlineAppState: OfflineAppStateMutations!
 	user: UserMutations!
 	userOption: UserOptionMutations!
+	cover: CoverMutations!
 }
 
 type OauthMutations {
