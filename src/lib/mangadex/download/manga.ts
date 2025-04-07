@@ -165,7 +165,7 @@ export class MangaDonwload {
 			}).subscribe((res) => {
 				set(res);
 				mangadexQueryClient.setQueryData(
-					["chapter", id, "download-state", "subscription"],
+					["manga", id, "download-state", "subscription"],
 					() => res
 				);
 				if (res.data?.watchMangaDownloadState.isDone || res.data?.watchMangaDownloadState.error || res.data?.watchMangaDownloadState.isCanceled) {
