@@ -135,7 +135,7 @@ export enum MangaDownloadState {
 
 type MangaSubOpType = OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables>;
 
-export class MangaDonwload {
+export class MangaDownload {
 	private mangaId: string;
 	protected isPresentInner: Readable<boolean>;
 	private reexecute: () => void;

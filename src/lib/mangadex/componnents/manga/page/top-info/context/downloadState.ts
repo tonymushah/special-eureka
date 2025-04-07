@@ -1,10 +1,10 @@
-import type { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
+import type { MangaDownloadState } from "@mangadex/download/manga";
 import { getContext, setContext } from "svelte";
 import type { Readable } from "svelte/store";
 
 const key = "top-manga-download-state";
 
-type DownloadStateTopManga = Readable<ChapterDownloadState>;
+type DownloadStateTopManga = Readable<MangaDownloadState>;
 
 export function setTopMangaDownloadContextStore(state: DownloadStateTopManga) {
 	return setContext<DownloadStateTopManga>(key, state);
