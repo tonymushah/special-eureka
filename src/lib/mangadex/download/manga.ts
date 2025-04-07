@@ -105,7 +105,7 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 });
 
 const cancel = debounce(async (id: string) => {
-	return await gqlClient.mutation(MangaDonwload.mangaRemoveMutation(), {
+	return await gqlClient.mutation(MangaDonwload.cancelDonwloadMuation(), {
 		id
 	}).toPromise()
 })
