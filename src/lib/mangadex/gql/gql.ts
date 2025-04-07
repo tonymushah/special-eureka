@@ -44,6 +44,11 @@ type Documents = {
     "\n\tsubscription chapterDownloadState($id: UUID!) {\n\t\twatchChapterDownloadState(chapterId: $id) {\n\t\t\tisPending\n\t\t\tisDone\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\terror\n\t\t\tdownloading {\n\t\t\t\tisPreloading\n\t\t\t\tisFetchingData\n\t\t\t\tfetchingImage {\n\t\t\t\t\tfilename\n\t\t\t\t\tindex\n\t\t\t\t\tlen\n\t\t\t\t}\n\t\t\t\tisFetchingAtHomeData\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterDownloadStateDocument,
     "\n\tmutation removeDownloadedChapter($id: UUID!) {\n\t\tchapter {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": typeof types.RemoveDownloadedChapterDocument,
     "\n\tquery chapterDownloadStateQ($id: UUID!) {\n\t\tdownloadState {\n\t\t\tchapter(chapterId: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterDownloadStateQDocument,
+    "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DownloadMangaDocument,
+    "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": typeof types.CancelDownloadMangaDocument,
+    "\n\tquery mangaDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tmanga(mangaId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MangaDownloadStateDocument,
+    "\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": typeof types.MangaDownloadSubDocument,
+    "\n\tmutation mangaRemoveMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": typeof types.MangaRemoveMutationDocument,
     "\n\tquery allTags {\n\t\ttag {\n\t\t\tlist {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tgroup\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AllTagsDocument,
     "\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": typeof types.RtlSidebarSubDocument,
     "\n\tsubscription userMe {\n\t\twatchUserMe {\n\t\t\tusername\n\t\t\troles\n\t\t}\n\t}\n": typeof types.UserMeDocument,
@@ -132,6 +137,11 @@ const documents: Documents = {
     "\n\tsubscription chapterDownloadState($id: UUID!) {\n\t\twatchChapterDownloadState(chapterId: $id) {\n\t\t\tisPending\n\t\t\tisDone\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\terror\n\t\t\tdownloading {\n\t\t\t\tisPreloading\n\t\t\t\tisFetchingData\n\t\t\t\tfetchingImage {\n\t\t\t\t\tfilename\n\t\t\t\t\tindex\n\t\t\t\t\tlen\n\t\t\t\t}\n\t\t\t\tisFetchingAtHomeData\n\t\t\t}\n\t\t}\n\t}\n": types.ChapterDownloadStateDocument,
     "\n\tmutation removeDownloadedChapter($id: UUID!) {\n\t\tchapter {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": types.RemoveDownloadedChapterDocument,
     "\n\tquery chapterDownloadStateQ($id: UUID!) {\n\t\tdownloadState {\n\t\t\tchapter(chapterId: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": types.ChapterDownloadStateQDocument,
+    "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.DownloadMangaDocument,
+    "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": types.CancelDownloadMangaDocument,
+    "\n\tquery mangaDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tmanga(mangaId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.MangaDownloadStateDocument,
+    "\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": types.MangaDownloadSubDocument,
+    "\n\tmutation mangaRemoveMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": types.MangaRemoveMutationDocument,
     "\n\tquery allTags {\n\t\ttag {\n\t\t\tlist {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tgroup\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.AllTagsDocument,
     "\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": types.RtlSidebarSubDocument,
     "\n\tsubscription userMe {\n\t\twatchUserMe {\n\t\t\tusername\n\t\t\troles\n\t\t}\n\t}\n": types.UserMeDocument,
@@ -324,6 +334,26 @@ export function graphql(source: "\n\tmutation removeDownloadedChapter($id: UUID!
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tquery chapterDownloadStateQ($id: UUID!) {\n\t\tdownloadState {\n\t\t\tchapter(chapterId: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery chapterDownloadStateQ($id: UUID!) {\n\t\tdownloadState {\n\t\t\tchapter(chapterId: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tquery mangaDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tmanga(mangaId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n"): (typeof documents)["\n\tquery mangaDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tmanga(mangaId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"): (typeof documents)["\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation mangaRemoveMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n"): (typeof documents)["\n\tmutation mangaRemoveMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
