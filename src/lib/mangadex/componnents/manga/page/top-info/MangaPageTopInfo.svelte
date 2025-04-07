@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { writable, type Readable } from "svelte/store";
+	import { readable, writable, type Readable } from "svelte/store";
 	import {
 		setTopCoverAltContextStore,
 		setTopCoverContextStore,
@@ -31,6 +31,7 @@
 	import type { TopMangaStatistics } from "./stats";
 	import TopMangaStats from "./TopMangaStats.svelte";
 	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
+	import { MangaDownloadState } from "@mangadex/download/manga";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -60,6 +61,9 @@
 		comments: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
+		downloading: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 
 	interface Props {
@@ -75,7 +79,7 @@
 		reading_status?: Readable<ReadingStatus | undefined>;
 		isFollowing?: Readable<boolean | undefined>;
 		rating?: Readable<number | undefined>;
-		downloadState?: Readable<ChapterDownloadState>;
+		downloadState?: Readable<MangaDownloadState>;
 		stats?: TopMangaStatistics | undefined;
 		contentRating?: ContentRating;
 	}
@@ -93,7 +97,7 @@
 		reading_status = writable<ReadingStatus | undefined>(undefined),
 		isFollowing = writable<boolean | undefined>(undefined),
 		rating = writable<number | undefined>(undefined),
-		downloadState = writable(ChapterDownloadState.NotDownloaded),
+		downloadState = readable(MangaDownloadState.Pending),
 		stats = $bindable(undefined),
 		contentRating = ContentRating.Safe
 	}: Props = $props();
@@ -147,6 +151,9 @@
 				}}
 				on:upload={({ detail }) => {
 					dispatch("upload", detail);
+				}}
+				on:downloading={({ detail }) => {
+					dispatch("downloading", detail);
 				}}
 			/>
 			<div class="tag-status">

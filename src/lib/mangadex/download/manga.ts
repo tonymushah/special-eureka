@@ -75,7 +75,7 @@ const download = debounce(async (id: string, _client?: QueryClient) => {
 	const res = createMutation({
 		mutationKey: ["manga", "download", id],
 		async mutationFn() {
-			const res = await (gqlClient.mutation(MangaDonwload.downloadMutation(), {
+			const res = await (gqlClient.mutation(MangaDownload.downloadMutation(), {
 				id,
 
 			}).toPromise())
@@ -94,7 +94,7 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 	const res = createMutation({
 		mutationKey: ["manga-removing", id],
 		async mutationFn() {
-			const res = await (gqlClient.mutation(MangaDonwload.mangaRemoveMutation(), {
+			const res = await (gqlClient.mutation(MangaDownload.mangaRemoveMutation(), {
 				id
 			}).toPromise());
 			return res;
@@ -105,7 +105,7 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 });
 
 const cancel = debounce(async (id: string) => {
-	return await gqlClient.mutation(MangaDonwload.cancelDonwloadMuation(), {
+	return await gqlClient.mutation(MangaDownload.cancelDonwloadMuation(), {
 		id
 	}).toPromise()
 })
@@ -116,7 +116,7 @@ const downloadStateQuery = ((id: string, _client?: QueryClient) => {
 	return createQuery({
 		queryKey,
 		async queryFn() {
-			return await gqlClient.query(MangaDonwload.mangaDownloadStateQuery(), {
+			return await gqlClient.query(MangaDownload.mangaDownloadStateQuery(), {
 				id
 			}).toPromise()
 		}
@@ -162,7 +162,7 @@ export class MangaDownload {
 			const mount_sub = isMounted.subscribe(() => {
 				invalidateMangaOfflinePresence(id)?.catch(console.warn);
 			});
-			const sub = gqlClient.subscription(MangaDonwload.mangaDownloadStateSub(), {
+			const sub = gqlClient.subscription(MangaDownload.mangaDownloadStateSub(), {
 				id
 			}).subscribe((res) => {
 				set(res);

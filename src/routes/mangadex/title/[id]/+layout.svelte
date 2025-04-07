@@ -16,6 +16,7 @@
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
 	import { setTitleLayoutData } from "./layout.context";
 	import ConflictLayout from "./ConflictLayout.svelte";
+	import { MangaDownload } from "@mangadex/download/manga";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -80,6 +81,8 @@
 	let layoutData = $derived(data.layoutData!);
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
+
+	let mangaDownload = $derived(new MangaDownload(data.layoutData.id));
 </script>
 
 {#if hasConflict && !ingnoreConflict}
@@ -102,6 +105,16 @@
 			}
 		}}
 		contentRating={layoutData.contentRating ?? undefined}
+		downloadState={mangaDownload.state()}
+		on:download={async () => {
+			await mangaDownload.download();
+		}}
+		on:delete={async () => {
+			await mangaDownload.remove();
+		}}
+		on:downloading={async () => {
+			await mangaDownload.cancel();
+		}}
 	/>
 
 	<div class="out-top">
