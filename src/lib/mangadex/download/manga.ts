@@ -84,7 +84,7 @@ const download = debounce(async (id: string, _client?: QueryClient) => {
 		onSettled(data, error, variables, context) {
 			invalidateMangaOfflinePresence(id);
 		},
-	});
+	}, client);
 	await get(res).mutateAsync();
 	return res;
 })
@@ -99,7 +99,7 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 			}).toPromise());
 			return res;
 		}
-	});
+	}, client);
 	await get(res).mutateAsync();
 	return res;
 });
@@ -133,13 +133,15 @@ export enum MangaDownloadState {
 	Removing
 }
 
+type MangaSubOpType = OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables>;
+
 export class MangaDonwload {
 	private mangaId: string;
 	protected isPresentInner: Readable<boolean>;
 	private reexecute: () => void;
 	protected hasFailedInner: Readable<boolean>;
 	private isRemoving_: Writable<boolean>
-	protected sub_op: Readable<OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables> | undefined>;
+	protected sub_op: Readable<MangaSubOpType | undefined>;
 
 
 	constructor(id: string) {
@@ -156,7 +158,7 @@ export class MangaDonwload {
 			return result?.data?.downloadState.manga.hasFailed == true
 		})
 		this.isRemoving_ = writable(false);
-		this.sub_op = readable<OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables> | undefined>(undefined, (set) => {
+		this.sub_op = readable<MangaSubOpType | undefined>(undefined, (set) => {
 			const mount_sub = isMounted.subscribe(() => {
 				invalidateMangaOfflinePresence(id)?.catch(console.warn);
 			});
@@ -204,7 +206,7 @@ export class MangaDonwload {
 		return mangaRemoveMutation;
 	}
 
-	public get sub_raw_state(): Readable<OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables> | undefined> {
+	public get sub_raw_state(): Readable<MangaSubOpType | undefined> {
 		return this.sub_op;
 	}
 
@@ -222,7 +224,7 @@ export class MangaDonwload {
 
 
 	public state(): Readable<MangaDownloadState> {
-		const stores: [Readable<OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables> | undefined>, Readable<boolean>, Readable<boolean>, Readable<boolean>] = [this.sub_raw_state, this.hasFailed, this.isPresent, this.isRemoving];
+		const stores: [Readable<MangaSubOpType | undefined>, Readable<boolean>, Readable<boolean>, Readable<boolean>] = [this.sub_raw_state, this.hasFailed, this.isPresent, this.isRemoving];
 		return derived(stores, ([result, hasFailed, isPresent, removing]) => {
 			const res = (() => {
 				if (removing) {
@@ -302,6 +304,9 @@ export class MangaDonwload {
 					return false;
 			}
 		})
+	}
+	public async cancel() {
+		return await cancel(this.id);
 	}
 	public is_downloaded() {
 		return derived(this.state(), (result) => {
