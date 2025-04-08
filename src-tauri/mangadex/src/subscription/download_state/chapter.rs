@@ -195,6 +195,9 @@ impl ChapterDownloadSubs {
                 .await?;
         let notify = manager.notify().await?;
         let stream = stream! {
+            if let Ok(tasks) = manager.tasks_id().await {
+                yield tasks
+            }
             loop {
                 select! {
                     _ = notify.notified() => {
