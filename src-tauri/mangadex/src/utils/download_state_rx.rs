@@ -82,7 +82,9 @@ where
                 Ok(task) => {
                     drop(manager);
                     match task.subscribe().await {
-                        Ok(mut sub) => {
+						Ok(mut sub) => {
+							let _task = task.downgrade();
+							drop(task);
                             if *is_readed.read().await {
                                 if sub.changed().await.is_err() {
                                     return None;
@@ -139,21 +141,27 @@ where
                     if is_mounted {
                         continue;
                     }else {
-                        O::offline_app_state_not_loaded()
+                        O::offline_app_state_not_loaded().into()
                     }
                 },
                 join_res = handle => {
                     match join_res {
-                        Ok(Some(res)) => res,
-                        Ok(None) => O::offline_app_state_not_loaded(),
+                        Ok(res) => res,
                         Err(err) => {
                             eprintln!("{:?}", err);
                             continue;
                         },
                     }
                 },
+				_ = tx.closed() => {
+					break;
+				}
                 else => break
             };
+			let Some(to_send) = to_send else {
+				sleep(Duration::from_millis(1000)).await;
+				continue;
+			};
             if to_send.is_offline_app_state_not_loaded() {
                 *is_readed.write().await = false;
             }
@@ -167,7 +175,7 @@ where
                     (true, true),
                 )
             } {
-                sleep(Duration::from_millis(500)).await;
+                sleep(Duration::from_millis(1000)).await;
                 continue;
             }
 			#[cfg(debug_assertions)]
