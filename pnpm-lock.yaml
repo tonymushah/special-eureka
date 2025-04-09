@@ -38,6 +38,9 @@ importers:
       '@tanstack/svelte-query':
         specifier: ^5.71.0
         version: 5.71.0(svelte@5.25.3)
+      '@tanstack/table-core':
+        specifier: ^8.21.2
+        version: 8.21.2
       '@tauri-apps/api':
         specifier: ^2.4.0
         version: 2.4.0
@@ -1911,6 +1914,10 @@ packages:
     resolution: {integrity: sha512-zBlIpnOCeGAhjUn5Ca2nozhQDpEGve1jBhMaK4dQ3KSqdeVGVFjtMVp3tz0jkLMDNeWciZC3g5ix3KICLN9ZWA==}
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
+
+  '@tanstack/table-core@8.21.2':
+    resolution: {integrity: sha512-uvXk/U4cBiFMxt+p9/G7yUWI/UbHYbyghLCjlpWZ3mLeIZiUBSKcUnw9UnKkdRz7Z/N4UBuFLWQdJCjUe7HjvA==}
+    engines: {node: '>=12'}
 
   '@tanstack/virtual-core@3.13.5':
     resolution: {integrity: sha512-gMLNylxhJdUlfRR1G3U9rtuwUh2IjdrrniJIDcekVJN3/3i+bluvdMi3+eodnxzJq5nKnxnigo9h0lIpaqV6HQ==}
@@ -6754,6 +6761,8 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.71.0
       svelte: 5.25.3
+
+  '@tanstack/table-core@8.21.2': {}
 
   '@tanstack/virtual-core@3.13.5': {}
 
