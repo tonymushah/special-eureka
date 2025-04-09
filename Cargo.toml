@@ -57,8 +57,15 @@ package = "tauri-plugin-speu-mangadex"
 
 # Enable a small amount of optimization in the dev profile.
 [profile.dev]
-opt-level = 1
+opt-level = 3
+lto = "thin"
+
+[profile.release]
+lto = "thin"
 
 # Enable a large amount of optimization in the dev profile for dependencies.
 [profile.dev.package."*"]
 opt-level = 3
+
+[profile.release.package."tauri-plugin-speu-mangadex"]
+opt-level = "s"
