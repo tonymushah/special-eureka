@@ -51,6 +51,13 @@ macro_rules! specific {
 		pub struct SpecificRateLimits {
 			$(pub $name: DefaultDirectRateLimiter,)*
 		}
+		impl SpecificRateLimits {
+			$(
+				pub async fn $name(&self) {
+					until_ready(&self.$name).await;
+				}
+			)*
+		}
 		impl From<&SpecificRateLimitConfig> for SpecificRateLimits {
 			fn from(value: &SpecificRateLimitConfig) -> Self {
 				Self {
