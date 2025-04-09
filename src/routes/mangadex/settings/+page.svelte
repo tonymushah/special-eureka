@@ -8,6 +8,7 @@
 	import ContentIcon from "./(icons)/ContentIcon.svelte";
 	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
 	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
+	import DownloadStateIcon from "./(icons)/DownloadStateIcon.svelte";
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
 			title: "Themes",
@@ -34,7 +35,13 @@
 			icon: ArchiveIcon
 		},
 		{
-			title: "Developer Playground",
+			title: "Download States",
+			description: "Check any download status",
+			href: route("/mangadex/settings/download-state"),
+			icon: DownloadStateIcon
+		},
+		{
+			title: "Dev Playground",
 			description: "Design tests etc...",
 			href: route("/mangadex/settings/css-playground"),
 			icon: PlaygroundIcon
