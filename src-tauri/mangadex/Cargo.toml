@@ -51,6 +51,7 @@ dirs.workspace = true
 enum-repr.workspace = true
 enum-kinds.workspace = true
 serde_repr.workspace = true
+governor.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.1"

@@ -4,10 +4,13 @@ use duration_string::DurationString;
 use serde::Deserialize;
 use tower::limit::RateLimitLayer;
 
+use crate::rate_limit::SpecificRateLimitConfig;
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct RateLimitConfig {
     pub(crate) number: u64,
     pub(crate) period: DurationString,
+    pub(crate) specific: SpecificRateLimitConfig,
 }
 
 impl Default for RateLimitConfig {
@@ -15,6 +18,7 @@ impl Default for RateLimitConfig {
         Self {
             number: 5,
             period: DurationString::new(Duration::from_secs(1)),
+            specific: Default::default(),
         }
     }
 }
