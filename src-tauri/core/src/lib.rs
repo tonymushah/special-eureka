@@ -22,8 +22,13 @@ pub fn run() {
     .unwrap();
     let context = tauri::generate_context!();
     System::set_current(runtime_guard.sys().clone());
-    tauri::async_runtime::set(runtime_guard.handle().clone());
+    /*let tauri_async_runtime = RuntimeBuilder::new_current_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+    tauri::async_runtime::set(tauri_async_runtime.handle().clone());*/
     let runtime_guard = Arc::new(Mutex::new(Some(runtime_guard)));
+
     match get_builder().build(context) {
         Ok(app) => app.run(move |app_handle, e| match e {
             tauri::RunEvent::WindowEvent {
