@@ -2,6 +2,7 @@ use std::{num::NonZero, time::Duration};
 
 use duration_string::DurationString;
 use governor::DefaultDirectRateLimiter;
+use governor::Jitter;
 use governor::Quota;
 use serde::Deserialize;
 
@@ -197,4 +198,12 @@ specific! {
         NonZero::new(250).unwrap(),
         Duration::from_secs(60).into()
     },
+}
+
+pub fn default_jitter() -> Jitter {
+    Jitter::new(Duration::from_millis(500), Duration::from_secs(2))
+}
+
+pub async fn until_ready(rate_limiter: &DefaultDirectRateLimiter) {
+    rate_limiter.until_ready_with_jitter(default_jitter()).await;
 }
