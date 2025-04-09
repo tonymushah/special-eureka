@@ -7,6 +7,7 @@
 	import AuthIcon from "./(icons)/AuthIcon.svelte";
 	import ContentIcon from "./(icons)/ContentIcon.svelte";
 	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
+	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
 			title: "Themes",
@@ -31,6 +32,12 @@
 			description: "Update offline data config",
 			href: route("/mangadex/settings/offline-data"),
 			icon: ArchiveIcon
+		},
+		{
+			title: "Developer Playground",
+			description: "Design tests etc...",
+			href: route("/mangadex/settings/css-playground"),
+			icon: PlaygroundIcon
 		}
 	];
 </script>
