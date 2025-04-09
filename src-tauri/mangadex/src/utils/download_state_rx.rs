@@ -83,7 +83,6 @@ where
                     drop(manager);
                     match task.subscribe().await {
                         Ok(mut sub) => {
-                            drop(task);
                             if *is_readed.read().await {
                                 if sub.changed().await.is_err() {
                                     return None;
@@ -171,6 +170,7 @@ where
                 sleep(Duration::from_millis(500)).await;
                 continue;
             }
+			#[cfg(debug_assertions)]
             println!("{id} - {:?}", to_send);
             if tx.send(to_send).is_err() {
                 break;
