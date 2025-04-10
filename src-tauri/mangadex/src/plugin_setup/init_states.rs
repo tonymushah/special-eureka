@@ -14,11 +14,11 @@ pub fn init_states<R: Runtime>(
     app: &tauri::AppHandle<R>,
     cfg: &PluginConfig,
 ) -> crate::PluginSetupResult<()> {
+    app.manage(SpecificRateLimits::from(&cfg.ratelimit.specific));
     let store = get_store_builder(app.clone())?.build()?;
     init_watches_states(app, &store)?;
     init_client_state(app, &store)?;
     app.manage(OfflineAppState::default());
     app.manage(MangaDexStoreState::new_from_store(store));
-    app.manage(SpecificRateLimits::from(&cfg.ratelimit.specific));
     Ok(())
 }

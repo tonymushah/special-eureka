@@ -24,11 +24,42 @@ use crate::{
     utils::watch::{SendData, Watches},
 };
 
+macro_rules! setup_watch {
+	($($watch:ident <= $store:ty$([$($how:ident,)*])?,)*) => {
+		fn inner_init<R: Runtime>(store: &Store<R>) -> crate::PluginSetupResult<Watches> {
+			let watches = Watches::default();
+			$(
+				let _ = watches.$watch.send_data(<$store>::extract_from_store(store)?$($(.$how())*)?);
+			)*
+			Ok(watches)
+		}
+	};
+}
+
+setup_watch! {
+    reading_mode <= ReadingModeStore,
+    chapter_languages <= ChapterLanguagesStore,
+    page_direction <= ReadingDirectionStore,
+    sidebar_direction <= SidebarDirectionStore,
+    image_fit <= ImageFitStore,
+    longstrip_image_width <= LongstripImageWidthStore,
+    manga_list_style <= MangaListStyleStore,
+    themes <= ThemeProfiles,
+    theme_default_key <= ThemeProfileDefaultKey,
+    client_info <= ClientInfoStore[inner,],
+    chapter_feed_style <= ChapterFeedStyleStore,
+    pagination_style <= PaginationStyleStore,
+    content_profiles <= ContentProfiles,
+    content_profiles_default_key <= ContentProfileDefaultKey,
+    chapter_quality <= ChapterQualityStore,
+}
+
 pub fn init_watches_states<R: Runtime>(
     app: &tauri::AppHandle<R>,
     store: &Store<R>,
 ) -> crate::PluginSetupResult<()> {
-    let watches = Watches::default();
+    let watches = inner_init(store)?;
+    /*
     let _ = watches
         .reading_mode
         .send_data(ReadingModeStore::extract_from_store(store)?);
@@ -73,7 +104,7 @@ pub fn init_watches_states<R: Runtime>(
         .send_data(ContentProfileDefaultKey::extract_from_store(store)?);
     let _ = watches
         .chapter_quality
-        .send_data(ChapterQualityStore::extract_from_store(store)?);
+        .send_data(ChapterQualityStore::extract_from_store(store)?);*/
     app.manage(watches);
     Ok(())
 }
