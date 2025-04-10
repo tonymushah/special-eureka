@@ -2,12 +2,7 @@ pub mod chapters;
 pub mod covers;
 pub mod favicon;
 
-use std::{
-    error::Error,
-    ops::{Deref, DerefMut},
-    sync::Mutex,
-    thread::JoinHandle,
-};
+use std::error::Error;
 
 use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_TYPE};
 use tauri::{
@@ -112,22 +107,6 @@ pub fn get_offline_app_state<R: Runtime>(
         .ok_or(SchemeResponseError::NotLoaded)
 }
 
-struct ResponsesThreads(Vec<JoinHandle<()>>);
-
-impl Deref for ResponsesThreads {
-    type Target = Vec<JoinHandle<()>>;
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-impl DerefMut for ResponsesThreads {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        self.0.retain(|e| !e.is_finished());
-        &mut self.0
-    }
-}
-
 fn handle<R: Runtime>(app: AppHandle<R>, req: Request<Vec<u8>>) -> Response<Vec<u8>> {
     match parse_uri(&req) {
         Ok(uri) => {
@@ -150,8 +129,6 @@ fn handle<R: Runtime>(app: AppHandle<R>, req: Request<Vec<u8>>) -> Response<Vec<
     }
 }
 
-type ResponsesThreadsMut = Mutex<ResponsesThreads>;
-
 pub fn register_scheme<R: Runtime>(
     app: &AppHandle<R>,
     config: serde_json::Value,
@@ -159,21 +136,9 @@ pub fn register_scheme<R: Runtime>(
     Builder::<R, ()>::new("mangadex-scheme")
         .register_asynchronous_uri_scheme_protocol("mangadex", |context, req, responder| {
             let app = context.app_handle().clone();
-            let j_hoindle = std::thread::spawn(move || {
+            std::thread::spawn(move || {
                 responder.respond(handle(app, req));
             });
-            if let Some(hs) = context.app_handle().try_state::<ResponsesThreadsMut>() {
-                if hs.is_poisoned() {
-                    hs.clear_poison();
-                }
-                if let Ok(mut lock) = hs.lock() {
-                    lock.push(j_hoindle);
-                }
-            } else {
-                context
-                    .app_handle()
-                    .manage(Mutex::new(ResponsesThreads(vec![j_hoindle])));
-            }
         })
         .build()
         .initialize(app, config)

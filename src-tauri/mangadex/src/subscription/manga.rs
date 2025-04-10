@@ -16,12 +16,11 @@ impl MangaSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-         
     ) -> Result<impl Stream<Item = MangaAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
-                |w| w.manga.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.manga.subscribe()
+            })?
             .option_filter_by_id(manga_id)
             .map(|data| data.inner_data()),
         )

@@ -25,36 +25,36 @@ pub fn weak_download_manager_watch<R: Runtime, M: Manager<R> + Clone + Send + 's
         WatchSubscriptionStream::<_>::from_tauri_manager::<IsAppStateMountedWatch, _, _>(app)?;
     let app = app.clone();
     tokio::spawn(async move {
-		loop {
-			tokio::select!{
-				_ = tx.closed() => {
-					break;
-				},
-				Some(mounted) = is_mounted_stream.next() => {
-					if mounted {
-						if let Ok(offline) = app.get_offline_app_state() {
-							if tx
-								.send(
-									offline
-										.read()
-										.await
-										.as_ref()
-										.map(|i| i.app_state.downgrade()),
-								)
-								.is_err()
-							{
-								break;
-							}
-						} else {
-							break;
-						}
-					} else if tx.send(None).is_err() {
-						break;
-					}
-				},
-				else => break
-			}
-		}
+        loop {
+            tokio::select! {
+                _ = tx.closed() => {
+                    break;
+                },
+                Some(mounted) = is_mounted_stream.next() => {
+                    if mounted {
+                        if let Ok(offline) = app.get_offline_app_state() {
+                            if tx
+                                .send(
+                                    offline
+                                        .read()
+                                        .await
+                                        .as_ref()
+                                        .map(|i| i.app_state.downgrade()),
+                                )
+                                .is_err()
+                            {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    } else if tx.send(None).is_err() {
+                        break;
+                    }
+                },
+                else => break
+            }
+        }
     });
     Ok(rx)
 }

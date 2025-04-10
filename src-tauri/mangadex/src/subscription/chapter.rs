@@ -16,12 +16,11 @@ impl ChapterSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-         
     ) -> Result<impl Stream<Item = ChapterAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
-                |w| w.chapter.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.chapter.subscribe()
+            })?
             .option_filter_by_id(chapter_id)
             .map(|data| data.inner_data()),
         )

@@ -16,12 +16,11 @@ impl CustomListSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         custom_list_id: Uuid,
-         
     ) -> Result<impl Stream<Item = CustomListAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
-                |w| w.custom_list.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.custom_list.subscribe()
+            })?
             .option_filter_by_id(custom_list_id),
         )
     }

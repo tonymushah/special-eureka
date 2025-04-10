@@ -20,12 +20,11 @@ impl DownloadStateSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         object_id: Uuid,
-         
     ) -> Result<impl Stream<Item = DownloadState> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
-                |w| w.download_state.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.download_state.subscribe()
+            })?
             .option_filter_by_id(object_id),
         )
     }

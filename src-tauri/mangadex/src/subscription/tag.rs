@@ -18,9 +18,9 @@ impl TagSubscriptions {
         tag_id: Uuid,
     ) -> Result<impl Stream<Item = TagAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx,
-                |w| w.tag.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.tag.subscribe()
+            })?
             .option_filter_by_id(tag_id),
         )
     }
