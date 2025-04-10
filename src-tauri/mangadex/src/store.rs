@@ -38,7 +38,42 @@ use self::{
 pub mod keys;
 pub mod types;
 
-pub fn get_store_builder<R: Runtime>(
+macro_rules! get_store_builder {
+    ($($store:ty,)*) => {
+        pub fn get_store_builder<R: Runtime>(
+            app: AppHandle<R>,
+        ) -> crate::PluginSetupResult<StoreBuilder<R>>  {
+            let b = StoreBuilder::new(&app, PATH.parse::<PathBuf>()?);
+            $(
+                let b= <$store>::default_store(b)?;
+            )*
+			Ok(b)
+        }
+    };
+}
+
+get_store_builder! {
+    ClientInfoStore,
+    RefreshTokenStore,
+    ReadingDirectionStore,
+    ReadingModeStore,
+    SidebarDirectionStore,
+    ChapterLanguagesStore,
+    ImageFitStore,
+    LongstripImageWidthStore,
+    MangaListStyleStore,
+    ThemeProfiles,
+    ThemeProfileDefaultKey,
+    ChapterFeedStyleStore,
+    PaginationStyleStore,
+    ContentProfiles,
+    ContentProfileDefaultKey,
+    OfflineConfigStore,
+    ChapterQualityStore,
+}
+
+// [x] refactor into a macro!
+/*pub fn get_store_builder<R: Runtime>(
     app: AppHandle<R>,
 ) -> crate::PluginSetupResult<StoreBuilder<R>> {
     let builder = {
@@ -63,7 +98,7 @@ pub fn get_store_builder<R: Runtime>(
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)
-}
+}*/
 
 // TODO implement this for refactorization
 /*
