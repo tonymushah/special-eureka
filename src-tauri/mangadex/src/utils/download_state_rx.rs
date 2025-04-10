@@ -82,9 +82,9 @@ where
                 Ok(task) => {
                     drop(manager);
                     match task.subscribe().await {
-						Ok(mut sub) => {
-							let _task = task.downgrade();
-							drop(task);
+                        Ok(mut sub) => {
+                            // let _task = task.downgrade();
+                            // drop(task);
                             if *is_readed.read().await {
                                 if sub.changed().await.is_err() {
                                     return None;
@@ -137,6 +137,11 @@ where
             let handle = get_next_task_value::<M, T, _>(maybe_manager, is_readed.clone(), id);
             let _abort = AbortHandleGuard::new(handle.abort_handle());
             let to_send = select! {
+                _ = tx.closed() => {
+                    #[cfg(debug_assertions)]
+                    println!("closed xD");
+                    break;
+                },
                 Some(is_mounted) = is_mounted_stream.next() => {
                     if is_mounted {
                         continue;
@@ -153,15 +158,12 @@ where
                         },
                     }
                 },
-				_ = tx.closed() => {
-					break;
-				}
                 else => break
             };
-			let Some(to_send) = to_send else {
-				sleep(Duration::from_millis(1000)).await;
-				continue;
-			};
+            let Some(to_send) = to_send else {
+                sleep(Duration::from_millis(1000)).await;
+                continue;
+            };
             if to_send.is_offline_app_state_not_loaded() {
                 *is_readed.write().await = false;
             }
@@ -178,7 +180,7 @@ where
                 sleep(Duration::from_millis(1000)).await;
                 continue;
             }
-			#[cfg(debug_assertions)]
+            #[cfg(debug_assertions)]
             println!("{id} - {:?}", to_send);
             if tx.send(to_send).is_err() {
                 break;
