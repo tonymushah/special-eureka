@@ -170,8 +170,9 @@ impl ChapterDownloadState {
 fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
     app: &M,
     id: Uuid,
+    deferred: bool,
 ) -> crate::Result<Receiver<ChapterDownloadState>> {
-    get_download_state_rx::<ChapterDownloadManager, ChapterDownloadTask, _, R, M>(app, id)
+    get_download_state_rx::<ChapterDownloadManager, ChapterDownloadTask, _, R, M>(app, id, deferred)
 }
 
 pub struct ChapterDownloadSubs;
@@ -215,10 +216,11 @@ impl ChapterDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
+        deferred: bool,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
         Ok(WatchSubscriptionStream::new(get_chapter_download_state_rx(
-            &window, chapter_id,
+            &window, chapter_id, deferred,
         )?))
         /* let stream = stream! {
             let mut is_readed = false;

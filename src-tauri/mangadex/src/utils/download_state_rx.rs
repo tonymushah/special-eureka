@@ -53,6 +53,7 @@ pub fn get_next_task_value<M, T, O>(
     maybe_manager: ArcRwLock<Option<WeakAddr<DownloadManager>>>,
     is_readed: ArcRwLock<bool>,
     id: Uuid,
+    deferred: bool,
 ) -> JoinHandle<Option<O>>
 where
     O: NextTaskValue + Send + 'static,
@@ -83,8 +84,9 @@ where
                     drop(manager);
                     match task.subscribe().await {
                         Ok(mut sub) => {
-                            // let _task = task.downgrade();
-                            // drop(task);
+                            if deferred {
+                                drop(task);
+                            }
                             if *is_readed.read().await {
                                 if sub.changed().await.is_err() {
                                     return None;
@@ -105,7 +107,11 @@ where
     })
 }
 
-pub fn get_download_state_rx<M, T, O, R, A>(app: &A, id: Uuid) -> crate::Result<Receiver<O>>
+pub fn get_download_state_rx<M, T, O, R, A>(
+    app: &A,
+    id: Uuid,
+    deferred: bool,
+) -> crate::Result<Receiver<O>>
 where
     R: Runtime,
     A: Manager<R> + Clone + Send + 'static,
@@ -134,7 +140,8 @@ where
         loop {
             let maybe_manager = maybe_manager.clone();
             let is_readed = is_readed.clone();
-            let handle = get_next_task_value::<M, T, _>(maybe_manager, is_readed.clone(), id);
+            let handle =
+                get_next_task_value::<M, T, _>(maybe_manager, is_readed.clone(), id, deferred);
             let _abort = AbortHandleGuard::new(handle.abort_handle());
             let to_send = select! {
                 _ = tx.closed() => {

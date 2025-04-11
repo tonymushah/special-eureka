@@ -135,8 +135,9 @@ impl MangaDownloadState {
 fn get_manga_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
     app: &M,
     id: Uuid,
+    deferred: bool,
 ) -> crate::Result<Receiver<MangaDownloadState>> {
-    get_download_state_rx::<MangaDownloadManager, MangaDownloadTask, _, R, M>(app, id)
+    get_download_state_rx::<MangaDownloadManager, MangaDownloadTask, _, R, M>(app, id, deferred)
 }
 
 pub struct MangaDownloadSubs;
@@ -179,10 +180,11 @@ impl MangaDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
+        deferred: bool,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
         Ok(WatchSubscriptionStream::new(get_manga_download_state_rx(
-            &window, manga_id,
+            &window, manga_id, deferred,
         )?))
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<

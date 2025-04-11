@@ -143,8 +143,9 @@ impl CoverDownloadState {
 fn get_cover_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
     app: &M,
     id: Uuid,
+    deferred: bool,
 ) -> crate::Result<Receiver<CoverDownloadState>> {
-    get_download_state_rx::<CoverDownloadManager, CoverDownloadTask, _, R, M>(app, id)
+    get_download_state_rx::<CoverDownloadManager, CoverDownloadTask, _, R, M>(app, id, deferred)
 }
 
 pub struct CoverDownloadSubs;
@@ -187,10 +188,11 @@ impl CoverDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
+        deferred: bool,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
         Ok(WatchSubscriptionStream::new(get_cover_download_state_rx(
-            &window, cover_id,
+            &window, cover_id, deferred,
         )?))
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<

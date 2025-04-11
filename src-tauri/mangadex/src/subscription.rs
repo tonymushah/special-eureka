@@ -381,11 +381,11 @@ impl Subscriptions {
     pub async fn watch_chapter_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-
+        deferred: Option<bool>,
         chapter_id: Uuid,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
         ChapterDownloadSubs
-            .listen_to_download_state(ctx, chapter_id)
+            .listen_to_download_state(ctx, chapter_id, deferred.unwrap_or_default())
             .await
     }
     pub async fn watch_chapters_tasks_list<'ctx>(
@@ -397,11 +397,11 @@ impl Subscriptions {
     pub async fn watch_cover_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-
+        deferred: Option<bool>,
         cover_id: Uuid,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         CoverDownloadSubs
-            .listen_to_download_state(ctx, cover_id)
+            .listen_to_download_state(ctx, cover_id, deferred.unwrap_or_default())
             .await
     }
     pub async fn watch_cover_tasks_list<'ctx>(
@@ -413,11 +413,11 @@ impl Subscriptions {
     pub async fn watch_manga_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-
+        deferred: Option<bool>,
         manga_id: Uuid,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
         MangaDownloadSubs
-            .listen_to_download_state(ctx, manga_id)
+            .listen_to_download_state(ctx, manga_id, deferred.unwrap_or_default())
             .await
     }
     pub async fn watch_manga_tasks_list<'ctx>(
