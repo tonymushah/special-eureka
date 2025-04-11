@@ -2189,11 +2189,11 @@ type Subscriptions {
 	watchClientInfo: ClientInfo
 	watchChapterFeedStyle: ChapterFeedStyle!
 	watchPaginationStyle: PaginationStyle!
-	watchChapterDownloadState(chapterId: UUID!): ChapterDownloadState!
+	watchChapterDownloadState(deferred: Boolean, chapterId: UUID!): ChapterDownloadState!
 	watchChaptersTasksList: [UUID!]!
-	watchCoverDownloadState(coverId: UUID!): CoverDownloadState!
+	watchCoverDownloadState(deferred: Boolean, coverId: UUID!): CoverDownloadState!
 	watchCoverTasksList: [UUID!]!
-	watchMangaDownloadState(mangaId: UUID!): MangaDownloadState!
+	watchMangaDownloadState(deferred: Boolean, mangaId: UUID!): MangaDownloadState!
 	watchMangaTasksList: [UUID!]!
 	watchContentProfiles: [ContentProfileEntry!]!
 	watchContentProfileDefaultName: String
