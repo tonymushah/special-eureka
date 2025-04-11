@@ -141,7 +141,8 @@ function subOPCover(id: string, deferred = false) {
 			invalidateCoverOfflinePresence(id)?.catch(console.warn);
 		});
 		const sub = gqlClient.subscription(CoverDownload.coverDownloadStateSub(), {
-			id
+			id,
+			deferred
 		}).subscribe((res) => {
 			set(res);
 			mangadexQueryClient.setQueryData(
