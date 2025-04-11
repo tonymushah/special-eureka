@@ -29,8 +29,8 @@ const canceled_download_mutation = graphql(`
 `);
 
 const subscription = graphql(`
-	subscription chapterDownloadState($id: UUID!) {
-		watchChapterDownloadState(chapterId: $id) {
+	subscription chapterDownloadState($id: UUID!, $deferred: Boolean) {
+		watchChapterDownloadState(chapterId: $id, deferred: $deferred) {
 			isPending
 			isDone
 			isCanceled
@@ -91,6 +91,31 @@ export const invalidateChapterOfflinePresence = debounce(async (id: string) => {
 	});
 })
 
+function subOpChapter(id: string, deferred: boolean = false) {
+	return readable<ChapterSubOpType | undefined>(undefined, (set) => {
+		const mount_sub = isMounted.subscribe(() => {
+			invalidateChapterOfflinePresence(id)?.catch(console.warn);
+		});
+		const sub = client.subscription(subscription, {
+			id,
+			deferred
+		}).subscribe((res) => {
+			set(res);
+			mangadexQueryClient.setQueryData(
+				["chapter", id, "download-state", "subscription"],
+				() => res
+			);
+			if (res.data?.watchChapterDownloadState.isDone) {
+				invalidateChapterOfflinePresence(id)?.catch(console.warn)
+			}
+		})
+		return () => {
+			sub.unsubscribe()
+			mount_sub()
+		}
+	});
+}
+
 type ChapterSubOpType = OperationResult<ChapterDownloadStateSubscription, ChapterDownloadStateSubscriptionVariables>;
 
 export class ChapterDownload {
@@ -118,27 +143,7 @@ export class ChapterDownload {
 				}).toPromise();
 			},
 		}, mangadexQueryClient);
-		this.sub_op = readable<ChapterSubOpType | undefined>(undefined, (set) => {
-			const mount_sub = isMounted.subscribe(() => {
-				invalidateChapterOfflinePresence(id)?.catch(console.warn);
-			});
-			const sub = client.subscription(subscription, {
-				id
-			}).subscribe((res) => {
-				set(res);
-				mangadexQueryClient.setQueryData(
-					["chapter", id, "download-state", "subscription"],
-					() => res
-				);
-				if (res.data?.watchChapterDownloadState.isDone) {
-					invalidateChapterOfflinePresence(id)?.catch(console.warn)
-				}
-			})
-			return () => {
-				sub.unsubscribe()
-				mount_sub()
-			}
-		});
+		this.sub_op = subOpChapter(id);
 
 		const is_present = derived(query, (res) => res.data);
 		this.isPresentInner = derived(is_present, (result) => {
@@ -152,7 +157,11 @@ export class ChapterDownload {
 		})
 		this.isRemoving_ = writable(false);
 	}
-
+	public static defered(chapterId: string, mode?: DownloadMode) {
+		const _this = new ChapterDownload(chapterId, mode);
+		_this.sub_op = subOpChapter(chapterId, true);
+		return _this;
+	}
 	public get isRemoving(): Readable<boolean> {
 		return readonly(this.isRemoving_)
 	}
