@@ -52,7 +52,7 @@ type Documents = {
     "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DownloadMangaDocument,
     "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": typeof types.CancelDownloadMangaDocument,
     "\n\tquery mangaDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tmanga(mangaId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MangaDownloadStateDocument,
-    "\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": typeof types.MangaDownloadSubDocument,
+    "\n\tsubscription mangaDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchMangaDownloadState(mangaId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": typeof types.MangaDownloadSubDocument,
     "\n\tmutation mangaRemoveMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": typeof types.MangaRemoveMutationDocument,
     "\n\tquery allTags {\n\t\ttag {\n\t\t\tlist {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tgroup\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AllTagsDocument,
     "\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": typeof types.RtlSidebarSubDocument,
@@ -153,7 +153,7 @@ const documents: Documents = {
     "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.DownloadMangaDocument,
     "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": types.CancelDownloadMangaDocument,
     "\n\tquery mangaDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tmanga(mangaId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.MangaDownloadStateDocument,
-    "\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": types.MangaDownloadSubDocument,
+    "\n\tsubscription mangaDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchMangaDownloadState(mangaId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": types.MangaDownloadSubDocument,
     "\n\tmutation mangaRemoveMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": types.MangaRemoveMutationDocument,
     "\n\tquery allTags {\n\t\ttag {\n\t\t\tlist {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tgroup\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": types.AllTagsDocument,
     "\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": types.RtlSidebarSubDocument,
@@ -385,7 +385,7 @@ export function graphql(source: "\n\tquery mangaDownloadState($id: UUID!) {\n\t\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"): (typeof documents)["\n\tsubscription mangaDownloadSub($id: UUID!) {\n\t\twatchMangaDownloadState(mangaId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tsubscription mangaDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchMangaDownloadState(mangaId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"): (typeof documents)["\n\tsubscription mangaDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchMangaDownloadState(mangaId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

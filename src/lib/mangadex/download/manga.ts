@@ -39,8 +39,8 @@ const mangaDownloadStateQuery = graphql(`
 `);
 
 const mangaDownloadStateSub = graphql(`
-	subscription mangaDownloadSub($id: UUID!) {
-		watchMangaDownloadState(mangaId: $id) {
+	subscription mangaDownloadSub($id: UUID!, $deferred: Boolean) {
+		watchMangaDownloadState(mangaId: $id, deferred: $deferred) {
 			isDone
 			isPending
 			isCanceled
@@ -135,6 +135,31 @@ export enum MangaDownloadState {
 
 type MangaSubOpType = OperationResult<MangaDownloadSubSubscription, MangaDownloadSubSubscriptionVariables>;
 
+function subOpManga(id: string, deferred = false) {
+	return readable<MangaSubOpType | undefined>(undefined, (set) => {
+		const mount_sub = isMounted.subscribe(() => {
+			invalidateMangaOfflinePresence(id)?.catch(console.warn);
+		});
+		const sub = gqlClient.subscription(MangaDownload.mangaDownloadStateSub(), {
+			id,
+			deferred
+		}).subscribe((res) => {
+			set(res);
+			mangadexQueryClient.setQueryData(
+				["manga", id, "download-state", "subscription"],
+				() => res
+			);
+			if (res.data?.watchMangaDownloadState.isDone || res.data?.watchMangaDownloadState.error || res.data?.watchMangaDownloadState.isCanceled) {
+				invalidateMangaOfflinePresence(id)?.catch(console.warn)
+			}
+		})
+		return () => {
+			sub.unsubscribe()
+			mount_sub()
+		}
+	});
+}
+
 export class MangaDownload {
 	private mangaId: string;
 	protected isPresentInner: Readable<boolean>;
@@ -158,27 +183,13 @@ export class MangaDownload {
 			return result?.data?.downloadState.manga.hasFailed == true
 		})
 		this.isRemoving_ = writable(false);
-		this.sub_op = readable<MangaSubOpType | undefined>(undefined, (set) => {
-			const mount_sub = isMounted.subscribe(() => {
-				invalidateMangaOfflinePresence(id)?.catch(console.warn);
-			});
-			const sub = gqlClient.subscription(MangaDownload.mangaDownloadStateSub(), {
-				id
-			}).subscribe((res) => {
-				set(res);
-				mangadexQueryClient.setQueryData(
-					["manga", id, "download-state", "subscription"],
-					() => res
-				);
-				if (res.data?.watchMangaDownloadState.isDone || res.data?.watchMangaDownloadState.error || res.data?.watchMangaDownloadState.isCanceled) {
-					invalidateMangaOfflinePresence(id)?.catch(console.warn)
-				}
-			})
-			return () => {
-				sub.unsubscribe()
-				mount_sub()
-			}
-		});
+		this.sub_op = subOpManga(id);
+	}
+
+	public static deferred(id: string) {
+		const _this = new MangaDownload(id);
+		_this.sub_op = subOpManga(id);
+		return _this;
 	}
 
 	public get id(): string {
