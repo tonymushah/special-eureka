@@ -58,7 +58,7 @@ package = "tauri-plugin-speu-mangadex"
 
 # Enable a small amount of optimization in the dev profile.
 [profile.dev]
-opt-level = 3
+opt-level = 1
 lto = "thin"
 
 [profile.release]
