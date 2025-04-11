@@ -24,8 +24,18 @@ export const chapterTasksSub = readable<OperationResult<ListenToChapterTasksIDsS
 	}
 });
 
-export const mangaTasks: Readable<string[]> = derived(mangaTasksSub, (sub) => sub?.data?.watchMangaTasksList ?? []);
+export const mangaTasks: Readable<string[]> = derived(mangaTasksSub, (sub) => {
+	const tasks = sub?.data?.watchMangaTasksList ?? [];
+	return Array.from(new Set(tasks))
+});
 
-export const coverTasks: Readable<string[]> = derived(coverTasksSub, (sub) => sub?.data?.watchCoverTasksList ?? []);
+export const coverTasks: Readable<string[]> = derived(coverTasksSub, (sub) => {
+	const tasks = sub?.data?.watchCoverTasksList ?? [];
+	return Array.from(new Set(tasks))
+});
 
-export const chapterTasks: Readable<string[]> = derived(chapterTasksSub, (sub) => sub?.data?.watchChaptersTasksList ?? []);
+export const chapterTasks: Readable<string[]> = derived(chapterTasksSub, (sub) => {
+	const tasks = sub?.data?.watchChaptersTasksList ?? [];
+	return Array.from(new Set(tasks))
+}
+);
