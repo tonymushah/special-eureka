@@ -343,4 +343,28 @@ export class ChapterDownload {
 			}
 		})
 	}
+	public download_state_images() {
+		return derived(
+			[this.images_state(), this.is_downloading()],
+			([_state, $is_downloaded]) => {
+				let [left, right, hasImages] = (() => {
+
+					if (_state && !$is_downloaded) {
+						return [
+							`${(_state.index * 100) / _state.len}%`,
+							`${100 - (_state.index * 100) / _state.len}%`,
+							true
+						];
+					} else {
+						return ["0%", "100%", false];
+					}
+				})();
+				return {
+					left,
+					right,
+					hasImages
+				};
+			}
+		);
+	}
 }

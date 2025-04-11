@@ -22,32 +22,8 @@
 		id
 	}: Props = $props();
 	const chapterDownload = new ChapterDownload(id);
-	const istate = chapterDownload.images_state();
-	const is_downloaded = chapterDownload.is_downloaded();
 
-	const download_state_images = storeDerived(
-		[istate, is_downloaded],
-		([_state, $is_downloaded]) => {
-			let [left, right, hasImages] = (() => {
-				let _state = $istate;
-
-				if (_state && !$is_downloaded) {
-					return [
-						`${(_state.index * 100) / _state.len}%`,
-						`${100 - (_state.index * 100) / _state.len}%`,
-						true
-					];
-				} else {
-					return ["0%", "100%", false];
-				}
-			})();
-			return {
-				left,
-				right,
-				hasImages
-			};
-		}
-	);
+	const download_state_images = chapterDownload.download_state_images();
 </script>
 
 <div
