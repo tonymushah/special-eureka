@@ -47,7 +47,7 @@ type Documents = {
     "\n\tmutation downloadCover($id: UUID!) {\n\t\tcover {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DownloadCoverDocument,
     "\n\tmutation cancelDownloadCover($id: UUID!) {\n\t\tcover {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": typeof types.CancelDownloadCoverDocument,
     "\n\tquery coverDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tcover(coverId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CoverDownloadStateDocument,
-    "\n\tsubscription coverDownloadSub($id: UUID!) {\n\t\twatchCoverDownloadState(coverId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": typeof types.CoverDownloadSubDocument,
+    "\n\tsubscription coverDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchCoverDownloadState(coverId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": typeof types.CoverDownloadSubDocument,
     "\n\tmutation coverRemoveMutation($id: UUID!) {\n\t\tcover {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": typeof types.CoverRemoveMutationDocument,
     "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DownloadMangaDocument,
     "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": typeof types.CancelDownloadMangaDocument,
@@ -148,7 +148,7 @@ const documents: Documents = {
     "\n\tmutation downloadCover($id: UUID!) {\n\t\tcover {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.DownloadCoverDocument,
     "\n\tmutation cancelDownloadCover($id: UUID!) {\n\t\tcover {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": types.CancelDownloadCoverDocument,
     "\n\tquery coverDownloadState($id: UUID!) {\n\t\tdownloadState {\n\t\t\tcover(coverId: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.CoverDownloadStateDocument,
-    "\n\tsubscription coverDownloadSub($id: UUID!) {\n\t\twatchCoverDownloadState(coverId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": types.CoverDownloadSubDocument,
+    "\n\tsubscription coverDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchCoverDownloadState(coverId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n": types.CoverDownloadSubDocument,
     "\n\tmutation coverRemoveMutation($id: UUID!) {\n\t\tcover {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": types.CoverRemoveMutationDocument,
     "\n\tmutation downloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id) {\n\t\t\t\thasFailed\n\t\t\t\tisDownloaded\n\t\t\t}\n\t\t}\n\t}\n": types.DownloadMangaDocument,
     "\n\tmutation cancelDownloadManga($id: UUID!) {\n\t\tmanga {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": types.CancelDownloadMangaDocument,
@@ -365,7 +365,7 @@ export function graphql(source: "\n\tquery coverDownloadState($id: UUID!) {\n\t\
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tsubscription coverDownloadSub($id: UUID!) {\n\t\twatchCoverDownloadState(coverId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"): (typeof documents)["\n\tsubscription coverDownloadSub($id: UUID!) {\n\t\twatchCoverDownloadState(coverId: $id) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"];
+export function graphql(source: "\n\tsubscription coverDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchCoverDownloadState(coverId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"): (typeof documents)["\n\tsubscription coverDownloadSub($id: UUID!, $deferred: Boolean) {\n\t\twatchCoverDownloadState(coverId: $id, deferred: $deferred) {\n\t\t\tisDone\n\t\t\tisPending\n\t\t\tisCanceled\n\t\t\tisOfflineAppStateNotLoaded\n\t\t\tdownloading\n\t\t\terror\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

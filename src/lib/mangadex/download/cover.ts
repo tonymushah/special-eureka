@@ -39,8 +39,8 @@ const coverDownloadStateQuery = graphql(`
 `);
 
 const coverDownloadStateSub = graphql(`
-	subscription coverDownloadSub($id: UUID!) {
-		watchCoverDownloadState(coverId: $id) {
+	subscription coverDownloadSub($id: UUID!, $deferred: Boolean) {
+		watchCoverDownloadState(coverId: $id, deferred: $deferred) {
 			isDone
 			isPending
 			isCanceled
@@ -135,6 +135,29 @@ export enum CoverDownloadState {
 	Removing
 }
 
+function subOPCover(id: string, deferred = false) {
+	return readable<CoverSubOpType | undefined>(undefined, (set) => {
+		const mount_sub = isMounted.subscribe(() => {
+			invalidateCoverOfflinePresence(id)?.catch(console.warn);
+		});
+		const sub = gqlClient.subscription(CoverDownload.coverDownloadStateSub(), {
+			id
+		}).subscribe((res) => {
+			set(res);
+			mangadexQueryClient.setQueryData(
+				["cover", id, "download-state", "subscription"],
+				() => res
+			);
+			if (res.data?.watchCoverDownloadState.isDone || res.data?.watchCoverDownloadState.error || res.data?.watchCoverDownloadState.isCanceled) {
+				invalidateCoverOfflinePresence(id)?.catch(console.warn)
+			}
+		})
+		return () => {
+			sub.unsubscribe()
+			mount_sub()
+		}
+	});
+}
 
 type CoverSubOpType = OperationResult<CoverDownloadSubSubscription, CoverDownloadSubSubscriptionVariables>;
 
@@ -161,27 +184,12 @@ export class CoverDownload {
 			return result?.data?.downloadState.cover.hasFailed == true
 		})
 		this.isRemoving_ = writable(false);
-		this.sub_op = readable<CoverSubOpType | undefined>(undefined, (set) => {
-			const mount_sub = isMounted.subscribe(() => {
-				invalidateCoverOfflinePresence(id)?.catch(console.warn);
-			});
-			const sub = gqlClient.subscription(CoverDownload.coverDownloadStateSub(), {
-				id
-			}).subscribe((res) => {
-				set(res);
-				mangadexQueryClient.setQueryData(
-					["cover", id, "download-state", "subscription"],
-					() => res
-				);
-				if (res.data?.watchCoverDownloadState.isDone || res.data?.watchCoverDownloadState.error || res.data?.watchCoverDownloadState.isCanceled) {
-					invalidateCoverOfflinePresence(id)?.catch(console.warn)
-				}
-			})
-			return () => {
-				sub.unsubscribe()
-				mount_sub()
-			}
-		});
+		this.sub_op = subOPCover(id)
+	}
+
+	public static deferred(id: string) {
+		const _this = new CoverDownload(id);
+		_this.sub_op = subOPCover(id, true);
 	}
 
 	public get sub_raw_state(): Readable<CoverSubOpType | undefined> {
