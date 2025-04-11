@@ -33,6 +33,14 @@
 </script>
 
 {#if isDownloaded}
+	<ButtonAccent
+		isBase
+		on:click={({ detail }) => {
+			dispatch("download", detail);
+		}}
+	>
+		<DownloadIcon />
+	</ButtonAccent>
 	<DangerButton
 		isBase
 		on:click={({ detail }) => {
