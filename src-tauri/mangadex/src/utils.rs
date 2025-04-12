@@ -11,6 +11,7 @@ pub mod collection;
 pub mod download;
 pub mod download_state;
 pub mod download_state_rx;
+pub mod math;
 pub mod source;
 pub mod store;
 pub mod traits_utils;
