@@ -1,9 +1,3 @@
-use crate::{
-    error::Error,
-    query::download_state::DownloadStateQueries,
-    utils::{download::cover::cover_download, traits_utils::MangadexAsyncGraphQLContextExt},
-    Result,
-};
 use async_graphql::{Context, Object};
 use eureka_mmanager::{
     download::cover::CoverDownloadMessage,
@@ -14,10 +8,17 @@ use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
 use uuid::Uuid;
 
 use crate::{
+    error::Error,
+    query::download_state::DownloadStateQueries,
+    utils::{download::cover::cover_download, traits_utils::MangadexAsyncGraphQLContextExt},
+    Result,
+};
+use crate::{
     objects::cover::Cover,
     utils::{
         download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
         get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
+        traits_utils::MangadexTauriManagerExt,
     },
 };
 
@@ -30,6 +31,10 @@ impl CoverMutations {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .post_cover()
+            .await;
         let data: ApiObjectNoRelationships<CoverAttributes> =
             params.send(&client).await?.body.data.into();
         let data: Cover = data.into();
@@ -40,6 +45,10 @@ impl CoverMutations {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .put_cover()
+            .await;
         let data: ApiObjectNoRelationships<CoverAttributes> =
             params.send(&client).await?.body.data.into();
         let data: Cover = data.into();
@@ -49,6 +58,10 @@ impl CoverMutations {
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .delete_cover()
+            .await;
         let _ = client.cover().cover_id(id).delete().send().await?;
         Ok(true)
     }
