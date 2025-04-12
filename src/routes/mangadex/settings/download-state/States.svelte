@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
 	import Chapters from "./(states)/Chapters.svelte";
+	import Mangas from "./(states)/Mangas.svelte";
 </script>
 
 <MangaDexTabs
@@ -27,7 +28,9 @@
 			</div>
 		{/if}
 		{#if content == "manga"}
-			<div></div>
+			<div>
+				<Mangas />
+			</div>
 		{/if}
 		{#if content == "covers"}
 			<div></div>
