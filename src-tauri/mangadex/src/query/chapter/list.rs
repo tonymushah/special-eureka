@@ -230,7 +230,7 @@ impl ChapterListQueries {
         tauri::async_runtime::spawn(async move {
             for data in _res.data {
                 let data: Chapter = data.into();
-                let _ = watches.chapter.send_offline(data);
+                let _ = watches.chapter.send_online(data);
             }
         });
         Ok(res)
