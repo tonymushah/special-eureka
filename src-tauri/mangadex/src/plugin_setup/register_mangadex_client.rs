@@ -4,7 +4,11 @@ use reqwest::{
     Client,
 };
 use tauri::{Manager, Runtime};
-use tower::{buffer::BufferLayer, limit::RateLimitLayer, ServiceBuilder};
+use tower::{
+    buffer::BufferLayer,
+    limit::{ConcurrencyLimitLayer, RateLimitLayer},
+    ServiceBuilder,
+};
 
 use super::plugin_config::PluginConfig;
 
@@ -34,6 +38,11 @@ pub fn register_mangadex_client<R: Runtime>(
         .layer(BufferLayer::new(1024))
         .layer(Into::<RateLimitLayer>::into(config.ratelimit.clone()));
     cli_builder = cli_builder.connector_layer(rate_limit);
+    if let Some(max_concurrency) = config.max_concurrency {
+        cli_builder = cli_builder.connector_layer(
+            ServiceBuilder::new().layer(ConcurrencyLimitLayer::new(max_concurrency)),
+        );
+    }
     app.manage(MangaDexClient::new(tauri::async_runtime::block_on(
         async { cli_builder.build() },
     )?));

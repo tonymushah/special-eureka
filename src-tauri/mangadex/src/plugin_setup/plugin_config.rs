@@ -39,4 +39,6 @@ pub struct PluginConfig {
     pub(crate) sdl_export_path: String,
     #[serde(default)]
     pub(crate) ratelimit: RateLimitConfig,
+    #[serde(default)]
+    pub(crate) max_concurrency: Option<usize>,
 }
