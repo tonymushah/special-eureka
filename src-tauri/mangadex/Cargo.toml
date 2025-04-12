@@ -54,7 +54,7 @@ serde_repr.workspace = true
 governor.workspace = true
 
 [dependencies.eureka-mmanager]
-version = "0.1"
+version = "0.2"
 default-features = false
 
 [dependencies.mangadex-api-input-types]
