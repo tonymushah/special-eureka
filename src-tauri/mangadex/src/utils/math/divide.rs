@@ -1,5 +1,6 @@
 use std::ops::{Div, Rem, Sub};
 
+#[derive(Debug, Clone, Copy)]
 pub struct DivideResult<T> {
     pub remainder: T,
     pub quot: T,
