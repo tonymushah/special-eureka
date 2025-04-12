@@ -191,6 +191,7 @@ export class CoverDownload {
 	public static deferred(id: string) {
 		const _this = new CoverDownload(id);
 		_this.sub_op = subOPCover(id, true);
+		return _this;
 	}
 
 	public get sub_raw_state(): Readable<CoverSubOpType | undefined> {
