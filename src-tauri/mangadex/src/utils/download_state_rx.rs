@@ -3,8 +3,7 @@ use std::{fmt::Debug, sync::Arc, time::Duration};
 use actix::{dev::ToEnvelope, Actor, Addr, Handler, WeakAddr};
 use eureka_mmanager::{
     download::{
-        messages::SubcribeMessage,
-        messages::TaskStateMessage,
+        messages::{SubcribeMessage, TaskStateMessage},
         traits::{
             managers::TaskManagerAddr,
             task::{State, Subscribe},
@@ -79,29 +78,37 @@ where
             .as_ref()
             .and_then(|m| m.upgrade())?;
         match GetManager::<M>::get(&manager).await {
-            Ok(manager) => match manager.new_task(id.into()).await {
-                Ok(task) => {
-                    drop(manager);
-                    match task.subscribe().await {
-                        Ok(mut sub) => {
-                            if deferred {
-                                drop(task);
-                            }
-                            if *is_readed.read().await {
-                                if sub.changed().await.is_err() {
-                                    return None;
-                                }
-                            } else {
-                                *is_readed.write().await = true;
-                            }
-                            let data = { (*sub.borrow()).clone().into() };
-                            Some(data)
-                        }
-                        Err(err) => O::error(err.into()).into(),
+            Ok(manager) => {
+                let task = if deferred {
+                    match manager.get_task(id).await {
+                        Ok(t) => t?,
+                        Err(err) => return O::error(ManagerError::MailBox(err).into()).into(),
                     }
+                } else {
+                    match manager.new_task(id.into()).await {
+                        Ok(t) => t,
+                        Err(err) => return O::error(ManagerError::MailBox(err).into()).into(),
+                    }
+                };
+                drop(manager);
+                match task.subscribe().await {
+                    Ok(mut sub) => {
+                        if deferred {
+                            drop(task);
+                        }
+                        if *is_readed.read().await {
+                            if sub.changed().await.is_err() {
+                                return None;
+                            }
+                        } else {
+                            *is_readed.write().await = true;
+                        }
+                        let data = { (*sub.borrow()).clone().into() };
+                        Some(data)
+                    }
+                    Err(err) => O::error(err.into()).into(),
                 }
-                Err(err) => O::error(ManagerError::MailBox(err).into()).into(),
-            },
+            }
             Err(err) => O::error(ManagerError::MailBox(err).into()).into(),
         }
     })
