@@ -173,7 +173,7 @@ impl ChapterListQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let params = if self.chapter_ids.is_empty() {
+        let params = if !self.chapter_ids.is_empty() {
             self.chapter_ids
                 .chunks(100)
                 .flat_map(|chunck| {

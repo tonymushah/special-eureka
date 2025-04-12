@@ -80,7 +80,7 @@ impl CoverListQuery {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let params = if self.params.cover_ids.is_empty() {
+        let params = if !self.params.cover_ids.is_empty() {
             self.params
                 .cover_ids
                 .chunks(100)

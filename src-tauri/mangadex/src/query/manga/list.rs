@@ -125,7 +125,7 @@ impl MangaListQueries {
             .deref()
             .clone();
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let params = if self.manga_ids.is_empty() {
+        let params = if !self.manga_ids.is_empty() {
             self.manga_ids
                 .chunks(100)
                 .flat_map(|chunck| {
