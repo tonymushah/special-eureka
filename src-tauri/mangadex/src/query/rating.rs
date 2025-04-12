@@ -20,23 +20,28 @@ impl RatingQueries {
     pub async fn lists(
         &self,
         ctx: &Context<'_>,
-        #[graphql(validator(min_items = 1, max_items = 100))] manga_ids: Vec<Uuid>,
+        #[graphql(validator(min_items = 1))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<RatingItem>> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let res: Vec<RatingItem> = client
-            .rating()
-            .get()
-            .manga(manga_ids)
-            .send()
-            .await?
-            .ratings
-            .into_iter()
-            .map(|i| -> RatingItem { i.into() })
-            .collect();
+        let mut res: Vec<RatingItem> = Vec::new();
+        for ids in manga_ids.chunks(100) {
+            client
+                .rating()
+                .get()
+                .manga(ids)
+                .send()
+                .await?
+                .ratings
+                .into_iter()
+                .map(|i| -> RatingItem { i.into() })
+                .for_each(|rating| {
+                    res.push(rating);
+                });
+        }
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
             for data in _res {
