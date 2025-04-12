@@ -2,6 +2,7 @@
 	import { ChapterDownload, ChapterDownloadState } from "@mangadex/download/chapter";
 	import type { TableData } from "../Chapters.svelte";
 	import { startCase } from "lodash";
+	import ActionButton from "./row/ActionButton.svelte";
 
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
@@ -29,7 +30,9 @@
 			No title
 		{/if}
 	</td>
-	<td></td>
+	<td>
+		<ActionButton {id} />
+	</td>
 </tr>
 
 <style lang="scss">

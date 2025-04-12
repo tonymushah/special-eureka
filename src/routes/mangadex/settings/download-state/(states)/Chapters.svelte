@@ -7,9 +7,8 @@
 
 <script lang="ts">
 	import { derived, readable, type Readable } from "svelte/store";
-	import { chapterTasks } from "./stores";
-	import { ChapterDownload } from "@mangadex/download/chapter";
 	import Row from "./chapters/Row.svelte";
+	import { chapterTasks } from "./stores";
 
 	const data = derived(chapterTasks, (tasks) => {
 		return tasks.map((task) => {
