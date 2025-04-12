@@ -6,7 +6,8 @@ use std::{collections::HashMap, ops::Deref};
 
 use crate::{
     store::types::structs::content::feed_from_gql_ctx,
-    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
@@ -113,6 +114,10 @@ impl MangaQueries {
             *includes = out;
         }
         Ok({
+            ctx.get_app_handle::<tauri::Wry>()?
+                .get_specific_rate_limit()?
+                .random_manga()
+                .await;
             let data: Manga = params.send(&client).await?.body.data.into();
             let _ = watches.manga.send_online(data.clone());
             data
