@@ -13,6 +13,7 @@ use mangadex_api_input_types::{
 use mangadex_api_schema_rust::v5::ChapterCollection;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::{
         chapter::lists::ChapterResults,
         manga_chapter_group::{group_results, MangaChapterGroup},
@@ -43,18 +44,19 @@ impl FeedQueries {
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         let params = {
-            let div_res = divide(param.limit.unwrap_or(10), 100);
+            let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
             let mut all = (0..div_res.quot)
                 .map(|d| {
                     let mut param = param.clone();
-                    param.offset = Some(param.offset.unwrap_or_default() + d * 100);
-                    param.limit = Some(100);
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
                     param
                 })
                 .collect::<Vec<_>>();
             all.push({
                 let mut param = param.clone();
-                param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
                 param.limit = Some(div_res.remainder);
                 param
             });
@@ -116,18 +118,21 @@ impl FeedQueries {
             {
                 let param = feed_params;
                 let params = {
-                    let div_res = divide(param.limit.unwrap_or(10), 100);
+                    let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
                     let mut all = (0..div_res.quot)
                         .map(|d| {
                             let mut param = param.clone();
-                            param.offset = Some(param.offset.unwrap_or_default() + d * 100);
-                            param.limit = Some(100);
+                            param.offset =
+                                Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                            param.limit = Some(MANGADEX_PAGE_LIMIT);
                             param
                         })
                         .collect::<Vec<_>>();
                     all.push({
                         let mut param = param.clone();
-                        param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                        param.offset = Some(
+                            param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT,
+                        );
                         param.limit = Some(div_res.remainder);
                         param
                     });
@@ -179,18 +184,19 @@ impl FeedQueries {
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         let params = {
-            let div_res = divide(param.limit.unwrap_or(10), 100);
+            let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
             let mut all = (0..div_res.quot)
                 .map(|d| {
                     let mut param = param.clone();
-                    param.offset = Some(param.offset.unwrap_or_default() + d * 100);
-                    param.limit = Some(100);
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
                     param
                 })
                 .collect::<Vec<_>>();
             all.push({
                 let mut param = param.clone();
-                param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
                 param.limit = Some(div_res.remainder);
                 param
             });
@@ -252,18 +258,21 @@ impl FeedQueries {
             {
                 let param = feed_params;
                 let params = {
-                    let div_res = divide(param.limit.unwrap_or(10), 100);
+                    let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
                     let mut all = (0..div_res.quot)
                         .map(|d| {
                             let mut param = param.clone();
-                            param.offset = Some(param.offset.unwrap_or_default() + d * 100);
-                            param.limit = Some(100);
+                            param.offset =
+                                Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                            param.limit = Some(MANGADEX_PAGE_LIMIT);
                             param
                         })
                         .collect::<Vec<_>>();
                     all.push({
                         let mut param = param.clone();
-                        param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                        param.offset = Some(
+                            param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT,
+                        );
                         param.limit = Some(div_res.remainder);
                         param
                     });

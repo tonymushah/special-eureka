@@ -8,6 +8,7 @@ use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::{
         author::{lists::AuthorResults, Author},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
@@ -35,7 +36,7 @@ impl AuthorQueries {
         let params = if !param.author_ids.is_empty() {
             param
                 .author_ids
-                .chunks(100)
+                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
                 .flat_map(|chunck| {
                     let mut param = param.clone();
                     param.author_ids = chunck.to_vec();
@@ -47,18 +48,19 @@ impl AuthorQueries {
                 })
                 .collect::<Vec<_>>()
         } else {
-            let div_res = divide(param.limit.unwrap_or(10), 100);
+            let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
             let mut all = (0..div_res.quot)
                 .map(|d| {
                     let mut param = param.clone();
-                    param.offset = Some(param.offset.unwrap_or_default() + d * 100);
-                    param.limit = Some(100);
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
                     param
                 })
                 .collect::<Vec<_>>();
             all.push({
                 let mut param = param.clone();
-                param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
                 param.limit = Some(div_res.remainder);
                 param
             });

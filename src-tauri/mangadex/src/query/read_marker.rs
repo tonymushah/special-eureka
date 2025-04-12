@@ -4,6 +4,7 @@ use mangadex_api_schema_rust::v5::MangaReadMarkers;
 use uuid::Uuid;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::read_marker::{grouped::MangaReadMarkerGroupedItems, user_history::UserHistoryEntry},
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
@@ -39,7 +40,7 @@ impl ReadMarkerQueries {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let mut to_ret = Vec::<Uuid>::default();
-        for ids in manga_ids.chunks(100) {
+        for ids in manga_ids.chunks(MANGADEX_PAGE_LIMIT.try_into()?) {
             if let MangaReadMarkers::Ungrouped(res) =
                 client.manga().read().get().manga_ids(ids).send().await?
             {
@@ -57,13 +58,13 @@ impl ReadMarkerQueries {
     pub async fn manga_read_markers_grouped(
         &self,
         ctx: &Context<'_>,
-        #[graphql(validator(min_items = 1, max_items = 100))] manga_ids: Vec<Uuid>,
+        #[graphql(validator(min_items = 1))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<MangaReadMarkerGroupedItems>> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let mut to_ret = Vec::<MangaReadMarkerGroupedItems>::default();
-        for ids in manga_ids.chunks(100) {
+        for ids in manga_ids.chunks(MANGADEX_PAGE_LIMIT.try_into()?) {
             if let MangaReadMarkers::Grouped(res) = client
                 .manga()
                 .read()

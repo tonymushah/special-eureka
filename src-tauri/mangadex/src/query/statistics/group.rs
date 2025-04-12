@@ -5,6 +5,7 @@ use async_graphql::{Context, Object};
 use uuid::Uuid;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::statistics::Statistics,
     utils::{
         get_mangadex_client_from_graphql_context, get_watches_from_graphql_context, watch::SendData,
@@ -45,7 +46,7 @@ impl GroupStatisticsQueries {
 
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut res: Vec<Statistics> = Vec::new();
-        for ids in ids.chunks(100) {
+        for ids in ids.chunks(MANGADEX_PAGE_LIMIT.try_into()?) {
             let statistics = client
                 .statistics()
                 .group()

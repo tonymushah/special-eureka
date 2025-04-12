@@ -16,6 +16,7 @@ use mangadex_api_schema_rust::v5::{MangaCollection, MangaObject};
 use tokio_stream::Stream;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::manga::lists::MangaResults,
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
@@ -127,7 +128,7 @@ impl MangaListQueries {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let params = if !self.manga_ids.is_empty() {
             self.manga_ids
-                .chunks(100)
+                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
                 .flat_map(|chunck| {
                     let mut param = self.deref().clone();
                     param.manga_ids = chunck.to_vec();
@@ -139,18 +140,19 @@ impl MangaListQueries {
                 })
                 .collect::<Vec<_>>()
         } else {
-            let div_res = divide(self.limit.unwrap_or(10), 100);
+            let div_res = divide(self.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
             let mut all = (0..div_res.quot)
                 .map(|d| {
                     let mut param = self.deref().clone();
-                    param.offset = Some(param.offset.unwrap_or_default() + d * 100);
-                    param.limit = Some(100);
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
                     param
                 })
                 .collect::<Vec<_>>();
             all.push({
                 let mut param = self.deref().clone();
-                param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
                 param.limit = Some(div_res.remainder);
                 param
             });

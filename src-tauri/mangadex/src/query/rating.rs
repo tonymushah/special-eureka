@@ -5,6 +5,7 @@ use async_graphql::{Context, Object};
 use uuid::Uuid;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::rating::RatingItem,
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
@@ -28,7 +29,7 @@ impl RatingQueries {
             .deref()
             .clone();
         let mut res: Vec<RatingItem> = Vec::new();
-        for ids in manga_ids.chunks(100) {
+        for ids in manga_ids.chunks(MANGADEX_PAGE_LIMIT.try_into()?) {
             client
                 .rating()
                 .get()
