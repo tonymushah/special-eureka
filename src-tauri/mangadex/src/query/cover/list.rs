@@ -13,7 +13,8 @@ use crate::{
     objects::cover::lists::CoverResults,
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData, Collection,
+        get_watches_from_graphql_context, math::divide::divide, source::SendMultiSourceData,
+        Collection,
     },
     Result,
 };
@@ -79,7 +80,61 @@ impl CoverListQuery {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let res: CoverResults = self.params.clone().send(&client).await?.into();
+        let params = if self.params.cover_ids.is_empty() {
+            self.params
+                .cover_ids
+                .chunks(100)
+                .flat_map(|chunck| {
+                    let mut param = self.params.clone();
+                    param.cover_ids = chunck.to_vec();
+
+                    if param.limit.is_none() && !param.cover_ids.is_empty() {
+                        param.limit.replace(param.cover_ids.len().try_into().ok()?);
+                    }
+                    Some(param)
+                })
+                .collect::<Vec<_>>()
+        } else {
+            let div_res = divide(self.params.limit.unwrap_or(10), 100);
+            let mut all = (0..div_res.quot)
+                .map(|d| {
+                    let mut param = self.params.clone();
+                    param.offset = Some(param.offset.unwrap_or_default() + d * 100);
+                    param.limit = Some(100);
+                    param
+                })
+                .collect::<Vec<_>>();
+            all.push({
+                let mut param = self.params.clone();
+                param.offset = Some(param.offset.unwrap_or_default() + div_res.quot * 100);
+                param.limit = Some(div_res.remainder);
+                param
+            });
+            all
+        };
+        let mut results = Vec::<CoverCollection>::new();
+        for val in params {
+            results.push(val.send(&client).await?);
+        }
+        let res: CoverResults = results
+            .into_iter()
+            .fold(
+                CoverCollection {
+                    response: mangadex_api_types_rust::ResponseType::Collection,
+                    offset: self.params.offset.unwrap_or_default(),
+                    total: 0,
+                    limit: 0,
+                    data: Vec::new(),
+                    result: mangadex_api_types_rust::ResultType::Ok,
+                },
+                |mut agg, mut res| {
+                    agg.total = res.total;
+                    agg.limit += res.limit;
+                    agg.data.append(&mut res.data);
+                    agg
+                },
+            )
+            .into();
         {
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
