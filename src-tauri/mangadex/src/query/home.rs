@@ -1,9 +1,5 @@
-use std::ops::Deref;
+use crate::{utils::traits_utils::MangadexAsyncGraphQLContextExt, Result};
 
-use crate::{
-    store::types::structs::content::feed_from_gql_ctx,
-    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
-};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_types_rust::{ChapterSortOrder, MangaDexDateTime, MangaSortOrder, OrderDirection};
@@ -17,12 +13,11 @@ use crate::{
         ExtractReferenceExpansionFromContext,
     },
     utils::{
-        get_mangadex_client_from_graphql_context, get_watches_from_graphql_context,
-        source::SendMultiSourceData, watch::SendData,
+        get_mangadex_client_from_graphql_context, get_watches_from_graphql_context, watch::SendData,
     },
 };
 
-use super::chapter::list::ChapterListQueries;
+use super::{chapter::list::ChapterListQueries, manga::list::MangaListQueries};
 
 #[derive(Debug, Clone, Copy)]
 pub struct HomeQueries;
@@ -76,23 +71,16 @@ impl HomeQueries {
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
     ) -> Result<MangaResults> {
-        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
-            .deref()
-            .clone();
+        let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::CreatedAt(OrderDirection::Descending));
         params.has_available_chapters = Some(true);
         params.manga_ids.clear();
         Ok({
-            let res: MangaResults = params.send(&client).await?.into();
-            let _res = res.clone();
-            tauri::async_runtime::spawn(async move {
-                for data in _res {
-                    let _ = watches.manga.send_online(data);
-                }
-            });
+            let res: MangaResults =
+                MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+                    .list(ctx)
+                    .await?;
             res
         })
     }
@@ -101,11 +89,7 @@ impl HomeQueries {
         ctx: &Context<'_>,
         params: Option<MangaListParams>,
     ) -> Result<MangaResults> {
-        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
-        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
-            .deref()
-            .clone();
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         params.order = Some(MangaSortOrder::FollowedCount(OrderDirection::Descending));
         let created_at_since = {
@@ -116,13 +100,10 @@ impl HomeQueries {
         params.created_at_since = Some(created_at_since);
         params.manga_ids.clear();
         Ok({
-            let res: MangaResults = params.send(&client).await?.into();
-            let _res = res.clone();
-            tauri::async_runtime::spawn(async move {
-                for data in _res {
-                    let _ = watches.manga.send_online(data);
-                }
-            });
+            let res: MangaResults =
+                MangaListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+                    .list(ctx)
+                    .await?;
             res
         })
     }
