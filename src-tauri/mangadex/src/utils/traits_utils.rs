@@ -66,6 +66,7 @@ where
             if should_fetched {
                 #[cfg(debug_assertions)]
                 println!("Should be fetched");
+                self.get_specific_rate_limit()?.refresh().await;
                 if let Ok(res) = client.oauth().refresh().send().await {
                     let _ = last_time_fetched
                         .write()
