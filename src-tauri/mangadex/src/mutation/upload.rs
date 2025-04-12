@@ -1,4 +1,7 @@
-use crate::Result;
+use crate::{
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api::{
     utils::upload::{abandon_session, check_and_abandon_session_if_exists},
@@ -47,9 +50,14 @@ impl UploadMutations {
     ) -> Result<UploadSession> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let rate_limitss = ctx
+            .get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?;
         if abandon_if_exists {
+            tokio::join!(rate_limitss.get_upload(), rate_limitss.delete_upload());
             check_and_abandon_session_if_exists(&client).await?;
         }
+        rate_limitss.begin_upload().await;
         let data: UploadSession = params.send(&client).await?.body.data.into();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let _ = watches.upload_session.send_data(data.clone());
@@ -63,9 +71,14 @@ impl UploadMutations {
     ) -> Result<UploadSession> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let rate_limitss = ctx
+            .get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?;
         if abandon_if_exists {
+            tokio::join!(rate_limitss.get_upload(), rate_limitss.delete_upload());
             check_and_abandon_session_if_exists(&client).await?;
         }
+        rate_limitss.begin_upload().await;
         let data: UploadSession = params.send(&client).await?.body.data.into();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let _ = watches.upload_session.send_data(data.clone());
@@ -82,6 +95,10 @@ impl UploadMutations {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let path: StdPathBuf = path.into();
         let image: UploadImage = path.try_into()?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .upload_files()
+            .await;
         let res = client
             .upload()
             .upload_session_id(session_id)
@@ -107,6 +124,10 @@ impl UploadMutations {
     pub async fn abandon_session(&self, ctx: &Context<'_>, session_id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .delete_upload()
+            .await;
         abandon_session(session_id, &client).await?;
         Ok(true)
     }
@@ -118,6 +139,10 @@ impl UploadMutations {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .commit_upload()
+            .await;
         let res = params.send(&client).await?;
         let data: Chapter = res.data.clone().drop_relationships().into();
         let _ = watches.chapter.send_online(data.clone());
@@ -130,6 +155,10 @@ impl UploadMutations {
     ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .upload_files()
+            .await;
         let _res = params.send(&client).await?;
         Ok(true)
     }
@@ -140,6 +169,10 @@ impl UploadMutations {
     ) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .upload_files()
+            .await;
         let _res = params.send(&client).await?;
         Ok(true)
     }

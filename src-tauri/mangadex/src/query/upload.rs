@@ -1,4 +1,8 @@
-use crate::{error::Error, Result};
+use crate::{
+    error::Error,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
+};
 use async_graphql::{Context, Object};
 
 use crate::{
@@ -20,6 +24,10 @@ impl UploadQueries {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .get_upload()
+            .await;
         match client.upload().get().send().await {
             Ok(u) => {
                 let data: UploadSession = u.body.data.into();
