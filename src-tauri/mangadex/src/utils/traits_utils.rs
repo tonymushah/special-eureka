@@ -12,6 +12,7 @@ use std::future::Future;
 
 use crate::{
     app_state::{inner::AppStateInner, LastTimeTokenWhenFecthed, OfflineAppState},
+    rate_limit::SpecificRateLimits,
     utils::watch::SendData,
 };
 
@@ -109,6 +110,10 @@ where
             let _ = watches.is_appstate_mounted.send_data(true);
             Ok(())
         }
+    }
+    fn get_specific_rate_limit(&self) -> crate::Result<State<'_, SpecificRateLimits>> {
+        self.try_state()
+            .ok_or(crate::Error::NotManagedSpecificRateLimit)
     }
 }
 

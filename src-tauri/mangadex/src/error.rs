@@ -115,6 +115,8 @@ pub enum Error {
     EndStream,
     #[error("Error on converting an OsStr to String or &str")]
     OsStrToString,
+    #[error("The specific rate limit is not managed")]
+    NotManagedSpecificRateLimit,
 }
 
 impl Error {
