@@ -19,9 +19,11 @@ use crate::{
     ins_handle,
     objects::chapter::Chapter,
     utils::{
-        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
-        traits_utils::MangadexAsyncGraphQLContextExt,
+        download_state::DownloadState,
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context,
+        source::SendMultiSourceData,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
 };
 
@@ -34,6 +36,10 @@ impl ChapterMutations {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .put_chapter()
+            .await;
         let res: ApiObjectNoRelationships<ChapterAttributes> =
             params.send(&client).await?.body.data.into();
         let data: Chapter = res.into();
@@ -43,6 +49,10 @@ impl ChapterMutations {
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .delete_chapter()
+            .await;
         let _ = client.chapter().id(id).delete().send().await?;
         Ok(true)
     }
