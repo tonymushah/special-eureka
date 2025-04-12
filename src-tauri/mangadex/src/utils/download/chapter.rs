@@ -46,6 +46,7 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
+    app.get_specific_rate_limit()?.at_home().await;
     let offline_app_state = (**app.get_offline_app_state()?).clone().read_owned().await;
     let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
         return Err(crate::Error::OfflineAppStateNotLoaded);
