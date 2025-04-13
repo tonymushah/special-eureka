@@ -28,7 +28,7 @@
 				<Chapters />
 			</div>
 		{/if}
-		{#if content == "manga"}
+		{#if content == "mangas"}
 			<div>
 				<Mangas />
 			</div>
