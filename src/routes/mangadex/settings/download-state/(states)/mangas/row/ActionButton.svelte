@@ -13,7 +13,9 @@
 	const is_downloading = download.is_downloading();
 	const is_downloaded = storeDerived(
 		[download.is_downloaded(), download.has_failed()],
-		([downloaded, failed]) => downloaded && failed
+		([downloaded, failed]) => {
+			return downloaded || failed;
+		}
 	);
 </script>
 
@@ -55,5 +57,6 @@
 		flex-direction: row;
 		gap: 3px;
 		flex-wrap: wrap;
+		transform: translateY(-2px);
 	}
 </style>

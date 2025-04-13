@@ -27,7 +27,7 @@
 			No title
 		{/if}
 	</td>
-	<td>
+	<td class="actions">
 		<ActionButton {id} />
 	</td>
 </tr>
@@ -45,5 +45,10 @@
 	td {
 		border: 2px solid var(--contrast-l1);
 		padding: 5px 10px;
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
