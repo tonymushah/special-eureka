@@ -1,4 +1,4 @@
-<script context="module">
+<script context="module" lang="ts">
 	export interface TableData {
 		id: string;
 		title: Readable<string | undefined>;
