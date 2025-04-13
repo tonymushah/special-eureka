@@ -2,10 +2,11 @@
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		mangaId: string;
 	}
 
-	let { children }: Props = $props();
+	let { children, mangaId }: Props = $props();
 
 	createEventDispatcher<{
 		click: MouseEvent & {
@@ -15,7 +16,7 @@
 </script>
 
 <ButtonBase on:click isBase={false} noPadding --button-color={"var(--main-background)"}>
-	<article class="layout">
+	<article class="layout manga-element" data-manga-id={mangaId}>
 		{@render children?.()}
 	</article>
 </ButtonBase>
@@ -27,5 +28,10 @@
 		border-radius: 0.25rem;
 		display: flex;
 		flex-direction: column;
+	}
+	.manga-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+		border-radius: 3px;
+		border: 2px solid var(--primary);
 	}
 </style>

@@ -18,6 +18,7 @@ pub mod user;
 pub mod user_option;
 
 use async_graphql::Object;
+use cover::CoverMutations;
 use user_option::UserOptionMutations;
 
 use self::{
@@ -80,5 +81,8 @@ impl Mutation {
     }
     pub async fn user_option(&self) -> UserOptionMutations {
         UserOptionMutations
+    }
+    pub async fn cover(&self) -> CoverMutations {
+        CoverMutations
     }
 }

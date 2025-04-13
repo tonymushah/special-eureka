@@ -6,6 +6,9 @@
 	import type { ComponentProps } from "svelte";
 	import AuthIcon from "./(icons)/AuthIcon.svelte";
 	import ContentIcon from "./(icons)/ContentIcon.svelte";
+	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
+	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
+	import DownloadStateIcon from "./(icons)/DownloadStateIcon.svelte";
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
 			title: "Themes",
@@ -24,6 +27,24 @@
 			description: "Add, edit, Delete content profile to edit Mangadex contents",
 			href: route("/mangadex/settings/content-profiles"),
 			icon: ContentIcon
+		},
+		{
+			title: "Offline Data",
+			description: "Update offline data config",
+			href: route("/mangadex/settings/offline-data"),
+			icon: ArchiveIcon
+		},
+		{
+			title: "Download States",
+			description: "Check any download status",
+			href: route("/mangadex/settings/download-state"),
+			icon: DownloadStateIcon
+		},
+		{
+			title: "Dev Playground",
+			description: "Design tests etc...",
+			href: route("/mangadex/settings/css-playground"),
+			icon: PlaygroundIcon
 		}
 	];
 </script>
@@ -37,10 +58,20 @@
 </div>
 
 <style lang="scss">
+	@media (width <= 900px) {
+		:root {
+			--grid-columns: 3;
+		}
+	}
+	@media (width > 900px) {
+		:root {
+			--grid-columns: 4;
+		}
+	}
+
 	.settings {
-		--grid-columns: 4;
 		display: grid;
 		gap: 10px;
-		grid-template-columns: repeat(var(--grid-columns), calc(100% / var(--grid-columns)));
+		grid-template-columns: repeat(var(--grid-columns), 1fr);
 	}
 </style>

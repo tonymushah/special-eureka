@@ -18,19 +18,15 @@
 		coverImageAlt: string;
 		title: string;
 		description: string;
+		mangaId: string;
 	}
 
-	let {
-		coverImage,
-		coverImageAlt,
-		title,
-		description
-	}: Props = $props();
+	let { coverImage, coverImageAlt, title, description, mangaId }: Props = $props();
 	let isHover = $state(false);
 	let image = $derived($coverImage);
 </script>
 
-<Layout bind:isHover>
+<Layout bind:isHover {mangaId}>
 	{#if image}
 		<img src={image} alt={coverImageAlt} />
 	{:else}

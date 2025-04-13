@@ -1,5 +1,6 @@
 use crate::objects::oauth::ClientInfo;
 use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
+use crate::store::types::enums::chapter_quality::DownloadMode;
 use crate::store::types::enums::pagination_style::PaginationStyle;
 use crate::store::types::structs::content::profiles::ContentProfileEntry;
 use crate::store::types::structs::content::ContentProfile;
@@ -380,11 +381,11 @@ impl Subscriptions {
     pub async fn watch_chapter_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-
+        deferred: Option<bool>,
         chapter_id: Uuid,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
         ChapterDownloadSubs
-            .listen_to_download_state(ctx, chapter_id)
+            .listen_to_download_state(ctx, chapter_id, deferred.unwrap_or_default())
             .await
     }
     pub async fn watch_chapters_tasks_list<'ctx>(
@@ -396,11 +397,11 @@ impl Subscriptions {
     pub async fn watch_cover_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-
+        deferred: Option<bool>,
         cover_id: Uuid,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         CoverDownloadSubs
-            .listen_to_download_state(ctx, cover_id)
+            .listen_to_download_state(ctx, cover_id, deferred.unwrap_or_default())
             .await
     }
     pub async fn watch_cover_tasks_list<'ctx>(
@@ -412,11 +413,11 @@ impl Subscriptions {
     pub async fn watch_manga_download_state<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-
+        deferred: Option<bool>,
         manga_id: Uuid,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
         MangaDownloadSubs
-            .listen_to_download_state(ctx, manga_id)
+            .listen_to_download_state(ctx, manga_id, deferred.unwrap_or_default())
             .await
     }
     pub async fn watch_manga_tasks_list<'ctx>(
@@ -448,5 +449,11 @@ impl Subscriptions {
         UserOptionSubscriptions
             .listen_to_content_profile_default(ctx)
             .await
+    }
+    pub async fn watch_chapter_quality<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = DownloadMode> + 'ctx> {
+        UserOptionSubscriptions.listen_to_chapter_quality(ctx).await
     }
 }

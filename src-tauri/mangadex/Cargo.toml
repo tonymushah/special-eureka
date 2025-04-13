@@ -4,7 +4,7 @@ version = "0.3.0"
 authors = ["You"]
 description = "The tauri plugin behind the Mangadex Part of special-eureka"
 edition = "2021"
-rust-version = "1.77"
+rust-version = "1.79"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 links = "mangadex-desktop-api"
 
@@ -47,9 +47,14 @@ tauri-plugin-notification.workspace = true
 tower = { workspace = true, features = ["limit", "buffer"] }
 duration-string = { version = "0.5", features = ["serde"] }
 impl-trait-for-tuples = "0.2"
+dirs.workspace = true
+enum-repr.workspace = true
+enum-kinds.workspace = true
+serde_repr.workspace = true
+governor.workspace = true
 
 [dependencies.eureka-mmanager]
-version = "0.1"
+version = "0.2"
 default-features = false
 
 [dependencies.mangadex-api-input-types]

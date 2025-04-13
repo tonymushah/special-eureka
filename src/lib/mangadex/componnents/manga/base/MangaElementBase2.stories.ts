@@ -6,6 +6,7 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 import { ContentRating, Language, MangaStatus } from "@mangadex/gql/graphql";
 import { honey_trap1 } from "@mangadex/test-data/images/honey-trap";
 import MangaBase2 from "./MangaElementBase2.svelte";
+import { v4 } from "uuid";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
@@ -31,6 +32,7 @@ export const Default: Story = {
 			name: v.attributes.name.en
 		})),
 		contentRating: ContentRating.Erotica,
-		language: Language.Japanese
+		language: Language.Japanese,
+		mangaId: v4()
 	}
 };

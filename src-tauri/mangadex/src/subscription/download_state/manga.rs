@@ -1,8 +1,8 @@
 use crate::{
     subscription::utils::WatchSubscriptionStream,
     utils::{
+        download_state_rx::{get_download_state_rx, NextTaskValue},
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-        watch::is_appstate_mounted::IsAppStateMountedWatch,
     },
     Result,
 };
@@ -14,18 +14,20 @@ use eureka_mmanager::{
     download::{
         manga::{
             task::{MangaDonwloadingState as DownloadingState, MangaDownloadTaskState},
-            MangaDownloadManager, MangaDownloadMessage,
+            MangaDownloadManager,
         },
         traits::managers::TaskManagerAddr,
         GetManager,
     },
-    prelude::AsyncSubscribe,
-    DownloadManager, Error as ManagerError, OwnedError,
+    prelude::MangaDownloadTask,
+    DownloadManager, OwnedError,
 };
-use tokio::{select, sync::watch::channel as watch};
-use tokio_stream::{Stream, StreamExt};
+use tauri::{Manager, Runtime};
+use tokio::{select, sync::watch::Receiver};
+use tokio_stream::Stream;
 use uuid::Uuid;
 
+#[derive(Debug, Clone)]
 pub enum MangaDownloadState {
     Pending,
     Downloading(DownloadingState),
@@ -33,6 +35,44 @@ pub enum MangaDownloadState {
     Done,
     Canceled,
     OfflineAppStateNotLoaded,
+}
+
+impl NextTaskValue for MangaDownloadState {
+    type DownloadingState = DownloadingState;
+    fn done() -> Self {
+        Self::Done
+    }
+    fn canceled() -> Self {
+        Self::Canceled
+    }
+    fn downloading(value: Self::DownloadingState) -> Self {
+        Self::Downloading(value)
+    }
+    fn error(error: OwnedError) -> Self {
+        Self::Error(error)
+    }
+    fn offline_app_state_not_loaded() -> Self {
+        Self::OfflineAppStateNotLoaded
+    }
+    fn pending() -> Self {
+        Self::Pending
+    }
+
+    fn is_pending(&self) -> bool {
+        matches!(self, Self::Pending)
+    }
+
+    fn is_done(&self) -> bool {
+        matches!(self, Self::Done)
+    }
+
+    fn is_canceled(&self) -> bool {
+        matches!(self, Self::Canceled)
+    }
+
+    fn is_offline_app_state_not_loaded(&self) -> bool {
+        matches!(self, Self::OfflineAppStateNotLoaded)
+    }
 }
 
 impl From<MangaDownloadTaskState> for MangaDownloadState {
@@ -92,6 +132,14 @@ impl MangaDownloadState {
     }
 }
 
+fn get_manga_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
+    app: &M,
+    id: Uuid,
+    deferred: bool,
+) -> crate::Result<Receiver<MangaDownloadState>> {
+    get_download_state_rx::<MangaDownloadManager, MangaDownloadTask, _, R, M>(app, id, deferred)
+}
+
 pub struct MangaDownloadSubs;
 
 #[Subscription]
@@ -112,6 +160,9 @@ impl MangaDownloadSubs {
             <Addr<DownloadManager> as GetManager<MangaDownloadManager>>::get(&offline_read).await?;
         let notify = manager.notify().await?;
         let stream = stream! {
+            if let Ok(tasks) = manager.tasks_id().await {
+                yield tasks
+            }
             loop {
                 select! {
                     _ = notify.notified() => {
@@ -129,8 +180,13 @@ impl MangaDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
+        deferred: bool,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
+        Ok(WatchSubscriptionStream::new(get_manga_download_state_rx(
+            &window, manga_id, deferred,
+        )?))
+        /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
             tauri::Wry,
@@ -189,5 +245,6 @@ impl MangaDownloadSubs {
             }
         };
         Ok(stream)
+        */
     }
 }

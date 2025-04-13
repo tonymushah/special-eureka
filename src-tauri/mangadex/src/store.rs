@@ -1,17 +1,20 @@
-use std::path::PathBuf;
+use std::{future::Future, path::PathBuf};
 
-use tauri::{AppHandle, Runtime /*Manager */};
+use tauri::{AppHandle, Manager, Runtime /*Manager */};
 use tauri_plugin_store::StoreBuilder;
 use types::{
     enums::{
-        chapter_feed_style::ChapterFeedStyleStore, image_fit::ImageFitStore,
-        pagination_style::PaginationStyleStore,
+        chapter_feed_style::ChapterFeedStyleStore, chapter_quality::ChapterQualityStore,
+        image_fit::ImageFitStore, pagination_style::PaginationStyleStore,
     },
     structs::{
         content::profiles::{ContentProfileDefaultKey, ContentProfiles},
         longstrip_image_width::LongstripImageWidthStore,
+        offline_config::OfflineConfigStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
+    ExtractFromStore,
+    StoreCrud,
     // ExtractFromStore, StoreCrud,
 };
 
@@ -35,7 +38,42 @@ use self::{
 pub mod keys;
 pub mod types;
 
-pub fn get_store_builder<R: Runtime>(
+macro_rules! get_store_builder {
+    ($($store:ty,)*) => {
+        pub fn get_store_builder<R: Runtime>(
+            app: AppHandle<R>,
+        ) -> crate::PluginSetupResult<StoreBuilder<R>>  {
+            let b = StoreBuilder::new(&app, PATH.parse::<PathBuf>()?);
+            $(
+                let b= <$store>::default_store(b)?;
+            )*
+			Ok(b)
+        }
+    };
+}
+
+get_store_builder! {
+    ClientInfoStore,
+    RefreshTokenStore,
+    ReadingDirectionStore,
+    ReadingModeStore,
+    SidebarDirectionStore,
+    ChapterLanguagesStore,
+    ImageFitStore,
+    LongstripImageWidthStore,
+    MangaListStyleStore,
+    ThemeProfiles,
+    ThemeProfileDefaultKey,
+    ChapterFeedStyleStore,
+    PaginationStyleStore,
+    ContentProfiles,
+    ContentProfileDefaultKey,
+    OfflineConfigStore,
+    ChapterQualityStore,
+}
+
+// [x] refactor into a macro!
+/*pub fn get_store_builder<R: Runtime>(
     app: AppHandle<R>,
 ) -> crate::PluginSetupResult<StoreBuilder<R>> {
     let builder = {
@@ -55,10 +93,12 @@ pub fn get_store_builder<R: Runtime>(
         let b = PaginationStyleStore::default_store(b)?;
         let b = ContentProfiles::default_store(b)?;
         let b = ContentProfileDefaultKey::default_store(b)?;
+        let b = OfflineConfigStore::default_store(b)?;
+        let b = ChapterQualityStore::default_store(b)?;
         LongstripImageWidthStore::default_store(b)?
     };
     Ok(builder)
-}
+}*/
 
 // TODO implement this for refactorization
 /*
@@ -73,3 +113,85 @@ where
     fn subscribe<M: Manager<R>>(app: M) -> crate::Result<Receiver<Self::ReceiverType>>;
 }
 */
+
+pub trait TauriManagerMangadexStoreExtractor<R>:
+    Manager<R> + crate::utils::traits_utils::MangadexTauriManagerExt<R> + Sync
+where
+    R: Runtime,
+{
+    fn extract<SD>(&self) -> impl Future<Output = crate::Result<SD>> + Send
+    where
+        SD: for<'de> ExtractFromStore<'de, R>,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.read().await;
+            Ok(SD::extract_from_store(&*store_read)?)
+        }
+    }
+}
+
+impl<R, M> TauriManagerMangadexStoreExtractor<R> for M
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+}
+
+pub trait TauriManagerMangadexStoreCrud<R>:
+    Manager<R> + crate::utils::traits_utils::MangadexTauriManagerExt<R> + Sync
+where
+    R: Runtime,
+{
+    fn insert<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.write().await;
+            store_data.insert(&*store_read)?;
+            Ok(())
+        }
+    }
+    fn insert_and_save<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.write().await;
+            store_data.insert_and_save(&*store_read)?;
+            Ok(())
+        }
+    }
+    fn delete<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.write().await;
+            store_data.delete(&*store_read)?;
+            Ok(())
+        }
+    }
+    fn delete_and_save<SD>(&self, store_data: &SD) -> impl Future<Output = crate::Result<()>>
+    where
+        SD: StoreCrud<R> + Sync + Send,
+    {
+        async {
+            let store = self.get_mangadex_store()?;
+            let store_read = store.write().await;
+            store_data.delete_and_save(&*store_read)?;
+            Ok(())
+        }
+    }
+}
+
+impl<R, M> TauriManagerMangadexStoreCrud<R> for M
+where
+    R: Runtime,
+    M: Manager<R> + Sync,
+{
+}

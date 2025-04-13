@@ -1,14 +1,14 @@
 <script lang="ts">
-	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	interface Props {
 		haveBeenRead?: boolean;
+		mangaId: string;
 		children?: import("svelte").Snippet;
 	}
 
-	let { haveBeenRead = $bindable(true), children }: Props = $props();
+	let { haveBeenRead = $bindable(true), children, mangaId }: Props = $props();
 </script>
 
-<article class="layout" class:haveBeenRead>
+<article class="layout manga-element" class:haveBeenRead data-manga-id={mangaId}>
 	{@render children?.()}
 </article>
 
@@ -28,5 +28,8 @@
 		border-style: solid;
 		border-width: 0px 0px 0px 5px;
 		border-color: var(--indication-blue);
+	}
+	.manga-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
 	}
 </style>

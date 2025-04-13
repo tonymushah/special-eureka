@@ -14,7 +14,8 @@
 		type?: "reset" | "submit" | "button";
 		style?: string | undefined;
 		isBase?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
@@ -22,20 +23,21 @@
 		type = "button",
 		style = undefined,
 		isBase = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 
 {#if variant == "1"}
-	<L1 on:click {type} {style} {isBase}>
+	<L1 on:click {disabled} {type} {style} {isBase}>
 		{@render children?.()}
 	</L1>
 {:else if variant == "2"}
-	<L2 on:click {type} {style} {isBase}>
+	<L2 on:click {type} {disabled} {style} {isBase}>
 		{@render children?.()}
 	</L2>
 {:else}
-	<Default on:click {type} {style} {isBase}>
+	<Default on:click {disabled} {type} {style} {isBase}>
 		{@render children?.()}
 	</Default>
 {/if}

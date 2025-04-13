@@ -1,6 +1,11 @@
 use async_graphql::ErrorExtensions;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
+#[enum_kind(
+    ErrorKind,
+    derive(PartialOrd, Ord, Hash),
+    enum_repr::EnumRepr(type = "u16", implicit = true)
+)]
 pub enum Error {
     #[error("Mangadex API SDK Error: {0}")]
     MangadexApi(#[from] mangadex_api_types_rust::error::Error),
@@ -108,6 +113,10 @@ pub enum Error {
     NoDefaultContentProfileSelected,
     #[error("End stream")]
     EndStream,
+    #[error("Error on converting an OsStr to String or &str")]
+    OsStrToString,
+    #[error("The specific rate limit is not managed")]
+    NotManagedSpecificRateLimit,
 }
 
 impl Error {
@@ -124,6 +133,8 @@ impl From<favicon_picker::error::Error> for Error {
 
 impl ErrorExtensions for Error {
     fn extend(&self) -> async_graphql::Error {
-        async_graphql::Error::new(format!("{}", self))
+        async_graphql::Error::new(format!("{}", self)).extend_with(|_err, exts| {
+            exts.set("code", ErrorKind::from(self).repr());
+        })
     }
 }

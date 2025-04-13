@@ -1,8 +1,8 @@
 use crate::{
     subscription::utils::WatchSubscriptionStream,
     utils::{
+        download_state_rx::{get_download_state_rx, NextTaskValue},
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-        watch::is_appstate_mounted::IsAppStateMountedWatch,
     },
     Result,
 };
@@ -14,18 +14,20 @@ use eureka_mmanager::{
     download::{
         cover::{
             task::{CoverDownloadTaskState, CoverDownloadingState as DownloadingState},
-            CoverDownloadManager, CoverDownloadMessage,
+            CoverDownloadManager,
         },
         traits::managers::TaskManagerAddr,
         GetManager,
     },
-    prelude::AsyncSubscribe,
-    DownloadManager, Error as ManagerError, OwnedError,
+    prelude::CoverDownloadTask,
+    DownloadManager, OwnedError,
 };
-use tokio::{select, sync::watch::channel as watch};
-use tokio_stream::{Stream, StreamExt};
+use tauri::{Manager, Runtime};
+use tokio::{select, sync::watch::Receiver};
+use tokio_stream::Stream;
 use uuid::Uuid;
 
+#[derive(Debug, Clone)]
 pub enum CoverDownloadState {
     Pending,
     Done,
@@ -33,6 +35,50 @@ pub enum CoverDownloadState {
     Canceled,
     Error(OwnedError),
     OfflineAppStateNotLoaded,
+}
+
+impl NextTaskValue for CoverDownloadState {
+    type DownloadingState = DownloadingState;
+
+    fn pending() -> Self {
+        Self::Pending
+    }
+
+    fn downloading(value: Self::DownloadingState) -> Self {
+        Self::Downloading(value)
+    }
+
+    fn error(error: OwnedError) -> Self {
+        Self::Error(error)
+    }
+
+    fn done() -> Self {
+        Self::Done
+    }
+
+    fn canceled() -> Self {
+        Self::Canceled
+    }
+
+    fn offline_app_state_not_loaded() -> Self {
+        Self::OfflineAppStateNotLoaded
+    }
+
+    fn is_pending(&self) -> bool {
+        matches!(self, Self::Pending)
+    }
+
+    fn is_done(&self) -> bool {
+        matches!(self, Self::Done)
+    }
+
+    fn is_canceled(&self) -> bool {
+        matches!(self, Self::Canceled)
+    }
+
+    fn is_offline_app_state_not_loaded(&self) -> bool {
+        matches!(self, Self::OfflineAppStateNotLoaded)
+    }
 }
 
 impl From<CoverDownloadTaskState> for CoverDownloadState {
@@ -94,6 +140,14 @@ impl CoverDownloadState {
     }
 }
 
+fn get_cover_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
+    app: &M,
+    id: Uuid,
+    deferred: bool,
+) -> crate::Result<Receiver<CoverDownloadState>> {
+    get_download_state_rx::<CoverDownloadManager, CoverDownloadTask, _, R, M>(app, id, deferred)
+}
+
 pub struct CoverDownloadSubs;
 
 #[Subscription]
@@ -101,7 +155,6 @@ impl CoverDownloadSubs {
     pub async fn listen_to_cover_tasks<'ctx>(
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
-         
     ) -> Result<impl Stream<Item = Vec<Uuid>> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
         let maybe_offline = (*window.get_offline_app_state()?).clone();
@@ -115,6 +168,9 @@ impl CoverDownloadSubs {
             <Addr<DownloadManager> as GetManager<CoverDownloadManager>>::get(&offline_read).await?;
         let notify = manager.notify().await?;
         let stream = stream! {
+            if let Ok(tasks) = manager.tasks_id().await {
+                yield tasks
+            }
             loop {
                 select! {
                     _ = notify.notified() => {
@@ -132,9 +188,13 @@ impl CoverDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
-         
+        deferred: bool,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
+        Ok(WatchSubscriptionStream::new(get_cover_download_state_rx(
+            &window, cover_id, deferred,
+        )?))
+        /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
             tauri::Wry,
@@ -193,5 +253,6 @@ impl CoverDownloadSubs {
             }
         };
         Ok(stream)
+        */
     }
 }

@@ -1,3 +1,3 @@
 fn main() {
-  mizuki_build::build();
+    mizuki_build::build();
 }

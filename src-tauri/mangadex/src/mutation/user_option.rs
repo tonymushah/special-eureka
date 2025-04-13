@@ -1,24 +1,30 @@
 use crate::{
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
-    store::types::{
-        enums::{
-            chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
-            image_fit::{ImageFit, ImageFitStore},
-            pagination_style::{PaginationStyle, PaginationStyleStore},
-        },
-        structs::{
-            content::{
-                profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
-                ContentProfile,
+    objects::offline_config::{OfflineConfigInput, OfflineConfigObject},
+    store::{
+        types::{
+            enums::{
+                chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
+                chapter_quality::{ChapterQualityStore, DownloadMode},
+                image_fit::{ImageFit, ImageFitStore},
+                pagination_style::{PaginationStyle, PaginationStyleStore},
             },
-            longstrip_image_width::LongstripImageWidthStore,
-            theme::{
-                profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
-                MangaDexTheme,
+            structs::{
+                content::{
+                    profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
+                    ContentProfile,
+                },
+                longstrip_image_width::LongstripImageWidthStore,
+                offline_config::OfflineConfigStore,
+                theme::{
+                    profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
+                    MangaDexTheme,
+                },
             },
         },
+        TauriManagerMangadexStoreCrud, TauriManagerMangadexStoreExtractor,
     },
-    utils::get_app_handle_from_async_graphql,
+    utils::{get_app_handle_from_async_graphql, traits_utils::MangadexAsyncGraphQLContextExt},
     Result,
 };
 use async_graphql::{Context, Object};
@@ -331,5 +337,29 @@ impl UserOptionMutations {
         let len = inner.len();
         watches.content_profiles.send_data(inner)?;
         Ok(len)
+    }
+    pub async fn set_offline_config(
+        &self,
+        ctx: &Context<'_>,
+        cfg: OfflineConfigInput,
+    ) -> Result<OfflineConfigObject> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let mut store = app.extract::<OfflineConfigStore>().await?;
+        store.replace((&cfg).into());
+        app.insert_and_save(&store).await?;
+        Ok(OfflineConfigObject)
+    }
+    pub async fn set_chapter_quality(
+        &self,
+        ctx: &Context<'_>,
+        quality: Option<DownloadMode>,
+    ) -> Result<DownloadMode> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ChapterQualityStore>().await?;
+        *store = quality.unwrap_or_default();
+        app.insert_and_save(&store).await?;
+        watches.chapter_quality.send_data(*store)?;
+        Ok(*store)
     }
 }

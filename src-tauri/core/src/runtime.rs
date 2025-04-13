@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::{error::Error, io, thread::JoinHandle};
 
 use actix::System;

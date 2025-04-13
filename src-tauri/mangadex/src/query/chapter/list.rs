@@ -4,10 +4,11 @@ use std::{
 };
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     error::Error,
     store::types::structs::content::ContentFeeder,
     subscription::utils::{OptionFlattenStream, ResultFlattenStream},
-    utils::Collection,
+    utils::{math::divide::divide, Collection},
     Result,
 };
 use async_graphql::{Context, InputObject, Object};
@@ -90,9 +91,7 @@ impl ChapterListQueries {
     }
 }
 
-#[Object]
 impl ChapterListQueries {
-    #[graphql(skip)]
     pub async fn get_offline(
         &self,
         ctx: &Context<'_>,
@@ -169,27 +168,75 @@ impl ChapterListQueries {
         });
         Ok(res)
     }
-    #[graphql(skip)]
+    // TODO Try this in practise lol
     pub async fn get_online(&self, ctx: &Context<'_>) -> Result<ChapterCollection> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let mut params = self.deref().clone();
-        if params.limit.is_none() && !params.chapter_ids.is_empty() {
-            params.limit.replace(params.chapter_ids.len().try_into()?);
+        let params = if !self.chapter_ids.is_empty() {
+            self.chapter_ids
+                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
+                .flat_map(|chunck| {
+                    let mut param = self.deref().clone();
+                    param.chapter_ids = chunck.to_vec();
+
+                    if param.limit.is_none() && !param.chapter_ids.is_empty() {
+                        param
+                            .limit
+                            .replace(param.chapter_ids.len().try_into().ok()?);
+                    }
+                    Some(param)
+                })
+                .collect::<Vec<_>>()
+        } else {
+            let div_res = divide(self.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+            let mut all = (0..div_res.quot)
+                .map(|d| {
+                    let mut param = self.deref().clone();
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
+                    param
+                })
+                .collect::<Vec<_>>();
+            all.push({
+                let mut param = self.deref().clone();
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
+                param.limit = Some(div_res.remainder);
+                param
+            });
+            all
+        };
+        let mut results = Vec::<ChapterCollection>::new();
+        for val in params {
+            results.push(val.send(&client).await?);
         }
-        let res = params.send(&client).await?;
+        let res = results.into_iter().fold(
+            ChapterCollection {
+                response: mangadex_api_types_rust::ResponseType::Collection,
+                offset: self.offset.unwrap_or_default(),
+                total: 0,
+                limit: 0,
+                data: Vec::new(),
+                result: mangadex_api_types_rust::ResultType::Ok,
+            },
+            |mut agg, mut res| {
+                agg.total = res.total;
+                agg.limit += res.limit;
+                agg.data.append(&mut res.data);
+                agg
+            },
+        );
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
             for data in _res.data {
                 let data: Chapter = data.into();
-                let _ = watches.chapter.send_offline(data);
+                let _ = watches.chapter.send_online(data);
             }
         });
         Ok(res)
     }
-    #[graphql(skip)]
     pub async fn _default(
         &self,
         ctx: &Context<'_>,
@@ -203,6 +250,10 @@ impl ChapterListQueries {
             self.get_offline(ctx, Default::default()).await
         }
     }
+}
+
+#[Object]
+impl ChapterListQueries {
     pub async fn default(
         &self,
         ctx: &Context<'_>,

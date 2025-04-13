@@ -1,5 +1,6 @@
 import type { MouseEventHandler } from "svelte/elements";
 import { debounce } from "lodash";
+import mangadexLogo from "@mangadex/assets/mangadex-logo.svg";
 
 const TOGGLE_SIDEBAR_KEY = "TOGGLE_SIDEBAR";
 const debunc = debounce(async () => {
@@ -19,4 +20,9 @@ export async function mangadexTitleBar() {
 		title: "Sidebar Direction",
 		onclick: TOGGLE_SIDEBAR_HANDLER
 	});
+	/*
+	const { logo, title } = await import("$lib/window-decoration/WindowDecoration.svelte");
+	logo.set(mangadexLogo);
+	title.set("MangaDex | Special Eureka")
+	*/
 }

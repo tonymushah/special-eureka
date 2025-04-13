@@ -81,7 +81,7 @@ export const load: LayoutLoad = async function ({ params }) {
 						: undefined;
 				const contentRating =
 					data.attributes.contentRating != null ||
-					data.attributes.contentRating != undefined
+						data.attributes.contentRating != undefined
 						? data.attributes.contentRating
 						: ContentRating.Safe;
 				const excludedTags = tags.filter((tag) =>
@@ -96,13 +96,13 @@ export const load: LayoutLoad = async function ({ params }) {
 							$profile.excludedOriginalLanguage.some(
 								(value) => originalLanguage == value
 							) == true) &&
-						$profile.originalLanguages.length != 0 &&
-						$profile.excludedOriginalLanguage.length != 0
+							$profile.originalLanguages.length != 0 &&
+							$profile.excludedOriginalLanguage.length != 0
 							? originalLanguage
 							: undefined,
 					status:
 						$profile.status.some((value) => value == status) == false &&
-						$profile.status.length != 0
+							$profile.status.length != 0
 							? status
 							: undefined,
 					publicationDemographic:
@@ -113,7 +113,7 @@ export const load: LayoutLoad = async function ({ params }) {
 							: undefined,
 					contentRating:
 						$profile.contentRating.some((value) => value == contentRating) == false &&
-						$profile.contentRating.length != 0
+							$profile.contentRating.length != 0
 							? contentRating
 							: undefined
 				};
@@ -149,7 +149,8 @@ export const load: LayoutLoad = async function ({ params }) {
 					description: get_value_from_title_and_random_if_undefined(
 						data.attributes.description,
 						"en"
-					)
+					),
+					contentRating: data.attributes.contentRating
 				},
 				statsQueryStore: queryStore({
 					client,

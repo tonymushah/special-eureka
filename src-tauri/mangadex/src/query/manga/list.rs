@@ -3,7 +3,9 @@ use std::{
     pin::Pin,
 };
 
-use crate::{store::types::structs::content::ContentFeeder, Error, Result};
+use crate::{
+    store::types::structs::content::ContentFeeder, utils::math::divide::divide, Error, Result,
+};
 
 use async_graphql::Context;
 use eureka_mmanager::prelude::{
@@ -14,6 +16,7 @@ use mangadex_api_schema_rust::v5::{MangaCollection, MangaObject};
 use tokio_stream::Stream;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::manga::lists::MangaResults,
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
@@ -56,6 +59,17 @@ impl From<&MangaListQueries> for MangaListParams {
 }
 
 impl MangaListQueries {
+    pub fn new_with_exclude_feed<CF: ContentFeeder<MangaListParams>>(
+        param: MangaListParams,
+        exclude_content_profile: bool,
+        feeder: &CF,
+    ) -> Self {
+        if !exclude_content_profile {
+            Self(feeder.feed(param))
+        } else {
+            Self(param)
+        }
+    }
     pub fn new<CF: ContentFeeder<MangaListParams>>(param: MangaListParams, feeder: &CF) -> Self {
         Self(feeder.feed(param))
     }
@@ -112,9 +126,62 @@ impl MangaListQueries {
             .deref()
             .clone();
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
-        let params = self.deref().clone();
+        let params = if !self.manga_ids.is_empty() {
+            self.manga_ids
+                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
+                .flat_map(|chunck| {
+                    let mut param = self.deref().clone();
+                    param.manga_ids = chunck.to_vec();
+
+                    if param.limit.is_none() && !param.manga_ids.is_empty() {
+                        param.limit.replace(param.manga_ids.len().try_into().ok()?);
+                    }
+                    Some(param)
+                })
+                .collect::<Vec<_>>()
+        } else {
+            let div_res = divide(self.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+            let mut all = (0..div_res.quot)
+                .map(|d| {
+                    let mut param = self.deref().clone();
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
+                    param
+                })
+                .collect::<Vec<_>>();
+            all.push({
+                let mut param = self.deref().clone();
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
+                param.limit = Some(div_res.remainder);
+                param
+            });
+            all
+        };
+        let mut results = Vec::<MangaCollection>::new();
+        for val in params {
+            results.push(val.send(&client).await?);
+        }
+        let res: MangaResults = results
+            .into_iter()
+            .fold(
+                MangaCollection {
+                    response: mangadex_api_types_rust::ResponseType::Collection,
+                    offset: self.offset.unwrap_or_default(),
+                    total: 0,
+                    limit: 0,
+                    data: Vec::new(),
+                    result: mangadex_api_types_rust::ResultType::Ok,
+                },
+                |mut agg, mut res| {
+                    agg.total = res.total;
+                    agg.limit += res.limit;
+                    agg.data.append(&mut res.data);
+                    agg
+                },
+            )
+            .into();
         Ok({
-            let res: MangaResults = params.send(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {

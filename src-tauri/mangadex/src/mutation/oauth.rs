@@ -1,6 +1,9 @@
 use std::ops::{Add, Deref};
 
-use crate::Result;
+use crate::{
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::v5::oauth::ClientInfo;
@@ -43,6 +46,10 @@ impl OauthMutations {
         username: Username,
         password: Password,
     ) -> Result<bool> {
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .login()
+            .await;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         match client
@@ -73,6 +80,10 @@ impl OauthMutations {
         }
     }
     pub async fn refresh(&self, ctx: &Context<'_>) -> Result<bool> {
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .refresh()
+            .await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         if let Ok(res) = client.oauth().refresh().send().await {

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Snippet } from "svelte";
+	import { derived as storeDerived } from "svelte/store";
 
 	interface Props {
 		haveBeenRead: boolean;
@@ -8,6 +10,7 @@
 		titleGroups?: Snippet;
 		dateUploader?: Snippet;
 		readingNumberComments?: Snippet;
+		id: string;
 	}
 	let {
 		haveBeenRead = $bindable(),
@@ -15,11 +18,20 @@
 		flagReadingState,
 		titleGroups,
 		dateUploader,
-		readingNumberComments
+		readingNumberComments,
+		id
 	}: Props = $props();
+	const chapterDownload = new ChapterDownload(id);
+
+	const download_state_images = chapterDownload.download_state_images();
 </script>
 
-<div class="layout" class:haveBeenRead>
+<div
+	class="layout"
+	class:haveBeenRead
+	class:hasImages={$download_state_images.hasImages}
+	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
+>
 	<div class="state">
 		{#if state}
 			{@render state()}
@@ -48,15 +60,23 @@
 </div>
 
 <style lang="scss">
+	.layout.hasImages {
+		background: linear-gradient(
+			90deg,
+			color-mix(in srgb, var(--primary) 50%, var(--chapter-layout) 50%) var(--status-left),
+			var(--chapter-layout) var(--status-right)
+		);
+	}
 	.layout {
 		background-color: var(--chapter-layout, transparent);
 		display: grid;
-		grid-template-areas: "state flag-reading-state title-groups title-groups title-groups title-groups date-uploader reading-number-comments";
+		grid-template-areas: "state flag-reading-state title-groups date-uploader reading-number-comments";
+		grid-template-columns: 25px 25px auto 125px 100px;
 		column-gap: 20px;
 		color: var(--text-color);
 		padding: 5px;
 		transition: background-color 300ms ease-in-out;
-		border-radius: 0.5rem;
+		border-radius: 0.15rem;
 		width: -webkit-fill-available;
 		.state {
 			grid-area: state;

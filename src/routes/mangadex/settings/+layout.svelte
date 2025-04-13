@@ -1,6 +1,6 @@
 <script lang="ts">
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
@@ -13,5 +13,6 @@
 <style lang="scss">
 	.layout {
 		margin: 8px 16px;
+		width: 95%;
 	}
 </style>

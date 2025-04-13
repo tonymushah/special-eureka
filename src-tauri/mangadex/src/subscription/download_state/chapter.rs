@@ -1,8 +1,8 @@
 use crate::{
     subscription::utils::WatchSubscriptionStream,
     utils::{
+        download_state_rx::{get_download_state_rx, NextTaskValue},
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-        watch::is_appstate_mounted::IsAppStateMountedWatch,
     },
     Result,
 };
@@ -13,17 +13,19 @@ use eureka_mmanager::{
     download::{
         chapter::{
             task::{ChapterDownloadTaskState, ChapterDownloadingState as DownloadingState},
-            ChapterDownloadManager, ChapterDownloadMessage,
+            ChapterDownloadManager,
         },
         GetManager,
     },
-    prelude::{AsyncSubscribe, TaskManagerAddr},
-    DownloadManager, Error as ManagerError, OwnedError,
+    prelude::{ChapterDownloadTask, TaskManagerAddr},
+    DownloadManager, OwnedError,
 };
-use tokio::{select, sync::watch::channel as watch};
-use tokio_stream::{Stream, StreamExt};
+use tauri::{Manager, Runtime};
+use tokio::{select, sync::watch::Receiver};
+use tokio_stream::Stream;
 use uuid::Uuid;
 
+#[derive(Debug, Clone)]
 pub enum ChapterDownloadState {
     Pending,
     Done,
@@ -31,6 +33,50 @@ pub enum ChapterDownloadState {
     Canceled,
     Error(OwnedError),
     OfflineAppStateNotLoaded,
+}
+
+impl NextTaskValue for ChapterDownloadState {
+    type DownloadingState = DownloadingState;
+
+    fn pending() -> Self {
+        Self::Pending
+    }
+
+    fn downloading(value: Self::DownloadingState) -> Self {
+        Self::Downloading(value)
+    }
+
+    fn error(error: OwnedError) -> Self {
+        Self::Error(error)
+    }
+
+    fn done() -> Self {
+        Self::Done
+    }
+
+    fn canceled() -> Self {
+        Self::Canceled
+    }
+
+    fn offline_app_state_not_loaded() -> Self {
+        Self::OfflineAppStateNotLoaded
+    }
+
+    fn is_pending(&self) -> bool {
+        matches!(self, Self::Pending)
+    }
+
+    fn is_done(&self) -> bool {
+        matches!(self, Self::Done)
+    }
+
+    fn is_canceled(&self) -> bool {
+        matches!(self, Self::Canceled)
+    }
+
+    fn is_offline_app_state_not_loaded(&self) -> bool {
+        matches!(self, Self::OfflineAppStateNotLoaded)
+    }
 }
 
 impl From<ChapterDownloadTaskState> for ChapterDownloadState {
@@ -121,6 +167,14 @@ impl ChapterDownloadState {
     }
 }
 
+fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
+    app: &M,
+    id: Uuid,
+    deferred: bool,
+) -> crate::Result<Receiver<ChapterDownloadState>> {
+    get_download_state_rx::<ChapterDownloadManager, ChapterDownloadTask, _, R, M>(app, id, deferred)
+}
+
 pub struct ChapterDownloadSubs;
 
 #[Subscription]
@@ -142,6 +196,9 @@ impl ChapterDownloadSubs {
                 .await?;
         let notify = manager.notify().await?;
         let stream = stream! {
+            if let Ok(tasks) = manager.tasks_id().await {
+                yield tasks
+            }
             loop {
                 select! {
                     _ = notify.notified() => {
@@ -159,15 +216,13 @@ impl ChapterDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
+        deferred: bool,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
         let window = ctx.get_window::<tauri::Wry>()?.clone();
-        let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
-            IsAppStateMountedWatch,
-            tauri::Wry,
-        >(ctx)?;
-        let (tx, rx) = watch::<Option<Addr<DownloadManager>>>(None);
-        let maybe_offline = (*window.get_offline_app_state()?).clone();
-        let stream = stream! {
+        Ok(WatchSubscriptionStream::new(get_chapter_download_state_rx(
+            &window, chapter_id, deferred,
+        )?))
+        /* let stream = stream! {
             let mut is_readed = false;
             loop {
                 select! {
@@ -218,7 +273,9 @@ impl ChapterDownloadSubs {
                     else => break
                 }
             }
+            println!("Leaves streams")
         };
         Ok(stream)
+         */
     }
 }

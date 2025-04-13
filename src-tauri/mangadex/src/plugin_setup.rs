@@ -33,7 +33,7 @@ pub fn setup<R: Runtime>(
     #[cfg(debug_assertions)]
     export_sdl(schema, &plug_config)?;
     register_mangadex_client(app, &plug_config)?;
-    init_states(app)?;
+    init_states(app, &plug_config)?;
     register_uri_scheme_protocol(app, config)?;
     Ok(())
 }

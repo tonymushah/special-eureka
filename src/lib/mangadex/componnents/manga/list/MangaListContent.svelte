@@ -9,6 +9,7 @@
 </script>
 
 <script lang="ts">
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import { MangaListStyle } from "@mangadex/gql/graphql";
 	import { getMangaListStyleContext } from "./contexts/style";
 	import CoverMangaList from "./cover/CoverMangaList.svelte";
@@ -21,9 +22,14 @@
 
 	let { list }: Props = $props();
 	const style = getMangaListStyleContext();
+	let container: HTMLElement | undefined = $state();
+	let selectedChapters: string[] = $state([]);
+	let selectedMangas: string[] = $state([]);
 </script>
 
-<div class="manga-list-content">
+<ChapterFeedSelecto bind:container bind:selectedChapters bind:selectedMangas />
+
+<div class="manga-list-content" bind:this={container}>
 	{#if $style == MangaListStyle.Grid}
 		<MediumMangaList {list} />
 	{:else if $style == MangaListStyle.Rows}

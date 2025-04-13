@@ -10,17 +10,19 @@
 		type?: "reset" | "submit" | "button";
 		style?: string | undefined;
 		isBase?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
 		type = "button",
 		style = undefined,
 		isBase = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 
-<ButtonBase --button-color={"var(--button-accent)"} {isBase} {style} on:click {type}>
+<ButtonBase --button-color={"var(--button-accent)"} {disabled} {isBase} {style} on:click {type}>
 	{@render children?.()}
 </ButtonBase>

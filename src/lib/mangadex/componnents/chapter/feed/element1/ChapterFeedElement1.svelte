@@ -26,7 +26,6 @@
 		uploader: Uploader;
 		upload_date: Date;
 		haveBeenRead?: boolean;
-		download_state: ChapterDownloadState;
 	}
 
 	let {
@@ -40,8 +39,7 @@
 		groups = [],
 		uploader,
 		upload_date,
-		haveBeenRead = $bindable(true),
-		download_state
+		haveBeenRead = $bindable(true)
 	}: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -65,7 +63,7 @@
 	}>();
 </script>
 
-<Layout bind:haveBeenRead>
+<Layout bind:haveBeenRead {mangaId}>
 	<CoverImage {coverImage} {coverImageAlt} {mangaId} on:mangaClick on:mangaKeyClick />
 	<Content
 		{mangaId}
@@ -76,7 +74,6 @@
 		{groups}
 		{upload_date}
 		{uploader}
-		{download_state}
 		on:download
 		on:downloadKeyPress
 		on:mangaClick

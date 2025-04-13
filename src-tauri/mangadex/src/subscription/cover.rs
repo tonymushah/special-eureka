@@ -16,12 +16,11 @@ impl CoverSubscriptions {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
-         
     ) -> Result<impl Stream<Item = CoverAttributes> + 'ctx> {
         Ok(
-            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry> (ctx,
-                |w| w.cover.subscribe(),
-            )?
+            WatchSubscriptionStream::<_>::from_async_graphql_context::<_, tauri::Wry>(ctx, |w| {
+                w.cover.subscribe()
+            })?
             .option_filter_by_id(cover_id)
             .map(|data| data.inner_data()),
         )

@@ -48,6 +48,8 @@
 </script>
 
 <script lang="ts">
+	/// TODO add fixed mangareading style
+	/// TODO Add cached chapter double page context data
 	import type { LayoutData } from "./$types";
 	import { writable } from "svelte/store";
 	import {

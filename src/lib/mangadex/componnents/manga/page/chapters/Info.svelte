@@ -182,16 +182,22 @@
 	}
 	function propsToUseLink(links: MangaLinks): MangaLinksItem[] {
 		if (links.hasNoLinks == false) {
-			return [
-				{
+			let to_return_links: MangaLinksItem[] = [];
+			const maybe_read_or_buy = propsToUseRawsLink(links);
+			if (maybe_read_or_buy.length > 0) {
+				to_return_links.push({
 					title: "Read or Buy",
-					items: propsToUseRawsLink(links)
-				},
-				{
+					items: maybe_read_or_buy
+				});
+			}
+			const maybe_track_links = propsToUseTrackLink(links);
+			if (maybe_track_links.length > 0) {
+				to_return_links.push({
 					title: "Track",
-					items: propsToUseTrackLink(links)
-				}
-			];
+					items: maybe_track_links
+				});
+			}
+			return to_return_links;
 		} else {
 			return [];
 		}

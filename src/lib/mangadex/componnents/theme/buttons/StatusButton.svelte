@@ -17,7 +17,8 @@
 		type?: "reset" | "submit" | "button";
 		style?: string | undefined;
 		isBase?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
@@ -25,32 +26,33 @@
 		type = "button",
 		style = undefined,
 		isBase = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 
 {#if color == "blue"}
-	<Blue on:click {type} {style} {isBase}>
+	<Blue on:click {type} {style} {isBase} {disabled}>
 		{@render children?.()}
 	</Blue>
 {:else if color == "gray"}
-	<Gray on:click {type} {style} {isBase}>
+	<Gray on:click {type} {style} {isBase} {disabled}>
 		{@render children?.()}
 	</Gray>
 {:else if color == "green"}
-	<Green on:click {type} {style} {isBase}>
+	<Green on:click {type} {style} {isBase} {disabled}>
 		{@render children?.()}
 	</Green>
 {:else if color == "purple"}
-	<Purple on:click {type} {style} {isBase}>
+	<Purple on:click {type} {style} {isBase} {disabled}>
 		{@render children?.()}
 	</Purple>
 {:else if color == "red"}
-	<Red on:click {type} {style} {isBase}>
+	<Red on:click {type} {style} {isBase} {disabled}>
 		{@render children?.()}
 	</Red>
 {:else if color == "yellow"}
-	<Yellow on:click {type} {style} {isBase}>
+	<Yellow on:click {type} {style} {isBase} {disabled}>
 		{@render children?.()}
 	</Yellow>
 {/if}

@@ -365,7 +365,7 @@ type ChapterMutations {
 	Remove the chapter from the current device or offline
 	"""
 	remove(id: UUID!): Boolean!
-	download(id: UUID!, quality: DownloadMode! = NORMAL): DownloadState!
+	download(id: UUID!, quality: DownloadMode): DownloadState!
 	cancelDownload(id: UUID!): Boolean!
 }
 
@@ -558,6 +558,23 @@ enum CoverDownloadingState {
 	FETCHING_IMAGE
 }
 
+input CoverEditParam {
+	coverOrMangaId: UUID!
+	"""
+	0-8 characters in length.
+	"""
+	volume: String!
+	"""
+	0-512 characters in length.
+	"""
+	description: String = null
+	locale: Language = null
+	"""
+	>= 1
+	"""
+	version: Int!
+}
+
 enum CoverImageQuality {
 	V512
 	V256
@@ -571,6 +588,15 @@ input CoverListParam {
 	uploaderIds: [UUID!]! = []
 	locales: [Language!]! = []
 	order: CoverSortOrder
+}
+
+type CoverMutations {
+	upload(params: CoverUploadParam!): Cover!
+	edit(params: CoverEditParam!): Cover!
+	delete(id: UUID!): Boolean!
+	download(id: UUID!): DownloadState!
+	remove(id: UUID!): Boolean!
+	cancelDownload(id: UUID!): Boolean!
 }
 
 type CoverQueries {
@@ -596,6 +622,21 @@ input CoverSortOrder @oneOf {
 	createdAt: OrderDirection
 	updatedAt: OrderDirection
 	volume: OrderDirection
+}
+
+input CoverUploadParam {
+	mangaId: UUID!
+	file: PathBuf!
+	"""
+	Volume number the cover is associated with.
+	
+	* Nullable
+	* <= 8 characters
+	* Pattern: `^(0|[1-9]\\d*)((\\.\\d+){1,2})?[a-z]?$`
+	"""
+	volume: String = null
+	description: String! = ""
+	locale: Language!
 }
 
 input CreateForumThreadParams {
@@ -979,11 +1020,11 @@ input FollowedMangaFeedParams {
 type FollowsQueries {
 	groups(params: UserFollowedGroupsParams! = {limit: null, offset: null}): ScanlationGroupResults!
 	isFollowingGroup(id: UUID!): Boolean!
-	users(params: UserFollowedUserParams! = {limit: null, offset: null}): UserResults!
+	users(param: UserFollowedUserParams! = {limit: null, offset: null}): UserResults!
 	isFollowingUser(id: UUID!): Boolean!
 	mangas(params: UserFollowedMangaParams! = {limit: null, offset: null}): MangaResults!
 	isFollowingManga(id: UUID!): Boolean!
-	customLists(params: UserFollowedListParams! = {limit: null, offset: null}): CustomListResults!
+	customLists(param: UserFollowedListParams! = {limit: null, offset: null}): CustomListResults!
 	isFollowingCustomList(id: UUID!): Boolean!
 }
 
@@ -1466,8 +1507,8 @@ type MangaObject {
 type MangaQueries {
 	isDownloaded(id: UUID!): DownloadState!
 	get(id: UUID!): MangaObject!
-	list(params: MangaListParams): MangaResults!
-	listOffline(params: MangaListParams): MangaResults!
+	list(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
+	listOffline(params: MangaListParams, excludeContentProfile: Boolean): MangaResults!
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
@@ -1698,6 +1739,7 @@ type Mutation {
 	offlineAppState: OfflineAppStateMutations!
 	user: UserMutations!
 	userOption: UserOptionMutations!
+	cover: CoverMutations!
 }
 
 type OauthMutations {
@@ -1719,6 +1761,29 @@ type OfflineAppStateMutations {
 
 type OfflineAppStateQueries {
 	isMounted: Boolean!
+}
+
+input OfflineConfigInput {
+	dataDirectory: String!
+	chaptersDirectory: String
+	mangasDirectory: String
+	coversDirectory: String
+}
+
+type OfflineConfigObject {
+	dataDir: String!
+	"""
+	Often relative to [`Self::data_dir`]
+	"""
+	chaptersDir: String!
+	"""
+	Often relative to [`Self::data_dir`]
+	"""
+	mangasDir: String!
+	"""
+	Often relative to [`Self::data_dir`]
+	"""
+	coversDir: String!
 }
 
 """
@@ -2124,15 +2189,16 @@ type Subscriptions {
 	watchClientInfo: ClientInfo
 	watchChapterFeedStyle: ChapterFeedStyle!
 	watchPaginationStyle: PaginationStyle!
-	watchChapterDownloadState(chapterId: UUID!): ChapterDownloadState!
+	watchChapterDownloadState(deferred: Boolean, chapterId: UUID!): ChapterDownloadState!
 	watchChaptersTasksList: [UUID!]!
-	watchCoverDownloadState(coverId: UUID!): CoverDownloadState!
+	watchCoverDownloadState(deferred: Boolean, coverId: UUID!): CoverDownloadState!
 	watchCoverTasksList: [UUID!]!
-	watchMangaDownloadState(mangaId: UUID!): MangaDownloadState!
+	watchMangaDownloadState(deferred: Boolean, mangaId: UUID!): MangaDownloadState!
 	watchMangaTasksList: [UUID!]!
 	watchContentProfiles: [ContentProfileEntry!]!
 	watchContentProfileDefaultName: String
 	watchContentProfileDefault: ContentProfile!
+	watchChapterQuality: DownloadMode!
 }
 
 type Tag {
@@ -2372,6 +2438,8 @@ type UserOptionMutations {
 	deleteContentProfile(name: String!): ContentProfile
 	clearContentProfiles: Boolean!
 	setContentProfiles(entries: [ContentProfileEntryInput!]!): Int!
+	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
+	setChapterQuality(quality: DownloadMode): DownloadMode!
 }
 
 type UserOptionQueries {
@@ -2380,6 +2448,7 @@ type UserOptionQueries {
 	getSidebarDirection: Direction!
 	getChapterLanguages: [Language!]!
 	getDefaultContentProfile: ContentProfile!
+	getOfflineConfig: OfflineConfigObject!
 }
 
 type UserQueries {

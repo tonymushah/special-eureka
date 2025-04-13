@@ -8,13 +8,13 @@
 
 	interface Props {
 		innerOverflow?: boolean;
-		top?: import('svelte').Snippet;
-		bottom?: import('svelte').Snippet;
+		top?: import("svelte").Snippet;
+		bottom?: import("svelte").Snippet;
 	}
 
 	let { innerOverflow = true, top, bottom }: Props = $props();
 	const currentChapterPage = getChapterCurrentPageContext();
-	let longstrip_root: HTMLDivElement | undefined = $state();
+	let longstrip_root: HTMLDivElement | undefined = undefined;
 	const images = getChapterImageContext();
 	const imageWidth = derived(getLongStripImagesWidthContext(), ($width) => {
 		if ($width == 0) {

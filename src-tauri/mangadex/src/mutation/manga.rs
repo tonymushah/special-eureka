@@ -2,25 +2,18 @@ use std::collections::HashMap;
 
 use crate::{
     error::Error,
-    objects::cover::Cover,
     query::download_state::DownloadStateQueries,
     store::types::structs::content::feed_from_gql_ctx,
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    utils::{
+        download::manga::download_manga,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
     Result,
 };
-use actix::Addr;
 use async_graphql::{Context, Object};
 use eureka_mmanager::{
-    download::{
-        cover::CoverDownloadMessage, manga::MangaDownloadMessage, state::DownloadMessageState,
-    },
-    history::service::messages::is_in::IsInMessage,
-    prelude::{
-        AsyncCanBeWaited, AsyncCancelable, CoverDownloadManager, DeleteDataAsyncTrait, GetManager,
-        GetManagerStateData, GetMangaDownloadManager, HistoryEntry, MangaDownloadManager,
-        TaskManagerAddr,
-    },
-    DownloadManager,
+    download::manga::MangaDownloadMessage,
+    prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetMangaDownloadManager, TaskManagerAddr},
 };
 use mangadex_api_input_types::manga::{
     create::CreateMangaParam, create_relation::MangaCreateRelationParam, list::MangaListParams,
@@ -52,74 +45,19 @@ impl MangaMutations {
     pub async fn download(&self, ctx: &Context<'_>, id: Uuid) -> Result<DownloadState> {
         let tauri_handle = ctx.get_app_handle::<tauri::Wry>()?.clone();
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let ola = get_offline_app_state::<tauri::Wry>(ctx)?;
-        let offline_app_state_write = ola.read().await;
-        let olasw = offline_app_state_write
-            .as_ref()
-            .map(|a| a.app_state.clone())
-            .ok_or(Error::OfflineAppStateNotLoaded)?;
-        let manager = olasw.clone();
-        let res = tauri::async_runtime::spawn(async move {
-            use log::{info, trace};
-            trace!("Downloading title {id}");
-            let watches = tauri_handle.get_watches()?;
-            let dirs =
-                <Addr<DownloadManager> as GetManagerStateData>::get_dir_options(&manager).await?;
-            let (manga, cover) = {
-                let manga_manager =
-                    <Addr<DownloadManager> as GetManager<MangaDownloadManager>>::get(&manager)
-                        .await?;
-                let mut task = manga_manager
-                    .send(MangaDownloadMessage::new(id).state(DownloadMessageState::Downloading))
-                    .await?;
-                let data = task.wait().await?.await?;
-                info!(
-                    "downloaded title {} = {:?}",
-                    data.id,
-                    data.attributes.title.values().next()
-                );
-                let cover = data
-                    .find_first_relationships(RelationshipType::CoverArt)
-                    .ok_or(Error::msg(format!(
-                        "Cannot find the title {} cover art",
-                        id
-                    )))?
-                    .clone();
-                (data, cover)
-            };
-            if !dirs
-                .send(IsInMessage(HistoryEntry::new(
-                    cover.id,
-                    RelationshipType::CoverArt,
-                )))
-                .await?
-            {
-                trace!("Downloading {} cover art", cover.id);
-                let cover_manager =
-                    <Addr<DownloadManager> as GetManager<CoverDownloadManager>>::get(&manager)
-                        .await?;
-                let mut task = cover_manager
-                    .send(
-                        CoverDownloadMessage::new(cover.id)
-                            .state(DownloadMessageState::Downloading),
-                    )
-                    .await?;
-                let _ = watches
-                    .cover
-                    .send_offline(Into::<Cover>::into(task.wait().await?.await?));
-                info!("Downloaded {} cover art", cover.id);
-            }
-            Ok::<_, Error>(manga)
-        })
-        .await;
+        let res = download_manga(&tauri_handle, id).await?;
         let state = DownloadStateQueries.manga(ctx, id).await?;
-        let manga = res??;
+        let manga = res;
         let _ = watches.manga.send_offline(Into::<Manga>::into(manga));
         Ok(state)
     }
     pub async fn create(&self, ctx: &Context<'_>, params: CreateMangaParam) -> Result<Manga> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .post_manga()
+            .await;
         let data: Manga = Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
@@ -131,6 +69,10 @@ impl MangaMutations {
     pub async fn edit(&self, ctx: &Context<'_>, params: UpdateMangaParam) -> Result<Manga> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .put_manga()
+            .await;
         let data: Manga = Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )
@@ -142,6 +84,10 @@ impl MangaMutations {
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .delete_manga()
+            .await;
         let _ = client.manga().id(id).delete().send().await?;
         Ok(true)
     }
@@ -210,6 +156,10 @@ impl MangaMutations {
     ) -> Result<Manga> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .commit_manga_draft()
+            .await;
         let data: Manga = Into::<ApiObjectNoRelationships<MangaAttributes>>::into(
             params.send(&client).await?.body.data,
         )

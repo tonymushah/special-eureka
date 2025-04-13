@@ -39,7 +39,6 @@
 		forceVisible: true,
 		positioning: {
 			placement: "bottom",
-			fitViewport: true,
 			sameWidth: true
 		}
 	});
@@ -143,7 +142,7 @@
 	.menu-outer {
 		display: flex;
 		flex-direction: column;
-		height: 200px;
+		position: absolute;
 	}
 	.layout {
 		flex: 3;

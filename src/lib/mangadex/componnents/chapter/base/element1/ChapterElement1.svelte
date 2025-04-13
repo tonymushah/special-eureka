@@ -45,11 +45,13 @@
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher } from "svelte";
+	import { createEventDispatcher, onDestroy } from "svelte";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
-	import type { Readable } from "svelte/store";
+	import { derived, type Readable } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
+	import { ChapterDownload } from "@mangadex/download/chapter";
+	import { debounce } from "lodash";
 	type Group = {
 		id: string;
 		name: string;
@@ -67,7 +69,6 @@
 		uploader: Uploader;
 		upload_date: Date;
 		haveBeenRead?: boolean;
-		download_state: Readable<ChapterDownloadState>;
 		comments?: number | undefined;
 	}
 
@@ -79,63 +80,70 @@
 		uploader,
 		upload_date,
 		haveBeenRead = true,
-		download_state,
 		comments = undefined
 	}: Props = $props();
 
 	const dispatch = createChapterEl1EventDispatcher();
-
-	let downloaded = $derived($download_state == ChapterDownloadState.Downloaded);
-	let downloading = $derived($download_state == ChapterDownloadState.Downloading);
-	let failed = $derived($download_state == ChapterDownloadState.Failed);
+	// TODO implement quality
+	const chapter_download_inner = new ChapterDownload(id);
+	const [downloading, downloaded, failed] = [
+		chapter_download_inner.is_downloading(),
+		chapter_download_inner.is_downloaded(),
+		chapter_download_inner.has_failed()
+	];
+	const handle_download_event = debounce(async () => {
+		if ($downloading) {
+			await chapter_download_inner.cancel();
+		} else {
+			await chapter_download_inner.download();
+		}
+	});
+	const showTrashButton = derived(
+		[failed, downloaded, downloading],
+		([$failed, $downloaded, $downloading]) => {
+			return ($failed || $downloaded) && !$downloading;
+		}
+	);
 </script>
 
 <article
-	class="border"
+	class="border chapter-element"
 	oncontextmenu={(e) => {
 		e.preventDefault();
 	}}
+	data-chapter-id={id}
 >
-	<Layout {haveBeenRead}>
+	<Layout {haveBeenRead} {id}>
 		{#snippet state()}
 			<div
 				class="buttons"
 				role="button"
-				onclick={(e) => {
-					if ($download_state != ChapterDownloadState.Downloading) {
-						dispatch("download", {
-							...e,
-							id
-						});
-					}
+				onclick={async (e) => {
+					dispatch("download", { ...e, id });
+					await handle_download_event();
 				}}
-				onkeypress={(e) => {
+				onkeypress={async (e) => {
 					dispatch("downloadKeyPress", {
 						...e,
 						id
 					});
+					if (e.key == "Enter") {
+						await handle_download_event();
+					}
 				}}
 				tabindex={0}
 			>
-				<DownloadStateComp {download_state} />
+				<DownloadStateComp {id} />
 			</div>
-			{#if (failed || downloaded) && !downloading}
+			{#if $showTrashButton}
 				<div
 					class="buttons remove"
-					onclick={(e) => {
-						if ($download_state != ChapterDownloadState.Downloading) {
-							dispatch("remove", {
-								...e,
-								id
-							});
-						}
+					onclick={async (e) => {
+						await chapter_download_inner.remove();
 					}}
-					onkeypress={(e) => {
-						if ($download_state != ChapterDownloadState.Downloading) {
-							dispatch("removeKeyPress", {
-								...e,
-								id
-							});
+					onkeypress={async (e) => {
+						if (e.key == "Enter") {
+							await chapter_download_inner.remove();
 						}
 					}}
 					tabindex={0}
@@ -184,7 +192,13 @@
 					})}
 					ext_href={`https://mangadex.org/chapter/${id}`}
 				>
-					<h4 class="title">{title}</h4>
+					<h4 class="title" class:empty={title == undefined}>
+						{#if title}
+							{title}
+						{:else}
+							Oneshot
+						{/if}
+					</h4>
 				</Link>
 			</div>
 
@@ -281,6 +295,9 @@
 		overflow: hidden;
 		width: 100%;
 	}
+	.title.empty {
+		font-style: italic;
+	}
 	.title-outer {
 		display: contents;
 	}
@@ -329,5 +346,8 @@
 	}
 	.comments:hover {
 		color: var(--primary);
+	}
+	.chapter-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
 	}
 </style>

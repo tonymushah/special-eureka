@@ -63,10 +63,19 @@
 								fontFamily: "Popins"
 							}
 						});
+						toast.showToast();
+						unlistens.push(() => {
+							try {
+								toast.hideToast();
+							} catch (error) {
+								console.warn(error);
+							}
+						});
 					})
 				);
 				unlistens.push(
 					await window.once<string>("tauri://error", (e) => {
+						console.warn(e);
 						const toast = Toastify({
 							text: `Error when creating a new window ${e}`,
 							gravity: "bottom",
@@ -79,6 +88,14 @@
 								fontFamily: "Popins"
 							}
 						});
+						toast.showToast();
+						unlistens.push(() => {
+							try {
+								toast.hideToast();
+							} catch (error) {
+								console.warn(error);
+							}
+						});
 					})
 				);
 			}
@@ -88,7 +105,7 @@
 					icon: OpenExtLinkIcon,
 					label: "Open External Link",
 					async onClick() {
-						if (ext_href) open(ext_href);
+						if (ext_href) openUrl(ext_href);
 					}
 				}
 			: undefined

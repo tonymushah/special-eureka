@@ -1,6 +1,8 @@
 use std::ops::Deref;
 
-use crate::{store::types::structs::content::feed_from_gql_ctx, Result};
+use crate::{
+    store::types::structs::content::feed_from_gql_ctx, utils::math::divide::divide, Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{
     feed::{
@@ -8,8 +10,10 @@ use mangadex_api_input_types::{
     },
     manga::list::MangaListParams,
 };
+use mangadex_api_schema_rust::v5::ChapterCollection;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::{
         chapter::lists::ChapterResults,
         manga_chapter_group::{group_results, MangaChapterGroup},
@@ -24,6 +28,7 @@ use crate::{
 #[derive(Debug, Clone, Copy)]
 pub struct FeedQueries;
 
+// TODO Implement
 #[Object]
 impl FeedQueries {
     pub async fn user_logged_manga_feed(
@@ -31,15 +36,56 @@ impl FeedQueries {
         ctx: &Context<'_>,
         params: Option<FollowedMangaFeedParams>,
     ) -> Result<ChapterResults> {
-        let mut params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
+        let mut param = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params.unwrap_or_default());
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        let params = {
+            let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+            let mut all = (0..div_res.quot)
+                .map(|d| {
+                    let mut param = param.clone();
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
+                    param
+                })
+                .collect::<Vec<_>>();
+            all.push({
+                let mut param = param.clone();
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
+                param.limit = Some(div_res.remainder);
+                param
+            });
+            all
+        };
+        let mut results = Vec::<ChapterCollection>::new();
+        for val in params {
+            results.push(val.send(&client).await?);
+        }
+        let res: ChapterResults = results
+            .into_iter()
+            .fold(
+                ChapterCollection {
+                    response: mangadex_api_types_rust::ResponseType::Collection,
+                    offset: param.offset.unwrap_or_default(),
+                    total: 0,
+                    limit: 0,
+                    data: Vec::new(),
+                    result: mangadex_api_types_rust::ResultType::Ok,
+                },
+                |mut agg, mut res| {
+                    agg.total = res.total;
+                    agg.limit += res.limit;
+                    agg.data.append(&mut res.data);
+                    agg
+                },
+            )
+            .into();
         Ok({
-            let res: ChapterResults = params.send(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
@@ -70,14 +116,55 @@ impl FeedQueries {
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
         group_results(
             {
-                let data = feed_params.send(&client).await?;
-                let _res: ChapterResults = data.clone().into();
+                let param = feed_params;
+                let params = {
+                    let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+                    let mut all = (0..div_res.quot)
+                        .map(|d| {
+                            let mut param = param.clone();
+                            param.offset =
+                                Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                            param.limit = Some(MANGADEX_PAGE_LIMIT);
+                            param
+                        })
+                        .collect::<Vec<_>>();
+                    all.push({
+                        let mut param = param.clone();
+                        param.offset = Some(
+                            param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT,
+                        );
+                        param.limit = Some(div_res.remainder);
+                        param
+                    });
+                    all
+                };
+                let mut results = Vec::<ChapterCollection>::new();
+                for val in params {
+                    results.push(val.send(&client).await?);
+                }
+                let res = results.into_iter().fold(
+                    ChapterCollection {
+                        response: mangadex_api_types_rust::ResponseType::Collection,
+                        offset: param.offset.unwrap_or_default(),
+                        total: 0,
+                        limit: 0,
+                        data: Vec::new(),
+                        result: mangadex_api_types_rust::ResultType::Ok,
+                    },
+                    |mut agg, mut res| {
+                        agg.total = res.total;
+                        agg.limit += res.limit;
+                        agg.data.append(&mut res.data);
+                        agg
+                    },
+                );
+                let _res: ChapterResults = res.clone().into();
                 tauri::async_runtime::spawn(async move {
                     for data in _res {
                         let _ = watches.chapter.send_online(data);
                     }
                 });
-                data
+                res
             },
             ctx,
             manga_list_params,
@@ -89,15 +176,56 @@ impl FeedQueries {
         ctx: &Context<'_>,
         params: CustomListMangaFeedParams,
     ) -> Result<ChapterResults> {
-        let mut params: CustomListMangaFeedParams = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
+        let mut param: CustomListMangaFeedParams = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        let params = {
+            let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+            let mut all = (0..div_res.quot)
+                .map(|d| {
+                    let mut param = param.clone();
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
+                    param
+                })
+                .collect::<Vec<_>>();
+            all.push({
+                let mut param = param.clone();
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
+                param.limit = Some(div_res.remainder);
+                param
+            });
+            all
+        };
+        let mut results = Vec::<ChapterCollection>::new();
+        for val in params {
+            results.push(val.send(&client).await?);
+        }
+        let res: ChapterResults = results
+            .into_iter()
+            .fold(
+                ChapterCollection {
+                    response: mangadex_api_types_rust::ResponseType::Collection,
+                    offset: param.offset.unwrap_or_default(),
+                    total: 0,
+                    limit: 0,
+                    data: Vec::new(),
+                    result: mangadex_api_types_rust::ResultType::Ok,
+                },
+                |mut agg, mut res| {
+                    agg.total = res.total;
+                    agg.limit += res.limit;
+                    agg.data.append(&mut res.data);
+                    agg
+                },
+            )
+            .into();
         Ok({
-            let res: ChapterResults = params.send(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
@@ -128,7 +256,49 @@ impl FeedQueries {
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
         group_results(
             {
-                let data = feed_params.send(&client).await?;
+                let param = feed_params;
+                let params = {
+                    let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+                    let mut all = (0..div_res.quot)
+                        .map(|d| {
+                            let mut param = param.clone();
+                            param.offset =
+                                Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                            param.limit = Some(MANGADEX_PAGE_LIMIT);
+                            param
+                        })
+                        .collect::<Vec<_>>();
+                    all.push({
+                        let mut param = param.clone();
+                        param.offset = Some(
+                            param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT,
+                        );
+                        param.limit = Some(div_res.remainder);
+                        param
+                    });
+                    all
+                };
+                let mut results = Vec::<ChapterCollection>::new();
+                for val in params {
+                    results.push(val.send(&client).await?);
+                }
+                let res = results.into_iter().fold(
+                    ChapterCollection {
+                        response: mangadex_api_types_rust::ResponseType::Collection,
+                        offset: param.offset.unwrap_or_default(),
+                        total: 0,
+                        limit: 0,
+                        data: Vec::new(),
+                        result: mangadex_api_types_rust::ResultType::Ok,
+                    },
+                    |mut agg, mut res| {
+                        agg.total = res.total;
+                        agg.limit += res.limit;
+                        agg.data.append(&mut res.data);
+                        agg
+                    },
+                );
+                let data = res;
                 let _res: ChapterResults = data.clone().into();
                 tauri::async_runtime::spawn(async move {
                     for data in _res {

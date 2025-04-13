@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Direction } from "@mangadex/gql/graphql";
-	import { ceil, isArray, random } from "lodash";
-	import { createEventDispatcher } from "svelte";
+	import { ceil, isArray, noop, random } from "lodash";
+	import { createEventDispatcher, onMount } from "svelte";
 	import { derived } from "svelte/store";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
@@ -24,15 +24,23 @@
 		next: {};
 		previous: {};
 	}>();
+	/// BUG or more like shit code xd
+	/// Required or else the component may not work proprely
+	onMount(() => images_indexes.subscribe(noop));
+	onMount(() => images.subscribe(noop));
+	onMount(() => currentChapterPage.subscribe(noop));
+	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
-			currentChapterPage.update(() => {
+			currentChapterPage.update((i) => {
 				const index = $images_indexes[$currentPageIndex + 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
-				} else {
+				} else if (typeof index == "number" && !isNaN(index)) {
 					return index;
+				} else {
+					return i;
 				}
 			});
 		} else {
@@ -42,12 +50,14 @@
 	function previous() {
 		if ($currentPageIndex > 0) {
 			resetZoom();
-			currentChapterPage.update(() => {
+			currentChapterPage.update((i) => {
 				const index = $images_indexes[$currentPageIndex - 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
-				} else {
+				} else if (typeof index == "number" && !isNaN(index)) {
 					return index;
+				} else {
+					return i;
 				}
 			});
 		} else {
@@ -95,6 +105,9 @@
 			default:
 				break;
 		}
+	}}
+	onfocus={() => {
+		resetZoom();
 	}}
 />
 

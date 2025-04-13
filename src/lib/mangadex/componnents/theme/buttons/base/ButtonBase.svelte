@@ -20,6 +20,7 @@
 		haveBorderRadius?: boolean;
 		noPadding?: boolean;
 		children?: import("svelte").Snippet;
+		disabled?: boolean;
 	}
 
 	let {
@@ -30,7 +31,8 @@
 		isBase = false,
 		haveBorderRadius = true,
 		noPadding = false,
-		children
+		children,
+		disabled
 	}: Props = $props();
 </script>
 
@@ -50,6 +52,7 @@
 	onclick={(e) => {
 		dispatch("click", e);
 	}}
+	{disabled}
 	{type}
 >
 	{@render children?.()}
@@ -59,7 +62,7 @@
 	button {
 		font-size: var(--font-size);
 		transition:
-			background-color 200ms ease-in-out,
+			background-color,
 			filter 200ms ease-in-out;
 		color: var(--text-color);
 		background-color: var(--button-color);
@@ -69,10 +72,25 @@
 		transition:
 			border,
 			box-shadow,
-			transform 100ms ease-in-out;
+			transform,
+			100ms ease-in-out;
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
+	}
+	button:disabled {
+		background: linear-gradient(
+			225deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 5%) 0%,
+			var(--button-color) 100%
+		);
+	}
+	button:hover:disabled {
+		background: linear-gradient(
+			45deg,
+			color-mix(in srgb, var(--main-background) 95%, var(--danger, transparent) 05%) 0% 0%,
+			var(--button-color) 100%
+		);
 	}
 	button.haveBorderRadius {
 		border-radius: 0.25rem;

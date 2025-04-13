@@ -4,21 +4,28 @@
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { ServerIcon } from "svelte-feather-icons";
 	import Toast from "toastify-js";
-	import { serverIconStateQuery } from "./server-icon-state";
+	import { onDestroy } from "svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { isSidebarRtl } from "../states/isRtl";
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
-	const toast = Toast({
-		position: "right",
-		gravity: "bottom",
-		style: {
-			fontFamily: "Poppins"
-		},
-		close: true
-	});
-	const offline_server_state_sub = subscriptionStore({
-		client,
-		query: serverIconStateQuery,
-		variables: {}
+	let toast = $derived(
+		Toast({
+			position: $isSidebarRtl ? "left" : "right",
+			gravity: "bottom",
+			style: {
+				fontFamily: "Poppins"
+			},
+
+			close: true
+		})
+	);
+	onDestroy(() => {
+		try {
+			toast.hideToast();
+		} catch (e) {
+			console.error(e);
+		}
 	});
 	let isLoading = $state(false);
 	const mount = async () => {
@@ -26,6 +33,11 @@
 			isLoading = true;
 			const res = await _mount(client);
 			const error = res.error;
+			try {
+				toast.hideToast();
+			} catch (e) {
+				console.warn(e);
+			}
 			if (error) {
 				error.graphQLErrors.forEach((e) => console.error(e));
 				toast.options.text = "Error on loading offline data";
@@ -58,7 +70,7 @@
 			isLoading = false;
 		}
 	};
-	let isEnabled = $derived($offline_server_state_sub.data?.watchIsAppMounted);
+	let isEnabled = $derived($isMounted);
 	let isDisabled = $derived(!isEnabled);
 </script>
 
@@ -69,7 +81,7 @@
 	class:isLoading
 	onclick={async () => {
 		if (!isLoading) {
-			if ($offline_server_state_sub.data?.watchIsAppMounted == true) {
+			if ($isMounted) {
 				await unmount();
 			} else {
 				await mount();

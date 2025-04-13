@@ -1,14 +1,14 @@
 import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vitest/config";
+import { defineConfig, searchForWorkspaceRoot } from "vite";
 import { kitRoutes } from "vite-plugin-kit-routes";
 
 export default defineConfig({
 	plugins: [sveltekit(), kitRoutes()],
 	test: {
-		include: ["src/**/*.{test,spec}.{js,ts}"]
+		include: ["src/**/*.{test,spec}.{js,ts}", "apps/**/*.{test,spec}.{js,ts}"]
 	},
 	optimizeDeps: {
-		exclude: ["@urql/svelte"]
+		exclude: ["@urql/svelte", "@urql/core"]
 	},
 	// prevent vite from obscuring rust errors
 	clearScreen: false,
@@ -18,17 +18,17 @@ export default defineConfig({
 		strictPort: true,
 		fs: {
 			deny: [
-				"**/src-tauri/**",
+				"../src-tauri",
 				".env",
 				".env.*",
 				"*.crt",
 				"*.pem",
-				"**/target/**",
-				"**/data/**"
+				"../target",
+				"../data"
 			]
 		},
 		watch: {
-			ignored: ["**/src-tauri/**", "**/target/**", "**/data/**"]
+			ignored: [`${searchForWorkspaceRoot(process.cwd())}/src-tauri`, `${searchForWorkspaceRoot(process.cwd())}/target`, `${searchForWorkspaceRoot(process.cwd())}/data`]
 		}
 	},
 	// to access the Tauri environment variables set by the CLI with information about the current target

@@ -13,6 +13,7 @@
 		style?: string | undefined;
 		label: string;
 		isBase?: boolean;
+		disabled?: boolean;
 	}
 
 	let {
@@ -20,10 +21,11 @@
 		type = "button",
 		style = undefined,
 		label,
-		isBase = false
+		isBase = false,
+		disabled
 	}: Props = $props();
 </script>
 
-<StatusButton {isBase} {color} {type} on:click {style}>
+<StatusButton {isBase} {color} {type} on:click {style} {disabled}>
 	{label}
 </StatusButton>

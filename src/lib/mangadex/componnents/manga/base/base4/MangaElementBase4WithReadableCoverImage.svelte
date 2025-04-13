@@ -15,12 +15,13 @@
 		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 		title: string;
+		mangaId: string;
 	}
 
-	let { coverImage, coverImageAlt, title }: Props = $props();
+	let { coverImage, coverImageAlt, title, mangaId }: Props = $props();
 </script>
 
-<Layout on:click --w-base={"9.5em"} --img-h={"12.5em"}>
+<Layout on:click --w-base={"9.5em"} --img-h={"12.5em"} {mangaId}>
 	{#if $coverImage}
 		<CoverImage coverImage={$coverImage} {coverImageAlt} />
 	{:else}

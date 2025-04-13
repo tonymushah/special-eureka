@@ -21,6 +21,12 @@ mizuki-build = "1"
 url = "2.5"
 actix = "0.13"
 tower = "0.5"
+dirs = "6"
+enum_all_variants = "0.2.0"
+enum-repr = "0.2"
+enum-kinds = "0.5.1"
+serde_repr = "0.1"
+governor = "0.10"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"
@@ -42,9 +48,25 @@ branch = "v2"
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
 
+[workspace.dependencies.tauri-plugin-dialog]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"
 package = "tauri-plugin-speu-mangadex"
 
+# Enable a small amount of optimization in the dev profile.
 [profile.dev]
+opt-level = 1
+lto = "thin"
+
+[profile.release]
+lto = "thin"
+
+# Enable a large amount of optimization in the dev profile for dependencies.
+[profile.dev.package."*"]
 opt-level = 3
+
+[profile.release.package."tauri-plugin-speu-mangadex"]
+opt-level = "s"

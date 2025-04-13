@@ -1,4 +1,8 @@
 <script lang="ts">
+	/*
+	 TODO implement selecto
+	 */
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
 	import { type Writable } from "svelte/store";
@@ -10,14 +14,19 @@
 	interface Props {
 		list?: ChapterFeedListItem[];
 		style: Writable<ChapterFeedStyle>;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { list = [], style, children }: Props = $props();
 	let coverfull = $derived($style == ChapterFeedStyle.CoverFull);
 	let coverless = $derived($style == ChapterFeedStyle.CoverLess);
 	let isEmpty = $derived(list.length == 0);
+	let container: HTMLElement | undefined = $state();
+	let selectedMangas: string[] = $state([]);
+	let selectedChapters: string[] = $state([]);
 </script>
+
+<ChapterFeedSelecto bind:container bind:selectedChapters bind:selectedMangas />
 
 <section>
 	<div class="tab-title">
@@ -29,7 +38,7 @@
 		<ChapterFeedListSelector {style} />
 	</div>
 	<MidToneLine />
-	<section class="content" class:coverfull class:coverless class:isEmpty>
+	<section class="content" bind:this={container} class:coverfull class:coverless class:isEmpty>
 		{#each list as item}
 			{#if coverfull}
 				<ChapterFeedElement2

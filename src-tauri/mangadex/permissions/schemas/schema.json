@@ -49,7 +49,7 @@
           "minimum": 1.0
         },
         "description": {
-          "description": "Human-readable description of what the permission does. Tauri convention is to use <h4> headings in markdown content for Tauri documentation generation purposes.",
+          "description": "Human-readable description of what the permission does. Tauri convention is to use `<h4>` headings in markdown content for Tauri documentation generation purposes.",
           "type": [
             "string",
             "null"
@@ -111,7 +111,7 @@
           "type": "string"
         },
         "description": {
-          "description": "Human-readable description of what the permission does. Tauri internal convention is to use <h4> headings in markdown content for Tauri documentation generation purposes.",
+          "description": "Human-readable description of what the permission does. Tauri internal convention is to use `<h4>` headings in markdown content for Tauri documentation generation purposes.",
           "type": [
             "string",
             "null"
@@ -297,22 +297,26 @@
         {
           "description": "Enables the graphql command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-graphql"
+          "const": "allow-graphql",
+          "markdownDescription": "Enables the graphql command without any pre-configured scope."
         },
         {
           "description": "Denies the graphql command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-graphql"
+          "const": "deny-graphql",
+          "markdownDescription": "Denies the graphql command without any pre-configured scope."
         },
         {
           "description": "Enables the subscriptions command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-subscriptions"
+          "const": "allow-subscriptions",
+          "markdownDescription": "Enables the subscriptions command without any pre-configured scope."
         },
         {
           "description": "Denies the subscriptions command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-subscriptions"
+          "const": "deny-subscriptions",
+          "markdownDescription": "Denies the subscriptions command without any pre-configured scope."
         }
       ]
     }

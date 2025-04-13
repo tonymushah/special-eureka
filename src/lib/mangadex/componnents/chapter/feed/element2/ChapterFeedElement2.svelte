@@ -1,14 +1,12 @@
 <script lang="ts">
-	import Layout from "@mangadex/componnents/manga/base/base2/Layout.svelte";
-	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import type { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
-	import { createEventDispatcher, onMount } from "svelte";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import type { Readable, Writable } from "svelte/store";
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import type { Language } from "@mangadex/gql/graphql";
+	import { createEventDispatcher, onMount } from "svelte";
+	import type { Readable } from "svelte/store";
 	import type { Chapter } from "..";
+	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 	interface Props {
 		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
@@ -64,7 +62,7 @@
 	}>();
 </script>
 
-<article class="layout">
+<article class="layout manga-element" data-manga-id={mangaId}>
 	<div
 		class="cover manga-content"
 		role="button"
@@ -131,7 +129,6 @@
 						{upload_date}
 						{uploader}
 						{haveBeenRead}
-						{download_state}
 						{comments}
 					/>
 				{/each}
@@ -227,5 +224,8 @@
 		margin: 0px;
 		background-color: var(--mid-tone);
 		padding: 0px;
+	}
+	.manga-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
 	}
 </style>

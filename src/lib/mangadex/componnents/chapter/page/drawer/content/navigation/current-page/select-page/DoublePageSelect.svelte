@@ -36,7 +36,7 @@
 			value,
 			label: isArray(value)
 				? `${value[$dir == ReadingDirection.Ltr ? 0 : 1] + 1} - ${value[$dir == ReadingDirection.Ltr ? 1 : 0] + 1}`
-				: `${value}`
+				: `${value + 1}`
 		}))
 	);
 	const {
@@ -55,9 +55,9 @@
 				return currentPageSelectedReadable.subscribe(run, invalidate);
 			},
 			set(_value) {
-				const value = isArray(_value)
-					? _value[get(readingDirection) == ReadingDirection.Ltr ? 0 : 1]
-					: _value;
+				const value = isArray(_value.value)
+					? _value.value[get(readingDirection) == ReadingDirection.Ltr ? 0 : 1]
+					: _value.value;
 				currentPageContext.set(value);
 			},
 			update(updater) {

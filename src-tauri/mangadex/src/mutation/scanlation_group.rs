@@ -1,4 +1,7 @@
-use crate::Result;
+use crate::{
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::scanlation_group::{
     create::CreateScalantionGroupParam, edit::EditScanlationGroupParam,
@@ -28,6 +31,10 @@ impl ScanlationGroupMutation {
     ) -> Result<ScanlationGroup> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .post_group()
+            .await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = params.send(&client).await?;
         let res: ApiObjectNoRelationships<ScanlationGroupAttributes> = res.body.data.into();
@@ -44,6 +51,10 @@ impl ScanlationGroupMutation {
     ) -> Result<ScanlationGroup> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .put_group()
+            .await;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let res = params.send(&client).await?;
         let res: ApiObjectNoRelationships<ScanlationGroupAttributes> = res.body.data.into();
@@ -56,6 +67,10 @@ impl ScanlationGroupMutation {
     pub async fn delete(&self, ctx: &Context<'_>, id: Uuid) -> Result<bool> {
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        ctx.get_app_handle::<tauri::Wry>()?
+            .get_specific_rate_limit()?
+            .delete_group()
+            .await;
         let _res = client.scanlation_group().id(id).delete().send().await?;
         Ok(true)
     }

@@ -2,7 +2,7 @@
 	import { initMangaSearchAuthorSearchFetcher } from "@mangadex/componnents/manga/search/form/filter/contexts/authorArtist";
 	import gqlAuthorFetcher from "@mangadex/componnents/manga/search/form/filter/contexts/authorArtist/gql";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
@@ -11,10 +11,9 @@
 </script>
 
 <svelte:boundary>
-    <div>
-	{@render children?.()}
-</div>
-
+	<div>
+		{@render children?.()}
+	</div>
 </svelte:boundary>
 
 <style lang="scss">

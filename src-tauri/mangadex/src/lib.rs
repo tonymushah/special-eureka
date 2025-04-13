@@ -18,6 +18,7 @@ pub mod mutation;
 pub mod objects;
 mod plugin_setup;
 pub mod query;
+pub mod rate_limit;
 pub mod scheme;
 pub mod store;
 pub mod subscription;

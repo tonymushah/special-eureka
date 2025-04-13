@@ -30,6 +30,9 @@
 		upload: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
 		};
+		downloading: MouseEvent & {
+			currentTarget: EventTarget & HTMLButtonElement;
+		};
 	}>();
 </script>
 
@@ -45,6 +48,9 @@
 		}}
 		on:download={({ detail }) => {
 			dispatch("download", detail);
+		}}
+		on:downloading={({ detail }) => {
+			dispatch("downloading", detail);
 		}}
 	/>
 	<StarButton

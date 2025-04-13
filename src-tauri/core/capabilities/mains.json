@@ -24,6 +24,9 @@
 		"mangadex-desktop-api:allow-graphql",
 		"mangadex-desktop-api:allow-subscriptions",
         "opener:default",
-        "notification:default"
+        "notification:default",
+		"core:webview:allow-create-webview-window",
+		"dialog:allow-open",
+		"opener:allow-reveal-item-in-dir"
 	]
 }

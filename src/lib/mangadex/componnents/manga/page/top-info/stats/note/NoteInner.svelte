@@ -67,7 +67,7 @@
 		display: none;
 		flex-direction: column;
 		width: 16em;
-		position: fixed;
+		position: absolute;
 		top: 0px;
 		left: 0px;
 		background-color: var(--accent-l1);

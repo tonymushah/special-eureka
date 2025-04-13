@@ -1,4 +1,4 @@
-use crate::intelligent_notification_system::DownloadEntry;
+use crate::intelligent_notification_system::DownloadEntries;
 use std::sync::Mutex;
 use tauri::AppHandle;
 use tauri::Manager;
@@ -8,13 +8,13 @@ use tauri_plugin_notification::NotificationExt;
 use tauri_plugin_notification::PermissionState;
 use uuid::Uuid;
 
-type INSHandle = Mutex<DownloadEntry<Uuid>>;
+type INSHandle = Mutex<DownloadEntries<Uuid>>;
 
 pub fn get_ins_handle<R: Runtime>(app: &AppHandle<R>) -> State<'_, INSHandle> {
     if let Some(handle) = app.try_state::<INSHandle>() {
         handle
     } else {
-        app.manage(Mutex::new(DownloadEntry::<Uuid>::new()));
+        app.manage(Mutex::new(DownloadEntries::<Uuid>::new()));
         app.state()
     }
 }
@@ -30,7 +30,7 @@ pub fn add_in_queue<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result<(
 
 fn check_and_notify<R: Runtime>(
     app: &AppHandle<R>,
-    handle: &mut DownloadEntry<Uuid>,
+    handle: &mut DownloadEntries<Uuid>,
 ) -> crate::Result<()> {
     if handle.is_all_finished() {
         if app.notification().permission_state()? == PermissionState::Prompt {

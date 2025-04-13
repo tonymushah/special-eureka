@@ -39,6 +39,6 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		justify-content: stretch;
-		gap: 10px;
+		gap: 8px;
 	}
 </style>

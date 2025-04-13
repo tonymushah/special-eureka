@@ -1,58 +1,58 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "material-icon-theme.files.associations": {
-        "vite.storybook.config.ts": "storybook",
-        "tauri.conf.json5": "tauri",
-        "Tauri.toml": "tauri"
-    },
-    "[javascript]": {
-        "editor.maxTokenizationLineLength": 2500,
-        "editor.formatOnSave": true
-    },
-    "[javascriptreact]": {
-        "editor.formatOnSave": true
-    },
-    "[typescript]": {
-        "editor.formatOnSave": true
-    },
-    "[typescriptreact]": {
-        "editor.formatOnSave": true
-    },
-    "[rust]": {
-        "editor.formatOnSave": true
-    },
-    "[svelte]": {
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "svelte.svelte-vscode",
-    },
-    "rust-analyzer.showUnlinkedFileNotification": false,
-    "evenBetterToml.schema.associations": {
-        "Tauri.toml": "../node_modules/@tauri-apps/cli/schema.json"
-    },
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/Thumbs.db": true,
-        "src-tauri/target": true,
-        "src-tauri/data": true
-    },
-    "[jsonc]": {
-        "editor.quickSuggestions": {
-            "strings": true
-        },
-        "editor.formatOnSave": true,
-        "editor.suggest.insertMode": "replace"
-    },
-    "files.associations": {
-        "*.json5": "jsonc"
-    },
-    "explorerExclude.backup": {},
-    "git.ignoreLimitWarning": true,
-    "files.watcherExclude": {
-        "**/target": true
-    },
-    "todo-tree.tree.scanMode": "workspace only"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"material-icon-theme.files.associations": {
+		"vite.storybook.config.ts": "storybook",
+		"tauri.conf.json5": "tauri",
+		"Tauri.toml": "tauri"
+	},
+	"[javascript]": {
+		"editor.maxTokenizationLineLength": 2500,
+		"editor.formatOnSave": true
+	},
+	"[javascriptreact]": {
+		"editor.formatOnSave": true
+	},
+	"[typescript]": {
+		"editor.formatOnSave": true
+	},
+	"[typescriptreact]": {
+		"editor.formatOnSave": true
+	},
+	"[rust]": {
+		"editor.formatOnSave": true
+	},
+	"[svelte]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "svelte.svelte-vscode",
+	},
+	"rust-analyzer.showUnlinkedFileNotification": false,
+	"evenBetterToml.schema.associations": {
+		"Tauri.toml": "../node_modules/@tauri-apps/cli/schema.json"
+	},
+	"files.exclude": {
+		"**/.git": true,
+		"**/.svn": true,
+		"**/.hg": true,
+		"**/.DS_Store": true,
+		"**/Thumbs.db": true,
+		"**/CVS": true,
+		"src-tauri/target": true,
+		"src-tauri/data": true
+	},
+	"[jsonc]": {
+		"editor.quickSuggestions": {
+			"strings": true
+		},
+		"editor.formatOnSave": true,
+		"editor.suggest.insertMode": "replace"
+	},
+	"files.associations": {
+		"*.json5": "jsonc"
+	},
+	"explorerExclude.backup": {},
+	"git.ignoreLimitWarning": true,
+	"files.watcherExclude": {
+		"**/target": true
+	},
+	"todo-tree.tree.scanMode": "workspace only"
 }

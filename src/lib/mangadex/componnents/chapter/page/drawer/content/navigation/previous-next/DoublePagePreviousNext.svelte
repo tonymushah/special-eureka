@@ -5,8 +5,8 @@
 	import getChapterImagesAsDoublePage from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterImagesAsDoublePage";
 
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { ceil, isArray, random } from "lodash";
-	import { createEventDispatcher } from "svelte";
+	import { ceil, isArray, noop, random } from "lodash";
+	import { createEventDispatcher, onMount } from "svelte";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
@@ -23,15 +23,22 @@
 		next: {};
 		previous: {};
 	}>();
+	/// BUG or more like shit code xd
+	/// Required or else the component may not work proprely
+	onMount(() => images_indexes.subscribe(noop));
+	onMount(() => images.subscribe(noop));
+	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
-			currentChapterPage.update(() => {
+			currentChapterPage.update((i) => {
 				const index = $images_indexes[$currentPageIndex + 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
-				} else {
+				} else if (typeof index == "number" && !isNaN(index)) {
 					return index;
+				} else {
+					return i;
 				}
 			});
 		} else {
@@ -41,12 +48,14 @@
 	function previous() {
 		if ($currentPageIndex > 0) {
 			resetZoom();
-			currentChapterPage.update(() => {
+			currentChapterPage.update((i) => {
 				const index = $images_indexes[$currentPageIndex - 1];
 				if (isArray(index)) {
 					return index[ceil(random(0, 1))];
-				} else {
+				} else if (typeof index == "number" && !isNaN(index)) {
 					return index;
+				} else {
+					return i;
 				}
 			});
 		} else {

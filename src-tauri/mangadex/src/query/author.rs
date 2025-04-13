@@ -1,12 +1,14 @@
 use std::ops::Deref;
 
-use crate::Result;
+use crate::{utils::math::divide::divide, Result};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::author::list::AuthorListParams;
+use mangadex_api_schema_rust::v5::AuthorCollection;
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
+    constants::MANGADEX_PAGE_LIMIT,
     objects::{
         author::{lists::AuthorResults, Author},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
@@ -26,12 +28,67 @@ impl AuthorQueries {
         ctx: &Context<'_>,
         params: Option<AuthorListParams>,
     ) -> Result<AuthorResults> {
-        let mut params: AuthorListParams = params.unwrap_or_else(list_default_params);
+        let mut param: AuthorListParams = params.unwrap_or_else(list_default_params);
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let _watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = _watches.deref().clone();
-        params.includes = <AuthorResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        let res: AuthorResults = params.send(&client).await?.into();
+        param.includes = <AuthorResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
+        let params = if !param.author_ids.is_empty() {
+            param
+                .author_ids
+                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
+                .flat_map(|chunck| {
+                    let mut param = param.clone();
+                    param.author_ids = chunck.to_vec();
+
+                    if param.limit.is_none() && !param.author_ids.is_empty() {
+                        param.limit.replace(param.author_ids.len().try_into().ok()?);
+                    }
+                    Some(param)
+                })
+                .collect::<Vec<_>>()
+        } else {
+            let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
+            let mut all = (0..div_res.quot)
+                .map(|d| {
+                    let mut param = param.clone();
+                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
+                    param.limit = Some(MANGADEX_PAGE_LIMIT);
+                    param
+                })
+                .collect::<Vec<_>>();
+            all.push({
+                let mut param = param.clone();
+                param.offset =
+                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
+                param.limit = Some(div_res.remainder);
+                param
+            });
+            all
+        };
+        let mut results = Vec::<AuthorCollection>::new();
+        for val in params {
+            results.push(val.send(&client).await?);
+        }
+        let res: AuthorResults = results
+            .into_iter()
+            .fold(
+                AuthorCollection {
+                    response: mangadex_api_types_rust::ResponseType::Collection,
+                    offset: param.offset.unwrap_or_default(),
+                    total: 0,
+                    limit: 0,
+                    data: Vec::new(),
+                    result: mangadex_api_types_rust::ResultType::Ok,
+                },
+                |mut agg, mut res| {
+                    agg.total = res.total;
+                    agg.limit += res.limit;
+                    agg.data.append(&mut res.data);
+                    agg
+                },
+            )
+            .into();
         let _res = res.clone();
         tauri::async_runtime::spawn(async move {
             _res.iter().for_each(|i| {

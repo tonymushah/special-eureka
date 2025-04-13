@@ -8,7 +8,7 @@
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	createEventDispatcher<{
 		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
+			currentTarget: EventTarget & HTMLElement;
 		};
 	}>();
 	interface Props {
@@ -18,6 +18,7 @@
 		status: MangaStatus;
 		description: string;
 		withFull?: boolean;
+		mangaId: string;
 	}
 
 	let {
@@ -26,12 +27,13 @@
 		title,
 		status,
 		description,
-		withFull = false
+		withFull = false,
+		mangaId
 	}: Props = $props();
 	let src = $derived($coverImage);
 </script>
 
-<Layout on:click --layout-width={withFull ? "100%" : "19em"}>
+<Layout on:click --layout-width={withFull ? "100%" : "19em"} {mangaId}>
 	{#if src}
 		<Image coverImage={src} {coverImageAlt} />
 	{:else}

@@ -1,23 +1,26 @@
 <script lang="ts">
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
+	import { ChapterDownload } from "@mangadex/download/chapter";
 	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "svelte-feather-icons";
-	import type { Readable } from "svelte/store";
 	interface Props {
-		download_state: Readable<ChapterDownloadState>;
+		id: string;
 	}
 
-	let { download_state }: Props = $props();
-	let downloaded = $derived($download_state == ChapterDownloadState.Downloaded);
-	let downloading = $derived($download_state == ChapterDownloadState.Downloading);
-	let failed = $derived($download_state == ChapterDownloadState.Failed);
+	let { id }: Props = $props();
+
+	const chapter_download_inner = new ChapterDownload(id);
+	const [downloading, downloaded, failed] = [
+		chapter_download_inner.is_downloading(),
+		chapter_download_inner.is_downloaded(),
+		chapter_download_inner.has_failed()
+	];
 </script>
 
-<span class:downloaded class:downloading class:failed>
-	{#if downloaded}
+<span class:downloaded={$downloaded} class:downloading={$downloading} class:failed={$failed}>
+	{#if $downloaded}
 		<CheckIcon />
-	{:else if downloading}
+	{:else if $downloading}
 		<DownloadCloudIcon />
-	{:else if failed}
+	{:else if $failed}
 		<XIcon />
 	{:else}
 		<DownloadIcon />

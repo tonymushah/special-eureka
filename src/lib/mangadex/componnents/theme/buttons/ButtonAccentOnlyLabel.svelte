@@ -16,6 +16,7 @@
 		oneLine?: boolean;
 		icon?: ComponentType | undefined;
 		noCenter?: boolean;
+		disabled?: boolean;
 	}
 
 	let {
@@ -26,11 +27,12 @@
 		isBase = false,
 		oneLine = false,
 		icon = undefined,
-		noCenter = false
+		noCenter = false,
+		disabled
 	}: Props = $props();
 </script>
 
-<ButtonAccent on:click {variant} {style} {type} {isBase}>
+<ButtonAccent on:click {variant} {style} {type} {isBase} {disabled}>
 	{@const SvelteComponent = icon}
 	<div class:noCenter>
 		{#if SvelteComponent}

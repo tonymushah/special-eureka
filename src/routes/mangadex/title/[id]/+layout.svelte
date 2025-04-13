@@ -1,14 +1,14 @@
 <script lang="ts">
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { LayoutData } from "./$types";
-	import { derived as der } from "svelte/store";
+	import { derived as der, writable } from "svelte/store";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { type Snippet } from "svelte";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { route } from "$lib/ROUTES";
 	import { v4 } from "uuid";
 	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
@@ -16,6 +16,7 @@
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
 	import { setTitleLayoutData } from "./layout.context";
 	import ConflictLayout from "./ConflictLayout.svelte";
+	import { MangaDownload, MangaDownloadState } from "@mangadex/download/manga";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -66,10 +67,9 @@
 			} satisfies TopMangaStatisticsStoreData;
 		}
 	});
-	const isOnInfoPage = der(
-		page,
-		($page) =>
-			$page.url.pathname ==
+	let isOnInfoPage = $derived.by(
+		() =>
+			page.url.pathname ==
 			route("/mangadex/title/[id]", {
 				id: data.layoutData?.id ?? v4()
 			})
@@ -80,6 +80,15 @@
 	let layoutData = $derived(data.layoutData!);
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
+
+	let mangaDownload = $derived(new MangaDownload(data.layoutData.id));
+
+	const _state = writable(MangaDownloadState.Pending);
+	$effect(() =>
+		mangaDownload.state().subscribe((s) => {
+			_state.set(s);
+		})
+	);
 </script>
 
 {#if hasConflict && !ingnoreConflict}
@@ -101,16 +110,27 @@
 				open($stats?.threadUrl);
 			}
 		}}
+		contentRating={layoutData.contentRating ?? undefined}
+		downloadState={_state}
+		on:download={async () => {
+			await mangaDownload.download();
+		}}
+		on:delete={async () => {
+			await mangaDownload.remove();
+		}}
+		on:downloading={async () => {
+			await mangaDownload.cancel();
+		}}
 	/>
 
 	<div class="out-top">
-		{#if description != undefined && $isOnInfoPage}
+		{#if description != undefined && isOnInfoPage}
 			<div class="description">
 				<Markdown source={description} />
 			</div>
 		{/if}
 		<div class="top">
-			{#if $isOnInfoPage}
+			{#if isOnInfoPage}
 				<div class="info">
 					<MangaPageInfo />
 				</div>

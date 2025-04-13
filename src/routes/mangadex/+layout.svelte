@@ -10,12 +10,14 @@
 	import SetTitle from "@mangadex/componnents/theme/SetTitle.svelte";
 	import defaultProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { client } from "@mangadex/gql/urql";
+	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { setContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
-	import { get } from "svelte/store";
+	import { mangadexQueryClient } from "@mangadex/index";
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
+	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
 	let { children }: Props = $props();
 	onMount(async () => {
@@ -37,44 +39,48 @@
 	let isRTL = $derived($isSidebarRtl);
 </script>
 
-<div class="d-content">
-	<style>
-		html::-webkit-scrollbar {
-			display: none;
-		}
-	</style>
-	<MangaDexContextDataProvider>
-		<MangaDexDefaultThemeProvider>
-			<SetTitle />
-			<div class="provider" class:isRTL class:defaultDecoration={$isDefaultDecoration}>
-				<div class="sidebar">
-					<Sidebar />
+<QueryClientProvider client={mangadexQueryClient}>
+	<div class="d-content">
+		<style>
+			html::-webkit-scrollbar {
+				display: none;
+			}
+		</style>
+		<MangaDexContextDataProvider>
+			<MangaDexDefaultThemeProvider>
+				<SetTitle />
+				<div class="provider" class:isRTL class:defaultDecoration={$isDefaultDecoration}>
+					<div class="sidebar">
+						<Sidebar />
+					</div>
+					<div
+						class="inner"
+						id="mangadex-scroll-container"
+						class:loading
+						class:defaultDecoration={$isDefaultDecoration}
+						role="button"
+						tabindex="0"
+						onkeydown={(e) => {
+							if (loading) {
+								e.stopPropagation();
+								e.preventDefault();
+							}
+						}}
+						onclick={(e) => {
+							if (loading) {
+								e.stopPropagation();
+								e.preventDefault();
+							}
+						}}
+					>
+						{@render children?.()}
+					</div>
 				</div>
-				<div
-					class="inner"
-					class:loading
-					class:defaultDecoration={$isDefaultDecoration}
-					role="button"
-					tabindex="0"
-					onkeydown={(e) => {
-						if (loading) {
-							e.stopPropagation();
-							e.preventDefault();
-						}
-					}}
-					onclick={(e) => {
-						if (loading) {
-							e.stopPropagation();
-							e.preventDefault();
-						}
-					}}
-				>
-					{@render children?.()}
-				</div>
-			</div>
-		</MangaDexDefaultThemeProvider>
-	</MangaDexContextDataProvider>
-</div>
+			</MangaDexDefaultThemeProvider>
+		</MangaDexContextDataProvider>
+	</div>
+	<SvelteQueryDevtools />
+</QueryClientProvider>
 
 <style lang="scss">
 	.provider {
@@ -102,19 +108,19 @@
 		transition:
 			filter,
 			webkit-filter 300ms ease-in-out;
-		*::-webkit-scrollbar {
+		:global(*::-webkit-scrollbar) {
 			width: 12px;
 		}
-		*::-webkit-scrollbar-thumb {
+		:global(*::-webkit-scrollbar-thumb) {
 			border-radius: 0.25em;
 			background-color: var(--scrollbar-color);
 			transition: background-color 300ms ease-in-out;
 		}
-		*::-webkit-scrollbar-thumb:hover {
+		:global(*::-webkit-scrollbar-thumb:hover) {
 			background-color: var(--scrollbar-color-hover);
 		}
 
-		*::-webkit-scrollbar-track {
+		:global(*::-webkit-scrollbar-track) {
 			background-color: var(--accent);
 		}
 	}
@@ -148,7 +154,7 @@
 		animation-timing-function: ease-in-out;
 		pointer-events: none;
 	}
-	.inner.loading * {
+	.inner.loading :global(*) {
 		pointer-events: none;
 	}
 	@keyframes loading {

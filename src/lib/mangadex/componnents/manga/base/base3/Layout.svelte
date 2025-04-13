@@ -2,10 +2,11 @@
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
 	import { createEventDispatcher } from "svelte";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
+		mangaId: string;
 	}
 
-	let { children }: Props = $props();
+	let { children, mangaId }: Props = $props();
 	createEventDispatcher<{
 		click: MouseEvent & {
 			currentTarget: EventTarget & HTMLButtonElement;
@@ -22,7 +23,7 @@
 	--button-hover={"var(--accent-l3-hover)"}
 	--button-active={"var(--accent-l-active)"}
 >
-	<article class="layout">
+	<article class="layout manga-element" data-manga-id={mangaId}>
 		{@render children?.()}
 	</article>
 </ButtonBase>
@@ -33,5 +34,11 @@
 		height: var(--element-h);
 		overflow: hidden;
 		border-radius: 0.25rem;
+	}
+	.manga-element:global([data-selecto-selected]) {
+		--content-bg: color-mix(in srgb, var(--primary) 75%, var(--accent-l3) 25%);
+	}
+	.manga-element:global(:not([data-selecto-selected])) {
+		--content-bg: var(--accent-l3);
 	}
 </style>
