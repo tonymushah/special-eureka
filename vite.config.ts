@@ -1,9 +1,10 @@
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig, searchForWorkspaceRoot } from "vite";
 import { kitRoutes } from "vite-plugin-kit-routes";
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 export default defineConfig({
-	plugins: [sveltekit(), kitRoutes()],
+	plugins: [sveltekit(), kitRoutes(), ViteImageOptimizer()],
 	test: {
 		include: ["src/**/*.{test,spec}.{js,ts}", "apps/**/*.{test,spec}.{js,ts}"]
 	},
@@ -48,6 +49,6 @@ export default defineConfig({
 		minify: !process.env.TAURI_DEBUG ? "esbuild" : false,
 		// produce sourcemaps for debug builds
 		sourcemap: !!process.env.TAURI_DEBUG,
-		cssMinify: "lightningcss"
+		cssMinify: "lightningcss",
 	}
 });

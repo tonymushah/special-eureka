@@ -3,4 +3,5 @@ ignoredBuiltDependencies:
 
 onlyBuiltDependencies:
   - esbuild
+  - sharp
   - svelte-preprocess

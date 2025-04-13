@@ -73,7 +73,7 @@
 	import ActionButtons from "./ActionButtons.svelte";
 	import Title from "./Title.svelte";
 	import { slide } from "svelte/transition";
-	import Commands from "./Commands.svelte";
+	const CommandsDyn = import("./Commands.svelte").then((c) => c.default);
 
 	let isMaximize = $state(false);
 	let unlistens: UnlistenFn[] = [];
@@ -156,7 +156,11 @@
 					axis: "x"
 				}}
 			>
-				<Commands />
+				{#await CommandsDyn}
+					<span>Lazy</span>
+				{:then Commands}
+					<Commands />
+				{/await}
 			</div>
 		{/if}
 		<ActionButtons {isMaximize} {isMaximized} />
