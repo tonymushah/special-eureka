@@ -78,7 +78,7 @@
     "vite": "^6.2.3",
     "vite-plugin-kit-routes": "^0.7.6",
     "vite-plugin-watch-and-run": "^1.7.4",
-    "vitest": "^2.1.9"
+    "vitest": "^3.0.0"
   },
   "type": "module",
   "dependencies": {
