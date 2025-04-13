@@ -42,7 +42,7 @@
     "@storybook/svelte": "^8.6.11",
     "@storybook/sveltekit": "^8.6.11",
     "@storybook/test": "^8.6.11",
-    "@sveltejs/adapter-auto": "^4.0.0",
+    "@sveltejs/adapter-auto": "^6.0.0",
     "@sveltejs/adapter-static": "^3.0.8",
     "@sveltejs/kit": "^2.20.2",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
