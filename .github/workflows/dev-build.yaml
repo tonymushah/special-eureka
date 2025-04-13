@@ -20,11 +20,11 @@ jobs:
             - name: setup node
               uses: actions/setup-node@v4
               with:
-                  node-version: 18
+                  node-version: 20
             - name: install pnpm
               uses: pnpm/action-setup@v2
               with:
-                  version: 8
+                  version: 10
                   run_install: false
             - name: install Rust stable
               uses: dtolnay/rust-toolchain@stable
