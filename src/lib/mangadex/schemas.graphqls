@@ -1020,11 +1020,11 @@ input FollowedMangaFeedParams {
 type FollowsQueries {
 	groups(params: UserFollowedGroupsParams! = {limit: null, offset: null}): ScanlationGroupResults!
 	isFollowingGroup(id: UUID!): Boolean!
-	users(params: UserFollowedUserParams! = {limit: null, offset: null}): UserResults!
+	users(param: UserFollowedUserParams! = {limit: null, offset: null}): UserResults!
 	isFollowingUser(id: UUID!): Boolean!
 	mangas(params: UserFollowedMangaParams! = {limit: null, offset: null}): MangaResults!
 	isFollowingManga(id: UUID!): Boolean!
-	customLists(params: UserFollowedListParams! = {limit: null, offset: null}): CustomListResults!
+	customLists(param: UserFollowedListParams! = {limit: null, offset: null}): CustomListResults!
 	isFollowingCustomList(id: UUID!): Boolean!
 }
 

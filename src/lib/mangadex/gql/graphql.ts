@@ -1282,7 +1282,7 @@ export type FollowsQueries = {
 
 
 export type FollowsQueriesCustomListsArgs = {
-  params?: UserFollowedListParams;
+  param?: UserFollowedListParams;
 };
 
 
@@ -1317,7 +1317,7 @@ export type FollowsQueriesMangasArgs = {
 
 
 export type FollowsQueriesUsersArgs = {
-  params?: UserFollowedUserParams;
+  param?: UserFollowedUserParams;
 };
 
 export enum ForumThreadType {
