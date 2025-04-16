@@ -171,8 +171,10 @@
 	.title-bar {
 		font-family: var(--fonts);
 		display: flex;
+		flex-direction: row;
 		justify-content: space-between;
 		width: 100vw;
+		align-items: center;
 	}
 	.commands {
 		display: flex;
