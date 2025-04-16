@@ -54,13 +54,12 @@
 <style lang="scss">
 	.outer {
 		width: 100vw;
-		height: 100vh;
+		height: 100cqh;
 		display: grid;
 		grid-template-areas:
-			"decoration decoration decoration"
-			"content content content"
-			"content content content"
-			"content content content";
+		  "decoration"
+		  "content";
+		grid-template-rows: auto 1fr;
 		.decoration {
 			grid-area: decoration;
 		}
@@ -68,14 +67,6 @@
 			grid-area: content;
 			overflow-x: hidden;
 		}
-	}
-	.outer.rem0asd:not(.defaultDecoration) {
-		.inner.redad {
-			height: calc(100vh - var(--decoH));
-		}
-	}
-	.outer.defaultDecoration {
-		height: 100cqh;
 	}
 	:global(body) {
 		margin: 0px;
