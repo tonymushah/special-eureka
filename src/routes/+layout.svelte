@@ -59,14 +59,13 @@
 		grid-template-areas:
 		  "decoration"
 		  "content";
-		grid-template-rows: fit-content 1fr;
+		grid-template-rows: auto 1fr;
 		.decoration {
 			grid-area: decoration;
 		}
 		.inner {
 			grid-area: content;
 			overflow-x: hidden;
-			overflow-y: scroll;
 		}
 	}
 	:global(body) {
