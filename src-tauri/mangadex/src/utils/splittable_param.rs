@@ -6,6 +6,7 @@ pub mod followed_manga_feed;
 pub mod manga;
 pub mod scanlation_group;
 pub mod user;
+pub mod user_followed_custom_list;
 pub mod user_followed_groups;
 pub mod user_followed_manga;
 pub mod user_followed_user;
