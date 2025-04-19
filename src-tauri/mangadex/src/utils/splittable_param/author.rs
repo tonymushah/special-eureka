@@ -1,6 +1,8 @@
 use mangadex_api_input_types::author::list::AuthorListParams;
 use mangadex_api_schema_rust::v5::AuthorObject;
 
+use crate::constants::MANGADEX_DEFAULT_LIMIT;
+
 use super::{SendableParam, SplittableParam};
 
 impl SplittableParam for AuthorListParams {
@@ -9,7 +11,7 @@ impl SplittableParam for AuthorListParams {
     }
 
     fn limit(&self) -> u32 {
-        self.limit.unwrap_or(10)
+        self.limit.unwrap_or(MANGADEX_DEFAULT_LIMIT)
     }
 
     fn set_offset(&mut self, offset: u32) {
