@@ -121,6 +121,7 @@ impl MangaListQueries {
             res
         })
     }
+    // [ ] use [`crate::utils::splittable_param`]
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<MangaResults> {
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()

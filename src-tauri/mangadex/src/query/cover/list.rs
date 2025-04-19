@@ -75,6 +75,7 @@ impl CoverListQuery {
         }
         Ok(res)
     }
+    // [ ] use [`crate::utils::splittable_param`]
     #[graphql(skip)]
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<CoverResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
