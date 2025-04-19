@@ -7,6 +7,7 @@ pub mod manga;
 pub mod scanlation_group;
 pub mod user;
 pub mod user_followed_groups;
+pub mod user_followed_user;
 
 use std::future::Future;
 
