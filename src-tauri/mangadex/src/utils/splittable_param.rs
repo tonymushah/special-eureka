@@ -1,6 +1,7 @@
 pub mod author;
 pub mod chapter;
 pub mod cover;
+pub mod custom_list_manga_feed;
 pub mod followed_manga_feed;
 pub mod manga;
 pub mod scanlation_group;
