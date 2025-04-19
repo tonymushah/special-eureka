@@ -1,14 +1,15 @@
 use std::ops::Deref;
 
-use crate::{utils::math::divide::divide, Result};
+use crate::{
+    utils::{math::divide::divide, splittable_param::SendSplitted},
+    Result,
+};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
     mangas::UserFollowedMangaParams, users::UserFollowedUserParams,
 };
-use mangadex_api_schema_rust::v5::{
-    CustomListCollection, GroupCollection, MangaCollection, UserCollection,
-};
+use mangadex_api_schema_rust::v5::{CustomListCollection, MangaCollection, UserCollection};
 use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
@@ -48,49 +49,7 @@ impl FollowsQueries {
             <ScanlationGroupResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
 
         Ok({
-            let params = {
-                let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
-                let mut all = (0..div_res.quot)
-                    .map(|d| {
-                        let mut param = param.clone();
-                        param.offset =
-                            Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
-                        param.limit = Some(MANGADEX_PAGE_LIMIT);
-                        param
-                    })
-                    .collect::<Vec<_>>();
-                all.push({
-                    let mut param = param.clone();
-                    param.offset =
-                        Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
-                    param.limit = Some(div_res.remainder);
-                    param
-                });
-                all
-            };
-            let mut results = Vec::<GroupCollection>::new();
-            for val in params {
-                results.push(val.send(&client).await?);
-            }
-            let res: ScanlationGroupResults = results
-                .into_iter()
-                .fold(
-                    GroupCollection {
-                        response: mangadex_api_types_rust::ResponseType::Collection,
-                        offset: param.offset.unwrap_or_default(),
-                        total: 0,
-                        limit: 0,
-                        data: Vec::new(),
-                        result: mangadex_api_types_rust::ResultType::Ok,
-                    },
-                    |mut agg, mut res| {
-                        agg.total = res.total;
-                        agg.limit += res.limit;
-                        agg.data.append(&mut res.data);
-                        agg
-                    },
-                )
-                .into();
+            let res: ScanlationGroupResults = param.send_splitted_default(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
