@@ -57,8 +57,8 @@
 		height: 100cqh;
 		display: grid;
 		grid-template-areas:
-		  "decoration"
-		  "content";
+			"decoration"
+			"content";
 		grid-template-rows: auto 1fr;
 		.decoration {
 			grid-area: decoration;
@@ -66,6 +66,7 @@
 		.inner {
 			grid-area: content;
 			overflow-x: hidden;
+			//height: 100%;
 		}
 	}
 	:global(body) {
