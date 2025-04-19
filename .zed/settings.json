@@ -1,34 +1,34 @@
 {
-  "lsp": {
-    "rust-analyzer": {
-      "initialization_options": {
-        "check": {
-          "command": "clippy" // rust-analyzer.check.command (default: "check")
-        }
-      }
-    }
-  },
-  "file_types": {
-    "JSONC": [
-      "*.json5"
-    ]
-  },
-  "format_on_save": "language_server",
-  "languages": {
-    "TypeScript": {
-      "code_actions_on_format": {
-        "source.organizeImports": true
-      },
-      "format_on_save": "on"
-    },
-    "TSX": {
-      "code_actions_on_format": {
-        "source.organizeImports": true
-      },
-      "format_on_save": "on"
-    },
-    "Svelte": {
-      "format_on_save": "on",
-    }
-  }
+	"lsp": {
+		"rust-analyzer": {
+			"initialization_options": {
+				"check": {
+					"command": "clippy" // rust-analyzer.check.command (default: "check")
+				}
+			}
+		}
+	},
+	"file_types": {
+		"JSONC": [
+			"*.json5"
+		]
+	},
+	"format_on_save": "language_server",
+	"languages": {
+		"TypeScript": {
+			"code_actions_on_format": {
+				"source.organizeImports": true
+			},
+			"format_on_save": "on"
+		},
+		"TSX": {
+			"code_actions_on_format": {
+				"source.organizeImports": true
+			},
+			"format_on_save": "on"
+		},
+		"Svelte": {
+			"format_on_save": "on"
+		}
+	}
 }
