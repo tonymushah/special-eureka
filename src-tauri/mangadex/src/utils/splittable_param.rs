@@ -1,6 +1,7 @@
 pub mod author;
 pub mod chapter;
 pub mod cover;
+pub mod scanlation_group;
 
 use std::future::Future;
 
