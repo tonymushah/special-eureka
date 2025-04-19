@@ -164,12 +164,8 @@
 			query.subscribe((e) => {
 				e?.data?.manga.aggregate.chunked.forEach((c) => {
 					const cache = chaptersStore.get();
-
-					lodash
-						.chunk<string>(
-							c.ids.filter((id) => !cache.has(id)),
-							100
-						)
+					c.ids
+						.filter((id) => !cache.has(id))
 						.forEach((ids) => {
 							if (ids.length > 0)
 								fetchChapters(ids)
@@ -257,7 +253,7 @@
 		{#each $aggregate as _, i}
 			<button
 				class="selector"
-				on:click={() => {
+				onclick={() => {
 					selectedIndex = i;
 				}}
 				class:selected={i == selectedIndex}
