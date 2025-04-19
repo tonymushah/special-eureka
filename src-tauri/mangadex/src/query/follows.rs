@@ -1,19 +1,15 @@
 use std::ops::Deref;
 
-use crate::{utils::math::divide::divide, Result};
+use crate::{utils::splittable_param::SendSplitted, Result};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
     mangas::UserFollowedMangaParams, users::UserFollowedUserParams,
 };
-use mangadex_api_schema_rust::v5::{
-    CustomListCollection, GroupCollection, MangaCollection, UserCollection,
-};
 use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
 use crate::{
-    constants::MANGADEX_PAGE_LIMIT,
     objects::{
         custom_list::lists::CustomListResults, manga::lists::MangaResults,
         scanlation_group::lists::ScanlationGroupResults, user::lists::UserResults,
@@ -27,6 +23,7 @@ use crate::{
     },
 };
 
+// [ ] use [`crate::utils::splittable_param`]
 #[derive(Debug, Clone, Copy)]
 pub struct FollowsQueries;
 
@@ -35,9 +32,9 @@ impl FollowsQueries {
     pub async fn groups(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: UserFollowedGroupsParams,
+        params: Option<UserFollowedGroupsParams>,
     ) -> Result<ScanlationGroupResults> {
-        let mut param: UserFollowedGroupsParams = params;
+        let mut param: UserFollowedGroupsParams = params.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -47,49 +44,7 @@ impl FollowsQueries {
             <ScanlationGroupResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
 
         Ok({
-            let params = {
-                let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
-                let mut all = (0..div_res.quot)
-                    .map(|d| {
-                        let mut param = param.clone();
-                        param.offset =
-                            Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
-                        param.limit = Some(MANGADEX_PAGE_LIMIT);
-                        param
-                    })
-                    .collect::<Vec<_>>();
-                all.push({
-                    let mut param = param.clone();
-                    param.offset =
-                        Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
-                    param.limit = Some(div_res.remainder);
-                    param
-                });
-                all
-            };
-            let mut results = Vec::<GroupCollection>::new();
-            for val in params {
-                results.push(val.send(&client).await?);
-            }
-            let res: ScanlationGroupResults = results
-                .into_iter()
-                .fold(
-                    GroupCollection {
-                        response: mangadex_api_types_rust::ResponseType::Collection,
-                        offset: param.offset.unwrap_or_default(),
-                        total: 0,
-                        limit: 0,
-                        data: Vec::new(),
-                        result: mangadex_api_types_rust::ResultType::Ok,
-                    },
-                    |mut agg, mut res| {
-                        agg.total = res.total;
-                        agg.limit += res.limit;
-                        agg.data.append(&mut res.data);
-                        agg
-                    },
-                )
-                .into();
+            let res: ScanlationGroupResults = param.send_splitted_default(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
@@ -131,57 +86,16 @@ impl FollowsQueries {
     pub async fn users(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] param: UserFollowedUserParams,
+        param: Option<UserFollowedUserParams>,
     ) -> Result<UserResults> {
+        let param = param.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
         Ok({
-            let params = {
-                let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
-                let mut all = (0..div_res.quot)
-                    .map(|d| {
-                        let mut param = param.clone();
-                        param.offset =
-                            Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
-                        param.limit = Some(MANGADEX_PAGE_LIMIT);
-                        param
-                    })
-                    .collect::<Vec<_>>();
-                all.push({
-                    let mut param = param.clone();
-                    param.offset =
-                        Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
-                    param.limit = Some(div_res.remainder);
-                    param
-                });
-                all
-            };
-            let mut results = Vec::<UserCollection>::new();
-            for val in params {
-                results.push(val.send(&client).await?);
-            }
-            let res: UserResults = results
-                .into_iter()
-                .fold(
-                    UserCollection {
-                        response: mangadex_api_types_rust::ResponseType::Collection,
-                        offset: param.offset.unwrap_or_default(),
-                        total: 0,
-                        limit: 0,
-                        data: Vec::new(),
-                        result: mangadex_api_types_rust::ResultType::Ok,
-                    },
-                    |mut agg, mut res| {
-                        agg.total = res.total;
-                        agg.limit += res.limit;
-                        agg.data.append(&mut res.data);
-                        agg
-                    },
-                )
-                .into();
+            let res: UserResults = param.send_splitted_default(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
@@ -223,9 +137,9 @@ impl FollowsQueries {
     pub async fn mangas(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: UserFollowedMangaParams,
+        params: Option<UserFollowedMangaParams>,
     ) -> Result<MangaResults> {
-        let mut param: UserFollowedMangaParams = params;
+        let mut param = params.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -233,49 +147,7 @@ impl FollowsQueries {
             .clone();
         param.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         Ok({
-            let params = {
-                let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
-                let mut all = (0..div_res.quot)
-                    .map(|d| {
-                        let mut param = param.clone();
-                        param.offset =
-                            Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
-                        param.limit = Some(MANGADEX_PAGE_LIMIT);
-                        param
-                    })
-                    .collect::<Vec<_>>();
-                all.push({
-                    let mut param = param.clone();
-                    param.offset =
-                        Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
-                    param.limit = Some(div_res.remainder);
-                    param
-                });
-                all
-            };
-            let mut results = Vec::<MangaCollection>::new();
-            for val in params {
-                results.push(val.send(&client).await?);
-            }
-            let res: MangaResults = results
-                .into_iter()
-                .fold(
-                    MangaCollection {
-                        response: mangadex_api_types_rust::ResponseType::Collection,
-                        offset: param.offset.unwrap_or_default(),
-                        total: 0,
-                        limit: 0,
-                        data: Vec::new(),
-                        result: mangadex_api_types_rust::ResultType::Ok,
-                    },
-                    |mut agg, mut res| {
-                        agg.total = res.total;
-                        agg.limit += res.limit;
-                        agg.data.append(&mut res.data);
-                        agg
-                    },
-                )
-                .into();
+            let res: MangaResults = param.send_splitted_default(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
@@ -317,57 +189,16 @@ impl FollowsQueries {
     pub async fn custom_lists(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] param: UserFollowedListParams,
+        param: Option<UserFollowedListParams>,
     ) -> Result<CustomListResults> {
+        let param = param.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
         Ok({
-            let params = {
-                let div_res = divide(param.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
-                let mut all = (0..div_res.quot)
-                    .map(|d| {
-                        let mut param = param.clone();
-                        param.offset =
-                            Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
-                        param.limit = Some(MANGADEX_PAGE_LIMIT);
-                        param
-                    })
-                    .collect::<Vec<_>>();
-                all.push({
-                    let mut param = param.clone();
-                    param.offset =
-                        Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
-                    param.limit = Some(div_res.remainder);
-                    param
-                });
-                all
-            };
-            let mut results = Vec::<CustomListCollection>::new();
-            for val in params {
-                results.push(val.send(&client).await?);
-            }
-            let res: CustomListResults = results
-                .into_iter()
-                .fold(
-                    CustomListCollection {
-                        response: mangadex_api_types_rust::ResponseType::Collection,
-                        offset: param.offset.unwrap_or_default(),
-                        total: 0,
-                        limit: 0,
-                        data: Vec::new(),
-                        result: mangadex_api_types_rust::ResultType::Ok,
-                    },
-                    |mut agg, mut res| {
-                        agg.total = res.total;
-                        agg.limit += res.limit;
-                        agg.data.append(&mut res.data);
-                        agg
-                    },
-                )
-                .into();
+            let res: CustomListResults = param.send_splitted_default(&client).await?.into();
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
                 for data in _res {
