@@ -36,9 +36,9 @@ impl FollowsQueries {
     pub async fn groups(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: UserFollowedGroupsParams,
+        params: Option<UserFollowedGroupsParams>,
     ) -> Result<ScanlationGroupResults> {
-        let mut param: UserFollowedGroupsParams = params;
+        let mut param: UserFollowedGroupsParams = params.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -132,8 +132,9 @@ impl FollowsQueries {
     pub async fn users(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] param: UserFollowedUserParams,
+        param: Option<UserFollowedUserParams>,
     ) -> Result<UserResults> {
+        let param = param.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -224,9 +225,9 @@ impl FollowsQueries {
     pub async fn mangas(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] params: UserFollowedMangaParams,
+        params: Option<UserFollowedMangaParams>,
     ) -> Result<MangaResults> {
-        let mut param: UserFollowedMangaParams = params;
+        let mut param = params.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
@@ -318,8 +319,9 @@ impl FollowsQueries {
     pub async fn custom_lists(
         &self,
         ctx: &Context<'_>,
-        #[graphql(default)] param: UserFollowedListParams,
+        param: Option<UserFollowedListParams>,
     ) -> Result<CustomListResults> {
+        let param = param.unwrap_or_default();
         let client =
             get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
