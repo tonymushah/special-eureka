@@ -1,5 +1,6 @@
 pub mod author;
 pub mod chapter;
+pub mod cover;
 
 use std::future::Future;
 

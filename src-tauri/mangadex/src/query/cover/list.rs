@@ -9,13 +9,12 @@ use mangadex_api_schema_rust::v5::{CoverCollection, CoverObject};
 use tokio_stream::Stream;
 
 use crate::{
-    constants::MANGADEX_PAGE_LIMIT,
     error::Error,
     objects::cover::lists::CoverResults,
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
-        get_watches_from_graphql_context, math::divide::divide, source::SendMultiSourceData,
-        Collection,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
+        splittable_param::SendSplitted, Collection,
     },
     Result,
 };
@@ -75,68 +74,19 @@ impl CoverListQuery {
         }
         Ok(res)
     }
-    // [ ] use [`crate::utils::splittable_param`]
+    // [x] use [`crate::utils::splittable_param`]
     #[graphql(skip)]
     pub async fn list_online(&self, ctx: &Context<'_>) -> Result<CoverResults> {
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
-        let params = if !self.params.cover_ids.is_empty() {
-            self.params
-                .cover_ids
-                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
-                .flat_map(|chunck| {
-                    let mut param = self.params.clone();
-                    param.cover_ids = chunck.to_vec();
 
-                    if param.limit.is_none() && !param.cover_ids.is_empty() {
-                        param.limit.replace(param.cover_ids.len().try_into().ok()?);
-                    }
-                    Some(param)
-                })
-                .collect::<Vec<_>>()
-        } else {
-            let div_res = divide(self.params.limit.unwrap_or(10), MANGADEX_PAGE_LIMIT);
-            let mut all = (0..div_res.quot)
-                .map(|d| {
-                    let mut param = self.params.clone();
-                    param.offset = Some(param.offset.unwrap_or_default() + d * MANGADEX_PAGE_LIMIT);
-                    param.limit = Some(MANGADEX_PAGE_LIMIT);
-                    param
-                })
-                .collect::<Vec<_>>();
-            all.push({
-                let mut param = self.params.clone();
-                param.offset =
-                    Some(param.offset.unwrap_or_default() + div_res.quot * MANGADEX_PAGE_LIMIT);
-                param.limit = Some(div_res.remainder);
-                param
-            });
-            all
-        };
-        let mut results = Vec::<CoverCollection>::new();
-        for val in params {
-            results.push(val.send(&client).await?);
-        }
-        let res: CoverResults = results
-            .into_iter()
-            .fold(
-                CoverCollection {
-                    response: mangadex_api_types_rust::ResponseType::Collection,
-                    offset: self.params.offset.unwrap_or_default(),
-                    total: 0,
-                    limit: 0,
-                    data: Vec::new(),
-                    result: mangadex_api_types_rust::ResultType::Ok,
-                },
-                |mut agg, mut res| {
-                    agg.total = res.total;
-                    agg.limit += res.limit;
-                    agg.data.append(&mut res.data);
-                    agg
-                },
-            )
+        let res: CoverResults = self
+            .params
+            .clone()
+            .send_splitted_default(&client)
+            .await?
             .into();
         {
             let _res = res.clone();
