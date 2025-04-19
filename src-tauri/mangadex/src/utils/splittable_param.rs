@@ -1,3 +1,5 @@
+pub mod author;
+
 use std::future::Future;
 
 use mangadex_api::MangaDexClient;
