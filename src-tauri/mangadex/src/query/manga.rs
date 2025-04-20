@@ -234,7 +234,7 @@ impl MangaQueries {
         exclude_content_profile: Option<bool>,
     ) -> crate::Result<MangaAggregateQueries> {
         let mut params = params;
-        if exclude_content_profile.unwrap_or(false) {
+        if !exclude_content_profile.unwrap_or(false) {
             params = try_feed_from_gql_ctx::<tauri::Wry, _>(ctx, params)?;
         }
         Ok(params.into())
