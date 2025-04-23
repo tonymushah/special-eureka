@@ -104,6 +104,7 @@
 	.inner {
 		scroll-behavior: smooth;
 		overflow-y: scroll;
+		padding-bottom: 10px;
 		width: 100%;
 		transition:
 			filter,

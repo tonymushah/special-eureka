@@ -1282,12 +1282,12 @@ export type FollowsQueries = {
 
 
 export type FollowsQueriesCustomListsArgs = {
-  param?: UserFollowedListParams;
+  param?: InputMaybe<UserFollowedListParams>;
 };
 
 
 export type FollowsQueriesGroupsArgs = {
-  params?: UserFollowedGroupsParams;
+  params?: InputMaybe<UserFollowedGroupsParams>;
 };
 
 
@@ -1312,12 +1312,12 @@ export type FollowsQueriesIsFollowingUserArgs = {
 
 
 export type FollowsQueriesMangasArgs = {
-  params?: UserFollowedMangaParams;
+  params?: InputMaybe<UserFollowedMangaParams>;
 };
 
 
 export type FollowsQueriesUsersArgs = {
-  param?: UserFollowedUserParams;
+  param?: InputMaybe<UserFollowedUserParams>;
 };
 
 export enum ForumThreadType {
@@ -1898,6 +1898,7 @@ export type MangaQueries = {
 
 
 export type MangaQueriesAggregateArgs = {
+  excludeContentProfile?: InputMaybe<Scalars['Boolean']['input']>;
   params: MangaAggregateParam;
 };
 
@@ -2582,7 +2583,7 @@ export type ScanlationGroupQueriesGetUniqueArgs = {
 
 
 export type ScanlationGroupQueriesListArgs = {
-  params?: ScanlationGroupListParams;
+  params?: InputMaybe<ScanlationGroupListParams>;
 };
 
 export type ScanlationGroupRelationships = {

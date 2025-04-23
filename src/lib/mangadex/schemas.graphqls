@@ -1018,13 +1018,13 @@ input FollowedMangaFeedParams {
 }
 
 type FollowsQueries {
-	groups(params: UserFollowedGroupsParams! = {limit: null, offset: null}): ScanlationGroupResults!
+	groups(params: UserFollowedGroupsParams): ScanlationGroupResults!
 	isFollowingGroup(id: UUID!): Boolean!
-	users(param: UserFollowedUserParams! = {limit: null, offset: null}): UserResults!
+	users(param: UserFollowedUserParams): UserResults!
 	isFollowingUser(id: UUID!): Boolean!
-	mangas(params: UserFollowedMangaParams! = {limit: null, offset: null}): MangaResults!
+	mangas(params: UserFollowedMangaParams): MangaResults!
 	isFollowingManga(id: UUID!): Boolean!
-	customLists(param: UserFollowedListParams! = {limit: null, offset: null}): CustomListResults!
+	customLists(param: UserFollowedListParams): CustomListResults!
 	isFollowingCustomList(id: UUID!): Boolean!
 }
 
@@ -1515,7 +1515,7 @@ type MangaQueries {
 	getDraft(params: GetMangaDraftParams!): MangaObject!
 	getDrafts(params: MangaDraftsParams! = {limit: null, offset: null, state: null, order: null, includes: []}): MangaResults!
 	relationList(params: MangaRelationParam!, listParams: MangaListParams): [MangaRelated!]!
-	aggregate(params: MangaAggregateParam!): MangaAggregateQueries!
+	aggregate(params: MangaAggregateParam!, excludeContentProfile: Boolean): MangaAggregateQueries!
 	readingStatus(id: UUID!): ReadingStatus
 }
 
@@ -2084,7 +2084,7 @@ type ScanlationGroupMutation {
 }
 
 type ScanlationGroupQueries {
-	list(params: ScanlationGroupListParams! = {limit: null, offset: null, groupIds: [], name: null, focusedLanguage: null, order: null}): ScanlationGroupResults!
+	list(params: ScanlationGroupListParams): ScanlationGroupResults!
 	getUnique(id: UUID!): ScanlationGroup!
 }
 

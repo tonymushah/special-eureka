@@ -5,7 +5,7 @@ pub mod list;
 use std::{collections::HashMap, ops::Deref};
 
 use crate::{
-    store::types::structs::content::feed_from_gql_ctx,
+    store::types::structs::content::{feed_from_gql_ctx, try_feed_from_gql_ctx},
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     Result,
 };
@@ -227,8 +227,17 @@ impl MangaQueries {
             })
             .collect())
     }
-    pub async fn aggregate(&self, params: MangaAggregateParam) -> MangaAggregateQueries {
-        params.into()
+    pub async fn aggregate(
+        &self,
+        ctx: &Context<'_>,
+        params: MangaAggregateParam,
+        exclude_content_profile: Option<bool>,
+    ) -> crate::Result<MangaAggregateQueries> {
+        let mut params = params;
+        if !exclude_content_profile.unwrap_or(false) {
+            params = try_feed_from_gql_ctx::<tauri::Wry, _>(ctx, params)?;
+        }
+        Ok(params.into())
     }
     pub async fn reading_status(
         &self,

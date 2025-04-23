@@ -34,6 +34,25 @@
 	export function createChapterEl1EventDispatcher() {
 		return createEventDispatcher<ChapterEl1Events>();
 	}
+	type Group = {
+		id: string;
+		name: string;
+	};
+	type Uploader = {
+		id: string;
+		roles: UserRole[];
+		name: string;
+	};
+	export interface Props {
+		id: string;
+		title?: string | undefined;
+		lang: Language;
+		groups?: Group[];
+		uploader: Uploader;
+		upload_date: Date;
+		haveBeenRead?: boolean;
+		comments?: number | undefined;
+	}
 </script>
 
 <script lang="ts">
@@ -52,25 +71,6 @@
 	import Layout from "./Layout.svelte";
 	import { ChapterDownload } from "@mangadex/download/chapter";
 	import { debounce } from "lodash";
-	type Group = {
-		id: string;
-		name: string;
-	};
-	type Uploader = {
-		id: string;
-		roles: UserRole[];
-		name: string;
-	};
-	interface Props {
-		id: string;
-		title?: string | undefined;
-		lang: Language;
-		groups?: Group[];
-		uploader: Uploader;
-		upload_date: Date;
-		haveBeenRead?: boolean;
-		comments?: number | undefined;
-	}
 
 	let {
 		id,
