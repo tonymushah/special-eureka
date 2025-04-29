@@ -1,31 +1,16 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import DangerButton from "./DangerButton.svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		variant?: "default" | "1" | "2";
-		type?: "reset" | "submit" | "button";
 		label: string;
-		style?: string | undefined;
 		isBase?: boolean;
-		disabled?: boolean;
 	}
 
-	let {
-		variant = "default",
-		type = "button",
-		label,
-		style = undefined,
-		isBase = false,
-		disabled
-	}: Props = $props();
+	let { variant = "default", label, isBase = false, ...restProps }: Props = $props();
 </script>
 
-<DangerButton on:click {variant} {style} {type} {isBase} {disabled}>
+<DangerButton {variant} {isBase} {...restProps}>
 	{label}
 </DangerButton>

@@ -1,31 +1,16 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import IndicationButton from "./IndicationButton.svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		variant?: "blue";
-		type?: "reset" | "submit" | "button";
-		style?: string | undefined;
 		label: string;
 		isBase?: boolean;
-		disabled?: boolean;
 	}
 
-	let {
-		variant = "blue",
-		type = "button",
-		style = undefined,
-		label,
-		isBase = false,
-		disabled
-	}: Props = $props();
+	let { variant = "blue", label, isBase = false, ...restProps }: Props = $props();
 </script>
 
-<IndicationButton {variant} {type} {style} on:click {isBase} {disabled}>
+<IndicationButton {variant} {isBase} {...restProps}>
 	{label}
 </IndicationButton>
