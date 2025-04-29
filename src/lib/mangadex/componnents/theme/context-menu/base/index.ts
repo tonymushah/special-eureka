@@ -1,14 +1,12 @@
-import type { ComponentType } from "svelte";
+import type { Component } from "svelte";
 
 export type Item = {
-	icon: ComponentType;
+	icon: Component;
 	label: string;
 	onClick?: (
-		e: CustomEvent<
-			MouseEvent & {
-				currentTarget: EventTarget & HTMLDivElement;
-			}
-		>
-	) => Promise<void> | void;
+		e: MouseEvent & {
+			currentTarget: EventTarget & HTMLDivElement;
+		}
+	) => any;
 	disabled?: undefined;
 };
