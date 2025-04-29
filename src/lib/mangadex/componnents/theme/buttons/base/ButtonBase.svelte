@@ -1,26 +1,13 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		mouseover: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		focus: FocusEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
-		type?: "reset" | "submit" | "button";
+	import type { HTMLButtonAttributes } from "svelte/elements";
+
+	interface Props extends HTMLButtonAttributes {
 		with_active?: boolean;
 		with_hover?: boolean;
-		style?: string | undefined;
 		isBase?: boolean;
 		haveBorderRadius?: boolean;
 		noPadding?: boolean;
 		children?: import("svelte").Snippet;
-		disabled?: boolean;
 	}
 
 	let {
@@ -32,28 +19,18 @@
 		haveBorderRadius = true,
 		noPadding = false,
 		children,
-		disabled
+		...restProps
 	}: Props = $props();
 </script>
 
 <button
-	onmouseover={(e) => {
-		dispatch("mouseover", e);
-	}}
-	onfocus={(e) => {
-		dispatch("focus", e);
-	}}
 	{style}
 	class:isBase
 	class:haveBorderRadius
 	class:with-active={with_active}
 	class:with-hover={with_hover}
 	class:noPadding
-	onclick={(e) => {
-		dispatch("click", e);
-	}}
-	{disabled}
-	{type}
+	{...restProps}
 >
 	{@render children?.()}
 </button>
