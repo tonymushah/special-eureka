@@ -61,7 +61,7 @@
 	<div class="bottom-body">
 		<div class="tags">
 			{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
-				<DangerBadge type="l1">
+				<DangerBadge variant="l1">
 					{#if contentRating == ContentRating.Erotica}
 						Erotica
 					{:else}
