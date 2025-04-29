@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Snippet } from "svelte";
-	import { derived as storeDerived } from "svelte/store";
 
 	interface Props {
 		haveBeenRead: boolean;
