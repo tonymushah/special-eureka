@@ -1,21 +1,15 @@
 <script lang="ts">
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import AccentBadge from "./AccentBadge.svelte";
-	import { createEventDispatcher } from "svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-
-	interface Props {
+	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		label: string;
 		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
 	}
 
-	let { label, variant = "default" }: Props = $props();
+	let { label, variant = "default", ...restProps }: Props = $props();
 </script>
 
-<AccentBadge on:click {variant}>
+<AccentBadge {variant} {...restProps}>
 	{label}
 </AccentBadge>

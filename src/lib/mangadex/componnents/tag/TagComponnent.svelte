@@ -32,7 +32,7 @@
 				id
 			});
 		}}
-		type="l1"
+		variant="l1"
 	>
 		{name}
 	</DangerBadge>

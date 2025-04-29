@@ -6,43 +6,25 @@
 	import Purple from "./status/Purple.svelte";
 	import Red from "./status/Red.svelte";
 	import Yellow from "./status/Yellow.svelte";
-	import { createEventDispatcher } from "svelte";
+	import type { HTMLButtonAttributes } from "svelte/elements";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends HTMLButtonAttributes {
 		color: StatusColor;
-		children?: import('svelte').Snippet;
 	}
 
-	let { color, children }: Props = $props();
+	let { color, ...restProps }: Props = $props();
 </script>
 
 {#if color == "blue"}
-	<Blue on:click>
-		{@render children?.()}
-	</Blue>
+	<Blue {...restProps} />
 {:else if color == "gray"}
-	<Gray on:click>
-		{@render children?.()}
-	</Gray>
+	<Gray {...restProps} />
 {:else if color == "green"}
-	<Green on:click>
-		{@render children?.()}
-	</Green>
+	<Green {...restProps} />
 {:else if color == "purple"}
-	<Purple on:click>
-		{@render children?.()}
-	</Purple>
+	<Purple {...restProps} />
 {:else if color == "red"}
-	<Red on:click>
-		{@render children?.()}
-	</Red>
+	<Red {...restProps} />
 {:else if color == "yellow"}
-	<Yellow on:click>
-		{@render children?.()}
-	</Yellow>
+	<Yellow {...restProps} />
 {/if}

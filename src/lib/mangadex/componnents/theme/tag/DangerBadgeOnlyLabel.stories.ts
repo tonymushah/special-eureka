@@ -10,7 +10,7 @@ const meta = {
 	component: DangerBadge,
 	tags: ["autodocs"],
 	argTypes: {
-		type: {
+		variant: {
 			type: {
 				name: "enum",
 				value: ["default", "l1", "l2"]
@@ -27,21 +27,21 @@ const label = "Tag";
 
 export const Default: Story = {
 	args: {
-		type: "default",
+		variant: "default",
 		label
 	}
 };
 
 export const L1: Story = {
 	args: {
-		type: "l1",
+		variant: "l1",
 		label
 	}
 };
 
 export const L2: Story = {
 	args: {
-		type: "l2",
+		variant: "l2",
 		label
 	}
 };
