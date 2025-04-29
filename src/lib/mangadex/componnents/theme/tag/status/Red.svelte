@@ -1,19 +1,10 @@
 <script lang="ts">
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import TagBase from "../base/TagBase.svelte";
-	import { createEventDispatcher } from "svelte";
-	interface Props {
-		children?: import('svelte').Snippet;
-	}
 
-	let { children }: Props = $props();
+	interface Props extends HTMLButtonAttributes {}
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	let { ...restProps }: Props = $props();
 </script>
 
-<TagBase on:click --tag-color="var(--status-red)">
-	{@render children?.()}
-</TagBase>
+<TagBase --tag-color="var(--status-red)" {...restProps} />
