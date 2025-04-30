@@ -2,18 +2,92 @@
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
 
-	interface Props {
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	interface Events {
+		ondownload?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		ondownloadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onread?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onreadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onremoveClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onremoveKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		oncomments?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		oncommentsKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+	}
+
+	interface Props extends Events {
 		title: string;
 		mangaId: string;
 		mangaLang?: Language | undefined;
 		chapters: Chapter[];
 	}
 
-	let { title, mangaId, mangaLang = undefined, chapters }: Props = $props();
+	let {
+		title,
+		mangaId,
+		mangaLang = undefined,
+		chapters,
+		ondownload,
+		ondownloadKeyPress,
+		onmangaClick,
+		onmangaKeyPress,
+		onread,
+		onreadKeyPress,
+		onremoveClick: onremove,
+		onremoveKeyPress,
+		oncomments,
+		oncommentsKeyPress
+	}: Props = $props();
 	let isCollapsed = $state(true);
 	let canCollaspe = $state(false);
 	function setDisplayedChapters() {
@@ -24,32 +98,6 @@
 	onMount(() => {
 		setDisplayedChapters();
 	});
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		mangaClick: MouseEnvDiv & {
-			id: string;
-		};
-		mangaKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
 </script>
 
 <article class="layout manga-element" data-manga-id={mangaId}>
@@ -59,13 +107,13 @@
 			role="button"
 			tabindex="0"
 			onclick={(e) => {
-				dispatch("mangaClick", {
+				onmangaClick?.({
 					...e,
 					id: mangaId
 				});
 			}}
 			onkeypress={(e) => {
-				dispatch("mangaKeyPress", {
+				onmangaKeyPress?.({
 					...e,
 					id: mangaId
 				});
@@ -85,10 +133,14 @@
 			<div class="chapters" class:isCollapsed>
 				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, comments }}
 					<ChapterElement1
-						on:download
-						on:downloadKeyPress
-						on:read
-						on:readKeyPress
+						{ondownload}
+						{onread}
+						{onreadKeyPress}
+						{ondownloadKeyPress}
+						{onremove}
+						{onremoveKeyPress}
+						{oncomments}
+						{oncommentsKeyPress}
 						id={chapterId}
 						{title}
 						{lang}
@@ -104,7 +156,7 @@
 				<div class="collapse">
 					<ButtonAccent
 						variant="4"
-						on:click={() => {
+						onclick={() => {
 							isCollapsed = !isCollapsed;
 						}}
 					>
