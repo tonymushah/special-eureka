@@ -26,40 +26,26 @@
 	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopMangaStats from "./TopMangaStats.svelte";
 
-	const dispatch = createEventDispatcher<{
-		readingStatus: ReadingStatusEventDetail;
-		rating: number;
-		download: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		delete: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		addToList: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		read: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		report: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		upload: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		tag: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-		comments: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		downloading: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	type ClickEventHandler<A = {}> = (
+		ev: MouseEvent & {
+			currentTarget: EventTarget & HTMLElement;
+		} & A
+	) => any;
+	interface Events {
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
+		onrating?: (ev: number) => any;
+		ondownload?: ClickEventHandler;
+		ondelete?: ClickEventHandler;
+		onaddToList?: ClickEventHandler;
+		onread?: ClickEventHandler;
+		onreport?: ClickEventHandler;
+		onupload?: ClickEventHandler;
+		ondownloading?: ClickEventHandler;
+		ontag?: ClickEventHandler<{ id: string }>;
+		oncomments?: ClickEventHandler;
+	}
 
-	interface Props {
+	interface Props extends Events {
 		id: string;
 		title: string;
 		altTitle?: string | undefined;
@@ -75,6 +61,7 @@
 		downloadState?: Readable<MangaDownloadState>;
 		stats?: TopMangaStatistics | undefined;
 		contentRating?: ContentRating;
+		closeDialogOnAdd?: boolean;
 	}
 
 	let {
@@ -92,7 +79,19 @@
 		rating = writable<number | undefined>(undefined),
 		downloadState = readable(MangaDownloadState.Pending),
 		stats = $bindable(undefined),
-		contentRating = ContentRating.Safe
+		contentRating = ContentRating.Safe,
+		closeDialogOnAdd,
+		onaddToList,
+		oncomments,
+		ondelete,
+		ondownload,
+		ondownloading,
+		onrating,
+		onread,
+		onreadingStatus,
+		onreport,
+		ontag,
+		onupload
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
@@ -121,39 +120,22 @@
 		<section class="bottom">
 			<TopInfoAuthors {authors} />
 			<TopInfoButtons
-				on:readingStatus={({ detail }) => {
-					dispatch("readingStatus", detail);
-				}}
-				on:rating={({ detail }) => {
-					dispatch("rating", detail);
-				}}
-				on:download={({ detail }) => {
-					dispatch("download", detail);
-				}}
-				on:delete={({ detail }) => {
-					dispatch("delete", detail);
-				}}
-				on:addToList={({ detail }) => {
-					dispatch("addToList", detail);
-				}}
-				on:read={({ detail }) => {
-					dispatch("read", detail);
-				}}
-				on:report={({ detail }) => {
-					dispatch("report", detail);
-				}}
-				on:upload={({ detail }) => {
-					dispatch("upload", detail);
-				}}
-				on:downloading={({ detail }) => {
-					dispatch("downloading", detail);
-				}}
+				{closeDialogOnAdd}
+				{onaddToList}
+				{ondelete}
+				{ondownload}
+				{ondownloading}
+				{onrating}
+				{onread}
+				{onreadingStatus}
+				{onreport}
+				{onupload}
 			/>
 			<div class="tag-status">
 				<TagComponnentsFlex
 					{tags}
 					onclick={(e) => {
-						dispatch("tag", e);
+						ontag?.(e);
 					}}
 				>
 					{#snippet pre()}
@@ -167,7 +149,7 @@
 					<TopMangaStats
 						bind:stats
 						on:commentClick={({ detail }) => {
-							dispatch("comments", detail);
+							oncomments?.(detail);
 						}}
 					/>
 				</div>
