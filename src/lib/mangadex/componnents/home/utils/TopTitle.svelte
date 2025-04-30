@@ -2,20 +2,22 @@
 	// import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import { createEventDispatcher } from "svelte";
 	import { RefreshCwIcon } from "svelte-feather-icons";
 
-	interface Props {
+	interface Events {
+		onrefresh?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+
+	interface Props extends Events {
 		label: string;
 		fetching: boolean;
 	}
 
-	let { label, fetching = $bindable() }: Props = $props();
-	const dispacther = createEventDispatcher<{
-		refresh: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	let { label, fetching = $bindable(), onrefresh }: Props = $props();
 
 	// $: console.log(`fetching ${fetching}`);
 </script>
@@ -25,7 +27,7 @@
 	<span class="button" class:fetching>
 		<ButtonAccent
 			onclick={(e) => {
-				dispacther("refresh", e);
+				onrefresh?.(e);
 			}}
 		>
 			<div class="icon" class:fetching>
