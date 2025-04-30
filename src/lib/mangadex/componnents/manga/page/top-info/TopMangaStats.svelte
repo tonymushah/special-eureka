@@ -1,19 +1,21 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
 	import type { TopMangaStatistics } from "./stats";
 	import BookmarkButton from "./stats/BookmarkButton.svelte";
 	import CommentsButton from "./stats/CommentsButton.svelte";
 	import Note from "./stats/Note.svelte";
-	const dispatch = createEventDispatcher<{
-		commentClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+
+	interface Events {
+		oncommentClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		stats: TopMangaStatistics;
 	}
 
-	let { stats = $bindable() }: Props = $props();
+	let { stats = $bindable(), oncommentClick }: Props = $props();
 </script>
 
 <div class="stats">
@@ -22,8 +24,8 @@
 	{#if stats.comments}
 		<CommentsButton
 			comments={stats.comments}
-			on:click={({ detail }) => {
-				dispatch("commentClick", detail);
+			onclick={(detail) => {
+				oncommentClick?.(detail);
 			}}
 		/>
 	{/if}

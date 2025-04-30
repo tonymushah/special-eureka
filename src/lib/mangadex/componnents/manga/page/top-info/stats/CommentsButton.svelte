@@ -1,19 +1,20 @@
 <script lang="ts">
 	import millify from "millify";
 	import CommentsIcon from "./comments/CommentsIcon.svelte";
-	import { createEventDispatcher } from "svelte";
 
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
 
-	interface Props {
+	interface Props extends Events {
 		comments: number;
 	}
 
-	let { comments }: Props = $props();
+	let { comments, onclick }: Props = $props();
 	let isMillify = $state(false);
 	let comments_ = $derived(isMillify ? millify(comments) : comments);
 </script>
@@ -27,7 +28,7 @@
 		isMillify = true;
 	}}
 	onclick={(e) => {
-		dispatch("click", e);
+		onclick?.(e);
 	}}
 >
 	<CommentsIcon />
