@@ -89,7 +89,9 @@
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
 	$effect(() => {
 		if (to_obserce_bind) {
-			observer.unobserve(to_obserce_bind);
+			// NOTE I don't know but this statement feels wrong so I commented it
+			// Please make a PR to uncomment it
+			// observer.unobserve(to_obserce_bind);
 			observer.observe(to_obserce_bind);
 		}
 	});
