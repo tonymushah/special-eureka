@@ -1,21 +1,24 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	import { createEventDispatcher } from "svelte";
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		children?: import("svelte").Snippet;
 		mangaId: string;
 	}
 
-	let { children, mangaId }: Props = $props();
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	let { children, mangaId, onclick }: Props = $props();
 </script>
 
+<!-- TODO Remove <ButtonBase/> for layout -->
 <ButtonBase
-	on:click
+	{onclick}
 	isBase={false}
 	with_hover
 	noPadding

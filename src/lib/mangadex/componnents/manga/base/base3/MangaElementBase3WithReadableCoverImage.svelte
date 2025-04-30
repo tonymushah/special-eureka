@@ -5,29 +5,24 @@
 	import Image from "./Image.svelte";
 	import type { Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 		title: string;
 		mangaId: string;
 	}
 
-	let { coverImage, coverImageAlt, title, mangaId }: Props = $props();
+	let { coverImage, coverImageAlt, title, mangaId, onclick }: Props = $props();
 </script>
 
-<Layout
-	--element-w="10em"
-	--element-h="15em"
-	on:click={({ detail }) => {
-		dispatch("click", detail);
-	}}
-	{mangaId}
->
+<Layout --element-w="10em" --element-h="15em" {onclick} {mangaId}>
 	{#if $coverImage}
 		<Image coverImage={$coverImage} {coverImageAlt} />
 	{:else}
