@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher } from "svelte";
+	import type { Readable } from "svelte/store";
 	import Content from "./inner/Content.svelte";
 	import CoverImage from "./inner/CoverImage.svelte";
 	import Layout from "./inner/Layout.svelte";
-	import type { Readable } from "svelte/store";
 	import LoaderImage from "./inner/LoaderImage.svelte";
+
 	type Group = {
 		id: string;
 		name: string;

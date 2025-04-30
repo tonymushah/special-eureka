@@ -3,10 +3,11 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import type { Readable } from "svelte/store";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
+
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};

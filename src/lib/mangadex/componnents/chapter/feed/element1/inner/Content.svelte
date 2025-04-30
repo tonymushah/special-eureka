@@ -1,9 +1,7 @@
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher } from "svelte";
 	import ChapterElement2 from "../../../base/element2/ChapterElement2.svelte";
-	import type { Readable } from "svelte/store";
+
 	type Group = {
 		id: string;
 		name: string;
