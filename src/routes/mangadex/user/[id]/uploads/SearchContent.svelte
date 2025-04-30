@@ -111,8 +111,8 @@
 	<ChapterFeedList
 		list={$feed}
 		style={chapterFeedStyle}
-		on:mangaClick={(e) => {
-			const id = e.detail.id;
+		onmangaClick={(e) => {
+			const id = e.id;
 			goto(
 				route("/mangadex/title/[id]", {
 					id

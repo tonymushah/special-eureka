@@ -110,7 +110,7 @@
 	{#each $lists as list}
 		<UsersSimpleBase
 			name={list.name}
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/list/[id]", {
 						id: list.id

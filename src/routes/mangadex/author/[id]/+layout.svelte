@@ -22,7 +22,7 @@
 		<div class="buttons">
 			<ButtonAccent
 				isBase
-				on:click={() => {
+				onclick={() => {
 					shellOpen(`https://mangadex.org/author/${data.id}`);
 				}}
 			>

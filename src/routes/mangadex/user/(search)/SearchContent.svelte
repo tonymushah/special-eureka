@@ -126,7 +126,7 @@
 		<UserRolesColorProvider roles={user.roles}>
 			<UsersSimpleBase
 				name={user.name}
-				on:click={() => {
+				onclick={() => {
 					goto(
 						route("/mangadex/user/[id]", {
 							id: user.id

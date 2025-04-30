@@ -126,7 +126,7 @@
 	{#each $scanGroups as group}
 		<UsersSimpleBase
 			name={group.name}
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/group/[id]", {
 						id: group.id
