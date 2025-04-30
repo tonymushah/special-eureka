@@ -18,7 +18,7 @@
 		) => any;
 	}
 
-	let { target, isOpen = $bindable(false), items = [], onSelect }: Props = $props();
+	let { target = $bindable(), isOpen = $bindable(false), items = [], onSelect }: Props = $props();
 
 	let menuItems = $derived(
 		items.map<Item>((i) => ({
