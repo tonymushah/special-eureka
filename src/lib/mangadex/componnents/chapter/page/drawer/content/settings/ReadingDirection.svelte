@@ -25,7 +25,7 @@
 			variant="3"
 			label={$label}
 			icon={Icon}
-			on:click={() => {
+			onclick={() => {
 				if ($readingDirection == Direction.Ltr) {
 					readingDirection.set(Direction.Rtl);
 				} else {

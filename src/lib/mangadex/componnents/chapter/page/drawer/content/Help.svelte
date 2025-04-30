@@ -22,7 +22,7 @@
 
 <section>
 	<trigger use:melt={$trigger}>
-		<ButtonAccentOnlyLabel icon={Icon} on:click={fireChapterHelpEvent} label="Help" />
+		<ButtonAccentOnlyLabel icon={Icon} onclick={fireChapterHelpEvent} label="Help" />
 	</trigger>
 </section>
 

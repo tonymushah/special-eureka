@@ -29,7 +29,7 @@
 			oneLine
 			variant="3"
 			label={$label}
-			on:click={() => {
+			onclick={() => {
 				switch ($imageFitStore) {
 					case ImageFit.Default:
 						imageFitStore.set(ImageFit.Width);

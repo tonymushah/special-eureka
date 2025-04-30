@@ -20,7 +20,7 @@
 
 <section>
 	<ButtonAccentOnlyLabel
-		on:click={fireChapterThreadEvent}
+		onclick={fireChapterThreadEvent}
 		variant="3"
 		icon={Icon}
 		label={$label}

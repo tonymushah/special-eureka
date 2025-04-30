@@ -12,7 +12,7 @@
 		<ButtonAccentOnlyLabel
 			oneLine
 			variant="3"
-			on:click={() => {
+			onclick={() => {
 				resetZoom();
 			}}
 			icon={ZoomOutIcon}

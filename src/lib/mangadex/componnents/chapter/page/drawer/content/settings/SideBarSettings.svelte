@@ -24,4 +24,4 @@
 	onMount(() => registerListeners());
 </script>
 
-<ButtonAccentOnlyLabel icon={Icon} variant="3" label={$label} on:click={toggleAction} />
+<ButtonAccentOnlyLabel icon={Icon} variant="3" label={$label} onclick={toggleAction} />

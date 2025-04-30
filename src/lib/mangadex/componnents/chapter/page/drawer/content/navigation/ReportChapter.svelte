@@ -4,4 +4,4 @@
 	import { fireReportChapterEvent } from "../../../contexts/previousNextEventTarget";
 </script>
 
-<ButtonAccentOnlyLabel on:click={fireReportChapterEvent} icon={Icon} label="Report Chapter" />
+<ButtonAccentOnlyLabel onclick={fireReportChapterEvent} icon={Icon} label="Report Chapter" />
