@@ -1,10 +1,13 @@
 <script lang="ts">
+	import PrimaryButtonOnlyLabel from "./theme/buttons/PrimaryButtonOnlyLabel.svelte";
+
 	interface Props {
 		error: Error;
 		label: string;
+		retry?: () => any;
 	}
 
-	let { error, label }: Props = $props();
+	let { error, label, retry }: Props = $props();
 </script>
 
 <div class="error with-margin">
@@ -12,6 +15,11 @@
 	<div class="details">
 		<h4>{error.name}</h4>
 		<div>{error.message}</div>
+		{#if retry}
+			<div>
+				<PrimaryButtonOnlyLabel label="Retry?" onclick={retry} />
+			</div>
+		{/if}
 	</div>
 </div>
 
