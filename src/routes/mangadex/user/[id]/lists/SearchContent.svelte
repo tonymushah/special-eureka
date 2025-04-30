@@ -24,7 +24,7 @@
 	const query = createInfiniteQuery(
 		derived([userId], ([$userId]) => {
 			return {
-				queryKey: ["user", $userId, "uploads"],
+				queryKey: ["user", $userId, "custom-lists"],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
