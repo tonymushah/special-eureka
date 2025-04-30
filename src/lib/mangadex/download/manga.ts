@@ -335,8 +335,8 @@ export class MangaDownload {
 		});
 	}
 	public async download() {
-		let id = this.id;
-		let data = await download(id);
+		const id = this.id;
+		const data = await download(id);
 		return data;
 	}
 	public async remove() {

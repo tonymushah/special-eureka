@@ -13,7 +13,7 @@ export enum SideBarActionType {
 export const sideBarActionType = writable(SideBarActionType.Default);
 
 export function registerListeners() {
-	let unsus: Unsubscriber[] = [];
+	const unsus: Unsubscriber[] = [];
 	unsus.push(
 		sideBarActionType.subscribe((action) => {
 			switch (action) {
