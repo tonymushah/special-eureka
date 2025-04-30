@@ -315,9 +315,9 @@ export class ChapterDownload {
 		});
 	}
 	public async download() {
-		let id = this.chapterId;
+		const id = this.chapterId;
 		const rexec = this.reexecute;
-		let quality = this.mode;
+		const quality = this.mode;
 		const res = createMutation(
 			{
 				mutationKey: ["chapter", "download", id, quality],
@@ -340,7 +340,7 @@ export class ChapterDownload {
 		return res;
 	}
 	public async remove() {
-		let id = this.chapterId;
+		const id = this.chapterId;
 		const rexec = this.reexecute;
 		const removing = this.isRemoving_;
 		const res = createMutation(
@@ -399,7 +399,7 @@ export class ChapterDownload {
 	}
 	public download_state_images() {
 		return derived([this.images_state(), this.is_downloading()], ([_state, $is_downloaded]) => {
-			let [left, right, hasImages] = (() => {
+			const [left, right, hasImages] = (() => {
 				if (_state && !$is_downloaded) {
 					return [
 						`${(_state.index * 100) / _state.len}%`,

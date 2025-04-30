@@ -75,8 +75,8 @@ export default async function executeSearchQuery(
 			total: data.total,
 			limit: data.limit,
 			data: data.data.map<ScanlationGroupListItemData>((e) => {
-				let eleader = e.relationships.leader;
-				let leader = eleader
+				const eleader = e.relationships.leader;
+				const leader = eleader
 					? { id: eleader.id, name: eleader.attributes.username }
 					: undefined;
 				return {

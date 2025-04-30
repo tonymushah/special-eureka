@@ -34,11 +34,11 @@ export function toMangaListParams(params: MangaSearchParams): MangaListParams {
 	const tags = Array.from(params.filter.tags.entries());
 	const year = (() => {
 		if (params.filter.year) {
-			let strYear = `${params.filter.year}`;
+			const strYear = `${params.filter.year}`;
 			if (strYear.length == 0) {
 				return null;
 			} else {
-				let year = Number(strYear);
+				const year = Number(strYear);
 				if (isNaN(year)) {
 					return null;
 				} else {
