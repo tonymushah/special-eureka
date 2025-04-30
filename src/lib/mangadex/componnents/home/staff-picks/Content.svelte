@@ -55,7 +55,7 @@
 					{coverImageAlt}
 					{title}
 					{description}
-					on:moreInfoClick={() => {
+					onmoreInfoClick={() => {
 						openTitle(id);
 					}}
 					mangaId={id}

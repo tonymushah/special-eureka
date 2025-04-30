@@ -80,7 +80,7 @@
 		{#each titles as { id, title, coverImage, coverImageAlt } (id)}
 			<swiper-slide>
 				<MangaElementBase4
-					on:click={() => {
+					onclick={() => {
 						openTitle(id);
 					}}
 					{title}
