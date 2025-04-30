@@ -1,4 +1,6 @@
 name: "Dev Builds"
+permissions:
+    contents: write
 on:
     push:
         branches:
