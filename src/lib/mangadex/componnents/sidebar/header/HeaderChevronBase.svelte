@@ -2,38 +2,42 @@
 	import sideDirGQLDoc from "@mangadex/gql-docs/sidebarSub";
 	import { Direction } from "@mangadex/gql/graphql";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
-	import { createEventDispatcher } from "svelte";
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+		onkeydown?: (
+			ev: KeyboardEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		isRight?: boolean;
 		size?: string;
 	}
 
-	let { isRight = false, size = "24" }: Props = $props();
+	let { isRight = false, size = "24", onclick, onkeydown }: Props = $props();
 	const rtl_sub = subscriptionStore({
 		client: getContextClient(),
 		query: sideDirGQLDoc
 	});
 	const rtl = derived(rtl_sub, ($r) => $r.data?.watchSidebarDirection == Direction.Rtl);
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-		keydown: KeyboardEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-	}>();
 </script>
 
 <div
 	tabindex="0"
 	role="button"
 	onkeydown={(e) => {
-		dispatch("keydown", e);
+		onkeydown?.(e);
 	}}
 	onclick={(e) => {
-		dispatch("click", e);
+		onclick?.(e);
 	}}
 >
 	{#if isRight}

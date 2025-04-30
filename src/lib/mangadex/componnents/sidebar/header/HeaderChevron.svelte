@@ -7,7 +7,7 @@
 <HeaderChevronBase
 	isRight={!$isOpen}
 	{size}
-	on:click={() => {
+	onclick={() => {
 		$isOpen = !$isOpen;
 	}}
 />
