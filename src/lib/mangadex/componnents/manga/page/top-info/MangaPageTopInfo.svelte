@@ -4,7 +4,6 @@
 	import { MangaDownloadState } from "@mangadex/download/manga";
 	import { ContentRating, type MangaStatus, type ReadingStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher } from "svelte";
 	import { readable, writable, type Readable } from "svelte/store";
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import {

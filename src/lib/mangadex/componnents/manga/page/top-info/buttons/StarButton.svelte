@@ -1,11 +1,10 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
-	import { createEventDispatcher } from "svelte";
-	import StarIcon from "./star-button/StarIcon.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import getText from "./star-button/getText";
+	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
 	import { getTopMangaRatingContextStore } from "../context";
+	import getText from "./star-button/getText";
+	import StarIcon from "./star-button/StarIcon.svelte";
 
 	let isOpen = $state(false);
 	let target: HTMLDivElement | undefined = $state(undefined);

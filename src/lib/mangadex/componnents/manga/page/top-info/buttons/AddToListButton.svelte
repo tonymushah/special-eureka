@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { createEventDispatcher } from "svelte";
 	import AddToListIcon from "./add-to-list/AddToListIcon.svelte";
 
 	interface Events {

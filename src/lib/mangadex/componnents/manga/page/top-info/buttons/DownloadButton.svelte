@@ -1,13 +1,11 @@
 <script lang="ts">
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { getTopMangaDownloadContextStore } from "../context";
-	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
-	import TrashIcon from "./download/TrashIcon.svelte";
-	import { createEventDispatcher } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import DangerButton from "@mangadex/componnents/theme/buttons/DangerButton.svelte";
+	import { MangaDownloadState } from "@mangadex/download/manga";
+	import { getTopMangaDownloadContextStore } from "../context";
 	import DownloadIcon from "./download/DownloadIcon.svelte";
 	import LoadingIcon from "./download/LoadingIcon.svelte";
-	import { MangaDownloadState } from "@mangadex/download/manga";
+	import TrashIcon from "./download/TrashIcon.svelte";
 
 	const stateStore = getTopMangaDownloadContextStore();
 	interface Events {
