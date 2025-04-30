@@ -31,8 +31,8 @@
 	</div>
 	<div class="button-group">
 		<PrimaryButton
-			on:click={({ detail }) => {
-				dispatch("readClick", detail);
+			onclick={(e) => {
+				dispatch("readClick", e);
 			}}
 		>
 			<div class="read-btn-content">
@@ -43,8 +43,8 @@
 			</div>
 		</PrimaryButton>
 		<ButtonAccent
-			on:click={({ detail }) => {
-				dispatch("moreInfoClick", detail);
+			onclick={(e) => {
+				dispatch("moreInfoClick", e);
 			}}
 		>
 			More Info

@@ -38,7 +38,7 @@
 <dialog bind:this={dialog} class="manga-search-filter">
 	<div class="title">
 		<p>Add to Library</p>
-		<ButtonAccent on:click={closeDialog}>
+		<ButtonAccent onclick={closeDialog}>
 			<CloseIcon />
 		</ButtonAccent>
 	</div>
@@ -56,12 +56,12 @@
 				</div>
 			</div>
 			<div class="bottom">
-				<ButtonAccent isBase on:click={closeDialog}>
+				<ButtonAccent isBase onclick={closeDialog}>
 					<div class="buttons">Cancel</div>
 				</ButtonAccent>
 				<PrimaryButton
 					isBase
-					on:click={() => {
+					onclick={() => {
 						dispatch("readingStatus", {
 							readingStatus: $selectedStatus,
 							isFollowing: $selectedIsFollowing

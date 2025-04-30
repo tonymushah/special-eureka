@@ -34,7 +34,7 @@
 	<div class="buttons">
 		<PrimaryButton
 			isBase
-			on:click={() => {
+			onclick={() => {
 				history.back();
 			}}
 		>
@@ -45,7 +45,7 @@
 		</PrimaryButton>
 		<ButtonAccent
 			isBase
-			on:click={() => {
+			onclick={() => {
 				location.reload();
 			}}
 		>

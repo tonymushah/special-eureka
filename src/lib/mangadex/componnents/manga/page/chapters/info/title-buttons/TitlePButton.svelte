@@ -34,7 +34,7 @@
 					with_hover
 					--button-color="var(--accent)"
 					--button-hover="var(--primary)"
-					on:click={({ detail }) => {
+					onclick={({ detail }) => {
 						dispatch("click", {
 							...detail,
 							key,

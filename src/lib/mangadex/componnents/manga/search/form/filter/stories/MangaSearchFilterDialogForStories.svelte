@@ -51,7 +51,7 @@
 
 <ButtonAccentOnlyLabel
 	label="Open dialog"
-	on:click={() => {
+	onclick={() => {
 		dialog_bind?.showModal();
 	}}
 />

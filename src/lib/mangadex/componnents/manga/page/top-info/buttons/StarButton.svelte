@@ -24,11 +24,11 @@
 
 <div class="star-button" bind:this={target}>
 	{#if rating == undefined}
-		<ButtonAccent isBase on:click={toggle}>
+		<ButtonAccent isBase onclick={toggle}>
 			<StarIcon />
 		</ButtonAccent>
 	{:else}
-		<PrimaryButton isBase on:click={toggle}>
+		<PrimaryButton isBase onclick={toggle}>
 			<div class="inner-button">
 				<StarIcon />
 				<span>{rating}</span>

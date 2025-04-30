@@ -205,7 +205,7 @@
 	<div class="top">
 		<div class="left">
 			<ButtonAccent
-				on:click={async () => {
+				onclick={async () => {
 					if (!$isFetching) {
 						await query.execute();
 					}
@@ -220,7 +220,7 @@
 		</div>
 		<div class="right">
 			<ButtonAccent
-				on:click={async () => {
+				onclick={async () => {
 					isReversed.update((i) => !i);
 				}}
 			>

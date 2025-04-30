@@ -95,7 +95,7 @@
 	<ButtonAccentOnlyLabel
 		disabled={$disabled}
 		label="Select data directory"
-		on:click={async () => {
+		onclick={async () => {
 			const dir = await dialogOpen({
 				directory: true,
 				title: "Select offline data directory",
@@ -125,7 +125,7 @@
 	<ButtonAccentOnlyLabel
 		disabled={$disabled}
 		label="Select titles directory"
-		on:click={async () => {
+		onclick={async () => {
 			const dir = await dialogOpen({
 				directory: true,
 				title: "Select offline titles directory",
@@ -156,7 +156,7 @@
 	<ButtonAccentOnlyLabel
 		disabled={$disabled}
 		label="Select chapters directory"
-		on:click={async () => {
+		onclick={async () => {
 			const dir = await dialogOpen({
 				directory: true,
 				title: "Select offline chapters directory",
@@ -187,7 +187,7 @@
 	<ButtonAccentOnlyLabel
 		disabled={$disabled}
 		label="Select covers directory"
-		on:click={async () => {
+		onclick={async () => {
 			const dir = await dialogOpen({
 				directory: true,
 				title: "Select offline covers directory",

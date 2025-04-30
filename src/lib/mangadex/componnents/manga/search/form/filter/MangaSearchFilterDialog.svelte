@@ -31,7 +31,7 @@
 		<Title type={2}>Search Filters</Title>
 		<div class="exit">
 			<ButtonAccent
-				on:click={() => {
+				onclick={() => {
 					dialog_bind?.close();
 				}}
 			>
@@ -45,8 +45,8 @@
 	{#if requireValidation}
 		<footer>
 			<PrimaryButton
-				on:click={({ detail }) => {
-					dispatch("validate", detail);
+				onclick={(e) => {
+					dispatch("validate", e);
 				}}
 			>
 				<div class="accept-inner">

@@ -35,7 +35,7 @@
 {#if isDownloaded}
 	<ButtonAccent
 		isBase
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("download", detail);
 		}}
 	>
@@ -43,7 +43,7 @@
 	</ButtonAccent>
 	<DangerButton
 		isBase
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("delete", detail);
 		}}
 	>
@@ -52,7 +52,7 @@
 {:else if hasFailed}
 	<ButtonAccent
 		isBase
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("download", detail);
 		}}
 	>
@@ -60,7 +60,7 @@
 	</ButtonAccent>
 	<DangerButton
 		isBase
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("delete", detail);
 		}}
 	>
@@ -69,7 +69,7 @@
 {:else if notDownloaded}
 	<ButtonAccent
 		isBase
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("download", detail);
 		}}
 	>
@@ -78,7 +78,7 @@
 {:else}
 	<ButtonAccent
 		isBase
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("downloading", detail);
 		}}
 	>

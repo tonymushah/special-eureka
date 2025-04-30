@@ -66,7 +66,7 @@
 {#if twitter}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (twitter) shellOpen(twitter);
 		}}
 		isBase
@@ -87,7 +87,7 @@
 {#if website}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (website) shellOpen(website);
 		}}
 		isBase
@@ -108,7 +108,7 @@
 {#if mangaUpdates}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (mangaUpdates) shellOpen(mangaUpdates);
 		}}
 		isBase
@@ -129,7 +129,7 @@
 {#if discord}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (discord) shellOpen(discord);
 		}}
 		isBase
@@ -146,7 +146,7 @@
 {#if ircChannel}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (ircChannel) writeText(ircChannel);
 		}}
 		isBase
@@ -163,7 +163,7 @@
 {#if ircServer}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (ircServer) writeText(ircServer);
 		}}
 		isBase
@@ -180,7 +180,7 @@
 {#if email}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (email) writeText(email);
 		}}
 		isBase

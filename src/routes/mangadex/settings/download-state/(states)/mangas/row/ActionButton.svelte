@@ -23,13 +23,13 @@
 	{#if $is_downloaded}
 		<DangerButtonOnlyLabel
 			label="Delete"
-			on:click={() => {
+			onclick={() => {
 				download.remove();
 			}}
 		/>
 		<PrimaryButtonOnlyLabel
 			label="Re-Download"
-			on:click={() => {
+			onclick={() => {
 				download.download();
 			}}
 		/>
@@ -37,14 +37,14 @@
 		<ButtonAccentOnlyLabel
 			label="Cancel"
 			variant="5"
-			on:click={() => {
+			onclick={() => {
 				download.cancel();
 			}}
 		/>
 	{:else}
 		<PrimaryButtonOnlyLabel
 			label="Download"
-			on:click={() => {
+			onclick={() => {
 				download.download();
 			}}
 		/>

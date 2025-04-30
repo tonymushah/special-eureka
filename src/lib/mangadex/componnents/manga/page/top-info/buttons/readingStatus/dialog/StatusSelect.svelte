@@ -19,7 +19,7 @@
 <div class="outer-button" bind:this={target}>
 	<ButtonAccent
 		isBase
-		on:click={() => {
+		onclick={() => {
 			isOpen = !isOpen;
 		}}
 	>

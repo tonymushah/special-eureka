@@ -29,7 +29,7 @@
 
 <PrimaryButton
 	isBase
-	on:click={() => {
+	onclick={() => {
 		openDialog();
 	}}
 >

@@ -12,7 +12,7 @@
 
 <ButtonAccent
 	isBase
-	on:click={({ detail }) => {
+	onclick={({ detail }) => {
 		dispatch("click", detail);
 	}}
 >

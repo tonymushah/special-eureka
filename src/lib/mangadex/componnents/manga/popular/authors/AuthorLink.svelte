@@ -18,7 +18,7 @@
 <ButtonBase
 	with_hover
 	with_active
-	on:click={({ detail }) => {
+	onclick={({ detail }) => {
 		dispatch("click", {
 			...detail,
 			id

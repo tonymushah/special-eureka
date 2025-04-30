@@ -129,7 +129,7 @@
 {#if links.twitter}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.twitter) shellOpen(links.twitter);
 		}}
 		isBase
@@ -150,7 +150,7 @@
 {#if links.pixiv}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.pixiv) shellOpen(links.pixiv);
 		}}
 		isBase
@@ -171,7 +171,7 @@
 {#if links.melonBook}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.melonBook) shellOpen(links.melonBook);
 		}}
 		isBase
@@ -192,7 +192,7 @@
 {#if links.fanBox}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.fanBox) shellOpen(links.fanBox);
 		}}
 		isBase
@@ -213,7 +213,7 @@
 {#if links.booth}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.booth) shellOpen(links.booth);
 		}}
 		isBase
@@ -234,7 +234,7 @@
 {#if links.nicoVideo}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.nicoVideo) shellOpen(links.nicoVideo);
 		}}
 		isBase
@@ -255,7 +255,7 @@
 {#if links.skeb}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.skeb) shellOpen(links.skeb);
 		}}
 		isBase
@@ -276,7 +276,7 @@
 {#if links.fantia}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.fantia) shellOpen(links.fantia);
 		}}
 		isBase
@@ -297,7 +297,7 @@
 {#if links.tumblr}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.tumblr) shellOpen(links.tumblr);
 		}}
 		isBase
@@ -318,7 +318,7 @@
 {#if links.youtube}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.youtube) shellOpen(links.youtube);
 		}}
 		isBase
@@ -339,7 +339,7 @@
 {#if links.weibo}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.weibo) shellOpen(links.weibo);
 		}}
 		isBase
@@ -360,7 +360,7 @@
 {#if links.naver}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.naver) shellOpen(links.naver);
 		}}
 		isBase
@@ -381,7 +381,7 @@
 {#if links.website}
 	<ButtonAccent
 		variant="3"
-		on:click={() => {
+		onclick={() => {
 			if (links.website) shellOpen(links.website);
 		}}
 		isBase

@@ -123,7 +123,7 @@
 		<ButtonAccent
 			variant="accent"
 			isBase
-			on:click={() => {
+			onclick={() => {
 				dialog_bind?.showModal();
 			}}
 		>
@@ -137,7 +137,7 @@
 			<PrimaryButton
 				variant="1"
 				isBase
-				on:click={() => {
+				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
 			>
@@ -149,7 +149,7 @@
 			<ButtonAccent
 				variant="accent"
 				isBase
-				on:click={() => {
+				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
 			>

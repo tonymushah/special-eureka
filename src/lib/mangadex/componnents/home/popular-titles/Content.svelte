@@ -106,7 +106,7 @@
 	<div class="pagination">
 		<ButtonAccent
 			isBase={false}
-			on:click={() => {
+			onclick={() => {
 				if (swiper_container != undefined) {
 					swiper_container.swiper.slidePrev();
 				}
@@ -115,7 +115,7 @@
 			<ArrowLeftIcon />
 		</ButtonAccent>
 		<ButtonAccent
-			on:click={() => {
+			onclick={() => {
 				if (current_page_) {
 					const title = popular_titles[current_page_];
 					if (title != undefined) {
@@ -130,7 +130,7 @@
 		>
 		<ButtonAccent
 			isBase={false}
-			on:click={() => {
+			onclick={() => {
 				if (swiper_container != undefined) {
 					swiper_container.swiper.slideNext();
 				}

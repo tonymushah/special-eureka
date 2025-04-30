@@ -24,7 +24,7 @@
 	<Title>{label}</Title>
 	<span class="button" class:fetching>
 		<ButtonAccent
-			on:click={(e) => {
+			onclick={(e) => {
 				dispacther("refresh", e);
 			}}
 		>

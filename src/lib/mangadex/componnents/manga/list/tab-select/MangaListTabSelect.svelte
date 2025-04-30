@@ -11,7 +11,7 @@
 
 <div class="tab-select">
 	<ButtonAccent
-		on:click={() => {
+		onclick={() => {
 			style.set(MangaListStyle.Grid);
 		}}
 		variant={$style == MangaListStyle.Grid ? "4" : "1"}
@@ -21,7 +21,7 @@
 		</div>
 	</ButtonAccent>
 	<ButtonAccent
-		on:click={() => {
+		onclick={() => {
 			style.set(MangaListStyle.Rows);
 		}}
 		variant={$style == MangaListStyle.Rows ? "5" : "1"}
@@ -31,7 +31,7 @@
 		</div>
 	</ButtonAccent>
 	<ButtonAccent
-		on:click={() => {
+		onclick={() => {
 			style.set(MangaListStyle.Cover);
 		}}
 		variant={$style == MangaListStyle.Cover ? "5" : "1"}

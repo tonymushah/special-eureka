@@ -26,7 +26,7 @@
 
 {#if isDanger}
 	<DangerBadge
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("click", {
 				...detail,
 				id
@@ -38,7 +38,7 @@
 	</DangerBadge>
 {:else}
 	<StatusBadge
-		on:click={({ detail }) => {
+		onclick={({ detail }) => {
 			dispatch("click", {
 				...detail,
 				id
