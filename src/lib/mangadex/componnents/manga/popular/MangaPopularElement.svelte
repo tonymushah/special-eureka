@@ -2,15 +2,36 @@
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount } from "svelte";
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
+
 	type Author = {
 		id: string;
 		name: string;
 	};
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+		onauthorClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+		ontagClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		index?: number;
 		coverImage: string;
 		coverImageAlt: string;
@@ -29,21 +50,12 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		authors
+		authors,
+		onauthorClick,
+		onclick,
+		ontagClick
 	}: Props = $props();
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-		tagClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
+
 	let isCoverLoading = $state(true);
 	let isCoverError = $state(false);
 	onMount(() => {
@@ -70,7 +82,7 @@
 		onkeydown={(e) => {}}
 		tabindex="0"
 		onclick={(e) => {
-			dispatch("click", e);
+			onclick?.(e);
 		}}
 	>
 		{#if isCoverLoading}
@@ -87,9 +99,9 @@
 		{tags}
 		{contentRating}
 		{authors}
-		on:click
-		on:authorClick
-		on:tagClick
+		{onclick}
+		{onauthorClick}
+		{ontagClick}
 	/>
 </Layout>
 

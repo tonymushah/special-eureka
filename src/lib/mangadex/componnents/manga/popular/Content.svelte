@@ -5,13 +5,32 @@
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher } from "svelte";
 	import AuthorLink from "./authors/AuthorLink.svelte";
+
 	type Author = {
 		id: string;
 		name: string;
 	};
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+		onauthorClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+		ontagClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		title: string;
 		description: string;
 		tags: Tag[];
@@ -19,20 +38,16 @@
 		authors: Author[];
 	}
 
-	let { title, description, tags, contentRating = ContentRating.Safe, authors }: Props = $props();
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-		tagClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
+	let {
+		title,
+		description,
+		tags,
+		contentRating = ContentRating.Safe,
+		authors,
+		onauthorClick,
+		onclick,
+		ontagClick
+	}: Props = $props();
 </script>
 
 <div class="content">
@@ -43,7 +58,7 @@
 			onkeydown={(e) => {}}
 			tabindex="0"
 			onclick={(e) => {
-				dispatch("click", e);
+				onclick?.(e);
 			}}
 		>
 			<h2>{title}</h2>
@@ -62,7 +77,7 @@
 			{/if}
 			<TagComponnents
 				onclick={(e) => {
-					dispatch("tagClick", e);
+					ontagClick?.(e);
 				}}
 				{tags}
 			/>
@@ -77,8 +92,8 @@
 				<AuthorLink
 					{id}
 					{name}
-					on:click={({ detail }) => {
-						dispatch("authorClick", detail);
+					onclick={(detail) => {
+						onauthorClick?.(detail);
 					}}
 				/>
 			{/each}

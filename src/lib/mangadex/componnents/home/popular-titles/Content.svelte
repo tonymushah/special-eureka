@@ -11,8 +11,10 @@
 	import { onMount } from "svelte";
 	import type { SwiperOptions } from "swiper/types";
 	import { random } from "lodash";
+
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
 	let current_page_: number | undefined = $state(undefined);
+
 	onMount(() => {
 		// swiper parameters
 		const swiperParams: SwiperOptions = {
@@ -44,6 +46,7 @@
 			swiper_container.initialize();
 		}
 	});
+
 	type PopularTitles = {
 		id: string;
 		title: string;
@@ -80,18 +83,17 @@
 					{title}
 					{contentRating}
 					{authors}
-					on:click={() => {
+					onclick={() => {
 						openTitle(id);
 					}}
-					on:authorClick={({ detail }) => {
-						console.debug(detail);
+					onauthorClick={(detail) => {
 						goto(
 							route("/mangadex/author/[id]", {
 								id: detail.id
 							})
 						);
 					}}
-					on:tagClick={({ detail }) => {
+					ontagClick={(detail) => {
 						goto(
 							route("/mangadex/tag/[id]", {
 								id: detail.id
