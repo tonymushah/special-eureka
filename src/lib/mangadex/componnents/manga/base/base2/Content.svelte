@@ -74,8 +74,8 @@
 				<StatusBadge color="green">Suggestive</StatusBadge>
 			{/if}
 			<TagComponnents
-				on:click={(e) => {
-					ontagClick?.(e.detail);
+				onclick={(e) => {
+					ontagClick?.(e);
 				}}
 				{tags}
 			/>

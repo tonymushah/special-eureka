@@ -1,37 +1,30 @@
 <script lang="ts">
+	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
+	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
+	import { MangaDownloadState } from "@mangadex/download/manga";
+	import { ContentRating, type MangaStatus, type ReadingStatus } from "@mangadex/gql/graphql";
+	import type { Tag } from "@mangadex/utils/types/Tag";
+	import { createEventDispatcher } from "svelte";
 	import { readable, writable, type Readable } from "svelte/store";
+	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import {
 		setTopCoverAltContextStore,
 		setTopCoverContextStore,
-		setTopMangaReadingStatusContextStore,
-		setTopMangaIsFollowingContextStore,
-		setTopMangaTitleContextStore,
-		setTopMangaRatingContextStore,
 		setTopMangaDownloadContextStore,
-		setTopMangaIdContextStore
+		setTopMangaIdContextStore,
+		setTopMangaIsFollowingContextStore,
+		setTopMangaRatingContextStore,
+		setTopMangaReadingStatusContextStore,
+		setTopMangaTitleContextStore
 	} from "./context";
-	import type { Tag } from "@mangadex/utils/types/Tag";
-	import {
-		ContentRating,
-		type MangaStatus,
-		type ReadingState,
-		type ReadingStatus
-	} from "@mangadex/gql/graphql";
-	import TopInfoLayout from "./TopInfoLayout.svelte";
-	import TopInfoCover from "./TopInfoCover.svelte";
 	import type { Author } from "./index";
+	import MangaStatusComp from "./MangaStatus.svelte";
+	import type { TopMangaStatistics } from "./stats";
 	import TopInfoAuthors from "./TopInfoAuthors.svelte";
 	import TopInfoButtons from "./TopInfoButtons.svelte";
-	import { createEventDispatcher } from "svelte";
-	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
-	import MangaStatusComp from "./MangaStatus.svelte";
-	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
-	import type { TopMangaStatistics } from "./stats";
+	import TopInfoCover from "./TopInfoCover.svelte";
+	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopMangaStats from "./TopMangaStats.svelte";
-	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
-	import { MangaDownloadState } from "@mangadex/download/manga";
 
 	const dispatch = createEventDispatcher<{
 		readingStatus: ReadingStatusEventDetail;
@@ -159,8 +152,8 @@
 			<div class="tag-status">
 				<TagComponnentsFlex
 					{tags}
-					on:click={({ detail }) => {
-						dispatch("tag", detail);
+					onclick={(e) => {
+						dispatch("tag", e);
 					}}
 				>
 					{#snippet pre()}

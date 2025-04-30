@@ -61,8 +61,8 @@
 				<StatusBadge color="green">Suggestive</StatusBadge>
 			{/if}
 			<TagComponnents
-				on:click={(e) => {
-					dispatch("tagClick", e.detail);
+				onclick={(e) => {
+					dispatch("tagClick", e);
 				}}
 				{tags}
 			/>
