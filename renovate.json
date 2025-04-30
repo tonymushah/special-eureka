@@ -1,7 +1,7 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:base"],
+	"extends": ["config:recommended"],
 	"ignoreDeps": ["window-vibrancy"],
-    "baseBranches": ["main"],
-    "commitMessagePrefix": "chore(deps)"
+	"baseBranches": ["main"],
+	"commitMessagePrefix": "chore(deps)"
 }
