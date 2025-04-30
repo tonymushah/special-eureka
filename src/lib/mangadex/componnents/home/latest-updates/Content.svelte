@@ -73,7 +73,6 @@
 				<ChapterFeedElement1
 					{mangaId}
 					{chapterId}
-					{download_state}
 					{coverImage}
 					{upload_date}
 					{lang}
@@ -82,7 +81,7 @@
 					{mangaTitle}
 					{coverImageAlt}
 					{chapterTitle}
-					on:mangaClick={() => {
+					onmangaClick={() => {
 						openTitle(mangaId);
 					}}
 				/>
@@ -95,7 +94,6 @@
 				<ChapterFeedElement1
 					{mangaId}
 					{chapterId}
-					{download_state}
 					{coverImage}
 					{upload_date}
 					{lang}
@@ -104,7 +102,7 @@
 					{mangaTitle}
 					{coverImageAlt}
 					{chapterTitle}
-					on:mangaClick={() => {
+					onmangaClick={() => {
 						openTitle(mangaId);
 					}}
 				/>

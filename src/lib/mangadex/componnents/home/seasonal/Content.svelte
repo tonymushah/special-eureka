@@ -86,6 +86,7 @@
 					on:click={() => {
 						openTitle(id);
 					}}
+					mangaId={id}
 				/>
 			</swiper-slide>
 		{/each}

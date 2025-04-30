@@ -86,6 +86,7 @@
 					{title}
 					{coverImage}
 					{coverImageAlt}
+					mangaId={id}
 				/>
 			</swiper-slide>
 		{/each}

@@ -58,6 +58,7 @@
 					on:moreInfoClick={() => {
 						openTitle(id);
 					}}
+					mangaId={id}
 				/>
 			</swiper-slide>
 		{/each}
