@@ -1,25 +1,27 @@
 <script lang="ts">
-	import { createEventDispatcher, type Snippet } from "svelte";
+	import { type Snippet } from "svelte";
 	import MenuBase from "./MenuBase.svelte";
 	import MenuIcons from "./MenuIcons.svelte";
 	import MenuLabel from "./MenuLabel.svelte";
 	import MenuLink from "./MenuLink.svelte";
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLAnchorElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		label: string;
 		href?: string;
 		icon?: Snippet;
 		suffixIcon?: Snippet;
 	}
-	let { label, href, icon, suffixIcon }: Props = $props();
-
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
-		};
-	}>();
+	let { label, href, icon, suffixIcon, onclick }: Props = $props();
 </script>
 
-<MenuLink {href} on:click>
+<MenuLink {href} {onclick}>
 	<MenuBase>
 		<MenuIcons>
 			{@render icon?.()}

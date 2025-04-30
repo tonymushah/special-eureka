@@ -27,7 +27,7 @@
 
 <Menu
 	{label}
-	on:click={async () => {
+	onclick={async () => {
 		await loadUserMe();
 	}}
 >

@@ -1,25 +1,23 @@
 <script lang="ts">
-	import { createBubbler } from "svelte/legacy";
-
-	const bubble = createBubbler();
 	import { page } from "$app/stores";
-	import { createEventDispatcher } from "svelte";
-
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLAnchorElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		href?: string | undefined;
 		children?: import("svelte").Snippet;
 	}
 
-	let { href = undefined, children }: Props = $props();
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
-		};
-	}>();
+	let { href = undefined, children, onclick }: Props = $props();
+
 	let active = $derived($page.url.pathname == href);
 </script>
 
-<a class:active {href} onclick={bubble("click")}>
+<a class:active {href} {onclick}>
 	{@render children?.()}
 </a>
 
