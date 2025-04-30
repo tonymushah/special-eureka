@@ -7,20 +7,22 @@
 	import is_tag_danger from "@mangadex/utils/tags/is_tag_danger";
 	let to_show: Tag[] = $state([]);
 	let more = 0;
-	import { createEventDispatcher } from "svelte";
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		limit?: number;
 		tags: Tag[];
 	}
 
-	let { limit = 0, tags }: Props = $props();
+	let { limit = 0, tags, onclick }: Props = $props();
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
 	onMount(() => {
 		const temp: Tag[] = [];
 		const gore_i = tags.findIndex((t) => is_tag_gore(t.id));
@@ -50,6 +52,12 @@
 
 {#if to_show}
 	{#each to_show as { id, name }}
-		<TagComponnent {id} {name} on:click />
+		<TagComponnent
+			{id}
+			{name}
+			onclick={(e) => {
+				onclick?.({ ...e, id });
+			}}
+		/>
 	{/each}
 {/if}

@@ -1,29 +1,31 @@
 <script lang="ts">
+	import { type Snippet } from "svelte";
 	import TagComponnents from "./TagComponnents.svelte";
-	import { createEventDispatcher, type Snippet } from "svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
 	type Tag = {
 		id: string;
 		name: string;
 	};
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		tags: Tag[];
 		pre?: Snippet;
 		post?: Snippet;
 	}
 
-	let { tags, pre, post }: Props = $props();
+	let { tags, pre, post, onclick }: Props = $props();
 </script>
 
 <div>
 	{@render pre?.()}
-	<TagComponnents on:click {tags} />
+	<TagComponnents {onclick} {tags} />
 	{@render post?.()}
 </div>
 
