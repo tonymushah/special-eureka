@@ -58,7 +58,7 @@
 
 <MangaSearchFilterDialog
 	bind:dialog_bind
-	on:validate={() => {
+	onvalidate={() => {
 		dialog_bind?.close();
 	}}
 	{requireValidation}

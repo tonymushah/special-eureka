@@ -6,6 +6,7 @@
 	} from "../filter/contexts/authorArtist";
 	import MangaSearchForm from "../MangaSearchForm.svelte";
 	import { v4 } from "uuid";
+
 	initMangaSearchAuthorSearchFetcher(async (name) => {
 		//await delay(2000);
 		console.log(name);
@@ -30,10 +31,10 @@
 </script>
 
 <MangaSearchForm
-	on:change={({ detail }) => {
+	onchange={(detail) => {
 		console.debug("change", detail);
 	}}
-	on:submit={({ detail }) => {
+	onsubmit={(detail) => {
 		console.debug("submit", detail);
 	}}
 />
