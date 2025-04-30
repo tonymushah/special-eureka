@@ -4,16 +4,15 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { UserListParam } from "@mangadex/gql/graphql";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce, type DebouncedFunc } from "lodash";
-	import { onDestroy, onMount } from "svelte";
-	import { derived, get, writable, type Readable } from "svelte/store";
+	import { debounce } from "lodash";
+	import { onDestroy } from "svelte";
+	import { derived, get, type Readable } from "svelte/store";
 	import executeSearchQuery, { type UserListItemData } from "./search";
 
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
-	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 
 	const client = getContextClient();
