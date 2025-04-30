@@ -11,9 +11,12 @@
 	let target: HTMLDivElement | undefined = $state(undefined);
 
 	const ratingStore = getTopMangaRatingContextStore();
-	const dispatch = createEventDispatcher<{
-		select: number;
-	}>();
+	interface Events {
+		onselect?: (ev: number) => any;
+	}
+	interface Props extends Events {}
+
+	let { onselect }: Props = $props();
 
 	let rating = $derived($ratingStore);
 
@@ -40,8 +43,8 @@
 <MenuKeyed
 	--menu-height={"16em"}
 	--menu-overflow={"scroll"}
-	on:onSelect={({ detail }) => {
-		dispatch("select", detail.value);
+	onSelect={(detail) => {
+		onselect?.(detail.value);
 	}}
 	bind:target
 	bind:isOpen

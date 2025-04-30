@@ -8,25 +8,31 @@
 	import type { ReadingStatus } from "@mangadex/gql/graphql";
 	import StatusSelect from "./dialog/StatusSelect.svelte";
 	import type { ReadingStatusEventDetail } from ".";
-	import { createEventDispatcher } from "svelte";
 	import IsFollowingButton from "./dialog/IsFollowingButton.svelte";
 
 	const title = getTopMangaTitleContextStore();
-	const dispatch = createEventDispatcher<{
-		readingStatus: ReadingStatusEventDetail;
-	}>();
+	interface Events {
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
+	}
 
-	interface Props {
+	interface Props extends Events {
 		status?: ReadingStatus | undefined;
 		isFollowing?: boolean;
 		dialog: HTMLDialogElement | undefined;
+		closeDialogOnAdd?: boolean;
 	}
 
-	let { status = undefined, isFollowing = false, dialog = $bindable() }: Props = $props();
+	let {
+		status = undefined,
+		isFollowing = false,
+		dialog = $bindable(),
+		closeDialogOnAdd,
+		onreadingStatus
+	}: Props = $props();
 
-	let selectedStatus = $derived(writable<ReadingStatus | undefined>(status));
+	const selectedStatus = writable<ReadingStatus | undefined>(status);
 
-	let selectedIsFollowing = $derived(writable(isFollowing));
+	const selectedIsFollowing = writable(isFollowing);
 
 	function closeDialog() {
 		if (dialog) {
@@ -62,11 +68,13 @@
 				<PrimaryButton
 					isBase
 					onclick={() => {
-						dispatch("readingStatus", {
+						onreadingStatus?.({
 							readingStatus: $selectedStatus,
 							isFollowing: $selectedIsFollowing
 						});
-						closeDialog();
+						if (closeDialogOnAdd == true) {
+							closeDialog();
+						}
 					}}
 				>
 					<div class="buttons">Add</div>

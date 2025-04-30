@@ -1,7 +1,6 @@
 <script lang="ts">
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import getText from "@mangadex/utils/manga/readingStatus/getText";
-	import { createEventDispatcher } from "svelte";
 	import {
 		getTopMangaIsFollowingContextStore,
 		getTopMangaReadingStatusContextStore
@@ -12,9 +11,14 @@
 
 	const readingStatus = getTopMangaReadingStatusContextStore();
 	const isFollowingStore = getTopMangaIsFollowingContextStore();
-	const dispatch = createEventDispatcher<{
-		readingStatus: ReadingStatusEventDetail;
-	}>();
+	interface Events {
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
+	}
+	interface Props extends Events {
+		closeDialogOnAdd?: boolean;
+	}
+
+	let { onreadingStatus, closeDialogOnAdd }: Props = $props();
 
 	let dialog: HTMLDialogElement | undefined = $state(undefined);
 	function openDialog() {
@@ -41,14 +45,7 @@
 	</div>
 </PrimaryButton>
 
-<Dialog
-	status={$readingStatus}
-	{isFollowing}
-	bind:dialog
-	on:readingStatus={({ detail }) => {
-		dispatch("readingStatus", detail);
-	}}
-/>
+<Dialog status={$readingStatus} {isFollowing} bind:dialog {onreadingStatus} {closeDialogOnAdd} />
 
 <style lang="scss">
 	.primary-button {

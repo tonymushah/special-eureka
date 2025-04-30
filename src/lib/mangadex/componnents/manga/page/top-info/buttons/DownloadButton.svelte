@@ -10,18 +10,25 @@
 	import { MangaDownloadState } from "@mangadex/download/manga";
 
 	const stateStore = getTopMangaDownloadContextStore();
-	const dispatch = createEventDispatcher<{
-		download: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		delete: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		downloading: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-
+	interface Events {
+		ondownload?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+		ondelete?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+		ondownloading?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {}
+	let { ondelete, ondownload, ondownloading }: Props = $props();
 	let state = $derived($stateStore);
 	let isDownloaded = $derived(state == MangaDownloadState.Done);
 	let hasFailed = $derived(
@@ -35,16 +42,16 @@
 {#if isDownloaded}
 	<ButtonAccent
 		isBase
-		onclick={({ detail }) => {
-			dispatch("download", detail);
+		onclick={(detail) => {
+			ondownload?.(detail);
 		}}
 	>
 		<DownloadIcon />
 	</ButtonAccent>
 	<DangerButton
 		isBase
-		onclick={({ detail }) => {
-			dispatch("delete", detail);
+		onclick={(detail) => {
+			ondelete?.(detail);
 		}}
 	>
 		<TrashIcon />
@@ -52,16 +59,16 @@
 {:else if hasFailed}
 	<ButtonAccent
 		isBase
-		onclick={({ detail }) => {
-			dispatch("download", detail);
+		onclick={(detail) => {
+			ondownload?.(detail);
 		}}
 	>
 		<DownloadIcon />
 	</ButtonAccent>
 	<DangerButton
 		isBase
-		onclick={({ detail }) => {
-			dispatch("delete", detail);
+		onclick={(detail) => {
+			ondelete?.(detail);
 		}}
 	>
 		<TrashIcon />
@@ -69,8 +76,8 @@
 {:else if notDownloaded}
 	<ButtonAccent
 		isBase
-		onclick={({ detail }) => {
-			dispatch("download", detail);
+		onclick={(detail) => {
+			ondownload?.(detail);
 		}}
 	>
 		<DownloadIcon />
@@ -78,8 +85,8 @@
 {:else}
 	<ButtonAccent
 		isBase
-		onclick={({ detail }) => {
-			dispatch("downloading", detail);
+		onclick={(detail) => {
+			ondownloading?.(detail);
 		}}
 	>
 		<LoadingIcon />
