@@ -2,7 +2,6 @@
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher } from "svelte";
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
