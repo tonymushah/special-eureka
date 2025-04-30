@@ -1,3 +1,4 @@
+<!-- TODO use tanstack query for fetching -->
 <script lang="ts">
 	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
@@ -91,7 +92,8 @@
 							coverImageAlt: coverArtAlt,
 							title,
 							description,
-							status
+							status,
+							mangaId: id
 						})
 					)
 				});
