@@ -14,6 +14,8 @@
 	import { get } from "svelte/store";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
+	import { goto } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
 
 	const client = getContextClient();
 	const store = getRelatedTitlesStoreContext();
@@ -116,7 +118,17 @@
 		/>
 	{/if}
 	{#each categories as category}
-		<CategorizedTitles title={category.title} titles={category.titles} />
+		<CategorizedTitles
+			title={category.title}
+			titles={category.titles}
+			ontitles={({ id }) => {
+				goto(
+					route("/mangadex/title/[id]", {
+						id
+					})
+				);
+			}}
+		/>
 	{:else}
 		<div class="404-not-found">Nothing was found... I guess</div>
 	{/each}
