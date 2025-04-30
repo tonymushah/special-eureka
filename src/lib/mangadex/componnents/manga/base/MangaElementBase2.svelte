@@ -14,6 +14,7 @@
 		ontagClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLElement;
+				id: string;
 			}
 		) => any;
 	}
@@ -47,15 +48,5 @@
 
 <Layout {onclick} --max-height="11em" {mangaId}>
 	<Image {coverImage} {coverImageAlt} />
-	<Content
-		on:tagClick={(e) => {
-			ontagClick?.(e.detail);
-		}}
-		{title}
-		{status}
-		{description}
-		{tags}
-		{contentRating}
-		{language}
-	/>
+	<Content {ontagClick} {title} {status} {description} {tags} {contentRating} {language} />
 </Layout>

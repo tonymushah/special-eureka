@@ -17,6 +17,7 @@
 		ontagClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLElement;
+				id: string;
 			}
 		) => any;
 	}
@@ -55,15 +56,5 @@
 	{:else}
 		<Skeleton height="11em" width="7em" />
 	{/if}
-	<Content
-		on:tagClick={(e) => {
-			ontagClick?.(e.detail);
-		}}
-		{title}
-		{status}
-		{description}
-		{tags}
-		{contentRating}
-		{language}
-	/>
+	<Content {ontagClick} {title} {status} {description} {tags} {contentRating} {language} />
 </Layout>
