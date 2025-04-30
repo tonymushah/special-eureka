@@ -93,9 +93,6 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
-	$effect(() => {
-		console.log(`isFetching: ${isFetching}`);
-	});
 </script>
 
 <div class="result">
