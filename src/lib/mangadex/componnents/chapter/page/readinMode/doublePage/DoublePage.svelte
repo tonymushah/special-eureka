@@ -75,7 +75,7 @@
 </script>
 
 <svelte:window
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		const direction = $readingDirection;
 		const onNext = function () {
 			switch (direction) {

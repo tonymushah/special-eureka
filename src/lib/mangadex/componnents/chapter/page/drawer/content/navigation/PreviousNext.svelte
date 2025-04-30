@@ -14,7 +14,7 @@
 </script>
 
 {#if $readingMode == ReadingMode.DoublePage}
-	<DoublePagePreviousNext on:next on:previous>
+	<DoublePagePreviousNext onnext onprevious>
 		{@render children?.()}
 	</DoublePagePreviousNext>
 {:else if $readingMode == ReadingMode.LongStrip}

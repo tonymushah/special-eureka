@@ -36,10 +36,10 @@
 	{#if $mode == ReadingMode.DoublePage}
 		<div transition:fade class:fixed={$isShouldFixed}>
 			<DoublePage
-				on:next={() => {
+				onnext={() => {
 					fireChapterNextEvent();
 				}}
-				on:previous={() => {
+				onprevious={() => {
 					fireChapterPreviousEvent();
 				}}
 			/>
@@ -51,10 +51,10 @@
 	{:else if $mode == ReadingMode.SinglePage}
 		<div transition:fade class:fixed={$isShouldFixed}>
 			<SinglePage
-				on:next={() => {
+				onnext={() => {
 					fireChapterNextEvent();
 				}}
-				on:previous={() => {
+				onprevious={() => {
 					fireChapterPreviousEvent();
 				}}
 			/>
