@@ -64,7 +64,7 @@
 			key: ReadingStatus.ReReading
 		}
 	]}
-	on:onSelect={({ detail }) => {
+	onSelect={(detail) => {
 		const { value } = detail;
 		readingStatus.set(value);
 	}}

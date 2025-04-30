@@ -147,7 +147,7 @@
 				<div class="stats">
 					<TopMangaStats
 						bind:stats
-						on:commentClick={({ detail }) => {
+						oncommentClick={(detail) => {
 							oncomments?.(detail);
 						}}
 					/>
