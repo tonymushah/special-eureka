@@ -1,10 +1,9 @@
 <script lang="ts">
-	import Layout from "./Layout.svelte";
-	import Content from "./Content.svelte";
-	import { createEventDispatcher } from "svelte";
-	import CoverImage from "./CoverImage.svelte";
-	import type { Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import type { Readable } from "svelte/store";
+	import Content from "./Content.svelte";
+	import CoverImage from "./CoverImage.svelte";
+	import Layout from "./Layout.svelte";
 
 	interface Events {
 		onclick?: (

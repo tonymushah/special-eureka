@@ -1,12 +1,11 @@
 <script lang="ts">
+	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher } from "svelte";
+	import type { Readable } from "svelte/store";
 	import Content from "./Content.svelte";
 	import Image from "./Image.svelte";
 	import Layout from "./Layout.svelte";
-	import type { Readable } from "svelte/store";
-	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 
 	interface Events {
 		onclick?: (

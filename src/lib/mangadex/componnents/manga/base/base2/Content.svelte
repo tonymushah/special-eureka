@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
-	import { createEventDispatcher } from "svelte";
+	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
-	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DefaultSpan from "@mangadex/componnents/theme/texts/span/DefaultSpan.svelte";
-	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
-	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
 
 	interface Events {
 		ontagClick?: (
