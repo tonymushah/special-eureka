@@ -6,12 +6,15 @@
 	import Layout from "./Layout.svelte";
 	import { type Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLElement;
-		};
-	}>();
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
 		title: string;
@@ -28,12 +31,13 @@
 		status,
 		description,
 		withFull = false,
-		mangaId
+		mangaId,
+		onclick
 	}: Props = $props();
 	let src = $derived($coverImage);
 </script>
 
-<Layout on:click --layout-width={withFull ? "100%" : "19em"} {mangaId}>
+<Layout {onclick} --layout-width={withFull ? "100%" : "19em"} {mangaId}>
 	{#if src}
 		<Image coverImage={src} {coverImageAlt} />
 	{:else}

@@ -1,25 +1,24 @@
 <script lang="ts">
-	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	import { createEventDispatcher } from "svelte";
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		mangaId: string;
 		children?: import("svelte").Snippet;
 	}
 
-	let { children, mangaId }: Props = $props();
-
-	const dispatcher = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLElement;
-		};
-	}>();
+	let { children, mangaId, onclick }: Props = $props();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <article
 	onclick={(e) => {
-		dispatcher("click", e);
+		onclick?.(e);
 	}}
 	class="layout manga-element"
 	data-manga-id={mangaId}
