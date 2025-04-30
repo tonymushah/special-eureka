@@ -1,5 +1,7 @@
 name: "vite test builds and cargo checks"
 on: push
+permissions:
+  contents: read
 env:
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 jobs:

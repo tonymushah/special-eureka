@@ -1,5 +1,7 @@
 name: "on pull_request test"
 on: [pull_request]
+permissions:
+  contents: read
 
 env:
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
