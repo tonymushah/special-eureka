@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Direction } from "@mangadex/gql/graphql";
 	import { ceil, isArray, noop, random } from "lodash";
-	import { createEventDispatcher, onMount, type Snippet } from "svelte";
+	import { onMount, type Snippet } from "svelte";
 	import { derived } from "svelte/store";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
