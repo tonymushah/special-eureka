@@ -2,7 +2,6 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { route } from "$lib/ROUTES";
-	import { createEventDispatcher } from "svelte";
 	import { derived } from "svelte/store";
 
 	const path = derived(page, ($p) => {
@@ -13,18 +12,20 @@
 			return pathname;
 		}
 	});
-	const dispatch = createEventDispatcher<{
-		comment: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Events {
+		oncomment?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		id: string;
 		hasRelation?: boolean;
 		comments?: number | undefined;
 	}
 
-	let { id, hasRelation = false, comments = undefined }: Props = $props();
+	let { id, hasRelation = false, comments = undefined, oncomment }: Props = $props();
 </script>
 
 <nav>
@@ -38,7 +39,7 @@
 	</button>
 	<button
 		onclick={(e) => {
-			dispatch("comment", e);
+			oncomment?.(e);
 		}}
 	>
 		Comments {#if comments}
