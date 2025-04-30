@@ -4,3 +4,4 @@ package-lock.json
 yarn.lock
 /src-tauri
 /target
+src/lib/ROUTES.ts
