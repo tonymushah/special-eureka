@@ -15,18 +15,19 @@
 </script>
 
 <script lang="ts" generics="T">
-	import { createEventDispatcher } from "svelte";
 	import MangaLinksBase from "./info/links/MangaLinksBase.svelte";
 	import TitlePButton from "./info/title-buttons/TitlePButton.svelte";
 	import MangaAltTitles from "./info/alt-titles/MangaAltTitles.svelte";
-	const dispatch = createEventDispatcher<{
-		titlePButton: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-			key: T;
-		};
-	}>();
-	interface Props {
+	interface Events {
+		ontitlePButton?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+				key: T;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		idsKeysItem: IdKeyedItem<T>[];
 		links: MangaLinksItem[];
 		altTitles: AltTitleItem[];
@@ -41,7 +42,8 @@
 		altTitles = $bindable(),
 		altTitlesBoxTitle = "Alternative Titles",
 		top,
-		children
+		children,
+		ontitlePButton
 	}: Props = $props();
 </script>
 
@@ -50,14 +52,7 @@
 	{#if idsKeysItem.length > 0}
 		<div class="flex-row">
 			{#each idsKeysItem as { key, title, items } (key)}
-				<TitlePButton
-					{title}
-					{items}
-					{key}
-					on:click={({ detail }) => {
-						dispatch("titlePButton", detail);
-					}}
-				/>
+				<TitlePButton {title} {items} {key} onclick={ontitlePButton} />
 			{/each}
 		</div>
 	{/if}
