@@ -22,7 +22,7 @@
 	{#each list as item}
 		<MangaElementBase3
 			{...item}
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/title/[id]", {
 						id: item.id

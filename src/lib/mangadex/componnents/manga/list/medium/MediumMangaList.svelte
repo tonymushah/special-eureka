@@ -22,7 +22,7 @@
 		<MangaElementBase1
 			{...data}
 			withFull
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/title/[id]", {
 						id: data.id

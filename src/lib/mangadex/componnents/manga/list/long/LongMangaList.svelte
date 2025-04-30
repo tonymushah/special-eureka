@@ -22,15 +22,15 @@
 	{#each list as data}
 		<MangaElementBase2
 			{...data}
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/title/[id]", {
 						id: data.id
 					})
 				);
 			}}
-			on:tagClick={(e) => {
-				const id = e.detail.id;
+			ontagClick={(e) => {
+				const id = e.id;
 				goto(
 					route("/mangadex/tag/[id]", {
 						id
