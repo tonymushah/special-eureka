@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from "svelte/transition";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();

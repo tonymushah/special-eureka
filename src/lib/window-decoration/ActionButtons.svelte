@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from "svelte/legacy";
 
 	import { MaximizeIcon, MinimizeIcon, MinusIcon, XIcon } from "svelte-feather-icons";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-const appWindow = getCurrentWebviewWindow()
+	const appWindow = getCurrentWebviewWindow();
 	interface Props {
 		isMaximize: boolean;
 		isMaximized: () => Promise<void>;

@@ -3,7 +3,7 @@
 
 	interface Props {
 		type: StatusColor;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { type, children }: Props = $props();

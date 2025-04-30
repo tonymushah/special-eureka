@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createBubbler } from 'svelte/legacy';
+	import { createBubbler } from "svelte/legacy";
 
 	const bubble = createBubbler();
 	import { page } from "$app/stores";
@@ -7,7 +7,7 @@
 
 	interface Props {
 		href?: string | undefined;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { href = undefined, children }: Props = $props();
@@ -16,20 +16,20 @@
 			currentTarget: EventTarget & HTMLAnchorElement;
 		};
 	}>();
-    let active = $derived($page.url.pathname == href);
+	let active = $derived($page.url.pathname == href);
 </script>
 
-<a class:active {href} onclick={bubble('click')}>
-    {@render children?.()}
+<a class:active {href} onclick={bubble("click")}>
+	{@render children?.()}
 </a>
 
 <style lang="scss">
-    a {
-        text-decoration: none;
-        color: var(--text-color);
-        transition: color 300ms ease-in-out;
-    }
-    a.active {
-        color: var(--primary-l1);
-    }
+	a {
+		text-decoration: none;
+		color: var(--text-color);
+		transition: color 300ms ease-in-out;
+	}
+	a.active {
+		color: var(--primary-l1);
+	}
 </style>

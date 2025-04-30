@@ -1,12 +1,12 @@
 <script lang="ts">
-    import DefaultSpan from "../DefaultSpan.svelte";
-    interface Props {
-        innerText: string;
-    }
+	import DefaultSpan from "../DefaultSpan.svelte";
+	interface Props {
+		innerText: string;
+	}
 
-    let { innerText }: Props = $props();
+	let { innerText }: Props = $props();
 </script>
 
 <DefaultSpan>
-    {innerText}
+	{innerText}
 </DefaultSpan>

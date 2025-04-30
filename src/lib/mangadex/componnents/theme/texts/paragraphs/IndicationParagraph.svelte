@@ -1,7 +1,7 @@
 <script lang="ts">
 	interface Props {
 		type?: "blue";
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { type = "blue", children }: Props = $props();

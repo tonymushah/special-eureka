@@ -12,10 +12,10 @@ import { honey_trap1 } from "@mangadex/test-data/images/honey-trap";
 import { data3 } from "@mangadex/componnents/tag/testDatas";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/style/Long",
-    component: List,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/list/style/Long",
+	component: List,
+	tags: ["autodocs"]
 } satisfies Meta<List>;
 
 export default meta;
@@ -23,24 +23,24 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const elementData = {
-    coverImage: readable(honey_trap1),
-    coverImageAlt: "Honey Trap Shared House volume 1",
-    status: MangaStatus.Ongoing,
-    title: "Honey Trap Shared House",
-    description:
-        "Amet numquam veniam magni repellat. Et nulla tempora placeat in omnis in. Fuga ut quos optio inventore alias delectus magni laboriosam voluptatem. Consequatur temporibus alias impedit voluptatem ducimus laudantium dolorem quo ut.",
-    tags: data3.map((v) => ({
-        id: v.id,
-        name: v.attributes.name.en
-    })),
-    contentRating: ContentRating.Erotica
-}
+	coverImage: readable(honey_trap1),
+	coverImageAlt: "Honey Trap Shared House volume 1",
+	status: MangaStatus.Ongoing,
+	title: "Honey Trap Shared House",
+	description:
+		"Amet numquam veniam magni repellat. Et nulla tempora placeat in omnis in. Fuga ut quos optio inventore alias delectus magni laboriosam voluptatem. Consequatur temporibus alias impedit voluptatem ducimus laudantium dolorem quo ut.",
+	tags: data3.map((v) => ({
+		id: v.id,
+		name: v.attributes.name.en
+	})),
+	contentRating: ContentRating.Erotica
+};
 
 export const Default: Story = {
-    args: {
-        list: range(random(2, 10, false)).map(() => ({
-            ...elementData,
-            id: v4()
-        }))
-    }
+	args: {
+		list: range(random(2, 10, false)).map(() => ({
+			...elementData,
+			id: v4()
+		}))
+	}
 };

@@ -5,10 +5,10 @@ import MidtoneLine from "./FormInput.svelte";
 import MangadexThemeProviderForStory from "../../MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/theme/form/Input",
-    component: MidtoneLine,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/theme/form/Input",
+	component: MidtoneLine,
+	tags: ["autodocs"]
 } satisfies Meta<MidtoneLine>;
 
 export default meta;

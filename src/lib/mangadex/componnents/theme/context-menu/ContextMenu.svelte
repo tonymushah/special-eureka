@@ -14,7 +14,7 @@
 		items: (Item | undefined)[];
 		font_size?: string;
 		menu_padding?: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let {

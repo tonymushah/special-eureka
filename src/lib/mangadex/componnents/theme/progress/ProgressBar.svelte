@@ -23,7 +23,11 @@
 	class:rounded
 	style="--progress-height: {height}; background-color: {backgroundColor};"
 >
-	<div class="line" class:rounded style="background-color: {lineColor}; width: {progress}%;"></div>
+	<div
+		class="line"
+		class:rounded
+		style="background-color: {lineColor}; width: {progress}%;"
+	></div>
 </div>
 
 <style lang="scss">

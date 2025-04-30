@@ -1,12 +1,12 @@
 <script lang="ts">
-    import MidToneSpan from "../MidToneSpan.svelte";
-    interface Props {
-        innerText: string;
-    }
+	import MidToneSpan from "../MidToneSpan.svelte";
+	interface Props {
+		innerText: string;
+	}
 
-    let { innerText }: Props = $props();
+	let { innerText }: Props = $props();
 </script>
 
 <MidToneSpan>
-    {innerText}
+	{innerText}
 </MidToneSpan>

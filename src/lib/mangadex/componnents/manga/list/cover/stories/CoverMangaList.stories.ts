@@ -9,10 +9,10 @@ import { random, range } from "lodash";
 import { v4 } from "uuid";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/style/Cover",
-    component: List,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/list/style/Cover",
+	component: List,
+	tags: ["autodocs"]
 } satisfies Meta<List>;
 
 export default meta;
@@ -20,16 +20,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const item_data = {
-    coverImage: readable(fukkoi1),
-    coverImageAlt: "fuufu-ijou-koibito-miman",
-    title: "Fuufu Ijou, Koibito Miman"
-}
+	coverImage: readable(fukkoi1),
+	coverImageAlt: "fuufu-ijou-koibito-miman",
+	title: "Fuufu Ijou, Koibito Miman"
+};
 
 export const Default: Story = {
-    args: {
-        list: range(random(2, 10, false)).map(() => ({
-            ...item_data,
-            id: v4()
-        }))
-    }
+	args: {
+		list: range(random(2, 10, false)).map(() => ({
+			...item_data,
+			id: v4()
+		}))
+	}
 };

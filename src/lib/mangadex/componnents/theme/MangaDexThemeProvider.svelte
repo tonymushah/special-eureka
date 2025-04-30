@@ -5,7 +5,7 @@
 	interface Props {
 		theme: MangadexTheme;
 		fonts?: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { theme, fonts = "Poppins", children }: Props = $props();

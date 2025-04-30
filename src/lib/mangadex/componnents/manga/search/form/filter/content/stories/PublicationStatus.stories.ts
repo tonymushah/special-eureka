@@ -5,10 +5,10 @@ import PublicationStatusForm from "./PublicationStatusForStories.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/Status",
-    component: PublicationStatusForm,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content/Status",
+	component: PublicationStatusForm,
+	tags: ["autodocs"]
 } satisfies Meta<PublicationStatusForm>;
 
 export default meta;

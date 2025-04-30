@@ -5,7 +5,7 @@
 		alignItems?: string;
 		display?: string;
 		justifyContent?: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let {

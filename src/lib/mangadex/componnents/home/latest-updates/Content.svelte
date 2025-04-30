@@ -13,51 +13,53 @@
 	}
 
 	let { chapters }: Props = $props();
-	let data = $derived(chapters.home.recentlyUploaded.data.map((c) => ({
-		mangaId: c.relationships.manga.id,
-		chapterId: c.id,
-		download_state: getChapterDownloadState({
-			id: c.id,
-			client
-		}),
-		coverImage: get_cover_art({
-			client,
-			cover_id: c.relationships.manga.relationships.coverArt.id,
-			filename: c.relationships.manga.relationships.coverArt.attributes.fileName,
-			manga_id: c.relationships.manga.id,
-			mode: CoverImageQuality.V256
-		}),
-		upload_date: new Date(c.attributes.readableAt),
-		lang: c.attributes.translatedLanguage,
-		uploader: {
-			id: c.relationships.user.id,
-			name: c.relationships.user.attributes.username,
-			roles: c.relationships.user.attributes.roles
-		},
-		groups: c.relationships.scanlationGroups.map((v) => ({
-			id: v.id,
-			name: v.attributes.name
-		})),
-		mangaTitle:
-			get_value_from_title_and_random_if_undefined(
-				c.relationships.manga.attributes.title,
-				"en"
-			) ?? "",
-		coverImageAlt: `${c.id}/${c.attributes.volume}`,
-		chapterTitle: `${
-			c.attributes.volume != null && c.attributes.volume != undefined
-				? ` Vol. ${c.attributes.volume}`
-				: ""
-		}${
-			c.attributes.chapter != null && c.attributes.chapter != undefined
-				? ` Ch. ${c.attributes.chapter}`
-				: ""
-		}${
-			c.attributes.title != null && c.attributes.title != undefined
-				? ` ${c.attributes.title}`
-				: ""
-		}`
-	})));
+	let data = $derived(
+		chapters.home.recentlyUploaded.data.map((c) => ({
+			mangaId: c.relationships.manga.id,
+			chapterId: c.id,
+			download_state: getChapterDownloadState({
+				id: c.id,
+				client
+			}),
+			coverImage: get_cover_art({
+				client,
+				cover_id: c.relationships.manga.relationships.coverArt.id,
+				filename: c.relationships.manga.relationships.coverArt.attributes.fileName,
+				manga_id: c.relationships.manga.id,
+				mode: CoverImageQuality.V256
+			}),
+			upload_date: new Date(c.attributes.readableAt),
+			lang: c.attributes.translatedLanguage,
+			uploader: {
+				id: c.relationships.user.id,
+				name: c.relationships.user.attributes.username,
+				roles: c.relationships.user.attributes.roles
+			},
+			groups: c.relationships.scanlationGroups.map((v) => ({
+				id: v.id,
+				name: v.attributes.name
+			})),
+			mangaTitle:
+				get_value_from_title_and_random_if_undefined(
+					c.relationships.manga.attributes.title,
+					"en"
+				) ?? "",
+			coverImageAlt: `${c.id}/${c.attributes.volume}`,
+			chapterTitle: `${
+				c.attributes.volume != null && c.attributes.volume != undefined
+					? ` Vol. ${c.attributes.volume}`
+					: ""
+			}${
+				c.attributes.chapter != null && c.attributes.chapter != undefined
+					? ` Ch. ${c.attributes.chapter}`
+					: ""
+			}${
+				c.attributes.title != null && c.attributes.title != undefined
+					? ` ${c.attributes.title}`
+					: ""
+			}`
+		}))
+	);
 	let halfwayThrough = $derived(Math.floor(data.length / 2));
 
 	let data1 = $derived(data.slice(0, halfwayThrough));

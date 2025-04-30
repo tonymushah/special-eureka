@@ -5,10 +5,10 @@ import MangaDexFormDialogContent from "./MangaSearchFilterDialogContentForStoire
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content",
-    component: MangaDexFormDialogContent,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content",
+	component: MangaDexFormDialogContent,
+	tags: ["autodocs"]
 } satisfies Meta<MangaDexFormDialogContent>;
 
 export default meta;

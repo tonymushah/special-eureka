@@ -1,7 +1,14 @@
 import type { Client } from "@urql/svelte";
 import { query } from "./query";
-import AbstractSearchResult, { type PaginationData } from "@mangadex/utils/searchResult/AbstractSearchResult";
-import { CoverImageQuality, type ChapterSortOrder, type Language, type MangaListParams } from "@mangadex/gql/graphql";
+import AbstractSearchResult, {
+	type PaginationData
+} from "@mangadex/utils/searchResult/AbstractSearchResult";
+import {
+	CoverImageQuality,
+	type ChapterSortOrder,
+	type Language,
+	type MangaListParams
+} from "@mangadex/gql/graphql";
 import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/list";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
@@ -12,73 +19,87 @@ import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 
 export type ScanlationGroupUploadsFeedChapterParams = {
-	group: string,
-	languages?: Language[],
-	offset?: number,
-	limit?: number,
-	order?: ChapterSortOrder
-}
+	group: string;
+	languages?: Language[];
+	offset?: number;
+	limit?: number;
+	order?: ChapterSortOrder;
+};
 
 type ScanlationGroupUploadsFeedChapterConstructorParams = {
-	data: ChapterFeedListItem[]
-	client: Client
+	data: ChapterFeedListItem[];
+	client: Client;
 	params: ScanlationGroupUploadsFeedChapterParams;
 	mangaListParams?: MangaListParams;
-	offset: number
-	limit: number
-	total: number
-}
+	offset: number;
+	limit: number;
+	total: number;
+};
 
 export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<ChapterFeedListItem> {
-	client: Client
-	params: ScanlationGroupUploadsFeedChapterParams
+	client: Client;
+	params: ScanlationGroupUploadsFeedChapterParams;
 	mangaListParams?: MangaListParams;
-	offset: number
-	limit: number
-	total: number
+	offset: number;
+	limit: number;
+	total: number;
 	constructor(param: ScanlationGroupUploadsFeedChapterConstructorParams) {
 		super(param.data);
 		this.client = param.client;
 		this.params = param.params;
 		this.limit = param.limit;
 		this.offset = param.offset;
-		this.total = param.total
+		this.total = param.total;
 		this.mangaListParams = param.mangaListParams;
 	}
 	hasNext(): boolean {
 		return this.offset < this.total && this.offset >= 0;
 	}
 	next(): Promise<AbstractSearchResult<ChapterFeedListItem>> {
-		return executeSearchQuery(this.client, {
-			...this.params,
-			offset: this.offset + this.limit,
-			limit: this.limit
-		}, this.mangaListParams);
+		return executeSearchQuery(
+			this.client,
+			{
+				...this.params,
+				offset: this.offset + this.limit,
+				limit: this.limit
+			},
+			this.mangaListParams
+		);
 	}
 	public get paginationData(): PaginationData {
 		return {
 			total: this.total,
 			limit: this.limit,
 			offset: this.offset
-		}
+		};
 	}
 }
 
-export default async function executeSearchQuery(client: Client, params: ScanlationGroupUploadsFeedChapterParams, mangaListParams?: MangaListParams): Promise<AbstractSearchResult<ChapterFeedListItem>> {
-	const results = await client.query(query, {
-		group: params.group,
-		translatedLanguages: params.languages,
-		offset: params.offset,
-		limit: params.limit,
-		order: params.order,
-		mangaListParams
-	}).toPromise();
+export default async function executeSearchQuery(
+	client: Client,
+	params: ScanlationGroupUploadsFeedChapterParams,
+	mangaListParams?: MangaListParams
+): Promise<AbstractSearchResult<ChapterFeedListItem>> {
+	const results = await client
+		.query(query, {
+			group: params.group,
+			translatedLanguages: params.languages,
+			offset: params.offset,
+			limit: params.limit,
+			order: params.order,
+			mangaListParams
+		})
+		.toPromise();
 	if (results.error) {
 		throw results.error;
 	}
 	if (results.data) {
 		const data = results.data.chapter.listWithGroupByManga;
-		const comments = await get_chapters_stats(client, data.data.flatMap((d) => d.chapters.map<string>((c) => c.id)), true);
+		const comments = await get_chapters_stats(
+			client,
+			data.data.flatMap((d) => d.chapters.map<string>((c) => c.id)),
+			true
+		);
 		return new ScanlationGroupUploadsFeedResult({
 			client,
 			params,
@@ -96,7 +117,11 @@ export default async function executeSearchQuery(client: Client, params: Scanlat
 				});
 				return {
 					mangaId: e.manga.id,
-					title: get_value_from_title_and_random_if_undefined(e.manga.attributes.title, "en") ?? e.manga.id,
+					title:
+						get_value_from_title_and_random_if_undefined(
+							e.manga.attributes.title,
+							"en"
+						) ?? e.manga.id,
 					coverImage: cover_art,
 					coverImageAlt: e.manga.relationships.coverArt.id,
 					mangaLang: e.manga.attributes.originalLanguage,
@@ -106,7 +131,7 @@ export default async function executeSearchQuery(client: Client, params: Scanlat
 							const volume = chap.attributes.volume;
 							const chapter = chap.attributes.chapter;
 
-							const _volume = volume ? `Vol.${volume} ` : ""
+							const _volume = volume ? `Vol.${volume} ` : "";
 							const _chapter = chapter ? `Chap.${chapter}` : "";
 							const __title = _title ? ` - ${_title}` : "";
 							return `${_volume}${_chapter}${__title}`;
@@ -123,14 +148,16 @@ export default async function executeSearchQuery(client: Client, params: Scanlat
 							} else {
 								return {
 									comments: 0
-								}
+								};
 							}
-						})()
+						})();
 						return {
 							chapterId: chap.id,
 							title,
 							lang: chap.attributes.translatedLanguage,
-							upload_date: new Date(chap.attributes.readableAt ?? chap.attributes.createdAt),
+							upload_date: new Date(
+								chap.attributes.readableAt ?? chap.attributes.createdAt
+							),
 							uploader: {
 								id: user.id,
 								name: user.attributes.username,
@@ -146,11 +173,11 @@ export default async function executeSearchQuery(client: Client, params: Scanlat
 								id: chap.id,
 								client
 							})
-						}
+						};
 					})
-				}
+				};
 			})
-		})
+		});
 	}
 	throw new Error("No results??");
 }

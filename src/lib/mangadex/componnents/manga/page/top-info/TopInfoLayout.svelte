@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { getTopCoverContextStore } from "./context";
 	interface Props {
-		cover?: import('svelte').Snippet;
-		children?: import('svelte').Snippet;
+		cover?: import("svelte").Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { cover, children }: Props = $props();

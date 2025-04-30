@@ -5,10 +5,10 @@ import PublicationDemographicForm from "./PublicationDemographicForStories.svelt
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/Demographic",
-    component: PublicationDemographicForm,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content/Demographic",
+	component: PublicationDemographicForm,
+	tags: ["autodocs"]
 } satisfies Meta<PublicationDemographicForm>;
 
 export default meta;

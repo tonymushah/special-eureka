@@ -5,6 +5,6 @@ import { pluginName } from "@mangadex/const";
 const exchanges = [...getExchanges(pluginName), cacheExchange];
 
 export const client = new Client({
-    "url": "graphql",
-    exchanges
+	url: "graphql",
+	exchanges
 });

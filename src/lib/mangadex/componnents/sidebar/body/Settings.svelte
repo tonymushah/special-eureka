@@ -6,6 +6,6 @@
 
 <Menu label="Settings" href={route("/mangadex/settings")}>
 	{#snippet icon()}
-		<SettingsIcon  size="24" />
+		<SettingsIcon size="24" />
 	{/snippet}
 </Menu>

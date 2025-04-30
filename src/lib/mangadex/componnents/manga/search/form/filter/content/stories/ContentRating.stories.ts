@@ -5,10 +5,10 @@ import ContentRatingForm from "./ContentRatingForStories.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/Rating",
-    component: ContentRatingForm,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content/Rating",
+	component: ContentRatingForm,
+	tags: ["autodocs"]
 } satisfies Meta<ContentRatingForm>;
 
 export default meta;
