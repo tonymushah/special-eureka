@@ -3,8 +3,7 @@ on:
     workflow_dispatch:
 permissions:
     contents: write
-env:
-    SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
 jobs:
     tauri-build:
         strategy:
