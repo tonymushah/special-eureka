@@ -25,7 +25,7 @@
 		<p>
 			You have selected {mangasLen} title{#if mangasLen > 1}s{/if} and {chaptersLen} chapter{#if chaptersLen > 1}s{/if}.
 		</p>
-		<ButtonAccent on:click={closeDialog}>
+		<ButtonAccent onclick={closeDialog}>
 			<CloseIcon />
 		</ButtonAccent>
 	</div>

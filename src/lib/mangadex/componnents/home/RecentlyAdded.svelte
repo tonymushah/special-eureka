@@ -24,7 +24,7 @@
 </script>
 
 <TopTitle
-	on:refresh={async () => {
+	onrefresh={async () => {
 		if (!$isFetching) {
 			await recently_added_query_store.execute();
 		}

@@ -51,14 +51,14 @@
 
 <ButtonAccentOnlyLabel
 	label="Open dialog"
-	on:click={() => {
+	onclick={() => {
 		dialog_bind?.showModal();
 	}}
 />
 
 <MangaSearchFilterDialog
 	bind:dialog_bind
-	on:validate={() => {
+	onvalidate={() => {
 		dialog_bind?.close();
 	}}
 	{requireValidation}

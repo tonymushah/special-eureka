@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher } from "svelte";
 	import { derived as der, type Readable } from "svelte/store";
 	import MangaPopularElement from "./MangaPopularElement.svelte";
 	import MangaPopularElementLoader from "./MangaPopularElementLoader.svelte";
@@ -10,7 +9,27 @@
 		id: string;
 		name: string;
 	};
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+		onauthorClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+		ontagClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		index?: number;
 		coverImage: Readable<string | undefined>;
 		coverImageAlt: string;
@@ -29,30 +48,21 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		authors
+		authors,
+		onauthorClick,
+		onclick,
+		ontagClick
 	}: Props = $props();
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-		tagClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
+
 	const image = der(coverImage, (v) => v);
 	let image_ = $derived($image ?? "");
 </script>
 
 {#if $image}
 	<MangaPopularElement
-		on:authorClick
-		on:click
-		on:tagClick
+		{onauthorClick}
+		{onclick}
+		{ontagClick}
 		coverImage={image_}
 		{index}
 		{coverImageAlt}
@@ -64,9 +74,9 @@
 	/>
 {:else}
 	<MangaPopularElementLoader
-		on:authorClick
-		on:click
-		on:tagClick
+		{onauthorClick}
+		{onclick}
+		{ontagClick}
 		{index}
 		{tags}
 		{title}

@@ -12,25 +12,52 @@ import { derived, readable, type Readable, type StartStopNotifier } from "svelte
 import { chapterTasksSubQuery, coverTasksSubQuery, mangaTasksSubQuery } from "./query";
 import { debounce, delay } from "lodash";
 
-const mangaTasksSubStart = debounce<StartStopNotifier<OperationResult<ListenToMangaTasksIDsSubscription, ListenToMangaTasksIDsSubscriptionVariables>
-	| undefined>>((set) => {
-		const sub = client.subscription(mangaTasksSubQuery, {}, {
-			optimistic: false
-		}).subscribe(set);
-		return () => {
-			sub.unsubscribe();
-		};
-	})
+const mangaTasksSubStart = debounce<
+	StartStopNotifier<
+		| OperationResult<
+				ListenToMangaTasksIDsSubscription,
+				ListenToMangaTasksIDsSubscriptionVariables
+		  >
+		| undefined
+	>
+>((set) => {
+	const sub = client
+		.subscription(
+			mangaTasksSubQuery,
+			{},
+			{
+				optimistic: false
+			}
+		)
+		.subscribe(set);
+	return () => {
+		sub.unsubscribe();
+	};
+});
 
 export const mangaTasksSub = readable<
 	| OperationResult<ListenToMangaTasksIDsSubscription, ListenToMangaTasksIDsSubscriptionVariables>
 	| undefined
 >(undefined, mangaTasksSubStart);
 
-const coverTasksSubStart = debounce<StartStopNotifier<OperationResult<ListenToCoverTasksIDsSubscription, ListenToCoverTasksIDsSubscriptionVariables> | undefined>>((set) => {
-	const sub = client.subscription(coverTasksSubQuery, {}, {
-		optimistic: false
-	}).subscribe(set);
+const coverTasksSubStart = debounce<
+	StartStopNotifier<
+		| OperationResult<
+				ListenToCoverTasksIDsSubscription,
+				ListenToCoverTasksIDsSubscriptionVariables
+		  >
+		| undefined
+	>
+>((set) => {
+	const sub = client
+		.subscription(
+			coverTasksSubQuery,
+			{},
+			{
+				optimistic: false
+			}
+		)
+		.subscribe(set);
 	return () => {
 		sub.unsubscribe();
 	};
@@ -40,27 +67,44 @@ export const coverTasksSub = readable<
 	| undefined
 >(undefined, coverTasksSubStart);
 
-const chapterTasksSubStart = debounce<StartStopNotifier<OperationResult<
-	ListenToChapterTasksIDsSubscription,
-	ListenToChapterTasksIDsSubscriptionVariables
-> | undefined>>((_set) => {
-	const set = (d: OperationResult<
-		ListenToChapterTasksIDsSubscription,
-		ListenToChapterTasksIDsSubscriptionVariables
-	> | undefined) => { delay(_set, 400, d) }
-	const sub = client.subscription(chapterTasksSubQuery, {}, {
-		optimistic: false
-	}).subscribe(set);
+const chapterTasksSubStart = debounce<
+	StartStopNotifier<
+		| OperationResult<
+				ListenToChapterTasksIDsSubscription,
+				ListenToChapterTasksIDsSubscriptionVariables
+		  >
+		| undefined
+	>
+>((_set) => {
+	const set = (
+		d:
+			| OperationResult<
+					ListenToChapterTasksIDsSubscription,
+					ListenToChapterTasksIDsSubscriptionVariables
+			  >
+			| undefined
+	) => {
+		delay(_set, 400, d);
+	};
+	const sub = client
+		.subscription(
+			chapterTasksSubQuery,
+			{},
+			{
+				optimistic: false
+			}
+		)
+		.subscribe(set);
 	return () => {
 		sub.unsubscribe();
 	};
-})
+});
 
 export const chapterTasksSub = readable<
 	| OperationResult<
-		ListenToChapterTasksIDsSubscription,
-		ListenToChapterTasksIDsSubscriptionVariables
-	>
+			ListenToChapterTasksIDsSubscription,
+			ListenToChapterTasksIDsSubscriptionVariables
+	  >
 	| undefined
 >(undefined, chapterTasksSubStart);
 

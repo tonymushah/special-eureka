@@ -7,7 +7,7 @@
 
 <Menu label="GraphQL" href={route("/mangadex/graphiql")}>
 	{#snippet icon()}
-		<img  alt="grahql-logo" src={logo} />
+		<img alt="grahql-logo" src={logo} />
 	{/snippet}
 </Menu>
 

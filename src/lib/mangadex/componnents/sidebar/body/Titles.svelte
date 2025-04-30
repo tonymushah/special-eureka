@@ -13,7 +13,7 @@
 	<SubMenuItem label="Offline Library" />
 	<SubMenuItem label="Latest Updates" />
 	<SubMenuItem
-		on:click={() => {
+		onclick={() => {
 			goto(route("/mangadex/title/random"));
 		}}
 		label="Random"

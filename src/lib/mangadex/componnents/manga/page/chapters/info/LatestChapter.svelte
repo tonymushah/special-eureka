@@ -5,9 +5,10 @@
 	}
 
 	let { volume = undefined, chapter = undefined }: Props = $props();
-	let shouldShow =
-		$derived((typeof volume == "string" && volume.length > 0) ||
-		(typeof chapter == "string" && chapter.length > 0));
+	let shouldShow = $derived(
+		(typeof volume == "string" && volume.length > 0) ||
+			(typeof chapter == "string" && chapter.length > 0)
+	);
 </script>
 
 {#if shouldShow}

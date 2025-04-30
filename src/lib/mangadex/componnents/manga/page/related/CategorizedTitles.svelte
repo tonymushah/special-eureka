@@ -1,21 +1,23 @@
 <script lang="ts">
-	import { createEventDispatcher, type ComponentProps } from "svelte";
+	import { type ComponentProps } from "svelte";
 	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
 
-	interface Props {
+	interface Events {
+		ontitles?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		title: string;
 		titles: (ComponentProps<typeof MangaElementBase1> & {
 			id: string;
 		})[];
 	}
 
-	let { title, titles }: Props = $props();
-	const dispatch = createEventDispatcher<{
-		titles: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
+	let { title, titles, ontitles }: Props = $props();
 </script>
 
 <div class="category">
@@ -24,8 +26,8 @@
 		{#each titles as { id, ...props } (id)}
 			<MangaElementBase1
 				{...props}
-				on:click={({ detail }) => {
-					dispatch("titles", {
+				onclick={(detail) => {
+					ontitles?.({
 						...detail,
 						id
 					});

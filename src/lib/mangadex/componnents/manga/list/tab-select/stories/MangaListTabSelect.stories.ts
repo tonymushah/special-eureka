@@ -5,16 +5,14 @@ import ListSelect from "./MangaListTabSelectForStories.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/misc/Select",
-    component: ListSelect,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/list/misc/Select",
+	component: ListSelect,
+	tags: ["autodocs"]
 } satisfies Meta<ListSelect>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-
-export const Default: Story = {
-};
+export const Default: Story = {};

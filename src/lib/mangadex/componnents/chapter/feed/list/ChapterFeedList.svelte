@@ -10,14 +10,71 @@
 	import ChapterFeedElement2 from "../element2/ChapterFeedElement2.svelte";
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
-
-	interface Props {
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	interface Events {
+		ondownload?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		ondownloadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onread?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onreadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onremoveClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onremoveKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		oncomments?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		oncommentsKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		list?: ChapterFeedListItem[];
 		style: Writable<ChapterFeedStyle>;
 		children?: import("svelte").Snippet;
 	}
 
-	let { list = [], style, children }: Props = $props();
+	let { list = [], style, children, ...eventsProps }: Props = $props();
 	let coverfull = $derived($style == ChapterFeedStyle.CoverFull);
 	let coverless = $derived($style == ChapterFeedStyle.CoverLess);
 	let isEmpty = $derived(list.length == 0);
@@ -48,13 +105,7 @@
 					coverImageAlt={item.coverImageAlt}
 					mangaLang={item.mangaLang}
 					mangaId={item.mangaId}
-					on:download
-					on:downloadKeyPress
-					on:mangaClick
-					on:mangaClick
-					on:mangaKeyPress
-					on:read
-					on:readKeyPress
+					{...eventsProps}
 				/>
 			{:else if coverless}
 				<ChapterFeedElement3
@@ -62,13 +113,7 @@
 					chapters={item.chapters}
 					mangaLang={item.mangaLang}
 					mangaId={item.mangaId}
-					on:download
-					on:downloadKeyPress
-					on:mangaClick
-					on:mangaClick
-					on:mangaKeyPress
-					on:read
-					on:readKeyPress
+					{...eventsProps}
 				/>
 			{/if}
 		{/each}

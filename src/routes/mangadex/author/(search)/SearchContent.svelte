@@ -123,7 +123,7 @@
 	{#each $authors as author}
 		<UsersSimpleBase
 			name={author.name}
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/author/[id]", {
 						id: author.id

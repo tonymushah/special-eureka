@@ -15,4 +15,7 @@ export const offline_server_state_sub = subscriptionStore({
 	variables: {}
 });
 
-export const isMounted = derived(offline_server_state_sub, (sub) => sub.data?.watchIsAppMounted ?? false);
+export const isMounted = derived(
+	offline_server_state_sub,
+	(sub) => sub.data?.watchIsAppMounted ?? false
+);

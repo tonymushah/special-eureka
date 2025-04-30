@@ -8,7 +8,7 @@
 
 <SubMenu label="Search">
 	{#snippet icon()}
-		<SearchIcon  size="24" />
+		<SearchIcon size="24" />
 	{/snippet}
 	<SubMenuItem label="Titles" href={route("/mangadex/titles")} />
 	<SubMenuItem label="Authors" href={route("/mangadex/author")} />

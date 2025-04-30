@@ -5,10 +5,10 @@ import AuthorArtistsForm from "./AuthorArtistsForStories.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/AuthorArtists",
-    component: AuthorArtistsForm,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content/AuthorArtists",
+	component: AuthorArtistsForm,
+	tags: ["autodocs"]
 } satisfies Meta<AuthorArtistsForm>;
 
 export default meta;

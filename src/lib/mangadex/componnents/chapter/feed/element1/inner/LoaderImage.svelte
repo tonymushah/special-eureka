@@ -1,38 +1,42 @@
 <script lang="ts">
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
-	import { createEventDispatcher } from "svelte";
-	interface Props {
-		mangaId: string;
-	}
 
-	let { mangaId }: Props = $props();
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	type KeyboardEnvDiv = KeyboardEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
-	const dispatch = createEventDispatcher<{
-		mangaClick: MouseEnvDiv & {
-			id: string;
-		};
-		mangaKeyClick: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+	interface Events {
+		onmangaClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaKeyClick?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
+		mangaId: string;
+	}
+
+	let { mangaId, onmangaClick, onmangaKeyClick }: Props = $props();
 </script>
 
 <div
 	tabindex="-1"
 	role="button"
 	onkeypress={(e) => {
-		dispatch("mangaKeyClick", {
+		onmangaKeyClick?.({
 			...e,
 			id: mangaId
 		});
 	}}
 	onclick={(e) => {
-		dispatch("mangaClick", {
+		onmangaClick?.({
 			...e,
 			id: mangaId
 		});

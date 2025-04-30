@@ -12,14 +12,15 @@
 	}
 
 	let { role }: Props = $props();
-	let staff =
-		$derived(role == UserRole.RoleStaff ||
-		role == UserRole.RoleDeveloper ||
-		role == UserRole.RoleDesigner ||
-		role == UserRole.RolePublicRelations ||
-		role == UserRole.RoleGlobalModerator ||
-		role == UserRole.RoleForumModerator ||
-		role == UserRole.RoleAdmin);
+	let staff = $derived(
+		role == UserRole.RoleStaff ||
+			role == UserRole.RoleDeveloper ||
+			role == UserRole.RoleDesigner ||
+			role == UserRole.RolePublicRelations ||
+			role == UserRole.RoleGlobalModerator ||
+			role == UserRole.RoleForumModerator ||
+			role == UserRole.RoleAdmin
+	);
 	let contributor = $derived(role == UserRole.RoleContributor);
 	let powerUploader = $derived(role == UserRole.RolePowerUploader);
 	let groupLeader = $derived(role == UserRole.RoleGroupLeader);

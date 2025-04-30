@@ -67,7 +67,7 @@
 			<p>{error.message}</p>
 			<div class="btts">
 				<ButtonAccent
-					on:click={() => {
+					onclick={() => {
 						isErrorOpen = false;
 					}}
 				>
@@ -135,7 +135,7 @@
 			</PrimaryButton>
 			<DangerButton
 				type="button"
-				on:click={() => {
+				onclick={() => {
 					$clientInfo = undefined;
 				}}
 				disabled={isFetching}

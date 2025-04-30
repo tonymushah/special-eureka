@@ -1,11 +1,23 @@
 import { graphql } from "@mangadex/gql";
 import { debounce } from "lodash";
 import { mangadexQueryClient } from "..";
-import { derived, get, readable, readonly, writable, type Readable, type Writable } from "svelte/store";
+import {
+	derived,
+	get,
+	readable,
+	readonly,
+	writable,
+	type Readable,
+	type Writable
+} from "svelte/store";
 import { createMutation, createQuery, type QueryClient } from "@tanstack/svelte-query";
 import { client as gqlClient } from "@mangadex/gql/urql";
 import type { OperationResult } from "@urql/svelte";
-import { CoverDownloadingState, type CoverDownloadSubSubscription, type CoverDownloadSubSubscriptionVariables } from "@mangadex/gql/graphql";
+import {
+	CoverDownloadingState,
+	type CoverDownloadSubSubscription,
+	type CoverDownloadSubSubscriptionVariables
+} from "@mangadex/gql/graphql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 const downloadMutation = graphql(`
@@ -25,7 +37,7 @@ const cancelDonwloadMuation = graphql(`
 			cancelDownload(id: $id)
 		}
 	}
-`)
+`);
 
 const coverDownloadStateQuery = graphql(`
 	query coverDownloadState($id: UUID!) {
@@ -60,68 +72,84 @@ const coverRemoveMutation = graphql(`
 `);
 
 export function offlinePresenceQueryKey(id: string) {
-	return ["cover", id, "offline-presence"]
+	return ["cover", id, "offline-presence"];
 }
 
 export const invalidateCoverOfflinePresence = debounce(async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
 	await mangadexQueryClient.invalidateQueries({
 		queryKey
-	})
+	});
 });
 
-const downloadStateQuery = ((id: string, _client?: QueryClient) => {
+const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
 	const queryKey = offlinePresenceQueryKey(id);
-	return createQuery({
-		queryKey,
-		async queryFn() {
-			return await gqlClient.query(CoverDownload.coverDownloadStateQuery(), {
-				id
-			}).toPromise()
-		}
-	}, client);
-})
+	return createQuery(
+		{
+			queryKey,
+			async queryFn() {
+				return await gqlClient
+					.query(CoverDownload.coverDownloadStateQuery(), {
+						id
+					})
+					.toPromise();
+			}
+		},
+		client
+	);
+};
 
 const download = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res = createMutation({
-		mutationKey: ["cover", "download", id],
-		async mutationFn() {
-			const res = await (gqlClient.mutation(CoverDownload.downloadMutation(), {
-				id,
-
-			}).toPromise())
-			return res
+	const res = createMutation(
+		{
+			mutationKey: ["cover", "download", id],
+			async mutationFn() {
+				const res = await gqlClient
+					.mutation(CoverDownload.downloadMutation(), {
+						id
+					})
+					.toPromise();
+				return res;
+			},
+			onSettled(data, error, variables, context) {
+				invalidateCoverOfflinePresence(id);
+			}
 		},
-		onSettled(data, error, variables, context) {
-			invalidateCoverOfflinePresence(id);
-		},
-	}, client);
+		client
+	);
 	await get(res).mutateAsync();
 	return res;
-})
+});
 
 const remove = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res = createMutation({
-		mutationKey: ["cover-removing", id],
-		async mutationFn() {
-			const res = await (gqlClient.mutation(CoverDownload.coverRemoveMutation(), {
-				id
-			}).toPromise());
-			return res;
-		}
-	}, client);
+	const res = createMutation(
+		{
+			mutationKey: ["cover-removing", id],
+			async mutationFn() {
+				const res = await gqlClient
+					.mutation(CoverDownload.coverRemoveMutation(), {
+						id
+					})
+					.toPromise();
+				return res;
+			}
+		},
+		client
+	);
 	await get(res).mutateAsync();
 	return res;
 });
 
 const cancel = debounce(async (id: string) => {
-	return await gqlClient.mutation(CoverDownload.cancelDonwloadMuation(), {
-		id
-	}).toPromise()
-})
+	return await gqlClient
+		.mutation(CoverDownload.cancelDonwloadMuation(), {
+			id
+		})
+		.toPromise();
+});
 
 export enum CoverDownloadState {
 	Pending,
@@ -140,52 +168,60 @@ function subOPCover(id: string, deferred = false) {
 		const mount_sub = isMounted.subscribe(() => {
 			invalidateCoverOfflinePresence(id)?.catch(console.warn);
 		});
-		const sub = gqlClient.subscription(CoverDownload.coverDownloadStateSub(), {
-			id,
-			deferred
-		}).subscribe((res) => {
-			set(res);
-			mangadexQueryClient.setQueryData(
-				["cover", id, "download-state", "subscription"],
-				() => res
-			);
-			if (res.data?.watchCoverDownloadState.isDone || res.data?.watchCoverDownloadState.error || res.data?.watchCoverDownloadState.isCanceled) {
-				invalidateCoverOfflinePresence(id)?.catch(console.warn)
-			}
-		})
+		const sub = gqlClient
+			.subscription(CoverDownload.coverDownloadStateSub(), {
+				id,
+				deferred
+			})
+			.subscribe((res) => {
+				set(res);
+				mangadexQueryClient.setQueryData(
+					["cover", id, "download-state", "subscription"],
+					() => res
+				);
+				if (
+					res.data?.watchCoverDownloadState.isDone ||
+					res.data?.watchCoverDownloadState.error ||
+					res.data?.watchCoverDownloadState.isCanceled
+				) {
+					invalidateCoverOfflinePresence(id)?.catch(console.warn);
+				}
+			});
 		return () => {
-			sub.unsubscribe()
-			mount_sub()
-		}
+			sub.unsubscribe();
+			mount_sub();
+		};
 	});
 }
 
-type CoverSubOpType = OperationResult<CoverDownloadSubSubscription, CoverDownloadSubSubscriptionVariables>;
+type CoverSubOpType = OperationResult<
+	CoverDownloadSubSubscription,
+	CoverDownloadSubSubscriptionVariables
+>;
 
 export class CoverDownload {
 	private coverId: string;
 	protected isPresentInner: Readable<boolean>;
 	private reexecute: () => void;
 	protected hasFailedInner: Readable<boolean>;
-	private isRemoving_: Writable<boolean>
+	private isRemoving_: Writable<boolean>;
 	protected sub_op: Readable<CoverSubOpType | undefined>;
-
 
 	constructor(id: string) {
 		this.coverId = id;
 		const query = downloadStateQuery(id);
 		const is_present = derived(query, (res) => res.data);
 		this.isPresentInner = derived(is_present, (result) => {
-			return result?.data?.downloadState.cover.isDownloaded == true
-		})
+			return result?.data?.downloadState.cover.isDownloaded == true;
+		});
 		this.reexecute = () => {
 			invalidateCoverOfflinePresence(id);
-		}
+		};
 		this.hasFailedInner = derived(is_present, (result) => {
-			return result?.data?.downloadState.cover.hasFailed == true
-		})
+			return result?.data?.downloadState.cover.hasFailed == true;
+		});
 		this.isRemoving_ = writable(false);
-		this.sub_op = subOPCover(id)
+		this.sub_op = subOPCover(id);
 	}
 
 	public static deferred(id: string) {
@@ -199,23 +235,28 @@ export class CoverDownload {
 	}
 
 	public get isRemoving(): Readable<boolean> {
-		return readonly(this.isRemoving_)
+		return readonly(this.isRemoving_);
 	}
 
 	private get isPresent(): Readable<boolean> {
-		return this.isPresentInner
+		return this.isPresentInner;
 	}
 
 	private get hasFailed(): Readable<boolean> {
-		return this.hasFailedInner
+		return this.hasFailedInner;
 	}
 
 	public get id(): string {
-		return this.coverId
+		return this.coverId;
 	}
 
 	public state(): Readable<CoverDownloadState> {
-		const stores: [Readable<CoverSubOpType | undefined>, Readable<boolean>, Readable<boolean>, Readable<boolean>] = [this.sub_raw_state, this.hasFailed, this.isPresent, this.isRemoving];
+		const stores: [
+			Readable<CoverSubOpType | undefined>,
+			Readable<boolean>,
+			Readable<boolean>,
+			Readable<boolean>
+		] = [this.sub_raw_state, this.hasFailed, this.isPresent, this.isRemoving];
 		return derived(stores, ([result, hasFailed, isPresent, removing]) => {
 			const res = (() => {
 				if (removing) {
@@ -224,30 +265,30 @@ export class CoverDownload {
 				if (result?.data) {
 					const data = result.data.watchCoverDownloadState;
 					if (data.downloading) {
-						const downloading = data.downloading
+						const downloading = data.downloading;
 						switch (downloading) {
 							case CoverDownloadingState.FetchingData:
 								return CoverDownloadState.FetchingData;
 							case CoverDownloadingState.FetchingImage:
-								return CoverDownloadState.FetchingImage
+								return CoverDownloadState.FetchingImage;
 							case CoverDownloadingState.Preloading:
-								return CoverDownloadState.Preloading
+								return CoverDownloadState.Preloading;
 							default:
 								break;
 						}
 					} else if (data.error) {
-						return CoverDownloadState.Error
+						return CoverDownloadState.Error;
 					} else if (data.isCanceled) {
-						return CoverDownloadState.Canceled
+						return CoverDownloadState.Canceled;
 					} else if (data.isDone) {
-						return CoverDownloadState.Done
+						return CoverDownloadState.Done;
 					} else if (data.isOfflineAppStateNotLoaded) {
-						return CoverDownloadState.OfflineAppStateNotLoaded
+						return CoverDownloadState.OfflineAppStateNotLoaded;
 					} else if (data.isPending) {
 						if (hasFailed) {
-							return CoverDownloadState.Error
+							return CoverDownloadState.Error;
 						} else if (isPresent) {
-							return CoverDownloadState.Done
+							return CoverDownloadState.Done;
 						} else {
 							return CoverDownloadState.Pending;
 						}
@@ -256,15 +297,15 @@ export class CoverDownload {
 					return CoverDownloadState.Error;
 				}
 				if (hasFailed) {
-					return CoverDownloadState.Error
+					return CoverDownloadState.Error;
 				} else if (isPresent) {
-					return CoverDownloadState.Done
+					return CoverDownloadState.Done;
 				} else {
 					return CoverDownloadState.Pending;
 				}
 			})();
 			return res;
-		})
+		});
 	}
 
 	public static downloadMutation() {
@@ -272,15 +313,15 @@ export class CoverDownload {
 	}
 
 	public static cancelDonwloadMuation() {
-		return cancelDonwloadMuation
+		return cancelDonwloadMuation;
 	}
 
 	public static coverDownloadStateQuery() {
-		return coverDownloadStateQuery
+		return coverDownloadStateQuery;
 	}
 
 	public static coverDownloadStateSub() {
-		return coverDownloadStateSub
+		return coverDownloadStateSub;
 	}
 
 	public static coverRemoveMutation() {
@@ -291,30 +332,30 @@ export class CoverDownload {
 		return derived(this.state(), (result) => {
 			switch (result) {
 				case CoverDownloadState.FetchingData:
-					return true
+					return true;
 				case CoverDownloadState.Preloading:
-					return true
+					return true;
 				case CoverDownloadState.FetchingImage:
-					return true
+					return true;
 				default:
-					return false
+					return false;
 					break;
 			}
-		})
+		});
 	}
 	public error() {
 		return derived(this.sub_raw_state, (result) => {
 			if (result?.error) {
-				return result?.error
+				return result?.error;
 			} else if (result?.data?.watchCoverDownloadState.error) {
-				return new Error(result?.data.watchCoverDownloadState.error)
+				return new Error(result?.data.watchCoverDownloadState.error);
 			}
-		})
+		});
 	}
 	public async download() {
 		let id = this.id;
 		let data = await download(id);
-		return data
+		return data;
 	}
 	public async remove() {
 		return await remove(this.id);
@@ -329,7 +370,7 @@ export class CoverDownload {
 				default:
 					return false;
 			}
-		})
+		});
 	}
 	public async cancel() {
 		return await cancel(this.id);
@@ -343,6 +384,6 @@ export class CoverDownload {
 				default:
 					return false;
 			}
-		})
+		});
 	}
 }

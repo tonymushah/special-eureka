@@ -31,7 +31,7 @@
 <TopTitle
 	label="Recent Uploads"
 	fetching={global_fetching}
-	on:refresh={async () => {
+	onrefresh={async () => {
 		if (!global_fetching) {
 			await latest_updates_query_store.execute();
 		}

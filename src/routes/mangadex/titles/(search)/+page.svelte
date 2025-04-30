@@ -1,24 +1,25 @@
 <script lang="ts">
+	import { TagOptionState } from "@mangadex/componnents/manga/search/form/filter/contexts/tags";
 	import MangaSearchForm from "@mangadex/componnents/manga/search/form/MangaSearchForm.svelte";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import SearchContent from "./SearchContent.svelte";
-	import type { PageData } from "./$types";
 	import defaultMangaSearchParams, {
 		mangaSearchParamsFromContentProfile,
 		toMangaListParams,
 		type MangaSearchParams
 	} from "@mangadex/componnents/manga/search/form/state";
-	import { derived, get, writable } from "svelte/store";
-	import { TagOptionState } from "@mangadex/componnents/manga/search/form/filter/contexts/tags";
-	import type { MangaListParams } from "@mangadex/gql/graphql";
+	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
-	import { onMount } from "svelte";
+	import type { MangaListParams } from "@mangadex/gql/graphql";
+	import { derived, writable } from "svelte/store";
+	import type { PageData } from "./$types";
+	import SearchContent from "./SearchContent.svelte";
+
 	interface Props {
 		data: PageData;
 	}
 
 	let { data = $bindable() }: Props = $props();
 	const defaultParams = writable(defaultMangaSearchParams());
+
 	$effect(() => {
 		return defaultContentProfile.subscribe((defaultProfile) => {
 			defaultParams.update((p) => {
@@ -81,12 +82,12 @@
 	<MangaSearchForm
 		bind:realTime
 		bind:defaultParams={$defaultParams}
-		on:change={({ detail }) => {
+		onchange={(detail) => {
 			if (realTime) {
 				currentSearchParams.set(detail);
 			}
 		}}
-		on:submit={({ detail }) => {
+		onsubmit={(detail) => {
 			if (!realTime) {
 				currentSearchParams.set(detail);
 			}

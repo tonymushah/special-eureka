@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, onMount } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { MenuIcon } from "svelte-feather-icons";
 	import { writable } from "svelte/store";
 	import { getCurrentChapterData } from "../contexts/currentChapter";
@@ -11,14 +11,20 @@
 	import TopContent from "./TopContent.svelte";
 
 	const current = getCurrentChapterData();
-	const dispatch = createEventDispatcher<{
-		menuClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-		menuPress: KeyboardEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-	}>();
+	interface Events {
+		onmenuClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+		onmenuPress?: (
+			ev: KeyboardEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {}
+	let { onmenuClick, onmenuPress }: Props = $props();
 	let headerEl: HTMLElement | undefined = $state();
 	onMount(() => {
 		const h = headerEl?.clientHeight;
@@ -53,10 +59,10 @@
 			tabindex="0"
 			role="button"
 			onclick={(e) => {
-				dispatch("menuClick", e);
+				onmenuClick?.(e);
 			}}
 			onkeydown={(e) => {
-				dispatch("menuPress", e);
+				onmenuPress?.(e);
 			}}
 		>
 			<MenuIcon /> Menu

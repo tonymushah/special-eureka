@@ -25,7 +25,7 @@
 <TopTitle
 	label="Staff Picks"
 	fetching={$isFetching}
-	on:refresh={async () => {
+	onrefresh={async () => {
 		if (!$isFetching) {
 			await execute();
 		}

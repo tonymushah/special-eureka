@@ -1,38 +1,29 @@
 <script lang="ts">
-	import { createEventDispatcher, type ComponentType } from "svelte";
+	import { type Component } from "svelte";
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import ButtonAccent from "./ButtonAccent.svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
-		type?: "reset" | "submit" | "button";
 		label: string;
-		style?: string | undefined;
 		isBase?: boolean;
 		oneLine?: boolean;
-		icon?: ComponentType | undefined;
+		icon?: Component | undefined;
 		noCenter?: boolean;
-		disabled?: boolean;
 	}
 
 	let {
 		variant = "default",
-		type = "button",
 		label,
-		style = undefined,
 		isBase = false,
 		oneLine = false,
 		icon = undefined,
 		noCenter = false,
-		disabled
+		...restProps
 	}: Props = $props();
 </script>
 
-<ButtonAccent on:click {variant} {style} {type} {isBase} {disabled}>
+<ButtonAccent {variant} {isBase} {...restProps}>
 	{@const SvelteComponent = icon}
 	<div class:noCenter>
 		{#if SvelteComponent}

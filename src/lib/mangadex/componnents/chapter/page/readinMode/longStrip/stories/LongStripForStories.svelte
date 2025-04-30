@@ -5,7 +5,7 @@
 	import { initLongStripImagesWidthContext } from "../utils/context/longstrip_images_width";
 	import { createSlider, melt } from "@melt-ui/svelte";
 	import { initChapterCurrentPageContext } from "../../../contexts/currentPage";
-	
+
 	interface Props {
 		//import { onMount } from "svelte";
 		imageWidth?: any;

@@ -6,10 +6,10 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 import { writable } from "svelte/store";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/Languages/Base",
-    component: LanguagesBase,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content/Languages/Base",
+	component: LanguagesBase,
+	tags: ["autodocs"]
 } satisfies Meta<LanguagesBase>;
 
 export default meta;
@@ -17,8 +17,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        selecteds: writable([]),
-        title: "Some languages"
-    }
+	args: {
+		selecteds: writable([]),
+		title: "Some languages"
+	}
 };

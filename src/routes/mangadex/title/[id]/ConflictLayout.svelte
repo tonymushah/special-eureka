@@ -27,8 +27,8 @@
 				<h3>Tags</h3>
 				<TagComponnentsFlex
 					tags={conflicts.tags}
-					on:click={({ detail }) => {
-						const { id } = detail;
+					onclick={(e) => {
+						const { id } = e;
 						goto(
 							route("/mangadex/tag/[id]", {
 								id
@@ -68,7 +68,7 @@
 	<div class="buttons">
 		<PrimaryButton
 			isBase
-			on:click={() => {
+			onclick={() => {
 				history.back();
 			}}
 		>
@@ -79,7 +79,7 @@
 		</PrimaryButton>
 		<ButtonAccent
 			isBase
-			on:click={() => {
+			onclick={() => {
 				ingnoreConflict = !ingnoreConflict;
 			}}
 		>

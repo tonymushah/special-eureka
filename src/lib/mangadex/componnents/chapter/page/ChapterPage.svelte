@@ -26,10 +26,10 @@
 					}}
 				>
 					<ChapterPageHeader
-						on:menuClick={() => {
+						onmenuClick={() => {
 							$open = !$open;
 						}}
-						on:menuPress={({ detail: e }) => {
+						onmenuPress={(e) => {
 							if (e.key == "Enter") {
 								$open = !$open;
 							}

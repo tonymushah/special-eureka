@@ -1,9 +1,7 @@
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher } from "svelte";
 	import ChapterElement2 from "../../../base/element2/ChapterElement2.svelte";
-	import type { Readable } from "svelte/store";
+
 	type Group = {
 		id: string;
 		name: string;
@@ -13,7 +11,35 @@
 		roles: UserRole[];
 		name: string;
 	};
-	interface Props {
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	interface Events {
+		ondownload?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		ondownloadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaKeyClick?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		mangaId: string;
 		chapterId: string;
 		mangaTitle: string;
@@ -32,28 +58,12 @@
 		lang,
 		groups = [],
 		uploader,
-		upload_date
+		upload_date,
+		ondownload,
+		ondownloadKeyPress,
+		onmangaClick,
+		onmangaKeyClick
 	}: Props = $props();
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		mangaClick: MouseEnvDiv & {
-			id: string;
-		};
-		mangaKeyClick: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
 </script>
 
 <div class="content">
@@ -61,14 +71,14 @@
 		tabindex="0"
 		role="button"
 		onkeypress={(e) => {
-			dispatch("mangaKeyClick", {
+			onmangaKeyClick?.({
 				...e,
 				id: mangaId
 			});
 		}}
 		class="manga-title"
 		onclick={(e) => {
-			dispatch("mangaClick", {
+			onmangaClick?.({
 				...e,
 				id: mangaId
 			});
@@ -81,8 +91,8 @@
 			{lang}
 			{upload_date}
 			id={chapterId}
-			on:download
-			on:downloadKeyPress
+			{ondownload}
+			{ondownloadKeyPress}
 			{chapterTitle}
 			{groups}
 			{uploader}

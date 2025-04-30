@@ -4,7 +4,6 @@
 	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { debounce } from "lodash";
-	import { createEventDispatcher } from "svelte";
 	import {
 		CheckIcon,
 		DownloadCloudIcon,
@@ -14,6 +13,7 @@
 		XIcon
 	} from "svelte-feather-icons";
 	import { cancel as timeCancel, render as timeRender } from "timeago.js";
+
 	type Group = {
 		id: string;
 		name: string;
@@ -23,7 +23,25 @@
 		roles: UserRole[];
 		name: string;
 	};
-	interface Props {
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	interface Chapter2Events {
+		ondownload?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		ondownloadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Chapter2Events {
 		id: string;
 		chapterTitle?: string | undefined;
 		lang: Language;
@@ -38,26 +56,16 @@
 		lang = $bindable(),
 		groups = [],
 		uploader,
-		upload_date
+		upload_date,
+		ondownload,
+		ondownloadKeyPress
 	}: Props = $props();
 	let timeago: HTMLTimeElement | undefined = $state();
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
+
 	let layout: HTMLDivElement | undefined = $state();
 	let tooltip: HTMLDivElement | undefined = $state(undefined);
 	let arrowElement: HTMLDivElement | undefined = $state(undefined);
-	const dispatch = createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+
 	async function update() {
 		if (layout && tooltip && arrowElement) {
 			const { x, y, placement, middlewareData } = await computePosition(layout, tooltip, {
@@ -150,11 +158,11 @@
 		class="state buttons"
 		role="button"
 		onclick={async (e) => {
-			dispatch("download", { ...e, id });
+			ondownload?.({ ...e, id });
 			await handle_download_event();
 		}}
 		onkeypress={async (e) => {
-			dispatch("downloadKeyPress", { ...e, id });
+			ondownloadKeyPress?.({ ...e, id });
 			if (e.key == "Enter") {
 				await handle_download_event();
 			}

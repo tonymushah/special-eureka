@@ -1,7 +1,7 @@
-import type { ComponentType } from "svelte";
+import type { Component } from "svelte";
 
 export type MenuItem<T> = {
 	label: string;
 	key: T;
-	icon?: ComponentType;
+	icon?: Component;
 };

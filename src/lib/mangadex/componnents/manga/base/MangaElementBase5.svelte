@@ -1,17 +1,21 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
 	import Content from "./base5/Content.svelte";
 	import Layout from "./base5/Layout.svelte";
 
-	const dispatch = createEventDispatcher<{
-		readClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		moreInfoClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Events {
+		onreadClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+		onmoreInfoClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+
+	interface Props extends Events {
 		coverImage: string;
 		coverImageAlt: string;
 		title: string;
@@ -19,13 +23,21 @@
 		mangaId: string;
 	}
 
-	let { coverImage, coverImageAlt, title, description, mangaId }: Props = $props();
+	let {
+		coverImage,
+		coverImageAlt,
+		title,
+		description,
+		mangaId,
+		onmoreInfoClick,
+		onreadClick
+	}: Props = $props();
 	let isHover = $state(false);
 </script>
 
 <Layout bind:isHover {mangaId}>
 	<img src={coverImage} alt={coverImageAlt} />
-	<Content {title} {description} {isHover} on:moreInfoClick on:readClick />
+	<Content {title} {description} {isHover} {onmoreInfoClick} {onreadClick} />
 </Layout>
 
 <style lang="scss">

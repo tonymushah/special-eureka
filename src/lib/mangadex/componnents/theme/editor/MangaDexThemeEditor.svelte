@@ -1,7 +1,7 @@
 <script lang="ts">
 	import MangaDexThemeEditorInner from "./MangaDexThemeEditorInner.svelte";
 	interface Props {
-		profile?: import('svelte').Snippet;
+		profile?: import("svelte").Snippet;
 	}
 
 	let { profile }: Props = $props();
@@ -12,10 +12,8 @@
 <div class="editor">
 	<MangaDexThemeEditorInner>
 		{#snippet profile()}
-			
-				{@render profile_render?.()}
-			
-			{/snippet}
+			{@render profile_render?.()}
+		{/snippet}
 	</MangaDexThemeEditorInner>
 </div>
 

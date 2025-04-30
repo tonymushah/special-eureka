@@ -1,22 +1,11 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-	interface Props {
-		children?: import('svelte').Snippet;
-	}
+	import type { HTMLButtonAttributes } from "svelte/elements";
+	interface Props extends HTMLButtonAttributes {}
 
-	let { children }: Props = $props();
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	let { children, ...restProps }: Props = $props();
 </script>
 
-<button
-	onclick={(e) => {
-		dispatch("click", e);
-	}}
->
+<button {...restProps}>
 	{@render children?.()}
 </button>
 

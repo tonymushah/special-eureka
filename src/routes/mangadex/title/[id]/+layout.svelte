@@ -105,20 +105,20 @@
 		status={layoutData.status}
 		year={layoutData.year ?? undefined}
 		stats={$stats}
-		on:comments={() => {
+		oncomments={() => {
 			if ($stats != undefined) {
 				open($stats?.threadUrl);
 			}
 		}}
 		contentRating={layoutData.contentRating ?? undefined}
 		downloadState={_state}
-		on:download={async () => {
+		ondownload={async () => {
 			await mangaDownload.download();
 		}}
-		on:delete={async () => {
+		ondelete={async () => {
 			await mangaDownload.remove();
 		}}
-		on:downloading={async () => {
+		ondownloading={async () => {
 			await mangaDownload.cancel();
 		}}
 	/>
@@ -141,7 +141,7 @@
 			id={layoutData.id}
 			{hasRelation}
 			comments={$stats?.comments}
-			on:comment={() => {
+			oncomment={() => {
 				if ($stats != undefined) {
 					open($stats?.threadUrl);
 				}

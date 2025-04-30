@@ -5,10 +5,10 @@ import ColorPickerVarProvider from "./ColorPickerThemeVarProviderForStories.svel
 import MangadexThemeProviderForStory from "../../MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/theme/editor/ColorPicker/VarThemeProvider",
-    component: ColorPickerVarProvider,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/theme/editor/ColorPicker/VarThemeProvider",
+	component: ColorPickerVarProvider,
+	tags: ["autodocs"]
 } satisfies Meta<ColorPickerVarProvider>;
 
 export default meta;

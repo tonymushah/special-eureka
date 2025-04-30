@@ -26,7 +26,7 @@
 			</PrimaryButton>
 			<ButtonAccent
 				isBase
-				on:click={() => {
+				onclick={() => {
 					shellOpen(`https://mangadex.org/user/${data.id}`);
 				}}
 			>

@@ -13,7 +13,7 @@
 		ArrowUpIcon
 	} from "svelte-feather-icons";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
@@ -37,12 +37,12 @@
 	const variant = "2";
 </script>
 
-<ButtonAccent {variant} on:click={previous}>
+<ButtonAccent {variant} onclick={previous}>
 	<ArrowUpIcon />
 </ButtonAccent>
 
 {@render children?.()}
 
-<ButtonAccent {variant} on:click={next}>
+<ButtonAccent {variant} onclick={next}>
 	<ArrowDownIcon />
 </ButtonAccent>

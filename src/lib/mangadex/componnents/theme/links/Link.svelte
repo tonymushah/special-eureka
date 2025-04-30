@@ -4,15 +4,10 @@
 		variant?: "primary" | "base";
 		href: string;
 		ext_href?: string | undefined;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
-	let {
-		variant = "primary",
-		href,
-		ext_href = undefined,
-		children
-	}: Props = $props();
+	let { variant = "primary", href, ext_href = undefined, children }: Props = $props();
 	let primary = $derived(variant == "primary");
 	let base = $derived(variant == "base");
 </script>

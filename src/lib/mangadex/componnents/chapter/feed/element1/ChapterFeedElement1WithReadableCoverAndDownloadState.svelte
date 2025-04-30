@@ -1,12 +1,11 @@
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher } from "svelte";
+	import type { Readable } from "svelte/store";
 	import Content from "./inner/Content.svelte";
 	import CoverImage from "./inner/CoverImage.svelte";
 	import Layout from "./inner/Layout.svelte";
-	import type { Readable } from "svelte/store";
 	import LoaderImage from "./inner/LoaderImage.svelte";
+
 	type Group = {
 		id: string;
 		name: string;
@@ -16,7 +15,36 @@
 		roles: UserRole[];
 		name: string;
 	};
-	interface Props {
+	type MouseEnvDiv = MouseEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	type KeyboardEnvDiv = KeyboardEvent & {
+		currentTarget: HTMLDivElement & EventTarget;
+	};
+	interface Events {
+		ondownload?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		ondownloadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaClick?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onmangaKeyClick?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+	}
+
+	interface Props extends Events {
 		mangaId: string;
 		chapterId: string;
 		coverImage: Readable<string | undefined>;
@@ -41,36 +69,27 @@
 		groups = [],
 		uploader,
 		upload_date,
-		haveBeenRead = $bindable(true)
+		haveBeenRead = $bindable(true),
+		ondownload,
+		ondownloadKeyPress,
+		onmangaClick,
+		onmangaKeyClick
 	}: Props = $props();
-	type MouseEnvDiv = MouseEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	type KeyboardEnvDiv = KeyboardEvent & {
-		currentTarget: HTMLDivElement & EventTarget;
-	};
-	createEventDispatcher<{
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		mangaClick: MouseEnvDiv & {
-			id: string;
-		};
-		mangaKeyClick: KeyboardEnvDiv & {
-			id: string;
-		};
-	}>();
+
 	let image_ = $derived($coverImage);
 </script>
 
 <Layout bind:haveBeenRead {mangaId}>
 	{#if image_}
-		<CoverImage coverImage={image_} {coverImageAlt} {mangaId} on:mangaClick on:mangaKeyClick />
+		<CoverImage
+			coverImage={image_}
+			{coverImageAlt}
+			{mangaId}
+			{onmangaClick}
+			{onmangaKeyClick}
+		/>
 	{:else}
-		<LoaderImage {mangaId} on:mangaClick on:mangaKeyClick />
+		<LoaderImage {mangaId} {onmangaClick} {onmangaKeyClick} />
 	{/if}
 	<Content
 		{mangaId}
@@ -81,9 +100,9 @@
 		{groups}
 		{upload_date}
 		{uploader}
-		on:download
-		on:downloadKeyPress
-		on:mangaClick
-		on:mangaKeyClick
+		{ondownload}
+		{ondownloadKeyPress}
+		{onmangaClick}
+		{onmangaKeyClick}
 	/>
 </Layout>

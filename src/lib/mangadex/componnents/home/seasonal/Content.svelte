@@ -83,9 +83,10 @@
 					{title}
 					{coverImage}
 					{coverImageAlt}
-					on:click={() => {
+					onclick={() => {
 						openTitle(id);
 					}}
+					mangaId={id}
 				/>
 			</swiper-slide>
 		{/each}

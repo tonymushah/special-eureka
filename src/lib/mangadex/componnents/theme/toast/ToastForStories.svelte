@@ -21,7 +21,7 @@
 </script>
 
 <ButtonAccent
-	on:click={() => {
+	onclick={() => {
 		toast();
 	}}
 >

@@ -1,24 +1,27 @@
 <script lang="ts">
-	import { fade } from "svelte/transition";
-	import MangaSearchFilterDialogContent from "./MangaSearchFilterDialogContent.svelte";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { RiCloseLine } from "svelte-remixicon";
-	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { createEventDispatcher } from "svelte";
+	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
+	import { RiCloseLine } from "svelte-remixicon";
+	import MangaSearchFilterDialogContent from "./MangaSearchFilterDialogContent.svelte";
 
-	interface Props {
+	interface Events {
+		onvalidate?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		dialog_bind?: HTMLDialogElement | undefined;
 		requireValidation?: boolean;
 	}
 
-	let { dialog_bind = $bindable(undefined), requireValidation = false }: Props = $props();
-	const dispatch = createEventDispatcher<{
-		validate: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	let {
+		dialog_bind = $bindable(undefined),
+		requireValidation = false,
+		onvalidate
+	}: Props = $props();
 </script>
 
 <dialog
@@ -31,7 +34,7 @@
 		<Title type={2}>Search Filters</Title>
 		<div class="exit">
 			<ButtonAccent
-				on:click={() => {
+				onclick={() => {
 					dialog_bind?.close();
 				}}
 			>
@@ -45,8 +48,8 @@
 	{#if requireValidation}
 		<footer>
 			<PrimaryButton
-				on:click={({ detail }) => {
-					dispatch("validate", detail);
+				onclick={(e) => {
+					onvalidate?.(e);
 				}}
 			>
 				<div class="accept-inner">

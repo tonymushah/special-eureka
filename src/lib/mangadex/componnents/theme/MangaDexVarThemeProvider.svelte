@@ -9,7 +9,7 @@
 	const theme_store = derived([theme_store_], ([$t]) => $t ?? custom);
 	interface Props {
 		fonts?: string;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { fonts = "Poppins", children }: Props = $props();

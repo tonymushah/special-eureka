@@ -1,24 +1,22 @@
-<!-- TODO update code -->
 <script lang="ts">
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
-	import mangaAggregateQuery, {
-		getMangaAggregateChapterQuery,
-		chapterCommentsQuery
-	} from "./utils/query";
-	import { getContextClient } from "@urql/svelte";
-	import { onDestroy, onMount, type ComponentProps } from "svelte";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import type { UnlistenFn } from "@tauri-apps/api/event";
-	import chapterStores, { getChapterStoreContext } from "./utils/chapterStores";
 	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 	import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
+	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
+	import type { UnlistenFn } from "@tauri-apps/api/event";
+	import { openUrl as open } from "@tauri-apps/plugin-opener";
+	import { getContextClient } from "@urql/svelte";
+	import { onDestroy, onMount, type ComponentProps } from "svelte";
 	import { derived as der, writable } from "svelte/store";
+	import { fade } from "svelte/transition";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
-	import lodash from "lodash";
-	import { fade } from "svelte/transition";
-	import { openUrl as open } from "@tauri-apps/plugin-opener";
+	import { getChapterStoreContext } from "./utils/chapterStores";
+	import mangaAggregateQuery, {
+		chapterCommentsQuery,
+		getMangaAggregateChapterQuery
+	} from "./utils/query";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -205,7 +203,7 @@
 	<div class="top">
 		<div class="left">
 			<ButtonAccent
-				on:click={async () => {
+				onclick={async () => {
 					if (!$isFetching) {
 						await query.execute();
 					}
@@ -220,7 +218,7 @@
 		</div>
 		<div class="right">
 			<ButtonAccent
-				on:click={async () => {
+				onclick={async () => {
 					isReversed.update((i) => !i);
 				}}
 			>
@@ -234,7 +232,7 @@
 				<div transition:fade>
 					<AggregateContent
 						volumes={selected.chapter}
-						on:comments={({ detail }) => {
+						oncomments={(detail) => {
 							console.log(`clicked ${detail.id}`);
 							const threadUrl = threadUrls.get(detail.id);
 							if (threadUrl) {

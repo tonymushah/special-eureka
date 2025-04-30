@@ -26,7 +26,7 @@
 <TopTitle
 	label="Seasonal"
 	{fetching}
-	on:refresh={async () => {
+	onrefresh={async () => {
 		if (!fetching) {
 			await query_store.execute();
 		}

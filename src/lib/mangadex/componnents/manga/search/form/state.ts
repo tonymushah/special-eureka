@@ -1,5 +1,9 @@
 import type { ContentProfile, MangaListParams } from "@mangadex/gql/graphql";
-import { defaultMangaFilterParams, mangaFilterParamsFromContentProfile, type MangaSearchFilterParams } from "./filter/contexts";
+import {
+	defaultMangaFilterParams,
+	mangaFilterParamsFromContentProfile,
+	type MangaSearchFilterParams
+} from "./filter/contexts";
 import { TagOptionState } from "./filter/contexts/tags";
 
 export type MangaSearchParams = {
@@ -8,7 +12,9 @@ export type MangaSearchParams = {
 	offlineOnly: boolean;
 };
 
-export function mangaSearchParamsFromContentProfile(contentProfile: ContentProfile): MangaSearchParams {
+export function mangaSearchParamsFromContentProfile(
+	contentProfile: ContentProfile
+): MangaSearchParams {
 	return {
 		title: undefined,
 		filter: mangaFilterParamsFromContentProfile(contentProfile),

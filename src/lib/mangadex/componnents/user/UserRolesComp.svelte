@@ -3,19 +3,20 @@
 
 	interface Props {
 		roles?: UserRole[];
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { roles = [], children }: Props = $props();
-	let staff =
-		$derived(roles.includes(UserRole.RoleStaff) ||
-		roles.includes(UserRole.RoleDeveloper) ||
-		roles.includes(UserRole.RoleDesigner) ||
-		roles.includes(UserRole.RolePublicRelations) ||
-		roles.includes(UserRole.RoleGlobalModerator) ||
-		roles.includes(UserRole.RoleForumModerator) ||
-		roles.includes(UserRole.RoleAdmin) ||
-		roles.includes(UserRole.RolePublicRelations));
+	let staff = $derived(
+		roles.includes(UserRole.RoleStaff) ||
+			roles.includes(UserRole.RoleDeveloper) ||
+			roles.includes(UserRole.RoleDesigner) ||
+			roles.includes(UserRole.RolePublicRelations) ||
+			roles.includes(UserRole.RoleGlobalModerator) ||
+			roles.includes(UserRole.RoleForumModerator) ||
+			roles.includes(UserRole.RoleAdmin) ||
+			roles.includes(UserRole.RolePublicRelations)
+	);
 	let contributor = $derived(roles.includes(UserRole.RoleContributor));
 	let powerUploader = $derived(roles.includes(UserRole.RolePowerUploader));
 	let groupLeader = $derived(roles.includes(UserRole.RoleGroupLeader));

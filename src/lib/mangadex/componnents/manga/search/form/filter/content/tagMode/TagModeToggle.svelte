@@ -12,9 +12,11 @@
 	let { writableTag, trueValue = TagSearchMode.And }: Props = $props();
 	let toUse = $derived(tagModeWritableToBoolWritable(writableTag, trueValue));
 
-	let toggle = $derived(createToggle({
-		pressed: toUse
-	}));
+	let toggle = $derived(
+		createToggle({
+			pressed: toUse
+		})
+	);
 	let root = $derived(toggle.elements.root);
 	let pressed = $derived(toggle.states.pressed);
 </script>

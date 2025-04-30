@@ -10,10 +10,10 @@ import { range, random } from "lodash";
 import { v4 } from "uuid";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/list/style/Medium",
-    component: MediumList,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/list/style/Medium",
+	component: MediumList,
+	tags: ["autodocs"]
 } satisfies Meta<MediumList>;
 
 export default meta;
@@ -21,19 +21,19 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const elementData = {
-    coverImage: readable(volume7),
-    coverImageAlt: "Yuusha Party volume7",
-    status: MangaStatus.Ongoing,
-    title: "Yuusha Party o Oida Sareta Kiyou Binbou sdasdsadasdad",
-    description:
-        "The Jack-Of-All-Trades Kicked Out of the Hero\u2019s Party: The Swordsman Who Became a Support Mage Due to Party Circumstances, Becomes All-Powerful"
-}
+	coverImage: readable(volume7),
+	coverImageAlt: "Yuusha Party volume7",
+	status: MangaStatus.Ongoing,
+	title: "Yuusha Party o Oida Sareta Kiyou Binbou sdasdsadasdad",
+	description:
+		"The Jack-Of-All-Trades Kicked Out of the Hero\u2019s Party: The Swordsman Who Became a Support Mage Due to Party Circumstances, Becomes All-Powerful"
+};
 
 export const Default: Story = {
-    args: {
-        list: range(random(2, 10, false)).map(() => ({
-            ...elementData,
-            id: v4()
-        }))
-    }
+	args: {
+		list: range(random(2, 10, false)).map(() => ({
+			...elementData,
+			id: v4()
+		}))
+	}
 };

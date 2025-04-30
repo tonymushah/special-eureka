@@ -1,22 +1,14 @@
 <script lang="ts">
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import Blue from "./indication/Blue.svelte";
-	import { createEventDispatcher } from "svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends HTMLButtonAttributes {
 		variant?: "blue";
-		children?: import('svelte').Snippet;
 	}
 
-	let { variant = "blue", children }: Props = $props();
+	let { variant = "blue", ...restProps }: Props = $props();
 </script>
 
 {#if variant == "blue"}
-	<Blue on:click>
-		{@render children?.()}
-	</Blue>
+	<Blue {...restProps} />
 {/if}

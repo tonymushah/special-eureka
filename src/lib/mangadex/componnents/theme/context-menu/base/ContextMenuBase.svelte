@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher, type ComponentType } from "svelte";
-	import { type AnyMeltElement, emptyMeltElement, melt } from "@melt-ui/svelte";
-	import ContextMenuItem from "./ContextMenuItem.svelte";
+	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import type { Item } from ".";
-	import SomeDiv from "../../SomeDiv.svelte";
 	import MangaDexVarThemeProvider from "../../MangaDexVarThemeProvider.svelte";
-	const dispatch = createEventDispatcher<{
-		menuItemClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-	}>();
+	import SomeDiv from "../../SomeDiv.svelte";
+	import ContextMenuItem from "./ContextMenuItem.svelte";
+
 	interface Props {
 		items: (Item | undefined)[];
 		font_size?: string;
@@ -19,6 +14,11 @@
 		separator?: AnyMeltElement;
 		arrow?: AnyMeltElement;
 		tabindex?: number;
+		onMenuItemClick: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
 	}
 
 	let {
@@ -29,7 +29,8 @@
 		item_ = emptyMeltElement,
 		separator = emptyMeltElement,
 		arrow = emptyMeltElement,
-		tabindex = 0
+		tabindex = 0,
+		onMenuItemClick
 	}: Props = $props();
 </script>
 
@@ -43,7 +44,7 @@
 							icon={item.icon}
 							label={item.label}
 							{tabindex}
-							on:click={async (e) => {
+							onClick={async (e) => {
 								const onClick = item?.onClick;
 								if (onClick) {
 									const res = onClick(e);
@@ -51,7 +52,7 @@
 										await res;
 									}
 								}
-								dispatch("menuItemClick", e.detail);
+								onMenuItemClick(e);
 							}}
 							isDisabled={item.disabled}
 							element={item_}

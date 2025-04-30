@@ -1,7 +1,6 @@
 <script lang="ts" generics="T">
 	import SomeDiv from "../SomeDiv.svelte";
 
-	import { createEventDispatcher } from "svelte";
 	import type { Item } from "../context-menu/base";
 
 	import Menu from "./Menu.svelte";
@@ -11,23 +10,21 @@
 		target: HTMLElement | undefined;
 		isOpen?: boolean;
 		items?: MenuItem<T>[];
+		onSelect?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+				value: T;
+			}
+		) => any;
 	}
 
-	let { target, isOpen = $bindable(false), items = [] }: Props = $props();
-
-	const dispatch = createEventDispatcher<{
-		onSelect: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-			value: T;
-		};
-	}>();
+	let { target = $bindable(), isOpen = $bindable(false), items = [], onSelect }: Props = $props();
 
 	let menuItems = $derived(
 		items.map<Item>((i) => ({
 			onClick(e) {
-				console.log(i.key);
-				dispatch("onSelect", {
-					...e.detail,
+				onSelect?.({
+					...e,
 					value: i.key
 				});
 				isOpen = false;

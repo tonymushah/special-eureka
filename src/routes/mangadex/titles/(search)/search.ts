@@ -8,7 +8,9 @@ import type { Client } from "@urql/svelte";
 import { defaultQuery, offlineQuery } from "./query";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-import AbstractSearchResult, { type PaginationData } from "@mangadex/utils/searchResult/AbstractSearchResult";
+import AbstractSearchResult, {
+	type PaginationData
+} from "@mangadex/utils/searchResult/AbstractSearchResult";
 
 type MangaSearchResultConstuctorParams = {
 	data: MangaListContentItemProps[];
@@ -19,8 +21,6 @@ type MangaSearchResultConstuctorParams = {
 	limit: number;
 	total: number;
 };
-
-
 
 export class MangaSearchResult extends AbstractSearchResult<MangaListContentItemProps> {
 	client: Client;
@@ -54,7 +54,7 @@ export class MangaSearchResult extends AbstractSearchResult<MangaListContentItem
 			total: this.total,
 			limit: this.limit,
 			offset: this.offset
-		}
+		};
 	}
 	next(): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 		return executeSearchQuery(

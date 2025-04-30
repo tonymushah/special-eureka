@@ -16,7 +16,7 @@
 	{#each data.groups as group (group.id)}
 		<UsersSimpleBase
 			name={group.name}
-			on:click={() => {
+			onclick={() => {
 				goto(
 					route("/mangadex/group/[id]", {
 						id: group.id

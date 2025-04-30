@@ -11,21 +11,19 @@
 </script>
 
 <script lang="ts">
-	import { onMount, type ComponentProps, createEventDispatcher } from "svelte";
-	import VolumeAccordion from "./VolumeAccordion.svelte";
-	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
 	import ChapterElement1, {
 		type ChapterEl1Events
 	} from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
+	import { type ComponentProps } from "svelte";
+	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import Volumes from "./Volumes.svelte";
+	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
 
-	const dispatch = createEventDispatcher<ChapterEl1Events>();
-
-	interface Props {
+	interface Props extends ChapterEl1Events {
 		volumes: MangaAggregateData;
 	}
 
-	let { volumes }: Props = $props();
+	let { volumes, ...events }: Props = $props();
 	const chaptersStore: ChapterStores = getChapterStoreContext();
 	let data: ComponentProps<typeof VolumeAccordion>[] = $state([]);
 	$effect(() => {
@@ -52,31 +50,4 @@
 	});
 </script>
 
-<Volumes
-	openStart
-	volumes={data}
-	on:download={({ detail }) => {
-		dispatch("download", detail);
-	}}
-	on:downloadKeyPress={({ detail }) => {
-		dispatch("downloadKeyPress", detail);
-	}}
-	on:read={({ detail }) => {
-		dispatch("read", detail);
-	}}
-	on:readKeyPress={({ detail }) => {
-		dispatch("readKeyPress", detail);
-	}}
-	on:remove={({ detail }) => {
-		dispatch("remove", detail);
-	}}
-	on:removeKeyPress={({ detail }) => {
-		dispatch("removeKeyPress", detail);
-	}}
-	on:comments={({ detail }) => {
-		dispatch("comments", detail);
-	}}
-	on:commentsKeyPress={({ detail }) => {
-		dispatch("commentsKeyPress", detail);
-	}}
-/>
+<Volumes openStart volumes={data} {...events} />

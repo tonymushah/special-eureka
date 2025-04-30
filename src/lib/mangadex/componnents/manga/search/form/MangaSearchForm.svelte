@@ -1,25 +1,31 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import type { UnlistenFn } from "@tauri-apps/api/event";
+	import { onDestroy } from "svelte";
 	import { ArchiveIcon, FilterIcon, SearchIcon } from "svelte-feather-icons";
-	import type { MangaSearchParams } from "./state";
-	import defaultMangaSearchParams from "./state";
 	import { derived, writable, type Writable } from "svelte/store";
 	import { init as initFilterContext, type MangaSearchFilterParams } from "./filter/contexts";
 	import MangaSearchFilterDialog from "./filter/MangaSearchFilterDialog.svelte";
-	import { createEventDispatcher, onDestroy } from "svelte";
-	import type { UnlistenFn } from "@tauri-apps/api/event";
-	interface Props {
+	import type { MangaSearchParams } from "./state";
+	import defaultMangaSearchParams from "./state";
+
+	interface Events {
+		onsubmit?: (ev: MangaSearchParams) => any;
+		onchange?: (ev: MangaSearchParams) => any;
+	}
+
+	interface Props extends Events {
 		realTime?: boolean;
 		defaultParams?: MangaSearchParams;
 	}
 
 	let {
 		realTime = $bindable(false),
-		defaultParams = $bindable(defaultMangaSearchParams())
+		defaultParams = $bindable(defaultMangaSearchParams()),
+		onchange,
+		onsubmit
 	}: Props = $props();
 	let dialog_bind: HTMLDialogElement | undefined = $state(undefined);
 	const params = writable(defaultParams);
@@ -66,10 +72,6 @@
 	$effect(() => {
 		params.set(defaultParams);
 	});
-	const dispatch = createEventDispatcher<{
-		submit: MangaSearchParams;
-		change: MangaSearchParams;
-	}>();
 	initFilterContext(
 		(() => {
 			const params_derived = derived(params, ($p) => $p.filter);
@@ -100,15 +102,16 @@
 	});
 	unlistens.push(
 		params.subscribe((p) => {
-			dispatch("change", p);
+			onchange?.(p);
 		})
 	);
 </script>
 
 <form
-	onsubmit={preventDefault(() => {
-		dispatch("submit", $params);
-	})}
+	onsubmit={(e) => {
+		e.preventDefault();
+		onsubmit?.($params);
+	}}
 >
 	<div class="input">
 		<FormInput
@@ -123,7 +126,7 @@
 		<ButtonAccent
 			variant="accent"
 			isBase
-			on:click={() => {
+			onclick={() => {
 				dialog_bind?.showModal();
 			}}
 		>
@@ -137,7 +140,7 @@
 			<PrimaryButton
 				variant="1"
 				isBase
-				on:click={() => {
+				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
 			>
@@ -149,7 +152,7 @@
 			<ButtonAccent
 				variant="accent"
 				isBase
-				on:click={() => {
+				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
 			>
@@ -161,9 +164,10 @@
 	</div>
 	<article
 		class="buttons"
-		oncontextmenu={preventDefault(() => {
+		oncontextmenu={(e) => {
+			e.preventDefault();
 			realTime = !realTime;
-		})}
+		}}
 	>
 		{#if realTime}
 			<ButtonAccent variant="accent" isBase type="submit">
@@ -184,9 +188,9 @@
 <MangaSearchFilterDialog
 	bind:dialog_bind
 	requireValidation={!realTime}
-	on:validate={() => {
+	onvalidate={() => {
 		dialog_bind?.close();
-		dispatch("submit", $params);
+		onsubmit?.($params);
 	}}
 />
 

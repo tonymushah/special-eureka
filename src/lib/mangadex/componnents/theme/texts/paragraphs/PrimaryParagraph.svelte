@@ -1,7 +1,7 @@
 <script lang="ts">
 	interface Props {
 		variant?: "default" | "l1" | "l2";
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { variant = "default", children }: Props = $props();

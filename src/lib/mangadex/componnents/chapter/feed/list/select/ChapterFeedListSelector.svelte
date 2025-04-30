@@ -15,7 +15,7 @@
 
 <div class="tab-select">
 	<ButtonAccent
-		on:click={() => {
+		onclick={() => {
 			style.set(ChapterFeedStyle.CoverLess);
 		}}
 		variant={$style == ChapterFeedStyle.CoverLess ? "4" : "1"}
@@ -25,7 +25,7 @@
 		</div>
 	</ButtonAccent>
 	<ButtonAccent
-		on:click={() => {
+		onclick={() => {
 			style.set(ChapterFeedStyle.CoverFull);
 		}}
 		variant={$style == ChapterFeedStyle.CoverFull ? "5" : "1"}

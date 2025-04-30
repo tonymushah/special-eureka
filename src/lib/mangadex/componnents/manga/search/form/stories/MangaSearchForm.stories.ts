@@ -5,10 +5,10 @@ import MidtoneLine from "./MangaSearchFormForStories.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form",
-    component: MidtoneLine,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form",
+	component: MidtoneLine,
+	tags: ["autodocs"]
 } satisfies Meta<MidtoneLine>;
 
 export default meta;

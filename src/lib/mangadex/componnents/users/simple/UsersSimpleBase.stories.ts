@@ -6,10 +6,10 @@ import UsersBaseElement from "./UsersSimpleBase.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/users/UserSimpleElement",
-    component: UsersBaseElement,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/users/UserSimpleElement",
+	component: UsersBaseElement,
+	tags: ["autodocs"]
 } satisfies Meta<UsersBaseElement>;
 
 export default meta;
@@ -17,8 +17,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-        name: "Some big bee",
-        profilePicture
-    }
+	args: {
+		name: "Some big bee",
+		profilePicture
+	}
 };

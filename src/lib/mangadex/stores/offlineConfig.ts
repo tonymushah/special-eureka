@@ -31,17 +31,20 @@ const mutation = graphql(`
 	}
 `);
 
-export const queryStore = createQuery({
-	queryKey: ["offline", "config"],
-	async queryFn() {
-		const res = await client.query(query, {});
-		if (res.error) throw res.error;
-		if (res.data) {
-			return res.data
+export const queryStore = createQuery(
+	{
+		queryKey: ["offline", "config"],
+		async queryFn() {
+			const res = await client.query(query, {});
+			if (res.error) throw res.error;
+			if (res.data) {
+				return res.data;
+			}
+			throw new Error("No data or error");
 		}
-		throw new Error("No data or error");
-	}
-}, mangadexQueryClient);
+	},
+	mangadexQueryClient
+);
 
 async function updateCfg(cfg: OfflineConfigInput) {
 	const res = await client.mutation(mutation, {
@@ -49,15 +52,18 @@ async function updateCfg(cfg: OfflineConfigInput) {
 	});
 	if (res.error) throw res.error;
 	if (res.data) {
-		return res.data.userOption.setOfflineConfig
+		return res.data.userOption.setOfflineConfig;
 	}
 	throw new Error("No data or error");
 }
 
-export const mutationStore = createMutation({
-	mutationKey: ["offline", "config", "mutation"],
-	onSettled(data, error, variables, context) {
-		get(queryStore).refetch()
+export const mutationStore = createMutation(
+	{
+		mutationKey: ["offline", "config", "mutation"],
+		onSettled(data, error, variables, context) {
+			get(queryStore).refetch();
+		},
+		mutationFn: updateCfg
 	},
-	mutationFn: updateCfg
-}, mangadexQueryClient);
+	mangadexQueryClient
+);

@@ -14,7 +14,7 @@
 </script>
 
 <ButtonBase
-	on:click={async () => {
+	onclick={async () => {
 		await open(href);
 	}}
 	--button-color="var(--accent)"

@@ -2,15 +2,35 @@
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { createEventDispatcher } from "svelte";
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
+
 	type Author = {
 		id: string;
 		name: string;
 	};
-	interface Props {
+
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
+		onauthorClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+		ontagClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		index?: number;
 		title: string;
 		description: string;
@@ -25,21 +45,11 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		authors
+		authors,
+		onauthorClick,
+		onclick,
+		ontagClick
 	}: Props = $props();
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-		authorClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLAnchorElement;
-			id: string;
-		};
-		tagClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
 </script>
 
 <Layout coverImage="">
@@ -53,7 +63,7 @@
 		onkeydown={(e) => {}}
 		tabindex="0"
 		onclick={(e) => {
-			dispatch("click", e);
+			onclick?.(e);
 		}}
 	>
 		<Skeleton width="13em" height="20em" border_radius={"0.25em"} />
@@ -64,9 +74,9 @@
 		{tags}
 		{contentRating}
 		{authors}
-		on:click
-		on:authorClick
-		on:tagClick
+		{onclick}
+		{onauthorClick}
+		{ontagClick}
 	/>
 </Layout>
 

@@ -2,24 +2,27 @@
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import { createEventDispatcher } from "svelte";
 	import { BookOpenIcon } from "svelte-feather-icons";
 
-	const dispatch = createEventDispatcher<{
-		readClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		moreInfoClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Events {
+		onreadClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+		onmoreInfoClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		title: string;
 		description: string;
 		isHover: boolean;
 	}
 
-	let { title, description, isHover }: Props = $props();
+	let { title, description, isHover, onmoreInfoClick, onreadClick }: Props = $props();
 </script>
 
 <div class="title has-transition" class:isHover>
@@ -31,8 +34,8 @@
 	</div>
 	<div class="button-group">
 		<PrimaryButton
-			on:click={({ detail }) => {
-				dispatch("readClick", detail);
+			onclick={(e) => {
+				onreadClick?.(e);
 			}}
 		>
 			<div class="read-btn-content">
@@ -43,8 +46,8 @@
 			</div>
 		</PrimaryButton>
 		<ButtonAccent
-			on:click={({ detail }) => {
-				dispatch("moreInfoClick", detail);
+			onclick={(e) => {
+				onmoreInfoClick?.(e);
 			}}
 		>
 			More Info

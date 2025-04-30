@@ -24,12 +24,12 @@
 			</p>
 		</div>
 		{#snippet content()}
-				<div class="content" class:left >
+			<div class="content" class:left>
 				<div class="buttons" class:left>
 					<button
 						onclick={() => {
-						open = !open;
-					}}
+							open = !open;
+						}}
 					>
 						{#if open}
 							Close
@@ -39,8 +39,8 @@
 					</button>
 					<button
 						onclick={() => {
-						fixed = !fixed;
-					}}
+							fixed = !fixed;
+						}}
 					>
 						{#if fixed}
 							Fixed
@@ -50,8 +50,8 @@
 					</button>
 					<button
 						onclick={() => {
-						left = !left;
-					}}
+							left = !left;
+						}}
 					>
 						{#if left}
 							Left
@@ -62,12 +62,12 @@
 				</div>
 
 				<p>
-					Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam dolor delectus saepe
-					ex laboriosam nihil dignissimos, fuga, dolorum aliquid quod ullam aut natus officiis
-					quis omnis similique molestiae suscipit corporis.
+					Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nam dolor delectus
+					saepe ex laboriosam nihil dignissimos, fuga, dolorum aliquid quod ullam aut
+					natus officiis quis omnis similique molestiae suscipit corporis.
 				</p>
 			</div>
-			{/snippet}
+		{/snippet}
 	</ChapterDrawer>
 </div>
 

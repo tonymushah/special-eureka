@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Direction } from "@mangadex/gql/graphql";
 	import { ceil, isArray, noop, random } from "lodash";
-	import { createEventDispatcher, onMount } from "svelte";
+	import { onMount, type Snippet } from "svelte";
 	import { derived } from "svelte/store";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
@@ -20,10 +20,18 @@
 	const images_indexes = getChapterDoublePageIndexes();
 	const images = getChapterImagesAsDoublePage();
 	const images_length = derived(images, ($imgs) => $imgs.length);
-	const dispatch = createEventDispatcher<{
-		next: {};
-		previous: {};
-	}>();
+
+	interface Events {
+		onnext?: () => any;
+		onprevious?: () => any;
+	}
+
+	interface Props extends Events {
+		children?: Snippet;
+	}
+
+	let { onnext, onprevious, children }: Props = $props();
+
 	/// BUG or more like shit code xd
 	/// Required or else the component may not work proprely
 	onMount(() => images_indexes.subscribe(noop));
@@ -44,7 +52,7 @@
 				}
 			});
 		} else {
-			dispatch("next", {});
+			onnext?.();
 		}
 	}
 	function previous() {
@@ -61,13 +69,13 @@
 				}
 			});
 		} else {
-			dispatch("previous", {});
+			onprevious?.();
 		}
 	}
 </script>
 
 <svelte:window
-	on:keydown={(e) => {
+	onkeydown={(e) => {
 		const direction = $readingDirection;
 		const onNext = function () {
 			switch (direction) {

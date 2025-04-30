@@ -1,6 +1,6 @@
 <script lang="ts">
+	import { MangaDownloadState } from "@mangadex/download/manga";
 	import type { MangaStatus, ReadingStatus } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
 	import type { Tag } from "@mangadex/utils/types/Tag";
 	import { writable, type Readable, type Writable } from "svelte/store";
 	import type { Author } from "..";
@@ -37,10 +37,11 @@
 	);
 	let isFollowing: Writable<boolean | undefined> = writable<boolean | undefined>(undefined);
 	let rating: Writable<number | undefined> = writable(undefined);
-	let downloadState = writable(ChapterDownloadState.NotDownloaded);
+	let downloadState = writable(MangaDownloadState.Done);
 </script>
 
 <MangaPageTopInfo
+	closeDialogOnAdd
 	{id}
 	{title}
 	{altTitle}
@@ -55,27 +56,27 @@
 	{rating}
 	{downloadState}
 	{stats}
-	on:readingStatus={({ detail }) => {
+	onreadingStatus={(detail) => {
 		reading_status.set(detail.readingStatus);
 		isFollowing.set(detail.isFollowing);
 	}}
-	on:rating={({ detail }) => {
+	onrating={(detail) => {
 		rating.set(detail);
 	}}
-	on:download={() => {
-		downloadState.set(ChapterDownloadState.Downloading);
+	ondownload={() => {
+		downloadState.set(MangaDownloadState.Downloading);
 		setTimeout(
 			() => {
 				if (Math.floor(Math.random() * 10) % 2) {
-					downloadState.set(ChapterDownloadState.Downloaded);
+					downloadState.set(MangaDownloadState.Done);
 				} else {
-					downloadState.set(ChapterDownloadState.Failed);
+					downloadState.set(MangaDownloadState.Error);
 				}
 			},
 			Math.floor(Math.random() * 10) * 1000
 		);
 	}}
-	on:delete={() => {
-		downloadState.set(ChapterDownloadState.NotDownloaded);
+	ondelete={() => {
+		downloadState.set(MangaDownloadState.Pending);
 	}}
 />

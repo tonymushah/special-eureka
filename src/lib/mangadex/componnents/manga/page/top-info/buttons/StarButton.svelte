@@ -1,19 +1,21 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
-	import { createEventDispatcher } from "svelte";
-	import StarIcon from "./star-button/StarIcon.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import getText from "./star-button/getText";
+	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
 	import { getTopMangaRatingContextStore } from "../context";
+	import getText from "./star-button/getText";
+	import StarIcon from "./star-button/StarIcon.svelte";
 
 	let isOpen = $state(false);
 	let target: HTMLDivElement | undefined = $state(undefined);
 
 	const ratingStore = getTopMangaRatingContextStore();
-	const dispatch = createEventDispatcher<{
-		select: number;
-	}>();
+	interface Events {
+		onselect?: (ev: number) => any;
+	}
+	interface Props extends Events {}
+
+	let { onselect }: Props = $props();
 
 	let rating = $derived($ratingStore);
 
@@ -24,11 +26,11 @@
 
 <div class="star-button" bind:this={target}>
 	{#if rating == undefined}
-		<ButtonAccent isBase on:click={toggle}>
+		<ButtonAccent isBase onclick={toggle}>
 			<StarIcon />
 		</ButtonAccent>
 	{:else}
-		<PrimaryButton isBase on:click={toggle}>
+		<PrimaryButton isBase onclick={toggle}>
 			<div class="inner-button">
 				<StarIcon />
 				<span>{rating}</span>
@@ -40,8 +42,8 @@
 <MenuKeyed
 	--menu-height={"16em"}
 	--menu-overflow={"scroll"}
-	on:onSelect={({ detail }) => {
-		dispatch("select", detail.value);
+	onSelect={(detail) => {
+		onselect?.(detail.value);
 	}}
 	bind:target
 	bind:isOpen

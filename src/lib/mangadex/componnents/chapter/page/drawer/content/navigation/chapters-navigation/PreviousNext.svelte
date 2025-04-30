@@ -9,7 +9,7 @@
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	interface Props {
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { children }: Props = $props();
@@ -57,12 +57,12 @@
 	const variant = "2";
 </script>
 
-<ButtonAccent {variant} on:click={onPrevious}>
+<ButtonAccent {variant} onclick={onPrevious}>
 	<ArrowLeftIcon />
 </ButtonAccent>
 
 {@render children?.()}
 
-<ButtonAccent {variant} on:click={onNext}>
+<ButtonAccent {variant} onclick={onNext}>
 	<ArrowRightIcon />
 </ButtonAccent>

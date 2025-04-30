@@ -5,34 +5,47 @@
 	type KeyboardEnvDiv = KeyboardEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
-	export type ChapterEl1Events = {
-		download: MouseEnvDiv & {
-			id: string;
-		};
-		downloadKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		remove: MouseEnvDiv & {
-			id: string;
-		};
-		removeKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		read: MouseEnvDiv & {
-			id: string;
-		};
-		readKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-		comments: MouseEnvDiv & {
-			id: string;
-		};
-		commentsKeyPress: KeyboardEnvDiv & {
-			id: string;
-		};
-	};
-	export function createChapterEl1EventDispatcher() {
-		return createEventDispatcher<ChapterEl1Events>();
+	export interface ChapterEl1Events {
+		ondownload?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		ondownloadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onremove?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onremoveKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onread?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		onreadKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
+		oncomments?: (
+			ev: MouseEnvDiv & {
+				id: string;
+			}
+		) => any;
+		oncommentsKeyPress?: (
+			ev: KeyboardEnvDiv & {
+				id: string;
+			}
+		) => any;
 	}
 	type Group = {
 		id: string;
@@ -43,7 +56,7 @@
 		roles: UserRole[];
 		name: string;
 	};
-	export interface Props {
+	export interface Props extends ChapterEl1Events {
 		id: string;
 		title?: string | undefined;
 		lang: Language;
@@ -62,15 +75,13 @@
 	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
+	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-	import { createEventDispatcher, onDestroy } from "svelte";
+	import { debounce } from "lodash";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
-	import { derived, type Readable } from "svelte/store";
+	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
-	import { ChapterDownload } from "@mangadex/download/chapter";
-	import { debounce } from "lodash";
 
 	let {
 		id,
@@ -80,10 +91,17 @@
 		uploader,
 		upload_date,
 		haveBeenRead = true,
-		comments = undefined
+		comments = undefined,
+		oncomments,
+		oncommentsKeyPress,
+		ondownload,
+		ondownloadKeyPress,
+		onread,
+		onreadKeyPress,
+		onremove,
+		onremoveKeyPress
 	}: Props = $props();
 
-	const dispatch = createChapterEl1EventDispatcher();
 	// TODO implement quality
 	const chapter_download_inner = new ChapterDownload(id);
 	const [downloading, downloaded, failed] = [
@@ -119,11 +137,11 @@
 				class="buttons"
 				role="button"
 				onclick={async (e) => {
-					dispatch("download", { ...e, id });
+					ondownload?.({ ...e, id });
 					await handle_download_event();
 				}}
 				onkeypress={async (e) => {
-					dispatch("downloadKeyPress", {
+					ondownloadKeyPress?.({
 						...e,
 						id
 					});
@@ -139,9 +157,14 @@
 				<div
 					class="buttons remove"
 					onclick={async (e) => {
+						onremove?.({
+							...e,
+							id
+						});
 						await chapter_download_inner.remove();
 					}}
 					onkeypress={async (e) => {
+						onremoveKeyPress?.({ ...e, id });
 						if (e.key == "Enter") {
 							await chapter_download_inner.remove();
 						}
@@ -163,14 +186,14 @@
 				class="buttons"
 				role="button"
 				onclick={(e) => {
-					dispatch("read", {
+					onread?.({
 						...e,
 						id
 					});
 				}}
 				tabindex={1}
 				onkeypress={(e) => {
-					dispatch("readKeyPress", {
+					onreadKeyPress?.({
 						...e,
 						id
 					});
@@ -244,13 +267,13 @@
 				class="comments buttons"
 				role="button"
 				onclick={(e) => {
-					dispatch("comments", {
+					oncomments?.({
 						...e,
 						id
 					});
 				}}
 				onkeypress={(e) => {
-					dispatch("commentsKeyPress", {
+					oncommentsKeyPress?.({
 						...e,
 						id
 					});

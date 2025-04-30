@@ -17,7 +17,7 @@
 		{#each data.members as member}
 			<UsersSimpleBase
 				name={member.name}
-				on:click={() => {
+				onclick={() => {
 					goto(
 						route("/mangadex/user/[id]", {
 							id: member.id

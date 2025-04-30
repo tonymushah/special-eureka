@@ -13,7 +13,7 @@
 <script lang="ts">
 	interface Props {
 		collapsed?: boolean;
-		children?: import('svelte').Snippet;
+		children?: import("svelte").Snippet;
 	}
 
 	let { collapsed = true, children }: Props = $props();

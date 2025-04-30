@@ -19,7 +19,7 @@
 <div class="outer-button" bind:this={target}>
 	<ButtonAccent
 		isBase
-		on:click={() => {
+		onclick={() => {
 			isOpen = !isOpen;
 		}}
 	>
@@ -64,7 +64,7 @@
 			key: ReadingStatus.ReReading
 		}
 	]}
-	on:onSelect={({ detail }) => {
+	onSelect={(detail) => {
 		const { value } = detail;
 		readingStatus.set(value);
 	}}

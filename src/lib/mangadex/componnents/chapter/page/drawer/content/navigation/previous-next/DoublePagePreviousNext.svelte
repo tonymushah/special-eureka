@@ -4,14 +4,14 @@
 	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
 	import getChapterImagesAsDoublePage from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterImagesAsDoublePage";
 
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { ceil, isArray, noop, random } from "lodash";
-	import { createEventDispatcher, onMount } from "svelte";
-	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
-	import { derived } from "svelte/store";
-	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
+	import { ceil, isArray, noop, random } from "lodash";
+	import { onMount, type Snippet } from "svelte";
+	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
+	import { derived } from "svelte/store";
 
 	const direction = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -19,10 +19,18 @@
 	const images_indexes = getChapterDoublePageIndexes();
 	const images = getChapterImagesAsDoublePage();
 	const images_length = derived(images, ($imgs) => $imgs.length);
-	const dispatch = createEventDispatcher<{
-		next: {};
-		previous: {};
-	}>();
+
+	interface Events {
+		onnext?: () => any;
+		onprevious?: () => any;
+	}
+
+	interface Props extends Events {
+		children?: Snippet;
+	}
+
+	let { onnext, onprevious, children }: Props = $props();
+
 	/// BUG or more like shit code xd
 	/// Required or else the component may not work proprely
 	onMount(() => images_indexes.subscribe(noop));
@@ -42,7 +50,7 @@
 				}
 			});
 		} else {
-			dispatch("next", {});
+			onnext?.();
 		}
 	}
 	function previous() {
@@ -59,7 +67,7 @@
 				}
 			});
 		} else {
-			dispatch("previous", {});
+			onprevious?.();
 		}
 	}
 	function onNext() {
@@ -89,12 +97,12 @@
 	const variant = "2";
 </script>
 
-<ButtonAccent {variant} on:click={onPrevious}>
+<ButtonAccent {variant} onclick={onPrevious}>
 	<ArrowLeftIcon />
 </ButtonAccent>
 
-<slot />
+{@render children?.()}
 
-<ButtonAccent {variant} on:click={onNext}>
+<ButtonAccent {variant} onclick={onNext}>
 	<ArrowRightIcon />
 </ButtonAccent>

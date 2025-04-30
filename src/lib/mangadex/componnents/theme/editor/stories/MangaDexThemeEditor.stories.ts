@@ -5,10 +5,10 @@ import MangadexThemeProviderForStory from "../../MangadexThemeProviderForStory.s
 import MangaDexThemeEditor from "../MangaDexThemeEditor.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/theme/editor",
-    component: MangaDexThemeEditor,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/theme/editor",
+	component: MangaDexThemeEditor,
+	tags: ["autodocs"]
 } satisfies Meta<MangaDexThemeEditor>;
 
 export default meta;
@@ -16,6 +16,5 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-    args: {
-    }
+	args: {}
 };

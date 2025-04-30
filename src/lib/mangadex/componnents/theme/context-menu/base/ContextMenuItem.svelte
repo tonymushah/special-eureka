@@ -1,13 +1,18 @@
 <script lang="ts">
-	import { melt, type AnyMeltElement, emptyMeltElement } from "@melt-ui/svelte";
-	import { createEventDispatcher, type ComponentType } from "svelte";
+	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
+	import { type Component } from "svelte";
 	interface Props {
-		icon: ComponentType;
+		icon: Component;
 		label: string;
 		key?: string | undefined;
 		tabindex: number;
 		isDisabled?: boolean;
 		element?: AnyMeltElement;
+		onClick: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLDivElement;
+			}
+		) => any;
 	}
 
 	let {
@@ -16,14 +21,10 @@
 		key = undefined,
 		tabindex,
 		isDisabled = false,
-		element = emptyMeltElement
+		element = emptyMeltElement,
+		onClick
 	}: Props = $props();
 	let isFocused = $state(false);
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLDivElement;
-		};
-	}>();
 
 	const SvelteComponent_1 = $derived(icon);
 </script>
@@ -31,9 +32,9 @@
 <div
 	use:melt={$element}
 	role="button"
-	onm-click={(e) => {
+	onclick={(e) => {
 		if (!isDisabled) {
-			dispatch("click", e);
+			onClick(e);
 		}
 	}}
 	onkeypress={(e) => {

@@ -61,7 +61,7 @@
 <TopTitle
 	label="Popular Title"
 	{fetching}
-	on:refresh={async () => {
+	onrefresh={async () => {
 		if (!fetching) {
 			await popular_titles_query.execute();
 		}

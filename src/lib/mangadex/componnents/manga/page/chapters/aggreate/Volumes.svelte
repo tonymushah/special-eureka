@@ -1,48 +1,19 @@
 <script lang="ts">
-	import { createEventDispatcher, type ComponentProps } from "svelte";
+	import type { ChapterEl1Events } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
+	import { type ComponentProps } from "svelte";
 	import VolumeAccordion from "./VolumeAccordion.svelte";
-	import { createChapterEl1EventDispatcher } from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
 
-	interface Props {
+	interface Props extends ChapterEl1Events {
 		volumes: ComponentProps<typeof VolumeAccordion>[];
 		openStart?: boolean;
 	}
 
-	let { volumes, openStart = false }: Props = $props();
-
-	const dispatch = createChapterEl1EventDispatcher();
+	let { volumes, openStart = false, ...events }: Props = $props();
 </script>
 
 <div class="volumes">
 	{#each volumes as volume, l}
-		<VolumeAccordion
-			isOpen={l == 0 && openStart}
-			{...volume}
-			on:download={({ detail }) => {
-				dispatch("download", detail);
-			}}
-			on:downloadKeyPress={({ detail }) => {
-				dispatch("downloadKeyPress", detail);
-			}}
-			on:read={({ detail }) => {
-				dispatch("read", detail);
-			}}
-			on:readKeyPress={({ detail }) => {
-				dispatch("readKeyPress", detail);
-			}}
-			on:remove={({ detail }) => {
-				dispatch("remove", detail);
-			}}
-			on:removeKeyPress={({ detail }) => {
-				dispatch("removeKeyPress", detail);
-			}}
-			on:comments={({ detail }) => {
-				dispatch("comments", detail);
-			}}
-			on:commentsKeyPress={({ detail }) => {
-				dispatch("commentsKeyPress", detail);
-			}}
-		/>
+		<VolumeAccordion isOpen={l == 0 && openStart} {...volume} {...events} />
 	{:else}
 		<div class="loading">Still loading</div>
 	{/each}

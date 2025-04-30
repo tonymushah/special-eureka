@@ -1,17 +1,15 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
-	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
-	import { derived } from "svelte/store";
-	import Title from "../texts/title/Title.svelte";
-	import { getContextClient } from "@urql/svelte";
 	import defaultThemeProfileKey from "@mangadex/theme/graphql/defaultThemeProfileKey";
-	import SomeDiv from "../SomeDiv.svelte";
-	import PrimaryButton from "../buttons/PrimaryButton.svelte";
-	import DangerButton from "../buttons/DangerButton.svelte";
+	import themes, { singleUpdateMutation } from "@mangadex/theme/graphql/themes";
+	import { getContextClient } from "@urql/svelte";
 	import { XCircleIcon } from "svelte-feather-icons";
+	import { derived } from "svelte/store";
+	import SomeDiv from "../SomeDiv.svelte";
 	import ButtonAccent from "../buttons/ButtonAccent.svelte";
+	import DangerButton from "../buttons/DangerButton.svelte";
+	import PrimaryButton from "../buttons/PrimaryButton.svelte";
 	import FormInput from "../form/input/FormInput.svelte";
+	import Title from "../texts/title/Title.svelte";
 
 	const client = getContextClient();
 	const list = derived(themes, ($ths) =>
@@ -50,7 +48,7 @@
 						<p>{profile.name}</p>
 						<div>
 							<DangerButton
-								on:click={(e) => {
+								onclick={(e) => {
 									e.stopPropagation();
 									deleteTheme(profile.name);
 								}}
@@ -64,7 +62,7 @@
 				</PrimaryButton>
 			{:else}
 				<ButtonAccent
-					on:click={() => {
+					onclick={() => {
 						$defaultThemeProfileKey = profile.name;
 					}}
 				>
@@ -72,7 +70,7 @@
 						<p>{profile.name}</p>
 						<div>
 							<DangerButton
-								on:click={(e) => {
+								onclick={(e) => {
 									e.stopPropagation();
 									deleteTheme(profile.name);
 								}}
@@ -92,7 +90,8 @@
 </div>
 
 <form
-	onsubmit={preventDefault((e) => {
+	onsubmit={(e) => {
+		e.preventDefault();
 		const data = new FormData(e.currentTarget);
 		const name = data.get("name");
 		if (typeof name == "string") {
@@ -100,7 +99,7 @@
 				addNew(name);
 			}
 		}
-	})}
+	}}
 >
 	<div>
 		<FormInput

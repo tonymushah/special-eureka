@@ -147,23 +147,23 @@
 		startX: $startX,
 		scrollLeft: $scrollLeft
 	});
-    on:mousedown={(e) => {
+    onmousedown={(e) => {
 		if (widestrip_root) {
 			isDown.set(true);
 			startX.set(e.clientX - widestrip_root.scrollLeft);
 			scrollLeft.set(widestrip_root.scrollLeft);
 		}
 	}}
-	on:mouseup={(e) => {
+	onmouseup={(e) => {
 		isDown.set(false);
 	}}
-	on:mousemove={(e) => {
+	onmousemove={(e) => {
 		if ($isDown && widestrip_root) {
 			e.preventDefault();
 			widestrip_root.scrollLeft -= $scrollLeft - $startX;
 		}
 	}}
-	on:mouseleave={(e) => {
+	onmouseleave={(e) => {
 		isDown.set(false);
 	}}
     */

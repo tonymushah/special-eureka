@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { preventDefault } from 'svelte/legacy';
+	import { preventDefault } from "svelte/legacy";
 
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { TagGroup } from "@mangadex/gql/graphql";

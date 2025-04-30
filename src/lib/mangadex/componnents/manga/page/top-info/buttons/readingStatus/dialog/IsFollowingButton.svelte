@@ -16,11 +16,11 @@
 </script>
 
 {#if $isFollowing}
-	<PrimaryButton on:click={toggle} isBase>
+	<PrimaryButton onclick={toggle} isBase>
 		<IsFollowingIcon />
 	</PrimaryButton>
 {:else}
-	<ButtonAccent isBase on:click={toggle}>
+	<ButtonAccent isBase onclick={toggle}>
 		<IsFollowingIconOff />
 	</ButtonAccent>
 {/if}

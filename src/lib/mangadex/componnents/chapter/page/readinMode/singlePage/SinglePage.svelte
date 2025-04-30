@@ -1,28 +1,31 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-	import { quintOut } from "svelte/easing";
-	import { blur } from "svelte/transition";
-	import { getChapterImageContext } from "../../contexts/images";
-	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
-	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
+	import { getChapterImageContext } from "../../contexts/images";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 	import { resetZoom } from "../../contexts/resetZoomEventTarget";
+	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
+	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
-	const dispatch = createEventDispatcher<{
-		next: {};
-		previous: {};
-	}>();
+
+	interface Events {
+		onnext?: () => any;
+		onprevious?: () => any;
+	}
+
+	interface Props extends Events {}
+
+	let { onnext, onprevious }: Props = $props();
+
 	const images_context = getChapterImageContext();
 	let next = $derived(function () {
 		if ($currentChapterPage < $images_context.length - 1) {
 			resetZoom();
 			$currentChapterPage++;
 		} else {
-			dispatch("next", {});
+			onnext?.();
 		}
 	});
 	let previous = $derived(function () {
@@ -30,7 +33,7 @@
 			resetZoom();
 			$currentChapterPage--;
 		} else {
-			dispatch("previous", {});
+			onprevious?.();
 		}
 	});
 	let current_page = $derived($images_context.at($currentChapterPage));

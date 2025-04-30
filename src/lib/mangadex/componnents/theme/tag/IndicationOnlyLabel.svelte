@@ -1,20 +1,15 @@
 <script lang="ts">
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import IndicationBadge from "./IndicationBadge.svelte";
-	import { createEventDispatcher } from "svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		variant?: "blue";
 		label: string;
 	}
 
-	let { variant = "blue", label }: Props = $props();
+	let { variant = "blue", label, ...restProps }: Props = $props();
 </script>
 
-<IndicationBadge on:click {variant}>
+<IndicationBadge {variant} {...restProps}>
 	{label}
 </IndicationBadge>

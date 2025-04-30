@@ -285,8 +285,8 @@
 	bind:altTitles
 	idsKeysItem={tBButtons}
 	links={toUseLinks}
-	on:titlePButton={({ detail }) => {
-		const { key, id } = detail;
+	ontitlePButton={(e) => {
+		const { key, id } = e;
 		switch (key) {
 			case TitleKey.Author:
 				goto(

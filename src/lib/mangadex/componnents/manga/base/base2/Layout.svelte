@@ -1,28 +1,23 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+			}
+		) => any;
+	}
+
+	interface Props extends Events {
 		children?: import("svelte").Snippet;
 		mangaId: string;
 	}
 
-	let { children, mangaId }: Props = $props();
-
-	const dispatcher = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLElement;
-		};
-	}>();
+	let { children, mangaId, onclick }: Props = $props();
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<article
-	onclick={(e) => {
-		dispatcher("click", e);
-	}}
-	class="layout manga-element"
-	data-manga-id={mangaId}
->
+<article {onclick} class="layout manga-element" data-manga-id={mangaId}>
 	{@render children?.()}
 </article>
 

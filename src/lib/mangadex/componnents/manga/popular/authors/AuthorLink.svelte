@@ -1,26 +1,27 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	import { createEventDispatcher } from "svelte";
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		name: string;
 		id: string;
 	}
 
-	let { name, id }: Props = $props();
+	let { name, id, onclick }: Props = $props();
 </script>
 
 <ButtonBase
 	with_hover
 	with_active
-	on:click={({ detail }) => {
-		dispatch("click", {
-			...detail,
+	onclick={(e) => {
+		onclick?.({
+			...e,
 			id
 		});
 	}}

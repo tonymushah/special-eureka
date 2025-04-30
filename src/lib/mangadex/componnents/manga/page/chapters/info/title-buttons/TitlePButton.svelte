@@ -7,22 +7,23 @@
 
 <script lang="ts" generics="T">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
-	import { createEventDispatcher } from "svelte";
 
-	interface Props {
+	interface Events {
+		onclick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLButtonElement;
+				id: string;
+				key: T;
+			}
+		) => any;
+	}
+	interface Props extends Events {
 		key: T;
 		title: string;
 		items: TitlePButtonItem[];
 	}
 
-	let { key, title, items }: Props = $props();
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-			key: T;
-		};
-	}>();
+	let { key, title, items, onclick }: Props = $props();
 </script>
 
 {#if items.length > 0}
@@ -34,9 +35,9 @@
 					with_hover
 					--button-color="var(--accent)"
 					--button-hover="var(--primary)"
-					on:click={({ detail }) => {
-						dispatch("click", {
-							...detail,
+					onclick={(e) => {
+						onclick?.({
+							...e,
 							key,
 							id
 						});

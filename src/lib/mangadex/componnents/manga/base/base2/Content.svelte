@@ -1,16 +1,24 @@
 <script lang="ts">
-	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
-	import { createEventDispatcher } from "svelte";
+	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DangerBadge from "@mangadex/componnents/theme/tag/DangerBadge.svelte";
 	import StatusBadge from "@mangadex/componnents/theme/tag/StatusBadge.svelte";
-	import TagComponnents from "@mangadex/componnents/tag/TagComponnents.svelte";
 	import DefaultSpan from "@mangadex/componnents/theme/texts/span/DefaultSpan.svelte";
-	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
-	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
+	import { ContentRating, Language, type MangaStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import PublicationStatusTag from "../../publicationStatusTag/PublicationStatusTag.svelte";
 
-	interface Props {
+	interface Events {
+		ontagClick?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLElement;
+				id: string;
+			}
+		) => any;
+	}
+
+	interface Props extends Events {
 		title: string;
 		status: MangaStatus;
 		description: string;
@@ -25,17 +33,10 @@
 		description,
 		tags,
 		contentRating = ContentRating.Safe,
-		language
+		language,
+		ontagClick
 	}: Props = $props();
-	const dispatch = createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		tagClick: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-			id: string;
-		};
-	}>();
+
 	$effect(() => {
 		console.debug(language);
 	});
@@ -61,7 +62,7 @@
 	<div class="bottom-body">
 		<div class="tags">
 			{#if contentRating == ContentRating.Erotica || contentRating == ContentRating.Pornographic}
-				<DangerBadge type="l1">
+				<DangerBadge variant="l1">
 					{#if contentRating == ContentRating.Erotica}
 						Erotica
 					{:else}
@@ -72,8 +73,8 @@
 				<StatusBadge color="green">Suggestive</StatusBadge>
 			{/if}
 			<TagComponnents
-				on:click={(e) => {
-					dispatch("tagClick", e.detail);
+				onclick={(e) => {
+					ontagClick?.(e);
 				}}
 				{tags}
 			/>

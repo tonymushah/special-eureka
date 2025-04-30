@@ -1,83 +1,53 @@
 <script lang="ts">
-	import ReadingStatusButton from "./buttons/ReadingStatusButton.svelte";
-	import { createEventDispatcher } from "svelte";
-	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
-	import StarButton from "./buttons/StarButton.svelte";
-	import DownloadButton from "./buttons/DownloadButton.svelte";
 	import AddToListButton from "./buttons/AddToListButton.svelte";
+	import DownloadButton from "./buttons/DownloadButton.svelte";
 	import ReadButton from "./buttons/ReadButton.svelte";
+	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
+	import ReadingStatusButton from "./buttons/ReadingStatusButton.svelte";
 	import ReportButton from "./buttons/ReportButton.svelte";
+	import StarButton from "./buttons/StarButton.svelte";
 	import UploadButton from "./buttons/UploadButton.svelte";
-
-	const dispatch = createEventDispatcher<{
-		readingStatus: ReadingStatusEventDetail;
-		rating: number;
-		download: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		delete: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		addToList: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		read: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		report: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		upload: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-		downloading: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
+	type ClickEventHandler = (
+		ev: MouseEvent & {
+			currentTarget: EventTarget & HTMLElement;
+		}
+	) => any;
+	interface Events {
+		onreadingStatus?: (ev: ReadingStatusEventDetail) => any;
+		onrating?: (ev: number) => any;
+		ondownload?: ClickEventHandler;
+		ondelete?: ClickEventHandler;
+		onaddToList?: ClickEventHandler;
+		onread?: ClickEventHandler;
+		onreport?: ClickEventHandler;
+		onupload?: ClickEventHandler;
+		ondownloading?: ClickEventHandler;
+	}
+	interface Props extends Events {
+		closeDialogOnAdd?: boolean;
+	}
+	let {
+		onaddToList,
+		ondelete,
+		ondownload,
+		ondownloading,
+		onrating,
+		onread,
+		onreadingStatus,
+		onreport,
+		onupload,
+		closeDialogOnAdd
+	}: Props = $props();
 </script>
 
 <div class="button-group">
-	<ReadingStatusButton
-		on:readingStatus={({ detail }) => {
-			dispatch("readingStatus", detail);
-		}}
-	/>
-	<DownloadButton
-		on:delete={({ detail }) => {
-			dispatch("delete", detail);
-		}}
-		on:download={({ detail }) => {
-			dispatch("download", detail);
-		}}
-		on:downloading={({ detail }) => {
-			dispatch("downloading", detail);
-		}}
-	/>
-	<StarButton
-		on:select={({ detail }) => {
-			dispatch("rating", detail);
-		}}
-	/>
-	<AddToListButton
-		on:click={({ detail }) => {
-			dispatch("addToList", detail);
-		}}
-	/>
-	<ReadButton
-		on:click={({ detail }) => {
-			dispatch("read", detail);
-		}}
-	/>
-	<ReportButton
-		on:click={({ detail }) => {
-			dispatch("report", detail);
-		}}
-	/>
-	<UploadButton
-		on:click={({ detail }) => {
-			dispatch("upload", detail);
-		}}
-	/>
+	<ReadingStatusButton {onreadingStatus} {closeDialogOnAdd} />
+	<DownloadButton {ondelete} {ondownload} {ondownloading} />
+	<StarButton onselect={onrating} />
+	<AddToListButton onclick={onaddToList} />
+	<ReadButton onclick={onread} />
+	<ReportButton onclick={onreport} />
+	<UploadButton onclick={onupload} />
 </div>
 
 <style lang="scss">

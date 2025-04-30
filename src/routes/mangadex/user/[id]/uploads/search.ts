@@ -1,88 +1,107 @@
-import type { Client } from "@urql/svelte";
-import { query } from "./query";
-import AbstractSearchResult, { type PaginationData } from "@mangadex/utils/searchResult/AbstractSearchResult";
-import { CoverImageQuality, type ChapterSortOrder, type Language, type MangaListParams } from "@mangadex/gql/graphql";
+import type { Chapter } from "@mangadex/componnents/chapter/feed";
 import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/list";
+import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
+import {
+	CoverImageQuality,
+	type ChapterSortOrder,
+	type Language,
+	type MangaListParams
+} from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-import type { Chapter } from "@mangadex/componnents/chapter/feed";
+import AbstractSearchResult, {
+	type PaginationData
+} from "@mangadex/utils/searchResult/AbstractSearchResult";
 import get_chapters_stats from "@mangadex/utils/statistics/chapter/query";
-import { readable } from "svelte/store";
-import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
+import type { Client } from "@urql/svelte";
+import { query } from "./query";
 
 export type UserUploadsFeedChapterParams = {
-	user: string,
-	languages?: Language[],
-	offset?: number,
-	limit?: number,
-	order?: ChapterSortOrder
-}
+	user: string;
+	languages?: Language[];
+	offset?: number;
+	limit?: number;
+	order?: ChapterSortOrder;
+};
 
 type UserUploadsFeedChapterConstructorParams = {
-	data: ChapterFeedListItem[]
-	client: Client
+	data: ChapterFeedListItem[];
+	client: Client;
 	params: UserUploadsFeedChapterParams;
 	mangaListParams?: MangaListParams;
-	offset: number
-	limit: number
-	total: number
-}
+	offset: number;
+	limit: number;
+	total: number;
+};
 
 export type ChapterFeedListItemExt = ChapterFeedListItem & {
-	threadUrl?: string
+	threadUrl?: string;
 };
 
 export class UserUploadsFeedResult extends AbstractSearchResult<ChapterFeedListItem> {
-	client: Client
-	params: UserUploadsFeedChapterParams
+	client: Client;
+	params: UserUploadsFeedChapterParams;
 	mangaListParams?: MangaListParams;
-	offset: number
-	limit: number
-	total: number
+	offset: number;
+	limit: number;
+	total: number;
 	constructor(param: UserUploadsFeedChapterConstructorParams) {
 		super(param.data);
 		this.client = param.client;
 		this.params = param.params;
 		this.limit = param.limit;
 		this.offset = param.offset;
-		this.total = param.total
+		this.total = param.total;
 		this.mangaListParams = param.mangaListParams;
 	}
 	hasNext(): boolean {
 		return this.offset < this.total && this.offset >= 0;
 	}
 	next(): Promise<AbstractSearchResult<ChapterFeedListItem>> {
-		return executeSearchQuery(this.client, {
-			...this.params,
-			offset: this.offset + this.limit,
-			limit: this.limit
-		}, this.mangaListParams);
+		return executeSearchQuery(
+			this.client,
+			{
+				...this.params,
+				offset: this.offset + this.limit,
+				limit: this.limit
+			},
+			this.mangaListParams
+		);
 	}
 	public get paginationData(): PaginationData {
 		return {
 			total: this.total,
 			limit: this.limit,
 			offset: this.offset
-		}
+		};
 	}
 }
 
-export default async function executeSearchQuery(client: Client, params: UserUploadsFeedChapterParams, mangaListParams?: MangaListParams): Promise<AbstractSearchResult<ChapterFeedListItem>> {
-	const results = await client.query(query, {
-		user: params.user,
-		translatedLanguages: params.languages,
-		offset: params.offset,
-		limit: params.limit,
-		order: params.order,
-		mangaListParams
-	}).toPromise();
+export default async function executeSearchQuery(
+	client: Client,
+	params: UserUploadsFeedChapterParams,
+	mangaListParams?: MangaListParams
+): Promise<AbstractSearchResult<ChapterFeedListItem>> {
+	const results = await client
+		.query(query, {
+			user: params.user,
+			translatedLanguages: params.languages,
+			offset: params.offset,
+			limit: params.limit,
+			order: params.order,
+			mangaListParams
+		})
+		.toPromise();
 	if (results.error) {
 		throw results.error;
 	}
 	if (results.data) {
 		const data = results.data.chapter.listWithGroupByManga;
-		const comments = await get_chapters_stats(client, data.data.flatMap((d) => d.chapters.map<string>((c) => c.id)), true);
+		const comments = await get_chapters_stats(
+			client,
+			data.data.flatMap((d) => d.chapters.map<string>((c) => c.id)),
+			true
+		);
 		return new UserUploadsFeedResult({
 			client,
 			params,
@@ -100,7 +119,11 @@ export default async function executeSearchQuery(client: Client, params: UserUpl
 				});
 				return {
 					mangaId: e.manga.id,
-					title: get_value_from_title_and_random_if_undefined(e.manga.attributes.title, "en") ?? e.manga.id,
+					title:
+						get_value_from_title_and_random_if_undefined(
+							e.manga.attributes.title,
+							"en"
+						) ?? e.manga.id,
 					coverImage: cover_art,
 					coverImageAlt: e.manga.relationships.coverArt.id,
 					mangaLang: e.manga.attributes.originalLanguage,
@@ -110,7 +133,7 @@ export default async function executeSearchQuery(client: Client, params: UserUpl
 							const volume = chap.attributes.volume;
 							const chapter = chap.attributes.chapter;
 
-							const _volume = volume ? `Vol.${volume} ` : ""
+							const _volume = volume ? `Vol.${volume} ` : "";
 							const _chapter = chapter ? `Chap.${chapter}` : "";
 							const __title = _title ? ` - ${_title}` : "";
 							return `${_volume}${_chapter}${__title}`;
@@ -127,14 +150,16 @@ export default async function executeSearchQuery(client: Client, params: UserUpl
 							} else {
 								return {
 									comments: 0
-								}
+								};
 							}
-						})()
+						})();
 						return {
 							chapterId: chap.id,
 							title,
 							lang: chap.attributes.translatedLanguage,
-							upload_date: new Date(chap.attributes.readableAt ?? chap.attributes.createdAt),
+							upload_date: new Date(
+								chap.attributes.readableAt ?? chap.attributes.createdAt
+							),
 							uploader: {
 								id: user.id,
 								name: user.attributes.username,
@@ -150,11 +175,11 @@ export default async function executeSearchQuery(client: Client, params: UserUpl
 								id: chap.id,
 								client
 							})
-						}
+						};
 					})
-				}
+				};
 			})
-		})
+		});
 	}
 	throw new Error("No results??");
 }

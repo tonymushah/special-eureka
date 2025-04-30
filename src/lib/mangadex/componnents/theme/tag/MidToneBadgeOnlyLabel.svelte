@@ -1,19 +1,14 @@
 <script lang="ts">
+	import type { HTMLButtonAttributes } from "svelte/elements";
 	import MidToneBadge from "./MidToneBadge.svelte";
-	import { createEventDispatcher } from "svelte";
 
-	createEventDispatcher<{
-		click: MouseEvent & {
-			currentTarget: EventTarget & HTMLButtonElement;
-		};
-	}>();
-	interface Props {
+	interface Props extends HTMLButtonAttributes {
 		label: string;
 	}
 
-	let { label }: Props = $props();
+	let { label, ...restProps }: Props = $props();
 </script>
 
-<MidToneBadge on:click>
+<MidToneBadge {...restProps}>
 	{label}
 </MidToneBadge>

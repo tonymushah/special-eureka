@@ -5,10 +5,10 @@ import TagsForm from "./TagsForStories.svelte";
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 
 const meta = {
-    decorators: [() => MangadexThemeProviderForStory],
-    title: "MangaDex/manga/search/Form/Dialog/Content/Tags",
-    component: TagsForm,
-    tags: ["autodocs"]
+	decorators: [() => MangadexThemeProviderForStory],
+	title: "MangaDex/manga/search/Form/Dialog/Content/Tags",
+	component: TagsForm,
+	tags: ["autodocs"]
 } satisfies Meta<TagsForm>;
 
 export default meta;
