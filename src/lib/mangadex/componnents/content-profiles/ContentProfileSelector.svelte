@@ -40,7 +40,7 @@
 					<p>{profile.name}</p>
 					<div>
 						<DangerButton
-							on:click={(e) => {
+							onclick={(e) => {
 								e.stopPropagation();
 								deleteProfile(profile.name);
 							}}
@@ -54,7 +54,7 @@
 			</PrimaryButton>
 		{:else}
 			<ButtonAccent
-				on:click={() => {
+				onclick={() => {
 					$defaultThemeProfileKey = profile.name;
 				}}
 			>
@@ -62,7 +62,7 @@
 					<p>{profile.name}</p>
 					<div>
 						<DangerButton
-							on:click={(e) => {
+							onclick={(e) => {
 								e.stopPropagation();
 								deleteProfile(profile.name);
 							}}
@@ -81,7 +81,8 @@
 </div>
 
 <form
-	onsubmit={preventDefault((e) => {
+	onsubmit={(e) => {
+		e.preventDefault();
 		const data = new FormData(e.currentTarget);
 		const name = data.get("name");
 		if (typeof name == "string") {
@@ -89,7 +90,7 @@
 				addNew(name);
 			}
 		}
-	})}
+	}}
 >
 	<div>
 		<FormInput
