@@ -12,7 +12,7 @@
 	<section>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			on:click={fireChapterChangeGroupThreadEvent}
+			onclick={fireChapterChangeGroupThreadEvent}
 			label="Change group"
 			icon={Icon}
 		/>
