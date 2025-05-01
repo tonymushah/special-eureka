@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "graphiql/graphiql.min.css";
+	import 'graphiql/graphiql.css';
 	import type { Root } from "react-dom/client";
 	import { onDestroy, onMount } from "svelte";
 	import type { Fetcher } from "@graphiql/toolkit";
