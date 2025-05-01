@@ -23,7 +23,7 @@
 				</Link>
 			</li>
 		{:else}
-			<li class="no-group"></li>
+			<span class="no-group">No groups</span>
 		{/each}
 	</ul>
 </div>
@@ -38,7 +38,7 @@
 			padding: 0;
 			margin: 0;
 			display: grid;
-			li.no-group {
+			span.no-group {
 				font-style: italic;
 			}
 		}
