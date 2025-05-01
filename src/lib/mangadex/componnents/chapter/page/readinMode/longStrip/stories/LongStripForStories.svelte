@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { derived, get, writable, type Readable } from "svelte/store";
+	import { derived, get, writable, type Readable, type Writable } from "svelte/store";
 	import { initChapterImageContext } from "../../../contexts/images";
 	import LongStrip from "../LongStrip.svelte";
 	import { initLongStripImagesWidthContext } from "../utils/context/longstrip_images_width";
@@ -8,7 +8,7 @@
 
 	interface Props {
 		//import { onMount } from "svelte";
-		imageWidth?: any;
+		imageWidth?: Writable<number>;
 		images: string[];
 		currentPage?: number;
 	}

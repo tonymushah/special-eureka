@@ -50,8 +50,6 @@
 <script lang="ts">
 	/// TODO add fixed mangareading style
 	/// TODO Add cached chapter double page context data
-	import type { LayoutData } from "./$types";
-	import { writable } from "svelte/store";
 	import {
 		CurrentChapterData,
 		CurrentChapterGroup,
@@ -60,27 +58,29 @@
 		CurrentChapterUploader,
 		initCurrentChapterData
 	} from "@mangadex/componnents/chapter/page/contexts/currentChapter";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { getContextClient } from "@urql/svelte";
+	import { initCurrentChapterReadingMode } from "@mangadex/componnents/chapter/page/contexts/currentChapterReadingMode";
 	import { initChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
+	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
+	import { initChapterImageContext } from "@mangadex/componnents/chapter/page/contexts/images";
+	import { initIsDrawerFixedWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
+	import { initIsDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
+	import { initCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import {
 		initRelatedChapters,
 		type RelatedChapter
 	} from "@mangadex/componnents/chapter/page/contexts/relatedChapters";
-	import { onMount } from "svelte";
-	import relatedChaptersQuery from "./layout-query/related";
-	import chapterPageThread from "./layout-query/thread";
+	import initDoublePageContexts from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/contexts";
 	import { initLongStripImagesWidthContext } from "@mangadex/componnents/chapter/page/readinMode/longStrip/utils/context/longstrip_images_width";
-	import { initChapterImageContext } from "@mangadex/componnents/chapter/page/contexts/images";
-	import { initIsDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
-	import { initIsDrawerFixedWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
-	import { initCurrentChapterReadingMode } from "@mangadex/componnents/chapter/page/contexts/currentChapterReadingMode";
-	import readingModeWritable from "./layout-query/readingMode";
-	import { initCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
-	import readingDirectionWritable from "./layout-query/pageDirection";
-	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import { getContextClient } from "@urql/svelte";
+	import { writable } from "svelte/store";
+	import type { LayoutData } from "./$types";
 	import imageFitWritable from "./layout-query/imageFit";
 	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
+	import readingDirectionWritable from "./layout-query/pageDirection";
+	import readingModeWritable from "./layout-query/readingMode";
+	import relatedChaptersQuery from "./layout-query/related";
+	import chapterPageThread from "./layout-query/thread";
 
 	interface Props {
 		data: LayoutData;
@@ -159,6 +159,7 @@
 			})
 			.catch(console.error);
 	});
+	initDoublePageContexts();
 </script>
 
 {@render children?.()}

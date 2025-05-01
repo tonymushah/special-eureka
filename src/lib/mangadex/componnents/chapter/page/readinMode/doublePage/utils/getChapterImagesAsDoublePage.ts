@@ -1,10 +1,8 @@
-import { derived, type Readable } from "svelte/store";
-import getChapterImagesRatio from "./getChapterImagesRatio";
-import generateDoublePageOutput from "./generateDoublePageOutput";
+import { type Readable } from "svelte/store";
+import { getDoublePageChapterImagesContext } from "./contexts/images-double";
 
 export type ChapterDoublePageImage = string | [string, string];
 
 export default function getChapterImagesAsDoublePage(): Readable<ChapterDoublePageImage[]> {
-	const iratios = getChapterImagesRatio();
-	return derived(iratios, (ratios) => generateDoublePageOutput(ratios));
+	return getDoublePageChapterImagesContext();
 }

@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { createPopover, melt, type SelectOption } from "@melt-ui/svelte";
+	import {
+		createCombobox,
+		createPopover,
+		melt,
+		type ComboboxOptionProps,
+		type SelectOption
+	} from "@melt-ui/svelte";
 	import { getRelatedChapters, hasRelatedChapters } from "../../../../contexts/relatedChapters";
 	import { derived } from "svelte/store";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
@@ -7,11 +13,13 @@
 	import { slide } from "svelte/transition";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { fireSelectChapterEvent } from "../../../../contexts/previousNextEventTarget";
+	import { groupBy, map, reverse, upperCase } from "lodash";
+	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	const hasRelated = hasRelatedChapters();
 	const {
-		elements: { content: menu, trigger, close },
+		elements: { menu, input: trigger, option, group, groupLabel },
 		states: { open }
-	} = createPopover({
+	} = createCombobox<string>({
 		forceVisible: true,
 		positioning: {
 			placement: "bottom",
@@ -19,47 +27,43 @@
 			sameWidth: true
 		}
 	});
+	type OptionsMap = ComboboxOptionProps<string> & {
+		volume: string;
+	};
 	const options = derived(getRelatedChapters(), ($related) =>
-		$related.map<SelectOption<string>>(({ chapter, volume, id }) => {
-			let label: string;
-			if (chapter != undefined && volume != undefined) {
-				if (volume == "none" || volume.length == 0) {
+		groupBy(
+			$related.map<OptionsMap>(({ chapter, volume, id }) => {
+				let label: string;
+				if (chapter != undefined) {
 					if (chapter == "none" || chapter.length == 0) {
 						label = "No label??";
 					} else {
-						label = `Ch. ${chapter}`;
+						label = `Chapter ${chapter}`;
 					}
 				} else {
-					label = `Vol. ${volume} Ch. ${chapter}`;
-				}
-			} else if (chapter != undefined) {
-				if (chapter == "none" || chapter.length == 0) {
 					label = "No label??";
-				} else {
-					label = `Ch. ${chapter}`;
 				}
-			} else {
-				label = "No label??";
-			}
-			return {
-				value: id,
-				label
-			};
-		})
+				return {
+					value: id,
+					label,
+					volume: volume ?? "none"
+				};
+			}),
+			"volume"
+		)
 	);
 	const current = getCurrentChapterData();
 	const isSelected = derived([current], ([$current]) => {
 		return (value: string) => $current.id == value;
 	});
+	const menu_options = derived(options, ($options) => reverse(Object.entries($options)));
 </script>
 
 <div class="layout">
 	<div class="input" use:melt={$trigger}>
 		<ButtonAccent>
-			{#if $current.chapterNumber != undefined && $current.volume != undefined}
-				Vol. {$current.volume} Ch. {$current.chapterNumber}
-			{:else if $current.chapterNumber != undefined}
-				Ch. {$current.chapterNumber}
+			{#if $current.chapterNumber != undefined}
+				Chapter {$current.chapterNumber}
 			{:else if $current.isOneshot}
 				Oneshot
 			{:else}
@@ -73,16 +77,26 @@
 	<div class="menu-outer" use:melt={$menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>
-				{#each $options as { value, label }}
-					<li
-						use:melt={$close}
-						on:m-click={() => {
-							fireSelectChapterEvent(value);
-						}}
-						class:isSelected={$isSelected(value)}
-					>
-						<h4>{label}</h4>
-					</li>
+				{#each $menu_options as [volume, chapters]}
+					<section use:melt={$group(volume)}>
+						<div class="label">
+							<span use:melt={$groupLabel(volume)}>
+								Volume {upperCase(volume)}
+							</span>
+							<hr />
+						</div>
+						{#each chapters as chapter}
+							<li
+								use:melt={$option(chapter)}
+								on:m-click={() => {
+									fireSelectChapterEvent(chapter.value);
+								}}
+								class:isSelected={$isSelected(chapter.value)}
+							>
+								<h4>{chapter.label}</h4>
+							</li>
+						{/each}
+					</section>
 				{/each}
 			</menu>
 		</MangaDexVarThemeProvider>
@@ -90,6 +104,22 @@
 {/if}
 
 <style lang="scss">
+	.label {
+		padding: 0em 0.5em;
+		color: var(--mid-tone);
+		display: flex;
+		gap: 2px;
+		align-items: center;
+		font-size: 12px;
+		font-family: inherit;
+		font-weight: 800;
+		hr {
+			flex-grow: 1;
+			height: 1px;
+			background-color: var(--mid-tone);
+			border: none;
+		}
+	}
 	.menu-outer {
 		display: flex;
 		flex-direction: column;
@@ -104,27 +134,31 @@
 	menu {
 		margin: 0px;
 		border-radius: 0.25em;
-		list-style: none;
+
 		background-color: var(--accent);
 		z-index: 10;
 		overflow-y: scroll;
 		color: var(--text-color);
 		padding-left: 0em;
-		li {
-			padding-left: 1em;
-			transition: background-color 200ms ease-in-out;
-			h4 {
-				margin: 0px;
+		section {
+			list-style: none;
+			li {
+				transition: background-color 200ms ease-in-out;
+				h4 {
+					padding-left: 0.5em;
+					margin: 0px;
+					font-size: 14px;
+				}
 			}
-		}
-		li:not(.isSelected):hover {
-			background-color: var(--accent-hover);
-		}
-		li:not(.isSelected):active {
-			background-color: var(--accent-active);
-		}
-		li.isSelected {
-			background-color: var(--primary);
+			li:not(.isSelected):hover {
+				background-color: var(--accent-hover);
+			}
+			li:not(.isSelected):active {
+				background-color: var(--accent-active);
+			}
+			li.isSelected {
+				background-color: var(--primary);
+			}
 		}
 	}
 	.input {

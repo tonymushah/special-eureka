@@ -89,15 +89,7 @@ enum ApiClientProfile {
 }
 
 type ApiClientQueries {
-	list(
-		params: ApiClientListParam! = {
-			limit: null
-			offset: null
-			state: null
-			name: null
-			includes: []
-		}
-	): ApiClientResults!
+	list(params: ApiClientListParam! = {limit: null, offset: null, state: null, name: null, includes: []}): ApiClientResults!
 	get(id: UUID!): ApiClient!
 }
 
@@ -235,6 +227,7 @@ input BeginUploadSessionParam {
 	mangaId: UUID!
 }
 
+
 type ButtonAccentColor {
 	default: String!
 	alternate: String!
@@ -334,7 +327,7 @@ input ChapterListParams {
 	excludedUploaders: [UUID!]! = []
 	"""
 	Flag to include future chapter updates in the results.
-
+	
 	Default: `IncludeFutureUpdates::Include` (1)
 	"""
 	includeFutureUpdates: IncludeFutureUpdates
@@ -385,10 +378,7 @@ type ChapterQueries {
 	list(params: ChapterListParams, offlineParams: GetAllChapterParams): ChapterResults!
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
-	listWithGroupByManga(
-		chapterListParams: ChapterListParams
-		mangaListParams: MangaListParams
-	): MangaChapterGroup!
+	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams): MangaChapterGroup!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
@@ -423,21 +413,21 @@ input ChapterUpdateParams {
 	chapterId: UUID!
 	"""
 	<= 255 characters in length.
-
+	
 	Nullable.
 	"""
 	title: String = null
 	"""
 	Volume number.
-
+	
 	Nullable.
 	"""
 	volume: String = null
 	"""
 	Chapter number.
-
+	
 	<= 8 characters in length.
-
+	
 	Nullable.
 	"""
 	chapter: String = null
@@ -475,7 +465,7 @@ input CommitUploadSessionParam {
 	translatedLanguage: Language!
 	"""
 	Must be a URL with "http(s)://".
-
+	
 	Nullable
 	"""
 	externalUrl: Url = null
@@ -610,17 +600,7 @@ type CoverMutations {
 }
 
 type CoverQueries {
-	list(
-		params: CoverListParam! = {
-			limit: null
-			offset: null
-			mangaIds: []
-			coverIds: []
-			uploaderIds: []
-			locales: []
-			order: null
-		}
-	): CoverResults!
+	list(params: CoverListParam! = {limit: null, offset: null, mangaIds: [], coverIds: [], uploaderIds: [], locales: [], order: null}): CoverResults!
 	get(id: UUID!): Cover!
 	getImage(mangaId: UUID!, coverId: UUID!, filename: String!, mode: CoverImageQuality): Url!
 	isDownloaded(id: UUID!): DownloadState!
@@ -649,7 +629,7 @@ input CoverUploadParam {
 	file: PathBuf!
 	"""
 	Volume number the cover is associated with.
-
+	
 	* Nullable
 	* <= 8 characters
 	* Pattern: `^(0|[1-9]\\d*)((\\.\\d+){1,2})?[a-z]?$`
@@ -697,13 +677,13 @@ input CreateReportParam {
 	category: ReportCategory!
 	"""
 	The report reason ID for sub-categorization.
-
+	
 	For example, if a manga was being reported for being a troll entry, the specific reason ID should be used, obtained from the [list report reasons endpoint](crate::v5::report::list).
 	"""
 	reason: UUID!
 	"""
 	The ID from the category type.
-
+	
 	For example, if the category is "manga", this should be a manga UUID.
 	"""
 	objectId: UUID!
@@ -745,7 +725,7 @@ input CreateScalantionGroupParam {
 	twitter: Url = null
 	"""
 	Regex: [^https:/\/www\.mangaupdates\.com\/(?:groups|publishers)\.html\?id=\d+](https://www.mangaupdates.com)
-
+	
 	Nullable.
 	"""
 	mangaUpdates: Url = null
@@ -760,7 +740,7 @@ input CreateUpdateRating {
 	mangaId: UUID!
 	"""
 	`[ 1 .. 10 ]`.
-
+	
 	Numbers below `1` will be set at `1` and numbers above `10` will be set at `10`.
 	"""
 	rating: Int!
@@ -813,7 +793,7 @@ input CustomListMangaFeedParams {
 	excludedUploaders: [UUID!]! = []
 	"""
 	Flag to include future chapter updates in the results.
-
+	
 	Default: `IncludeFutureUpdates::Include` (1)
 	"""
 	includeFutureUpdates: IncludeFutureUpdates = null
@@ -848,9 +828,7 @@ type CustomListMutations {
 
 type CustomListQueries {
 	get(id: UUID!): CustomList!
-	currentLoggedLists(
-		params: CurrentLoggedLists! = { offset: null, limit: null }
-	): CustomListResults!
+	currentLoggedLists(params: CurrentLoggedLists! = {offset: null, limit: null}): CustomListResults!
 	getUserLists(params: UserCustomListParams!): CustomListResults!
 }
 
@@ -973,13 +951,13 @@ input EditScanlationGroupParam {
 	twitter: Url = null
 	"""
 	Regex: [^https:/\/www\.mangaupdates\.com\/(?:groups|publishers)\.html\?id=\d+](https://www.mangaupdates.com)
-
+	
 	Nullable.
 	"""
 	mangaUpdates: Url = null
 	"""
 	Languages the scanlation primarily translates or uploads works into.
-
+	
 	Nullable.
 	"""
 	focusedLanguages: [Language!] = null
@@ -994,16 +972,11 @@ input EditScanlationGroupParam {
 
 type FeedQueries {
 	userLoggedMangaFeed(params: FollowedMangaFeedParams): ChapterResults!
-	userLoggedMangaFeedGrouped(
-		feedParams: FollowedMangaFeedParams
-		mangaListParams: MangaListParams
-	): MangaChapterGroup!
+	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams): MangaChapterGroup!
 	customListFeed(params: CustomListMangaFeedParams!): ChapterResults!
-	customListFeedGrouped(
-		feedParams: CustomListMangaFeedParams!
-		mangaListParams: MangaListParams
-	): MangaChapterGroup!
+	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams): MangaChapterGroup!
 }
+
 
 input FollowedMangaFeedParams {
 	limit: Int
@@ -1022,7 +995,7 @@ input FollowedMangaFeedParams {
 	excludedUploaders: [UUID!]! = []
 	"""
 	Flag to include future chapter updates in the results.
-
+	
 	Default: `IncludeFutureUpdates::Include` (1)
 	"""
 	includeFutureUpdates: IncludeFutureUpdates
@@ -1122,6 +1095,7 @@ type HomeQueries {
 	popularTitles(params: MangaListParams): MangaResults!
 }
 
+
 enum ImageFit {
 	DEFAULT
 	WIDTH
@@ -1159,6 +1133,7 @@ input IndicatorColorInput {
 type InfrastructureQueries {
 	ping: Boolean!
 }
+
 
 """
 A scalar that can represent any JSON Object value.
@@ -1410,7 +1385,7 @@ input MangaFeedParams {
 	excludedUploaders: [UUID!]! = []
 	"""
 	Flag to include future chapter updates in the results.
-
+	
 	Default: `IncludeFutureUpdates::Include` (1)
 	"""
 	includeFutureUpdates: IncludeFutureUpdates = null
@@ -1518,10 +1493,7 @@ type MangaMutations {
 	unfollow(id: UUID!): Boolean!
 	updateReadingStatus(id: UUID!, status: ReadingStatus): Boolean!
 	submitDraft(params: SubmitMangaDraftParams!): MangaObject!
-	createRelation(
-		params: MangaCreateRelationParam!
-		mangaListParams: MangaListParams
-	): [MangaRelated!]!
+	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams): [MangaRelated!]!
 	deleteRelation(id: UUID!, targetManga: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
 }
@@ -1541,15 +1513,7 @@ type MangaQueries {
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
 	getDraft(params: GetMangaDraftParams!): MangaObject!
-	getDrafts(
-		params: MangaDraftsParams! = {
-			limit: null
-			offset: null
-			state: null
-			order: null
-			includes: []
-		}
-	): MangaResults!
+	getDrafts(params: MangaDraftsParams! = {limit: null, offset: null, state: null, order: null, includes: []}): MangaResults!
 	relationList(params: MangaRelationParam!, listParams: MangaListParams): [MangaRelated!]!
 	aggregate(params: MangaAggregateParam!, excludeContentProfile: Boolean): MangaAggregateQueries!
 	readingStatus(id: UUID!): ReadingStatus
@@ -1955,7 +1919,7 @@ enum ReferenceExpansionResource {
 	CHAPTER
 	"""
 	A Cover Art for a manga.
-
+	
 	On manga resources, only one cover art resource relation is returned,
 	marking the primary cover if there are more than one. By default, this will be the latest
 	volume's cover art. To see all the covers for a given manga, use the cover search endpoint.
@@ -2030,17 +1994,7 @@ type ReportMutations {
 }
 
 type ReportQueries {
-	list(
-		params: ListReportParams! = {
-			limit: null
-			offset: null
-			category: null
-			objectId: null
-			reasonId: null
-			status: null
-			order: null
-		}
-	): UserReportResults!
+	list(params: ListReportParams! = {limit: null, offset: null, category: null, objectId: null, reasonId: null, status: null, order: null}): UserReportResults!
 	listByCaterogy(params: ListReasonsByCategory!): ReportReasonResults!
 }
 
@@ -2190,6 +2144,7 @@ input StatusColorInput {
 	grey: String!
 	purple: String!
 }
+
 
 input SubmitMangaDraftParams {
 	mangaId: UUID!
@@ -2350,10 +2305,7 @@ input UpdateMangaParam {
 
 type UploadMutations {
 	beginSession(params: BeginUploadSessionParam!, abandonIfExists: Boolean! = true): UploadSession!
-	beginEditSession(
-		params: BeginEditUploadSessionParam!
-		abandonIfExists: Boolean! = true
-	): UploadSession!
+	beginEditSession(params: BeginEditUploadSessionParam!, abandonIfExists: Boolean! = true): UploadSession!
 	uploadImagesToSession(sessionId: UUID!, path: PathBuf!): UploadSessionFile!
 	abandonSession(sessionId: UUID!): Boolean!
 	commitSession(params: CommitUploadSessionParam!): Chapter!
