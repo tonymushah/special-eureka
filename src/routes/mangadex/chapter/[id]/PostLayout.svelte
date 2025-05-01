@@ -81,6 +81,7 @@
 	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
 	import imageFitWritable from "./layout-query/imageFit";
 	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
+	import { initChapterImagesRatioContext } from "@mangadex/componnents/chapter/page/contexts/images-double-ratio";
 
 	interface Props {
 		data: LayoutData;
@@ -96,6 +97,7 @@
 	const fixed = initIsDrawerFixedWritable(writable(false));
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
+	initChapterImagesRatioContext();
 
 	$effect(() => {
 		images.set(data.pages.data);

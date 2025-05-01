@@ -6,6 +6,7 @@
 	import { ImageFit, Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { initCurrentChapterDirection } from "../../../contexts/readingDirection";
 	import { initCurrentChapterImageFit } from "../../../contexts/imageFit";
+	import { initChapterImagesRatioContext } from "../../../contexts/images-double-ratio";
 	interface Props {
 		images: string[];
 		currentPage?: number;
@@ -30,6 +31,7 @@
 	});
 	initChapterImageContext(images);
 	initChapterCurrentPageContext(writable(currentPage));
+	initChapterImagesRatioContext();
 </script>
 
 <div>

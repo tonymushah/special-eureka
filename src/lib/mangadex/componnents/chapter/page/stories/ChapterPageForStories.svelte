@@ -12,6 +12,7 @@
 	import { initRelatedChapters, type RelatedChapters } from "../contexts/relatedChapters";
 	import { initCurrentChapterDirection } from "../contexts/readingDirection";
 	import { initCurrentChapterImageFit } from "../contexts/imageFit";
+	import { initChapterImagesRatioContext } from "../contexts/images-double-ratio";
 
 	interface Props {
 		chapter: CurrentChapterData;
@@ -80,6 +81,7 @@
 	$effect(() => {
 		pageDirection.set(direction);
 	});
+	initChapterImagesRatioContext();
 </script>
 
 <main>
