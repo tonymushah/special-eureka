@@ -1,3 +1,5 @@
+use std::num::NonZero;
+
 use crate::{
     store::types::{
         enums::{
@@ -6,10 +8,14 @@ use crate::{
         },
         structs::{
             content::{profiles::ContentProfileEntry, ContentProfile},
+            page_limit::PAGE_LIMIT_DEFAULT,
             theme::{profiles::ThemeProfileEntry, MangaDexTheme},
         },
     },
-    utils::{get_watches_from_graphql_context, watch::chapter_quality::ChapterQualityWatch},
+    utils::{
+        get_watches_from_graphql_context,
+        watch::{chapter_quality::ChapterQualityWatch, page_limit::PageLimitWatch},
+    },
     Result,
 };
 use async_graphql::{Context, Subscription};
@@ -247,5 +253,19 @@ impl UserOptionSubscriptions {
             ChapterQualityWatch,
             tauri::Wry,
         >(ctx)
+    }
+    pub async fn listen_to_page_limit<'ctx>(
+        &self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = NonZero<u64>>> {
+        let default_limit = NonZero::new(PAGE_LIMIT_DEFAULT).unwrap();
+        let stream = WatchSubscriptionStream::<Option<NonZero<u64>>>::from_async_graphql_context_watch_as_ref::<PageLimitWatch, tauri::Wry>(ctx)?;
+        Ok(stream.map(move |item| {
+            if let Some(inner) = item {
+                inner
+            } else {
+                default_limit
+            }
+        }))
     }
 }
