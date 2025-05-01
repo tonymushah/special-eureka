@@ -2759,6 +2759,7 @@ export type Subscriptions = {
 	watchMangaStatistics: MangaStatisticsAttributes;
 	watchMangaTasksList: Array<Scalars["UUID"]["output"]>;
 	watchPageDirection: Direction;
+	watchPageLimit: Scalars["Int"]["output"];
 	watchPaginationStyle: PaginationStyle;
 	watchRating: RatingItemAttributes;
 	watchReadMarker: Scalars["Boolean"]["output"];
@@ -3136,6 +3137,7 @@ export type UserOptionMutations = {
 	setMangaListStyle: MangaListStyle;
 	setOfflineConfig: OfflineConfigObject;
 	setPageDirection: Direction;
+	setPageLimit?: Maybe<Scalars["Int"]["output"]>;
 	setPaginationStyle: PaginationStyle;
 	setReadingMode: ReadingMode;
 	setSidebarDirection: Direction;
@@ -3200,6 +3202,10 @@ export type UserOptionMutationsSetOfflineConfigArgs = {
 
 export type UserOptionMutationsSetPageDirectionArgs = {
 	direction: Direction;
+};
+
+export type UserOptionMutationsSetPageLimitArgs = {
+	value?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type UserOptionMutationsSetPaginationStyleArgs = {
