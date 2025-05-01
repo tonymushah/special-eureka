@@ -36,6 +36,7 @@
 	/// Required or else the component may not work proprely
 	onMount(() => images_indexes.subscribe(noop));
 	onMount(() => images.subscribe(noop));
+	onMount(() => currentPage.subscribe(noop));
 	onMount(() => currentChapterPage.subscribe(noop));
 	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
