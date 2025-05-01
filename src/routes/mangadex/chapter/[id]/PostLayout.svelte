@@ -96,7 +96,6 @@
 	const fixed = initIsDrawerFixedWritable(writable(false));
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
-	initDoublePageContexts();
 
 	$effect(() => {
 		images.set(data.pages.data);
@@ -160,6 +159,7 @@
 			})
 			.catch(console.error);
 	});
+	initDoublePageContexts();
 </script>
 
 {@render children?.()}
