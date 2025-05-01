@@ -9,7 +9,7 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
-	import { isArray } from "lodash";
+	import { every, isArray } from "lodash";
 	import { derived, get } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
@@ -26,7 +26,7 @@
 				? `${value[$dir == ReadingDirection.Ltr ? 0 : 1] + 1} - ${value[$dir == ReadingDirection.Ltr ? 1 : 0] + 1}`
 				: `${value + 1}`;
 			return {
-				value,
+				value /*: isArray(value) && $dir == ReadingDirection.Rtl ? value.toReversed() : value*/,
 				label
 			} as SelectOption<Page>;
 		}
@@ -41,8 +41,7 @@
 	);
 	const {
 		elements: { trigger, menu, option },
-		states: { selectedLabel, open },
-		helpers: { isSelected }
+		states: { selectedLabel, open, selected }
 	} = createSelect<Page>({
 		forceVisible: true,
 		positioning: {
@@ -68,6 +67,26 @@
 				currentPageContext.set(value);
 			}
 		}
+	});
+	const isSelected = derived(selected, ($selected) => {
+		return (value: number | [number, number]) => {
+			if ($selected == undefined) {
+				return false;
+			}
+			if (isArray(value)) {
+				return every(value, (i) => {
+					if (isArray($selected.value)) {
+						return $selected.value.includes(i);
+					} else {
+						return false;
+					}
+				});
+			} else if (!isArray($selected.value)) {
+				return value == $selected.value;
+			} else {
+				return false;
+			}
+		};
 	});
 </script>
 
