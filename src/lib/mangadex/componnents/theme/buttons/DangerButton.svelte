@@ -9,7 +9,7 @@
 		isBase?: boolean;
 	}
 
-	let { variant = "default", isBase = false, children, ...restProps }: Props = $props();
+	let { variant = "default", isBase = false, ...restProps }: Props = $props();
 </script>
 
 {#if variant == "1"}
