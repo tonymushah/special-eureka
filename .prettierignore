@@ -5,3 +5,4 @@ yarn.lock
 /src-tauri
 /target
 src/lib/ROUTES.ts
+src/lib/mangadex/schemas.graphqls
