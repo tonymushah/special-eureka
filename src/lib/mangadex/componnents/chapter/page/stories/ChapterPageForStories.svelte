@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { writable } from "svelte/store";
-	import { initCurrentChapterData, type CurrentChapterData } from "../contexts/currentChapter";
-	import { initChapterCurrentPageContext } from "../contexts/currentPage";
-	import { initChapterImageContext } from "../contexts/images";
 	import { Direction, ImageFit, ReadingMode } from "@mangadex/gql/graphql";
-	import { initIsDrawerFixedWritable } from "../contexts/isDrawerFixed";
-	import { initCurrentChapterReadingMode } from "../contexts/currentChapterReadingMode";
+	import { writable } from "svelte/store";
 	import ChapterPage from "../ChapterPage.svelte";
-	import { initIsDrawerOpenWritable } from "../contexts/isDrawerOpen";
-	import { initLongStripImagesWidthContext } from "../readinMode/longStrip/utils/context/longstrip_images_width";
-	import { initRelatedChapters, type RelatedChapters } from "../contexts/relatedChapters";
-	import { initCurrentChapterDirection } from "../contexts/readingDirection";
+	import { initCurrentChapterData, type CurrentChapterData } from "../contexts/currentChapter";
+	import { initCurrentChapterReadingMode } from "../contexts/currentChapterReadingMode";
+	import { initChapterCurrentPageContext } from "../contexts/currentPage";
 	import { initCurrentChapterImageFit } from "../contexts/imageFit";
-	import { initChapterImagesRatioContext } from "../contexts/images-double-ratio";
+	import { initChapterImageContext } from "../contexts/images";
+	import { initIsDrawerFixedWritable } from "../contexts/isDrawerFixed";
+	import { initIsDrawerOpenWritable } from "../contexts/isDrawerOpen";
+	import { initCurrentChapterDirection } from "../contexts/readingDirection";
+	import { initRelatedChapters, type RelatedChapters } from "../contexts/relatedChapters";
+	import initDoublePageContexts from "../readinMode/doublePage/utils/contexts";
+	import { initLongStripImagesWidthContext } from "../readinMode/longStrip/utils/context/longstrip_images_width";
 
 	interface Props {
 		chapter: CurrentChapterData;
@@ -81,7 +81,7 @@
 	$effect(() => {
 		pageDirection.set(direction);
 	});
-	initChapterImagesRatioContext();
+	initDoublePageContexts();
 </script>
 
 <main>

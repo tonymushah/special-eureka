@@ -1,5 +1,5 @@
 import { derived, type Readable } from "svelte/store";
-import { getChapterImagesRatioContext } from "../../../contexts/images-double-ratio";
+import { getChapterImagesRatioContext } from "./contexts/images-ratios";
 import getImageRatio from "./getImageRatio";
 
 export function getChapterImagesRatioStore(images: Readable<string[]>): Readable<Map<string, number>> {

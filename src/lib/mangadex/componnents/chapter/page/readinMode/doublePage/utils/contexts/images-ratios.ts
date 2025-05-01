@@ -1,7 +1,7 @@
 import { getContext, setContext } from "svelte";
 import { type Readable } from "svelte/store";
-import { getChapterImagesRatioStore } from "../readinMode/doublePage/utils/getChapterImagesRatio";
-import { getChapterImageContext } from "./images";
+import { getChapterImagesRatioStore } from "../getChapterImagesRatio";
+import { getChapterImageContext } from "../../../../contexts/images";
 
 type ChapterImagesList = Array<string>;
 type ChapterImagesRation = Map<string, number>;

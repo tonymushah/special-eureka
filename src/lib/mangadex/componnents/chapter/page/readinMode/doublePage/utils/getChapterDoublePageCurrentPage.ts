@@ -1,12 +1,12 @@
-import { derived, type Readable, type Writable } from "svelte/store";
-import type { ChapterDoublePageImage } from "./getChapterImagesAsDoublePage";
-import getChapterDoublePageCurrentPageIndex from "./getChapterDoublePageCurrentPageIndex";
-import getChapterImagesAsDoublePage from "./getChapterImagesAsDoublePage";
 import { isArray } from "lodash";
+import { derived, type Readable } from "svelte/store";
 import { getChapterCurrentPageContext } from "../../../contexts/currentPage";
+import getChapterDoublePageCurrentPageIndex from "./getChapterDoublePageCurrentPageIndex";
+import type { ChapterDoublePageImage } from "./getChapterImagesAsDoublePage";
+import getChapterImagesAsDoublePage from "./getChapterImagesAsDoublePage";
 
-import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 
 export default function getChapterDoublePageCurrentPage(
 	currentChapter = getChapterCurrentPageContext()
