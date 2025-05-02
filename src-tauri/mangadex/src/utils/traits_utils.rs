@@ -58,8 +58,12 @@ where
             let should_fetched: bool = {
                 let last_time_fetched_inner = last_time_fetched.read().await;
                 let inner = last_time_fetched_inner.ok_or(crate::Error::NotLoggedIn)?;
+
                 #[cfg(debug_assertions)]
-                println!("{:#?}", inner);
+                {
+                    super::print_instant(inner.into());
+                }
+
                 inner < Instant::now()
             };
 

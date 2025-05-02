@@ -1,5 +1,5 @@
 use mangadex_api::MangaDexClient;
-use std::future::Future;
+use std::{future::Future, time::Instant};
 use tauri::{AppHandle, Runtime, State, Window};
 
 use crate::app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
@@ -99,4 +99,24 @@ where
     std::thread::spawn(move || tauri::async_runtime::block_on(fut))
         .join()
         .unwrap()
+}
+
+pub fn print_instant(instant: Instant) {
+    use mangadex_api_types_rust::MangaDexDateTime;
+    use time::OffsetDateTime;
+    println!(
+        "{:?}",
+        instant
+            .checked_duration_since(Instant::now())
+            .and_then(|d| {
+                Some(
+                    MangaDexDateTime::new(
+                        &OffsetDateTime::now_local()
+                            .ok()?
+                            .checked_add(d.try_into().ok()?)?,
+                    )
+                    .to_string(),
+                )
+            })
+    );
 }
