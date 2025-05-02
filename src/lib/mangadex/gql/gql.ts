@@ -82,6 +82,7 @@ type Documents = {
 	"\n\t\t\tquery coverImage(\n\t\t\t\t$cover_id: UUID!\n\t\t\t\t$manga_id: UUID!\n\t\t\t\t$filename: String!\n\t\t\t\t$mode: CoverImageQuality\n\t\t\t) {\n\t\t\t\tcover {\n\t\t\t\t\tgetImage(\n\t\t\t\t\t\tcoverId: $cover_id\n\t\t\t\t\t\tmangaId: $manga_id\n\t\t\t\t\t\tfilename: $filename\n\t\t\t\t\t\tmode: $mode\n\t\t\t\t\t)\n\t\t\t\t}\n\t\t\t}\n\t\t": typeof types.CoverImageDocument;
 	"\n\tquery favicon($url: Url!) {\n\t\tutils {\n\t\t\tfavicon(url: $url)\n\t\t}\n\t}\n": typeof types.FaviconDocument;
 	"\n\tquery getLanguageFromStr($lang: String!) {\n\t\tutils {\n\t\t\tstrToLanguage(input: $lang)\n\t\t}\n\t}\n": typeof types.GetLanguageFromStrDocument;
+	"\n\tquery getAuthExpiration {\n\t\tuserOption {\n\t\t\tgetAuthDateTimeLimit\n\t\t}\n\t}\n": typeof types.GetAuthExpirationDocument;
 	"\n\t\t\t\tmutation mountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t": typeof types.MountAppStateDocument;
 	"\n\t\t\t\tmutation unmountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tunmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t": typeof types.UnmountAppStateDocument;
 	"\n\tquery chaptersStats($ids: [UUID!]!) {\n\t\tstatistics {\n\t\t\tchapter {\n\t\t\t\tlist(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChaptersStatsDocument;
@@ -252,6 +253,8 @@ const documents: Documents = {
 		types.FaviconDocument,
 	"\n\tquery getLanguageFromStr($lang: String!) {\n\t\tutils {\n\t\t\tstrToLanguage(input: $lang)\n\t\t}\n\t}\n":
 		types.GetLanguageFromStrDocument,
+	"\n\tquery getAuthExpiration {\n\t\tuserOption {\n\t\t\tgetAuthDateTimeLimit\n\t\t}\n\t}\n":
+		types.GetAuthExpirationDocument,
 	"\n\t\t\t\tmutation mountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t":
 		types.MountAppStateDocument,
 	"\n\t\t\t\tmutation unmountAppState {\n\t\t\t\t\tofflineAppState {\n\t\t\t\t\t\tunmountOfflineAppState\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t":
@@ -742,6 +745,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery getLanguageFromStr($lang: String!) {\n\t\tutils {\n\t\t\tstrToLanguage(input: $lang)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery getLanguageFromStr($lang: String!) {\n\t\tutils {\n\t\t\tstrToLanguage(input: $lang)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getAuthExpiration {\n\t\tuserOption {\n\t\t\tgetAuthDateTimeLimit\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getAuthExpiration {\n\t\tuserOption {\n\t\t\tgetAuthDateTimeLimit\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

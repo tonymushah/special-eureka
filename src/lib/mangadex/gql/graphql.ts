@@ -4538,6 +4538,13 @@ export type GetLanguageFromStrQuery = {
 	utils: { __typename?: "UtilsQuery"; strToLanguage: Language };
 };
 
+export type GetAuthExpirationQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAuthExpirationQuery = {
+	__typename?: "Query";
+	userOption: { __typename?: "UserOptionQueries"; getAuthDateTimeLimit?: any | null };
+};
+
 export type MountAppStateMutationVariables = Exact<{ [key: string]: never }>;
 
 export type MountAppStateMutation = {
@@ -11563,6 +11570,34 @@ export const GetLanguageFromStrDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetLanguageFromStrQuery, GetLanguageFromStrQueryVariables>;
+export const GetAuthExpirationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getAuthExpiration" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getAuthDateTimeLimit" }
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetAuthExpirationQuery, GetAuthExpirationQueryVariables>;
 export const MountAppStateDocument = {
 	kind: "Document",
 	definitions: [
