@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { isLinuxStore } from "$lib/commands/isLinux";
+
 	interface Props {
 		title: string;
 	}
@@ -6,7 +8,7 @@
 	let { title }: Props = $props();
 </script>
 
-<div class="title">
+<div class="title" class:noTransition={$isLinuxStore}>
 	<p>{title}</p>
 </div>
 
@@ -21,8 +23,10 @@
 		opacity: 1;
 		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--content-bg) 100%);
 		border-radius: 0.25rem;
-		transition: opacity 300ms ease-in-out;
 		justify-content: center;
+	}
+	div.title:not(.noTransition) {
+		transition: opacity 300ms ease-in-out;
 	}
 	div.title > p {
 		font-weight: 700;

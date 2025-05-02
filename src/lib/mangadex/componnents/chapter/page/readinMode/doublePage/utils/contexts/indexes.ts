@@ -9,19 +9,24 @@ type ChapterImagesIndexes = ([number, number] | number)[];
 
 const KEY = "chapter-page-double-indexes";
 
-export function initDoublePageChapterIndexesContext(images: Readable<ChapterImagesList> = getChapterImagesAsDoublePage()): Readable<ChapterImagesIndexes> {
-	return setContext<Readable<ChapterImagesIndexes>>(KEY, derived(images, ($images) => {
-		let index = 0;
-		return $images.map<number | [number, number]>((img) => {
-			if (isArray(img)) {
-				index = index + 2;
-				return [index - 2, index - 1];
-			} else {
-				index = index + 1;
-				return index - 1;
-			}
-		});
-	}));
+export function initDoublePageChapterIndexesContext(
+	images: Readable<ChapterImagesList> = getChapterImagesAsDoublePage()
+): Readable<ChapterImagesIndexes> {
+	return setContext<Readable<ChapterImagesIndexes>>(
+		KEY,
+		derived(images, ($images) => {
+			let index = 0;
+			return $images.map<number | [number, number]>((img) => {
+				if (isArray(img)) {
+					index = index + 2;
+					return [index - 2, index - 1];
+				} else {
+					index = index + 1;
+					return index - 1;
+				}
+			});
+		})
+	);
 }
 
 export function getDoublePageChapterIndexesContext(): Readable<ChapterImagesIndexes> {

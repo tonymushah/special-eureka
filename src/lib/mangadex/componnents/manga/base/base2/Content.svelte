@@ -92,6 +92,7 @@
 		flex-wrap: wrap;
 		height: 1.5em;
 		overflow: hidden;
+		padding: 2px 0px;
 	}
 	@media (width < 600px) {
 		.pub-tag {

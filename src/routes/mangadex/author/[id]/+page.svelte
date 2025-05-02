@@ -3,6 +3,7 @@
 	import type { PageData } from "./$types";
 	import { derived, readable, writable } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
+	import pageLimit from "@mangadex/stores/page-limit";
 	interface Props {
 		data: PageData;
 	}
@@ -14,9 +15,10 @@
 	});
 	const offlineStore = readable(false);
 
-	const listParams = derived([authorId], ([$id]) => {
+	const listParams = derived([authorId, pageLimit], ([$id, $limit]) => {
 		return {
-			authorOrArtist: $id
+			authorOrArtist: $id,
+			limit: $limit
 		} as MangaListParams;
 	});
 </script>

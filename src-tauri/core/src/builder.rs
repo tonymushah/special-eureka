@@ -27,7 +27,8 @@ pub fn get_builder() -> Builder<Wry> {
         .invoke_handler(tauri::generate_handler![
             crate::commands::close_splashcreen::close_splashscreen,
             crate::commands::open_new_window::open_new_window,
-            crate::commands::toggle_decoration::toggle_decoration
+            crate::commands::toggle_decoration::toggle_decoration,
+            crate::commands::is_linux::is_linux
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(mangadex::init())

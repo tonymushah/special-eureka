@@ -17,6 +17,7 @@ use crate::{
             client_info::ClientInfoStore,
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
             longstrip_image_width::LongstripImageWidthStore,
+            page_limit::PageLimitStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
         },
         ExtractFromStore,
@@ -52,6 +53,7 @@ setup_watch! {
     content_profiles <= ContentProfiles,
     content_profiles_default_key <= ContentProfileDefaultKey,
     chapter_quality <= ChapterQualityStore,
+    page_limit <= PageLimitStore,
 }
 
 pub fn init_watches_states<R: Runtime>(

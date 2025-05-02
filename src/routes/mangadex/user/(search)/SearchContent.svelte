@@ -14,6 +14,7 @@
 	import UserRolesColorProvider from "@mangadex/componnents/user/UserRolesColorProvider.svelte";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	const client = getContextClient();
 	interface Props {
@@ -21,9 +22,10 @@
 	}
 
 	let { userName }: Props = $props();
-	const params = derived([userName], ([$userName]) => {
+	const params = derived([userName, pageLimit], ([$userName, $limit]) => {
 		return {
-			username: $userName
+			username: $userName,
+			limit: $limit
 		} satisfies UserListParam;
 	});
 	interface InfiniteQueryData {

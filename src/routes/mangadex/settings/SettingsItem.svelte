@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import type { ComponentType } from "svelte";
+	import type { Component } from "svelte";
 
 	interface Props {
-		icon: ComponentType;
+		icon: Component;
 		title: string;
 		description: string;
 		href: string;

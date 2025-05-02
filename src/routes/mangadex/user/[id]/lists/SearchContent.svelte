@@ -14,6 +14,7 @@
 	import type { Readable } from "svelte/store";
 	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type UserCustomListItemData } from "./search";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	interface Props {
 		userId: Readable<string>;
@@ -22,9 +23,9 @@
 	let { userId }: Props = $props();
 	const client = getContextClient();
 	const query = createInfiniteQuery(
-		derived([userId], ([$userId]) => {
+		derived([userId, pageLimit], ([$userId, $limit]) => {
 			return {
-				queryKey: ["user", $userId, "custom-lists"],
+				queryKey: ["user", $userId, "custom-lists", `limit:${$limit}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -42,7 +43,8 @@
 					}
 				},
 				initialPageParam: {
-					userId
+					userId,
+					limit: $limit
 				} satisfies UserCustomListParams
 			} satisfies CreateInfiniteQueryOptions<
 				AbstractSearchResult<UserCustomListItemData>,

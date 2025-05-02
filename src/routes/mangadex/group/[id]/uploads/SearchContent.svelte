@@ -16,6 +16,7 @@
 	import type { Readable } from "svelte/store";
 	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type ScanlationGroupUploadsFeedChapterParams } from "./search";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	interface Props {
 		groupId: Readable<string>;
@@ -24,9 +25,9 @@
 	let { groupId }: Props = $props();
 	const client = getContextClient();
 	const query = createInfiniteQuery(
-		derived([groupId], ([$groupId]) => {
+		derived([groupId, pageLimit], ([$groupId, $limit]) => {
 			return {
-				queryKey: ["group", $groupId, "uploads"],
+				queryKey: ["group", $groupId, "uploads", `limit:${$limit}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -45,6 +46,7 @@
 				},
 				initialPageParam: {
 					group: $groupId,
+					limit: $limit,
 					order: {
 						readableAt: OrderDirection.Descending
 					}

@@ -26,6 +26,7 @@ use self::{
     manga_list_style::MangaListStyleWatch,
     manga_reading_state::MangaReadingStateWatch,
     page_direction::PageDirectionWatch,
+    page_limit::PageLimitWatch,
     rating::RatingWatch,
     read_marker::ReadMarkerWatch,
     reading_mode::ReadingModeWatch,
@@ -60,6 +61,7 @@ pub mod manga;
 pub mod manga_list_style;
 pub mod manga_reading_state;
 pub mod page_direction;
+pub mod page_limit;
 pub mod pagination_style;
 pub mod rating;
 pub mod read_marker;
@@ -245,4 +247,5 @@ watches_implementation! {
     content_profiles => ContentProfilesWatch,
     content_profiles_default_key => ContentProfileDefaultKeyWatch,
     chapter_quality => ChapterQualityWatch,
+    page_limit => PageLimitWatch,
 }

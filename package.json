@@ -4,7 +4,7 @@
   "scripts": {
     "vite:dev": "vite dev",
     "codegen": "graphql-codegen",
-    "codegen:mangadex": "pnpm codegen -c ./src/lib/mangadex/codegen.ts",
+    "codegen:mangadex": "pnpm codegen -c ./src/lib/mangadex/codegen.ts; pnpm prettier -w src/lib/mangadex/gql",
     "vite:build_preview": "pnpm vite:build && pnpm vite:preview",
     "vite:build": "vite build --emptyOutDir",
     "vite:preview": "vite preview --port 9305",

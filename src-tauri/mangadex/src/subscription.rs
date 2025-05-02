@@ -1,3 +1,5 @@
+use std::num::NonZero;
+
 use crate::objects::oauth::ClientInfo;
 use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
 use crate::store::types::enums::chapter_quality::DownloadMode;
@@ -455,5 +457,11 @@ impl Subscriptions {
         ctx: &'ctx Context<'ctx>,
     ) -> Result<impl Stream<Item = DownloadMode> + 'ctx> {
         UserOptionSubscriptions.listen_to_chapter_quality(ctx).await
+    }
+    pub async fn watch_page_limit<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> Result<impl Stream<Item = NonZero<u64>> + 'ctx> {
+        UserOptionSubscriptions.listen_to_page_limit(ctx).await
     }
 }

@@ -8,7 +8,9 @@ type ChapterImagesRation = Map<string, number>;
 
 const KEY = "chapter-page-images-ratios";
 
-export function initChapterImagesRatioContext(images: Readable<ChapterImagesList> = getChapterImageContext()): Readable<ChapterImagesRation> {
+export function initChapterImagesRatioContext(
+	images: Readable<ChapterImagesList> = getChapterImageContext()
+): Readable<ChapterImagesRation> {
 	return setContext<Readable<ChapterImagesRation>>(KEY, getChapterImagesRatioStore(images));
 }
 
