@@ -1,9 +1,10 @@
-use std::time::SystemTime;
+use std::{fs::create_dir_all, time::SystemTime};
 
 use fern::{log_file, Dispatch};
 use tauri::{App, Manager, Runtime};
 
 pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {
+    create_dir_all(app.path().app_log_dir()?)?;
     let file_dispatch = Dispatch::new()
         .format(|out, msg, record| {
             out.finish(format_args!(
