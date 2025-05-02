@@ -3239,6 +3239,7 @@ export type UserOptionMutationsUpdateDefaultThemeArgs = {
 
 export type UserOptionQueries = {
 	__typename?: "UserOptionQueries";
+	getAuthDateTimeLimit?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
 	getChapterLanguages: Array<Language>;
 	getDefaultContentProfile: ContentProfile;
 	getOfflineConfig: OfflineConfigObject;

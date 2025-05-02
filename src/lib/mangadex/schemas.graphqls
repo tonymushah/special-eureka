@@ -2451,6 +2451,7 @@ type UserOptionQueries {
 	getChapterLanguages: [Language!]!
 	getDefaultContentProfile: ContentProfile!
 	getOfflineConfig: OfflineConfigObject!
+	getAuthDateTimeLimit: MangaDexDateTime
 }
 
 type UserQueries {
