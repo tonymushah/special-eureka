@@ -2199,6 +2199,7 @@ type Subscriptions {
 	watchContentProfileDefaultName: String
 	watchContentProfileDefault: ContentProfile!
 	watchChapterQuality: DownloadMode!
+	watchPageLimit: Int!
 }
 
 type Tag {
@@ -2440,6 +2441,7 @@ type UserOptionMutations {
 	setContentProfiles(entries: [ContentProfileEntryInput!]!): Int!
 	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
 	setChapterQuality(quality: DownloadMode): DownloadMode!
+	setPageLimit(value: Int): Int
 }
 
 type UserOptionQueries {

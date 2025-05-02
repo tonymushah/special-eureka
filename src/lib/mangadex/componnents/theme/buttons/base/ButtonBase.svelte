@@ -40,17 +40,12 @@
 		font-size: var(--font-size);
 		transition:
 			background-color,
-			filter 200ms ease-in-out;
+			filter 100ms ease-in-out;
 		color: var(--text-color);
 		background-color: var(--button-color);
 		font-family: var(--fonts);
 		border: var(--mid-tone) solid 3px;
 		box-shadow: 0px 3px 0px var(--mid-tone);
-		transition:
-			border,
-			box-shadow,
-			transform,
-			100ms ease-in-out;
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);

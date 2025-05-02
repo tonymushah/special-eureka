@@ -9,8 +9,13 @@ type ChapterImagesRation = Map<string, number>;
 
 const KEY = "chapter-page-double-images";
 
-export function initDoublePageChapterImagesContext(ratios: Readable<ChapterImagesRation> = getChapterImagesRatio()): Readable<ChapterImagesList> {
-	return setContext<Readable<ChapterImagesList>>(KEY, derived(ratios, (ratios) => generateDoublePageOutput(ratios)));
+export function initDoublePageChapterImagesContext(
+	ratios: Readable<ChapterImagesRation> = getChapterImagesRatio()
+): Readable<ChapterImagesList> {
+	return setContext<Readable<ChapterImagesList>>(
+		KEY,
+		derived(ratios, (ratios) => generateDoublePageOutput(ratios))
+	);
 }
 
 export function getDoublePageChapterImagesContext(): Readable<ChapterImagesList> {

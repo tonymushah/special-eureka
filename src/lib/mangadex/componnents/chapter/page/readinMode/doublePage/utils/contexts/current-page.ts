@@ -12,25 +12,30 @@ type ChapterImages = ChapterDoublePageImage | undefined;
 
 const KEY = "chapter-page-double-page-current-page";
 
-export function initDoublePageChapterCurrentPageContext(currentChapter = readonly(getChapterCurrentPageContext())): Readable<ChapterImages> {
+export function initDoublePageChapterCurrentPageContext(
+	currentChapter = readonly(getChapterCurrentPageContext())
+): Readable<ChapterImages> {
 	const readingDirection = getCurrentChapterDirection();
 	const images = getChapterImagesAsDoublePage();
 	const current = getChapterDoublePageCurrentPageIndex();
 
-	return setContext<Readable<ChapterImages>>(KEY, derived([images, current, readingDirection], ([$images, $currentPage, $rd]) => {
-		const image = $images.at($currentPage);
-		if (image) {
-			if (isArray(image)) {
-				if ($rd == ReadingDirection.Ltr) {
-					return image;
+	return setContext<Readable<ChapterImages>>(
+		KEY,
+		derived([images, current, readingDirection], ([$images, $currentPage, $rd]) => {
+			const image = $images.at($currentPage);
+			if (image) {
+				if (isArray(image)) {
+					if ($rd == ReadingDirection.Ltr) {
+						return image;
+					} else {
+						return [image[1], image[0]] satisfies ChapterDoublePageImage;
+					}
 				} else {
-					return [image[1], image[0]] satisfies ChapterDoublePageImage;
+					return image;
 				}
-			} else {
-				return image;
 			}
-		}
-	}));
+		})
+	);
 }
 
 export function getDoublePageChapterCurrentPageContext(): Readable<ChapterImages> {

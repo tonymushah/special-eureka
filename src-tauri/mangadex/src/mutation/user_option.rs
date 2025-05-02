@@ -1,3 +1,5 @@
+use std::num::NonZero;
+
 use crate::{
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     objects::offline_config::{OfflineConfigInput, OfflineConfigObject},
@@ -16,6 +18,7 @@ use crate::{
                 },
                 longstrip_image_width::LongstripImageWidthStore,
                 offline_config::OfflineConfigStore,
+                page_limit::{PageLimitStore, PAGE_LIMIT_DEFAULT},
                 theme::{
                     profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
                     MangaDexTheme,
@@ -361,5 +364,27 @@ impl UserOptionMutations {
         app.insert_and_save(&store).await?;
         watches.chapter_quality.send_data(*store)?;
         Ok(*store)
+    }
+    pub async fn set_page_limit(
+        &self,
+        ctx: &Context<'_>,
+        value: Option<NonZero<u64>>,
+    ) -> Result<Option<NonZero<u64>>> {
+        let mut value = value;
+        value = value.map(|a| {
+            let default_limit = NonZero::new(PAGE_LIMIT_DEFAULT).unwrap();
+            if a < default_limit {
+                default_limit
+            } else {
+                a
+            }
+        });
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<PageLimitStore>().await?;
+        *store = value;
+        app.insert_and_save(&store).await?;
+        watches.page_limit.send_data(*store)?;
+        Ok(NonZero::new(store.value()))
     }
 }

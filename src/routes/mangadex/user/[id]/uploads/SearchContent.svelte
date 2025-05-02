@@ -18,6 +18,7 @@
 		type ChapterFeedListItemExt,
 		type UserUploadsFeedChapterParams
 	} from "./search";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	interface Props {
 		userId: Readable<string>;
@@ -26,9 +27,9 @@
 	let { userId }: Props = $props();
 	const client = getContextClient();
 	const query = createInfiniteQuery(
-		derived([userId], ([$userId]) => {
+		derived([userId, pageLimit], ([$userId, $limit]) => {
 			return {
-				queryKey: ["user", $userId, "uploads"],
+				queryKey: ["user", $userId, "uploads", `limit:${$limit}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -47,6 +48,7 @@
 				},
 				initialPageParam: {
 					user: $userId,
+					limit: $limit,
 					order: {
 						readableAt: OrderDirection.Descending
 					}

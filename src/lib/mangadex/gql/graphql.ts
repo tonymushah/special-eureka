@@ -2759,6 +2759,7 @@ export type Subscriptions = {
 	watchMangaStatistics: MangaStatisticsAttributes;
 	watchMangaTasksList: Array<Scalars["UUID"]["output"]>;
 	watchPageDirection: Direction;
+	watchPageLimit: Scalars["Int"]["output"];
 	watchPaginationStyle: PaginationStyle;
 	watchRating: RatingItemAttributes;
 	watchReadMarker: Scalars["Boolean"]["output"];
@@ -3136,6 +3137,7 @@ export type UserOptionMutations = {
 	setMangaListStyle: MangaListStyle;
 	setOfflineConfig: OfflineConfigObject;
 	setPageDirection: Direction;
+	setPageLimit?: Maybe<Scalars["Int"]["output"]>;
 	setPaginationStyle: PaginationStyle;
 	setReadingMode: ReadingMode;
 	setSidebarDirection: Direction;
@@ -3200,6 +3202,10 @@ export type UserOptionMutationsSetOfflineConfigArgs = {
 
 export type UserOptionMutationsSetPageDirectionArgs = {
 	direction: Direction;
+};
+
+export type UserOptionMutationsSetPageLimitArgs = {
+	value?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type UserOptionMutationsSetPaginationStyleArgs = {
@@ -4261,6 +4267,22 @@ export type ServerIconStateSubscriptionVariables = Exact<{ [key: string]: never 
 export type ServerIconStateSubscription = {
 	__typename?: "Subscriptions";
 	watchIsAppMounted: boolean;
+};
+
+export type PageLimitSubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type PageLimitSubscriptionSubscription = {
+	__typename?: "Subscriptions";
+	watchPageLimit: number;
+};
+
+export type SetPageLimitMutationVariables = Exact<{
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+}>;
+
+export type SetPageLimitMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setPageLimit?: number | null };
 };
 
 export type PaginationStyleUpdateSubscriptionVariables = Exact<{ [key: string]: never }>;
@@ -9591,6 +9613,68 @@ export const ServerIconStateDocument = {
 		}
 	]
 } as unknown as DocumentNode<ServerIconStateSubscription, ServerIconStateSubscriptionVariables>;
+export const PageLimitSubscriptionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "pageLimitSubscription" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [{ kind: "Field", name: { kind: "Name", value: "watchPageLimit" } }]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	PageLimitSubscriptionSubscription,
+	PageLimitSubscriptionSubscriptionVariables
+>;
+export const SetPageLimitDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setPageLimit" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setPageLimit" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "value" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "limit" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetPageLimitMutation, SetPageLimitMutationVariables>;
 export const PaginationStyleUpdateDocument = {
 	kind: "Document",
 	definitions: [

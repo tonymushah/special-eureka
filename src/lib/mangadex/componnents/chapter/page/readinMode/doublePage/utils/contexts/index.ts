@@ -5,7 +5,10 @@ import { initDoublePageChapterIndexesContext } from "./indexes";
 import { initDoublePageChapterCurrentPageContext } from "./current-page";
 import { initDoublePageChapterCurrentPageIndexContext } from "./current-page-index";
 
-export default function initDoublePageContexts(param?: { images?: Readable<string[]>, currentChapter?: Readable<number> }) {
+export default function initDoublePageContexts(param?: {
+	images?: Readable<string[]>;
+	currentChapter?: Readable<number>;
+}) {
 	const ratios = initChapterImagesRatioContext(param?.images);
 	const doubleImages = initDoublePageChapterImagesContext(ratios);
 	const indexes = initDoublePageChapterIndexesContext(doubleImages);

@@ -9,7 +9,15 @@
 	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
 	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
 	import DownloadStateIcon from "./(icons)/DownloadStateIcon.svelte";
+	import GeneralSettingsIcon from "./(icons)/GeneralSettingsIcon.svelte";
+
 	let settings: ComponentProps<typeof SettingsItem>[] = [
+		{
+			title: "General Settings",
+			description: "...",
+			href: route("/mangadex/settings/general-settings"),
+			icon: GeneralSettingsIcon
+		},
 		{
 			title: "Themes",
 			description: "Add, Edit, Delete theme profiles to edit MangaDex Colors and more!",

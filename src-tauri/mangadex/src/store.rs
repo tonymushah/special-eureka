@@ -29,7 +29,7 @@ use self::{
         },
         structs::{
             chapter_language::ChapterLanguagesStore, client_info::ClientInfoStore,
-            refresh_token::RefreshTokenStore,
+            page_limit::PageLimitStore, refresh_token::RefreshTokenStore,
         },
         DefaulStore,
     },
@@ -70,6 +70,7 @@ get_store_builder! {
     ContentProfileDefaultKey,
     OfflineConfigStore,
     ChapterQualityStore,
+    PageLimitStore,
 }
 
 // [x] refactor into a macro!

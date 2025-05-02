@@ -33,3 +33,5 @@ pub const CONTENT_PROFILE_KEY: &str = "content_profile_key";
 pub const OFFLINE_CONFIG: &str = "offline_config";
 
 pub const CHAPTERS_QUALITY: &str = "chapters_quality";
+
+pub const PAGE_LIMIT: &str = "page_limit";

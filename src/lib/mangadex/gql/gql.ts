@@ -68,6 +68,8 @@ type Documents = {
 	"\n\tquery offlineConfig {\n\t\tuserOption {\n\t\t\tgetOfflineConfig {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n": typeof types.OfflineConfigDocument;
 	"\n\tmutation updateOfflineConfig($cfg: OfflineConfigInput!) {\n\t\tuserOption {\n\t\t\tsetOfflineConfig(cfg: $cfg) {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateOfflineConfigDocument;
 	"\n\tsubscription serverIconState {\n\t\twatchIsAppMounted\n\t}\n": typeof types.ServerIconStateDocument;
+	"\n\tsubscription pageLimitSubscription {\n\t\twatchPageLimit\n\t}\n": typeof types.PageLimitSubscriptionDocument;
+	"\n\tmutation setPageLimit($limit: Int) {\n\t\tuserOption {\n\t\t\tsetPageLimit(value: $limit)\n\t\t}\n\t}\n": typeof types.SetPageLimitDocument;
 	"\n\tsubscription paginationStyleUpdate {\n\t\twatchPaginationStyle\n\t}\n": typeof types.PaginationStyleUpdateDocument;
 	"\n\tmutation updatePaginationStyle($style: PaginationStyle!) {\n\t\tuserOption {\n\t\t\tsetPaginationStyle(style: $style)\n\t\t}\n\t}\n": typeof types.UpdatePaginationStyleDocument;
 	"\n\tsubscription defaultThemeProfileSubscription {\n\t\twatchThemeProfileDefault {\n\t\t\ttextColor\n\t\t\tmainBackground\n\t\t\taccents {\n\t\t\t\tdefault {\n\t\t\t\t\tdefault\n\t\t\t\t\thover\n\t\t\t\t\tactive\n\t\t\t\t}\n\t\t\t\tl1 {\n\t\t\t\t\tdefault\n\t\t\t\t\thover\n\t\t\t\t\tactive\n\t\t\t\t}\n\t\t\t\tl2 {\n\t\t\t\t\tdefault\n\t\t\t\t\thover\n\t\t\t\t\tactive\n\t\t\t\t}\n\t\t\t\tl3 {\n\t\t\t\t\tdefault\n\t\t\t\t\thover\n\t\t\t\t\tactive\n\t\t\t\t}\n\t\t\t\tl4 {\n\t\t\t\t\tdefault\n\t\t\t\t\thover\n\t\t\t\t\tactive\n\t\t\t\t}\n\t\t\t\tl5 {\n\t\t\t\t\tdefault\n\t\t\t\t\thover\n\t\t\t\t\tactive\n\t\t\t\t}\n\t\t\t}\n\t\t\tmidTone\n\t\t\tcontrast {\n\t\t\t\tl1\n\t\t\t}\n\t\t\tscrollbar {\n\t\t\t\tdefault\n\t\t\t\thovered\n\t\t\t}\n\t\t\tbutton {\n\t\t\t\tdefault\n\t\t\t\talternate\n\t\t\t}\n\t\t\tprimary {\n\t\t\t\tprimary\n\t\t\t\tprimary1\n\t\t\t\tprimary2\n\t\t\t}\n\t\t\tstatus {\n\t\t\t\tred\n\t\t\t\tgrey\n\t\t\t\tgreen\n\t\t\t\tyellow\n\t\t\t\tblue\n\t\t\t\tgrey\n\t\t\t\tpurple\n\t\t\t}\n\t\t\tindication {\n\t\t\t\tblue\n\t\t\t}\n\t\t\tdanger {\n\t\t\t\tdefault\n\t\t\t\tl1\n\t\t\t\tl2\n\t\t\t}\n\t\t}\n\t}\n": typeof types.DefaultThemeProfileSubscriptionDocument;
@@ -222,6 +224,10 @@ const documents: Documents = {
 		types.UpdateOfflineConfigDocument,
 	"\n\tsubscription serverIconState {\n\t\twatchIsAppMounted\n\t}\n":
 		types.ServerIconStateDocument,
+	"\n\tsubscription pageLimitSubscription {\n\t\twatchPageLimit\n\t}\n":
+		types.PageLimitSubscriptionDocument,
+	"\n\tmutation setPageLimit($limit: Int) {\n\t\tuserOption {\n\t\t\tsetPageLimit(value: $limit)\n\t\t}\n\t}\n":
+		types.SetPageLimitDocument,
 	"\n\tsubscription paginationStyleUpdate {\n\t\twatchPaginationStyle\n\t}\n":
 		types.PaginationStyleUpdateDocument,
 	"\n\tmutation updatePaginationStyle($style: PaginationStyle!) {\n\t\tuserOption {\n\t\t\tsetPaginationStyle(style: $style)\n\t\t}\n\t}\n":
@@ -652,6 +658,18 @@ export function graphql(
 export function graphql(
 	source: "\n\tsubscription serverIconState {\n\t\twatchIsAppMounted\n\t}\n"
 ): (typeof documents)["\n\tsubscription serverIconState {\n\t\twatchIsAppMounted\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription pageLimitSubscription {\n\t\twatchPageLimit\n\t}\n"
+): (typeof documents)["\n\tsubscription pageLimitSubscription {\n\t\twatchPageLimit\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation setPageLimit($limit: Int) {\n\t\tuserOption {\n\t\t\tsetPageLimit(value: $limit)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation setPageLimit($limit: Int) {\n\t\tuserOption {\n\t\t\tsetPageLimit(value: $limit)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
