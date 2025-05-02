@@ -104,10 +104,11 @@ where
 pub fn print_instant(instant: Instant) {
     use mangadex_api_types_rust::MangaDexDateTime;
     use time::OffsetDateTime;
+    let now = Instant::now();
     log::debug!(
         "{:?}",
-        instant
-            .checked_duration_since(Instant::now())
+        now.checked_duration_since(instant)
+            .or(instant.checked_duration_since(now))
             .and_then(|d| {
                 Some(
                     MangaDexDateTime::new(
