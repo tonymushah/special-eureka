@@ -1,11 +1,13 @@
 use std::ops::Deref;
 
 use crate::{
-    objects::offline_config::OfflineConfigObject, store::types::structs::content::ContentProfile,
-    subscription::user_option::UserOptionSubscriptions, Result,
+    objects::offline_config::OfflineConfigObject,
+    store::types::structs::{content::ContentProfile, refresh_token::RefreshTokenStore},
+    subscription::user_option::UserOptionSubscriptions,
+    Result,
 };
 use async_graphql::{Context, Object};
-use mangadex_api_types_rust::Language;
+use mangadex_api_types_rust::{Language, MangaDexDateTime};
 use tokio_stream::StreamExt;
 
 use crate::{
@@ -68,5 +70,15 @@ impl UserOptionQueries {
     }
     pub async fn get_offline_config(&self, _ctx: &Context<'_>) -> OfflineConfigObject {
         OfflineConfigObject
+    }
+    pub async fn get_auth_date_time_limit(
+        &self,
+        ctx: &Context<'_>,
+    ) -> Result<Option<MangaDexDateTime>> {
+        let store = get_store::<tauri::Wry>(ctx)?;
+        let store_read = store.read().await;
+        Ok(RefreshTokenStore::extract_from_store(&*store_read)?
+            .as_ref()
+            .map(|d| d.expires_in))
     }
 }
