@@ -34,7 +34,7 @@ mangadex-api-types-rust = { version = "0.10", default-features = false, features
 async-graphql.workspace = true
 convert_case = "0.6"
 tokio-stream = { version = "0", features = ["sync"] }
-regex = "1"
+regex.workspace = true
 bytes.workspace = true
 async-stream = "0"
 favicon-picker = "1.0.0"

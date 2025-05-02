@@ -29,6 +29,7 @@ serde_repr = "0.1"
 governor = "0.10"
 log = "0.4"
 fern = "0.7"
+regex = "1"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"

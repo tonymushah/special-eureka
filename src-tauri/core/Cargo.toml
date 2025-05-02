@@ -33,9 +33,12 @@ tauri-plugin-notification.workspace = true
 tauri-plugin-clipboard-manager.workspace = true
 tauri-plugin-dialog.workspace = true
 fern.workspace = true
+log.workspace = true
+time = {workspace = true, features = ["formatting"]}
+humantime = "2"
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
-tauri-plugin-updater = "2.0.0"
+tauri-plugin-updater = "2"
 
 [dependencies.mangadex]
 workspace = true
