@@ -12,6 +12,7 @@
 	import { derived, writable } from "svelte/store";
 	import type { PageData } from "./$types";
 	import SearchContent from "./SearchContent.svelte";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	interface Props {
 		data: PageData;
@@ -63,11 +64,16 @@
 		}
 	});
 	const isEmpty = derived(preListParams, ($p) => $p == undefined);
-	const listParams = derived(preListParams, ($p) => {
+	const listParams = derived([preListParams, pageLimit], ([$p, $limit]) => {
 		if ($p) {
-			return $p;
+			return {
+				...$p,
+				limit: $limit
+			} satisfies MangaListParams;
 		} else {
-			return {} satisfies MangaListParams;
+			return {
+				limit: $limit
+			} satisfies MangaListParams;
 		}
 	});
 	let realTime = $state(false);
