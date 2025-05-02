@@ -273,7 +273,7 @@ impl ChapterDownloadSubs {
                     else => break
                 }
             }
-            println!("Leaves streams")
+            log::debug!("Leaves streams")
         };
         Ok(stream)
          */

@@ -13,7 +13,7 @@ pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
         .plugin(tauri_plugin_updater::Builder::new().build())?;
     app.manage(LastFocusedWindow::<R>::default());
     if let Some(system) = System::try_current() {
-        println!("has sys!");
+        log::debug!("has sys!");
         app.manage(system);
     }
     /*

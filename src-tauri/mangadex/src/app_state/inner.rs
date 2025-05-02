@@ -48,7 +48,7 @@ impl AppStateInner {
         let watches1 = app.get_watches()?.deref().clone();
         let watches2 = watches1.clone();
         let watches3 = watches2.clone();
-        println!("starting..,");
+        log::debug!("starting..,");
         // [x] import dir option from runtime
         let dirs = {
             let store = app.extract::<OfflineConfigStore>().await?;
@@ -58,13 +58,13 @@ impl AppStateInner {
         let app_state = system
             .arbiter()
             .spawn_fn_with_data(move || {
-                println!("loading...");
+                log::debug!("loading...");
                 let manager = DownloadManager::new(dirs.start(), client).start();
-                println!("Loaded!");
+                log::debug!("Loaded!");
                 manager
             })
             .await?;
-        println!("Started!");
+        log::debug!("Started!");
         let app_state1 = app_state.clone();
         let app_state2 = app_state.clone();
         let app_state3 = app_state.clone();

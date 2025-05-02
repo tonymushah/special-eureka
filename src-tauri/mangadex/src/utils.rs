@@ -104,7 +104,7 @@ where
 pub fn print_instant(instant: Instant) {
     use mangadex_api_types_rust::MangaDexDateTime;
     use time::OffsetDateTime;
-    println!(
+    log::debug!(
         "{:?}",
         instant
             .checked_duration_since(Instant::now())

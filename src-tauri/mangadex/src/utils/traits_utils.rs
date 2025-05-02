@@ -69,7 +69,7 @@ where
 
             if should_fetched {
                 #[cfg(debug_assertions)]
-                println!("Should be fetched");
+                log::debug!("Should be fetched");
                 self.get_specific_rate_limit()?.refresh().await;
                 if let Ok(res) = client.oauth().refresh().send().await {
                     let _ = last_time_fetched
@@ -172,11 +172,11 @@ impl MangaDexActixArbiterHandleExt for ArbiterHandle {
         T: Send + 'static,
     {
         let (rx, tx) = oneshot::<T>();
-        println!("Spawning...");
+        log::debug!("Spawning...");
         self.spawn_fn(move || {
-            println!("executing task...");
+            log::debug!("executing task...");
             let res = task();
-            println!("executed!");
+            log::debug!("executed!");
             let _ = rx.send(res);
         });
         tx.await
@@ -188,11 +188,11 @@ impl MangaDexActixArbiterHandleExt for ArbiterHandle {
         F::Output: Send + 'static,
     {
         let (rx, tx) = oneshot::<F::Output>();
-        println!("Spawning...");
+        log::debug!("Spawning...");
         self.spawn(async move {
-            println!("executing task...");
+            log::debug!("executing task...");
             let res = task.await;
-            println!("executed!");
+            log::debug!("executed!");
             let _ = rx.send(res);
         });
         tx.await

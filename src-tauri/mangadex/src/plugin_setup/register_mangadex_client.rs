@@ -25,7 +25,7 @@ pub fn register_mangadex_client<R: Runtime>(
     }
     /*
     #[cfg(debug_assertions)]
-    println!("{ua}");
+    log::debug!("{ua}");
      */
 
     default_headers.append(USER_AGENT, HeaderValue::from_str(&ua)?);

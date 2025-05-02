@@ -40,6 +40,7 @@ pub fn init_client_state<R: Runtime>(
             Some(i.clone().into())
         }
     }) {
+        log::debug!("valid auth tokens");
         tauri::async_runtime::spawn(async move {
             let client = app_clone.state::<MangaDexClient>();
             let watches = app_clone.state::<Watches>();

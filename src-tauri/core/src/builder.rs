@@ -13,7 +13,7 @@ pub fn get_builder() -> Builder<Wry> {
     builder
         /*
             .register_uri_scheme_protocol("tony", |_app, req| {
-                println!("{:#?}", req);
+                log::debug!("{:#?}", req);
                 tauri::http::Response::builder()
                     .header("access-control-allow-origin", "*")
                     .status(tauri::http::status::StatusCode::OK)
