@@ -13,6 +13,7 @@
 	import { route } from "$lib/ROUTES";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	const client = getContextClient();
 
@@ -22,9 +23,10 @@
 	}
 
 	let { groupName }: Props = $props();
-	const params = derived([groupName], ([$groupName]) => {
+	const params = derived([groupName, pageLimit], ([$groupName, $limit]) => {
 		return {
-			name: $groupName
+			name: $groupName,
+			limit: $limit
 		} satisfies ScanlationGroupListParams;
 	});
 	interface InfiniteQueryData {
