@@ -13,6 +13,7 @@
 	import { route } from "$lib/ROUTES";
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	const client = getContextClient();
 	interface Props {
@@ -20,9 +21,10 @@
 	}
 
 	let { authorName }: Props = $props();
-	const params = derived([authorName], ([$authorName]) => {
+	const params = derived([authorName, pageLimit], ([$authorName, $limit]) => {
 		return {
-			name: $authorName
+			name: $authorName,
+			limit: $limit
 		} satisfies AuthorListParams;
 	});
 	interface InfiniteQueryData {
