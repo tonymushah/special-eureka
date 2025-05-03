@@ -80,7 +80,9 @@
 	}
 	.container:not(.fixed) {
 		display: flex;
-		max-height: 100%;
+		// NOTE Replacing it with `height: -webkit-fill-available`
+		// max-height: 100%;
+		height: -webkit-fill-available;
 	}
 	.container {
 		height: 100%;
