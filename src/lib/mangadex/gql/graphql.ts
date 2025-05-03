@@ -5303,6 +5303,80 @@ export type OfflineMangaSearchQueryQuery = {
 	};
 };
 
+export type UserLoggedChapterFeedQueryVariables = Exact<{
+	translatedLanguages?: Array<Language> | Language;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: MangaFeedSortOrder;
+	mangaListParams?: InputMaybe<MangaListParams>;
+}>;
+
+export type UserLoggedChapterFeedQuery = {
+	__typename?: "Query";
+	feed: {
+		__typename?: "FeedQueries";
+		userLoggedMangaFeedGrouped: {
+			__typename?: "MangaChapterGroup";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaChapterItem";
+				manga: {
+					__typename?: "MangaObject";
+					id: any;
+					attributes: {
+						__typename?: "GraphQLMangaAttributes";
+						title: any;
+						originalLanguage: Language;
+						lastVolume?: string | null;
+						lastChapter?: string | null;
+					};
+					relationships: {
+						__typename?: "MangaRelationships";
+						coverArt: {
+							__typename?: "Cover";
+							id: any;
+							attributes: { __typename?: "CoverAttributes"; fileName: string };
+						};
+					};
+				};
+				chapters: Array<{
+					__typename?: "Chapter";
+					id: any;
+					attributes: {
+						__typename?: "ChapterAttributes";
+						title?: string | null;
+						chapter?: string | null;
+						volume?: string | null;
+						translatedLanguage: Language;
+						externalUrl?: any | null;
+						createdAt: any;
+						readableAt?: any | null;
+					};
+					relationships: {
+						__typename?: "ChapterRelationships";
+						scanlationGroups: Array<{
+							__typename?: "ScanlationGroup";
+							id: any;
+							attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
+						}>;
+						user: {
+							__typename?: "User";
+							id: any;
+							attributes: {
+								__typename?: "UserAttributes";
+								roles: Array<UserRole>;
+								username: string;
+							};
+						};
+					};
+				}>;
+			}>;
+		};
+	};
+};
+
 export type UserSearchQueryVariables = Exact<{
 	params: UserListParam;
 }>;
@@ -15460,6 +15534,481 @@ export const OfflineMangaSearchQueryDocument = {
 		}
 	]
 } as unknown as DocumentNode<OfflineMangaSearchQueryQuery, OfflineMangaSearchQueryQueryVariables>;
+export const UserLoggedChapterFeedDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "userLoggedChapterFeed" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "translatedLanguages" }
+					},
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: {
+									kind: "NamedType",
+									name: { kind: "Name", value: "Language" }
+								}
+							}
+						}
+					},
+					defaultValue: { kind: "ListValue", values: [] }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "offset" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "limit" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "order" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "MangaFeedSortOrder" }
+						}
+					},
+					defaultValue: {
+						kind: "ObjectValue",
+						fields: [
+							{
+								kind: "ObjectField",
+								name: { kind: "Name", value: "publishAt" },
+								value: { kind: "EnumValue", value: "DESCENDING" }
+							}
+						]
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: {
+						kind: "Variable",
+						name: { kind: "Name", value: "mangaListParams" }
+					},
+					type: { kind: "NamedType", name: { kind: "Name", value: "MangaListParams" } },
+					defaultValue: { kind: "ObjectValue", fields: [] }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "feed" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "userLoggedMangaFeedGrouped" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "feedParams" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "offset" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "offset" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "limit" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "limit" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "order" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "order" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "translatedLanguage"
+														},
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "translatedLanguages"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "includeFutureUpdates"
+														},
+														value: {
+															kind: "EnumValue",
+															value: "EXCLUDE"
+														}
+													}
+												]
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaListParams" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangaListParams" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "manga" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "title"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "originalLanguage"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "lastVolume"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "lastChapter"
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "relationships"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "coverArt"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "id"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "attributes"
+																									},
+																									selectionSet:
+																										{
+																											kind: "SelectionSet",
+																											selections:
+																												[
+																													{
+																														kind: "Field",
+																														name: {
+																															kind: "Name",
+																															value: "fileName"
+																														}
+																													}
+																												]
+																										}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "chapters"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "title"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "chapter"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "volume"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "translatedLanguage"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "externalUrl"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "createdAt"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "readableAt"
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "relationships"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "scanlationGroups"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "id"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "attributes"
+																									},
+																									selectionSet:
+																										{
+																											kind: "SelectionSet",
+																											selections:
+																												[
+																													{
+																														kind: "Field",
+																														name: {
+																															kind: "Name",
+																															value: "name"
+																														}
+																													}
+																												]
+																										}
+																								}
+																							]
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "user"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "id"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "attributes"
+																									},
+																									selectionSet:
+																										{
+																											kind: "SelectionSet",
+																											selections:
+																												[
+																													{
+																														kind: "Field",
+																														name: {
+																															kind: "Name",
+																															value: "roles"
+																														}
+																													},
+																													{
+																														kind: "Field",
+																														name: {
+																															kind: "Name",
+																															value: "username"
+																														}
+																													}
+																												]
+																										}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UserLoggedChapterFeedQuery, UserLoggedChapterFeedQueryVariables>;
 export const UserSearchDocument = {
 	kind: "Document",
 	definitions: [
