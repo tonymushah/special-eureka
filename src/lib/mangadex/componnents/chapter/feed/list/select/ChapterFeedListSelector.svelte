@@ -18,7 +18,7 @@
 		onclick={() => {
 			style.set(ChapterFeedStyle.CoverLess);
 		}}
-		variant={$style == ChapterFeedStyle.CoverLess ? "4" : "1"}
+		variant={$style == ChapterFeedStyle.CoverLess ? "5" : "1"}
 	>
 		<div class="icon">
 			<ListIcon {size} />
