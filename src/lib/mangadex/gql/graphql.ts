@@ -407,6 +407,12 @@ export type ChapterImageFetchingStatus = {
 	len: Scalars["Int"]["output"];
 };
 
+export type ChapterLayoutStore = {
+	__typename?: "ChapterLayoutStore";
+	drawer: DrawerMode;
+	sidebar: SidebarMode;
+};
+
 export type ChapterListParams = {
 	chapterIds?: Array<Scalars["UUID"]["input"]>;
 	/** Chapter number in the series or volume. */
@@ -1168,6 +1174,11 @@ export type DownloadStateQueriesCoverArgs = {
 export type DownloadStateQueriesMangaArgs = {
 	mangaId: Scalars["UUID"]["input"];
 };
+
+export enum DrawerMode {
+	Pinned = "PINNED",
+	Unpinned = "UNPINNED"
+}
 
 export type EditScanlationGroupParam = {
 	/** Nullable. */
@@ -2681,6 +2692,12 @@ export type ScrollbarColorInput = {
 	hovered: Scalars["String"]["input"];
 };
 
+export enum SidebarMode {
+	Default = "DEFAULT",
+	Floating = "FLOATING",
+	Hidden = "HIDDEN"
+}
+
 export type Statistics = {
 	__typename?: "Statistics";
 	comments?: Maybe<StatisticsComments>;
@@ -3127,6 +3144,7 @@ export type UserOptionMutations = {
 	deleteThemeProfile?: Maybe<MangaDexTheme>;
 	setChapterFeedStyle: ChapterFeedStyle;
 	setChapterLanguages: Array<Language>;
+	setChapterLayout: ChapterLayoutStore;
 	setChapterQuality: DownloadMode;
 	setContentProfile: ContentProfile;
 	setContentProfiles: Scalars["Int"]["output"];
@@ -3161,6 +3179,11 @@ export type UserOptionMutationsSetChapterFeedStyleArgs = {
 
 export type UserOptionMutationsSetChapterLanguagesArgs = {
 	languages: Array<Language>;
+};
+
+export type UserOptionMutationsSetChapterLayoutArgs = {
+	drawer?: InputMaybe<DrawerMode>;
+	sidebar?: InputMaybe<SidebarMode>;
 };
 
 export type UserOptionMutationsSetChapterQualityArgs = {
