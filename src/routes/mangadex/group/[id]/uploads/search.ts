@@ -1,22 +1,20 @@
-import type { Client } from "@urql/svelte";
-import { query } from "./query";
-import AbstractSearchResult, {
-	type PaginationData
-} from "@mangadex/utils/searchResult/AbstractSearchResult";
+import type { Chapter } from "@mangadex/componnents/chapter/feed";
+import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/list";
+import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 import {
 	CoverImageQuality,
 	type ChapterSortOrder,
 	type Language,
 	type MangaListParams
 } from "@mangadex/gql/graphql";
-import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/list";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-import type { Chapter } from "@mangadex/componnents/chapter/feed";
+import AbstractSearchResult, {
+	type PaginationData
+} from "@mangadex/utils/searchResult/AbstractSearchResult";
 import get_chapters_stats from "@mangadex/utils/statistics/chapter/query";
-import { readable } from "svelte/store";
-import { ChapterDownloadState } from "@mangadex/utils/types/DownloadState";
-import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
+import type { Client } from "@urql/svelte";
+import { query } from "./query";
 
 export type ScanlationGroupUploadsFeedChapterParams = {
 	group: string;
