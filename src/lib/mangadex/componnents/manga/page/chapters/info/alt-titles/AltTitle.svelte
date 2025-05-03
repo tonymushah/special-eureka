@@ -14,7 +14,9 @@
 
 <div class="alt-title">
 	{#if lang}
-		<FlagIcon {lang} />
+		<div class="flag">
+			<FlagIcon {lang} />
+		</div>
 	{/if}
 	<h4>{title}</h4>
 </div>
