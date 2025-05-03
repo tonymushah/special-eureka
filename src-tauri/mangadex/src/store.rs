@@ -28,8 +28,9 @@ use self::{
             reading_mode::ReadingModeStore,
         },
         structs::{
-            chapter_language::ChapterLanguagesStore, client_info::ClientInfoStore,
-            page_limit::PageLimitStore, refresh_token::RefreshTokenStore,
+            chapter_language::ChapterLanguagesStore, chapter_layout::ChapterLayoutStore,
+            client_info::ClientInfoStore, page_limit::PageLimitStore,
+            refresh_token::RefreshTokenStore,
         },
         DefaulStore,
     },
@@ -71,6 +72,7 @@ get_store_builder! {
     OfflineConfigStore,
     ChapterQualityStore,
     PageLimitStore,
+    ChapterLayoutStore,
 }
 
 // [x] refactor into a macro!
