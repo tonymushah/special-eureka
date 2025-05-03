@@ -12,6 +12,7 @@ use crate::{
                 pagination_style::{PaginationStyle, PaginationStyleStore},
             },
             structs::{
+                chapter_layout::{ChapterLayoutStore, DrawerMode, SidebarMode},
                 content::{
                     profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
                     ContentProfile,
@@ -386,5 +387,24 @@ impl UserOptionMutations {
         app.insert_and_save(&store).await?;
         watches.page_limit.send_data(*store)?;
         Ok(NonZero::new(store.value()))
+    }
+    pub async fn set_chapter_layout(
+        &self,
+        ctx: &Context<'_>,
+        sidebar: Option<SidebarMode>,
+        drawer: Option<DrawerMode>,
+    ) -> Result<ChapterLayoutStore> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ChapterLayoutStore>().await?;
+        if let Some(sidebar) = sidebar {
+            store.sidebar = sidebar;
+        }
+        if let Some(drawer) = drawer {
+            store.drawer = drawer;
+        }
+        app.insert_and_save(&store).await?;
+        watches.chapter_layout.send_data(store)?;
+        Ok(store)
     }
 }

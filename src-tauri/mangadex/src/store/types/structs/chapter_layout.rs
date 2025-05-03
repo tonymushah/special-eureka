@@ -1,4 +1,4 @@
-use async_graphql::Enum;
+use async_graphql::{Enum, SimpleObject};
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 
@@ -19,7 +19,7 @@ use crate::store::{keys::CHAPTER_LAYOUT, types::ExtractFromStore, DefaulStore, S
     Hash,
 )]
 #[repr(u8)]
-pub enum SibebarMode {
+pub enum SidebarMode {
     #[default]
     Default,
     Floating,
@@ -47,9 +47,9 @@ pub enum DrawerMode {
     Pinned,
 }
 
-#[derive(Debug, Clone, Copy, Default, Deserialize, Serialize)]
+#[derive(Debug, Clone, Copy, Default, Deserialize, Serialize, SimpleObject)]
 pub struct ChapterLayoutStore {
-    pub sidebar: SibebarMode,
+    pub sidebar: SidebarMode,
     pub drawer: DrawerMode,
 }
 
