@@ -35,3 +35,5 @@ pub const OFFLINE_CONFIG: &str = "offline_config";
 pub const CHAPTERS_QUALITY: &str = "chapters_quality";
 
 pub const PAGE_LIMIT: &str = "page_limit";
+
+pub const CHAPTER_LAYOUT: &str = "chapter_layout";
