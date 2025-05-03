@@ -7,20 +7,21 @@
 </script>
 
 <div class="title">
-	<span>{title}</span>
+	<p>{title}</p>
 </div>
 
 <style lang="scss">
-	div.title > span {
+	div.title > p {
 		font-weight: 500;
-		-webkit-box-orient: vertical;
-		line-clamp: 2;
-		-webkit-line-clamp: 2;
-		display: -webkit-box;
-		overflow: hidden;
 		text-align: start;
-		margin: 0px;
-		padding: 5px;
+		margin: 5px;
+		padding: 0px;
 		font-size: 16px;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		overflow: hidden;
+		width: 100%;
 	}
 </style>
