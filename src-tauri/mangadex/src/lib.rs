@@ -36,7 +36,7 @@ pub use error::Error;
 pub fn init<R: Runtime>() -> MizukiPlugin<R, Q, M, S> {
     mizuki::Builder::new(
         "mangadex-desktop-api",
-        Schema::new(Query, Mutation, Subscriptions),
+        Schema::new(Query, Mutation, Subscriptions::default()),
     )
     .setup(setup)
     .build()

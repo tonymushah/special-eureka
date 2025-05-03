@@ -14,6 +14,7 @@ use crate::{
         },
         structs::{
             chapter_language::ChapterLanguagesStore,
+            chapter_layout::ChapterLayoutStore,
             client_info::ClientInfoStore,
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
             longstrip_image_width::LongstripImageWidthStore,
@@ -54,6 +55,7 @@ setup_watch! {
     content_profiles_default_key <= ContentProfileDefaultKey,
     chapter_quality <= ChapterQualityStore,
     page_limit <= PageLimitStore,
+    chapter_layout <= ChapterLayoutStore,
 }
 
 pub fn init_watches_states<R: Runtime>(

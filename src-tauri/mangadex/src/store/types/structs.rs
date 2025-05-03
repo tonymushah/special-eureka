@@ -1,4 +1,5 @@
 pub mod chapter_language;
+pub mod chapter_layout;
 pub mod client_info;
 pub mod content;
 pub mod longstrip_image_width;

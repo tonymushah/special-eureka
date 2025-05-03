@@ -300,6 +300,11 @@ type ChapterImageFetchingStatus {
 	len: Int!
 }
 
+type ChapterLayoutStore {
+	sidebar: SidebarMode!
+	drawer: DrawerMode!
+}
+
 input ChapterListParams {
 	limit: Int
 	offset: Int
@@ -915,6 +920,11 @@ type DownloadStateQueries {
 	chapter(chapterId: UUID!): DownloadState!
 	cover(coverId: UUID!): DownloadState!
 	manga(mangaId: UUID!): DownloadState!
+}
+
+enum DrawerMode {
+	UNPINNED
+	PINNED
 }
 
 input EditScanlationGroupParam {
@@ -2110,6 +2120,12 @@ input ScrollbarColorInput {
 	hovered: String!
 }
 
+enum SidebarMode {
+	DEFAULT
+	FLOATING
+	HIDDEN
+}
+
 type Statistics {
 	id: UUID!
 	comments: StatisticsComments
@@ -2200,6 +2216,7 @@ type Subscriptions {
 	watchContentProfileDefault: ContentProfile!
 	watchChapterQuality: DownloadMode!
 	watchPageLimit: Int!
+	watchChapterLayout: ChapterLayoutStore!
 }
 
 type Tag {
@@ -2442,6 +2459,7 @@ type UserOptionMutations {
 	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
 	setChapterQuality(quality: DownloadMode): DownloadMode!
 	setPageLimit(value: Int): Int
+	setChapterLayout(sidebar: SidebarMode, drawer: DrawerMode): ChapterLayoutStore!
 }
 
 type UserOptionQueries {

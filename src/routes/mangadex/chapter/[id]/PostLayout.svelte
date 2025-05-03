@@ -73,7 +73,7 @@
 	import { initLongStripImagesWidthContext } from "@mangadex/componnents/chapter/page/readinMode/longStrip/utils/context/longstrip_images_width";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { getContextClient } from "@urql/svelte";
-	import { writable } from "svelte/store";
+	import { derived, writable } from "svelte/store";
 	import type { LayoutData } from "./$types";
 	import imageFitWritable from "./layout-query/imageFit";
 	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
@@ -81,6 +81,8 @@
 	import readingModeWritable from "./layout-query/readingMode";
 	import relatedChaptersQuery from "./layout-query/related";
 	import chapterPageThread from "./layout-query/thread";
+	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
+	import { DrawerMode } from "@mangadex/gql/graphql";
 
 	interface Props {
 		data: LayoutData;
@@ -93,7 +95,23 @@
 
 	const related = initRelatedChapters(writable([]));
 	const lsImgWidth = initLongStripImagesWidthContext(longstripImageWidthWritable);
-	const fixed = initIsDrawerFixedWritable(writable(false));
+	const pinnedDerived = derived(
+		drawerModeStore,
+		(drawerModeStore) => drawerModeStore == DrawerMode.Pinned
+	);
+	const fixed = initIsDrawerFixedWritable({
+		subscribe(run, invalidate) {
+			return pinnedDerived.subscribe(run, invalidate);
+		},
+		set(value) {
+			drawerModeStore.set(value ? DrawerMode.Pinned : DrawerMode.Unpinned);
+		},
+		update(updater) {
+			drawerModeStore.update((v) =>
+				updater(v == DrawerMode.Pinned) ? DrawerMode.Pinned : DrawerMode.Pinned
+			);
+		}
+	});
 	const opened = initIsDrawerOpenWritable(writable(false));
 	const images = initChapterImageContext();
 

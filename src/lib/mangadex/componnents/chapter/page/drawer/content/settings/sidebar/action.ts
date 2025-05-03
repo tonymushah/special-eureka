@@ -2,28 +2,24 @@ import defaultBehavior, {
 	floatSidebar,
 	hideSidebar
 } from "@mangadex/componnents/sidebar/states/actions";
-import { writable, type Unsubscriber } from "svelte/store";
+import { SidebarMode } from "@mangadex/gql/graphql";
+import { sidebarModeStore } from "@mangadex/stores/chapterLayout";
+import { type Unsubscriber } from "svelte/store";
 
-export enum SideBarActionType {
-	Default,
-	Floating,
-	Hidden
-}
-
-export const sideBarActionType = writable(SideBarActionType.Default);
+export const sideBarActionType = sidebarModeStore;
 
 export function registerListeners() {
 	const unsus: Unsubscriber[] = [];
 	unsus.push(
 		sideBarActionType.subscribe((action) => {
 			switch (action) {
-				case SideBarActionType.Default:
+				case SidebarMode.Default:
 					defaultBehavior();
 					break;
-				case SideBarActionType.Floating:
+				case SidebarMode.Floating:
 					floatSidebar();
 					break;
-				case SideBarActionType.Hidden:
+				case SidebarMode.Hidden:
 					hideSidebar();
 					break;
 				default:
@@ -39,12 +35,12 @@ export function registerListeners() {
 export function toggleAction() {
 	sideBarActionType.update((action) => {
 		switch (action) {
-			case SideBarActionType.Default:
-				return SideBarActionType.Floating;
-			case SideBarActionType.Floating:
-				return SideBarActionType.Hidden;
+			case SidebarMode.Default:
+				return SidebarMode.Floating;
+			case SidebarMode.Floating:
+				return SidebarMode.Hidden;
 			default:
-				return SideBarActionType.Default;
+				return SidebarMode.Default;
 		}
 	});
 }

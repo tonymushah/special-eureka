@@ -407,6 +407,12 @@ export type ChapterImageFetchingStatus = {
 	len: Scalars["Int"]["output"];
 };
 
+export type ChapterLayoutStore = {
+	__typename?: "ChapterLayoutStore";
+	drawer: DrawerMode;
+	sidebar: SidebarMode;
+};
+
 export type ChapterListParams = {
 	chapterIds?: Array<Scalars["UUID"]["input"]>;
 	/** Chapter number in the series or volume. */
@@ -1168,6 +1174,11 @@ export type DownloadStateQueriesCoverArgs = {
 export type DownloadStateQueriesMangaArgs = {
 	mangaId: Scalars["UUID"]["input"];
 };
+
+export enum DrawerMode {
+	Pinned = "PINNED",
+	Unpinned = "UNPINNED"
+}
 
 export type EditScanlationGroupParam = {
 	/** Nullable. */
@@ -2681,6 +2692,12 @@ export type ScrollbarColorInput = {
 	hovered: Scalars["String"]["input"];
 };
 
+export enum SidebarMode {
+	Default = "DEFAULT",
+	Floating = "FLOATING",
+	Hidden = "HIDDEN"
+}
+
 export type Statistics = {
 	__typename?: "Statistics";
 	comments?: Maybe<StatisticsComments>;
@@ -2733,6 +2750,7 @@ export type Subscriptions = {
 	watchChapterDownloadState: ChapterDownloadState;
 	watchChapterFeedStyle: ChapterFeedStyle;
 	watchChapterLanguages: Array<Language>;
+	watchChapterLayout: ChapterLayoutStore;
 	watchChapterQuality: DownloadMode;
 	watchChaptersTasksList: Array<Scalars["UUID"]["output"]>;
 	watchClientInfo?: Maybe<ClientInfo>;
@@ -3127,6 +3145,7 @@ export type UserOptionMutations = {
 	deleteThemeProfile?: Maybe<MangaDexTheme>;
 	setChapterFeedStyle: ChapterFeedStyle;
 	setChapterLanguages: Array<Language>;
+	setChapterLayout: ChapterLayoutStore;
 	setChapterQuality: DownloadMode;
 	setContentProfile: ContentProfile;
 	setContentProfiles: Scalars["Int"]["output"];
@@ -3161,6 +3180,11 @@ export type UserOptionMutationsSetChapterFeedStyleArgs = {
 
 export type UserOptionMutationsSetChapterLanguagesArgs = {
 	languages: Array<Language>;
+};
+
+export type UserOptionMutationsSetChapterLayoutArgs = {
+	drawer?: InputMaybe<DrawerMode>;
+	sidebar?: InputMaybe<SidebarMode>;
 };
 
 export type UserOptionMutationsSetChapterQualityArgs = {
@@ -4187,6 +4211,34 @@ export type UpdateChapterFeedStyleMutationVariables = Exact<{
 export type UpdateChapterFeedStyleMutation = {
 	__typename?: "Mutation";
 	userOption: { __typename?: "UserOptionMutations"; setChapterFeedStyle: ChapterFeedStyle };
+};
+
+export type ChapterLayoutSubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type ChapterLayoutSubscriptionSubscription = {
+	__typename?: "Subscriptions";
+	watchChapterLayout: {
+		__typename?: "ChapterLayoutStore";
+		drawer: DrawerMode;
+		sidebar: SidebarMode;
+	};
+};
+
+export type SetChapterLayoutMutationVariables = Exact<{
+	sidebar?: InputMaybe<SidebarMode>;
+	drawer?: InputMaybe<DrawerMode>;
+}>;
+
+export type SetChapterLayoutMutation = {
+	__typename?: "Mutation";
+	userOption: {
+		__typename?: "UserOptionMutations";
+		setChapterLayout: {
+			__typename?: "ChapterLayoutStore";
+			sidebar: SidebarMode;
+			drawer: DrawerMode;
+		};
+	};
 };
 
 export type ChapterQualitySubscriptionSubscriptionVariables = Exact<{ [key: string]: never }>;
@@ -9304,6 +9356,106 @@ export const UpdateChapterFeedStyleDocument = {
 	UpdateChapterFeedStyleMutation,
 	UpdateChapterFeedStyleMutationVariables
 >;
+export const ChapterLayoutSubscriptionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "chapterLayoutSubscription" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchChapterLayout" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "drawer" } },
+								{ kind: "Field", name: { kind: "Name", value: "sidebar" } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ChapterLayoutSubscriptionSubscription,
+	ChapterLayoutSubscriptionSubscriptionVariables
+>;
+export const SetChapterLayoutDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setChapterLayout" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "sidebar" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "SidebarMode" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "drawer" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DrawerMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setChapterLayout" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "sidebar" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "sidebar" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "drawer" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "drawer" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "sidebar" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "drawer" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetChapterLayoutMutation, SetChapterLayoutMutationVariables>;
 export const ChapterQualitySubscriptionDocument = {
 	kind: "Document",
 	definitions: [

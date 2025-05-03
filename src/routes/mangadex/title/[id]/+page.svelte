@@ -17,6 +17,7 @@
 		display: grid;
 		column-gap: 10px;
 		grid-template-columns: repeat(3, 1fr);
+		margin-bottom: 10px;
 		.chapters {
 			grid-column: 2/4;
 			--chapter-layout: var(--accent-l3);

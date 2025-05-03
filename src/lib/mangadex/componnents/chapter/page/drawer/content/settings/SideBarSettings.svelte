@@ -1,21 +1,17 @@
 <script lang="ts">
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
-	import {
-		registerListeners,
-		SideBarActionType,
-		sideBarActionType,
-		toggleAction
-	} from "./sidebar/action";
+	import { registerListeners, sideBarActionType, toggleAction } from "./sidebar/action";
 	import { derived } from "svelte/store";
 	import { onMount } from "svelte";
 	import Icon from "./sidebar/Icon.svelte";
+	import { SidebarMode } from "@mangadex/gql/graphql";
 	const label = derived(sideBarActionType, ($action) => {
 		switch ($action) {
-			case SideBarActionType.Default:
+			case SidebarMode.Default:
 				return "SideBar Normal";
-			case SideBarActionType.Floating:
+			case SidebarMode.Floating:
 				return "SideBar Floating";
-			case SideBarActionType.Hidden:
+			case SidebarMode.Hidden:
 				return "SideBar Hidden";
 			default:
 				return "SideBar ??";
