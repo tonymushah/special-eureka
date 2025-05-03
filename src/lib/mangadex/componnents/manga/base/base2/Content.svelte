@@ -45,18 +45,22 @@
 <div class="body">
 	<div class="top-body">
 		<div class="title">
-			<p>
-				{#if language}
+			{#if language}
+				<div>
 					<FlagIcon lang={language} />
-				{/if}
+				</div>
+			{/if}
+			<p>
 				{title}
 			</p>
 		</div>
 		<div class="publication">
 			<DefaultSpan --font-size="12px">
 				<span class="pub-tag">Publication :</span>
-				<PublicationStatusTag {status} />
 			</DefaultSpan>
+			<div class="publication-tag">
+				<PublicationStatusTag {status} />
+			</div>
 		</div>
 	</div>
 	<div class="bottom-body">
@@ -93,6 +97,7 @@
 		height: 1.5em;
 		overflow: hidden;
 		padding: 2px 0px;
+		transform: translateY(-2px);
 	}
 	@media (width < 600px) {
 		.pub-tag {
@@ -108,6 +113,11 @@
 		display: -webkit-box;
 		overflow: hidden;
 		font-weight: 700;
+	}
+	div.title {
+		display: flex;
+		align-items: center;
+		gap: 10px;
 	}
 	div.top-body {
 		gap: 10px;
@@ -146,5 +156,14 @@
 		display: -webkit-box;
 		overflow: hidden;
 		margin-top: 0.5em;
+	}
+	div.publication {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+	div.publication-tag {
+		display: flex;
+		transform: translateY(-2px);
 	}
 </style>
