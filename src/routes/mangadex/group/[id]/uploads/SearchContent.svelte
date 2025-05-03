@@ -17,6 +17,7 @@
 	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type ScanlationGroupUploadsFeedChapterParams } from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	interface Props {
 		groupId: Readable<string>;
@@ -111,6 +112,10 @@
 		}}
 	/>
 </div>
+
+{#if $query.error}
+	<ErrorComponent error={$query.error} label="Error on loading some pages" />
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if $isFetching}
