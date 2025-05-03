@@ -15,7 +15,9 @@
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
 	import { derived, get } from "svelte/store";
-	import executeSearchQuery, { type ScanlationGroupUploadsFeedChapterParams } from "./search";
+	import executeSearchQuery, {
+		type ScanlationGroupUploadsFeedChapterParams as Params
+	} from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
@@ -51,14 +53,14 @@
 					order: {
 						readableAt: OrderDirection.Descending
 					}
-				} satisfies ScanlationGroupUploadsFeedChapterParams
+				} satisfies Params
 			} satisfies CreateInfiniteQueryOptions<
 				AbstractSearchResult<ChapterFeedListItemExt>,
 				Error,
 				AbstractSearchResult<ChapterFeedListItemExt>,
 				AbstractSearchResult<ChapterFeedListItemExt>,
 				readonly string[],
-				ScanlationGroupUploadsFeedChapterParams
+				Params
 			>;
 		})
 	);
