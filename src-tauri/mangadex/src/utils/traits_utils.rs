@@ -71,14 +71,18 @@ where
                 #[cfg(debug_assertions)]
                 log::debug!("Should be fetched");
                 self.get_specific_rate_limit()?.refresh().await;
-                if let Ok(res) = client.oauth().refresh().send().await {
-                    let _ = last_time_fetched
-                        .write()
-                        .await
-                        .replace(Instant::now() + (Duration::from_millis(res.expires_in as u64)));
-                    let _ = watches.is_logged.send_data(true);
-                } else {
-                    let _ = watches.is_logged.send_data(false);
+                match client.oauth().refresh().send().await {
+                    Ok(res) => {
+                        let _ = last_time_fetched.write().await.replace(
+                            Instant::now() + (Duration::from_millis(res.expires_in as u64)),
+                        );
+                        let _ = watches.is_logged.send_data(true);
+                    }
+                    Err(err) => {
+                        let _ = watches.is_logged.send_data(false);
+                        log::error!("{}", err);
+                        return Err(err.into());
+                    }
                 }
             }
             Ok(client)
