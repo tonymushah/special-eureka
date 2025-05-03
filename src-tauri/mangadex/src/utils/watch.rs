@@ -8,44 +8,12 @@ use uuid::Uuid;
 
 use crate::objects::{GetAttributes, GetId};
 
-use self::{
-    api_client::ApiClientWatch,
-    author::AuthorWatch,
-    chapter::ChapterWatch,
-    chapter_languages::ChapterLanguagesWatch,
-    chapter_quality::ChapterQualityWatch,
-    content::{key::ContentProfileDefaultKeyWatch, ContentProfilesWatch},
-    cover::CoverWatch,
-    custom_list::CustomListWatch,
-    download_state::DownloadStateWatch,
-    is_appstate_mounted::IsAppStateMountedWatch,
-    is_following::IsFollowingWatch,
-    is_logged::IsLoggedWatch,
-    longstrip_image_width::LongstripImageWidthWatch,
-    manga::MangaWatch,
-    manga_list_style::MangaListStyleWatch,
-    manga_reading_state::MangaReadingStateWatch,
-    page_direction::PageDirectionWatch,
-    page_limit::PageLimitWatch,
-    rating::RatingWatch,
-    read_marker::ReadMarkerWatch,
-    reading_mode::ReadingModeWatch,
-    reading_state::ReadingStateWatch,
-    scanlation_group::ScanlationGroupWatch,
-    sidebar_direction::SideBarDirectionWatch,
-    statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
-    tag::TagWatch,
-    theme::{key::ThemeProfileDefaultKeyWatch, ThemeProfilesWatch},
-    upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
-    user::UserWatch,
-    user_me::UserMeWatch,
-};
-
 pub mod api_client;
 pub mod author;
 pub mod chapter;
 pub mod chapter_feed_style;
 pub mod chapter_languages;
+pub mod chapter_layout;
 pub mod chapter_quality;
 pub mod client_info;
 pub mod content;
@@ -75,6 +43,40 @@ pub mod theme;
 pub mod upload;
 pub mod user;
 pub mod user_me;
+
+use self::{
+    api_client::ApiClientWatch,
+    author::AuthorWatch,
+    chapter::ChapterWatch,
+    chapter_languages::ChapterLanguagesWatch,
+    chapter_layout::ChapterLayoutWatch,
+    chapter_quality::ChapterQualityWatch,
+    content::{key::ContentProfileDefaultKeyWatch, ContentProfilesWatch},
+    cover::CoverWatch,
+    custom_list::CustomListWatch,
+    download_state::DownloadStateWatch,
+    is_appstate_mounted::IsAppStateMountedWatch,
+    is_following::IsFollowingWatch,
+    is_logged::IsLoggedWatch,
+    longstrip_image_width::LongstripImageWidthWatch,
+    manga::MangaWatch,
+    manga_list_style::MangaListStyleWatch,
+    manga_reading_state::MangaReadingStateWatch,
+    page_direction::PageDirectionWatch,
+    page_limit::PageLimitWatch,
+    rating::RatingWatch,
+    read_marker::ReadMarkerWatch,
+    reading_mode::ReadingModeWatch,
+    reading_state::ReadingStateWatch,
+    scanlation_group::ScanlationGroupWatch,
+    sidebar_direction::SideBarDirectionWatch,
+    statistics::{manga::MangaStatisticsWatch, StatisticsWatch},
+    tag::TagWatch,
+    theme::{key::ThemeProfileDefaultKeyWatch, ThemeProfilesWatch},
+    upload::{session::UploadSessionWatch, session_file::UploadSessionFileWatch},
+    user::UserWatch,
+    user_me::UserMeWatch,
+};
 
 pub struct WatcherInnerData<T: ?Sized> {
     pub id: Uuid,
@@ -248,4 +250,5 @@ watches_implementation! {
     content_profiles_default_key => ContentProfileDefaultKeyWatch,
     chapter_quality => ChapterQualityWatch,
     page_limit => PageLimitWatch,
+    chapter_layout => ChapterLayoutWatch,
 }
