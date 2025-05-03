@@ -62,7 +62,9 @@
 			height: -webkit-fill-available;
 			overflow: hidden;
 			display: grid;
-			height: 100cqh;
+			// NOTE This css looks ass on Linux,
+			// Maybe we can reactivate it on Windows or Macos if it look better
+			/// height: 100cqh;
 		}
 	}
 	article {
