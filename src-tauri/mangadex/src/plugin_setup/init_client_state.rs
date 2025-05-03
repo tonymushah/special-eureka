@@ -40,20 +40,25 @@ pub fn init_client_state<R: Runtime>(
             Some(i.clone().into())
         }
     }) {
+        log::debug!("valid auth tokens");
         tauri::async_runtime::spawn(async move {
             let client = app_clone.state::<MangaDexClient>();
             let watches = app_clone.state::<Watches>();
             client.set_auth_tokens(&auth_tokens).await?;
 
-            if let Ok(res) = client.oauth().refresh().send().await {
-                let mut last_time_fetched_write = ltf.write().await;
-                let _ = last_time_fetched_write
-                    .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
-                let _ = watches.is_logged.send_data(true);
-            } else {
-                let mut last_time_fetched_write = ltf.write().await;
-                let _ = last_time_fetched_write.replace(Instant::now());
-                let _ = watches.is_logged.send_data(false);
+            match client.oauth().refresh().send().await {
+                Ok(res) => {
+                    let mut last_time_fetched_write = ltf.write().await;
+                    let _ = last_time_fetched_write
+                        .replace(Instant::now().add(Duration::from_secs(res.expires_in as u64)));
+                    let _ = watches.is_logged.send_data(true);
+                }
+                Err(err) => {
+                    let mut last_time_fetched_write = ltf.write().await;
+                    let _ = last_time_fetched_write.replace(Instant::now());
+                    let _ = watches.is_logged.send_data(false);
+                    log::error!("{}", err);
+                }
             }
             Ok::<(), mangadex_api_types_rust::error::Error>(())
         });

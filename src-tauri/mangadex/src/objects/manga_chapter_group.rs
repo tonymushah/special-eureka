@@ -97,7 +97,7 @@ pub async fn group_results(
 
     manga_list_params.manga_ids = manga_ids_chapter_group.iter().map(|(id, _)| *id).collect();
     #[cfg(debug_assertions)]
-    println!("{:#?}", manga_list_params.manga_ids);
+    log::debug!("{:#?}", manga_list_params.manga_ids);
     manga_list_params.offset = Some(0_u32);
     manga_list_params.limit = Some(manga_list_params.manga_ids.len().try_into()?);
     let mangas = MangaListQueries::new(manga_list_params, ctx.get_app_handle::<tauri::Wry>()?)

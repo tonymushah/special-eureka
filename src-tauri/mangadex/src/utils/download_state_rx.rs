@@ -153,7 +153,7 @@ where
             let to_send = select! {
                 _ = tx.closed() => {
                     #[cfg(debug_assertions)]
-                    println!("closed xD");
+                    log::debug!("closed xD");
                     break;
                 },
                 Some(is_mounted) = is_mounted_stream.next() => {
@@ -195,7 +195,7 @@ where
                 continue;
             }
             #[cfg(debug_assertions)]
-            println!("{id} - {:?}", to_send);
+            log::debug!("{id} - {:?}", to_send);
             if tx.send(to_send).is_err() {
                 break;
             }

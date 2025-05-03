@@ -58,23 +58,31 @@ where
             let should_fetched: bool = {
                 let last_time_fetched_inner = last_time_fetched.read().await;
                 let inner = last_time_fetched_inner.ok_or(crate::Error::NotLoggedIn)?;
+
                 #[cfg(debug_assertions)]
-                println!("{:#?}", inner);
+                {
+                    super::print_instant(inner.into());
+                }
+
                 inner < Instant::now()
             };
 
             if should_fetched {
                 #[cfg(debug_assertions)]
-                println!("Should be fetched");
+                log::debug!("Should be fetched");
                 self.get_specific_rate_limit()?.refresh().await;
-                if let Ok(res) = client.oauth().refresh().send().await {
-                    let _ = last_time_fetched
-                        .write()
-                        .await
-                        .replace(Instant::now() + (Duration::from_millis(res.expires_in as u64)));
-                    let _ = watches.is_logged.send_data(true);
-                } else {
-                    let _ = watches.is_logged.send_data(false);
+                match client.oauth().refresh().send().await {
+                    Ok(res) => {
+                        let _ = last_time_fetched.write().await.replace(
+                            Instant::now() + (Duration::from_millis(res.expires_in as u64)),
+                        );
+                        let _ = watches.is_logged.send_data(true);
+                    }
+                    Err(err) => {
+                        let _ = watches.is_logged.send_data(false);
+                        log::error!("{}", err);
+                        return Err(err.into());
+                    }
                 }
             }
             Ok(client)
@@ -168,11 +176,11 @@ impl MangaDexActixArbiterHandleExt for ArbiterHandle {
         T: Send + 'static,
     {
         let (rx, tx) = oneshot::<T>();
-        println!("Spawning...");
+        log::debug!("Spawning...");
         self.spawn_fn(move || {
-            println!("executing task...");
+            log::debug!("executing task...");
             let res = task();
-            println!("executed!");
+            log::debug!("executed!");
             let _ = rx.send(res);
         });
         tx.await
@@ -184,11 +192,11 @@ impl MangaDexActixArbiterHandleExt for ArbiterHandle {
         F::Output: Send + 'static,
     {
         let (rx, tx) = oneshot::<F::Output>();
-        println!("Spawning...");
+        log::debug!("Spawning...");
         self.spawn(async move {
-            println!("executing task...");
+            log::debug!("executing task...");
             let res = task.await;
-            println!("executed!");
+            log::debug!("executed!");
             let _ = rx.send(res);
         });
         tx.await

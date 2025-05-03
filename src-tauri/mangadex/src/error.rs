@@ -117,6 +117,8 @@ pub enum Error {
     OsStrToString,
     #[error("The specific rate limit is not managed")]
     NotManagedSpecificRateLimit,
+    #[error(transparent)]
+    IndeterminateOffset(#[from] time::error::IndeterminateOffset),
 }
 
 impl Error {

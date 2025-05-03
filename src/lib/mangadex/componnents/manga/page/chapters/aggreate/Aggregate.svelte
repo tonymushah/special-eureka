@@ -17,6 +17,7 @@
 		chapterCommentsQuery,
 		getMangaAggregateChapterQuery
 	} from "./utils/query";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -196,6 +197,12 @@
 	});
 	let selected = $derived(
 		$isReversed ? $aggregateReverse[selectedIndex] : $aggregate[selectedIndex]
+	);
+	/// Test if this work
+	onMount(() =>
+		defaultContentProfile.subscribe(() => {
+			query.execute();
+		})
 	);
 </script>
 
