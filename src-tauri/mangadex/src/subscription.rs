@@ -1,6 +1,7 @@
 pub mod api_client;
 pub mod author;
 pub mod chapter;
+pub mod chapter_layout;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
@@ -25,4 +26,7 @@ pub mod utils;
 use async_graphql::MergedSubscription;
 
 #[derive(Debug, Default, Clone, Copy, MergedSubscription)]
-pub struct Subscriptions(legacy::LegacySubscriptions);
+pub struct Subscriptions(
+    legacy::LegacySubscriptions,
+    chapter_layout::ChapterLayoutSubscription,
+);
