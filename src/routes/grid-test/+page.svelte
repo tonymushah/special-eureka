@@ -8,15 +8,15 @@
 	<header
 		oncontextmenu={async (e) => {
 			e.preventDefault();
-			await (
-				await Menu.new({
-					items: [
-						await MenuItem.new({
-							text: "Something"
-						})
-					]
-				})
-			).popup(new LogicalPosition(e.x, e.y), getCurrentWebviewWindow());
+			const menu = await Menu.new({
+				items: [
+					await MenuItem.new({
+						text: "Something"
+					})
+				]
+			});
+			await menu.popup(new LogicalPosition(e.x, e.y), getCurrentWebviewWindow());
+			await menu.close();
 		}}
 		role="heading"
 		aria-level="1"
