@@ -15671,6 +15671,17 @@ export const UserLoggedChapterFeedDocument = {
 															kind: "EnumValue",
 															value: "EXCLUDE"
 														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "includeExternalUrl"
+														},
+														value: {
+															kind: "EnumValue",
+															value: "EXCLUDE"
+														}
 													}
 												]
 											}

@@ -15,7 +15,8 @@ export const query = graphql(`
 					limit: $limit
 					order: $order
 					translatedLanguage: $translatedLanguages
-					includeFutureUpdates: EXCLUDE
+					includeFutureUpdates: EXCLUDE,
+					includeExternalUrl: EXCLUDE
 				}
 				mangaListParams: $mangaListParams
 			) {
