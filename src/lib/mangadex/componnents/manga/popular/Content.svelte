@@ -136,6 +136,8 @@
 	.tags {
 		display: flex;
 		gap: 0.25rem;
+		align-items: center;
+		flex-wrap: wrap;
 	}
 	.description {
 		height: 10em;
