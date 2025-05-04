@@ -208,21 +208,23 @@
 		flex-direction: row;
 		overflow-y: hidden;
 		border-radius: 0.25rem;
+	}
+	.chapters {
 		transition: height 300ms ease-in-out;
 	}
 	div.cover > img {
-		height: 15em;
+		height: 12em;
 		object-fit: cover;
-		width: 10em;
+		width: 8em;
 		padding: 0.5em;
 		border-radius: 0.55em;
 	}
 	div.cover {
-		height: 16em;
+		height: 12em;
 	}
 	div.title > p {
 		margin: 0px;
-		font-size: 23px;
+		font-size: 18px;
 		-webkit-box-orient: vertical;
 		line-clamp: 2;
 		-webkit-line-clamp: 2;

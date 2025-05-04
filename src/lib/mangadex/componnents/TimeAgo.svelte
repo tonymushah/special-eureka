@@ -1,12 +1,16 @@
 <script lang="ts">
-	import { render as timeRender, cancel as timeCancel } from "timeago.js";
-	import { onDestroy, onMount } from "svelte";
-	let timeago: HTMLTimeElement = $state();
-	onMount(() => {
-		if (timeago) timeRender(timeago);
-	});
-	onDestroy(() => {
-		if (timeago) timeCancel(timeago);
+	import { sysLocaleStore } from "$lib/commands/sys_locale";
+	import { cancel as timeCancel, render as timeRender } from "timeago.js";
+	let timeago: HTMLTimeElement | undefined = $state();
+	$effect(() => {
+		if (timeago) {
+			timeRender(timeago, $sysLocaleStore ?? undefined);
+			return () => {
+				if (timeago) {
+					timeCancel(timeago);
+				}
+			};
+		}
 	});
 	interface Props {
 		date: Date;

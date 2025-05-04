@@ -3,8 +3,8 @@ import type { ChapterFeedListItem } from "@mangadex/componnents/chapter/feed/lis
 import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 import {
 	CoverImageQuality,
-	type ChapterSortOrder,
 	type Language,
+	type MangaFeedSortOrder,
 	type MangaListParams
 } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
@@ -16,32 +16,31 @@ import get_chapters_stats from "@mangadex/utils/statistics/chapter/query";
 import type { Client } from "@urql/svelte";
 import { query } from "./query";
 
-export type ScanlationGroupUploadsFeedChapterParams = {
-	group: string;
+export type UserMangaFeedChapterParams = {
 	languages?: Language[];
 	offset?: number;
 	limit?: number;
-	order?: ChapterSortOrder;
+	order?: MangaFeedSortOrder;
 };
 
-type ScanlationGroupUploadsFeedChapterConstructorParams = {
+type UserMangaFeedConstructorParams = {
 	data: ChapterFeedListItem[];
 	client: Client;
-	params: ScanlationGroupUploadsFeedChapterParams;
+	params: UserMangaFeedChapterParams;
 	mangaListParams?: MangaListParams;
 	offset: number;
 	limit: number;
 	total: number;
 };
 
-export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<ChapterFeedListItem> {
+export class UserMangaFeedResult extends AbstractSearchResult<ChapterFeedListItem> {
 	client: Client;
-	params: ScanlationGroupUploadsFeedChapterParams;
+	params: UserMangaFeedChapterParams;
 	mangaListParams?: MangaListParams;
 	offset: number;
 	limit: number;
 	total: number;
-	constructor(param: ScanlationGroupUploadsFeedChapterConstructorParams) {
+	constructor(param: UserMangaFeedConstructorParams) {
 		super(param.data);
 		this.client = param.client;
 		this.params = param.params;
@@ -75,12 +74,11 @@ export class ScanlationGroupUploadsFeedResult extends AbstractSearchResult<Chapt
 
 export default async function executeSearchQuery(
 	client: Client,
-	params: ScanlationGroupUploadsFeedChapterParams,
+	params: UserMangaFeedChapterParams,
 	mangaListParams?: MangaListParams
 ): Promise<AbstractSearchResult<ChapterFeedListItem>> {
 	const results = await client
 		.query(query, {
-			group: params.group,
 			translatedLanguages: params.languages,
 			offset: params.offset,
 			limit: params.limit,
@@ -92,13 +90,13 @@ export default async function executeSearchQuery(
 		throw results.error;
 	}
 	if (results.data) {
-		const data = results.data.chapter.listWithGroupByManga;
+		const data = results.data.feed.userLoggedMangaFeedGrouped;
 		const comments = await get_chapters_stats(
 			client,
 			data.data.flatMap((d) => d.chapters.map<string>((c) => c.id)),
 			true
 		);
-		return new ScanlationGroupUploadsFeedResult({
+		return new UserMangaFeedResult({
 			client,
 			params,
 			offset: data.offset,

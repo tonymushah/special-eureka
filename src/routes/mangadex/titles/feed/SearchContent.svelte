@@ -2,35 +2,27 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import ChapterFeedList from "@mangadex/componnents/chapter/feed/list/ChapterFeedList.svelte";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import { OrderDirection } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
+	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import type { Readable } from "svelte/store";
 	import { derived, get } from "svelte/store";
-	import executeSearchQuery, {
-		type ScanlationGroupUploadsFeedChapterParams as Params
-	} from "./search";
-	import pageLimit from "@mangadex/stores/page-limit";
-	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import executeSearchQuery, { type UserMangaFeedChapterParams as Params } from "./search";
 
-	interface Props {
-		groupId: Readable<string>;
-	}
-
-	let { groupId }: Props = $props();
 	const client = getContextClient();
 	const query = createInfiniteQuery(
-		derived([groupId, pageLimit], ([$groupId, $limit]) => {
+		derived([pageLimit], ([$limit]) => {
 			return {
-				queryKey: ["group", $groupId, "uploads", `limit:${$limit}`],
+				queryKey: ["user-logged", "manga", "feed", `limit:${$limit}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -48,7 +40,6 @@
 					}
 				},
 				initialPageParam: {
-					group: $groupId,
 					limit: $limit,
 					order: {
 						readableAt: OrderDirection.Descending
@@ -65,7 +56,7 @@
 		})
 	);
 	const hasNext = derived(query, ($query) => $query.hasNextPage);
-	const isFetching = derived(query, ($query) => $query.isLoading);
+	const isFetching = derived(query, ($query) => $query.isFetching);
 	const feed = derived(query, ($query) => $query.data?.pages.flatMap((e) => e.data) ?? []);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
