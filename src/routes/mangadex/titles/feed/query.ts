@@ -5,7 +5,7 @@ export const query = graphql(`
 		$translatedLanguages: [Language!]! = []
 		$offset: Int
 		$limit: Int
-		$order: MangaFeedSortOrder! = { publishAt: DESCENDING }
+		$order: MangaFeedSortOrder! = { readableAt: DESCENDING }
 		$mangaListParams: MangaListParams = {}
 	) {
 		feed {

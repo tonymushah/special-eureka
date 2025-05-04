@@ -15588,7 +15588,7 @@ export const UserLoggedChapterFeedDocument = {
 						fields: [
 							{
 								kind: "ObjectField",
-								name: { kind: "Name", value: "publishAt" },
+								name: { kind: "Name", value: "readableAt" },
 								value: { kind: "EnumValue", value: "DESCENDING" }
 							}
 						]
