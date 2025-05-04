@@ -188,7 +188,7 @@
 	}
 	div.title > p {
 		margin: 0px;
-		font-size: 23px;
+		font-size: 18px;
 		-webkit-box-orient: vertical;
 		line-clamp: 2;
 		-webkit-line-clamp: 2;
@@ -221,9 +221,10 @@
 	div.bottom-body > div.chapters:not(.isCollapsed) {
 		height: initial;
 	}
-	div.bottom-body > div.chapters.isCollapsed {
+	/*div.bottom-body > div.chapters.isCollapsed {
 		height: 8.6em;
-	}
+		
+	}*/
 	div.manga-content:hover {
 		cursor: pointer;
 	}
