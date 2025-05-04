@@ -1,22 +1,68 @@
 <script lang="ts">
+	import { onDestroy, onMount } from "svelte";
 	import ContextMenuLink from "./context-menu/ContextMenuLink.svelte";
+	import { Menu, MenuItem } from "@tauri-apps/api/menu";
+	import mouseEventMenu from "$lib/utils/mouseEventMenu";
+	import { goto } from "$app/navigation";
+	import type { UnlistenFn } from "@tauri-apps/api/event";
+	import openNewWindow from "$lib/commands/openNewWindow";
+	import { openUrl } from "@tauri-apps/plugin-opener";
 	interface Props {
 		variant?: "primary" | "base";
 		href: string;
 		ext_href?: string | undefined;
 		children?: import("svelte").Snippet;
 	}
-
+	let unlistens: UnlistenFn[] = [];
+	onDestroy(() => {
+		unlistens.forEach((u) => u());
+	});
 	let { variant = "primary", href, ext_href = undefined, children }: Props = $props();
 	let primary = $derived(variant == "primary");
 	let base = $derived(variant == "base");
 </script>
 
-<ContextMenuLink {href} {ext_href}>
-	<a {href} class:primary class:base>
-		{@render children?.()}
-	</a>
-</ContextMenuLink>
+<a
+	{href}
+	class:primary
+	class:base
+	oncontextmenu={async (e) => {
+		e.preventDefault();
+		let items = [
+			await MenuItem.new({
+				text: "Open",
+				action(id) {
+					goto(href);
+				}
+			}),
+			await MenuItem.new({
+				text: "Open in a new window",
+				action(id) {
+					openNewWindow(href);
+				}
+			})
+		];
+		if (ext_href) {
+			items.push(
+				await MenuItem.new({
+					text: "Open External Link",
+					action(id) {
+						if (ext_href) openUrl(ext_href);
+					}
+				})
+			);
+		}
+		mouseEventMenu({
+			menu: await Menu.new({
+				items
+			}),
+			preventDefault: true,
+			shouldClose: true
+		})(e);
+	}}
+>
+	{@render children?.()}
+</a>
 
 <style lang="scss">
 	a {
