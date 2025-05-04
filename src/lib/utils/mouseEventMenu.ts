@@ -7,12 +7,13 @@ type MouseEventMenuParam<T extends HTMLElement> = {
 	menu: Menu | Promise<Menu>,
 	preventDefault?: boolean,
 	stopPropagation?: boolean,
-	callback?: EventHandler<MouseEvent, T>
+	callback?: EventHandler<MouseEvent, T>,
+	shouldClose?: boolean
 }
 
 export default function mouseEventMenu<H extends HTMLElement = HTMLElement>(params: MouseEventMenuParam<H>): EventHandler<MouseEvent, H> {
 	return async (e) => {
-		const { menu: maybeMenu, preventDefault = true, stopPropagation = true, callback } = params;
+		const { menu: maybeMenu, preventDefault = true, stopPropagation = true, callback, shouldClose } = params;
 		if (preventDefault) {
 			e.preventDefault();
 		}
@@ -21,12 +22,10 @@ export default function mouseEventMenu<H extends HTMLElement = HTMLElement>(para
 		}
 		try {
 			let menu: Menu;
-			let shouldClose = false;
 			if (maybeMenu instanceof Menu) {
 				menu = maybeMenu;
 			} else {
 				menu = await maybeMenu;
-				shouldClose = true;
 			}
 			try {
 				await menu.popup(new LogicalPosition(e.x, e.y), getCurrentWindow());
