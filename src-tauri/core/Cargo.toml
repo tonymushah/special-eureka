@@ -36,6 +36,7 @@ fern.workspace = true
 log.workspace = true
 time = {workspace = true, features = ["formatting"]}
 humantime = "2"
+sys-locale = "0.3.2"
 
 [target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
 tauri-plugin-updater = "2"
