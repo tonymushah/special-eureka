@@ -1,5 +1,26 @@
+<script lang="ts">
+	import { LogicalPosition } from "@tauri-apps/api/dpi";
+	import { Menu, MenuItem } from "@tauri-apps/api/menu";
+	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+</script>
+
 <main class="container">
-	<header>
+	<header
+		oncontextmenu={async (e) => {
+			e.preventDefault();
+			await (
+				await Menu.new({
+					items: [
+						await MenuItem.new({
+							text: "Something"
+						})
+					]
+				})
+			).popup(new LogicalPosition(e.x, e.y), getCurrentWebviewWindow());
+		}}
+		role="heading"
+		aria-level="1"
+	>
 		<h1>Header</h1>
 	</header>
 	<div class="content">
