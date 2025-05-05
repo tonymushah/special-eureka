@@ -2,8 +2,9 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 use tauri::{
+    image::Image,
     ipc::CallbackFn,
-    menu::{ContextMenu, IsMenuItem, MenuBuilder, MenuId, MenuItemBuilder, SubmenuBuilder},
+    menu::{ContextMenu, IconMenuItemBuilder, IsMenuItem, MenuBuilder, MenuId, SubmenuBuilder},
     Manager, Position, Runtime, Webview,
 };
 
@@ -15,6 +16,7 @@ pub enum ContextMenuItem {
         action: CallbackFn,
         accelerator: Option<String>,
         enabled: Option<bool>,
+        icon: Option<String>,
     },
     Submenu {
         text: String,
@@ -57,10 +59,15 @@ impl ContextMenuItem {
                 action,
                 accelerator,
                 enabled,
+                icon,
             } => {
-                let mut builder = MenuItemBuilder::new(text).enabled(enabled.unwrap_or(true));
+                let mut builder = IconMenuItemBuilder::new(text).enabled(enabled.unwrap_or(true));
                 if let Some(acc) = accelerator {
                     builder = builder.accelerator(acc);
+                }
+                if let Some(icon) = icon {
+                    builder =
+                        builder.icon(Image::from_path(manager.path().resource_dir()?.join(icon))?);
                 }
                 let item = builder.build(manager)?;
                 callbacks.insert(item.id().clone(), *action);
