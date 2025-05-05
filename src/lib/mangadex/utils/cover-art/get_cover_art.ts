@@ -46,11 +46,22 @@ export default function get_cover_art({
 				}
 				if (res.data) {
 					const url = res.data.cover.getImage;
-					return URL.createObjectURL(await (await fetch(url)).blob())
+					//return URL.createObjectURL(await (await fetch(url)).blob())
+					return url;
 				}
 				throw new Error("No results??");
 			},
-			staleTime: 1000 * 60 * 5
+			/*structuralSharing(oldData, newData) {
+				try {
+					if (typeof oldData == "string") {
+						URL.revokeObjectURL(oldData);
+					}
+				} catch (e) {
+					console.error(e);
+				}
+				return newData;
+			},*/
+			staleTime: 1000 * 60 * 15
 		},
 		mangadexQueryClient
 	);
