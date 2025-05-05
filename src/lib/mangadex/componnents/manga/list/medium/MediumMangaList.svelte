@@ -9,27 +9,44 @@
 	import MangaElementBase1 from "../../base/base1/MangaElementBase1WithReadableCoverImage.svelte";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
+	import { isArray } from "lodash";
 
 	interface Props {
-		list?: MediumMangaListElementProps[];
+		list?: MediumMangaListElementProps[] | MediumMangaListElementProps[][];
 	}
 
 	let { list = [] }: Props = $props();
 </script>
 
 <section class="medium">
-	{#each list as data}
-		<MangaElementBase1
-			{...data}
-			withFull
-			onclick={() => {
-				goto(
-					route("/mangadex/title/[id]", {
-						id: data.id
-					})
-				);
-			}}
-		/>
+	{#each list as listItem}
+		{#if isArray(listItem)}
+			{#each listItem as data}
+				<MangaElementBase1
+					{...data}
+					withFull
+					onclick={() => {
+						goto(
+							route("/mangadex/title/[id]", {
+								id: data.id
+							})
+						);
+					}}
+				/>
+			{/each}
+		{:else}
+			<MangaElementBase1
+				{...listItem}
+				withFull
+				onclick={() => {
+					goto(
+						route("/mangadex/title/[id]", {
+							id: listItem.id
+						})
+					);
+				}}
+			/>
+		{/if}
 	{/each}
 </section>
 

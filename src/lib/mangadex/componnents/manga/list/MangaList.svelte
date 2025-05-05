@@ -5,7 +5,7 @@
 	import MangaListTabSelect from "./tab-select/MangaListTabSelect.svelte";
 
 	interface Props {
-		list?: MangaListContentItemProps[];
+		list?: MangaListContentItemProps[] | MangaListContentItemProps[][];
 		children?: import("svelte").Snippet;
 	}
 

@@ -10,9 +10,10 @@
 	import MangaElementBase3 from "../../base/base3/MangaElementBase3WithReadableCoverImage.svelte";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
+	import { isArray } from "lodash";
 
 	interface Props {
-		list?: CoverMangaListItemProps[];
+		list?: CoverMangaListItemProps[] | CoverMangaListItemProps[][];
 	}
 
 	let { list = [] }: Props = $props();
@@ -20,16 +21,32 @@
 
 <section class="cover-list">
 	{#each list as item}
-		<MangaElementBase3
-			{...item}
-			onclick={() => {
-				goto(
-					route("/mangadex/title/[id]", {
-						id: item.id
-					})
-				);
-			}}
-		/>
+		{#if isArray(item)}
+			{@const list = item}
+			{#each list as item}
+				<MangaElementBase3
+					{...item}
+					onclick={() => {
+						goto(
+							route("/mangadex/title/[id]", {
+								id: item.id
+							})
+						);
+					}}
+				/>
+			{/each}
+		{:else}
+			<MangaElementBase3
+				{...item}
+				onclick={() => {
+					goto(
+						route("/mangadex/title/[id]", {
+							id: item.id
+						})
+					);
+				}}
+			/>
+		{/if}
 	{/each}
 </section>
 

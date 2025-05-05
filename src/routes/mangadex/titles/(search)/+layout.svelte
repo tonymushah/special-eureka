@@ -10,11 +10,9 @@
 	initMangaSearchAuthorSearchFetcher(gqlAuthorFetcher);
 </script>
 
-<svelte:boundary>
-	<div>
-		{@render children?.()}
-	</div>
-</svelte:boundary>
+<div>
+	{@render children?.()}
+</div>
 
 <style lang="scss">
 	div {
