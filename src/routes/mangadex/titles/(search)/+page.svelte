@@ -17,6 +17,7 @@
 	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
+	import { delay } from "lodash";
 
 	interface Props {
 		data: PageData;
@@ -84,7 +85,7 @@
 	const offlineStore = derived(currentSearchParams, ($p) => $p?.offlineOnly ?? false);
 	let dialog_bind: HTMLDialogElement | undefined = $state();
 
-	let topElement: HTMLElement | undefined = $state();
+	let topElement: HTMLElement | undefined = $state(undefined);
 
 	const menu = setContextMenuContext(() => [
 		...defaultContextMenuContent(),
@@ -100,7 +101,10 @@
 		ContextMenuItemProvider.menuItem({
 			text: "Go to top",
 			action() {
-				topElement?.scrollTo();
+				delay(() => {
+					topElement?.scrollIntoView(true);
+				}, 10);
+				console.log(topElement);
 			}
 		})
 	]);
