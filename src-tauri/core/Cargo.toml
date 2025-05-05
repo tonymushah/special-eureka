@@ -17,7 +17,7 @@ tauri-build = { workspace = true, features = [] }
 [dependencies]
 serde_json.workspace = true
 serde = { workspace = true, features = ["derive"] }
-tauri = { workspace = true, features = ["unstable", "tray-icon"] }
+tauri = { workspace = true, features = ["unstable", "tray-icon", "image-ico", "image-png"] }
 tokio.workspace = true
 # tauri-plugin-upload = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
 # tauri-plugin-websocket = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "dev" }
