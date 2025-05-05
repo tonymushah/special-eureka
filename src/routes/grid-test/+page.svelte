@@ -1,22 +1,30 @@
 <script lang="ts">
-	import { LogicalPosition } from "@tauri-apps/api/dpi";
-	import { Menu, MenuItem } from "@tauri-apps/api/menu";
-	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
+	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
 </script>
 
 <main class="container">
 	<header
 		oncontextmenu={async (e) => {
 			e.preventDefault();
-			const menu = await Menu.new({
-				items: [
-					await MenuItem.new({
-						text: "Something"
+			await contextMenu(
+				[
+					ContextMenuItemProvider.menuItem("Something"),
+					ContextMenuItemProvider.menuItem("Other thing"),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.subMenu({
+						text: "Real Actions",
+						items: [
+							ContextMenuItemProvider.menuItem({
+								text: "Console log",
+								action() {
+									console.log("sdasdasdsadsad");
+								}
+							})
+						]
 					})
-				]
-			});
-			await menu.popup(new LogicalPosition(e.x, e.y), getCurrentWebviewWindow());
-			await menu.close();
+				],
+				e
+			);
 		}}
 		role="heading"
 		aria-level="1"
