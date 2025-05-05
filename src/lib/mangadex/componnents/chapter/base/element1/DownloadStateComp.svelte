@@ -16,12 +16,12 @@
 </script>
 
 <span class:downloaded={$downloaded} class:downloading={$downloading} class:failed={$failed}>
-	{#if $downloaded}
-		<CheckIcon />
-	{:else if $downloading}
+	{#if $downloading}
 		<DownloadCloudIcon />
 	{:else if $failed}
 		<XIcon />
+	{:else if $downloaded}
+		<CheckIcon />
 	{:else}
 		<DownloadIcon />
 	{/if}
