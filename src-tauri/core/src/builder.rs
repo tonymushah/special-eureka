@@ -29,7 +29,8 @@ pub fn get_builder() -> Builder<Wry> {
             crate::commands::open_new_window::open_new_window,
             crate::commands::toggle_decoration::toggle_decoration,
             crate::commands::is_linux::is_linux,
-            crate::commands::sys_locale::sys_locale
+            crate::commands::sys_locale::sys_locale,
+            crate::commands::context_menu::context_menu
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .plugin(mangadex::init())
