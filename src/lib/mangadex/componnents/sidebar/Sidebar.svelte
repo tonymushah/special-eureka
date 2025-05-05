@@ -69,9 +69,9 @@
 						text: $isMounted ? "Unmount Offline Server" : "Mount OfflineServer",
 						action() {
 							if ($isMounted) {
-								unmount(client);
+								unmount(client).then(console.debug).catch(console.error);
 							} else {
-								mount(client);
+								mount(client).then(console.debug).catch(console.error);
 							}
 						}
 					}),
