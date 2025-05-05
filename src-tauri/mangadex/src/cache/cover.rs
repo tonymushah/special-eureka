@@ -9,9 +9,8 @@ use std::{
 
 use crate::{query::cover::image::CoverImageQuery, Result};
 use async_graphql::Enum;
-use bytes::Bytes;
 use mangadex_api::CDN_URL;
-use reqwest::Client;
+use reqwest::{header::CACHE_CONTROL, Client};
 use url::Url;
 use uuid::Uuid;
 
@@ -96,31 +95,35 @@ impl CoverImageCache {
             self.get_cover_temp_image_path(),
         )?))
     }
-    pub fn get_from_cache(&self) -> Result<Bytes> {
+    pub fn get_from_cache(&self) -> Result<Vec<u8>> {
         let mut bytes: Vec<u8> = Vec::new();
         self.get_temp_buf_reader()?.read_to_end(&mut bytes)?;
-        Ok(bytes.into())
+        Ok(bytes)
     }
     pub fn is_in_cache(&self) -> bool {
         self.get_cover_temp_image_path().exists()
     }
-    pub fn seed(&self, bytes: &Bytes) -> Result<()> {
+    pub fn seed(&self, bytes: &[u8]) -> Result<()> {
         let mut writer = self.get_temp_buf_writer()?;
         writer.write_all(bytes)?;
         writer.flush()?;
         Ok(())
     }
-    pub async fn get_online(&self, client: &Client) -> Result<Bytes> {
+    pub async fn get_online(&self, client: &Client) -> Result<Vec<u8>> {
         let filename = self.get_online_filename();
         let url = Url::parse(format!("{CDN_URL}/covers/{}/{filename}", self.manga_id).as_str())?;
 
-        let response = client.get(url).send().await?;
+        let response = client
+            .get(url)
+            .header(CACHE_CONTROL, format!("max-age={}", 3600 * 24 * 7))
+            .send()
+            .await?;
         if response.status().is_success() {
             let body = response.bytes().await?;
             let mut file = self.get_temp_buf_writer()?;
             file.write_all(&body)?;
             file.flush()?;
-            Ok(body)
+            Ok(body.to_vec())
         } else {
             Err(crate::Error::CoverFetch)
         }
