@@ -8,7 +8,8 @@ export type ContextMenuItem = {
 	text: string,
 	accelerator?: string | null,
 	enabled?: boolean | null,
-	action: number
+	action: number,
+	icon?: string | null
 } | {
 	type: "Submenu",
 	text: string,
@@ -19,7 +20,11 @@ export type MenuItemParams = {
 	text: string,
 	accelerator?: string | null,
 	enabled?: boolean | null
-	action: () => any
+	action: () => any,
+	/**
+	 * The icon path should be available in the tauri ressource dir
+	 */
+	icon?: string | null
 }
 
 export type SubmenuParams = {
