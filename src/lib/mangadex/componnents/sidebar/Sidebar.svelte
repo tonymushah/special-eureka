@@ -12,6 +12,9 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { delay } from "lodash";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { mount, unmount } from "@mangadex/utils/offline_app_state";
+	import { client } from "@mangadex/gql/urql";
 </script>
 
 <div
@@ -59,6 +62,17 @@
 						text: $isSidebarRtl ? "Move sidebar to left" : "Move sidebar to right",
 						action() {
 							$isSidebarRtl = !$isSidebarRtl;
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: $isMounted ? "Unmount Offline Server" : "Mount OfflineServer",
+						action() {
+							if ($isMounted) {
+								unmount(client);
+							} else {
+								mount(client);
+							}
 						}
 					}),
 					ContextMenuItemProvider.seperator(),

@@ -4,16 +4,24 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import type { EventHandler } from "svelte/elements";
 
 type MouseEventMenuParam<T extends HTMLElement> = {
-	menu: Menu | Promise<Menu>,
-	preventDefault?: boolean,
-	stopPropagation?: boolean,
-	callback?: EventHandler<MouseEvent, T>,
-	shouldClose?: boolean
-}
+	menu: Menu | Promise<Menu>;
+	preventDefault?: boolean;
+	stopPropagation?: boolean;
+	callback?: EventHandler<MouseEvent, T>;
+	shouldClose?: boolean;
+};
 
-export default function mouseEventMenu<H extends HTMLElement = HTMLElement>(params: MouseEventMenuParam<H>): EventHandler<MouseEvent, H> {
+export default function mouseEventMenu<H extends HTMLElement = HTMLElement>(
+	params: MouseEventMenuParam<H>
+): EventHandler<MouseEvent, H> {
 	return async (e) => {
-		const { menu: maybeMenu, preventDefault = true, stopPropagation = true, callback, shouldClose } = params;
+		const {
+			menu: maybeMenu,
+			preventDefault = true,
+			stopPropagation = true,
+			callback,
+			shouldClose
+		} = params;
 		if (preventDefault) {
 			e.preventDefault();
 		}
@@ -37,7 +45,7 @@ export default function mouseEventMenu<H extends HTMLElement = HTMLElement>(para
 		} catch (error) {
 			console.error(error);
 		} finally {
-			callback?.(e)
+			callback?.(e);
 		}
-	}
+	};
 }

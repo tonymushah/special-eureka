@@ -9,8 +9,8 @@ export default function goto_sub_menu(): ContextMenuItem {
 			ContextMenuItemProvider.menuItem({
 				text: "Home",
 				action() {
-					goto(route("/mangadex"))
-				},
+					goto(route("/mangadex"));
+				}
 			}),
 			ContextMenuItemProvider.subMenu({
 				text: "Follows",
@@ -18,23 +18,20 @@ export default function goto_sub_menu(): ContextMenuItem {
 					ContextMenuItemProvider.menuItem({
 						text: "Updates",
 						action() {
-							goto(route("/mangadex/titles/feed"))
-						},
+							goto(route("/mangadex/titles/feed"));
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Online Library",
-						action() {
-						},
+						action() {}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "MDList",
-						action() {
-						},
+						action() {}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Followed Groups",
-						action() {
-						},
+						action() {}
 					})
 				]
 			}),
@@ -43,21 +40,17 @@ export default function goto_sub_menu(): ContextMenuItem {
 				items: [
 					ContextMenuItemProvider.menuItem({
 						text: "Latest Updates",
-						action() {
-
-						},
+						action() {}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Random",
 						action() {
-							goto(route("/mangadex/title/random"))
-						},
+							goto(route("/mangadex/title/random"));
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Popular",
-						action() {
-
-						},
+						action() {}
 					})
 				]
 			}),
@@ -67,23 +60,23 @@ export default function goto_sub_menu(): ContextMenuItem {
 					ContextMenuItemProvider.menuItem({
 						text: "Titles",
 						action() {
-							goto(route("/mangadex/titles"))
-						},
+							goto(route("/mangadex/titles"));
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Authors",
 						action() {
-							goto(route("/mangadex/author"))
-						},
+							goto(route("/mangadex/author"));
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Groups",
 						action() {
-							goto(route("/mangadex/group"))
-						},
+							goto(route("/mangadex/group"));
+						}
 					})
 				]
 			})
 		]
-	})
+	});
 }

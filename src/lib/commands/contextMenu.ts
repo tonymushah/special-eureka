@@ -1,56 +1,59 @@
 import { invoke, transformCallback } from "@tauri-apps/api/core";
 import { LogicalPosition, Position, type PhysicalPosition } from "@tauri-apps/api/dpi";
 
-export type ContextMenuItem = {
-	type: "Seperator"
-} | {
-	type: "MenuItem",
-	text: string,
-	accelerator?: string | null,
-	enabled?: boolean | null,
-	action: number,
-	icon?: string | null
-} | {
-	type: "Submenu",
-	text: string,
-	items: ContextMenuItem[]
-};
+export type ContextMenuItem =
+	| {
+			type: "Seperator";
+	  }
+	| {
+			type: "MenuItem";
+			text: string;
+			accelerator?: string | null;
+			enabled?: boolean | null;
+			action: number;
+			icon?: string | null;
+	  }
+	| {
+			type: "Submenu";
+			text: string;
+			items: ContextMenuItem[];
+	  };
 
 export type MenuItemParams = {
-	text: string,
-	accelerator?: string | null,
-	enabled?: boolean | null
-	action: () => any,
+	text: string;
+	accelerator?: string | null;
+	enabled?: boolean | null;
+	action: () => any;
 	/**
 	 * The icon path should be available in the tauri ressource dir
 	 */
-	icon?: string | null
-}
+	icon?: string | null;
+};
 
 export type SubmenuParams = {
-	text: string,
-	items: ContextMenuItem[]
-}
+	text: string;
+	items: ContextMenuItem[];
+};
 
 export class ContextMenuItemProvider {
 	public static seperator(): ContextMenuItem {
 		return {
 			type: "Seperator"
-		}
+		};
 	}
 	public static menuItem(params: string | MenuItemParams): ContextMenuItem {
 		if (typeof params == "string") {
 			return {
 				type: "MenuItem",
 				text: params,
-				action: transformCallback(() => { }, true)
-			}
+				action: transformCallback(() => {}, true)
+			};
 		} else {
 			return {
 				type: "MenuItem",
 				...params,
-				action: transformCallback(params.action, true),
-			}
+				action: transformCallback(params.action, true)
+			};
 		}
 	}
 	public static subMenu(params: SubmenuParams): ContextMenuItem {
@@ -61,7 +64,10 @@ export class ContextMenuItemProvider {
 	}
 }
 
-export default async function contextMenu(items: ContextMenuItem[], position: LogicalPosition | PhysicalPosition | Position | MouseEvent) {
+export default async function contextMenu(
+	items: ContextMenuItem[],
+	position: LogicalPosition | PhysicalPosition | Position | MouseEvent
+) {
 	let to_send_p: Position;
 	if (position instanceof Position) {
 		to_send_p = position;
