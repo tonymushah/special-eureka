@@ -18,6 +18,7 @@ pub enum ContextMenuItem {
     },
     Submenu {
         text: String,
+        #[serde(default)]
         items: Vec<ContextMenuItem>,
     },
     Seperator,
