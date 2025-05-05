@@ -7,6 +7,11 @@
 	import { showSidebar } from "./states/showSidebar";
 	import { isSidebarFloating } from "./states/isSidebarFloating";
 	import { isSidebarRtl } from "./states/isRtl";
+	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import goto_sub_menu from "./goto_sub_menu";
+	import { goto } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
+	import { delay } from "lodash";
 </script>
 
 <div
@@ -16,7 +21,60 @@
 	class:float={$isSidebarFloating}
 	class:defaultDecoration={$isDefaultDecoration}
 >
-	<aside class:collapsed={$isOpen} class:defaultDecoration={$isDefaultDecoration}>
+	<aside
+		class:collapsed={$isOpen}
+		class:defaultDecoration={$isDefaultDecoration}
+		oncontextmenu={async (e) => {
+			e.preventDefault();
+			await contextMenu(
+				[
+					ContextMenuItemProvider.menuItem({
+						text: "Back",
+						action() {
+							history.back();
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Forward",
+						action() {
+							history.forward();
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Reload",
+						action() {
+							delay(() => {
+								location.reload();
+							}, 20);
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: $isOpen ? "Unfold sidebar" : "Fold sidebar",
+						action() {
+							$isOpen = !$isOpen;
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: $isSidebarRtl ? "Move sidebar to left" : "Move sidebar to right",
+						action() {
+							$isSidebarRtl = !$isSidebarRtl;
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					goto_sub_menu(),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: "Settings",
+						action() {
+							goto(route("/mangadex/settings"));
+						}
+					})
+				],
+				e
+			).catch(console.error);
+		}}
+	>
 		<div class="header">
 			<SidebarHeader />
 		</div>
