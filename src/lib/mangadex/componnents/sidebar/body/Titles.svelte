@@ -10,13 +10,13 @@
 	{#snippet icon()}
 		<BookIcon size="24" />
 	{/snippet}
-	<SubMenuItem label="Offline Library" />
-	<SubMenuItem label="Latest Updates" />
+	<SubMenuItem label="Recently Popular" />
+	<SubMenuItem label="Latest Uploads" />
+	<SubMenuItem label="Recently Added" />
 	<SubMenuItem
 		onclick={() => {
 			goto(route("/mangadex/title/random"));
 		}}
 		label="Random"
 	/>
-	<SubMenuItem label="Recently Popular" />
 </SubMenu>

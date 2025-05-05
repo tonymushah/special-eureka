@@ -23,15 +23,15 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Online Library",
-						action() {}
+						action() { }
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "MDList",
-						action() {}
+						action() { }
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Followed Groups",
-						action() {}
+						action() { }
 					})
 				]
 			}),
@@ -39,8 +39,8 @@ export default function goto_sub_menu(): ContextMenuItem {
 				text: "Titles",
 				items: [
 					ContextMenuItemProvider.menuItem({
-						text: "Latest Updates",
-						action() {}
+						text: "Latest Uploads",
+						action() { }
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Random",
@@ -50,7 +50,7 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Popular",
-						action() {}
+						action() { }
 					})
 				]
 			}),
