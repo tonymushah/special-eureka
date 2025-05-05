@@ -15,6 +15,7 @@
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import { mount, unmount } from "@mangadex/utils/offline_app_state";
 	import { client } from "@mangadex/gql/urql";
+	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 </script>
 
 <div
@@ -31,26 +32,7 @@
 			e.preventDefault();
 			await contextMenu(
 				[
-					ContextMenuItemProvider.menuItem({
-						text: "Back",
-						action() {
-							history.back();
-						}
-					}),
-					ContextMenuItemProvider.menuItem({
-						text: "Forward",
-						action() {
-							history.forward();
-						}
-					}),
-					ContextMenuItemProvider.menuItem({
-						text: "Reload",
-						action() {
-							delay(() => {
-								location.reload();
-							}, 20);
-						}
-					}),
+					...defaultContextMenuContent(),
 					ContextMenuItemProvider.seperator(),
 					ContextMenuItemProvider.menuItem({
 						text: $isOpen ? "Unfold sidebar" : "Fold sidebar",

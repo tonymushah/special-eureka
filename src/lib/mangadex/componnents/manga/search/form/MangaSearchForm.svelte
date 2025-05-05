@@ -19,15 +19,16 @@
 	interface Props extends Events {
 		realTime?: boolean;
 		defaultParams?: MangaSearchParams;
+		dialog_bind?: HTMLDialogElement;
 	}
 
 	let {
 		realTime = $bindable(false),
 		defaultParams = $bindable(defaultMangaSearchParams()),
 		onchange,
-		onsubmit
+		onsubmit,
+		dialog_bind = $bindable()
 	}: Props = $props();
-	let dialog_bind: HTMLDialogElement | undefined = $state(undefined);
 	const params = writable(defaultParams);
 	const titleParams: Writable<string | undefined> = (() => {
 		const title_params_derived = derived(params, ($p) => $p.title);
@@ -124,6 +125,7 @@
 	</div>
 	<div class="buttons">
 		<ButtonAccent
+			type="button"
 			variant="accent"
 			isBase
 			onclick={() => {
@@ -140,6 +142,7 @@
 			<PrimaryButton
 				variant="1"
 				isBase
+				type="button"
 				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
@@ -152,6 +155,7 @@
 			<ButtonAccent
 				variant="accent"
 				isBase
+				type="button"
 				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
@@ -166,6 +170,7 @@
 		class="buttons"
 		oncontextmenu={(e) => {
 			e.preventDefault();
+			e.stopPropagation();
 			realTime = !realTime;
 		}}
 	>
