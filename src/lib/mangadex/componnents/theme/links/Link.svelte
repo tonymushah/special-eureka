@@ -7,6 +7,7 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import openNewWindow from "$lib/commands/openNewWindow";
 	import { openUrl } from "@tauri-apps/plugin-opener";
+	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
 	interface Props {
 		variant?: "primary" | "base";
 		href: string;
@@ -28,37 +29,29 @@
 	class:base
 	oncontextmenu={async (e) => {
 		e.preventDefault();
-		let items = [
-			await MenuItem.new({
-				text: "Open",
-				action(id) {
-					goto(href);
-				}
-			}),
-			await MenuItem.new({
-				text: "Open in a new window",
-				action(id) {
-					openNewWindow(href);
-				}
-			})
-		];
-		if (ext_href) {
-			items.push(
-				await MenuItem.new({
+		await contextMenu(
+			[
+				ContextMenuItemProvider.menuItem({
+					text: "Open",
+					action: () => {
+						goto(href);
+					}
+				}),
+				ContextMenuItemProvider.menuItem({
+					text: "Open in a new window",
+					action: () => {
+						openNewWindow(href);
+					}
+				}),
+				ContextMenuItemProvider.menuItem({
 					text: "Open External Link",
-					action(id) {
+					action: () => {
 						if (ext_href) openUrl(ext_href);
 					}
 				})
-			);
-		}
-		mouseEventMenu({
-			menu: await Menu.new({
-				items
-			}),
-			preventDefault: true,
-			shouldClose: true
-		})(e);
+			],
+			e
+		);
 	}}
 >
 	{@render children?.()}
