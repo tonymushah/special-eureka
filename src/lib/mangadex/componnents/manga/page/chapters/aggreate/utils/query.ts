@@ -4,7 +4,7 @@ const mangaAggregateQuery = graphql(`
 	query mangaAggregate($id: UUID!, $size: Int = 3) {
 		manga {
 			aggregate(params: { mangaId: $id }) {
-				chunked(chunkSize: $size) {
+				chunked(chunkSize: $size, isReversed: true) {
 					ids
 					volumes {
 						volume

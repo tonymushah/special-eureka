@@ -6718,6 +6718,11 @@ export const MangaAggregateDocument = {
 															kind: "Variable",
 															name: { kind: "Name", value: "size" }
 														}
+													},
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "isReversed" },
+														value: { kind: "BooleanValue", value: true }
 													}
 												],
 												selectionSet: {
