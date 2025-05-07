@@ -51,7 +51,7 @@
 			"digestAlgorithm": "sha256",
 			"timestampUrl": ""
 		},
-		"longDescription": "This app is a desktop-mangareader built in Tauri and React, with ❤ and tears by Tony Mushah. Feel free to use it!",
+		"longDescription": "This app is a desktop-mangareader built in Tauri and Svelte, with ❤ and tears by Tony Mushah. Feel free to use it!",
 		"macOS": {
 			"entitlements": null,
 			"exceptionDomain": "",

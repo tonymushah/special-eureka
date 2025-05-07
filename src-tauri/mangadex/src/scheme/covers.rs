@@ -3,7 +3,6 @@ use std::{
     ops::Deref,
 };
 
-use bytes::{Buf, BufMut, Bytes, BytesMut};
 use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use regex::Regex;
 use reqwest::header::CONTENT_TYPE;
@@ -105,15 +104,15 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
     pub fn new(param: &'a HandleCoversParams, app: &'a AppHandle<R>) -> Self {
         Self { param, app }
     }
-    fn get_from_cache(&self) -> crate::Result<Bytes> {
+    fn get_from_cache(&self) -> crate::Result<Vec<u8>> {
         let cache: CoverImageCache = self.param.clone().try_into()?;
         cache.get_from_cache()
     }
 
     pub fn handle(&self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
-        let mut buf = BytesMut::new().writer();
+        let mut buf = Vec::<u8>::new();
         if let Ok(cache) = self.get_from_cache() {
-            io::copy(&mut (cache.reader()), &mut buf)?;
+            buf = cache;
         } else {
             let inner__ = self.app.get_offline_app_state()?.deref().deref().clone();
             let state = crate::utils::block_on(inner__.read_owned());
@@ -137,7 +136,7 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
             .header("access-control-allow-origin", "*")
             .status(StatusCode::OK)
             .header(CONTENT_TYPE, "image/*")
-            .body(buf.into_inner().into())
+            .body(buf)
             .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
     }
 }

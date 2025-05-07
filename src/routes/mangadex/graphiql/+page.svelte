@@ -1,9 +1,7 @@
 <script lang="ts">
-	const graphiQL = import("@mangadex/componnents/GraphiQL.svelte").then((g) => g.default);
+	import PageError from "@mangadex/componnents/PageError.svelte";
 </script>
 
-{#await graphiQL}
-	<p>Loading...</p>
-{:then GraphiQL}
-	<GraphiQL />
-{/await}
+<PageError
+	message="This graphiql page is now disabled because f*ck React with their hooks policy."
+/>

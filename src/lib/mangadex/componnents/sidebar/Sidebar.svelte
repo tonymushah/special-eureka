@@ -7,6 +7,15 @@
 	import { showSidebar } from "./states/showSidebar";
 	import { isSidebarFloating } from "./states/isSidebarFloating";
 	import { isSidebarRtl } from "./states/isRtl";
+	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import goto_sub_menu from "./goto_sub_menu";
+	import { goto } from "$app/navigation";
+	import { route } from "$lib/ROUTES";
+	import { delay } from "lodash";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import { mount, unmount } from "@mangadex/utils/offline_app_state";
+	import { client } from "@mangadex/gql/urql";
+	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 </script>
 
 <div
@@ -16,7 +25,52 @@
 	class:float={$isSidebarFloating}
 	class:defaultDecoration={$isDefaultDecoration}
 >
-	<aside class:collapsed={$isOpen} class:defaultDecoration={$isDefaultDecoration}>
+	<aside
+		class:collapsed={$isOpen}
+		class:defaultDecoration={$isDefaultDecoration}
+		oncontextmenu={async (e) => {
+			e.preventDefault();
+			await contextMenu(
+				[
+					...defaultContextMenuContent(),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: $isOpen ? "Unfold sidebar" : "Fold sidebar",
+						action() {
+							$isOpen = !$isOpen;
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: $isSidebarRtl ? "Move sidebar to left" : "Move sidebar to right",
+						action() {
+							$isSidebarRtl = !$isSidebarRtl;
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: $isMounted ? "Unmount Offline Server" : "Mount OfflineServer",
+						action() {
+							if ($isMounted) {
+								unmount(client).then(console.debug).catch(console.error);
+							} else {
+								mount(client).then(console.debug).catch(console.error);
+							}
+						}
+					}),
+					ContextMenuItemProvider.seperator(),
+					goto_sub_menu(),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.menuItem({
+						text: "Settings",
+						action() {
+							goto(route("/mangadex/settings"));
+						}
+					})
+				],
+				e
+			).catch(console.error);
+		}}
+	>
 		<div class="header">
 			<SidebarHeader />
 		</div>

@@ -95,9 +95,7 @@
 		if (result.isLoading) {
 			return [];
 		}
-		return Array.from(
-			new Set(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).values()
-		);
+		return result.data?.pages.map((d) => d.data) ?? [];
 	});
 	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
 	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);

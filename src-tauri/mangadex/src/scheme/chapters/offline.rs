@@ -2,7 +2,6 @@ use crate::{
     scheme::{SchemeResponseError, SchemeResponseResult},
     utils::traits_utils::MangadexTauriManagerExt,
 };
-use bytes::{BufMut, Bytes, BytesMut};
 use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
 use reqwest::header::CONTENT_TYPE;
 use std::{
@@ -23,7 +22,7 @@ pub struct ChaptersHandlerOffline<'a, R: Runtime> {
 }
 
 impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
-    fn get_image(&'a self) -> SchemeResponseResult<Bytes> {
+    fn get_image(&'a self) -> SchemeResponseResult<Vec<u8>> {
         let inner__ = self
             .app_handle
             .get_offline_app_state()?
@@ -36,7 +35,7 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
             .map(|e| e.app_state.clone())
             .ok_or(SchemeResponseError::NotLoaded)?;
 
-        let mut buf = BytesMut::new().writer();
+        let mut buf = Vec::<u8>::new();
         let mut file = {
             let chapter_id = self.chapter_id;
             let filename = self.filename.clone();
@@ -55,10 +54,10 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
         };
         io::copy(&mut file, &mut buf)?;
         buf.flush()?;
-        Ok(buf.into_inner().freeze())
+        Ok(buf)
     }
     pub fn handle(&'a self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
-        let body: Bytes = self.get_image()?;
+        let body = self.get_image()?;
         tauri::http::Response::builder()
             .header("access-control-allow-origin", "*")
             .status(StatusCode::OK)
@@ -75,7 +74,7 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
                 )
                 .as_str(),
             )
-            .body(body.to_vec())
+            .body(body)
             .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
     }
 }

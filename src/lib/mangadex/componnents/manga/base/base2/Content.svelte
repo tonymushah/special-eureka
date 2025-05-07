@@ -124,7 +124,7 @@
 		display: grid;
 		grid-template-areas: "title publication";
 		flex-direction: row;
-		align-items: start;
+		align-items: center;
 		grid-template-columns: auto 160px;
 		.title {
 			grid-area: title;

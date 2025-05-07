@@ -1,5 +1,34 @@
+<script lang="ts">
+	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+</script>
+
 <main class="container">
-	<header>
+	<header
+		oncontextmenu={async (e) => {
+			e.preventDefault();
+			await contextMenu(
+				[
+					ContextMenuItemProvider.menuItem("Something"),
+					ContextMenuItemProvider.menuItem("Other thing"),
+					ContextMenuItemProvider.seperator(),
+					ContextMenuItemProvider.subMenu({
+						text: "Real Actions",
+						items: [
+							ContextMenuItemProvider.menuItem({
+								text: "Console log",
+								action() {
+									console.log("sdasdasdsadsad");
+								}
+							})
+						]
+					})
+				],
+				e
+			);
+		}}
+		role="heading"
+		aria-level="1"
+	>
 		<h1>Header</h1>
 	</header>
 	<div class="content">

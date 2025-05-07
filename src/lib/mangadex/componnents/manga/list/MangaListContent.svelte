@@ -17,7 +17,7 @@
 	import MediumMangaList from "./medium/MediumMangaList.svelte";
 
 	interface Props {
-		list?: MangaListContentItemProps[];
+		list?: MangaListContentItemProps[] | MangaListContentItemProps[][];
 	}
 
 	let { list }: Props = $props();

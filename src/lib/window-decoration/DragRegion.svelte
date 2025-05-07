@@ -6,7 +6,14 @@
 	let { children }: Props = $props();
 </script>
 
-<div data-tauri-drag-region>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	data-tauri-drag-region
+	oncontextmenu={(e) => {
+		e.preventDefault();
+		e.stopPropagation();
+	}}
+>
 	{@render children?.()}
 </div>
 
