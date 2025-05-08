@@ -72,16 +72,3 @@ opt-level = 3
 opt-level = 3
 lto = true
 strip = true
-
-# These are specifics packages
-[profile.release.package."special-eureka"]
-opt-level = "s"
-
-[profile.release.package."tokio"]
-opt-level = "s"
-
-[profile.release.package."tauri-plugin-speu-mangadex"]
-opt-level = "s"
-
-[profile.release.package."wry"]
-opt-level = "s"
