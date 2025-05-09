@@ -35,7 +35,9 @@ jobs:
       - name: make vite build dir
         run: mkdir build
       - name: clippy run
-        run: cargo clippy --workspace
+        if: matrix.platform != 'windows-latest'
+        run: | 
+          cargo clippy --workspace
       - name: build it the app
         run: pnpm build
         env:
