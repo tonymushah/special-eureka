@@ -6902,6 +6902,17 @@ export const GetMangaAggregateChapterDocument = {
 															kind: "Variable",
 															name: { kind: "Name", value: "ids" }
 														}
+													},
+													{
+														kind: "ObjectField",
+														name: {
+															kind: "Name",
+															value: "includeExternalUrl"
+														},
+														value: {
+															kind: "EnumValue",
+															value: "EXCLUDE"
+														}
 													}
 												]
 											}
