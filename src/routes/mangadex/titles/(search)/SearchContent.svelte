@@ -98,6 +98,7 @@
 	});
 	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
 	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);
+	/// TODO implement this
 	const pages = derived(infiniteQuery, (result) => {
 		const initalPage = result.data?.pages[0];
 		if (initalPage) {
