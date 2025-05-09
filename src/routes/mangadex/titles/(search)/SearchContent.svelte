@@ -146,7 +146,9 @@
 	});
 </script>
 
-<MangaList list={$titles}></MangaList>
+{#if !$infiniteQuery.isLoading}
+	<MangaList list={$titles}></MangaList>
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if $isFetching}
