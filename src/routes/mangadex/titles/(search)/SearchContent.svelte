@@ -1,17 +1,16 @@
 <script lang="ts">
 	import MangaList from "@mangadex/componnents/manga/list/MangaList.svelte";
 	import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-	import type { MangaListParams } from "@mangadex/gql/graphql";
-	import { getContextClient } from "@urql/svelte";
-	import { debounce, last, range, type DebouncedFunc } from "lodash";
-	import { onDestroy, onMount } from "svelte";
-	import { derived, get, writable, type Readable } from "svelte/store";
-	import executeSearchQuery from "./search";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
+	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import { getContextClient } from "@urql/svelte";
+	import { debounce, last, range } from "lodash";
+	import { onDestroy } from "svelte";
+	import { derived, get, type Readable } from "svelte/store";
+	import executeSearchQuery from "./search";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
