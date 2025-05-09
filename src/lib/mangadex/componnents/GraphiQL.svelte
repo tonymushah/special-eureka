@@ -20,14 +20,18 @@
 			} else {
 				root = createRoot(divRoot);
 			}
-			root.render(
-				GraphiQL({
-					fetcher
-				})
-			);
+			try {
+				root.render(
+					await GraphiQL({
+						fetcher
+					})
+				);
+			} catch (error) {
+				console.error(error);
+			}
 		}
 	});
-
+	$inspect(root);
 	onDestroy(function () {
 		if (root != undefined) root.unmount();
 	});
