@@ -3,6 +3,7 @@
 	import Accordion from "@mangadex/componnents/theme/accordion/Accordion.svelte";
 	import { type ComponentProps } from "svelte";
 	import Chapters from "./ChaptersAccordion.svelte";
+	import { every } from "lodash";
 
 	interface Props extends ChapterEl1Events {
 		title: string;

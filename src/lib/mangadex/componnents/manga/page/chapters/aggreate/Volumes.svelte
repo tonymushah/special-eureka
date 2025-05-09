@@ -8,7 +8,10 @@
 		openStart?: boolean;
 	}
 
-	let { volumes, openStart = false, ...events }: Props = $props();
+	let { volumes: vs, openStart = false, ...events }: Props = $props();
+	let volumes = $derived.by(() =>
+		vs.filter((v) => v.volumeContent.flatMap((d) => d.chapters).length != 0)
+	);
 </script>
 
 <div class="volumes">
