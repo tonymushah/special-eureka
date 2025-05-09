@@ -38,7 +38,7 @@ pub trait SplittableParam: Clone {
                     let mut param = self.clone();
                     param.set_ids(chunck.to_vec());
 
-                    if param.limit() == 0 && !param.ids().is_empty() {
+                    if !param.ids().is_empty() {
                         param.set_limit(param.ids().len().try_into().ok()?);
                     }
                     Some(param)
