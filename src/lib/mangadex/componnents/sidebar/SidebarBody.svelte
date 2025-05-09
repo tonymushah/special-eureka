@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from "$app/environment";
 	import Follows from "./body/Follows.svelte";
 	import Graphql from "./body/Graphql.svelte";
 	import Home from "./body/Home.svelte";
@@ -18,6 +19,8 @@
 
 <Search />
 
-<Graphql />
+{#if dev}
+	<Graphql />
+{/if}
 
 <Settings />
