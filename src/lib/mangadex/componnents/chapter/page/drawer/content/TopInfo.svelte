@@ -19,9 +19,7 @@
 					href={route("/mangadex/title/[id]", {
 						id: $current.series.id
 					})}
-					ext_href={`https://mangadex.org${route("/mangadex/title/[id]", {
-						id: $current.series.id
-					})}`}
+					ext_href={`https://mangadex.org/title/${$current.series.id}`}
 				>
 					{$current.series.title}
 				</Link>

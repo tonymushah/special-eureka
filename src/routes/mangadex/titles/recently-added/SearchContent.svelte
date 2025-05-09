@@ -7,21 +7,21 @@
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { debounce, last, range } from "lodash";
+	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import { derived, get, type Readable } from "svelte/store";
-	import executeSearchQuery from "./search";
+	import executeSearchQuery from "./execute";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
 	interface Props {
 		params: Readable<MangaListParams>;
-		offlineStore: Readable<boolean>;
-		excludeContentProfile?: boolean;
+		refetch?: () => void;
 	}
 
-	let { params, offlineStore, excludeContentProfile }: Props = $props();
-	const p_p_offline = derived([params, offlineStore], (merged) => merged);
+	let { params, refetch = $bindable() }: Props = $props();
+	const p_p_offline = derived([params, defaultContentProfile], ([merged]) => [merged]);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
 		offset: number;
@@ -29,16 +29,11 @@
 		total: number;
 	}
 	const infiniteQuery = createInfiniteQuery(
-		derived(p_p_offline, ([$params, isOffline]) => {
+		derived(p_p_offline, ([$params]) => {
 			return {
-				queryKey: ["manga-search", $params, isOffline],
-				initialPageParam: [$params, isOffline],
-				getNextPageParam(
-					lastPage,
-					allPages,
-					[lastPageParam, lastPageOffline],
-					allPageParams
-				) {
+				queryKey: ["rencently-added-page", $params],
+				initialPageParam: [$params],
+				getNextPageParam(lastPage, allPages, [lastPageParam], allPageParams) {
 					const next_offset = lastPage.limit + lastPage.offset;
 					if (next_offset > lastPage.total) {
 						return null;
@@ -48,24 +43,18 @@
 								...lastPageParam,
 								limit: lastPage.limit,
 								offset: next_offset
-							},
-							lastPageOffline
+							}
 						];
 					}
 				},
-				async queryFn({ pageParam: [p, offline] }) {
-					const res = await executeSearchQuery(client, p, offline, excludeContentProfile);
+				async queryFn({ pageParam: [p] }) {
+					const res = await executeSearchQuery(client, p);
 					return {
 						data: res.data,
 						...res.paginationData
 					};
 				},
-				getPreviousPageParam(
-					firstPage,
-					allPages,
-					[firstPageParam, firstPageOffline],
-					allPageParams
-				) {
+				getPreviousPageParam(firstPage, allPages, [firstPageParam], allPageParams) {
 					const next_offset = firstPage.limit - firstPage.offset;
 					if (next_offset < 0) {
 						return null;
@@ -75,8 +64,7 @@
 								...firstPageParam,
 								limit: firstPage.limit,
 								offset: next_offset
-							},
-							firstPageOffline
+							}
 						];
 					}
 				}
@@ -85,11 +73,14 @@
 				Error,
 				InfiniteQueryData,
 				InfiniteQueryData,
-				[string, MangaListParams, boolean],
-				[MangaListParams, boolean]
+				[string, MangaListParams],
+				[MangaListParams]
 			>;
 		})
 	);
+	refetch = debounce(() => {
+		get(infiniteQuery).refetch();
+	}, debounce_wait);
 	const titles = derived(infiniteQuery, (result) => {
 		if (result.isLoading) {
 			return [];
@@ -98,22 +89,6 @@
 	});
 	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
 	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);
-	/// TODO implement this
-	const pages = derived(infiniteQuery, (result) => {
-		const initalPage = result.data?.pages[0];
-		if (initalPage) {
-			return Math.floor(initalPage.total / initalPage.limit);
-		}
-	});
-	const currentPage = derived(infiniteQuery, (result) => {
-		const current = last(result.data?.pages);
-		const initalPage = result.data?.pages[0];
-		if (current && initalPage) {
-			return range(initalPage.offset, current.total, initalPage.limit).findIndex(
-				(step) => step <= current.offset
-			);
-		}
-	});
 	const fetchNext = debounce(async function () {
 		const inf = get(infiniteQuery);
 		return await inf.fetchNextPage();

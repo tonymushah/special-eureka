@@ -161,6 +161,7 @@
 	onMount(async () => {
 		unlistens.push(
 			query.subscribe((e) => {
+				// TODO Flatten the result data and fetch the data in one go.
 				e?.data?.manga.aggregate.chunked.forEach((c) => {
 					const cache = chaptersStore.get();
 					const ids = c.ids.filter((id) => !cache.has(id));

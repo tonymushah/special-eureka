@@ -11,7 +11,7 @@ pub mod user_followed_groups;
 pub mod user_followed_manga;
 pub mod user_followed_user;
 
-use std::future::Future;
+use std::{future::Future, iter::Extend};
 
 use mangadex_api::MangaDexClient;
 use mangadex_api_schema_rust::v5::Results;
@@ -101,10 +101,10 @@ pub trait SendSplitted: SendableParam + SplittableParam {
                     data: Vec::new(),
                     result: mangadex_api_types_rust::ResultType::Ok,
                 },
-                |mut agg, mut res| {
+                |mut agg, res| {
                     agg.total = res.total;
                     agg.limit += res.limit;
-                    agg.data.append(&mut res.data);
+                    agg.data.extend(res.data);
                     agg
                 },
             ))
