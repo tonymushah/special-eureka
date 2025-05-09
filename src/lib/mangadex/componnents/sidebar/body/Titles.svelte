@@ -12,7 +12,12 @@
 	{/snippet}
 	<SubMenuItem label="Recently Popular" />
 	<SubMenuItem label="Latest Uploads" />
-	<SubMenuItem label="Recently Added" />
+	<SubMenuItem
+		label="Recently Added"
+		onclick={() => {
+			goto(route("/mangadex/titles/recently-added"));
+		}}
+	/>
 	<SubMenuItem
 		onclick={() => {
 			goto(route("/mangadex/title/random"));

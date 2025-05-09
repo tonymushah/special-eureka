@@ -51,6 +51,12 @@ export default function goto_sub_menu(): ContextMenuItem {
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Popular",
 						action() { }
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Recently Added",
+						action() {
+							goto(route("/mangadex/titles/recently-added"))
+						},
 					})
 				]
 			}),
