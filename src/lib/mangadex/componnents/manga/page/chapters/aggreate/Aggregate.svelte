@@ -163,7 +163,6 @@
 			query.subscribe((e) => {
 				// [x] Flatten the result data and fetch the data in one go.
 				const ids: string[] = e?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
-				const cache = chaptersStore.get();
 				if (ids.length > 0)
 					fetchChapters(ids)
 						.then(async (cs) => {
