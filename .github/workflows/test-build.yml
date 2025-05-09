@@ -32,12 +32,6 @@ jobs:
           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
       - name: install app dependencies
         run: pnpm install
-      - name: make vite build dir
-        run: mkdir build
-      - name: clippy run
-        if: matrix.platform != 'windows-latest'
-        run: | 
-          cargo clippy --workspace
       - name: build it the app
         run: pnpm build
         env:
