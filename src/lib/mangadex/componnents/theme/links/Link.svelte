@@ -8,6 +8,8 @@
 	import openNewWindow from "$lib/commands/openNewWindow";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import { getContextMenuContext } from "$lib/utils/contextMenuContext";
+	import { assign } from "lodash";
 	interface Props {
 		variant?: "primary" | "base";
 		href: string;
@@ -21,6 +23,7 @@
 	let { variant = "primary", href, ext_href = undefined, children }: Props = $props();
 	let primary = $derived(variant == "primary");
 	let base = $derived(variant == "base");
+	let context = getContextMenuContext();
 </script>
 
 <a
@@ -31,6 +34,7 @@
 		e.preventDefault();
 		await contextMenu(
 			[
+				...context(),
 				ContextMenuItemProvider.menuItem({
 					text: "Open",
 					action: () => {
@@ -40,14 +44,22 @@
 				ContextMenuItemProvider.menuItem({
 					text: "Open in a new window",
 					action: () => {
-						openNewWindow(href);
+						try {
+							const href_ = new URL(href);
+							openNewWindow(href_.toString());
+						} catch {
+							const current_url = new URL(location.href);
+							current_url.pathname = href;
+							openNewWindow(current_url.toString());
+						}
 					}
 				}),
 				ContextMenuItemProvider.menuItem({
 					text: "Open External Link",
 					action: () => {
 						if (ext_href) openUrl(ext_href);
-					}
+					},
+					enabled: !!ext_href
 				})
 			],
 			e
