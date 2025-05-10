@@ -1,15 +1,11 @@
 <script lang="ts">
-	import { onDestroy, onMount } from "svelte";
-	import ContextMenuLink from "./context-menu/ContextMenuLink.svelte";
-	import { Menu, MenuItem } from "@tauri-apps/api/menu";
-	import mouseEventMenu from "$lib/utils/mouseEventMenu";
 	import { goto } from "$app/navigation";
-	import type { UnlistenFn } from "@tauri-apps/api/event";
-	import openNewWindow from "$lib/commands/openNewWindow";
-	import { openUrl } from "@tauri-apps/plugin-opener";
 	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import openNewWindow from "$lib/commands/openNewWindow";
 	import { getContextMenuContext } from "$lib/utils/contextMenuContext";
-	import { assign } from "lodash";
+	import type { UnlistenFn } from "@tauri-apps/api/event";
+	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { onDestroy } from "svelte";
 	interface Props {
 		variant?: "primary" | "base";
 		href: string;
