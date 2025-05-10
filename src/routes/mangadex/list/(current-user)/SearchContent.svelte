@@ -14,6 +14,7 @@
 	import { onDestroy } from "svelte";
 	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type CurrentUserCustomListItemData } from "./search";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	const client = getContextClient();
 	const query = createInfiniteQuery(
@@ -113,6 +114,10 @@
 		</UsersSimpleBase>
 	{/each}
 </div>
+
+{#if $query.error}
+	<ErrorComponent label="Error on fetching" error={$query.error} />
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if $isFetching}
