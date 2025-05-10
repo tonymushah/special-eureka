@@ -31,3 +31,9 @@
 	</div>
 	{@render children?.()}
 </div>
+
+<style lang="scss">
+	.layout {
+		margin: 0px 10px;
+	}
+</style>

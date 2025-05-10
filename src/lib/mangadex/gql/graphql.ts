@@ -5071,6 +5071,33 @@ export type ScanlationUploadsFeedQuery = {
 	};
 };
 
+export type CurrentUserCustomListsQueryVariables = Exact<{
+	params: CurrentLoggedLists;
+}>;
+
+export type CurrentUserCustomListsQuery = {
+	__typename?: "Query";
+	customList: {
+		__typename?: "CustomListQueries";
+		currentLoggedLists: {
+			__typename?: "CustomListResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "CustomList";
+				id: any;
+				attributes: {
+					__typename?: "CustomListAttributes";
+					name: string;
+					visibility: CustomListVisibility;
+				};
+				relationships: { __typename?: "CustomListRelationships"; titlesIds: Array<any> };
+			}>;
+		};
+	};
+};
+
 export type LoginMutationMutationVariables = Exact<{
 	username: Scalars["Username"]["input"];
 	password: Scalars["Password"]["input"];
@@ -14377,6 +14404,132 @@ export const ScanlationUploadsFeedDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanlationUploadsFeedQuery, ScanlationUploadsFeedQueryVariables>;
+export const CurrentUserCustomListsDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserCustomLists" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "params" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "CurrentLoggedLists" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "currentLoggedLists" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "params" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "visibility"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "titlesIds"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CurrentUserCustomListsQuery, CurrentUserCustomListsQueryVariables>;
 export const LoginMutationDocument = {
 	kind: "Document",
 	definitions: [
