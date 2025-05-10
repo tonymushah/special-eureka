@@ -14,6 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+	"\n\tquery customlistPageQuery($id: UUID!) {\n\t\tcustomList {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CustomlistPageQueryDocument;
 	"\n\tquery isChapterDownloaded($id: UUID!) {\n\t\tchapter {\n\t\t\tisDownloaded(id: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": typeof types.IsChapterDownloadedDocument;
 	"\n\tsubscription watchChapterDownloadState($id: UUID!) {\n\t\twatchDownloadState(objectId: $id) {\n\t\t\thasFailed\n\t\t\tisDownloaded\n\t\t}\n\t}\n": typeof types.WatchChapterDownloadStateDocument;
 	"\n\tquery recentlyAddedHome {\n\t\thome {\n\t\t\trecentlyUploaded {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tpages\n\t\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\t\treadableAt\n\t\t\t\t\t\tchapter\n\t\t\t\t\t\tvolume\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tmanga {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RecentlyAddedHomeDocument;
@@ -122,6 +123,8 @@ type Documents = {
 	"\n\tquery userUploadsFeed(\n\t\t$user: UUID!\n\t\t$translatedLanguages: [Language!]! = []\n\t\t$offset: Int\n\t\t$limit: Int\n\t\t$order: ChapterSortOrder! = { publishAt: DESCENDING }\n\t\t$mangaListParams: MangaListParams = {}\n\t) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(\n\t\t\t\tchapterListParams: {\n\t\t\t\t\toffset: $offset\n\t\t\t\t\tlimit: $limit\n\t\t\t\t\ttranslatedLanguages: $translatedLanguages\n\t\t\t\t\tuploaders: [$user]\n\t\t\t\t\torder: $order\n\t\t\t\t}\n\t\t\t\tmangaListParams: $mangaListParams\n\t\t\t) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\tlastVolume\n\t\t\t\t\t\t\tlastChapter\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\t\t\texternalUrl\n\t\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t\t\treadableAt\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserUploadsFeedDocument;
 };
 const documents: Documents = {
+	"\n\tquery customlistPageQuery($id: UUID!) {\n\t\tcustomList {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.CustomlistPageQueryDocument,
 	"\n\tquery isChapterDownloaded($id: UUID!) {\n\t\tchapter {\n\t\t\tisDownloaded(id: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n":
 		types.IsChapterDownloadedDocument,
 	"\n\tsubscription watchChapterDownloadState($id: UUID!) {\n\t\twatchDownloadState(objectId: $id) {\n\t\t\thasFailed\n\t\t\tisDownloaded\n\t\t}\n\t}\n":
@@ -349,6 +352,12 @@ const documents: Documents = {
  */
 export function graphql(source: string): unknown;
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery customlistPageQuery($id: UUID!) {\n\t\tcustomList {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery customlistPageQuery($id: UUID!) {\n\t\tcustomList {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

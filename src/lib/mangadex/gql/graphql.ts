@@ -3389,6 +3389,39 @@ export type VolumeAggregate = {
 	volume: Scalars["String"]["output"];
 };
 
+export type CustomlistPageQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type CustomlistPageQueryQuery = {
+	__typename?: "Query";
+	customList: {
+		__typename?: "CustomListQueries";
+		get: {
+			__typename?: "CustomList";
+			id: any;
+			attributes: {
+				__typename?: "CustomListAttributes";
+				name: string;
+				visibility: CustomListVisibility;
+			};
+			relationships: {
+				__typename?: "CustomListRelationships";
+				titlesIds: Array<any>;
+				user: {
+					__typename?: "User";
+					id: any;
+					attributes: {
+						__typename?: "UserAttributes";
+						username: string;
+						roles: Array<UserRole>;
+					};
+				};
+			};
+		};
+	};
+};
+
 export type IsChapterDownloadedQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -5585,6 +5618,138 @@ export type UserUploadsFeedQuery = {
 	};
 };
 
+export const CustomlistPageQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "customlistPageQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "get" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "name" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													]
+												}
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "relationships" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "titlesIds"
+															}
+														},
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "user" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "username"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "roles"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CustomlistPageQueryQuery, CustomlistPageQueryQueryVariables>;
 export const IsChapterDownloadedDocument = {
 	kind: "Document",
 	definitions: [
