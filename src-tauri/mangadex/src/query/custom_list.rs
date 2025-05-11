@@ -21,10 +21,28 @@ pub struct CustomListQueries;
 
 #[Object]
 impl CustomListQueries {
-    pub async fn get(&self, ctx: &Context<'_>, id: Uuid) -> Result<CustomList> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+    pub async fn get(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+        private: Option<bool>,
+    ) -> Result<CustomList> {
+        let private = private.unwrap_or_default();
+        let client = if private {
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?
+        } else {
+            get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?
+        };
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
-        let data: CustomList = client.custom_list().id(id).get().send().await?.data.into();
+        let data: CustomList = client
+            .custom_list()
+            .id(id)
+            .get()
+            .with_auth(private)
+            .send()
+            .await?
+            .data
+            .into();
         let _ = watches.custom_list.send_data(data.clone());
         Ok(data)
     }
