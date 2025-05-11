@@ -832,7 +832,7 @@ type CustomListMutations {
 }
 
 type CustomListQueries {
-	get(id: UUID!): CustomList!
+	get(id: UUID!, private: Boolean): CustomList!
 	currentLoggedLists(params: CurrentLoggedLists! = {offset: null, limit: null}): CustomListResults!
 	getUserLists(params: UserCustomListParams!): CustomListResults!
 }

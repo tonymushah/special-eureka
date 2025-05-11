@@ -1064,6 +1064,7 @@ export type CustomListQueriesCurrentLoggedListsArgs = {
 
 export type CustomListQueriesGetArgs = {
 	id: Scalars["UUID"]["input"];
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type CustomListQueriesGetUserListsArgs = {
