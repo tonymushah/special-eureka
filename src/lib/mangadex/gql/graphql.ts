@@ -3392,6 +3392,7 @@ export type VolumeAggregate = {
 
 export type CustomlistPageQueryQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type CustomlistPageQueryQuery = {
@@ -5661,6 +5662,11 @@ export const CustomlistPageQueryDocument = {
 						kind: "NonNullType",
 						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
 					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "private" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -5682,6 +5688,14 @@ export const CustomlistPageQueryDocument = {
 											value: {
 												kind: "Variable",
 												name: { kind: "Name", value: "id" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "private" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "private" }
 											}
 										}
 									],

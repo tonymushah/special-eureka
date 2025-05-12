@@ -1,9 +1,9 @@
 import { graphql } from "@mangadex/gql";
 
 const customListPageQuery = graphql(`
-	query customlistPageQuery($id: UUID!) {
+	query customlistPageQuery($id: UUID!, $private: Boolean) {
 		customList {
-			get(id: $id) {
+			get(id: $id, private: $private) {
 				id
 				attributes {
 					name
