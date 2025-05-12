@@ -93,7 +93,10 @@
 			onclick={() => {
 				goto(
 					route("/mangadex/list/[id]", {
-						id: list.id
+						id:
+							list.visibility == CustomListVisibility.Private
+								? `private:${list.id}`
+								: list.id
 					})
 				);
 			}}
