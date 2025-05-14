@@ -78,6 +78,15 @@ pub trait SendableParam: Sync + Send {
         self,
         client: &MangaDexClient,
     ) -> impl Future<Output = crate::Result<Results<Self::Item>>> + Send;
+    fn send_with_auth(
+        self,
+        client: &MangaDexClient,
+    ) -> impl Future<Output = crate::Result<Results<Self::Item>>> + Send
+    where
+        Self: Sized,
+    {
+        self.send(client)
+    }
 }
 
 pub trait SendSplitted: SendableParam + SplittableParam {
@@ -116,6 +125,50 @@ pub trait SendSplitted: SendableParam + SplittableParam {
     ) -> impl Future<Output = crate::Result<Results<<Self as SendableParam>::Item>>> + Send {
         async move {
             self.send_splitted(client, MANGADEX_PAGE_LIMIT.try_into()?)
+                .await
+        }
+    }
+    fn send_splitted_with_auth(
+        self,
+        client: &MangaDexClient,
+        chunck: usize,
+    ) -> impl Future<Output = crate::Result<Results<<Self as SendableParam>::Item>>> + Send
+    where
+        Self: Sized,
+    {
+        async move {
+            let params = self.split_param(chunck)?;
+            let mut results = Vec::<Results<<Self as SendableParam>::Item>>::new();
+            for val in params {
+                results.push(val.send_with_auth(client).await?);
+            }
+            Ok(results.into_iter().fold(
+                Results {
+                    response: mangadex_api_types_rust::ResponseType::Collection,
+                    offset: self.offset(),
+                    total: 0,
+                    limit: 0,
+                    data: Vec::new(),
+                    result: mangadex_api_types_rust::ResultType::Ok,
+                },
+                |mut agg, res| {
+                    agg.total = res.total;
+                    agg.limit += res.limit;
+                    agg.data.extend(res.data);
+                    agg
+                },
+            ))
+        }
+    }
+    fn send_splitted_default_with_auth(
+        self,
+        client: &MangaDexClient,
+    ) -> impl Future<Output = crate::Result<Results<<Self as SendableParam>::Item>>> + Send
+    where
+        Self: Sized,
+    {
+        async move {
+            self.send_splitted_with_auth(client, MANGADEX_PAGE_LIMIT.try_into()?)
                 .await
         }
     }
