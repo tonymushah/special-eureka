@@ -37,15 +37,7 @@
 	>
 		Chapters
 	</button>
-	<button
-		onclick={(e) => {
-			oncomment?.(e);
-		}}
-	>
-		Comments {#if comments}
-			({comments})
-		{/if}
-	</button>
+
 	<button
 		class:active={$path == route("/mangadex/title/[id]/covers", { id })}
 		onclick={() => {
@@ -64,6 +56,15 @@
 			Related
 		</button>
 	{/if}
+	<button
+		onclick={(e) => {
+			oncomment?.(e);
+		}}
+	>
+		Comments {#if comments}
+			({comments})
+		{/if}
+	</button>
 </nav>
 
 <style lang="scss">
