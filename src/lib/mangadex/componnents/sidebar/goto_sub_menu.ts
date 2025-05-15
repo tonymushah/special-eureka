@@ -27,7 +27,9 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "MDList",
-						action() { }
+						action() {
+							goto(route("/mangadex/list"))
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Followed Groups",

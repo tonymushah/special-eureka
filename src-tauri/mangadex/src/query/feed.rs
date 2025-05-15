@@ -1,7 +1,8 @@
 use std::ops::Deref;
 
 use crate::{
-    store::types::structs::content::feed_from_gql_ctx, utils::splittable_param::SendSplitted,
+    store::types::structs::content::feed_from_gql_ctx,
+    utils::{get_mangadex_client_from_graphql_context, splittable_param::SendSplitted},
     Result,
 };
 use async_graphql::{Context, Object};
@@ -94,16 +95,25 @@ impl FeedQueries {
         &self,
         ctx: &Context<'_>,
         params: CustomListMangaFeedParams,
+        private: Option<bool>,
     ) -> Result<ChapterResults> {
         let mut param: CustomListMangaFeedParams = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
-        let client =
-            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let client = if private.unwrap_or_default() {
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?
+        } else {
+            get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?
+        };
+
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
         param.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
 
-        let res: ChapterResults = param.send_splitted_default(&client).await?.into();
+        let res: ChapterResults = if private.unwrap_or_default() {
+            param.send_splitted_default_with_auth(&client).await?.into()
+        } else {
+            param.send_splitted_default(&client).await?.into()
+        };
         Ok({
             let _res = res.clone();
             tauri::async_runtime::spawn(async move {
@@ -119,13 +129,18 @@ impl FeedQueries {
         ctx: &Context<'_>,
         feed_params: CustomListMangaFeedParams,
         manga_list_params: Option<MangaListParams>,
+        private: Option<bool>,
     ) -> Result<MangaChapterGroup> {
         let mut feed_params: CustomListMangaFeedParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, feed_params);
         let mut manga_list_params: MangaListParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, manga_list_params.unwrap_or_default());
-        let client =
-            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let client = if private.unwrap_or_default() {
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?
+        } else {
+            get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?
+        };
+
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
@@ -135,7 +150,11 @@ impl FeedQueries {
             MangaChapterGroup::get_manga_references_expansions_from_context(ctx);
         group_results(
             {
-                let res = feed_params.send_splitted_default(&client).await?;
+                let res = if private.unwrap_or_default() {
+                    feed_params.send_splitted_default_with_auth(&client).await?
+                } else {
+                    feed_params.send_splitted_default(&client).await?
+                };
                 let data = res;
                 let _res: ChapterResults = data.clone().into();
                 tauri::async_runtime::spawn(async move {

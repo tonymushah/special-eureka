@@ -832,7 +832,7 @@ type CustomListMutations {
 }
 
 type CustomListQueries {
-	get(id: UUID!): CustomList!
+	get(id: UUID!, private: Boolean): CustomList!
 	currentLoggedLists(params: CurrentLoggedLists! = {offset: null, limit: null}): CustomListResults!
 	getUserLists(params: UserCustomListParams!): CustomListResults!
 }
@@ -983,8 +983,8 @@ input EditScanlationGroupParam {
 type FeedQueries {
 	userLoggedMangaFeed(params: FollowedMangaFeedParams): ChapterResults!
 	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams): MangaChapterGroup!
-	customListFeed(params: CustomListMangaFeedParams!): ChapterResults!
-	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams): MangaChapterGroup!
+	customListFeed(params: CustomListMangaFeedParams!, private: Boolean): ChapterResults!
+	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean): MangaChapterGroup!
 }
 
 
