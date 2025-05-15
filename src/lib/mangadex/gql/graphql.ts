@@ -1228,11 +1228,13 @@ export type FeedQueries = {
 
 export type FeedQueriesCustomListFeedArgs = {
 	params: CustomListMangaFeedParams;
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FeedQueriesCustomListFeedGroupedArgs = {
 	feedParams: CustomListMangaFeedParams;
 	mangaListParams?: InputMaybe<MangaListParams>;
+	private?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FeedQueriesUserLoggedMangaFeedArgs = {
