@@ -40,7 +40,10 @@ impl SendableParam for CustomListMangaFeedParams {
         Self: Sized,
     {
         let mut param: CustomListMangaFeedBuilder = self.into();
-        param.with_auth(true).http_client(client.get_http_client());
-        Ok(param.send().await?)
+        Ok(param
+            .with_auth(true)
+            .http_client(client.get_http_client())
+            .send()
+            .await?)
     }
 }
