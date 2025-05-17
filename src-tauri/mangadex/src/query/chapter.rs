@@ -37,8 +37,13 @@ impl ChapterQueries {
         ctx: &Context<'_>,
         params: Option<ChapterListParams>,
         offline_params: Option<GetAllChapterParams>,
+        feed_content: Option<bool>,
     ) -> Result<ChapterResults> {
+        let feed_content = feed_content.unwrap_or_default();
         let mut params = params.unwrap_or_default();
+        if feed_content {
+            params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
+        }
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
         ChapterListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
             .default(ctx, offline_params)
@@ -70,8 +75,13 @@ impl ChapterQueries {
         ctx: &Context<'_>,
         chapter_list_params: Option<ChapterListParams>,
         manga_list_params: Option<MangaListParams>,
+        feed_content: Option<bool>,
     ) -> Result<MangaChapterGroup> {
+        let feed_content = feed_content.unwrap_or_default();
         let mut chapter_list_params: ChapterListParams = chapter_list_params.unwrap_or_default();
+        if feed_content {
+            chapter_list_params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, chapter_list_params);
+        }
         let mut manga_list_params: MangaListParams =
             feed_from_gql_ctx::<tauri::Wry, _>(ctx, manga_list_params.unwrap_or_default());
         chapter_list_params.includes =
