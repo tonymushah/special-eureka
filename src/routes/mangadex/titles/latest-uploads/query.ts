@@ -1,6 +1,6 @@
 import { graphql } from "@mangadex/gql";
 
-export const latest_updates_query = graphql(/* GraphQL */ `
+const latest_updates_query = graphql(/* GraphQL */ `
 	query latestUploadsPageQuery($offset: Int, $limit: Int) {
 		chapter {
 			listWithGroupByManga(
@@ -68,3 +68,5 @@ export const latest_updates_query = graphql(/* GraphQL */ `
 		}
 	}
 `);
+
+export default latest_updates_query
