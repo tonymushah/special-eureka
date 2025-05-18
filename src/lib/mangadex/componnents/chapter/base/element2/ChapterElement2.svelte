@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
 	import { ChapterDownload } from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { debounce } from "lodash";
@@ -12,7 +13,6 @@
 		UsersIcon,
 		XIcon
 	} from "svelte-feather-icons";
-	import { cancel as timeCancel, render as timeRender } from "timeago.js";
 
 	type Group = {
 		id: string;
@@ -60,7 +60,6 @@
 		ondownload,
 		ondownloadKeyPress
 	}: Props = $props();
-	let timeago: HTMLTimeElement | undefined = $state();
 
 	let layout: HTMLDivElement | undefined = $state();
 	let tooltip: HTMLDivElement | undefined = $state(undefined);
@@ -117,12 +116,6 @@
 			tooltip.style.display = "";
 		}
 	}
-	$effect(() => {
-		if (timeago) timeRender(timeago);
-		return () => {
-			if (timeago) timeCancel(timeago);
-		};
-	});
 
 	/// TODO implement quality
 	const download_state_inner = new ChapterDownload(id);
@@ -187,7 +180,7 @@
 			<a href={`/mangadex/chapter/${id}`}><h4>{chapterTitle}</h4></a>
 		</div>
 		<p>
-			<time datetime={upload_date.toDateString()} bind:this={timeago}></time>
+			<TimeAgo date={upload_date} />
 		</p>
 	</div>
 </div>
