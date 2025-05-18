@@ -11,7 +11,12 @@
 		<BookIcon size="24" />
 	{/snippet}
 	<SubMenuItem label="Recently Popular" />
-	<SubMenuItem label="Latest Uploads" />
+	<SubMenuItem
+		label="Latest Uploads"
+		onclick={() => {
+			goto(route("/mangadex/titles/latest-uploads"));
+		}}
+	/>
 	<SubMenuItem
 		label="Recently Added"
 		onclick={() => {

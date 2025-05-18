@@ -380,10 +380,10 @@ type ChapterPages {
 }
 
 type ChapterQueries {
-	list(params: ChapterListParams, offlineParams: GetAllChapterParams): ChapterResults!
+	list(params: ChapterListParams, offlineParams: GetAllChapterParams, feedContent: Boolean): ChapterResults!
 	get(id: UUID!): Chapter!
 	pages(id: UUID!): ChapterPages!
-	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams): MangaChapterGroup!
+	listWithGroupByManga(chapterListParams: ChapterListParams, mangaListParams: MangaListParams, feedContent: Boolean): MangaChapterGroup!
 	isDownloaded(id: UUID!): DownloadState!
 }
 
