@@ -8,4 +8,13 @@
 	let { children }: Props = $props();
 </script>
 
-{@render children?.()}
+<div class="content">
+	<h1>Latest uploads</h1>
+	{@render children?.()}
+</div>
+
+<style lang="scss">
+	.content {
+		margin: 0px 12px;
+	}
+</style>

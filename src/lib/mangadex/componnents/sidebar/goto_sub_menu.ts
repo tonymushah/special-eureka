@@ -27,7 +27,9 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "MDList",
-						action() { }
+						action() {
+							goto(route("/mangadex/list"))
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Followed Groups",
@@ -40,7 +42,9 @@ export default function goto_sub_menu(): ContextMenuItem {
 				items: [
 					ContextMenuItemProvider.menuItem({
 						text: "Latest Uploads",
-						action() { }
+						action() {
+							goto(route("/mangadex/titles/latest-uploads"))
+						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Random",
