@@ -26,6 +26,7 @@
 
 <style>
 	timeago {
+		width: max-content;
 		display: block;
 	}
 </style>
