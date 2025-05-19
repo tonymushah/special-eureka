@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { sysLocaleStore } from "$lib/commands/sys_locale";
+	import { makeAsUTCDate } from "@mangadex/utils";
 	import { cancel as timeCancel, render as timeRender } from "timeago.js";
 	let timeago: HTMLTimeElement | undefined = $state();
 	$effect(() => {
@@ -14,9 +15,18 @@
 	});
 	interface Props {
 		date: Date;
+		asDateUTC?: boolean;
 	}
 
-	let { date }: Props = $props();
+	let { date, asDateUTC = true }: Props = $props();
+	let to_use_date = $derived(asDateUTC ? makeAsUTCDate(date) : date);
 </script>
 
-<timeago datetime={date.toDateString()} bind:this={timeago}></timeago>
+<timeago datetime={to_use_date.toJSON()} bind:this={timeago}></timeago>
+
+<style>
+	timeago {
+		width: max-content;
+		display: block;
+	}
+</style>

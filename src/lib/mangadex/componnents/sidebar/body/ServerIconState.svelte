@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import { mount as _mount, unmount as _unmount } from "@mangadex/utils/offline_app_state";
-	import { getContextClient, subscriptionStore } from "@urql/svelte";
+	import { getContextClient } from "@urql/svelte";
+	import { onDestroy } from "svelte";
 	import { ServerIcon } from "svelte-feather-icons";
 	import Toast from "toastify-js";
-	import { onDestroy } from "svelte";
-	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 	import { isSidebarRtl } from "../states/isRtl";
+
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
 	let toast = $derived(
