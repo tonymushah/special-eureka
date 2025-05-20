@@ -99,4 +99,46 @@ impl CustomListMutations {
         params.send(&client).await?;
         Ok(true)
     }
+    pub async fn add_manga_batch(
+        &self,
+        ctx: &Context<'_>,
+        list_id: Uuid,
+        manga_ids: Vec<Uuid>,
+    ) -> Result<bool> {
+        for manga_id in manga_ids {
+            let client =
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?;
+            client
+                .manga()
+                .id(manga_id)
+                .list()
+                .list_id(list_id)
+                .post()
+                .send()
+                .await?;
+        }
+        Ok(true)
+    }
+    pub async fn remove_manga_batch(
+        &self,
+        ctx: &Context<'_>,
+        list_id: Uuid,
+        manga_ids: Vec<Uuid>,
+    ) -> Result<bool> {
+        for manga_id in manga_ids {
+            let client =
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?;
+            client
+                .manga()
+                .id(manga_id)
+                .list()
+                .list_id(list_id)
+                .delete()
+                .send()
+                .await?;
+        }
+        Ok(true)
+    }
 }
