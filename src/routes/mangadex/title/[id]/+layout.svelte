@@ -17,6 +17,11 @@
 	import { setTitleLayoutData } from "./layout.context";
 	import ConflictLayout from "./ConflictLayout.svelte";
 	import { MangaDownload, MangaDownloadState } from "@mangadex/download/manga";
+	import manga_reading_status, {
+		get_manga_reading_status,
+		set_manga_reading_status
+	} from "@mangadex/stores/manga_reading_status";
+	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -84,12 +89,22 @@
 	let mangaDownload = $derived(new MangaDownload(data.layoutData.id));
 
 	const _state = writable(MangaDownloadState.Pending);
+	const reading_status = der(
+		manga_reading_status(data.layoutData.id),
+		(status) => status ?? undefined
+	);
 	$effect(() =>
 		mangaDownload.state().subscribe((s) => {
 			_state.set(s);
 		})
 	);
 </script>
+
+<svelte:window
+	onfocus={() => {
+		get_manga_reading_status(data.layoutData.id);
+	}}
+/>
 
 {#if hasConflict && !ingnoreConflict}
 	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
@@ -120,6 +135,45 @@
 		}}
 		ondownloading={async () => {
 			await mangaDownload.cancel();
+		}}
+		{reading_status}
+		onreadingStatus={(e) => {
+			Promise.all([set_manga_reading_status(layoutData.id, e.readingStatus ?? null)])
+				.then(() => {
+					addToast({
+						data: {
+							title: "Manga reading and follow status sucessufully updated",
+							variant: "green"
+						}
+					});
+				})
+				.catch((e) => {
+					if (e instanceof Error) {
+						addToast({
+							data: {
+								title: "Error on updating reading or follow status",
+								description: e.message,
+								variant: "danger"
+							}
+						});
+					} else if (typeof e == "string") {
+						addToast({
+							data: {
+								title: "Error on updating reading or follow status",
+								description: e,
+								variant: "danger"
+							}
+						});
+					} else {
+						addToast({
+							data: {
+								title: "Error on updating reading or follow status",
+								variant: "danger"
+							}
+						});
+					}
+				})
+				.finally(() => e.closeDialog?.());
 		}}
 	/>
 
