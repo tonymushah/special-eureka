@@ -8,10 +8,11 @@
 				currentTarget: EventTarget & HTMLButtonElement;
 			}
 		) => any;
+		disabled?: boolean;
 	}
 
 	interface Props extends Events {}
-	let { onclick }: Props = $props();
+	let { onclick, disabled }: Props = $props();
 </script>
 
 <ButtonAccent
@@ -19,6 +20,7 @@
 	onclick={(detail) => {
 		onclick?.(detail);
 	}}
+	{disabled}
 >
 	<ReadIcon />
 </ButtonAccent>

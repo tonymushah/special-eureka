@@ -61,6 +61,7 @@
 		stats?: TopMangaStatistics | undefined;
 		contentRating?: ContentRating;
 		closeDialogOnAdd?: boolean;
+		disableRead?: boolean;
 	}
 
 	let {
