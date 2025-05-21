@@ -20,7 +20,9 @@
 		helpers,
 		states: { toasts },
 		actions: { portal }
-	} = createToaster<ToastData>();
+	} = createToaster<ToastData>({
+		hover: "pause"
+	});
 
 	export const addToast = helpers.addToast;
 </script>
@@ -52,7 +54,7 @@
 							<span data-toast-variant={data.variant ?? "accent"} class="status"
 							></span>
 						</h3>
-						<div use:melt={$description(id)}>
+						<div use:melt={$description(id)} class="description">
 							{data.description}
 						</div>
 					</div>
@@ -159,5 +161,8 @@
 	}
 	.close:active {
 		background-color: var(--accent-l1-active);
+	}
+	.description {
+		font-size: 12px;
 	}
 </style>

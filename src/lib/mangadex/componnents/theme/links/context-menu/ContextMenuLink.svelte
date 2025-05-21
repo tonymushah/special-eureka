@@ -7,12 +7,12 @@
 	import { v4 } from "uuid";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { onDestroy } from "svelte";
-	import Toastify from "toastify-js";
 	import { getContextClient, subscriptionStore } from "@urql/svelte";
 	import { Direction, RtlSidebarSubDocument } from "@mangadex/gql/graphql";
 	import OpenExtLinkIcon from "../icons/OpenExtLinkIcon.svelte";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import { addToast } from "../../toast/Toaster.svelte";
 	const appWindow = getCurrentWebviewWindow();
 	const client = getContextClient();
 	const rtl_sidebar_query = subscriptionStore({
@@ -51,49 +51,21 @@
 				});
 				unlistens.push(
 					await window.once("tauri://created", () => {
-						const toast = Toastify({
-							text: "A new window was opened",
-							gravity: "bottom",
-							position:
-								$rtl_sidebar_query.data?.watchSidebarDirection == Direction.Rtl
-									? "left"
-									: "right",
-							close: true,
-							style: {
-								fontFamily: "Popins"
-							}
-						});
-						toast.showToast();
-						unlistens.push(() => {
-							try {
-								toast.hideToast();
-							} catch (error) {
-								console.warn(error);
+						addToast({
+							data: {
+								title: "A new window was opened",
+								variant: "green"
 							}
 						});
 					})
 				);
 				unlistens.push(
 					await window.once<string>("tauri://error", (e) => {
-						console.warn(e);
-						const toast = Toastify({
-							text: `Error when creating a new window ${e}`,
-							gravity: "bottom",
-							position:
-								$rtl_sidebar_query.data?.watchSidebarDirection == Direction.Rtl
-									? "left"
-									: "right",
-							close: true,
-							style: {
-								fontFamily: "Popins"
-							}
-						});
-						toast.showToast();
-						unlistens.push(() => {
-							try {
-								toast.hideToast();
-							} catch (error) {
-								console.warn(error);
+						addToast({
+							data: {
+								title: "Error when creating a new window",
+								description: e.payload,
+								variant: "green"
 							}
 						});
 					})

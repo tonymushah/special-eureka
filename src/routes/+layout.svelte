@@ -14,7 +14,7 @@
 	import { readonly, writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { register } from "swiper/element/bundle";
-	import "toastify-js/src/toastify.css";
+
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
