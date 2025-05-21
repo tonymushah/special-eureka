@@ -17,7 +17,8 @@ const config = {
 		}),
 		alias: {
 			"@mangadex/routes/*": "./src/routes/mangadex/*",
-			"@mangadex/*": "./src/lib/mangadex/*"
+			"@mangadex/*": "./src/lib/mangadex/*",
+			"$routes/*": "./src/routes/*"
 		}
 	}
 };
