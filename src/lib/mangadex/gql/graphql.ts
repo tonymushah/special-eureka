@@ -4355,6 +4355,42 @@ export type ResetAuthClientMutation = {
 	oauth: { __typename?: "OauthMutations"; clearClientInfo: boolean };
 };
 
+export type MangaFollowingStatusSubscriptionSubscriptionVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MangaFollowingStatusSubscriptionSubscription = {
+	__typename?: "Subscriptions";
+	watchIsFollowingManga: boolean;
+};
+
+export type MangaFollowingStatusQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MangaFollowingStatusQueryQuery = {
+	__typename?: "Query";
+	follows: { __typename?: "FollowsQueries"; isFollowingManga: boolean };
+};
+
+export type FollowMangaMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type FollowMangaMutationMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; follow: boolean };
+};
+
+export type UnfollowMangaMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowMangaMutationMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; unfollow: boolean };
+};
+
 export type MangaReadingStatusSubscriptionSubscriptionVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -10193,6 +10229,192 @@ export const ResetAuthClientDocument = {
 		}
 	]
 } as unknown as DocumentNode<ResetAuthClientMutation, ResetAuthClientMutationVariables>;
+export const MangaFollowingStatusSubscriptionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "mangaFollowingStatusSubscription" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchIsFollowingManga" },
+						arguments: [
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "mangaId" },
+								value: { kind: "Variable", name: { kind: "Name", value: "id" } }
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MangaFollowingStatusSubscriptionSubscription,
+	MangaFollowingStatusSubscriptionSubscriptionVariables
+>;
+export const MangaFollowingStatusQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "mangaFollowingStatusQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "isFollowingManga" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MangaFollowingStatusQueryQuery,
+	MangaFollowingStatusQueryQueryVariables
+>;
+export const FollowMangaMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followMangaMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "follow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowMangaMutationMutation, FollowMangaMutationMutationVariables>;
+export const UnfollowMangaMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowMangaMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowMangaMutationMutation, UnfollowMangaMutationMutationVariables>;
 export const MangaReadingStatusSubscriptionDocument = {
 	kind: "Document",
 	definitions: [

@@ -20,8 +20,11 @@
 	import manga_reading_status, {
 		get_manga_reading_status,
 		set_manga_reading_status
-	} from "@mangadex/stores/manga_reading_status";
+	} from "@mangadex/stores/manga/manga_reading_status";
 	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import manga_following_status, {
+		set_manga_following_status
+	} from "@mangadex/stores/manga/manga_following_status";
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
 	};
@@ -93,6 +96,7 @@
 		manga_reading_status(data.layoutData.id),
 		(status) => status ?? undefined
 	);
+	const isFollowing = manga_following_status(data.layoutData.id);
 	$effect(() =>
 		mangaDownload.state().subscribe((s) => {
 			_state.set(s);
@@ -137,8 +141,12 @@
 			await mangaDownload.cancel();
 		}}
 		{reading_status}
+		{isFollowing}
 		onreadingStatus={(e) => {
-			Promise.all([set_manga_reading_status(layoutData.id, e.readingStatus ?? null)])
+			Promise.all([
+				set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
+				set_manga_following_status(layoutData.id, e.isFollowing)
+			])
 				.then(() => {
 					addToast({
 						data: {

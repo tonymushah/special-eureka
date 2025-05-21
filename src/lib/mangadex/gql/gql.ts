@@ -68,6 +68,10 @@ type Documents = {
 	"\n\tsubscription currentClientInfo {\n\t\twatchClientInfo {\n\t\t\tclientSecret\n\t\t\tclientId\n\t\t}\n\t}\n": typeof types.CurrentClientInfoDocument;
 	"\n\tmutation setAuthClient($clientId: String!, $clientSecret: String!) {\n\t\toauth {\n\t\t\tsetClientInfo(clientId: $clientId, clientSecret: $clientSecret)\n\t\t}\n\t}\n": typeof types.SetAuthClientDocument;
 	"\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n": typeof types.ResetAuthClientDocument;
+	"\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n": typeof types.MangaFollowingStatusSubscriptionDocument;
+	"\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n": typeof types.MangaFollowingStatusQueryDocument;
+	"\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowMangaMutationDocument;
+	"\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n": typeof types.UnfollowMangaMutationDocument;
 	"\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id) \n\t}\n": typeof types.MangaReadingStatusSubscriptionDocument;
 	"\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n": typeof types.MangaReadingStatusQueryDocument;
 	"\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n": typeof types.MangaReadingStatusMutationDocument;
@@ -236,6 +240,14 @@ const documents: Documents = {
 		types.SetAuthClientDocument,
 	"\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n":
 		types.ResetAuthClientDocument,
+	"\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n":
+		types.MangaFollowingStatusSubscriptionDocument,
+	"\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n":
+		types.MangaFollowingStatusQueryDocument,
+	"\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n":
+		types.FollowMangaMutationDocument,
+	"\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n":
+		types.UnfollowMangaMutationDocument,
 	"\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id) \n\t}\n":
 		types.MangaReadingStatusSubscriptionDocument,
 	"\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n":
@@ -694,6 +706,30 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n"
+): (typeof documents)["\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
