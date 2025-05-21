@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
+	import ToastForStories from "@mangadex/componnents/theme/toast/ToastForStories.svelte";
 	import { melt } from "@melt-ui/svelte";
 	import { cubicInOut } from "svelte/easing";
 	import { crossfade, fade, slide } from "svelte/transition";
@@ -33,6 +34,11 @@
 						}}
 					>
 						<h3>Mangas lol</h3>
+						<ToastForStories
+							title="Something"
+							description="sadadasd"
+							color="var(--danger)"
+						/>
 					</div>
 				{/if}
 				{#if content == "tab-2"}

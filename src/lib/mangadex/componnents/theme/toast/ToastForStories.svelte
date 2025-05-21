@@ -13,8 +13,7 @@
 		addToast({
 			data: {
 				title,
-				description,
-				color
+				description
 			}
 		});
 	}

@@ -18,6 +18,7 @@
 		children?: import("svelte").Snippet;
 	}
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
+	import Toaster from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	let { children }: Props = $props();
 	onMount(async () => {
@@ -73,6 +74,7 @@
 							}
 						}}
 					>
+						<Toaster />
 						{@render children?.()}
 					</div>
 				</div>
