@@ -35,32 +35,35 @@
 	import { XIcon } from "svelte-feather-icons";
 	import { flip } from "svelte/animate";
 	import { fly } from "svelte/transition";
+	import ToastProgress from "./ToastProgress.svelte";
 </script>
 
 <div use:portal class="portal" class:rtl={$isSidebarRtl} style="--decoH: {$decoHStore}px">
 	<MangaDexVarThemeProvider>
-		{#each $toasts as { id, data } (id)}
-			<div
-				use:melt={$content(id)}
-				class="toast-container"
-				animate:flip={{ duration: 500 }}
-				in:fly={{ duration: 150, x: $isSidebarRtl ? "-100%" : "100%" }}
-				out:fly={{ duration: 150, x: $isSidebarRtl ? "-100%" : "100%" }}
-			>
-				<div class="toast">
-					<div>
-						<h3 use:melt={$title(id)}>
-							{data.title}
-							<span data-toast-variant={data.variant ?? "accent"} class="status"
-							></span>
-						</h3>
-						<div use:melt={$description(id)} class="description">
-							{data.description}
+		{#each $toasts as { id, data, ...toast } (id)}
+			<div animate:flip={{ duration: 500 }}>
+				<div
+					use:melt={$content(id)}
+					class="toast-container"
+					in:fly={{ duration: 150, x: $isSidebarRtl ? "-100%" : "100%" }}
+					out:fly={{ duration: 150, x: $isSidebarRtl ? "-100%" : "100%" }}
+				>
+					<ToastProgress getPercentage={toast.getPercentage} />
+					<div class="toast">
+						<div>
+							<h3 use:melt={$title(id)}>
+								{data.title}
+								<span data-toast-variant={data.variant ?? "accent"} class="status"
+								></span>
+							</h3>
+							<div use:melt={$description(id)} class="description">
+								{data.description}
+							</div>
 						</div>
+						<button use:melt={$close(id)} aria-label="close notification" class="close">
+							<XIcon size="16" />
+						</button>
 					</div>
-					<button use:melt={$close(id)} aria-label="close notification" class="close">
-						<XIcon size="16" />
-					</button>
 				</div>
 			</div>
 		{/each}
@@ -95,6 +98,7 @@
 		border-radius: 0.5rem; /* 8px */
 		background-color: var(--accent-l1);
 		border: 2px solid var(--mid-tone);
+		position: relative;
 	}
 	.toast {
 		position: relative;
