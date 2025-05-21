@@ -62,6 +62,9 @@
 		contentRating?: ContentRating;
 		closeDialogOnAdd?: boolean;
 		disableRead?: boolean;
+		disableAddToList?: boolean;
+		disableReport?: boolean;
+		disableUpload?: boolean;
 	}
 
 	let {
@@ -91,7 +94,11 @@
 		onreadingStatus,
 		onreport,
 		ontag,
-		onupload
+		onupload,
+		disableAddToList,
+		disableRead,
+		disableReport,
+		disableUpload
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
@@ -130,6 +137,10 @@
 				{onreadingStatus}
 				{onreport}
 				{onupload}
+				{disableAddToList}
+				{disableRead}
+				{disableReport}
+				{disableUpload}
 			/>
 			<div class="tag-status">
 				<TagComponnentsFlex

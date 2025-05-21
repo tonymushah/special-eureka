@@ -26,6 +26,9 @@
 	interface Props extends Events {
 		closeDialogOnAdd?: boolean;
 		disableRead?: boolean;
+		disableAddToList?: boolean;
+		disableReport?: boolean;
+		disableUpload?: boolean;
 	}
 	let {
 		onaddToList,
@@ -38,7 +41,10 @@
 		onreport,
 		onupload,
 		closeDialogOnAdd,
-		disableRead
+		disableRead,
+		disableAddToList,
+		disableReport,
+		disableUpload
 	}: Props = $props();
 </script>
 
@@ -46,10 +52,10 @@
 	<ReadingStatusButton {onreadingStatus} {closeDialogOnAdd} />
 	<DownloadButton {ondelete} {ondownload} {ondownloading} />
 	<StarButton onselect={onrating} />
-	<AddToListButton onclick={onaddToList} />
+	<AddToListButton onclick={onaddToList} disabled={disableAddToList} />
 	<ReadButton onclick={onread} disabled={disableRead} />
-	<ReportButton onclick={onreport} />
-	<UploadButton onclick={onupload} />
+	<ReportButton onclick={onreport} disabled={disableReport} />
+	<UploadButton onclick={onupload} disabled={disableUpload} />
 </div>
 
 <style lang="scss">

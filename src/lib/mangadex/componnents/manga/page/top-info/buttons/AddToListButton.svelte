@@ -9,8 +9,10 @@
 			}
 		) => any;
 	}
-	interface Props extends Events {}
-	let { onclick }: Props = $props();
+	interface Props extends Events {
+		disabled?: boolean;
+	}
+	let { onclick, disabled }: Props = $props();
 </script>
 
 <ButtonAccent
@@ -18,6 +20,7 @@
 	onclick={(ev) => {
 		onclick?.(ev);
 	}}
+	{disabled}
 >
 	<AddToListIcon />
 </ButtonAccent>
