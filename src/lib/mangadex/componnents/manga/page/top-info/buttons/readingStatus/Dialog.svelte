@@ -70,7 +70,8 @@
 					onclick={() => {
 						onreadingStatus?.({
 							readingStatus: $selectedStatus,
-							isFollowing: $selectedIsFollowing
+							isFollowing: $selectedIsFollowing,
+							closeDialog
 						});
 						if (closeDialogOnAdd == true) {
 							closeDialog();
