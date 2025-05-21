@@ -1017,16 +1017,23 @@ export type CustomListMangaFeedParams = {
 export type CustomListMutations = {
 	__typename?: "CustomListMutations";
 	addManga: Scalars["Boolean"]["output"];
+	addMangaBatch: Scalars["Boolean"]["output"];
 	create: CustomList;
 	delete: Scalars["Boolean"]["output"];
 	follow: Scalars["Boolean"]["output"];
 	removeManga: Scalars["Boolean"]["output"];
+	removeMangaBatch: Scalars["Boolean"]["output"];
 	unfollow: Scalars["Boolean"]["output"];
 	update: CustomList;
 };
 
 export type CustomListMutationsAddMangaArgs = {
 	params: CustomListAddMangaParam;
+};
+
+export type CustomListMutationsAddMangaBatchArgs = {
+	listId: Scalars["UUID"]["input"];
+	mangaIds: Array<Scalars["UUID"]["input"]>;
 };
 
 export type CustomListMutationsCreateArgs = {
@@ -1043,6 +1050,11 @@ export type CustomListMutationsFollowArgs = {
 
 export type CustomListMutationsRemoveMangaArgs = {
 	params: CustomListRemoveMangaParam;
+};
+
+export type CustomListMutationsRemoveMangaBatchArgs = {
+	listId: Scalars["UUID"]["input"];
+	mangaIds: Array<Scalars["UUID"]["input"]>;
 };
 
 export type CustomListMutationsUnfollowArgs = {
@@ -1880,10 +1892,13 @@ export type MangaMutations = {
 	download: DownloadState;
 	edit: MangaObject;
 	follow: Scalars["Boolean"]["output"];
+	followBatch: Scalars["Boolean"]["output"];
 	remove: Scalars["Boolean"]["output"];
 	submitDraft: MangaObject;
 	unfollow: Scalars["Boolean"]["output"];
+	unfollowBatch: Scalars["Boolean"]["output"];
 	updateReadingStatus: Scalars["Boolean"]["output"];
+	updateReadingStatusBatch: Scalars["Boolean"]["output"];
 };
 
 export type MangaMutationsCancelDownloadArgs = {
@@ -1920,6 +1935,10 @@ export type MangaMutationsFollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type MangaMutationsFollowBatchArgs = {
+	mangaIds: Array<Scalars["UUID"]["input"]>;
+};
+
 export type MangaMutationsRemoveArgs = {
 	id: Scalars["UUID"]["input"];
 };
@@ -1932,8 +1951,17 @@ export type MangaMutationsUnfollowArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type MangaMutationsUnfollowBatchArgs = {
+	mangaIds: Array<Scalars["UUID"]["input"]>;
+};
+
 export type MangaMutationsUpdateReadingStatusArgs = {
 	id: Scalars["UUID"]["input"];
+	status?: InputMaybe<ReadingStatus>;
+};
+
+export type MangaMutationsUpdateReadingStatusBatchArgs = {
+	mangaIds: Array<Scalars["UUID"]["input"]>;
 	status?: InputMaybe<ReadingStatus>;
 };
 
@@ -2413,10 +2441,17 @@ export type RatingQueriesListsArgs = {
 export type ReadMarkerMutations = {
 	__typename?: "ReadMarkerMutations";
 	mangaReadMarkersBatch: Scalars["Boolean"]["output"];
+	readMarkersBatch: Scalars["Boolean"]["output"];
 };
 
 export type ReadMarkerMutationsMangaReadMarkersBatchArgs = {
 	params: MarkChapterBatchParam;
+};
+
+export type ReadMarkerMutationsReadMarkersBatchArgs = {
+	chapterIdsRead: Array<Scalars["UUID"]["input"]>;
+	chapterIdsUnread: Array<Scalars["UUID"]["input"]>;
+	updateHistory?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type ReadMarkerQueries = {

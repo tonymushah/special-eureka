@@ -829,6 +829,8 @@ type CustomListMutations {
 	unfollow(id: UUID!): Boolean!
 	addManga(params: CustomListAddMangaParam!): Boolean!
 	removeManga(params: CustomListRemoveMangaParam!): Boolean!
+	addMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
+	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 }
 
 type CustomListQueries {
@@ -1506,6 +1508,9 @@ type MangaMutations {
 	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams): [MangaRelated!]!
 	deleteRelation(id: UUID!, targetManga: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
+	updateReadingStatusBatch(mangaIds: [UUID!]!, status: ReadingStatus): Boolean!
+	followBatch(mangaIds: [UUID!]!): Boolean!
+	unfollowBatch(mangaIds: [UUID!]!): Boolean!
 }
 
 type MangaObject {
@@ -1874,6 +1879,7 @@ type RatingQueries {
 
 type ReadMarkerMutations {
 	mangaReadMarkersBatch(params: MarkChapterBatchParam!): Boolean!
+	readMarkersBatch(chapterIdsRead: [UUID!]!, chapterIdsUnread: [UUID!]!, updateHistory: Boolean): Boolean!
 }
 
 type ReadMarkerQueries {
