@@ -68,6 +68,9 @@ type Documents = {
 	"\n\tsubscription currentClientInfo {\n\t\twatchClientInfo {\n\t\t\tclientSecret\n\t\t\tclientId\n\t\t}\n\t}\n": typeof types.CurrentClientInfoDocument;
 	"\n\tmutation setAuthClient($clientId: String!, $clientSecret: String!) {\n\t\toauth {\n\t\t\tsetClientInfo(clientId: $clientId, clientSecret: $clientSecret)\n\t\t}\n\t}\n": typeof types.SetAuthClientDocument;
 	"\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n": typeof types.ResetAuthClientDocument;
+	"\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id) \n\t}\n": typeof types.MangaReadingStatusSubscriptionDocument;
+	"\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n": typeof types.MangaReadingStatusQueryDocument;
+	"\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n": typeof types.MangaReadingStatusMutationDocument;
 	"\n\tquery offlineConfig {\n\t\tuserOption {\n\t\t\tgetOfflineConfig {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n": typeof types.OfflineConfigDocument;
 	"\n\tmutation updateOfflineConfig($cfg: OfflineConfigInput!) {\n\t\tuserOption {\n\t\t\tsetOfflineConfig(cfg: $cfg) {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateOfflineConfigDocument;
 	"\n\tsubscription serverIconState {\n\t\twatchIsAppMounted\n\t}\n": typeof types.ServerIconStateDocument;
@@ -233,6 +236,12 @@ const documents: Documents = {
 		types.SetAuthClientDocument,
 	"\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n":
 		types.ResetAuthClientDocument,
+	"\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id) \n\t}\n":
+		types.MangaReadingStatusSubscriptionDocument,
+	"\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n":
+		types.MangaReadingStatusQueryDocument,
+	"\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n":
+		types.MangaReadingStatusMutationDocument,
 	"\n\tquery offlineConfig {\n\t\tuserOption {\n\t\t\tgetOfflineConfig {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n":
 		types.OfflineConfigDocument,
 	"\n\tmutation updateOfflineConfig($cfg: OfflineConfigInput!) {\n\t\tuserOption {\n\t\t\tsetOfflineConfig(cfg: $cfg) {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n":
@@ -685,6 +694,24 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id) \n\t}\n"
+): (typeof documents)["\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id) \n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
