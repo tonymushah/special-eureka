@@ -16,9 +16,18 @@
 				value: T;
 			}
 		) => any;
+		sameWidth?: boolean;
+		fitContent?: boolean;
 	}
 
-	let { target = $bindable(), isOpen = $bindable(false), items = [], onSelect }: Props = $props();
+	let {
+		target = $bindable(),
+		isOpen = $bindable(false),
+		items = [],
+		onSelect,
+		sameWidth,
+		fitContent
+	}: Props = $props();
 
 	let menuItems = $derived(
 		items.map<Item>((i) => ({
@@ -35,4 +44,4 @@
 	);
 </script>
 
-<Menu {target} bind:isOpen items={menuItems} />
+<Menu {target} bind:isOpen items={menuItems} {sameWidth} {fitContent} />

@@ -29,7 +29,16 @@
 	{@render children?.()}
 </div>
 
-<ContextMenuBase {menu_padding} {font_size} {items} {separator} {menu} item_={item} {arrow} />
+<ContextMenuBase
+	fitContent
+	{menu_padding}
+	{font_size}
+	{items}
+	{separator}
+	{menu}
+	item_={item}
+	{arrow}
+/>
 
 <style lang="scss">
 	.content {

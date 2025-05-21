@@ -68,6 +68,7 @@
 		const { value } = detail;
 		readingStatus.set(value);
 	}}
+	sameWidth
 />
 
 <style lang="scss">

@@ -145,7 +145,7 @@
 				if (e instanceof Error) {
 					addToast({
 						data: {
-							title: "Error on updating reading or follow status",
+							title: "Error on updating the reading or follow status",
 							description: e.message,
 							variant: "danger"
 						}
@@ -153,7 +153,7 @@
 				} else if (typeof e == "string") {
 					addToast({
 						data: {
-							title: "Error on updating reading or follow status",
+							title: "Error on updating the reading or follow status",
 							description: e,
 							variant: "danger"
 						}
@@ -161,7 +161,7 @@
 				} else {
 					addToast({
 						data: {
-							title: "Error on updating reading or follow status",
+							title: "Error on updating the reading or follow status",
 							variant: "danger"
 						}
 					});

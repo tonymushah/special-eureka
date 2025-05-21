@@ -45,6 +45,7 @@
 	onSelect={(detail) => {
 		onselect?.(detail.value);
 	}}
+	fitContent
 	bind:target
 	bind:isOpen
 	items={Array.from({ length: 10 }, (_, i) => i + 1)

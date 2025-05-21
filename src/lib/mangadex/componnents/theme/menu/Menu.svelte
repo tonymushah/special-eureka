@@ -7,9 +7,17 @@
 		target: HTMLElement | undefined;
 		isOpen?: boolean;
 		items?: Item[];
+		sameWidth?: boolean;
+		fitContent?: boolean;
 	}
 
-	let { target, isOpen = $bindable(false), items = $bindable([]) }: Props = $props();
+	let {
+		target,
+		isOpen = $bindable(false),
+		items = $bindable([]),
+		sameWidth,
+		fitContent
+	}: Props = $props();
 	let menu: HTMLDivElement | undefined = $state();
 
 	async function openMenu() {
@@ -20,7 +28,8 @@
 			});
 			Object.assign(menu.style, {
 				top: `${_y}px`,
-				left: `${_x}px`
+				left: `${_x}px`,
+				width: sameWidth ? `${target.clientWidth}px` : ``
 			});
 		}
 	}
@@ -35,7 +44,7 @@
 </script>
 
 <div class="menu" class:isOpen bind:this={menu}>
-	<ContextMenuBase {items} tabindex={0} />
+	<ContextMenuBase {items} tabindex={0} {fitContent} />
 </div>
 
 <style lang="scss">
@@ -44,8 +53,7 @@
 		position: absolute;
 		top: 0px;
 		left: 0px;
-		height: var(--menu-height);
-		overflow: var(--menu-overflow);
+		z-index: 10;
 	}
 	.menu.isOpen {
 		display: block;

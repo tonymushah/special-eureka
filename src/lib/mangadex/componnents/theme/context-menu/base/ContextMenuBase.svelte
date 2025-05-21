@@ -14,11 +14,12 @@
 		separator?: AnyMeltElement;
 		arrow?: AnyMeltElement;
 		tabindex?: number;
-		onMenuItemClick: (
+		onMenuItemClick?: (
 			ev: MouseEvent & {
 				currentTarget: EventTarget & HTMLDivElement;
 			}
 		) => any;
+		fitContent?: boolean;
 	}
 
 	let {
@@ -30,11 +31,12 @@
 		separator = emptyMeltElement,
 		arrow = emptyMeltElement,
 		tabindex = 0,
-		onMenuItemClick
+		onMenuItemClick,
+		fitContent
 	}: Props = $props();
 </script>
 
-<div class="menu" use:melt={$menu}>
+<div class="menu" use:melt={$menu} class:fitContent>
 	<MangaDexVarThemeProvider>
 		<div class="inner">
 			<SomeDiv --menu-item-padding={menu_padding} --font-size={font_size}>
@@ -52,7 +54,7 @@
 										await res;
 									}
 								}
-								onMenuItemClick(e);
+								onMenuItemClick?.(e);
 							}}
 							isDisabled={item.disabled}
 							element={item_}
@@ -70,18 +72,21 @@
 
 <style lang="scss">
 	div.menu {
-		width: fit-content;
 		display: flex;
 		flex-direction: column;
 		border-radius: 0.25em;
 		height: fit-content;
-		overflow: hidden;
+		overflow-y: auto;
+		max-height: var(--menu-height);
 		z-index: 1;
 		.inner {
 			border-color: var(--mid-tone);
 			border-style: solid;
 			border-width: 1px;
 		}
+	}
+	div.menu.fitContent {
+		width: fit-content;
 	}
 	hr {
 		width: 100%;
