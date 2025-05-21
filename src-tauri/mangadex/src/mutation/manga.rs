@@ -1,6 +1,7 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, time::Duration};
 
 use crate::{
+    Result,
     error::Error,
     query::download_state::DownloadStateQueries,
     store::types::structs::content::feed_from_gql_ctx,
@@ -8,7 +9,6 @@ use crate::{
         download::manga::download_manga,
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
-    Result,
 };
 use async_graphql::{Context, Object};
 use eureka_mmanager::{
@@ -19,21 +19,21 @@ use mangadex_api_input_types::manga::{
     create::CreateMangaParam, create_relation::MangaCreateRelationParam, list::MangaListParams,
     submit_draft::SubmitMangaDraftParams, update::UpdateMangaParam,
 };
-use mangadex_api_schema_rust::{v5::MangaAttributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::MangaAttributes};
 use mangadex_api_types_rust::{MangaRelation, ReadingStatus, RelationshipType};
 use uuid::Uuid;
 
 use crate::{
     objects::{
-        manga::{related::MangaRelated, MangaObject as Manga},
         ExtractReferenceExpansionFromContext, GetId,
+        manga::{MangaObject as Manga, related::MangaRelated},
     },
     utils::{
         download_state::DownloadState,
         get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
         get_watches_from_graphql_context,
         source::SendMultiSourceData,
-        watch::{is_following::inner::IsFollowingInnerData, SendData},
+        watch::{SendData, is_following::inner::IsFollowingInnerData},
     },
 };
 
@@ -234,6 +234,32 @@ impl MangaMutations {
             .await?
             .cancel()
             .await?;
+        Ok(true)
+    }
+    pub async fn update_reading_status_batch(
+        &self,
+        ctx: &Context<'_>,
+        manga_ids: Vec<Uuid>,
+        status: Option<ReadingStatus>,
+    ) -> Result<bool> {
+        for manga_id in manga_ids {
+            self.update_reading_status(ctx, manga_id, status).await?;
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+        Ok(true)
+    }
+    pub async fn follow_batch(&self, ctx: &Context<'_>, manga_ids: Vec<Uuid>) -> Result<bool> {
+        for manga_id in manga_ids {
+            self.follow(ctx, manga_id).await?;
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+        Ok(true)
+    }
+    pub async fn unfollow_batch(&self, ctx: &Context<'_>, manga_ids: Vec<Uuid>) -> Result<bool> {
+        for manga_id in manga_ids {
+            self.unfollow(ctx, manga_id).await?;
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
         Ok(true)
     }
 }
