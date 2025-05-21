@@ -30,7 +30,7 @@
 		background-color: color-mix(in srgb, var(--danger) 70%, transparent 30%);
 		border-radius: 8px;
 		border: solid 3px var(--mid-tone);
-		box-shadow: 0px 3px 0px var(--mid-tone);
+		//box-shadow: 0px 3px 0px var(--mid-tone);
 		color: var(--text-color);
 		padding: 1em;
 		h3 {
