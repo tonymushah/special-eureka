@@ -25,6 +25,8 @@
 	});
 
 	export const addToast = helpers.addToast;
+	export const removeToast = helpers.removeToast;
+	export const updateToast = helpers.updateToast;
 </script>
 
 <script lang="ts">
