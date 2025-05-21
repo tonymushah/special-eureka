@@ -14,6 +14,7 @@
 	import UsersSimpleBase from "@mangadex/componnents/users/simple/UsersSimpleBase.svelte";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	const client = getContextClient();
 
@@ -146,6 +147,10 @@
 		</UsersSimpleBase>
 	{/each}
 </div>
+
+{#if $infiniteQuery.error}
+	<ErrorComponent label="Error on loading title" error={$infiniteQuery.error} />
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if isFetching}

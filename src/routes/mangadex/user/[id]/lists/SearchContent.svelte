@@ -15,6 +15,7 @@
 	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type UserCustomListItemData } from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	interface Props {
 		userId: Readable<string>;
@@ -113,6 +114,10 @@
 		</UsersSimpleBase>
 	{/each}
 </div>
+
+{#if $query.error}
+	<ErrorComponent label="Error on loading title" error={$query.error} />
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if $isFetching}

@@ -11,6 +11,7 @@
 	import { onDestroy } from "svelte";
 	import { derived, get, type Readable } from "svelte/store";
 	import executeSearchQuery from "./search";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
@@ -147,6 +148,10 @@
 </script>
 
 <MangaList list={$titles}></MangaList>
+
+{#if $infiniteQuery.error}
+	<ErrorComponent label="Error on loading title" error={$infiniteQuery.error} />
+{/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if $isFetching}
