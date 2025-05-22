@@ -66,6 +66,7 @@
 		disableReport?: boolean;
 		disableUpload?: boolean;
 		disableAddToLibrary?: boolean;
+		disableRating?: boolean;
 	}
 
 	let {
@@ -100,7 +101,8 @@
 		disableRead,
 		disableReport,
 		disableUpload,
-		disableAddToLibrary
+		disableAddToLibrary,
+		disableRating
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
@@ -144,6 +146,7 @@
 				{disableReport}
 				{disableUpload}
 				{disableAddToLibrary}
+				{disableRating}
 			/>
 			<div class="tag-status">
 				<TagComponnentsFlex
