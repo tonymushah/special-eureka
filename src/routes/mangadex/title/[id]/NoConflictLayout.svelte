@@ -32,6 +32,8 @@
 	} from "@mangadex/stores/manga/manga_rating";
 	import { debounce } from "lodash";
 	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
+	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter";
+	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -203,6 +205,7 @@
 				});
 		}
 	});
+	const hasChaptToRead = hasChapterToRead(data.layoutData.id);
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -248,6 +251,10 @@
 	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
 	{onrating}
 	{disableRating}
+	disableRead={!$hasChaptToRead}
+	onread={() => {
+		readManga(data.layoutData.id);
+	}}
 />
 
 <div class="out-top">

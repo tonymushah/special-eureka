@@ -6,6 +6,7 @@
 		currentTarget: HTMLDivElement & EventTarget;
 	};
 	export interface ChapterEl1Events {
+		onclick?: (e?: MouseEvent & { currentTarget: EventTarget & HTMLElement }) => any;
 		ondownload?: (
 			ev: MouseEnvDiv & {
 				id: string;
@@ -99,7 +100,8 @@
 		onread,
 		onreadKeyPress,
 		onremove,
-		onremoveKeyPress
+		onremoveKeyPress,
+		onclick
 	}: Props = $props();
 
 	// TODO implement quality
@@ -213,6 +215,7 @@
 					href={route("/mangadex/chapter/[id]", {
 						id
 					})}
+					{onclick}
 					ext_href={`https://mangadex.org/chapter/${id}`}
 				>
 					<h4 class="title" class:empty={title == undefined}>

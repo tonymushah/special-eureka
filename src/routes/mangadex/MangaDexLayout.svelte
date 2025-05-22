@@ -19,6 +19,7 @@
 	}
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 	import Toaster from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import ReadDialog from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 
 	let { children }: Props = $props();
 	onMount(async () => {
@@ -50,6 +51,7 @@
 		<MangaDexContextDataProvider>
 			<MangaDexDefaultThemeProvider>
 				<SetTitle />
+				<ReadDialog />
 				<div class="provider" class:isRTL class:defaultDecoration={$isDefaultDecoration}>
 					<div class="sidebar">
 						<Sidebar />

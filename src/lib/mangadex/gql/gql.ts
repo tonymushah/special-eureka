@@ -29,6 +29,7 @@ type Documents = {
 	"\n\tquery chapterAggregateComments($ids: [UUID!]!) {\n\t\tstatistics {\n\t\t\tchapter {\n\t\t\t\tlist(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterAggregateCommentsDocument;
 	"\n\tquery getMangaCovers($id: UUID!, $offset: Int = 0, $limit: Int = 10) {\n\t\tcover {\n\t\t\tlist(\n\t\t\t\tparams: {\n\t\t\t\t\tmangaIds: [$id]\n\t\t\t\t\toffset: $offset\n\t\t\t\t\tlimit: $limit\n\t\t\t\t\torder: { volume: ASCENDING }\n\t\t\t\t}\n\t\t\t) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tfileName\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tlocale\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\ttotal\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetMangaCoversDocument;
 	"\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetRelatedTitlesDataDocument;
+	"\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params:  {\n\t\t\t   mangaId: $id\n\t\t\t}) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetMangatoReadAggregateDocument;
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorSearchFetcherDocument;
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserMeOnSidebarFooterDocument;
 	"\n\tmutation setSidebarDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetSidebarDirection(direction: $direction)\n\t\t}\n\t}\n": typeof types.SetSidebarDirectionDocument;
@@ -167,6 +168,8 @@ const documents: Documents = {
 		types.GetMangaCoversDocument,
 	"\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetRelatedTitlesDataDocument,
+	"\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params:  {\n\t\t\t   mangaId: $id\n\t\t\t}) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetMangatoReadAggregateDocument,
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.AuthorSearchFetcherDocument,
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -484,6 +487,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params:  {\n\t\t\t   mangaId: $id\n\t\t\t}) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params:  {\n\t\t\t   mangaId: $id\n\t\t\t}) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

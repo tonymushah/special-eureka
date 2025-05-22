@@ -3849,6 +3849,33 @@ export type GetRelatedTitlesDataQuery = {
 	};
 };
 
+export type GetMangatoReadAggregateQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetMangatoReadAggregateQuery = {
+	__typename?: "Query";
+	manga: {
+		__typename?: "MangaQueries";
+		aggregate: {
+			__typename?: "MangaAggregateQueries";
+			default: {
+				__typename?: "MangaAggregate";
+				volumes: Array<{
+					__typename?: "VolumeAggregate";
+					volume: string;
+					chapters: Array<{
+						__typename?: "ChapterAggregate";
+						ids: Array<any>;
+						count: number;
+						chapter: string;
+					}>;
+				}>;
+			};
+		};
+	};
+};
+
 export type AuthorSearchFetcherQueryVariables = Exact<{
 	name: Scalars["String"]["input"];
 	offset?: Scalars["Int"]["input"];
@@ -8028,6 +8055,129 @@ export const GetRelatedTitlesDataDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetRelatedTitlesDataQuery, GetRelatedTitlesDataQueryVariables>;
+export const GetMangatoReadAggregateDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getMangatoReadAggregate" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "aggregate" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "mangaId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "default" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "volumes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "volume"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "chapters"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "ids"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "count"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "chapter"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetMangatoReadAggregateQuery, GetMangatoReadAggregateQueryVariables>;
 export const AuthorSearchFetcherDocument = {
 	kind: "Document",
 	definitions: [
