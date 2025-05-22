@@ -255,6 +255,8 @@
 	onread={() => {
 		readManga(data.layoutData.id);
 	}}
+	disableReport
+	disableUpload
 />
 
 <div class="out-top">
