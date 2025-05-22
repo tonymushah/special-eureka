@@ -26,7 +26,10 @@
 	import type { LayoutData } from "./$types";
 	import { setTitleLayoutData } from "./layout.context";
 	import { goto } from "$app/navigation";
-	import manga_rating, { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
+	import manga_rating, {
+		get_manga_rating,
+		set_manga_rating
+	} from "@mangadex/stores/manga/manga_rating";
 	import { debounce } from "lodash";
 	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
 
@@ -96,7 +99,8 @@
 	function refetchReadingFollowingStatus() {
 		Promise.all([
 			get_manga_following_status(data.layoutData.id),
-			get_manga_reading_status(data.layoutData.id)
+			get_manga_reading_status(data.layoutData.id),
+			get_manga_rating(data.layoutData.id)
 		]).catch(console.error);
 	}
 	function onSetReadingStatusError(e: unknown) {
