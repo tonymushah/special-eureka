@@ -27,7 +27,7 @@
 <script lang="ts">
 	let dialog: HTMLDialogElement | undefined = $state();
 	$effect(() => {
-		if ($currentMangaId) {
+		if ($currentMangaId != undefined || $currentMangaId != null) {
 			dialog?.showModal();
 		}
 	});
@@ -89,37 +89,39 @@
 </script>
 
 <dialog bind:this={dialog}>
-	{#if $query.isFetching}
-		<Fetching />
-	{:else if $query.error}
-		<ErrorComponent error={$query.error} label="Error on finding the first chapters" />
-	{:else}
-		<div>
-			<h1>Select a chapter to read</h1>
-			<div class="chapters">
-				{#each chapters as chapter (chapter.id)}
-					<ChapterElement1
-						{...chapter}
-						oncomments={({ id }) => {
-							const url = threadUrls.get(id);
-							if (url) openUrl(url);
-						}}
-						onclick={() => {
-							readChapter(chapter.id);
-						}}
-					/>
-				{/each}
+	<div class="container">
+		{#if $query.isFetching}
+			<Fetching />
+		{:else if $query.error}
+			<ErrorComponent error={$query.error} label="Error on finding the first chapters" />
+		{:else}
+			<div>
+				<h1>Select a chapter to read</h1>
+				<div class="chapters">
+					{#each chapters as chapter (chapter.id)}
+						<ChapterElement1
+							{...chapter}
+							oncomments={({ id }) => {
+								const url = threadUrls.get(id);
+								if (url) openUrl(url);
+							}}
+							onclick={() => {
+								readChapter(chapter.id);
+							}}
+						/>
+					{/each}
+				</div>
 			</div>
+		{/if}
+		<div class="bottom">
+			<ButtonAccentOnlyLabel
+				label="Close"
+				onclick={() => {
+					dialog?.close();
+					unsetManga();
+				}}
+			/>
 		</div>
-	{/if}
-	<div class="bottom">
-		<ButtonAccentOnlyLabel
-			label="Close"
-			onclick={() => {
-				dialog?.close();
-				unsetManga();
-			}}
-		/>
 	</div>
 </dialog>
 
@@ -131,16 +133,20 @@
 		height: 65vh;
 		border: 2px solid var(--primary);
 		border-radius: 3px;
+		padding: 12px;
+		z-index: 30;
+	}
+	.container {
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
-		padding: 12px;
 		align-items: center;
+		height: 100%;
 	}
 	.bottom {
 		display: flex;
-		align-items: center;
-		justify-content: end;
+		align-items: end;
+		justify-content: center;
 	}
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
