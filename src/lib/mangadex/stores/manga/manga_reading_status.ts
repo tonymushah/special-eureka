@@ -51,13 +51,14 @@ export async function set_manga_reading_status(id: string, status: ReadingStatus
 
 export type MangaReadingStatusOption = {
 	getOnMount?: boolean,
-	onGetError?: (e: unknown) => void
+	onGetError?: (e: unknown) => void,
+	initValue?: ReadingStatus | null
 }
 
 export default function manga_reading_status(id: string, options: MangaReadingStatusOption = {
 	getOnMount: true
 }): Readable<ReadingStatus | null> {
-	return readable<ReadingStatus | null>(null, (set) => {
+	return readable<ReadingStatus | null>(options.initValue ?? null, (set) => {
 		let sub = client.subscription(subscription, {
 			id
 		}).subscribe((res) => {

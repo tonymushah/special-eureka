@@ -73,13 +73,14 @@ export async function set_manga_following_status(manga_id: string, is_following:
 
 export type MangaFollowingStatusOption = {
 	getOnMount?: boolean,
-	onGetError?: (e: unknown) => void
+	onGetError?: (e: unknown) => void,
+	initValue?: boolean
 }
 
 export default function manga_following_status(manga_id: string, options: MangaFollowingStatusOption = {
 	getOnMount: true
 }): Readable<boolean> {
-	return readable(false, (set) => {
+	return readable(options.initValue ?? false, (set) => {
 		const sub = client.subscription(subscription, {
 			id: manga_id
 		}).subscribe((res) => {
