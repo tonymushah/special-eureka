@@ -169,6 +169,13 @@
 			})
 			.finally(() => e.closeDialog?.());
 	}}
+	ontag={({ id }) => {
+		goto(
+			route("/mangadex/tag/[id]", {
+				id
+			})
+		);
+	}}
 />
 
 <div class="out-top">
