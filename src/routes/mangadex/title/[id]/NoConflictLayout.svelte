@@ -27,6 +27,8 @@
 	import { setTitleLayoutData } from "./layout.context";
 	import { goto } from "$app/navigation";
 	import manga_rating, { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
+	import { debounce } from "lodash";
+	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -151,6 +153,52 @@
 			});
 		}
 	}
+	let disableAddToLibrary = $state(false);
+	const onreadingStatus = debounce((e: ReadingStatusEventDetail) => {
+		if (!disableAddToLibrary) {
+			disableAddToLibrary = true;
+			Promise.all([
+				set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
+				set_manga_following_status(layoutData.id, e.isFollowing)
+			])
+				.then(() => {
+					addToast({
+						data: {
+							title: "Manga reading and follow status sucessufully updated",
+							variant: "green"
+						}
+					});
+				})
+				.catch((e) => {
+					onSetReadingStatusError(e);
+				})
+				.finally(() => {
+					e.closeDialog?.();
+					disableAddToLibrary = false;
+				});
+		}
+	});
+	let disableRating = $state(false);
+	const onrating = debounce((e: number | null) => {
+		if (!disableRating) {
+			disableRating = true;
+			set_manga_rating(data.layoutData.id, e)
+				.then(() => {
+					addToast({
+						data: {
+							title: "Manga rating updated sucessully",
+							variant: "green"
+						}
+					});
+				})
+				.catch((e) => {
+					onSetRatingError(e);
+				})
+				.finally(() => {
+					disableRating = false;
+				});
+		}
+	});
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -184,24 +232,7 @@
 	}}
 	{reading_status}
 	{isFollowing}
-	onreadingStatus={(e) => {
-		Promise.all([
-			set_manga_reading_status(layoutData.id, e.readingStatus ?? null),
-			set_manga_following_status(layoutData.id, e.isFollowing)
-		])
-			.then(() => {
-				addToast({
-					data: {
-						title: "Manga reading and follow status sucessufully updated",
-						variant: "green"
-					}
-				});
-			})
-			.catch((e) => {
-				onSetReadingStatusError(e);
-			})
-			.finally(() => e.closeDialog?.());
-	}}
+	{onreadingStatus}
 	ontag={({ id }) => {
 		goto(
 			route("/mangadex/tag/[id]", {
@@ -209,21 +240,10 @@
 			})
 		);
 	}}
+	{disableAddToLibrary}
 	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
-	onrating={(e) => {
-		set_manga_rating(data.layoutData.id, e)
-			.then(() => {
-				addToast({
-					data: {
-						title: "Manga rating updated sucessully",
-						variant: "green"
-					}
-				});
-			})
-			.catch((e) => {
-				onSetRatingError(e);
-			});
-	}}
+	{onrating}
+	{disableRating}
 />
 
 <div class="out-top">
