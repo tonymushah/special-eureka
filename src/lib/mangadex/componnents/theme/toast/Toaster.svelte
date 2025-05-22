@@ -118,6 +118,7 @@
 		align-items: center;
 		gap: 0.5rem; /* 8px */
 		font-weight: 600;
+		font-size: 16px;
 	}
 	.status {
 		width: 0.375em;
@@ -161,6 +162,8 @@
 		justify-content: center;
 		align-items: center;
 		border-radius: 9999px;
+		background-color: inherit;
+		border: none;
 	}
 	.close:hover {
 		background-color: var(--accent-l1-hover);
