@@ -388,9 +388,9 @@ export class ChapterDownload {
 		});
 	}
 	public download_state_images() {
-		return derived([this.images_state(), this.is_downloading()], ([_state, $is_downloaded]) => {
+		return derived([this.images_state(), this.is_downloading()], ([_state, $is_downloading]) => {
 			const [left, right, hasImages] = (() => {
-				if (_state && !$is_downloaded) {
+				if (_state && $is_downloading) {
 					return [
 						`${(_state.index * 100) / _state.len}%`,
 						`${100 - (_state.index * 100) / _state.len}%`,
