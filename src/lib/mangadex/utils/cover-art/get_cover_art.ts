@@ -35,14 +35,16 @@ export default function get_cover_art({
 		{
 			queryKey: ["cover", "image", cover_id, manga_id, filename, mode],
 			async queryFn() {
-				const res = await client.query(query, {
-					cover_id,
-					manga_id,
-					mode,
-					filename
-				}).toPromise();
+				const res = await client
+					.query(query, {
+						cover_id,
+						manga_id,
+						mode,
+						filename
+					})
+					.toPromise();
 				if (res.error) {
-					throw res.error
+					throw res.error;
 				}
 				if (res.data) {
 					const url = res.data.cover.getImage;

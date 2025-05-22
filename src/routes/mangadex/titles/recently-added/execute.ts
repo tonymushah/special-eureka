@@ -1,8 +1,5 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-import {
-	CoverImageQuality,
-	type MangaListParams
-} from "@mangadex/gql/graphql";
+import { CoverImageQuality, type MangaListParams } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
@@ -53,14 +50,11 @@ export class RecentlyAddedSearchResult extends AbstractSearchResult<MangaListCon
 		};
 	}
 	next(): Promise<AbstractSearchResult<MangaListContentItemProps>> {
-		return executeSearchQuery(
-			this.client,
-			{
-				...this.params,
-				offset: this.offset + this.limit,
-				limit: this.limit
-			},
-		);
+		return executeSearchQuery(this.client, {
+			...this.params,
+			offset: this.offset + this.limit,
+			limit: this.limit
+		});
 	}
 }
 
@@ -73,12 +67,12 @@ type SomeRes = {
 
 export default async function executeSearchQuery(
 	client: Client,
-	params: MangaListParams,
+	params: MangaListParams
 ): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 	let res: SomeRes | undefined = undefined;
 	const result = await client
 		.query(defaultQuery, {
-			params,
+			params
 		})
 		.toPromise();
 	if (result.data) {
@@ -104,10 +98,8 @@ export default async function executeSearchQuery(
 							"en"
 						) ?? "",
 					title:
-						get_value_from_title_and_random_if_undefined(
-							v.attributes.title,
-							"en"
-						) ?? "",
+						get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ??
+						"",
 					coverImageAlt: v.relationships.coverArt.id,
 					withFull: true,
 					tags: v.attributes.tags.map((tag) => ({
@@ -134,7 +126,7 @@ export default async function executeSearchQuery(
 		return new RecentlyAddedSearchResult({
 			...res,
 			client,
-			params,
+			params
 		});
 	} else {
 		throw new Error("no data obtained");

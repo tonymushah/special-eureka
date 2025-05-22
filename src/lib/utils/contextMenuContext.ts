@@ -4,7 +4,7 @@ import { getContext, setContext } from "svelte";
 const KEY = "context-menu-context";
 
 export function setContextMenuContext(items: () => ContextMenuItem[]) {
-	return setContext(KEY, items)
+	return setContext(KEY, items);
 }
 
 export function getContextMenuContext(): () => ContextMenuItem[] {

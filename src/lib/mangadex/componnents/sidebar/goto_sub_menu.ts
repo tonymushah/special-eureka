@@ -23,17 +23,17 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Online Library",
-						action() { }
+						action() {}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "MDList",
 						action() {
-							goto(route("/mangadex/list"))
+							goto(route("/mangadex/list"));
 						}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Followed Groups",
-						action() { }
+						action() {}
 					})
 				]
 			}),
@@ -43,7 +43,7 @@ export default function goto_sub_menu(): ContextMenuItem {
 					ContextMenuItemProvider.menuItem({
 						text: "Latest Uploads",
 						action() {
-							goto(route("/mangadex/titles/latest-uploads"))
+							goto(route("/mangadex/titles/latest-uploads"));
 						}
 					}),
 					ContextMenuItemProvider.menuItem({
@@ -54,13 +54,13 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Popular",
-						action() { }
+						action() {}
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Added",
 						action() {
-							goto(route("/mangadex/titles/recently-added"))
-						},
+							goto(route("/mangadex/titles/recently-added"));
+						}
 					})
 				]
 			}),
