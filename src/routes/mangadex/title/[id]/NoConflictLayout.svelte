@@ -25,6 +25,8 @@
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./$types";
 	import { setTitleLayoutData } from "./layout.context";
+	import { goto } from "$app/navigation";
+	import manga_rating, { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -95,6 +97,60 @@
 			get_manga_reading_status(data.layoutData.id)
 		]).catch(console.error);
 	}
+	function onSetReadingStatusError(e: unknown) {
+		const title = "Error on updating the reading or follow status";
+		if (e instanceof Error) {
+			addToast({
+				data: {
+					title,
+					description: e.message,
+					variant: "danger"
+				}
+			});
+		} else if (typeof e == "string") {
+			addToast({
+				data: {
+					title,
+					description: e,
+					variant: "danger"
+				}
+			});
+		} else {
+			addToast({
+				data: {
+					title,
+					variant: "danger"
+				}
+			});
+		}
+	}
+	function onSetRatingError(e: unknown) {
+		const title = "Error on updating your manga rating";
+		if (e instanceof Error) {
+			addToast({
+				data: {
+					title,
+					description: e.message,
+					variant: "danger"
+				}
+			});
+		} else if (typeof e == "string") {
+			addToast({
+				data: {
+					title,
+					description: e,
+					variant: "danger"
+				}
+			});
+		} else {
+			addToast({
+				data: {
+					title,
+					variant: "danger"
+				}
+			});
+		}
+	}
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -142,30 +198,7 @@
 				});
 			})
 			.catch((e) => {
-				if (e instanceof Error) {
-					addToast({
-						data: {
-							title: "Error on updating the reading or follow status",
-							description: e.message,
-							variant: "danger"
-						}
-					});
-				} else if (typeof e == "string") {
-					addToast({
-						data: {
-							title: "Error on updating the reading or follow status",
-							description: e,
-							variant: "danger"
-						}
-					});
-				} else {
-					addToast({
-						data: {
-							title: "Error on updating the reading or follow status",
-							variant: "danger"
-						}
-					});
-				}
+				onSetReadingStatusError(e);
 			})
 			.finally(() => e.closeDialog?.());
 	}}
@@ -175,6 +208,21 @@
 				id
 			})
 		);
+	}}
+	rating={der(manga_rating(data.layoutData.id), (d) => d ?? undefined)}
+	onrating={(e) => {
+		set_manga_rating(data.layoutData.id, e)
+			.then(() => {
+				addToast({
+					data: {
+						title: "Manga rating updated sucessully",
+						variant: "green"
+					}
+				});
+			})
+			.catch((e) => {
+				onSetRatingError(e);
+			});
 	}}
 />
 

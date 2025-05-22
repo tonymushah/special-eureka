@@ -4391,6 +4391,46 @@ export type UnfollowMangaMutationMutation = {
 	manga: { __typename?: "MangaMutations"; unfollow: boolean };
 };
 
+export type MangaRatingSubscriptionSubscriptionVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MangaRatingSubscriptionSubscription = {
+	__typename?: "Subscriptions";
+	watchRating: { __typename?: "RatingItemAttributes"; rating: number };
+};
+
+export type GetMangaRatingQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetMangaRatingQuery = {
+	__typename?: "Query";
+	rating: {
+		__typename?: "RatingQueries";
+		lists: Array<{ __typename?: "RatingItem"; rating: number }>;
+	};
+};
+
+export type UpdateMangaRatingMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	rating: Scalars["Int"]["input"];
+}>;
+
+export type UpdateMangaRatingMutation = {
+	__typename?: "Mutation";
+	rating: { __typename?: "RatingMutations"; createUpdate: boolean };
+};
+
+export type DeleteMangaRatingMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type DeleteMangaRatingMutation = {
+	__typename?: "Mutation";
+	rating: { __typename?: "RatingMutations"; delete: boolean };
+};
+
 export type MangaReadingStatusSubscriptionSubscriptionVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -10415,6 +10455,232 @@ export const UnfollowMangaMutationDocument = {
 		}
 	]
 } as unknown as DocumentNode<UnfollowMangaMutationMutation, UnfollowMangaMutationMutationVariables>;
+export const MangaRatingSubscriptionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "mangaRatingSubscription" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchRating" },
+						arguments: [
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "mangaId" },
+								value: { kind: "Variable", name: { kind: "Name", value: "id" } }
+							}
+						],
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [{ kind: "Field", name: { kind: "Name", value: "rating" } }]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MangaRatingSubscriptionSubscription,
+	MangaRatingSubscriptionSubscriptionVariables
+>;
+export const GetMangaRatingDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getMangaRating" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "rating" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "lists" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "ListValue",
+												values: [
+													{
+														kind: "Variable",
+														name: { kind: "Name", value: "id" }
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "rating" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetMangaRatingQuery, GetMangaRatingQueryVariables>;
+export const UpdateMangaRatingDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "updateMangaRating" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "rating" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "rating" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "createUpdate" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "mangaId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "rating" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "rating" }
+														}
+													}
+												]
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateMangaRatingMutation, UpdateMangaRatingMutationVariables>;
+export const DeleteMangaRatingDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "deleteMangaRating" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "rating" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "delete" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<DeleteMangaRatingMutation, DeleteMangaRatingMutationVariables>;
 export const MangaReadingStatusSubscriptionDocument = {
 	kind: "Document",
 	definitions: [
