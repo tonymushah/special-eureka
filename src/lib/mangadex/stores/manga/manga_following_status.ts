@@ -71,7 +71,14 @@ export async function set_manga_following_status(manga_id: string, is_following:
 	}
 }
 
-export default function manga_following_status(manga_id: string): Readable<boolean> {
+export type MangaFollowingStatusOption = {
+	getOnMount?: boolean,
+	onGetError?: (e: unknown) => void
+}
+
+export default function manga_following_status(manga_id: string, options: MangaFollowingStatusOption = {
+	getOnMount: true
+}): Readable<boolean> {
 	return readable(false, (set) => {
 		const sub = client.subscription(subscription, {
 			id: manga_id
@@ -82,7 +89,8 @@ export default function manga_following_status(manga_id: string): Readable<boole
 				console.error(res.error);
 			}
 		});
-		get_manga_following_status(manga_id).catch(console.error);
+		if (options?.getOnMount)
+			get_manga_following_status(manga_id).catch(options.onGetError ?? console.error);
 		return () => {
 			sub.unsubscribe()
 		}

@@ -49,7 +49,14 @@ export async function set_manga_reading_status(id: string, status: ReadingStatus
 	return res.data?.manga.updateReadingStatus;
 }
 
-export default function manga_reading_status(id: string): Readable<ReadingStatus | null> {
+export type MangaReadingStatusOption = {
+	getOnMount?: boolean,
+	onGetError?: (e: unknown) => void
+}
+
+export default function manga_reading_status(id: string, options: MangaReadingStatusOption = {
+	getOnMount: true
+}): Readable<ReadingStatus | null> {
 	return readable<ReadingStatus | null>(null, (set) => {
 		let sub = client.subscription(subscription, {
 			id
@@ -57,7 +64,8 @@ export default function manga_reading_status(id: string): Readable<ReadingStatus
 			const status = res.data?.watchMangaReadingState;
 			set(status ?? null);
 		});
-		get_manga_reading_status(id).catch(console.error);
+		if (options.getOnMount)
+			get_manga_reading_status(id).catch(options.onGetError ?? console.error);
 		return () => {
 			sub.unsubscribe()
 		}
