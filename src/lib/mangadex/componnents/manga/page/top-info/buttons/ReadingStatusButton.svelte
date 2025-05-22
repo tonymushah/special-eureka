@@ -16,9 +16,10 @@
 	}
 	interface Props extends Events {
 		closeDialogOnAdd?: boolean;
+		disabled?: boolean;
 	}
 
-	let { onreadingStatus, closeDialogOnAdd }: Props = $props();
+	let { onreadingStatus, closeDialogOnAdd, disabled }: Props = $props();
 
 	let dialog: HTMLDialogElement | undefined = $state(undefined);
 	function openDialog() {
@@ -26,9 +27,10 @@
 			dialog.showModal();
 		}
 	}
-
-	let readingStatusText = $derived(getText($readingStatus) ?? "Add to Library");
 	let isFollowing = $derived($isFollowingStore);
+	let readingStatusText = $derived(
+		(getText($readingStatus) ?? isFollowing) ? "Followed" : "Add to Library"
+	);
 </script>
 
 <PrimaryButton
@@ -36,6 +38,7 @@
 	onclick={() => {
 		openDialog();
 	}}
+	{disabled}
 >
 	<div class="primary-button">
 		{#if isFollowing}

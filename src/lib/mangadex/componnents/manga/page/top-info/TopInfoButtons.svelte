@@ -29,6 +29,7 @@
 		disableAddToList?: boolean;
 		disableReport?: boolean;
 		disableUpload?: boolean;
+		disableAddToLibrary?: boolean;
 	}
 	let {
 		onaddToList,
@@ -44,12 +45,13 @@
 		disableRead,
 		disableAddToList,
 		disableReport,
-		disableUpload
+		disableUpload,
+		disableAddToLibrary
 	}: Props = $props();
 </script>
 
 <div class="button-group">
-	<ReadingStatusButton {onreadingStatus} {closeDialogOnAdd} />
+	<ReadingStatusButton {onreadingStatus} {closeDialogOnAdd} disabled={disableAddToLibrary} />
 	<DownloadButton {ondelete} {ondownload} {ondownloading} />
 	<StarButton onselect={onrating} />
 	<AddToListButton onclick={onaddToList} disabled={disableAddToList} />
