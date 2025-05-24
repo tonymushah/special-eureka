@@ -9,9 +9,7 @@ import { readable, type Readable } from "svelte/store";
 const aggregateQuery = graphql(`
 	query getMangatoReadAggregate($id: UUID!) {
 		manga {
-			aggregate(params:  {
-			   mangaId: $id
-			}) {
+			aggregate(params: { mangaId: $id }) {
 				default {
 					volumes {
 						volume
@@ -29,31 +27,35 @@ const aggregateQuery = graphql(`
 
 async function getMangaToReadChapter(manga_id: string): Promise<Chapter[]> {
 	const aggregateRes = await (async () => {
-		const aggregateRes = await client.query(aggregateQuery, {
-			id: manga_id
-		}).toPromise();
+		const aggregateRes = await client
+			.query(aggregateQuery, {
+				id: manga_id
+			})
+			.toPromise();
 		if (aggregateRes.data) {
-			return aggregateRes.data
+			return aggregateRes.data;
 		} else if (aggregateRes.error) {
-			throw aggregateRes.error
+			throw aggregateRes.error;
 		} else {
-			throw new Error("no data??")
+			throw new Error("no data??");
 		}
 	})();
 	const first_volume = aggregateRes.manga.aggregate.default.volumes.at(0)?.chapters.at(0)?.ids;
 	if (first_volume?.length == 0 || first_volume == undefined) {
-		return []
+		return [];
 	}
 	const chapters = await (async () => {
-		const res = await client.query(getMangaAggregateChapterQuery, {
-			ids: first_volume
-		}).toPromise();
+		const res = await client
+			.query(getMangaAggregateChapterQuery, {
+				ids: first_volume
+			})
+			.toPromise();
 		if (res.data) {
-			return res.data
+			return res.data;
 		} else if (res.error) {
 			throw res.error;
 		} else {
-			throw new Error("no data")
+			throw new Error("no data");
 		}
 	})();
 	return chapters.chapter.list.data.map<Chapter>((c) => {
@@ -85,7 +87,7 @@ async function getMangaToReadChapter(manga_id: string): Promise<Chapter[]> {
 			haveBeenRead: false,
 			comments: 0
 		} satisfies Chapter;
-	})
+	});
 }
 
 export default getMangaToReadChapter;
@@ -94,6 +96,6 @@ export function hasChapterToRead(manga_id: string): Readable<boolean> {
 	return readable(false, (set) => {
 		getMangaToReadChapter(manga_id).then((e) => {
 			set(e.length != 0);
-		})
-	})
+		});
+	});
 }

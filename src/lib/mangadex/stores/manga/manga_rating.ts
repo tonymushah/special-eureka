@@ -37,11 +37,13 @@ const deleteMutation = graphql(`
 `);
 
 export async function get_manga_rating(manga_id: string): Promise<number | null> {
-	const res = await client.query(query, {
-		id: manga_id
-	}).toPromise();
+	const res = await client
+		.query(query, {
+			id: manga_id
+		})
+		.toPromise();
 	if (res.data) {
-		return res.data.rating.lists[0]?.rating ?? null
+		return res.data.rating.lists[0]?.rating ?? null;
 	} else if (res.error) {
 		throw res.error;
 	} else {
@@ -50,27 +52,31 @@ export async function get_manga_rating(manga_id: string): Promise<number | null>
 }
 
 export async function create_or_update_manga_rating(manga_id: string, rating: number) {
-	const res = await client.mutation(updateCreateMutation, {
-		id: manga_id,
-		rating
-	}).toPromise();
+	const res = await client
+		.mutation(updateCreateMutation, {
+			id: manga_id,
+			rating
+		})
+		.toPromise();
 	if (res.data) {
 		return;
 	} else if (res.error) {
-		throw res.error
+		throw res.error;
 	} else {
 		throw new Error("no data?");
 	}
 }
 
 export async function delete_manga_rating(manga_id: string) {
-	const res = await client.mutation(deleteMutation, {
-		id: manga_id,
-	}).toPromise();
+	const res = await client
+		.mutation(deleteMutation, {
+			id: manga_id
+		})
+		.toPromise();
 	if (res.data) {
 		return;
 	} else if (res.error) {
-		throw res.error
+		throw res.error;
 	} else {
 		throw new Error("no data?");
 	}
@@ -78,9 +84,9 @@ export async function delete_manga_rating(manga_id: string) {
 
 export async function set_manga_rating(manga_id: string, rating: number | null) {
 	if (rating) {
-		await create_or_update_manga_rating(manga_id, rating)
+		await create_or_update_manga_rating(manga_id, rating);
 	} else {
-		await delete_manga_rating(manga_id)
+		await delete_manga_rating(manga_id);
 	}
 }
 
@@ -90,22 +96,30 @@ export type MangaRatingOption = {
 	initValue?: boolean;
 };
 
-export default function manga_rating(manga_id: string, option: MangaRatingOption = {
-	getOnMount: true
-}): Readable<number | null> {
+export default function manga_rating(
+	manga_id: string,
+	option: MangaRatingOption = {
+		getOnMount: true
+	}
+): Readable<number | null> {
 	return readable<number | null>(null, (set) => {
-		const sub = client.subscription(subscription, {
-			id: manga_id
-		}).subscribe((e) => {
-			if (e.data) {
-				set(e.data.watchRating.rating ?? null)
-			} else if (e.error) {
-				console.error(e.error);
-			}
-		});
-		if (option.getOnMount) get_manga_rating(manga_id).then((e) => set(e)).catch(option.onGetError ?? console.error);
+		const sub = client
+			.subscription(subscription, {
+				id: manga_id
+			})
+			.subscribe((e) => {
+				if (e.data) {
+					set(e.data.watchRating.rating ?? null);
+				} else if (e.error) {
+					console.error(e.error);
+				}
+			});
+		if (option.getOnMount)
+			get_manga_rating(manga_id)
+				.then((e) => set(e))
+				.catch(option.onGetError ?? console.error);
 		return () => {
-			sub.unsubscribe()
-		}
-	})
+			sub.unsubscribe();
+		};
+	});
 }
