@@ -3715,6 +3715,17 @@ export type GetUserLoggedCustomListsQuery = {
 	};
 };
 
+export type AddOrRemoveTitleToCustomListMutationVariables = Exact<{
+	manga_id: Scalars["UUID"]["input"];
+	addTo: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	removeFrom: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type AddOrRemoveTitleToCustomListMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; addToListBatch: boolean; removeFromListBatch: boolean };
+};
+
 export type MangaListMutationMutationVariables = Exact<{
 	style: MangaListStyle;
 }>;
@@ -7336,6 +7347,115 @@ export const GetUserLoggedCustomListsDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetUserLoggedCustomListsQuery, GetUserLoggedCustomListsQueryVariables>;
+export const AddOrRemoveTitleToCustomListDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "addOrRemoveTitleToCustomList" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "manga_id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "addTo" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "removeFrom" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "addToListBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "customLists" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "addTo" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "manga_id" }
+											}
+										}
+									]
+								},
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "removeFromListBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "customLists" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "removeFrom" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "manga_id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	AddOrRemoveTitleToCustomListMutation,
+	AddOrRemoveTitleToCustomListMutationVariables
+>;
 export const MangaListMutationDocument = {
 	kind: "Document",
 	definitions: [

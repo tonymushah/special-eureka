@@ -23,6 +23,7 @@ type Documents = {
 	"\n\tquery seasonal {\n\t\thome {\n\t\t\tseasonal {\n\t\t\t\tid\n\t\t\t\trelationships {\n\t\t\t\t\ttitles {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\taltTitles\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SeasonalDocument;
 	"\n\tquery staffPicks {\n\t\thome {\n\t\t\tstaffPicks {\n\t\t\t\tid\n\t\t\t\trelationships {\n\t\t\t\t\ttitles {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\taltTitles\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tavailableTranslatedLanguages\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.StaffPicksDocument;
 	"\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetUserLoggedCustomListsDocument;
+	"\n\tmutation addOrRemoveTitleToCustomList($manga_id: UUID!, $addTo: [UUID!]!, $removeFrom: [UUID!]!) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n": typeof types.AddOrRemoveTitleToCustomListDocument;
 	"\n\tmutation mangaListMutation($style: MangaListStyle!) {\n\t\tuserOption {\n\t\t\tsetMangaListStyle(mangaListStyle: $style)\n\t\t}\n\t}\n": typeof types.MangaListMutationDocument;
 	"\n\tsubscription mangaListStyleSub {\n\t\twatchMangaListStyle\n\t}\n": typeof types.MangaListStyleSubDocument;
 	"\n\tquery mangaAggregate($id: UUID!, $size: Int = 3) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tchunked(chunkSize: $size, isReversed: true) {\n\t\t\t\t\tids\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tcount\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MangaAggregateDocument;
@@ -157,6 +158,8 @@ const documents: Documents = {
 		types.StaffPicksDocument,
 	"\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetUserLoggedCustomListsDocument,
+	"\n\tmutation addOrRemoveTitleToCustomList($manga_id: UUID!, $addTo: [UUID!]!, $removeFrom: [UUID!]!) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n":
+		types.AddOrRemoveTitleToCustomListDocument,
 	"\n\tmutation mangaListMutation($style: MangaListStyle!) {\n\t\tuserOption {\n\t\t\tsetMangaListStyle(mangaListStyle: $style)\n\t\t}\n\t}\n":
 		types.MangaListMutationDocument,
 	"\n\tsubscription mangaListStyleSub {\n\t\twatchMangaListStyle\n\t}\n":
@@ -454,6 +457,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation addOrRemoveTitleToCustomList($manga_id: UUID!, $addTo: [UUID!]!, $removeFrom: [UUID!]!) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation addOrRemoveTitleToCustomList($manga_id: UUID!, $addTo: [UUID!]!, $removeFrom: [UUID!]!) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
