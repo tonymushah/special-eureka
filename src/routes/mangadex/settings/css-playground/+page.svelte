@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CustomListCheckbox from "@mangadex/componnents/manga/add-to-list/CustomListCheckbox.svelte";
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
 	import ToastForStories from "@mangadex/componnents/theme/toast/ToastForStories.svelte";
 	import { melt } from "@melt-ui/svelte";
@@ -50,6 +51,7 @@
 						}}
 					>
 						<h3>Covers lol</h3>
+						<CustomListCheckbox name="Something" onChange={(e) => console.debug(e)} />
 					</div>
 				{/if}
 				{#if content == "tab-3"}
