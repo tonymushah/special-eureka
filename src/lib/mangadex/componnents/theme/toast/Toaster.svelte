@@ -27,6 +27,22 @@
 	export const addToast = helpers.addToast;
 	export const removeToast = helpers.removeToast;
 	export const updateToast = helpers.updateToast;
+	export function addErrorToast(title: string, error: unknown) {
+		return addToast({
+			data: {
+				title,
+				description: (() => {
+					if (error instanceof Error) {
+						return error.message;
+					} else if (typeof error == "string") {
+						return error;
+					} else {
+						return "unknow error :3";
+					}
+				})()
+			}
+		});
+	}
 </script>
 
 <script lang="ts">
