@@ -23,6 +23,11 @@
 		dialog?.close();
 		unsetManga();
 	}
+	$effect(() => {
+		if ($currentMangaId) {
+			dialog?.showModal();
+		}
+	});
 </script>
 
 <dialog bind:this={dialog}>

@@ -15,6 +15,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
+	import MakeANewList from "./MakeANewList.svelte";
 
 	const client = getContextClient();
 
@@ -168,6 +169,13 @@
 		{/if}
 	</div>
 </div>
+
+<MakeANewList
+	{mangaId}
+	onMakeSuccess={() => {
+		$query.refetch();
+	}}
+/>
 
 <style lang="scss">
 	.lists {

@@ -25,10 +25,24 @@ const getUserLoggedCustomListsQuery = graphql(`
 export default getUserLoggedCustomListsQuery;
 
 export const mutation = graphql(`
-	mutation addOrRemoveTitleToCustomList($manga_id: UUID!, $addTo: [UUID!]!, $removeFrom: [UUID!]!) {
+	mutation addOrRemoveTitleToCustomList(
+		$manga_id: UUID!
+		$addTo: [UUID!]!
+		$removeFrom: [UUID!]!
+	) {
 		manga {
 			addToListBatch(customLists: $addTo, mangaId: $manga_id)
 			removeFromListBatch(customLists: $removeFrom, mangaId: $manga_id)
+		}
+	}
+`);
+
+export const makeListMutation = graphql(`
+	mutation createCustomList($mangaId: UUID!, $visibility: CustomListVisibility!, $name: String!) {
+		customList {
+			create(params: { manga: [$mangaId], visibility: $visibility, name: $name }) {
+				id
+			}
 		}
 	}
 `);
