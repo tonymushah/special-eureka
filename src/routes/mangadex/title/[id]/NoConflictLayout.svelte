@@ -9,7 +9,7 @@
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
-	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { MangaDownload, MangaDownloadState } from "@mangadex/download/manga";
 	import manga_following_status, {
 		get_manga_following_status,
@@ -34,6 +34,10 @@
 	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
 	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter";
 	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
+	import {
+		isMutating as isAddingToList,
+		addMangaToAList
+	} from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -107,57 +111,11 @@
 	}
 	function onSetReadingStatusError(e: unknown) {
 		const title = "Error on updating the reading or follow status";
-		if (e instanceof Error) {
-			addToast({
-				data: {
-					title,
-					description: e.message,
-					variant: "danger"
-				}
-			});
-		} else if (typeof e == "string") {
-			addToast({
-				data: {
-					title,
-					description: e,
-					variant: "danger"
-				}
-			});
-		} else {
-			addToast({
-				data: {
-					title,
-					variant: "danger"
-				}
-			});
-		}
+		addErrorToast(title, e);
 	}
 	function onSetRatingError(e: unknown) {
 		const title = "Error on updating your manga rating";
-		if (e instanceof Error) {
-			addToast({
-				data: {
-					title,
-					description: e.message,
-					variant: "danger"
-				}
-			});
-		} else if (typeof e == "string") {
-			addToast({
-				data: {
-					title,
-					description: e,
-					variant: "danger"
-				}
-			});
-		} else {
-			addToast({
-				data: {
-					title,
-					variant: "danger"
-				}
-			});
-		}
+		addErrorToast(title, e);
 	}
 	let disableAddToLibrary = $state(false);
 	const onreadingStatus = debounce((e: ReadingStatusEventDetail) => {
@@ -254,6 +212,10 @@
 	disableRead={!$hasChaptToRead}
 	onread={() => {
 		readManga(data.layoutData.id);
+	}}
+	disableAddToList={$isAddingToList}
+	onaddToList={() => {
+		addMangaToAList(data.layoutData.id);
 	}}
 	disableReport
 	disableUpload

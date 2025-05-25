@@ -2,7 +2,7 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
 	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { writable } from "svelte/store";
+	import { readonly, writable } from "svelte/store";
 	import Lists from "./Lists.svelte";
 
 	const currentMangaId = writable<string | null>(null);
@@ -13,11 +13,13 @@
 	function unsetManga() {
 		currentMangaId.set(null);
 	}
+	const isMutating_ = writable(false);
+
+	export const isMutating = readonly(isMutating_);
 </script>
 
 <script lang="ts">
 	let dialog: HTMLDialogElement | undefined = $state();
-	let isMutating = $state(false);
 	let mutate: ((manga_id: string) => Promise<void> | undefined) | undefined = $state();
 	function closeDialog() {
 		dialog?.close();
@@ -34,13 +36,13 @@
 	<div class="content">
 		<h3>Add to list</h3>
 		{#if $currentMangaId}
-			<Lists mangaId={$currentMangaId} bind:mutate bind:isMutating />
+			<Lists mangaId={$currentMangaId} bind:mutate bind:isMutating={$isMutating_} />
 		{/if}
 		<div class="bottom">
 			{#if mutate && $currentMangaId}
 				<PrimaryButtonOnlyLabel
 					label={"Add to list"}
-					disabled={isMutating}
+					disabled={$isMutating_}
 					onclick={() => {
 						mutate?.($currentMangaId) ??
 							Promise.reject(new Error("no results"))
@@ -120,5 +122,9 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 100%;
+	}
+	dialog::backdrop {
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
 	}
 </style>
