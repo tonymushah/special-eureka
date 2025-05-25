@@ -49,6 +49,7 @@
 		display: var(--button-display);
 		align-items: var(--button-align-items);
 		justify-content: var(--button-justify-content);
+		transform: translateY(-3px);
 	}
 	button:disabled {
 		background: linear-gradient(
@@ -86,7 +87,7 @@
 	}
 	button:active {
 		box-shadow: none;
-		transform: translateY(3px);
+		transform: translateY(0px);
 	}
 	button.with-active:active {
 		background-color: var(--button-active);
