@@ -164,6 +164,7 @@
 		border-radius: 9999px;
 		background-color: inherit;
 		border: none;
+		color: var(--text-color);
 	}
 	.close:hover {
 		background-color: var(--accent-l1-hover);
