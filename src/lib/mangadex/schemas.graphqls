@@ -1507,6 +1507,8 @@ type MangaMutations {
 	updateReadingStatusBatch(mangaIds: [UUID!]!, status: ReadingStatus): Boolean!
 	followBatch(mangaIds: [UUID!]!): Boolean!
 	unfollowBatch(mangaIds: [UUID!]!): Boolean!
+	addToListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
+	removeFromListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
 }
 
 type MangaObject {

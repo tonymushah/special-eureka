@@ -1884,6 +1884,7 @@ export enum MangaListStyle {
 
 export type MangaMutations = {
 	__typename?: "MangaMutations";
+	addToListBatch: Scalars["Boolean"]["output"];
 	cancelDownload: Scalars["Boolean"]["output"];
 	create: MangaObject;
 	createRelation: Array<MangaRelated>;
@@ -1894,11 +1895,17 @@ export type MangaMutations = {
 	follow: Scalars["Boolean"]["output"];
 	followBatch: Scalars["Boolean"]["output"];
 	remove: Scalars["Boolean"]["output"];
+	removeFromListBatch: Scalars["Boolean"]["output"];
 	submitDraft: MangaObject;
 	unfollow: Scalars["Boolean"]["output"];
 	unfollowBatch: Scalars["Boolean"]["output"];
 	updateReadingStatus: Scalars["Boolean"]["output"];
 	updateReadingStatusBatch: Scalars["Boolean"]["output"];
+};
+
+export type MangaMutationsAddToListBatchArgs = {
+	customLists: Array<Scalars["UUID"]["input"]>;
+	mangaId: Scalars["UUID"]["input"];
 };
 
 export type MangaMutationsCancelDownloadArgs = {
@@ -1941,6 +1948,11 @@ export type MangaMutationsFollowBatchArgs = {
 
 export type MangaMutationsRemoveArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type MangaMutationsRemoveFromListBatchArgs = {
+	customLists: Array<Scalars["UUID"]["input"]>;
+	mangaId: Scalars["UUID"]["input"];
 };
 
 export type MangaMutationsSubmitDraftArgs = {

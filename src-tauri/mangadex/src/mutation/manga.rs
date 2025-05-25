@@ -15,9 +15,12 @@ use eureka_mmanager::{
     download::manga::MangaDownloadMessage,
     prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetMangaDownloadManager, TaskManagerAddr},
 };
-use mangadex_api_input_types::manga::{
-    create::CreateMangaParam, create_relation::MangaCreateRelationParam, list::MangaListParams,
-    submit_draft::SubmitMangaDraftParams, update::UpdateMangaParam,
+use mangadex_api_input_types::{
+    custom_list::{add_manga::CustomListAddMangaParam, remove_manga::CustomListRemoveMangaParam},
+    manga::{
+        create::CreateMangaParam, create_relation::MangaCreateRelationParam, list::MangaListParams,
+        submit_draft::SubmitMangaDraftParams, update::UpdateMangaParam,
+    },
 };
 use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::MangaAttributes};
 use mangadex_api_types_rust::{MangaRelation, ReadingStatus, RelationshipType};
@@ -36,6 +39,8 @@ use crate::{
         watch::{SendData, is_following::inner::IsFollowingInnerData},
     },
 };
+
+use super::custom_list::CustomListMutations;
 
 #[derive(Debug, Clone, Copy)]
 pub struct MangaMutations;
@@ -258,6 +263,46 @@ impl MangaMutations {
     pub async fn unfollow_batch(&self, ctx: &Context<'_>, manga_ids: Vec<Uuid>) -> Result<bool> {
         for manga_id in manga_ids {
             self.unfollow(ctx, manga_id).await?;
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+        Ok(true)
+    }
+    pub async fn add_to_list_batch(
+        &self,
+        ctx: &Context<'_>,
+        manga_id: Uuid,
+        custom_lists: Vec<Uuid>,
+    ) -> Result<bool> {
+        for custom_list in custom_lists {
+            CustomListMutations
+                .add_manga(
+                    ctx,
+                    CustomListAddMangaParam {
+                        manga_id,
+                        list_id: custom_list,
+                    },
+                )
+                .await?;
+            tokio::time::sleep(Duration::from_millis(100)).await;
+        }
+        Ok(true)
+    }
+    pub async fn remove_from_list_batch(
+        &self,
+        ctx: &Context<'_>,
+        manga_id: Uuid,
+        custom_lists: Vec<Uuid>,
+    ) -> Result<bool> {
+        for custom_list in custom_lists {
+            CustomListMutations
+                .remove_manga(
+                    ctx,
+                    CustomListRemoveMangaParam {
+                        manga_id,
+                        list_id: custom_list,
+                    },
+                )
+                .await?;
             tokio::time::sleep(Duration::from_millis(100)).await;
         }
         Ok(true)
