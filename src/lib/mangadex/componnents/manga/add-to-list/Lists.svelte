@@ -125,57 +125,59 @@
 	});
 </script>
 
-<div class="lists">
-	{#if $query.data}
-		{#each $query.data.pages as pages}
-			{#each pages.data as customList (customList.id)}
-				{@const isSelected = customList.titles.includes(mangaId)}
-				<div>
-					<CustomListCheckbox
-						name={customList.name}
-						defaultChecked={isSelected}
-						onChange={(value) => {
-							switch (value) {
-								case true:
-									if (!isSelected) {
-										selectedListMap.set(customList.id, ActionMode.Add);
-									}
-									break;
+<div class="list-w-make">
+	<div class="lists">
+		{#if $query.data}
+			{#each $query.data.pages as pages}
+				{#each pages.data as customList (customList.id)}
+					{@const isSelected = customList.titles.includes(mangaId)}
+					<div>
+						<CustomListCheckbox
+							name={customList.name}
+							defaultChecked={isSelected}
+							onChange={(value) => {
+								switch (value) {
+									case true:
+										if (!isSelected) {
+											selectedListMap.set(customList.id, ActionMode.Add);
+										}
+										break;
 
-								case false:
-									if (isSelected) {
-										selectedListMap.set(customList.id, ActionMode.Remove);
-									} else {
-										selectedListMap.delete(customList.id);
-									}
-									break;
+									case false:
+										if (isSelected) {
+											selectedListMap.set(customList.id, ActionMode.Remove);
+										} else {
+											selectedListMap.delete(customList.id);
+										}
+										break;
 
-								default:
-									break;
-							}
-						}}
-					/>
-				</div>
+									default:
+										break;
+								}
+							}}
+						/>
+					</div>
+				{/each}
 			{/each}
-		{/each}
-	{/if}
-	<div class="observer-trigger" bind:this={to_obserce_bind}>
-		{#if $isFetching}
-			<Fetching />
-		{:else if $hasNext}
-			<HasNext />
-		{:else}
-			<NothingToShow />
 		{/if}
+		<div class="observer-trigger" bind:this={to_obserce_bind}>
+			{#if $isFetching}
+				<Fetching />
+			{:else if $hasNext}
+				<HasNext />
+			{:else}
+				<NothingToShow />
+			{/if}
+		</div>
 	</div>
-</div>
 
-<MakeANewList
-	{mangaId}
-	onMakeSuccess={() => {
-		$query.refetch();
-	}}
-/>
+	<MakeANewList
+		{mangaId}
+		onMakeSuccess={() => {
+			$query.refetch();
+		}}
+	/>
+</div>
 
 <style lang="scss">
 	.lists {
@@ -183,5 +185,12 @@
 		gap: 4px;
 		max-height: 100%;
 		overflow-y: scroll;
+	}
+	.list-w-make {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
 	}
 </style>

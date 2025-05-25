@@ -122,6 +122,7 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 100%;
+		gap: 12px;
 	}
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
