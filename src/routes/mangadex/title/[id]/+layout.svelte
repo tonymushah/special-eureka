@@ -29,5 +29,7 @@
 {#if hasConflict && !ingnoreConflict}
 	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
 {:else}
-	<NoConflictLayout {data} {children} />
+	<NoConflictLayout {data}>
+		{@render children?.()}
+	</NoConflictLayout>
 {/if}
