@@ -39,7 +39,8 @@
 					} else {
 						return "unknow error :3";
 					}
-				})()
+				})(),
+				variant: "danger"
 			}
 		});
 	}
