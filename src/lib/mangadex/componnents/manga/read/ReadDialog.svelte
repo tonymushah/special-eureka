@@ -1,19 +1,18 @@
 <script lang="ts" module>
-	import type { Chapter } from "@mangadex/componnents/chapter/feed";
-	import ChapterFeedElement1 from "@mangadex/componnents/chapter/feed/element1/ChapterFeedElement1.svelte";
-	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
-	import { debounce } from "lodash";
-	import { derived as der, writable } from "svelte/store";
-	import chapterStores from "../page/chapters/aggreate/utils/chapterStores";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import getMangaToReadChapter from "./getMangaToReadChapter";
-	import { fetchComments } from "../page/chapters/aggreate/utils";
-	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
-	import { openUrl } from "@tauri-apps/plugin-opener";
+	import type { Chapter } from "@mangadex/componnents/chapter/feed";
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
+	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
+	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { debounce } from "lodash";
+	import { derived as der, writable } from "svelte/store";
+	import { fetchComments } from "../page/chapters/aggreate/utils";
+	import chapterStores from "../page/chapters/aggreate/utils/chapterStores";
+	import getMangaToReadChapter from "./getMangaToReadChapter";
 
 	const currentMangaId = writable<string | null>(null);
 	export const readManga = debounce(function (id: string) {
