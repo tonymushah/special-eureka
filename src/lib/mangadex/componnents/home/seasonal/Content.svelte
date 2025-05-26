@@ -99,5 +99,6 @@
 	}
 	swiper-slide {
 		padding-bottom: 10px;
+		padding-top: 3px;
 	}
 </style>
