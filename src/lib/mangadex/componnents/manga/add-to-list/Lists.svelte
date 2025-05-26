@@ -61,8 +61,8 @@
 	);
 
 	let selectedListMap = $state(new Map<string, ActionMode>());
-	$effect(() => {
-		mutate = debounce(async (manga_id: string) => {
+	$effect.pre(() => {
+		mutate = async (manga_id: string) => {
 			isMutating = true;
 			try {
 				const addTo = Array.from(
@@ -90,7 +90,7 @@
 			} finally {
 				isMutating = false;
 			}
-		});
+		};
 	});
 	const hasNext = der(query, ($query) => $query.hasNextPage);
 	const isFetching = der(query, ($query) => $query.isLoading);
@@ -183,14 +183,10 @@
 	.lists {
 		display: grid;
 		gap: 4px;
-		max-height: 100%;
 		overflow-y: scroll;
+		padding: 0px 12px;
 	}
 	.list-w-make {
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
+		display: contents;
 	}
 </style>

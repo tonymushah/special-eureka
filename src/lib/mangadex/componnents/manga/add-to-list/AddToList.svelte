@@ -1,9 +1,10 @@
 <script lang="ts" module>
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
-	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { readonly, writable } from "svelte/store";
 	import Lists from "./Lists.svelte";
+	import { add } from "lodash";
 
 	const currentMangaId = writable<string | null>(null);
 
@@ -35,6 +36,7 @@
 <dialog bind:this={dialog}>
 	<div class="content">
 		<h3>Add to list</h3>
+
 		{#if $currentMangaId}
 			<Lists mangaId={$currentMangaId} bind:mutate bind:isMutating={$isMutating_} />
 		{/if}
@@ -44,44 +46,22 @@
 					label={"Add to list"}
 					disabled={$isMutating_}
 					onclick={() => {
-						mutate?.($currentMangaId) ??
-							Promise.reject(new Error("no results"))
-								.then(() => {
-									addToast({
-										data: {
-											title: "Title Added to List(s) succefully",
-											variant: "green"
-										}
-									});
-								})
-								.catch((e) => {
-									const title = "Error on adding title to list(s)";
-									if (e instanceof Error) {
-										addToast({
-											data: {
-												title,
-												description: e.message
-											}
-										});
-									} else if (typeof e == "string") {
-										addToast({
-											data: {
-												title,
-												description: e
-											}
-										});
-									} else {
-										addToast({
-											data: {
-												title,
-												description: "Unknown"
-											}
-										});
+						mutate?.($currentMangaId)
+							?.then(() => {
+								addToast({
+									data: {
+										title: "Title Added/Removed to List(s) succefully",
+										variant: "green"
 									}
-								})
-								.finally(() => {
-									closeDialog();
 								});
+							})
+							.catch((e) => {
+								const title = "Error on adding title to list(s)";
+								addErrorToast(title, e);
+							})
+							.finally(() => {
+								closeDialog();
+							});
 					}}
 				/>
 			{/if}
@@ -99,6 +79,7 @@
 <style lang="scss">
 	h3 {
 		margin: 0px;
+		text-align: center;
 	}
 	dialog {
 		background-color: var(--main-background);
@@ -117,12 +98,11 @@
 		gap: 8px;
 	}
 	.content {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: center;
-		height: 100%;
+		display: grid;
 		gap: 12px;
+		width: 100%;
+		grid-template-rows: 1fr auto 1f 1fr;
+		height: -webkit-fill-available;
 	}
 	dialog::backdrop {
 		backdrop-filter: blur(10px);
