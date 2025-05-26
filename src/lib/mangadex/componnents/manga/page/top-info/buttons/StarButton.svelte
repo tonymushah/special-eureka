@@ -13,9 +13,11 @@
 	interface Events {
 		onselect?: (ev: number) => any;
 	}
-	interface Props extends Events {}
+	interface Props extends Events {
+		disabled?: boolean;
+	}
 
-	let { onselect }: Props = $props();
+	let { onselect, disabled }: Props = $props();
 
 	let rating = $derived($ratingStore);
 
@@ -26,11 +28,11 @@
 
 <div class="star-button" bind:this={target}>
 	{#if rating == undefined}
-		<ButtonAccent isBase onclick={toggle}>
+		<ButtonAccent isBase onclick={toggle} {disabled}>
 			<StarIcon />
 		</ButtonAccent>
 	{:else}
-		<PrimaryButton isBase onclick={toggle}>
+		<PrimaryButton isBase onclick={toggle} {disabled}>
 			<div class="inner-button">
 				<StarIcon />
 				<span>{rating}</span>
@@ -45,6 +47,7 @@
 	onSelect={(detail) => {
 		onselect?.(detail.value);
 	}}
+	fitContent
 	bind:target
 	bind:isOpen
 	items={Array.from({ length: 10 }, (_, i) => i + 1)

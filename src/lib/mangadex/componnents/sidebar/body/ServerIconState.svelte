@@ -5,49 +5,33 @@
 	import { getContextClient } from "@urql/svelte";
 	import { onDestroy } from "svelte";
 	import { ServerIcon } from "svelte-feather-icons";
-	import Toast from "toastify-js";
 	import { isSidebarRtl } from "../states/isRtl";
+	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	const client = getContextClient();
 	const theme = getMangaDexThemeContext();
-	let toast = $derived(
-		Toast({
-			position: $isSidebarRtl ? "left" : "right",
-			gravity: "bottom",
-			style: {
-				fontFamily: "Poppins"
-			},
 
-			close: true
-		})
-	);
-	onDestroy(() => {
-		try {
-			toast.hideToast();
-		} catch (e) {
-			console.error(e);
-		}
-	});
 	let isLoading = $state(false);
 	const mount = async () => {
 		if (!isLoading) {
 			isLoading = true;
 			const res = await _mount(client);
 			const error = res.error;
-			try {
-				toast.hideToast();
-			} catch (e) {
-				console.warn(e);
-			}
 			if (error) {
-				error.graphQLErrors.forEach((e) => console.error(e));
-				toast.options.text = "Error on loading offline data";
-				if (toast.options.style) toast.options.style.background = $theme.danger.default;
-				toast.showToast();
+				addToast({
+					data: {
+						title: "Error on loading offline data",
+						description: error.message,
+						variant: "danger"
+					}
+				});
 			} else {
-				toast.options.text = "Offline data loaded";
-				if (toast.options.style) toast.options.style.background = $theme.status.green;
-				toast.showToast();
+				addToast({
+					data: {
+						title: "Offline data loaded",
+						variant: "green"
+					}
+				});
 			}
 
 			isLoading = false;
@@ -59,14 +43,20 @@
 			const res = await _unmount(client);
 			const error = res.error;
 			if (error) {
-				error.graphQLErrors.forEach((e) => console.error(e));
-				toast.options.text = "Error on unmounting offline data";
-				if (toast.options.style) toast.options.style.background = $theme.danger.default;
-				toast.showToast();
+				addToast({
+					data: {
+						title: "Error on unmounting offline data",
+						description: error.message,
+						variant: "danger"
+					}
+				});
 			} else {
-				toast.options.text = "Offline data unmounted";
-				if (toast.options.style) toast.options.style.background = $theme.status.green;
-				toast.showToast();
+				addToast({
+					data: {
+						title: "Offline data unmounted",
+						variant: "green"
+					}
+				});
 			}
 			isLoading = false;
 		}

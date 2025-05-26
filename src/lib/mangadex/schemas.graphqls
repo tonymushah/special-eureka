@@ -227,7 +227,6 @@ input BeginUploadSessionParam {
 	mangaId: UUID!
 }
 
-
 type ButtonAccentColor {
 	default: String!
 	alternate: String!
@@ -829,6 +828,8 @@ type CustomListMutations {
 	unfollow(id: UUID!): Boolean!
 	addManga(params: CustomListAddMangaParam!): Boolean!
 	removeManga(params: CustomListRemoveMangaParam!): Boolean!
+	addMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
+	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 }
 
 type CustomListQueries {
@@ -987,7 +988,6 @@ type FeedQueries {
 	customListFeedGrouped(feedParams: CustomListMangaFeedParams!, mangaListParams: MangaListParams, private: Boolean): MangaChapterGroup!
 }
 
-
 input FollowedMangaFeedParams {
 	limit: Int
 	offset: Int
@@ -1105,7 +1105,6 @@ type HomeQueries {
 	popularTitles(params: MangaListParams): MangaResults!
 }
 
-
 enum ImageFit {
 	DEFAULT
 	WIDTH
@@ -1143,7 +1142,6 @@ input IndicatorColorInput {
 type InfrastructureQueries {
 	ping: Boolean!
 }
-
 
 """
 A scalar that can represent any JSON Object value.
@@ -1506,6 +1504,11 @@ type MangaMutations {
 	createRelation(params: MangaCreateRelationParam!, mangaListParams: MangaListParams): [MangaRelated!]!
 	deleteRelation(id: UUID!, targetManga: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
+	updateReadingStatusBatch(mangaIds: [UUID!]!, status: ReadingStatus): Boolean!
+	followBatch(mangaIds: [UUID!]!): Boolean!
+	unfollowBatch(mangaIds: [UUID!]!): Boolean!
+	addToListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
+	removeFromListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
 }
 
 type MangaObject {
@@ -1874,6 +1877,7 @@ type RatingQueries {
 
 type ReadMarkerMutations {
 	mangaReadMarkersBatch(params: MarkChapterBatchParam!): Boolean!
+	readMarkersBatch(chapterIdsRead: [UUID!]!, chapterIdsUnread: [UUID!]!, updateHistory: Boolean): Boolean!
 }
 
 type ReadMarkerQueries {
@@ -2161,7 +2165,6 @@ input StatusColorInput {
 	purple: String!
 }
 
-
 input SubmitMangaDraftParams {
 	mangaId: UUID!
 	version: Int!
@@ -2287,7 +2290,7 @@ entities without requiring a central allocating authority.
 # References
 
 * [Wikipedia: Universally Unique Identifier](http://en.wikipedia.org/wiki/Universally_unique_identifier)
-* [RFC4122: A Universally Unique IDentifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)
+* [RFC4122: A Universally Unique Identifier (UUID) URN Namespace](http://tools.ietf.org/html/rfc4122)
 """
 scalar UUID
 
@@ -2602,9 +2605,21 @@ type VolumeAggregate {
 	ids: [UUID!]!
 }
 
+"""
+Directs the executor to include this field or fragment only when the `if` argument is true.
+"""
 directive @include(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+"""
+Indicates that an Input Object is a OneOf Input Object (and thus requires exactly one of its field be provided)
+"""
 directive @oneOf on INPUT_OBJECT
+"""
+Directs the executor to skip this field or fragment when the `if` argument is true.
+"""
 directive @skip(if: Boolean!) on FIELD | FRAGMENT_SPREAD | INLINE_FRAGMENT
+"""
+Provides a scalar specification URL for specifying the behavior of custom scalar types.
+"""
 directive @specifiedBy(url: String!) on SCALAR
 schema {
 	query: Query

@@ -3,8 +3,8 @@ name = "tauri-plugin-speu-mangadex"
 version = "0.3.0"
 authors = ["You"]
 description = "The tauri plugin behind the Mangadex Part of special-eureka"
-edition = "2021"
-rust-version = "1.79"
+edition = "2024"
+rust-version = "1.86"
 exclude = ["/examples", "/webview-dist", "/webview-src", "node_modules"]
 links = "mangadex-desktop-api"
 

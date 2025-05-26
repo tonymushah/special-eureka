@@ -109,10 +109,8 @@ impl CustomListRelationships {
                             TagSearchMode::And => !attributes
                                 .tags
                                 .iter()
-                                .filter(|t| {
-                                    content_profile.excluded_tags.iter().any(|i| t.id == *i)
-                                })
-                                .all(|t| content_profile.excluded_tags.iter().any(|i| t.id == *i)),
+                                .filter(|t| content_profile.excluded_tags.contains(&t.id))
+                                .all(|t| content_profile.excluded_tags.contains(&t.id)),
                         }
                     } else {
                         true
@@ -168,10 +166,8 @@ impl CustomListRelationships {
                             TagSearchMode::And => attributes
                                 .tags
                                 .iter()
-                                .filter(|t| {
-                                    content_profile.included_tags.iter().any(|i| t.id == *i)
-                                })
-                                .all(|t| content_profile.included_tags.iter().any(|i| t.id == *i)),
+                                .filter(|t| content_profile.included_tags.contains(&t.id))
+                                .all(|t| content_profile.included_tags.contains(&t.id)),
                         }
                     } else {
                         true

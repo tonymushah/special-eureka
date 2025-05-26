@@ -1,5 +1,7 @@
 <script lang="ts">
-	const Layout = import("./MangaDexLayout.svelte").then((mod) => mod.default);
+	const Layout = import("@mangadex/componnents/layout/MangaDexLayout.svelte").then(
+		(mod) => mod.default
+	);
 	interface Props {
 		children?: import("svelte").Snippet;
 	}

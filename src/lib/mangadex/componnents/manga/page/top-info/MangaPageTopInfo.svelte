@@ -4,7 +4,7 @@
 	import { MangaDownloadState } from "@mangadex/download/manga";
 	import { ContentRating, type MangaStatus, type ReadingStatus } from "@mangadex/gql/graphql";
 	import type { Tag } from "@mangadex/utils/types/Tag";
-	import { readable, writable, type Readable } from "svelte/store";
+	import { readable, type Readable } from "svelte/store";
 	import type { ReadingStatusEventDetail } from "./buttons/readingStatus";
 	import {
 		setTopCoverAltContextStore,
@@ -61,6 +61,12 @@
 		stats?: TopMangaStatistics | undefined;
 		contentRating?: ContentRating;
 		closeDialogOnAdd?: boolean;
+		disableRead?: boolean;
+		disableAddToList?: boolean;
+		disableReport?: boolean;
+		disableUpload?: boolean;
+		disableAddToLibrary?: boolean;
+		disableRating?: boolean;
 	}
 
 	let {
@@ -73,9 +79,9 @@
 		tags = $bindable(),
 		status = $bindable(),
 		year = $bindable(undefined),
-		reading_status = writable<ReadingStatus | undefined>(undefined),
-		isFollowing = writable<boolean | undefined>(undefined),
-		rating = writable<number | undefined>(undefined),
+		reading_status = readable<ReadingStatus | undefined>(undefined),
+		isFollowing = readable<boolean | undefined>(undefined),
+		rating = readable<number | undefined>(undefined),
 		downloadState = readable(MangaDownloadState.Pending),
 		stats = $bindable(undefined),
 		contentRating = ContentRating.Safe,
@@ -90,7 +96,13 @@
 		onreadingStatus,
 		onreport,
 		ontag,
-		onupload
+		onupload,
+		disableAddToList,
+		disableRead,
+		disableReport,
+		disableUpload,
+		disableAddToLibrary,
+		disableRating
 	}: Props = $props();
 
 	setTopMangaIdContextStore(id);
@@ -129,6 +141,12 @@
 				{onreadingStatus}
 				{onreport}
 				{onupload}
+				{disableAddToList}
+				{disableRead}
+				{disableReport}
+				{disableUpload}
+				{disableAddToLibrary}
+				{disableRating}
 			/>
 			<div class="tag-status">
 				<TagComponnentsFlex

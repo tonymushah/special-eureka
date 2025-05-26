@@ -12,7 +12,7 @@ const customListPageQuery = graphql(`
 				relationships {
 					titlesIds
 					user {
-						id 
+						id
 						attributes {
 							username
 							roles
@@ -24,4 +24,4 @@ const customListPageQuery = graphql(`
 	}
 `);
 
-export default customListPageQuery
+export default customListPageQuery;

@@ -10,6 +10,7 @@
 	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
 	import DownloadStateIcon from "./(icons)/DownloadStateIcon.svelte";
 	import GeneralSettingsIcon from "./(icons)/GeneralSettingsIcon.svelte";
+	import { dev } from "$app/environment";
 
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
@@ -47,14 +48,16 @@
 			description: "Check any download status",
 			href: route("/mangadex/settings/download-state"),
 			icon: DownloadStateIcon
-		},
-		{
+		}
+	];
+	if (dev) {
+		settings.push({
 			title: "Dev Playground",
 			description: "Design tests etc...",
 			href: route("/mangadex/settings/css-playground"),
 			icon: PlaygroundIcon
-		}
-	];
+		});
+	}
 </script>
 
 <Title type={1}>Settings</Title>

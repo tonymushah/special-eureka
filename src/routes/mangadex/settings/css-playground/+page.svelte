@@ -1,8 +1,12 @@
 <script lang="ts">
+	import CustomListCheckbox from "@mangadex/componnents/manga/add-to-list/CustomListCheckbox.svelte";
+	import MakeANewList from "@mangadex/componnents/manga/add-to-list/MakeANewList.svelte";
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
+	import ToastForStories from "@mangadex/componnents/theme/toast/ToastForStories.svelte";
 	import { melt } from "@melt-ui/svelte";
 	import { cubicInOut } from "svelte/easing";
 	import { crossfade, fade, slide } from "svelte/transition";
+	import { v4 } from "uuid";
 	const triggers = [
 		{
 			id: "tab-1",
@@ -33,6 +37,11 @@
 						}}
 					>
 						<h3>Mangas lol</h3>
+						<ToastForStories
+							title="Something"
+							description="sadadasd"
+							color="var(--danger)"
+						/>
 					</div>
 				{/if}
 				{#if content == "tab-2"}
@@ -44,6 +53,10 @@
 						}}
 					>
 						<h3>Covers lol</h3>
+						<CustomListCheckbox name="Something" onChange={(e) => console.debug(e)} />
+						<div class="make">
+							<MakeANewList mangaId={v4()} />
+						</div>
 					</div>
 				{/if}
 				{#if content == "tab-3"}
@@ -61,3 +74,9 @@
 		</MangaDexTabs>
 	</div>
 </section>
+
+<style lang="scss">
+	.make {
+		margin: 10px 0px;
+	}
+</style>

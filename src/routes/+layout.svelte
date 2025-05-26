@@ -1,3 +1,9 @@
+<script lang="ts" module>
+	const _decoHg = writable(0);
+
+	export const decoHStore = readonly(_decoHg);
+</script>
+
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import WindowDecoration from "$lib/window-decoration/WindowDecoration.svelte";
@@ -5,9 +11,10 @@
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	import { onDestroy, onMount } from "svelte";
+	import { readonly, writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { register } from "swiper/element/bundle";
-	import "toastify-js/src/toastify.css";
+
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
@@ -27,7 +34,13 @@
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	let decoHg = $derived(decorationHeigth ?? 0);
+	let decoHg = $derived.by(() => {
+		const decoH = decorationHeigth ?? 0;
+		return decoH;
+	});
+	$effect(() => {
+		_decoHg.set(decoHg);
+	});
 </script>
 
 <div

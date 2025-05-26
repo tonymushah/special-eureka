@@ -8,6 +8,7 @@
 	import type { ReadingStatusEventDetail } from "./readingStatus";
 	import Dialog from "./readingStatus/Dialog.svelte";
 	import IsFollowingIcon from "./readingStatus/IsFollowingIcon.svelte";
+	import Added from "./readingStatus/Added.svelte";
 
 	const readingStatus = getTopMangaReadingStatusContextStore();
 	const isFollowingStore = getTopMangaIsFollowingContextStore();
@@ -16,9 +17,10 @@
 	}
 	interface Props extends Events {
 		closeDialogOnAdd?: boolean;
+		disabled?: boolean;
 	}
 
-	let { onreadingStatus, closeDialogOnAdd }: Props = $props();
+	let { onreadingStatus, closeDialogOnAdd, disabled }: Props = $props();
 
 	let dialog: HTMLDialogElement | undefined = $state(undefined);
 	function openDialog() {
@@ -26,9 +28,10 @@
 			dialog.showModal();
 		}
 	}
-
-	let readingStatusText = $derived(getText($readingStatus) ?? "Add to Library");
 	let isFollowing = $derived($isFollowingStore);
+	let readingStatusText = $derived(
+		getText($readingStatus) ?? (isFollowing ? "Followed" : "Add to Library")
+	);
 </script>
 
 <PrimaryButton
@@ -36,10 +39,13 @@
 	onclick={() => {
 		openDialog();
 	}}
+	{disabled}
 >
 	<div class="primary-button">
 		{#if isFollowing}
 			<IsFollowingIcon />
+		{:else if $readingStatus}
+			<Added />
 		{/if}
 		{readingStatusText}
 	</div>

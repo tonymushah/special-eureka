@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-	"\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CustomlistPageQueryDocument;
+	"\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CustomlistPageQueryDocument;
 	"\n\tquery isChapterDownloaded($id: UUID!) {\n\t\tchapter {\n\t\t\tisDownloaded(id: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": typeof types.IsChapterDownloadedDocument;
 	"\n\tsubscription watchChapterDownloadState($id: UUID!) {\n\t\twatchDownloadState(objectId: $id) {\n\t\t\thasFailed\n\t\t\tisDownloaded\n\t\t}\n\t}\n": typeof types.WatchChapterDownloadStateDocument;
 	"\n\tquery recentlyAddedHome {\n\t\thome {\n\t\t\trecentlyUploaded {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tpages\n\t\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\t\treadableAt\n\t\t\t\t\t\tchapter\n\t\t\t\t\t\tvolume\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tmanga {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RecentlyAddedHomeDocument;
@@ -22,6 +22,9 @@ type Documents = {
 	"\n\tquery recentlyAddedHomeQuery {\n\t\thome {\n\t\t\trecentlyAdded(params: { limit: 15 }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RecentlyAddedHomeQueryDocument;
 	"\n\tquery seasonal {\n\t\thome {\n\t\t\tseasonal {\n\t\t\t\tid\n\t\t\t\trelationships {\n\t\t\t\t\ttitles {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\taltTitles\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SeasonalDocument;
 	"\n\tquery staffPicks {\n\t\thome {\n\t\t\tstaffPicks {\n\t\t\t\tid\n\t\t\t\trelationships {\n\t\t\t\t\ttitles {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\taltTitles\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tavailableTranslatedLanguages\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.StaffPicksDocument;
+	"\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetUserLoggedCustomListsDocument;
+	"\n\tmutation addOrRemoveTitleToCustomList(\n\t\t$manga_id: UUID!\n\t\t$addTo: [UUID!]!\n\t\t$removeFrom: [UUID!]!\n\t) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n": typeof types.AddOrRemoveTitleToCustomListDocument;
+	"\n\tmutation createCustomList($mangaId: UUID!, $visibility: CustomListVisibility!, $name: String!) {\n\t\tcustomList {\n\t\t\tcreate(params: { manga: [$mangaId], visibility: $visibility, name: $name }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CreateCustomListDocument;
 	"\n\tmutation mangaListMutation($style: MangaListStyle!) {\n\t\tuserOption {\n\t\t\tsetMangaListStyle(mangaListStyle: $style)\n\t\t}\n\t}\n": typeof types.MangaListMutationDocument;
 	"\n\tsubscription mangaListStyleSub {\n\t\twatchMangaListStyle\n\t}\n": typeof types.MangaListStyleSubDocument;
 	"\n\tquery mangaAggregate($id: UUID!, $size: Int = 3) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tchunked(chunkSize: $size, isReversed: true) {\n\t\t\t\t\tids\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tcount\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MangaAggregateDocument;
@@ -29,6 +32,7 @@ type Documents = {
 	"\n\tquery chapterAggregateComments($ids: [UUID!]!) {\n\t\tstatistics {\n\t\t\tchapter {\n\t\t\t\tlist(ids: $ids) {\n\t\t\t\t\tid\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterAggregateCommentsDocument;
 	"\n\tquery getMangaCovers($id: UUID!, $offset: Int = 0, $limit: Int = 10) {\n\t\tcover {\n\t\t\tlist(\n\t\t\t\tparams: {\n\t\t\t\t\tmangaIds: [$id]\n\t\t\t\t\toffset: $offset\n\t\t\t\t\tlimit: $limit\n\t\t\t\t\torder: { volume: ASCENDING }\n\t\t\t\t}\n\t\t\t) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tfileName\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tlocale\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\ttotal\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetMangaCoversDocument;
 	"\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetRelatedTitlesDataDocument;
+	"\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetMangatoReadAggregateDocument;
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorSearchFetcherDocument;
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserMeOnSidebarFooterDocument;
 	"\n\tmutation setSidebarDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetSidebarDirection(direction: $direction)\n\t\t}\n\t}\n": typeof types.SetSidebarDirectionDocument;
@@ -68,6 +72,17 @@ type Documents = {
 	"\n\tsubscription currentClientInfo {\n\t\twatchClientInfo {\n\t\t\tclientSecret\n\t\t\tclientId\n\t\t}\n\t}\n": typeof types.CurrentClientInfoDocument;
 	"\n\tmutation setAuthClient($clientId: String!, $clientSecret: String!) {\n\t\toauth {\n\t\t\tsetClientInfo(clientId: $clientId, clientSecret: $clientSecret)\n\t\t}\n\t}\n": typeof types.SetAuthClientDocument;
 	"\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n": typeof types.ResetAuthClientDocument;
+	"\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n": typeof types.MangaFollowingStatusSubscriptionDocument;
+	"\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n": typeof types.MangaFollowingStatusQueryDocument;
+	"\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowMangaMutationDocument;
+	"\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n": typeof types.UnfollowMangaMutationDocument;
+	"\n\tsubscription mangaRatingSubscription($id: UUID!) {\n\t\twatchRating(mangaId: $id) {\n\t\t\trating\n\t\t}\n\t}\n": typeof types.MangaRatingSubscriptionDocument;
+	"\n\tquery getMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tlists(mangaIds: [$id]) {\n\t\t\t\trating\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetMangaRatingDocument;
+	"\n\tmutation updateMangaRating($id: UUID!, $rating: Int!) {\n\t\trating {\n\t\t\tcreateUpdate(params: { mangaId: $id, rating: $rating })\n\t\t}\n\t}\n": typeof types.UpdateMangaRatingDocument;
+	"\n\tmutation deleteMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tdelete(id: $id)\n\t\t}\n\t}\n": typeof types.DeleteMangaRatingDocument;
+	"\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id)\n\t}\n": typeof types.MangaReadingStatusSubscriptionDocument;
+	"\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n": typeof types.MangaReadingStatusQueryDocument;
+	"\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n": typeof types.MangaReadingStatusMutationDocument;
 	"\n\tquery offlineConfig {\n\t\tuserOption {\n\t\t\tgetOfflineConfig {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n": typeof types.OfflineConfigDocument;
 	"\n\tmutation updateOfflineConfig($cfg: OfflineConfigInput!) {\n\t\tuserOption {\n\t\t\tsetOfflineConfig(cfg: $cfg) {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateOfflineConfigDocument;
 	"\n\tsubscription serverIconState {\n\t\twatchIsAppMounted\n\t}\n": typeof types.ServerIconStateDocument;
@@ -126,7 +141,7 @@ type Documents = {
 	"\n\tquery userUploadsFeed(\n\t\t$user: UUID!\n\t\t$translatedLanguages: [Language!]! = []\n\t\t$offset: Int\n\t\t$limit: Int\n\t\t$order: ChapterSortOrder! = { publishAt: DESCENDING }\n\t\t$mangaListParams: MangaListParams = {}\n\t) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(\n\t\t\t\tchapterListParams: {\n\t\t\t\t\toffset: $offset\n\t\t\t\t\tlimit: $limit\n\t\t\t\t\ttranslatedLanguages: $translatedLanguages\n\t\t\t\t\tuploaders: [$user]\n\t\t\t\t\torder: $order\n\t\t\t\t}\n\t\t\t\tmangaListParams: $mangaListParams\n\t\t\t) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\tlastVolume\n\t\t\t\t\t\t\tlastChapter\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\t\t\texternalUrl\n\t\t\t\t\t\t\tcreatedAt\n\t\t\t\t\t\t\treadableAt\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tuser {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserUploadsFeedDocument;
 };
 const documents: Documents = {
-	"\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.CustomlistPageQueryDocument,
 	"\n\tquery isChapterDownloaded($id: UUID!) {\n\t\tchapter {\n\t\t\tisDownloaded(id: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n":
 		types.IsChapterDownloadedDocument,
@@ -142,6 +157,12 @@ const documents: Documents = {
 		types.SeasonalDocument,
 	"\n\tquery staffPicks {\n\t\thome {\n\t\t\tstaffPicks {\n\t\t\t\tid\n\t\t\t\trelationships {\n\t\t\t\t\ttitles {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\taltTitles\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tavailableTranslatedLanguages\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.StaffPicksDocument,
+	"\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetUserLoggedCustomListsDocument,
+	"\n\tmutation addOrRemoveTitleToCustomList(\n\t\t$manga_id: UUID!\n\t\t$addTo: [UUID!]!\n\t\t$removeFrom: [UUID!]!\n\t) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n":
+		types.AddOrRemoveTitleToCustomListDocument,
+	"\n\tmutation createCustomList($mangaId: UUID!, $visibility: CustomListVisibility!, $name: String!) {\n\t\tcustomList {\n\t\t\tcreate(params: { manga: [$mangaId], visibility: $visibility, name: $name }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n":
+		types.CreateCustomListDocument,
 	"\n\tmutation mangaListMutation($style: MangaListStyle!) {\n\t\tuserOption {\n\t\t\tsetMangaListStyle(mangaListStyle: $style)\n\t\t}\n\t}\n":
 		types.MangaListMutationDocument,
 	"\n\tsubscription mangaListStyleSub {\n\t\twatchMangaListStyle\n\t}\n":
@@ -156,6 +177,8 @@ const documents: Documents = {
 		types.GetMangaCoversDocument,
 	"\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetRelatedTitlesDataDocument,
+	"\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetMangatoReadAggregateDocument,
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.AuthorSearchFetcherDocument,
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -233,6 +256,28 @@ const documents: Documents = {
 		types.SetAuthClientDocument,
 	"\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n":
 		types.ResetAuthClientDocument,
+	"\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n":
+		types.MangaFollowingStatusSubscriptionDocument,
+	"\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n":
+		types.MangaFollowingStatusQueryDocument,
+	"\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n":
+		types.FollowMangaMutationDocument,
+	"\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n":
+		types.UnfollowMangaMutationDocument,
+	"\n\tsubscription mangaRatingSubscription($id: UUID!) {\n\t\twatchRating(mangaId: $id) {\n\t\t\trating\n\t\t}\n\t}\n":
+		types.MangaRatingSubscriptionDocument,
+	"\n\tquery getMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tlists(mangaIds: [$id]) {\n\t\t\t\trating\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetMangaRatingDocument,
+	"\n\tmutation updateMangaRating($id: UUID!, $rating: Int!) {\n\t\trating {\n\t\t\tcreateUpdate(params: { mangaId: $id, rating: $rating })\n\t\t}\n\t}\n":
+		types.UpdateMangaRatingDocument,
+	"\n\tmutation deleteMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tdelete(id: $id)\n\t\t}\n\t}\n":
+		types.DeleteMangaRatingDocument,
+	"\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id)\n\t}\n":
+		types.MangaReadingStatusSubscriptionDocument,
+	"\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n":
+		types.MangaReadingStatusQueryDocument,
+	"\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n":
+		types.MangaReadingStatusMutationDocument,
 	"\n\tquery offlineConfig {\n\t\tuserOption {\n\t\t\tgetOfflineConfig {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n":
 		types.OfflineConfigDocument,
 	"\n\tmutation updateOfflineConfig($cfg: OfflineConfigInput!) {\n\t\tuserOption {\n\t\t\tsetOfflineConfig(cfg: $cfg) {\n\t\t\t\tdataDir\n\t\t\t\tmangasDir\n\t\t\t\tcoversDir\n\t\t\t\tchaptersDir\n\t\t\t}\n\t\t}\n\t}\n":
@@ -365,8 +410,8 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid \n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery customlistPageQuery($id: UUID!, $private: Boolean) {\n\t\tcustomList {\n\t\t\tget(id: $id, private: $private) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tname\n\t\t\t\t\tvisibility\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\ttitlesIds\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -413,6 +458,24 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+	source: "\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getUserLoggedCustomLists($offset: Int, $limit: Int) {\n\t\tcustomList {\n\t\t\tcurrentLoggedLists(params: { limit: $limit, offset: $offset }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t\tvisibility\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\ttitlesIds\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation addOrRemoveTitleToCustomList(\n\t\t$manga_id: UUID!\n\t\t$addTo: [UUID!]!\n\t\t$removeFrom: [UUID!]!\n\t) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation addOrRemoveTitleToCustomList(\n\t\t$manga_id: UUID!\n\t\t$addTo: [UUID!]!\n\t\t$removeFrom: [UUID!]!\n\t) {\n\t\tmanga {\n\t\t\taddToListBatch(customLists: $addTo, mangaId: $manga_id)\n\t\t\tremoveFromListBatch(customLists: $removeFrom, mangaId: $manga_id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation createCustomList($mangaId: UUID!, $visibility: CustomListVisibility!, $name: String!) {\n\t\tcustomList {\n\t\t\tcreate(params: { manga: [$mangaId], visibility: $visibility, name: $name }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation createCustomList($mangaId: UUID!, $visibility: CustomListVisibility!, $name: String!) {\n\t\tcustomList {\n\t\t\tcreate(params: { manga: [$mangaId], visibility: $visibility, name: $name }) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
 	source: "\n\tmutation mangaListMutation($style: MangaListStyle!) {\n\t\tuserOption {\n\t\t\tsetMangaListStyle(mangaListStyle: $style)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation mangaListMutation($style: MangaListStyle!) {\n\t\tuserOption {\n\t\t\tsetMangaListStyle(mangaListStyle: $style)\n\t\t}\n\t}\n"];
 /**
@@ -451,6 +514,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery getRelatedTitlesData($ids: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: { mangaIds: $ids }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -685,6 +754,72 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation resetAuthClient {\n\t\toauth {\n\t\t\tclearClientInfo\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n"
+): (typeof documents)["\n\tsubscription mangaFollowingStatusSubscription($id: UUID!) {\n\t\twatchIsFollowingManga(mangaId: $id)\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangaFollowingStatusQuery($id: UUID!) {\n\t\tfollows {\n\t\t\tisFollowingManga(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation followMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unfollowMangaMutation($id: UUID!) {\n\t\tmanga {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription mangaRatingSubscription($id: UUID!) {\n\t\twatchRating(mangaId: $id) {\n\t\t\trating\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription mangaRatingSubscription($id: UUID!) {\n\t\twatchRating(mangaId: $id) {\n\t\t\trating\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tlists(mangaIds: [$id]) {\n\t\t\t\trating\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tlists(mangaIds: [$id]) {\n\t\t\t\trating\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation updateMangaRating($id: UUID!, $rating: Int!) {\n\t\trating {\n\t\t\tcreateUpdate(params: { mangaId: $id, rating: $rating })\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation updateMangaRating($id: UUID!, $rating: Int!) {\n\t\trating {\n\t\t\tcreateUpdate(params: { mangaId: $id, rating: $rating })\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation deleteMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tdelete(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation deleteMangaRating($id: UUID!) {\n\t\trating {\n\t\t\tdelete(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id)\n\t}\n"
+): (typeof documents)["\n\tsubscription mangaReadingStatusSubscription($id: UUID!) {\n\t\twatchMangaReadingState(mangaId: $id)\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangaReadingStatusQuery($id: UUID!) {\n\t\tmanga {\n\t\t\treadingStatus(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation mangaReadingStatusMutation($id: UUID!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatus(id: $id, status: $status)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

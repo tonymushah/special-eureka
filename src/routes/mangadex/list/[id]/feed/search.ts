@@ -25,7 +25,7 @@ type CustomListFeedChapterConstructorParams = {
 	offset: number;
 	limit: number;
 	total: number;
-	isPrivate: boolean
+	isPrivate: boolean;
 };
 
 export type ChapterFeedListItemExt = ChapterFeedListItem & {
@@ -39,7 +39,7 @@ export class CustomListFeedResult extends AbstractSearchResult<ChapterFeedListIt
 	offset: number;
 	limit: number;
 	total: number;
-	isPrivate: boolean
+	isPrivate: boolean;
 	constructor(param: CustomListFeedChapterConstructorParams) {
 		super(param.data);
 		this.client = param.client;

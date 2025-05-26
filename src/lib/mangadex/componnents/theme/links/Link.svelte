@@ -11,12 +11,13 @@
 		href: string;
 		ext_href?: string | undefined;
 		children?: import("svelte").Snippet;
+		onclick?: (e?: MouseEvent & { currentTarget: EventTarget & HTMLElement }) => any;
 	}
 	let unlistens: UnlistenFn[] = [];
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
 	});
-	let { variant = "primary", href, ext_href = undefined, children }: Props = $props();
+	let { variant = "primary", href, ext_href = undefined, children, onclick }: Props = $props();
 	let primary = $derived(variant == "primary");
 	let base = $derived(variant == "base");
 	let context = getContextMenuContext();
@@ -24,6 +25,7 @@
 
 <a
 	{href}
+	{onclick}
 	class:primary
 	class:base
 	oncontextmenu={async (e) => {
@@ -34,7 +36,11 @@
 				ContextMenuItemProvider.menuItem({
 					text: "Open",
 					action: () => {
-						goto(href);
+						if (onclick) {
+							onclick?.();
+						} else {
+							goto(href);
+						}
 					}
 				}),
 				ContextMenuItemProvider.menuItem({

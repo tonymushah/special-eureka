@@ -9,7 +9,7 @@ export type CurrentUserCustomListItemData = {
 	id: string;
 	name: string;
 	titles: number;
-	visibility: CustomListVisibility
+	visibility: CustomListVisibility;
 };
 
 type UserSearchResultConstructorParams = {

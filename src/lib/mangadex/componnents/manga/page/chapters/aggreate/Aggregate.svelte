@@ -1,23 +1,19 @@
 <script lang="ts">
-	import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
-	import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
 	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
-	import { onDestroy, onMount, type ComponentProps } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { derived as der, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
+	import { fetchChapters, fetchComments } from "./utils";
 	import { getChapterStoreContext } from "./utils/chapterStores";
-	import mangaAggregateQuery, {
-		chapterCommentsQuery,
-		getMangaAggregateChapterQuery
-	} from "./utils/query";
-	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import mangaAggregateQuery from "./utils/query";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -33,93 +29,7 @@
 	let threadUrls = $state(new Map<string, string>());
 	let unlistens: UnlistenFn[] = [];
 	const isFetching = query.isFetching;
-	function chapterTitle({
-		chapter,
-		title
-	}: {
-		chapter: string | null | undefined;
-		title: string | null | undefined;
-	}): string | undefined {
-		console.log(`${chapter} - ${title}`);
-		if (typeof chapter == "string" && typeof title == "string") {
-			if (title.length == 0 || title == null) {
-				return `Chap. ${chapter}`;
-			} else {
-				return `Chap. ${chapter} - ${title}`;
-			}
-		} else if (typeof chapter == "string") {
-			return `Chap. ${chapter}`;
-		} else if (typeof title == "string") {
-			return title;
-		} else {
-			return undefined;
-		}
-	}
-	async function fetchChapters(ids: string[]) {
-		const result = await client
-			.query(getMangaAggregateChapterQuery, {
-				ids
-			})
-			.toPromise();
-		if (result.error) {
-			throw result.error;
-		}
-		const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
-			(c) => {
-				const title = chapterTitle({
-					chapter: c.attributes.chapter,
-					title: c.attributes.title
-				});
-				const groups = c.relationships.scanlationGroups.map((group) => ({
-					id: group.id,
-					name: group.attributes.name
-				}));
-				const user = c.relationships.user;
-				const uploader = {
-					id: user.id,
-					roles: user.attributes.roles,
-					name: user.attributes.username
-				};
-				return {
-					id: c.id,
-					title,
-					lang: c.attributes.translatedLanguage,
-					uploader,
-					upload_date: new Date(c.attributes.readableAt),
-					download_state: getChapterDownloadState({
-						id: c.id,
-						client
-					}),
-					groups
-				};
-			}
-		);
-		return chapters;
-	}
-	async function fetchComments(ids: string[]) {
-		const res = await client
-			.query(chapterCommentsQuery, {
-				ids
-			})
-			.toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-		const ret: { id: string; stats: { threadUrl: string; comments: number } }[] = [];
-		res.data?.statistics.chapter.list.forEach((d) => {
-			const c = d.comments;
-			if (c != null || c != undefined) {
-				ret.push({
-					id: d.id,
-					stats: {
-						threadUrl: c.threadUrl,
-						comments: c.repliesCount
-					}
-				});
-			}
-		});
-		return ret;
-	}
+
 	const aggregate = der(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
 			chapter: MangaAggregateData;

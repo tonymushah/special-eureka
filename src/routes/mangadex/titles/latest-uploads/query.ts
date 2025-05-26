@@ -69,4 +69,4 @@ const latest_updates_query = graphql(/* GraphQL */ `
 	}
 `);
 
-export default latest_updates_query
+export default latest_updates_query;
