@@ -8,6 +8,7 @@
 	import type { ReadingStatusEventDetail } from "./readingStatus";
 	import Dialog from "./readingStatus/Dialog.svelte";
 	import IsFollowingIcon from "./readingStatus/IsFollowingIcon.svelte";
+	import Added from "./readingStatus/Added.svelte";
 
 	const readingStatus = getTopMangaReadingStatusContextStore();
 	const isFollowingStore = getTopMangaIsFollowingContextStore();
@@ -29,7 +30,7 @@
 	}
 	let isFollowing = $derived($isFollowingStore);
 	let readingStatusText = $derived(
-		(getText($readingStatus) ?? isFollowing) ? "Followed" : "Add to Library"
+		getText($readingStatus) ?? (isFollowing ? "Followed" : "Add to Library")
 	);
 </script>
 
@@ -43,6 +44,8 @@
 	<div class="primary-button">
 		{#if isFollowing}
 			<IsFollowingIcon />
+		{:else if $readingStatus}
+			<Added />
 		{/if}
 		{readingStatusText}
 	</div>
