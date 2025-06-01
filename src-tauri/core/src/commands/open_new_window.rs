@@ -28,9 +28,11 @@ pub fn open_new_window_sync<R: Runtime>(
         webview,
         format!("main-{}", Uuid::new_v4()),
         if tauri::is_dev() {
-    			tauri::WebviewUrl::External(current_url)
-        }else {
-        		tauri::WebviewUrl::CustomProtocol(current_url)
+            tauri::WebviewUrl::External(current_url)
+        } else if cfg!(windows) {
+            tauri::WebviewUrl::App(current_url.path().into())
+        } else {
+            tauri::WebviewUrl::CustomProtocol(current_url)
         },
     )
     .title(webview.title().unwrap_or(String::from("Special Eureka")))
