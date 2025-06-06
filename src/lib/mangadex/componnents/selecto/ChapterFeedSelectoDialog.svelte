@@ -61,8 +61,10 @@
 					<h2 use:melt={$title}>Selecto</h2>
 					{#if !$nothingSelected}
 						<p use:melt={$description}>
-							You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if} and {$chaptersLen}
-							chapter{#if $chaptersLen > 1}s{/if}.
+							You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
+								and {$chaptersLen}
+								chapter{#if $chaptersLen > 1}s{/if}
+							{/if}.
 						</p>
 					{/if}
 				</div>
