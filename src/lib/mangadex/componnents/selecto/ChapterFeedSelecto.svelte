@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Selecto from "selecto";
 	import { validate } from "uuid";
-	import ChapterFeedSelectoDialog from "./ChapterFeedSelectoDialog.svelte";
 	import { uniq } from "lodash";
+	import { openSelectoDialog } from "./ChapterFeedSelectoDialog.svelte";
 
 	interface Props {
 		container: HTMLElement | undefined;
@@ -18,13 +18,6 @@
 		useDialog = true,
 		onEnd
 	}: Props = $props();
-	let dialog: HTMLDialogElement | undefined = $state(undefined);
-	function openDialog() {
-		onEnd?.();
-		if (dialog && useDialog) {
-			dialog.showModal();
-		}
-	}
 	let canSelect = $state(false);
 	let selected_mangas = $derived(uniq(selectedMangas));
 	let selected_chapters = $derived(uniq(selectedChapters));
@@ -76,7 +69,10 @@
 							if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
 						}
 					});
-					openDialog();
+					openSelectoDialog({
+						titles: selected_mangas,
+						chapters: selected_chapters
+					});
 				});
 
 			return () => {
@@ -101,10 +97,4 @@
 			canSelect = false;
 		}
 	}}
-/>
-
-<ChapterFeedSelectoDialog
-	bind:dialog
-	selectedChapters={selected_chapters}
-	selectedMangas={selected_mangas}
 />
