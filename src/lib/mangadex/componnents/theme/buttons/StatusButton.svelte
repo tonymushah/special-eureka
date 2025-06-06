@@ -7,10 +7,12 @@
 	import Red from "./status/Red.svelte";
 	import Yellow from "./status/Yellow.svelte";
 	import type { StatusColor } from "@mangadex/utils/types/status";
+	import type { AnyMeltElement } from "@melt-ui/svelte";
 
 	interface Props extends HTMLButtonAttributes {
 		color: StatusColor;
 		isBase?: boolean;
+		meltElement?: AnyMeltElement;
 	}
 
 	let { color, isBase = false, ...restProps }: Props = $props();

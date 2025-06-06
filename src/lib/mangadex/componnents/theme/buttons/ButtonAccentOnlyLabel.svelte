@@ -2,6 +2,7 @@
 	import { type Component } from "svelte";
 	import type { HTMLButtonAttributes } from "svelte/elements";
 	import ButtonAccent from "./ButtonAccent.svelte";
+	import type { AnyMeltElement } from "@melt-ui/svelte";
 
 	interface Props extends Omit<HTMLButtonAttributes, "children"> {
 		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
@@ -10,6 +11,7 @@
 		oneLine?: boolean;
 		icon?: Component | undefined;
 		noCenter?: boolean;
+		meltElement?: AnyMeltElement;
 	}
 
 	let {

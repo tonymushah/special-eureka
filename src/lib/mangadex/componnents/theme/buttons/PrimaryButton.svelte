@@ -3,10 +3,12 @@
 	import Default from "./primary/Default.svelte";
 	import L1 from "./primary/L1.svelte";
 	import L2 from "./primary/L2.svelte";
+	import type { AnyMeltElement } from "@melt-ui/svelte";
 
 	interface Props extends HTMLButtonAttributes {
 		variant?: "default" | "1" | "2";
 		isBase?: boolean;
+		meltElement?: AnyMeltElement;
 	}
 
 	let { variant = "default", isBase = false, ...restProps }: Props = $props();
