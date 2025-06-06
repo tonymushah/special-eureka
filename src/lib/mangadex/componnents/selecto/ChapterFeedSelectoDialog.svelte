@@ -88,8 +88,8 @@
 		background-color: var(--main-background);
 		color: var(--text-color);
 		width: 75vw;
-		border: 2px solid var(--primary);
-		border-radius: 3px;
+		border: 3px solid var(--primary);
+		border-radius: 0.5rem;
 		position: fixed;
 		z-index: 50;
 		transform: translateY(-50%);
