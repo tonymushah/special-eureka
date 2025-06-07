@@ -11,7 +11,7 @@ use tokio_util::sync::CancellationToken;
 use std::future::Future;
 
 use crate::{
-    app_state::{inner::AppStateInner, LastTimeTokenWhenFecthed, OfflineAppState},
+    app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
     rate_limit::SpecificRateLimits,
     utils::watch::SendData,
 };
@@ -56,8 +56,10 @@ where
             let last_time_fetched = self.get_last_time_token_when_fetched()?;
             let watches = self.get_watches()?;
             let should_fetched: bool = {
-                let last_time_fetched_inner = last_time_fetched.read().await;
-                let inner = last_time_fetched_inner.ok_or(crate::Error::NotLoggedIn)?;
+                let inner = last_time_fetched
+                    .get()
+                    .await
+                    .ok_or(crate::Error::NotLoggedIn)?;
 
                 #[cfg(debug_assertions)]
                 {
@@ -73,9 +75,11 @@ where
                 self.get_specific_rate_limit()?.refresh().await;
                 match client.oauth().refresh().send().await {
                     Ok(res) => {
-                        let _ = last_time_fetched.write().await.replace(
-                            Instant::now() + (Duration::from_millis(res.expires_in as u64)),
-                        );
+                        let _ = last_time_fetched
+                            .replace(
+                                Instant::now() + (Duration::from_millis(res.expires_in as u64)),
+                            )
+                            .await;
                         let _ = watches.is_logged.send_data(true);
                     }
                     Err(err) => {

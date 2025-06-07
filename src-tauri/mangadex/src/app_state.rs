@@ -42,3 +42,15 @@ impl Default for LastTimeTokenWhenFecthed {
         Self(Arc::new(RwLock::new(None)))
     }
 }
+
+impl LastTimeTokenWhenFecthed {
+    pub async fn clear(&self) {
+        let _ = self.write().await.take();
+    }
+    pub async fn replace(&self, instant: Instant) {
+        let _ = self.write().await.replace(instant);
+    }
+    pub async fn get(&self) -> Option<Instant> {
+        *self.read().await
+    }
+}
