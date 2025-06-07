@@ -1,5 +1,7 @@
 use async_graphql::ErrorExtensions;
 
+use crate::utils::refresh_token::AbstractRefreshTokenDedupError;
+
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
 #[enum_kind(
     ErrorKind,
@@ -49,9 +51,13 @@ pub enum Error {
     ChapterReadingSetPage,
     #[error("Website favicon not found")]
     FaviconNotFound,
-    #[error("Invalid Response : Expected `MangaReadMarkers::Ungrouped` found `MangaReadMarkers::Grouped`")]
+    #[error(
+        "Invalid Response : Expected `MangaReadMarkers::Ungrouped` found `MangaReadMarkers::Grouped`"
+    )]
     GotReadMarkersGrouped,
-    #[error("Invalid Response : Expected `MangaReadMarkers::Grouped` found `MangaReadMarkers::Ungrouped`")]
+    #[error(
+        "Invalid Response : Expected `MangaReadMarkers::Grouped` found `MangaReadMarkers::Ungrouped`"
+    )]
     GotReadMarkersUnGrouped,
     #[error("MangaDexClient not found")]
     MangaDexClientNotFound,
@@ -119,6 +125,14 @@ pub enum Error {
     NotManagedSpecificRateLimit,
     #[error(transparent)]
     IndeterminateOffset(#[from] time::error::IndeterminateOffset),
+    #[error(transparent)]
+    AbstractRefreshTokenDedup(#[from] AbstractRefreshTokenDedupError),
+    #[error(transparent)]
+    Deduplicate(#[from] deduplicate::DeduplicateError),
+    #[error("No deduplicate task available")]
+    NoDeduplicateTask,
+    #[error(transparent)]
+    TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
 }
 
 impl Error {

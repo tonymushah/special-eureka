@@ -1044,6 +1044,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "deduplicate"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "90e0148815900af3c2b08da375399784370cd22e0c41c0fb7d6ad37169cb62cb"
+dependencies = [
+ "async-trait",
+ "lru",
+ "parking_lot",
+ "thiserror 2.0.12",
+ "tokio",
+ "tracing",
+]
+
+[[package]]
 name = "deranged"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2793,6 +2807,15 @@ name = "log"
 version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "13dc2df351e3202783a1fe0d44375f7295ffb4049267b0f3018346dc122a1d94"
+
+[[package]]
+name = "lru"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "227748d55f2f0ab4735d87fd623798cb6b664512fe979705f829c9f81c934465"
+dependencies = [
+ "hashbrown 0.15.3",
+]
 
 [[package]]
 name = "lru-slab"
@@ -5448,6 +5471,7 @@ dependencies = [
  "async-stream",
  "bytes",
  "convert_case 0.8.0",
+ "deduplicate",
  "dirs",
  "duration-string",
  "emdx",
@@ -5456,6 +5480,7 @@ dependencies = [
  "eureka-mmanager",
  "eureka-mmanager-core",
  "favicon-picker",
+ "futures-util",
  "governor",
  "impl-trait-for-tuples",
  "log",
