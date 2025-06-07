@@ -32,6 +32,7 @@
 	import { fade } from "svelte/transition";
 	import { dev } from "$app/environment";
 	import { makeScroll, preventScroll } from "../layout/scrollElement";
+	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
 	const mangasLen = der(selected, (d) => d?.titles?.length ?? 0);
 	const chaptersLen = der(selected, (d) => d?.chapters?.length ?? 0);
 
@@ -74,7 +75,12 @@
 					</ButtonAccent>
 				</div>
 			</div>
-			<div class="body"></div>
+			{#if $selected?.titles && $selected?.chapters}
+				<ChapterFeedSelectoDialogBody
+					titles={$selected?.titles}
+					chapters={$selected?.chapters}
+				/>
+			{/if}
 		</div>
 	</div>
 {/if}

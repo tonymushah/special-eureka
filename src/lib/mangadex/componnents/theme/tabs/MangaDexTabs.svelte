@@ -1,18 +1,22 @@
+<script lang="ts" module>
+	export type MangaDexTabTrigger = {
+		id: string;
+		title: string;
+		disabled?: boolean;
+	};
+</script>
+
 <script lang="ts">
 	import { createTabs, melt } from "@melt-ui/svelte";
 	import type { Snippet } from "svelte";
 	import MangaDexTabButton from "./MangaDexTabButton.svelte";
 	interface Props {
-		triggers: {
-			id: string;
-			title: string;
-			disabled?: boolean;
-		}[];
+		triggers: MangaDexTabTrigger[];
 		defaultValue?: string;
 		children?: Snippet<[string]>;
 		fontSize?: "small" | "medium" | "large" | "larger" | string;
 	}
-	let { triggers = [], defaultValue, children, fontSize = "medium" }: Props = $props();
+	let { triggers = $bindable([]), defaultValue, children, fontSize = "medium" }: Props = $props();
 	const {
 		elements: { root, list },
 		states: { value }
