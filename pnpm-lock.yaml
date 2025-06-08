@@ -56,6 +56,9 @@ importers:
       '@urql/svelte':
         specifier: ^4.2.3
         version: 4.2.3(@urql/core@5.1.1(graphql@16.11.0))(svelte@5.33.1)
+      dragselect:
+        specifier: ^3.1.1
+        version: 3.1.1
       fast-xml-parser:
         specifier: ^4.5.3
         version: 4.5.3
@@ -86,9 +89,6 @@ importers:
       panzoom:
         specifier: ^9.4.3
         version: 9.4.3
-      selecto:
-        specifier: ^1.26.3
-        version: 1.26.3
       svelte-exmarkdown:
         specifier: ^4.0.3
         version: 4.0.3(svelte@5.33.1)
@@ -401,9 +401,6 @@ packages:
     resolution: {integrity: sha512-+EzkxvLNfiUeKMgy/3luqfsCWFRXLb7U6wNQTk60tovuckwB15B191tJWvpp4HjiQWdJkCxO3Wbvc6jlk3Xb2Q==}
     engines: {node: '>=6.9.0'}
 
-  '@cfcs/core@0.0.6':
-    resolution: {integrity: sha512-FxfJMwoLB8MEMConeXUCqtMGqxdtePQxRBOiGip9ULcYYam3WfCgoY6xdnMaSkYvRvmosp5iuG+TiPofm65+Pw==}
-
   '@chromatic-com/storybook@2.0.2':
     resolution: {integrity: sha512-7bPIliISedeIpnVKbzktysFYW5n56bN91kxuOj1XXKixmjbUHRUMvcXd4K2liN6MiR5ZqJtmtcPsZ6CebbGlEA==}
     engines: {node: '>=16.0.0', yarn: '>=1.22.18'}
@@ -416,18 +413,6 @@ packages:
 
   '@codemirror/view@6.36.8':
     resolution: {integrity: sha512-yoRo4f+FdnD01fFt4XpfpMCcCAo9QvZOtbrXExn4SqzH32YC6LgzqxfLZw/r6Ge65xyY03mK/UfUqrVw1gFiFg==}
-
-  '@daybrush/utils@1.13.0':
-    resolution: {integrity: sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==}
-
-  '@egjs/children-differ@1.0.1':
-    resolution: {integrity: sha512-DRvyqMf+CPCOzAopQKHtW+X8iN6Hy6SFol+/7zCUiE5y4P/OB8JP8FtU4NxtZwtafvSL4faD5KoQYPj3JHzPFQ==}
-
-  '@egjs/component@3.0.5':
-    resolution: {integrity: sha512-cLcGizTrrUNA2EYE3MBmEDt2tQv1joVP1Q3oDisZ5nw0MZDx2kcgEXM+/kZpfa/PAkFvYVhRUZwytIQWoN3V/w==}
-
-  '@egjs/list-differ@1.0.1':
-    resolution: {integrity: sha512-OTFTDQcWS+1ZREOdCWuk5hCBgYO4OsD30lXcOCyVOAjXMhgL5rBRDnt/otb6Nz8CzU0L/igdcaQBDLWc4t9gvg==}
 
   '@emnapi/runtime@1.4.3':
     resolution: {integrity: sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==}
@@ -1731,15 +1716,6 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scena/dragscroll@1.4.0':
-    resolution: {integrity: sha512-3O8daaZD9VXA9CP3dra6xcgt/qrm0mg0xJCwiX6druCteQ9FFsXffkF8PrqxY4Z4VJ58fFKEa0RlKqbsi/XnRA==}
-
-  '@scena/event-emitter@1.0.5':
-    resolution: {integrity: sha512-AzY4OTb0+7ynefmWFQ6hxDdk0CySAq/D4efljfhtRHCOP7MBF9zUfhKG3TJiroVjASqVgkRJFdenS8ArZo6Olg==}
-
-  '@scena/matrix@1.1.1':
-    resolution: {integrity: sha512-JVKBhN0tm2Srl+Yt+Ywqu0oLgLcdemDQlD1OxmN9jaCTwaFPZ7tY8n6dhVgMEaR9qcR7r+kAlMXnSfNyYdE+Vg==}
-
   '@storybook/addon-a11y@8.6.14':
     resolution: {integrity: sha512-fozv6enO9IgpWq2U8qqS8MZ21Nt+MVHiRQe3CjnCpBOejTyo/ATm690PeYYRVHVG6M/15TVePb0h3ngKQbrrzQ==}
     peerDependencies:
@@ -2655,12 +2631,6 @@ packages:
   css-select@5.1.0:
     resolution: {integrity: sha512-nwoRF1rvRRnnCqqY7updORDsuqKzqYJ28+oSMaJMMgOauh3fvwHqMS7EZpIPqK8GL+g9mKxF1vP/ZjSeNjEVHg==}
 
-  css-styled@1.0.8:
-    resolution: {integrity: sha512-tCpP7kLRI8dI95rCh3Syl7I+v7PP+2JYOzWkl0bUEoSbJM+u8ITbutjlQVf0NC2/g4ULROJPi16sfwDIO8/84g==}
-
-  css-to-mat@1.1.1:
-    resolution: {integrity: sha512-kvpxFYZb27jRd2vium35G7q5XZ2WJ9rWjDUMNT36M3Hc41qCrLXFM5iEKMGXcrPsKfXEN+8l/riB4QzwwwiEyQ==}
-
   css-tree@2.2.1:
     resolution: {integrity: sha512-OA0mILzGc1kCOCSJerOeqDxDQ4HOh+G8NbOJFOTgOCzpw7fCBubk0fEyxp8AgOL/jvLgYA/uV0cMbe43ElF1JA==}
     engines: {node: ^10 || ^12.20.0 || ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
@@ -2815,6 +2785,9 @@ packages:
   dotenv@16.5.0:
     resolution: {integrity: sha512-m/C+AwOAr9/W1UOIZUo232ejMNnJAJtYQjUbHoNTBNTJSvqzzDh7vnrei3o3r3m9blf6ZoDkvcw0VmozNRFJxg==}
     engines: {node: '>=12'}
+
+  dragselect@3.1.1:
+    resolution: {integrity: sha512-vaTAVcCSvv8xMLD9jD2Qe/Y0nEwnj1yQjyacDAd+znp97b5V0Prw+MxG6OknmjbnYWaN3vtsQVr+BUL9J838zA==}
 
   dset@3.1.4:
     resolution: {integrity: sha512-2QF/g9/zTaPDc3BjNcVTGoBbXBgYfMTTceLaYcFJ/W9kggFUkhxD/hMEeuLKbugyef9SqAx8cpgwlIP/jinUTA==}
@@ -3121,9 +3094,6 @@ packages:
       react-dom:
         optional: true
 
-  framework-utils@1.1.0:
-    resolution: {integrity: sha512-KAfqli5PwpFJ8o3psRNs8svpMGyCSAe8nmGcjQ0zZBWN2H6dZDnq+ABp3N3hdUmFeMrLtjOCTXD4yplUJIWceg==}
-
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
@@ -3146,9 +3116,6 @@ packages:
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
     engines: {node: '>=6.9.0'}
-
-  gesto@1.19.4:
-    resolution: {integrity: sha512-hfr/0dWwh0Bnbb88s3QVJd1ZRJeOWcgHPPwmiH6NnafDYvhTsxg+SLYu+q/oPNh9JS3V+nlr6fNs8kvPAtcRDQ==}
 
   get-caller-file@2.0.5:
     resolution: {integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==}
@@ -3537,12 +3504,6 @@ packages:
 
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
-
-  keycode@2.2.1:
-    resolution: {integrity: sha512-Rdgz9Hl9Iv4QKi8b0OlCRQEzp4AgVxyCtz5S/+VIHezDmrDhkp2N2TqBWOLz0/gbeREXOOiI9/4b8BY9uw2vFg==}
-
-  keycon@1.4.0:
-    resolution: {integrity: sha512-p1NAIxiRMH3jYfTeXRs2uWbVJ1WpEjpi8ktzUyBJsX7/wn2qu2VRXktneBLNtKNxJmlUYxRi9gOJt1DuthXR7A==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -3959,9 +3920,6 @@ packages:
     resolution: {integrity: sha512-D2FR03Vir7FIu45XBY20mTb+/ZSWB00sjU9jdQXt83gDrI4Ztz5Fs7/yy74g2N5SVQY4xY1qDr4rNddwYRVX0g==}
     engines: {node: '>=0.10.0'}
 
-  overlap-area@1.1.0:
-    resolution: {integrity: sha512-3dlJgJCaVeXH0/eZjYVJvQiLVVrPO4U1ZGqlATtx6QGO3b5eNM6+JgUKa7oStBTdYuGTk7gVoABCW6Tp+dhRdw==}
-
   p-limit@3.1.0:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
     engines: {node: '>=10'}
@@ -4324,9 +4282,6 @@ packages:
 
   scuid@1.1.0:
     resolution: {integrity: sha512-MuCAyrGZcTLfQoH2XoBlQ8C6bzwN88XT/0slOGz0pn8+gIP85BOAfYa44ZXQUTOwRwPU0QvgU+V+OSajl/59Xg==}
-
-  selecto@1.26.3:
-    resolution: {integrity: sha512-gZHgqMy5uyB6/2YDjv3Qqaf7bd2hTDOpPdxXlrez4R3/L0GiEWDCFaUfrflomgqdb3SxHF2IXY0Jw0EamZi7cw==}
 
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
@@ -5201,10 +5156,6 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@cfcs/core@0.0.6':
-    dependencies:
-      '@egjs/component': 3.0.5
-
   '@chromatic-com/storybook@2.0.2(react@19.1.0)':
     dependencies:
       chromatic: 11.29.0
@@ -5235,16 +5186,6 @@ snapshots:
       '@codemirror/state': 6.5.2
       style-mod: 4.1.2
       w3c-keyname: 2.2.8
-
-  '@daybrush/utils@1.13.0': {}
-
-  '@egjs/children-differ@1.0.1':
-    dependencies:
-      '@egjs/list-differ': 1.0.1
-
-  '@egjs/component@3.0.5': {}
-
-  '@egjs/list-differ@1.0.1': {}
 
   '@emnapi/runtime@1.4.3':
     dependencies:
@@ -6668,19 +6609,6 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.41.1':
     optional: true
 
-  '@scena/dragscroll@1.4.0':
-    dependencies:
-      '@daybrush/utils': 1.13.0
-      '@scena/event-emitter': 1.0.5
-
-  '@scena/event-emitter@1.0.5':
-    dependencies:
-      '@daybrush/utils': 1.13.0
-
-  '@scena/matrix@1.1.1':
-    dependencies:
-      '@daybrush/utils': 1.13.0
-
   '@storybook/addon-a11y@8.6.14(storybook@8.6.14(prettier@3.5.3))':
     dependencies:
       '@storybook/addon-highlight': 8.6.14(storybook@8.6.14(prettier@3.5.3))
@@ -7750,15 +7678,6 @@ snapshots:
       domutils: 3.2.2
       nth-check: 2.1.1
 
-  css-styled@1.0.8:
-    dependencies:
-      '@daybrush/utils': 1.13.0
-
-  css-to-mat@1.1.1:
-    dependencies:
-      '@daybrush/utils': 1.13.0
-      '@scena/matrix': 1.1.1
-
   css-tree@2.2.1:
     dependencies:
       mdn-data: 2.0.28
@@ -7891,6 +7810,8 @@ snapshots:
       tslib: 2.8.1
 
   dotenv@16.5.0: {}
+
+  dragselect@3.1.1: {}
 
   dset@3.1.4: {}
 
@@ -8284,8 +8205,6 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  framework-utils@1.1.0: {}
-
   fs.realpath@1.0.0: {}
 
   fsevents@2.3.2:
@@ -8299,11 +8218,6 @@ snapshots:
   functional-red-black-tree@1.0.1: {}
 
   gensync@1.0.0-beta.2: {}
-
-  gesto@1.19.4:
-    dependencies:
-      '@daybrush/utils': 1.13.0
-      '@scena/event-emitter': 1.0.5
 
   get-caller-file@2.0.5: {}
 
@@ -8686,15 +8600,6 @@ snapshots:
       universalify: 2.0.1
     optionalDependencies:
       graceful-fs: 4.2.11
-
-  keycode@2.2.1: {}
-
-  keycon@1.4.0:
-    dependencies:
-      '@cfcs/core': 0.0.6
-      '@daybrush/utils': 1.13.0
-      '@scena/event-emitter': 1.0.5
-      keycode: 2.2.1
 
   keyv@4.5.4:
     dependencies:
@@ -9291,10 +9196,6 @@ snapshots:
 
   os-tmpdir@1.0.2: {}
 
-  overlap-area@1.1.0:
-    dependencies:
-      '@daybrush/utils': 1.13.0
-
   p-limit@3.1.0:
     dependencies:
       yocto-queue: 0.1.0
@@ -9660,19 +9561,6 @@ snapshots:
   scheduler@0.26.0: {}
 
   scuid@1.1.0: {}
-
-  selecto@1.26.3:
-    dependencies:
-      '@daybrush/utils': 1.13.0
-      '@egjs/children-differ': 1.0.1
-      '@scena/dragscroll': 1.4.0
-      '@scena/event-emitter': 1.0.5
-      css-styled: 1.0.8
-      css-to-mat: 1.1.1
-      framework-utils: 1.1.0
-      gesto: 1.19.4
-      keycon: 1.4.0
-      overlap-area: 1.1.0
 
   semver@5.7.2:
     optional: true
