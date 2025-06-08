@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MangaDexTabs, { type MangaDexTabTrigger } from "../theme/tabs/MangaDexTabs.svelte";
+	import Titles from "./dialog/Titles.svelte";
 
 	interface Props {
 		titles: string[];
@@ -27,7 +28,9 @@
 <div class="body">
 	<MangaDexTabs bind:triggers>
 		{#snippet children(key)}
-			{#if key == titleId}{:else if key == chapterId}{/if}
+			{#if key == titleId}
+				<Titles {titles} />
+			{:else if key == chapterId}{/if}
 		{/snippet}
 	</MangaDexTabs>
 </div>

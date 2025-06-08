@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DragSelect from "dragselect";
+	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
 	import { uniq } from "lodash";
 	import { openSelectoDialog } from "./ChapterFeedSelectoDialog.svelte";
@@ -21,60 +21,52 @@
 	let canSelect = $state(false);
 	let selected_mangas = $derived(uniq(selectedMangas));
 	let selected_chapters = $derived(uniq(selectedChapters));
+	const selectionAreaClass = "chapter-feed-selecto-area";
 	$effect(() => {
 		if (container && canSelect) {
-			const dragselect = new DragSelect({
-				//selectables: [...document.querySelectorAll<HTMLElement>(".manga-element"), ...document.querySelectorAll<HTMLElement>(".chapter-element")],
-				area: container
-			});
-			const mutationObserver = new MutationObserver((v) => {
-				for (const mutation of v) {
-					if (mutation.type == "childList") {
-						dragselect.addSelectables([
-							...container.querySelectorAll<HTMLElement>(".manga-element"),
-							...container.querySelectorAll<HTMLElement>(".chapter-element")
-						]);
-					}
-				}
-			});
-			mutationObserver.observe(container);
-			dragselect.subscribe("DS:start", (ev) => {
-				dragselect.SelectableSet.forEach((e) => {
-					e.removeAttribute("data-selecto-selected");
-					selectedChapters = [];
-					selectedMangas = [];
+			const dragselect = new SelectionArea({
+				selectables: [".manga-element", ".chapter-element"],
+				boundaries: container,
+				selectionAreaClass
+			})
+				.on("start", (ev) => {
+					ev.store.stored.forEach((e) => {
+						e.removeAttribute("data-selecto-selected");
+						selectedChapters = [];
+						selectedMangas = [];
+					});
+				})
+				.on("stop", (ev) => {
+					ev.store.selected.forEach((element) => {
+						const maybeChapterId = element?.getAttribute("data-chapter-id");
+						if (maybeChapterId != null) {
+							if (validate(maybeChapterId)) selectedChapters.push(maybeChapterId);
+						}
+						const maybeMangaId = element?.getAttribute("data-manga-id");
+						if (maybeMangaId != null) {
+							if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
+						}
+						element.removeAttribute("data-selecto-selected");
+					});
+					openSelectoDialog({
+						titles: selected_mangas,
+						chapters: selected_chapters
+					});
+					onEnd?.();
+				})
+				.on("move", (ev) => {
+					ev.store.changed.added.forEach((item) =>
+						item.setAttribute("data-selecto-selected", "")
+					);
+					ev.store.changed.removed.forEach((item) =>
+						item.removeAttribute("data-selecto-selected")
+					);
 				});
-			});
-			dragselect.subscribe("DS:end", (ev) => {
-				ev.items.forEach((element) => {});
-				ev.items.forEach((element) => {
-					const maybeChapterId = element.getAttribute("data-chapter-id");
-					if (maybeChapterId != null) {
-						if (validate(maybeChapterId)) selectedChapters.push(maybeChapterId);
-					}
-					const maybeMangaId = element.getAttribute("data-manga-id");
-					if (maybeMangaId != null) {
-						if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
-					}
-					element.removeAttribute("data-selecto-selected");
-				});
-				openSelectoDialog({
-					titles: selected_mangas,
-					chapters: selected_chapters
-				});
-			});
-			dragselect.subscribe("DS:select", (ev) => {
-				ev.item.setAttribute("data-selecto-selected", "");
-			});
-			dragselect.subscribe("DS:unselect", (ev) => {
-				ev.item.removeAttribute("data-selecto-selected");
-			});
 			return () => {
-				mutationObserver.disconnect();
-				dragselect.SelectedSet.forEach((e) => {
+				dragselect.getSelection().forEach((e) => {
 					e.removeAttribute("data-selecto-selected");
 				});
-				dragselect.stop();
+				dragselect.destroy();
 			};
 		}
 	});
@@ -93,3 +85,11 @@
 		}
 	}}
 />
+
+<style lang="scss">
+	:global(.chapter-feed-selecto-area) {
+		background: rgba(108, 115, 255, 0.5);
+		border: 1px solid rgb(62, 99, 221);
+		border-radius: 0.15em;
+	}
+</style>
