@@ -82,13 +82,16 @@ impl<R: Runtime> RefreshTokenTask<R> {
     pub fn new(app: AppHandle<R>) -> Self {
         let dedup: Dedup = {
             let new_app = app.clone();
-            Deduplicate::new(Box::new(move |_| {
-                let new_app = new_app.clone();
-                let fut = refresh_token(new_app)
-                    .map_err(|d| AbstractRefreshTokenDedupError(d.to_string()))
-                    .map(Some);
-                Box::pin(fut)
-            }))
+            Deduplicate::with_capacity(
+                Box::new(move |_| {
+                    let new_app = new_app.clone();
+                    let fut = refresh_token(new_app)
+                        .map_err(|d| AbstractRefreshTokenDedupError(d.to_string()))
+                        .map(Some);
+                    Box::pin(fut)
+                }),
+                1,
+            )
         };
         Self {
             handle: app,
