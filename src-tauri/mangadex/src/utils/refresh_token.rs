@@ -90,7 +90,7 @@ impl<R: Runtime> RefreshTokenTask<R> {
                         .map(Some);
                     Box::pin(fut)
                 }),
-                1,
+                0,
             )
         };
         Self {
