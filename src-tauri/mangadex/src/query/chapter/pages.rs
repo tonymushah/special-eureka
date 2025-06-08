@@ -1,9 +1,9 @@
 use std::path::Path;
 
 use crate::{
+    Result,
     error::Error,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-    Result,
 };
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
@@ -24,12 +24,15 @@ pub struct ChapterPagesQuery {
 impl ChapterPagesQuery {
     #[graphql(skip)]
     pub async fn pages_online(&self, ctx: &Context<'_>) -> Result<ChapterPages> {
+        log::trace!("Passing rate limit");
         ctx.get_app_handle::<tauri::Wry>()?
             .get_specific_rate_limit()?
             .at_home()
             .await;
+        log::trace!("Rate limit passed");
         let id = self.id;
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        log::trace!("Getted client");
         Ok(client
             .at_home()
             .server()
@@ -90,9 +93,13 @@ impl ChapterPagesQuery {
     }
     pub async fn pages(&self, ctx: &Context<'_>) -> Result<ChapterPages> {
         if let Ok(offline) = self.pages_offline(ctx).await {
+            log::debug!("Fetched offline chapter {}", self.id);
             Ok(offline)
         } else {
-            self.pages_online(ctx).await
+            log::debug!("Fetching online chapter {}", self.id);
+            let re = self.pages_online(ctx).await;
+            log::debug!("Fetched online chapter {}", self.id);
+            re
         }
     }
 }

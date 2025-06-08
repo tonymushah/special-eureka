@@ -58,11 +58,8 @@ export const load: LayoutLoad = async ({ params, url }) => {
 		query,
 		{
 			id
-		},
-		{
-			optimistic: true
 		}
-	);
+	).toPromise();
 	console.log("Invoked layout data");
 	if (result.data != undefined) {
 		const pages = result.data.chapter.pages;
