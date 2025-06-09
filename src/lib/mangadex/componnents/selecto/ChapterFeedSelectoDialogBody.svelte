@@ -34,14 +34,28 @@
 </script>
 
 <div class="body">
-	<MangaDexTabs bind:triggers>
+	<MangaDexTabs bind:triggers fullHeight flex>
 		{#snippet children(key)}
 			{#if key == titleId}
 				<Titles {titles} />
-			{:else if key == chapterId}{/if}
+			{:else if key == chapterId}{:else}
+				<div class="nothing">
+					<h2>Nothing selected</h2>
+				</div>
+			{/if}
 		{/snippet}
 	</MangaDexTabs>
 </div>
 
 <style lang="scss">
+	.body {
+		height: 100%;
+	}
+	.nothing {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 100%;
+	}
 </style>

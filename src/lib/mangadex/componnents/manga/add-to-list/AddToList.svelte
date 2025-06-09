@@ -101,7 +101,7 @@
 		display: grid;
 		gap: 12px;
 		width: 100%;
-		grid-template-rows: 1fr auto 1f 1fr;
+		grid-template-rows: 1fr auto 1fr 1fr;
 		height: -webkit-fill-available;
 	}
 	dialog::backdrop {

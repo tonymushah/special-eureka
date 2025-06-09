@@ -3740,6 +3740,19 @@ export type CreateCustomListMutation = {
 	};
 };
 
+export type CreateEmptyCustomListMutationVariables = Exact<{
+	visibility: CustomListVisibility;
+	name: Scalars["String"]["input"];
+}>;
+
+export type CreateEmptyCustomListMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		create: { __typename?: "CustomList"; id: any };
+	};
+};
+
 export type MangaListMutationMutationVariables = Exact<{
 	style: MangaListStyle;
 }>;
@@ -3963,6 +3976,16 @@ export type AuthorSearchFetcherQuery = {
 			}>;
 		};
 	};
+};
+
+export type AddTitleToListBatchMutationVariables = Exact<{
+	mangas: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	customList: Scalars["UUID"]["input"];
+}>;
+
+export type AddTitleToListBatchMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; addMangaBatch: boolean };
 };
 
 export type UserMeOnSidebarFooterQueryVariables = Exact<{ [key: string]: never }>;
@@ -7579,6 +7602,91 @@ export const CreateCustomListDocument = {
 		}
 	]
 } as unknown as DocumentNode<CreateCustomListMutation, CreateCustomListMutationVariables>;
+export const CreateEmptyCustomListDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "createEmptyCustomList" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "visibility" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "CustomListVisibility" }
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "name" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "create" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "visibility" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "name" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "name" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } }
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CreateEmptyCustomListMutation, CreateEmptyCustomListMutationVariables>;
 export const MangaListMutationDocument = {
 	kind: "Document",
 	definitions: [
@@ -8743,6 +8851,76 @@ export const AuthorSearchFetcherDocument = {
 		}
 	]
 } as unknown as DocumentNode<AuthorSearchFetcherQuery, AuthorSearchFetcherQueryVariables>;
+export const AddTitleToListBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "addTitleToListBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangas" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "customList" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "addMangaBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "listId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "customList" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangas" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<AddTitleToListBatchMutation, AddTitleToListBatchMutationVariables>;
 export const UserMeOnSidebarFooterDocument = {
 	kind: "Document",
 	definitions: [

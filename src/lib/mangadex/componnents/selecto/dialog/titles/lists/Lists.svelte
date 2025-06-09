@@ -1,34 +1,39 @@
 <script lang="ts">
+	import executeSearchQuery, {
+		type CurrentUserCustomListItemData
+	} from "@mangadex/componnents/manga/add-to-list/content";
+	import CustomListCheckbox from "@mangadex/componnents/manga/add-to-list/CustomListCheckbox.svelte";
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
+	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
+	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 	import type { CurrentLoggedLists } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
-	import { derived as der, get } from "svelte/store";
-	import type { CurrentUserCustomListItemData } from "./content";
-	import executeSearchQuery from "./content";
 	import { getContextClient } from "@urql/svelte";
-	import { ActionMode } from ".";
 	import { debounce } from "lodash";
-	import { mutation } from "./query";
-	import CustomListCheckbox from "./CustomListCheckbox.svelte";
 	import { onDestroy } from "svelte";
-	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
-	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
-	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import MakeANewList from "./MakeANewList.svelte";
+	import { derived as der, get } from "svelte/store";
+	import MakeEmptyList from "./MakeEmptyList.svelte";
 
 	const client = getContextClient();
 
 	interface Props {
-		mutate?: (manga_id: string) => Promise<void> | undefined;
-		isMutating?: boolean;
-		mangaId: string;
+		selectedLists: string[];
 	}
-	let { mutate = $bindable(), isMutating = $bindable(), mangaId }: Props = $props();
+
+	let { selectedLists = $bindable() }: Props = $props();
 	const query = createInfiniteQuery(
 		der(pageLimit, (limit) => {
 			return {
-				queryKey: ["current", "user", "custom-list", "for-add-to-list", `limit:${limit}`],
+				queryKey: [
+					"current",
+					"user",
+					"custom-list",
+					"for-add-to-list",
+					"batch",
+					`limit:${limit}`
+				],
 				initialPageParam: {
 					offset: 0,
 					limit
@@ -60,38 +65,6 @@
 		})
 	);
 
-	let selectedListMap = $state(new Map<string, ActionMode>());
-	$effect.pre(() => {
-		mutate = async (manga_id: string) => {
-			isMutating = true;
-			try {
-				const addTo = Array.from(
-					selectedListMap
-						.entries()
-						.filter(([_, mode]) => mode == ActionMode.Add)
-						.map(([id, _]) => id)
-				);
-				const removeFrom = Array.from(
-					selectedListMap
-						.entries()
-						.filter(([_, mode]) => mode == ActionMode.Remove)
-						.map(([id, _]) => id)
-				);
-				const res = await client
-					.mutation(mutation, {
-						addTo,
-						removeFrom,
-						manga_id
-					})
-					.toPromise();
-				if (res.error) {
-					throw res.error;
-				}
-			} finally {
-				isMutating = false;
-			}
-		};
-	});
 	const hasNext = der(query, ($query) => $query.hasNextPage);
 	const isFetching = der(query, ($query) => $query.isLoading);
 	const debounce_wait = 450;
@@ -130,7 +103,7 @@
 		{#if $query.data}
 			{#each $query.data.pages as pages}
 				{#each pages.data as customList (customList.id)}
-					{@const isSelected = customList.titles.includes(mangaId)}
+					{@const isSelected = selectedLists.includes(customList.id)}
 					<div>
 						<CustomListCheckbox
 							name={customList.name}
@@ -138,19 +111,13 @@
 							onChange={(value) => {
 								switch (value) {
 									case true:
-										if (!isSelected) {
-											selectedListMap.set(customList.id, ActionMode.Add);
-										}
+										selectedLists.push(customList.id);
 										break;
-
 									case false:
-										if (isSelected) {
-											selectedListMap.set(customList.id, ActionMode.Remove);
-										} else {
-											selectedListMap.delete(customList.id);
-										}
+										selectedLists = selectedLists.filter(
+											(dd) => dd != customList.id
+										);
 										break;
-
 									default:
 										break;
 								}
@@ -171,8 +138,7 @@
 		</div>
 	</div>
 
-	<MakeANewList
-		{mangaId}
+	<MakeEmptyList
 		onMakeSuccess={() => {
 			$query.refetch();
 		}}

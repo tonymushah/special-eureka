@@ -94,6 +94,8 @@
 		left: 50%;
 		padding: 0.5rem; /* 24px */
 		height: 75vh;
+		display: flex;
+		flex-direction: column;
 	}
 	.close {
 		align-items: center;
