@@ -15,8 +15,17 @@
 		defaultValue?: string;
 		children?: Snippet<[string]>;
 		fontSize?: "small" | "medium" | "large" | "larger" | string;
+		fullHeight?: boolean;
+		fillAvailableHeight?: boolean;
 	}
-	let { triggers = $bindable([]), defaultValue, children, fontSize = "medium" }: Props = $props();
+	let {
+		triggers = $bindable([]),
+		defaultValue,
+		children,
+		fontSize = "medium",
+		fullHeight,
+		fillAvailableHeight
+	}: Props = $props();
 	const {
 		elements: { root, list },
 		states: { value }
@@ -30,10 +39,11 @@
 	});
 </script>
 
-<div class="root" use:melt={$root}>
+<div class="root" use:melt={$root} class:fullHeight class:fillAvailableHeight>
 	<div class="list" use:melt={$list}>
 		{#each triggers as triggerItem}
 			<MangaDexTabButton
+				disabled={triggerItem.disabled}
 				id={triggerItem.id}
 				title={triggerItem.title}
 				{value}
@@ -46,6 +56,12 @@
 </div>
 
 <style lang="scss">
+	.root.fullHeight {
+		height: 100%;
+	}
+	.root.fillAvailableHeight {
+		height: -webkit-fill-available;
+	}
 	.list {
 		display: flex;
 		gap: 3px;
