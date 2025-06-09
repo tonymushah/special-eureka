@@ -36,6 +36,9 @@ type Documents = {
 	"\n\tquery getMangatoReadAggregate($id: UUID!) {\n\t\tmanga {\n\t\t\taggregate(params: { mangaId: $id }) {\n\t\t\t\tdefault {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t\tcount\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetMangatoReadAggregateDocument;
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorSearchFetcherDocument;
 	"\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n": typeof types.AddTitleToListBatchDocument;
+	"\n\tmutation updateReadingStatuses($titles: [UUID!]!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatusBatch(mangaIds: $titles, status: $status)\n\t\t}\n\t}\n": typeof types.UpdateReadingStatusesDocument;
+	"\n\tmutation followTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n": typeof types.FollowTitlesBatchDocument;
+	"\n\tmutation unfollowTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tunfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n": typeof types.UnfollowTitlesBatchDocument;
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UserMeOnSidebarFooterDocument;
 	"\n\tmutation setSidebarDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetSidebarDirection(direction: $direction)\n\t\t}\n\t}\n": typeof types.SetSidebarDirectionDocument;
 	"\n\tsubscription watchDefaultContentProfile {\n\t\twatchContentProfileDefault {\n\t\t\toriginalLanguages\n\t\t\tpublicationDemographic\n\t\t\tincludedTags\n\t\t\tincludedTagsMode\n\t\t\texcludedTags\n\t\t\texcludedTagsMode\n\t\t\tstatus\n\t\t\texcludedOriginalLanguage\n\t\t\ttranslatedLanguages\n\t\t\tcontentRating\n\t\t\texcludedGroups\n\t\t\texcludedUploaders\n\t\t}\n\t}\n": typeof types.WatchDefaultContentProfileDocument;
@@ -187,6 +190,12 @@ const documents: Documents = {
 		types.AuthorSearchFetcherDocument,
 	"\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n":
 		types.AddTitleToListBatchDocument,
+	"\n\tmutation updateReadingStatuses($titles: [UUID!]!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatusBatch(mangaIds: $titles, status: $status)\n\t\t}\n\t}\n":
+		types.UpdateReadingStatusesDocument,
+	"\n\tmutation followTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n":
+		types.FollowTitlesBatchDocument,
+	"\n\tmutation unfollowTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tunfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n":
+		types.UnfollowTitlesBatchDocument,
 	"\n\tquery userMeOnSidebarFooter {\n\t\tuser {\n\t\t\tme {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\tusername\n\t\t\t\t\troles\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UserMeOnSidebarFooterDocument,
 	"\n\tmutation setSidebarDirection($direction: Direction!) {\n\t\tuserOption {\n\t\t\tsetSidebarDirection(direction: $direction)\n\t\t}\n\t}\n":
@@ -544,6 +553,24 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation updateReadingStatuses($titles: [UUID!]!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatusBatch(mangaIds: $titles, status: $status)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation updateReadingStatuses($titles: [UUID!]!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatusBatch(mangaIds: $titles, status: $status)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation followTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation followTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation unfollowTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tunfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation unfollowTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tunfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import AddToListBatch from "./titles/AddToListBatch.svelte";
+	import UpdateReadingStatuses from "./titles/UpdateReadingStatuses.svelte";
 
 	interface Props {
 		titles: string[];
@@ -22,7 +23,9 @@
 	<div class="content">
 		{#if isLists}
 			<AddToListBatch {titles} />
-		{:else if isStatus}{/if}
+		{:else if isStatus}
+			<UpdateReadingStatuses {titles} />
+		{/if}
 	</div>
 	<div class="actions">
 		<ButtonAccentOnlyLabel

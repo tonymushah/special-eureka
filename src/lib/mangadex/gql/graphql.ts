@@ -3988,6 +3988,34 @@ export type AddTitleToListBatchMutation = {
 	customList: { __typename?: "CustomListMutations"; addMangaBatch: boolean };
 };
 
+export type UpdateReadingStatusesMutationVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	status?: InputMaybe<ReadingStatus>;
+}>;
+
+export type UpdateReadingStatusesMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; updateReadingStatusBatch: boolean };
+};
+
+export type FollowTitlesBatchMutationVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type FollowTitlesBatchMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; followBatch: boolean };
+};
+
+export type UnfollowTitlesBatchMutationVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowTitlesBatchMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; unfollowBatch: boolean };
+};
+
 export type UserMeOnSidebarFooterQueryVariables = Exact<{ [key: string]: never }>;
 
 export type UserMeOnSidebarFooterQuery = {
@@ -8921,6 +8949,181 @@ export const AddTitleToListBatchDocument = {
 		}
 	]
 } as unknown as DocumentNode<AddTitleToListBatchMutation, AddTitleToListBatchMutationVariables>;
+export const UpdateReadingStatusesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "updateReadingStatuses" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "status" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "ReadingStatus" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "updateReadingStatusBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titles" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "status" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "status" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateReadingStatusesMutation, UpdateReadingStatusesMutationVariables>;
+export const FollowTitlesBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followTitlesBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "followBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titles" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowTitlesBatchMutation, FollowTitlesBatchMutationVariables>;
+export const UnfollowTitlesBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowTitlesBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollowBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titles" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowTitlesBatchMutation, UnfollowTitlesBatchMutationVariables>;
 export const UserMeOnSidebarFooterDocument = {
 	kind: "Document",
 	definitions: [
