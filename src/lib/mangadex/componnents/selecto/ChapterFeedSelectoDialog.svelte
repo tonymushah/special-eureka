@@ -28,23 +28,11 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { XIcon as CloseIcon } from "svelte-feather-icons";
-	import { derived as der, get, writable } from "svelte/store";
+	import { derived as der, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
-	import { dev } from "$app/environment";
-	import { makeScroll, preventScroll } from "../layout/scrollElement";
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
 	const mangasLen = der(selected, (d) => d?.titles?.length ?? 0);
 	const chaptersLen = der(selected, (d) => d?.chapters?.length ?? 0);
-
-	const mangadexScrollContainer = document.getElementById("mangadex-scroll-container");
-	$effect(() => {
-		if (mangadexScrollContainer && $isOpened) {
-			preventScroll();
-			return () => {
-				makeScroll();
-			};
-		}
-	});
 </script>
 
 {#if $isOpened}
