@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { onDestroy, onMount } from "svelte";
 	import MangaDexTabs, { type MangaDexTabTrigger } from "../theme/tabs/MangaDexTabs.svelte";
 	import Titles from "./dialog/Titles.svelte";
+	import { makeScroll, preventScroll } from "../layout/scrollElement";
 
 	interface Props {
 		titles: string[];
@@ -22,6 +24,12 @@
 				disabled: chapters.length == 0
 			}
 		] as MangaDexTabTrigger[];
+	});
+	onMount(() => {
+		preventScroll();
+	});
+	onDestroy(() => {
+		makeScroll();
 	});
 </script>
 
