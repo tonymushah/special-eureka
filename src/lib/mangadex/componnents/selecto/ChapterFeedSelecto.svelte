@@ -106,6 +106,7 @@
 
 <svelte:window
 	onkeydown={(e) => {
+		e.preventDefault();
 		console.log(e.key);
 		if (e.key == "Control") {
 			canSelect = true;
