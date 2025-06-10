@@ -88,10 +88,10 @@
 		display: flex;
 	}
 	.lists {
-		display: grid;
+		display: flex;
 		gap: 12px;
 		width: 100%;
-		grid-template-rows: 1fr auto 1fr;
 		height: 100%;
+		flex-direction: column;
 	}
 </style>

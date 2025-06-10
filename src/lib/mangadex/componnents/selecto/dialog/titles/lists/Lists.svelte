@@ -151,6 +151,7 @@
 		gap: 4px;
 		overflow-y: scroll;
 		padding: 0px 12px;
+		flex: 1;
 	}
 	.list-w-make {
 		display: contents;

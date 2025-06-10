@@ -18,6 +18,7 @@
 		fullHeight?: boolean;
 		fillAvailableHeight?: boolean;
 		flex?: boolean;
+		content?: boolean;
 	}
 	let {
 		triggers = $bindable([]),
@@ -26,7 +27,8 @@
 		fontSize = "medium",
 		fullHeight,
 		fillAvailableHeight,
-		flex
+		flex,
+		content
 	}: Props = $props();
 	const {
 		elements: { root, list },
@@ -41,7 +43,14 @@
 	});
 </script>
 
-<div class="root" use:melt={$root} class:fullHeight class:fillAvailableHeight class:flex>
+<div
+	class="root"
+	use:melt={$root}
+	class:fullHeight
+	class:fillAvailableHeight
+	class:flex
+	class:content
+>
 	<div class="list" use:melt={$list}>
 		{#each triggers as triggerItem}
 			<MangaDexTabButton
@@ -67,10 +76,13 @@
 	.root.flex {
 		display: flex;
 		flex-direction: column;
-		hr {
-			width: 100%;
-			height: 1px;
-		}
+	}
+	hr {
+		width: 100%;
+		height: 1px;
+	}
+	.root.content {
+		display: contents;
 	}
 	.list {
 		display: flex;

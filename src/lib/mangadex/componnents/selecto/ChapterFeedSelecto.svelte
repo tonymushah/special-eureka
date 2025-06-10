@@ -118,8 +118,8 @@
 					d.forEach(pushSelected);
 				});
 			openSelectoDialog({
-				titles: selected_mangas,
-				chapters: selected_chapters
+				titles: [...selected_mangas],
+				chapters: [...selected_chapters]
 			});
 			onEnd?.();
 		}

@@ -34,7 +34,7 @@
 </script>
 
 <div class="body">
-	<MangaDexTabs bind:triggers fullHeight flex>
+	<MangaDexTabs bind:triggers content>
 		{#snippet children(key)}
 			{#if key == titleId}
 				<Titles {titles} />
@@ -49,7 +49,7 @@
 
 <style lang="scss">
 	.body {
-		height: 100%;
+		display: contents;
 	}
 	.nothing {
 		display: flex;

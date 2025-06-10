@@ -45,30 +45,32 @@
 				duration: 150
 			}}
 		>
-			<div class="top">
-				<div class="title-desc">
-					<h2 use:melt={$title}>Selecto</h2>
-					{#if !$nothingSelected}
-						<p use:melt={$description}>
-							You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
-								and {$chaptersLen}
-								chapter{#if $chaptersLen > 1}s{/if}
-							{/if}.
-						</p>
-					{/if}
+			<div class="content">
+				<div class="top">
+					<div class="title-desc">
+						<h2 use:melt={$title}>Selecto</h2>
+						{#if !$nothingSelected}
+							<p use:melt={$description}>
+								You have selected {$mangasLen} title{#if $mangasLen > 1}s{/if}{#if $chaptersLen > 0}
+									and {$chaptersLen}
+									chapter{#if $chaptersLen > 1}s{/if}
+								{/if}.
+							</p>
+						{/if}
+					</div>
+					<div class="close">
+						<ButtonAccent meltElement={close}>
+							<CloseIcon />
+						</ButtonAccent>
+					</div>
 				</div>
-				<div class="close">
-					<ButtonAccent meltElement={close}>
-						<CloseIcon />
-					</ButtonAccent>
-				</div>
+				{#if $selected?.titles && $selected?.chapters}
+					<ChapterFeedSelectoDialogBody
+						titles={$selected?.titles}
+						chapters={$selected?.chapters}
+					/>
+				{/if}
 			</div>
-			{#if $selected?.titles && $selected?.chapters}
-				<ChapterFeedSelectoDialogBody
-					titles={$selected?.titles}
-					chapters={$selected?.chapters}
-				/>
-			{/if}
 		</div>
 	</div>
 {/if}
@@ -94,7 +96,11 @@
 		left: 50%;
 		padding: 0.5rem; /* 24px */
 		height: 75vh;
+	}
+	.content {
+		height: 100%;
 		display: flex;
+		//grid-template-rows: fit-content auto;
 		flex-direction: column;
 	}
 	.close {
