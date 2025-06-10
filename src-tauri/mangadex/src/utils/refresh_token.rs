@@ -62,10 +62,9 @@ async fn refresh_token<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
         app.get_specific_rate_limit()?.refresh().await;
         match client.oauth().refresh().send().await {
             Ok(res) => {
+                // NOTE Made a bold mistake of using `Duration::from_millis` instead of `from_secs`
                 let _ = last_time_fetched
-                    .replace(
-                        (Instant::now() + (Duration::from_millis(res.expires_in as u64))).into(),
-                    )
+                    .replace((Instant::now() + (Duration::from_secs(res.expires_in as u64))).into())
                     .await;
                 let _ = watches.is_logged.send_data(true);
             }
