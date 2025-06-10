@@ -26,10 +26,12 @@
 		] as MangaDexTabTrigger[];
 	});
 	onMount(() => {
+		console.debug("Opening");
 		preventScroll();
 	});
 	onDestroy(() => {
 		makeScroll();
+		console.debug("Closing");
 	});
 </script>
 
