@@ -175,7 +175,7 @@ export default async function executeSearchQuery(
 								id: chap.id,
 								client
 							})
-						};
+						} satisfies Chapter;
 					})
 				};
 			})
