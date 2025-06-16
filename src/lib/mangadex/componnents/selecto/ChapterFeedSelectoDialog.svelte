@@ -23,6 +23,8 @@
 		[open, nothingSelected],
 		([$open, $nothingSelected]) => $open == true && $nothingSelected == false
 	);
+	const mangasLen = der(selected, (d) => d?.titles?.length ?? 0);
+	const chaptersLen = der(selected, (d) => d?.chapters?.length ?? 0);
 </script>
 
 <script lang="ts">
@@ -31,8 +33,6 @@
 	import { derived as der, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import ChapterFeedSelectoDialogBody from "./ChapterFeedSelectoDialogBody.svelte";
-	const mangasLen = der(selected, (d) => d?.titles?.length ?? 0);
-	const chaptersLen = der(selected, (d) => d?.chapters?.length ?? 0);
 </script>
 
 {#if $isOpened}
