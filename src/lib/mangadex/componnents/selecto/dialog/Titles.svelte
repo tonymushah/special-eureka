@@ -43,6 +43,7 @@
 				showStatus();
 			}}
 		/>
+		<ButtonAccentOnlyLabel variant="3" label="Download" />
 		<ButtonAccentOnlyLabel variant="3" label="Export ids to txt" />
 		{#if dev}
 			<ButtonAccentOnlyLabel variant="3" label="Export as emdx" />
