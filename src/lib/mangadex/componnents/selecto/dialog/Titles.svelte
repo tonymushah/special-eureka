@@ -2,6 +2,7 @@
 	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import AddToListBatch from "./titles/AddToListBatch.svelte";
 	import UpdateReadingStatuses from "./titles/UpdateReadingStatuses.svelte";
+	import { dev } from "$app/environment";
 
 	interface Props {
 		titles: string[];
@@ -43,6 +44,9 @@
 			}}
 		/>
 		<ButtonAccentOnlyLabel variant="3" label="Export ids to txt" />
+		{#if dev}
+			<ButtonAccentOnlyLabel variant="3" label="Export as emdx" />
+		{/if}
 	</div>
 </div>
 
