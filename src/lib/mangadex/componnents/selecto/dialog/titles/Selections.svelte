@@ -92,6 +92,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 6px;
+		overflow-y: scroll;
 	}
 	p {
 		margin: 4px 0px;
