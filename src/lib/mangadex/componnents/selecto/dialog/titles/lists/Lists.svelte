@@ -15,6 +15,7 @@
 	import { onDestroy } from "svelte";
 	import { derived as der, get } from "svelte/store";
 	import MakeEmptyList from "./MakeEmptyList.svelte";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	const client = getContextClient();
 
@@ -99,6 +100,9 @@
 </script>
 
 <div class="list-w-make">
+	{#if $query.error}
+		<ErrorComponent label="Error" error={$query.error} />
+	{/if}
 	<div class="lists">
 		{#if $query.data}
 			{#each $query.data.pages as pages}
