@@ -5,7 +5,6 @@
 	import { query } from "./selections/query";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import StatusBadgeOnlyLabel from "@mangadex/componnents/theme/tag/StatusBadgeOnlyLabel.svelte";
-	import { remove } from "lodash";
 
 	interface Props {
 		titles: string[];
@@ -55,8 +54,8 @@
 <p>Click on the badge to remove it from the selection</p>
 <div class="titles-selected">
 	{#if $selectedTitles.data && !$selectedTitles.isFetching}
-		{@const titles = $selectedTitles.data}
-		{#each titles as title}
+		{@const _titles = $selectedTitles.data}
+		{#each _titles as title}
 			<StatusBadgeOnlyLabel
 				label={title.title}
 				color="blue"
@@ -64,6 +63,16 @@
 					removeSelection(title.id);
 				}}
 			/>
+		{:else}
+			{#each titles as title}
+				<StatusBadgeOnlyLabel
+					label={title}
+					color="gray"
+					onclick={() => {
+						removeSelection(title);
+					}}
+				/>
+			{/each}
 		{/each}
 	{:else}
 		{#each titles as title}
