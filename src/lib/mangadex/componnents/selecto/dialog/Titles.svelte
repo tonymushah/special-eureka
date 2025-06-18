@@ -6,6 +6,7 @@
 	import { titlesDownload } from "./titles/download";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import Selections from "./titles/Selections.svelte";
+	import SectionBase from "./SectionBase.svelte";
 
 	interface Props {
 		titles: string[];
@@ -28,8 +29,8 @@
 	let isSelecting = $derived(currentAction == "selections");
 </script>
 
-<div class="titles">
-	<div class="content">
+<SectionBase>
+	{#snippet content()}
 		{#if isLists}
 			<AddToListBatch {titles} />
 		{:else if isStatus}
@@ -37,8 +38,8 @@
 		{:else if isSelecting}
 			<Selections bind:titles />
 		{/if}
-	</div>
-	<div class="actions">
+	{/snippet}
+	{#snippet actions()}
 		<ButtonAccentOnlyLabel
 			label="Change Selections"
 			variant={isSelecting ? "5" : "3"}
@@ -84,23 +85,5 @@
 		{#if dev}
 			<ButtonAccentOnlyLabel variant="3" label="Export as emdx" />
 		{/if}
-	</div>
-</div>
-
-<style lang="scss">
-	.titles {
-		display: flex;
-		gap: 12px;
-		width: 100%;
-		height: 77%;
-	}
-	.content {
-		flex: 1;
-		height: 100%;
-	}
-	.actions {
-		display: flex;
-		flex-direction: column;
-		gap: 6px;
-	}
-</style>
+	{/snippet}
+</SectionBase>
