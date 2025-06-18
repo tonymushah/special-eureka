@@ -3,6 +3,8 @@
 	import AddToListBatch from "./titles/AddToListBatch.svelte";
 	import UpdateReadingStatuses from "./titles/UpdateReadingStatuses.svelte";
 	import { dev } from "$app/environment";
+	import { titlesDownload } from "./titles/download";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	interface Props {
 		titles: string[];
@@ -43,7 +45,26 @@
 				showStatus();
 			}}
 		/>
-		<ButtonAccentOnlyLabel variant="3" label="Download" />
+		<ButtonAccentOnlyLabel
+			variant="3"
+			disabled={$titlesDownload.isPending}
+			label="Download"
+			onclick={() => {
+				$titlesDownload
+					.mutateAsync(titles)
+					.then(() => {
+						addToast({
+							data: {
+								variant: "primary",
+								title: "Titles downloaded"
+							}
+						});
+					})
+					.catch((e) => {
+						addErrorToast("Failed to download some titles", e);
+					});
+			}}
+		/>
 		<ButtonAccentOnlyLabel variant="3" label="Export ids to txt" />
 		{#if dev}
 			<ButtonAccentOnlyLabel variant="3" label="Export as emdx" />
