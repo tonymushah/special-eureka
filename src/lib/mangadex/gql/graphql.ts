@@ -4000,6 +4000,25 @@ export type AddTitleToListBatchMutation = {
 	customList: { __typename?: "CustomListMutations"; addMangaBatch: boolean };
 };
 
+export type GetTitleTitlesQueryVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetTitleTitlesQuery = {
+	__typename?: "Query";
+	manga: {
+		__typename?: "MangaQueries";
+		list: {
+			__typename?: "MangaResults";
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+			}>;
+		};
+	};
+};
+
 export type UpdateReadingStatusesMutationVariables = Exact<{
 	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 	status?: InputMaybe<ReadingStatus>;
@@ -9022,6 +9041,111 @@ export const AddTitleToListBatchDocument = {
 		}
 	]
 } as unknown as DocumentNode<AddTitleToListBatchMutation, AddTitleToListBatchMutationVariables>;
+export const GetTitleTitlesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getTitleTitles" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "mangaIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "titles" }
+														}
+													}
+												]
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "excludeContentProfile" },
+											value: { kind: "BooleanValue", value: true }
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetTitleTitlesQuery, GetTitleTitlesQueryVariables>;
 export const UpdateReadingStatusesDocument = {
 	kind: "Document",
 	definitions: [

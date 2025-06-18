@@ -10,7 +10,7 @@
 	}
 	const titleId = "titles";
 	const chapterId = "chapters";
-	let { titles, chapters }: Props = $props();
+	let { titles = $bindable(), chapters = $bindable() }: Props = $props();
 	let triggers = $derived.by(() => {
 		return [
 			{
@@ -39,7 +39,7 @@
 	<MangaDexTabs bind:triggers content>
 		{#snippet children(key)}
 			{#if key == titleId}
-				<Titles {titles} />
+				<Titles bind:titles />
 			{:else if key == chapterId}{:else}
 				<div class="nothing">
 					<h2>Nothing selected</h2>

@@ -37,6 +37,7 @@ type Documents = {
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorSearchFetcherDocument;
 	"\n\tmutation justDownloadingTitle($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id){\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": typeof types.JustDownloadingTitleDocument;
 	"\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n": typeof types.AddTitleToListBatchDocument;
+	"\n\tquery getTitleTitles($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: {\n\t\t\t\tmangaIds: $titles\n\t\t\t}, excludeContentProfile: true) {\n\t\t\t\tdata{\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetTitleTitlesDocument;
 	"\n\tmutation updateReadingStatuses($titles: [UUID!]!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatusBatch(mangaIds: $titles, status: $status)\n\t\t}\n\t}\n": typeof types.UpdateReadingStatusesDocument;
 	"\n\tmutation followTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n": typeof types.FollowTitlesBatchDocument;
 	"\n\tmutation unfollowTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tunfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n": typeof types.UnfollowTitlesBatchDocument;
@@ -193,6 +194,8 @@ const documents: Documents = {
 		types.JustDownloadingTitleDocument,
 	"\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n":
 		types.AddTitleToListBatchDocument,
+	"\n\tquery getTitleTitles($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: {\n\t\t\t\tmangaIds: $titles\n\t\t\t}, excludeContentProfile: true) {\n\t\t\t\tdata{\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+		types.GetTitleTitlesDocument,
 	"\n\tmutation updateReadingStatuses($titles: [UUID!]!, $status: ReadingStatus) {\n\t\tmanga {\n\t\t\tupdateReadingStatusBatch(mangaIds: $titles, status: $status)\n\t\t}\n\t}\n":
 		types.UpdateReadingStatusesDocument,
 	"\n\tmutation followTitlesBatch($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tfollowBatch(mangaIds: $titles)\n\t\t}\n\t}\n":
@@ -562,6 +565,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getTitleTitles($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: {\n\t\t\t\tmangaIds: $titles\n\t\t\t}, excludeContentProfile: true) {\n\t\t\t\tdata{\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getTitleTitles($titles: [UUID!]!) {\n\t\tmanga {\n\t\t\tlist(params: {\n\t\t\t\tmangaIds: $titles\n\t\t\t}, excludeContentProfile: true) {\n\t\t\t\tdata{\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

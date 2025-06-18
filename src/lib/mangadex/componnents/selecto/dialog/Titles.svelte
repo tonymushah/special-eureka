@@ -5,21 +5,27 @@
 	import { dev } from "$app/environment";
 	import { titlesDownload } from "./titles/download";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import Selections from "./titles/Selections.svelte";
 
 	interface Props {
 		titles: string[];
 	}
-	let { titles }: Props = $props();
-	let currentAction: "lists" | "status" = $state("lists");
+	let { titles = $bindable() }: Props = $props();
+	let currentAction: "lists" | "status" | "selections" = $state("lists");
 	function showLists() {
 		currentAction = "lists";
 	}
 	function showStatus() {
 		currentAction = "status";
 	}
+	function showSelecetions() {
+		currentAction = "selections";
+	}
 	let isLists = $derived(currentAction == "lists");
 	// @ts-ignore
 	let isStatus = $derived(currentAction == "status");
+	//@ts-ignore
+	let isSelecting = $derived(currentAction == "selections");
 </script>
 
 <div class="titles">
@@ -28,9 +34,18 @@
 			<AddToListBatch {titles} />
 		{:else if isStatus}
 			<UpdateReadingStatuses {titles} />
+		{:else if isSelecting}
+			<Selections bind:titles />
 		{/if}
 	</div>
 	<div class="actions">
+		<ButtonAccentOnlyLabel
+			label="Change Selections"
+			variant={isSelecting ? "5" : "3"}
+			onclick={() => {
+				showSelecetions();
+			}}
+		/>
 		<ButtonAccentOnlyLabel
 			variant={isLists ? "5" : "3"}
 			label="Add to list"
