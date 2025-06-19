@@ -3978,6 +3978,27 @@ export type AuthorSearchFetcherQuery = {
 	};
 };
 
+export type MultiChapterDownloadBaseMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MultiChapterDownloadBaseMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		download: { __typename?: "DownloadState"; isDownloaded: boolean; hasFailed: boolean };
+	};
+};
+
+export type MultiChapterCancelDownloadBaseMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MultiChapterCancelDownloadBaseMutation = {
+	__typename?: "Mutation";
+	chapter: { __typename?: "ChapterMutations"; cancelDownload: boolean };
+};
+
 export type GetChaptersIDsAsFeedQueryVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
@@ -8942,6 +8963,121 @@ export const AuthorSearchFetcherDocument = {
 		}
 	]
 } as unknown as DocumentNode<AuthorSearchFetcherQuery, AuthorSearchFetcherQueryVariables>;
+export const MultiChapterDownloadBaseDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "multiChapterDownloadBase" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "download" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isDownloaded" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "hasFailed" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MultiChapterDownloadBaseMutation,
+	MultiChapterDownloadBaseMutationVariables
+>;
+export const MultiChapterCancelDownloadBaseDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "multiChapterCancelDownloadBase" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "cancelDownload" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MultiChapterCancelDownloadBaseMutation,
+	MultiChapterCancelDownloadBaseMutationVariables
+>;
 export const GetChaptersIDsAsFeedDocument = {
 	kind: "Document",
 	definitions: [
