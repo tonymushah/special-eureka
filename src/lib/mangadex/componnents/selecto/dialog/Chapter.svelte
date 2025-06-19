@@ -3,6 +3,7 @@
 	import SectionBase from "./SectionBase.svelte";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import Selections from "./chapter/Selections.svelte";
+	import { multiChapterDownload } from "./chapter/download";
 
 	interface Props {
 		chapters: string[];
@@ -26,7 +27,14 @@
 				currentAction = "selection";
 			}}
 		/>
-		<ButtonAccentOnlyLabel variant="3" label="Download" />
+		<ButtonAccentOnlyLabel
+			variant="3"
+			label="Download"
+			disabled={$multiChapterDownload.isPending}
+			onclick={() => {
+				$multiChapterDownload.mutate(chapters);
+			}}
+		/>
 		<ButtonAccentOnlyLabel variant="3" label="Remove them locally" />
 		{#if canDelete}
 			<DangerButtonOnlyLabel variant="1" label="Delete them permanently" />
