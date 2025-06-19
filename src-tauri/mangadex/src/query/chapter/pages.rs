@@ -92,7 +92,7 @@ impl ChapterPagesQuery {
         Ok(ChapterPages { data, data_saver })
     }
     pub async fn pages(&self, ctx: &Context<'_>) -> Result<ChapterPages> {
-        if let Ok(offline) = self.pages_offline(ctx).await {
+        if let Some(offline) = self.pages_offline(ctx).await.ok().filter(|d| !d.is_empty()) {
             log::debug!("Fetched offline chapter {}", self.id);
             Ok(offline)
         } else {

@@ -64,6 +64,12 @@ impl ChapterPages {
     }
 }
 
+impl ChapterPages {
+    pub fn is_empty(&self) -> bool {
+        self.data.is_empty() && self.data_saver.is_empty()
+    }
+}
+
 impl From<AtHomeServer> for ChapterPages {
     fn from(value: AtHomeServer) -> Self {
         let hash = value.chapter.hash;
