@@ -74,6 +74,7 @@ type Documents = {
 	"\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": typeof types.RtlSidebarSubDocument;
 	"\n\tsubscription userMe {\n\t\twatchUserMe {\n\t\t\tusername\n\t\t\troles\n\t\t}\n\t}\n": typeof types.UserMeDocument;
 	"\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n": typeof types.IsLoggedDocument;
+	"\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthCheckDocument;
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n": typeof types.ChapterFeedStyleSubDocument;
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n": typeof types.UpdateChapterFeedStyleDocument;
 	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t}\n\t}\n": typeof types.ChapterLayoutSubscriptionDocument;
@@ -271,6 +272,8 @@ const documents: Documents = {
 	"\n\tsubscription userMe {\n\t\twatchUserMe {\n\t\t\tusername\n\t\t\troles\n\t\t}\n\t}\n":
 		types.UserMeDocument,
 	"\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n": types.IsLoggedDocument,
+	"\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n":
+		types.AuthCheckDocument,
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n":
 		types.ChapterFeedStyleSubDocument,
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n":
@@ -799,6 +802,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n"
 ): (typeof documents)["\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

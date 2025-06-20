@@ -188,6 +188,18 @@ export enum ApiClientState {
 	Requested = "REQUESTED"
 }
 
+export type AuthCheck = {
+	__typename?: "AuthCheck";
+	isAuthenticated: Scalars["Boolean"]["output"];
+	permissions: Array<Scalars["String"]["output"]>;
+	roles: Array<UserRole>;
+};
+
+export type AuthQuery = {
+	__typename?: "AuthQuery";
+	check: AuthCheck;
+};
+
 export type Author = {
 	__typename?: "Author";
 	attributes: AuthorAttributes;
@@ -2389,6 +2401,7 @@ export type PrimaryColorInput = {
 export type Query = {
 	__typename?: "Query";
 	apiClient: ApiClientQueries;
+	auth: AuthQuery;
 	author: AuthorQueries;
 	chapter: ChapterQueries;
 	cover: CoverQueries;
@@ -4506,6 +4519,21 @@ export type UserMeSubscription = {
 export type IsLoggedSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type IsLoggedSubscription = { __typename?: "Subscriptions"; watchIsLogged: boolean };
+
+export type AuthCheckQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AuthCheckQuery = {
+	__typename?: "Query";
+	auth: {
+		__typename?: "AuthQuery";
+		check: {
+			__typename?: "AuthCheck";
+			isAuthenticated: boolean;
+			roles: Array<UserRole>;
+			permissions: Array<string>;
+		};
+	};
+};
 
 export type ChapterFeedStyleSubSubscriptionVariables = Exact<{ [key: string]: never }>;
 
@@ -11464,6 +11492,51 @@ export const IsLoggedDocument = {
 		}
 	]
 } as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;
+export const AuthCheckDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "authCheck" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "auth" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "check" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isAuthenticated" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "roles" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "permissions" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<AuthCheckQuery, AuthCheckQueryVariables>;
 export const ChapterFeedStyleSubDocument = {
 	kind: "Document",
 	definitions: [
