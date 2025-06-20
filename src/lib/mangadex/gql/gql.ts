@@ -37,6 +37,7 @@ type Documents = {
 	"\n\tquery authorSearchFetcher($name: String!, $offset: Int! = 0, $limit: Int! = 10) {\n\t\tauthor {\n\t\t\tlist(params: { name: $name, offset: $offset, limit: $limit }) {\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tname\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\toffset\n\t\t\t\tlimit\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthorSearchFetcherDocument;
 	"\n\tmutation multiChapterDownloadBase($id: UUID!) {\n\t\tchapter {\n\t\t\tdownload(id: $id) {\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MultiChapterDownloadBaseDocument;
 	"\n\tmutation multiChapterCancelDownloadBase($id: UUID!) {\n\t\tchapter {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n": typeof types.MultiChapterCancelDownloadBaseDocument;
+	"\n\tmutation removeMultipleChapterMutationBase($id: UUID!) {\n\t\tchapter {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n": typeof types.RemoveMultipleChapterMutationBaseDocument;
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(feedContent: false, chapterListParams:  {\n\t\t\t\tchapterIds: $ids\n\t\t\t}) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChaptersIDsAsFeedDocument;
 	"\n\tmutation justDownloadingTitle($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id){\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n": typeof types.JustDownloadingTitleDocument;
 	"\n\tmutation addTitleToListBatch($mangas: [UUID!]!, $customList: UUID!) {\n\t\tcustomList {\n\t\t\taddMangaBatch(listId: $customList, mangaIds: $mangas)\n\t\t}\n\t}\n": typeof types.AddTitleToListBatchDocument;
@@ -197,6 +198,8 @@ const documents: Documents = {
 		types.MultiChapterDownloadBaseDocument,
 	"\n\tmutation multiChapterCancelDownloadBase($id: UUID!) {\n\t\tchapter {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n":
 		types.MultiChapterCancelDownloadBaseDocument,
+	"\n\tmutation removeMultipleChapterMutationBase($id: UUID!) {\n\t\tchapter {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n":
+		types.RemoveMultipleChapterMutationBaseDocument,
 	"\n\tquery getChaptersIDsAsFeed($ids: [UUID!]!) {\n\t\tchapter {\n\t\t\tlistWithGroupByManga(feedContent: false, chapterListParams:  {\n\t\t\t\tchapterIds: $ids\n\t\t\t}) {\n\t\t\t\tdata {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tchapters {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tvolume\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetChaptersIDsAsFeedDocument,
 	"\n\tmutation justDownloadingTitle($id: UUID!) {\n\t\tmanga {\n\t\t\tdownload(id: $id){\n\t\t\t\tisDownloaded\n\t\t\t\thasFailed\n\t\t\t}\n\t\t}\n\t}\n":
@@ -574,6 +577,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation multiChapterCancelDownloadBase($id: UUID!) {\n\t\tchapter {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation multiChapterCancelDownloadBase($id: UUID!) {\n\t\tchapter {\n\t\t\tcancelDownload(id: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation removeMultipleChapterMutationBase($id: UUID!) {\n\t\tchapter {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation removeMultipleChapterMutationBase($id: UUID!) {\n\t\tchapter {\n\t\t\tremove(id: $id)\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

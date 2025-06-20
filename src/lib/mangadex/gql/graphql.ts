@@ -3999,6 +3999,15 @@ export type MultiChapterCancelDownloadBaseMutation = {
 	chapter: { __typename?: "ChapterMutations"; cancelDownload: boolean };
 };
 
+export type RemoveMultipleChapterMutationBaseMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type RemoveMultipleChapterMutationBaseMutation = {
+	__typename?: "Mutation";
+	chapter: { __typename?: "ChapterMutations"; remove: boolean };
+};
+
 export type GetChaptersIDsAsFeedQueryVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
 }>;
@@ -9077,6 +9086,57 @@ export const MultiChapterCancelDownloadBaseDocument = {
 } as unknown as DocumentNode<
 	MultiChapterCancelDownloadBaseMutation,
 	MultiChapterCancelDownloadBaseMutationVariables
+>;
+export const RemoveMultipleChapterMutationBaseDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "removeMultipleChapterMutationBase" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "remove" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	RemoveMultipleChapterMutationBaseMutation,
+	RemoveMultipleChapterMutationBaseMutationVariables
 >;
 export const GetChaptersIDsAsFeedDocument = {
 	kind: "Document",
