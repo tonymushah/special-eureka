@@ -36,6 +36,7 @@ use self::{
     read_marker::ReadMarkerQueries, report::ReportQueries,
     scanlation_group::ScanlationGroupQueries, statistics::StatisticsQueries, tag::TagQueries,
     upload::UploadQueries, user::UserQueries, utils::UtilsQuery,
+	auth::AuthQuery
 };
 
 pub struct Query;
@@ -114,4 +115,7 @@ impl Query {
     pub async fn user_option(&self) -> UserOptionQueries {
         UserOptionQueries
     }
+	pub async fn auth(&self) -> AuthQuery {
+		AuthQuery
+	}
 }
