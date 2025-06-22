@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import type { HTMLButtonAttributes } from "svelte/elements";
 
 	interface Props extends HTMLButtonAttributes {
@@ -8,6 +9,7 @@
 		haveBorderRadius?: boolean;
 		noPadding?: boolean;
 		children?: import("svelte").Snippet;
+		meltElement?: AnyMeltElement;
 	}
 
 	let {
@@ -19,6 +21,7 @@
 		haveBorderRadius = true,
 		noPadding = false,
 		children,
+		meltElement = emptyMeltElement,
 		...restProps
 	}: Props = $props();
 </script>
@@ -30,6 +33,7 @@
 	class:with-active={with_active}
 	class:with-hover={with_hover}
 	class:noPadding
+	use:melt={$meltElement}
 	{...restProps}
 >
 	{@render children?.()}

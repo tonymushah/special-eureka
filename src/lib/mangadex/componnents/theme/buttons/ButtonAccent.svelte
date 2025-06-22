@@ -8,10 +8,12 @@
 	import L3 from "./accents/L3.svelte";
 	import L4 from "./accents/L4.svelte";
 	import L5 from "./accents/L5.svelte";
+	import type { AnyMeltElement } from "@melt-ui/svelte";
 
 	interface Props extends HTMLButtonAttributes {
 		variant?: "default" | "1" | "2" | "3" | "4" | "5" | "accent" | "accent-alt";
 		isBase?: boolean;
+		meltElement?: AnyMeltElement;
 	}
 
 	let { variant = "default", isBase = false, ...restProps }: Props = $props();

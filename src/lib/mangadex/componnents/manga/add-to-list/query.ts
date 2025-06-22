@@ -46,3 +46,13 @@ export const makeListMutation = graphql(`
 		}
 	}
 `);
+
+export const makeEmptyListMutation = graphql(`
+	mutation createEmptyCustomList($visibility: CustomListVisibility!, $name: String!) {
+		customList {
+			create(params: { visibility: $visibility, name: $name }) {
+				id
+			}
+		}
+	}
+`);

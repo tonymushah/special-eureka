@@ -1,18 +1,35 @@
+<script lang="ts" module>
+	export type MangaDexTabTrigger = {
+		id: string;
+		title: string;
+		disabled?: boolean;
+	};
+</script>
+
 <script lang="ts">
 	import { createTabs, melt } from "@melt-ui/svelte";
 	import type { Snippet } from "svelte";
 	import MangaDexTabButton from "./MangaDexTabButton.svelte";
 	interface Props {
-		triggers: {
-			id: string;
-			title: string;
-			disabled?: boolean;
-		}[];
+		triggers: MangaDexTabTrigger[];
 		defaultValue?: string;
 		children?: Snippet<[string]>;
 		fontSize?: "small" | "medium" | "large" | "larger" | string;
+		fullHeight?: boolean;
+		fillAvailableHeight?: boolean;
+		flex?: boolean;
+		content?: boolean;
 	}
-	let { triggers = [], defaultValue, children, fontSize = "medium" }: Props = $props();
+	let {
+		triggers = $bindable([]),
+		defaultValue,
+		children,
+		fontSize = "medium",
+		fullHeight,
+		fillAvailableHeight,
+		flex,
+		content
+	}: Props = $props();
 	const {
 		elements: { root, list },
 		states: { value }
@@ -26,10 +43,18 @@
 	});
 </script>
 
-<div class="root" use:melt={$root}>
+<div
+	class="root"
+	use:melt={$root}
+	class:fullHeight
+	class:fillAvailableHeight
+	class:flex
+	class:content
+>
 	<div class="list" use:melt={$list}>
 		{#each triggers as triggerItem}
 			<MangaDexTabButton
+				disabled={triggerItem.disabled}
 				id={triggerItem.id}
 				title={triggerItem.title}
 				{value}
@@ -42,6 +67,23 @@
 </div>
 
 <style lang="scss">
+	.root.fullHeight {
+		height: 100%;
+	}
+	.root.fillAvailableHeight {
+		height: -webkit-fill-available;
+	}
+	.root.flex {
+		display: flex;
+		flex-direction: column;
+	}
+	hr {
+		width: 100%;
+		height: 1px;
+	}
+	.root.content {
+		display: contents;
+	}
 	.list {
 		display: flex;
 		gap: 3px;

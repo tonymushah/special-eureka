@@ -30,6 +30,8 @@ governor = "0.10"
 log = "0.4"
 fern = "0.7"
 regex = "1"
+futures-util = "0.3"
+deduplicate = "0.4.1"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"
@@ -63,6 +65,7 @@ package = "tauri-plugin-speu-mangadex"
 [profile.dev]
 opt-level = 1
 lto = "thin"
+incremental = true
 
 # Enable a large amount of optimization in the dev profile for dependencies.
 [profile.dev.package."*"]
@@ -72,3 +75,7 @@ opt-level = 3
 opt-level = 3
 lto = true
 strip = true
+panic = "abort"
+
+[profile.release.package."*"]
+opt-level = "s"

@@ -1,8 +1,9 @@
 <script lang="ts">
-	import Selecto from "selecto";
+	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
-	import ChapterFeedSelectoDialog from "./ChapterFeedSelectoDialog.svelte";
 	import { uniq } from "lodash";
+	import { openSelectoDialog } from "./ChapterFeedSelectoDialog.svelte";
+	import { scrollElementId } from "../layout/scrollElement";
 
 	interface Props {
 		container: HTMLElement | undefined;
@@ -18,72 +19,86 @@
 		useDialog = true,
 		onEnd
 	}: Props = $props();
-	let dialog: HTMLDialogElement | undefined = $state(undefined);
-	function openDialog() {
-		onEnd?.();
-		if (dialog && useDialog) {
-			dialog.showModal();
-		}
-	}
 	let canSelect = $state(false);
 	let selected_mangas = $derived(uniq(selectedMangas));
 	let selected_chapters = $derived(uniq(selectedChapters));
+	const selectionAreaClass = "chapter-feed-selecto-area";
+	function pushSelected(element: Element) {
+		const maybeChapterId = element?.getAttribute("data-chapter-id");
+		if (maybeChapterId != null) {
+			if (validate(maybeChapterId)) selectedChapters.push(maybeChapterId);
+		}
+		const maybeMangaId = element?.getAttribute("data-manga-id");
+		if (maybeMangaId != null) {
+			if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
+		}
+	}
+	function cleatSelecteds() {
+		selectedChapters = [];
+		selectedMangas = [];
+	}
 	$effect(() => {
 		if (container && canSelect) {
-			const selecto = new Selecto({
-				container,
-				selectableTargets: [".manga-element", ".chapter-element"],
-				toggleContinueSelect: "alt",
-				preventDefault: true,
-				preventRightClick: true,
-				preventClickEventOnDrag: true,
-				preventClickEventOnDragStart: true,
-				hitRate: 50,
-				innerScrollOptions: {
-					container: "#mangadex-scroll-container"
+			cleatSelecteds();
+			container.style.userSelect = "none";
+			(() => {
+				const mangadexScroll = document.getElementById(scrollElementId);
+				if (mangadexScroll) {
+					mangadexScroll.style.userSelect = "none";
+					// mangadexScroll.style.overflow = "auto";
 				}
-			});
-			selecto
-				.on("dragStart", () => {
-					selecto
-						.findSelectableTargets()
-						.forEach((e) => e.removeAttribute("data-selecto-selected"));
-					selectedChapters = [];
-					selectedMangas = [];
+			})();
+			const dragselect = new SelectionArea({
+				selectables: [".manga-element", ".chapter-element"],
+				boundaries: (() => {
+					const bound: HTMLElement[] = [container];
+					const mangadexScroll = document.getElementById(scrollElementId);
+					if (mangadexScroll) {
+						bound.push(mangadexScroll);
+					}
+					return bound;
+				})(),
+				selectionAreaClass
+			})
+				.on("start", (ev) => {
+					ev.selection.clearSelection();
 				})
-				.on("select", (ev) => {
-					ev.added.forEach((element) => {
-						element.setAttribute("data-selecto-selected", "");
-					});
-					ev.removed.forEach((element) => {
+				.on("stop", (ev) => {
+					ev.store.selected.forEach((element) => {
+						pushSelected(element);
 						element.removeAttribute("data-selecto-selected");
 					});
+					openSelectoDialog({
+						titles: selected_mangas,
+						chapters: selected_chapters
+					});
+					onEnd?.();
 				})
-				.on("selectEnd", (ev) => {
-					ev.afterAdded.forEach((element) => {
-						element.setAttribute("data-selecto-selected", "");
-					});
-					ev.afterRemoved.forEach((element) => {
-						element.removeAttribute("data-selecto-selected");
-					});
-					ev.selected.forEach((element) => {
-						const maybeChapterId = element.getAttribute("data-chapter-id");
-						if (maybeChapterId != null) {
-							if (validate(maybeChapterId)) selectedChapters.push(maybeChapterId);
-						}
-						const maybeMangaId = element.getAttribute("data-manga-id");
-						if (maybeMangaId != null) {
-							if (validate(maybeMangaId)) selectedMangas.push(maybeMangaId);
-						}
-					});
-					openDialog();
+				.on("move", (ev) => {
+					ev.store.changed.added.forEach((item) =>
+						item.setAttribute("data-selecto-selected", "")
+					);
+					ev.store.changed.removed.forEach((item) =>
+						item.removeAttribute("data-selecto-selected")
+					);
 				});
-
 			return () => {
-				selecto
-					.findSelectableTargets()
-					.forEach((e) => e.removeAttribute("data-selecto-selected"));
-				selecto.destroy();
+				dragselect.getSelection().forEach((item) => {
+					item.removeAttribute("data-selecto-selected");
+				});
+				dragselect.clearSelection();
+
+				dragselect.destroy();
+				if (container) {
+					container.style.userSelect = "auto";
+					(() => {
+						const mangadexScroll = document.getElementById(scrollElementId);
+						if (mangadexScroll) {
+							mangadexScroll.style.userSelect = "auto";
+							//mangadexScroll.style.overflow = "initial";
+						}
+					})();
+				}
 			};
 		}
 	});
@@ -91,9 +106,22 @@
 
 <svelte:window
 	onkeydown={(e) => {
+		e.preventDefault();
 		console.log(e.key);
 		if (e.key == "Control") {
 			canSelect = true;
+		} else if (e.key == "a" && canSelect && container) {
+			console.log("select all");
+			[".manga-element", ".chapter-element"]
+				.map((d) => container.querySelectorAll(d))
+				.forEach((d) => {
+					d.forEach(pushSelected);
+				});
+			openSelectoDialog({
+				titles: [...selected_mangas],
+				chapters: [...selected_chapters]
+			});
+			onEnd?.();
 		}
 	}}
 	onkeyup={(e) => {
@@ -103,8 +131,10 @@
 	}}
 />
 
-<ChapterFeedSelectoDialog
-	bind:dialog
-	selectedChapters={selected_chapters}
-	selectedMangas={selected_mangas}
-/>
+<style lang="scss">
+	:global(.chapter-feed-selecto-area) {
+		background: rgba(108, 115, 255, 0.5);
+		border: 1px solid rgb(62, 99, 221);
+		border-radius: 0.15em;
+	}
+</style>

@@ -66,7 +66,7 @@ impl MangaQueries {
     ) -> Result<MangaResults> {
         let mut params = params.unwrap_or_default();
         params.includes = <MangaResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        if params.limit.is_none() && !params.manga_ids.is_empty() {
+        if !params.manga_ids.is_empty() {
             params.limit.replace(params.manga_ids.len().try_into()?);
         }
         MangaListQueries::new_with_exclude_feed(

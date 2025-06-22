@@ -4,6 +4,7 @@
 	import Sidebar from "../sidebar/Sidebar.svelte";
 	import { isSidebarRtl } from "../sidebar/states/isRtl";
 	import Toaster from "../theme/toast/Toaster.svelte";
+	import { scrollElementId } from "./scrollElement";
 	interface Props {
 		children?: import("svelte").Snippet;
 	}
@@ -18,7 +19,7 @@
 	</div>
 	<div
 		class="inner"
-		id="mangadex-scroll-container"
+		id={scrollElementId}
 		class:loading
 		class:defaultDecoration={$isDefaultDecoration}
 		role="button"

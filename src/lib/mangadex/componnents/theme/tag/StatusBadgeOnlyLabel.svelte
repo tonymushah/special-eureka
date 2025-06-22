@@ -8,9 +8,9 @@
 		label: string;
 	}
 
-	let { color, label }: Props = $props();
+	let { color, label, ...restProps }: Props = $props();
 </script>
 
-<StatusBadge {color}>
+<StatusBadge {color} {...restProps}>
 	{label}
 </StatusBadge>

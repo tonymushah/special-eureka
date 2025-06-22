@@ -189,4 +189,9 @@
 	.list-w-make {
 		display: contents;
 	}
+	.observer-trigger {
+		align-items: center;
+		justify-content: center;
+		display: flex;
+	}
 </style>

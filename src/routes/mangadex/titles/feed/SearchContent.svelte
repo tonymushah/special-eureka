@@ -103,6 +103,21 @@
 				})
 			);
 		}}
+		oncomments={(e) => {
+			let threadUrl: string | undefined = undefined;
+			for (let index = 0; index < $feed.length; index++) {
+				const { chapters } = $feed[index];
+				for (let index = 0; index < chapters.length; index++) {
+					const chapter = chapters[index];
+					if (chapter.chapterId == e.id) {
+						threadUrl = chapter.threadUrl;
+					}
+				}
+				if (threadUrl) {
+					break;
+				}
+			}
+		}}
 	/>
 </div>
 

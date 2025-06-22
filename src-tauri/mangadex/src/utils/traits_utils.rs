@@ -2,18 +2,15 @@ use actix::{ArbiterHandle, System};
 use mangadex_api::MangaDexClient;
 use mizuki::AsyncGQLContextExt;
 use tauri::{AppHandle, Manager, Runtime, State, Webview, Window};
-use tokio::{
-    sync::oneshot::channel as oneshot,
-    time::{Duration, Instant},
-};
+use tokio::sync::oneshot::channel as oneshot;
 use tokio_util::sync::CancellationToken;
 
 use std::future::Future;
 
 use crate::{
-    app_state::{inner::AppStateInner, LastTimeTokenWhenFecthed, OfflineAppState},
+    app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
     rate_limit::SpecificRateLimits,
-    utils::watch::SendData,
+    utils::{refresh_token::RefreshTokenTask, watch::SendData},
 };
 
 use super::{store::MangaDexStoreState, watch::Watches};
@@ -51,41 +48,30 @@ where
     where
         Self: Sync,
     {
-        async {
-            let client = self.get_mangadex_client()?;
-            let last_time_fetched = self.get_last_time_token_when_fetched()?;
-            let watches = self.get_watches()?;
-            let should_fetched: bool = {
-                let last_time_fetched_inner = last_time_fetched.read().await;
-                let inner = last_time_fetched_inner.ok_or(crate::Error::NotLoggedIn)?;
+        let app = self.app_handle().clone();
 
-                #[cfg(debug_assertions)]
+        // TODO make a trait for this
+        let (tx, rx) = tokio::sync::oneshot::channel::<crate::Result<()>>();
+        std::thread::spawn(move || {
+            let res = tauri::async_runtime::block_on(async {
+                if let Some(res) = RefreshTokenTask::get_state_from_manager(&app)
+                    .get(())
+                    .await?
                 {
-                    super::print_instant(inner.into());
+                    res?;
+                    Ok(())
+                } else {
+                    Err(crate::Error::NoDeduplicateTask)
                 }
-
-                inner < Instant::now()
-            };
-
-            if should_fetched {
-                #[cfg(debug_assertions)]
-                log::debug!("Should be fetched");
-                self.get_specific_rate_limit()?.refresh().await;
-                match client.oauth().refresh().send().await {
-                    Ok(res) => {
-                        let _ = last_time_fetched.write().await.replace(
-                            Instant::now() + (Duration::from_millis(res.expires_in as u64)),
-                        );
-                        let _ = watches.is_logged.send_data(true);
-                    }
-                    Err(err) => {
-                        let _ = watches.is_logged.send_data(false);
-                        log::error!("{}", err);
-                        return Err(err.into());
-                    }
-                }
+            });
+            if let Err(Err(err)) = tx.send(res) {
+                log::error!("{err}")
             }
-            Ok(client)
+        });
+
+        async move {
+            rx.await??;
+            self.get_mangadex_client()
         }
     }
     fn unmount_offline_app_state(&self) -> impl Future<Output = crate::Result<()>> + Send

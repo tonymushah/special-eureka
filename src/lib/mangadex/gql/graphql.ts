@@ -188,6 +188,18 @@ export enum ApiClientState {
 	Requested = "REQUESTED"
 }
 
+export type AuthCheck = {
+	__typename?: "AuthCheck";
+	isAuthenticated: Scalars["Boolean"]["output"];
+	permissions: Array<Scalars["String"]["output"]>;
+	roles: Array<UserRole>;
+};
+
+export type AuthQuery = {
+	__typename?: "AuthQuery";
+	check: AuthCheck;
+};
+
 export type Author = {
 	__typename?: "Author";
 	attributes: AuthorAttributes;
@@ -2389,6 +2401,7 @@ export type PrimaryColorInput = {
 export type Query = {
 	__typename?: "Query";
 	apiClient: ApiClientQueries;
+	auth: AuthQuery;
 	author: AuthorQueries;
 	chapter: ChapterQueries;
 	cover: CoverQueries;
@@ -3740,6 +3753,19 @@ export type CreateCustomListMutation = {
 	};
 };
 
+export type CreateEmptyCustomListMutationVariables = Exact<{
+	visibility: CustomListVisibility;
+	name: Scalars["String"]["input"];
+}>;
+
+export type CreateEmptyCustomListMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		create: { __typename?: "CustomList"; id: any };
+	};
+};
+
 export type MangaListMutationMutationVariables = Exact<{
 	style: MangaListStyle;
 }>;
@@ -3963,6 +3989,137 @@ export type AuthorSearchFetcherQuery = {
 			}>;
 		};
 	};
+};
+
+export type MultiChapterDownloadBaseMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MultiChapterDownloadBaseMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		download: { __typename?: "DownloadState"; isDownloaded: boolean; hasFailed: boolean };
+	};
+};
+
+export type MultiChapterCancelDownloadBaseMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MultiChapterCancelDownloadBaseMutation = {
+	__typename?: "Mutation";
+	chapter: { __typename?: "ChapterMutations"; cancelDownload: boolean };
+};
+
+export type RemoveMultipleChapterMutationBaseMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type RemoveMultipleChapterMutationBaseMutation = {
+	__typename?: "Mutation";
+	chapter: { __typename?: "ChapterMutations"; remove: boolean };
+};
+
+export type GetChaptersIDsAsFeedQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetChaptersIDsAsFeedQuery = {
+	__typename?: "Query";
+	chapter: {
+		__typename?: "ChapterQueries";
+		listWithGroupByManga: {
+			__typename?: "MangaChapterGroup";
+			data: Array<{
+				__typename?: "MangaChapterItem";
+				manga: {
+					__typename?: "MangaObject";
+					id: any;
+					attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+				};
+				chapters: Array<{
+					__typename?: "Chapter";
+					id: any;
+					attributes: {
+						__typename?: "ChapterAttributes";
+						chapter?: string | null;
+						title?: string | null;
+						volume?: string | null;
+					};
+				}>;
+			}>;
+		};
+	};
+};
+
+export type JustDownloadingTitleMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type JustDownloadingTitleMutation = {
+	__typename?: "Mutation";
+	manga: {
+		__typename?: "MangaMutations";
+		download: { __typename?: "DownloadState"; isDownloaded: boolean; hasFailed: boolean };
+	};
+};
+
+export type AddTitleToListBatchMutationVariables = Exact<{
+	mangas: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	customList: Scalars["UUID"]["input"];
+}>;
+
+export type AddTitleToListBatchMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; addMangaBatch: boolean };
+};
+
+export type GetTitleTitlesQueryVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type GetTitleTitlesQuery = {
+	__typename?: "Query";
+	manga: {
+		__typename?: "MangaQueries";
+		list: {
+			__typename?: "MangaResults";
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+			}>;
+		};
+	};
+};
+
+export type UpdateReadingStatusesMutationVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	status?: InputMaybe<ReadingStatus>;
+}>;
+
+export type UpdateReadingStatusesMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; updateReadingStatusBatch: boolean };
+};
+
+export type FollowTitlesBatchMutationVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type FollowTitlesBatchMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; followBatch: boolean };
+};
+
+export type UnfollowTitlesBatchMutationVariables = Exact<{
+	titles: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowTitlesBatchMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; unfollowBatch: boolean };
 };
 
 export type UserMeOnSidebarFooterQueryVariables = Exact<{ [key: string]: never }>;
@@ -4362,6 +4519,21 @@ export type UserMeSubscription = {
 export type IsLoggedSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type IsLoggedSubscription = { __typename?: "Subscriptions"; watchIsLogged: boolean };
+
+export type AuthCheckQueryVariables = Exact<{ [key: string]: never }>;
+
+export type AuthCheckQuery = {
+	__typename?: "Query";
+	auth: {
+		__typename?: "AuthQuery";
+		check: {
+			__typename?: "AuthCheck";
+			isAuthenticated: boolean;
+			roles: Array<UserRole>;
+			permissions: Array<string>;
+		};
+	};
+};
 
 export type ChapterFeedStyleSubSubscriptionVariables = Exact<{ [key: string]: never }>;
 
@@ -7579,6 +7751,91 @@ export const CreateCustomListDocument = {
 		}
 	]
 } as unknown as DocumentNode<CreateCustomListMutation, CreateCustomListMutationVariables>;
+export const CreateEmptyCustomListDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "createEmptyCustomList" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "visibility" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "CustomListVisibility" }
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "name" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "create" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "visibility" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "name" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "name" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } }
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CreateEmptyCustomListMutation, CreateEmptyCustomListMutationVariables>;
 export const MangaListMutationDocument = {
 	kind: "Document",
 	definitions: [
@@ -8743,6 +9000,752 @@ export const AuthorSearchFetcherDocument = {
 		}
 	]
 } as unknown as DocumentNode<AuthorSearchFetcherQuery, AuthorSearchFetcherQueryVariables>;
+export const MultiChapterDownloadBaseDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "multiChapterDownloadBase" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "download" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isDownloaded" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "hasFailed" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MultiChapterDownloadBaseMutation,
+	MultiChapterDownloadBaseMutationVariables
+>;
+export const MultiChapterCancelDownloadBaseDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "multiChapterCancelDownloadBase" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "cancelDownload" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MultiChapterCancelDownloadBaseMutation,
+	MultiChapterCancelDownloadBaseMutationVariables
+>;
+export const RemoveMultipleChapterMutationBaseDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "removeMultipleChapterMutationBase" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "remove" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	RemoveMultipleChapterMutationBaseMutation,
+	RemoveMultipleChapterMutationBaseMutationVariables
+>;
+export const GetChaptersIDsAsFeedDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getChaptersIDsAsFeed" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "listWithGroupByManga" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "feedContent" },
+											value: { kind: "BooleanValue", value: false }
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "chapterListParams" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "chapterIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "ids" }
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "manga" },
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "title"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "chapters"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "id"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "attributes"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "chapter"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "title"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "volume"
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetChaptersIDsAsFeedQuery, GetChaptersIDsAsFeedQueryVariables>;
+export const JustDownloadingTitleDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "justDownloadingTitle" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "download" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isDownloaded" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "hasFailed" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<JustDownloadingTitleMutation, JustDownloadingTitleMutationVariables>;
+export const AddTitleToListBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "addTitleToListBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mangas" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "customList" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "addMangaBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "listId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "customList" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mangas" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<AddTitleToListBatchMutation, AddTitleToListBatchMutationVariables>;
+export const GetTitleTitlesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getTitleTitles" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "list" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "mangaIds" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "titles" }
+														}
+													}
+												]
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "excludeContentProfile" },
+											value: { kind: "BooleanValue", value: true }
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetTitleTitlesQuery, GetTitleTitlesQueryVariables>;
+export const UpdateReadingStatusesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "updateReadingStatuses" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "status" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "ReadingStatus" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "updateReadingStatusBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titles" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "status" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "status" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateReadingStatusesMutation, UpdateReadingStatusesMutationVariables>;
+export const FollowTitlesBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followTitlesBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "followBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titles" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowTitlesBatchMutation, FollowTitlesBatchMutationVariables>;
+export const UnfollowTitlesBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowTitlesBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "titles" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollowBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "titles" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowTitlesBatchMutation, UnfollowTitlesBatchMutationVariables>;
 export const UserMeOnSidebarFooterDocument = {
 	kind: "Document",
 	definitions: [
@@ -10489,6 +11492,51 @@ export const IsLoggedDocument = {
 		}
 	]
 } as unknown as DocumentNode<IsLoggedSubscription, IsLoggedSubscriptionVariables>;
+export const AuthCheckDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "authCheck" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "auth" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "check" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "isAuthenticated" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "roles" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "permissions" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<AuthCheckQuery, AuthCheckQueryVariables>;
 export const ChapterFeedStyleSubDocument = {
 	kind: "Document",
 	definitions: [
