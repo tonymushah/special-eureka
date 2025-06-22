@@ -263,7 +263,7 @@ importers:
         version: 0.4.1(svelte@5.34.7)
       svelte2tsx:
         specifier: ~0.7.39
-        version: 0.7.39(svelte@5.34.7)(typescript@5.8.3)
+        version: 0.7.40(svelte@5.34.7)(typescript@5.8.3)
       svgo:
         specifier: ^3.3.2
         version: 3.3.2
@@ -4400,8 +4400,8 @@ packages:
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0 || ^5.0.0
 
-  svelte2tsx@0.7.39:
-    resolution: {integrity: sha512-NX8a7eSqF1hr6WKArvXr7TV7DeE+y0kDFD7L5JP7TWqlwFidzGKaG415p992MHREiiEWOv2xIWXJ+mlONofs0A==}
+  svelte2tsx@0.7.40:
+    resolution: {integrity: sha512-Fgqe2lzC9DWT/kQTIXqN39O2ot9rUqzUu9dqpbuI6EsaEJ6+RSXVmXnxcNYMlKb2LRPDoIg9TVzXYWwi0zhCmQ==}
     peerDependencies:
       svelte: ^3.55 || ^4.0.0-next.0 || ^4.0 || ^5.0.0-next.0
       typescript: ^4.9.4 || ^5.0.0
@@ -6706,7 +6706,7 @@ snapshots:
       magic-string: 0.30.17
       storybook: 9.0.12(@testing-library/dom@10.4.0)(prettier@3.5.3)
       svelte: 5.34.7
-      svelte2tsx: 0.7.39(svelte@5.34.7)(typescript@5.8.3)
+      svelte2tsx: 0.7.40(svelte@5.34.7)(typescript@5.8.3)
       typescript: 5.8.3
       vite: 6.3.5(@types/node@22.15.21)(jiti@2.4.2)(less@4.3.0)(sass@1.89.2)(yaml@2.8.0)
 
@@ -9434,7 +9434,7 @@ snapshots:
     dependencies:
       svelte: 5.34.7
 
-  svelte2tsx@0.7.39(svelte@5.34.7)(typescript@5.8.3):
+  svelte2tsx@0.7.40(svelte@5.34.7)(typescript@5.8.3):
     dependencies:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
