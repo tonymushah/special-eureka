@@ -52,7 +52,7 @@ importers:
         version: 2.2.2
       '@tauri-apps/plugin-opener':
         specifier: ^2.3.0
-        version: 2.3.0
+        version: 2.3.1
       '@urql/svelte':
         specifier: ^4.2.3
         version: 4.2.3(@urql/core@5.1.1(graphql@16.11.0))(svelte@5.34.7)
@@ -1974,8 +1974,8 @@ packages:
   '@tauri-apps/plugin-dialog@2.2.2':
     resolution: {integrity: sha512-Pm9qnXQq8ZVhAMFSEPwxvh+nWb2mk7LASVlNEHYaksHvcz8P6+ElR5U5dNL9Ofrm+uwhh1/gYKWswK8JJJAh6A==}
 
-  '@tauri-apps/plugin-opener@2.3.0':
-    resolution: {integrity: sha512-yAbauwp8BCHIhhA48NN8rEf6OtfZBPCgTOCa10gmtoVCpmic5Bq+1Ba7C+NZOjogedkSiV7hAotjYnnbUVmYrw==}
+  '@tauri-apps/plugin-opener@2.3.1':
+    resolution: {integrity: sha512-ia4EW2x/ux2qYpuBRoo1qHwK9/tPwnXYX8HizrJlyHyd3iJCueI5lC7Oa3y1zaCKLZH5elEFSWunnfar8ejbdg==}
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -6507,7 +6507,7 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.5.0
 
-  '@tauri-apps/plugin-opener@2.3.0':
+  '@tauri-apps/plugin-opener@2.3.1':
     dependencies:
       '@tauri-apps/api': 2.5.0
 
