@@ -1,7 +1,8 @@
 use std::{fmt::Debug, sync::Arc, time::Duration};
 
-use actix::{dev::ToEnvelope, Actor, Addr, Handler, WeakAddr};
+use actix::{Actor, Addr, Handler, WeakAddr, dev::ToEnvelope};
 use eureka_mmanager::{
+    DownloadManager, Error as ManagerError, OwnedError,
     download::{
         messages::{SubcribeMessage, TaskStateMessage},
         traits::{
@@ -10,14 +11,13 @@ use eureka_mmanager::{
         },
     },
     prelude::{AsyncSubscribe, GetManager},
-    DownloadManager, Error as ManagerError, OwnedError,
 };
 use tauri::{Manager, Runtime};
 use tokio::{
     select,
     sync::{
-        watch::{channel as watch, Receiver},
         RwLock,
+        watch::{Receiver, channel as watch},
     },
     task::JoinHandle,
     time::sleep,
@@ -65,7 +65,6 @@ where
     <T as Actor>::Context:
         ToEnvelope<T, SubcribeMessage<<T as State>::State>> + ToEnvelope<T, TaskStateMessage>,
     <T as Actor>::Context: ToEnvelope<T, TaskStateMessage>,
-
     Addr<M>: TaskManagerAddr<Task = T>,
     <Addr<M> as TaskManagerAddr>::DownloadMessage: From<Uuid>,
     Addr<DownloadManager>: GetManager<M>,
@@ -132,7 +131,6 @@ where
     <T as Actor>::Context:
         ToEnvelope<T, SubcribeMessage<<T as State>::State>> + ToEnvelope<T, TaskStateMessage>,
     <T as Actor>::Context: ToEnvelope<T, TaskStateMessage>,
-
     Addr<M>: TaskManagerAddr<Task = T>,
     <Addr<M> as TaskManagerAddr>::DownloadMessage: From<Uuid>,
     Addr<DownloadManager>: GetManager<M>,
@@ -167,7 +165,7 @@ where
                     match join_res {
                         Ok(res) => res,
                         Err(err) => {
-                            eprintln!("{:?}", err);
+                            eprintln!("{err:?}");
                             continue;
                         },
                     }
@@ -195,7 +193,7 @@ where
                 continue;
             }
             #[cfg(debug_assertions)]
-            log::debug!("{id} - {:?}", to_send);
+            log::debug!("{id} - {to_send:?}");
             if tx.send(to_send).is_err() {
                 break;
             }

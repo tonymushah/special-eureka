@@ -1,7 +1,7 @@
 use std::{ops::Add, time::Duration};
 
 use mangadex_api::MangaDexClient;
-use mangadex_api_schema_rust::v5::{oauth::ClientInfo as Info, AuthTokens};
+use mangadex_api_schema_rust::v5::{AuthTokens, oauth::ClientInfo as Info};
 use mangadex_api_types_rust::MangaDexDateTime;
 use tauri::{Manager, Runtime};
 use tauri_plugin_store::Store;
@@ -10,8 +10,8 @@ use tokio::time::Instant;
 use crate::{
     app_state::LastTimeTokenWhenFecthed,
     store::types::{
-        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore},
         ExtractFromStore,
+        structs::{client_info::ClientInfoStore, refresh_token::RefreshTokenStore},
     },
     utils::watch::{SendData, Watches},
 };
@@ -57,7 +57,7 @@ pub fn init_client_state<R: Runtime>(
                     let mut last_time_fetched_write = ltf.write().await;
                     let _ = last_time_fetched_write.replace(Instant::now());
                     let _ = watches.is_logged.send_data(false);
-                    log::error!("{}", err);
+                    log::error!("{err}");
                 }
             }
             Ok::<(), mangadex_api_types_rust::error::Error>(())

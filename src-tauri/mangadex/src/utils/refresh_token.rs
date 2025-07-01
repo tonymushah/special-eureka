@@ -70,7 +70,7 @@ async fn refresh_token<R: Runtime>(app: AppHandle<R>) -> crate::Result<()> {
             }
             Err(err) => {
                 let _ = watches.is_logged.send_data(false);
-                log::error!("{}", err);
+                log::error!("{err}");
                 return Err(err.into());
             }
         }
