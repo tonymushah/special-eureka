@@ -4,14 +4,15 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import type { MangaListParams } from "@mangadex/gql/graphql";
+	import type { MangaListParams, MangaSortOrder } from "@mangadex/gql/graphql";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce, last, range } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get, type Readable } from "svelte/store";
+	import { derived, get, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import SortSelector from "@mangadex/componnents/manga/list/sortSelector/SortSelector.svelte";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
@@ -21,7 +22,8 @@
 		excludeContentProfile?: boolean;
 	}
 
-	let { params, offlineStore, excludeContentProfile }: Props = $props();
+	let { params: initialParam, offlineStore, excludeContentProfile }: Props = $props();
+	const params = writable(get(initialParam), (set) => initialParam.subscribe(set));
 	const p_p_offline = derived([params, offlineStore], (merged) => merged);
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
@@ -144,9 +146,38 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
+	const sortDer: Readable<MangaSortOrder | undefined> = derived(params, ($params) => {
+		return $params.order ?? undefined;
+	});
+	const sort: Writable<MangaSortOrder | undefined> = {
+		subscribe(run, invalidate) {
+			return sortDer.subscribe(run, invalidate);
+		},
+		set(value) {
+			params.update((param) => {
+				param.order = value;
+				return param;
+			});
+		},
+		update(updater) {
+			params.update((param) => {
+				param.order = updater(param.order ?? undefined);
+				return param;
+			});
+		}
+	};
 </script>
 
-<MangaList list={$titles}></MangaList>
+<MangaList list={$titles}>
+	{#snippet additionalContent()}
+		<div class="additional-content">
+			<section>
+				<p>Sort by:</p>
+				<SortSelector {sort} />
+			</section>
+		</div>
+	{/snippet}
+</MangaList>
 
 {#if $infiniteQuery.error}
 	<ErrorComponent label="Error on loading title" error={$infiniteQuery.error} />
@@ -167,5 +198,12 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.additional-content {
+		display: flex;
+		align-items: center;
+		section {
+			display: grid;
+		}
 	}
 </style>
