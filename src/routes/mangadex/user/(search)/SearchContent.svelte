@@ -75,7 +75,6 @@
 				InfiniteQueryData,
 				Error,
 				InfiniteQueryData,
-				InfiniteQueryData,
 				[string, UserListParam],
 				UserListParam
 			>;

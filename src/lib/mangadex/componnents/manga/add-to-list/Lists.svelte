@@ -53,7 +53,6 @@
 				AbstractSearchResult<CurrentUserCustomListItemData>,
 				Error,
 				AbstractSearchResult<CurrentUserCustomListItemData>,
-				AbstractSearchResult<CurrentUserCustomListItemData>,
 				readonly string[],
 				CurrentLoggedLists
 			>;

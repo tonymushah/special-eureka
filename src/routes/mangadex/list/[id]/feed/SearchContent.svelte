@@ -65,7 +65,6 @@
 				AbstractSearchResult<ChapterFeedListItemExt>,
 				Error,
 				AbstractSearchResult<ChapterFeedListItemExt>,
-				AbstractSearchResult<ChapterFeedListItemExt>,
 				readonly string[],
 				CustomListFeedChapterParams
 			>;
