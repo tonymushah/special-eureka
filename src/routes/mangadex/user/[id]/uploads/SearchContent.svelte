@@ -5,7 +5,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection } from "@mangadex/gql/graphql";
+	import { OrderDirection, type ChapterSortOrder } from "@mangadex/gql/graphql";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
@@ -13,12 +13,13 @@
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
-	import { derived, get } from "svelte/store";
+	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, {
 		type ChapterFeedListItemExt,
 		type UserUploadsFeedChapterParams
 	} from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
+	import ChapterSortSelector from "@mangadex/componnents/chapter/feed/list/sort/ChapterSortSelector.svelte";
 
 	interface Props {
 		userId: Readable<string>;
@@ -26,10 +27,13 @@
 
 	let { userId }: Props = $props();
 	const client = getContextClient();
+	const order = writable<ChapterSortOrder | undefined>({
+		readableAt: OrderDirection.Descending
+	});
 	const query = createInfiniteQuery(
-		derived([userId, pageLimit], ([$userId, $limit]) => {
+		derived([userId, pageLimit, order], ([$userId, $limit, $order]) => {
 			return {
-				queryKey: ["user", $userId, "uploads", `limit:${$limit}`],
+				queryKey: ["user", $userId, "uploads", `limit:${$limit}`, `${$order}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -49,9 +53,7 @@
 				initialPageParam: {
 					user: $userId,
 					limit: $limit,
-					order: {
-						readableAt: OrderDirection.Descending
-					}
+					order: $order
 				} satisfies UserUploadsFeedChapterParams
 			} satisfies CreateInfiniteQueryOptions<
 				AbstractSearchResult<ChapterFeedListItemExt>,
@@ -110,7 +112,16 @@
 				})
 			);
 		}}
-	/>
+	>
+		{#snippet additionalContent()}
+			<div class="additional-content">
+				<section>
+					<p>Sort by:</p>
+					<ChapterSortSelector sort={order} />
+				</section>
+			</div>
+		{/snippet}
+	</ChapterFeedList>
 </div>
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
@@ -135,4 +146,16 @@
 		flex-wrap: wrap;
 		gap: 8px;
 	}*/
+	.additional-content {
+		display: flex;
+		align-items: center;
+		section {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			p {
+				margin: 0px;
+			}
+		}
+	}
 </style>
