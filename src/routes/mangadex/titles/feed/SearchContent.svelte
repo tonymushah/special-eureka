@@ -88,6 +88,27 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	const oncomments = (
+		e: MouseEvent & {
+			currentTarget: HTMLDivElement & EventTarget;
+		} & {
+			id: string;
+		}
+	) => {
+		let threadUrl: string | undefined = undefined;
+		for (let index = 0; index < $feed.length; index++) {
+			const { chapters } = $feed[index];
+			for (let index = 0; index < chapters.length; index++) {
+				const chapter = chapters[index];
+				if (chapter.chapterId == e.id) {
+					threadUrl = chapter.threadUrl;
+				}
+			}
+			if (threadUrl) {
+				break;
+			}
+		}
+	};
 </script>
 
 <div class="result">
@@ -102,22 +123,10 @@
 				})
 			);
 		}}
-		oncomments={(e) => {
-			let threadUrl: string | undefined = undefined;
-			for (let index = 0; index < $feed.length; index++) {
-				const { chapters } = $feed[index];
-				for (let index = 0; index < chapters.length; index++) {
-					const chapter = chapters[index];
-					if (chapter.chapterId == e.id) {
-						threadUrl = chapter.threadUrl;
-					}
-				}
-				if (threadUrl) {
-					break;
-				}
-			}
-		}}
-	/>
+		{oncomments}
+	>
+		{#snippet additionalContent()}{/snippet}
+	</ChapterFeedList>
 </div>
 
 {#if $query.error}

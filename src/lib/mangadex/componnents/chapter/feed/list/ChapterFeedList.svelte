@@ -71,10 +71,10 @@
 	interface Props extends Events {
 		list?: ChapterFeedListItem[];
 		style: Writable<ChapterFeedStyle>;
-		children?: import("svelte").Snippet;
+		additionalContent?: import("svelte").Snippet;
 	}
 
-	let { list = [], style, children, ...eventsProps }: Props = $props();
+	let { list = [], style, additionalContent, ...eventsProps }: Props = $props();
 	let coverfull = $derived($style == ChapterFeedStyle.CoverFull);
 	let coverless = $derived($style == ChapterFeedStyle.CoverLess);
 	let isEmpty = $derived(list.length == 0);
@@ -88,7 +88,7 @@
 <section>
 	<div class="tab-title">
 		<div class="tab-additional-content">
-			{#if children}{@render children()}{:else}
+			{#if additionalContent}{@render additionalContent()}{:else}
 				<span>:3</span>
 			{/if}
 		</div>

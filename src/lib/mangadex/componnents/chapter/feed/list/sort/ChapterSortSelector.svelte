@@ -1,46 +1,40 @@
 <script lang="ts" module>
-	const sortsData: Record<string, MangaSortOrder> = {
-		"Recently Created": {
+	const sortsData: Record<string, Order> = {
+		"Chapter Ascending": {
+			chapter: OrderDirection.Ascending
+		},
+		"Chapter Descending": {
+			chapter: OrderDirection.Descending
+		},
+		"Created At Ascending": {
 			createdAt: OrderDirection.Ascending
 		},
-		"Anciently Created": {
+		"Created At Descending": {
 			createdAt: OrderDirection.Descending
 		},
-		"Most Followed": {
-			followedCount: OrderDirection.Ascending
+		"Publish At Ascending": {
+			publishAt: OrderDirection.Ascending
 		},
-		"Least Followed": {
-			followedCount: OrderDirection.Descending
+		"Publish At Descending": {
+			publishAt: OrderDirection.Descending
 		},
-		"Latest Upload": {
-			latestUploadedChapter: OrderDirection.Ascending
+		"Readable At Ascending": {
+			readableAt: OrderDirection.Ascending
 		},
-		"Oldest Upload": {
-			latestUploadedChapter: OrderDirection.Descending
+		"Readable At Descending": {
+			readableAt: OrderDirection.Descending
 		},
-		"Relevance Ascending": {
-			relevance: OrderDirection.Ascending
-		},
-		"Relevance Descending": {
-			relevance: OrderDirection.Descending
-		},
-		"Title Ascending": {
-			title: OrderDirection.Ascending
-		},
-		"Title Descending": {
-			title: OrderDirection.Descending
-		},
-		"Recently Updated": {
+		"Updated At Ascending": {
 			updatedAt: OrderDirection.Ascending
 		},
-		"Anciently Updated": {
+		"Updated At Descending": {
 			updatedAt: OrderDirection.Descending
 		},
-		"Year Ascending": {
-			year: OrderDirection.Ascending
+		"Volume Ascending": {
+			volume: OrderDirection.Ascending
 		},
-		"Year Descending": {
-			year: OrderDirection.Descending
+		"Volume Descending": {
+			volume: OrderDirection.Descending
 		}
 	};
 	const sortDataReversed = new Map(Object.entries(sortsData).map(([key, value]) => [value, key]));
@@ -50,13 +44,13 @@
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 
-	import { OrderDirection, type MangaSortOrder } from "@mangadex/gql/graphql";
+	import { OrderDirection, type ChapterSortOrder as Order } from "@mangadex/gql/graphql";
 	import { createCombobox, melt } from "@melt-ui/svelte";
 	import { derived as der, type Writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 
 	interface Props {
-		sort: Writable<MangaSortOrder | undefined>;
+		sort: Writable<Order | undefined>;
 	}
 	let { sort }: Props = $props();
 	const currentSortText = der(sort, ($sort) => {
@@ -69,7 +63,7 @@
 	const {
 		elements: { menu, input: trigger, option, group, groupLabel },
 		states: { open }
-	} = createCombobox<MangaSortOrder | undefined>({
+	} = createCombobox<Order | undefined>({
 		forceVisible: true,
 		positioning: {
 			placement: "bottom",
@@ -80,11 +74,9 @@
 </script>
 
 <div class="layout">
-	<div class="input">
-		<ButtonAccent meltElement={trigger}>
-			<p class="input-text">
-				{$currentSortText}
-			</p>
+	<div class="input" use:melt={$trigger}>
+		<ButtonAccent>
+			{$currentSortText}
 		</ButtonAccent>
 	</div>
 </div>
@@ -175,9 +167,5 @@
 	}
 	.input {
 		display: grid;
-	}
-	.input-text {
-		min-width: 250px;
-		margin: 0px;
 	}
 </style>

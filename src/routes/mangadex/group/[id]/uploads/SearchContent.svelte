@@ -5,7 +5,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection } from "@mangadex/gql/graphql";
+	import { OrderDirection, type ChapterSortOrder } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
@@ -14,23 +14,27 @@
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
 	import type { Readable } from "svelte/store";
-	import { derived, get } from "svelte/store";
+	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, {
 		type ScanlationGroupUploadsFeedChapterParams as Params
 	} from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import ChapterSortSelector from "@mangadex/componnents/chapter/feed/list/sort/ChapterSortSelector.svelte";
 
 	interface Props {
 		groupId: Readable<string>;
 	}
 
+	const sort = writable<ChapterSortOrder | undefined>({
+		readableAt: OrderDirection.Descending
+	});
 	let { groupId }: Props = $props();
 	const client = getContextClient();
 	const query = createInfiniteQuery(
-		derived([groupId, pageLimit], ([$groupId, $limit]) => {
+		derived([groupId, pageLimit, sort], ([$groupId, $limit, $sort]) => {
 			return {
-				queryKey: ["group", $groupId, "uploads", `limit:${$limit}`],
+				queryKey: ["group", $groupId, "uploads", `limit:${$limit}`, `${$sort}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -50,9 +54,7 @@
 				initialPageParam: {
 					group: $groupId,
 					limit: $limit,
-					order: {
-						readableAt: OrderDirection.Descending
-					}
+					order: $sort
 				} satisfies Params
 			} satisfies CreateInfiniteQueryOptions<
 				AbstractSearchResult<ChapterFeedListItemExt>,
@@ -111,7 +113,16 @@
 				})
 			);
 		}}
-	/>
+	>
+		{#snippet additionalContent()}
+			<div class="additional-content">
+				<section>
+					<p>Sort by:</p>
+					<ChapterSortSelector {sort} />
+				</section>
+			</div>
+		{/snippet}
+	</ChapterFeedList>
 </div>
 
 {#if $query.error}
@@ -133,6 +144,16 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.additional-content {
+		display: flex;
+		align-items: center;
+		section {
+			display: grid;
+			p {
+				margin: 0px;
+			}
+		}
 	}
 	/*.result {
 		display: flex;
