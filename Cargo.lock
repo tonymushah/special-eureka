@@ -202,9 +202,9 @@ dependencies = [
 
 [[package]]
 name = "async-channel"
-version = "2.3.1"
+version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89b47800b0be77592da0afd425cc03468052844aff33b84e33cc696f64e77b6a"
+checksum = "924ed96dd52d1b75e9c1a3e6275715fd320f5f9439fb5a4a11fa51f4221158d2"
 dependencies = [
  "concurrent-queue",
  "event-listener-strategy",
@@ -525,9 +525,9 @@ dependencies = [
 
 [[package]]
 name = "blocking"
-version = "1.6.1"
+version = "1.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "703f41c54fc768e63e091340b424302bb1c29ef4aa0c7f10fe849dfb114d29ea"
+checksum = "e83f8d02be6967315521be875afa792a316e28d57b5a2d401897e2a7921b7f21"
 dependencies = [
  "async-channel",
  "async-task",
@@ -659,9 +659,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.27"
+version = "1.2.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d487aa071b5f64da6f19a3e848e3578944b726ee5a4854b82172f02aa876bfdc"
+checksum = "5c1599538de2394445747c8cf7935946e3cc27e9625f889d979bfb2aaf569362"
 dependencies = [
  "jobserver",
  "libc",
@@ -2310,9 +2310,9 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
-version = "0.1.14"
+version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc2fdfdbff08affe55bb779f33b053aa1fe5dd5b54c257343c17edfa55711bdb"
+checksum = "7f66d5bd4c6f02bf0542fad85d626775bab9258cf795a4256dcaf3161114d1df"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -2538,6 +2538,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a588916bfdfd92e71cacef98a63d9b1f0d74d6599980d11894290e7ddefffcf7"
 dependencies = [
  "cfb",
+]
+
+[[package]]
+name = "io-uring"
+version = "0.7.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b86e202f00093dcba4275d4636b93ef9dd75d025ae560d2521b45ea28ab49013"
+dependencies = [
+ "bitflags 2.9.1",
+ "cfg-if",
+ "libc",
 ]
 
 [[package]]
@@ -2826,9 +2837,9 @@ checksum = "c41e0c4fef86961ac6d6f8a82609f55f31b05e4fce149ac5710e439df7619ba4"
 
 [[package]]
 name = "mac-notification-sys"
-version = "0.6.4"
+version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b95dfb34071d1592b45622bf93e315e3a72d414b6782aca9a015c12bec367ef"
+checksum = "1280f4ec61016b4960075c5c090085129647807a77a964bdb352c14903450589"
 dependencies = [
  "cc",
  "objc2 0.6.1",
@@ -3844,9 +3855,9 @@ checksum = "7edddbd0b52d732b21ad9a5fab5c704c14cd949e5e9a1ec5929a24fded1b904c"
 
 [[package]]
 name = "plist"
-version = "1.7.2"
+version = "1.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d77244ce2d584cd84f6a15f86195b8c9b2a0dfbfd817c09e0464244091a58ed"
+checksum = "546b279bf0638ee811d9e47de2ca5b66575a543035d79fdf83959dd2f5c3b4c3"
 dependencies = [
  "base64 0.22.1",
  "indexmap 2.10.0",
@@ -4292,9 +4303,9 @@ checksum = "2b15c43186be67a4fd63bee50d0303afffcef381492ebe2c5d87f324e1b8815c"
 
 [[package]]
 name = "reqwest"
-version = "0.12.21"
+version = "0.12.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c8cea6b35bcceb099f30173754403d2eba0a5dc18cea3630fccd88251909288"
+checksum = "cbc931937e6ca3a06e3b6c0aa7841849b160a90351d6ab467a8b9b9959767531"
 dependencies = [
  "base64 0.22.1",
  "bytes",
@@ -4381,13 +4392,12 @@ dependencies = [
 
 [[package]]
 name = "rust-ini"
-version = "0.21.1"
+version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e310ef0e1b6eeb79169a1171daf9abcb87a2e17c03bee2c4bb100b55c75409f"
+checksum = "e7295b7ce3bf4806b419dc3420745998b447178b7005e2011947b38fc5aa6791"
 dependencies = [
  "cfg-if",
  "ordered-multimap",
- "trim-in-place",
 ]
 
 [[package]]
@@ -4531,9 +4541,9 @@ dependencies = [
 
 [[package]]
 name = "schemars"
-version = "1.0.3"
+version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1375ba8ef45a6f15d83fa8748f1079428295d403d6ea991d09ab100155fbc06d"
+checksum = "82d20c4491bc164fa2f6c5d44565947a52ad80b9505d8e36f8d54c27c739fcd0"
 dependencies = [
  "dyn-clone",
  "ref-cast",
@@ -4752,7 +4762,7 @@ dependencies = [
  "indexmap 1.9.3",
  "indexmap 2.10.0",
  "schemars 0.9.0",
- "schemars 1.0.3",
+ "schemars 1.0.4",
  "serde",
  "serde_derive",
  "serde_json",
@@ -4929,7 +4939,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.0-5"
+version = "0.2.0-6"
 dependencies = [
  "actix",
  "anyhow",
@@ -5344,7 +5354,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-clipboard-manager"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "arboard",
  "log",
@@ -5358,7 +5368,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-deep-link"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "dunce",
  "rust-ini",
@@ -5377,7 +5387,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "log",
  "raw-window-handle",
@@ -5394,7 +5404,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "anyhow",
  "dunce",
@@ -5415,7 +5425,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-notification"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "log",
  "notify-rust",
@@ -5433,7 +5443,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-opener"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "dunce",
  "glob",
@@ -5502,7 +5512,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#1635282868b235c81aac52ae1aca4ea8355c0081"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#989470f0d7b45d58a222414110355b1d63320589"
 dependencies = [
  "dunce",
  "serde",
@@ -5800,17 +5810,19 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.45.1"
+version = "1.46.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75ef51a33ef1da925cea3e4eb122833cb377c61439ca401b770f54902b806779"
+checksum = "0cc3a2344dafbe23a245241fe8b09735b521110d30fcefbbd5feb1797ca35d17"
 dependencies = [
  "backtrace",
  "bytes",
+ "io-uring",
  "libc",
  "mio",
  "parking_lot",
  "pin-project-lite",
  "signal-hook-registry",
+ "slab",
  "socket2",
  "tokio-macros",
  "tracing",
@@ -6048,12 +6060,6 @@ dependencies = [
  "once_cell",
  "petgraph",
 ]
-
-[[package]]
-name = "trim-in-place"
-version = "0.1.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "343e926fc669bc8cde4fa3129ab681c63671bae288b1f1081ceee6d9d37904fc"
 
 [[package]]
 name = "try-lock"
@@ -7378,18 +7384,18 @@ checksum = "3f423a2c17029964870cfaabb1f13dfab7d092a62a29a89264f4d36990ca414a"
 
 [[package]]
 name = "zune-jpeg"
-version = "0.4.18"
+version = "0.4.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7384255a918371b5af158218d131530f694de9ad3815ebdd0453a940485cb0fa"
+checksum = "2c9e525af0a6a658e031e95f14b7f889976b74a11ba0eca5a5fc9ac8a1c43a6a"
 dependencies = [
  "zune-core",
 ]
 
 [[package]]
 name = "zvariant"
-version = "5.5.3"
+version = "5.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9d30786f75e393ee63a21de4f9074d4c038d52c5b1bb4471f955db249f9dffb1"
+checksum = "d91b3680bb339216abd84714172b5138a4edac677e641ef17e1d8cb1b3ca6e6f"
 dependencies = [
  "endi",
  "enumflags2",
@@ -7402,9 +7408,9 @@ dependencies = [
 
 [[package]]
 name = "zvariant_derive"
-version = "5.5.3"
+version = "5.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75fda702cd42d735ccd48117b1630432219c0e9616bf6cb0f8350844ee4d9580"
+checksum = "3a8c68501be459a8dbfffbe5d792acdd23b4959940fc87785fb013b32edbc208"
 dependencies = [
  "proc-macro-crate 3.3.0",
  "proc-macro2",
