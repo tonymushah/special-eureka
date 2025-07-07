@@ -6,7 +6,7 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection } from "@mangadex/gql/graphql";
+	import { OrderDirection, type MangaFeedSortOrder } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -15,14 +15,18 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy } from "svelte";
-	import { derived, get } from "svelte/store";
+	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, { type UserMangaFeedChapterParams as Params } from "./search";
+	import MangaFeedSortOrderSelection from "@mangadex/componnents/manga/feed/sort/MangaFeedSortOrderSelection.svelte";
 
 	const client = getContextClient();
+	const order = writable<MangaFeedSortOrder | undefined>({
+		readableAt: OrderDirection.Descending
+	});
 	const query = createInfiniteQuery(
-		derived([pageLimit], ([$limit]) => {
+		derived([pageLimit, order], ([$limit, $order]) => {
 			return {
-				queryKey: ["user-logged", "manga", "feed", `limit:${$limit}`],
+				queryKey: ["user-logged", "manga", "feed", `limit:${$limit}`, `${$order}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
@@ -41,9 +45,7 @@
 				},
 				initialPageParam: {
 					limit: $limit,
-					order: {
-						readableAt: OrderDirection.Descending
-					}
+					order: $order
 				} satisfies Params
 			} satisfies CreateInfiniteQueryOptions<
 				AbstractSearchResult<ChapterFeedListItemExt>,
@@ -125,7 +127,14 @@
 		}}
 		{oncomments}
 	>
-		{#snippet additionalContent()}{/snippet}
+		{#snippet additionalContent()}
+			<div class="additional-content">
+				<section>
+					<p>Sort by:</p>
+					<MangaFeedSortOrderSelection sort={order} />
+				</section>
+			</div>
+		{/snippet}
 	</ChapterFeedList>
 </div>
 
@@ -155,4 +164,16 @@
 		flex-wrap: wrap;
 		gap: 8px;
 	}*/
+	.additional-content {
+		display: flex;
+		align-items: center;
+		section {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			p {
+				margin: 0px;
+			}
+		}
+	}
 </style>
