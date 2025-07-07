@@ -1,27 +1,25 @@
 use crate::{
-    subscription::utils::WatchSubscriptionStream,
-    utils::{
-        download_state_rx::{get_download_state_rx, NextTaskValue},
-        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-    },
     Result,
+    subscription::{download_state::NextTaskValue, utils::WatchSubscriptionStream},
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 
 use actix::Addr;
 use async_graphql::{Context, Enum, Object, Subscription};
 use async_stream::stream;
 use eureka_mmanager::{
+    DownloadManager, OwnedError,
     download::{
+        GetManager,
         cover::{
-            task::{CoverDownloadTaskState, CoverDownloadingState as DownloadingState},
             CoverDownloadManager,
+            task::{CoverDownloadTaskState, CoverDownloadingState as DownloadingState},
         },
         traits::managers::TaskManagerAddr,
-        GetManager,
     },
     prelude::CoverDownloadTask,
-    DownloadManager, OwnedError,
 };
+use futures_util::stream::Pending;
 use tauri::{Manager, Runtime};
 use tokio::{select, sync::watch::Receiver};
 use tokio_stream::Stream;
@@ -140,14 +138,6 @@ impl CoverDownloadState {
     }
 }
 
-fn get_cover_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
-    app: &M,
-    id: Uuid,
-    deferred: bool,
-) -> crate::Result<Receiver<CoverDownloadState>> {
-    get_download_state_rx::<CoverDownloadManager, CoverDownloadTask, _, R, M>(app, id, deferred)
-}
-
 pub struct CoverDownloadSubs;
 
 #[Subscription]
@@ -190,10 +180,7 @@ impl CoverDownloadSubs {
         cover_id: Uuid,
         deferred: bool,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
-        let window = ctx.get_window::<tauri::Wry>()?.clone();
-        Ok(WatchSubscriptionStream::new(get_cover_download_state_rx(
-            &window, cover_id, deferred,
-        )?))
+        Err::<Pending<_>, _>(crate::Error::Unimplemented)
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
