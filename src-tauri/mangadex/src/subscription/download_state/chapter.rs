@@ -165,14 +165,6 @@ impl ChapterDownloadState {
     }
 }
 
-fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
-    app: &M,
-    id: Uuid,
-    deferred: bool,
-) -> crate::Result<Receiver<ChapterDownloadState>> {
-    get_download_state_rx::<ChapterDownloadManager, ChapterDownloadTask, _, R, M>(app, id, deferred)
-}
-
 pub struct ChapterDownloadSubs;
 
 #[Subscription]
