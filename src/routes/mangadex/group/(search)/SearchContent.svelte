@@ -76,7 +76,6 @@
 				InfiniteQueryData,
 				Error,
 				InfiniteQueryData,
-				InfiniteQueryData,
 				[string, ScanlationGroupListParams],
 				ScanlationGroupListParams
 			>;

@@ -73,7 +73,6 @@
 				InfiniteQueryData,
 				Error,
 				InfiniteQueryData,
-				InfiniteQueryData,
 				[string, MangaListParams],
 				[MangaListParams]
 			>;

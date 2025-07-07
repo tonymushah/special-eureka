@@ -51,7 +51,6 @@
 				AbstractSearchResult<UserCustomListItemData>,
 				Error,
 				AbstractSearchResult<UserCustomListItemData>,
-				AbstractSearchResult<UserCustomListItemData>,
 				readonly string[],
 				UserCustomListParams
 			>;

@@ -74,7 +74,6 @@
 				InfiniteQueryData,
 				Error,
 				InfiniteQueryData,
-				InfiniteQueryData,
 				[string, AuthorListParams],
 				AuthorListParams
 			>;

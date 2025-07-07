@@ -6,16 +6,16 @@
 
 	interface Props {
 		list?: MangaListContentItemProps[] | MangaListContentItemProps[][];
-		children?: import("svelte").Snippet;
+		additionalContent?: import("svelte").Snippet;
 	}
 
-	let { list, children }: Props = $props();
+	let { list, additionalContent }: Props = $props();
 </script>
 
 <article>
 	<div class="tab-title">
 		<div class="tab-additional-content">
-			{#if children}{@render children()}{:else}
+			{#if additionalContent}{@render additionalContent()}{:else}
 				<span>:3</span>
 			{/if}
 		</div>
