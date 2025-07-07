@@ -1,7 +1,10 @@
 use crate::{
     Result,
     subscription::download_state::NextTaskValue,
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    utils::{
+        download::stream::chapter::ChapterDownloadStream,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
 };
 use actix::Addr;
 use async_graphql::{Context, Object, SimpleObject, Subscription};
@@ -15,11 +18,8 @@ use eureka_mmanager::{
             task::{ChapterDownloadTaskState, ChapterDownloadingState as DownloadingState},
         },
     },
-    prelude::{ChapterDownloadTask, TaskManagerAddr},
+    prelude::TaskManagerAddr,
 };
-use futures_util::stream::Pending;
-use tauri::{Manager, Runtime};
-use tokio::{select, sync::watch::Receiver};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -190,7 +190,7 @@ impl ChapterDownloadSubs {
                 yield tasks
             }
             loop {
-                select! {
+                tokio::select! {
                     _ = notify.notified() => {
                         if let Ok(tasks) = manager.tasks_id().await {
                             yield tasks
@@ -206,9 +206,9 @@ impl ChapterDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        deferred: bool,
+        _deferred: bool,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
-        Err::<Pending<_>, _>(crate::Error::Unimplemented)
+        ChapterDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, chapter_id).await
         /* let stream = stream! {
             let mut is_readed = false;
             loop {
