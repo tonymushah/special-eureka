@@ -56,7 +56,7 @@ deduplicate.workspace = true
 futures-util.workspace =true
 
 [dependencies.eureka-mmanager]
-version = "0.2"
+version = "0.3"
 default-features = false
 
 [dependencies.mangadex-api-input-types]

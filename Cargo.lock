@@ -1428,9 +1428,9 @@ checksum = "dea2df4cf52843e0452895c455a1a2cfbb842a1e7329671acf418fdc53ed4c59"
 
 [[package]]
 name = "eureka-mmanager"
-version = "0.2.2"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdd629caace06ffcb764a200ffcbe91e92737f8ab891d7fd54591a7c58ef3ab6"
+checksum = "63418a5f4b595026608c91f77ff782b74213e995acb2bb83df5442aaeb042179"
 dependencies = [
  "actix",
  "bytes",
@@ -1442,6 +1442,7 @@ dependencies = [
  "mangadex-api-input-types",
  "mangadex-api-schema-rust",
  "mangadex-api-types-rust",
+ "parking_lot",
  "reqwest",
  "serde",
  "serde_json",
