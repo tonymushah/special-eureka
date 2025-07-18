@@ -180,10 +180,7 @@ impl CoverDownloadSubs {
         cover_id: Uuid,
         _deferred: Option<bool>,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
-        Ok(
-            CoverDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, cover_id)
-                .await?,
-        )
+        CoverDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, cover_id).await
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
