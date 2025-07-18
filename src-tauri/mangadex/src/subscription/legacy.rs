@@ -5,15 +5,15 @@ use super::download_state::chapter::ChapterDownloadSubs;
 use super::download_state::cover::{CoverDownloadState, CoverDownloadSubs};
 use super::download_state::manga::{MangaDownloadState, MangaDownloadSubs};
 use super::oauth::OauthSubscriptions;
+use crate::Result;
 use crate::objects::oauth::ClientInfo;
 use crate::store::types::enums::chapter_feed_style::ChapterFeedStyle;
 use crate::store::types::enums::chapter_quality::DownloadMode;
 use crate::store::types::enums::pagination_style::PaginationStyle;
-use crate::store::types::structs::content::profiles::ContentProfileEntry;
 use crate::store::types::structs::content::ContentProfile;
-use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
+use crate::store::types::structs::content::profiles::ContentProfileEntry;
 use crate::store::types::structs::theme::MangaDexTheme;
-use crate::Result;
+use crate::store::types::structs::theme::profiles::ThemeProfileEntry;
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 use uuid::Uuid;
@@ -36,10 +36,10 @@ use super::{
     rating::RatingSubscriptions,
     read_marker::ChapterReadMarkerSubscriptions,
     reading_state::ReadingStateSubscriptions,
-    statistics::{manga::MangaStatisticsSubscriptions, StatisticsSubscriptions},
+    statistics::{StatisticsSubscriptions, manga::MangaStatisticsSubscriptions},
     tag::TagSubscriptions,
     upload::{session::UploadSessionSubscriptions, session_file::UploadSessionFileSubscriptions},
-    user::{me::UserMeSubscriptions, UserSubscriptions},
+    user::{UserSubscriptions, me::UserMeSubscriptions},
     user_option::UserOptionSubscriptions,
 };
 use crate::utils::download_state::DownloadState;
@@ -53,7 +53,7 @@ use crate::{
         custom_list::attributes::CustomListAttributes,
         manga::attributes::GraphQLMangaAttributes as MangaAttributes,
         rating::RatingItemAttributes,
-        statistics::{manga::MangaStatisticsAttributes, StatisticsComments},
+        statistics::{StatisticsComments, manga::MangaStatisticsAttributes},
         tag::attributes::TagAttributes,
         upload::{
             session::attributes::UploadSessionAttributes,
@@ -380,7 +380,7 @@ impl LegacySubscriptions {
         cover_id: Uuid,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
         CoverDownloadSubs
-            .listen_to_download_state(ctx, cover_id, deferred.unwrap_or_default())
+            .listen_to_download_state(ctx, cover_id, deferred)
             .await
     }
     pub async fn watch_cover_tasks_list<'ctx>(
