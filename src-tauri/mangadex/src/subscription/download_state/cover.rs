@@ -1,7 +1,10 @@
 use crate::{
     Result,
-    subscription::{download_state::NextTaskValue, utils::WatchSubscriptionStream},
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    subscription::download_state::NextTaskValue,
+    utils::{
+        download::stream::cover::CoverDownloadStream,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
 };
 
 use actix::Addr;
@@ -17,11 +20,8 @@ use eureka_mmanager::{
         },
         traits::managers::TaskManagerAddr,
     },
-    prelude::CoverDownloadTask,
 };
-use futures_util::stream::Pending;
-use tauri::{Manager, Runtime};
-use tokio::{select, sync::watch::Receiver};
+use tokio::select;
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -178,9 +178,12 @@ impl CoverDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
-        deferred: bool,
+        _deferred: Option<bool>,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
-        Err::<Pending<_>, _>(crate::Error::Unimplemented)
+        Ok(
+            CoverDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, cover_id)
+                .await?,
+        )
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
