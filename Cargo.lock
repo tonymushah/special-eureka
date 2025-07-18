@@ -318,7 +318,7 @@ dependencies = [
  "futures-lite",
  "parking",
  "polling",
- "rustix 1.0.7",
+ "rustix 1.0.8",
  "slab",
  "tracing",
  "windows-sys 0.59.0",
@@ -350,7 +350,7 @@ dependencies = [
  "cfg-if",
  "event-listener",
  "futures-lite",
- "rustix 1.0.7",
+ "rustix 1.0.8",
  "tracing",
 ]
 
@@ -377,7 +377,7 @@ dependencies = [
  "cfg-if",
  "futures-core",
  "futures-io",
- "rustix 1.0.7",
+ "rustix 1.0.8",
  "signal-hook-registry",
  "slab",
  "windows-sys 0.59.0",
@@ -662,9 +662,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.2.29"
+version = "1.2.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5c1599538de2394445747c8cf7935946e3cc27e9625f889d979bfb2aaf569362"
+checksum = "deec109607ca693028562ed836a5f1c4b8bd77755c4e132fc5ce11b0b6211ae7"
 dependencies = [
  "jobserver",
  "libc",
@@ -752,9 +752,9 @@ dependencies = [
 
 [[package]]
 name = "clipboard-win"
-version = "5.4.0"
+version = "5.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "15efe7a882b08f34e38556b14f2fb3daa98769d06c7f0c1b076dfd0d983bc892"
+checksum = "bde03770d3df201d4fb868f2c9c59e66a3e4e2bd06692a0fe701e7103c7e84d4"
 dependencies = [
  "error-code",
 ]
@@ -1430,9 +1430,9 @@ checksum = "dea2df4cf52843e0452895c455a1a2cfbb842a1e7329671acf418fdc53ed4c59"
 
 [[package]]
 name = "eureka-mmanager"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63418a5f4b595026608c91f77ff782b74213e995acb2bb83df5442aaeb042179"
+checksum = "d50fe11946f520021320ce74d1e961fb5182bd0c9fc0f869534b07f38ef1a799"
 dependencies = [
  "actix",
  "bytes",
@@ -1448,7 +1448,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "thiserror 1.0.69",
+ "thiserror 2.0.12",
  "tokio",
  "tokio-stream",
  "tokio-util",
@@ -3902,7 +3902,7 @@ dependencies = [
  "concurrent-queue",
  "hermit-abi",
  "pin-project-lite",
- "rustix 1.0.7",
+ "rustix 1.0.8",
  "tracing",
  "windows-sys 0.59.0",
 ]
@@ -4458,15 +4458,15 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "1.0.7"
+version = "1.0.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c71e83d6afe7ff64890ec6b71d6a69bb8a610ab78ce364b3352876bb4c801266"
+checksum = "11181fbabf243db407ef8df94a6ce0b2f9a733bd8be4ad02b4eda9602296cac8"
 dependencies = [
  "bitflags 2.9.1",
  "errno",
  "libc",
  "linux-raw-sys 0.9.4",
- "windows-sys 0.59.0",
+ "windows-sys 0.60.2",
 ]
 
 [[package]]
@@ -5391,7 +5391,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-clipboard-manager"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "arboard",
  "log",
@@ -5405,7 +5405,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-deep-link"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "dunce",
  "rust-ini",
@@ -5424,7 +5424,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "log",
  "raw-window-handle",
@@ -5441,7 +5441,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "anyhow",
  "dunce",
@@ -5462,7 +5462,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-notification"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "log",
  "notify-rust",
@@ -5480,7 +5480,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-opener"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "dunce",
  "glob",
@@ -5549,7 +5549,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#6210cd31df00bb3c55642013c74dc1da81fa00f9"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#2f9c71aae77cddd4ca2ffe9d13e9e1f23ee4f478"
 dependencies = [
  "dunce",
  "serde",
@@ -5712,7 +5712,7 @@ dependencies = [
  "fastrand",
  "getrandom 0.3.3",
  "once_cell",
- "rustix 1.0.7",
+ "rustix 1.0.8",
  "windows-sys 0.59.0",
 ]
 
@@ -6592,9 +6592,9 @@ dependencies = [
 
 [[package]]
 name = "webpki-roots"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8782dd5a41a24eed3a4f40b606249b3e236ca61adf1f25ea4d45c73de122b502"
+checksum = "7e8983c3ab33d6fb807cfcdad2491c4ea8cbc8ed839181c7dfd9c67c83e261b2"
 dependencies = [
  "rustls-pki-types",
 ]
@@ -7247,7 +7247,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af3a19837351dc82ba89f8a125e22a3c475f05aba604acc023d62b2739ae2909"
 dependencies = [
  "libc",
- "rustix 1.0.7",
+ "rustix 1.0.8",
 ]
 
 [[package]]
@@ -7276,9 +7276,9 @@ dependencies = [
 
 [[package]]
 name = "zbus"
-version = "5.8.0"
+version = "5.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "597f45e98bc7e6f0988276012797855613cd8269e23b5be62cc4e5d28b7e515d"
+checksum = "4bb4f9a464286d42851d18a605f7193b8febaf5b0919d71c6399b7b26e5b0aad"
 dependencies = [
  "async-broadcast",
  "async-executor",
@@ -7310,9 +7310,9 @@ dependencies = [
 
 [[package]]
 name = "zbus_macros"
-version = "5.8.0"
+version = "5.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e5c8e4e14dcdd9d97a98b189cd1220f30e8394ad271e8c987da84f73693862c2"
+checksum = "ef9859f68ee0c4ee2e8cde84737c78e3f4c54f946f2a38645d0d4c7a95327659"
 dependencies = [
  "proc-macro-crate 3.3.0",
  "proc-macro2",
