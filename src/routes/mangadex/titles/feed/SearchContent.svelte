@@ -137,7 +137,7 @@
 			<div class="additional-content">
 				<section>
 					<p>Sort by:</p>
-					<MangaFeedSortOrderSelection sort={order} />
+					<MangaFeedSortOrderSelection sort={order} addMinWidth />
 				</section>
 			</div>
 		{/snippet}

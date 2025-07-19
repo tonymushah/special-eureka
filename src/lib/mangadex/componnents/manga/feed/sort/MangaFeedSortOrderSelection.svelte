@@ -51,8 +51,9 @@
 
 	interface Props {
 		sort: Writable<Order | undefined>;
+		addMinWidth?: boolean;
 	}
-	let { sort }: Props = $props();
+	let { sort, addMinWidth }: Props = $props();
 	const currentSortText = der(sort, ($sort) => {
 		if (!$sort) {
 			return "None";
@@ -76,7 +77,9 @@
 <div class="layout">
 	<div class="input" use:melt={$trigger}>
 		<ButtonAccent>
-			{$currentSortText}
+			<p class:addMinWidth>
+				{$currentSortText}
+			</p>
 		</ButtonAccent>
 	</div>
 </div>
@@ -167,5 +170,9 @@
 	}
 	.input {
 		display: grid;
+		p.addMinWidth {
+			margin: 0px;
+			min-width: 250px;
+		}
 	}
 </style>
