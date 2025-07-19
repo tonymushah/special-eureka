@@ -1,16 +1,15 @@
 <script lang="ts">
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
-	import SettingsItem from "./SettingsItem.svelte";
+	import { dev } from "$app/environment";
 	import { route } from "$lib/ROUTES";
-	import ThemeIcon from "./(icons)/ThemeIcon.svelte";
 	import type { ComponentProps } from "svelte";
+	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
 	import AuthIcon from "./(icons)/AuthIcon.svelte";
 	import ContentIcon from "./(icons)/ContentIcon.svelte";
-	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
-	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
 	import DownloadStateIcon from "./(icons)/DownloadStateIcon.svelte";
 	import GeneralSettingsIcon from "./(icons)/GeneralSettingsIcon.svelte";
-	import { dev } from "$app/environment";
+	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
+	import ThemeIcon from "./(icons)/ThemeIcon.svelte";
+	import SettingsItem from "./SettingsItem.svelte";
 
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
@@ -59,8 +58,6 @@
 		});
 	}
 </script>
-
-<Title type={1}>Settings</Title>
 
 <div class="settings">
 	{#each settings as cog}

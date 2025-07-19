@@ -18,6 +18,7 @@
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
 	import { delay } from "lodash";
+	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 
 	interface Props {
 		data: PageData;
@@ -134,7 +135,7 @@
 	}}
 >
 	<section class="title" bind:this={topElement}>
-		<Title>Advanced Titles Search</Title>
+		<PageTitle title={"Advanced Titles Search"} titleType={1} withReturn />
 	</section>
 
 	<section class="form-search">

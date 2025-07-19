@@ -19,10 +19,6 @@
 	});
 </script>
 
-<section class="title">
-	<Title>Users</Title>
-</section>
-
 <section>
 	<form
 		onsubmit={preventDefault(() => {

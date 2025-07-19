@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { SearchIcon } from "svelte-feather-icons";
 	import { readonly, writable } from "svelte/store";
 	import SearchContent from "./SearchContent.svelte";
@@ -19,17 +16,14 @@
 	});
 </script>
 
-<section class="title">
-	<Title>Authors</Title>
-</section>
-
 <section>
 	<form
-		onsubmit={preventDefault(() => {
+		onsubmit={(e) => {
+			e.preventDefault();
 			if (!realTime) {
 				authorName.set(inputName);
 			}
-		})}
+		}}
 	>
 		<div class="input">
 			<FormInput
@@ -42,9 +36,10 @@
 		</div>
 		<article
 			class="buttons"
-			oncontextmenu={preventDefault(() => {
+			oncontextmenu={(e) => {
+				e.preventDefault();
 				realTime = !realTime;
-			})}
+			}}
 		>
 			{#if realTime}
 				<ButtonAccent variant="accent" isBase type="submit">

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -9,7 +10,7 @@
 </script>
 
 <div class="content">
-	<h1>Latest uploads</h1>
+	<PageTitle title={"Latest uploads"} withReturn titleType={1} />
 	{@render children?.()}
 </div>
 
