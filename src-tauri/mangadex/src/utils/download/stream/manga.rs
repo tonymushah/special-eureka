@@ -1,7 +1,4 @@
-use std::{
-    sync::{Arc, RwLock},
-    task::{Poll, Waker},
-};
+use std::task::{Poll, ready};
 
 use actix::{WeakRecipient, prelude::*};
 use eureka_mmanager::{
@@ -12,8 +9,11 @@ use eureka_mmanager::{
     prelude::{AsyncSubscribe, GetMangaDownloadManager},
     recipients::MaybeWeakRecipient,
 };
-use futures_util::StreamExt;
-use tauri::{AppHandle, Runtime};
+use futures_util::{FutureExt, StreamExt};
+use tauri::{
+    AppHandle, Runtime,
+    async_runtime::{Receiver, Sender, channel},
+};
 use tokio_stream::wrappers::WatchStream;
 use uuid::Uuid;
 
@@ -25,12 +25,10 @@ use crate::{
     },
 };
 
-type SharedState = Arc<RwLock<Option<TaskSubscriberMessages<MangaDownloadTaskState>>>>;
+type SharedState = super::SharedState<Box<TaskSubscriberMessages<MangaDownloadTaskState>>>;
 
-#[derive(Default)]
 struct MangaDownloadStreamActor {
-    current_state: SharedState,
-    waker: Option<Waker>,
+    tx: Sender<SharedState>,
 }
 
 impl Actor for MangaDownloadStreamActor {
@@ -45,34 +43,40 @@ impl Handler<TaskSubscriberMessages<MangaDownloadTaskState>> for MangaDownloadSt
         msg: TaskSubscriberMessages<MangaDownloadTaskState>,
         _ctx: &mut Self::Context,
     ) -> Self::Result {
-        self.current_state.clear_poison();
-        if let Ok(mut write) = self.current_state.write() {
-            write.replace(msg);
-        }
-        if let Some(waker) = &self.waker {
-            waker.wake_by_ref();
-        }
+        let tx = self.tx.clone();
+        async move { tx.send(SharedState::Task(msg.into())).await }
+            .map(|d| {
+                if let Err(err) = d {
+                    log::error!("{err}");
+                }
+            })
+            .into_actor(self)
+            .wait(_ctx);
     }
 }
 
-#[derive(Message)]
-#[rtype(result = "()")]
-struct SendWaker(Waker);
-
-impl Handler<SendWaker> for MangaDownloadStreamActor {
+impl Handler<super::OfflineAppStateNotLoadedMsg> for MangaDownloadStreamActor {
     type Result = ();
-    fn handle(&mut self, msg: SendWaker, _ctx: &mut Self::Context) -> Self::Result {
-        match self.waker.as_mut() {
-            Some(waker) => waker.clone_from(&msg.0),
-            None => self.waker = Some(msg.0),
-        }
+    fn handle(
+        &mut self,
+        _: super::OfflineAppStateNotLoadedMsg,
+        ctx: &mut Self::Context,
+    ) -> Self::Result {
+        let tx = self.tx.clone();
+        async move { tx.send(SharedState::OfflineAppStateNotLoaded).await }
+            .map(|d| {
+                if let Err(err) = d {
+                    log::error!("{err}");
+                }
+            })
+            .into_actor(self)
+            .wait(ctx);
     }
 }
 
 pub struct MangaDownloadStream {
-    current_state: SharedState,
+    rx: Receiver<SharedState>,
     actor: Addr<MangaDownloadStreamActor>,
-    app_state_watch: WatchStream<bool>,
     _handle: AbortHandleGuard,
 }
 
@@ -82,27 +86,23 @@ impl Stream for MangaDownloadStream {
         mut self: std::pin::Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
     ) -> Poll<Option<Self::Item>> {
-        self.actor.do_send(SendWaker(cx.waker().clone()));
-
-        if let Poll::Ready(Some(false)) = Box::pin(&mut self.app_state_watch).poll_next_unpin(cx) {
-            return Poll::Ready(Some(MangaDownloadState::OfflineAppStateNotLoaded));
-        }
-
-        self.current_state.clear_poison();
-        match self.current_state.read() {
-            Ok(data) => {
-                if let Some(msg) = data.as_ref() {
-                    match msg {
+        loop {
+            let data = ready!(self.rx.poll_recv(cx));
+            if let Some(msg) = data {
+                match msg {
+                    SharedState::Task(msg) => match *msg {
                         TaskSubscriberMessages::State(state) => {
-                            Poll::Ready(Some(state.clone().into()))
+                            return dbg!(Poll::Ready(Some(state.into())));
                         }
-                        _ => Poll::Pending,
+                        _ => continue,
+                    },
+                    SharedState::OfflineAppStateNotLoaded => {
+                        return Poll::Ready(Some(MangaDownloadState::OfflineAppStateNotLoaded));
                     }
-                } else {
-                    Poll::Pending
                 }
+            } else {
+                return Poll::Ready(None);
             }
-            Err(_) => Poll::Ready(None),
         }
     }
 }
@@ -112,12 +112,9 @@ impl MangaDownloadStream {
         self.actor.downgrade().recipient()
     }
     pub async fn get_from_app<R: Runtime>(app: &AppHandle<R>, id: Uuid) -> crate::Result<Self> {
-        let current_state = SharedState::default();
+        let (tx, rx) = channel::<SharedState>(super::CHANNEL_SIZE);
         let actor = {
-            let atx = MangaDownloadStreamActor {
-                current_state: current_state.clone(),
-                waker: None,
-            };
+            let atx = MangaDownloadStreamActor { tx };
             app.get_actix_system()?
                 .arbiter()
                 .spawn_fn_with_data(move || atx.start())
@@ -126,10 +123,12 @@ impl MangaDownloadStream {
         let recipient = actor
             .downgrade()
             .recipient::<TaskSubscriberMessages<MangaDownloadTaskState>>();
+        let offline_app_state_not_loaded_rx = actor
+            .downgrade()
+            .recipient::<super::OfflineAppStateNotLoadedMsg>();
         Ok(Self {
-            current_state,
             actor,
-            app_state_watch: WatchStream::new(app.get_watches()?.is_appstate_mounted.subscribe()),
+            rx,
             _handle: {
                 let app = app.clone();
                 AbortHandleGuard::new(
@@ -145,8 +144,8 @@ impl MangaDownloadStream {
                                     .await?
                                     .subscribe(MaybeWeakRecipient::Weak(recipient.clone()))
                                     .await?;
-                            } else if let Some(rec) = recipient.upgrade() {
-                                rec.do_send(TaskSubscriberMessages::Dropped);
+                            } else if let Some(rec) = offline_app_state_not_loaded_rx.upgrade() {
+                                rec.do_send(super::OfflineAppStateNotLoadedMsg);
                             }
                         }
                         Ok::<_, crate::Error>(())
