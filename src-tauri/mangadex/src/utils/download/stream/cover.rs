@@ -9,7 +9,7 @@ use eureka_mmanager::{
     prelude::{AsyncSubscribe, GetCoverDownloadManager},
     recipients::MaybeWeakRecipient,
 };
-use futures_util::{FutureExt, StreamExt};
+use futures_util::StreamExt;
 use tauri::{
     AppHandle, Runtime,
     async_runtime::{Receiver, Sender, channel},
@@ -45,12 +45,12 @@ impl Handler<TaskSubscriberMessages<CoverDownloadTaskState>> for CoverDownloadSt
     ) -> Self::Result {
         let tx = self.tx.clone();
         async move { tx.send(SharedState::Task(msg.into())).await }
-            .map(|d| {
-                if let Err(err) = d {
-                    log::error!("{err}");
+            .into_actor(self)
+            .map(|d, _, ctx| {
+                if d.is_err() {
+                    ctx.stop();
                 }
             })
-            .into_actor(self)
             .wait(_ctx);
     }
 }
@@ -64,12 +64,12 @@ impl Handler<super::OfflineAppStateNotLoadedMsg> for CoverDownloadStreamActor {
     ) -> Self::Result {
         let tx = self.tx.clone();
         async move { tx.send(SharedState::OfflineAppStateNotLoaded).await }
-            .map(|d| {
-                if let Err(err) = d {
-                    log::error!("{err}");
+            .into_actor(self)
+            .map(|d, _, ctx| {
+                if d.is_err() {
+                    ctx.stop();
                 }
             })
-            .into_actor(self)
             .wait(ctx);
     }
 }
