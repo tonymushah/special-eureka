@@ -1,29 +1,27 @@
 use crate::{
-    subscription::utils::WatchSubscriptionStream,
+    Result,
+    subscription::download_state::NextTaskValue,
     utils::{
-        download_state_rx::{get_download_state_rx, NextTaskValue},
+        download::stream::cover::CoverDownloadStream,
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
-    Result,
 };
 
 use actix::Addr;
 use async_graphql::{Context, Enum, Object, Subscription};
 use async_stream::stream;
 use eureka_mmanager::{
+    DownloadManager, OwnedError,
     download::{
+        GetManager,
         cover::{
-            task::{CoverDownloadTaskState, CoverDownloadingState as DownloadingState},
             CoverDownloadManager,
+            task::{CoverDownloadTaskState, CoverDownloadingState as DownloadingState},
         },
         traits::managers::TaskManagerAddr,
-        GetManager,
     },
-    prelude::CoverDownloadTask,
-    DownloadManager, OwnedError,
 };
-use tauri::{Manager, Runtime};
-use tokio::{select, sync::watch::Receiver};
+use tokio::select;
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -140,14 +138,6 @@ impl CoverDownloadState {
     }
 }
 
-fn get_cover_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
-    app: &M,
-    id: Uuid,
-    deferred: bool,
-) -> crate::Result<Receiver<CoverDownloadState>> {
-    get_download_state_rx::<CoverDownloadManager, CoverDownloadTask, _, R, M>(app, id, deferred)
-}
-
 pub struct CoverDownloadSubs;
 
 #[Subscription]
@@ -188,12 +178,9 @@ impl CoverDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         cover_id: Uuid,
-        deferred: bool,
+        _deferred: Option<bool>,
     ) -> Result<impl Stream<Item = CoverDownloadState> + 'ctx> {
-        let window = ctx.get_window::<tauri::Wry>()?.clone();
-        Ok(WatchSubscriptionStream::new(get_cover_download_state_rx(
-            &window, cover_id, deferred,
-        )?))
+        CoverDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, cover_id).await
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,

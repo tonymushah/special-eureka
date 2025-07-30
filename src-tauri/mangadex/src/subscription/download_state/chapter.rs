@@ -1,27 +1,25 @@
 use crate::{
-    subscription::utils::WatchSubscriptionStream,
+    Result,
+    subscription::download_state::NextTaskValue,
     utils::{
-        download_state_rx::{get_download_state_rx, NextTaskValue},
+        download::stream::chapter::ChapterDownloadStream,
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
-    Result,
 };
 use actix::Addr;
 use async_graphql::{Context, Object, SimpleObject, Subscription};
 use async_stream::stream;
 use eureka_mmanager::{
-    download::{
-        chapter::{
-            task::{ChapterDownloadTaskState, ChapterDownloadingState as DownloadingState},
-            ChapterDownloadManager,
-        },
-        GetManager,
-    },
-    prelude::{ChapterDownloadTask, TaskManagerAddr},
     DownloadManager, OwnedError,
+    download::{
+        GetManager,
+        chapter::{
+            ChapterDownloadManager,
+            task::{ChapterDownloadTaskState, ChapterDownloadingState as DownloadingState},
+        },
+    },
+    prelude::TaskManagerAddr,
 };
-use tauri::{Manager, Runtime};
-use tokio::{select, sync::watch::Receiver};
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -167,14 +165,6 @@ impl ChapterDownloadState {
     }
 }
 
-fn get_chapter_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
-    app: &M,
-    id: Uuid,
-    deferred: bool,
-) -> crate::Result<Receiver<ChapterDownloadState>> {
-    get_download_state_rx::<ChapterDownloadManager, ChapterDownloadTask, _, R, M>(app, id, deferred)
-}
-
 pub struct ChapterDownloadSubs;
 
 #[Subscription]
@@ -200,7 +190,7 @@ impl ChapterDownloadSubs {
                 yield tasks
             }
             loop {
-                select! {
+                tokio::select! {
                     _ = notify.notified() => {
                         if let Ok(tasks) = manager.tasks_id().await {
                             yield tasks
@@ -216,12 +206,9 @@ impl ChapterDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         chapter_id: Uuid,
-        deferred: bool,
+        _deferred: bool,
     ) -> Result<impl Stream<Item = ChapterDownloadState> + 'ctx> {
-        let window = ctx.get_window::<tauri::Wry>()?.clone();
-        Ok(WatchSubscriptionStream::new(get_chapter_download_state_rx(
-            &window, chapter_id, deferred,
-        )?))
+        ChapterDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, chapter_id).await
         /* let stream = stream! {
             let mut is_readed = false;
             loop {

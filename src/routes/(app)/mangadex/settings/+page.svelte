@@ -1,0 +1,85 @@
+<script lang="ts">
+	import { dev } from "$app/environment";
+	import { route } from "$lib/ROUTES";
+	import type { ComponentProps } from "svelte";
+	import ArchiveIcon from "./(icons)/ArchiveIcon.svelte";
+	import AuthIcon from "./(icons)/AuthIcon.svelte";
+	import ContentIcon from "./(icons)/ContentIcon.svelte";
+	import DownloadStateIcon from "./(icons)/DownloadStateIcon.svelte";
+	import GeneralSettingsIcon from "./(icons)/GeneralSettingsIcon.svelte";
+	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
+	import ThemeIcon from "./(icons)/ThemeIcon.svelte";
+	import SettingsItem from "./SettingsItem.svelte";
+
+	let settings: ComponentProps<typeof SettingsItem>[] = [
+		{
+			title: "General Settings",
+			description: "...",
+			href: route("/mangadex/settings/general-settings"),
+			icon: GeneralSettingsIcon
+		},
+		{
+			title: "Themes",
+			description: "Add, Edit, Delete theme profiles to edit MangaDex Colors and more!",
+			href: route("/mangadex/settings/themes"),
+			icon: ThemeIcon
+		},
+		{
+			title: "Authentification",
+			description: "Log in or out from MangaDex",
+			href: route("/mangadex/settings/auth"),
+			icon: AuthIcon
+		},
+		{
+			title: "Content Profile",
+			description: "Add, edit, Delete content profile to edit Mangadex contents",
+			href: route("/mangadex/settings/content-profiles"),
+			icon: ContentIcon
+		},
+		{
+			title: "Offline Data",
+			description: "Update offline data config",
+			href: route("/mangadex/settings/offline-data"),
+			icon: ArchiveIcon
+		},
+		{
+			title: "Download States",
+			description: "Check any download status",
+			href: route("/mangadex/settings/download-state"),
+			icon: DownloadStateIcon
+		}
+	];
+	if (dev) {
+		settings.push({
+			title: "Dev Playground",
+			description: "Design tests etc...",
+			href: route("/mangadex/settings/css-playground"),
+			icon: PlaygroundIcon
+		});
+	}
+</script>
+
+<div class="settings">
+	{#each settings as cog}
+		<SettingsItem {...cog} />
+	{/each}
+</div>
+
+<style lang="scss">
+	@media (width <= 900px) {
+		:root {
+			--grid-columns: 3;
+		}
+	}
+	@media (width > 900px) {
+		:root {
+			--grid-columns: 4;
+		}
+	}
+
+	.settings {
+		display: grid;
+		gap: 10px;
+		grid-template-columns: repeat(var(--grid-columns), 1fr);
+	}
+</style>

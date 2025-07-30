@@ -1,29 +1,27 @@
 use crate::{
-    subscription::utils::WatchSubscriptionStream,
+    Result,
+    subscription::download_state::NextTaskValue,
     utils::{
-        download_state_rx::{get_download_state_rx, NextTaskValue},
+        download::stream::manga::MangaDownloadStream,
         traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     },
-    Result,
 };
 
 use actix::Addr;
 use async_graphql::{Context, Enum, Object, Subscription};
 use async_stream::stream;
 use eureka_mmanager::{
+    DownloadManager, OwnedError,
     download::{
+        GetManager,
         manga::{
-            task::{MangaDonwloadingState as DownloadingState, MangaDownloadTaskState},
             MangaDownloadManager,
+            task::{MangaDonwloadingState as DownloadingState, MangaDownloadTaskState},
         },
         traits::managers::TaskManagerAddr,
-        GetManager,
     },
-    prelude::MangaDownloadTask,
-    DownloadManager, OwnedError,
 };
-use tauri::{Manager, Runtime};
-use tokio::{select, sync::watch::Receiver};
+use tokio::select;
 use tokio_stream::Stream;
 use uuid::Uuid;
 
@@ -132,14 +130,6 @@ impl MangaDownloadState {
     }
 }
 
-fn get_manga_download_state_rx<R: Runtime, M: Manager<R> + Clone + Send + 'static>(
-    app: &M,
-    id: Uuid,
-    deferred: bool,
-) -> crate::Result<Receiver<MangaDownloadState>> {
-    get_download_state_rx::<MangaDownloadManager, MangaDownloadTask, _, R, M>(app, id, deferred)
-}
-
 pub struct MangaDownloadSubs;
 
 #[Subscription]
@@ -180,12 +170,9 @@ impl MangaDownloadSubs {
         &'ctx self,
         ctx: &'ctx Context<'ctx>,
         manga_id: Uuid,
-        deferred: bool,
+        _deferred: bool,
     ) -> Result<impl Stream<Item = MangaDownloadState> + 'ctx> {
-        let window = ctx.get_window::<tauri::Wry>()?.clone();
-        Ok(WatchSubscriptionStream::new(get_manga_download_state_rx(
-            &window, manga_id, deferred,
-        )?))
+        MangaDownloadStream::get_from_app(ctx.get_app_handle::<tauri::Wry>()?, manga_id).await
         /*
         let mut is_mounted = WatchSubscriptionStream::<_>::from_async_graphql_context_watch_as_ref::<
             IsAppStateMountedWatch,
