@@ -1,10 +1,11 @@
+pub mod cache;
 mod offline;
 
-use super::{parse_uri, SchemeResponseError, SchemeResponseResult};
+use super::{SchemeResponseError, SchemeResponseResult, parse_uri};
 use offline::ChaptersHandlerOffline;
 use regex::Regex;
 
-use tauri::{http::Request, AppHandle, Runtime};
+use tauri::{AppHandle, Runtime, http::Request};
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Copy)]

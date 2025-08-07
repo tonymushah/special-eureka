@@ -5,16 +5,16 @@ use std::{
 
 use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use regex::Regex;
-use reqwest::header::CONTENT_TYPE;
+use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE};
 use tauri::{
-    http::{status::StatusCode, Request},
     AppHandle, Runtime,
+    http::{Request, status::StatusCode},
 };
 use uuid::Uuid;
 
 use crate::{cache::cover::CoverImageCache, utils::traits_utils::MangadexTauriManagerExt};
 
-use super::{parse_uri, SchemeResponseError, SchemeResponseResult};
+use super::{SchemeResponseError, SchemeResponseResult, parse_uri};
 
 #[derive(Debug, Clone)]
 struct HandleCoversParams {
@@ -130,12 +130,12 @@ impl<'a, R: Runtime> CoverImagesOfflineHandler<'a, R> {
                 )?;
             }
         }
-
         buf.flush()?;
         tauri::http::Response::builder()
-            .header("access-control-allow-origin", "*")
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
             .status(StatusCode::OK)
             .header(CONTENT_TYPE, "image/*")
+            .header(CONTENT_LENGTH, format!("{}", buf.len()))
             .body(buf)
             .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
     }

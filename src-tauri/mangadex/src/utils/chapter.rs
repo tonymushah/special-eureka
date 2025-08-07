@@ -307,7 +307,7 @@ impl<R: Runtime> SpawnHandle<R> {
                             }));
                         } else {
                             match Url::parse(&format!(
-                                "{}/chapter-cache/{}/{}/{}",
+                                "{}chapter-cache/{}/{}/{}",
                                 crate::constants::PROTOCOL,
                                 self.chapter_id,
                                 match self.mode {
@@ -534,8 +534,11 @@ impl ChapterPagesHandle {
     pub fn refetch_page(&self, page: u32) {
         self.send_instruction(Instructions::RefetchPage(page));
     }
+    pub fn get_file_path<P: AsRef<Path>>(&self, path: &P) -> PathBuf {
+        self._temp_dir.path().join(path)
+    }
     pub fn get_file<P: AsRef<Path>>(&self, path: &P) -> std::io::Result<File> {
-        File::open(self._temp_dir.path().join(path))
+        File::open(self.get_file_path(path))
     }
     pub fn new<R: Runtime>(id: Uuid, mode: Mode, app: AppHandle<R>) -> io::Result<Self> {
         let subs: Subs = Default::default();
@@ -616,5 +619,14 @@ impl ChapterPagesStore {
                 Ok(task)
             }
         }
+    }
+    pub fn get_handle_maybe_not_loaded(
+        &self,
+        id: Uuid,
+        mode: Mode,
+    ) -> Option<Arc<ChapterPagesHandle>> {
+        self.pages
+            .get(&StoreKey { id, mode })
+            .and_then(|d| d.upgrade())
     }
 }

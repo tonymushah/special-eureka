@@ -6,10 +6,10 @@ use std::error::Error;
 
 use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_TYPE};
 use tauri::{
-    http::{status::StatusCode, Request, Response},
+    AppHandle, Manager, Runtime, State,
+    http::{Request, Response, status::StatusCode},
     plugin::{Builder, Plugin},
     utils::mime_type::MimeType,
-    AppHandle, Manager, Runtime, State,
 };
 use url::Url;
 
@@ -119,6 +119,9 @@ fn handle<R: Runtime>(app: AppHandle<R>, req: Request<Vec<u8>>) -> Response<Vec<
                     "chapter" => handle_chapters(&app, &req).into_response(),
                     "covers" => handle_covers(&app, &req).into_response(),
                     "favicons" => handle_favicon(&app, &req).into_response(),
+                    "chapter-cache" => {
+                        chapters::cache::handle_chapters_cache(&app, &req).into_response()
+                    }
                     _ => not_found,
                 }
             } else {
