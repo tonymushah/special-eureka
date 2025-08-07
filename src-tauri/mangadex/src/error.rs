@@ -1,3 +1,5 @@
+use std::backtrace::Backtrace;
+
 use async_graphql::ErrorExtensions;
 
 use crate::utils::refresh_token::AbstractRefreshTokenDedupError;
@@ -133,6 +135,10 @@ pub enum Error {
     NoDeduplicateTask,
     #[error(transparent)]
     TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
+    #[error("Some Mutex or RwLock has been poisoned")]
+    SyncPoison,
+    #[error(transparent)]
+    TokioTryLock(#[from] tokio::sync::TryLockError),
 }
 
 impl Error {
@@ -151,6 +157,31 @@ impl ErrorExtensions for Error {
     fn extend(&self) -> async_graphql::Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
+            exts.set("backtrace", Backtrace::capture().to_string());
         })
+    }
+}
+
+#[derive(Debug)]
+pub struct ErrorWrapper(Error);
+
+impl<E> From<E> for ErrorWrapper
+where
+    E: Into<Error>,
+{
+    fn from(value: E) -> Self {
+        Self(value.into())
+    }
+}
+
+impl ErrorWrapper {
+    pub fn into_inner(self) -> Error {
+        self.0
+    }
+}
+
+impl From<ErrorWrapper> for async_graphql::Error {
+    fn from(value: ErrorWrapper) -> Self {
+        value.0.extend()
     }
 }

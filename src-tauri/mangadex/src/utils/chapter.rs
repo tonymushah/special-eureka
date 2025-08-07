@@ -168,7 +168,7 @@ impl<R: Runtime> SpawnHandle<R> {
         while let Some(instruction) = self.instruction_rx.recv().await {
             match instruction {
                 Instructions::FetchMetadata => {
-                    if let Err(err) = self.fetch_metadata().await {
+                    if let Err(err) = self.check_metadata().await {
                         self.send_message(Err(err));
                     }
                 }
