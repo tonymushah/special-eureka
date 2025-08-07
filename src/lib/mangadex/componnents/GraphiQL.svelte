@@ -31,7 +31,6 @@
 			}
 		}
 	});
-	$inspect(root);
 	onDestroy(function () {
 		if (root != undefined) root.unmount();
 	});
