@@ -567,6 +567,13 @@ impl ChapterPagesHandle {
         let rx = self.subscribe_with_rx();
         ChapterPagesStream { rx, handle: self }
     }
+    pub fn pages(&self) -> Vec<ChapterPage> {
+        self.pages
+            .read()
+            .ok()
+            .map(|d| d.values().cloned().collect())
+            .unwrap_or_default()
+    }
 }
 
 impl Drop for ChapterPagesHandle {
