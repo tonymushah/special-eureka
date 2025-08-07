@@ -68,6 +68,8 @@ enum Instructions {
     FetchMetadata,
     StartCaching,
     RefetchPage(u32),
+    ResendPage(u32),
+    ResendAll,
 }
 
 #[derive(Debug, thiserror::Error, Clone)]
@@ -103,6 +105,8 @@ pub enum FetchingError {
         err: Arc<url::ParseError>,
         page: u32,
     },
+    #[error("Page {0} is not cached")]
+    PageNotCached(u32),
 }
 
 impl From<reqwest::Error> for FetchingError {
@@ -139,6 +143,10 @@ impl async_graphql::ErrorExtensions for FetchingError {
                 Self::IoPage { err, page } => {
                     extion.set("page", *page);
                     extion.set("io_code", err.kind().to_string());
+                }
+                Self::PageNotCached(page) => {
+                    extion.set("page", *page);
+                    extion.set("not-cached", true);
                 }
                 _ => {}
             }),
@@ -212,6 +220,20 @@ impl<R: Runtime> SpawnHandle<R> {
                 Instructions::RefetchPage(page) => {
                     if let Err(err) = self.refetch_page(page).await {
                         self.send_message(Err(err));
+                    }
+                }
+                Instructions::ResendPage(page) => {
+                    if let Some(s) = self.pages.read().ok().and_then(|d| d.get(&page).cloned()) {
+                        self.send_message(Ok(s));
+                    } else {
+                        self.send_message(Err(FetchingError::PageNotCached(page)));
+                    }
+                }
+                Instructions::ResendAll => {
+                    if let Ok(read) = self.pages.read() {
+                        for (_, page) in read.iter() {
+                            self.send_message(Ok(page.clone()));
+                        }
                     }
                 }
             }
@@ -307,6 +329,9 @@ impl<R: Runtime> SpawnHandle<R> {
                         .map_err(crate::Error::from)
                 }
                 .await
+                .inspect_err(|d| {
+                    log::error!("{d}");
+                })
                 .ok(),
             };
             self.send_message(Ok(page.clone()));
@@ -569,6 +594,12 @@ impl ChapterPagesHandle {
             .ok()
             .map(|d| d.values().cloned().collect())
             .unwrap_or_default()
+    }
+    pub fn resend_page(&self, page: u32) {
+        self.send_instruction(Instructions::ResendPage(page));
+    }
+    pub fn resend_all(&self) {
+        self.send_instruction(Instructions::ResendAll);
     }
 }
 
