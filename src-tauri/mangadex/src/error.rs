@@ -160,6 +160,52 @@ impl ErrorExtensions for Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
             exts.set("backtrace", Backtrace::capture().to_string());
+            match self {
+                Self::Reqwest(err)
+                | Self::MangadexApi(mangadex_api_types_rust::error::Error::RequestError(err)) => {
+                    if let Some(url) = err.url() {
+                        exts.set("url", url.to_string());
+                    }
+                    if let Some(status) = err.status() {
+                        exts.set("status", status.as_str());
+                    }
+                }
+                Self::MangadexApi(mangadex_api_types_rust::error::Error::Api(api)) => {
+                    exts.set(
+                        "status",
+                        api.errors.iter().map(|d| d.status).collect::<Vec<_>>(),
+                    );
+                    exts.set(
+                        "request_id",
+                        api.errors
+                            .iter()
+                            .map(|d| d.id.to_string())
+                            .collect::<Vec<_>>(),
+                    );
+                    exts.set(
+                        "details",
+                        api.errors
+                            .iter()
+                            .flat_map(|d| d.detail.clone())
+                            .collect::<Vec<_>>(),
+                    );
+                    exts.set(
+                        "titles",
+                        api.errors
+                            .iter()
+                            .flat_map(|d| d.title.clone())
+                            .collect::<Vec<_>>(),
+                    );
+                }
+                Self::MangadexApi(mangadex_api_types_rust::error::Error::ServerError(
+                    status,
+                    detail,
+                )) => {
+                    exts.set("status", *status);
+                    exts.set("detail", detail.clone());
+                }
+                _ => {}
+            }
         })
     }
 }
