@@ -1,18 +1,20 @@
+pub mod pages;
+
 use crate::{
+    Result,
     error::Error,
     query::download_state::DownloadStateQueries,
     store::{
-        types::enums::chapter_quality::ChapterQualityStore, TauriManagerMangadexStoreExtractor,
+        TauriManagerMangadexStoreExtractor, types::enums::chapter_quality::ChapterQualityStore,
     },
     utils::download::chapter::download_chapter,
-    Result,
 };
 
 use crate::store::types::enums::chapter_quality::DownloadMode;
 use async_graphql::{Context, Object};
 use eureka_mmanager::{download::chapter::ChapterDownloadMessage, prelude::*};
 use mangadex_api_input_types::chapter::edit::ChapterUpdateParams;
-use mangadex_api_schema_rust::{v5::ChapterAttributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::ChapterAttributes};
 use uuid::Uuid;
 
 use crate::{
@@ -117,5 +119,16 @@ impl ChapterMutations {
             .cancel()
             .await?;
         Ok(true)
+    }
+    pub async fn pages_cache(
+        &self,
+        _ctx: &Context<'_>,
+        id: Uuid,
+        mode: Option<DownloadMode>,
+    ) -> pages::ChapterPagesStoreMutation {
+        pages::ChapterPagesStoreMutation {
+            id,
+            mode: mode.unwrap_or_default(),
+        }
     }
 }
