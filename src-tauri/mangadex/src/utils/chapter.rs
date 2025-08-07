@@ -10,11 +10,11 @@ use std::{
 };
 
 use async_graphql::ErrorExtensions;
-use bytes::Buf;
-use eureka_mmanager::prelude::{ChapterDataPullAsyncTrait, GetManagerStateData};
+use bytes::{Buf, Bytes};
+use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
 use futures_util::Stream;
-use image::GenericImageView;
 use mangadex_api_schema_rust::v5::AtHomeServer;
+use reqwest::Client;
 use tauri::{AppHandle, Runtime};
 use tempfile::TempDir;
 use tokio::{
@@ -282,12 +282,13 @@ impl<R: Runtime> SpawnHandle<R> {
             Mode::DataSaver => data_saver,
         };
         let to_use_len = to_use.len();
+
         for (index, (url, path)) in to_use.into_iter().enumerate() {
             let page = ChapterPage {
                 index: index as u32,
                 pages: to_use_len as u32,
                 url,
-                size: {
+                size: async {
                     let mut file = match self.mode {
                         Mode::DataSaver => state
                             .get_chapter_image_data_saver(self.chapter_id, path.clone())
@@ -299,17 +300,14 @@ impl<R: Runtime> SpawnHandle<R> {
                             .map_err(crate::Error::from)?,
                     };
                     let mut inner_buf = Vec::<u8>::new();
-                    io::copy(&mut BufReader::new(&mut file), &mut inner_buf).map_err(|err| {
-                        FetchingError::IoPage {
-                            err: Arc::new(err),
-                            page: index as _,
-                        }
-                    })?;
+                    io::copy(&mut BufReader::new(&mut file), &mut inner_buf)?;
                     image::ImageFormat::from_path(&path)
                         .and_then(|format| image::load_from_memory_with_format(&inner_buf, format))
                         .map(|img| ChapterImageSize::from_img(&img))
-                        .ok()
-                },
+                        .map_err(crate::Error::from)
+                }
+                .await
+                .ok(),
             };
             self.send_message(Ok(page.clone()));
             if let Ok(mut write) = self.pages.write() {
@@ -317,6 +315,80 @@ impl<R: Runtime> SpawnHandle<R> {
             }
         }
         Ok(())
+    }
+    async fn get_bytes(&self, client: &Client, url: &Url, index: u32) -> Option<Bytes> {
+        match client
+            .get(url.clone())
+            .send()
+            .await
+            .and_then(|response| response.error_for_status())
+        {
+            Ok(response) => match response.bytes().await {
+                Ok(b) => Some(b),
+                Err(err) => {
+                    self.send_message(Err(FetchingError::ReqwestPageFetching {
+                        err: Arc::new(err),
+                        page: index,
+                    }));
+                    None
+                }
+            },
+            Err(err) => {
+                self.send_message(Err(FetchingError::ReqwestPageFetching {
+                    err: Arc::new(err),
+                    page: index,
+                }));
+                None
+            }
+        }
+    }
+    async fn handle_bytes(&self, bytes: Bytes, file: &String, index: u32, pages_len: usize) {
+        let res = File::create(self.dir.join(file)).and_then(|d| {
+            let mut writer = BufWriter::new(d);
+            io::copy(&mut bytes.reader(), &mut writer)?;
+            writer.flush()?;
+            Ok::<_, io::Error>(self.dir.join(file))
+        });
+        match res {
+            Ok(path) => {
+                match Url::parse(&format!(
+                    "{}chapter-cache/{}/{}/{}",
+                    crate::constants::PROTOCOL,
+                    self.chapter_id,
+                    match self.mode {
+                        Mode::DataSaver => "data-saver",
+                        Mode::Normal => "data",
+                    },
+                    file
+                )) {
+                    Err(err) => {
+                        self.send_message(Err(FetchingError::ParsePageUrl {
+                            err: Arc::new(err),
+                            page: index as _,
+                        }));
+                    }
+                    Ok(url) => {
+                        let page = ChapterPage {
+                            index: index as _,
+                            pages: pages_len as _,
+                            url,
+                            size: ChapterImageSize::from_path(&path),
+                        };
+                        self.pages.clear_poison();
+                        if let Ok(mut write) = self.pages.write() {
+                            write.insert(index as _, page.clone());
+                        }
+                        self.send_message(Ok(page));
+                    }
+                }
+            }
+            Err(err) => {
+                self.send_message(Err(FetchingError::IoPage {
+                    err: Arc::new(err),
+                    page: index,
+                }));
+            }
+        }
     }
     async fn start_caching_online(&mut self) -> Result<(), FetchingError> {
         self.check_metadata().await?;
@@ -331,75 +403,8 @@ impl<R: Runtime> SpawnHandle<R> {
         let client_inner = client_ref.read().await;
 
         for (index, (url, file)) in pages.into_iter().enumerate() {
-            match client_inner
-                .client
-                .get(url)
-                .send()
-                .await
-                .and_then(|response| response.error_for_status())
-            {
-                Ok(response) => match response.bytes().await {
-                    Ok(bytes) => {
-                        let res = File::create(self.dir.join(&file)).and_then(|d| {
-                            let mut writer = BufWriter::new(d);
-                            io::copy(&mut bytes.reader(), &mut writer)?;
-                            writer.flush()?;
-                            Ok::<_, io::Error>(self.dir.join(&file))
-                        });
-                        match res {
-                            Ok(path) => {
-                                match Url::parse(&format!(
-                                    "{}chapter-cache/{}/{}/{}",
-                                    crate::constants::PROTOCOL,
-                                    self.chapter_id,
-                                    match self.mode {
-                                        Mode::DataSaver => "data-saver",
-                                        Mode::Normal => "data",
-                                    },
-                                    file
-                                )) {
-                                    Err(err) => {
-                                        self.send_message(Err(FetchingError::ParsePageUrl {
-                                            err: Arc::new(err),
-                                            page: index as _,
-                                        }));
-                                    }
-                                    Ok(url) => {
-                                        let page = ChapterPage {
-                                            index: index as _,
-                                            pages: pages_len as _,
-                                            url,
-                                            size: ChapterImageSize::from_path(&path),
-                                        };
-                                        self.pages.clear_poison();
-                                        if let Ok(mut write) = self.pages.write() {
-                                            write.insert(index as _, page.clone());
-                                        }
-                                        self.send_message(Ok(page));
-                                    }
-                                }
-                            }
-                            Err(err) => {
-                                self.send_message(Err(FetchingError::IoPage {
-                                    err: Arc::new(err),
-                                    page: index as u32,
-                                }));
-                            }
-                        }
-                    }
-                    Err(err) => {
-                        self.send_message(Err(FetchingError::ReqwestPageFetching {
-                            err: Arc::new(err),
-                            page: index as u32,
-                        }));
-                    }
-                },
-                Err(err) => {
-                    self.send_message(Err(FetchingError::ReqwestPageFetching {
-                        err: Arc::new(err),
-                        page: index as u32,
-                    }));
-                }
+            if let Some(bytes) = self.get_bytes(&client_inner.client, &url, index as _).await {
+                self.handle_bytes(bytes, &file, index as _, pages_len).await;
             }
         }
         Ok(())
@@ -451,75 +456,8 @@ impl<R: Runtime> SpawnHandle<R> {
             self.send_message(Err(FetchingError::PageLoading(page, None)));
             return Ok(());
         };
-        match client_inner
-            .client
-            .get(base_url.clone())
-            .send()
-            .await
-            .and_then(|response| response.error_for_status())
-        {
-            Ok(response) => match response.bytes().await {
-                Ok(bytes) => {
-                    let res = File::create(self.dir.join(file)).and_then(|d| {
-                        let mut writer = BufWriter::new(d);
-                        io::copy(&mut bytes.reader(), &mut writer)?;
-                        writer.flush()?;
-                        Ok::<_, io::Error>(self.dir.join(file))
-                    });
-                    match res {
-                        Ok(path) => {
-                            match Url::parse(&format!(
-                                "{}/chapter-cache/{}/{}/{}",
-                                crate::constants::PROTOCOL,
-                                self.chapter_id,
-                                match self.mode {
-                                    Mode::DataSaver => "data-saver",
-                                    Mode::Normal => "data",
-                                },
-                                file
-                            )) {
-                                Err(err) => {
-                                    self.send_message(Err(FetchingError::ParsePageUrl {
-                                        err: Arc::new(err),
-                                        page,
-                                    }));
-                                }
-                                Ok(url) => {
-                                    let page = ChapterPage {
-                                        index: page,
-                                        pages: pages_len as _,
-                                        url,
-                                        size: ChapterImageSize::from_path(&path),
-                                    };
-                                    self.pages.clear_poison();
-                                    if let Ok(mut write) = self.pages.write() {
-                                        write.insert(page.index, page.clone());
-                                    }
-                                    self.send_message(Ok(page));
-                                }
-                            }
-                        }
-                        Err(err) => {
-                            self.send_message(Err(FetchingError::IoPage {
-                                err: Arc::new(err),
-                                page,
-                            }));
-                        }
-                    }
-                }
-                Err(err) => {
-                    self.send_message(Err(FetchingError::ReqwestPageFetching {
-                        err: Arc::new(err),
-                        page,
-                    }));
-                }
-            },
-            Err(err) => {
-                self.send_message(Err(FetchingError::ReqwestPageFetching {
-                    err: Arc::new(err),
-                    page,
-                }));
-            }
+        if let Some(bytes) = self.get_bytes(&client_inner.client, base_url, page).await {
+            self.handle_bytes(bytes, file, page, pages_len).await;
         }
         Ok(())
     }
