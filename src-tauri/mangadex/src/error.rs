@@ -139,6 +139,8 @@ pub enum Error {
     SyncPoison,
     #[error(transparent)]
     TokioTryLock(#[from] tokio::sync::TryLockError),
+    #[error(transparent)]
+    Image(#[from] image::ImageError),
 }
 
 impl Error {
