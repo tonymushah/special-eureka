@@ -5699,6 +5699,89 @@ export type AuthCheckQuery = {
 	};
 };
 
+export type ChapterPagesSubscriptionSubscriptionVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type ChapterPagesSubscriptionSubscription = {
+	__typename?: "Subscriptions";
+	getChapterPages: {
+		__typename?: "ChapterPage";
+		pages: number;
+		index: number;
+		url: any;
+		size?: { __typename?: "ChapterImageSize"; width: number; height: number } | null;
+	};
+};
+
+export type StartChapterPagesCachingMutationVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type StartChapterPagesCachingMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; startCaching: boolean };
+	};
+};
+
+export type FetchingChapterPagesMetadataMutationVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type FetchingChapterPagesMetadataMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; fetchMetadata: boolean };
+	};
+};
+
+export type RefetchChapterPageMutationVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+	page: Scalars["Int"]["input"];
+}>;
+
+export type RefetchChapterPageMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; refetchPage: boolean };
+	};
+};
+
+export type ResendChapterPageMutationVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+	page: Scalars["Int"]["input"];
+}>;
+
+export type ResendChapterPageMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; resendPage: boolean };
+	};
+};
+
+export type ResendChapterPagesMutationVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type ResendChapterPagesMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; resendAll: boolean };
+	};
+};
+
 export type ChapterFeedStyleSubSubscriptionVariables = Exact<{ [key: string]: never }>;
 
 export type ChapterFeedStyleSubSubscription = {
@@ -17743,6 +17826,475 @@ export const AuthCheckDocument = {
 		}
 	]
 } as unknown as DocumentNode<AuthCheckQuery, AuthCheckQueryVariables>;
+export const ChapterPagesSubscriptionDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "chapterPagesSubscription" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "getChapterPages" },
+						arguments: [
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "chapter" },
+								value: {
+									kind: "Variable",
+									name: { kind: "Name", value: "chapter" }
+								}
+							},
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "mode" },
+								value: { kind: "Variable", name: { kind: "Name", value: "mode" } }
+							}
+						],
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "pages" } },
+								{ kind: "Field", name: { kind: "Name", value: "index" } },
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "size" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "width" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "height" }
+											}
+										]
+									}
+								},
+								{ kind: "Field", name: { kind: "Name", value: "url" } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ChapterPagesSubscriptionSubscription,
+	ChapterPagesSubscriptionSubscriptionVariables
+>;
+export const StartChapterPagesCachingDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "startChapterPagesCaching" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "chapter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "startCaching" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	StartChapterPagesCachingMutation,
+	StartChapterPagesCachingMutationVariables
+>;
+export const FetchingChapterPagesMetadataDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "fetchingChapterPagesMetadata" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "chapter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "fetchMetadata" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	FetchingChapterPagesMetadataMutation,
+	FetchingChapterPagesMetadataMutationVariables
+>;
+export const RefetchChapterPageDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "refetchChapterPage" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "page" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "chapter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "refetchPage" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "page" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "page" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<RefetchChapterPageMutation, RefetchChapterPageMutationVariables>;
+export const ResendChapterPageDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "resendChapterPage" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "page" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "chapter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "resendPage" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "page" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "page" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ResendChapterPageMutation, ResendChapterPageMutationVariables>;
+export const ResendChapterPagesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "resendChapterPages" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "chapter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "resendAll" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ResendChapterPagesMutation, ResendChapterPagesMutationVariables>;
 export const ChapterFeedStyleSubDocument = {
 	kind: "Document",
 	definitions: [

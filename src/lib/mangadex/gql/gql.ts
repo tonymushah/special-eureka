@@ -110,6 +110,12 @@ type Documents = {
 	"\n\tsubscription userMe {\n\t\twatchUserMe {\n\t\t\tusername\n\t\t\troles\n\t\t}\n\t}\n": typeof types.UserMeDocument;
 	"\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n": typeof types.IsLoggedDocument;
 	"\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n": typeof types.AuthCheckDocument;
+	"\n\tsubscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {\n\t\tgetChapterPages(chapter: $chapter, mode: $mode) {\n\t\t\tpages\n\t\t\tindex\n\t\t\tsize {\n\t\t\t\twidth\n\t\t\t\theight\n\t\t\t}\n\t\t\turl\n\t\t}\n\t}\n": typeof types.ChapterPagesSubscriptionDocument;
+	"\n\tmutation startChapterPagesCaching($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tstartCaching\n\t\t\t}\n\t\t}\n\t}\n": typeof types.StartChapterPagesCachingDocument;
+	"\n\tmutation fetchingChapterPagesMetadata($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tfetchMetadata\n\t\t\t}\n\t\t}\n\t}\n": typeof types.FetchingChapterPagesMetadataDocument;
+	"\n\tmutation refetchChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RefetchChapterPageDocument;
+	"\n\tmutation resendChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ResendChapterPageDocument;
+	"\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ResendChapterPagesDocument;
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n": typeof types.ChapterFeedStyleSubDocument;
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n": typeof types.UpdateChapterFeedStyleDocument;
 	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t}\n\t}\n": typeof types.ChapterLayoutSubscriptionDocument;
@@ -344,6 +350,18 @@ const documents: Documents = {
 	"\n\tsubscription isLogged {\n\t\twatchIsLogged\n\t}\n": types.IsLoggedDocument,
 	"\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n":
 		types.AuthCheckDocument,
+	"\n\tsubscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {\n\t\tgetChapterPages(chapter: $chapter, mode: $mode) {\n\t\t\tpages\n\t\t\tindex\n\t\t\tsize {\n\t\t\t\twidth\n\t\t\t\theight\n\t\t\t}\n\t\t\turl\n\t\t}\n\t}\n":
+		types.ChapterPagesSubscriptionDocument,
+	"\n\tmutation startChapterPagesCaching($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tstartCaching\n\t\t\t}\n\t\t}\n\t}\n":
+		types.StartChapterPagesCachingDocument,
+	"\n\tmutation fetchingChapterPagesMetadata($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tfetchMetadata\n\t\t\t}\n\t\t}\n\t}\n":
+		types.FetchingChapterPagesMetadataDocument,
+	"\n\tmutation refetchChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n":
+		types.RefetchChapterPageDocument,
+	"\n\tmutation resendChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n":
+		types.ResendChapterPageDocument,
+	"\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n":
+		types.ResendChapterPagesDocument,
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n":
 		types.ChapterFeedStyleSubDocument,
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n":
@@ -1018,6 +1036,42 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery authCheck {\n\t\tauth {\n\t\t\tcheck {\n\t\t\t\tisAuthenticated\n\t\t\t\troles\n\t\t\t\tpermissions\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {\n\t\tgetChapterPages(chapter: $chapter, mode: $mode) {\n\t\t\tpages\n\t\t\tindex\n\t\t\tsize {\n\t\t\t\twidth\n\t\t\t\theight\n\t\t\t}\n\t\t\turl\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {\n\t\tgetChapterPages(chapter: $chapter, mode: $mode) {\n\t\t\tpages\n\t\t\tindex\n\t\t\tsize {\n\t\t\t\twidth\n\t\t\t\theight\n\t\t\t}\n\t\t\turl\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation startChapterPagesCaching($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tstartCaching\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation startChapterPagesCaching($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tstartCaching\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation fetchingChapterPagesMetadata($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tfetchMetadata\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation fetchingChapterPagesMetadata($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tfetchMetadata\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation refetchChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation refetchChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation resendChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation resendChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
