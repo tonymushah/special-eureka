@@ -75,12 +75,12 @@
 	import { getContextClient } from "@urql/svelte";
 	import { derived, writable } from "svelte/store";
 	import type { LayoutData } from "./$types";
-	import imageFitWritable from "./layout-query/imageFit";
-	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
-	import readingDirectionWritable from "./layout-query/pageDirection";
-	import readingModeWritable from "./layout-query/readingMode";
-	import relatedChaptersQuery from "./layout-query/related";
-	import chapterPageThread from "./layout-query/thread";
+	import imageFitWritable from "@mangadex/gql-docs/chapter/layout-query/imageFit";
+	import longstripImageWidthWritable from "@mangadex/gql-docs/chapter/layout-query/longstripImageWidth";
+	import readingDirectionWritable from "@mangadex/gql-docs/chapter/layout-query/pageDirection";
+	import readingModeWritable from "@mangadex/gql-docs/chapter/layout-query/readingMode";
+	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
+	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import { DrawerMode } from "@mangadex/gql/graphql";
 

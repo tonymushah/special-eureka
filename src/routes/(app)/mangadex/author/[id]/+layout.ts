@@ -1,40 +1,7 @@
-import { graphql } from "@mangadex/gql/exports";
-import type { LayoutLoad } from "./$types";
+import query from "@mangadex/gql-docs/author/id";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
-
-const query = graphql(`
-	query authorPageQuery($id: UUID!) {
-		author {
-			get(id: $id) {
-				id
-				attributes {
-					name
-					imageUrl
-					biography
-					twitter
-					pixiv
-					melonBook
-					fanBox
-					booth
-					nicoVideo
-					skeb
-					fantia
-					tumblr
-					youtube
-					weibo
-					naver
-					website
-				}
-			}
-		}
-		manga {
-			list(params: { authorOrArtist: $id }) {
-				total
-			}
-		}
-	}
-`);
+import type { LayoutLoad } from "./$types";
 
 export type AuthorLinks = {
 	twitter?: string;

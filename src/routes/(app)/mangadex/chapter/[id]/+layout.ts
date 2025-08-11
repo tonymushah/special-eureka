@@ -2,50 +2,8 @@ import { graphql } from "@mangadex/gql/exports";
 import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
+import query from "@mangadex/gql-docs/chapter/layout";
 
-const query = graphql(`
-	query getChapterPageData($id: UUID!) {
-		chapter {
-			pages(id: $id) {
-				data
-				dataSaver
-			}
-			get(id: $id) {
-				id
-				attributes {
-					title
-					volume
-					chapter
-					pages
-					translatedLanguage
-					externalUrl
-					readableAt
-				}
-				relationships {
-					manga {
-						id
-						attributes {
-							title
-						}
-					}
-					scanlationGroups {
-						id
-						attributes {
-							name
-						}
-					}
-					user {
-						id
-						attributes {
-							username
-							roles
-						}
-					}
-				}
-			}
-		}
-	}
-`);
 
 // TODO add data-saver support
 export const load: LayoutLoad = async ({ params, url }) => {

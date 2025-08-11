@@ -1,39 +1,7 @@
-import { graphql } from "@mangadex/gql/exports";
-import type { LayoutLoad } from "./$types";
+import query from "@mangadex/gql-docs/user/id";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
-
-const query = graphql(`
-	query userPageQuery($id: UUID!) {
-		user {
-			get(id: $id) {
-				id
-				attributes {
-					username
-					roles
-				}
-				relationships {
-					groups {
-						id
-						attributes {
-							name
-						}
-						relationships {
-							leader {
-								id
-							}
-						}
-					}
-				}
-			}
-		}
-		chapter {
-			list(params: { uploaders: [$id] }) {
-				total
-			}
-		}
-	}
-`);
+import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async function ({ params }) {
 	const { id } = params;
