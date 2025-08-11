@@ -1,3 +1,14 @@
+//! I am sure you are asking `what in the f* is this again?`
+//!
+//! To put it simply, it is trying to solve online chapter pages loading by "caching" the images.
+//!
+//! _Why making it as a sub?_
+//!
+//! Well, this is the solution I came up with after a long thinking time.
+//!
+//! Since the chapters pages can be loaded from any webview,
+//! it thought that making it as a sub would be solution to it.
+//!
 use std::{
     collections::{HashMap, hash_map::Entry},
     fs::File,
@@ -29,11 +40,16 @@ use crate::{
     utils::traits_utils::MangadexTauriManagerExt,
 };
 
+/// The sub object
 #[derive(Debug, Clone, async_graphql::SimpleObject)]
 pub struct ChapterPage {
+    /// Page index
     pub index: u32,
+    /// total pages that should be sent
     pub pages: u32,
+    /// Page url (this one should points to an internal scheme)
     pub url: Url,
+    /// This image size (if available)
     pub size: Option<ChapterImageSize>,
 }
 
@@ -72,6 +88,7 @@ enum Instructions {
     ResendAll,
 }
 
+/// Any error that could happen during the fetching process
 #[derive(Debug, thiserror::Error, Clone)]
 pub enum FetchingError {
     #[error("File not found {maybe_file}", maybe_file = if let Some(file) = .0 {
