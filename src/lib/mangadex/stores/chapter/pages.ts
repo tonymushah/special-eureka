@@ -5,6 +5,7 @@ import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
 import type { StoreOrVal } from "@tanstack/svelte-query";
 import type { Client, CombinedError, OperationResult } from "@urql/svelte";
+import { range } from "lodash";
 import { get, readable, type Readable } from "svelte/store";
 
 export type ChapterImage = {
@@ -14,6 +15,12 @@ export type ChapterImage = {
 		height: number
 	}
 }
+
+export type MaybeNullString = string | null
+
+export type ChapterDoubleImageItem = MaybeNullString | [MaybeNullString, MaybeNullString]
+
+export type DoublePageIndex = number | [number, number];
 
 export class ChapterPages {
 	private pages: Map<number, ChapterImage>;
@@ -37,6 +44,77 @@ export class ChapterPages {
 	}
 	addPageError(index: number, error: Error) {
 		this.pagesError.set(index, error)
+	}
+	public getImages(): (ChapterImage | null)[] {
+		return this.pagesLenRange().map((index) => {
+			const page = this.pages.get(index);
+			return page ?? null
+		});
+	}
+	public getUrls(): (string | null)[] {
+		return this.getImages().map((d) => {
+			return d?.value ?? null
+		});
+	}
+	public getPageError(page: number): Error | null {
+		return this.pagesError.get(page) ?? null
+	}
+	public getPageData(page: number): ChapterImage | null {
+		return this.pages.get(page) ?? null
+	}
+	private pagesLenRange(): number[] {
+		if (this.pagesLen)
+			return range(0, this.pagesLen)
+		else
+			return []
+	}
+	public pagesAsDoublePageIndexes(): DoublePageIndex[] {
+		const output: Array<DoublePageIndex> = [];
+		let accumalator: number[] = [];
+		function push_acc_to_out1() {
+			if (accumalator.length == 1) {
+				output.push(accumalator[0]);
+			} else if (accumalator.length == 2) {
+				output.push([accumalator[0], accumalator[1]]);
+			}
+			accumalator = [];
+		}
+		function push_acc_to_out2() {
+			if (accumalator.length == 2) {
+				output.push([accumalator[0], accumalator[1]]);
+				accumalator = [];
+			}
+		}
+		this.pagesLenRange().map((index) => {
+			const img = this.pages.get(index);
+			const height = img?.size?.height;
+			const width = img?.size?.width
+			return {
+				index,
+				img,
+				ratio: (width && height) ? width / height : undefined
+			}
+		}).forEach((maybeImg) => {
+			if (maybeImg.ratio != undefined && maybeImg.ratio < 1) {
+				accumalator.push(maybeImg.index);
+			} else {
+				push_acc_to_out1();
+				output.push(maybeImg.index);
+			}
+			push_acc_to_out2();
+		});
+		/*
+		((value, key) => {
+			if (value < 1) {
+				accumalator.push(key);
+			} else {
+				push_acc_to_out1();
+				output.push(key);
+			}
+			push_acc_to_out2();
+		});*/
+		push_acc_to_out1();
+		return output;
 	}
 }
 
@@ -300,7 +378,7 @@ export default function chapterPages(chapter: string, options?: ChapterPagesFunc
 			await resendChapterPage(chapter, page, {
 				client,
 				mode: getMode()
-			})
+			});
 		},
 	}
 }
