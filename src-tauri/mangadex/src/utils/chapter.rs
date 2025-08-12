@@ -268,8 +268,8 @@ impl<R: Runtime> SpawnHandle<R> {
             .get_chapter_images(self.chapter_id)
             .await
             .map_err(crate::Error::from)?;
-        let data: Vec<(Url, PathBuf)> = sort::sort_by_filenames(at_home.data)
-            .map_err(crate::Error::from)?
+        let data: Vec<(Url, PathBuf)> = at_home
+            .data
             .iter()
             .flat_map(|i| {
                 let path = Path::new(i);
@@ -293,8 +293,7 @@ impl<R: Runtime> SpawnHandle<R> {
                 }
             })
             .collect();
-        let data_saver: Vec<(Url, PathBuf)> = sort::sort_by_filenames(at_home.data_saver)
-            .map_err(crate::Error::from)?
+        let data_saver: Vec<(Url, PathBuf)> = (at_home.data_saver)
             .iter()
             .flat_map(|i| {
                 let path = Path::new(i);
@@ -322,6 +321,7 @@ impl<R: Runtime> SpawnHandle<R> {
             Mode::Normal => data,
             Mode::DataSaver => data_saver,
         };
+        let to_use = sort::sort_couple(to_use).map_err(crate::Error::from)?;
         let to_use_len = to_use.len();
 
         for (index, (url, path)) in to_use.into_iter().enumerate() {
