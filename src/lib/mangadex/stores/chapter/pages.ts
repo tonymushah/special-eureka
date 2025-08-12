@@ -170,7 +170,7 @@ export default class ChapterPages {
 	}
 
 	set pagesLen(pages: number) {
-		this.pagesLen = pages;
+		this.pages_len = pages;
 	}
 
 	public get pagesLen(): number | undefined {
