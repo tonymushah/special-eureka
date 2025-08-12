@@ -1,4 +1,5 @@
 <script lang="ts">
+	import "./styles.css";
 	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
 	import { uniq } from "lodash";
@@ -132,9 +133,4 @@
 />
 
 <style lang="scss">
-	:global(.chapter-feed-selecto-area) {
-		background: rgba(108, 115, 255, 0.5);
-		border: 1px solid rgb(62, 99, 221);
-		border-radius: 0.15em;
-	}
 </style>
