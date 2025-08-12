@@ -257,6 +257,8 @@ export default class ChapterPages {
 		const store = readable(new ChapterPages(), (set, update) => {
 			// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.
 			const sub_func = (op: OperationResult<ChapterPagesSubscriptionSubscription, ChapterPagesSubscriptionSubscriptionVariables>) => {
+				const error = op.error;
+				const extensions = op.extensions;
 				if (op.data) {
 					const data = op.data;
 					const toUse = data.getChapterPages;
@@ -293,9 +295,7 @@ export default class ChapterPages {
 							});
 						})
 					}
-				} else if (op.error && op.extensions) {
-					const error = op.error;
-					const extensions = op.extensions;
+				} else if (error && extensions) {
 					const page = extensions.page;
 					if (typeof page == "number" || typeof page == "string") {
 						update((d) => {
