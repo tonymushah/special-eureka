@@ -508,11 +508,16 @@ export type ChapterMutationsUpdateArgs = {
 	params: ChapterUpdateParams;
 };
 
+/** The sub object */
 export type ChapterPage = {
 	__typename?: "ChapterPage";
+	/** Page index */
 	index: Scalars["Int"]["output"];
+	/** total pages that should be sent */
 	pages: Scalars["Int"]["output"];
+	/** This image size (if available) */
 	size?: Maybe<ChapterImageSize>;
+	/** Page url (this one should points to an internal scheme) */
 	url: Scalars["Url"]["output"];
 };
 

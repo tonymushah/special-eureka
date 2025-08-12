@@ -389,10 +389,25 @@ type ChapterMutations {
 	pagesCache(id: UUID!, mode: DownloadMode): ChapterPagesStoreMutation!
 }
 
+"""
+The sub object
+"""
 type ChapterPage {
+	"""
+	Page index
+	"""
 	index: Int!
+	"""
+	total pages that should be sent
+	"""
 	pages: Int!
+	"""
+	Page url (this one should points to an internal scheme)
+	"""
 	url: Url!
+	"""
+	This image size (if available)
+	"""
 	size: ChapterImageSize
 }
 
