@@ -1,4 +1,4 @@
-use std::backtrace::Backtrace;
+use std::{backtrace::Backtrace, ops::Deref};
 
 use async_graphql::ErrorExtensions;
 
@@ -212,21 +212,27 @@ impl ErrorExtensions for Error {
     }
 }
 
-#[derive(Debug)]
-pub struct ErrorWrapper(Error);
+#[derive(Debug, Clone)]
+pub struct ErrorWrapper(std::sync::Arc<Error>);
 
 impl<E> From<E> for ErrorWrapper
 where
     E: Into<Error>,
 {
     fn from(value: E) -> Self {
-        Self(value.into())
+        Self(std::sync::Arc::new(value.into()))
+    }
+}
+
+impl AsRef<Error> for ErrorWrapper {
+    fn as_ref(&self) -> &Error {
+        self.0.deref()
     }
 }
 
 impl ErrorWrapper {
-    pub fn into_inner(self) -> Error {
-        self.0
+    pub fn into_inner(self) -> Option<Error> {
+        std::sync::Arc::into_inner(self.0)
     }
 }
 
