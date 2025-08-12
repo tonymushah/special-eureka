@@ -8,116 +8,6 @@ import type { Client, CombinedError, OperationResult } from "@urql/svelte";
 import { range } from "lodash";
 import { get, readable, type Readable } from "svelte/store";
 
-export type ChapterImage = {
-	value: string,
-	size?: {
-		width: number,
-		height: number
-	}
-}
-
-export type MaybeNullString = string | null
-
-export type ChapterDoubleImageItem = MaybeNullString | [MaybeNullString, MaybeNullString]
-
-export type DoublePageIndex = number | [number, number];
-
-export class ChapterPages {
-	private pages: Map<number, ChapterImage>;
-	private pagesError: Map<number, Error>;
-	private pages_len?: number;
-	constructor() {
-		this.pages = new Map();
-		this.pagesError = new Map()
-	}
-	addPage(index: number, page: ChapterImage) {
-		this.pages.set(index, page);
-		this.pagesError.delete(index)
-	}
-
-	set pagesLen(pages: number) {
-		this.pagesLen = pages;
-	}
-
-	public get pagesLen(): number | undefined {
-		return this.pages_len;
-	}
-	addPageError(index: number, error: Error) {
-		this.pagesError.set(index, error)
-	}
-	public getImages(): (ChapterImage | null)[] {
-		return this.pagesLenRange().map((index) => {
-			const page = this.pages.get(index);
-			return page ?? null
-		});
-	}
-	public getUrls(): (string | null)[] {
-		return this.getImages().map((d) => {
-			return d?.value ?? null
-		});
-	}
-	public getPageError(page: number): Error | null {
-		return this.pagesError.get(page) ?? null
-	}
-	public getPageData(page: number): ChapterImage | null {
-		return this.pages.get(page) ?? null
-	}
-	private pagesLenRange(): number[] {
-		if (this.pagesLen)
-			return range(0, this.pagesLen)
-		else
-			return []
-	}
-	public pagesAsDoublePageIndexes(): DoublePageIndex[] {
-		const output: Array<DoublePageIndex> = [];
-		let accumalator: number[] = [];
-		function push_acc_to_out1() {
-			if (accumalator.length == 1) {
-				output.push(accumalator[0]);
-			} else if (accumalator.length == 2) {
-				output.push([accumalator[0], accumalator[1]]);
-			}
-			accumalator = [];
-		}
-		function push_acc_to_out2() {
-			if (accumalator.length == 2) {
-				output.push([accumalator[0], accumalator[1]]);
-				accumalator = [];
-			}
-		}
-		this.pagesLenRange().map((index) => {
-			const img = this.pages.get(index);
-			const height = img?.size?.height;
-			const width = img?.size?.width
-			return {
-				index,
-				img,
-				ratio: (width && height) ? width / height : undefined
-			}
-		}).forEach((maybeImg) => {
-			if (maybeImg.ratio != undefined && maybeImg.ratio < 1) {
-				accumalator.push(maybeImg.index);
-			} else {
-				push_acc_to_out1();
-				output.push(maybeImg.index);
-			}
-			push_acc_to_out2();
-		});
-		/*
-		((value, key) => {
-			if (value < 1) {
-				accumalator.push(key);
-			} else {
-				push_acc_to_out1();
-				output.push(key);
-			}
-			push_acc_to_out2();
-		});*/
-		push_acc_to_out1();
-		return output;
-	}
-}
-
 export const subscription = graphql(`
 	subscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {
 		getChapterPages(chapter: $chapter, mode: $mode) {
@@ -252,133 +142,242 @@ export type ChapterPagesStore = Readable<ChapterPages> & {
 	resendChapterPage: (page: number) => Promise<void>
 };
 
-export default function chapterPages(chapter: string, options?: ChapterPagesFuncOptions): ChapterPagesStore {
-	const client = options?.client ?? mangadexClient;
-	const mode = options?.mode ?? DownloadMode.Normal;
+export type ChapterImage = {
+	value: string,
+	size?: {
+		width: number,
+		height: number
+	}
+}
 
-	const store = readable(new ChapterPages(), (set, update) => {
-		// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.
-		const sub_func = (op: OperationResult<ChapterPagesSubscriptionSubscription, ChapterPagesSubscriptionSubscriptionVariables>) => {
-			if (op.data) {
-				const data = op.data;
-				const toUse = data.getChapterPages;
-				update((value) => {
-					value.pagesLen = toUse.pages;
-					return value;
-				});
-				if (toUse.size != null && toUse.size != undefined) {
+export type MaybeNullString = string | null
+
+export type ChapterDoubleImageItem = MaybeNullString | [MaybeNullString, MaybeNullString]
+
+export type DoublePageIndex = number | [number, number];
+
+export default class ChapterPages {
+	private pages: Map<number, ChapterImage>;
+	private pagesError: Map<number, Error>;
+	private pages_len?: number;
+	private constructor() {
+		this.pages = new Map();
+		this.pagesError = new Map()
+	}
+	private addPage(index: number, page: ChapterImage) {
+		this.pages.set(index, page);
+		this.pagesError.delete(index)
+	}
+
+	set pagesLen(pages: number) {
+		this.pagesLen = pages;
+	}
+
+	public get pagesLen(): number | undefined {
+		return this.pages_len;
+	}
+	private addPageError(index: number, error: Error) {
+		this.pagesError.set(index, error)
+	}
+	public getImages(): (ChapterImage | null)[] {
+		return this.pagesLenRange().map((index) => {
+			const page = this.pages.get(index);
+			return page ?? null
+		});
+	}
+	public getUrls(): (string | null)[] {
+		return this.getImages().map((d) => {
+			return d?.value ?? null
+		});
+	}
+	public getPageError(page: number): Error | null {
+		return this.pagesError.get(page) ?? null
+	}
+	public getPageData(page: number): ChapterImage | null {
+		return this.pages.get(page) ?? null
+	}
+	private pagesLenRange(): number[] {
+		if (this.pagesLen)
+			return range(0, this.pagesLen)
+		else
+			return []
+	}
+	public pagesAsDoublePageIndexes(): DoublePageIndex[] {
+		const output: Array<DoublePageIndex> = [];
+		let accumalator: number[] = [];
+		function push_acc_to_out1() {
+			if (accumalator.length == 1) {
+				output.push(accumalator[0]);
+			} else if (accumalator.length == 2) {
+				output.push([accumalator[0], accumalator[1]]);
+			}
+			accumalator = [];
+		}
+		function push_acc_to_out2() {
+			if (accumalator.length == 2) {
+				output.push([accumalator[0], accumalator[1]]);
+				accumalator = [];
+			}
+		}
+		this.pagesLenRange().map((index) => {
+			const img = this.pages.get(index);
+			const height = img?.size?.height;
+			const width = img?.size?.width
+			return {
+				index,
+				img,
+				ratio: (width && height) ? width / height : undefined
+			}
+		}).forEach((maybeImg) => {
+			if (maybeImg.ratio != undefined && maybeImg.ratio < 1) {
+				accumalator.push(maybeImg.index);
+			} else {
+				push_acc_to_out1();
+				output.push(maybeImg.index);
+			}
+			push_acc_to_out2();
+		});
+		/*
+		((value, key) => {
+			if (value < 1) {
+				accumalator.push(key);
+			} else {
+				push_acc_to_out1();
+				output.push(key);
+			}
+			push_acc_to_out2();
+		});*/
+		push_acc_to_out1();
+		return output;
+	}
+	public static initStore(chapter: string, options?: ChapterPagesFuncOptions): ChapterPagesStore {
+		const client = options?.client ?? mangadexClient;
+		const mode = options?.mode ?? DownloadMode.Normal;
+
+		const store = readable(new ChapterPages(), (set, update) => {
+			// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.
+			const sub_func = (op: OperationResult<ChapterPagesSubscriptionSubscription, ChapterPagesSubscriptionSubscriptionVariables>) => {
+				if (op.data) {
+					const data = op.data;
+					const toUse = data.getChapterPages;
 					update((value) => {
-						if (toUse.size != null && toUse.size != undefined)
-							value.addPage(toUse.index, {
-								value: toUse.url,
-								size: {
-									width: toUse.size.width,
-									height: toUse.size.height
-								}
-							})
-						return value;
-					})
-				} else {
-					update((value) => {
-						value.addPage(toUse.index, {
-							value: toUse.url
-						});
+						value.pagesLen = toUse.pages;
 						return value;
 					});
-					getImageSize(toUse.url).then((d) => {
+					if (toUse.size != null && toUse.size != undefined) {
+						update((value) => {
+							if (toUse.size != null && toUse.size != undefined)
+								value.addPage(toUse.index, {
+									value: toUse.url,
+									size: {
+										width: toUse.size.width,
+										height: toUse.size.height
+									}
+								})
+							return value;
+						})
+					} else {
 						update((value) => {
 							value.addPage(toUse.index, {
-								value: toUse.url,
-								size: d
+								value: toUse.url
 							});
 							return value;
 						});
-					})
-				}
-			} else if (op.error && op.extensions) {
-				const error = op.error;
-				const extensions = op.extensions;
-				const page = extensions.page;
-				if (typeof page == "number" || typeof page == "string") {
-					update((d) => {
-						try {
-							d.addPageError(Number(page), error);
-						} catch (e) {
-							addErrorToast("Chapter loading error", e);
-						}
-						return d;
-					});
-				} else {
-					addErrorToast("Chapter loading error", error);
+						getImageSize(toUse.url).then((d) => {
+							update((value) => {
+								value.addPage(toUse.index, {
+									value: toUse.url,
+									size: d
+								});
+								return value;
+							});
+						})
+					}
+				} else if (op.error && op.extensions) {
+					const error = op.error;
+					const extensions = op.extensions;
+					const page = extensions.page;
+					if (typeof page == "number" || typeof page == "string") {
+						update((d) => {
+							try {
+								d.addPageError(Number(page), error);
+							} catch (e) {
+								addErrorToast("Chapter loading error", e);
+							}
+							return d;
+						});
+					} else {
+						addErrorToast("Chapter loading error", error);
+					}
 				}
 			}
-		}
-		// TODO test if this `mode` store *actually* works
-		if (typeof mode == "object") {
-			let unsub: (() => void) | undefined = undefined;
-			let sub = mode.subscribe(($mode) => {
-				unsub?.()
+			// TODO test if this `mode` store *actually* works
+			if (typeof mode == "object") {
+				let unsub: (() => void) | undefined = undefined;
+				let sub = mode.subscribe(($mode) => {
+					unsub?.()
+					let inner_sub = client.subscription(subscription, {
+						chapter,
+						mode: $mode
+					}).subscribe((d) => sub_func(d));
+					unsub = () => {
+						inner_sub.unsubscribe()
+					}
+				})
+				return () => {
+					unsub?.();
+					sub();
+				}
+			} else {
+				// NOTE this one doesn't need test. It should work fine.
 				let inner_sub = client.subscription(subscription, {
 					chapter,
-					mode: $mode
+					mode
 				}).subscribe((d) => sub_func(d));
-				unsub = () => {
+				return () => {
 					inner_sub.unsubscribe()
 				}
-			})
-			return () => {
-				unsub?.();
-				sub();
 			}
-		} else {
-			// NOTE this one doesn't need test. It should work fine.
-			let inner_sub = client.subscription(subscription, {
-				chapter,
-				mode
-			}).subscribe((d) => sub_func(d));
-			return () => {
-				inner_sub.unsubscribe()
+		});
+		const getMode = () => {
+			if (typeof mode == "object") {
+				return get(mode);
+			} else {
+				return mode;
 			}
 		}
-	});
-	const getMode = () => {
-		if (typeof mode == "object") {
-			return get(mode);
-		} else {
-			return mode;
+		return {
+			...store,
+			async startCaching() {
+				await startCaching(chapter, {
+					client,
+					mode: getMode()
+				})
+			},
+			async fetchMetadata() {
+				await fetchMetadata(chapter, {
+					client,
+					mode: getMode()
+				})
+			},
+			async resendAll() {
+				await resendAll(chapter, {
+					client,
+					mode: getMode()
+				})
+			},
+			async refetchChapterPage(page) {
+				await refetchChapterPage(chapter, page, {
+					client,
+					mode: getMode()
+				})
+			},
+			async resendChapterPage(page) {
+				await resendChapterPage(chapter, page, {
+					client,
+					mode: getMode()
+				});
+			},
 		}
-	}
-	return {
-		...store,
-		async startCaching() {
-			await startCaching(chapter, {
-				client,
-				mode: getMode()
-			})
-		},
-		async fetchMetadata() {
-			await fetchMetadata(chapter, {
-				client,
-				mode: getMode()
-			})
-		},
-		async resendAll() {
-			await resendAll(chapter, {
-				client,
-				mode: getMode()
-			})
-		},
-		async refetchChapterPage(page) {
-			await refetchChapterPage(chapter, page, {
-				client,
-				mode: getMode()
-			})
-		},
-		async resendChapterPage(page) {
-			await resendChapterPage(chapter, page, {
-				client,
-				mode: getMode()
-			});
-		},
 	}
 }
