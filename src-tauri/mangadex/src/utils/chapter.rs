@@ -9,6 +9,8 @@
 //! Since the chapters pages can be loaded from any webview,
 //! it thought that making it as a sub would be solution to it.
 //!
+pub mod sort;
+
 use std::{
     collections::{HashMap, hash_map::Entry},
     fs::File,
@@ -266,8 +268,8 @@ impl<R: Runtime> SpawnHandle<R> {
             .get_chapter_images(self.chapter_id)
             .await
             .map_err(crate::Error::from)?;
-        let data: Vec<(Url, PathBuf)> = at_home
-            .data
+        let data: Vec<(Url, PathBuf)> = sort::sort_by_filenames(at_home.data)
+            .map_err(crate::Error::from)?
             .iter()
             .flat_map(|i| {
                 let path = Path::new(i);
@@ -291,8 +293,8 @@ impl<R: Runtime> SpawnHandle<R> {
                 }
             })
             .collect();
-        let data_saver: Vec<(Url, PathBuf)> = at_home
-            .data_saver
+        let data_saver: Vec<(Url, PathBuf)> = sort::sort_by_filenames(at_home.data_saver)
+            .map_err(crate::Error::from)?
             .iter()
             .flat_map(|i| {
                 let path = Path::new(i);

@@ -141,6 +141,8 @@ pub enum Error {
     TokioTryLock(#[from] tokio::sync::TryLockError),
     #[error(transparent)]
     Image(#[from] image::ImageError),
+    #[error(transparent)]
+    Regex(#[from] regex::Error),
 }
 
 impl Error {
