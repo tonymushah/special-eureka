@@ -14,9 +14,6 @@
 		}
 		return false;
 	}
-	$effect(() => {
-		console.debug(data);
-	});
 	let isDataValid = $derived(isLayoutDataValid(data));
 </script>
 

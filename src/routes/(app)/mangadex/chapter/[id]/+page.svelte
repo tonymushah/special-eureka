@@ -1,5 +1,8 @@
 <script lang="ts">
-	import ChapterPage from "@mangadex/componnents/chapter/page/ChapterPage.svelte";
+	import { getCurrentChapterData } from "@mangadex/componnents/chapter/page/contexts/currentChapter";
+	import ChapterPagesTest from "./ChapterPagesTest.svelte";
+
+	/*import ChapterPage from "@mangadex/componnents/chapter/page/ChapterPage.svelte";
 	import { isDrawerFixed } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
 	import registerPreviousNextChapterEvent from "@mangadex/componnents/chapter/page/contexts/registerPreviousNextChapterEvent";
@@ -16,8 +19,13 @@
 	onDestroy(() => {
 		defaultBehavior();
 		unregister();
-	});
+	});*/
+	const chap = getCurrentChapterData();
 </script>
+
+<ChapterPagesTest data={$chap} />
+
+<!--
 
 {#if $isFixed && !$open}
 	<OpenMenuButton left={$isSidebarRtl} />
@@ -26,13 +34,14 @@
 <main class:notFixed={!$isFixed}>
 	<ChapterPage />
 </main>
-
+-->
 <style lang="scss">
+	/*
 	main:not(.notFixed) {
 		padding-top: 0px;
 	}
 	main.notFixed {
 		padding: 10px;
 		padding-top: 10px;
-	}
+	}*/
 </style>
