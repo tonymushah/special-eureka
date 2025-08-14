@@ -8,6 +8,7 @@
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import { derived as der } from "svelte/store";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import ChapterPages from "@mangadex/stores/chapter/pages";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -112,6 +113,7 @@
 					<DangerButtonOnlyLabel
 						label="Retry"
 						onclick={() => {
+							ChapterPages.removePageError(images, $currentChapterPage);
 							images.refetchChapterPage($currentChapterPage);
 						}}
 					/>

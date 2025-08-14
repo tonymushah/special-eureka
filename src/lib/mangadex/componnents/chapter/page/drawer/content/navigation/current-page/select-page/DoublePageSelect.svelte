@@ -4,7 +4,6 @@
 <script lang="ts">
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
-	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
 
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
@@ -22,18 +21,7 @@
 	const currentPageContext = getChapterCurrentPageContext();
 	const images = getCurrentChapterImages();
 	const doublePages = derived(images, ($images) => $images.pagesAsDoublePageIndexes());
-	const currentDoublePageIndex = derived(
-		[doublePages, currentPageContext],
-		([$images, $currentPage]) => {
-			return $images.findIndex((image) => {
-				if (isArray(image)) {
-					return image.includes($currentPage);
-				} else {
-					return image == $currentPage;
-				}
-			});
-		}
-	);
+	const currentDoublePageIndex = getChapterDoublePageCurrentPageIndex();
 	const currentPageSelectedReadable = derived(
 		[currentDoublePageIndex, doublePages, readingDirection],
 		([$index, $pages, $dir]) => {

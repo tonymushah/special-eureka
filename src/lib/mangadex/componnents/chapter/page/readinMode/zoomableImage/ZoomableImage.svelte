@@ -11,15 +11,16 @@
 	interface Props {
 		src: string | [string, string];
 		alt: string | [string, string];
+		noZoom?: boolean;
 	}
 
-	let { src, alt }: Props = $props();
+	let { src, alt, noZoom }: Props = $props();
 
 	const imageFitStore = getCurrentChapterImageFit();
 	let toZoom: HTMLElement | undefined = $state(undefined);
 	let toZoomPanZoom: PanzoomObject | undefined = $state();
 	$effect(() => {
-		if (toZoom) {
+		if (toZoom && !noZoom) {
 			toZoomPanZoom = panzoom(toZoom, {
 				animate: true
 			});

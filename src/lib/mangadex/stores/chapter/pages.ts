@@ -5,8 +5,8 @@ import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
 import type { StoreOrVal } from "@tanstack/svelte-query";
 import type { Client, CombinedError, OperationResult } from "@urql/svelte";
-import { range } from "lodash";
-import { get, readable, type Readable, type Writable } from "svelte/store";
+import { isArray, range } from "lodash";
+import { get, readable, writable, type Readable, type Writable } from "svelte/store";
 
 export const subscription = graphql(`
 	subscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {
@@ -134,7 +134,7 @@ export async function resendChapterPage(chapter: string, page: number, options?:
 	}
 }
 
-export type ChapterPagesStore = Readable<ChapterPages> & {
+export type ChapterPagesStore = Writable<ChapterPages> & {
 	startCaching: () => Promise<void>,
 	fetchMetadata: () => Promise<void>,
 	resendAll: () => Promise<void>,
@@ -158,13 +158,17 @@ export type DoublePageIndex = number | [number, number];
 
 // TODO implement an enum to get page state
 
-export type PageState = {
+export type PageStateInner = {
 	page: ChapterImage,
 	error?: never
 } | {
 	page?: never,
 	error: Error
-} | null;
+}
+
+export type PageState = PageStateInner | null;
+
+export type DoublePageState = [PageState, PageState] | PageState;
 
 export default class ChapterPages {
 	private pages: Map<number, ChapterImage>;
@@ -275,6 +279,19 @@ export default class ChapterPages {
 			return null;
 		}
 	}
+	public getDoublePageState(doublePageIndex: number): DoublePageState {
+		const pages = this.pagesAsDoublePageIndexes();
+		const current = pages.at(doublePageIndex);
+		if (current) {
+			if (isArray(current)) {
+				return [this.getPageState(current[0]), this.getPageState(current[1])];
+			} else {
+				return this.getPageState(current);
+			}
+		} else {
+			return null;
+		}
+	}
 	private _removePageError(page: number) {
 		this.pagesError.delete(page)
 	}
@@ -287,7 +304,7 @@ export default class ChapterPages {
 	public static initFromStore(chapterId: Readable<string>, options?: ChapterPagesFuncOptions): ChapterPagesStore {
 		const client = options?.client ?? mangadexClient;
 		const mode = options?.mode ?? DownloadMode.Normal;
-		const store = readable(new ChapterPages(), (set, update) => {
+		const store = writable(new ChapterPages(), (set, update) => {
 			let unsub: (() => void) | undefined = undefined;
 			function chapterIdSub(chapter: string) {
 				// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.

@@ -20,6 +20,7 @@
 		defaultBehavior();
 		unregister();
 	});*/
+
 	const chap = getCurrentChapterData();
 </script>
 
