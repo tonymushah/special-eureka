@@ -6,7 +6,7 @@ import getImageSize from "@mangadex/utils/img/getSize";
 import type { StoreOrVal } from "@tanstack/svelte-query";
 import type { Client, CombinedError, OperationResult } from "@urql/svelte";
 import { range } from "lodash";
-import { get, readable, type Readable } from "svelte/store";
+import { get, readable, type Readable, type Writable } from "svelte/store";
 
 export const subscription = graphql(`
 	subscription chapterPagesSubscription($chapter: UUID!, $mode: DownloadMode) {
@@ -156,6 +156,16 @@ export type ChapterDoubleImageItem = MaybeNullString | [MaybeNullString, MaybeNu
 
 export type DoublePageIndex = number | [number, number];
 
+// TODO implement an enum to get page state
+
+export type PageState = {
+	page: ChapterImage,
+	error?: never
+} | {
+	page?: never,
+	error: Error
+} | null;
+
 export default class ChapterPages {
 	private pages: Map<number, ChapterImage>;
 	private pagesError: Map<number, Error>;
@@ -249,6 +259,30 @@ export default class ChapterPages {
 		});*/
 		push_acc_to_out1();
 		return output;
+	}
+	public getPageState(page: number): PageState {
+		const pageData = this.getPageData(page);
+		const pageError = this.getPageError(page);
+		if (pageData) {
+			return {
+				"page": pageData,
+			}
+		} else if (pageError) {
+			return {
+				error: pageError,
+			}
+		} else {
+			return null;
+		}
+	}
+	private _removePageError(page: number) {
+		this.pagesError.delete(page)
+	}
+	public static removePageError(pages: Writable<ChapterPages>, page: number) {
+		pages.update((ps) => {
+			ps._removePageError(page);
+			return ps;
+		})
 	}
 	public static initFromStore(chapterId: Readable<string>, options?: ChapterPagesFuncOptions): ChapterPagesStore {
 		const client = options?.client ?? mangadexClient;
