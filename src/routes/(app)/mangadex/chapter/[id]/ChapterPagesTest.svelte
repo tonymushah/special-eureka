@@ -8,10 +8,21 @@
 	}
 	let { data }: Props = $props();
 	const pages = ChapterPages.initStore(data.id);
-	pages.startCaching().catch((e) => {
-		addErrorToast("Error on caching", e);
+	$effect(() => {
+		data.id;
+		pages.startCaching().catch((e) => {
+			addErrorToast("Error on caching", e);
+		});
 	});
 </script>
+
+<button
+	onclick={() => {
+		pages.startCaching().catch((e) => {
+			addErrorToast("Error on caching", e);
+		});
+	}}>Start caching</button
+>
 
 <div class="grid">
 	<div class="simple">

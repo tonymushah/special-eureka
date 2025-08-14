@@ -250,93 +250,102 @@ export default class ChapterPages {
 		push_acc_to_out1();
 		return output;
 	}
-	public static initStore(chapter: string, options?: ChapterPagesFuncOptions): ChapterPagesStore {
+	public static initFromStore(chapterId: Readable<string>, options?: ChapterPagesFuncOptions): ChapterPagesStore {
 		const client = options?.client ?? mangadexClient;
 		const mode = options?.mode ?? DownloadMode.Normal;
-
 		const store = readable(new ChapterPages(), (set, update) => {
-			// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.
-			const sub_func = (op: OperationResult<ChapterPagesSubscriptionSubscription, ChapterPagesSubscriptionSubscriptionVariables>) => {
-				const error = op.error;
-				const extensions = op.extensions;
-				if (op.data) {
-					const data = op.data;
-					const toUse = data.getChapterPages;
-					update((value) => {
-						value.pagesLen = toUse.pages;
-						return value;
-					});
-					if (toUse.size != null && toUse.size != undefined) {
+			let unsub: (() => void) | undefined = undefined;
+			function chapterIdSub(chapter: string) {
+				// NOTE I am lazy to rewrite the same function over and over. This is why i came with this `sub_func` thingy.
+				const sub_func = (op: OperationResult<ChapterPagesSubscriptionSubscription, ChapterPagesSubscriptionSubscriptionVariables>) => {
+					const error = op.error;
+					const extensions = op.extensions;
+					if (op.data) {
+						const data = op.data;
+						const toUse = data.getChapterPages;
 						update((value) => {
-							if (toUse.size != null && toUse.size != undefined)
-								value.addPage(toUse.index, {
-									value: toUse.url,
-									size: {
-										width: toUse.size.width,
-										height: toUse.size.height
-									}
-								})
-							return value;
-						})
-					} else {
-						update((value) => {
-							value.addPage(toUse.index, {
-								value: toUse.url
-							});
+							value.pagesLen = toUse.pages;
 							return value;
 						});
-						getImageSize(toUse.url).then((d) => {
+						if (toUse.size != null && toUse.size != undefined) {
+							update((value) => {
+								if (toUse.size != null && toUse.size != undefined)
+									value.addPage(toUse.index, {
+										value: toUse.url,
+										size: {
+											width: toUse.size.width,
+											height: toUse.size.height
+										}
+									})
+								return value;
+							})
+						} else {
 							update((value) => {
 								value.addPage(toUse.index, {
-									value: toUse.url,
-									size: d
+									value: toUse.url
 								});
 								return value;
 							});
-						})
+							getImageSize(toUse.url).then((d) => {
+								update((value) => {
+									value.addPage(toUse.index, {
+										value: toUse.url,
+										size: d
+									});
+									return value;
+								});
+							})
+						}
+					} else if (error && extensions) {
+						const page = extensions.page;
+						if (typeof page == "number" || typeof page == "string") {
+							update((d) => {
+								try {
+									d.addPageError(Number(page), error);
+								} catch (e) {
+									addErrorToast("Chapter loading error", e);
+								}
+								return d;
+							});
+						} else {
+							addErrorToast("Chapter loading error", error);
+						}
 					}
-				} else if (error && extensions) {
-					const page = extensions.page;
-					if (typeof page == "number" || typeof page == "string") {
-						update((d) => {
-							try {
-								d.addPageError(Number(page), error);
-							} catch (e) {
-								addErrorToast("Chapter loading error", e);
-							}
-							return d;
-						});
-					} else {
-						addErrorToast("Chapter loading error", error);
+				}
+				// TODO test if this `mode` store *actually* works
+				if (typeof mode == "object") {
+					let unsub: (() => void) | undefined = undefined;
+					let sub = mode.subscribe(($mode) => {
+						unsub?.()
+						let inner_sub = client.subscription(subscription, {
+							chapter,
+							mode: $mode
+						}).subscribe((d) => sub_func(d));
+						unsub = () => {
+							inner_sub.unsubscribe()
+						}
+					})
+					return () => {
+						unsub?.();
+						sub();
+					}
+				} else {
+					// NOTE this one doesn't need test. It should work fine.
+					let inner_sub = client.subscription(subscription, {
+						chapter,
+						mode
+					}).subscribe((d) => sub_func(d));
+					return () => {
+						inner_sub.unsubscribe()
 					}
 				}
 			}
-			// TODO test if this `mode` store *actually* works
-			if (typeof mode == "object") {
-				let unsub: (() => void) | undefined = undefined;
-				let sub = mode.subscribe(($mode) => {
-					unsub?.()
-					let inner_sub = client.subscription(subscription, {
-						chapter,
-						mode: $mode
-					}).subscribe((d) => sub_func(d));
-					unsub = () => {
-						inner_sub.unsubscribe()
-					}
-				})
-				return () => {
-					unsub?.();
-					sub();
-				}
-			} else {
-				// NOTE this one doesn't need test. It should work fine.
-				let inner_sub = client.subscription(subscription, {
-					chapter,
-					mode
-				}).subscribe((d) => sub_func(d));
-				return () => {
-					inner_sub.unsubscribe()
-				}
+			chapterId.subscribe((chapter) => {
+				unsub?.();
+				unsub = chapterIdSub(chapter);
+			});
+			return () => {
+				unsub?.();
 			}
 		});
 		const getMode = () => {
@@ -349,35 +358,38 @@ export default class ChapterPages {
 		return {
 			...store,
 			async startCaching() {
-				await startCaching(chapter, {
+				await startCaching(get(chapterId), {
 					client,
 					mode: getMode()
 				})
 			},
 			async fetchMetadata() {
-				await fetchMetadata(chapter, {
+				await fetchMetadata(get(chapterId), {
 					client,
 					mode: getMode()
 				})
 			},
 			async resendAll() {
-				await resendAll(chapter, {
+				await resendAll(get(chapterId), {
 					client,
 					mode: getMode()
 				})
 			},
 			async refetchChapterPage(page) {
-				await refetchChapterPage(chapter, page, {
+				await refetchChapterPage(get(chapterId), page, {
 					client,
 					mode: getMode()
 				})
 			},
 			async resendChapterPage(page) {
-				await resendChapterPage(chapter, page, {
+				await resendChapterPage(get(chapterId), page, {
 					client,
 					mode: getMode()
 				});
 			},
 		}
+	}
+	public static initStore(chapter: string, options?: ChapterPagesFuncOptions): ChapterPagesStore {
+		return ChapterPages.initFromStore(readable(chapter), options);
 	}
 }

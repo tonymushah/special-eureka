@@ -1,12 +1,13 @@
 <script lang="ts">
+	import { getCurrentChapterData } from "@mangadex/componnents/chapter/page/contexts/currentChapter";
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
-	import { getChapterImageContext } from "@mangadex/componnents/chapter/page/contexts/images";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
+	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
 	import { times } from "lodash";
 	import { derived, get } from "svelte/store";
-	import { fade, slide } from "svelte/transition";
+	import { slide } from "svelte/transition";
 
 	type Page = {
 		index: number;
@@ -18,11 +19,15 @@
 			label: `${$page + 1}`
 		} as SelectOption<number>;
 	});
-	const options = derived(getChapterImageContext(), ($images) =>
-		times($images.length).map<SelectOption<number>>((index) => ({
-			value: index,
-			label: `${index + 1}`
-		}))
+	const currentData = getCurrentChapterData();
+
+	const options = derived(
+		ChapterPages.initFromStore(derived(currentData, ($d) => $d.id)),
+		($images) =>
+			times($images.getImages().length).map<SelectOption<number>>((index) => ({
+				value: index,
+				label: `${index + 1}`
+			}))
 	);
 	const {
 		elements: { trigger, menu, option },
