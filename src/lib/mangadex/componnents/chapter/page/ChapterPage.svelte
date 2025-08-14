@@ -38,8 +38,7 @@
 				</div>
 			{/if}
 			<section class="content">
-				<!-- TODO Fix this -->
-				<!-- <ChapterReadingMode /> -->
+				<ChapterReadingMode />
 			</section>
 		</div>
 	</ChapterDrawer>
