@@ -295,6 +295,9 @@ export default class ChapterPages {
 	private _removePageError(page: number) {
 		this.pagesError.delete(page)
 	}
+	public getPagesState(): PageState[] {
+		return this.pagesLenRange().map((index) => this.getPageState(index))
+	}
 	public static removePageError(pages: Writable<ChapterPages>, page: number) {
 		pages.update((ps) => {
 			ps._removePageError(page);

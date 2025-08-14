@@ -2,21 +2,23 @@
     TODO Add drag support for scrolling
 -->
 <script lang="ts">
-	import { preventDefault, createBubbler } from "svelte/legacy";
-
-	const bubble = createBubbler();
 	import { derived as der, get, writable, type Readable } from "svelte/store";
-	import { getChapterImageContext } from "../../contexts/images";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { onDestroy, onMount } from "svelte";
 	import { delay } from "lodash";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
+	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import ChapterPages from "@mangadex/stores/chapter/pages";
 
 	const readingDirection = getCurrentChapterDirection();
 	let widestrip_root: HTMLDivElement | undefined = $state();
-	const images = getChapterImageContext();
+
+	const images_root_data = getCurrentChapterImages();
+	const images = der(images_root_data, ($data) => $data.getPagesState());
+
 	const isFromIntersector = writable(false);
 	let shouldIgnore = false;
 	function fromIntersector<T = unknown>(fn: () => T): T {
@@ -192,7 +194,31 @@
 	{@render before?.()}
 	{#each $images as image, page}
 		<div data-page={page} use:mount>
-			<img ondrag={preventDefault(bubble("drag"))} src={image} alt={image} data-page={page} />
+			{#if image?.page}
+				<img
+					data-page={page}
+					src={image.page.value}
+					alt={image.page.value}
+					ondrag={(e) => {
+						e.preventDefault();
+					}}
+				/>
+			{:else if image?.error}
+				<div class="error">
+					<p>{image.error.name} ({image.error.message})</p>
+					<div class="_inner">
+						<DangerButtonOnlyLabel
+							label="Error"
+							onclick={() => {
+								ChapterPages.removePageError(images_root_data, page);
+								images_root_data.refetchChapterPage(page);
+							}}
+						/>
+					</div>
+				</div>
+			{:else}
+				<p>Loadign...</p>
+			{/if}
 		</div>
 	{/each}
 	{@render after?.()}
@@ -223,5 +249,11 @@
 	}
 	img {
 		height: 100%;
+	}
+	.error {
+		display: flex;
+		align-items: center;
+		justify-items: center;
+		flex-direction: column;
 	}
 </style>
