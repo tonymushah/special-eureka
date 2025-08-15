@@ -107,12 +107,11 @@
 
 <svelte:window
 	onkeydown={(e) => {
-		e.preventDefault();
-		console.log(e.key);
 		if (e.key == "Control") {
+			e.preventDefault();
 			canSelect = true;
 		} else if (e.key == "a" && canSelect && container) {
-			console.log("select all");
+			e.preventDefault();
 			[".manga-element", ".chapter-element"]
 				.map((d) => container.querySelectorAll(d))
 				.forEach((d) => {
