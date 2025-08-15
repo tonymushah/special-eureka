@@ -1,9 +1,9 @@
-use std::{num::NonZero, time::Duration};
+use std::{hash::Hash, num::NonZero, time::Duration};
 
 use duration_string::DurationString;
-use governor::DefaultDirectRateLimiter;
 use governor::Jitter;
 use governor::Quota;
+use governor::{DefaultDirectRateLimiter, DefaultKeyedRateLimiter};
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
@@ -26,58 +26,81 @@ impl From<SpecificRateLimitConfigEntry> for Quota {
     }
 }
 
-macro_rules! specific {
-    ($($name:ident = {$num:expr, $period:expr}, )*) => {
-		#[derive(Debug, Clone, Deserialize)]
-		#[serde(default)]
-		pub struct SpecificRateLimitConfig {
-			$(
-				pub $name: SpecificRateLimitConfigEntry,
-			)*
-		}
+#[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Eq, Ord, Hash)]
+struct NoKey;
 
-		impl Default for SpecificRateLimitConfig {
-			fn default() -> Self {
-				Self {
-					$(
-						$name: SpecificRateLimitConfigEntry {
-							num: $num,
-							duration: $period
-						},
-					)*
-				}
-			}
+type RateLimiter<K = NoKey> = DefaultKeyedRateLimiter<K>;
+
+macro_rules! specific {
+    ($($name:ident $([$key:ty])? = {$num:expr, $period:expr}, )*) => {
+        #[derive(Debug, Clone, Deserialize)]
+        #[serde(default)]
+        pub struct SpecificRateLimitConfig {
+            $(
+                pub $name: SpecificRateLimitConfigEntry,
+            )*
+        }
+
+        impl Default for SpecificRateLimitConfig {
+            fn default() -> Self {
+                Self {
+                    $(
+                        $name: SpecificRateLimitConfigEntry {
+                            num: $num,
+                            duration: $period
+                        },
+                    )*
+                }
+            }
+        }
+
+        pub struct SpecificRateLimits {
+            $(
+                pub $name: RateLimiter$(<$key>)?,
+            )*
+        }
+
+        impl SpecificRateLimits {
+            $(
+				specific!(@imp $name $($key)?);
+            )*
+        }
+
+        impl From<&SpecificRateLimitConfig> for SpecificRateLimits {
+            fn from(value: &SpecificRateLimitConfig) -> Self {
+                Self {
+                    $(
+                        $name: RateLimiter$(::<$key>)?::keyed((&value.$name).into()),
+                    )*
+                }
+            }
+        }
+
+        impl From<SpecificRateLimitConfig> for SpecificRateLimits {
+            fn from(value: SpecificRateLimitConfig) -> Self {
+                Self {
+                    $(
+                        $name: RateLimiter$(::<$key>)?::keyed(value.$name.into()),
+                    )*
+                }
+            }
+        }
+    };
+	(@imp $name:ident) => {
+		pub async fn $name(&self) {
+			until_no_key_ready(&self.$name).await
 		}
-		pub struct SpecificRateLimits {
-			$(pub $name: DefaultDirectRateLimiter,)*
-		}
-		impl SpecificRateLimits {
-			$(
-				pub async fn $name(&self) {
-					until_ready(&self.$name).await;
-				}
-			)*
-		}
-		impl From<&SpecificRateLimitConfig> for SpecificRateLimits {
-			fn from(value: &SpecificRateLimitConfig) -> Self {
-				Self {
-					$($name: DefaultDirectRateLimiter::direct((&value.$name).into()),)*
-				}
-			}
-		}
-		impl From<SpecificRateLimitConfig> for SpecificRateLimits {
-			fn from(value: SpecificRateLimitConfig) -> Self {
-				Self {
-					$($name: DefaultDirectRateLimiter::direct(value.$name.into()),)*
-				}
-			}
+	};
+	(@imp $name:ident $key:ty) => {
+		pub async fn $name(&self, key: &$key) {
+			until_key_ready(&self.$name, key).await
 		}
 	};
 }
 
 specific! {
     // AtHome
-    at_home = {
+    at_home [uuid::Uuid] = {
         NonZero::new(40).unwrap(),
         Duration::from_secs(60).into()
     },
@@ -213,4 +236,19 @@ pub fn default_jitter() -> Jitter {
 
 pub async fn until_ready(rate_limiter: &DefaultDirectRateLimiter) {
     rate_limiter.until_ready_with_jitter(default_jitter()).await;
+}
+
+pub async fn until_key_ready<K>(rate_limiter: &DefaultKeyedRateLimiter<K>, key: &K)
+where
+    K: Eq + Hash + Clone,
+{
+    rate_limiter
+        .until_key_ready_with_jitter(key, default_jitter())
+        .await
+}
+
+async fn until_no_key_ready(rate_limiter: &RateLimiter) {
+    rate_limiter
+        .until_key_ready_with_jitter(&NoKey, default_jitter())
+        .await
 }

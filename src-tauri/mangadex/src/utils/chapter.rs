@@ -461,7 +461,10 @@ impl<R: Runtime> SpawnHandle<R> {
         }
     }
     async fn fetch_metadata(&mut self) -> Result<(), FetchingError> {
-        self.app_handle.get_specific_rate_limit()?.at_home().await;
+        self.app_handle
+            .get_specific_rate_limit()?
+            .at_home(&self.chapter_id)
+            .await;
         let client = self.app_handle.get_mangadex_client()?;
         let at_home = client
             .at_home()
