@@ -2,18 +2,13 @@
 	import type { CurrentChapterData } from "@mangadex/componnents/chapter/page/contexts/currentChapter";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import { delay } from "lodash";
 
 	interface Props {
 		data: CurrentChapterData;
 	}
 	let { data }: Props = $props();
 	const pages = ChapterPages.initStore(data.id);
-	$effect(() => {
-		data.id;
-		pages.startCaching().catch((e) => {
-			addErrorToast("Error on caching", e);
-		});
-	});
 </script>
 
 <button

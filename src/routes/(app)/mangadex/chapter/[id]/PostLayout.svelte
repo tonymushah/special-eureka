@@ -69,20 +69,19 @@
 		type RelatedChapter
 	} from "@mangadex/componnents/chapter/page/contexts/relatedChapters";
 	import { initLongStripImagesWidthContext } from "@mangadex/componnents/chapter/page/readinMode/longStrip/utils/context/longstrip_images_width";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { getContextClient } from "@urql/svelte";
-	import { derived, writable } from "svelte/store";
-	import type { LayoutData } from "./$types";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import imageFitWritable from "@mangadex/gql-docs/chapter/layout-query/imageFit";
 	import longstripImageWidthWritable from "@mangadex/gql-docs/chapter/layout-query/longstripImageWidth";
 	import readingDirectionWritable from "@mangadex/gql-docs/chapter/layout-query/pageDirection";
 	import readingModeWritable from "@mangadex/gql-docs/chapter/layout-query/readingMode";
 	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
 	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
-	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import { DrawerMode } from "@mangadex/gql/graphql";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
-	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import { getContextClient } from "@urql/svelte";
+	import { derived, writable } from "svelte/store";
+	import type { LayoutData } from "./$types";
 
 	interface Props {
 		data: LayoutData;
@@ -180,7 +179,6 @@
 				addErrorToast("Cannot fetch chapter comments data", e);
 			});
 	});
-	const chapterPages = ChapterPages.initStore(data.data.id);
 </script>
 
 {@render children?.()}

@@ -1,4 +1,3 @@
-import { graphql } from "@mangadex/gql/exports";
 import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
@@ -18,15 +17,12 @@ export const load: LayoutLoad = async ({ params, url }) => {
 			id
 		}
 	).toPromise();
-	console.log("Invoked layout data");
 	if (result.data != undefined) {
-		const pages = result.data.chapter.pages;
-		const pagesL = pages.data.length;
+		const pagesL = result.data.chapter.get.attributes.pages;
 		const data = result.data.chapter.get;
 		const currentPage = isEnd ? pagesL - 1 : Math.abs(Number(startPage));
 		return {
 			data,
-			pages,
 			currentPage: isNaN(currentPage) ? 0 : currentPage
 		};
 	} else if (result.error != undefined) {

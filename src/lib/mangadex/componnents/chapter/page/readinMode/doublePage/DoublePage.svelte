@@ -217,6 +217,31 @@
 					{/if}
 				</div>
 			{/if}
+		{:else if typeof $currentPage == "object"}
+			{@const p1 = $currentPage}
+			{#if p1.page}
+				<ZoomableImage src={p1.page.value} alt={p1.page.value} />
+			{:else if p1.error}
+				<div class="error">
+					<div class="_inner">
+						<p>{p1.error.name} ({p1.error.message})</p>
+						<DangerButtonOnlyLabel
+							label="Error"
+							onclick={() => {
+								const pageIndex = $images_indexes.at($currentPageIndex);
+								if (typeof pageIndex == "number") {
+									ChapterPages.removePageError(images, pageIndex);
+									images.refetchChapterPage(pageIndex);
+								}
+							}}
+						/>
+					</div>
+				</div>
+			{/if}
+		{:else}
+			<div class="error">
+				<div class="_inner">Loadign...</div>
+			</div>
 		{/if}
 	</div>
 {/if}

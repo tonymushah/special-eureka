@@ -395,6 +395,7 @@ export default class ChapterPages {
 				}
 			}
 			chapterId.subscribe((chapter) => {
+				set(new ChapterPages());
 				unsub?.();
 				unsub = chapterIdSub(chapter);
 			});
@@ -445,5 +446,27 @@ export default class ChapterPages {
 	}
 	public static initStore(chapter: string, options?: ChapterPagesFuncOptions): ChapterPagesStore {
 		return ChapterPages.initFromStore(readable(chapter), options);
+	}
+	public isComplete(): boolean {
+		return this.pages.size == this.pagesLen
+	}
+	public getIncompleteIndexes(): number[] {
+		return this.getImages().flatMap((value, index) => {
+			if (value == null) {
+				return []
+			} else {
+				return [index]
+			}
+		});
+	}
+	public static async refetchIncompletes(pages: ChapterPagesStore) {
+		if (get(pages).pagesLen) {
+			const indexes = get(pages).getIncompleteIndexes();
+			await Promise.all(indexes.map((index) => {
+				return pages.refetchChapterPage(index);
+			}));
+		} else {
+			await pages.startCaching();
+		}
 	}
 }

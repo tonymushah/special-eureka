@@ -4750,7 +4750,6 @@ export type GetChapterPageDataQuery = {
 	__typename?: "Query";
 	chapter: {
 		__typename?: "ChapterQueries";
-		pages: { __typename?: "ChapterPages"; data: Array<any>; dataSaver: Array<any> };
 		get: {
 			__typename?: "Chapter";
 			id: any;
@@ -12525,33 +12524,6 @@ export const GetChapterPageDataDocument = {
 						selectionSet: {
 							kind: "SelectionSet",
 							selections: [
-								{
-									kind: "Field",
-									name: { kind: "Name", value: "pages" },
-									arguments: [
-										{
-											kind: "Argument",
-											name: { kind: "Name", value: "id" },
-											value: {
-												kind: "Variable",
-												name: { kind: "Name", value: "id" }
-											}
-										}
-									],
-									selectionSet: {
-										kind: "SelectionSet",
-										selections: [
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "data" }
-											},
-											{
-												kind: "Field",
-												name: { kind: "Name", value: "dataSaver" }
-											}
-										]
-									}
-								},
 								{
 									kind: "Field",
 									name: { kind: "Name", value: "get" },

@@ -3,10 +3,6 @@ import { graphql } from "@mangadex/gql";
 const chapterLayoutPageQuery = graphql(`
 	query getChapterPageData($id: UUID!) {
 		chapter {
-			pages(id: $id) {
-				data
-				dataSaver
-			}
 			get(id: $id) {
 				id
 				attributes {
