@@ -27,7 +27,7 @@ impl From<SpecificRateLimitConfigEntry> for Quota {
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, PartialOrd, Eq, Ord, Hash)]
-struct NoKey;
+pub struct NoKey;
 
 type RateLimiter<K = NoKey> = DefaultKeyedRateLimiter<K>;
 
