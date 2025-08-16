@@ -11,6 +11,7 @@
 	import getChapterDoublePageCurrentPageIndex from "../readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getCurrentChapterImages from "../utils/getCurrentChapterImages";
 	import { progressModeStore } from "@mangadex/stores/chapterLayout";
+	import { resetZoom } from "../contexts/resetZoomEventTarget";
 
 	const images = getCurrentChapterImages();
 	const doublePage = isDoublePage();
@@ -75,6 +76,7 @@
 									class:selected={doublePageIndex == $currentDoublePage}
 									onclick={() => {
 										$currentPage = page[0].index;
+										resetZoom();
 									}}
 								></div>
 							{:else}
@@ -89,6 +91,7 @@
 									class:hasError={page.state?.error != undefined}
 									onclick={() => {
 										$currentPage = page.index;
+										resetZoom();
 									}}
 								></div>
 							{/if}
@@ -105,6 +108,7 @@
 								class:hasError={page?.error != undefined}
 								onclick={() => {
 									$currentPage = index;
+									resetZoom();
 								}}
 							></div>
 						{/each}
