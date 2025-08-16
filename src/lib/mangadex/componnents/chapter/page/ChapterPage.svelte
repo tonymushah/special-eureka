@@ -15,6 +15,7 @@
 	import { onDestroy } from "svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import Progress from "./progress/Progress.svelte";
 
 	const isFixed = isDrawerFixed();
 	const shouldShowHeader = derived(isFixed, (fixed) => {
@@ -86,6 +87,7 @@
 						</div>
 					</div>
 				{/if}
+				<Progress />
 			</section>
 		</div>
 	</ChapterDrawer>
@@ -109,6 +111,7 @@
 			height: -webkit-fill-available;
 			overflow: hidden;
 			display: grid;
+			position: relative;
 			// NOTE This css looks ass on Linux,
 			// Maybe we can reactivate it on Windows or Macos if it look better
 			/// height: 100cqh;

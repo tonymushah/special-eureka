@@ -156,6 +156,13 @@ export type ChapterDoubleImageItem = MaybeNullString | [MaybeNullString, MaybeNu
 
 export type DoublePageIndex = number | [number, number];
 
+export type IndexedPageState = {
+	index: number,
+	state: PageState
+};
+
+export type IndexedDoublePageState = [IndexedPageState, IndexedPageState] | IndexedPageState;
+
 // TODO implement an enum to get page state
 
 export type PageStateInner = {
@@ -297,6 +304,24 @@ export default class ChapterPages {
 	}
 	public getPagesState(): PageState[] {
 		return this.pagesLenRange().map((index) => this.getPageState(index))
+	}
+	public getDoublePageStates(): IndexedDoublePageState[] {
+		return this.pagesAsDoublePageIndexes().map((e) => {
+			if (isArray(e)) {
+				return [{
+					index: e[0],
+					state: this.getPageState(e[0])
+				}, {
+					index: e[1],
+					state: this.getPageState(e[1])
+				}]
+			} else {
+				return {
+					index: e,
+					state: this.getPageState(e)
+				}
+			}
+		})
 	}
 	public static removePageError(pages: Writable<ChapterPages>, page: number) {
 		pages.update((ps) => {

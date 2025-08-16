@@ -66,6 +66,9 @@
 		margin-top: 29px;
 		height: calc(100cqh - 29px);
 	}
+	aside:not(.fixed) {
+		height: -webkit-fill-available;
+	}
 	.content {
 		transition-duration: 0.5s;
 		flex: 4;
