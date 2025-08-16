@@ -1,9 +1,11 @@
 use std::num::NonZero;
 
 use crate::{
+    Result,
     cache::{cover::CoverImageCache, favicon::clear_favicons_dir},
     objects::offline_config::{OfflineConfigInput, OfflineConfigObject},
     store::{
+        TauriManagerMangadexStoreCrud, TauriManagerMangadexStoreExtractor,
         types::{
             enums::{
                 chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
@@ -12,39 +14,37 @@ use crate::{
                 pagination_style::{PaginationStyle, PaginationStyleStore},
             },
             structs::{
-                chapter_layout::{ChapterLayoutStore, DrawerMode, SidebarMode},
+                chapter_layout::{ChapterLayoutStore, DrawerMode, ProgressMode, SidebarMode},
                 content::{
-                    profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
                     ContentProfile,
+                    profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
                 },
                 longstrip_image_width::LongstripImageWidthStore,
                 offline_config::OfflineConfigStore,
-                page_limit::{PageLimitStore, PAGE_LIMIT_DEFAULT},
+                page_limit::{PAGE_LIMIT_DEFAULT, PageLimitStore},
                 theme::{
-                    profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
                     MangaDexTheme,
+                    profiles::{ThemeProfileDefaultKey, ThemeProfileEntry, ThemeProfiles},
                 },
             },
         },
-        TauriManagerMangadexStoreCrud, TauriManagerMangadexStoreExtractor,
     },
     utils::{get_app_handle_from_async_graphql, traits_utils::MangadexAsyncGraphQLContextExt},
-    Result,
 };
 use async_graphql::{Context, Object};
 use mangadex_api_types_rust::Language;
 
 use crate::{
     store::types::{
+        ExtractFromStore, StoreCrud,
         enums::{
             direction::{
-                reading::ReadingDirectionStore, sidebar::SidebarDirectionStore, Direction,
+                Direction, reading::ReadingDirectionStore, sidebar::SidebarDirectionStore,
             },
             manga_list_style::{MangaListStyle, MangaListStyleStore},
             reading_mode::{ReadingMode, ReadingModeStore},
         },
         structs::chapter_language::ChapterLanguagesStore,
-        ExtractFromStore, StoreCrud,
     },
     utils::{get_store, get_watches_from_graphql_context, watch::SendData},
 };
@@ -374,11 +374,7 @@ impl UserOptionMutations {
         let mut value = value;
         value = value.map(|a| {
             let default_limit = NonZero::new(PAGE_LIMIT_DEFAULT).unwrap();
-            if a < default_limit {
-                default_limit
-            } else {
-                a
-            }
+            if a < default_limit { default_limit } else { a }
         });
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
@@ -393,6 +389,7 @@ impl UserOptionMutations {
         ctx: &Context<'_>,
         sidebar: Option<SidebarMode>,
         drawer: Option<DrawerMode>,
+        progress: Option<ProgressMode>,
     ) -> Result<ChapterLayoutStore> {
         let app = ctx.get_app_handle::<tauri::Wry>()?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
@@ -402,6 +399,9 @@ impl UserOptionMutations {
         }
         if let Some(drawer) = drawer {
             store.drawer = drawer;
+        }
+        if let Some(progress) = progress {
+            store.progress = progress;
         }
         app.insert_and_save(&store).await?;
         watches.chapter_layout.send_data(store)?;

@@ -317,6 +317,7 @@ type ChapterImageSize {
 type ChapterLayoutStore {
 	sidebar: SidebarMode!
 	drawer: DrawerMode!
+	progress: ProgressMode!
 }
 
 input ChapterListParams {
@@ -1874,6 +1875,12 @@ input PrimaryColorInput {
 	primary2: String!
 }
 
+enum ProgressMode {
+	DEFAULT
+	FLOATING
+	HIDDEN
+}
+
 type Query {
 	manga: MangaQueries!
 	apiClient: ApiClientQueries!
@@ -2510,7 +2517,7 @@ type UserOptionMutations {
 	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
 	setChapterQuality(quality: DownloadMode): DownloadMode!
 	setPageLimit(value: Int): Int
-	setChapterLayout(sidebar: SidebarMode, drawer: DrawerMode): ChapterLayoutStore!
+	setChapterLayout(sidebar: SidebarMode, drawer: DrawerMode, progress: ProgressMode): ChapterLayoutStore!
 }
 
 type UserOptionQueries {

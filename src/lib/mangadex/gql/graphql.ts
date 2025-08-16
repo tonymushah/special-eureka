@@ -428,6 +428,7 @@ export type ChapterImageSize = {
 export type ChapterLayoutStore = {
 	__typename?: "ChapterLayoutStore";
 	drawer: DrawerMode;
+	progress: ProgressMode;
 	sidebar: SidebarMode;
 };
 
@@ -2440,6 +2441,12 @@ export type PrimaryColorInput = {
 	primary2: Scalars["String"]["input"];
 };
 
+export enum ProgressMode {
+	Default = "DEFAULT",
+	Floating = "FLOATING",
+	Hidden = "HIDDEN"
+}
+
 export type Query = {
 	__typename?: "Query";
 	apiClient: ApiClientQueries;
@@ -3297,6 +3304,7 @@ export type UserOptionMutationsSetChapterLanguagesArgs = {
 
 export type UserOptionMutationsSetChapterLayoutArgs = {
 	drawer?: InputMaybe<DrawerMode>;
+	progress?: InputMaybe<ProgressMode>;
 	sidebar?: InputMaybe<SidebarMode>;
 };
 
@@ -5810,12 +5818,14 @@ export type ChapterLayoutSubscriptionSubscription = {
 		__typename?: "ChapterLayoutStore";
 		drawer: DrawerMode;
 		sidebar: SidebarMode;
+		progress: ProgressMode;
 	};
 };
 
 export type SetChapterLayoutMutationVariables = Exact<{
 	sidebar?: InputMaybe<SidebarMode>;
 	drawer?: InputMaybe<DrawerMode>;
+	progress?: InputMaybe<ProgressMode>;
 }>;
 
 export type SetChapterLayoutMutation = {
@@ -5826,6 +5836,7 @@ export type SetChapterLayoutMutation = {
 			__typename?: "ChapterLayoutStore";
 			sidebar: SidebarMode;
 			drawer: DrawerMode;
+			progress: ProgressMode;
 		};
 	};
 };
@@ -18362,7 +18373,8 @@ export const ChapterLayoutSubscriptionDocument = {
 							kind: "SelectionSet",
 							selections: [
 								{ kind: "Field", name: { kind: "Name", value: "drawer" } },
-								{ kind: "Field", name: { kind: "Name", value: "sidebar" } }
+								{ kind: "Field", name: { kind: "Name", value: "sidebar" } },
+								{ kind: "Field", name: { kind: "Name", value: "progress" } }
 							]
 						}
 					}
@@ -18391,6 +18403,11 @@ export const SetChapterLayoutDocument = {
 					kind: "VariableDefinition",
 					variable: { kind: "Variable", name: { kind: "Name", value: "drawer" } },
 					type: { kind: "NamedType", name: { kind: "Name", value: "DrawerMode" } }
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "progress" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "ProgressMode" } }
 				}
 			],
 			selectionSet: {
@@ -18421,6 +18438,14 @@ export const SetChapterLayoutDocument = {
 												kind: "Variable",
 												name: { kind: "Name", value: "drawer" }
 											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "progress" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "progress" }
+											}
 										}
 									],
 									selectionSet: {
@@ -18433,6 +18458,10 @@ export const SetChapterLayoutDocument = {
 											{
 												kind: "Field",
 												name: { kind: "Name", value: "drawer" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "progress" }
 											}
 										]
 									}

@@ -118,8 +118,8 @@ type Documents = {
 	"\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ResendChapterPagesDocument;
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n": typeof types.ChapterFeedStyleSubDocument;
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n": typeof types.UpdateChapterFeedStyleDocument;
-	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t}\n\t}\n": typeof types.ChapterLayoutSubscriptionDocument;
-	"\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SetChapterLayoutDocument;
+	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t\tprogress\n\t\t}\n\t}\n": typeof types.ChapterLayoutSubscriptionDocument;
+	"\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode, $progress: ProgressMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer, progress: $progress) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t\tprogress\n\t\t\t}\n\t\t}\n\t}\n": typeof types.SetChapterLayoutDocument;
 	"\n\tsubscription chapterQualitySubscription {\n\t\twatchChapterQuality\n\t}\n": typeof types.ChapterQualitySubscriptionDocument;
 	"\n\tmutation chapterQualityMutation($quality: DownloadMode) {\n\t\tuserOption {\n\t\t\tsetChapterQuality(quality: $quality)\n\t\t}\n\t}\n": typeof types.ChapterQualityMutationDocument;
 	"\n\tsubscription currentClientInfo {\n\t\twatchClientInfo {\n\t\t\tclientSecret\n\t\t\tclientId\n\t\t}\n\t}\n": typeof types.CurrentClientInfoDocument;
@@ -366,9 +366,9 @@ const documents: Documents = {
 		types.ChapterFeedStyleSubDocument,
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n":
 		types.UpdateChapterFeedStyleDocument,
-	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t}\n\t}\n":
+	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t\tprogress\n\t\t}\n\t}\n":
 		types.ChapterLayoutSubscriptionDocument,
-	"\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode, $progress: ProgressMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer, progress: $progress) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t\tprogress\n\t\t\t}\n\t\t}\n\t}\n":
 		types.SetChapterLayoutDocument,
 	"\n\tsubscription chapterQualitySubscription {\n\t\twatchChapterQuality\n\t}\n":
 		types.ChapterQualitySubscriptionDocument,
@@ -1088,14 +1088,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t}\n\t}\n"];
+	source: "\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t\tprogress\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t\tprogress\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode, $progress: ProgressMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer, progress: $progress) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t\tprogress\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation setChapterLayout($sidebar: SidebarMode, $drawer: DrawerMode, $progress: ProgressMode) {\n\t\tuserOption {\n\t\t\tsetChapterLayout(sidebar: $sidebar, drawer: $drawer, progress: $progress) {\n\t\t\t\tsidebar\n\t\t\t\tdrawer\n\t\t\t\tprogress\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

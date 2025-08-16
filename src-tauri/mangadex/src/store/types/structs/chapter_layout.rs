@@ -2,7 +2,7 @@ use async_graphql::{Enum, SimpleObject};
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 
-use crate::store::{keys::CHAPTER_LAYOUT, types::ExtractFromStore, DefaulStore, StoreCrud};
+use crate::store::{DefaulStore, StoreCrud, keys::CHAPTER_LAYOUT, types::ExtractFromStore};
 
 #[derive(
     Debug,
@@ -47,10 +47,34 @@ pub enum DrawerMode {
     Pinned,
 }
 
+#[derive(
+    Debug,
+    Default,
+    serde_repr::Deserialize_repr,
+    serde_repr::Serialize_repr,
+    Enum,
+    Clone,
+    Copy,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+)]
+#[repr(u8)]
+pub enum ProgressMode {
+    #[default]
+    Default,
+    Floating,
+    Hidden,
+}
+
 #[derive(Debug, Clone, Copy, Default, Deserialize, Serialize, SimpleObject)]
+#[serde(default)]
 pub struct ChapterLayoutStore {
     pub sidebar: SidebarMode,
     pub drawer: DrawerMode,
+    pub progress: ProgressMode,
 }
 
 impl<R> ExtractFromStore<'_, R> for ChapterLayoutStore

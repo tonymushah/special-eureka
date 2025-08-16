@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SomeDiv from "@mangadex/componnents/theme/SomeDiv.svelte";
 	import readingDirectionWritable from "@mangadex/gql-docs/chapter/layout-query/pageDirection";
-	import { Direction } from "@mangadex/gql/graphql";
+	import { Direction, ProgressMode } from "@mangadex/gql/graphql";
 	import type { IndexedDoublePageState, IndexedPageState } from "@mangadex/stores/chapter/pages";
 	import { isArray, last } from "lodash";
 	import { derived as der } from "svelte/store";
@@ -10,6 +10,7 @@
 	import { getCurrentChapterDirection } from "../contexts/readingDirection";
 	import getChapterDoublePageCurrentPageIndex from "../readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getCurrentChapterImages from "../utils/getCurrentChapterImages";
+	import { progressModeStore } from "@mangadex/stores/chapterLayout";
 
 	const images = getCurrentChapterImages();
 	const doublePage = isDoublePage();
@@ -32,120 +33,148 @@
 </script>
 
 <SomeDiv --pages={$images.pagesLen}>
-	<div class="progress" class:isRtl>
-		{#if $doublePage}
-			{@const _first = $images.pagesAsDoublePageIndexes().at(0)}
-			<p>
-				{#if isArray(_first)}
-					{#if isRtl}
-						{_first[1] + 1} - {_first[0] + 1}
-					{:else}
-						{_first[0] + 1} - {_first[1] + 1}
-					{/if}
-				{:else if typeof _first == "number"}
-					{_first + 1}
-				{/if}
-			</p>
-		{:else}
-			{@const _last = $images.pagesLen}
-			<p>
-				{#if _last != undefined}
-					1
-				{/if}
-			</p>
-		{/if}
-		<div class="progress-inner" class:isRtl>
-			{#if $images.pagesLen}
-				{#if $doublePage}
-					{#each $doublePageStates as page, doublePageIndex}
-						{#if isArray(page)}
-							<!-- svelte-ignore a11y_no_static_element_interactions -->
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
-							<div
-								class="item"
-								class:loaded={isDoublePageLoaded(page)}
-								class:hasError={hasError(page)}
-								class:aSelect={doublePageIndex < $currentDoublePage}
-								class:selected={doublePageIndex == $currentDoublePage}
-								onclick={() => {
-									$currentPage = page[0].index;
-								}}
-							></div>
+	<div
+		class="progress-container"
+		class:floating={$progressModeStore == ProgressMode.Floating}
+		class:hidden={$progressModeStore == ProgressMode.Hidden}
+	>
+		<div class="progress" class:isRtl>
+			{#if $doublePage}
+				{@const _first = $images.pagesAsDoublePageIndexes().at(0)}
+				<p>
+					{#if isArray(_first)}
+						{#if isRtl}
+							{_first[1] + 1} - {_first[0] + 1}
 						{:else}
-							<!-- svelte-ignore a11y_click_events_have_key_events -->
+							{_first[0] + 1} - {_first[1] + 1}
+						{/if}
+					{:else if typeof _first == "number"}
+						{_first + 1}
+					{/if}
+				</p>
+			{:else}
+				{@const _last = $images.pagesLen}
+				<p>
+					{#if _last != undefined}
+						1
+					{/if}
+				</p>
+			{/if}
+			<div class="progress-inner" class:isRtl>
+				{#if $images.pagesLen}
+					{#if $doublePage}
+						{#each $doublePageStates as page, doublePageIndex}
+							{#if isArray(page)}
+								<!-- svelte-ignore a11y_no_static_element_interactions -->
+								<!-- svelte-ignore a11y_click_events_have_key_events -->
+								<div
+									class="item"
+									class:loaded={isDoublePageLoaded(page)}
+									class:hasError={hasError(page)}
+									class:aSelect={doublePageIndex < $currentDoublePage}
+									class:selected={doublePageIndex == $currentDoublePage}
+									onclick={() => {
+										$currentPage = page[0].index;
+									}}
+								></div>
+							{:else}
+								<!-- svelte-ignore a11y_click_events_have_key_events -->
+								<!-- svelte-ignore a11y_no_static_element_interactions -->
+								<div
+									class="item"
+									class:loading={page.state == null}
+									class:aSelect={page.index < $currentPage}
+									class:selected={page.index == $currentPage}
+									class:loaded={isDoublePageLoaded(page)}
+									class:hasError={page.state?.error != undefined}
+									onclick={() => {
+										$currentPage = page.index;
+									}}
+								></div>
+							{/if}
+						{/each}
+					{:else}
+						{#each $pageStates as page, index}
 							<!-- svelte-ignore a11y_no_static_element_interactions -->
+							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<div
 								class="item"
-								class:loading={page.state == null}
-								class:aSelect={page.index < $currentPage}
-								class:selected={page.index == $currentPage}
-								class:loaded={isDoublePageLoaded(page)}
-								class:hasError={page.state?.error != undefined}
+								class:loaded={page?.page != undefined}
+								class:aSelect={index < $currentPage}
+								class:selected={index == $currentPage}
+								class:hasError={page?.error != undefined}
 								onclick={() => {
-									$currentPage = page.index;
+									$currentPage = index;
 								}}
 							></div>
-						{/if}
-					{/each}
+						{/each}
+					{/if}
 				{:else}
-					{#each $pageStates as page, index}
-						<!-- svelte-ignore a11y_no_static_element_interactions -->
-						<!-- svelte-ignore a11y_click_events_have_key_events -->
-						<div
-							class="item"
-							class:loaded={page?.page != undefined}
-							class:aSelect={index < $currentPage}
-							class:selected={index == $currentPage}
-							class:hasError={page?.error != undefined}
-							onclick={() => {
-								$currentPage = index;
-							}}
-						></div>
-					{/each}
+					<div class="item loading"></div>
 				{/if}
+			</div>
+			{#if $doublePage}
+				{@const _last = last($images.pagesAsDoublePageIndexes())}
+				<p>
+					{#if isArray(_last)}
+						{#if isRtl}
+							{_last[1] + 1} - {_last[0] + 1}
+						{:else}
+							{_last[0] + 1} - {_last[1] + 1}
+						{/if}
+					{:else if typeof _last == "number"}
+						{_last + 1}
+					{/if}
+				</p>
 			{:else}
-				<div class="item loading"></div>
+				{@const _last = $images.pagesLen}
+				<p>
+					{#if _last != undefined}
+						{_last + 1}
+					{/if}
+				</p>
 			{/if}
 		</div>
-		{#if $doublePage}
-			{@const _last = last($images.pagesAsDoublePageIndexes())}
-			<p>
-				{#if isArray(_last)}
-					{#if isRtl}
-						{_last[1] + 1} - {_last[0] + 1}
-					{:else}
-						{_last[0] + 1} - {_last[1] + 1}
-					{/if}
-				{:else if typeof _last == "number"}
-					{_last + 1}
-				{/if}
-			</p>
-		{:else}
-			{@const _last = $images.pagesLen}
-			<p>
-				{#if _last != undefined}
-					{_last + 1}
-				{/if}
-			</p>
-		{/if}
 	</div>
 </SomeDiv>
 
 <style lang="scss">
+	:root {
+		--progress-transition-duration: 200ms;
+	}
+	.progress-container {
+		width: 100%;
+		position: absolute;
+		bottom: 0px;
+	}
+	.progress-container.floating {
+		.progress {
+			translate: 0px 48px;
+		}
+	}
+	.progress-container.floating:hover {
+		.progress {
+			translate: 0px 0px;
+		}
+	}
+	.progress-container.hidden {
+		display: none;
+	}
 	.progress {
+		transform: translate ease-in-out var(--progress-transition-duration);
 		width: 100%;
 		padding: 12px 8px;
 		background-color: var(--accent-l1);
-		position: absolute;
-		bottom: 0px;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		gap: 8px;
+		z-index: 10;
 		p {
 			margin: 0px;
 		}
 	}
+
 	.progress.isRtl {
 		flex-direction: row-reverse;
 	}
