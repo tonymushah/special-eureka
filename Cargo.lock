@@ -5354,7 +5354,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.0-6"
+version = "0.2.0-7"
 dependencies = [
  "actix",
  "anyhow",
@@ -5769,7 +5769,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-clipboard-manager"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "arboard",
  "log",
@@ -5783,7 +5783,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-deep-link"
 version = "2.4.1"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "dunce",
  "rust-ini",
@@ -5802,7 +5802,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-dialog"
 version = "2.3.2"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "log",
  "raw-window-handle",
@@ -5819,7 +5819,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-fs"
 version = "2.4.1"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "anyhow",
  "dunce",
@@ -5840,7 +5840,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-notification"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "log",
  "notify-rust",
@@ -5858,7 +5858,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-opener"
 version = "2.4.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "dunce",
  "glob",
@@ -5928,7 +5928,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-store"
 version = "2.3.0"
-source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#d3d290ab8a8913981a98e2eb7f2c5d4aba3bc36c"
+source = "git+https://github.com/tauri-apps/plugins-workspace?branch=v2#515182a179d4439079b2b7f6927555ba5ab0b035"
 dependencies = [
  "dunce",
  "serde",
