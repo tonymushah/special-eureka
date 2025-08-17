@@ -54,8 +54,8 @@ importers:
         specifier: ^2.4.0
         version: 2.4.0
       '@urql/svelte':
-        specifier: ^4.2.3
-        version: 4.2.3(@urql/core@5.2.0(graphql@16.11.0))(svelte@5.38.1)
+        specifier: ^5.0.0
+        version: 5.0.0(@urql/core@5.2.0(graphql@16.11.0))(svelte@5.38.1)
       fast-xml-parser:
         specifier: ^5.2.5
         version: 5.2.5
@@ -2075,10 +2075,10 @@ packages:
   '@urql/core@5.2.0':
     resolution: {integrity: sha512-/n0ieD0mvvDnVAXEQgX/7qJiVcvYvNkOHeBvkwtylfjydar123caCXcl58PXFY11oU1oquJocVXHxLAbtv4x1A==}
 
-  '@urql/svelte@4.2.3':
-    resolution: {integrity: sha512-v3eArfymhdjaM5VQFp3QZxq9veYPadmDfX7ueid/kD4DlRplIycPakJ2FrKigh46SXa5mWqJ3QWuWyRKVu61sw==}
+  '@urql/svelte@5.0.0':
+    resolution: {integrity: sha512-tHYEyFZwWsBW9GfpXbK+GImWhyZO1TJkhHsquosza0D0qOZyL+wGp/qT74WPUBJaF4gkUSXOQtUidDI7uvnuoQ==}
     peerDependencies:
-      '@urql/core': ^5.0.0
+      '@urql/core': ^6.0.0
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0
 
   '@viselect/vanilla@3.9.0':
@@ -6449,7 +6449,7 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  '@urql/svelte@4.2.3(@urql/core@5.2.0(graphql@16.11.0))(svelte@5.38.1)':
+  '@urql/svelte@5.0.0(@urql/core@5.2.0(graphql@16.11.0))(svelte@5.38.1)':
     dependencies:
       '@urql/core': 5.2.0(graphql@16.11.0)
       svelte: 5.38.1
