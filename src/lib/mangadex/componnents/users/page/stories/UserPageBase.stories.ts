@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/svelte";
+import type { Meta, StoryObj } from "@storybook/sveltekit";
 import "@fontsource/poppins/latin.css";
 import profilePicture from "../images/story-profile-picture.jpg";
 import profileBanner from "../images/story-profile-banner.jpg";

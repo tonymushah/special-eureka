@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/svelte";
+import type { Meta, StoryObj } from "@storybook/sveltekit";
 import "@fontsource/poppins/latin.css";
 import testData from "../../base/element1/test-data.json";
 import ChapterFeedElement1 from "./ChapterFeedElement1.svelte";

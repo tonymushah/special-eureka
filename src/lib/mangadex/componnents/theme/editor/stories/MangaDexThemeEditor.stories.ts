@@ -1,5 +1,5 @@
 import "@fontsource/poppins/latin.css";
-import type { Meta, StoryObj } from "@storybook/svelte";
+import type { Meta, StoryObj } from "@storybook/sveltekit";
 
 import MangadexThemeProviderForStory from "../../MangadexThemeProviderForStory.svelte";
 import MangaDexThemeEditor from "../MangaDexThemeEditor.svelte";

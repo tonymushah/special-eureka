@@ -6,7 +6,7 @@ import { readable, writable } from "svelte/store";
 import { fukkoi1 } from "@mangadex/test-data/images/fukkoi";
 import type { ChapterFeedListItem } from ".";
 import "@fontsource/poppins/latin.css";
-import type { Meta, StoryObj } from "@storybook/svelte";
+import type { Meta, StoryObj } from "@storybook/sveltekit";
 
 import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexThemeProviderForStory.svelte";
 import ChapterFeedList from "./ChapterFeedList.svelte";
