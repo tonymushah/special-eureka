@@ -7,18 +7,14 @@ pub fn open_new_window_sync_from_app<R: Runtime>(
     app: &AppHandle<R>,
     url: Option<WebviewUrl>,
 ) -> Result<()> {
-    #[allow(unused_mut)]
-    let mut builder = WebviewWindow::builder(
+    let builder = WebviewWindow::builder(
         app,
         format!("main-{}", Uuid::new_v4()),
         url.unwrap_or_default(),
     )
     .title(String::from("Special Eureka"))
-    .decorations(false);
-    #[cfg(windows)]
-    {
-        builder = builder.use_https_scheme(true);
-    }
+    .decorations(false)
+    .use_https_scheme(true);
     let _ww = builder.build()?;
     //set_menu_window(&ww.as_ref().window())?;
     Ok(())
