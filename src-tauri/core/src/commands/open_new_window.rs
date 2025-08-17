@@ -37,7 +37,8 @@ pub fn open_new_window_sync<R: Runtime>(
         },
     )
     .title(webview.title().unwrap_or(String::from("Special Eureka")))
-    .decorations(false);
+    .decorations(false)
+    .use_https_scheme(true);
 
     let _ww = builder.build()?;
     Ok(())
