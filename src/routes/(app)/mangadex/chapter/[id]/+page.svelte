@@ -1,4 +1,6 @@
 <script lang="ts">
+	/*import ChapterPagesTest from "./ChapterPagesTest.svelte";*/
+
 	import ChapterPage from "@mangadex/componnents/chapter/page/ChapterPage.svelte";
 	import { isDrawerFixed } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
 	import { isDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
@@ -18,6 +20,10 @@
 		unregister();
 	});
 </script>
+
+<!--
+<ChapterPagesTest data={$chap} />
+-->
 
 {#if $isFixed && !$open}
 	<OpenMenuButton left={$isSidebarRtl} />

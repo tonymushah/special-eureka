@@ -27,7 +27,7 @@ impl ChapterPagesQuery {
         log::trace!("Passing rate limit");
         ctx.get_app_handle::<tauri::Wry>()?
             .get_specific_rate_limit()?
-            .at_home()
+            .at_home(&self.id)
             .await;
         log::trace!("Rate limit passed");
         let id = self.id;

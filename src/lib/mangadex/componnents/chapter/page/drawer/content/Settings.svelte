@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ImageFit from "./settings/ImageFit.svelte";
 	import LongstripImageWidth from "./settings/LongstripImageWidth.svelte";
+	import ProgressSettings from "./settings/ProgressSettings.svelte";
 	import ReadingDirection from "./settings/ReadingDirection.svelte";
 	import ReadingModeButton from "./settings/ReadingModeButton.svelte";
 	import ResetZoom from "./settings/ResetZoom.svelte";
@@ -14,6 +15,7 @@
 	<ImageFit />
 	<LongstripImageWidth />
 	<SideBarSettings />
+	<ProgressSettings />
 </section>
 
 <style lang="scss">

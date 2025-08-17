@@ -3,16 +3,7 @@ import type { PageLoad } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
 import { route } from "$lib/ROUTES";
 import getClient from "@mangadex/gql/urql/getClient";
-
-const query = graphql(`
-	query randomTitle($options: MangaRandomParams) {
-		manga {
-			random(params: $options) {
-				id
-			}
-		}
-	}
-`);
+import query from "@mangadex/gql-docs/title/random";
 
 export const load: PageLoad = async function () {
 	const client = await getClient();

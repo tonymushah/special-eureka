@@ -10,7 +10,7 @@ use std::future::Future;
 use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
     rate_limit::SpecificRateLimits,
-    utils::{refresh_token::RefreshTokenTask, watch::SendData},
+    utils::{chapter::ChapterPagesStore, refresh_token::RefreshTokenTask, watch::SendData},
 };
 
 use super::{store::MangaDexStoreState, watch::Watches};
@@ -109,6 +109,14 @@ where
     fn get_specific_rate_limit(&self) -> crate::Result<State<'_, SpecificRateLimits>> {
         self.try_state()
             .ok_or(crate::Error::NotManagedSpecificRateLimit)
+    }
+    fn get_chapter_pages_store(&self) -> State<'_, std::sync::RwLock<ChapterPagesStore>> {
+        if let Some(d) = self.try_state() {
+            d
+        } else {
+            self.manage(std::sync::RwLock::<ChapterPagesStore>::default());
+            self.state()
+        }
     }
 }
 

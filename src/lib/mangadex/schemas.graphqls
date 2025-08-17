@@ -309,9 +309,15 @@ type ChapterImageFetchingStatus {
 	len: Int!
 }
 
+type ChapterImageSize {
+	width: Int!
+	height: Int!
+}
+
 type ChapterLayoutStore {
 	sidebar: SidebarMode!
 	drawer: DrawerMode!
+	progress: ProgressMode!
 }
 
 input ChapterListParams {
@@ -381,11 +387,42 @@ type ChapterMutations {
 	remove(id: UUID!): Boolean!
 	download(id: UUID!, quality: DownloadMode): DownloadState!
 	cancelDownload(id: UUID!): Boolean!
+	pagesCache(id: UUID!, mode: DownloadMode): ChapterPagesStoreMutation!
+}
+
+"""
+The sub object
+"""
+type ChapterPage {
+	"""
+	Page index
+	"""
+	index: Int!
+	"""
+	total pages that should be sent
+	"""
+	pages: Int!
+	"""
+	Page url (this one should points to an internal scheme)
+	"""
+	url: Url!
+	"""
+	This image size (if available)
+	"""
+	size: ChapterImageSize
 }
 
 type ChapterPages {
 	data: [Url!]!
 	dataSaver: [Url!]!
+}
+
+type ChapterPagesStoreMutation {
+	fetchMetadata: Boolean!
+	startCaching: Boolean!
+	refetchPage(page: Int!): Boolean!
+	resendPage(page: Int!): Boolean!
+	resendAll: Boolean!
 }
 
 type ChapterQueries {
@@ -1838,6 +1875,12 @@ input PrimaryColorInput {
 	primary2: String!
 }
 
+enum ProgressMode {
+	DEFAULT
+	FLOATING
+	HIDDEN
+}
+
 type Query {
 	manga: MangaQueries!
 	apiClient: ApiClientQueries!
@@ -2231,6 +2274,7 @@ type Subscriptions {
 	watchChapterQuality: DownloadMode!
 	watchPageLimit: Int!
 	watchChapterLayout: ChapterLayoutStore!
+	getChapterPages(chapter: UUID!, mode: DownloadMode): ChapterPage!
 }
 
 type Tag {
@@ -2473,7 +2517,7 @@ type UserOptionMutations {
 	setOfflineConfig(cfg: OfflineConfigInput!): OfflineConfigObject!
 	setChapterQuality(quality: DownloadMode): DownloadMode!
 	setPageLimit(value: Int): Int
-	setChapterLayout(sidebar: SidebarMode, drawer: DrawerMode): ChapterLayoutStore!
+	setChapterLayout(sidebar: SidebarMode, drawer: DrawerMode, progress: ProgressMode): ChapterLayoutStore!
 }
 
 type UserOptionQueries {

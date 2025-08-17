@@ -32,6 +32,7 @@ fern = "0.7"
 regex = "1"
 futures-util = "0.3"
 deduplicate = "0.4.1"
+image = "0"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"

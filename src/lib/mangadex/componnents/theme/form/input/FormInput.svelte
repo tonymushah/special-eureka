@@ -3,14 +3,14 @@
 	import type { HTMLInputAttributes } from "svelte/elements";
 
 	interface Props {
-		inputProps?: HTMLInputAttributes;
+		inputProps?: Omit<HTMLInputAttributes, "value">;
 		value?: any;
 		widthFull?: boolean;
 		element?: AnyMeltElement;
 	}
 
 	let {
-		inputProps = {},
+		inputProps,
 		value = $bindable(undefined),
 		widthFull = false,
 		element = emptyMeltElement

@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
-	import { getChapterImageContext } from "../../contexts/images";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
 	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
+	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
+	import { derived as der } from "svelte/store";
+	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import ChapterPages from "@mangadex/stores/chapter/pages";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
@@ -19,13 +22,18 @@
 
 	let { onnext, onprevious }: Props = $props();
 
-	const images_context = getChapterImageContext();
+	const images = getCurrentChapterImages();
+
+	const images_len = der(images, ($images) => $images.pagesLen);
+
 	let next = $derived(function () {
-		if ($currentChapterPage < $images_context.length - 1) {
-			resetZoom();
-			$currentChapterPage++;
-		} else {
-			onnext?.();
+		if ($images_len) {
+			if ($currentChapterPage < $images_len - 1) {
+				resetZoom();
+				$currentChapterPage++;
+			} else {
+				onnext?.();
+			}
 		}
 	});
 	let previous = $derived(function () {
@@ -36,7 +44,7 @@
 			onprevious?.();
 		}
 	});
-	let current_page = $derived($images_context.at($currentChapterPage));
+	let current_page = $derived($images.getPageState($currentChapterPage));
 	/*
 	$: previous_p = $images_context[$currentChapterPage - 1];
 	$: next_p = $images_context[$currentChapterPage + 1];
@@ -94,7 +102,24 @@
 -->
 {#if current_page}
 	<div class="single-page">
-		<ZoomableImage src={current_page} alt={current_page} />
+		{#if current_page.page}
+			{@const page = current_page.page}
+			<ZoomableImage src={page.value} alt={page.value} />
+		{:else}
+			{@const error = current_page.error}
+			<div class="error">
+				<div class="inner_">
+					<p>{error.name} ({error.message})</p>
+					<DangerButtonOnlyLabel
+						label="Retry"
+						onclick={() => {
+							ChapterPages.removePageError(images, $currentChapterPage);
+							images.refetchChapterPage($currentChapterPage);
+						}}
+					/>
+				</div>
+			</div>
+		{/if}
 	</div>
 {/if}
 
@@ -102,5 +127,12 @@
 	.single-page {
 		height: 100%;
 		display: contents;
+	}
+	.error {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
 	}
 </style>

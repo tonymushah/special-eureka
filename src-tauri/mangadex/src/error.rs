@@ -1,3 +1,5 @@
+use std::{backtrace::Backtrace, ops::Deref};
+
 use async_graphql::ErrorExtensions;
 
 use crate::utils::refresh_token::AbstractRefreshTokenDedupError;
@@ -133,6 +135,14 @@ pub enum Error {
     NoDeduplicateTask,
     #[error(transparent)]
     TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
+    #[error("Some Mutex or RwLock has been poisoned")]
+    SyncPoison,
+    #[error(transparent)]
+    TokioTryLock(#[from] tokio::sync::TryLockError),
+    #[error(transparent)]
+    Image(#[from] image::ImageError),
+    #[error(transparent)]
+    Regex(#[from] regex::Error),
 }
 
 impl Error {
@@ -151,6 +161,83 @@ impl ErrorExtensions for Error {
     fn extend(&self) -> async_graphql::Error {
         async_graphql::Error::new(format!("{self}")).extend_with(|_err, exts| {
             exts.set("code", ErrorKind::from(self).repr());
+            exts.set("backtrace", Backtrace::capture().to_string());
+            match self {
+                Self::Reqwest(err)
+                | Self::MangadexApi(mangadex_api_types_rust::error::Error::RequestError(err)) => {
+                    if let Some(url) = err.url() {
+                        exts.set("url", url.to_string());
+                    }
+                    if let Some(status) = err.status() {
+                        exts.set("status", status.as_str());
+                    }
+                }
+                Self::MangadexApi(mangadex_api_types_rust::error::Error::Api(api)) => {
+                    exts.set(
+                        "status",
+                        api.errors.iter().map(|d| d.status).collect::<Vec<_>>(),
+                    );
+                    exts.set(
+                        "request_id",
+                        api.errors
+                            .iter()
+                            .map(|d| d.id.to_string())
+                            .collect::<Vec<_>>(),
+                    );
+                    exts.set(
+                        "details",
+                        api.errors
+                            .iter()
+                            .flat_map(|d| d.detail.clone())
+                            .collect::<Vec<_>>(),
+                    );
+                    exts.set(
+                        "titles",
+                        api.errors
+                            .iter()
+                            .flat_map(|d| d.title.clone())
+                            .collect::<Vec<_>>(),
+                    );
+                }
+                Self::MangadexApi(mangadex_api_types_rust::error::Error::ServerError(
+                    status,
+                    detail,
+                )) => {
+                    exts.set("status", *status);
+                    exts.set("detail", detail.clone());
+                }
+                _ => {}
+            }
         })
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct ErrorWrapper(std::sync::Arc<Error>);
+
+impl<E> From<E> for ErrorWrapper
+where
+    E: Into<Error>,
+{
+    fn from(value: E) -> Self {
+        Self(std::sync::Arc::new(value.into()))
+    }
+}
+
+impl AsRef<Error> for ErrorWrapper {
+    fn as_ref(&self) -> &Error {
+        self.0.deref()
+    }
+}
+
+impl ErrorWrapper {
+    pub fn into_inner(self) -> Option<Error> {
+        std::sync::Arc::into_inner(self.0)
+    }
+}
+
+impl From<ErrorWrapper> for async_graphql::Error {
+    fn from(value: ErrorWrapper) -> Self {
+        value.0.extend()
     }
 }

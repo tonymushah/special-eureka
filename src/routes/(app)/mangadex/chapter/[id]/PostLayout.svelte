@@ -61,7 +61,6 @@
 	import { initCurrentChapterReadingMode } from "@mangadex/componnents/chapter/page/contexts/currentChapterReadingMode";
 	import { initChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import { initCurrentChapterImageFit } from "@mangadex/componnents/chapter/page/contexts/imageFit";
-	import { initChapterImageContext } from "@mangadex/componnents/chapter/page/contexts/images";
 	import { initIsDrawerFixedWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerFixed";
 	import { initIsDrawerOpenWritable } from "@mangadex/componnents/chapter/page/contexts/isDrawerOpen";
 	import { initCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
@@ -69,20 +68,20 @@
 		initRelatedChapters,
 		type RelatedChapter
 	} from "@mangadex/componnents/chapter/page/contexts/relatedChapters";
-	import initDoublePageContexts from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/contexts";
 	import { initLongStripImagesWidthContext } from "@mangadex/componnents/chapter/page/readinMode/longStrip/utils/context/longstrip_images_width";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import imageFitWritable from "@mangadex/gql-docs/chapter/layout-query/imageFit";
+	import longstripImageWidthWritable from "@mangadex/gql-docs/chapter/layout-query/longstripImageWidth";
+	import readingDirectionWritable from "@mangadex/gql-docs/chapter/layout-query/pageDirection";
+	import readingModeWritable from "@mangadex/gql-docs/chapter/layout-query/readingMode";
+	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
+	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
+	import { DrawerMode } from "@mangadex/gql/graphql";
+	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { getContextClient } from "@urql/svelte";
 	import { derived, writable } from "svelte/store";
 	import type { LayoutData } from "./$types";
-	import imageFitWritable from "./layout-query/imageFit";
-	import longstripImageWidthWritable from "./layout-query/longstripImageWidth";
-	import readingDirectionWritable from "./layout-query/pageDirection";
-	import readingModeWritable from "./layout-query/readingMode";
-	import relatedChaptersQuery from "./layout-query/related";
-	import chapterPageThread from "./layout-query/thread";
-	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
-	import { DrawerMode } from "@mangadex/gql/graphql";
 
 	interface Props {
 		data: LayoutData;
@@ -113,11 +112,7 @@
 		}
 	});
 	const opened = initIsDrawerOpenWritable(writable(false));
-	const images = initChapterImageContext();
 
-	$effect(() => {
-		images.set(data.pages.data);
-	});
 	const currentChapterData = initCurrentChapterData(
 		writable(layoutDataToCurrentChapterData(data))
 	);
@@ -140,6 +135,9 @@
 			})
 			.toPromise()
 			.then((res) => {
+				if (res.error) {
+					throw res.error;
+				}
 				const rel = res.data?.manga.aggregate.default.volumes.flatMap(
 					({ volume, chapters }) =>
 						chapters.map<RelatedChapter>(({ chapter, ids }) => ({
@@ -152,7 +150,9 @@
 					related.set(rel);
 				}
 			})
-			.catch(console.error);
+			.catch((e) => {
+				addErrorToast("Cannot get related chapters", e);
+			});
 	});
 	$effect(() => {
 		client
@@ -175,9 +175,10 @@
 					}
 				}
 			})
-			.catch(console.error);
+			.catch((e) => {
+				addErrorToast("Cannot fetch chapter comments data", e);
+			});
 	});
-	initDoublePageContexts();
 </script>
 
 {@render children?.()}

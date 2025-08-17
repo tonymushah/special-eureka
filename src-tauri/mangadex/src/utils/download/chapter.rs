@@ -1,7 +1,8 @@
 use actix::Addr;
 use eureka_mmanager::{
+    DownloadManager,
     download::{
-        chapter::{task::DownloadMode, ChapterDownloadMessage},
+        chapter::{ChapterDownloadMessage, task::DownloadMode},
         state::DownloadMessageState,
     },
     history::service::messages::is_in::IsInMessage,
@@ -9,7 +10,6 @@ use eureka_mmanager::{
         AsyncCanBeWaited, ChapterDownloadManager, GetManager, GetManagerStateData, HistoryEntry,
         TaskManagerAddr,
     },
-    DownloadManager,
 };
 use mangadex_api_schema_rust::v5::ChapterObject;
 use mangadex_api_types_rust::RelationshipType;
@@ -46,7 +46,7 @@ where
     R: Runtime,
     M: Manager<R> + Sync,
 {
-    app.get_specific_rate_limit()?.at_home().await;
+    app.get_specific_rate_limit()?.at_home(&id).await;
     let offline_app_state = (**app.get_offline_app_state()?).clone().read_owned().await;
     let Some(manager) = (*offline_app_state).as_ref().map(|d| d.app_state.clone()) else {
         return Err(crate::Error::OfflineAppStateNotLoaded);

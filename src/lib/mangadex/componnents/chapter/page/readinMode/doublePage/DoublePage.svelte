@@ -8,18 +8,30 @@
 	import { resetZoom } from "../../contexts/resetZoomEventTarget";
 	import { chapterKeyBindingsStore } from "../../stores/keyBindings";
 	import ZoomableImage from "../zoomableImage/ZoomableImage.svelte";
-	import getChapterDoublePageCurrentPage from "./utils/getChapterDoublePageCurrentPage";
 	import getChapterDoublePageCurrentPageIndex from "./utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "./utils/getChapterDoublePageIndexes";
-	import getChapterImagesAsDoublePage from "./utils/getChapterImagesAsDoublePage";
+	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
+	import type { DoublePageState } from "@mangadex/stores/chapter/pages";
+	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import ChapterPages from "@mangadex/stores/chapter/pages";
 
 	const readingDirection = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
-	const currentPage = getChapterDoublePageCurrentPage();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
-	const images = getChapterImagesAsDoublePage();
-	const images_length = derived(images, ($imgs) => $imgs.length);
+	const images = getCurrentChapterImages();
+	const images_length = derived(images, ($imgs) => $imgs.pagesAsDoublePageIndexes().length);
+	const currentPage = derived(
+		[images, currentPageIndex, readingDirection],
+		([$imgs, $index, $direction]) => {
+			const doublePageMaybe = $imgs.getDoublePageState($index);
+			if (isArray(doublePageMaybe) && $readingDirection == Direction.Rtl) {
+				return [doublePageMaybe[1], doublePageMaybe[0]] satisfies DoublePageState;
+			} else {
+				return doublePageMaybe satisfies DoublePageState;
+			}
+		}
+	);
 
 	interface Events {
 		onnext?: () => any;
@@ -122,12 +134,132 @@
 
 {#if $currentPage}
 	<div class="double-page">
-		<ZoomableImage src={$currentPage} alt={$currentPage} />
+		{#if isArray($currentPage)}
+			{@const p1 = $currentPage[0]}
+			{@const p2 = $currentPage[1]}
+			{#if p1?.page && p2?.page}
+				<ZoomableImage
+					src={[p1.page.value, p2.page.value]}
+					alt={[p1.page.value, p2.page.value]}
+				/>
+			{:else}
+				<div class="disabled-zoom">
+					{#if p1?.page}
+						<ZoomableImage src={p1.page.value} alt={p1.page.value} noZoom />
+					{:else if p1?.error}
+						<div class="error">
+							<div class="_inner">
+								<p>{p1.error.name} ({p1.error.message})</p>
+								<DangerButtonOnlyLabel
+									label="Error"
+									onclick={() => {
+										const pageIndex = $images_indexes.at($currentPageIndex);
+										if (isArray(pageIndex)) {
+											ChapterPages.removePageError(
+												images,
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 0 : 1
+												]
+											);
+											images.refetchChapterPage(
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 0 : 1
+												]
+											);
+										} else if (typeof pageIndex == "number") {
+											ChapterPages.removePageError(images, pageIndex);
+											images.refetchChapterPage(pageIndex);
+										}
+									}}
+								/>
+							</div>
+						</div>
+					{:else}
+						<div class="error">
+							<div class="_inner">Loadign...</div>
+						</div>
+					{/if}
+
+					{#if p2?.page}
+						<ZoomableImage src={p2.page.value} alt={p2.page.value} noZoom />
+					{:else if p2?.error}
+						<div class="error">
+							<div class="_inner">
+								<p>{p2.error.name} ({p2.error.message})</p>
+								<DangerButtonOnlyLabel
+									label="Error"
+									onclick={() => {
+										const pageIndex = $images_indexes.at($currentPageIndex);
+										if (isArray(pageIndex)) {
+											ChapterPages.removePageError(
+												images,
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 1 : 0
+												]
+											);
+											images.refetchChapterPage(
+												pageIndex[
+													$readingDirection == Direction.Ltr ? 1 : 0
+												]
+											);
+										} else if (typeof pageIndex == "number") {
+											ChapterPages.removePageError(images, pageIndex);
+											images.refetchChapterPage(pageIndex);
+										}
+									}}
+								/>
+							</div>
+						</div>
+					{:else}
+						<div class="error">
+							<div class="_inner">Loadign...</div>
+						</div>
+					{/if}
+				</div>
+			{/if}
+		{:else if typeof $currentPage == "object"}
+			{@const p1 = $currentPage}
+			{#if p1.page}
+				<ZoomableImage src={p1.page.value} alt={p1.page.value} />
+			{:else if p1.error}
+				<div class="error">
+					<div class="_inner">
+						<p>{p1.error.name} ({p1.error.message})</p>
+						<DangerButtonOnlyLabel
+							label="Error"
+							onclick={() => {
+								const pageIndex = $images_indexes.at($currentPageIndex);
+								if (typeof pageIndex == "number") {
+									ChapterPages.removePageError(images, pageIndex);
+									images.refetchChapterPage(pageIndex);
+								}
+							}}
+						/>
+					</div>
+				</div>
+			{/if}
+		{:else}
+			<div class="error">
+				<div class="_inner">Loadign...</div>
+			</div>
+		{/if}
 	</div>
 {/if}
 
 <style lang="scss">
 	div {
 		display: contents;
+	}
+	div.disabled-zoom {
+		display: grid;
+		grid-template-columns: 50% 50%;
+		grid-template-columns: 100%;
+	}
+	.error {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		width: 100%;
 	}
 </style>

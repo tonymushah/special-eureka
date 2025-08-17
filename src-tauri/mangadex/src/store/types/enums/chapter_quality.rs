@@ -27,6 +27,7 @@ use crate::store::{
     Enum,
     Serialize_repr,
     Deserialize_repr,
+    Hash,
 )]
 pub enum DownloadMode {
     #[default]

@@ -4,7 +4,6 @@
 <script lang="ts">
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
-	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
 
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
@@ -14,12 +13,17 @@
 	import { slide } from "svelte/transition";
 	import { Direction as ReadingDirection } from "@mangadex/gql/graphql";
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
+	import type { DoublePageIndex } from "@mangadex/stores/chapter/pages";
+	import getCurrentChapterImages from "@mangadex/componnents/chapter/page/utils/getCurrentChapterImages";
 
 	const readingDirection = getCurrentChapterDirection();
-	type Page = [number, number] | number;
+	type Page = DoublePageIndex;
 	const currentPageContext = getChapterCurrentPageContext();
+	const images = getCurrentChapterImages();
+	const doublePages = derived(images, ($images) => $images.pagesAsDoublePageIndexes());
+	const currentDoublePageIndex = getChapterDoublePageCurrentPageIndex();
 	const currentPageSelectedReadable = derived(
-		[getChapterDoublePageCurrentPageIndex(), getChapterDoublePageIndexes(), readingDirection],
+		[currentDoublePageIndex, doublePages, readingDirection],
 		([$index, $pages, $dir]) => {
 			const value = $pages[$index];
 			const label = isArray(value)
@@ -31,7 +35,7 @@
 			} as SelectOption<Page>;
 		}
 	);
-	const options = derived([getChapterDoublePageIndexes(), readingDirection], ([$images, $dir]) =>
+	const options = derived([doublePages, readingDirection], ([$images, $dir]) =>
 		$images.map<SelectOption<[number, number] | number>>((value) => ({
 			value,
 			label: isArray(value)

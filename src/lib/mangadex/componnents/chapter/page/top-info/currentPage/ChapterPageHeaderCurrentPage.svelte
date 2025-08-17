@@ -4,16 +4,17 @@
 	import { derived, readable } from "svelte/store";
 	import { getCurrentChapterReadingMode } from "../../contexts/currentChapterReadingMode";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
-	import { getChapterImageContext } from "../../contexts/images";
 	import getChapterDoublePageCurrentPageIndex from "../../readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "../../readinMode/doublePage/utils/getChapterDoublePageIndexes";
 	import { getCurrentChapterDirection } from "../../contexts/readingDirection";
+	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	function getCurrentPageIndex() {
 		try {
 			const readingMode = getCurrentChapterReadingMode();
 			const currentPage = getChapterCurrentPageContext();
-			const currentPageDouble = getChapterDoublePageCurrentPageIndex(currentPage);
+			const currentPageDouble = getChapterDoublePageCurrentPageIndex();
 			const currentPageIndexes = getChapterDoublePageIndexes();
 			const readingDirection = getCurrentChapterDirection();
 			return derived(
@@ -41,11 +42,12 @@
 	}
 	function getCurrentImagesLength() {
 		try {
-			const images = getChapterImageContext();
+			const images = getCurrentChapterImages();
 			return derived(images, ($is) => {
-				return `${$is.length}`;
+				return `${$is.pagesLen ?? "??"}`;
 			});
 		} catch (error) {
+			addErrorToast("Error", error);
 			return readable("??");
 		}
 	}

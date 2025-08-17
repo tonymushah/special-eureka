@@ -1,4 +1,5 @@
 <script lang="ts">
+	import "./styles.css";
 	import SelectionArea from "@viselect/vanilla";
 	import { validate } from "uuid";
 	import { uniq } from "lodash";
@@ -106,12 +107,11 @@
 
 <svelte:window
 	onkeydown={(e) => {
-		e.preventDefault();
-		console.log(e.key);
 		if (e.key == "Control") {
+			e.preventDefault();
 			canSelect = true;
 		} else if (e.key == "a" && canSelect && container) {
-			console.log("select all");
+			e.preventDefault();
 			[".manga-element", ".chapter-element"]
 				.map((d) => container.querySelectorAll(d))
 				.forEach((d) => {
@@ -132,9 +132,4 @@
 />
 
 <style lang="scss">
-	:global(.chapter-feed-selecto-area) {
-		background: rgba(108, 115, 255, 0.5);
-		border: 1px solid rgb(62, 99, 221);
-		border-radius: 0.15em;
-	}
 </style>

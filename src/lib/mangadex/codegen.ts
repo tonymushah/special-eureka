@@ -5,8 +5,9 @@ const config: CodegenConfig = {
 	documents: [
 		"./src/lib/mangadex/**/*.svelte",
 		"./src/lib/mangadex/**/*.ts",
-		"./src/routes/mangadex/**/*.svelte",
-		"./src/routes/mangadex/**/*.ts"
+		// TODO fix this 
+		//"./src/routes/(app)/mangadex/**/*.svelte",
+		//"./src/routes/(app)/mangadex/**/*.ts"
 	],
 	ignoreNoDocuments: false, // for better experience with the watcher
 	generates: {

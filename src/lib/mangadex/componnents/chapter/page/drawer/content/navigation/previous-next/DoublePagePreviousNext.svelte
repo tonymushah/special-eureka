@@ -2,7 +2,6 @@
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
 	import getChapterDoublePageCurrentPageIndex from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageCurrentPageIndex";
 	import getChapterDoublePageIndexes from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterDoublePageIndexes";
-	import getChapterImagesAsDoublePage from "@mangadex/componnents/chapter/page/readinMode/doublePage/utils/getChapterImagesAsDoublePage";
 
 	import { getCurrentChapterDirection } from "@mangadex/componnents/chapter/page/contexts/readingDirection";
 	import { resetZoom } from "@mangadex/componnents/chapter/page/contexts/resetZoomEventTarget";
@@ -11,14 +10,15 @@
 	import { ceil, isArray, noop, random } from "lodash";
 	import { onMount, type Snippet } from "svelte";
 	import { ArrowLeftIcon, ArrowRightIcon } from "svelte-feather-icons";
-	import { derived } from "svelte/store";
+	import { derived as der } from "svelte/store";
+	import getCurrentChapterImages from "@mangadex/componnents/chapter/page/utils/getCurrentChapterImages";
 
+	const chapterPages = getCurrentChapterImages();
 	const direction = getCurrentChapterDirection();
 	const currentChapterPage = getChapterCurrentPageContext();
 	const currentPageIndex = getChapterDoublePageCurrentPageIndex();
 	const images_indexes = getChapterDoublePageIndexes();
-	const images = getChapterImagesAsDoublePage();
-	const images_length = derived(images, ($imgs) => $imgs.length);
+	const images_length = der(images_indexes, ($imgs) => $imgs.length);
 
 	interface Events {
 		onnext?: () => any;
@@ -30,13 +30,17 @@
 	}
 
 	let { onnext, onprevious, children }: Props = $props();
+	let disabled = $derived($chapterPages.pagesLen == undefined);
 
 	/// BUG or more like shit code xd
 	/// Required or else the component may not work proprely
 	onMount(() => images_indexes.subscribe(noop));
-	onMount(() => images.subscribe(noop));
+	// onMount(() => images.subscribe(noop));
 	onMount(() => currentPageIndex.subscribe(noop));
 	function next() {
+		if (disabled) {
+			return;
+		}
 		if ($currentPageIndex < $images_length - 1) {
 			resetZoom();
 			currentChapterPage.update((i) => {
@@ -54,6 +58,9 @@
 		}
 	}
 	function previous() {
+		if (disabled) {
+			return;
+		}
 		if ($currentPageIndex > 0) {
 			resetZoom();
 			currentChapterPage.update((i) => {
@@ -97,12 +104,12 @@
 	const variant = "2";
 </script>
 
-<ButtonAccent {variant} onclick={onPrevious}>
+<ButtonAccent {variant} onclick={onPrevious} {disabled}>
 	<ArrowLeftIcon />
 </ButtonAccent>
 
 {@render children?.()}
 
-<ButtonAccent {variant} onclick={onNext}>
+<ButtonAccent {variant} onclick={onNext} {disabled}>
 	<ArrowRightIcon />
 </ButtonAccent>

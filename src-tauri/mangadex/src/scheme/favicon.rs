@@ -1,5 +1,5 @@
-use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_TYPE};
-use tauri::{http::Request, http::StatusCode, AppHandle, Runtime};
+use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE};
+use tauri::{AppHandle, Runtime, http::Request, http::StatusCode};
 use url::Url;
 
 use super::{SchemeResponseError, SchemeResponseResult};
@@ -34,6 +34,7 @@ pub fn handle_favicon<'a, R: Runtime>(
         .status(StatusCode::OK)
         .header(CONTENT_TYPE, "image/*")
         .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        .header(CONTENT_LENGTH, format!("{}", bytes.len()).as_str())
         .body(bytes.into())
         .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
 }

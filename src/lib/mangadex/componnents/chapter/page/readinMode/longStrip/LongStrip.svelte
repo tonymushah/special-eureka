@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { derived, writable, type Readable } from "svelte/store";
-	import { getChapterImageContext } from "../../contexts/images";
 	import { getLongStripImagesWidthContext } from "./utils/context/longstrip_images_width";
 	import { onMount } from "svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
+	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
+	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import ChapterPages from "@mangadex/stores/chapter/pages";
 
 	interface Props {
 		innerOverflow?: boolean;
@@ -15,7 +17,9 @@
 	let { innerOverflow = true, top, bottom }: Props = $props();
 	const currentChapterPage = getChapterCurrentPageContext();
 	let longstrip_root: HTMLDivElement | undefined = undefined;
-	const images = getChapterImageContext();
+	const images_root_data = getCurrentChapterImages();
+	const images = derived(images_root_data, ($data) => $data.getPagesState());
+
 	const imageWidth = derived(getLongStripImagesWidthContext(), ($width) => {
 		if ($width == 0) {
 			return 100;
@@ -105,7 +109,29 @@
 	{@render top?.()}
 	{#each $images as image, page}
 		<div data-page={page} use:mount class="image">
-			<img data-page={page} src={image} alt={image} width="{$imageWidth}%" />
+			{#if image?.page}
+				<img
+					data-page={page}
+					src={image.page.value}
+					alt={image.page.value}
+					width="{$imageWidth}%"
+				/>
+			{:else if image?.error}
+				<div class="error">
+					<p>{image.error.name} ({image.error.message})</p>
+					<div class="_inner">
+						<DangerButtonOnlyLabel
+							label="Error"
+							onclick={() => {
+								ChapterPages.removePageError(images_root_data, page);
+								images_root_data.refetchChapterPage(page);
+							}}
+						/>
+					</div>
+				</div>
+			{:else}
+				<p>Loadign...</p>
+			{/if}
 		</div>
 	{/each}
 	{@render bottom?.()}
@@ -125,5 +151,11 @@
 		height: 100%;
 		width: 100%;
 		overflow-y: scroll;
+	}
+	.error {
+		display: flex;
+		align-items: center;
+		justify-items: center;
+		flex-direction: column;
 	}
 </style>

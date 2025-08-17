@@ -1,24 +1,3 @@
-import { graphql } from "@mangadex/gql/exports";
+import query from "@mangadex/gql-docs/author/search"
 
-export const query = graphql(`
-	query authorsSearch($params: AuthorListParams!) {
-		author {
-			list(params: $params) {
-				limit
-				offset
-				total
-				data {
-					id
-					attributes {
-						name
-					}
-					relationships {
-						works {
-							id
-						}
-					}
-				}
-			}
-		}
-	}
-`);
+export { query as default, query };

@@ -7,6 +7,7 @@ use crate::app_state::{LastTimeTokenWhenFecthed, OfflineAppState};
 use self::{store::MangaDexStoreState, watch::Watches};
 
 pub mod abort;
+pub mod chapter;
 pub mod collection;
 pub mod download;
 pub mod download_state;

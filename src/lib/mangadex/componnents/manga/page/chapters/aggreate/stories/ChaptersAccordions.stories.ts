@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/svelte";
+import type { Meta, StoryObj } from "@storybook/sveltekit";
 import "@fontsource/poppins/latin.css";
 import testData from "@mangadex/componnents/chapter/base/element1/test-data.json";
 import ChaptersAccordions from "../ChaptersAccordion.svelte";

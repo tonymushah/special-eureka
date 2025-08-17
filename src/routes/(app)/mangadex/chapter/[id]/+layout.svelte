@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { LayoutData } from "./$types";
 	import PostLayout from "./PostLayout.svelte";
+	import { navigating } from "$app/state";
 
 	interface Props {
 		data: LayoutData;
@@ -8,19 +9,27 @@
 	}
 
 	let { data = $bindable(), children }: Props = $props();
-	function isLayoutDataValid({ data, pages, currentPage }: LayoutData): boolean {
-		if (data != null && data != undefined && pages != undefined && currentPage != undefined) {
+	function isLayoutDataValid({ data, currentPage }: LayoutData): boolean {
+		if (data != null && data != undefined && currentPage != undefined) {
 			return true;
 		}
 		return false;
 	}
+	let isLoading = $state(false);
 	$effect(() => {
-		console.debug(data);
+		Promise.resolve()
+			.then(() => (isLoading = true))
+			.then(() => navigating.complete)
+			.finally(() => (isLoading = false));
 	});
 	let isDataValid = $derived(isLayoutDataValid(data));
 </script>
 
-{#if isDataValid}
+{#if isLoading}
+	<div class="loading">
+		<h1>Loading chapter...</h1>
+	</div>
+{:else if isDataValid}
 	<PostLayout bind:data>
 		{@render children?.()}
 	</PostLayout>
@@ -52,5 +61,12 @@
 		.hate-js {
 			font-style: italic;
 		}
+	}
+	.loading {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

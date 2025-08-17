@@ -2,71 +2,7 @@ import { graphql } from "@mangadex/gql/exports";
 import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
-
-const query = graphql(`
-	query groupPageQuery($id: UUID!) {
-		scanlationGroup {
-			getUnique(id: $id) {
-				id
-				attributes {
-					website
-					twitter
-					name
-					altNames
-					ircServer
-					ircChannel
-					contactEmail
-					mangaUpdates
-					focusedLanguages
-					locked
-					official
-					verified
-					exLicensed
-					publishDelay
-					createdAt
-					description
-					discord
-				}
-				relationships {
-					leader {
-						id
-						attributes {
-							roles
-							username
-						}
-					}
-					members {
-						id
-						attributes {
-							roles
-							username
-						}
-					}
-				}
-			}
-		}
-		manga {
-			list(params: { group: $id }) {
-				total
-			}
-		}
-		statistics {
-			group {
-				get(id: $id) {
-					comments {
-						threadUrl
-						repliesCount
-					}
-				}
-			}
-		}
-		chapter {
-			list(params: { groups: [$id] }) {
-				total
-			}
-		}
-	}
-`);
+import query from "@mangadex/gql-docs/group/id"
 
 export const load: LayoutLoad = async function ({ params }) {
 	const id = params.id;

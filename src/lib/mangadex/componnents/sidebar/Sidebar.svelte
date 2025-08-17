@@ -1,21 +1,20 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
+	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import { route } from "$lib/ROUTES";
+	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import { client } from "@mangadex/gql/urql";
 	import { sidebarState as isOpen } from "@mangadex/stores";
-	import SidebarHeader from "./SidebarHeader.svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
+	import { mount, unmount } from "@mangadex/utils/offline_app_state";
+	import goto_sub_menu from "./goto_sub_menu";
 	import SidebarBody from "./SidebarBody.svelte";
 	import SidebarFooter from "./SidebarFooter.svelte";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
-	import { showSidebar } from "./states/showSidebar";
-	import { isSidebarFloating } from "./states/isSidebarFloating";
+	import SidebarHeader from "./SidebarHeader.svelte";
 	import { isSidebarRtl } from "./states/isRtl";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
-	import goto_sub_menu from "./goto_sub_menu";
-	import { goto } from "$app/navigation";
-	import { route } from "$lib/ROUTES";
-	import { delay } from "lodash";
-	import { isMounted } from "@mangadex/stores/offlineIsMounted";
-	import { mount, unmount } from "@mangadex/utils/offline_app_state";
-	import { client } from "@mangadex/gql/urql";
-	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
+	import { isSidebarFloating } from "./states/isSidebarFloating";
+	import { showSidebar } from "./states/showSidebar";
 </script>
 
 <div

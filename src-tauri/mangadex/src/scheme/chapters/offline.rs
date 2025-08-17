@@ -3,16 +3,16 @@ use crate::{
     utils::traits_utils::MangadexTauriManagerExt,
 };
 use eureka_mmanager::prelude::ChapterDataPullAsyncTrait;
-use reqwest::header::CONTENT_TYPE;
+use reqwest::header::{ACCESS_CONTROL_ALLOW_ORIGIN, CONTENT_LENGTH, CONTENT_TYPE};
 use std::{
     io::{self, Write},
     ops::Deref,
     path::Path,
 };
-use tauri::{http::StatusCode, AppHandle, Runtime};
+use tauri::{AppHandle, Runtime, http::StatusCode};
 use uuid::Uuid;
 
-use super::{not_found_chapter_image, ChapterMode};
+use super::{ChapterMode, not_found_chapter_image};
 
 pub struct ChaptersHandlerOffline<'a, R: Runtime> {
     pub app_handle: &'a AppHandle<R>,
@@ -59,7 +59,7 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
     pub fn handle(&'a self) -> SchemeResponseResult<tauri::http::Response<Vec<u8>>> {
         let body = self.get_image()?;
         tauri::http::Response::builder()
-            .header("access-control-allow-origin", "*")
+            .header(ACCESS_CONTROL_ALLOW_ORIGIN, "*")
             .status(StatusCode::OK)
             // TODO Add jpeg mimetype
             .header(
@@ -74,6 +74,7 @@ impl<'a, R: Runtime> ChaptersHandlerOffline<'a, R> {
                 )
                 .as_str(),
             )
+            .header(CONTENT_LENGTH, format!("{}", body.len()).as_str())
             .body(body)
             .map_err(|e| SchemeResponseError::InternalError(Box::new(e)))
     }
