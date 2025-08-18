@@ -72,6 +72,7 @@
 	.content {
 		transition-duration: 0.5s;
 		flex: 4;
+		height: -webkit-fill-available;
 	}
 	aside:not(.open) {
 		border-style: none;

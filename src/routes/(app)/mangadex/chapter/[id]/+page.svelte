@@ -34,11 +34,7 @@
 </main>
 
 <style lang="scss">
-	main:not(.notFixed) {
-		padding-top: 0px;
-	}
-	main.notFixed {
-		padding: 10px;
-		padding-top: 10px;
+	main {
+		display: contents;
 	}
 </style>
