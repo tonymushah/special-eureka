@@ -29,22 +29,50 @@
 </span>
 
 <style lang="scss">
+	:root {
+		--status-percent: 50%;
+		--text-color-percent: 50%;
+	}
 	.groupLeader {
-		color: var(--status-blue);
+		color: color-mix(
+			in srgb,
+			var(--status-blue) var(--status-percent),
+			var(--text-color) var(--text-color-percent)
+		);
 	}
 	.powerUploader {
-		color: var(--status-green);
+		color: color-mix(
+			in srgb,
+			var(--status-green) var(--status-percent),
+			var(--text-color) var(--text-color-percent)
+		);
 	}
 	.mdHome {
-		color: var(--status-blue);
+		color: color-mix(
+			in srgb,
+			var(--status-blue) var(--status-percent),
+			var(--text-color) var(--text-color-percent)
+		);
 	}
 	.contributor {
-		color: var(--indication-blue);
+		color: color-mix(
+			in srgb,
+			var(--indication-blue) var(--status-percent),
+			var(--text-color) var(--text-color-percent)
+		);
 	}
 	.vip {
-		color: var(--status-yellow);
+		color: color-mix(
+			in srgb,
+			var(--status-yellow) var(--status-percent),
+			var(--text-color) var(--text-color-percent)
+		);
 	}
 	.staff {
-		color: var(--status-purple);
+		color: color-mix(
+			in srgb,
+			var(--status-purple) var(--status-percent),
+			var(--text-color) var(--text-color-percent)
+		);
 	}
 </style>
