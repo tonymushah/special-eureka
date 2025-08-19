@@ -268,6 +268,7 @@ impl<R: Runtime> SpawnHandle<R> {
             .get_chapter_images(self.chapter_id)
             .await
             .map_err(crate::Error::from)?;
+
         let data: Vec<(Url, PathBuf)> = at_home
             .data
             .iter()
@@ -317,6 +318,11 @@ impl<R: Runtime> SpawnHandle<R> {
                 }
             })
             .collect();
+
+        if data.is_empty() && data_saver.is_empty() {
+            return Err(FetchingError::ChapterPagesDataNotFound);
+        }
+
         let to_use = match self.mode {
             Mode::Normal => data,
             Mode::DataSaver => data_saver,
@@ -476,7 +482,8 @@ impl<R: Runtime> SpawnHandle<R> {
     }
     async fn start_caching(&mut self) -> Result<(), FetchingError> {
         match self.start_caching_offline().await {
-            Err(FetchingError::OfflineAppStateNotLoaded) => self.start_caching_online().await,
+            Err(FetchingError::OfflineAppStateNotLoaded)
+            | Err(FetchingError::ChapterPagesDataNotFound) => self.start_caching_online().await,
             Err(err) => Err(err),
             _ => Ok(()),
         }
@@ -548,7 +555,8 @@ impl<R: Runtime> SpawnHandle<R> {
     }
     async fn refetch_page(&mut self, page: u32) -> Result<(), FetchingError> {
         match self.refetch_page_offline(page).await {
-            Err(FetchingError::OfflineAppStateNotLoaded) => self.refetch_page_online(page).await,
+            Err(FetchingError::OfflineAppStateNotLoaded)
+            | Err(FetchingError::ChapterPagesDataNotFound) => self.refetch_page_online(page).await,
             Err(err) => Err(err),
             Ok(_) => Ok(()),
         }
