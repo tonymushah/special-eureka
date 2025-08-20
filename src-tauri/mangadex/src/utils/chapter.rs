@@ -38,7 +38,7 @@ use url::Url;
 use uuid::Uuid;
 
 use crate::{
-    store::types::enums::chapter_quality::DownloadMode as Mode,
+    app_state::inner::AppStateInner, store::types::enums::chapter_quality::DownloadMode as Mode,
     utils::traits_utils::MangadexTauriManagerExt,
 };
 
@@ -258,7 +258,7 @@ impl<R: Runtime> SpawnHandle<R> {
             }
         }
     }
-    async fn start_caching_offline(&self) -> Result<(), FetchingError> {
+    async fn get_offline_to_use_pages(&self) -> Result<Vec<(Url, PathBuf)>, FetchingError> {
         let d = self.app_handle.get_offline_app_state()?;
         let read = d.read().await;
         let state = read
@@ -268,6 +268,7 @@ impl<R: Runtime> SpawnHandle<R> {
             .get_chapter_images(self.chapter_id)
             .await
             .map_err(crate::Error::from)?;
+
         let data: Vec<(Url, PathBuf)> = at_home
             .data
             .iter()
@@ -317,46 +318,72 @@ impl<R: Runtime> SpawnHandle<R> {
                 }
             })
             .collect();
+
+        if data.is_empty() && data_saver.is_empty() {
+            return Err(FetchingError::ChapterPagesDataNotFound);
+        }
+
         let to_use = match self.mode {
             Mode::Normal => data,
             Mode::DataSaver => data_saver,
         };
         let to_use = sort::sort_couple(to_use).map_err(crate::Error::from)?;
+        Ok(to_use)
+    }
+    async fn handle_offline_pages(
+        &self,
+        state: &AppStateInner,
+        index: u32,
+        url: Url,
+        path: PathBuf,
+        to_use_len: u32,
+    ) {
+        let page = ChapterPage {
+            index,
+            pages: to_use_len,
+            url,
+            size: async {
+                let mut file = match self.mode {
+                    Mode::DataSaver => state
+                        .get_chapter_image_data_saver(self.chapter_id, path.clone())
+                        .await
+                        .map_err(crate::Error::from)?,
+                    Mode::Normal => state
+                        .get_chapter_image(self.chapter_id, path.clone())
+                        .await
+                        .map_err(crate::Error::from)?,
+                };
+                let mut inner_buf = Vec::<u8>::new();
+                io::copy(&mut BufReader::new(&mut file), &mut inner_buf)?;
+                image::ImageFormat::from_path(&path)
+                    .and_then(|format| image::load_from_memory_with_format(&inner_buf, format))
+                    .map(|img| ChapterImageSize::from_img(&img))
+                    .map_err(crate::Error::from)
+            }
+            .await
+            .inspect_err(|d| {
+                log::error!("{d}");
+            })
+            .ok(),
+        };
+        self.send_message(Ok(page.clone()));
+        if let Ok(mut write) = self.pages.write() {
+            write.insert(index, page);
+        }
+    }
+    async fn start_caching_offline(&self) -> Result<(), FetchingError> {
+        let to_use = self.get_offline_to_use_pages().await?;
         let to_use_len = to_use.len();
 
+        let d = self.app_handle.get_offline_app_state()?;
+        let read = d.read().await;
+        let state = read
+            .as_ref()
+            .ok_or(FetchingError::OfflineAppStateNotLoaded)?;
+
         for (index, (url, path)) in to_use.into_iter().enumerate() {
-            let page = ChapterPage {
-                index: index as u32,
-                pages: to_use_len as u32,
-                url,
-                size: async {
-                    let mut file = match self.mode {
-                        Mode::DataSaver => state
-                            .get_chapter_image_data_saver(self.chapter_id, path.clone())
-                            .await
-                            .map_err(crate::Error::from)?,
-                        Mode::Normal => state
-                            .get_chapter_image(self.chapter_id, path.clone())
-                            .await
-                            .map_err(crate::Error::from)?,
-                    };
-                    let mut inner_buf = Vec::<u8>::new();
-                    io::copy(&mut BufReader::new(&mut file), &mut inner_buf)?;
-                    image::ImageFormat::from_path(&path)
-                        .and_then(|format| image::load_from_memory_with_format(&inner_buf, format))
-                        .map(|img| ChapterImageSize::from_img(&img))
-                        .map_err(crate::Error::from)
-                }
-                .await
-                .inspect_err(|d| {
-                    log::error!("{d}");
-                })
-                .ok(),
-            };
-            self.send_message(Ok(page.clone()));
-            if let Ok(mut write) = self.pages.write() {
-                write.insert(index as u32, page);
-            }
+            self.handle_offline_pages(state, index as u32, url, path, to_use_len as u32)
+                .await;
         }
         Ok(())
     }
@@ -455,7 +482,8 @@ impl<R: Runtime> SpawnHandle<R> {
     }
     async fn start_caching(&mut self) -> Result<(), FetchingError> {
         match self.start_caching_offline().await {
-            Err(FetchingError::OfflineAppStateNotLoaded) => self.start_caching_online().await,
+            Err(FetchingError::OfflineAppStateNotLoaded)
+            | Err(FetchingError::ChapterPagesDataNotFound) => self.start_caching_online().await,
             Err(err) => Err(err),
             _ => Ok(()),
         }
@@ -488,7 +516,24 @@ impl<R: Runtime> SpawnHandle<R> {
         }
         Ok(())
     }
-    async fn refetch_page(&mut self, page: u32) -> Result<(), FetchingError> {
+    async fn refetch_page_offline(&self, page: u32) -> Result<(), FetchingError> {
+        log::debug!("refetch offline");
+        let to_use = self.get_offline_to_use_pages().await?;
+        let to_use_len = to_use.len();
+
+        let d = self.app_handle.get_offline_app_state()?;
+        let read = d.read().await;
+        let state = read
+            .as_ref()
+            .ok_or(FetchingError::OfflineAppStateNotLoaded)?;
+        if let Some((page, (url, path))) = to_use.into_iter().enumerate().nth(page as usize) {
+            self.handle_offline_pages(state, page as u32, url, path, to_use_len as _)
+                .await;
+        }
+        Ok(())
+    }
+    async fn refetch_page_online(&mut self, page: u32) -> Result<(), FetchingError> {
+        log::debug!("refetch online");
         self.check_metadata().await?;
         let at_home = self
             .at_home_server
@@ -507,6 +552,14 @@ impl<R: Runtime> SpawnHandle<R> {
             self.handle_bytes(bytes, file, page, pages_len).await;
         }
         Ok(())
+    }
+    async fn refetch_page(&mut self, page: u32) -> Result<(), FetchingError> {
+        match self.refetch_page_offline(page).await {
+            Err(FetchingError::OfflineAppStateNotLoaded)
+            | Err(FetchingError::ChapterPagesDataNotFound) => self.refetch_page_online(page).await,
+            Err(err) => Err(err),
+            Ok(_) => Ok(()),
+        }
     }
 }
 

@@ -144,7 +144,7 @@
 
 <style lang="scss">
 	:root {
-		--progress-transition-duration: 200ms;
+		--progress-transition-duration: 100ms;
 	}
 	.progress-container {
 		width: 100%;
@@ -165,7 +165,7 @@
 		display: none;
 	}
 	.progress {
-		transform: translate ease-in-out var(--progress-transition-duration);
+		transition: translate ease-in-out var(--progress-transition-duration);
 		width: 100%;
 		padding: 12px 8px;
 		background-color: var(--accent-l1);
@@ -173,7 +173,6 @@
 		flex-direction: row;
 		align-items: center;
 		gap: 8px;
-		z-index: 10;
 		p {
 			margin: 0px;
 		}

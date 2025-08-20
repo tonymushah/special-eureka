@@ -105,6 +105,7 @@
 			"content content content content";
 		div.header {
 			grid-area: header;
+			padding: 10px;
 		}
 		section.content {
 			grid-area: content;
