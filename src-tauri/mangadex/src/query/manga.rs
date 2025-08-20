@@ -146,7 +146,8 @@ impl MangaQueries {
         ctx: &Context<'_>,
         status: Option<ReadingStatus>,
     ) -> Result<Vec<MangaReadingStatusItem>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let mut req = client.manga().status().get();
         if let Some(status) = status {
             req.status(status);
@@ -166,7 +167,8 @@ impl MangaQueries {
         excluded_statuses: Option<Vec<ReadingStatus>>,
     ) -> Result<bool> {
         let excluded_statuses = excluded_statuses.unwrap_or_default();
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let mut statuses = client.manga().status().get().send().await?.statuses;
         statuses.retain(|_, status| {
             if !excluded_statuses.is_empty() {
