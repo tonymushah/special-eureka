@@ -1012,6 +1012,40 @@ export type CurrentLoggedLists = {
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
+export type CurrentUserLibrary = {
+	__typename?: "CurrentUserLibrary";
+	completed: MangaResults;
+	dropped: MangaResults;
+	onHold: MangaResults;
+	planToRead: MangaResults;
+	reReading: MangaResults;
+	reading: MangaResults;
+};
+
+export type CurrentUserLibraryCompletedArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryDroppedArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryOnHoldArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryPlanToReadArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryReReadingArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryReadingArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
 export type CustomList = {
 	__typename?: "CustomList";
 	attributes: CustomListAttributes;
@@ -2048,6 +2082,7 @@ export type MangaQueries = {
 	getDrafts: MangaResults;
 	getMangaStatus: Array<MangaReadingStatusItem>;
 	isDownloaded: DownloadState;
+	isInLibrary: Scalars["Boolean"]["output"];
 	list: MangaResults;
 	listOffline: MangaResults;
 	random: MangaObject;
@@ -2081,6 +2116,11 @@ export type MangaQueriesGetMangaStatusArgs = {
 };
 
 export type MangaQueriesIsDownloadedArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type MangaQueriesIsInLibraryArgs = {
+	excludedStatuses?: InputMaybe<Array<ReadingStatus>>;
 	id: Scalars["UUID"]["input"];
 };
 
@@ -2461,6 +2501,7 @@ export type Query = {
 	home: HomeQueries;
 	infrastructure: InfrastructureQueries;
 	legacy: LegacyQueries;
+	library: CurrentUserLibrary;
 	manga: MangaQueries;
 	oauth: OauthQueries;
 	offlineAppState: OfflineAppStateQueries;
@@ -3231,6 +3272,16 @@ export type UserHistoryEntry = {
 	__typename?: "UserHistoryEntry";
 	chapterId: Scalars["UUID"]["output"];
 	readDate: Scalars["MangaDexDateTime"]["output"];
+};
+
+export type UserLibrarySectionParam = {
+	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	hasAvailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: InputMaybe<MangaSortOrder>;
+	publicationStatus?: InputMaybe<Array<MangaStatus>>;
+	year?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type UserListParam = {

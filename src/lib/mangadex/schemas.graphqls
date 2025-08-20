@@ -802,6 +802,15 @@ input CurrentLoggedLists {
 	limit: Int
 }
 
+type CurrentUserLibrary {
+	completed(param: UserLibrarySectionParam): MangaResults!
+	dropped(param: UserLibrarySectionParam): MangaResults!
+	onHold(param: UserLibrarySectionParam): MangaResults!
+	planToRead(param: UserLibrarySectionParam): MangaResults!
+	reading(param: UserLibrarySectionParam): MangaResults!
+	reReading(param: UserLibrarySectionParam): MangaResults!
+}
+
 type CustomList {
 	id: UUID!
 	attributes: CustomListAttributes!
@@ -1572,6 +1581,7 @@ type MangaQueries {
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
+	isInLibrary(id: UUID!, excludedStatuses: [ReadingStatus!]): Boolean!
 	getDraft(params: GetMangaDraftParams!): MangaObject!
 	getDrafts(params: MangaDraftsParams! = {limit: null, offset: null, state: null, order: null, includes: []}): MangaResults!
 	relationList(params: MangaRelationParam!, listParams: MangaListParams): [MangaRelated!]!
@@ -1907,6 +1917,7 @@ type Query {
 	scanlationGroup: ScanlationGroupQueries!
 	userOption: UserOptionQueries!
 	auth: AuthQuery!
+	library: CurrentUserLibrary!
 }
 
 type RatingItem {
@@ -2475,6 +2486,16 @@ input UserFollowedUserParams {
 type UserHistoryEntry {
 	chapterId: UUID!
 	readDate: MangaDexDateTime!
+}
+
+input UserLibrarySectionParam {
+	offset: Int
+	limit: Int
+	order: MangaSortOrder
+	publicationStatus: [MangaStatus!]
+	year: Int
+	hasAvailableChapters: Boolean
+	excludeContentProfile: Boolean
 }
 
 input UserListParam {
