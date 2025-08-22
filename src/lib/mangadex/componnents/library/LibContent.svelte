@@ -2,17 +2,19 @@
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import MangaList from "@mangadex/componnents/manga/list/MangaList.svelte";
 	import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-	import SortSelector from "@mangadex/componnents/manga/list/sortSelector/SortSelector.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import type { MangaSortOrder, UserLibrarySectionParam } from "@mangadex/gql/graphql";
+	import type { UserLibrarySectionParam } from "@mangadex/gql/graphql";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import { Client, getContextClient } from "@urql/svelte";
 	import { debounce, last, range } from "lodash";
-	import { onDestroy } from "svelte";
-	import { derived, get, writable, type Readable, type Writable } from "svelte/store";
+	import { onDestroy, onMount } from "svelte";
+	import { derived, get, writable } from "svelte/store";
+	import LibContentFilter from "./LibContentFilter.svelte";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import pageLimit from "@mangadex/stores/page-limit";
 
 	const client = getContextClient();
 	const debounce_wait = 450;
@@ -26,7 +28,10 @@
 
 	let { executeSearchQuery, section }: Props = $props();
 	const params = writable<UserLibrarySectionParam>({});
-	const p_p_offline = derived([params], (merged) => merged);
+	const p_p_offline = derived([params, pageLimit], ([$params, $pageLimit]) => {
+		$params.limit = $pageLimit;
+		return $params;
+	});
 	interface InfiniteQueryData {
 		data: MangaListContentItemProps[];
 		offset: number;
@@ -34,7 +39,7 @@
 		total: number;
 	}
 	const infiniteQuery = createInfiniteQuery(
-		derived(p_p_offline, ([$params]) => {
+		derived(p_p_offline, ($params) => {
 			return {
 				queryKey: ["user", "library", section, $params],
 				initialPageParam: [$params],
@@ -80,6 +85,11 @@
 				[string, string, string, UserLibrarySectionParam],
 				[UserLibrarySectionParam]
 			>;
+		})
+	);
+	onMount(() =>
+		defaultContentProfile.subscribe(() => {
+			get(infiniteQuery).refetch();
 		})
 	);
 	const titles = derived(infiniteQuery, (result) => {
@@ -136,41 +146,22 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
-	const sortDer: Readable<MangaSortOrder | undefined> = derived(params, ($params) => {
-		return $params.order ?? undefined;
-	});
-	const sort: Writable<MangaSortOrder | undefined> = {
-		subscribe(run, invalidate) {
-			return sortDer.subscribe(run, invalidate);
-		},
-		set(value) {
-			params.update((param) => {
-				param.order = value;
-				return param;
-			});
-		},
-		update(updater) {
-			params.update((param) => {
-				param.order = updater(param.order ?? undefined);
-				return param;
-			});
-		}
-	};
 </script>
 
 <MangaList list={$titles}>
 	{#snippet additionalContent()}
 		<div class="additional-content">
-			<section>
-				<p>Sort by:</p>
-				<SortSelector {sort} />
-			</section>
+			<LibContentFilter {params} />
 		</div>
 	{/snippet}
 </MangaList>
 
 {#if $infiniteQuery.error}
-	<ErrorComponent label="Error on loading title" error={$infiniteQuery.error} />
+	<ErrorComponent
+		label="Error on loading title"
+		error={$infiniteQuery.error}
+		retry={() => $infiniteQuery.refetch()}
+	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
@@ -192,13 +183,5 @@
 	.additional-content {
 		display: flex;
 		align-items: center;
-		section {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			p {
-				margin: 0px;
-			}
-		}
 	}
 </style>
