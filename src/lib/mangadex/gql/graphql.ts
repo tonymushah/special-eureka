@@ -3292,12 +3292,18 @@ export type UserHistoryEntry = {
 };
 
 export type UserLibrarySectionParam = {
+	artists?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
+	authors?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
+	/** DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`. */
+	createdAtSince?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
 	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
 	hasAvailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
 	limit?: InputMaybe<Scalars["Int"]["input"]>;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 	order?: InputMaybe<MangaSortOrder>;
 	publicationStatus?: InputMaybe<Array<MangaStatus>>;
+	/** DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`. */
+	updatedAtSince?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
 	year?: InputMaybe<Scalars["Int"]["input"]>;
 };
 

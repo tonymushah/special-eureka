@@ -2508,6 +2508,16 @@ input UserLibrarySectionParam {
 	year: Int
 	hasAvailableChapters: Boolean
 	excludeContentProfile: Boolean
+	authors: [UUID!]
+	artists: [UUID!]
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime
 }
 
 input UserListParam {

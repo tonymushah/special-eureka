@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use async_graphql::{Context, InputObject, Object, SimpleObject};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::manga::list::MangaListParams;
-use mangadex_api_types_rust::{MangaSortOrder, MangaStatus, ReadingStatus};
+use mangadex_api_types_rust::{MangaDexDateTime, MangaSortOrder, MangaStatus, ReadingStatus};
 use uuid::Uuid;
 
 use crate::{
@@ -108,6 +108,12 @@ pub struct UserLibrarySectionParam {
     pub year: Option<u16>,
     pub has_available_chapters: Option<bool>,
     pub exclude_content_profile: Option<bool>,
+    pub authors: Option<Vec<Uuid>>,
+    pub artists: Option<Vec<Uuid>>,
+    /// DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+    pub created_at_since: Option<MangaDexDateTime>,
+    /// DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+    pub updated_at_since: Option<MangaDexDateTime>,
 }
 
 impl From<UserLibrarySectionParam> for MangaListParams {
@@ -119,6 +125,10 @@ impl From<UserLibrarySectionParam> for MangaListParams {
             publication_status,
             year,
             has_available_chapters,
+            artists,
+            authors,
+            created_at_since,
+            updated_at_since,
             ..
         } = value;
         Self {
@@ -128,6 +138,10 @@ impl From<UserLibrarySectionParam> for MangaListParams {
             status: publication_status.unwrap_or_default(),
             year,
             has_available_chapters,
+            artists: artists.unwrap_or_default(),
+            authors: authors.unwrap_or_default(),
+            created_at_since,
+            updated_at_since,
             ..Default::default()
         }
     }
