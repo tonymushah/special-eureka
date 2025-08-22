@@ -63,7 +63,13 @@
 {/if}
 
 {#if $queryStore.error}
-	<ErrorComponent error={$queryStore.error} label="Error on fetching config" />
+	<ErrorComponent
+		error={$queryStore.error}
+		label="Error on fetching config"
+		retry={() => {
+			$queryStore.refetch();
+		}}
+	/>
 {/if}
 
 {#if $isMounted}
