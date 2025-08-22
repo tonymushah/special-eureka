@@ -45,11 +45,27 @@
 			});
 		}
 	});
+	initMangaSearchAuthorSearchFetcher(gqlAuthorFetcher);
+	// TODO Find a way to sync this proprely
+	const authorArtistsParam = writable<AuthorArtistOptions>({ artists: [], authors: [] });
+	onMount(() =>
+		authorArtistsParam.subscribe(({ authors, artists }) => {
+			params.update(($params) => {
+				$params.authors = authors.map((author) => author.id);
+				$params.artists = artists.map((artist) => artist.id);
+				return $params;
+			});
+		})
+	);
+	initMangaSearchAuthorArtistsOptions(authorArtistsParam);
 	const availableChapterCheckId = v4();
 	const excludeContentProfileId = v4();
 </script>
 
 <section class="filter-content">
+	<div class="row">
+		<AuthorArtists />
+	</div>
 	<div class="row">
 		<PublicationStatus />
 		<Year />
