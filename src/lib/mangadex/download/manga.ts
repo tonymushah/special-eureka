@@ -18,6 +18,7 @@ import type {
 	MangaDownloadSubSubscriptionVariables
 } from "@mangadex/gql/graphql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 const downloadMutation = graphql(`
 	mutation downloadManga($id: UUID!) {
@@ -116,7 +117,18 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 					})
 					.toPromise();
 				return res;
-			}
+			},
+			onError(error, variables, context) {
+				addErrorToast("Cannot remove title", error);
+			},
+			onSuccess(data, variables, context) {
+				addToast({
+					data: {
+						"title": "Removed title",
+						"description": id
+					}
+				});
+			},
 		},
 		client
 	);
