@@ -803,6 +803,7 @@ input CurrentLoggedLists {
 }
 
 type CurrentUserLibrary {
+	size: CurrentUserLibrarySize!
 	unfiltered(param: UserLibrarySectionParam): MangaResults!
 	completed(param: UserLibrarySectionParam): MangaResults!
 	dropped(param: UserLibrarySectionParam): MangaResults!
@@ -810,6 +811,16 @@ type CurrentUserLibrary {
 	planToRead(param: UserLibrarySectionParam): MangaResults!
 	reading(param: UserLibrarySectionParam): MangaResults!
 	reReading(param: UserLibrarySectionParam): MangaResults!
+}
+
+type CurrentUserLibrarySize {
+	unfiltered: Int!
+	completed: Int!
+	dropped: Int!
+	planToRead: Int!
+	reading: Int!
+	reReading: Int!
+	onHold: Int!
 }
 
 type CustomList {

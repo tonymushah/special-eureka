@@ -64,6 +64,13 @@ const PAGES = {
   "/mangadex/titles": `/mangadex/titles`,
   "/mangadex/titles/feed": `/mangadex/titles/feed`,
   "/mangadex/titles/latest-uploads": `/mangadex/titles/latest-uploads`,
+  "/mangadex/titles/library": `/mangadex/titles/library`,
+  "/mangadex/titles/library/completed": `/mangadex/titles/library/completed`,
+  "/mangadex/titles/library/dropped": `/mangadex/titles/library/dropped`,
+  "/mangadex/titles/library/on-hold": `/mangadex/titles/library/on-hold`,
+  "/mangadex/titles/library/plan-to-read": `/mangadex/titles/library/plan-to-read`,
+  "/mangadex/titles/library/re-reading": `/mangadex/titles/library/re-reading`,
+  "/mangadex/titles/library/reading": `/mangadex/titles/library/reading`,
   "/mangadex/titles/recently-added": `/mangadex/titles/recently-added`,
   "/mangadex/upload": `/mangadex/upload`,
   "/mangadex/user": `/mangadex/user`,
@@ -208,7 +215,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/grid-test': never, '/mangadex': never, '/mangadex/author': never, '/mangadex/author/[id]': 'id', '/mangadex/chapter/[id]': 'id', '/mangadex/graphiql': never, '/mangadex/group': never, '/mangadex/group/[id]': 'id', '/mangadex/group/[id]/titles': 'id', '/mangadex/group/[id]/uploads': 'id', '/mangadex/group/new': never, '/mangadex/list': never, '/mangadex/list/[id]': 'id', '/mangadex/list/[id]/feed': 'id', '/mangadex/list/new': never, '/mangadex/login': never, '/mangadex/settings': never, '/mangadex/settings/auth': never, '/mangadex/settings/content-profiles': never, '/mangadex/settings/css-playground': never, '/mangadex/settings/download-state': never, '/mangadex/settings/general-settings': never, '/mangadex/settings/offline-data': never, '/mangadex/settings/themes': never, '/mangadex/tag/[id]': 'id', '/mangadex/title/[id]': 'id', '/mangadex/title/[id]/covers': 'id', '/mangadex/title/[id]/related': 'id', '/mangadex/title/random': never, '/mangadex/titles': never, '/mangadex/titles/feed': never, '/mangadex/titles/latest-uploads': never, '/mangadex/titles/recently-added': never, '/mangadex/upload': never, '/mangadex/user': never, '/mangadex/user/[id]': 'id', '/mangadex/user/[id]/lists': 'id', '/mangadex/user/[id]/uploads': 'id', '/mangadex/user/me': never, '/mangadex/user/me/lists': never, '/mangadex/user/me/uploads': never, '/splashscreen': never }
+  PAGES: { '/': never, '/grid-test': never, '/mangadex': never, '/mangadex/author': never, '/mangadex/author/[id]': 'id', '/mangadex/chapter/[id]': 'id', '/mangadex/graphiql': never, '/mangadex/group': never, '/mangadex/group/[id]': 'id', '/mangadex/group/[id]/titles': 'id', '/mangadex/group/[id]/uploads': 'id', '/mangadex/group/new': never, '/mangadex/list': never, '/mangadex/list/[id]': 'id', '/mangadex/list/[id]/feed': 'id', '/mangadex/list/new': never, '/mangadex/login': never, '/mangadex/settings': never, '/mangadex/settings/auth': never, '/mangadex/settings/content-profiles': never, '/mangadex/settings/css-playground': never, '/mangadex/settings/download-state': never, '/mangadex/settings/general-settings': never, '/mangadex/settings/offline-data': never, '/mangadex/settings/themes': never, '/mangadex/tag/[id]': 'id', '/mangadex/title/[id]': 'id', '/mangadex/title/[id]/covers': 'id', '/mangadex/title/[id]/related': 'id', '/mangadex/title/random': never, '/mangadex/titles': never, '/mangadex/titles/feed': never, '/mangadex/titles/latest-uploads': never, '/mangadex/titles/library': never, '/mangadex/titles/library/completed': never, '/mangadex/titles/library/dropped': never, '/mangadex/titles/library/on-hold': never, '/mangadex/titles/library/plan-to-read': never, '/mangadex/titles/library/re-reading': never, '/mangadex/titles/library/reading': never, '/mangadex/titles/recently-added': never, '/mangadex/upload': never, '/mangadex/user': never, '/mangadex/user/[id]': 'id', '/mangadex/user/[id]/lists': 'id', '/mangadex/user/[id]/uploads': 'id', '/mangadex/user/me': never, '/mangadex/user/me/lists': never, '/mangadex/user/me/uploads': never, '/splashscreen': never }
   SERVERS: Record<string, never>
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>

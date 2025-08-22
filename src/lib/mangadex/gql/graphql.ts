@@ -1020,6 +1020,7 @@ export type CurrentUserLibrary = {
 	planToRead: MangaResults;
 	reReading: MangaResults;
 	reading: MangaResults;
+	size: CurrentUserLibrarySize;
 	unfiltered: MangaResults;
 };
 
@@ -1049,6 +1050,17 @@ export type CurrentUserLibraryReadingArgs = {
 
 export type CurrentUserLibraryUnfilteredArgs = {
 	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibrarySize = {
+	__typename?: "CurrentUserLibrarySize";
+	completed: Scalars["Int"]["output"];
+	dropped: Scalars["Int"]["output"];
+	onHold: Scalars["Int"]["output"];
+	planToRead: Scalars["Int"]["output"];
+	reReading: Scalars["Int"]["output"];
+	reading: Scalars["Int"]["output"];
+	unfiltered: Scalars["Int"]["output"];
 };
 
 export type CustomList = {
@@ -5387,6 +5399,25 @@ export type CurrentUserLibraryReadingQuery = {
 					};
 				};
 			}>;
+		};
+	};
+};
+
+export type LibrarySizeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LibrarySizeQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		size: {
+			__typename?: "CurrentUserLibrarySize";
+			unfiltered: number;
+			completed: number;
+			dropped: number;
+			planToRead: number;
+			reading: number;
+			reReading: number;
+			onHold: number;
 		};
 	};
 };
@@ -15926,6 +15957,67 @@ export const CurrentUserLibraryReadingDocument = {
 	CurrentUserLibraryReadingQuery,
 	CurrentUserLibraryReadingQueryVariables
 >;
+export const LibrarySizeDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "librarySize" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "size" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unfiltered" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "completed" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "dropped" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "planToRead" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "reading" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "reReading" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "onHold" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<LibrarySizeQuery, LibrarySizeQueryVariables>;
 export const CurrentUserCustomListsDocument = {
 	kind: "Document",
 	definitions: [

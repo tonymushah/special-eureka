@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use async_graphql::{Context, InputObject, Object};
+use async_graphql::{Context, InputObject, Object, SimpleObject};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::manga::list::MangaListParams;
 use mangadex_api_types_rust::{MangaSortOrder, MangaStatus, ReadingStatus};
@@ -15,6 +15,17 @@ pub struct CurrentUserLibrary {
     statuses: HashMap<Uuid, ReadingStatus>,
 }
 
+#[derive(Debug, SimpleObject, Copy, Clone)]
+pub struct CurrentUserLibrarySize {
+    pub unfiltered: u32,
+    pub completed: u32,
+    pub dropped: u32,
+    pub plan_to_read: u32,
+    pub reading: u32,
+    pub re_reading: u32,
+    pub on_hold: u32,
+}
+
 impl CurrentUserLibrary {
     pub async fn new(client: &MangaDexClient) -> crate::Result<Self> {
         let res = client.manga().status().get().send().await?;
@@ -27,6 +38,17 @@ impl CurrentUserLibrary {
             .filter(|(_, stt)| **stt == status)
             .map(|(id, _)| *id)
             .collect()
+    }
+    fn reading_status_len(&self, status: Option<ReadingStatus>) -> u32 {
+        self.statuses
+            .iter()
+            .filter(|(_, status_itm)| {
+                status
+                    .as_ref()
+                    .map(|stt| stt == *status_itm)
+                    .unwrap_or(true)
+            })
+            .count() as u32
     }
     async fn extract_result(
         &self,
@@ -113,6 +135,17 @@ impl From<UserLibrarySectionParam> for MangaListParams {
 
 #[Object]
 impl CurrentUserLibrary {
+    pub async fn size(&self) -> CurrentUserLibrarySize {
+        CurrentUserLibrarySize {
+            unfiltered: self.reading_status_len(None),
+            completed: self.reading_status_len(Some(ReadingStatus::Completed)),
+            dropped: self.reading_status_len(Some(ReadingStatus::Dropped)),
+            plan_to_read: self.reading_status_len(Some(ReadingStatus::PlanToRead)),
+            reading: self.reading_status_len(Some(ReadingStatus::Reading)),
+            re_reading: self.reading_status_len(Some(ReadingStatus::ReReading)),
+            on_hold: self.reading_status_len(Some(ReadingStatus::OnHold)),
+        }
+    }
     pub async fn unfiltered(
         &self,
         ctx: &Context<'_>,
