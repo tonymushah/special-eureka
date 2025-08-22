@@ -155,13 +155,7 @@
 		</section>
 
 		<section class="content">
-			<div class="real">
-				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui odit, soluta saepe
-				dolor libero molestiae, pariatur aspernatur eos ullam modi quibusdam. Voluptas
-				quidem sunt officiis quis temporibus! Perferendis, voluptate molestiae.
-
-				{@render children?.()}
-			</div>
+			{@render children?.()}
 		</section>
 	</section>
 </div>
