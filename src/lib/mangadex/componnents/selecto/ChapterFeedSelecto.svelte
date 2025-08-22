@@ -52,14 +52,11 @@
 			const dragselect = new SelectionArea({
 				selectables: [".manga-element", ".chapter-element"],
 				boundaries: (() => {
-					const bound: HTMLElement[] = [container];
-					const mangadexScroll = document.getElementById(scrollElementId);
-					if (mangadexScroll) {
-						bound.push(mangadexScroll);
-					}
+					const bound: (HTMLElement | string)[] = [container, `#${scrollElementId}`];
 					return bound;
 				})(),
-				selectionAreaClass
+				selectionAreaClass,
+				container
 			})
 				.on("start", (ev) => {
 					ev.selection.clearSelection();
