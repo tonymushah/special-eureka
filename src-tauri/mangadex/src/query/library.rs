@@ -31,7 +31,7 @@ impl CurrentUserLibrary {
     async fn extract_result(
         &self,
         ctx: &Context<'_>,
-        status: ReadingStatus,
+        status: Option<ReadingStatus>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
         let section_param = param.unwrap_or_default();
@@ -40,7 +40,11 @@ impl CurrentUserLibrary {
         let offset = param.offset.unwrap_or_default();
         let limit = param.limit.unwrap_or_default();
 
-        let all_ids = self.extract_ids(status);
+        let all_ids = if let Some(status) = status {
+            self.extract_ids(status)
+        } else {
+            self.statuses.keys().copied().collect()
+        };
         let total: u32 = all_ids.len().try_into()?;
 
         if total == 0 {
@@ -109,12 +113,19 @@ impl From<UserLibrarySectionParam> for MangaListParams {
 
 #[Object]
 impl CurrentUserLibrary {
+    pub async fn unfiltered(
+        &self,
+        ctx: &Context<'_>,
+        param: Option<UserLibrarySectionParam>,
+    ) -> crate::Result<MangaResults> {
+        self.extract_result(ctx, None, param).await
+    }
     pub async fn completed(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, ReadingStatus::Completed, param)
+        self.extract_result(ctx, Some(ReadingStatus::Completed), param)
             .await
     }
     pub async fn dropped(
@@ -122,7 +133,7 @@ impl CurrentUserLibrary {
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, ReadingStatus::Dropped, param)
+        self.extract_result(ctx, Some(ReadingStatus::Dropped), param)
             .await
     }
     pub async fn on_hold(
@@ -130,14 +141,15 @@ impl CurrentUserLibrary {
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, ReadingStatus::OnHold, param).await
+        self.extract_result(ctx, Some(ReadingStatus::OnHold), param)
+            .await
     }
     pub async fn plan_to_read(
         &self,
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, ReadingStatus::PlanToRead, param)
+        self.extract_result(ctx, Some(ReadingStatus::PlanToRead), param)
             .await
     }
     pub async fn reading(
@@ -145,7 +157,7 @@ impl CurrentUserLibrary {
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, ReadingStatus::Reading, param)
+        self.extract_result(ctx, Some(ReadingStatus::Reading), param)
             .await
     }
     pub async fn re_reading(
@@ -153,7 +165,7 @@ impl CurrentUserLibrary {
         ctx: &Context<'_>,
         param: Option<UserLibrarySectionParam>,
     ) -> crate::Result<MangaResults> {
-        self.extract_result(ctx, ReadingStatus::ReReading, param)
+        self.extract_result(ctx, Some(ReadingStatus::ReReading), param)
             .await
     }
 }

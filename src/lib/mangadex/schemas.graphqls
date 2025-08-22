@@ -803,6 +803,7 @@ input CurrentLoggedLists {
 }
 
 type CurrentUserLibrary {
+	unfiltered(param: UserLibrarySectionParam): MangaResults!
 	completed(param: UserLibrarySectionParam): MangaResults!
 	dropped(param: UserLibrarySectionParam): MangaResults!
 	onHold(param: UserLibrarySectionParam): MangaResults!
