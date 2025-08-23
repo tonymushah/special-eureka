@@ -51,7 +51,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 200px;
-		z-index: 10000;
+		z-index: 100;
 	}
 	menu {
 		margin: 0px;

@@ -131,7 +131,7 @@
 			}
 		},
 		{
-			threshold: 0.0
+			threshold: 1.0
 		}
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
@@ -164,7 +164,16 @@
 	/>
 {/if}
 
-<div class="observer-trigger" bind:this={to_obserce_bind}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="observer-trigger"
+	bind:this={to_obserce_bind}
+	onmouseenter={() => {
+		if (!$isFetching && $hasNext) {
+			fetchNext();
+		}
+	}}
+>
 	{#if $isFetching}
 		<Fetching />
 	{:else if $hasNext}

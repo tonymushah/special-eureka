@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createDialog, melt } from "@melt-ui/svelte";
 	import ButtonAccent from "../theme/buttons/ButtonAccent.svelte";
-	import { scrollElementId } from "../layout/scrollElement";
+	import { makeScroll, preventScroll, scrollElementId } from "../layout/scrollElement";
 	import { FilterIcon } from "svelte-feather-icons";
 	import type { UserLibrarySectionParam } from "@mangadex/gql/graphql";
 	import type { Writable } from "svelte/store";
@@ -17,7 +17,13 @@
 	interface Props {
 		params: Writable<UserLibrarySectionParam>;
 	}
-
+	$effect(() => {
+		if ($open) {
+			preventScroll();
+		} else {
+			makeScroll();
+		}
+	});
 	let { params }: Props = $props();
 </script>
 

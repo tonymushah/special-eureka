@@ -73,7 +73,7 @@
 
 <section class="filter-content">
 	<div class="row">
-		<AuthorArtists />
+		<AuthorArtists portal=".portalled" />
 	</div>
 	<div class="row">
 		<PublicationStatus />
@@ -86,6 +86,7 @@
 				type="checkbox"
 				id={availableChapterCheckId}
 				bind:checked={$params.hasAvailableChapters}
+				defaultChecked
 			/>
 			<label for={availableChapterCheckId}>Has available chapters</label>
 		</article>
