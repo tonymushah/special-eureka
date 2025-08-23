@@ -59,10 +59,11 @@ impl CurrentUserLibrary {
     ) -> crate::Result<MangaResults> {
         let section_param = param.unwrap_or_default();
         let mut param: MangaListParams = section_param.clone().into();
+        param.offset = None;
         param.includes = <MangaResults as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
 
-        let offset = param.offset.unwrap_or_default();
-        let limit = param.limit.unwrap_or_default();
+        let mut offset = param.offset.unwrap_or_default();
+        let limit = param.limit.unwrap_or(10);
 
         let all_ids = if let Some(status) = status {
             self.extract_ids(status)
@@ -75,29 +76,34 @@ impl CurrentUserLibrary {
             return Ok(MangaResults::default());
         }
 
-        param.manga_ids = all_ids
-            .iter()
-            .skip(offset.try_into()?)
-            .take(limit.try_into()?)
-            .copied()
-            .collect();
+        loop {
+            param.manga_ids = all_ids
+                .iter()
+                .skip(offset.try_into()?)
+                .take(limit.try_into()?)
+                .copied()
+                .collect();
 
-        let mut results = if param.manga_ids.is_empty() {
-            MangaResults::default()
-        } else {
-            MangaListQueries::new_with_exclude_feed(
-                param,
-                section_param.exclude_content_profile.unwrap_or_default(),
-                ctx.get_app_handle::<tauri::Wry>()?,
-            )
-            .list(ctx)
-            .await?
-        };
-        results.info.limit = limit;
-        results.info.offset = offset;
-        results.info.total = total;
-
-        Ok(results)
+            let mut results = if param.manga_ids.is_empty() {
+                MangaResults::default()
+            } else {
+                MangaListQueries::new_with_exclude_feed(
+                    param.clone(),
+                    section_param.exclude_content_profile.unwrap_or_default(),
+                    ctx.get_app_handle::<tauri::Wry>()?,
+                )
+                .list(ctx)
+                .await?
+            };
+            if results.is_empty() && total >= (offset + limit) {
+                offset += limit;
+                continue;
+            }
+            results.info.limit = limit;
+            results.info.offset = offset;
+            results.info.total = total;
+            return Ok(results);
+        }
     }
 }
 
