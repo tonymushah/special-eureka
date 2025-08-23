@@ -39,6 +39,7 @@ pub trait SplittableParam: Clone {
                     param.set_ids(chunck.to_vec());
 
                     if !param.ids().is_empty() {
+                        param.set_offset(0);
                         param.set_limit(param.ids().len().try_into().ok()?);
                     }
                     Some(param)

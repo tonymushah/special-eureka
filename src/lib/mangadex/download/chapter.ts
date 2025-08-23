@@ -27,6 +27,7 @@ import { createMutation, createQuery } from "@tanstack/svelte-query";
 import { debounce, delay, random } from "lodash";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import { sleep } from "@melt-ui/svelte/internal/helpers";
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 const download_mutation = graphql(`
 	mutation downloadChapterMutation($id: UUID!, $quality: DownloadMode) {
@@ -136,6 +137,50 @@ function subOpChapter(id: string, deferred: boolean = false) {
 		};
 	});
 }
+
+export const removeMutation = createMutation(
+	{
+		mutationKey: ["chapter-removing"],
+		async mutationFn(id: string) {
+			return await client
+				.mutation(ChapterDownload.remove_chapter_mutation(), {
+					id
+				})
+				.toPromise();
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					title: "Removed chapter",
+					description: variables
+				}
+			})
+		},
+	},
+	mangadexQueryClient
+);
+
+export const downloadMutation = createMutation(
+	{
+		mutationKey: ["chapter", "download"],
+		async mutationFn({ id, quality }: {
+			id: string,
+			quality?: DownloadMode
+		}) {
+			const res = await client
+				.mutation(ChapterDownload.download_mutation(), {
+					id,
+					quality
+				})
+				.toPromise();
+			return res;
+		},
+		onError(error, variables, context) {
+			addErrorToast("Error on downloading title", error);
+		},
+	},
+	mangadexQueryClient
+);
 
 type ChapterSubOpType = OperationResult<
 	ChapterDownloadStateSubscription,
@@ -308,52 +353,28 @@ export class ChapterDownload {
 		const id = this.chapterId;
 		const rexec = this.reexecute;
 		const quality = this.mode;
-		const res = createMutation(
-			{
-				mutationKey: ["chapter", "download", id, quality],
-				async mutationFn() {
-					const res = await client
-						.mutation(ChapterDownload.download_mutation(), {
-							id,
-							quality
-						})
-						.toPromise();
-					return res;
-				},
-				onSettled(data, error, variables, context) {
-					rexec();
-				}
+
+		const res = await get(downloadMutation).mutateAsync({
+			id,
+			quality
+		}, {
+			onSettled(data, error, variables, context) {
+				rexec()
 			},
-			mangadexQueryClient
-		);
-		await get(res).mutateAsync();
+		});
 		return res;
 	}
 	public async remove() {
 		const id = this.chapterId;
 		const rexec = this.reexecute;
 		const removing = this.isRemoving_;
-		const res = createMutation(
-			{
-				mutationKey: ["chapter-removing", id],
-				async mutationFn() {
-					return await client
-						.mutation(ChapterDownload.remove_chapter_mutation(), {
-							id
-						})
-						.toPromise();
-				},
-				onMutate(variables) {
-					removing.set(true);
-				},
-				onSettled(data, error, variables, context) {
-					removing.set(false);
-					rexec();
-				}
-			},
-			mangadexQueryClient
-		);
-		return res;
+
+		return await Promise.resolve().then(() => {
+			removing.set(true);
+		}).then(() => get(removeMutation).mutateAsync(id)).finally(() => {
+			removing.set(false);
+			rexec();
+		});
 	}
 	public async cancel() {
 		const res = await client
@@ -361,6 +382,9 @@ export class ChapterDownload {
 				id: this.chapterId
 			})
 			.toPromise();
+		if (res.error) {
+			throw res.error
+		}
 		this.reexecute();
 		return res;
 	}

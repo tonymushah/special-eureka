@@ -92,7 +92,13 @@
 		{#if $query.isFetching}
 			<Fetching />
 		{:else if $query.error}
-			<ErrorComponent error={$query.error} label="Error on finding the first chapters" />
+			<ErrorComponent
+				error={$query.error}
+				label="Error on finding the first chapters"
+				retry={() => {
+					$query.refetch();
+				}}
+			/>
 		{:else}
 			<div>
 				<h1>Select a chapter to read</h1>

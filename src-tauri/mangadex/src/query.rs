@@ -10,6 +10,7 @@ pub mod follows;
 pub mod home;
 pub mod infrastructure;
 pub mod legacy;
+pub mod library;
 pub mod manga;
 pub mod oauth;
 pub mod offline_app_state;
@@ -24,11 +25,13 @@ pub mod user;
 pub mod user_option;
 pub mod utils;
 
-use async_graphql::Object;
+use async_graphql::{Context, Object};
 use user_option::UserOptionQueries;
 
+use crate::utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
+
 use self::{
-    api_client::ApiClientQueries, author::AuthorQueries, chapter::ChapterQueries,
+    api_client::ApiClientQueries, auth::AuthQuery, author::AuthorQueries, chapter::ChapterQueries,
     cover::CoverQueries, custom_list::CustomListQueries, download_state::DownloadStateQueries,
     feed::FeedQueries, follows::FollowsQueries, home::HomeQueries,
     infrastructure::InfrastructureQueries, legacy::LegacyQueries, manga::MangaQueries,
@@ -36,7 +39,6 @@ use self::{
     read_marker::ReadMarkerQueries, report::ReportQueries,
     scanlation_group::ScanlationGroupQueries, statistics::StatisticsQueries, tag::TagQueries,
     upload::UploadQueries, user::UserQueries, utils::UtilsQuery,
-	auth::AuthQuery
 };
 
 pub struct Query;
@@ -115,7 +117,12 @@ impl Query {
     pub async fn user_option(&self) -> UserOptionQueries {
         UserOptionQueries
     }
-	pub async fn auth(&self) -> AuthQuery {
-		AuthQuery
-	}
+    pub async fn auth(&self) -> AuthQuery {
+        AuthQuery
+    }
+    pub async fn library(&self, ctx: &Context<'_>) -> crate::Result<library::CurrentUserLibrary> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let client = app.get_mangadex_client_with_auth_refresh().await?;
+        library::CurrentUserLibrary::new(&client).await
+    }
 }

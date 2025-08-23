@@ -100,7 +100,13 @@
 
 <div class="list-w-make">
 	{#if $query.error}
-		<ErrorComponent label="Error" error={$query.error} />
+		<ErrorComponent
+			label="Error"
+			error={$query.error}
+			retry={() => {
+				$query.refetch();
+			}}
+		/>
 	{/if}
 	<div class="lists">
 		{#if $query.data}

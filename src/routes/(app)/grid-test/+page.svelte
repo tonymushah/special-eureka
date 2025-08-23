@@ -1,5 +1,31 @@
 <script lang="ts">
+	import "./selecto.css";
 	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import SelectionArea from "@viselect/vanilla";
+	let content: HTMLElement | undefined = undefined;
+	$effect(() => {
+		if (content) {
+			const selecto = new SelectionArea({
+				selectables: ["p"],
+				boundaries: [content],
+				selectionAreaClass: "grid-test-selection"
+			})
+				.on("start", (ev) => {
+					if (!ev.event?.ctrlKey && !ev.event?.metaKey) {
+						ev.store.stored.forEach((d) => d.removeAttribute("data-selected"));
+						ev.selection.clearSelection();
+					}
+				})
+				.on("move", (ev) => {
+					ev.store.changed.added.forEach((d) => d.setAttribute("data-selected", ""));
+					ev.store.changed.removed.forEach((d) => d.removeAttribute("data-selected"));
+				});
+
+			return () => {
+				selecto.destroy();
+			};
+		}
+	});
 </script>
 
 <main class="container">
@@ -31,7 +57,7 @@
 	>
 		<h1>Header</h1>
 	</header>
-	<div class="content">
+	<div class="content" bind:this={content}>
 		<div class="inner">
 			<section>
 				<p>
@@ -182,5 +208,9 @@
 				height: 100%;
 			}
 		}
+	}
+	p:global([data-selected]) {
+		text-decoration: wavy;
+		font-style: italic;
 	}
 </style>

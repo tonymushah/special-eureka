@@ -1012,6 +1012,57 @@ export type CurrentLoggedLists = {
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
+export type CurrentUserLibrary = {
+	__typename?: "CurrentUserLibrary";
+	completed: MangaResults;
+	dropped: MangaResults;
+	onHold: MangaResults;
+	planToRead: MangaResults;
+	reReading: MangaResults;
+	reading: MangaResults;
+	size: CurrentUserLibrarySize;
+	unfiltered: MangaResults;
+};
+
+export type CurrentUserLibraryCompletedArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryDroppedArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryOnHoldArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryPlanToReadArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryReReadingArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryReadingArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibraryUnfilteredArgs = {
+	param?: InputMaybe<UserLibrarySectionParam>;
+};
+
+export type CurrentUserLibrarySize = {
+	__typename?: "CurrentUserLibrarySize";
+	completed: Scalars["Int"]["output"];
+	dropped: Scalars["Int"]["output"];
+	onHold: Scalars["Int"]["output"];
+	planToRead: Scalars["Int"]["output"];
+	reReading: Scalars["Int"]["output"];
+	reading: Scalars["Int"]["output"];
+	unfiltered: Scalars["Int"]["output"];
+};
+
 export type CustomList = {
 	__typename?: "CustomList";
 	attributes: CustomListAttributes;
@@ -2048,6 +2099,7 @@ export type MangaQueries = {
 	getDrafts: MangaResults;
 	getMangaStatus: Array<MangaReadingStatusItem>;
 	isDownloaded: DownloadState;
+	isInLibrary: Scalars["Boolean"]["output"];
 	list: MangaResults;
 	listOffline: MangaResults;
 	random: MangaObject;
@@ -2081,6 +2133,11 @@ export type MangaQueriesGetMangaStatusArgs = {
 };
 
 export type MangaQueriesIsDownloadedArgs = {
+	id: Scalars["UUID"]["input"];
+};
+
+export type MangaQueriesIsInLibraryArgs = {
+	excludedStatuses?: InputMaybe<Array<ReadingStatus>>;
 	id: Scalars["UUID"]["input"];
 };
 
@@ -2461,6 +2518,7 @@ export type Query = {
 	home: HomeQueries;
 	infrastructure: InfrastructureQueries;
 	legacy: LegacyQueries;
+	library: CurrentUserLibrary;
 	manga: MangaQueries;
 	oauth: OauthQueries;
 	offlineAppState: OfflineAppStateQueries;
@@ -3231,6 +3289,22 @@ export type UserHistoryEntry = {
 	__typename?: "UserHistoryEntry";
 	chapterId: Scalars["UUID"]["output"];
 	readDate: Scalars["MangaDexDateTime"]["output"];
+};
+
+export type UserLibrarySectionParam = {
+	artists?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
+	authors?: InputMaybe<Array<Scalars["UUID"]["input"]>>;
+	/** DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`. */
+	createdAtSince?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
+	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	hasAvailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+	order?: InputMaybe<MangaSortOrder>;
+	publicationStatus?: InputMaybe<Array<MangaStatus>>;
+	/** DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`. */
+	updatedAtSince?: InputMaybe<Scalars["MangaDexDateTime"]["input"]>;
+	year?: InputMaybe<Scalars["Int"]["input"]>;
 };
 
 export type UserListParam = {
@@ -4995,6 +5069,361 @@ export type ScanalationGroupSearchQuery = {
 					members: Array<{ __typename?: "User"; id: any }>;
 				};
 			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryCompletedQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryCompletedQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		completed: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryDroppedQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryDroppedQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		dropped: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryUnfilteredQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryUnfilteredQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		unfiltered: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryOnHoldQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryOnHoldQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		onHold: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryPlanToReadQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryPlanToReadQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		planToRead: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryReReadingQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryReReadingQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		reReading: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type CurrentUserLibraryReadingQueryVariables = Exact<{
+	param?: InputMaybe<UserLibrarySectionParam>;
+}>;
+
+export type CurrentUserLibraryReadingQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		reading: {
+			__typename?: "MangaResults";
+			limit: number;
+			offset: number;
+			total: number;
+			data: Array<{
+				__typename?: "MangaObject";
+				id: any;
+				attributes: {
+					__typename?: "GraphQLMangaAttributes";
+					description: any;
+					year?: number | null;
+					title: any;
+					status: MangaStatus;
+					state: MangaState;
+					originalLanguage: Language;
+					contentRating?: ContentRating | null;
+					tags: Array<{
+						__typename?: "Tag";
+						id: any;
+						attributes: { __typename?: "TagAttributes"; name: any };
+					}>;
+				};
+				relationships: {
+					__typename?: "MangaRelationships";
+					coverArt: {
+						__typename?: "Cover";
+						id: any;
+						attributes: {
+							__typename?: "CoverAttributes";
+							description: string;
+							fileName: string;
+						};
+					};
+				};
+			}>;
+		};
+	};
+};
+
+export type LibrarySizeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type LibrarySizeQuery = {
+	__typename?: "Query";
+	library: {
+		__typename?: "CurrentUserLibrary";
+		size: {
+			__typename?: "CurrentUserLibrarySize";
+			unfiltered: number;
+			completed: number;
+			dropped: number;
+			planToRead: number;
+			reading: number;
+			reReading: number;
+			onHold: number;
 		};
 	};
 };
@@ -13864,6 +14293,1737 @@ export const ScanalationGroupSearchDocument = {
 		}
 	]
 } as unknown as DocumentNode<ScanalationGroupSearchQuery, ScanalationGroupSearchQueryVariables>;
+export const CurrentUserLibraryCompletedDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryCompleted" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "completed" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CurrentUserLibraryCompletedQuery,
+	CurrentUserLibraryCompletedQueryVariables
+>;
+export const CurrentUserLibraryDroppedDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryDropped" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "dropped" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CurrentUserLibraryDroppedQuery,
+	CurrentUserLibraryDroppedQueryVariables
+>;
+export const CurrentUserLibraryUnfilteredDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryUnfiltered" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfiltered" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CurrentUserLibraryUnfilteredQuery,
+	CurrentUserLibraryUnfilteredQueryVariables
+>;
+export const CurrentUserLibraryOnHoldDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryOnHold" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "onHold" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CurrentUserLibraryOnHoldQuery, CurrentUserLibraryOnHoldQueryVariables>;
+export const CurrentUserLibraryPlanToReadDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryPlanToRead" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "planToRead" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CurrentUserLibraryPlanToReadQuery,
+	CurrentUserLibraryPlanToReadQueryVariables
+>;
+export const CurrentUserLibraryReReadingDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryReReading" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "reReading" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CurrentUserLibraryReReadingQuery,
+	CurrentUserLibraryReReadingQueryVariables
+>;
+export const CurrentUserLibraryReadingDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "currentUserLibraryReading" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "param" } },
+					type: {
+						kind: "NamedType",
+						name: { kind: "Name", value: "UserLibrarySectionParam" }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "reading" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "param" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "param" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "limit" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "offset" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "total" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "data" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "id" }
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "attributes"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "description"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "year"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "title"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "status"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "state"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "originalLanguage"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "tags"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "name"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "contentRating"
+																		}
+																	}
+																]
+															}
+														},
+														{
+															kind: "Field",
+															name: {
+																kind: "Name",
+																value: "relationships"
+															},
+															selectionSet: {
+																kind: "SelectionSet",
+																selections: [
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "coverArt"
+																		},
+																		selectionSet: {
+																			kind: "SelectionSet",
+																			selections: [
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "id"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "attributes"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "description"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "fileName"
+																									}
+																								}
+																							]
+																					}
+																				}
+																			]
+																		}
+																	}
+																]
+															}
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	CurrentUserLibraryReadingQuery,
+	CurrentUserLibraryReadingQueryVariables
+>;
+export const LibrarySizeDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "librarySize" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "size" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "unfiltered" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "completed" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "dropped" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "planToRead" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "reading" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "reReading" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "onHold" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<LibrarySizeQuery, LibrarySizeQueryVariables>;
 export const CurrentUserCustomListsDocument = {
 	kind: "Document",
 	definitions: [

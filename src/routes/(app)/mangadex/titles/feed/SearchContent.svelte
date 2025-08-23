@@ -145,7 +145,11 @@
 </div>
 
 {#if $query.error}
-	<ErrorComponent error={$query.error} label="Error on loading some pages" />
+	<ErrorComponent
+		error={$query.error}
+		label="Error on loading some pages"
+		retry={() => $query.refetch()}
+	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
