@@ -131,7 +131,7 @@
 			}
 		},
 		{
-			threshold: 1.0
+			threshold: 0.0
 		}
 	);
 	let to_obserce_bind: HTMLElement | undefined = $state(undefined);
