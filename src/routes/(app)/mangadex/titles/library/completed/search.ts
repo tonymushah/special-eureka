@@ -2,7 +2,6 @@ import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list
 import libraryCompletedQuery from "@mangadex/gql-docs/library/completed";
 import {
 	CoverImageQuality,
-	type MangaListParams,
 	type UserLibrarySectionParam
 } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
@@ -23,7 +22,7 @@ type CompletedLibraryResultConstuctorParams = {
 
 export class CompletedLibraryResult extends AbstractSearchResult<MangaListContentItemProps> {
 	client: Client;
-	params?: MangaListParams;
+	params?: UserLibrarySectionParam;
 	offset: number;
 	limit: number;
 	total: number;

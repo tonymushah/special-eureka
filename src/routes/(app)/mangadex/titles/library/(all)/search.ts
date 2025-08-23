@@ -23,7 +23,7 @@ type UnfilteredLibraryResultConstuctorParams = {
 
 export class UnfilteredLibraryResult extends AbstractSearchResult<MangaListContentItemProps> {
 	client: Client;
-	params?: MangaListParams;
+	params?: UserLibrarySectionParam;
 	offset: number;
 	limit: number;
 	total: number;

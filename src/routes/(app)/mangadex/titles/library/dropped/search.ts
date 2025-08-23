@@ -1,10 +1,7 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-import libraryUnfilteredQuery from "@mangadex/gql-docs/library";
-import libraryCompletedQuery from "@mangadex/gql-docs/library/completed";
 import libraryDroppedQuery from "@mangadex/gql-docs/library/dropped";
 import {
 	CoverImageQuality,
-	type MangaListParams,
 	type UserLibrarySectionParam
 } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
@@ -25,7 +22,7 @@ type DroppedLibraryResultConstuctorParams = {
 
 export class DroppedLibraryResult extends AbstractSearchResult<MangaListContentItemProps> {
 	client: Client;
-	params?: MangaListParams;
+	params?: UserLibrarySectionParam;
 	offset: number;
 	limit: number;
 	total: number;
