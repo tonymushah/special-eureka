@@ -59,10 +59,9 @@ impl CurrentUserLibrary {
     ) -> crate::Result<MangaResults> {
         let section_param = param.unwrap_or_default();
         let mut param: MangaListParams = section_param.clone().into();
-        param.offset = None;
         param.includes = <MangaResults as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
 
-        let mut offset = param.offset.unwrap_or_default();
+        let mut offset = param.offset.take().unwrap_or_default();
         let limit = param.limit.unwrap_or(10);
 
         let all_ids = if let Some(status) = status {
