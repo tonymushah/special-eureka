@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::BTreeMap;
 
 use async_graphql::{Context, InputObject, Object, SimpleObject};
 use mangadex_api::MangaDexClient;
@@ -13,7 +13,7 @@ use crate::{
 };
 
 pub struct CurrentUserLibrary {
-    statuses: HashMap<Uuid, ReadingStatus>,
+    statuses: BTreeMap<Uuid, ReadingStatus>,
 }
 
 #[derive(Debug, SimpleObject, Copy, Clone)]
@@ -30,7 +30,7 @@ pub struct CurrentUserLibrarySize {
 impl CurrentUserLibrary {
     pub async fn new(client: &MangaDexClient) -> crate::Result<Self> {
         let res = client.manga().status().get().send().await?;
-        let statuses = res.statuses;
+        let statuses: BTreeMap<_, _> = res.statuses.into_iter().collect();
         Ok(Self { statuses })
     }
     fn extract_ids(&self, status: ReadingStatus) -> Vec<Uuid> {
