@@ -187,7 +187,6 @@
 		height: -webkit-fill-available;
 		.content {
 			width: 100%;
-			overflow-y: scroll;
 		}
 	}
 	.layout.isRtl {
