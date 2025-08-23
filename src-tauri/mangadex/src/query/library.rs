@@ -7,7 +7,8 @@ use mangadex_api_types_rust::{MangaDexDateTime, MangaSortOrder, MangaStatus, Rea
 use uuid::Uuid;
 
 use crate::{
-    objects::manga::lists::MangaResults, query::manga::list::MangaListQueries,
+    objects::{ExtractReferenceExpansionFromContext, manga::lists::MangaResults},
+    query::manga::list::MangaListQueries,
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
 
@@ -58,6 +59,7 @@ impl CurrentUserLibrary {
     ) -> crate::Result<MangaResults> {
         let section_param = param.unwrap_or_default();
         let mut param: MangaListParams = section_param.clone().into();
+        param.includes = <MangaResults as ExtractReferenceExpansionFromContext<'_>>::exctract(ctx);
 
         let offset = param.offset.unwrap_or_default();
         let limit = param.limit.unwrap_or_default();
