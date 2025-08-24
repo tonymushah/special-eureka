@@ -9,8 +9,9 @@ use std::future::Future;
 
 use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
+    cache::chapter::ChapterPagesStore,
     rate_limit::SpecificRateLimits,
-    utils::{chapter::ChapterPagesStore, refresh_token::RefreshTokenTask, watch::SendData},
+    utils::{refresh_token::RefreshTokenTask, watch::SendData},
 };
 
 use super::{store::MangaDexStoreState, watch::Watches};
