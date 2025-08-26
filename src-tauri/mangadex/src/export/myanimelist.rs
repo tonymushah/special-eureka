@@ -1,12 +1,14 @@
-use async_graphql::Enum;
+use async_graphql::{Enum, InputObject};
 use mangadex_api_types_rust::ReadingStatus;
 use serde::{Deserialize, Serialize};
 use std::{fmt::Display, str::FromStr};
+use tauri::{AppHandle, Runtime};
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct MyInfo {
     pub user_id: String,
     pub user_name: String,
+    // TODO Convert to enum
     pub user_export_type: u16,
     pub user_total_manga: u32,
     pub user_total_reading: u32,
@@ -142,6 +144,50 @@ where
     S: serde::Serializer,
 {
     serializer.serialize_u8(if *value { 1 } else { 0 })
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct ReadingStatusPriorities {
+    pub completed: MALTitlePriority,
+    pub dropped: MALTitlePriority,
+    pub on_hold: MALTitlePriority,
+    pub plan_to_read: MALTitlePriority,
+    pub reading: MALTitlePriority,
+    pub re_reading: MALTitlePriority,
+}
+
+impl Default for ReadingStatusPriorities {
+    fn default() -> Self {
+        Self {
+            completed: MALTitlePriority::Low,
+            dropped: MALTitlePriority::Low,
+            on_hold: MALTitlePriority::Medium,
+            plan_to_read: MALTitlePriority::Medium,
+            re_reading: MALTitlePriority::High,
+            reading: MALTitlePriority::High,
+        }
+    }
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct MDLibraryToMyAnimeListExportOption {
+    pub user_name: String,
+    pub user_id: String,
+    pub priorities: Option<ReadingStatusPriorities>,
+    pub include_read_chapters: Option<bool>,
+    pub include_read_volumes: Option<bool>,
+    pub include_score: Option<bool>,
+    pub export_path: String,
+}
+
+pub async fn export_md_library_to_my_anime_list<R>(
+    app: &AppHandle<R>,
+    option: MDLibraryToMyAnimeListExportOption,
+) -> crate::Result<String>
+where
+    R: Runtime,
+{
+    todo!()
 }
 
 #[cfg(test)]
