@@ -248,7 +248,7 @@ pub async fn export_md_library_to_my_anime_list<R>(
 where
     R: Runtime,
 {
-    let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).canonicalize()?;
+    let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
     let mut to_use_file = File::create(&export_path)?;
 
     let client = app.get_mangadex_client_with_auth_refresh().await?;
