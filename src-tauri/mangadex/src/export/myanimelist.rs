@@ -248,8 +248,6 @@ pub async fn export_md_library_to_my_anime_list<R>(
 where
     R: Runtime,
 {
-    let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
-    let mut to_use_file = File::create(&export_path)?;
 
     let client = app.get_mangadex_client_with_auth_refresh().await?;
     let statuses = { client.manga().status().get().send().await?.statuses };
@@ -405,6 +403,9 @@ where
         my_info,
         manga: mangas.into_values().collect(),
     };
+
+	let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
+	let mut to_use_file = File::create(&export_path)?;
     {
         let mut buf_writer = BufWriter::new(&mut to_use_file);
         serde_xml_rs::to_writer(&mut buf_writer, &xml_data)?;
