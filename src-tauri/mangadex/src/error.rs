@@ -143,6 +143,8 @@ pub enum Error {
     Image(#[from] image::ImageError),
     #[error(transparent)]
     Regex(#[from] regex::Error),
+    #[error(transparent)]
+    SerdeXml(#[from] serde_xml_rs::Error),
 }
 
 impl Error {
