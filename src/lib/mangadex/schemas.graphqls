@@ -1329,6 +1329,10 @@ type LegacyQueries {
 	idMapping(params: LegacyIdMappingParams!): LegacyIdMappingResults!
 }
 
+type LibraryMutations {
+	exportAsMyAnimeList(options: MdlibraryToMyAnimeListExportOption!): String!
+}
+
 input ListReasonsByCategory {
 	category: ReportCategory!
 }
@@ -1341,6 +1345,12 @@ input ListReportParams {
 	reasonId: UUID
 	status: ReportStatus
 	order: ReportSortOrder
+}
+
+enum MaltitlePriority {
+	LOW
+	MEDIUM
+	HIGH
 }
 
 type MangaAggregate {
@@ -1804,6 +1814,18 @@ input MarkChapterBatchParam {
 	updateHistory: Boolean! = false
 }
 
+input MdlibraryToMyAnimeListExportOption {
+	userName: String!
+	userId: String!
+	priorities: ReadingStatusPriorities
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeScore: Boolean
+	exportPath: String!
+	excludeContentProfile: Boolean
+	hasAvailableChapters: Boolean
+}
+
 type Mutation {
 	apiClient: ApiClientMutation!
 	author: AuthorMutations!
@@ -1822,6 +1844,7 @@ type Mutation {
 	user: UserMutations!
 	userOption: UserOptionMutations!
 	cover: CoverMutations!
+	library: LibraryMutations!
 }
 
 type OauthMutations {
@@ -1989,6 +2012,15 @@ enum ReadingStatus {
 	PLAN_TO_READ
 	READING
 	RE_READING
+}
+
+input ReadingStatusPriorities {
+	completed: MaltitlePriority!
+	dropped: MaltitlePriority!
+	onHold: MaltitlePriority!
+	planToRead: MaltitlePriority!
+	reading: MaltitlePriority!
+	reReading: MaltitlePriority!
 }
 
 """

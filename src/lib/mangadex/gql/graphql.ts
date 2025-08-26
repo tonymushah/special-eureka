@@ -1730,6 +1730,15 @@ export type LegacyQueriesIdMappingArgs = {
 	params: LegacyIdMappingParams;
 };
 
+export type LibraryMutations = {
+	__typename?: "LibraryMutations";
+	exportAsMyAnimeList: Scalars["String"]["output"];
+};
+
+export type LibraryMutationsExportAsMyAnimeListArgs = {
+	options: MdlibraryToMyAnimeListExportOption;
+};
+
 export type ListReasonsByCategory = {
 	category: ReportCategory;
 };
@@ -1743,6 +1752,12 @@ export type ListReportParams = {
 	reasonId?: InputMaybe<Scalars["UUID"]["input"]>;
 	status?: InputMaybe<ReportStatus>;
 };
+
+export enum MaltitlePriority {
+	High = "HIGH",
+	Low = "LOW",
+	Medium = "MEDIUM"
+}
 
 export type MangaAggregate = {
 	__typename?: "MangaAggregate";
@@ -2400,6 +2415,18 @@ export type MarkChapterBatchParam = {
 	updateHistory?: Scalars["Boolean"]["input"];
 };
 
+export type MdlibraryToMyAnimeListExportOption = {
+	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	exportPath: Scalars["String"]["input"];
+	hasAvailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadVolumes?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeScore?: InputMaybe<Scalars["Boolean"]["input"]>;
+	priorities?: InputMaybe<ReadingStatusPriorities>;
+	userId: Scalars["String"]["input"];
+	userName: Scalars["String"]["input"];
+};
+
 export type Mutation = {
 	__typename?: "Mutation";
 	apiClient: ApiClientMutation;
@@ -2409,6 +2436,7 @@ export type Mutation = {
 	cover: CoverMutations;
 	customList: CustomListMutations;
 	forums: ForumsMutations;
+	library: LibraryMutations;
 	manga: MangaMutations;
 	oauth: OauthMutations;
 	offlineAppState: OfflineAppStateMutations;
@@ -2633,6 +2661,15 @@ export enum ReadingStatus {
 	Reading = "READING",
 	ReReading = "RE_READING"
 }
+
+export type ReadingStatusPriorities = {
+	completed: MaltitlePriority;
+	dropped: MaltitlePriority;
+	onHold: MaltitlePriority;
+	planToRead: MaltitlePriority;
+	reReading: MaltitlePriority;
+	reading: MaltitlePriority;
+};
 
 /**
  * Relationship types for reference expansion.
