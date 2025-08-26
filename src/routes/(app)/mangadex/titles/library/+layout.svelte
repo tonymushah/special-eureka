@@ -5,7 +5,6 @@
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import getCurrentUserLibrarySize from "@mangadex/stores/library/size";
 	import type { Snippet } from "svelte";
@@ -151,6 +150,18 @@
 						{/if}
 					</span>
 				</ButtonAccent>
+				<ButtonAccent
+					isBase
+					variant={page.url.pathname ==
+					route("/mangadex/titles/library/export/my-anime-list")
+						? "5"
+						: "2"}
+					onclick={() => {
+						goto(route("/mangadex/titles/library/export/my-anime-list"));
+					}}
+				>
+					<span class="tab-section-text"> Export as My Anime List </span>
+				</ButtonAccent>
 			</div>
 		</section>
 
@@ -194,5 +205,6 @@
 	}
 	.tab-section-text {
 		white-space: nowrap;
+		margin: 0px 12px;
 	}
 </style>
