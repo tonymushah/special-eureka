@@ -5206,6 +5206,15 @@ export type CurrentUserLibraryDroppedQuery = {
 	};
 };
 
+export type ExportLibraryToMyAnimeListMutationVariables = Exact<{
+	options: MdlibraryToMyAnimeListExportOption;
+}>;
+
+export type ExportLibraryToMyAnimeListMutation = {
+	__typename?: "Mutation";
+	library: { __typename?: "LibraryMutations"; exportAsMyAnimeList: string };
+};
+
 export type CurrentUserLibraryUnfilteredQueryVariables = Exact<{
 	param?: InputMaybe<UserLibrarySectionParam>;
 }>;
@@ -14807,6 +14816,60 @@ export const CurrentUserLibraryDroppedDocument = {
 } as unknown as DocumentNode<
 	CurrentUserLibraryDroppedQuery,
 	CurrentUserLibraryDroppedQueryVariables
+>;
+export const ExportLibraryToMyAnimeListDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportLibraryToMyAnimeList" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "MdlibraryToMyAnimeListExportOption" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "exportAsMyAnimeList" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ExportLibraryToMyAnimeListMutation,
+	ExportLibraryToMyAnimeListMutationVariables
 >;
 export const CurrentUserLibraryUnfilteredDocument = {
 	kind: "Document",
