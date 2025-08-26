@@ -2,6 +2,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { createMutation } from "@tanstack/svelte-query";
 import type { MdlibraryToMyAnimeListExportOption } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
+import { mangadexQueryClient } from "@mangadex/index";
 
 const exportLibraryToMyAnimeListMutation = graphql(`
 	mutation exportLibraryToMyAnimeList($options: MdlibraryToMyAnimeListExportOption!) {
@@ -10,8 +11,6 @@ const exportLibraryToMyAnimeListMutation = graphql(`
 		}
 	}
 `);
-
-export default exportLibraryToMyAnimeListMutation;
 
 export const exportLibraryToMyAnimeList = createMutation({
 	mutationKey: ["mangadex", "export", "library", "MyAnimeList"],
@@ -27,4 +26,6 @@ export const exportLibraryToMyAnimeList = createMutation({
 			throw new Error("No data??");
 		}
 	},
-});
+}, mangadexQueryClient);
+
+export default exportLibraryToMyAnimeListMutation;

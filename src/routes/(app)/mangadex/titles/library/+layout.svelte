@@ -205,6 +205,6 @@
 	}
 	.tab-section-text {
 		white-space: nowrap;
-		margin: 0px 12px;
+		padding: 0px 12px;
 	}
 </style>

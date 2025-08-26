@@ -1,0 +1,362 @@
+<script lang="ts">
+	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
+	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
+	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { exportLibraryToMyAnimeList } from "@mangadex/gql-docs/library/export/my-anime-list";
+	import {
+		MaltitlePriority,
+		type MdlibraryToMyAnimeListExportOption,
+		type ReadingStatusPriorities
+	} from "@mangadex/gql/graphql";
+	import { save } from "@tauri-apps/plugin-dialog";
+	import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
+	import { last } from "lodash";
+	import { ExternalLinkIcon, RotateCwIcon } from "svelte-feather-icons";
+	import { get } from "svelte/store";
+	import { v4 } from "uuid";
+
+	type Options = Omit<MdlibraryToMyAnimeListExportOption, "priorities" | "exportPath"> & {
+		priorities: ReadingStatusPriorities;
+	};
+
+	function defaultOptions(): Options {
+		return {
+			userId: "",
+			userName: "",
+			priorities: {
+				completed: MaltitlePriority.Low,
+				dropped: MaltitlePriority.Low,
+				onHold: MaltitlePriority.Medium,
+				planToRead: MaltitlePriority.Medium,
+				reReading: MaltitlePriority.High,
+				reading: MaltitlePriority.High
+			},
+			excludeContentProfile: true,
+			hasAvailableChapters: true
+		};
+	}
+	let options: Options = $state(defaultOptions());
+	let revealAfterFinish: boolean = $state(true);
+
+	async function submitExport() {
+		const exportPath = await save({
+			title: "Export MangaDex library to My Anime List XML Import",
+			canCreateDirectories: true,
+			filters: [
+				{
+					name: "XML Import My Anime List",
+					extensions: ["xml"]
+				}
+			]
+		}).catch((e) => {
+			addErrorToast("Cannot create file", e);
+		});
+		console.log(exportPath);
+		if (typeof exportPath == "string") {
+			$exportLibraryToMyAnimeList.mutateAsync(
+				{ ...options, exportPath },
+				{
+					onSettled(data, error, variables, context) {
+						console.debug(variables);
+					},
+					onSuccess(data, variables, context) {
+						addToast({
+							data: {
+								title: "Library exported",
+								description: data
+							}
+						});
+						if (revealAfterFinish) {
+							revealItemInDir(data);
+						}
+					},
+					onError(error, variables, context) {
+						addErrorToast(
+							"Cannot export library as a My Anime List XML Import file",
+							error
+						);
+					}
+				}
+			);
+		} else {
+			addErrorToast("Invalid `null` output from save", null);
+			return;
+		}
+	}
+
+	const user_id_input_id = v4();
+	const user_name_input_id = v4();
+	const reading_id = v4();
+	const reReading_id = v4();
+	const planToRead_id = v4();
+	const completed_id = v4();
+	const dropped_id = v4();
+	const on_hold_id = v4();
+</script>
+
+<div class="export-layout">
+	<Title>Export as MyAnimeList</Title>
+	<section class="input-row">
+		<label for={user_id_input_id}>User Id: </label>
+		<FormInput
+			inputProps={{
+				id: user_id_input_id,
+				disabled: $exportLibraryToMyAnimeList.isPending,
+				required: true
+			}}
+			bind:value={options.userId}
+		/>
+	</section>
+	<section class="input-row">
+		<label for={user_name_input_id}>Username: </label>
+		<FormInput
+			inputProps={{
+				id: user_name_input_id,
+				disabled: $exportLibraryToMyAnimeList.isPending,
+				required: true
+			}}
+			bind:value={options.userName}
+		/>
+	</section>
+	<section class="input-row">
+		<Title underline type={4}>Reading Status Priorities</Title>
+		<section class="priorities">
+			<div class="priority">
+				<label for={reading_id}>Reading: </label>
+				<select
+					bind:value={options.priorities.reading}
+					disabled={$exportLibraryToMyAnimeList.isPending}
+					id={reading_id}
+				>
+					<option value={MaltitlePriority.Low}>Low</option>
+					<option value={MaltitlePriority.Medium}>Medium</option>
+					<option value={MaltitlePriority.High}>High</option>
+				</select>
+			</div>
+			<div class="priority">
+				<label for={on_hold_id}>On-Hold: </label>
+				<select
+					bind:value={options.priorities.onHold}
+					disabled={$exportLibraryToMyAnimeList.isPending}
+					id={on_hold_id}
+				>
+					<option value={MaltitlePriority.Low}>Low</option>
+					<option value={MaltitlePriority.Medium}>Medium</option>
+					<option value={MaltitlePriority.High}>High</option>
+				</select>
+			</div>
+			<div class="priority">
+				<label for={planToRead_id}>Plan to Read: </label>
+				<select
+					bind:value={options.priorities.planToRead}
+					disabled={$exportLibraryToMyAnimeList.isPending}
+					id={planToRead_id}
+				>
+					<option value={MaltitlePriority.Low}>Low</option>
+					<option value={MaltitlePriority.Medium}>Medium</option>
+					<option value={MaltitlePriority.High}>High</option>
+				</select>
+			</div>
+			<div class="priority">
+				<label for={completed_id}>Completed: </label>
+				<select
+					bind:value={options.priorities.completed}
+					disabled={$exportLibraryToMyAnimeList.isPending}
+					id={completed_id}
+				>
+					<option value={MaltitlePriority.Low}>Low</option>
+					<option value={MaltitlePriority.Medium}>Medium</option>
+					<option value={MaltitlePriority.High}>High</option>
+				</select>
+			</div>
+			<div class="priority">
+				<label for={reReading_id}>Re-Reading: </label>
+				<select
+					bind:value={options.priorities.reReading}
+					disabled={$exportLibraryToMyAnimeList.isPending}
+					id={reReading_id}
+				>
+					<option value={MaltitlePriority.Low}>Low</option>
+					<option value={MaltitlePriority.Medium}>Medium</option>
+					<option value={MaltitlePriority.High}>High</option>
+				</select>
+			</div>
+			<div class="priority">
+				<label for={dropped_id}>Dropped: </label>
+				<select
+					bind:value={options.priorities.dropped}
+					disabled={$exportLibraryToMyAnimeList.isPending}
+					id={dropped_id}
+				>
+					<option value={MaltitlePriority.Low}>Low</option>
+					<option value={MaltitlePriority.Medium}>Medium</option>
+					<option value={MaltitlePriority.High}>High</option>
+				</select>
+			</div>
+		</section>
+	</section>
+	<section class="checkboxes">
+		<div class="checkbox-layout">
+			<input
+				id="exclude-content-profile"
+				type="checkbox"
+				class="checkbox"
+				bind:checked={options.excludeContentProfile}
+				defaultChecked
+			/>
+			<label for="exclude-content-profile">Exclude content profile</label>
+		</div>
+		<div class="checkbox-layout">
+			<input
+				id="has-available-chapters"
+				type="checkbox"
+				class="checkbox"
+				bind:checked={options.hasAvailableChapters}
+				defaultChecked
+			/>
+			<label for="has-available-chapter">Has available chapter</label>
+		</div>
+		<div class="checkbox-layout">
+			<input
+				id="include-score"
+				type="checkbox"
+				class="checkbox"
+				bind:checked={options.includeScore}
+			/>
+			<label for="include-score">Include score</label>
+		</div>
+		<div class="checkbox-layout">
+			<input
+				id="include-read-volumes"
+				type="checkbox"
+				class="checkbox"
+				bind:checked={options.includeReadVolumes}
+			/>
+			<label for="include-read-volumes">Include read volumes</label>
+		</div>
+		<div class="checkbox-layout">
+			<input
+				id="include-read-chapters"
+				type="checkbox"
+				class="checkbox"
+				bind:checked={options.includeReadChapters}
+			/>
+			<label for="include-read-chapters">Include read chapters</label>
+		</div>
+		<div class="checkbox-layout">
+			<input
+				id="reveal-after-finish"
+				type="checkbox"
+				class="checkbox"
+				bind:checked={revealAfterFinish}
+				defaultChecked
+			/>
+			<label for="reveal-after-finishi">Reveal File After Finish</label>
+		</div>
+	</section>
+	<section class="actions" class:isLtr={!$isSidebarRtl}>
+		<PrimaryButton
+			isBase
+			disabled={$exportLibraryToMyAnimeList.isPending}
+			onclick={(e) => {
+				submitExport();
+			}}
+		>
+			<div class="button-content">
+				<div class="icon">
+					<ExternalLinkIcon size="20" strokeWidth={3} />
+				</div>
+				<p>Export</p>
+			</div>
+		</PrimaryButton>
+		<ButtonAccent
+			isBase
+			variant="3"
+			onclick={(e) => {
+				options = defaultOptions();
+			}}
+			disabled={$exportLibraryToMyAnimeList.isPending}
+		>
+			<div class="button-content">
+				<div class="icon">
+					<RotateCwIcon size="20" strokeWidth={3} />
+				</div>
+				<p>Reset</p>
+			</div>
+		</ButtonAccent>
+	</section>
+</div>
+
+<style lang="scss">
+	.export-layout {
+		display: grid;
+		margin: 0px 12px;
+		gap: 6px;
+	}
+	.input-row {
+		display: grid;
+	}
+	.priorities {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 8px 12px;
+		align-items: center;
+		.priority {
+			display: flex;
+			flex-direction: row;
+			gap: 4px;
+			flex-wrap: nowrap;
+			align-items: center;
+			justify-content: center;
+			select {
+				font-family: var(--fonts);
+				background-color: var(--accent-l1);
+			}
+		}
+	}
+	.checkboxes {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 8px 12px;
+		align-items: center;
+		.checkbox-layout {
+			display: flex;
+			flex-direction: row;
+			gap: 4px;
+			flex-wrap: nowrap;
+			align-items: center;
+			justify-content: center;
+			.checkbox {
+				width: 18px;
+				height: 18px;
+			}
+		}
+	}
+	.actions {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		.button-content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+			padding: 0px 12px;
+			.icon {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transform: translateY(-1px);
+			}
+			p {
+				margin: 0px;
+			}
+		}
+	}
+</style>
