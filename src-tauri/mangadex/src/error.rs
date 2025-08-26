@@ -145,6 +145,8 @@ pub enum Error {
     Regex(#[from] regex::Error),
     #[error(transparent)]
     SerdeXml(#[from] serde_xml_rs::Error),
+    #[error("Cannot converse some path to an &str")]
+    PathToStr,
 }
 
 impl Error {
