@@ -46,7 +46,7 @@
 				const mangadexScroll = document.getElementById(scrollElementId);
 				if (mangadexScroll) {
 					mangadexScroll.style.userSelect = "none";
-					mangadexScroll.style.overflowX = "hidden";
+					mangadexScroll.style.overflow = "scroll";
 					mangadexScroll.setAttribute("data-selecting", "");
 				}
 			})();
@@ -94,7 +94,7 @@
 						const mangadexScroll = document.getElementById(scrollElementId);
 						if (mangadexScroll) {
 							mangadexScroll.style.userSelect = "auto";
-							mangadexScroll.style.overflowX = "";
+							mangadexScroll.style.overflow = "";
 							mangadexScroll.removeAttribute("data-selecting");
 						}
 					})();
