@@ -39,5 +39,7 @@ pub fn get_builder() -> Builder<Wry> {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
+        // TODO Implement cli function
+        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cmd| {}))
         .setup(setup::setup)
 }
