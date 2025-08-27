@@ -1,3 +1,5 @@
+pub mod deep_link;
+
 use actix::System;
 use tauri::{App, Manager, Runtime};
 
@@ -21,5 +23,6 @@ pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
         let _ = set_menu_window(&main.as_ref().window());
     }
     */
+    deep_link::setup(app.app_handle());
     Ok(())
 }
