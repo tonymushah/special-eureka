@@ -1,4 +1,5 @@
 pub mod deep_link;
+pub mod tray;
 
 use actix::System;
 use tauri::{App, Manager, Runtime};
@@ -24,5 +25,8 @@ pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
     }
     */
     deep_link::setup(app.app_handle());
+    if let Err(err) = tray::setup(app.app_handle()) {
+        log::error!("{err}");
+    }
     Ok(())
 }
