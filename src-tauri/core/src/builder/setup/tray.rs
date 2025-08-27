@@ -9,14 +9,16 @@ use crate::{
     states::last_focused_window::LastFocusedWindow,
 };
 
-pub fn setup<R: Runtime>(app: &AppHandle<R>) -> tauri::Result<()> {
+pub fn setup<R: Runtime>(app: &AppHandle<R>) -> anyhow::Result<()> {
     let quit = MenuItem::new(app, "Quit", true, None::<&str>)?;
     let new_window = MenuItem::new(app, "Open a new window", true, None::<&str>)?;
     let menu = Menu::with_items(app, &[&quit, &new_window])?;
     let focus_last = MenuItem::new(app, "Focus last window", true, None::<&str>)?;
 
     let _tray = TrayIconBuilder::new()
+		.icon(app.default_window_icon().ok_or(anyhow::Error::msg("No default window icon"))?.clone())
         .show_menu_on_left_click(false)
+		.title("Special-Eureka")
         .menu(&menu)
         .on_menu_event(move |app, event| {
             if event.id() == quit.id() {
