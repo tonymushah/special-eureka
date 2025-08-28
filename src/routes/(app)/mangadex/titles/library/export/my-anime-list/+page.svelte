@@ -12,11 +12,13 @@
 		type MdlibraryToMyAnimeListExportOption,
 		type ReadingStatusPriorities
 	} from "@mangadex/gql/graphql";
+	import { exportTaskEvent } from "@mangadex/stores/library/export/mal";
+	import { createProgress, melt } from "@melt-ui/svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { last } from "lodash";
 	import { ExternalLinkIcon, RotateCwIcon } from "svelte-feather-icons";
-	import { get } from "svelte/store";
+	import { derived as der, get, writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
 
@@ -96,6 +98,18 @@
 	const completed_id = v4();
 	const dropped_id = v4();
 	const on_hold_id = v4();
+	const progressValue = writable(0, (set) => {
+		return exportTaskEvent.subscribe((d) => {
+			set(d?.progress ?? 0);
+		});
+	});
+	const {
+		elements: { root: progressRoot },
+		options: { max: progressMax }
+	} = createProgress({
+		value: progressValue,
+		max: 255
+	});
 </script>
 
 <div class="export-layout">
@@ -113,6 +127,39 @@
 					$exportLibraryToMyAnimeList.reset();
 				}}
 			/>
+		</div>
+	{:else if $exportLibraryToMyAnimeList.isPending && $exportTaskEvent}
+		{@const c_state = $exportTaskEvent.state}
+		<div
+			transition:slide={{
+				axis: "y"
+			}}
+		>
+			<p>
+				{#if c_state == "Preloading"}
+					Preloading...
+				{:else if c_state == "AssemblingInfo"}
+					Assembling infos...
+				{:else if c_state == "GettingScores"}
+					Getting scores...
+				{:else if c_state == "GettingStatuses"}
+					Getting statuses...
+				{:else if c_state == "GettingTitlesData"}
+					Getting titltes data...
+				{:else if c_state == "WritingToFile"}
+					Writing file...
+				{:else if c_state.FetchingReadChapter}
+					Fetching {c_state.FetchingReadChapter.manga} read chapters...
+				{/if}
+			</p>
+			<div class="progress" use:melt={$progressRoot}>
+				<div
+					class="progress-inner"
+					style={`transform: translateX(-${
+						100 - (100 * ($progressValue ?? 0)) / ($progressMax ?? 1)
+					}%)`}
+				></div>
+			</div>
 		</div>
 	{/if}
 	<section class="input-row">
@@ -392,5 +439,25 @@
 				margin: 0px;
 			}
 		}
+	}
+	.progress {
+		position: relative;
+		height: 1em;
+		width: 80%;
+		overflow: hidden;
+		border-radius: 99999999px;
+		background-color: var(--accent-l5);
+		.progress-inner {
+			height: 100%;
+			width: 100%;
+			background-color: var(--primary-l2);
+			transition: transform ease-in-out 100ms;
+		}
+	}
+	.progress:hover {
+		background-color: var(--accent-l5-hover);
+	}
+	.progress:active {
+		background-color: var(--accent-l5-active);
 	}
 </style>

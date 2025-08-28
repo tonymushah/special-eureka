@@ -12,7 +12,7 @@ use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::Ma
 use mangadex_api_schema_rust::v5::ratings::Rating as MangaRating;
 use mangadex_api_types_rust::ReadingStatus;
 use serde::{Deserialize, Serialize, Serializer};
-use tauri::{AppHandle, Runtime};
+use tauri::{AppHandle, Emitter, Runtime};
 use uuid::Uuid;
 
 use crate::{
@@ -240,6 +240,42 @@ pub struct MDLibraryToMyAnimeListExportOption {
     pub has_available_chapters: Option<bool>,
 }
 
+#[derive(Debug, Serialize, Clone)]
+enum ExportState {
+    Preloading,
+    GettingStatuses,
+    GettingTitlesData,
+    GettingScores,
+    FetchingReadChapter { manga: Uuid },
+    AssemblingInfo,
+    WritingToFile,
+}
+
+#[derive(Debug, Serialize, Clone)]
+struct ExportEventPayload {
+    progress: u8,
+    state: ExportState,
+}
+
+const EVENT_KEY: &str = "special-eureka://mangadex/export-to-mal";
+
+fn emit_event<R: Runtime>(app: &AppHandle<R>, progress: u8, state: ExportState) {
+    if let Err(err) = app.emit(EVENT_KEY, ExportEventPayload { progress, state }) {
+        log::warn!("{err}");
+    }
+}
+
+macro_rules! increment_return {
+    ($val:ident) => {{
+        $val += 1;
+        $val
+    }};
+    ($val:ident, $inc:expr) => {{
+        $val += $inc;
+        $val
+    }};
+}
+
 // TODO Implement start_date and finish date
 pub async fn export_md_library_to_my_anime_list<R>(
     app: &AppHandle<R>,
@@ -248,8 +284,23 @@ pub async fn export_md_library_to_my_anime_list<R>(
 where
     R: Runtime,
 {
+    let mut progress = 0;
+    emit_event(app, progress, ExportState::Preloading);
+
     let client = app.get_mangadex_client_with_auth_refresh().await?;
+
+    emit_event(
+        app,
+        increment_return!(progress),
+        ExportState::GettingStatuses,
+    );
     let statuses = { client.manga().status().get().send().await?.statuses };
+
+    emit_event(
+        app,
+        increment_return!(progress),
+        ExportState::GettingTitlesData,
+    );
     let mut params = MangaListParams {
         manga_ids: statuses.keys().cloned().collect(),
         has_available_chapters: option.has_available_chapters,
@@ -315,7 +366,9 @@ where
             })
             .collect()
     };
+
     if option.include_score.unwrap_or_default() {
+        emit_event(app, increment_return!(progress), ExportState::GettingScores);
         let mut ratings = HashMap::<Uuid, MangaRating>::new();
         for ids in mangas
             .keys()
@@ -336,7 +389,16 @@ where
         let include_read_chapters = option.include_read_chapters.unwrap_or_default();
         let include_read_volumes = option.include_read_volumes.unwrap_or_default();
         if include_read_chapters || include_read_volumes {
-            for (id, manga_entry) in mangas.iter_mut() {
+            let titles_len = mangas.len();
+            for (index, (id, manga_entry)) in mangas.iter_mut().enumerate() {
+                emit_event(
+                    app,
+                    increment_return!(progress, {
+                        let p: u8 = (index / titles_len).try_into()?;
+                        p * (u8::MAX - 12)
+                    }),
+                    ExportState::FetchingReadChapter { manga: *id },
+                );
                 let client = app.get_mangadex_client_with_auth_refresh().await?;
                 let read_chapters = client.manga().id(*id).read().get().send().await?.data;
                 if !read_chapters.is_empty() {
@@ -369,6 +431,12 @@ where
             }
         }
     }
+
+    emit_event(
+        app,
+        increment_return!(progress),
+        ExportState::AssemblingInfo,
+    );
     let my_info = MyInfo {
         user_id: option.user_id,
         user_name: option.user_name,
@@ -405,6 +473,7 @@ where
         manga: mangas.into_values().collect(),
     };
 
+    emit_event(app, increment_return!(progress), ExportState::WritingToFile);
     let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
     let mut to_use_file = File::create(&export_path)?;
     {
