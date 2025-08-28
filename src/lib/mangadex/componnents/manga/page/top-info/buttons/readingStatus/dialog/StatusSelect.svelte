@@ -8,9 +8,10 @@
 	let target: HTMLDivElement | undefined = $state(undefined);
 	interface Props {
 		readingStatus: Writable<ReadingStatus | undefined>;
+		disabled?: boolean;
 	}
 
-	let { readingStatus }: Props = $props();
+	let { readingStatus, disabled }: Props = $props();
 	let isOpen: boolean = $state(false);
 
 	let status = $derived(getText($readingStatus) ?? "None");
@@ -22,6 +23,7 @@
 		onclick={() => {
 			isOpen = !isOpen;
 		}}
+		{disabled}
 	>
 		<div class="inner-button">
 			<span>{status}</span>
