@@ -205,6 +205,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.excludeContentProfile}
+				disabled={$exportLibraryToMyAnimeList.isPending}
 				defaultChecked
 			/>
 			<label for="exclude-content-profile">Exclude content profile</label>
@@ -215,6 +216,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={options.hasAvailableChapters}
+				disabled={$exportLibraryToMyAnimeList.isPending}
 				defaultChecked
 			/>
 			<label for="has-available-chapter">Has available chapter</label>
@@ -233,6 +235,7 @@
 				id="include-read-volumes"
 				type="checkbox"
 				class="checkbox"
+				disabled={$exportLibraryToMyAnimeList.isPending}
 				bind:checked={options.includeReadVolumes}
 			/>
 			<label for="include-read-volumes">Include read volumes</label>
@@ -242,6 +245,7 @@
 				id="include-read-chapters"
 				type="checkbox"
 				class="checkbox"
+				disabled={$exportLibraryToMyAnimeList.isPending}
 				bind:checked={options.includeReadChapters}
 			/>
 			<label for="include-read-chapters">Include read chapters</label>
@@ -252,6 +256,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={revealAfterFinish}
+				disabled={$exportLibraryToMyAnimeList.isPending}
 				defaultChecked
 			/>
 			<label for="reveal-after-finishi">Reveal File After Finish</label>
