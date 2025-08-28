@@ -110,7 +110,7 @@
     "mizuki-graphiql-fetcher": "^1.0.1",
     "mizuki-urql-adapter": "^1.0.1",
     "panzoom": "^9.4.3",
-    "svelte-exmarkdown": "^4.0.3",
+    "svelte-exmarkdown": "^5.0.0",
     "svelte-feather-icons": "^4.2.0",
     "svelte-remixicon": "^2.7.0",
     "swiper": "^11.2.10",
