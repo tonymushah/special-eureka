@@ -4,14 +4,14 @@ use eureka_mmanager::{
     prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetCoverDownloadManager, TaskManagerAddr},
 };
 use mangadex_api_input_types::cover::{edit::CoverEditParam, upload::CoverUploadParam};
-use mangadex_api_schema_rust::{v5::CoverAttributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CoverAttributes};
 use uuid::Uuid;
 
 use crate::{
+    Result,
     error::Error,
     query::download_state::DownloadStateQueries,
     utils::{download::cover::cover_download, traits_utils::MangadexAsyncGraphQLContextExt},
-    Result,
 };
 use crate::{
     objects::cover::Cover,

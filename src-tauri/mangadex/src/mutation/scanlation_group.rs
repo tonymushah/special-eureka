@@ -1,12 +1,12 @@
 use crate::{
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     Result,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::scanlation_group::{
     create::CreateScalantionGroupParam, edit::EditScanlationGroupParam,
 };
-use mangadex_api_schema_rust::{v5::ScanlationGroupAttributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::ScanlationGroupAttributes};
 use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
@@ -15,7 +15,7 @@ use crate::{
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
         get_watches_from_graphql_context,
-        watch::{is_following::inner::IsFollowingInnerData, SendData},
+        watch::{SendData, is_following::inner::IsFollowingInnerData},
     },
 };
 

@@ -1,12 +1,12 @@
 use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
+    ApiObjectNoRelationships,
     v5::{
         AuthorAttributes, CoverAttributes, MangaAttributes as Attributes, RelatedAttributes,
         Relationship, UserAttributes,
     },
-    ApiObjectNoRelationships,
 };
-use mangadex_api_types_rust::{error::RelationshipConversionError, RelationshipType};
+use mangadex_api_types_rust::{RelationshipType, error::RelationshipConversionError};
 use uuid::Uuid;
 
 use crate::objects::{author::Author, cover::Cover, manga::MangaObject, user::User};

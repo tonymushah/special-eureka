@@ -1,6 +1,6 @@
 use crate::{
-    cache::cover::{CoverImageCache, CoverImageQuality},
     Result,
+    cache::cover::{CoverImageCache, CoverImageQuality},
 };
 use async_graphql::Context;
 use eureka_mmanager::prelude::CoverDataPullAsyncTrait;

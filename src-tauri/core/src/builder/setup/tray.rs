@@ -16,9 +16,13 @@ pub fn setup<R: Runtime>(app: &AppHandle<R>) -> anyhow::Result<()> {
     let focus_last = MenuItem::new(app, "Focus last window", true, None::<&str>)?;
 
     let _tray = TrayIconBuilder::new()
-		.icon(app.default_window_icon().ok_or(anyhow::Error::msg("No default window icon"))?.clone())
+        .icon(
+            app.default_window_icon()
+                .ok_or(anyhow::Error::msg("No default window icon"))?
+                .clone(),
+        )
         .show_menu_on_left_click(false)
-		.title("Special-Eureka")
+        .title("Special-Eureka")
         .menu(&menu)
         .on_menu_event(move |app, event| {
             if event.id() == quit.id() {

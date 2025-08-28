@@ -9,14 +9,14 @@ use mangadex_api_schema_rust::v5::{CoverCollection, CoverObject};
 use tokio_stream::Stream;
 
 use crate::{
+    Result,
     error::Error,
     objects::cover::lists::CoverResults,
     utils::{
-        get_mangadex_client_from_graphql_context, get_offline_app_state,
+        Collection, get_mangadex_client_from_graphql_context, get_offline_app_state,
         get_watches_from_graphql_context, source::SendMultiSourceData,
-        splittable_param::SendSplitted, Collection,
+        splittable_param::SendSplitted,
     },
-    Result,
 };
 
 #[derive(Clone, Debug)]

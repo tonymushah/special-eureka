@@ -1,4 +1,4 @@
-use crate::{utils::traits_utils::MangadexAsyncGraphQLContextExt, Result};
+use crate::{Result, utils::traits_utils::MangadexAsyncGraphQLContextExt};
 
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
@@ -7,10 +7,10 @@ use time::Duration;
 
 use crate::{
     objects::{
-        chapter::lists::ChapterResults,
-        custom_list::{seasonal::SeasonalData, staff_picks::StaffPicksData, CustomList},
-        manga::lists::MangaResults,
         ExtractReferenceExpansionFromContext,
+        chapter::lists::ChapterResults,
+        custom_list::{CustomList, seasonal::SeasonalData, staff_picks::StaffPicksData},
+        manga::lists::MangaResults,
     },
     utils::{
         get_mangadex_client_from_graphql_context, get_watches_from_graphql_context, watch::SendData,

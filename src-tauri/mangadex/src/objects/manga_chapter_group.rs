@@ -5,13 +5,13 @@ use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType};
 use uuid::Uuid;
 
 use crate::{
-    objects::GetId, query::manga::list::MangaListQueries,
-    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+    Result, objects::GetId, query::manga::list::MangaListQueries,
+    utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
 
 use self::item::MangaChapterItem;
 
-use super::{chapter::Chapter, manga::MangaObject, ExtractReferenceExpansion, ResultsInfo};
+use super::{ExtractReferenceExpansion, ResultsInfo, chapter::Chapter, manga::MangaObject};
 
 pub mod item;
 

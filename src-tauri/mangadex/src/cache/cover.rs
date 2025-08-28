@@ -2,15 +2,15 @@ use std::{
     env::temp_dir,
     error::Error,
     fmt::Display,
-    fs::{create_dir_all, remove_dir_all, File},
+    fs::{File, create_dir_all, remove_dir_all},
     io::{BufReader, BufWriter, Read, Write},
     path::PathBuf,
 };
 
-use crate::{query::cover::image::CoverImageQuery, Result};
+use crate::{Result, query::cover::image::CoverImageQuery};
 use async_graphql::Enum;
 use mangadex_api::CDN_URL;
-use reqwest::{header::CACHE_CONTROL, Client};
+use reqwest::{Client, header::CACHE_CONTROL};
 use url::Url;
 use uuid::Uuid;
 

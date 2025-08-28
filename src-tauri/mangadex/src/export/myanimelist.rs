@@ -248,7 +248,6 @@ pub async fn export_md_library_to_my_anime_list<R>(
 where
     R: Runtime,
 {
-
     let client = app.get_mangadex_client_with_auth_refresh().await?;
     let statuses = { client.manga().status().get().send().await?.statuses };
     let mut params = MangaListParams {
@@ -340,29 +339,31 @@ where
             for (id, manga_entry) in mangas.iter_mut() {
                 let client = app.get_mangadex_client_with_auth_refresh().await?;
                 let read_chapters = client.manga().id(*id).read().get().send().await?.data;
-                let read_chapters = ChapterListParams {
-                    chapter_ids: read_chapters,
-                    ..Default::default()
-                }
-                .send_splitted_default(&client)
-                .await?
-                .data;
-                if include_read_chapters {
-                    let maybe_read_chapters = read_chapters
-                        .iter()
-                        .flat_map(|c| c.attributes.chapter.as_ref()?.parse::<u32>().ok())
-                        .max();
-                    if let Some(read_chapters) = maybe_read_chapters {
-                        manga_entry.my_read_chapters = read_chapters.to_string();
+                if !read_chapters.is_empty() {
+                    let read_chapters = ChapterListParams {
+                        chapter_ids: read_chapters,
+                        ..Default::default()
                     }
-                }
-                if include_read_volumes {
-                    let maybe_read_volumes = read_chapters
-                        .iter()
-                        .flat_map(|c| c.attributes.volume.as_ref()?.parse::<u32>().ok())
-                        .max();
-                    if let Some(read_volumes) = maybe_read_volumes {
-                        manga_entry.my_read_volumes = read_volumes.to_string();
+                    .send_splitted_default(&client)
+                    .await?
+                    .data;
+                    if include_read_chapters {
+                        let maybe_read_chapters = read_chapters
+                            .iter()
+                            .flat_map(|c| c.attributes.chapter.as_ref()?.parse::<u32>().ok())
+                            .max();
+                        if let Some(read_chapters) = maybe_read_chapters {
+                            manga_entry.my_read_chapters = read_chapters.to_string();
+                        }
+                    }
+                    if include_read_volumes {
+                        let maybe_read_volumes = read_chapters
+                            .iter()
+                            .flat_map(|c| c.attributes.volume.as_ref()?.parse::<u32>().ok())
+                            .max();
+                        if let Some(read_volumes) = maybe_read_volumes {
+                            manga_entry.my_read_volumes = read_volumes.to_string();
+                        }
                     }
                 }
             }
@@ -404,8 +405,8 @@ where
         manga: mangas.into_values().collect(),
     };
 
-	let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
-	let mut to_use_file = File::create(&export_path)?;
+    let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
+    let mut to_use_file = File::create(&export_path)?;
     {
         let mut buf_writer = BufWriter::new(&mut to_use_file);
         serde_xml_rs::to_writer(&mut buf_writer, &xml_data)?;

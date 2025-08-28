@@ -1,4 +1,4 @@
-use tauri::{command, Emitter, EventTarget, Result, Runtime, Window};
+use tauri::{Emitter, EventTarget, Result, Runtime, Window, command};
 
 fn menu_handle<R: Runtime>(window: &Window<R>) -> Result<()> {
     if window.is_decorated()? {
