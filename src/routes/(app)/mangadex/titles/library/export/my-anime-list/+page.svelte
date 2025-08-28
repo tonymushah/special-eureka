@@ -226,6 +226,7 @@
 				id="include-score"
 				type="checkbox"
 				class="checkbox"
+				disabled={$exportLibraryToMyAnimeList.isPending}
 				bind:checked={options.includeScore}
 			/>
 			<label for="include-score">Include score</label>
