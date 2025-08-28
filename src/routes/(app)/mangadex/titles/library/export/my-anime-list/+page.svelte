@@ -86,7 +86,6 @@
 			return;
 		}
 	}
-
 	const user_id_input_id = v4();
 	const user_name_input_id = v4();
 	const reading_id = v4();
@@ -293,6 +292,18 @@
 				<p>Reset</p>
 			</div>
 		</ButtonAccent>
+	</section>
+	<section class="notes">
+		<p>
+			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API,
+			it is <b>recommended to not open MangaDex on your browser </b>
+			<i>or any similar activities that might send unecessary requests to the API </i>
+			because it might blow your
+			<i>IP rate-limit</i>
+			and also check if <b>your internet connection is smooth enough</b> for this operation.
+			(also check if you have enough RAM too.
+			<code>`The bigger the library, the more it needs RAM`</code>)
+		</p>
 	</section>
 </div>
 
