@@ -1,13 +1,16 @@
 <script lang="ts">
+	import { XCircleIcon } from "svelte-feather-icons";
+	import ButtonAccent from "./theme/buttons/ButtonAccent.svelte";
 	import PrimaryButtonOnlyLabel from "./theme/buttons/PrimaryButtonOnlyLabel.svelte";
 
 	interface Props {
 		error: Error;
 		label: string;
 		retry?: () => any;
+		close?: () => any;
 	}
 
-	let { error, label, retry }: Props = $props();
+	let { error, label, retry, close }: Props = $props();
 </script>
 
 <div class="error with-margin">
@@ -16,6 +19,15 @@
 		{#if retry}
 			<div>
 				<PrimaryButtonOnlyLabel label="Retry?" onclick={retry} />
+			</div>
+		{/if}
+		{#if close}
+			<div>
+				<ButtonAccent onclick={close}>
+					<div class="icon">
+						<XCircleIcon size="20" />
+					</div>
+				</ButtonAccent>
 			</div>
 		{/if}
 	</div>
@@ -55,5 +67,10 @@
 			flex-direction: row;
 			overflow: hidden;
 		}
+	}
+	.icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

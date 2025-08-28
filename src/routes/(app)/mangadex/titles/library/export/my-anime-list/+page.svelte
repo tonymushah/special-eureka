@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
@@ -16,6 +17,7 @@
 	import { last } from "lodash";
 	import { ExternalLinkIcon, RotateCwIcon } from "svelte-feather-icons";
 	import { get } from "svelte/store";
+	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
 
 	type Options = Omit<MdlibraryToMyAnimeListExportOption, "priorities" | "exportPath"> & {
@@ -98,6 +100,21 @@
 
 <div class="export-layout">
 	<Title>Export as MyAnimeList</Title>
+	{#if $exportLibraryToMyAnimeList.error && !$exportLibraryToMyAnimeList.isPending}
+		<div
+			transition:slide={{
+				axis: "y"
+			}}
+		>
+			<ErrorComponent
+				label="Cannot export library"
+				error={$exportLibraryToMyAnimeList.error}
+				close={() => {
+					$exportLibraryToMyAnimeList.reset();
+				}}
+			/>
+		</div>
+	{/if}
 	<section class="input-row">
 		<label for={user_id_input_id}>User Id: </label>
 		<FormInput
