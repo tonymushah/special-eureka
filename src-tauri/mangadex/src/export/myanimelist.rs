@@ -8,6 +8,7 @@ use std::{
 };
 
 use async_graphql::{Enum, InputObject};
+use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_schema_rust::v5::ratings::Rating as MangaRating;
 use mangadex_api_types_rust::ReadingStatus;
@@ -23,6 +24,42 @@ use crate::{
         traits_utils::MangadexTauriManagerExt,
     },
 };
+
+#[derive(Debug, Serialize, Clone)]
+enum ExportState {
+    Preloading,
+    GettingStatuses,
+    GettingTitlesData,
+    GettingScores,
+    FetchingReadChapter { manga: Uuid },
+    AssemblingInfo,
+    WritingToFile,
+}
+
+#[derive(Debug, Serialize, Clone)]
+struct ExportEventPayload {
+    progress: u8,
+    state: ExportState,
+}
+
+const EVENT_KEY: &str = "special-eureka://mangadex/export-to-mal";
+
+fn emit_event<R: Runtime>(app: &AppHandle<R>, progress: u8, state: ExportState) {
+    if let Err(err) = app.emit(EVENT_KEY, ExportEventPayload { progress, state }) {
+        log::warn!("{err}");
+    }
+}
+
+macro_rules! increment_return {
+    ($val:ident) => {{
+        $val += 1;
+        $val
+    }};
+    ($val:ident, $inc:expr) => {{
+        $val += $inc;
+        $val
+    }};
+}
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 pub struct MyInfo {
@@ -227,99 +264,42 @@ impl Default for ReadingStatusPriorities {
     }
 }
 
-#[derive(Debug, Clone, InputObject)]
-pub struct MDLibraryToMyAnimeListExportOption {
-    pub user_name: String,
-    pub user_id: String,
-    pub priorities: Option<ReadingStatusPriorities>,
-    pub include_read_chapters: Option<bool>,
-    pub include_read_volumes: Option<bool>,
-    pub include_score: Option<bool>,
-    pub export_path: String,
-    pub exclude_content_profile: Option<bool>,
-    pub has_available_chapters: Option<bool>,
-}
-
-#[derive(Debug, Serialize, Clone)]
-enum ExportState {
-    Preloading,
-    GettingStatuses,
-    GettingTitlesData,
-    GettingScores,
-    FetchingReadChapter { manga: Uuid },
-    AssemblingInfo,
-    WritingToFile,
-}
-
-#[derive(Debug, Serialize, Clone)]
-struct ExportEventPayload {
+struct ExportCoreOptions<'a, R: Runtime> {
+    app: &'a AppHandle<R>,
+    client: &'a MangaDexClient,
+    params: MangaListParams,
+    priorities: Option<ReadingStatusPriorities>,
+    include_read_chapters: Option<bool>,
+    include_read_volumes: Option<bool>,
+    include_score: Option<bool>,
+    export_path: String,
+    statuses: HashMap<Uuid, ReadingStatus>,
     progress: u8,
-    state: ExportState,
+    user_name: String,
+    user_id: String,
 }
 
-const EVENT_KEY: &str = "special-eureka://mangadex/export-to-mal";
-
-fn emit_event<R: Runtime>(app: &AppHandle<R>, progress: u8, state: ExportState) {
-    if let Err(err) = app.emit(EVENT_KEY, ExportEventPayload { progress, state }) {
-        log::warn!("{err}");
-    }
-}
-
-macro_rules! increment_return {
-    ($val:ident) => {{
-        $val += 1;
-        $val
-    }};
-    ($val:ident, $inc:expr) => {{
-        $val += $inc;
-        $val
-    }};
-}
-
-// TODO Implement start_date and finish date
-pub async fn export_md_library_to_my_anime_list<R>(
-    app: &AppHandle<R>,
-    option: MDLibraryToMyAnimeListExportOption,
-) -> crate::Result<String>
-where
-    R: Runtime,
-{
-    let mut progress = 0;
-    emit_event(app, progress, ExportState::Preloading);
-
-    let client = app.get_mangadex_client_with_auth_refresh().await?;
-
+async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Result<String> {
+    let priorities = options.priorities.unwrap_or_default();
+    let mut progress = options.progress;
     emit_event(
-        app,
-        increment_return!(progress),
-        ExportState::GettingStatuses,
-    );
-    let statuses = { client.manga().status().get().send().await?.statuses };
-
-    emit_event(
-        app,
+        options.app,
         increment_return!(progress),
         ExportState::GettingTitlesData,
     );
-    let mut params = MangaListParams {
-        manga_ids: statuses.keys().cloned().collect(),
-        has_available_chapters: option.has_available_chapters,
-        ..Default::default()
-    };
-    if !option.exclude_content_profile.unwrap_or_default() {
-        params = app.feed(params);
-    }
-    let priorities = option.priorities.unwrap_or_default();
-
     let mut mangas: HashMap<Uuid, MangaEntry> = {
-        let data = params.send_splitted_default(&client).await?.data;
+        let data = options
+            .params
+            .send_splitted_default(options.client)
+            .await?
+            .data;
         {
             let mangas = data
                 .iter()
                 .cloned()
                 .map(crate::objects::manga::MangaObject::from)
                 .collect::<Vec<_>>();
-            let watches = (*app.get_watches()?).clone();
+            let watches = (*options.app.get_watches()?).clone();
             tauri::async_runtime::spawn(async move {
                 for data in mangas {
                     let _ = watches.manga.send_online(data);
@@ -329,7 +309,7 @@ where
         data.into_iter()
             .flat_map(|manga| {
                 let title_id = manga.attributes.links?.my_anime_list?.0;
-                let status = *statuses.get(&manga.id)?;
+                let status = *options.statuses.get(&manga.id)?;
                 let priority = match status {
                     ReadingStatus::Completed => priorities.completed,
                     ReadingStatus::Dropped => priorities.dropped,
@@ -367,8 +347,12 @@ where
             .collect()
     };
 
-    if option.include_score.unwrap_or_default() {
-        emit_event(app, increment_return!(progress), ExportState::GettingScores);
+    if options.include_score.unwrap_or_default() {
+        emit_event(
+            options.app,
+            increment_return!(progress),
+            ExportState::GettingScores,
+        );
         let mut ratings = HashMap::<Uuid, MangaRating>::new();
         for ids in mangas
             .keys()
@@ -376,7 +360,7 @@ where
             .collect::<Vec<_>>()
             .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
         {
-            let client = app.get_mangadex_client_with_auth_refresh().await?;
+            let client = options.app.get_mangadex_client_with_auth_refresh().await?;
             ratings.extend(client.rating().get().manga(ids).send().await?.ratings);
         }
         for (manga_id, entry) in mangas.iter_mut() {
@@ -386,20 +370,20 @@ where
         }
     }
     {
-        let include_read_chapters = option.include_read_chapters.unwrap_or_default();
-        let include_read_volumes = option.include_read_volumes.unwrap_or_default();
+        let include_read_chapters = options.include_read_chapters.unwrap_or_default();
+        let include_read_volumes = options.include_read_volumes.unwrap_or_default();
         if include_read_chapters || include_read_volumes {
             let titles_len = mangas.len();
             for (index, (id, manga_entry)) in mangas.iter_mut().enumerate() {
                 emit_event(
-                    app,
+                    options.app,
                     increment_return!(progress, {
                         let p: u8 = (index / titles_len).try_into()?;
                         p * (u8::MAX - 12)
                     }),
                     ExportState::FetchingReadChapter { manga: *id },
                 );
-                let client = app.get_mangadex_client_with_auth_refresh().await?;
+                let client = options.app.get_mangadex_client_with_auth_refresh().await?;
                 let read_chapters = client.manga().id(*id).read().get().send().await?.data;
                 if !read_chapters.is_empty() {
                     let read_chapters = ChapterListParams {
@@ -428,18 +412,19 @@ where
                         }
                     }
                 }
+                tokio::time::sleep(std::time::Duration::from_millis(200)).await;
             }
         }
     }
 
     emit_event(
-        app,
+        options.app,
         increment_return!(progress),
         ExportState::AssemblingInfo,
     );
     let my_info = MyInfo {
-        user_id: option.user_id,
-        user_name: option.user_name,
+        user_id: options.user_id,
+        user_name: options.user_name,
         user_export_type: 2,
         user_total_manga: mangas.len().try_into()?,
         user_total_reading: mangas
@@ -473,8 +458,12 @@ where
         manga: mangas.into_values().collect(),
     };
 
-    emit_event(app, increment_return!(progress), ExportState::WritingToFile);
-    let export_path = <String as AsRef<Path>>::as_ref(&option.export_path).to_path_buf();
+    emit_event(
+        options.app,
+        increment_return!(progress),
+        ExportState::WritingToFile,
+    );
+    let export_path = <String as AsRef<Path>>::as_ref(&options.export_path).to_path_buf();
     let mut to_use_file = File::create(&export_path)?;
     {
         let mut buf_writer = BufWriter::new(&mut to_use_file);
@@ -485,6 +474,131 @@ where
         .to_str()
         .map(String::from)
         .ok_or(crate::Error::PathToStr)
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct MDLibraryToMyAnimeListExportOption {
+    pub user_name: String,
+    pub user_id: String,
+    pub priorities: Option<ReadingStatusPriorities>,
+    pub include_read_chapters: Option<bool>,
+    pub include_read_volumes: Option<bool>,
+    pub include_score: Option<bool>,
+    pub export_path: String,
+    pub exclude_content_profile: Option<bool>,
+    pub has_available_chapters: Option<bool>,
+}
+
+// TODO Implement start_date and finish date
+pub async fn export_md_library_to_my_anime_list<R>(
+    app: &AppHandle<R>,
+    option: MDLibraryToMyAnimeListExportOption,
+) -> crate::Result<String>
+where
+    R: Runtime,
+{
+    let mut progress = 0;
+    emit_event(app, progress, ExportState::Preloading);
+
+    let client = app.get_mangadex_client_with_auth_refresh().await?;
+
+    emit_event(
+        app,
+        increment_return!(progress),
+        ExportState::GettingStatuses,
+    );
+    let statuses = { client.manga().status().get().send().await?.statuses };
+
+    emit_event(
+        app,
+        increment_return!(progress),
+        ExportState::GettingTitlesData,
+    );
+    let mut params = MangaListParams {
+        manga_ids: statuses.keys().cloned().collect(),
+        has_available_chapters: option.has_available_chapters,
+        ..Default::default()
+    };
+    if !option.exclude_content_profile.unwrap_or_default() {
+        params = app.feed(params);
+    }
+
+    export_core(ExportCoreOptions {
+        app,
+        client: &client,
+        params,
+        priorities: option.priorities,
+        progress,
+        statuses,
+        include_read_chapters: option.include_read_chapters,
+        include_read_volumes: option.include_read_volumes,
+        include_score: option.include_score,
+        export_path: option.export_path,
+        user_name: option.user_name,
+        user_id: option.user_id,
+    })
+    .await
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct MDIdsToMyAnimeListExportOption {
+    pub user_name: String,
+    pub user_id: String,
+    pub priorities: Option<ReadingStatusPriorities>,
+    pub include_read_chapters: Option<bool>,
+    pub include_read_volumes: Option<bool>,
+    pub include_score: Option<bool>,
+    pub export_path: String,
+    pub ids: Vec<Uuid>,
+}
+
+pub async fn export_manga_ids_to_my_anime_list<R>(
+    app: &AppHandle<R>,
+    option: MDIdsToMyAnimeListExportOption,
+) -> crate::Result<String>
+where
+    R: Runtime,
+{
+    let mut progress = 0;
+    emit_event(app, progress, ExportState::Preloading);
+    let client = app.get_mangadex_client_with_auth_refresh().await?;
+
+    emit_event(
+        app,
+        increment_return!(progress),
+        ExportState::GettingStatuses,
+    );
+    let statuses = client
+        .manga()
+        .status()
+        .get()
+        .send()
+        .await?
+        .statuses
+        .into_iter()
+        .filter(|(id, _)| option.ids.contains(id))
+        .collect::<HashMap<_, _>>();
+
+    let params = MangaListParams {
+        manga_ids: option.ids,
+        ..Default::default()
+    };
+
+    export_core(ExportCoreOptions {
+        app,
+        client: &client,
+        params,
+        priorities: option.priorities,
+        progress,
+        statuses,
+        include_read_chapters: option.include_read_chapters,
+        include_read_volumes: option.include_read_volumes,
+        include_score: option.include_score,
+        export_path: option.export_path,
+        user_name: option.user_name,
+        user_id: option.user_id,
+    })
+    .await
 }
 
 #[cfg(test)]
