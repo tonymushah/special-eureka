@@ -52,7 +52,6 @@ enum-repr.workspace = true
 enum-kinds.workspace = true
 serde_repr.workspace = true
 governor.workspace = true
-deduplicate.workspace = true
 futures-util.workspace = true
 image.workspace = true
 serde-xml-rs.workspace = true

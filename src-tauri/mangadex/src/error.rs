@@ -2,8 +2,6 @@ use std::{backtrace::Backtrace, ops::Deref};
 
 use async_graphql::ErrorExtensions;
 
-use crate::utils::refresh_token::AbstractRefreshTokenDedupError;
-
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
 #[enum_kind(
     ErrorKind,
@@ -127,8 +125,6 @@ pub enum Error {
     NotManagedSpecificRateLimit,
     #[error(transparent)]
     IndeterminateOffset(#[from] time::error::IndeterminateOffset),
-    #[error(transparent)]
-    AbstractRefreshTokenDedup(#[from] AbstractRefreshTokenDedupError),
     #[error(transparent)]
     Deduplicate(#[from] deduplicate::DeduplicateError),
     #[error("No deduplicate task available")]
