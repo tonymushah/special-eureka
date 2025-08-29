@@ -10,9 +10,7 @@ use std::{
 use async_graphql::{Enum, InputObject};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
-use mangadex_api_schema_rust::v5::{
-    manga_read_markers::MangaReadMarkers, ratings::Rating as MangaRating,
-};
+use mangadex_api_schema_rust::v5::manga_read_markers::MangaReadMarkers;
 use mangadex_api_types_rust::ReadingStatus;
 use serde::{Deserialize, Serialize, Serializer};
 use tauri::{AppHandle, Emitter, Runtime};
@@ -359,7 +357,6 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
             increment_return!(progress),
             ExportState::GettingScores,
         );
-        let mut ratings = HashMap::<Uuid, MangaRating>::new();
         for ids in mangas
             .keys()
             .cloned()
@@ -367,10 +364,10 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
             .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
         {
             let client = options.app.get_mangadex_client_with_auth_refresh().await?;
-            ratings.extend(client.rating().get().manga(ids).send().await?.ratings);
-        }
-        for (manga_id, entry) in mangas.iter_mut() {
-            if let Some(rating) = ratings.get(manga_id) {
+            for (id, rating) in client.rating().get().manga(ids).send().await?.ratings {
+                let Some(entry) = mangas.get_mut(&id) else {
+                    continue;
+                };
                 entry.my_score = rating.rating as u16;
             }
         }
