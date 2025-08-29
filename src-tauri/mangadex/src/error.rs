@@ -126,10 +126,6 @@ pub enum Error {
     #[error(transparent)]
     IndeterminateOffset(#[from] time::error::IndeterminateOffset),
     #[error(transparent)]
-    Deduplicate(#[from] deduplicate::DeduplicateError),
-    #[error("No deduplicate task available")]
-    NoDeduplicateTask,
-    #[error(transparent)]
     TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
     #[error("Some Mutex or RwLock has been poisoned")]
     SyncPoison,
