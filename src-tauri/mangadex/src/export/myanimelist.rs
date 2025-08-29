@@ -10,7 +10,9 @@ use std::{
 use async_graphql::{Enum, InputObject};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
-use mangadex_api_schema_rust::v5::ratings::Rating as MangaRating;
+use mangadex_api_schema_rust::v5::{
+    manga_read_markers::MangaReadMarkers, ratings::Rating as MangaRating,
+};
 use mangadex_api_types_rust::ReadingStatus;
 use serde::{Deserialize, Serialize, Serializer};
 use tauri::{AppHandle, Emitter, Runtime};
@@ -378,45 +380,73 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
         let include_read_volumes = options.include_read_volumes.unwrap_or_default();
         if include_read_chapters || include_read_volumes {
             let titles_len = mangas.len();
-            for (index, (id, manga_entry)) in mangas.iter_mut().enumerate() {
-                emit_event(
-                    options.app,
-                    increment_return!(progress, {
-                        let p: u8 = (index / titles_len).try_into()?;
-                        p * (u8::MAX - 12)
-                    }),
-                    ExportState::FetchingReadChapter { manga: *id },
-                );
+
+            let mut index: usize = 0;
+            for ids in mangas
+                .keys()
+                .copied()
+                .collect::<Vec<_>>()
+                .chunks(MANGADEX_PAGE_LIMIT.try_into()?)
+            {
                 let client = options.app.get_mangadex_client_with_auth_refresh().await?;
-                let read_chapters = client.manga().id(*id).read().get().send().await?.data;
-                if !read_chapters.is_empty() {
-                    let read_chapters = ChapterListParams {
-                        chapter_ids: read_chapters,
-                        ..Default::default()
-                    }
-                    .send_splitted_default(&client)
+                let read_markers = match client
+                    .manga()
+                    .read()
+                    .get()
+                    .manga_ids(ids)
+                    .grouped(true)
+                    .send()
                     .await?
-                    .data;
-                    if include_read_chapters {
-                        let maybe_read_chapters = read_chapters
-                            .iter()
-                            .flat_map(|c| c.attributes.chapter.as_ref()?.parse::<u32>().ok())
-                            .max();
-                        if let Some(read_chapters) = maybe_read_chapters {
-                            manga_entry.my_read_chapters = read_chapters.to_string();
+                {
+                    MangaReadMarkers::Grouped(grouped) => grouped.data,
+                    _ => {
+                        index += ids.len();
+                        continue;
+                    }
+                };
+                for (id, read_chapters) in read_markers {
+                    let Some(manga_entry) = mangas.get_mut(&id) else {
+                        index += 1;
+                        continue;
+                    };
+                    emit_event(
+                        options.app,
+                        increment_return!(progress, {
+                            let p: u8 = (index / titles_len).try_into()?;
+                            p * (u8::MAX - 12)
+                        }),
+                        ExportState::FetchingReadChapter { manga: id },
+                    );
+                    if !read_chapters.is_empty() {
+                        let read_chapters = ChapterListParams {
+                            chapter_ids: read_chapters,
+                            ..Default::default()
+                        }
+                        .send_splitted_default(&client)
+                        .await?
+                        .data;
+                        if include_read_chapters {
+                            let maybe_read_chapters = read_chapters
+                                .iter()
+                                .flat_map(|c| c.attributes.chapter.as_ref()?.parse::<u32>().ok())
+                                .max();
+                            if let Some(read_chapters) = maybe_read_chapters {
+                                manga_entry.my_read_chapters = read_chapters.to_string();
+                            }
+                        }
+                        if include_read_volumes {
+                            let maybe_read_volumes = read_chapters
+                                .iter()
+                                .flat_map(|c| c.attributes.volume.as_ref()?.parse::<u32>().ok())
+                                .max();
+                            if let Some(read_volumes) = maybe_read_volumes {
+                                manga_entry.my_read_volumes = read_volumes.to_string();
+                            }
                         }
                     }
-                    if include_read_volumes {
-                        let maybe_read_volumes = read_chapters
-                            .iter()
-                            .flat_map(|c| c.attributes.volume.as_ref()?.parse::<u32>().ok())
-                            .max();
-                        if let Some(read_volumes) = maybe_read_volumes {
-                            manga_entry.my_read_volumes = read_volumes.to_string();
-                        }
-                    }
+                    // tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+                    index += 1;
                 }
-                tokio::time::sleep(std::time::Duration::from_millis(200)).await;
             }
         }
     }
