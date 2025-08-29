@@ -139,6 +139,8 @@ pub enum Error {
     SerdeXml(#[from] serde_xml_rs::Error),
     #[error("Cannot converse some path to an &str")]
     PathToStr,
+    #[error(transparent)]
+    Csv(#[from] csv::Error),
 }
 
 impl Error {
