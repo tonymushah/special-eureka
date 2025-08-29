@@ -58,36 +58,39 @@
 		}).catch((e) => {
 			addErrorToast("Cannot create file", e);
 		});
-		console.log(exportPath);
-		if (typeof exportPath == "string") {
-			$exportLibraryToMyAnimeList.mutateAsync(
-				{ ...options, exportPath },
-				{
-					onSettled(data, error, variables, context) {
-						console.debug(variables);
-					},
-					onSuccess(data, variables, context) {
-						addToast({
-							data: {
-								title: "Library exported",
-								description: data
+		try {
+			if (typeof exportPath == "string") {
+				$exportLibraryToMyAnimeList.mutateAsync(
+					{ ...options, exportPath },
+					{
+						onSettled(data, error, variables, context) {
+							console.debug(variables);
+						},
+						onSuccess(data, variables, context) {
+							addToast({
+								data: {
+									title: "Library exported",
+									description: data
+								}
+							});
+							if (revealAfterFinish) {
+								revealItemInDir(data);
 							}
-						});
-						if (revealAfterFinish) {
-							revealItemInDir(data);
+						},
+						onError(error, variables, context) {
+							addErrorToast(
+								"Cannot export library as a My Anime List XML Import file",
+								error
+							);
 						}
-					},
-					onError(error, variables, context) {
-						addErrorToast(
-							"Cannot export library as a My Anime List XML Import file",
-							error
-						);
 					}
-				}
-			);
-		} else {
-			addErrorToast("Invalid `null` output from save", null);
-			return;
+				);
+			} else {
+				addErrorToast("Invalid `null` output from save", null);
+				return;
+			}
+		} catch (error) {
+			addErrorToast("Cannot export library as a My Anime List XML Import file", error);
 		}
 	}
 	const user_id_input_id = v4();
@@ -134,6 +137,7 @@
 			transition:slide={{
 				axis: "y"
 			}}
+			class="loading"
 		>
 			<p>
 				{#if c_state == "Preloading"}
@@ -459,5 +463,11 @@
 	}
 	.progress:active {
 		background-color: var(--accent-l5-active);
+	}
+	.loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
 	}
 </style>
