@@ -6,8 +6,8 @@ use uuid::Uuid;
 
 use crate::{
     objects::{
-        api_client::{lists::ApiClientResults, ApiClient},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+        api_client::{ApiClient, lists::ApiClientResults},
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,

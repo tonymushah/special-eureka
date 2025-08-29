@@ -1,6 +1,6 @@
 use crate::{
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     Result,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::report::{
@@ -9,8 +9,8 @@ use mangadex_api_input_types::report::{
 
 use crate::{
     objects::{
-        report::lists::UserReportResults, report_reason::list::ReportReasonResults,
-        ExtractReferenceExpansionFromContext,
+        ExtractReferenceExpansionFromContext, report::lists::UserReportResults,
+        report_reason::list::ReportReasonResults,
     },
     utils::get_mangadex_client_from_graphql_context_with_auth_refresh,
 };

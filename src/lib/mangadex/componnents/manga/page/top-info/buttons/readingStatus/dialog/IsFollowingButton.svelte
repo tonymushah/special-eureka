@@ -7,20 +7,21 @@
 
 	interface Props {
 		isFollowing: Writable<boolean>;
+		disabled?: boolean;
 	}
 
-	let { isFollowing }: Props = $props();
+	let { isFollowing, disabled }: Props = $props();
 	function toggle() {
 		isFollowing.set(!$isFollowing);
 	}
 </script>
 
 {#if $isFollowing}
-	<PrimaryButton onclick={toggle} isBase>
+	<PrimaryButton onclick={toggle} isBase {disabled}>
 		<IsFollowingIcon />
 	</PrimaryButton>
 {:else}
-	<ButtonAccent isBase onclick={toggle}>
+	<ButtonAccent isBase onclick={toggle} {disabled}>
 		<IsFollowingIconOff />
 	</ButtonAccent>
 {/if}

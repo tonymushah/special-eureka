@@ -1,5 +1,5 @@
 use std::{
-    collections::{hash_map::Entry, HashMap},
+    collections::{HashMap, hash_map::Entry},
     hash::Hash,
     io::Result,
 };
@@ -102,7 +102,7 @@ where
                 return Err(std::io::Error::new(
                     std::io::ErrorKind::AlreadyExists,
                     "The value to insert is alredy in queue",
-                ))
+                ));
             }
             Entry::Vacant(d) => {
                 d.insert(DownloadEntryState::Queue);
@@ -120,13 +120,13 @@ where
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::AlreadyExists,
                         "The value to insert is alredy in success",
-                    ))
+                    ));
                 }
                 DownloadEntryState::Failed => {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::AlreadyExists,
                         "The value to insert is alredy in failed",
-                    ))
+                    ));
                 }
             },
             Entry::Vacant(_) => {
@@ -148,13 +148,13 @@ where
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::AlreadyExists,
                         "The value to insert is alredy in success",
-                    ))
+                    ));
                 }
                 DownloadEntryState::Failed => {
                     return Err(std::io::Error::new(
                         std::io::ErrorKind::AlreadyExists,
                         "The value to insert is alredy in failed",
-                    ))
+                    ));
                 }
             },
             Entry::Vacant(_) => {

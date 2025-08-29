@@ -1,6 +1,6 @@
 use crate::{
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     Result,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};
 use mangadex_api::{
@@ -8,12 +8,12 @@ use mangadex_api::{
     v5::upload::upload_session_id::post::UploadImage,
 };
 use mangadex_api_input_types::{
+    PathBuf,
     upload::{
         begin_edit_session::BeginEditUploadSessionParam, begin_session::BeginUploadSessionParam,
         commit::CommitUploadSessionParam, delete_uploaded_image::DeleteImageParam,
         delete_uploaded_images::DeleteImagesParam,
     },
-    PathBuf,
 };
 use std::path::PathBuf as StdPathBuf;
 use uuid::Uuid;

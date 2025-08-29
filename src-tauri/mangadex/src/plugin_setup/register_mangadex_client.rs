@@ -1,13 +1,13 @@
 use mangadex_api::MangaDexClient;
 use reqwest::{
-    header::{HeaderMap, HeaderValue, USER_AGENT},
     Client,
+    header::{HeaderMap, HeaderValue, USER_AGENT},
 };
 use tauri::{Manager, Runtime};
 use tower::{
+    ServiceBuilder,
     buffer::BufferLayer,
     limit::{ConcurrencyLimitLayer, RateLimitLayer},
-    ServiceBuilder,
 };
 
 use super::plugin_config::PluginConfig;

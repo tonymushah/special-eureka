@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use crate::{utils::splittable_param::SendSplitted, Result};
+use crate::{Result, utils::splittable_param::SendSplitted};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::scanlation_group::list::ScanlationGroupListParams;
 use mangadex_api_types_rust::ReferenceExpansionResource;
@@ -8,8 +8,8 @@ use uuid::Uuid;
 
 use crate::{
     objects::{
-        scanlation_group::{lists::ScanlationGroupResults, ScanlationGroup},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+        scanlation_group::{ScanlationGroup, lists::ScanlationGroupResults},
     },
     utils::{
         get_mangadex_client_from_graphql_context, get_watches_from_graphql_context, watch::SendData,

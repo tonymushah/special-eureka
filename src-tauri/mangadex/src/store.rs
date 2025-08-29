@@ -3,6 +3,9 @@ use std::{future::Future, path::PathBuf};
 use tauri::{AppHandle, Manager, Runtime /*Manager */};
 use tauri_plugin_store::StoreBuilder;
 use types::{
+    ExtractFromStore,
+    StoreCrud,
+    // ExtractFromStore, StoreCrud,
     enums::{
         chapter_feed_style::ChapterFeedStyleStore, chapter_quality::ChapterQualityStore,
         image_fit::ImageFitStore, pagination_style::PaginationStyleStore,
@@ -13,15 +16,13 @@ use types::{
         offline_config::OfflineConfigStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
     },
-    ExtractFromStore,
-    StoreCrud,
-    // ExtractFromStore, StoreCrud,
 };
 
 /// use crate::utils::watch::{SendData, Watches};
 use self::{
     keys::PATH,
     types::{
+        DefaulStore,
         enums::{
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             manga_list_style::MangaListStyleStore,
@@ -32,7 +33,6 @@ use self::{
             client_info::ClientInfoStore, page_limit::PageLimitStore,
             refresh_token::RefreshTokenStore,
         },
-        DefaulStore,
     },
 };
 

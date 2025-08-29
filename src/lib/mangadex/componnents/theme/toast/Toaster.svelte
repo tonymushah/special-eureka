@@ -36,6 +36,8 @@
 						return error.message;
 					} else if (typeof error == "string") {
 						return error;
+					} else if (typeof error == "undefined" || error == null) {
+						return undefined;
 					} else {
 						return "unknow error :3";
 					}

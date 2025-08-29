@@ -1,9 +1,9 @@
-use crate::{error::Error, Result};
+use crate::{Result, error::Error};
 use async_graphql::{Context, Object};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
-    v5::{ChapterAttributes as Attributes, ChapterObject},
     ApiObjectNoRelationships,
+    v5::{ChapterAttributes as Attributes, ChapterObject},
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;

@@ -1,6 +1,6 @@
 use tauri::{
-    menu::{Menu, MenuItem, Submenu},
     Emitter, EventTarget, Manager, Runtime, Window,
+    menu::{Menu, MenuItem, Submenu},
 };
 
 use crate::commands::{

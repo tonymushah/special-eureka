@@ -6,7 +6,7 @@ use crate::objects::{
     ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, ResultsInfo,
 };
 
-use super::{relationship::ReportRelationship, UserReport};
+use super::{UserReport, relationship::ReportRelationship};
 
 #[derive(Debug, Clone, SimpleObject)]
 pub struct UserReportResults {

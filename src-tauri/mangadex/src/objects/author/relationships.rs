@@ -2,8 +2,8 @@ use std::ops::Deref;
 
 use async_graphql::Object;
 use mangadex_api_schema_rust::{
-    v5::{MangaAttributes, Relationship},
     ApiObjectNoRelationships,
+    v5::{MangaAttributes, Relationship},
 };
 use mangadex_api_types_rust::RelationshipType;
 

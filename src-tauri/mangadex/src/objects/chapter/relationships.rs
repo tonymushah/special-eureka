@@ -2,12 +2,12 @@ use std::ops::Deref;
 
 use async_graphql::{Error as GraphQLError, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
+    ApiObjectNoRelationships,
     v5::{
         MangaAttributes, RelatedAttributes, Relationship, ScanlationGroupAttributes, UserAttributes,
     },
-    ApiObjectNoRelationships,
 };
-use mangadex_api_types_rust::{error::RelationshipConversionError, RelationshipType};
+use mangadex_api_types_rust::{RelationshipType, error::RelationshipConversionError};
 
 use crate::objects::{manga::MangaObject as Manga, scanlation_group::ScanlationGroup, user::User};
 

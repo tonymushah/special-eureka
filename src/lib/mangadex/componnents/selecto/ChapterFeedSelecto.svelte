@@ -46,34 +46,32 @@
 				const mangadexScroll = document.getElementById(scrollElementId);
 				if (mangadexScroll) {
 					mangadexScroll.style.userSelect = "none";
-					// mangadexScroll.style.overflow = "auto";
+					mangadexScroll.style.overflow = "scroll";
+					mangadexScroll.setAttribute("data-selecting", "");
 				}
 			})();
 			const dragselect = new SelectionArea({
 				selectables: [".manga-element", ".chapter-element"],
-				boundaries: (() => {
-					const bound: HTMLElement[] = [container];
-					const mangadexScroll = document.getElementById(scrollElementId);
-					if (mangadexScroll) {
-						bound.push(mangadexScroll);
-					}
-					return bound;
-				})(),
+				boundaries: [`#${scrollElementId}`],
 				selectionAreaClass
 			})
 				.on("start", (ev) => {
-					ev.selection.clearSelection();
+					if (!ev.event?.altKey) {
+						ev.selection.clearSelection();
+					}
 				})
 				.on("stop", (ev) => {
-					ev.store.selected.forEach((element) => {
-						pushSelected(element);
-						element.removeAttribute("data-selecto-selected");
-					});
-					openSelectoDialog({
-						titles: selected_mangas,
-						chapters: selected_chapters
-					});
-					onEnd?.();
+					if (!ev.event?.altKey) {
+						ev.store.selected.forEach((element) => {
+							pushSelected(element);
+							element.removeAttribute("data-selecto-selected");
+						});
+						openSelectoDialog({
+							titles: selected_mangas,
+							chapters: selected_chapters
+						});
+						onEnd?.();
+					}
 				})
 				.on("move", (ev) => {
 					ev.store.changed.added.forEach((item) =>
@@ -96,7 +94,8 @@
 						const mangadexScroll = document.getElementById(scrollElementId);
 						if (mangadexScroll) {
 							mangadexScroll.style.userSelect = "auto";
-							//mangadexScroll.style.overflow = "initial";
+							mangadexScroll.style.overflow = "";
+							mangadexScroll.removeAttribute("data-selecting");
 						}
 					})();
 				}

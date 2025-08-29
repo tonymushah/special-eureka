@@ -1,8 +1,8 @@
 use std::ops::Deref;
 
 use async_graphql::Object;
-use mangadex_api_schema_rust::v5::TagAttributes as Attributes;
 use mangadex_api_schema_rust::ApiObject;
+use mangadex_api_schema_rust::v5::TagAttributes as Attributes;
 use uuid::Uuid;
 
 use self::attributes::TagAttributes;

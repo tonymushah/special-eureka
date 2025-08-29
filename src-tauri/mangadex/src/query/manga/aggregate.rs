@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use crate::{error::Error, Result};
+use crate::{Result, error::Error};
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::{AsyncIntoMangaAggreagate, ChapterDataPullAsyncTrait};
 use mangadex_api_input_types::manga::aggregate::MangaAggregateParam;

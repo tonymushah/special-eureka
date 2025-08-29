@@ -4,8 +4,8 @@ use actix::WeakAddr;
 use eureka_mmanager::DownloadManager;
 use tauri::{Manager, Runtime};
 use tokio::sync::{
-    watch::{self, Receiver},
     RwLock,
+    watch::{self, Receiver},
 };
 use tokio_stream::StreamExt;
 

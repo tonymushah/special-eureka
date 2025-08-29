@@ -1,13 +1,13 @@
 use std::{ops::Deref, sync::Arc};
 
 use mangadex_api_schema_rust::{
-    v5::ScanlationGroupAttributes as Attributes, ApiObjectNoRelationships,
+    ApiObjectNoRelationships, v5::ScanlationGroupAttributes as Attributes,
 };
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::objects::{
-    scanlation_group::attributes::ScanlationGroupAttributes, GetAttributes, GetId,
+    GetAttributes, GetId, scanlation_group::attributes::ScanlationGroupAttributes,
 };
 
 use super::{SendData, WatcherInnerData};

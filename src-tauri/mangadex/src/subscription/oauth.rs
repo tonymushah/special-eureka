@@ -1,4 +1,4 @@
-use crate::{objects::oauth::ClientInfo, Result};
+use crate::{Result, objects::oauth::ClientInfo};
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 

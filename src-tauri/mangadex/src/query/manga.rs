@@ -5,9 +5,9 @@ pub mod list;
 use std::{collections::HashMap, ops::Deref};
 
 use crate::{
+    Result,
     store::types::structs::content::{feed_from_gql_ctx, try_feed_from_gql_ctx},
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-    Result,
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::manga::{
@@ -20,12 +20,12 @@ use uuid::Uuid;
 
 use crate::{
     objects::{
+        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
         chapter::lists::ChapterResults,
         manga::{
-            lists::MangaResults, manga_reading_status::MangaReadingStatusItem,
-            related::MangaRelated, MangaObject as Manga,
+            MangaObject as Manga, lists::MangaResults,
+            manga_reading_status::MangaReadingStatusItem, related::MangaRelated,
         },
-        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
     },
     utils::{
         download_state::DownloadState, get_mangadex_client_from_graphql_context,
@@ -146,7 +146,8 @@ impl MangaQueries {
         ctx: &Context<'_>,
         status: Option<ReadingStatus>,
     ) -> Result<Vec<MangaReadingStatusItem>> {
-        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let mut req = client.manga().status().get();
         if let Some(status) = status {
             req.status(status);
@@ -158,6 +159,25 @@ impl MangaQueries {
             .into_iter()
             .map(|(id, status)| MangaReadingStatusItem { id, status })
             .collect())
+    }
+    pub async fn is_in_library(
+        &self,
+        ctx: &Context<'_>,
+        id: Uuid,
+        excluded_statuses: Option<Vec<ReadingStatus>>,
+    ) -> Result<bool> {
+        let excluded_statuses = excluded_statuses.unwrap_or_default();
+        let client =
+            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
+        let mut statuses = client.manga().status().get().send().await?.statuses;
+        statuses.retain(|_, status| {
+            if !excluded_statuses.is_empty() {
+                !excluded_statuses.contains(status)
+            } else {
+                true
+            }
+        });
+        Ok(statuses.contains_key(&id))
     }
     pub async fn get_draft(&self, ctx: &Context<'_>, params: GetMangaDraftParams) -> Result<Manga> {
         let mut params = params;

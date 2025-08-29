@@ -3,12 +3,12 @@ use std::ops::{Deref, DerefMut};
 use async_graphql::{Error, Object, Result};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
-    v5::{Relationship, UserAttributes},
     ApiObjectNoRelationships,
+    v5::{Relationship, UserAttributes},
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 
-use crate::objects::{user::User, ExtractReferenceExpansion, ExtractReferenceExpansionFromContext};
+use crate::objects::{ExtractReferenceExpansion, ExtractReferenceExpansionFromContext, user::User};
 
 type Relationships = Vec<Relationship>;
 

@@ -2,7 +2,7 @@ use std::{ops::Deref, sync::Arc};
 
 use crate::objects::api_client::attributes::ApiClientAttributes;
 use mangadex_api_schema_rust::{
-    v5::ApiClientAttributes as Attributes, ApiObjectNoRelationships as AONR,
+    ApiObjectNoRelationships as AONR, v5::ApiClientAttributes as Attributes,
 };
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;

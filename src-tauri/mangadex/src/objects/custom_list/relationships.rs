@@ -2,14 +2,14 @@ use std::ops::Deref;
 
 use async_graphql::{Context, Error as GraphQLError, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
-    v5::{MangaAttributes, Relationship},
     ApiObject,
+    v5::{MangaAttributes, Relationship},
 };
 use mangadex_api_types_rust::{ReferenceExpansionResource, RelationshipType, TagSearchMode};
 use uuid::Uuid;
 
 use crate::{
-    objects::{manga::MangaObject, user::User, ExtractReferenceExpansion},
+    objects::{ExtractReferenceExpansion, manga::MangaObject, user::User},
     query::user_option::UserOptionQueries,
     utils::get_mangadex_client_from_graphql_context,
 };

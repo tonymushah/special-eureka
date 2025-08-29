@@ -1,4 +1,4 @@
-use crate::{error::Error, Result};
+use crate::{Result, error::Error};
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::*;
 use mangadex_api_types_rust::ReferenceExpansionResource;

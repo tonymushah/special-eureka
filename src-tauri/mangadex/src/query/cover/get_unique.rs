@@ -1,11 +1,11 @@
-use crate::{error::Error, Result};
+use crate::{Result, error::Error};
 use async_graphql::{Context, Object};
 use eureka_mmanager::prelude::CoverDataPullAsyncTrait;
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;
 
 use crate::{
-    objects::{cover::Cover, ExtractReferenceExpansion},
+    objects::{ExtractReferenceExpansion, cover::Cover},
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,
         get_watches_from_graphql_context, source::SendMultiSourceData,

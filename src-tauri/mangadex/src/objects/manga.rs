@@ -9,8 +9,8 @@ pub mod relationships;
 use async_graphql::{Context, Object, Result as GraphQLResult};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
-    v5::{MangaAttributes, MangaObject as MangaData, Relationship},
     ApiObjectNoRelationships,
+    v5::{MangaAttributes, MangaObject as MangaData, Relationship},
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;

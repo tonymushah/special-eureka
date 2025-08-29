@@ -51,7 +51,14 @@
 	</div>
 </PrimaryButton>
 
-<Dialog status={$readingStatus} {isFollowing} bind:dialog {onreadingStatus} {closeDialogOnAdd} />
+<Dialog
+	{disabled}
+	status={$readingStatus}
+	{isFollowing}
+	bind:dialog
+	{onreadingStatus}
+	{closeDialogOnAdd}
+/>
 
 <style lang="scss">
 	.primary-button {

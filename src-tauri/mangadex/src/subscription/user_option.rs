@@ -1,22 +1,22 @@
 use std::num::NonZero;
 
 use crate::{
+    Result,
     store::types::{
         enums::{
             chapter_feed_style::ChapterFeedStyle, chapter_quality::DownloadMode,
             image_fit::ImageFit, pagination_style::PaginationStyle,
         },
         structs::{
-            content::{profiles::ContentProfileEntry, ContentProfile},
+            content::{ContentProfile, profiles::ContentProfileEntry},
             page_limit::PAGE_LIMIT_DEFAULT,
-            theme::{profiles::ThemeProfileEntry, MangaDexTheme},
+            theme::{MangaDexTheme, profiles::ThemeProfileEntry},
         },
     },
     utils::{
         get_watches_from_graphql_context,
         watch::{chapter_quality::ChapterQualityWatch, page_limit::PageLimitWatch},
     },
-    Result,
 };
 use async_graphql::{Context, Subscription};
 use async_stream::stream;

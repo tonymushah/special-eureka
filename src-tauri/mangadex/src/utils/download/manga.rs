@@ -1,12 +1,12 @@
 use actix::Addr;
 use eureka_mmanager::{
+    DownloadManager,
     download::{manga::MangaDownloadMessage, state::DownloadMessageState},
     history::service::messages::is_in::IsInMessage,
     prelude::{
         AsyncCanBeWaited, GetManager, GetManagerStateData, HistoryEntry, MangaDownloadManager,
         TaskManagerAddr,
     },
-    DownloadManager,
 };
 use mangadex_api_schema_rust::v5::MangaObject;
 use mangadex_api_types_rust::RelationshipType;

@@ -1,4 +1,4 @@
-use mangadex_api_schema_rust::v5::{oauth::OAuthTokenResponse, AuthTokens};
+use mangadex_api_schema_rust::v5::{AuthTokens, oauth::OAuthTokenResponse};
 use mangadex_api_types_rust::MangaDexDateTime;
 use serde::{Deserialize, Serialize};
 use std::ops::{Deref, DerefMut};

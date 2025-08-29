@@ -5,6 +5,7 @@ pub mod chapter;
 pub mod cover;
 pub mod custom_list;
 pub mod forums;
+pub mod library;
 pub mod manga;
 pub mod oauth;
 pub mod offline_app_state;
@@ -20,6 +21,8 @@ pub mod user_option;
 use async_graphql::Object;
 use cover::CoverMutations;
 use user_option::UserOptionMutations;
+
+use crate::mutation::library::LibraryMutations;
 
 use self::{
     api_client::ApiClientMutation, author::AuthorMutations, captcha::CaptchaMutations,
@@ -84,5 +87,8 @@ impl Mutation {
     }
     pub async fn cover(&self) -> CoverMutations {
         CoverMutations
+    }
+    pub async fn library(&self) -> LibraryMutations {
+        LibraryMutations
     }
 }

@@ -10,7 +10,7 @@
 		<BookmarkIcon size="24" />
 	{/snippet}
 	<SubMenuItem label="Updates" href={route("/mangadex/titles/feed")} />
-	<SubMenuItem label="Online Library" />
+	<SubMenuItem label="Online Library" href={route("/mangadex/titles/library")} />
 	<SubMenuItem label="MDList" href={route("/mangadex/list")} />
 	<SubMenuItem label="Followed Groups" />
 </SubMenu>

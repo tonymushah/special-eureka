@@ -5,8 +5,8 @@ use eureka_mmanager::DirsOptions;
 
 use crate::{
     store::{
-        types::structs::offline_config::{OfflineConfig, OfflineConfigStore},
         TauriManagerMangadexStoreExtractor,
+        types::structs::offline_config::{OfflineConfig, OfflineConfigStore},
     },
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };

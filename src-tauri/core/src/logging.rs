@@ -1,6 +1,6 @@
 use std::{fs::create_dir_all, time::SystemTime};
 
-use fern::{log_file, Dispatch};
+use fern::{Dispatch, log_file};
 use tauri::{App, Manager, Runtime};
 
 pub fn setup_logger<R: Runtime>(app: &App<R>) -> anyhow::Result<()> {

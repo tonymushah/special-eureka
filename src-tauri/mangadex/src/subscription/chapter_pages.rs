@@ -2,11 +2,9 @@ use async_graphql::{Context, Subscription};
 use uuid::Uuid;
 
 use crate::{
+    cache::chapter::{ChapterPagesHandle, ChapterPagesStream},
     store::types::enums::chapter_quality::DownloadMode,
-    utils::{
-        chapter::{ChapterPagesHandle, ChapterPagesStream},
-        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-    },
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 
 #[derive(Debug, Clone, Default, Copy)]

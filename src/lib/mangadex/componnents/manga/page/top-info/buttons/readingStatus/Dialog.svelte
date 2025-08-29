@@ -20,6 +20,7 @@
 		isFollowing?: boolean;
 		dialog: HTMLDialogElement | undefined;
 		closeDialogOnAdd?: boolean;
+		disabled?: boolean;
 	}
 
 	let {
@@ -27,7 +28,8 @@
 		isFollowing = false,
 		dialog = $bindable(),
 		closeDialogOnAdd,
-		onreadingStatus
+		onreadingStatus,
+		disabled
 	}: Props = $props();
 
 	const selectedStatus = writable<ReadingStatus | undefined>(status);
@@ -57,12 +59,12 @@
 				<h3>{title}</h3>
 				<h4>Reading Status</h4>
 				<div class="form">
-					<StatusSelect readingStatus={selectedStatus} />
+					<StatusSelect {disabled} readingStatus={selectedStatus} />
 					<IsFollowingButton isFollowing={selectedIsFollowing} />
 				</div>
 			</div>
 			<div class="bottom">
-				<ButtonAccent isBase onclick={closeDialog}>
+				<ButtonAccent isBase onclick={closeDialog} {disabled}>
 					<div class="buttons">Cancel</div>
 				</ButtonAccent>
 				<PrimaryButton
@@ -77,6 +79,7 @@
 							closeDialog();
 						}
 					}}
+					{disabled}
 				>
 					<div class="buttons">Add</div>
 				</PrimaryButton>

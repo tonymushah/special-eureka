@@ -1,7 +1,7 @@
 use async_graphql::Context as GQLContext;
 use tauri::{Manager, Runtime};
 use tokio::sync::watch::{Receiver, Ref, Sender};
-use tokio_stream::{wrappers::WatchStream, Stream, StreamExt};
+use tokio_stream::{Stream, StreamExt, wrappers::WatchStream};
 
 use std::{
     future::Future,

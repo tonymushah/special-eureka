@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use crate::{utils::splittable_param::SendSplitted, Result};
+use crate::{Result, utils::splittable_param::SendSplitted};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::follows::{
     groups::UserFollowedGroupsParams, lists::UserFollowedListParams,
@@ -11,15 +11,15 @@ use uuid::Uuid;
 
 use crate::{
     objects::{
-        custom_list::lists::CustomListResults, manga::lists::MangaResults,
-        scanlation_group::lists::ScanlationGroupResults, user::lists::UserResults,
-        ExtractReferenceExpansionFromContext, GetId,
+        ExtractReferenceExpansionFromContext, GetId, custom_list::lists::CustomListResults,
+        manga::lists::MangaResults, scanlation_group::lists::ScanlationGroupResults,
+        user::lists::UserResults,
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
         get_watches_from_graphql_context,
         source::SendMultiSourceData,
-        watch::{is_following::inner::IsFollowingInnerData, SendData},
+        watch::{SendData, is_following::inner::IsFollowingInnerData},
     },
 };
 

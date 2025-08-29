@@ -1,4 +1,4 @@
-use crate::{error::Error, Result};
+use crate::{Result, error::Error};
 use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::v5::MangaReadMarkers;
 use uuid::Uuid;

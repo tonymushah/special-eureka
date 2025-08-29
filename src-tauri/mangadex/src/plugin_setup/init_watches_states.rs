@@ -3,6 +3,7 @@ use tauri_plugin_store::Store;
 
 use crate::{
     store::types::{
+        ExtractFromStore,
         enums::{
             chapter_feed_style::ChapterFeedStyleStore,
             chapter_quality::ChapterQualityStore,
@@ -21,7 +22,6 @@ use crate::{
             page_limit::PageLimitStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
         },
-        ExtractFromStore,
     },
     utils::watch::{SendData, Watches},
 };

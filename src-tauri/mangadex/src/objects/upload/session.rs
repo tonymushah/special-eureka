@@ -4,7 +4,7 @@ use std::ops::Deref;
 
 use async_graphql::Object;
 use mangadex_api_schema_rust::v5::{
-    upload_session::UploadSessionAttributes as Attributes, UploadSessionObject,
+    UploadSessionObject, upload_session::UploadSessionAttributes as Attributes,
 };
 use uuid::Uuid;
 

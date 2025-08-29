@@ -15,7 +15,7 @@
 </div>
 
 <span class="note"
-	><span class="note-top">Note:</span> If the item per list is > 100, loading the list might be slower.</span
+	><span class="note-top">Note:</span> If the item per list is > 100, loading a list might be slower.</span
 >
 
 <style lang="scss">

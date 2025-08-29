@@ -4,7 +4,7 @@ pub const PROTOCOL: &str = "https://mangadex.";
 pub const PROTOCOL: &str = "mangadex://";
 
 // [x] add this into the code
-pub const MANGADEX_PAGE_LIMIT: u32 = 100;
+pub const MANGADEX_PAGE_LIMIT: u32 = 90;
 
 // [x] add this into the code
 pub const MANGADEX_DEFAULT_LIMIT: u32 = 10;

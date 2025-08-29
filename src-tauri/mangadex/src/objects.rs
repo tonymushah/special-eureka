@@ -24,7 +24,7 @@ pub mod tag;
 pub mod upload;
 pub mod user;
 
-#[derive(Debug, Clone, Copy, SimpleObject)]
+#[derive(Debug, Clone, Copy, SimpleObject, Default)]
 pub struct ResultsInfo {
     pub limit: u32,
     pub offset: u32,

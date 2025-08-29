@@ -1,12 +1,12 @@
-use crate::{error::Error, Result};
+use crate::{Result, error::Error};
 use async_graphql::{Context, Object};
 use uuid::Uuid;
 
 use crate::utils::{
     get_watches_from_graphql_context,
     watch::{
-        reading_state::data::{ReadingState, ReadingStateEnum},
         SendData, WatcherInnerData,
+        reading_state::data::{ReadingState, ReadingStateEnum},
     },
 };
 

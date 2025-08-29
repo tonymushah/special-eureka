@@ -2,7 +2,7 @@ use async_graphql::{ComplexObject, Context, Result, SimpleObject};
 use mangadex_api_types_rust::MangaRelation;
 use uuid::Uuid;
 
-use super::{attributes::GraphQLMangaAttributes, relationships::MangaRelationships, MangaObject};
+use super::{MangaObject, attributes::GraphQLMangaAttributes, relationships::MangaRelationships};
 
 #[derive(Clone, SimpleObject)]
 #[graphql(complex)]

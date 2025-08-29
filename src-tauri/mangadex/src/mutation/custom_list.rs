@@ -12,7 +12,7 @@ use crate::{
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,
         get_watches_from_graphql_context,
-        watch::{is_following::inner::IsFollowingInnerData, SendData},
+        watch::{SendData, is_following::inner::IsFollowingInnerData},
     },
 };
 
