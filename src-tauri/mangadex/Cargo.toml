@@ -55,6 +55,7 @@ governor.workspace = true
 futures-util.workspace = true
 image.workspace = true
 serde-xml-rs.workspace = true
+csv.workspace = true
 
 [dependencies.eureka-mmanager]
 version = "0.3"
