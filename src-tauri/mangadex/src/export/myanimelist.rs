@@ -277,6 +277,7 @@ struct ExportCoreOptions<'a, R: Runtime> {
     progress: u8,
     user_name: String,
     user_id: String,
+    allow_none_status: bool,
 }
 
 async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Result<String> {
@@ -309,19 +310,22 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
         data.into_iter()
             .flat_map(|manga| {
                 let title_id = manga.attributes.links?.my_anime_list?.0;
-                let status = *options.statuses.get(&manga.id)?;
-                let priority = match status {
+                let status = options.statuses.get(&manga.id).copied();
+                if status.is_none() && !options.allow_none_status {
+                    return None;
+                }
+                let priority = status.map(|status| match status {
                     ReadingStatus::Completed => priorities.completed,
                     ReadingStatus::Dropped => priorities.dropped,
                     ReadingStatus::OnHold => priorities.on_hold,
                     ReadingStatus::PlanToRead => priorities.plan_to_read,
                     ReadingStatus::Reading => priorities.reading,
                     ReadingStatus::ReReading => priorities.re_reading,
-                };
+                });
                 let times_read: u32 = match status {
-                    ReadingStatus::Completed
-                    | ReadingStatus::Dropped
-                    | ReadingStatus::ReReading => 1,
+                    Some(ReadingStatus::Completed)
+                    | Some(ReadingStatus::Dropped)
+                    | Some(ReadingStatus::ReReading) => 1,
                     _ => 0,
                 };
                 Some((
@@ -332,11 +336,11 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
                         my_start_date: "0000-00-00".into(),
                         my_finish_date: "0000-00-00".into(),
                         my_scanalation_group: CData::default().to_string(),
-                        my_status: Some(status),
+                        my_status: status,
                         my_comments: CData::default().to_string(),
                         my_times_read: times_read,
                         my_tags: CData::default().to_string(),
-                        my_priority: Some(priority),
+                        my_priority: priority,
                         my_discuss: YesNo::Yes,
                         my_sns: "default".into(),
                         update_on_import: true,
@@ -536,6 +540,7 @@ where
         export_path: option.export_path,
         user_name: option.user_name,
         user_id: option.user_id,
+        allow_none_status: false,
     })
     .await
 }
@@ -597,6 +602,7 @@ where
         export_path: option.export_path,
         user_name: option.user_name,
         user_id: option.user_id,
+        allow_none_status: true,
     })
     .await
 }
