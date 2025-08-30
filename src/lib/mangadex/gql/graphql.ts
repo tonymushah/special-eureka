@@ -5696,6 +5696,30 @@ export type RtlSidebarSubSubscription = {
 	watchSidebarDirection: Direction;
 };
 
+export type ExportTitlesToCsvMutationVariables = Exact<{
+	options: ExportIdsLibraryToCsvOptions;
+}>;
+
+export type ExportTitlesToCsvMutation = {
+	__typename?: "Mutation";
+	manga: {
+		__typename?: "MangaMutations";
+		export: { __typename?: "MangaExportMutations"; idsAsCsv: string };
+	};
+};
+
+export type ExportTitlesToMalMutationVariables = Exact<{
+	options: MdidsToMyAnimeListExportOption;
+}>;
+
+export type ExportTitlesToMalMutation = {
+	__typename?: "Mutation";
+	manga: {
+		__typename?: "MangaMutations";
+		export: { __typename?: "MangaExportMutations"; idsAsMyAnimeList: string };
+	};
+};
+
 export type UserLoggedChapterFeedQueryVariables = Exact<{
 	translatedLanguages?: Array<Language> | Language;
 	offset?: InputMaybe<Scalars["Int"]["input"]>;
@@ -16901,6 +16925,126 @@ export const RtlSidebarSubDocument = {
 		}
 	]
 } as unknown as DocumentNode<RtlSidebarSubSubscription, RtlSidebarSubSubscriptionVariables>;
+export const ExportTitlesToCsvDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportTitlesToCSV" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "ExportIdsLibraryToCSVOptions" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "export" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "idsAsCsv" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "options" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "options" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ExportTitlesToCsvMutation, ExportTitlesToCsvMutationVariables>;
+export const ExportTitlesToMalDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportTitlesToMAL" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "MdidsToMyAnimeListExportOption" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "export" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "idsAsMyAnimeList" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "options" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "options" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ExportTitlesToMalMutation, ExportTitlesToMalMutationVariables>;
 export const UserLoggedChapterFeedDocument = {
 	kind: "Document",
 	definitions: [
