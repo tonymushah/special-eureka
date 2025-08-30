@@ -5298,6 +5298,15 @@ export type CurrentUserLibraryDroppedQuery = {
 	};
 };
 
+export type ExportLibraryToCsvMutationVariables = Exact<{
+	options: ExportMdLibraryToCsvOptions;
+}>;
+
+export type ExportLibraryToCsvMutation = {
+	__typename?: "Mutation";
+	library: { __typename?: "LibraryMutations"; exportAsCsv: string };
+};
+
 export type ExportLibraryToMyAnimeListMutationVariables = Exact<{
 	options: MdlibraryToMyAnimeListExportOption;
 }>;
@@ -14957,6 +14966,57 @@ export const CurrentUserLibraryDroppedDocument = {
 	CurrentUserLibraryDroppedQuery,
 	CurrentUserLibraryDroppedQueryVariables
 >;
+export const ExportLibraryToCsvDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportLibraryToCSV" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "ExportMDLibraryToCSVOptions" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "library" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "exportAsCsv" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "options" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "options" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ExportLibraryToCsvMutation, ExportLibraryToCsvMutationVariables>;
 export const ExportLibraryToMyAnimeListDocument = {
 	kind: "Document",
 	definitions: [
