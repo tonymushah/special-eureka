@@ -13,12 +13,13 @@
 		type ReadingStatusPriorities
 	} from "@mangadex/gql/graphql";
 	import { exportTaskEvent } from "@mangadex/stores/library/export/mal";
+	import { isLogged } from "@mangadex/utils/auth";
+	import defaultReadingStatusPriorities from "@mangadex/utils/readingStatusPriorities";
 	import { createProgress, melt } from "@melt-ui/svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
-	import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
-	import { last } from "lodash";
-	import { ExternalLinkIcon, RotateCwIcon } from "svelte-feather-icons";
-	import { derived as der, get, writable } from "svelte/store";
+	import { revealItemInDir } from "@tauri-apps/plugin-opener";
+	import { ExternalLinkIcon, RotateCwIcon, SaveIcon } from "svelte-feather-icons";
+	import { writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
 
@@ -30,14 +31,7 @@
 		return {
 			userId: "",
 			userName: "",
-			priorities: {
-				completed: MaltitlePriority.Low,
-				dropped: MaltitlePriority.Low,
-				onHold: MaltitlePriority.Medium,
-				planToRead: MaltitlePriority.Medium,
-				reReading: MaltitlePriority.High,
-				reading: MaltitlePriority.High
-			},
+			priorities: defaultReadingStatusPriorities(),
 			excludeContentProfile: true,
 			hasAvailableChapters: true
 		};
@@ -60,7 +54,7 @@
 		});
 		try {
 			if (typeof exportPath == "string") {
-				$exportLibraryToMyAnimeList.mutateAsync(
+				await $exportLibraryToMyAnimeList.mutateAsync(
 					{ ...options, exportPath },
 					{
 						onSettled(data, error, variables, context) {
@@ -333,14 +327,14 @@
 	<section class="actions" class:isLtr={!$isSidebarRtl}>
 		<PrimaryButton
 			isBase
-			disabled={$exportLibraryToMyAnimeList.isPending}
+			disabled={$exportLibraryToMyAnimeList.isPending || !$isLogged}
 			onclick={(e) => {
 				submitExport();
 			}}
 		>
 			<div class="button-content">
 				<div class="icon">
-					<ExternalLinkIcon size="20" strokeWidth={3} />
+					<SaveIcon size="20" strokeWidth={3} />
 				</div>
 				<p>Export</p>
 			</div>

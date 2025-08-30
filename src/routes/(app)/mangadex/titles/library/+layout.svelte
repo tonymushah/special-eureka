@@ -160,7 +160,20 @@
 						goto(route("/mangadex/titles/library/export/my-anime-list"));
 					}}
 				>
-					<span class="tab-section-text"> Export as My Anime List </span>
+					<span class="tab-section-text mal">
+						Export as <br /> a My Anime List File
+					</span>
+				</ButtonAccent>
+				<ButtonAccent
+					isBase
+					variant={page.url.pathname == route("/mangadex/titles/library/export/csv")
+						? "5"
+						: "2"}
+					onclick={() => {
+						goto(route("/mangadex/titles/library/export/csv"));
+					}}
+				>
+					<span class="tab-section-text"> Export as CSV </span>
 				</ButtonAccent>
 			</div>
 		</section>
@@ -206,5 +219,8 @@
 	.tab-section-text {
 		white-space: nowrap;
 		padding: 0px 12px;
+	}
+	.tab-section-text.mal {
+		white-space: auto;
 	}
 </style>
