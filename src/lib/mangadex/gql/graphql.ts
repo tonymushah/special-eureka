@@ -1089,6 +1089,20 @@ export type CustomListCreateParam = {
 	visibility?: InputMaybe<CustomListVisibility>;
 };
 
+export type CustomListExportMutations = {
+	__typename?: "CustomListExportMutations";
+	asCsv: Scalars["String"]["output"];
+	asMyAnimeList: Scalars["String"]["output"];
+};
+
+export type CustomListExportMutationsAsCsvArgs = {
+	option: ExportCustomListsToCsvOptions;
+};
+
+export type CustomListExportMutationsAsMyAnimeListArgs = {
+	option: MdcustomListsToMyAnimeListExportOption;
+};
+
 export type CustomListMangaFeedParams = {
 	contentRating?: Array<ContentRating>;
 	/** DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`. */
@@ -1126,6 +1140,7 @@ export type CustomListMutations = {
 	addMangaBatch: Scalars["Boolean"]["output"];
 	create: CustomList;
 	delete: Scalars["Boolean"]["output"];
+	export: CustomListExportMutations;
 	follow: Scalars["Boolean"]["output"];
 	removeManga: Scalars["Boolean"]["output"];
 	removeMangaBatch: Scalars["Boolean"]["output"];
@@ -1336,6 +1351,40 @@ export type EditScanlationGroupParam = {
 	version: Scalars["Int"]["input"];
 	/** Nullable. */
 	website?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type ExportCustomListsToCsvOptions = {
+	exportPath: Scalars["String"]["input"];
+	ids: Array<Scalars["UUID"]["input"]>;
+	includeForumUrl?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeMdScore?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includePrivate?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadVolumes?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadingStatus?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeScores?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type ExportIdsLibraryToCsvOptions = {
+	exportPath: Scalars["String"]["input"];
+	ids: Array<Scalars["UUID"]["input"]>;
+	includeForumUrl?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeMdScore?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadVolumes?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadingStatus?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeScores?: InputMaybe<Scalars["Boolean"]["input"]>;
+};
+
+export type ExportMdLibraryToCsvOptions = {
+	excludeContentProfile?: InputMaybe<Scalars["Boolean"]["input"]>;
+	exportPath: Scalars["String"]["input"];
+	hasAvailableChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeForumUrl?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeMdScore?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadVolumes?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeScores?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
 export type FeedQueries = {
@@ -1732,7 +1781,12 @@ export type LegacyQueriesIdMappingArgs = {
 
 export type LibraryMutations = {
 	__typename?: "LibraryMutations";
+	exportAsCsv: Scalars["String"]["output"];
 	exportAsMyAnimeList: Scalars["String"]["output"];
+};
+
+export type LibraryMutationsExportAsCsvArgs = {
+	options: ExportMdLibraryToCsvOptions;
 };
 
 export type LibraryMutationsExportAsMyAnimeListArgs = {
@@ -1866,6 +1920,20 @@ export type MangaDraftsSortOrder =
 	| { createdAt?: never; title: OrderDirection; updatedAt?: never; year?: never }
 	| { createdAt?: never; title?: never; updatedAt: OrderDirection; year?: never }
 	| { createdAt?: never; title?: never; updatedAt?: never; year: OrderDirection };
+
+export type MangaExportMutations = {
+	__typename?: "MangaExportMutations";
+	idsAsCsv: Scalars["String"]["output"];
+	idsAsMyAnimeList: Scalars["String"]["output"];
+};
+
+export type MangaExportMutationsIdsAsCsvArgs = {
+	options: ExportIdsLibraryToCsvOptions;
+};
+
+export type MangaExportMutationsIdsAsMyAnimeListArgs = {
+	options: MdidsToMyAnimeListExportOption;
+};
 
 export type MangaFeedParams = {
 	contentRating?: Array<ContentRating>;
@@ -2013,6 +2081,7 @@ export type MangaMutations = {
 	deleteRelation: Scalars["Boolean"]["output"];
 	download: DownloadState;
 	edit: MangaObject;
+	export: MangaExportMutations;
 	follow: Scalars["Boolean"]["output"];
 	followBatch: Scalars["Boolean"]["output"];
 	remove: Scalars["Boolean"]["output"];
@@ -2413,6 +2482,29 @@ export type MarkChapterBatchParam = {
 	chapterIdsUnread?: Array<Scalars["UUID"]["input"]>;
 	mangaId: Scalars["UUID"]["input"];
 	updateHistory?: Scalars["Boolean"]["input"];
+};
+
+export type MdcustomListsToMyAnimeListExportOption = {
+	exportPath: Scalars["String"]["input"];
+	ids: Array<Scalars["UUID"]["input"]>;
+	includePrivate?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadVolumes?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeScore?: InputMaybe<Scalars["Boolean"]["input"]>;
+	priorities?: InputMaybe<ReadingStatusPriorities>;
+	userId: Scalars["String"]["input"];
+	userName: Scalars["String"]["input"];
+};
+
+export type MdidsToMyAnimeListExportOption = {
+	exportPath: Scalars["String"]["input"];
+	ids: Array<Scalars["UUID"]["input"]>;
+	includeReadChapters?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeReadVolumes?: InputMaybe<Scalars["Boolean"]["input"]>;
+	includeScore?: InputMaybe<Scalars["Boolean"]["input"]>;
+	priorities?: InputMaybe<ReadingStatusPriorities>;
+	userId: Scalars["String"]["input"];
+	userName: Scalars["String"]["input"];
 };
 
 export type MdlibraryToMyAnimeListExportOption = {

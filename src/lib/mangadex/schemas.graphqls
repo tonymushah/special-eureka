@@ -847,6 +847,11 @@ input CustomListCreateParam {
 	version: Int = null
 }
 
+type CustomListExportMutations {
+	asMyAnimeList(option: MdcustomListsToMyAnimeListExportOption!): String!
+	asCsv(option: ExportCustomListsToCSVOptions!): String!
+}
+
 input CustomListMangaFeedParams {
 	listId: UUID!
 	limit: Int = null
@@ -898,6 +903,7 @@ type CustomListMutations {
 	removeManga(params: CustomListRemoveMangaParam!): Boolean!
 	addMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
+	export: CustomListExportMutations!
 }
 
 type CustomListQueries {
@@ -1047,6 +1053,40 @@ input EditScanlationGroupParam {
 	>= 1
 	"""
 	version: Int!
+}
+
+input ExportCustomListsToCSVOptions {
+	exportPath: String!
+	includeScores: Boolean
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeReadingStatus: Boolean
+	ids: [UUID!]!
+	includeMdScore: Boolean
+	includeForumUrl: Boolean
+	includePrivate: Boolean
+}
+
+input ExportIdsLibraryToCSVOptions {
+	exportPath: String!
+	includeScores: Boolean
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeReadingStatus: Boolean
+	ids: [UUID!]!
+	includeMdScore: Boolean
+	includeForumUrl: Boolean
+}
+
+input ExportMDLibraryToCSVOptions {
+	exportPath: String!
+	includeScores: Boolean
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	hasAvailableChapters: Boolean
+	excludeContentProfile: Boolean
+	includeMdScore: Boolean
+	includeForumUrl: Boolean
 }
 
 type FeedQueries {
@@ -1331,6 +1371,7 @@ type LegacyQueries {
 
 type LibraryMutations {
 	exportAsMyAnimeList(options: MdlibraryToMyAnimeListExportOption!): String!
+	exportAsCsv(options: ExportMDLibraryToCSVOptions!): String!
 }
 
 input ListReasonsByCategory {
@@ -1451,6 +1492,11 @@ input MangaDraftsSortOrder @oneOf {
 	title: OrderDirection
 	updatedAt: OrderDirection
 	year: OrderDirection
+}
+
+type MangaExportMutations {
+	idsAsMyAnimeList(options: MdidsToMyAnimeListExportOption!): String!
+	idsAsCsv(options: ExportIdsLibraryToCSVOptions!): String!
 }
 
 input MangaFeedParams {
@@ -1587,6 +1633,7 @@ type MangaMutations {
 	unfollowBatch(mangaIds: [UUID!]!): Boolean!
 	addToListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
 	removeFromListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
+	export: MangaExportMutations!
 }
 
 type MangaObject {
@@ -1812,6 +1859,29 @@ input MarkChapterBatchParam {
 	chapterIdsRead: [UUID!]! = []
 	chapterIdsUnread: [UUID!]! = []
 	updateHistory: Boolean! = false
+}
+
+input MdcustomListsToMyAnimeListExportOption {
+	userName: String!
+	userId: String!
+	priorities: ReadingStatusPriorities
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeScore: Boolean
+	exportPath: String!
+	ids: [UUID!]!
+	includePrivate: Boolean
+}
+
+input MdidsToMyAnimeListExportOption {
+	userName: String!
+	userId: String!
+	priorities: ReadingStatusPriorities
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeScore: Boolean
+	exportPath: String!
+	ids: [UUID!]!
 }
 
 input MdlibraryToMyAnimeListExportOption {
