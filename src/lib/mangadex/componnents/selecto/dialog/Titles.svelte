@@ -10,12 +10,14 @@
 	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
+	import ExportTitlesAsMal from "./titles/export/ExportTitlesAsMAL.svelte";
 
 	interface Props {
 		titles: string[];
 	}
 	let { titles = $bindable() }: Props = $props();
-	let currentAction: "lists" | "status" | "selections" | "export-csv" = $state("lists");
+	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
+		$state("lists");
 	function showLists() {
 		currentAction = "lists";
 	}
@@ -25,6 +27,12 @@
 	function showSelecetions() {
 		currentAction = "selections";
 	}
+	function showExportCSV() {
+		currentAction = "export-csv";
+	}
+	function showExportMAL() {
+		currentAction = "export-mal";
+	}
 	let isLists = $derived(currentAction == "lists");
 	// @ts-ignore
 	let isStatus = $derived(currentAction == "status");
@@ -32,6 +40,8 @@
 	let isSelecting = $derived(currentAction == "selections");
 	//@ts-ignore
 	let isExportCSV = $derived(currentAction == "export-csv");
+	//@ts-ignore
+	let isExportMAL = $derived(currentAction == "export-mal");
 </script>
 
 <SectionBase>
@@ -44,6 +54,8 @@
 			<Selections bind:titles />
 		{:else if isExportCSV}
 			<ExportTitlesAsCsv {titles} />
+		{:else if isExportMAL}
+			<ExportTitlesAsMal {titles} />
 		{/if}
 	{/snippet}
 	{#snippet actions()}
@@ -86,6 +98,20 @@
 					.catch((e) => {
 						addErrorToast("Failed to download some titles", e);
 					});
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			label="Export titles as CSV"
+			variant={isExportCSV ? "5" : "3"}
+			onclick={() => {
+				showExportCSV();
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			label="Export titles as MAL"
+			variant={isExportMAL ? "5" : "3"}
+			onclick={() => {
+				showExportMAL();
 			}}
 		/>
 		<ButtonAccentOnlyLabel
