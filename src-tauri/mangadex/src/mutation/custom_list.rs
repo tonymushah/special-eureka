@@ -1,3 +1,5 @@
+pub mod export;
+
 use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::custom_list::{
@@ -140,5 +142,8 @@ impl CustomListMutations {
                 .await?;
         }
         Ok(true)
+    }
+    pub async fn export(&self) -> export::CustomListExportMutations {
+        export::CustomListExportMutations
     }
 }

@@ -1,9 +1,15 @@
-use std::{collections::HashMap, fs::File, path::Path};
+use std::{
+    collections::{HashMap, HashSet},
+    fs::File,
+    path::Path,
+};
 
 use async_graphql::InputObject;
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_schema_rust::v5::MangaReadMarkers;
-use mangadex_api_types_rust::{ContentRating, Demographic, MangaStatus, ReadingStatus};
+use mangadex_api_types_rust::{
+    ContentRating, Demographic, MangaStatus, ReadingStatus, RelationshipType,
+};
 use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, Runtime};
 use url::Url;
@@ -337,7 +343,7 @@ pub struct ExportIdsLibraryToCSVOptions {
     pub include_forum_url: Option<bool>,
 }
 
-pub async fn export_ids_to_csv<R>(
+pub async fn export_manga_ids_to_csv<R>(
     app: &AppHandle<R>,
     options: ExportIdsLibraryToCSVOptions,
 ) -> crate::Result<String>
@@ -367,5 +373,67 @@ where
         include_md_scored: options.include_md_score,
         include_forum_url: options.include_forum_url,
     })
+    .await
+}
+
+#[derive(Debug, InputObject)]
+pub struct ExportCustomListsToCSVOptions {
+    pub export_path: String,
+    pub include_scores: Option<bool>,
+    pub include_read_chapters: Option<bool>,
+    pub include_read_volumes: Option<bool>,
+    pub include_reading_status: Option<bool>,
+    pub ids: Vec<Uuid>,
+    pub include_md_score: Option<bool>,
+    pub include_forum_url: Option<bool>,
+    pub include_private: Option<bool>,
+}
+
+pub async fn export_custom_lists_to_csv<R>(
+    app: &AppHandle<R>,
+    option: ExportCustomListsToCSVOptions,
+) -> crate::Result<String>
+where
+    R: Runtime,
+{
+    let include_private = option.include_private.unwrap_or_default();
+
+    let mut manga_ids = HashSet::<Uuid>::new();
+    for custom_list_id in option.ids {
+        let client = if include_private {
+            app.get_mangadex_client_with_auth_refresh().await?
+        } else {
+            app.get_mangadex_client()?
+        };
+        let Ok(res) = client
+            .custom_list()
+            .id(custom_list_id)
+            .get()
+            .with_auth(include_private)
+            .send()
+            .await
+        else {
+            continue;
+        };
+        manga_ids.extend(
+            res.data
+                .find_relationships(RelationshipType::Manga)
+                .into_iter()
+                .map(|e| e.id),
+        );
+    }
+    export_manga_ids_to_csv(
+        app,
+        ExportIdsLibraryToCSVOptions {
+            export_path: option.export_path,
+            include_scores: option.include_scores,
+            include_read_chapters: option.include_read_chapters,
+            include_read_volumes: option.include_read_volumes,
+            include_reading_status: option.include_reading_status,
+            ids: manga_ids.into_iter().collect(),
+            include_md_score: option.include_md_score,
+            include_forum_url: option.include_forum_url,
+        },
+    )
     .await
 }

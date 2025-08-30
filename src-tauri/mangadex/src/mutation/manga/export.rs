@@ -2,7 +2,7 @@ use async_graphql::{Context, Object};
 
 use crate::{
     export::{
-        csv::{ExportIdsLibraryToCSVOptions, export_ids_to_csv},
+        csv::{ExportIdsLibraryToCSVOptions, export_manga_ids_to_csv},
         myanimelist::{MDIdsToMyAnimeListExportOption, export_manga_ids_to_my_anime_list},
     },
     utils::traits_utils::MangadexAsyncGraphQLContextExt,
@@ -26,7 +26,7 @@ impl MangaExportMutations {
         ctx: &Context<'_>,
         options: ExportIdsLibraryToCSVOptions,
     ) -> crate::Result<String, crate::error::ErrorWrapper> {
-        export_ids_to_csv::<tauri::Wry>(ctx.get_app_handle()?, options)
+        export_manga_ids_to_csv::<tauri::Wry>(ctx.get_app_handle()?, options)
             .await
             .map_err(Into::into)
     }
