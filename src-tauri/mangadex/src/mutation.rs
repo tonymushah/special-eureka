@@ -4,6 +4,7 @@ pub mod captcha;
 pub mod chapter;
 pub mod cover;
 pub mod custom_list;
+pub mod export;
 pub mod forums;
 pub mod library;
 pub mod manga;
@@ -90,5 +91,8 @@ impl Mutation {
     }
     pub async fn library(&self) -> LibraryMutations {
         LibraryMutations
+    }
+    pub async fn export(&self) -> export::ExportMutations {
+        export::ExportMutations
     }
 }

@@ -1,4 +1,5 @@
 pub mod csv;
 pub mod myanimelist;
+pub mod txt;
 
-// [ ] add custom-list import for both lists and individual
+// [x] add custom-list import for both lists and individual
