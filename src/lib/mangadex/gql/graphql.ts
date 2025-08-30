@@ -5593,6 +5593,30 @@ export type CurrentUserCustomListsQuery = {
 	};
 };
 
+export type ExportCustomListsToCsvMutationVariables = Exact<{
+	options: ExportCustomListsToCsvOptions;
+}>;
+
+export type ExportCustomListsToCsvMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		export: { __typename?: "CustomListExportMutations"; asCsv: string };
+	};
+};
+
+export type ExportCustomListsToMalMutationVariables = Exact<{
+	options: MdcustomListsToMyAnimeListExportOption;
+}>;
+
+export type ExportCustomListsToMalMutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		export: { __typename?: "CustomListExportMutations"; asMyAnimeList: string };
+	};
+};
+
 export type CustomListChapterFeedQueryVariables = Exact<{
 	feedParam: CustomListMangaFeedParams;
 	mangaParam?: InputMaybe<MangaListParams>;
@@ -16342,6 +16366,132 @@ export const CurrentUserCustomListsDocument = {
 		}
 	]
 } as unknown as DocumentNode<CurrentUserCustomListsQuery, CurrentUserCustomListsQueryVariables>;
+export const ExportCustomListsToCsvDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportCustomListsToCSV" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "ExportCustomListsToCSVOptions" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "export" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "asCsv" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "option" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "options" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ExportCustomListsToCsvMutation,
+	ExportCustomListsToCsvMutationVariables
+>;
+export const ExportCustomListsToMalDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportCustomListsToMAL" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "options" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "MdcustomListsToMyAnimeListExportOption" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "export" },
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "asMyAnimeList" },
+												arguments: [
+													{
+														kind: "Argument",
+														name: { kind: "Name", value: "option" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "options" }
+														}
+													}
+												]
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ExportCustomListsToMalMutation,
+	ExportCustomListsToMalMutationVariables
+>;
 export const CustomListChapterFeedDocument = {
 	kind: "Document",
 	definitions: [
