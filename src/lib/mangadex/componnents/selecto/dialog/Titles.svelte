@@ -9,12 +9,13 @@
 	import SectionBase from "./SectionBase.svelte";
 	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
+	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
 
 	interface Props {
 		titles: string[];
 	}
 	let { titles = $bindable() }: Props = $props();
-	let currentAction: "lists" | "status" | "selections" = $state("lists");
+	let currentAction: "lists" | "status" | "selections" | "export-csv" = $state("lists");
 	function showLists() {
 		currentAction = "lists";
 	}
@@ -29,6 +30,8 @@
 	let isStatus = $derived(currentAction == "status");
 	//@ts-ignore
 	let isSelecting = $derived(currentAction == "selections");
+	//@ts-ignore
+	let isExportCSV = $derived(currentAction == "export-csv");
 </script>
 
 <SectionBase>
@@ -39,6 +42,8 @@
 			<UpdateReadingStatuses {titles} />
 		{:else if isSelecting}
 			<Selections bind:titles />
+		{:else if isExportCSV}
+			<ExportTitlesAsCsv {titles} />
 		{/if}
 	{/snippet}
 	{#snippet actions()}
