@@ -1089,6 +1089,10 @@ input ExportMDLibraryToCSVOptions {
 	includeForumUrl: Boolean
 }
 
+type ExportMutations {
+	uuidsToAsTxt(uuids: [UUID!]!, file: String!): String!
+}
+
 type FeedQueries {
 	userLoggedMangaFeed(params: FollowedMangaFeedParams): ChapterResults!
 	userLoggedMangaFeedGrouped(feedParams: FollowedMangaFeedParams, mangaListParams: MangaListParams): MangaChapterGroup!
@@ -1915,6 +1919,7 @@ type Mutation {
 	userOption: UserOptionMutations!
 	cover: CoverMutations!
 	library: LibraryMutations!
+	export: ExportMutations!
 }
 
 type OauthMutations {

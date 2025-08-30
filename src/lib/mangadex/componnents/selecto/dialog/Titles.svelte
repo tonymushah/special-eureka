@@ -7,6 +7,8 @@
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import Selections from "./titles/Selections.svelte";
 	import SectionBase from "./SectionBase.svelte";
+	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
+	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		titles: string[];
@@ -81,7 +83,26 @@
 					});
 			}}
 		/>
-		<ButtonAccentOnlyLabel variant="3" label="Export ids to txt" />
+		<ButtonAccentOnlyLabel
+			variant="3"
+			label="Export ids to txt"
+			disabled={$exportIdsToTxt.isPending}
+			onclick={() => {
+				$exportIdsToTxt.mutateAsync(
+					{
+						uuids: titles
+					},
+					{
+						onSuccess(data, variables, context) {
+							revealItemInDir(data);
+						},
+						onError(error, variables, context) {
+							addErrorToast("Cannot export ids as txt", error);
+						}
+					}
+				);
+			}}
+		/>
 		{#if dev}
 			<ButtonAccentOnlyLabel variant="3" label="Export as emdx" />
 		{/if}

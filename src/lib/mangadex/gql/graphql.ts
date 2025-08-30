@@ -1387,6 +1387,16 @@ export type ExportMdLibraryToCsvOptions = {
 	includeScores?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
+export type ExportMutations = {
+	__typename?: "ExportMutations";
+	uuidsToAsTxt: Scalars["String"]["output"];
+};
+
+export type ExportMutationsUuidsToAsTxtArgs = {
+	file: Scalars["String"]["input"];
+	uuids: Array<Scalars["UUID"]["input"]>;
+};
+
 export type FeedQueries = {
 	__typename?: "FeedQueries";
 	customListFeed: ChapterResults;
@@ -2527,6 +2537,7 @@ export type Mutation = {
 	chapter: ChapterMutations;
 	cover: CoverMutations;
 	customList: CustomListMutations;
+	export: ExportMutations;
 	forums: ForumsMutations;
 	library: LibraryMutations;
 	manga: MangaMutations;
@@ -5019,6 +5030,16 @@ export type ListenToCoverTasksIDsSubscriptionVariables = Exact<{ [key: string]: 
 export type ListenToCoverTasksIDsSubscription = {
 	__typename?: "Subscriptions";
 	watchCoverTasksList: Array<any>;
+};
+
+export type ExportIdsToTxtMutationVariables = Exact<{
+	uuids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	path: Scalars["String"]["input"];
+}>;
+
+export type ExportIdsToTxtMutation = {
+	__typename?: "Mutation";
+	export: { __typename?: "ExportMutations"; uuidsToAsTxt: string };
 };
 
 export type GroupPageQueryQueryVariables = Exact<{
@@ -13414,6 +13435,76 @@ export const ListenToCoverTasksIDsDocument = {
 	ListenToCoverTasksIDsSubscription,
 	ListenToCoverTasksIDsSubscriptionVariables
 >;
+export const ExportIdsToTxtDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "exportIdsToTxt" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "uuids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "path" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "String" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "export" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "uuidsToAsTxt" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "file" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "path" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "uuids" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "uuids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ExportIdsToTxtMutation, ExportIdsToTxtMutationVariables>;
 export const GroupPageQueryDocument = {
 	kind: "Document",
 	definitions: [
