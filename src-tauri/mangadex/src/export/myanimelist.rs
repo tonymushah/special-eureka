@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     fmt::Display,
     fs::File,
     io::{BufWriter, Write},
@@ -11,7 +11,7 @@ use async_graphql::{Enum, InputObject};
 use mangadex_api::MangaDexClient;
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
 use mangadex_api_schema_rust::v5::manga_read_markers::MangaReadMarkers;
-use mangadex_api_types_rust::ReadingStatus;
+use mangadex_api_types_rust::{ReadingStatus, RelationshipType};
 use serde::{Deserialize, Serialize, Serializer};
 use tauri::{AppHandle, Emitter, Runtime};
 use uuid::Uuid;
@@ -593,29 +593,33 @@ where
 {
     let mut progress = 0;
     emit_event(app, progress, ExportState::Preloading);
-    let client = app.get_mangadex_client_with_auth_refresh().await?;
 
     emit_event(
         app,
         increment_return!(progress),
         ExportState::GettingStatuses,
     );
-    let statuses = client
-        .manga()
-        .status()
-        .get()
-        .send()
-        .await?
-        .statuses
-        .into_iter()
-        .filter(|(id, _)| option.ids.contains(id))
-        .collect::<HashMap<_, _>>();
+    let statuses = match app.get_mangadex_client_with_auth_refresh().await {
+        Ok(client) => client
+            .manga()
+            .status()
+            .get()
+            .send()
+            .await
+            .map(|res| res.statuses)
+            .unwrap_or_default()
+            .into_iter()
+            .filter(|(id, _)| option.ids.contains(id))
+            .collect::<HashMap<_, _>>(),
+        Err(_) => Default::default(),
+    };
 
     let params = MangaListParams {
         manga_ids: option.ids,
         ..Default::default()
     };
 
+    let client = app.get_mangadex_client()?;
     export_core(ExportCoreOptions {
         app,
         client: &client,
@@ -631,6 +635,68 @@ where
         user_id: option.user_id,
         allow_none_status: true,
     })
+    .await
+}
+
+#[derive(Debug, Clone, InputObject)]
+pub struct MDCustomListsToMyAnimeListExportOption {
+    pub user_name: String,
+    pub user_id: String,
+    pub priorities: Option<ReadingStatusPriorities>,
+    pub include_read_chapters: Option<bool>,
+    pub include_read_volumes: Option<bool>,
+    pub include_score: Option<bool>,
+    pub export_path: String,
+    pub ids: Vec<Uuid>,
+    pub include_private: Option<bool>,
+}
+
+pub async fn export_custom_lists_to_my_anime_list<R>(
+    app: &AppHandle<R>,
+    option: MDCustomListsToMyAnimeListExportOption,
+) -> crate::Result<String>
+where
+    R: Runtime,
+{
+    let include_private = option.include_private.unwrap_or_default();
+
+    let mut manga_ids = HashSet::<Uuid>::new();
+    for custom_list_id in option.ids {
+        let client = if include_private {
+            app.get_mangadex_client_with_auth_refresh().await?
+        } else {
+            app.get_mangadex_client()?
+        };
+        let Ok(res) = client
+            .custom_list()
+            .id(custom_list_id)
+            .get()
+            .with_auth(include_private)
+            .send()
+            .await
+        else {
+            continue;
+        };
+        manga_ids.extend(
+            res.data
+                .find_relationships(RelationshipType::Manga)
+                .into_iter()
+                .map(|e| e.id),
+        );
+    }
+    export_manga_ids_to_my_anime_list(
+        app,
+        MDIdsToMyAnimeListExportOption {
+            user_name: option.user_name,
+            user_id: option.user_id,
+            priorities: option.priorities,
+            include_read_chapters: option.include_read_chapters,
+            include_read_volumes: option.include_read_volumes,
+            include_score: option.include_score,
+            export_path: option.export_path,
+            ids: manga_ids.into_iter().collect(),
+        },
+    )
     .await
 }
 
