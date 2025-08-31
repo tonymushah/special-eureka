@@ -1191,6 +1191,15 @@ export type DangerColorInput = {
 	l2: Scalars["String"]["input"];
 };
 
+export enum DatePeriod {
+	AllTime = "ALL_TIME",
+	Past_2Weeks = "PAST_2_WEEKS",
+	Past_6Months = "PAST_6_MONTHS",
+	ThisMonth = "THIS_MONTH",
+	ThisWeek = "THIS_WEEK",
+	ThisYear = "THIS_YEAR"
+}
+
 export type DeleteImageParam = {
 	sessionFileId: Scalars["UUID"]["input"];
 	sessionId: Scalars["UUID"]["input"];
@@ -3034,10 +3043,32 @@ export enum TagGroup {
 	Theme = "THEME"
 }
 
+export type TagPageQueries = {
+	__typename?: "TagPageQueries";
+	popularInfSection: MangaResults;
+	recentlyAdded: Array<MangaObject>;
+	topTen: Array<MangaObject>;
+};
+
+export type TagPageQueriesPopularInfSectionArgs = {
+	params?: InputMaybe<TagPopularList>;
+};
+
+export type TagPopularList = {
+	datePeriod?: InputMaybe<DatePeriod>;
+	limit?: InputMaybe<Scalars["Int"]["input"]>;
+	offset?: InputMaybe<Scalars["Int"]["input"]>;
+};
+
 export type TagQueries = {
 	__typename?: "TagQueries";
 	list: TagResults;
 	listGrouped: TagResultsGrouped;
+	page: TagPageQueries;
+};
+
+export type TagQueriesPageArgs = {
+	id: Scalars["UUID"]["input"];
 };
 
 export type TagResults = {

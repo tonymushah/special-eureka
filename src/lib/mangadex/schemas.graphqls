@@ -928,6 +928,15 @@ input DangerColorInput {
 	l2: String!
 }
 
+enum DatePeriod {
+	THIS_WEEK
+	PAST_2_WEEKS
+	THIS_MONTH
+	PAST_6_MONTHS
+	THIS_YEAR
+	ALL_TIME
+}
+
 input DeleteImageParam {
 	sessionId: UUID!
 	sessionFileId: UUID!
@@ -2295,9 +2304,22 @@ enum TagGroup {
 	THEME
 }
 
+type TagPageQueries {
+	topTen: [MangaObject!]!
+	popularInfSection(params: TagPopularList): MangaResults!
+	recentlyAdded: [MangaObject!]!
+}
+
+input TagPopularList {
+	offset: Int
+	limit: Int
+	datePeriod: DatePeriod
+}
+
 type TagQueries {
 	list: TagResults!
 	listGrouped: TagResultsGrouped!
+	page(id: UUID!): TagPageQueries!
 }
 
 type TagResults {
