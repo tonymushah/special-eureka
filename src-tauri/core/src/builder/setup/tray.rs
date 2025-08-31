@@ -4,6 +4,9 @@ use tauri::{
     tray::TrayIconBuilder,
 };
 
+#[cfg(not(target_os = "linux"))]
+use tauri::tray::{MouseButton, TrayIconEvent};
+
 use crate::{
     commands::open_new_window::{open_new_window_sync, open_new_window_sync_from_app},
     states::last_focused_window::LastFocusedWindow,
