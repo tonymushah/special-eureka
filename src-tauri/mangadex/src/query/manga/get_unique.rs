@@ -6,8 +6,8 @@ use uuid::Uuid;
 
 use crate::{
     objects::{
-        manga::MangaObject as Manga, ExtractReferenceExpansion,
-        ExtractReferenceExpansionFromContext,
+        ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+        manga::MangaObject as Manga,
     },
     utils::{
         get_mangadex_client_from_graphql_context, get_offline_app_state,

@@ -3,8 +3,8 @@ pub mod list;
 pub mod pages;
 
 use crate::{
-    store::types::structs::content::feed_from_gql_ctx,
-    utils::traits_utils::MangadexAsyncGraphQLContextExt, Result,
+    Result, store::types::structs::content::feed_from_gql_ctx,
+    utils::traits_utils::MangadexAsyncGraphQLContextExt,
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{chapter::list::ChapterListParams, manga::list::MangaListParams};
@@ -13,9 +13,9 @@ use uuid::Uuid;
 
 use crate::{
     objects::{
-        chapter::{lists::ChapterResults, pages::ChapterPages, Chapter},
-        manga_chapter_group::{group_results, MangaChapterGroup},
         ExtractReferenceExpansion, ExtractReferenceExpansionFromContext,
+        chapter::{Chapter, lists::ChapterResults, pages::ChapterPages},
+        manga_chapter_group::{MangaChapterGroup, group_results},
     },
     utils::download_state::DownloadState,
 };

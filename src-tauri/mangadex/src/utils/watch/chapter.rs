@@ -1,11 +1,11 @@
 use std::{ops::Deref, sync::Arc};
 
-use mangadex_api_schema_rust::{v5::ChapterAttributes as Attributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::ChapterAttributes as Attributes};
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::{
-    objects::{chapter::attributes::ChapterAttributes, GetAttributes, GetId},
+    objects::{GetAttributes, GetId, chapter::attributes::ChapterAttributes},
     utils::source::{MultiSourceData, SendMultiSourceData},
 };
 

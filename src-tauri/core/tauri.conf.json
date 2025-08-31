@@ -72,8 +72,7 @@
 			"icons/icon.png"
 		]
 	},
-	"productName": "Special-Eureka",
-	"mainBinaryName": "Special-Eureka",
+	"productName": "Special Eureka",
 	"identifier": "mg.tonymushah.special-eureka",
 	"app": {
 		"withGlobalTauri": false,
@@ -97,12 +96,6 @@
 			"pattern": {
 				"use": "brownfield"
 			}
-		},
-		"trayIcon": {
-			"id": "main",
-			"tooltip": "Special Eureka",
-			"showMenuOnLeftClick": false,
-			"iconPath": "./icons/icon.png"
 		}
 	}
 }

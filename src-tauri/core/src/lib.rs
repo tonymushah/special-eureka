@@ -66,3 +66,6 @@ pub fn run() {
         }
     };
 }
+
+#[allow(unused)]
+pub(crate) const SPECIAL_EUREKA_ERROR_EVENT_KEY: &str = "special-eureka://internal-error";

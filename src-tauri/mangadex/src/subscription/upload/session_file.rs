@@ -1,5 +1,5 @@
-use crate::utils::watch::upload::session_file::UploadSessionFileWatch;
 use crate::Result;
+use crate::utils::watch::upload::session_file::UploadSessionFileWatch;
 use async_graphql::{Context, Subscription};
 use tokio_stream::Stream;
 use uuid::Uuid;

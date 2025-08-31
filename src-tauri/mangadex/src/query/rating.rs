@@ -23,13 +23,14 @@ impl RatingQueries {
         ctx: &Context<'_>,
         #[graphql(validator(min_items = 1))] manga_ids: Vec<Uuid>,
     ) -> Result<Vec<RatingItem>> {
-        let client =
-            get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx).await?;
         let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?
             .deref()
             .clone();
         let mut res: Vec<RatingItem> = Vec::new();
         for ids in manga_ids.chunks(MANGADEX_PAGE_LIMIT.try_into()?) {
+            let client =
+                get_mangadex_client_from_graphql_context_with_auth_refresh::<tauri::Wry>(ctx)
+                    .await?;
             client
                 .rating()
                 .get()

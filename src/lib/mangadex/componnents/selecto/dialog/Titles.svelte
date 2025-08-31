@@ -7,12 +7,17 @@
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import Selections from "./titles/Selections.svelte";
 	import SectionBase from "./SectionBase.svelte";
+	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
+	import { revealItemInDir } from "@tauri-apps/plugin-opener";
+	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
+	import ExportTitlesAsMal from "./titles/export/ExportTitlesAsMAL.svelte";
 
 	interface Props {
 		titles: string[];
 	}
 	let { titles = $bindable() }: Props = $props();
-	let currentAction: "lists" | "status" | "selections" = $state("lists");
+	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
+		$state("lists");
 	function showLists() {
 		currentAction = "lists";
 	}
@@ -22,11 +27,21 @@
 	function showSelecetions() {
 		currentAction = "selections";
 	}
+	function showExportCSV() {
+		currentAction = "export-csv";
+	}
+	function showExportMAL() {
+		currentAction = "export-mal";
+	}
 	let isLists = $derived(currentAction == "lists");
 	// @ts-ignore
 	let isStatus = $derived(currentAction == "status");
 	//@ts-ignore
 	let isSelecting = $derived(currentAction == "selections");
+	//@ts-ignore
+	let isExportCSV = $derived(currentAction == "export-csv");
+	//@ts-ignore
+	let isExportMAL = $derived(currentAction == "export-mal");
 </script>
 
 <SectionBase>
@@ -37,6 +52,10 @@
 			<UpdateReadingStatuses {titles} />
 		{:else if isSelecting}
 			<Selections bind:titles />
+		{:else if isExportCSV}
+			<ExportTitlesAsCsv {titles} />
+		{:else if isExportMAL}
+			<ExportTitlesAsMal {titles} />
 		{/if}
 	{/snippet}
 	{#snippet actions()}
@@ -81,7 +100,40 @@
 					});
 			}}
 		/>
-		<ButtonAccentOnlyLabel variant="3" label="Export ids to txt" />
+		<ButtonAccentOnlyLabel
+			label="Export titles as CSV"
+			variant={isExportCSV ? "5" : "3"}
+			onclick={() => {
+				showExportCSV();
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			label="Export titles as MAL"
+			variant={isExportMAL ? "5" : "3"}
+			onclick={() => {
+				showExportMAL();
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			variant="3"
+			label="Export ids to txt"
+			disabled={$exportIdsToTxt.isPending}
+			onclick={() => {
+				$exportIdsToTxt.mutateAsync(
+					{
+						uuids: titles
+					},
+					{
+						onSuccess(data, variables, context) {
+							revealItemInDir(data);
+						},
+						onError(error, variables, context) {
+							addErrorToast("Cannot export ids as txt", error);
+						}
+					}
+				);
+			}}
+		/>
 		{#if dev}
 			<ButtonAccentOnlyLabel variant="3" label="Export as emdx" />
 		{/if}

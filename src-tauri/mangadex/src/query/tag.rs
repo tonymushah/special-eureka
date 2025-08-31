@@ -3,8 +3,8 @@ use std::ops::Deref;
 use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
-    v5::{Results, TagAttributes},
     ApiObject, ApiObjectNoRelationships,
+    v5::{Results, TagAttributes},
 };
 use mangadex_api_types_rust::{ResponseType, Tag as TagEnum};
 

@@ -1,7 +1,7 @@
 use async_graphql::{Context, Error, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
-    v5::{CoverAttributes as Attributes, CoverObject},
     ApiObjectNoRelationships,
+    v5::{CoverAttributes as Attributes, CoverObject},
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use uuid::Uuid;

@@ -2,10 +2,10 @@ use std::ops::Deref;
 
 use async_graphql::{Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
-    v5::{RelatedAttributes, Relationship, UserAttributes},
     ApiObjectNoRelationships,
+    v5::{RelatedAttributes, Relationship, UserAttributes},
 };
-use mangadex_api_types_rust::{error::RelationshipConversionError, RelationshipType};
+use mangadex_api_types_rust::{RelationshipType, error::RelationshipConversionError};
 
 use crate::objects::user::User;
 

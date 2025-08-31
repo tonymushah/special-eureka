@@ -1,8 +1,8 @@
 use async_graphql::{Context, Object, Result as GraphQLResult};
 use convert_case::{Case, Casing};
 use mangadex_api_schema_rust::{
-    v5::{Relationship, UserAttributes as Attributes, UserObject},
     ApiObjectNoRelationships,
+    v5::{Relationship, UserAttributes as Attributes, UserObject},
 };
 use mangadex_api_types_rust::ReferenceExpansionResource;
 use relationships::UserRelationships;

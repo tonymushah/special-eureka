@@ -1,10 +1,10 @@
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::author::{create::AuthorCreateParams, edit::AuthorEditParams};
-use mangadex_api_schema_rust::{v5::AuthorAttributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::AuthorAttributes};
 use uuid::Uuid;
 
-use crate::utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
 use crate::Result;
+use crate::utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt};
 use crate::{
     objects::author::Author,
     utils::{

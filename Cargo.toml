@@ -31,8 +31,10 @@ log = "0.4"
 fern = "0.7"
 regex = "1"
 futures-util = "0.3"
-deduplicate = "0.4.1"
 image = "0"
+serde-xml-rs = "0.8"
+clap = "4"
+csv = "1"
 
 [workspace.dependencies.tauri-plugin-notification]
 git = "https://github.com/tauri-apps/plugins-workspace"
@@ -57,6 +59,11 @@ branch = "v2"
 [workspace.dependencies.tauri-plugin-dialog]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v2"
+
+[workspace.dependencies.tauri-plugin-single-instance]
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v2"
+features = ["deep-link"]
 
 [workspace.dependencies.mangadex]
 path = "./src-tauri/mangadex"

@@ -8,7 +8,7 @@ use mangadex_api_schema_rust::v5::CustomListListResponse;
 use uuid::Uuid;
 
 use crate::{
-    objects::custom_list::{lists::CustomListResults, CustomList},
+    objects::custom_list::{CustomList, lists::CustomListResults},
     utils::{
         get_mangadex_client_from_graphql_context,
         get_mangadex_client_from_graphql_context_with_auth_refresh,

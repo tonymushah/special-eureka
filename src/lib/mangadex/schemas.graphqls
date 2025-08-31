@@ -802,6 +802,27 @@ input CurrentLoggedLists {
 	limit: Int
 }
 
+type CurrentUserLibrary {
+	size: CurrentUserLibrarySize!
+	unfiltered(param: UserLibrarySectionParam): MangaResults!
+	completed(param: UserLibrarySectionParam): MangaResults!
+	dropped(param: UserLibrarySectionParam): MangaResults!
+	onHold(param: UserLibrarySectionParam): MangaResults!
+	planToRead(param: UserLibrarySectionParam): MangaResults!
+	reading(param: UserLibrarySectionParam): MangaResults!
+	reReading(param: UserLibrarySectionParam): MangaResults!
+}
+
+type CurrentUserLibrarySize {
+	unfiltered: Int!
+	completed: Int!
+	dropped: Int!
+	planToRead: Int!
+	reading: Int!
+	reReading: Int!
+	onHold: Int!
+}
+
 type CustomList {
 	id: UUID!
 	attributes: CustomListAttributes!
@@ -824,6 +845,11 @@ input CustomListCreateParam {
 	visibility: CustomListVisibility = null
 	manga: [UUID!]! = []
 	version: Int = null
+}
+
+type CustomListExportMutations {
+	asMyAnimeList(option: MdcustomListsToMyAnimeListExportOption!): String!
+	asCsv(option: ExportCustomListsToCSVOptions!): String!
 }
 
 input CustomListMangaFeedParams {
@@ -877,6 +903,7 @@ type CustomListMutations {
 	removeManga(params: CustomListRemoveMangaParam!): Boolean!
 	addMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
 	removeMangaBatch(listId: UUID!, mangaIds: [UUID!]!): Boolean!
+	export: CustomListExportMutations!
 }
 
 type CustomListQueries {
@@ -1026,6 +1053,44 @@ input EditScanlationGroupParam {
 	>= 1
 	"""
 	version: Int!
+}
+
+input ExportCustomListsToCSVOptions {
+	exportPath: String!
+	includeScores: Boolean
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeReadingStatus: Boolean
+	ids: [UUID!]!
+	includeMdScore: Boolean
+	includeForumUrl: Boolean
+	includePrivate: Boolean
+}
+
+input ExportIdsLibraryToCSVOptions {
+	exportPath: String!
+	includeScores: Boolean
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeReadingStatus: Boolean
+	ids: [UUID!]!
+	includeMdScore: Boolean
+	includeForumUrl: Boolean
+}
+
+input ExportMDLibraryToCSVOptions {
+	exportPath: String!
+	includeScores: Boolean
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	hasAvailableChapters: Boolean
+	excludeContentProfile: Boolean
+	includeMdScore: Boolean
+	includeForumUrl: Boolean
+}
+
+type ExportMutations {
+	uuidsToAsTxt(uuids: [UUID!]!, file: String!): String!
 }
 
 type FeedQueries {
@@ -1308,6 +1373,11 @@ type LegacyQueries {
 	idMapping(params: LegacyIdMappingParams!): LegacyIdMappingResults!
 }
 
+type LibraryMutations {
+	exportAsMyAnimeList(options: MdlibraryToMyAnimeListExportOption!): String!
+	exportAsCsv(options: ExportMDLibraryToCSVOptions!): String!
+}
+
 input ListReasonsByCategory {
 	category: ReportCategory!
 }
@@ -1320,6 +1390,12 @@ input ListReportParams {
 	reasonId: UUID
 	status: ReportStatus
 	order: ReportSortOrder
+}
+
+enum MaltitlePriority {
+	LOW
+	MEDIUM
+	HIGH
 }
 
 type MangaAggregate {
@@ -1420,6 +1496,11 @@ input MangaDraftsSortOrder @oneOf {
 	title: OrderDirection
 	updatedAt: OrderDirection
 	year: OrderDirection
+}
+
+type MangaExportMutations {
+	idsAsMyAnimeList(options: MdidsToMyAnimeListExportOption!): String!
+	idsAsCsv(options: ExportIdsLibraryToCSVOptions!): String!
 }
 
 input MangaFeedParams {
@@ -1556,6 +1637,7 @@ type MangaMutations {
 	unfollowBatch(mangaIds: [UUID!]!): Boolean!
 	addToListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
 	removeFromListBatch(mangaId: UUID!, customLists: [UUID!]!): Boolean!
+	export: MangaExportMutations!
 }
 
 type MangaObject {
@@ -1572,6 +1654,7 @@ type MangaQueries {
 	random(params: MangaRandomParams): MangaObject!
 	feed(params: MangaFeedParams!): ChapterResults!
 	getMangaStatus(status: ReadingStatus): [MangaReadingStatusItem!]!
+	isInLibrary(id: UUID!, excludedStatuses: [ReadingStatus!]): Boolean!
 	getDraft(params: GetMangaDraftParams!): MangaObject!
 	getDrafts(params: MangaDraftsParams! = {limit: null, offset: null, state: null, order: null, includes: []}): MangaResults!
 	relationList(params: MangaRelationParam!, listParams: MangaListParams): [MangaRelated!]!
@@ -1782,6 +1865,41 @@ input MarkChapterBatchParam {
 	updateHistory: Boolean! = false
 }
 
+input MdcustomListsToMyAnimeListExportOption {
+	userName: String!
+	userId: String!
+	priorities: ReadingStatusPriorities
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeScore: Boolean
+	exportPath: String!
+	ids: [UUID!]!
+	includePrivate: Boolean
+}
+
+input MdidsToMyAnimeListExportOption {
+	userName: String!
+	userId: String!
+	priorities: ReadingStatusPriorities
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeScore: Boolean
+	exportPath: String!
+	ids: [UUID!]!
+}
+
+input MdlibraryToMyAnimeListExportOption {
+	userName: String!
+	userId: String!
+	priorities: ReadingStatusPriorities
+	includeReadChapters: Boolean
+	includeReadVolumes: Boolean
+	includeScore: Boolean
+	exportPath: String!
+	excludeContentProfile: Boolean
+	hasAvailableChapters: Boolean
+}
+
 type Mutation {
 	apiClient: ApiClientMutation!
 	author: AuthorMutations!
@@ -1800,6 +1918,8 @@ type Mutation {
 	user: UserMutations!
 	userOption: UserOptionMutations!
 	cover: CoverMutations!
+	library: LibraryMutations!
+	export: ExportMutations!
 }
 
 type OauthMutations {
@@ -1907,6 +2027,7 @@ type Query {
 	scanlationGroup: ScanlationGroupQueries!
 	userOption: UserOptionQueries!
 	auth: AuthQuery!
+	library: CurrentUserLibrary!
 }
 
 type RatingItem {
@@ -1966,6 +2087,15 @@ enum ReadingStatus {
 	PLAN_TO_READ
 	READING
 	RE_READING
+}
+
+input ReadingStatusPriorities {
+	completed: MaltitlePriority!
+	dropped: MaltitlePriority!
+	onHold: MaltitlePriority!
+	planToRead: MaltitlePriority!
+	reading: MaltitlePriority!
+	reReading: MaltitlePriority!
 }
 
 """
@@ -2475,6 +2605,26 @@ input UserFollowedUserParams {
 type UserHistoryEntry {
 	chapterId: UUID!
 	readDate: MangaDexDateTime!
+}
+
+input UserLibrarySectionParam {
+	offset: Int
+	limit: Int
+	order: MangaSortOrder
+	publicationStatus: [MangaStatus!]
+	year: Int
+	hasAvailableChapters: Boolean
+	excludeContentProfile: Boolean
+	authors: [UUID!]
+	artists: [UUID!]
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	createdAtSince: MangaDexDateTime
+	"""
+	DateTime string with following format: `YYYY-MM-DDTHH:MM:SS`.
+	"""
+	updatedAtSince: MangaDexDateTime
 }
 
 input UserListParam {

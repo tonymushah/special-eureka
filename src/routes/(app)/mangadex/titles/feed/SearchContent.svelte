@@ -18,6 +18,8 @@
 	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, { type UserMangaFeedChapterParams as Params } from "./search";
 	import MangaFeedSortOrderSelection from "@mangadex/componnents/manga/feed/sort/MangaFeedSortOrderSelection.svelte";
+	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	const client = getContextClient();
 	const order = writable<MangaFeedSortOrder | undefined>({
@@ -113,6 +115,9 @@
 				}
 			}
 			if (threadUrl) {
+				openUrl(threadUrl).catch((e) => {
+					addErrorToast("Cannot open thread url", e);
+				});
 				break;
 			}
 		}
@@ -145,7 +150,11 @@
 </div>
 
 {#if $query.error}
-	<ErrorComponent error={$query.error} label="Error on loading some pages" />
+	<ErrorComponent
+		error={$query.error}
+		label="Error on loading some pages"
+		retry={() => $query.refetch()}
+	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>

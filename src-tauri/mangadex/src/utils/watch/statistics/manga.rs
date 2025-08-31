@@ -3,7 +3,7 @@ use std::{ops::Deref, sync::Arc};
 use tokio::sync::watch::Sender;
 
 use crate::{
-    objects::{statistics::manga::MangaStatisticsAttributes, GetAttributes, GetId},
+    objects::{GetAttributes, GetId, statistics::manga::MangaStatisticsAttributes},
     utils::watch::SendDataResult,
 };
 

@@ -1,7 +1,7 @@
 use crate::{
+    Result,
     error::Error,
     utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
-    Result,
 };
 use async_graphql::{Context, Object};
 

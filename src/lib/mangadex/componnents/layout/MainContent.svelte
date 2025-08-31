@@ -61,8 +61,15 @@
 	.provider::-webkit-scrollbar {
 		display: none;
 	}
+	.inner:global([data-selecting]) {
+		user-select: none;
+		:global(*) {
+			user-select: none;
+		}
+	}
+
 	.inner {
-		scroll-behavior: smooth;
+		//scroll-behavior: smooth;
 		overflow-y: scroll;
 		// NOTE it added a lot of unecessary space that made appear a lot unecessary scrollbar
 		// on Linux.
