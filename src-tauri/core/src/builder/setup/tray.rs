@@ -51,11 +51,11 @@ pub fn setup<R: Runtime>(app: &AppHandle<R>) -> anyhow::Result<()> {
                 };
             }
         })
-        .on_tray_icon_event(|_app, _event| {
+        .on_tray_icon_event(|_tray, _event| {
             #[cfg(not(target_os = "linux"))]
             if let TrayIconEvent::Click { button, .. } = &_event {
                 if *button == MouseButton::Left {
-                    let last_wrap = _app.state::<LastFocusedWindow<R>>();
+                    let last_wrap = _tray.app_handle().state::<LastFocusedWindow<R>>();
                     if let Ok(last) = last_wrap.read() {
                         let _ = last.as_ref().and_then(|l| l.set_focus().ok());
                     };
