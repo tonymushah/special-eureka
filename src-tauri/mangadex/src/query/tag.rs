@@ -1,12 +1,15 @@
+pub mod page;
+
 use std::ops::Deref;
 
 use crate::Result;
 use async_graphql::{Context, Object};
 use mangadex_api_schema_rust::{
-    v5::{Results, TagAttributes},
     ApiObject, ApiObjectNoRelationships,
+    v5::{Results, TagAttributes},
 };
 use mangadex_api_types_rust::{ResponseType, Tag as TagEnum};
+use uuid::Uuid;
 
 use crate::{
     objects::tag::lists::{TagResults, TagResultsGrouped},
@@ -77,5 +80,9 @@ impl TagQueries {
     }
     pub async fn list_grouped(&self, ctx: &Context<'_>) -> Result<TagResultsGrouped> {
         Ok(self.list(ctx).await?.into())
+    }
+
+    pub async fn page(&self, id: Uuid) -> page::TagPageQueries {
+        page::TagPageQueries(id)
     }
 }
