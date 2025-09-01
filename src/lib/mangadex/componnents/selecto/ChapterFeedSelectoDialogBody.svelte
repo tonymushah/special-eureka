@@ -3,6 +3,7 @@
 	import MangaDexTabs, { type MangaDexTabTrigger } from "../theme/tabs/MangaDexTabs.svelte";
 	import Titles from "./dialog/Titles.svelte";
 	import { makeScroll, preventScroll } from "../layout/scrollElement";
+	import Chapter from "./dialog/Chapter.svelte";
 
 	interface Props {
 		titles: string[];
@@ -39,8 +40,10 @@
 	<MangaDexTabs bind:triggers content>
 		{#snippet children(key)}
 			{#if key == titleId}
-				<Titles bind:titles />
-			{:else if key == chapterId}{:else}
+				<Titles {titles} />
+			{:else if key == chapterId}
+				<Chapter {chapters} />
+			{:else}
 				<div class="nothing">
 					<h2>Nothing selected</h2>
 				</div>

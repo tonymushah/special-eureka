@@ -15,7 +15,8 @@
 	interface Props {
 		titles: string[];
 	}
-	let { titles = $bindable() }: Props = $props();
+	let { titles: titles_main }: Props = $props();
+	let titles = $state(titles_main);
 	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
 		$state("lists");
 	function showLists() {
