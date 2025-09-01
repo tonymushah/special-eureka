@@ -179,9 +179,9 @@
 	{/snippet}
 </MangaList>
 
-{#if $infiniteQuery.error}
+{#if $infiniteQuery.error && ($infiniteQuery.data?.pages.length ?? 0) == 0}
 	<ErrorComponent
-		label="Error on loading title"
+		label="Error on loading titles"
 		error={$infiniteQuery.error}
 		retry={() => $infiniteQuery.refetch()}
 	/>
