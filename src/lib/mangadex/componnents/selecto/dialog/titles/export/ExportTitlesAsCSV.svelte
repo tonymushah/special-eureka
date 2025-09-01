@@ -191,6 +191,7 @@
 		align-items: center;
 		justify-content: center;
 		gap: 6px;
+		margin-top: 12px;
 		.button-content {
 			display: flex;
 			align-items: center;
