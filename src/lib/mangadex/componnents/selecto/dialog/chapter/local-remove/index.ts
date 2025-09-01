@@ -36,4 +36,5 @@ export const removeMultipleChapterMutation = createMutation<void, Error, string[
 	onError(error, variables, context) {
 		addErrorToast("Error on removing chapters", error);
 	},
+	networkMode: "always"
 }, mangadexQueryClient);

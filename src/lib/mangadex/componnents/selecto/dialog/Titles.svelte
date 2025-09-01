@@ -11,6 +11,7 @@
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
 	import ExportTitlesAsMal from "./titles/export/ExportTitlesAsMAL.svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 	interface Props {
 		titles: string[];
@@ -83,7 +84,7 @@
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={$titlesDownload.isPending}
+			disabled={$titlesDownload.isPending || !$isMounted}
 			label="Download"
 			onclick={() => {
 				$titlesDownload

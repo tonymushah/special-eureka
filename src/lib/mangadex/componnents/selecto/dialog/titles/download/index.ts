@@ -35,5 +35,6 @@ export const titlesDownload = createMutation<void, Error, string[]>({
 					break;
 			}
 		})
-	}
+	},
+	networkMode: "always"
 }, mangadexQueryClient);

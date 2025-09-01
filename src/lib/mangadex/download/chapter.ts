@@ -156,6 +156,7 @@ export const removeMutation = createMutation(
 				}
 			})
 		},
+		networkMode: "always"
 	},
 	mangadexQueryClient
 );

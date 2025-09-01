@@ -72,7 +72,7 @@
 </script>
 
 <div class="update-reading-status">
-	<h4>Update Reading Status</h4>
+	<h3>Update Reading Status</h3>
 	<div class="form">
 		<StatusSelect readingStatus={selectedStatus} />
 		<IsFollowingButton isFollowing={selectedIsFollowing} />
@@ -138,11 +138,15 @@
 		flex-direction: row;
 		gap: 10px;
 	}
-	h4 {
+	h3 {
 		margin: 0px;
 	}
 	.update-reading-status {
-		display: grid;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		height: 80%;
 		gap: 8px;
 	}
 </style>

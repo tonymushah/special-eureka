@@ -100,7 +100,7 @@
 </script>
 
 <div class="list-w-make">
-	{#if $query.error}
+	{#if $query.error && !$query.isFetched}
 		<ErrorComponent
 			label="Error"
 			error={$query.error}
