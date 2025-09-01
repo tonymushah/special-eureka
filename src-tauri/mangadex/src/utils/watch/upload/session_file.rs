@@ -1,14 +1,14 @@
 use std::{ops::Deref, sync::Arc};
 
 use mangadex_api_schema_rust::{
-    v5::UploadSessionFileAttributes as Attributes, ApiObjectNoRelationships,
+    ApiObjectNoRelationships, v5::UploadSessionFileAttributes as Attributes,
 };
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
 use crate::{
     objects::{
-        upload::session_file::attributes::UploadSessionFileAttributes, GetAttributes, GetId,
+        GetAttributes, GetId, upload::session_file::attributes::UploadSessionFileAttributes,
     },
     utils::watch::{SendData, SendDataResult, WatcherInnerData},
 };

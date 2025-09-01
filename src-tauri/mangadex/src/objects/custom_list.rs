@@ -1,7 +1,7 @@
 use async_graphql::{Context, Object, Result as GraphQLResult};
 use mangadex_api_schema_rust::{
-    v5::{CustomListAttributes as Attributes, CustomListObject},
     ApiObjectNoRelationships,
+    v5::{CustomListAttributes as Attributes, CustomListObject},
 };
 use uuid::Uuid;
 

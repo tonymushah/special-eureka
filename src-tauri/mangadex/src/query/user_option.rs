@@ -1,10 +1,10 @@
 use std::ops::Deref;
 
 use crate::{
+    Result,
     objects::offline_config::OfflineConfigObject,
     store::types::structs::{content::ContentProfile, refresh_token::RefreshTokenStore},
     subscription::user_option::UserOptionSubscriptions,
-    Result,
 };
 use async_graphql::{Context, Object};
 use mangadex_api_types_rust::{Language, MangaDexDateTime};
@@ -12,14 +12,14 @@ use tokio_stream::StreamExt;
 
 use crate::{
     store::types::{
+        ExtractFromStore,
         enums::{
             direction::{
-                reading::ReadingDirectionStore, sidebar::SidebarDirectionStore, Direction,
+                Direction, reading::ReadingDirectionStore, sidebar::SidebarDirectionStore,
             },
             reading_mode::{ReadingMode, ReadingModeStore},
         },
         structs::chapter_language::ChapterLanguagesStore,
-        ExtractFromStore,
     },
     utils::{get_store, get_watches_from_graphql_context, watch::SendData},
 };

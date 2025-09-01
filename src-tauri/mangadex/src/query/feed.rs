@@ -1,9 +1,9 @@
 use std::ops::Deref;
 
 use crate::{
+    Result,
     store::types::structs::content::feed_from_gql_ctx,
     utils::{get_mangadex_client_from_graphql_context, splittable_param::SendSplitted},
-    Result,
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::{
@@ -15,9 +15,9 @@ use mangadex_api_input_types::{
 
 use crate::{
     objects::{
-        chapter::lists::ChapterResults,
-        manga_chapter_group::{group_results, MangaChapterGroup},
         ExtractReferenceExpansionFromContext,
+        chapter::lists::ChapterResults,
+        manga_chapter_group::{MangaChapterGroup, group_results},
     },
     utils::{
         get_mangadex_client_from_graphql_context_with_auth_refresh,

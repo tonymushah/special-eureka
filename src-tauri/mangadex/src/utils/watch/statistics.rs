@@ -4,7 +4,7 @@ use std::{ops::Deref, sync::Arc};
 
 use tokio::sync::watch::Sender;
 
-use crate::objects::{statistics::StatisticsComments, GetAttributes, GetId};
+use crate::objects::{GetAttributes, GetId, statistics::StatisticsComments};
 
 use super::{SendData, WatcherInnerData};
 

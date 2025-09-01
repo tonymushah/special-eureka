@@ -4,11 +4,11 @@ use std::{
 };
 
 use crate::{
+    Result,
     error::Error,
     store::types::structs::content::ContentFeeder,
     subscription::utils::{OptionFlattenStream, ResultFlattenStream},
-    utils::{splittable_param::SendSplitted, Collection},
-    Result,
+    utils::{Collection, splittable_param::SendSplitted},
 };
 use async_graphql::{Context, InputObject, Object};
 use eureka_mmanager::prelude::{

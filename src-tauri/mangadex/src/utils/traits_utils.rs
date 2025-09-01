@@ -9,8 +9,9 @@ use std::future::Future;
 
 use crate::{
     app_state::{LastTimeTokenWhenFecthed, OfflineAppState, inner::AppStateInner},
+    cache::chapter::ChapterPagesStore,
     rate_limit::SpecificRateLimits,
-    utils::{chapter::ChapterPagesStore, refresh_token::RefreshTokenTask, watch::SendData},
+    utils::watch::SendData,
 };
 
 use super::{store::MangaDexStoreState, watch::Watches};
@@ -50,27 +51,8 @@ where
     {
         let app = self.app_handle().clone();
 
-        // TODO make a trait for this
-        let (tx, rx) = tokio::sync::oneshot::channel::<crate::Result<()>>();
-        std::thread::spawn(move || {
-            let res = tauri::async_runtime::block_on(async {
-                if let Some(res) = RefreshTokenTask::get_state_from_manager(&app)
-                    .get(())
-                    .await?
-                {
-                    res?;
-                    Ok(())
-                } else {
-                    Err(crate::Error::NoDeduplicateTask)
-                }
-            });
-            if let Err(Err(err)) = tx.send(res) {
-                log::error!("{err}")
-            }
-        });
-
         async move {
-            rx.await??;
+            super::refresh_token::refresh_token(app).await?;
             self.get_mangadex_client()
         }
     }

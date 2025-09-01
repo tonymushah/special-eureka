@@ -1,3 +1,5 @@
+pub mod export;
+
 use std::{collections::HashMap, time::Duration};
 
 use crate::{
@@ -306,5 +308,8 @@ impl MangaMutations {
             tokio::time::sleep(Duration::from_millis(100)).await;
         }
         Ok(true)
+    }
+    pub async fn export(&self) -> export::MangaExportMutations {
+        export::MangaExportMutations
     }
 }

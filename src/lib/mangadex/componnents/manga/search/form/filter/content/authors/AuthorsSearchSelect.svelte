@@ -13,12 +13,14 @@
 	} from "../../contexts/authorArtist";
 	import { tagWritableToComboboxOptionWritable } from "./utils";
 	import AuthorsSearchSelectMenu from "./AuthorsSearchSelectMenu.svelte";
+	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 
 	interface Props {
 		store: Writable<Tag[]>;
+		portal?: PortalConfig;
 	}
 
-	let { store }: Props = $props();
+	let { store, portal = "dialog" }: Props = $props();
 	const {
 		elements: { input, menu, option, label },
 		states: { open, inputValue, touchedInput },
@@ -33,7 +35,7 @@
 			sameWidth: true
 			// strategy: "fixed"
 		},
-		portal: "dialog"
+		portal
 	});
 	const {
 		elements: { root, tag, deleteTrigger, edit, input: inputTags },

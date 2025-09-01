@@ -1,12 +1,12 @@
 use std::ops::Deref;
 
-use crate::{utils::splittable_param::SendSplitted, Result};
+use crate::{Result, utils::splittable_param::SendSplitted};
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::user::list::UserListParam;
 use uuid::Uuid;
 
 use crate::{
-    objects::user::{lists::UserResults, User},
+    objects::user::{User, lists::UserResults},
     utils::{
         get_mangadex_client_from_graphql_context,
         get_mangadex_client_from_graphql_context_with_auth_refresh,

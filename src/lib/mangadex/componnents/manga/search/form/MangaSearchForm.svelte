@@ -10,6 +10,7 @@
 	import MangaSearchFilterDialog from "./filter/MangaSearchFilterDialog.svelte";
 	import type { MangaSearchParams } from "./state";
 	import defaultMangaSearchParams from "./state";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 	interface Events {
 		onsubmit?: (ev: MangaSearchParams) => any;
@@ -143,6 +144,7 @@
 				variant="1"
 				isBase
 				type="button"
+				disabled={!$isMounted}
 				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}
@@ -156,6 +158,7 @@
 				variant="accent"
 				isBase
 				type="button"
+				disabled={!$isMounted}
 				onclick={() => {
 					$offlineParams = !$offlineParams;
 				}}

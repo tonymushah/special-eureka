@@ -96,38 +96,42 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	const pages = der(query, ($query) => new Set($query.data?.pages.flatMap((a) => a.data)));
 </script>
 
 <div class="list-w-make">
-	{#if $query.error}
-		<ErrorComponent label="Error" error={$query.error} />
+	{#if $query.error && !$query.isFetched}
+		<ErrorComponent
+			label="Error"
+			error={$query.error}
+			retry={() => {
+				$query.refetch();
+			}}
+		/>
 	{/if}
 	<div class="lists">
 		{#if $query.data}
-			{#each $query.data.pages as pages}
-				{#each pages.data as customList (customList.id)}
-					{@const isSelected = selectedLists.includes(customList.id)}
-					<div>
-						<CustomListCheckbox
-							name={customList.name}
-							defaultChecked={isSelected}
-							onChange={(value) => {
-								switch (value) {
-									case true:
-										selectedLists.push(customList.id);
-										break;
-									case false:
-										selectedLists = selectedLists.filter(
-											(dd) => dd != customList.id
-										);
-										break;
-									default:
-										break;
+			{#each $pages as customList (customList.id)}
+				<article>
+					<input
+						class="checkbox"
+						type="checkbox"
+						id={`list:${customList.id}`}
+						bind:checked={
+							() => selectedLists.includes(customList.id),
+							(checked) => {
+								if (checked) {
+									selectedLists.push(customList.id);
+								} else {
+									selectedLists = selectedLists.filter(
+										(dd) => dd != customList.id
+									);
 								}
-							}}
-						/>
-					</div>
-				{/each}
+							}
+						}
+					/>
+					<label for={`list:${customList.id}`}>{customList.name} </label>
+				</article>
 			{/each}
 		{/if}
 		<div class="observer-trigger" bind:this={to_obserce_bind}>
@@ -163,5 +167,14 @@
 		align-items: center;
 		justify-content: center;
 		display: flex;
+	}
+	article {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+	}
+	.checkbox {
+		width: 20px;
+		height: 20px;
 	}
 </style>

@@ -1,10 +1,10 @@
 use std::{ops::Deref, sync::Arc};
 
-use mangadex_api_schema_rust::{v5::CustomListAttributes as Attributes, ApiObjectNoRelationships};
+use mangadex_api_schema_rust::{ApiObjectNoRelationships, v5::CustomListAttributes as Attributes};
 use mangadex_api_types_rust::RelationshipType;
 use tokio::sync::watch::Sender;
 
-use crate::objects::{custom_list::attributes::CustomListAttributes, GetAttributes, GetId};
+use crate::objects::{GetAttributes, GetId, custom_list::attributes::CustomListAttributes};
 
 use super::{SendData, WatcherInnerData};
 

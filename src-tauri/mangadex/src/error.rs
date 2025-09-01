@@ -2,8 +2,6 @@ use std::{backtrace::Backtrace, ops::Deref};
 
 use async_graphql::ErrorExtensions;
 
-use crate::utils::refresh_token::AbstractRefreshTokenDedupError;
-
 #[derive(Debug, thiserror::Error, enum_kinds::EnumKind)]
 #[enum_kind(
     ErrorKind,
@@ -128,12 +126,6 @@ pub enum Error {
     #[error(transparent)]
     IndeterminateOffset(#[from] time::error::IndeterminateOffset),
     #[error(transparent)]
-    AbstractRefreshTokenDedup(#[from] AbstractRefreshTokenDedupError),
-    #[error(transparent)]
-    Deduplicate(#[from] deduplicate::DeduplicateError),
-    #[error("No deduplicate task available")]
-    NoDeduplicateTask,
-    #[error(transparent)]
     TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
     #[error("Some Mutex or RwLock has been poisoned")]
     SyncPoison,
@@ -143,6 +135,12 @@ pub enum Error {
     Image(#[from] image::ImageError),
     #[error(transparent)]
     Regex(#[from] regex::Error),
+    #[error(transparent)]
+    SerdeXml(#[from] serde_xml_rs::Error),
+    #[error("Cannot converse some path to an &str")]
+    PathToStr,
+    #[error(transparent)]
+    Csv(#[from] csv::Error),
 }
 
 impl Error {

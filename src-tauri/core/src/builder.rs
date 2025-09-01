@@ -1,9 +1,7 @@
 pub mod menu;
 pub mod setup;
-pub mod tray;
 
 use tauri::{Builder, Wry};
-use tray::on_tray;
 
 pub fn get_builder() -> Builder<Wry> {
     let builder = tauri::Builder::default();
@@ -23,7 +21,6 @@ pub fn get_builder() -> Builder<Wry> {
         */
         // .system_tray(tray::get_tray())
         // .on_system_tray_event(tray::on_system_tray_event)
-        .on_tray_icon_event(on_tray)
         .invoke_handler(tauri::generate_handler![
             crate::commands::close_splashcreen::close_splashscreen,
             crate::commands::open_new_window::open_new_window,
@@ -39,5 +36,7 @@ pub fn get_builder() -> Builder<Wry> {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
+        // TODO Implement cli function
+        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cmd| {}))
         .setup(setup::setup)
 }

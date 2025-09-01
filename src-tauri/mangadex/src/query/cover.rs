@@ -11,8 +11,8 @@ use uuid::Uuid;
 use crate::{
     cache::cover::CoverImageQuality,
     objects::{
-        cover::{lists::CoverResults, Cover},
         ExtractReferenceExpansionFromContext,
+        cover::{Cover, lists::CoverResults},
     },
     utils::download_state::DownloadState,
 };

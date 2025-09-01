@@ -10,7 +10,7 @@ use crate::objects::{
 
 use super::MangaObject as Manga;
 
-#[derive(Clone, SimpleObject)]
+#[derive(Clone, SimpleObject, Debug, Default)]
 pub struct MangaResults {
     data: Vec<Manga>,
     #[graphql(flatten)]

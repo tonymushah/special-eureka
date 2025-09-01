@@ -140,7 +140,11 @@
 </div>
 
 {#if $infiniteQuery.error}
-	<ErrorComponent label="Error on loading title" error={$infiniteQuery.error} />
+	<ErrorComponent
+		label="Error on loading title"
+		error={$infiniteQuery.error}
+		retry={() => $infiniteQuery.refetch()}
+	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>

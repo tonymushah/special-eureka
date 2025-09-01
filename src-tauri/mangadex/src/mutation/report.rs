@@ -1,6 +1,6 @@
 use crate::{
-    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
     Result,
+    utils::traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
 };
 use async_graphql::{Context, Object};
 use mangadex_api_input_types::report::create::CreateReportParam;

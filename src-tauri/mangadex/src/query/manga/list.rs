@@ -4,8 +4,8 @@ use std::{
 };
 
 use crate::{
-    store::types::structs::content::ContentFeeder, utils::splittable_param::SendSplitted, Error,
-    Result,
+    Error, Result, store::types::structs::content::ContentFeeder,
+    utils::splittable_param::SendSplitted,
 };
 
 use async_graphql::Context;
@@ -19,8 +19,8 @@ use tokio_stream::Stream;
 use crate::{
     objects::manga::lists::MangaResults,
     utils::{
-        get_mangadex_client_from_graphql_context, get_offline_app_state,
-        get_watches_from_graphql_context, source::SendMultiSourceData, Collection,
+        Collection, get_mangadex_client_from_graphql_context, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
     },
 };
 

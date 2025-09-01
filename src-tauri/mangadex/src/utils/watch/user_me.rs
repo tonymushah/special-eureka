@@ -2,7 +2,7 @@ use std::{ops::Deref, sync::Arc};
 
 use tokio::sync::watch::Sender;
 
-use crate::objects::{user::attributes::UserAttributes, GetAttributes, GetId};
+use crate::objects::{GetAttributes, GetId, user::attributes::UserAttributes};
 
 use super::{SendData, WatcherInnerData};
 

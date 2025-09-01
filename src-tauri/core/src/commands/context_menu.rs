@@ -2,10 +2,10 @@ use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
 use tauri::{
+    Manager, Position, Runtime, Webview,
     image::Image,
     ipc::CallbackFn,
     menu::{ContextMenu, IconMenuItemBuilder, IsMenuItem, MenuBuilder, MenuId, SubmenuBuilder},
-    Manager, Position, Runtime, Webview,
 };
 
 #[derive(Debug, Clone, Deserialize)]
@@ -115,7 +115,10 @@ pub async fn context_menu<R: Runtime>(
         let webview_1 = webview.clone();
         webview.window().on_menu_event(move |_, id| {
             if let Some(callback) = callbacks.get(id.id()) {
-                if let Err(err) = webview_1.eval(format!("window._{}()", callback.0)) {
+                if let Err(err) = webview_1.eval(format!(
+                    "window.__TAURI_INTERNALS__.runCallback({})",
+                    callback.0
+                )) {
                     log::error!("{} => {}", id.id().0, err);
                 }
             }

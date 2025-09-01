@@ -1,43 +1,15 @@
 <script lang="ts">
 	import PrimaryButtonOnlyLabel from "@mangadex/componnents/theme/buttons/PrimaryButtonOnlyLabel.svelte";
-	import Lists from "./lists/Lists.svelte";
-	import { createMutation } from "@tanstack/svelte-query";
-	import { getContextClient } from "@urql/svelte";
-	import { addToListBatch } from "./lists/query";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { getContextClient } from "@urql/svelte";
+	import Lists from "./lists/Lists.svelte";
+	import mutation from "./lists/mutation";
 
 	interface Props {
 		titles: string[];
 	}
 	let { titles }: Props = $props();
 	let selectedLists: string[] = $state([]);
-	const client = getContextClient();
-	const mutation = createMutation<
-		void,
-		Error,
-		{
-			customListIds: string[];
-			titles: string[];
-		}
-	>({
-		mutationKey: ["add", "to", "list", "batch"],
-		async mutationFn({ customListIds, titles }) {
-			if (customListIds.length == 0 || titles.length == 0) {
-				throw new Error("No titles or custom lists selected");
-			}
-			for (const list in customListIds) {
-				const res = await client
-					.mutation(addToListBatch, {
-						mangas: titles,
-						customList: list
-					})
-					.toPromise();
-				if (res.error) {
-					throw res.error;
-				}
-			}
-		}
-	});
 </script>
 
 <div class="lists">

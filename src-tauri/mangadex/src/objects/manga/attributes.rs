@@ -2,8 +2,8 @@ use std::ops::Deref;
 
 use async_graphql::Object;
 use mangadex_api_schema_rust::{
-    v5::{LocalizedString, MangaAttributes, TagAttributes as VanillaTagAttributes},
     ApiObject,
+    v5::{LocalizedString, MangaAttributes, TagAttributes as VanillaTagAttributes},
 };
 use mangadex_api_types_rust::{
     ContentRating, Demographic, Language, MangaDexDateTime, MangaState, MangaStatus,

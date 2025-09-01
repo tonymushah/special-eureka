@@ -18,6 +18,7 @@ import type {
 	MangaDownloadSubSubscriptionVariables
 } from "@mangadex/gql/graphql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 const downloadMutation = graphql(`
 	mutation downloadManga($id: UUID!) {
@@ -81,47 +82,79 @@ export const invalidateMangaOfflinePresence = debounce(async (id: string) => {
 	});
 });
 
+export const downloadMutationQuery = createMutation(
+	{
+		mutationKey: ["manga", "download"],
+		async mutationFn(id: string) {
+			const res = await gqlClient
+				.mutation(MangaDownload.downloadMutation(), {
+					id
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			}
+			return res;
+		},
+		onSettled(data, error, variables, context) {
+			invalidateMangaOfflinePresence(variables);
+		},
+		onError(error, variables, context) {
+			addErrorToast("Error on downloading title", error)
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					title: "Downloaded title",
+					description: variables
+				}
+			})
+		},
+	},
+	mangadexQueryClient
+);;
+
 const download = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res = createMutation(
-		{
-			mutationKey: ["manga", "download", id],
-			async mutationFn() {
-				const res = await gqlClient
-					.mutation(MangaDownload.downloadMutation(), {
-						id
-					})
-					.toPromise();
-				return res;
-			},
-			onSettled(data, error, variables, context) {
-				invalidateMangaOfflinePresence(id);
-			}
-		},
-		client
-	);
-	await get(res).mutateAsync();
+
+	const res = await get(downloadMutationQuery).mutateAsync(id);
 	return res;
 });
 
+export const removeMutation = createMutation(
+	{
+		mutationKey: ["manga-removing"],
+		async mutationFn(id: string) {
+			const res = await gqlClient
+				.mutation(MangaDownload.mangaRemoveMutation(), {
+					id
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error
+			}
+			return res;
+		},
+		onError(error, variables, context) {
+			addErrorToast("Cannot remove title", error);
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					"title": "Removed title",
+					"description": variables
+				}
+			});
+		},
+		networkMode: "always"
+	},
+	mangadexQueryClient
+);
+
 const remove = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res = createMutation(
-		{
-			mutationKey: ["manga-removing", id],
-			async mutationFn() {
-				const res = await gqlClient
-					.mutation(MangaDownload.mangaRemoveMutation(), {
-						id
-					})
-					.toPromise();
-				return res;
-			}
-		},
-		client
-	);
-	await get(res).mutateAsync();
-	return res;
+
+	return await get(removeMutation).mutateAsync(id);
 });
 
 const cancel = debounce(async (id: string) => {
@@ -129,7 +162,25 @@ const cancel = debounce(async (id: string) => {
 		.mutation(MangaDownload.cancelDonwloadMuation(), {
 			id
 		})
-		.toPromise();
+		.toPromise().then((d) => {
+			if (d.error) {
+				throw d.error;
+			}
+			return d;
+		}).then((d) => {
+			addToast({
+				data: {
+					title: "Cancelled Title downloading",
+					description: id,
+					variant: "yellow"
+				}
+			})
+			return d;
+		}).catch((e) => {
+			addErrorToast("Cannot cancel title downloading", e);
+			throw e
+		}
+		);
 });
 
 const downloadStateQuery = (id: string, _client?: QueryClient) => {

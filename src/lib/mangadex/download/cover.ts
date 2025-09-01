@@ -19,6 +19,7 @@ import {
 	type CoverDownloadSubSubscriptionVariables
 } from "@mangadex/gql/graphql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 const downloadMutation = graphql(`
 	mutation downloadCover($id: UUID!) {
@@ -100,47 +101,72 @@ const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	);
 };
 
+export const downloadMutationQuery = createMutation(
+	{
+		mutationKey: ["cover", "download"],
+		async mutationFn(id: string) {
+			const res = await gqlClient
+				.mutation(CoverDownload.downloadMutation(), {
+					id
+				})
+				.toPromise();
+			return res;
+		},
+		onSettled(data, error, variables, context) {
+			invalidateCoverOfflinePresence(variables);
+		},
+		onError(error, variables, context) {
+			addErrorToast(`Cannot download cover art ${variables}`, error)
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					title: "Downloaded cover art",
+					description: variables
+				}
+			})
+		},
+	},
+	mangadexQueryClient
+);
+
 const download = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res = createMutation(
-		{
-			mutationKey: ["cover", "download", id],
-			async mutationFn() {
-				const res = await gqlClient
-					.mutation(CoverDownload.downloadMutation(), {
-						id
-					})
-					.toPromise();
-				return res;
-			},
-			onSettled(data, error, variables, context) {
-				invalidateCoverOfflinePresence(id);
-			}
-		},
-		client
-	);
-	await get(res).mutateAsync();
+	const res =
+		await get(downloadMutationQuery).mutateAsync(id);
 	return res;
 });
 
+export const removeMutation = createMutation(
+	{
+		mutationKey: ["cover-removing"],
+		async mutationFn(id: string) {
+			const res = await gqlClient
+				.mutation(CoverDownload.coverRemoveMutation(), {
+					id
+				})
+				.toPromise();
+			return res;
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					title: `Removed cover`,
+					description: variables
+				}
+			})
+		},
+		onError(error, variables, context) {
+			addErrorToast(`Cannot remove cover ${variables}`, error);
+		},
+		networkMode: "always"
+	},
+	mangadexQueryClient
+);
+
 const remove = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res = createMutation(
-		{
-			mutationKey: ["cover-removing", id],
-			async mutationFn() {
-				const res = await gqlClient
-					.mutation(CoverDownload.coverRemoveMutation(), {
-						id
-					})
-					.toPromise();
-				return res;
-			}
-		},
-		client
-	);
-	await get(res).mutateAsync();
-	return res;
+	return await get(removeMutation).mutateAsync(id);
 });
 
 const cancel = debounce(async (id: string) => {
@@ -148,7 +174,15 @@ const cancel = debounce(async (id: string) => {
 		.mutation(CoverDownload.cancelDonwloadMuation(), {
 			id
 		})
-		.toPromise();
+		.toPromise().then((d) => {
+			if (d.error) {
+				throw d.error
+			}
+			return d;
+		}).catch((e) => {
+			addErrorToast(`Cannot cancel cover downloading ${id}`, e);
+			throw e;
+		});
 });
 
 export enum CoverDownloadState {

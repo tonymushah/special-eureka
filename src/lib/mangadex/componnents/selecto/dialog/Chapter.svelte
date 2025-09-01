@@ -5,6 +5,9 @@
 	import Selections from "./chapter/Selections.svelte";
 	import { multiChapterDownload } from "./chapter/download";
 	import { removeMultipleChapterMutation } from "./chapter/local-remove";
+	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
+	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		chapters: string[];
@@ -42,6 +45,26 @@
 			label="Remove them locally"
 			onclick={() => {
 				$removeMultipleChapterMutation.mutate(chapters);
+			}}
+		/>
+		<ButtonAccentOnlyLabel
+			variant="3"
+			disabled={$exportIdsToTxt.isPending}
+			label="Export ids as txt"
+			onclick={() => {
+				$exportIdsToTxt.mutateAsync(
+					{
+						uuids: chapters
+					},
+					{
+						onError(error, variables, context) {
+							addErrorToast("Cannot export chapters ids as txt", error);
+						},
+						onSuccess(data, variables, context) {
+							revealItemInDir(data);
+						}
+					}
+				);
 			}}
 		/>
 		{#if canDelete}

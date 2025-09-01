@@ -1,6 +1,6 @@
 use async_graphql::{ComplexObject, Result, SimpleObject};
 use mangadex_api_schema_rust::v5::statistics::{
-    chapter::ChapterStatistics, groups::GroupStatistics, Comments,
+    Comments, chapter::ChapterStatistics, groups::GroupStatistics,
 };
 use url::Url;
 use uuid::Uuid;
