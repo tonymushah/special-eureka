@@ -76,9 +76,12 @@ impl Feedable for Tuple {
     }
 }
 
-pub trait ContentFeeder<F: Feedable> {
+pub trait GetContentProfile {
     type Error;
     fn get_content_profile(&self) -> Result<ContentProfile, Self::Error>;
+}
+
+pub trait ContentFeeder<F: Feedable>: GetContentProfile {
     fn try_feed(&self, feedable: F) -> Result<F, Self::Error> {
         let content_profile = self.get_content_profile()?;
         Ok(feedable.feed(&content_profile))
@@ -89,9 +92,8 @@ pub trait ContentFeeder<F: Feedable> {
     }
 }
 
-impl<F, R> ContentFeeder<F> for tauri::AppHandle<R>
+impl<R> GetContentProfile for tauri::AppHandle<R>
 where
-    F: Feedable,
     R: Runtime,
 {
     type Error = crate::Error;
@@ -106,6 +108,13 @@ where
         };
         Ok(ctt_profile)
     }
+}
+
+impl<F, R> ContentFeeder<F> for tauri::AppHandle<R>
+where
+    F: Feedable,
+    R: Runtime,
+{
 }
 
 pub fn try_feed_from_gql_ctx<R, TF>(
