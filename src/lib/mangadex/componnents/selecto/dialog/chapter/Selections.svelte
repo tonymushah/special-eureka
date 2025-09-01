@@ -130,10 +130,14 @@
 		flex-direction: row;
 		gap: 6px;
 		overflow-y: scroll;
+		width: 100%;
+		max-height: 90%;
 	}
 	.chapter-selected.hasData {
 		flex-direction: column;
-		width: 100%;
+		flex-wrap: nowrap;
+		max-height: 90%;
+		padding-bottom: 10px;
 	}
 	.chapaters {
 		display: flex;
@@ -143,5 +147,20 @@
 	}
 	p {
 		margin: 4px 0px;
+	}
+	article {
+		display: grid;
+		border: 1px dashed var(--mid-tone);
+		border-radius: 12px;
+		padding: 6px;
+		h4 {
+			margin: 0px;
+		}
+		.chapaters {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 3px;
+		}
 	}
 </style>

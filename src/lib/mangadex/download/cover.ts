@@ -159,6 +159,7 @@ export const removeMutation = createMutation(
 		onError(error, variables, context) {
 			addErrorToast(`Cannot remove cover ${variables}`, error);
 		},
+		networkMode: "always"
 	},
 	mangadexQueryClient
 );

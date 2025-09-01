@@ -53,7 +53,7 @@
 
 <p>Click on the badge to remove it from the selection</p>
 <div class="titles-selected">
-	{#if $selectedTitles.data && !$selectedTitles.isFetching}
+	{#if $selectedTitles.data}
 		{@const _titles = $selectedTitles.data}
 		{#each _titles as title}
 			<StatusBadgeOnlyLabel
@@ -93,6 +93,8 @@
 		flex-wrap: wrap;
 		gap: 6px;
 		overflow-y: scroll;
+		max-height: 90%;
+		padding-bottom: 10px;
 	}
 	p {
 		margin: 4px 0px;

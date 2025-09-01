@@ -181,7 +181,7 @@
 
 {#if $infiniteQuery.error}
 	<ErrorComponent
-		label="Error on loading title"
+		label="Error on loading titles"
 		error={$infiniteQuery.error}
 		retry={() => $infiniteQuery.refetch()}
 	/>

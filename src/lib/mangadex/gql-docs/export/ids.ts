@@ -41,7 +41,8 @@ const exportIdsToTxt = createMutation({
 				throw new Error("no data??");
 			}
 		}
-	}
+	},
+	networkMode: "always"
 }, mangadexQueryClient);
 
 export default exportIdsToTxt;

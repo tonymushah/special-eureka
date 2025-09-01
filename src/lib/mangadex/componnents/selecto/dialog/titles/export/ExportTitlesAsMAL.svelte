@@ -444,4 +444,8 @@
 		justify-content: center;
 		flex-direction: column;
 	}
+	.export-layout {
+		overflow-y: scroll;
+		height: 100%;
+	}
 </style>

@@ -11,11 +11,13 @@
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import ExportTitlesAsCsv from "./titles/export/ExportTitlesAsCSV.svelte";
 	import ExportTitlesAsMal from "./titles/export/ExportTitlesAsMAL.svelte";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 	interface Props {
 		titles: string[];
 	}
-	let { titles = $bindable() }: Props = $props();
+	let { titles: titles_main }: Props = $props();
+	let titles = $state(titles_main);
 	let currentAction: "lists" | "status" | "selections" | "export-csv" | "export-mal" =
 		$state("lists");
 	function showLists() {
@@ -82,7 +84,7 @@
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={$titlesDownload.isPending}
+			disabled={$titlesDownload.isPending || !$isMounted}
 			label="Download"
 			onclick={() => {
 				$titlesDownload
