@@ -19,12 +19,13 @@
 		pre?: Snippet;
 		post?: Snippet;
 		nowrap?: boolean;
+		dContent?: boolean;
 	}
 
-	let { tags, pre, post, onclick, nowrap }: Props = $props();
+	let { tags, pre, post, onclick, nowrap, dContent }: Props = $props();
 </script>
 
-<div class:nowrap>
+<div class:nowrap class:dContent>
 	{@render pre?.()}
 	<TagComponnents {onclick} {tags} />
 	{@render post?.()}
@@ -38,5 +39,8 @@
 	}
 	div.nowrap {
 		flex-wrap: nowrap;
+	}
+	.dContent {
+		display: contents;
 	}
 </style>

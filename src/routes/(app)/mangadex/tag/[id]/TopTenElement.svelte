@@ -87,6 +87,7 @@
 				transition:slide={{
 					axis: "y"
 				}}
+				class="tags"
 			>
 				<TagComponnentsFlex
 					{tags}
@@ -99,6 +100,7 @@
 							})
 						);
 					}}
+					dContent
 				>
 					{#snippet pre()}
 						<ContentRatingTag {contentRating} />
@@ -120,6 +122,7 @@
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
+			object-position: 0px 0px;
 		}
 	}
 	swiper-slide:focus {
@@ -151,5 +154,12 @@
 	}
 	.content:active {
 		background-color: var(--accent-l5-active);
+	}
+	.tags {
+		display: flex;
+		gap: 6px;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
 	}
 </style>
