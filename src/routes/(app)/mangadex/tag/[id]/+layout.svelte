@@ -12,8 +12,14 @@
 </script>
 
 <div class="layout">
-	<PageTitle>{data.names.get("en")}</PageTitle>
+	<PageTitle withReturn>{data.names.get("en")}</PageTitle>
 	<div class="page-layout">
 		{@render children?.()}
 	</div>
 </div>
+
+<style lang="scss">
+	.layout {
+		margin: 8px 12px;
+	}
+</style>

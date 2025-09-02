@@ -40,7 +40,16 @@
 <h4>Trending <i>idk...</i></h4>
 
 {#if $topTen.data}
-	<swiper-container slides-per-view={2} loop="true">
+	<swiper-container
+		slides-per-view={2}
+		space-between={10}
+		loop="true"
+		autoplay={{
+			pauseOnMouseEnter: true,
+			delay: 5000
+		}}
+		mousewheel
+	>
 		{#each $topTen.data as title}
 			{@const _title = manga_title_to_lang_map(title.attributes.title)}
 			<TopTenElement

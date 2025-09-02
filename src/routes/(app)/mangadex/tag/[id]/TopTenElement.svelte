@@ -8,6 +8,7 @@
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 	import { getContextClient } from "@urql/svelte";
+	import { slide } from "svelte/transition";
 
 	interface Props {
 		mangaId: string;
@@ -48,13 +49,14 @@
 			name: get_value_and_random_if_undefined(d.name, "en") ?? d.id
 		}))
 	);
+	let isHoveringContent = $state(false);
 </script>
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 <swiper-slide
-	onclick={() => {
+	onclick={(e: MouseEvent) => {
 		goto(
 			route("/mangadex/title/[id]", {
 				id: mangaId
@@ -70,22 +72,40 @@
 	{:else}
 		<Skeleton width="100%" height="100%" />
 	{/if}
-	<div class="content">
+	<div
+		class="content"
+		onmouseenter={() => {
+			isHoveringContent = true;
+		}}
+		onmouseleave={() => {
+			isHoveringContent = false;
+		}}
+	>
 		<h4>{title}</h4>
-		<TagComponnentsFlex
-			{tags}
-			onclick={() => {
-				goto(
-					route("/mangadex/tag/[id]", {
-						id: mangaId
-					})
-				);
-			}}
-		>
-			{#snippet pre()}
-				<ContentRatingTag {contentRating} />
-			{/snippet}
-		</TagComponnentsFlex>
+		{#if isHoveringContent}
+			<div
+				transition:slide={{
+					axis: "y"
+				}}
+			>
+				<TagComponnentsFlex
+					{tags}
+					onclick={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						goto(
+							route("/mangadex/tag/[id]", {
+								id: mangaId
+							})
+						);
+					}}
+				>
+					{#snippet pre()}
+						<ContentRatingTag {contentRating} />
+					{/snippet}
+				</TagComponnentsFlex>
+			</div>
+		{/if}
 	</div>
 </swiper-slide>
 
@@ -93,17 +113,17 @@
 	swiper-slide {
 		width: 100%;
 		position: relative;
-		height: 200px;
+		height: 350px;
+		border-radius: 0.5em;
+		overflow: hidden;
 		img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			background-position: 0 -200px;
 		}
 	}
 	swiper-slide:focus {
 		border: 1px dashed var(--mid-tone);
-		border-radius: 0.5em;
 	}
 	swiper-slide:global([data-selecto-selected]) {
 		border: 2px dashed var(--primary-l2);
@@ -118,6 +138,13 @@
 		border-radius: 1em;
 		display: grid;
 		gap: 4px;
+		margin-inline: auto;
+		left: 0;
+		right: 0;
+		h4 {
+			margin: 0px;
+			text-align: center;
+		}
 	}
 	.content:hover {
 		background-color: var(--accent-l5-hover);
