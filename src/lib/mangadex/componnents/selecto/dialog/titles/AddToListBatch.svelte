@@ -27,8 +27,8 @@
 			onclick={() => {
 				$mutation
 					.mutateAsync({
-						customListIds: selectedLists,
-						titles
+						customListIds: new Set(selectedLists).values().toArray(),
+						titles: new Set(titles).values().toArray()
 					})
 					.then(() => {
 						addToast({
