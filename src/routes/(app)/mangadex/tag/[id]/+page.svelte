@@ -8,6 +8,4 @@
 	let { data }: Props = $props();
 </script>
 
-<section>
-	<TopTenTags id={data.id} />
-</section>
+<TopTenTags id={data.id} />
