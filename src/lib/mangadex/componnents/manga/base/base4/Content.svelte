@@ -13,7 +13,7 @@
 <style lang="scss">
 	div.title > p {
 		font-weight: 500;
-		text-align: start;
+		text-align: center;
 		margin: 5px;
 		padding: 0px;
 		font-size: 16px;
