@@ -3,6 +3,9 @@
 	import tagTopTenQuery from "@mangadex/gql-docs/tag/page/topTen";
 	import { client } from "@mangadex/gql/urql";
 	import { createQuery } from "@tanstack/svelte-query";
+	import TopTenElement from "./TopTenElement.svelte";
+	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 
 	interface Props {
 		id: string;
@@ -38,10 +41,32 @@
 
 {#if $topTen.data}
 	<swiper-container slides-per-view={2} loop="true">
-		{#each $topTen.data as title}{/each}
+		{#each $topTen.data as title}
+			{@const _title = manga_title_to_lang_map(title.attributes.title)}
+			<TopTenElement
+				mangaId={title.id}
+				coverId={title.relationships.coverArt.id}
+				filename={title.relationships.coverArt.attributes.fileName}
+				originalLanguage={title.attributes.originalLanguage}
+				tags={title.attributes.tags.map((tag) => ({
+					id: tag.id,
+					name: manga_title_to_lang_map(tag.attributes.name)
+				}))}
+				title={_title}
+				cttRating={title.attributes.contentRating ?? undefined}
+			/>
+		{/each}
 	</swiper-container>
 {:else if $topTen.isLoading}
 	<section class="loading">
 		<p>Loading...</p>
 	</section>
+{:else if $topTen.isError}
+	<ErrorComponent
+		label="Error on loading treding..."
+		error={$topTen.error}
+		retry={() => {
+			$topTen.refetch();
+		}}
+	/>
 {/if}

@@ -18,12 +18,13 @@
 		tags: Tag[];
 		pre?: Snippet;
 		post?: Snippet;
+		nowrap?: boolean;
 	}
 
-	let { tags, pre, post, onclick }: Props = $props();
+	let { tags, pre, post, onclick, nowrap }: Props = $props();
 </script>
 
-<div>
+<div class:nowrap>
 	{@render pre?.()}
 	<TagComponnents {onclick} {tags} />
 	{@render post?.()}
@@ -34,5 +35,8 @@
 		display: flex;
 		gap: 6px;
 		flex-wrap: wrap;
+	}
+	div.nowrap {
+		flex-wrap: nowrap;
 	}
 </style>
