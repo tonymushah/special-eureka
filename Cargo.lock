@@ -5438,7 +5438,7 @@ dependencies = [
 
 [[package]]
 name = "special-eureka"
-version = "0.2.0-7"
+version = "0.2.0-9"
 dependencies = [
  "actix",
  "anyhow",
