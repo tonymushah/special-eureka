@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/cover/commands/contextMenu";
 	import { route } from "$lib/ROUTES";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import { client } from "@mangadex/gql/urql";
 	import { sidebarState as isOpen } from "@mangadex/stores";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";

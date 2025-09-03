@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { route } from "$lib/ROUTES";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
-	import { fonts, setDefault } from "$lib/window-decoration/WindowDecoration.svelte";
+	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
+	import { fonts, setDefault } from "$lib/core/window-decoration/WindowDecoration.svelte";
 	import { onMount } from "svelte";
 	onMount(() => {
 		setDefault();

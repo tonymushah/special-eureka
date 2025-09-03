@@ -1,4 +1,4 @@
-import toggleDecoration from "$lib/commands/toggleDecoration";
+import toggleDecoration from "@special-eureka/cover/commands/toggleDecoration";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { readable, type Readable } from "svelte/store";
 const appWindow = getCurrentWebviewWindow();

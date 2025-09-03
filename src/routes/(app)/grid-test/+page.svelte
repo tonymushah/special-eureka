@@ -1,6 +1,8 @@
 <script lang="ts">
 	import "./selecto.css";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/cover/commands/contextMenu";
 	import SelectionArea from "@viselect/vanilla";
 	let content: HTMLElement | undefined = undefined;
 	$effect(() => {

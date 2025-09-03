@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { navigating } from "$app/stores";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import Sidebar from "../sidebar/Sidebar.svelte";
 	import { isSidebarRtl } from "../sidebar/states/isRtl";
 	import Toaster from "../theme/toast/Toaster.svelte";

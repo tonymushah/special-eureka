@@ -14,7 +14,9 @@
 	import SearchContent from "./SearchContent.svelte";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import { setContextMenuContext } from "$lib/utils/contextMenuContext";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/cover/commands/contextMenu";
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
 	import { delay } from "lodash";

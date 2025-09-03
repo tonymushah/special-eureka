@@ -1,4 +1,4 @@
-import { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+import { ContextMenuItemProvider } from "@special-eureka/cover/commands/contextMenu";
 import { delay } from "lodash";
 
 const defaultContextMenuContent = () => [

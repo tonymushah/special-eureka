@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
-	import openNewWindow from "$lib/commands/openNewWindow";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/cover/commands/contextMenu";
+	import openNewWindow from "@special-eureka/cover/commands/openNewWindow";
 	import { getContextMenuContext } from "$lib/utils/contextMenuContext";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl } from "@tauri-apps/plugin-opener";

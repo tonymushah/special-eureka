@@ -16,7 +16,7 @@
 		fireChapterNextEvent,
 		fireChapterPreviousEvent
 	} from "../contexts/previousNextEventTarget";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 
 	const mode = getCurrentChapterReadingMode();
 	const opened = der([isDrawerOpen(), isDrawerFixed()], ([$open, $fixed]) => $open && $fixed);

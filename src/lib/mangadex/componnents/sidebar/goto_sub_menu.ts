@@ -1,5 +1,5 @@
 import { goto } from "$app/navigation";
-import { ContextMenuItemProvider, type ContextMenuItem } from "$lib/commands/contextMenu";
+import { ContextMenuItemProvider, type ContextMenuItem } from "@special-eureka/cover/commands/contextMenu";
 import { route } from "$lib/ROUTES";
 
 export default function goto_sub_menu(): ContextMenuItem {
@@ -23,7 +23,7 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Online Library",
-						action() {}
+						action() { }
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "MDList",
@@ -33,7 +33,7 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Followed Groups",
-						action() {}
+						action() { }
 					})
 				]
 			}),
@@ -54,7 +54,7 @@ export default function goto_sub_menu(): ContextMenuItem {
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Popular",
-						action() {}
+						action() { }
 					}),
 					ContextMenuItemProvider.menuItem({
 						text: "Recently Added",
