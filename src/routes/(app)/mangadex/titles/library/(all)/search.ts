@@ -1,9 +1,7 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
 import libraryUnfilteredQuery from "@mangadex/gql-docs/library";
 import {
-	CoverImageQuality,
-	type MangaListParams,
-	type UserLibrarySectionParam
+	CoverImageQuality, type UserLibrarySectionParam
 } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
