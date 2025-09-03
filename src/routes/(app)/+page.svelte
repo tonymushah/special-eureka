@@ -3,10 +3,13 @@
 	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import { fonts, setDefault } from "$lib/core/window-decoration/WindowDecoration.svelte";
 	import { onMount } from "svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	onMount(() => {
 		setDefault();
 	});
 </script>
+
+<AppTitle title="Welcome to Special Eureka" />
 
 <main class:isDefaultDecoration={$isDefaultDecoration}>
 	<div class="top" style="--fonts: {$fonts}">
