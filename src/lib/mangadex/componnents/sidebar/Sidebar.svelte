@@ -2,7 +2,7 @@
 	import { goto } from "$app/navigation";
 	import contextMenu, {
 		ContextMenuItemProvider
-	} from "@special-eureka/cover/commands/contextMenu";
+	} from "@special-eureka/core/commands/contextMenu";
 	import { route } from "$lib/ROUTES";
 	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import { client } from "@mangadex/gql/urql";

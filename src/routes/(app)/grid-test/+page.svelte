@@ -2,7 +2,7 @@
 	import "./selecto.css";
 	import contextMenu, {
 		ContextMenuItemProvider
-	} from "@special-eureka/cover/commands/contextMenu";
+	} from "@special-eureka/core/commands/contextMenu";
 	import SelectionArea from "@viselect/vanilla";
 	let content: HTMLElement | undefined = undefined;
 	$effect(() => {

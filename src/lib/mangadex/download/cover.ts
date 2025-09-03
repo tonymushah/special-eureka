@@ -116,7 +116,7 @@ export const downloadMutationQuery = createMutation(
 			invalidateCoverOfflinePresence(variables);
 		},
 		onError(error, variables, context) {
-			addErrorToast(`Cannot download cover art ${variables}`, error)
+			addErrorToast(`Cannot download cover art ${variables}`, error);
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -124,16 +124,15 @@ export const downloadMutationQuery = createMutation(
 					title: "Downloaded cover art",
 					description: variables
 				}
-			})
-		},
+			});
+		}
 	},
 	mangadexQueryClient
 );
 
 const download = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
-	const res =
-		await get(downloadMutationQuery).mutateAsync(id);
+	const res = await get(downloadMutationQuery).mutateAsync(id);
 	return res;
 });
 
@@ -154,7 +153,7 @@ export const removeMutation = createMutation(
 					title: `Removed cover`,
 					description: variables
 				}
-			})
+			});
 		},
 		onError(error, variables, context) {
 			addErrorToast(`Cannot remove cover ${variables}`, error);
@@ -174,12 +173,14 @@ const cancel = debounce(async (id: string) => {
 		.mutation(CoverDownload.cancelDonwloadMuation(), {
 			id
 		})
-		.toPromise().then((d) => {
+		.toPromise()
+		.then((d) => {
 			if (d.error) {
-				throw d.error
+				throw d.error;
 			}
 			return d;
-		}).catch((e) => {
+		})
+		.catch((e) => {
 			addErrorToast(`Cannot cancel cover downloading ${id}`, e);
 			throw e;
 		});

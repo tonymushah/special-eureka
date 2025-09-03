@@ -3,12 +3,19 @@ import { writable } from "svelte/store";
 
 const EVENT_KEY = "special-eureka://mangadex/export-to-mal";
 
-export type ExportTaskState = "Preloading" | "GettingStatuses" | "GettingTitlesData" | "GettingScores" | {
-	"FetchingReadChapter": { manga: string }
-} | "AssemblingInfo" | "WritingToFile"
+export type ExportTaskState =
+	| "Preloading"
+	| "GettingStatuses"
+	| "GettingTitlesData"
+	| "GettingScores"
+	| {
+			FetchingReadChapter: { manga: string };
+	  }
+	| "AssemblingInfo"
+	| "WritingToFile";
 
 export type ExportTaskEventPayload = {
-	progress: number,
+	progress: number;
 	state: ExportTaskState;
 };
 
@@ -19,5 +26,5 @@ export const exportTaskEvent = writable<ExportTaskEventPayload | null>(null, (se
 	});
 	return () => {
 		sub.then((e) => e()).catch(console.error);
-	}
+	};
 });

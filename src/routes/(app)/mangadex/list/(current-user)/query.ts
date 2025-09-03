@@ -1,1 +1,1 @@
-export { default as query } from "@mangadex/gql-docs/list/current-user" 
+export { default as query } from "@mangadex/gql-docs/list/current-user";

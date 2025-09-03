@@ -1,4 +1,4 @@
-import type { ContextMenuItem } from "@special-eureka/cover/commands/contextMenu";
+import type { ContextMenuItem } from "@special-eureka/core/commands/contextMenu";
 import { getContext, setContext } from "svelte";
 
 const KEY = "context-menu-context";

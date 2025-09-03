@@ -2,9 +2,9 @@
 	import { goto } from "$app/navigation";
 	import contextMenu, {
 		ContextMenuItemProvider
-	} from "@special-eureka/cover/commands/contextMenu";
-	import openNewWindow from "@special-eureka/cover/commands/openNewWindow";
-	import { getContextMenuContext } from "$lib/utils/contextMenuContext";
+	} from "@special-eureka/core/commands/contextMenu";
+	import openNewWindow from "@special-eureka/core/commands/openNewWindow";
+	import { getContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { onDestroy } from "svelte";

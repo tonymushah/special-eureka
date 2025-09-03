@@ -21,7 +21,7 @@ export async function mangadexTitleBar() {
 		onclick: TOGGLE_SIDEBAR_HANDLER
 	});
 	/*
-	const { logo, title } = await import("$lib/window-decoration/WindowDecoration.svelte");
+	const { logo, title } = await import("@special-eureka/core/window-decoration/WindowDecoration.svelte");
 	logo.set(mangadexLogo);
 	title.set("MangaDex | Special Eureka")
 	*/

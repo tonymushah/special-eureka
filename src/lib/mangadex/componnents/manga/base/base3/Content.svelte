@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isLinuxStore } from "$lib/commands/isLinux";
+	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 
 	interface Props {
 		title: string;
