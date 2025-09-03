@@ -61,7 +61,10 @@
 		},
 		"resources": [],
 		"shortDescription": "Special Eureka",
-		"createUpdaterArtifacts": "v1Compatible"
+		"createUpdaterArtifacts": "v1Compatible",
+		"icon": [
+			"icons/*"
+		]
 	},
 	"productName": "Special Eureka",
 	"identifier": "mg.tonymushah.special-eureka",
