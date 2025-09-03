@@ -3,8 +3,9 @@
 
 	interface Props {
 		title: string;
+		head?: boolean;
 	}
-	let { title }: Props = $props();
+	let { title, head }: Props = $props();
 
 	const currentWindow = getCurrentWindow();
 	$effect(() => {
@@ -12,3 +13,9 @@
 		document.title = title;
 	});
 </script>
+
+<svelte:head>
+	{#if head}
+		<title>{title}</title>
+	{/if}
+</svelte:head>
