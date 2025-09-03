@@ -10,7 +10,6 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onMount } from "svelte";
-	import { get } from "svelte/store";
 	import type { SwiperContainer } from "swiper/element";
 	import type { SwiperOptions } from "swiper/types";
 
