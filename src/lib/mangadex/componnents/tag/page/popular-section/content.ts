@@ -1,7 +1,7 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
-import libraryUnfilteredQuery from "@mangadex/gql-docs/library";
+import tagPopularTitlesQuery from "@mangadex/gql-docs/tag/page/popularInfQuery";
 import {
-	CoverImageQuality, type UserLibrarySectionParam
+	CoverImageQuality, type TagPopularList
 } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
@@ -10,35 +10,39 @@ import AbstractSearchResult, {
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
 import type { Client } from "@urql/svelte";
 
-type UnfilteredLibraryResultConstuctorParams = {
+type TagPopularSectionResultConstuctorParams = {
 	data: MangaListContentItemProps[];
 	client: Client;
-	params?: UserLibrarySectionParam;
+	params?: TagPopularList;
 	offset: number;
 	limit: number;
 	total: number;
+	id: string;
 };
 
-export class UnfilteredLibraryResult extends AbstractSearchResult<MangaListContentItemProps> {
+export class TagPopularSectionResult extends AbstractSearchResult<MangaListContentItemProps> {
 	client: Client;
-	params?: UserLibrarySectionParam;
+	params?: TagPopularList;
 	offset: number;
 	limit: number;
 	total: number;
+	id: string
 	constructor({
 		data,
 		client,
 		params,
 		offset,
 		limit,
-		total
-	}: UnfilteredLibraryResultConstuctorParams) {
+		total,
+		id
+	}: TagPopularSectionResultConstuctorParams) {
 		super(data);
 		this.client = client;
 		this.params = params;
 		this.limit = limit;
 		this.offset = offset;
 		this.total = total;
+		this.id = id;
 	}
 	hasNext(): boolean {
 		return this.offset <= this.total && this.offset >= 0;
@@ -53,6 +57,7 @@ export class UnfilteredLibraryResult extends AbstractSearchResult<MangaListConte
 	next(): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 		return executeSearchQuery(
 			this.client,
+			this.id,
 			{
 				...this.params,
 				offset: this.offset + this.limit,
@@ -71,17 +76,19 @@ type SomeRes = {
 
 export default async function executeSearchQuery(
 	client: Client,
-	param?: UserLibrarySectionParam,
+	id: string,
+	param?: TagPopularList,
 ): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 	let res: SomeRes | undefined = undefined;
 
 	const result = await client
-		.query(libraryUnfilteredQuery, {
-			param
+		.query(tagPopularTitlesQuery, {
+			params: param,
+			id
 		})
 		.toPromise();
 	if (result.data) {
-		const data = result.data.library.unfiltered;
+		const data = result.data.tag.page.popularInfSection;
 		res = {
 			data: data.data.map<MangaListContentItemProps>((v) => {
 				const contentRating = v.attributes.contentRating;
@@ -130,10 +137,11 @@ export default async function executeSearchQuery(
 	}
 
 	if (res) {
-		return new UnfilteredLibraryResult({
+		return new TagPopularSectionResult({
 			...res,
 			client,
 			params: param,
+			id
 		});
 	} else {
 		throw new Error("no data obtained");

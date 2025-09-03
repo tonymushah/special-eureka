@@ -16,7 +16,8 @@ const mutation = createMutation<
 		if (customListIds.length == 0 || titles.length == 0) {
 			throw new Error("No titles or custom lists selected");
 		}
-		for (const list in customListIds) {
+		for (let index = 0; index < customListIds.length; index++) {
+			const list = customListIds[index];
 			const res = await client
 				.mutation(addToListBatch, {
 					mangas: titles,
