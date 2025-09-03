@@ -20,7 +20,7 @@ const config = {
 			"@mangadex/*": "./src/lib/mangadex/*",
 			"$routes/*": "./src/routes/(app)/*",
 			"$routes/main/*": "./src/routes/*",
-			"@special-eureka/cover": "./src/lib/core"
+			"@special-eureka/core": "./src/lib/core"
 		}
 	}
 };
