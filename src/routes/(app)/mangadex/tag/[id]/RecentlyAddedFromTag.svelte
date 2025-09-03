@@ -18,7 +18,7 @@
 	}
 	let { id }: Props = $props();
 	let swiper_container: SwiperContainer | undefined = $state(undefined);
-	onMount(() => {
+	$effect(() => {
 		// swiper parameters
 		const swiperParams: SwiperOptions = {
 			slidesPerView: "auto",
@@ -48,6 +48,7 @@
 
 			// and now initialize it
 			swiper_container.initialize();
+			return () => {};
 		}
 	});
 
@@ -134,5 +135,8 @@
 		width: 50%;
 		margin: 0px 25%;
 		height: 7em;
+	}
+	swiper-slide {
+		margin-top: 10px;
 	}
 </style>
