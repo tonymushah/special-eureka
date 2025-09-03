@@ -11,6 +11,7 @@
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import { isLogged } from "@mangadex/utils/auth";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	type Options = Omit<ExportMdLibraryToCsvOptions, "exportPath">;
 
@@ -75,6 +76,8 @@
 		}
 	}
 </script>
+
+<AppTitle title="Export Library as CSV - MangaDex" />
 
 <div class="export-layout">
 	<Title>Export as CSV</Title>

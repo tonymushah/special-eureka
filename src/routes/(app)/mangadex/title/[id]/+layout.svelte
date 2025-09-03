@@ -3,6 +3,7 @@
 	import type { LayoutData } from "./$types";
 	import ConflictLayout from "./ConflictLayout.svelte";
 	import NoConflictLayout from "./NoConflictLayout.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -27,6 +28,7 @@
 </script>
 
 {#if hasConflict && !ingnoreConflict}
+	<AppTitle title="Title {data.layoutData.id} - MangaDex" />
 	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
 {:else}
 	<NoConflictLayout {data}>

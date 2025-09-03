@@ -7,6 +7,7 @@
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { ExternalLinkIcon } from "svelte-feather-icons";
 	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -16,6 +17,8 @@
 	let { data, children }: Props = $props();
 	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
 </script>
+
+<AppTitle title={data.name} />
 
 <UsersPageBase title={data.name} {description}>
 	{#snippet _left()}

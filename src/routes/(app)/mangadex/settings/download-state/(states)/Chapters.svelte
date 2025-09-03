@@ -9,6 +9,7 @@
 	import { derived, readable, type Readable } from "svelte/store";
 	import Row from "./chapters/Row.svelte";
 	import { chapterTasks } from "./stores";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	const data = derived(chapterTasks, (tasks) => {
 		return tasks.map((task) => {
@@ -19,6 +20,8 @@
 		}) satisfies TableData[];
 	});
 </script>
+
+<AppTitle title="Chapters Download State - MangaDex" />
 
 <table>
 	<thead>

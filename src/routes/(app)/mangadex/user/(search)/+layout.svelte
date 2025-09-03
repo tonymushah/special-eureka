@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		children?: import("svelte").Snippet;
@@ -7,6 +8,8 @@
 
 	let { children }: Props = $props();
 </script>
+
+<AppTitle title="Users - MangaDex" />
 
 <div>
 	<section class="title">

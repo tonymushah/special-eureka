@@ -9,6 +9,7 @@
 	import { derived, readable, type Readable } from "svelte/store";
 	import Row from "./mangas/Row.svelte";
 	import { coverTasks } from "./stores";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	const data = derived(coverTasks, (tasks) => {
 		return tasks.map((task) => {
@@ -19,6 +20,8 @@
 		}) satisfies TableData[];
 	});
 </script>
+
+<AppTitle title="Covers Download State - MangaDex" />
 
 <table>
 	<thead>

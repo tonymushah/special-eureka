@@ -4,6 +4,7 @@
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
 	import ToastForStories from "@mangadex/componnents/theme/toast/ToastForStories.svelte";
 	import { melt } from "@melt-ui/svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { cubicInOut } from "svelte/easing";
 	import { crossfade, fade, slide } from "svelte/transition";
 	import { v4 } from "uuid";
@@ -22,6 +23,8 @@
 		}
 	];
 </script>
+
+<AppTitle title="CSS Playground - MangaDex" />
 
 <section>
 	<h2>Tabs</h2>

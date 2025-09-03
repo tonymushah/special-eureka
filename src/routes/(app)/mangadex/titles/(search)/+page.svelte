@@ -21,6 +21,7 @@
 	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
 	import { delay } from "lodash";
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: PageData;
@@ -112,6 +113,8 @@
 		})
 	]);
 </script>
+
+<AppTitle title="Advanced Title Search - MangaDex" />
 
 <main
 	oncontextmenu={async (e) => {
