@@ -1,1 +1,1 @@
-export { default as query } from "@mangadex/gql-docs/user/search"
+export { default as query } from "@mangadex/gql-docs/user/search";

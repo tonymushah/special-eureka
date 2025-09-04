@@ -1,9 +1,6 @@
 import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
 import libraryPlanToReadQuery from "@mangadex/gql-docs/library/planToRead";
-import {
-	CoverImageQuality,
-	type UserLibrarySectionParam
-} from "@mangadex/gql/graphql";
+import { CoverImageQuality, type UserLibrarySectionParam } from "@mangadex/gql/graphql";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 import AbstractSearchResult, {
@@ -52,14 +49,11 @@ export class PlanToReadLibraryResult extends AbstractSearchResult<MangaListConte
 		};
 	}
 	next(): Promise<AbstractSearchResult<MangaListContentItemProps>> {
-		return executeSearchQuery(
-			this.client,
-			{
-				...this.params,
-				offset: this.offset + this.limit,
-				limit: this.limit
-			},
-		);
+		return executeSearchQuery(this.client, {
+			...this.params,
+			offset: this.offset + this.limit,
+			limit: this.limit
+		});
 	}
 }
 
@@ -72,7 +66,7 @@ type SomeRes = {
 
 export default async function executeSearchQuery(
 	client: Client,
-	param?: UserLibrarySectionParam,
+	param?: UserLibrarySectionParam
 ): Promise<AbstractSearchResult<MangaListContentItemProps>> {
 	let res: SomeRes | undefined = undefined;
 
@@ -104,10 +98,8 @@ export default async function executeSearchQuery(
 							"en"
 						) ?? "",
 					title:
-						get_value_from_title_and_random_if_undefined(
-							v.attributes.title,
-							"en"
-						) ?? "",
+						get_value_from_title_and_random_if_undefined(v.attributes.title, "en") ??
+						"",
 					coverImageAlt: v.relationships.coverArt.id,
 					withFull: true,
 					tags: v.attributes.tags.map((tag) => ({
@@ -134,7 +126,7 @@ export default async function executeSearchQuery(
 		return new PlanToReadLibraryResult({
 			...res,
 			client,
-			params: param,
+			params: param
 		});
 	} else {
 		throw new Error("no data obtained");

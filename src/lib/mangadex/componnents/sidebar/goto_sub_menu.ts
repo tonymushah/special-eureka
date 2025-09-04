@@ -1,5 +1,8 @@
 import { goto } from "$app/navigation";
-import { ContextMenuItemProvider, type ContextMenuItem } from "$lib/commands/contextMenu";
+import {
+	ContextMenuItemProvider,
+	type ContextMenuItem
+} from "@special-eureka/core/commands/contextMenu";
 import { route } from "$lib/ROUTES";
 
 export default function goto_sub_menu(): ContextMenuItem {

@@ -154,7 +154,7 @@ export const removeMutation = createMutation(
 					title: "Removed chapter",
 					description: variables
 				}
-			})
+			});
 		},
 		networkMode: "always"
 	},
@@ -164,10 +164,7 @@ export const removeMutation = createMutation(
 export const downloadMutation = createMutation(
 	{
 		mutationKey: ["chapter", "download"],
-		async mutationFn({ id, quality }: {
-			id: string,
-			quality?: DownloadMode
-		}) {
+		async mutationFn({ id, quality }: { id: string; quality?: DownloadMode }) {
 			const res = await client
 				.mutation(ChapterDownload.download_mutation(), {
 					id,
@@ -178,7 +175,7 @@ export const downloadMutation = createMutation(
 		},
 		onError(error, variables, context) {
 			addErrorToast("Error on downloading title", error);
-		},
+		}
 	},
 	mangadexQueryClient
 );
@@ -201,7 +198,7 @@ export class ChapterDownload {
 	 */
 	constructor(chapterId: string, mode?: DownloadMode) {
 		const id = chapterId;
-		(this.chapterId = chapterId), (this.mode = mode);
+		((this.chapterId = chapterId), (this.mode = mode));
 
 		const queryKey = offlinePresenceQueryKey(id);
 		const query = createQuery(
@@ -355,14 +352,17 @@ export class ChapterDownload {
 		const rexec = this.reexecute;
 		const quality = this.mode;
 
-		const res = await get(downloadMutation).mutateAsync({
-			id,
-			quality
-		}, {
-			onSettled(data, error, variables, context) {
-				rexec()
+		const res = await get(downloadMutation).mutateAsync(
+			{
+				id,
+				quality
 			},
-		});
+			{
+				onSettled(data, error, variables, context) {
+					rexec();
+				}
+			}
+		);
 		return res;
 	}
 	public async remove() {
@@ -370,12 +370,15 @@ export class ChapterDownload {
 		const rexec = this.reexecute;
 		const removing = this.isRemoving_;
 
-		return await Promise.resolve().then(() => {
-			removing.set(true);
-		}).then(() => get(removeMutation).mutateAsync(id)).finally(() => {
-			removing.set(false);
-			rexec();
-		});
+		return await Promise.resolve()
+			.then(() => {
+				removing.set(true);
+			})
+			.then(() => get(removeMutation).mutateAsync(id))
+			.finally(() => {
+				removing.set(false);
+				rexec();
+			});
 	}
 	public async cancel() {
 		const res = await client
@@ -384,7 +387,7 @@ export class ChapterDownload {
 			})
 			.toPromise();
 		if (res.error) {
-			throw res.error
+			throw res.error;
 		}
 		this.reexecute();
 		return res;

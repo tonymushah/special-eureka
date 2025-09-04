@@ -1,7 +1,7 @@
 import { graphql } from "@mangadex/gql/gql";
 
 const tagPopularTitlesQuery = graphql(`
-	query tagPopulatTitlesQuery($id: UUID!,$params: TagPopularList) {
+	query tagPopulatTitlesQuery($id: UUID!, $params: TagPopularList) {
 		tag {
 			page(id: $id) {
 				popularInfSection(params: $params) {

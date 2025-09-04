@@ -4,6 +4,7 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { RiVipCrown2Fill } from "svelte-remixicon";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: PageData;
@@ -11,6 +12,8 @@
 
 	let { data }: Props = $props();
 </script>
+
+<AppTitle title="{data.username} - MangaDex" />
 
 <div class="groups">
 	{#each data.groups as group (group.id)}

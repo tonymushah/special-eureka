@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
-	import openNewWindow from "$lib/commands/openNewWindow";
-	import { getContextMenuContext } from "$lib/utils/contextMenuContext";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/core/commands/contextMenu";
+	import openNewWindow from "@special-eureka/core/commands/openNewWindow";
+	import { getContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { onDestroy } from "svelte";

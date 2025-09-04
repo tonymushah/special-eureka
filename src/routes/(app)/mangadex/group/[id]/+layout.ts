@@ -2,7 +2,7 @@ import { graphql } from "@mangadex/gql/exports";
 import type { LayoutLoad } from "./$types";
 import getClient from "@mangadex/gql/urql/getClient";
 import { error } from "@sveltejs/kit";
-import query from "@mangadex/gql-docs/group/id"
+import query from "@mangadex/gql-docs/group/id";
 
 export const load: LayoutLoad = async function ({ params }) {
 	const id = params.id;

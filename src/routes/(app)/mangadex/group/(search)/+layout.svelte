@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		children?: import("svelte").Snippet;
@@ -11,6 +12,7 @@
 <div>
 	<section class="title">
 		<PageTitle withReturn>Scanlation Groups</PageTitle>
+		<AppTitle title="Scanlation Groups - MangaDex" />
 	</section>
 
 	{@render children?.()}

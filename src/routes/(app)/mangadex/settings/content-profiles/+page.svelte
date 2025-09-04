@@ -4,6 +4,7 @@
 	import type { PageData } from "./$types";
 	import { readonly, writable } from "svelte/store";
 	import type { TagGroup } from "@mangadex/gql/graphql";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	interface Props {
 		data: PageData;
 	}
@@ -22,6 +23,8 @@
 		}
 	});
 </script>
+
+<AppTitle title="Content Profiles - MangaDex" />
 
 <section class="selector">
 	<ContentProfileSelector />

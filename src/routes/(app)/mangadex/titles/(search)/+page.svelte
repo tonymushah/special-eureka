@@ -13,12 +13,15 @@
 	import type { PageData } from "./$types";
 	import SearchContent from "./SearchContent.svelte";
 	import pageLimit from "@mangadex/stores/page-limit";
-	import { setContextMenuContext } from "$lib/utils/contextMenuContext";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/core/commands/contextMenu";
 	import defaultContextMenuContent from "@mangadex/utils/defaultContextMenuContent";
 	import goto_sub_menu from "@mangadex/componnents/sidebar/goto_sub_menu";
 	import { delay } from "lodash";
 	import PageTitle from "@mangadex/componnents/pages/PageTitle.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: PageData;
@@ -110,6 +113,8 @@
 		})
 	]);
 </script>
+
+<AppTitle title="Advanced Title Search - MangaDex" />
 
 <main
 	oncontextmenu={async (e) => {

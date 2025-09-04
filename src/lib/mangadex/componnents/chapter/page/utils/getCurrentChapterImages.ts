@@ -6,7 +6,7 @@ import { getContext, setContext } from "svelte";
 const KEY = "CHAPTER-CURRENT-IMAGES";
 
 function init(): ChapterPagesStore {
-	return ChapterPages.initFromStore(derived(getCurrentChapterData(), (c) => c.id))
+	return ChapterPages.initFromStore(derived(getCurrentChapterData(), (c) => c.id));
 }
 
 function getFromContext(): ChapterPagesStore {

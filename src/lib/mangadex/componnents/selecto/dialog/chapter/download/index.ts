@@ -23,54 +23,68 @@ const multiChapterCancelDownloadBase = graphql(`
 	}
 `);
 
-export const multiChapterDownload = createMutation<void, Error, string[]>({
-	mutationKey: ["multi", "download", "chapters"],
-	async mutationFn(ids) {
-		await Promise.all(ids.map(async (id) => {
-			const res = await client.mutation(multiChapterDownloadBase, {
-				id
-			}).toPromise()
-			if (res.error) {
-				throw res.error
-			} else if (res.data?.chapter.download.hasFailed) {
-				throw new Error(`chapter ${id} download failed`);
-			}
-		}));
+export const multiChapterDownload = createMutation<void, Error, string[]>(
+	{
+		mutationKey: ["multi", "download", "chapters"],
+		async mutationFn(ids) {
+			await Promise.all(
+				ids.map(async (id) => {
+					const res = await client
+						.mutation(multiChapterDownloadBase, {
+							id
+						})
+						.toPromise();
+					if (res.error) {
+						throw res.error;
+					} else if (res.data?.chapter.download.hasFailed) {
+						throw new Error(`chapter ${id} download failed`);
+					}
+				})
+			);
+		},
+		onSuccess(_, ids) {
+			addToast({
+				data: {
+					variant: "primary",
+					title: `Downloaded ${ids.length} chapters`
+				}
+			});
+		},
+		onError(error, variables, context) {
+			addErrorToast("Error on downloading chapters", error);
+		}
 	},
-	onSuccess(_, ids) {
-		addToast({
-			data: {
-				variant: "primary",
-				title: `Downloaded ${ids.length} chapters`
-			}
-		});
-	},
-	onError(error, variables, context) {
-		addErrorToast("Error on downloading chapters", error);
-	},
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
-export const multiCancelChapterDownload = createMutation<void, Error, string[]>({
-	mutationKey: ["multi", "cancel", "download", "chapters"],
-	async mutationFn(ids) {
-		await Promise.all(ids.map(async (id) => {
-			const res = await client.mutation(multiChapterCancelDownloadBase, {
-				id
-			}).toPromise()
-			if (res.error) {
-				throw res.error
-			}
-		}));
+export const multiCancelChapterDownload = createMutation<void, Error, string[]>(
+	{
+		mutationKey: ["multi", "cancel", "download", "chapters"],
+		async mutationFn(ids) {
+			await Promise.all(
+				ids.map(async (id) => {
+					const res = await client
+						.mutation(multiChapterCancelDownloadBase, {
+							id
+						})
+						.toPromise();
+					if (res.error) {
+						throw res.error;
+					}
+				})
+			);
+		},
+		onSuccess(_, ids) {
+			addToast({
+				data: {
+					variant: "yellow",
+					title: `${ids.length} chapters download cancelled`
+				}
+			});
+		},
+		onError(error, variables, context) {
+			addErrorToast("Error on cancelling", error);
+		}
 	},
-	onSuccess(_, ids) {
-		addToast({
-			data: {
-				variant: "yellow",
-				title: `${ids.length} chapters download cancelled`
-			}
-		});
-	},
-	onError(error, variables, context) {
-		addErrorToast("Error on cancelling", error);
-	},
-}, mangadexQueryClient);
+	mangadexQueryClient
+);

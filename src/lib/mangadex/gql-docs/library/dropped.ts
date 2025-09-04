@@ -2,7 +2,7 @@ import { graphql } from "@mangadex/gql/gql";
 
 const libraryDroppedQuery = graphql(`
 	query currentUserLibraryDropped($param: UserLibrarySectionParam) {
-		library{
+		library {
 			dropped(param: $param) {
 				limit
 				offset

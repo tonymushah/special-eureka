@@ -1,4 +1,4 @@
-import openNewWindow from "$lib/commands/openNewWindow";
+import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import type { MouseEventHandler } from "svelte/elements";
 

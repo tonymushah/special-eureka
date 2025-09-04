@@ -10,6 +10,7 @@
 	import PlaygroundIcon from "./(icons)/PlaygroundIcon.svelte";
 	import ThemeIcon from "./(icons)/ThemeIcon.svelte";
 	import SettingsItem from "./SettingsItem.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	let settings: ComponentProps<typeof SettingsItem>[] = [
 		{
@@ -58,6 +59,8 @@
 		});
 	}
 </script>
+
+<AppTitle title="Settings - MangaDex" />
 
 <div class="settings">
 	{#each settings as cog}

@@ -6,10 +6,10 @@ const tagTopTenQuery = graphql(`
 			page(id: $id) {
 				topTen {
 					id
-					attributes{
+					attributes {
 						title
 						tags {
-							id 
+							id
 							attributes {
 								name
 							}
@@ -21,7 +21,7 @@ const tagTopTenQuery = graphql(`
 						contentRating
 						year
 						altTitles
-					} 
+					}
 					relationships {
 						coverArt {
 							id
