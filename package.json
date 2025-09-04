@@ -68,7 +68,7 @@
     "sharp": "^0.34.3",
     "storybook": "^9.1.4",
     "svelte": "^5.38.6",
-    "svelte-awesome-color-picker": "^3.1.4",
+    "svelte-awesome-color-picker": "^4.0.0",
     "svelte-check": "^4.3.1",
     "svelte-markdown": "^0.4.1",
     "svelte2tsx": "~0.7.42",
