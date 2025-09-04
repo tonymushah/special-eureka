@@ -2,6 +2,7 @@
 	import type { LayoutData } from "./$types";
 	import PostLayout from "./PostLayout.svelte";
 	import { navigating } from "$app/state";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -27,6 +28,7 @@
 
 {#if isLoading}
 	<div class="loading">
+		<AppTitle title="Loading chapter - MangaDex" />
 		<h1>Loading chapter...</h1>
 	</div>
 {:else if isDataValid}

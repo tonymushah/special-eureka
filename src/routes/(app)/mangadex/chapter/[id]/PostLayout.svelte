@@ -82,6 +82,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { derived, writable } from "svelte/store";
 	import type { LayoutData } from "./$types";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -180,5 +181,9 @@
 			});
 	});
 </script>
+
+<AppTitle
+	title={`${$currentPage} | ${data.data.attributes.chapter ?? "Oneshot"} - ${get_value_from_title_and_random_if_undefined(data.data.relationships.manga.attributes.title, "en") ?? "none"} - MangaDex`}
+/>
 
 {@render children?.()}

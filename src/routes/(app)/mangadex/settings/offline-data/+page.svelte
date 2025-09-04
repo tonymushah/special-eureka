@@ -5,6 +5,7 @@
 	import WarningComponent from "@mangadex/componnents/WarningComponent.svelte";
 	import { mutationStore, queryStore } from "@mangadex/stores/offlineConfig";
 	import { isMounted } from "@mangadex/stores/offlineIsMounted";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { open as dialogOpen } from "@tauri-apps/plugin-dialog";
 	import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { derived, get } from "svelte/store";
@@ -57,6 +58,8 @@
 </script>
 
 <h1>Offline Data Config</h1>
+
+<AppTitle title="Offline Data Config - MangaDex" />
 
 {#if $mutationStore.error}
 	<ErrorComponent error={$mutationStore.error} label="Error on updating config" />

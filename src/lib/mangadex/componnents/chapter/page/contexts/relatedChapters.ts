@@ -26,7 +26,7 @@ export class RelatedNextPrevious {
 	next?: string;
 	previous?: string;
 	constructor({ next, previous }: { next?: string; previous?: string }) {
-		(this.next = next), (this.previous = previous);
+		((this.next = next), (this.previous = previous));
 	}
 }
 

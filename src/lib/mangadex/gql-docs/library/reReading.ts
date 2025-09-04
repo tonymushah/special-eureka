@@ -2,7 +2,7 @@ import { graphql } from "@mangadex/gql/gql";
 
 const libraryReReadingQuery = graphql(`
 	query currentUserLibraryReReading($param: UserLibrarySectionParam) {
-		library{
+		library {
 			reReading(param: $param) {
 				limit
 				offset

@@ -6,10 +6,10 @@ const tagRecentlyAddedQuery = graphql(`
 			page(id: $id) {
 				recentlyAdded {
 					id
-					attributes{
+					attributes {
 						title
 						tags {
-							id 
+							id
 							attributes {
 								name
 							}
@@ -21,7 +21,7 @@ const tagRecentlyAddedQuery = graphql(`
 						contentRating
 						year
 						altTitles
-					} 
+					}
 					relationships {
 						coverArt {
 							id

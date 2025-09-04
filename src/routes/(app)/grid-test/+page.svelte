@@ -1,6 +1,9 @@
 <script lang="ts">
 	import "./selecto.css";
-	import contextMenu, { ContextMenuItemProvider } from "$lib/commands/contextMenu";
+	import contextMenu, {
+		ContextMenuItemProvider
+	} from "@special-eureka/core/commands/contextMenu";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import SelectionArea from "@viselect/vanilla";
 	let content: HTMLElement | undefined = undefined;
 	$effect(() => {
@@ -27,6 +30,8 @@
 		}
 	});
 </script>
+
+<AppTitle title="Grid Test - Special Eureka" />
 
 <main class="container">
 	<header

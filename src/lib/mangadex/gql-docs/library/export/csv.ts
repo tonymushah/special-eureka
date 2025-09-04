@@ -12,20 +12,25 @@ const exportLibraryToCSVMutation = graphql(`
 	}
 `);
 
-export const exportLibraryToCSV = createMutation({
-	mutationKey: ["mangadex", "export", "library", "CSV"],
-	async mutationFn(options: ExportMdLibraryToCsvOptions): Promise<string> {
-		const res = await client.mutation(exportLibraryToCSVMutation, {
-			options
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		} else if (res.data) {
-			return res.data.library.exportAsCsv;
-		} else {
-			throw new Error("No data??");
+export const exportLibraryToCSV = createMutation(
+	{
+		mutationKey: ["mangadex", "export", "library", "CSV"],
+		async mutationFn(options: ExportMdLibraryToCsvOptions): Promise<string> {
+			const res = await client
+				.mutation(exportLibraryToCSVMutation, {
+					options
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.library.exportAsCsv;
+			} else {
+				throw new Error("No data??");
+			}
 		}
 	},
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
 export default exportLibraryToCSVMutation;

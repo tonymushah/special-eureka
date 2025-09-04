@@ -100,7 +100,7 @@ export const downloadMutationQuery = createMutation(
 			invalidateMangaOfflinePresence(variables);
 		},
 		onError(error, variables, context) {
-			addErrorToast("Error on downloading title", error)
+			addErrorToast("Error on downloading title", error);
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -108,11 +108,11 @@ export const downloadMutationQuery = createMutation(
 					title: "Downloaded title",
 					description: variables
 				}
-			})
-		},
+			});
+		}
 	},
 	mangadexQueryClient
-);;
+);
 
 const download = debounce(async (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
@@ -131,7 +131,7 @@ export const removeMutation = createMutation(
 				})
 				.toPromise();
 			if (res.error) {
-				throw res.error
+				throw res.error;
 			}
 			return res;
 		},
@@ -141,8 +141,8 @@ export const removeMutation = createMutation(
 		onSuccess(data, variables, context) {
 			addToast({
 				data: {
-					"title": "Removed title",
-					"description": variables
+					title: "Removed title",
+					description: variables
 				}
 			});
 		},
@@ -162,25 +162,27 @@ const cancel = debounce(async (id: string) => {
 		.mutation(MangaDownload.cancelDonwloadMuation(), {
 			id
 		})
-		.toPromise().then((d) => {
+		.toPromise()
+		.then((d) => {
 			if (d.error) {
 				throw d.error;
 			}
 			return d;
-		}).then((d) => {
+		})
+		.then((d) => {
 			addToast({
 				data: {
 					title: "Cancelled Title downloading",
 					description: id,
 					variant: "yellow"
 				}
-			})
+			});
 			return d;
-		}).catch((e) => {
+		})
+		.catch((e) => {
 			addErrorToast("Cannot cancel title downloading", e);
-			throw e
-		}
-		);
+			throw e;
+		});
 });
 
 const downloadStateQuery = (id: string, _client?: QueryClient) => {

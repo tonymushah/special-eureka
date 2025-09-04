@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { style, fonts } from "$lib/window-decoration/WindowDecoration.svelte";
+	import { style, fonts } from "$lib/core/window-decoration/WindowDecoration.svelte";
 	import { getMangaDexThemeContext } from "@mangadex/utils/contexts";
 	import { getMangaDexFontsContext } from "@mangadex/utils/contexts/fonts";
 	import type { UnlistenFn } from "@tauri-apps/api/event";

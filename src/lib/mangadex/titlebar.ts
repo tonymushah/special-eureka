@@ -13,7 +13,7 @@ const TOGGLE_SIDEBAR_HANDLER: MouseEventHandler<HTMLButtonElement> = () => {
 
 export async function mangadexTitleBar() {
 	const { defaultBehavior, titleBarButtons } = await import(
-		"$lib/window-decoration/stores/decorations.svelte"
+		"$lib/core/window-decoration/stores/decorations.svelte"
 	);
 	defaultBehavior();
 	titleBarButtons.set(TOGGLE_SIDEBAR_KEY, {
@@ -21,7 +21,7 @@ export async function mangadexTitleBar() {
 		onclick: TOGGLE_SIDEBAR_HANDLER
 	});
 	/*
-	const { logo, title } = await import("$lib/window-decoration/WindowDecoration.svelte");
+	const { logo, title } = await import("@special-eureka/core/window-decoration/WindowDecoration.svelte");
 	logo.set(mangadexLogo);
 	title.set("MangaDex | Special Eureka")
 	*/

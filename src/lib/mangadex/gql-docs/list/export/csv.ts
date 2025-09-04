@@ -1,4 +1,4 @@
-import { graphql, } from "@mangadex/gql/gql";
+import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation } from "@tanstack/svelte-query";
@@ -14,20 +14,25 @@ const export_mutation = graphql(`
 	}
 `);
 
-const exportCustomListsToCSV = createMutation({
-	mutationKey: ["export", "custom-lists", "to", "CSV"],
-	async mutationFn(options: ExportCustomListsToCsvOptions): Promise<string> {
-		const res = await client.mutation(export_mutation, {
-			options
-		}).toPromise();
-		if (res.data) {
-			return res.data.customList.export.asCsv
-		} else if (res.error) {
-			throw res.error;
-		} else {
-			throw new Error("No data??");
+const exportCustomListsToCSV = createMutation(
+	{
+		mutationKey: ["export", "custom-lists", "to", "CSV"],
+		async mutationFn(options: ExportCustomListsToCsvOptions): Promise<string> {
+			const res = await client
+				.mutation(export_mutation, {
+					options
+				})
+				.toPromise();
+			if (res.data) {
+				return res.data.customList.export.asCsv;
+			} else if (res.error) {
+				throw res.error;
+			} else {
+				throw new Error("No data??");
+			}
 		}
-	}
-}, mangadexQueryClient);
+	},
+	mangadexQueryClient
+);
 
 export default exportCustomListsToCSV;

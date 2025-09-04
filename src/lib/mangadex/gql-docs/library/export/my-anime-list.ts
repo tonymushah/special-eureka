@@ -12,20 +12,25 @@ const exportLibraryToMyAnimeListMutation = graphql(`
 	}
 `);
 
-export const exportLibraryToMyAnimeList = createMutation({
-	mutationKey: ["mangadex", "export", "library", "MyAnimeList"],
-	async mutationFn(options: MdlibraryToMyAnimeListExportOption): Promise<string> {
-		const res = await client.mutation(exportLibraryToMyAnimeListMutation, {
-			options
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		} else if (res.data) {
-			return res.data.library.exportAsMyAnimeList;
-		} else {
-			throw new Error("No data??");
+export const exportLibraryToMyAnimeList = createMutation(
+	{
+		mutationKey: ["mangadex", "export", "library", "MyAnimeList"],
+		async mutationFn(options: MdlibraryToMyAnimeListExportOption): Promise<string> {
+			const res = await client
+				.mutation(exportLibraryToMyAnimeListMutation, {
+					options
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data.library.exportAsMyAnimeList;
+			} else {
+				throw new Error("No data??");
+			}
 		}
 	},
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
 export default exportLibraryToMyAnimeListMutation;

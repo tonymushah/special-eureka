@@ -11,7 +11,7 @@
 	import { Direction, RtlSidebarSubDocument } from "@mangadex/gql/graphql";
 	import OpenExtLinkIcon from "../icons/OpenExtLinkIcon.svelte";
 	import { openUrl } from "@tauri-apps/plugin-opener";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import { addToast } from "../../toast/Toaster.svelte";
 	const appWindow = getCurrentWebviewWindow();
 	const client = getContextClient();

@@ -2,7 +2,7 @@ import { graphql } from "@mangadex/gql/gql";
 
 const libraryUnfilteredQuery = graphql(`
 	query currentUserLibraryUnfiltered($param: UserLibrarySectionParam) {
-		library{
+		library {
 			unfiltered(param: $param) {
 				limit
 				offset

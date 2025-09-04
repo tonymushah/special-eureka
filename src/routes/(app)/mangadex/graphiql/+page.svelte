@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PageError from "@mangadex/componnents/PageError.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 </script>
 
 <!-- TODO find a way to fix this -->
@@ -19,6 +20,8 @@
 	{/await}
 </svelte:boundary>
 -->
+
+<AppTitle title="GraphiQL - MangaDex" />
 <PageError
 	message={"This graphiql page is now disabled because f*ck React with their hooks policy."}
 />

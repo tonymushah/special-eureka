@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { sysLocaleStore } from "$lib/commands/sys_locale";
+	import { sysLocaleStore } from "@special-eureka/core/commands/sys_locale";
 	import { makeAsUTCDate } from "@mangadex/utils";
 	import { cancel as timeCancel, render as timeRender } from "timeago.js";
 	let timeago: HTMLTimeElement | undefined = $state();

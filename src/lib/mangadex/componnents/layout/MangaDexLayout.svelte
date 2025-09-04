@@ -26,7 +26,7 @@
 	});
 	onDestroy(async () => {
 		const { defaultBehavior } = await import(
-			"$lib/window-decoration/stores/decorations.svelte"
+			"$lib/core/window-decoration/stores/decorations.svelte"
 		);
 		defaultBehavior();
 	});

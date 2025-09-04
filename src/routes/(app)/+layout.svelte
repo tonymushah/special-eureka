@@ -6,8 +6,8 @@
 
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import WindowDecoration from "$lib/window-decoration/WindowDecoration.svelte";
-	import isDefaultDecoration from "$lib/window-decoration/stores/isDefaultDecoration";
+	import WindowDecoration from "$lib/core/window-decoration/WindowDecoration.svelte";
+	import isDefaultDecoration from "$lib/core/window-decoration/stores/isDefaultDecoration";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 	import { onDestroy, onMount } from "svelte";

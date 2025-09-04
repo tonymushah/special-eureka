@@ -5,7 +5,10 @@
 	import Seasonal from "@mangadex/componnents/home/Seasonal.svelte";
 	import StaffPicks from "@mangadex/componnents/home/StaffPicks.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 </script>
+
+<AppTitle title="MangaDex - Special Eureka" />
 
 <section class="popular-titles">
 	<PopularTitles />

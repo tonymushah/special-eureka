@@ -97,5 +97,5 @@ export const progressModeStore: Writable<ProgressMode> = {
 	},
 	update(updater) {
 		setChapterProgressLayout(updater(get(readProgressMode))).catch(console.error);
-	},
-}
+	}
+};

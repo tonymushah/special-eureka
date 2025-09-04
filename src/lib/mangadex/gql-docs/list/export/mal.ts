@@ -14,20 +14,25 @@ const export_mutation = graphql(`
 	}
 `);
 
-const exportCustomListsToMAL = createMutation({
-	mutationKey: ["export", "custom-lists", "to", "MAL"],
-	async mutationFn(options: MdcustomListsToMyAnimeListExportOption): Promise<string> {
-		const res = await client.mutation(export_mutation, {
-			options
-		}).toPromise();
-		if (res.data) {
-			return res.data.customList.export.asMyAnimeList
-		} else if (res.error) {
-			throw res.error;
-		} else {
-			throw new Error("No data??");
+const exportCustomListsToMAL = createMutation(
+	{
+		mutationKey: ["export", "custom-lists", "to", "MAL"],
+		async mutationFn(options: MdcustomListsToMyAnimeListExportOption): Promise<string> {
+			const res = await client
+				.mutation(export_mutation, {
+					options
+				})
+				.toPromise();
+			if (res.data) {
+				return res.data.customList.export.asMyAnimeList;
+			} else if (res.error) {
+				throw res.error;
+			} else {
+				throw new Error("No data??");
+			}
 		}
-	}
-}, mangadexQueryClient);
+	},
+	mangadexQueryClient
+);
 
-export default exportCustomListsToMAL
+export default exportCustomListsToMAL;

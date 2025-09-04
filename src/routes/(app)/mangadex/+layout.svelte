@@ -9,9 +9,40 @@
 </script>
 
 {#await Layout}
-	<p>Loading :3</p>
-{:then Layout}
-	<Layout>
+	<div class="loading">
+		<div class="loading-inner">
+			<h1>Loading :3</h1>
+		</div>
+	</div>
+{:then MangaDexLayout}
+	<MangaDexLayout>
 		{@render children?.()}
-	</Layout>
+	</MangaDexLayout>
+{:catch e}
+	<div class="loading">
+		<div class="loading-inner">
+			<h1>Error :3</h1>
+			<p>{e}</p>
+		</div>
+	</div>
 {/await}
+
+<style lang="scss">
+	.loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: -webkit-fill-available;
+		width: 100%;
+		.loading-inner {
+			height: 75cqh;
+			width: 60%;
+			border: 2px dashed plum;
+			color: plum;
+			border-radius: 12px;
+			align-items: center;
+			justify-content: center;
+			display: flex;
+		}
+	}
+</style>

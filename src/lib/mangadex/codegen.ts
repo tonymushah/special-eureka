@@ -4,8 +4,8 @@ const config: CodegenConfig = {
 	schema: "./src/lib/mangadex/schemas.graphqls",
 	documents: [
 		"./src/lib/mangadex/**/*.svelte",
-		"./src/lib/mangadex/**/*.ts",
-		// TODO fix this 
+		"./src/lib/mangadex/**/*.ts"
+		// TODO fix this
 		//"./src/routes/(app)/mangadex/**/*.svelte",
 		//"./src/routes/(app)/mangadex/**/*.ts"
 	],

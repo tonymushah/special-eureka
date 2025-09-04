@@ -1,5 +1,5 @@
 <script lang="ts">
-	import isAltKeyPressed from "$lib/window-decoration/stores/isAltKeyPressed";
+	import isAltKeyPressed from "$lib/core/window-decoration/stores/isAltKeyPressed";
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
 	import { resetZoomKey, zoomSpeedValue } from "./settings";

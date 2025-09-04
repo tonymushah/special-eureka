@@ -16,6 +16,7 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import defaultReadingStatusPriorities from "@mangadex/utils/readingStatusPriorities";
 	import { createProgress, melt } from "@melt-ui/svelte";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
 	import { ExternalLinkIcon, RotateCwIcon, SaveIcon } from "svelte-feather-icons";
@@ -108,6 +109,8 @@
 		max: 255
 	});
 </script>
+
+<AppTitle title="Export Library as MyAnimeList - MangaDex" />
 
 <div class="export-layout">
 	<Title>Export as MyAnimeList</Title>

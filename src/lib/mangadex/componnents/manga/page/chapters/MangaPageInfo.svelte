@@ -9,6 +9,9 @@
 	import getDemographicName from "@mangadex/utils/demographic/getDemographicName";
 	import LatestChapter from "@mangadex/componnents/manga/page/chapters/info/LatestChapter.svelte";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
+	import { openUrl } from "@tauri-apps/plugin-opener";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 
 	const __res = getTitleLayoutData();
 	const data = __res.queryResult;
@@ -139,4 +142,32 @@
 	{content}
 >
 	<LatestChapter volume={lastVolume} chapter={lastChapter} />
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<!-- svelte-ignore a11y_missing_attribute -->
+	<h4>
+		Title ID: <a
+			onclick={() => {
+				openUrl(`https://mangadex.org/title/${data.id}`);
+			}}
+			oncontextmenu={(e) => {
+				e.preventDefault();
+				writeText(data.id).then(() => {
+					addToast({
+						data: {
+							title: "Title ID copied!"
+						}
+					});
+				});
+			}}
+		>
+			{data.id}
+		</a>
+	</h4>
 </Info>
+
+<style lang="scss">
+	a {
+		color: var(--primary-l2);
+	}
+</style>
