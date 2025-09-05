@@ -91,7 +91,7 @@ const downloadStateQuery = (id: string, _client?: QueryClient) => {
 			queryKey,
 			async queryFn() {
 				return await gqlClient
-					.query(CoverDownload.coverDownloadStateQuery(), {
+					.query(coverDownloadStateQuery, {
 						id
 					})
 					.toPromise();
@@ -106,7 +106,7 @@ export const downloadMutationQuery = createMutation(
 		mutationKey: ["cover", "download"],
 		async mutationFn(id: string) {
 			const res = await gqlClient
-				.mutation(CoverDownload.downloadMutation(), {
+				.mutation(downloadMutation, {
 					id
 				})
 				.toPromise();
@@ -130,22 +130,19 @@ export const downloadMutationQuery = createMutation(
 	mangadexQueryClient
 );
 
-const download = debounce(async (id: string, _client?: QueryClient) => {
-	const client = _client ?? mangadexQueryClient;
-	const res = await get(downloadMutationQuery).mutateAsync(id);
-	return res;
-});
-
 export const removeMutation = createMutation(
 	{
 		mutationKey: ["cover-removing"],
 		async mutationFn(id: string) {
 			const res = await gqlClient
-				.mutation(CoverDownload.coverRemoveMutation(), {
+				.mutation(coverRemoveMutation, {
 					id
 				})
 				.toPromise();
 			return res;
+		},
+		onSettled(data, error, variables, context) {
+			invalidateCoverOfflinePresence(variables)
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -168,23 +165,32 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 	return await get(removeMutation).mutateAsync(id);
 });
 
-const cancel = debounce(async (id: string) => {
-	return await gqlClient
-		.mutation(CoverDownload.cancelDonwloadMuation(), {
-			id
-		})
-		.toPromise()
-		.then((d) => {
-			if (d.error) {
-				throw d.error;
+export const cancelDonwloadMutation = createMutation({
+	mutationKey: ["cover", "download", "cancel"],
+	async mutationFn(id: string) {
+		const res = await gqlClient
+			.mutation(cancelDonwloadMuation, {
+				id
+			})
+			.toPromise();
+		return res;
+	},
+	onSettled(data, error, variables, context) {
+		invalidateCoverOfflinePresence(variables)
+	},
+	onSuccess(data, variables, context) {
+		addToast({
+			data: {
+				title: `Removed cover`,
+				description: variables
 			}
-			return d;
-		})
-		.catch((e) => {
-			addErrorToast(`Cannot cancel cover downloading ${id}`, e);
-			throw e;
 		});
-});
+	},
+	onError(error, variables, context) {
+		addErrorToast(`Cannot remove cover ${variables}`, error);
+	},
+	networkMode: "always"
+}, mangadexQueryClient);
 
 export enum CoverDownloadState {
 	Pending,
@@ -204,7 +210,7 @@ function subOPCover(id: string, deferred = false) {
 			invalidateCoverOfflinePresence(id)?.catch(console.warn);
 		});
 		const sub = gqlClient
-			.subscription(CoverDownload.coverDownloadStateSub(), {
+			.subscription(coverDownloadStateSub, {
 				id,
 				deferred
 			})
@@ -234,6 +240,107 @@ type CoverSubOpType = OperationResult<
 	CoverDownloadSubSubscriptionVariables
 >;
 
+export default function coverDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<CoverDownloadState> {
+	return derived([downloadStateQuery(id), subOPCover(id, deferred)], ([$query, $state], set) => {
+		const res = (() => {
+			if ($state?.data) {
+				const data = $state.data.watchCoverDownloadState;
+				if (data.downloading) {
+					const downloading = data.downloading;
+					switch (downloading) {
+						case CoverDownloadingState.FetchingData:
+							return CoverDownloadState.FetchingData;
+						case CoverDownloadingState.FetchingImage:
+							return CoverDownloadState.FetchingImage;
+						case CoverDownloadingState.Preloading:
+							return CoverDownloadState.Preloading;
+						default:
+							break;
+					}
+				} else if (data.error) {
+					return CoverDownloadState.Error;
+				} else if (data.isCanceled) {
+					return CoverDownloadState.Canceled;
+				} else if (data.isDone) {
+					return CoverDownloadState.Done;
+				} else if (data.isOfflineAppStateNotLoaded) {
+					return CoverDownloadState.OfflineAppStateNotLoaded;
+				} else if (data.isPending) {
+					if ($query.data?.data?.downloadState.cover.hasFailed) {
+						return CoverDownloadState.Error;
+					} else if ($query.data?.data?.downloadState.cover.isDownloaded) {
+						return CoverDownloadState.Done;
+					} else {
+						return CoverDownloadState.Pending;
+					}
+				}
+			} else if ($state?.error) {
+				return CoverDownloadState.Error;
+			}
+			if ($query.data?.data?.downloadState.cover.hasFailed) {
+				return CoverDownloadState.Error;
+			} else if ($query.data?.data?.downloadState.cover.isDownloaded) {
+				return CoverDownloadState.Done;
+			} else {
+				return CoverDownloadState.Pending;
+			}
+		})();
+	})
+}
+
+export function isCoverDownloading(param: { id: string, deferred?: boolean }) {
+	return derived(coverDownloadState(param), (result) => {
+		switch (result) {
+			case CoverDownloadState.FetchingData:
+				return true;
+			case CoverDownloadState.Preloading:
+				return true;
+			case CoverDownloadState.FetchingImage:
+				return true;
+			default:
+				return false;
+				break;
+		}
+	});
+}
+
+export function coverDownloadingError({ id, deferred }: { id: string, deferred?: boolean }) {
+	return derived(subOPCover(id, deferred), (result) => {
+		if (result?.error) {
+			return result?.error;
+		} else if (result?.data?.watchCoverDownloadState.error) {
+			return new Error(result?.data.watchCoverDownloadState.error);
+		}
+	});
+}
+
+export function hasCoverDownloadingFailed(param: { id: string, deferred?: boolean }) {
+	return derived(coverDownloadState(param), (result) => {
+		switch (result) {
+			case CoverDownloadState.Error:
+				return true;
+			case CoverDownloadState.Canceled:
+				return true;
+			default:
+				return false;
+		}
+	});
+}
+
+export function isCoverDownloaded(param: { id: string, deferred?: boolean }) {
+	return derived(coverDownloadState(param), (result) => {
+		switch (result) {
+			case CoverDownloadState.Done:
+				return true;
+
+			default:
+				return false;
+		}
+	});
+}
+
+export class CoverDownload { }
+/*
 export class CoverDownload {
 	private coverId: string;
 	protected isPresentInner: Readable<boolean>;
@@ -422,3 +529,4 @@ export class CoverDownload {
 		});
 	}
 }
+*/

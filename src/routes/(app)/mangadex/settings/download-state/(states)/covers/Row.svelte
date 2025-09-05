@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { CoverDownload } from "@mangadex/download/cover";
+	import coverDownloadState, { CoverDownload } from "@mangadex/download/cover";
 	import { MangaDownloadState } from "@mangadex/download/manga";
 	import { startCase } from "lodash";
 	import type { TableData } from "../Covers.svelte";
@@ -8,8 +8,7 @@
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
 
-	const downlaod = CoverDownload.deferred(id);
-	const donwload_state = downlaod.state();
+	const donwload_state = coverDownloadState({ id, deferred: true });
 	let title: string | undefined = $state();
 	$effect(() =>
 		title_store.subscribe((e) => {
