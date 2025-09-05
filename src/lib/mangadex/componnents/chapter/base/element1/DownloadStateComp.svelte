@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { ChapterDownload } from "@mangadex/download/chapter";
+	import {
+		hasChapterDownloadingFailed,
+		isChapterDownloaded,
+		isChapterDownloading
+	} from "@mangadex/download/chapter";
 	import { CheckIcon, DownloadCloudIcon, DownloadIcon, XIcon } from "svelte-feather-icons";
 	interface Props {
 		id: string;
@@ -7,12 +11,15 @@
 
 	let { id }: Props = $props();
 
-	const chapter_download_inner = new ChapterDownload(id);
-	const [downloading, downloaded, failed] = [
-		chapter_download_inner.is_downloading(),
-		chapter_download_inner.is_downloaded(),
-		chapter_download_inner.has_failed()
-	];
+	const downloading = isChapterDownloading({
+		id
+	});
+	const failed = hasChapterDownloadingFailed({
+		id
+	});
+	const downloaded = isChapterDownloaded({
+		id
+	});
 </script>
 
 <span class:downloaded={$downloaded} class:downloading={$downloading} class:failed={$failed}>

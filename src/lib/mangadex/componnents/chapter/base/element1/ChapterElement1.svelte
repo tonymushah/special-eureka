@@ -76,7 +76,14 @@
 	import TrashIcon from "@mangadex/componnents/manga/page/top-info/buttons/download/TrashIcon.svelte";
 	import Link from "@mangadex/componnents/theme/links/Link.svelte";
 	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
-	import { ChapterDownload } from "@mangadex/download/chapter";
+	import {
+		cancelDownloadMutation,
+		downloadMutation,
+		hasChapterDownloadingFailed,
+		isChapterDownloaded,
+		isChapterDownloading,
+		removeMutation
+	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { debounce } from "lodash";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
@@ -104,18 +111,20 @@
 		onclick
 	}: Props = $props();
 
-	// TODO implement quality
-	const chapter_download_inner = new ChapterDownload(id);
-	const [downloading, downloaded, failed] = [
-		chapter_download_inner.is_downloading(),
-		chapter_download_inner.is_downloaded(),
-		chapter_download_inner.has_failed()
-	];
+	const downloading = isChapterDownloading({
+		id
+	});
+	const failed = hasChapterDownloadingFailed({
+		id
+	});
+	const downloaded = isChapterDownloaded({
+		id
+	});
 	const handle_download_event = debounce(async () => {
 		if ($downloading) {
-			await chapter_download_inner.cancel();
+			await $cancelDownloadMutation.mutateAsync(id);
 		} else {
-			await chapter_download_inner.download();
+			await $downloadMutation.mutateAsync({ id });
 		}
 	});
 	const showTrashButton = derived(
@@ -158,17 +167,18 @@
 			{#if $showTrashButton}
 				<div
 					class="buttons remove"
+					aria-disabled={$removeMutation.isPending}
 					onclick={async (e) => {
 						onremove?.({
 							...e,
 							id
 						});
-						await chapter_download_inner.remove();
+						await $removeMutation.mutateAsync(id);
 					}}
 					onkeypress={async (e) => {
 						onremoveKeyPress?.({ ...e, id });
 						if (e.key == "Enter") {
-							await chapter_download_inner.remove();
+							await $removeMutation.mutateAsync(id);
 						}
 					}}
 					tabindex={0}

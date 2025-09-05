@@ -2,7 +2,13 @@
 	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
-	import { ChapterDownload } from "@mangadex/download/chapter";
+	import chapterDownloadState, {
+		cancelDownloadMutation,
+		downloadMutation,
+		hasChapterDownloadingFailed,
+		isChapterDownloaded,
+		isChapterDownloading
+	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import { debounce } from "lodash";
 	import {
@@ -99,6 +105,7 @@
 					top: arrowY != null ? `${arrowY}px` : "",
 					right: "",
 					bottom: "",
+					// @ts-ignore
 					[staticSide]: "-4px"
 				});
 			}
@@ -118,21 +125,30 @@
 	}
 
 	/// TODO implement quality
-	const download_state_inner = new ChapterDownload(id);
 
-	const download_state = download_state_inner.state();
+	const download_state = chapterDownloadState({
+		id
+	});
 
-	const isDownloading = download_state_inner.is_downloading();
+	const isDownloading = isChapterDownloading({
+		id
+	});
 
-	const hasFailed = download_state_inner.has_failed();
+	const hasFailed = hasChapterDownloadingFailed({
+		id
+	});
 
-	const is_downloaded = download_state_inner.is_downloaded();
+	const is_downloaded = isChapterDownloaded({
+		id
+	});
 
 	const handle_download_event = debounce(async function () {
 		if ($isDownloading) {
-			await download_state_inner.cancel();
+			await $cancelDownloadMutation.mutateAsync(id);
 		} else {
-			await download_state_inner.download();
+			await $downloadMutation.mutateAsync({
+				id
+			});
 		}
 	});
 </script>
