@@ -13,10 +13,10 @@ importers:
         version: 1.7.4
       '@fontsource-variable/josefin-sans':
         specifier: ^5.2.6
-        version: 5.2.6
+        version: 5.2.7
       '@fontsource-variable/noto-sans-jp':
         specifier: ^5.2.6
-        version: 5.2.6
+        version: 5.2.7
       '@fontsource/pacifico':
         specifier: ^5.2.6
         version: 5.2.6
@@ -647,11 +647,11 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@fontsource-variable/josefin-sans@5.2.6':
-    resolution: {integrity: sha512-oqJ9FuwPHa8ukZRDIbcz0+FkplU44L8eJQjNN3DpMcHluz6ZhYT3DvVZCF9QWy/WNWkH0Dcz2hcoyNVpRPniLQ==}
+  '@fontsource-variable/josefin-sans@5.2.7':
+    resolution: {integrity: sha512-ImlBTpfzeFoZRvhI5SE+wwxhmaiwRr7/uVC8M5lMlNSrSA7c6yoIILr7cnKO4sbK/PjOPO/A8aSFkX3M6NewZA==}
 
-  '@fontsource-variable/noto-sans-jp@5.2.6':
-    resolution: {integrity: sha512-YjN8UF1hX8ZFkYx95NMz8XeojsCIF5dGPu1htoWkbXyTZj3Z29cxDT8glaT/cOg1BstyOlmtvNC8crPF5Csj/w==}
+  '@fontsource-variable/noto-sans-jp@5.2.7':
+    resolution: {integrity: sha512-0uZ8EKCNG3W49uDDiZdhMOXICJIm2dmmmI8JOjIuq3Kt/2ZUgzkgdnSKWYLe0Ahk9jQpLVMU23tEOaGfPH7xQg==}
 
   '@fontsource/pacifico@5.2.6':
     resolution: {integrity: sha512-fiFNIwcG96tXG+B3Bc3pbSzFooqYAXr2+GeiqkgufXrVE/WAlKx8DHHL/km8HRP1FzRJUp12ZJX7YPogbfU0Ng==}
@@ -4831,9 +4831,9 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@fontsource-variable/josefin-sans@5.2.6': {}
+  '@fontsource-variable/josefin-sans@5.2.7': {}
 
-  '@fontsource-variable/noto-sans-jp@5.2.6': {}
+  '@fontsource-variable/noto-sans-jp@5.2.7': {}
 
   '@fontsource/pacifico@5.2.6': {}
 
