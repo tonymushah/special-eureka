@@ -317,7 +317,19 @@ export function isMangaDownloaded(param: { id: string, deferred?: boolean }) {
 	}, false);
 }
 
-export class MangaDownload { }
+export function hasMangaDownloadingFailed(param: { id: string, deferred?: boolean }) {
+	return derived(mangaDownloadState(param), (result) => {
+		switch (result) {
+			case MangaDownloadState.Error:
+				return true;
+			case MangaDownloadState.Canceled:
+				return true;
+			default:
+				return false;
+		}
+	}, false);
+}
+
 /*
 export class MangaDownload {
 	private mangaId: string;

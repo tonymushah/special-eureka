@@ -10,7 +10,13 @@
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { MangaDownload, MangaDownloadState } from "@mangadex/download/manga";
+	import mangaDownloadState, {
+		cancelMutation,
+		downloadMutationQuery,
+		MangaDownload,
+		MangaDownloadState,
+		removeMutation
+	} from "@mangadex/download/manga";
 	import manga_following_status, {
 		get_manga_following_status,
 		set_manga_following_status
@@ -89,19 +95,13 @@
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
 
-	let mangaDownload = $derived(new MangaDownload(data.layoutData.id));
-
-	const _state = writable(MangaDownloadState.Pending);
+	const _state = mangaDownloadState({ id: data.layoutData.id, deferred: true });
 	const reading_status = der(
 		manga_reading_status(data.layoutData.id),
 		(status) => status ?? undefined
 	);
 	const isFollowing = manga_following_status(data.layoutData.id);
-	$effect(() =>
-		mangaDownload.state().subscribe((s) => {
-			_state.set(s);
-		})
-	);
+
 	function refetchReadingFollowingStatus() {
 		Promise.all([
 			get_manga_following_status(data.layoutData.id),
@@ -187,13 +187,13 @@
 	contentRating={layoutData.contentRating ?? undefined}
 	downloadState={_state}
 	ondownload={async () => {
-		await mangaDownload.download();
+		await $downloadMutationQuery.mutateAsync(data.layoutData.id);
 	}}
 	ondelete={async () => {
-		await mangaDownload.remove();
+		await $removeMutation.mutateAsync(data.layoutData.id);
 	}}
 	ondownloading={async () => {
-		await mangaDownload.cancel();
+		await $cancelMutation.mutateAsync(data.layoutData.id);
 	}}
 	{reading_status}
 	{isFollowing}
