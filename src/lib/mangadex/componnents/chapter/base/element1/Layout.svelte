@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ChapterDownload } from "@mangadex/download/chapter";
+	import { chapterDownloadStateImages } from "@mangadex/download/chapter";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -20,9 +20,8 @@
 		readingNumberComments,
 		id
 	}: Props = $props();
-	const chapterDownload = new ChapterDownload(id);
 
-	const download_state_images = chapterDownload.download_state_images();
+	const download_state_images = chapterDownloadStateImages({ id });
 </script>
 
 <div

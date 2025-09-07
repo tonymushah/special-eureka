@@ -1,14 +1,13 @@
 <script lang="ts">
-	import { MangaDownload, MangaDownloadState } from "@mangadex/download/manga";
-	import type { TableData } from "../Mangas.svelte";
+	import mangaDownloadState, { MangaDownloadState } from "@mangadex/download/manga";
 	import { startCase } from "lodash";
+	import type { TableData } from "../Mangas.svelte";
 	import ActionButton from "./row/ActionButton.svelte";
 
 	interface Props extends TableData {}
 	let { id, title: title_store }: Props = $props();
 
-	const downlaod = MangaDownload.deferred(id);
-	const donwload_state = downlaod.state();
+	const donwload_state = mangaDownloadState({ id, deferred: true });
 	let title: string | undefined = $state();
 	$effect(() =>
 		title_store.subscribe((e) => {

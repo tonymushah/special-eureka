@@ -1,43 +1,47 @@
 <script lang="ts">
+	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
 	import { route } from "$lib/ROUTES";
+	import {
+		addMangaToAList,
+		isMutating as isAddingToList
+	} from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
 	import { initChapterStoreContext } from "@mangadex/componnents/manga/page/chapters/aggreate/utils/chapterStores";
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
 	import { initCoverImageStoreContext } from "@mangadex/componnents/manga/page/covers/utils/coverImageStoreContext";
 	import MangaNavBar from "@mangadex/componnents/manga/page/MangaNavBar.svelte";
 	import { initRelatedTitlesStoreContext } from "@mangadex/componnents/manga/page/related/utils/relatedTitleStore";
+	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
 	import MangaPageTopInfo from "@mangadex/componnents/manga/page/top-info/MangaPageTopInfo.svelte";
 	import type { TopMangaStatistics } from "@mangadex/componnents/manga/page/top-info/stats";
+	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter";
+	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
-	import { MangaDownload, MangaDownloadState } from "@mangadex/download/manga";
+	import mangaDownloadState, {
+		cancelMutation,
+		downloadMutationQuery,
+		removeMutation
+	} from "@mangadex/download/manga";
 	import manga_following_status, {
 		get_manga_following_status,
 		set_manga_following_status
 	} from "@mangadex/stores/manga/manga_following_status";
+	import manga_rating, {
+		get_manga_rating,
+		set_manga_rating
+	} from "@mangadex/stores/manga/manga_rating";
 	import manga_reading_status, {
 		get_manga_reading_status,
 		set_manga_reading_status
 	} from "@mangadex/stores/manga/manga_reading_status";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
+	import { debounce } from "lodash";
 	import { type Snippet } from "svelte";
-	import { derived as der, writable } from "svelte/store";
+	import { derived as der } from "svelte/store";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./$types";
 	import { setTitleLayoutData } from "./layout.context";
-	import { goto } from "$app/navigation";
-	import manga_rating, {
-		get_manga_rating,
-		set_manga_rating
-	} from "@mangadex/stores/manga/manga_rating";
-	import { debounce } from "lodash";
-	import type { ReadingStatusEventDetail } from "@mangadex/componnents/manga/page/top-info/buttons/readingStatus";
-	import { hasChapterToRead } from "@mangadex/componnents/manga/read/getMangaToReadChapter";
-	import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
-	import {
-		isMutating as isAddingToList,
-		addMangaToAList
-	} from "@mangadex/componnents/manga/add-to-list/AddToList.svelte";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -89,19 +93,13 @@
 	let description = $derived(layoutData.description);
 	let hasRelation = $derived(data.queryResult!.relationships.manga.length > 0);
 
-	let mangaDownload = $derived(new MangaDownload(data.layoutData.id));
-
-	const _state = writable(MangaDownloadState.Pending);
+	const _state = mangaDownloadState({ id: data.layoutData.id, deferred: true });
 	const reading_status = der(
 		manga_reading_status(data.layoutData.id),
 		(status) => status ?? undefined
 	);
 	const isFollowing = manga_following_status(data.layoutData.id);
-	$effect(() =>
-		mangaDownload.state().subscribe((s) => {
-			_state.set(s);
-		})
-	);
+
 	function refetchReadingFollowingStatus() {
 		Promise.all([
 			get_manga_following_status(data.layoutData.id),
@@ -187,13 +185,13 @@
 	contentRating={layoutData.contentRating ?? undefined}
 	downloadState={_state}
 	ondownload={async () => {
-		await mangaDownload.download();
+		await $downloadMutationQuery.mutateAsync(data.layoutData.id);
 	}}
 	ondelete={async () => {
-		await mangaDownload.remove();
+		await $removeMutation.mutateAsync(data.layoutData.id);
 	}}
 	ondownloading={async () => {
-		await mangaDownload.cancel();
+		await $cancelMutation.mutateAsync(data.layoutData.id);
 	}}
 	{reading_status}
 	{isFollowing}
