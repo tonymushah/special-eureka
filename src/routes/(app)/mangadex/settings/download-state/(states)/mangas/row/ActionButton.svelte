@@ -8,7 +8,6 @@
 		hasMangaDownloadingFailed,
 		isMangaDownloaded,
 		isMangaDownloading,
-		MangaDownload,
 		removeMutation
 	} from "@mangadex/download/manga";
 	import { derived as storeDerived } from "svelte/store";
