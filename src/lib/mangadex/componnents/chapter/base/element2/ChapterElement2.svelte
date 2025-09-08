@@ -10,6 +10,10 @@
 		isChapterDownloading
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
+	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
 	import {
 		CheckIcon,
@@ -150,6 +154,13 @@
 				id
 			});
 		}
+	});
+	setContextMenuContext(() => {
+		return chapterElementContextMenuItems({
+			id,
+			groups,
+			uploader
+		});
 	});
 </script>
 
