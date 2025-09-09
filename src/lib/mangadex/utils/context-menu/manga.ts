@@ -9,6 +9,8 @@ import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { get } from "svelte/store";
 import get_value_and_random_if_undefined from "../lang/get_value_and_random_if_undefined";
+import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
+import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 type MangaElementContextMenuOption = {
 	id: string,
@@ -44,6 +46,16 @@ export default function mangaElementContextMenu({ id, coverArtId, tags, artists,
 		text: "Open in the browser",
 		action() {
 			openUrl(`https://mangadex.org/title/${id}`);
+		},
+	}), ContextMenuItemProvider.menuItem({
+		text: "Read",
+		action() {
+			readManga(id)
+		},
+	}), ContextMenuItemProvider.menuItem({
+		text: "Copy title id",
+		action() {
+			writeText(id)
 		},
 	}), ContextMenuItemProvider.seperator()];
 	const isDownloading = get(isMangaDownloading({ id, deferred: true }));

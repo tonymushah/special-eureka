@@ -6,6 +6,9 @@
 	import Content from "./Content.svelte";
 	import Image from "./Image.svelte";
 	import Layout from "./Layout.svelte";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 
 	interface Events {
 		onclick?: (
@@ -47,6 +50,16 @@
 		onclick
 	}: Props = $props();
 	let src = $derived($coverImage);
+	setContextMenuContext(() =>
+		mangaElementContextMenu({
+			id: mangaId,
+			coverArtId: mangaId,
+			tags: tags.map((tag) => ({
+				id: tag.id,
+				name: new Map([["id", tag.name]])
+			}))
+		})
+	);
 </script>
 
 <Layout {onclick} --max-height="11em" {mangaId}>

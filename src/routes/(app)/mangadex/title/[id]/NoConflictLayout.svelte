@@ -42,6 +42,13 @@
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./$types";
 	import { setTitleLayoutData } from "./layout.context";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
+	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -162,6 +169,24 @@
 		}
 	});
 	const hasChaptToRead = hasChapterToRead(data.layoutData.id);
+	setContextMenuContext(() =>
+		mangaElementContextMenu({
+			id: data.layoutData.id,
+			coverArtId: data.queryResult.relationships.coverArt.id,
+			tags: data.queryResult.attributes.tags.map((tag) => ({
+				id: tag.id,
+				name: manga_title_to_lang_map(tag.attributes.name)
+			})),
+			artists: data.queryResult.relationships.artists.map((a) => ({
+				id: a.id,
+				name: a.attributes.name
+			})),
+			authors: data.queryResult.relationships.authors.map((a) => ({
+				id: a.id,
+				name: a.attributes.name
+			}))
+		})
+	);
 </script>
 
 <svelte:window onfocus={refetchReadingFollowingStatus} />
@@ -221,13 +246,33 @@
 
 <div class="out-top">
 	{#if description != undefined && isOnInfoPage}
-		<div class="description">
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div
+			class="description"
+			oncontextmenu={registerContextMenuEvent({
+				preventDefault: true,
+				additionalMenus: [
+					ContextMenuItemProvider.menuItem({
+						text: "Copy Descrription",
+						action() {
+							writeText(description);
+						}
+					})
+				]
+			})}
+		>
 			<Markdown source={description} />
 		</div>
 	{/if}
 	<div class="top">
 		{#if isOnInfoPage}
-			<div class="info">
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<div
+				class="info"
+				oncontextmenu={registerContextMenuEvent({
+					preventDefault: true
+				})}
+			>
 				<MangaPageInfo />
 			</div>
 		{/if}

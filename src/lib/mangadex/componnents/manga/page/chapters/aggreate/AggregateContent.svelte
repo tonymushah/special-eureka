@@ -18,6 +18,7 @@
 	import VolumeAccordion from "./VolumeAccordion.svelte";
 	import Volumes from "./Volumes.svelte";
 	import { getChapterStoreContext, type ChapterStores } from "./utils/chapterStores";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Props extends ChapterEl1Events {
 		volumes: MangaAggregateData;
@@ -48,6 +49,7 @@
 			};
 		});
 	});
+	setContextMenuContext([]);
 </script>
 
 <Volumes openStart volumes={data} {...events} />

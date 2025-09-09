@@ -1,4 +1,5 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -9,7 +10,14 @@
 	let { coverImage = $bindable(), nOindex, children }: Props = $props();
 </script>
 
-<div class="layout-image" style={`background-image: url(${coverImage});`}>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div
+	class="layout-image"
+	style={`background-image: url(${coverImage});`}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
+>
 	<div class="layout-color">
 		<div class="layout">
 			<div class="no-index">

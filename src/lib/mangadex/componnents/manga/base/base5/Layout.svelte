@@ -1,4 +1,6 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+
 	interface Props {
 		isHover: boolean;
 		children?: import("svelte").Snippet;
@@ -18,6 +20,9 @@
 		isHover = false;
 	}}
 	data-manga-id={mangaId}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
 >
 	{@render children?.()}
 </div>

@@ -1,13 +1,26 @@
 <script lang="ts">
 	import MangaPageInfo from "@mangadex/componnents/manga/page/chapters/MangaPageInfo.svelte";
 	import Aggregate from "@mangadex/componnents/manga/page/chapters/aggreate/Aggregate.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 </script>
 
 <article class="layout">
-	<section class="info">
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<section
+		class="info"
+		oncontextmenu={registerContextMenuEvent({
+			preventDefault: true
+		})}
+	>
 		<MangaPageInfo />
 	</section>
-	<section class="chapters">
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<section
+		class="chapters"
+		oncontextmenu={registerContextMenuEvent({
+			preventDefault: true
+		})}
+	>
 		<Aggregate />
 	</section>
 </article>

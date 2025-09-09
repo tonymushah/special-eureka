@@ -28,7 +28,7 @@ export function getContextMenuContext(): () => ContextMenuItem[] {
 }
 
 export type RegisterContextMenuEventOptions = {
-	additionalMenus?: ContextMenuItem[]
+	additionalMenus?: (() => ContextMenuItem[]) | ContextMenuItem[]
 	includeContext?: boolean;
 	preventDefault?: boolean;
 	stopPropagation?: boolean;
@@ -51,7 +51,11 @@ export default function registerContextMenuEvent(options?: RegisterContextMenuEv
 			if (addSeparator) {
 				menu.push(ContextMenuItemProvider.seperator());
 			}
-			menu.push(...options.additionalMenus);
+			if (typeof options.additionalMenus == "function") {
+				menu.push(...options.additionalMenus());
+			} else if (Array.isArray(options.additionalMenus)) {
+				menu.push(...options.additionalMenus);
+			}
 		}
 		await contextMenu(menu, e)
 	}
