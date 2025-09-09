@@ -836,6 +836,7 @@ export type CoverMutations = {
 	download: DownloadState;
 	edit: Cover;
 	remove: Scalars["Boolean"]["output"];
+	saveImage: Scalars["String"]["output"];
 	upload: Cover;
 };
 
@@ -857,6 +858,11 @@ export type CoverMutationsEditArgs = {
 
 export type CoverMutationsRemoveArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CoverMutationsSaveImageArgs = {
+	coverId: Scalars["UUID"]["input"];
+	exportDir: Scalars["String"]["input"];
 };
 
 export type CoverMutationsUploadArgs = {
