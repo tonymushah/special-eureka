@@ -68,7 +68,7 @@ export default function chapterElementContextMenuItems({ id, groups = [], upload
 						id
 					});
 				},
-				enabled: !get(isMounted)
+				enabled: get(isMounted)
 			})
 		);
 		if (isDownloaded) {
