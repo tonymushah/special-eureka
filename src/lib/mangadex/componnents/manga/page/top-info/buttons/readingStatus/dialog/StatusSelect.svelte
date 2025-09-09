@@ -1,33 +1,24 @@
 <script lang="ts">
 	import { ReadingStatus } from "@mangadex/gql/graphql";
-	import getText from "@mangadex/utils/manga/readingStatus/getText.js";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import type { Writable } from "svelte/store";
-	import MenuKeyed from "@mangadex/componnents/theme/menu/MenuKeyed.svelte";
 
-	let target: HTMLDivElement | undefined = $state(undefined);
 	interface Props {
 		readingStatus: Writable<ReadingStatus | undefined>;
 		disabled?: boolean;
 	}
 
 	let { readingStatus, disabled }: Props = $props();
-	let isOpen: boolean = $state(false);
-
-	let status = $derived(getText($readingStatus) ?? "None");
 </script>
 
-<div class="outer-button" bind:this={target}>
-	<select bind:value={$readingStatus}>
-		<option value={undefined}>None</option>
-		<option value={ReadingStatus.Reading}>Reading</option>
-		<option value={ReadingStatus.OnHold}>On Hold</option>
-		<option value={ReadingStatus.Dropped}>Dropped</option>
-		<option value={ReadingStatus.PlanToRead}>Plan to Read</option>
-		<option value={ReadingStatus.Completed}>Completed</option>
-		<option value={ReadingStatus.ReReading}>Re-Reading</option>
-	</select>
-</div>
+<select bind:value={$readingStatus} {disabled}>
+	<option value={undefined}>None</option>
+	<option value={ReadingStatus.Reading}>Reading</option>
+	<option value={ReadingStatus.OnHold}>On Hold</option>
+	<option value={ReadingStatus.Dropped}>Dropped</option>
+	<option value={ReadingStatus.PlanToRead}>Plan to Read</option>
+	<option value={ReadingStatus.Completed}>Completed</option>
+	<option value={ReadingStatus.ReReading}>Re-Reading</option>
+</select>
 
 <style lang="scss">
 	select {
