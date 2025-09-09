@@ -1,6 +1,7 @@
 import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
 import { cancelDownloadMutation, downloadMutation, isChapterDownloaded, isChapterDownloading, removeMutation } from "@mangadex/download/chapter";
+import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import { ContextMenuItemProvider, type ContextMenuItem } from "@special-eureka/core/commands/contextMenu";
 import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
@@ -66,7 +67,8 @@ export default function chapterElementContextMenuItems({ id, groups = [], upload
 					get(downloadMutation).mutateAsync({
 						id
 					});
-				}
+				},
+				enabled: !get(isMounted)
 			})
 		);
 		if (isDownloaded) {
