@@ -6,7 +6,6 @@
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
-	import { OrderDirection } from "@mangadex/gql/graphql";
 	import type { ChapterFeedListItemExt } from "@mangadex/routes/user/[id]/uploads/search";
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
@@ -17,6 +16,8 @@
 	import { onDestroy } from "svelte";
 	import { derived, get } from "svelte/store";
 	import executeSearchQuery, { type LatestUploadsParams as Params } from "./search";
+	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
+	import { openUrl } from "@tauri-apps/plugin-opener";
 
 	const client = getContextClient();
 	const query = createInfiniteQuery(
@@ -85,6 +86,7 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	const threads = chapterThreadsFromChapterFeedQuery(query);
 </script>
 
 <div class="result">
@@ -98,6 +100,12 @@
 					id
 				})
 			);
+		}}
+		oncomments={({ id }) => {
+			const url = $threads.get(id);
+			if (url) {
+				openUrl(url);
+			}
 		}}
 	/>
 </div>
