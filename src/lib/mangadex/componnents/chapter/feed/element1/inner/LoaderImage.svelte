@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -42,6 +43,7 @@
 		});
 	}}
 	class="cover-image"
+	oncontextmenu={registerContextMenuEvent({ preventDefault: true })}
 >
 	<Skeleton width="60px" height="100px" />
 </div>

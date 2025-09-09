@@ -85,26 +85,15 @@
 		removeMutation
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
-	import { debounce } from "lodash";
-	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
-	import { derived, get } from "svelte/store";
-	import DownloadStateComp from "./DownloadStateComp.svelte";
-	import Layout from "./Layout.svelte";
+	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
-	import contextMenu, {
-		ContextMenuItemProvider
-	} from "@special-eureka/core/commands/contextMenu";
-	import { goto } from "$app/navigation";
-	import openNewWindow from "@special-eureka/core/commands/openNewWindow";
-	import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
-	import { getCurrentWindow } from "@tauri-apps/api/window";
-	import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
-	import { openUrl } from "@tauri-apps/plugin-opener";
-	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
-	import { data } from "@mangadex/componnents/tag/testDatas";
-	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
+	import { debounce } from "lodash";
+	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
+	import { derived } from "svelte/store";
+	import DownloadStateComp from "./DownloadStateComp.svelte";
+	import Layout from "./Layout.svelte";
 
 	let {
 		id,

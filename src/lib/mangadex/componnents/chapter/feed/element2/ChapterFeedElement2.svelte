@@ -7,6 +7,10 @@
 	import type { Readable } from "svelte/store";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -56,7 +60,7 @@
 			}
 		) => any;
 		oncomments?: (
-			ev: MouseEnvDiv & {
+			ev: Partial<MouseEnvDiv> & {
 				id: string;
 			}
 		) => any;
@@ -103,6 +107,7 @@
 	onMount(() => {
 		setDisplayedChapters();
 	});
+	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <article class="layout manga-element" data-manga-id={mangaId}>
@@ -122,6 +127,9 @@
 				id: mangaId
 			});
 		}}
+		oncontextmenu={registerContextMenuEvent({
+			preventDefault: true
+		})}
 	>
 		{#if $coverImage}
 			<img src={$coverImage} alt={coverImageAlt} />
@@ -146,6 +154,9 @@
 					id: mangaId
 				});
 			}}
+			oncontextmenu={registerContextMenuEvent({
+				preventDefault: true
+			})}
 		>
 			<div class="title">
 				<p>

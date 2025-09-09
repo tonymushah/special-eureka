@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import ChapterElement2 from "../../../base/element2/ChapterElement2.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 
 	type Group = {
 		id: string;
@@ -83,6 +84,9 @@
 				id: mangaId
 			});
 		}}
+		oncontextmenu={registerContextMenuEvent({
+			preventDefault: true
+		})}
 	>
 		<h4>{mangaTitle}</h4>
 	</div>

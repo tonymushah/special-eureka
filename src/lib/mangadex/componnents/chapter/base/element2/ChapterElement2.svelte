@@ -161,7 +161,7 @@
 			groups,
 			uploader
 		});
-	});
+	}, true);
 </script>
 
 <div
