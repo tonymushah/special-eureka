@@ -18,63 +18,26 @@
 </script>
 
 <div class="outer-button" bind:this={target}>
-	<ButtonAccent
-		isBase
-		onclick={() => {
-			isOpen = !isOpen;
-		}}
-		{disabled}
-	>
-		<div class="inner-button">
-			<span>{status}</span>
-		</div>
-	</ButtonAccent>
+	<select bind:value={$readingStatus}>
+		<option value={undefined}>None</option>
+		<option value={ReadingStatus.Reading}>Reading</option>
+		<option value={ReadingStatus.OnHold}>On Hold</option>
+		<option value={ReadingStatus.Dropped}>Dropped</option>
+		<option value={ReadingStatus.PlanToRead}>Plan to Read</option>
+		<option value={ReadingStatus.Completed}>Completed</option>
+		<option value={ReadingStatus.ReReading}>Re-Reading</option>
+	</select>
 </div>
 
-<MenuKeyed
-	--menu-height={"10em"}
-	--menu-overflow={"scroll"}
-	bind:isOpen
-	bind:target
-	items={[
-		{
-			label: "None",
-			key: undefined
-		},
-		{
-			label: getText(ReadingStatus.Reading) ?? "",
-			key: ReadingStatus.Reading
-		},
-		{
-			label: getText(ReadingStatus.OnHold) ?? "",
-			key: ReadingStatus.OnHold
-		},
-		{
-			label: getText(ReadingStatus.Dropped) ?? "",
-			key: ReadingStatus.Dropped
-		},
-		{
-			label: getText(ReadingStatus.PlanToRead) ?? "",
-			key: ReadingStatus.PlanToRead
-		},
-		{
-			label: getText(ReadingStatus.Completed) ?? "",
-			key: ReadingStatus.Completed
-		},
-		{
-			label: getText(ReadingStatus.ReReading) ?? "",
-			key: ReadingStatus.ReReading
-		}
-	]}
-	onSelect={(detail) => {
-		const { value } = detail;
-		readingStatus.set(value);
-	}}
-	sameWidth
-/>
-
 <style lang="scss">
-	.inner-button {
-		width: 7em;
+	select {
+		background-color: var(--accent);
+		border-radius: 6px;
+		padding: 8px 12px;
+		border: 3px solid var(--mid-tone);
+		min-height: 3em;
+		min-width: 3em;
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
 	}
 </style>
