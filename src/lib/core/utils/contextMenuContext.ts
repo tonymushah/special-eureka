@@ -43,7 +43,7 @@ export default function registerContextMenuEvent(options?: RegisterContextMenuEv
 		if (options?.preventDefault) {
 			e.preventDefault();
 		}
-		if (options?.stopPropagation) {
+		if (options?.stopPropagation ?? true) {
 			e.stopPropagation();
 		}
 		let menu = contextMenuFunc();
