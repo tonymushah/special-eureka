@@ -204,7 +204,12 @@
 			<div class="flag-icon">
 				<MangaDexFlagIcon bind:lang />
 			</div>
-			<a href={`/mangadex/chapter/${id}`}><h4>{chapterTitle}</h4></a>
+			<a
+				href={`/mangadex/chapter/${id}`}
+				oncontextmenu={registerContextMenuEvent({
+					preventDefault: true
+				})}><h4>{chapterTitle}</h4></a
+			>
 		</div>
 		<p>
 			<TimeAgo date={upload_date} />

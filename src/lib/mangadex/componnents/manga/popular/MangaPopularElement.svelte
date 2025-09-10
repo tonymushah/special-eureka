@@ -73,6 +73,17 @@
 		});
 		img.src = coverImage;
 	});
+	setContextMenuContext(() =>
+		mangaElementContextMenu({
+			id: mangaId,
+			coverArtId: mangaId,
+			tags: tags.map((tag) => ({
+				id: tag.id,
+				name: new Map([["id", tag.name]])
+			})),
+			authors
+		})
+	);
 </script>
 
 <Layout {coverImage}>

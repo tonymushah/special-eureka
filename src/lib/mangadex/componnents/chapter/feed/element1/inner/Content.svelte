@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
 	import ChapterElement2 from "../../../base/element2/ChapterElement2.svelte";
-	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 
 	type Group = {
 		id: string;
@@ -65,6 +68,12 @@
 		onmangaClick,
 		onmangaKeyClick
 	}: Props = $props();
+	setContextMenuContext(() =>
+		mangaElementContextMenu({
+			id: mangaId,
+			coverArtId: mangaId
+		})
+	);
 </script>
 
 <div class="content">
