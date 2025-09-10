@@ -83,10 +83,10 @@ export default function chapterElementContextMenuItems({ id, groups = [], upload
 		}
 	}
 	items.push(ContextMenuItemProvider.seperator());
-	if (groups.length == 0) {
+	if (groups.length != 0) {
 		items.push(
 			ContextMenuItemProvider.subMenu({
-				text: "ScanlationGroups",
+				text: "Scanlation Groups",
 				items: groups.map((group) =>
 					ContextMenuItemProvider.subMenu({
 						text: group.name,
