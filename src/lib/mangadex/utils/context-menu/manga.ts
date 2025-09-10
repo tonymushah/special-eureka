@@ -15,6 +15,8 @@ import isFollowingTitle from "@mangadex/gql-docs/title/id/follow";
 import manga_reading_status, { get_manga_reading_status, set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
 import { isLogged } from "../auth";
 import { ReadingStatus } from "@mangadex/gql/graphql";
+import { range } from "lodash";
+import { set_manga_rating } from "@mangadex/stores/manga/manga_rating";
 
 type MangaElementContextMenuOption = {
 	id: string,
@@ -74,8 +76,20 @@ export default function mangaElementContextMenu({ id, coverArtId, tags, artists,
 			}
 		})
 	};
+	const set_manga_rating_success_toast = () => {
+		addToast({
+			data: {
+				title: "Updated title rating",
+				description: id,
+				variant: "blue"
+			}
+		})
+	};
 	const set_manga_reading_status_error_toast = (e: unknown) => {
 		addErrorToast("Error on updating title reading status", e);
+	}
+	const set_manga_rating_error_toast = (e: unknown) => {
+		addErrorToast("Error on updating title rating", e);
 	}
 	items.push(ContextMenuItemProvider.menuItem({
 		text: get(isFollowed) ? "Unfollow title" : "Follow title",
@@ -123,7 +137,22 @@ export default function mangaElementContextMenu({ id, coverArtId, tags, artists,
 			},
 		})],
 		enabled: get(isLogged)
-	}), ContextMenuItemProvider.seperator())
+	}), ContextMenuItemProvider.subMenu({
+		text: "Rating",
+		items: [...range(1, 10).toReversed().map((rating) => ContextMenuItemProvider.menuItem({
+			text: `${rating}`,
+			action() {
+				set_manga_rating(id, rating).then(set_manga_rating_success_toast).catch(set_manga_rating_error_toast);
+			},
+		})), ContextMenuItemProvider.menuItem({
+			text: `None`,
+			action() {
+				set_manga_rating(id, null).then(set_manga_rating_success_toast).catch(set_manga_rating_error_toast);
+			},
+		})],
+		enabled: get(isLogged)
+	}), ContextMenuItemProvider.seperator());
+
 	if (isDownloading) {
 		items.push(ContextMenuItemProvider.menuItem({
 			text: "Cancel title download",
