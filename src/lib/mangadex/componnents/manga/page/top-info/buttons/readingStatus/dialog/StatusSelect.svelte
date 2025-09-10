@@ -22,7 +22,7 @@
 
 <style lang="scss">
 	select {
-		background-color: var(--accent);
+		background-color: var(--accent-l1);
 		border-radius: 6px;
 		padding: 8px 12px;
 		border: 3px solid var(--mid-tone);
@@ -30,5 +30,6 @@
 		min-width: 3em;
 		padding-left: 0.75rem;
 		padding-right: 0.75rem;
+		font-family: inherit;
 	}
 </style>
