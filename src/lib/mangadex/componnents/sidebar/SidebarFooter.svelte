@@ -55,6 +55,15 @@
 			addErrorToast("Cannot load info", error);
 		}
 	}}
+	oncontextmenu={async (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		try {
+			await loadUserMe();
+		} catch (error) {
+			addErrorToast("Cannot load info", error);
+		}
+	}}
 >
 	{#snippet icon()}
 		<div role="button" tabindex="0" onkeypress={(e) => {}} class:isRefreshing>
