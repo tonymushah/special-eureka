@@ -17,6 +17,8 @@
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
+	import { crossfade } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	const client = getContextClient();
 	const query = createInfiniteQuery(
@@ -86,54 +88,65 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	const [send, receive] = crossfade({});
 </script>
 
 <div class="result">
 	{#each $lists as list (list.id)}
 		{@const isPrivate = list.visibility == CustomListVisibility.Private}
 		{@const isPublic = list.visibility == CustomListVisibility.Public}
-		<UsersSimpleBase
-			name={list.name}
-			onclick={() => {
-				goto(
-					route("/mangadex/list/[id]", {
-						id:
-							list.visibility == CustomListVisibility.Private
-								? `private:${list.id}`
-								: list.id
-					})
-				);
+		<span
+			animate:flip
+			in:receive={{
+				key: list.id
 			}}
-			oncontextmenu={registerContextMenuEvent({
-				includeContext: false,
-				stopPropagation: true,
-				preventDefault: true,
-				additionalMenus() {
-					return customListElementContextMenu({
-						id: list.id,
-						name: list.name,
-						isMine: true,
-						onVisibilityChange() {
-							$query.refetch();
-						}
-					});
-				}
-			})}
+			out:send={{
+				key: list.id
+			}}
 		>
-			<div class="child">
-				<p class:isPrivate class:isPublic class="visibility">
-					{list.visibility == CustomListVisibility.Public ? "Public" : "Private"}
-				</p>
-				<p class="titles-number">
-					{list.titles}
-					{#if list.titles > 1}
-						titles
-					{:else}
-						title
-					{/if}
-				</p>
-			</div>
-		</UsersSimpleBase>
+			<UsersSimpleBase
+				name={list.name}
+				onclick={() => {
+					goto(
+						route("/mangadex/list/[id]", {
+							id:
+								list.visibility == CustomListVisibility.Private
+									? `private:${list.id}`
+									: list.id
+						})
+					);
+				}}
+				oncontextmenu={registerContextMenuEvent({
+					includeContext: false,
+					stopPropagation: true,
+					preventDefault: true,
+					additionalMenus() {
+						return customListElementContextMenu({
+							id: list.id,
+							name: list.name,
+							isMine: true,
+							onVisibilityChange() {
+								$query.refetch();
+							}
+						});
+					}
+				})}
+			>
+				<div class="child">
+					<p class:isPrivate class:isPublic class="visibility">
+						{list.visibility == CustomListVisibility.Public ? "Public" : "Private"}
+					</p>
+					<p class="titles-number">
+						{list.titles}
+						{#if list.titles > 1}
+							titles
+						{:else}
+							title
+						{/if}
+					</p>
+				</div>
+			</UsersSimpleBase>
+		</span>
 	{/each}
 </div>
 

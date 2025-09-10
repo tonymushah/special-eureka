@@ -15,6 +15,10 @@
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import scanlationGroupElementContextMenu from "@mangadex/utils/context-menu/scanlationGroup";
+	import { crossfade } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	const client = getContextClient();
 
@@ -121,29 +125,54 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
+	const [send, receive] = crossfade({});
 </script>
 
 <div class="result">
-	{#each $scanGroups as group}
-		<UsersSimpleBase
-			name={group.name}
-			onclick={() => {
-				goto(
-					route("/mangadex/group/[id]", {
-						id: group.id
-					})
-				);
+	{#each $scanGroups as group (group.id)}
+		<span
+			animate:flip
+			in:receive={{
+				key: group.id
+			}}
+			out:send={{
+				key: group.id
 			}}
 		>
-			<p class="group-members">
-				{group.members}
-				{#if group.members > 1}
-					members
-				{:else}
-					member
-				{/if}
-			</p>
-		</UsersSimpleBase>
+			<UsersSimpleBase
+				name={group.name}
+				onclick={() => {
+					goto(
+						route("/mangadex/group/[id]", {
+							id: group.id
+						})
+					);
+				}}
+				oncontextmenu={registerContextMenuEvent({
+					preventDefault: true,
+					includeContext: false,
+					stopPropagation: true,
+					additionalMenus() {
+						return scanlationGroupElementContextMenu({
+							id: group.id,
+							name: group.name,
+							leader: group.leader,
+							website: group.website,
+							discord: group.discord
+						});
+					}
+				})}
+			>
+				<p class="group-members">
+					{group.members}
+					{#if group.members > 1}
+						members
+					{:else}
+						member
+					{/if}
+				</p>
+			</UsersSimpleBase>
+		</span>
 	{/each}
 </div>
 

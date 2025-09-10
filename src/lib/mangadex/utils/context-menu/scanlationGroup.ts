@@ -13,10 +13,14 @@ type ScanlationGroupElementContextMenuOptions = {
 	id: string,
 	name?: string,
 	website?: string,
-	discord?: string
+	discord?: string,
+	leader?: {
+		id: string,
+		name: string
+	}
 };
 
-export default function scanlationGroupElementContextMenu({ id, name, website, discord }: ScanlationGroupElementContextMenuOptions): ContextMenuItem[] {
+export default function scanlationGroupElementContextMenu({ id, name, website, discord, leader }: ScanlationGroupElementContextMenuOptions): ContextMenuItem[] {
 	const items = [ContextMenuItemProvider.menuItem({
 		text: name ? `Goto ${name}` : "Open scanlation group",
 		action() {
@@ -59,6 +63,31 @@ export default function scanlationGroupElementContextMenu({ id, name, website, d
 			action() {
 				openUrl(discord);
 			},
+		}))
+	}
+	if (leader) {
+		items.push(ContextMenuItemProvider.seperator(), ContextMenuItemProvider.subMenu({
+			text: "Leader",
+			items: [ContextMenuItemProvider.menuItem({
+				text: `Open ${leader.name}`,
+				action() {
+					goto(route("/mangadex/user/[id]", {
+						id: leader.id
+					}));
+				},
+			}), ContextMenuItemProvider.menuItem({
+				text: `Open ${leader.name} in a new window`,
+				action() {
+					openNewWindow(currentLocationWithNewPath(route(`/mangadex/user/[id]`, {
+						id: leader.id
+					})));
+				},
+			}), ContextMenuItemProvider.menuItem({
+				text: `Open ${leader.name} in the broswer`,
+				action() {
+					openUrl(`https://mangadex.org/user/${leader.id}`);
+				},
+			})]
 		}))
 	}
 	return items;

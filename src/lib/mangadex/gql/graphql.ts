@@ -5272,7 +5272,12 @@ export type ScanalationGroupSearchQuery = {
 			data: Array<{
 				__typename?: "ScanlationGroup";
 				id: any;
-				attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
+				attributes: {
+					__typename?: "ScanlationGroupAttributes";
+					name: string;
+					discord?: string | null;
+					website?: any | null;
+				};
 				relationships: {
 					__typename?: "ScanlationGroupRelationships";
 					leader?: {
@@ -14981,6 +14986,20 @@ export const ScanalationGroupSearchDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "discord"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "website"
 																		}
 																	}
 																]
