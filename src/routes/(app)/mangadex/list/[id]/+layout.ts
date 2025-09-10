@@ -1,6 +1,7 @@
 import getClient from "@mangadex/gql/urql/getClient";
 import type { LayoutLoad } from "./$types";
 import customListPageQuery from "@mangadex/componnents/custom-list/page/query";
+import { userMeOnSidebarFooterQuery } from "@mangadex/componnents/sidebar/footer";
 
 export const load: LayoutLoad = async (load_params) => {
 	const id = load_params.params.id;
@@ -10,10 +11,13 @@ export const load: LayoutLoad = async (load_params) => {
 	const res = await client
 		.query(customListPageQuery, { id: real_id, private: _private })
 		.toPromise();
+
 	if (res.error) {
 		throw res.error;
 	} else if (res.data) {
-		return res.data.customList.get;
+		const me = await client.query(userMeOnSidebarFooterQuery, {}).toPromise();
+
+		return { ...res.data.customList.get, isMine: me.data?.user.me.id == res.data.customList.get.relationships.user.id };
 	} else {
 		throw new Error("unreachable...");
 	}

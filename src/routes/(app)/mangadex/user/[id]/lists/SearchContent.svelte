@@ -16,6 +16,10 @@
 	import executeSearchQuery, { type UserCustomListItemData } from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
+	import { crossfade } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	interface Props {
 		userId: Readable<string>;
@@ -58,7 +62,10 @@
 	);
 	const hasNext = derived(query, ($query) => $query.hasNextPage);
 	const isFetching = derived(query, ($query) => $query.isLoading);
-	const lists = derived(query, ($query) => $query.data?.pages.flatMap((e) => e.data) ?? []);
+	const lists = derived(
+		query,
+		($query) => new Set($query.data?.pages.flatMap((e) => e.data)) ?? []
+	);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
 		return get(query).fetchNextPage();
@@ -88,29 +95,44 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	const [send, receive] = crossfade({});
 </script>
 
 <div class="result">
-	{#each $lists as list}
-		<UsersSimpleBase
-			name={list.name}
-			onclick={() => {
-				goto(
-					route("/mangadex/list/[id]", {
-						id: list.id
-					})
-				);
-			}}
+	{#each $lists as list (list.id)}
+		<span
+			animate:flip
+			in:receive={{ key: `custom-list-${list.id}` }}
+			out:send={{ key: `custom-list-${list.id}` }}
 		>
-			<p class="titles-number">
-				{list.titles}
-				{#if list.titles > 1}
-					titles
-				{:else}
-					title
-				{/if}
-			</p>
-		</UsersSimpleBase>
+			<UsersSimpleBase
+				name={list.name}
+				onclick={() => {
+					goto(
+						route("/mangadex/list/[id]", {
+							id: list.id
+						})
+					);
+				}}
+				oncontextmenu={registerContextMenuEvent({
+					preventDefault: true,
+					includeContext: false,
+					stopPropagation: true,
+					additionalMenus() {
+						return customListElementContextMenu({ id: list.id, name: list.name });
+					}
+				})}
+			>
+				<p class="titles-number">
+					{list.titles}
+					{#if list.titles > 1}
+						titles
+					{:else}
+						title
+					{/if}
+				</p>
+			</UsersSimpleBase>
+		</span>
 	{/each}
 </div>
 

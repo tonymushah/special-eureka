@@ -6,18 +6,23 @@
 				currentTarget: EventTarget & HTMLAnchorElement;
 			}
 		) => any;
+		oncontextmenu?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLAnchorElement;
+			}
+		) => any;
 	}
 	interface Props extends Events {
 		href?: string | undefined;
 		children?: import("svelte").Snippet;
 	}
 
-	let { href = undefined, children, onclick }: Props = $props();
+	let { href = undefined, children, onclick, oncontextmenu }: Props = $props();
 
 	let active = $derived($page.url.pathname == href);
 </script>
 
-<a class:active {href} {onclick}>
+<a class:active {href} {onclick} {oncontextmenu}>
 	{@render children?.()}
 </a>
 

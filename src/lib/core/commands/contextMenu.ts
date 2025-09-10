@@ -3,21 +3,21 @@ import { LogicalPosition, Position, type PhysicalPosition } from "@tauri-apps/ap
 
 export type ContextMenuItem =
 	| {
-			type: "Seperator";
-	  }
+		type: "Seperator";
+	}
 	| {
-			type: "MenuItem";
-			text: string;
-			accelerator?: string | null;
-			enabled?: boolean | null;
-			action: number;
-			icon?: string | null;
-	  }
+		type: "MenuItem";
+		text: string;
+		accelerator?: string | null;
+		enabled?: boolean | null;
+		action: number;
+		icon?: string | null;
+	}
 	| {
-			type: "Submenu";
-			text: string;
-			items: ContextMenuItem[];
-	  };
+		type: "Submenu";
+		text: string;
+		items: ContextMenuItem[];
+	};
 
 export type MenuItemParams = {
 	text: string;
@@ -33,6 +33,7 @@ export type MenuItemParams = {
 export type SubmenuParams = {
 	text: string;
 	items: ContextMenuItem[];
+	enabled?: boolean
 };
 
 export class ContextMenuItemProvider {
@@ -46,7 +47,7 @@ export class ContextMenuItemProvider {
 			return {
 				type: "MenuItem",
 				text: params,
-				action: transformCallback(() => {}, true)
+				action: transformCallback(() => { }, true)
 			};
 		} else {
 			return {

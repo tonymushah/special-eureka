@@ -16,6 +16,8 @@
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import userElementContextMenu from "@mangadex/utils/context-menu/user";
 
 	const client = getContextClient();
 	interface Props {
@@ -123,10 +125,18 @@
 </script>
 
 <div class="result">
-	{#each $users as user}
+	{#each $users as user (user.id)}
 		<UserRolesColorProvider roles={user.roles}>
 			<UsersSimpleBase
 				name={user.name}
+				oncontextmenu={registerContextMenuEvent({
+					includeContext: true,
+					additionalMenus() {
+						return userElementContextMenu({ id: user.id, name: user.name });
+					},
+					preventDefault: true,
+					stopPropagation: true
+				})}
 				onclick={() => {
 					goto(
 						route("/mangadex/user/[id]", {

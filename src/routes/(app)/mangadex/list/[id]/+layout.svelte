@@ -6,8 +6,14 @@
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
 	import { page } from "$app/stores";
 	import { derived as storeDerived } from "svelte/store";
-	import { goto } from "$app/navigation";
+	import { goto, invalidate } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import customListElementContextMenu from "@mangadex/utils/context-menu/list";
+	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
+	import updateCustomListVisibilityMutation from "@mangadex/gql-docs/list/id/update-visibilty";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import ButtonAccentOnlyLabel from "@mangadex/componnents/theme/buttons/ButtonAccentOnlyLabel.svelte";
 
 	interface Props {
 		data: LayoutData;
@@ -25,6 +31,9 @@
 			return pathname;
 		}
 	});
+	setContextMenuContext(() =>
+		customListElementContextMenu({ id: data.id, name: data.attributes.name })
+	);
 </script>
 
 <div class="layout">
@@ -35,6 +44,73 @@
 				? "Public"
 				: "Private"}
 		</p>
+		{#if data.isMine}
+			{#if isPrivate}
+				<DangerButtonOnlyLabel
+					label="Make Public"
+					onclick={() => {
+						$updateCustomListVisibilityMutation.mutate(
+							{
+								id: data.id,
+								visibility: CustomListVisibility.Public
+							},
+							{
+								onSuccess() {
+									invalidate(
+										route("/mangadex/list/[id]", {
+											id: data.id
+										})
+									);
+									addToast({
+										data: {
+											title: "Sucefully made custom list public",
+											description: data.attributes.name,
+											variant: "yellow"
+										}
+									});
+								},
+								onError(error, variables, context) {
+									addErrorToast("Cannot update visibility", error);
+								}
+							}
+						);
+					}}
+					disabled={$updateCustomListVisibilityMutation.isPending}
+				/>
+			{:else}
+				<ButtonAccentOnlyLabel
+					label="Make Private"
+					onclick={() => {
+						$updateCustomListVisibilityMutation.mutate(
+							{
+								id: data.id,
+								visibility: CustomListVisibility.Private
+							},
+							{
+								onSuccess() {
+									invalidate(
+										route("/mangadex/list/[id]", {
+											id: data.id
+										})
+									);
+									addToast({
+										data: {
+											title: "Sucefully made custom list private",
+											description: data.attributes.name,
+											variant: "yellow"
+										}
+									});
+								},
+								onError(error, variables, context) {
+									addErrorToast("Cannot update visibility", error);
+								}
+							}
+						);
+					}}
+					disabled={$updateCustomListVisibilityMutation.isPending}
+				/>
+			{/if}
+		{/if}
 		<p>
 			Created by <UserLink
 				name={user.attributes.username}

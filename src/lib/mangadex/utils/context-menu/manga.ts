@@ -11,6 +11,10 @@ import { get } from "svelte/store";
 import get_value_and_random_if_undefined from "../lang/get_value_and_random_if_undefined";
 import { readManga } from "@mangadex/componnents/manga/read/ReadDialog.svelte";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+import isFollowingTitle from "@mangadex/gql-docs/title/id/follow";
+import manga_reading_status, { get_manga_reading_status, set_manga_reading_status } from "@mangadex/stores/manga/manga_reading_status";
+import { isLogged } from "../auth";
+import { ReadingStatus } from "@mangadex/gql/graphql";
 
 type MangaElementContextMenuOption = {
 	id: string,
@@ -60,6 +64,66 @@ export default function mangaElementContextMenu({ id, coverArtId, tags, artists,
 	}), ContextMenuItemProvider.seperator()];
 	const isDownloading = get(isMangaDownloading({ id, deferred: true }));
 	const isDownloaded = get(isMangaDownloaded({ id, deferred: true }));
+	const isFollowed = isFollowingTitle(id);
+	const set_manga_reading_status_success_toast = () => {
+		addToast({
+			data: {
+				title: "Updated title reading status",
+				description: id,
+				variant: "blue"
+			}
+		})
+	};
+	const set_manga_reading_status_error_toast = (e: unknown) => {
+		addErrorToast("Error on updating title reading status", e);
+	}
+	items.push(ContextMenuItemProvider.menuItem({
+		text: get(isFollowed) ? "Unfollow title" : "Follow title",
+		action() {
+			isFollowed.update((v) => !v);
+		},
+		enabled: get(isLogged)
+	}), ContextMenuItemProvider.subMenu({
+		text: "Reading status",
+		items: [ContextMenuItemProvider.menuItem({
+			text: "None",
+			action() {
+				set_manga_reading_status(id, null).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+
+		}), ContextMenuItemProvider.menuItem({
+			text: "Reading",
+			action() {
+				set_manga_reading_status(id, ReadingStatus.Reading).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+		}), ContextMenuItemProvider.menuItem({
+			text: "On Hold",
+			action() {
+				set_manga_reading_status(id, ReadingStatus.OnHold).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+		}), ContextMenuItemProvider.menuItem({
+			text: "Plan to Read",
+			action() {
+				set_manga_reading_status(id, ReadingStatus.PlanToRead).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+		}), ContextMenuItemProvider.menuItem({
+			text: "Completed",
+			action() {
+				set_manga_reading_status(id, ReadingStatus.Completed).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+		}), ContextMenuItemProvider.menuItem({
+			text: "Dropped",
+			action() {
+				set_manga_reading_status(id, ReadingStatus.Dropped).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+		}), ContextMenuItemProvider.menuItem({
+			text: "Re-Reading",
+			action() {
+				set_manga_reading_status(id, ReadingStatus.ReReading).then(set_manga_reading_status_success_toast).catch(set_manga_reading_status_error_toast);
+			},
+		})],
+		enabled: get(isLogged)
+	}), ContextMenuItemProvider.seperator())
 	if (isDownloading) {
 		items.push(ContextMenuItemProvider.menuItem({
 			text: "Cancel title download",
