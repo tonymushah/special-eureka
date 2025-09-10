@@ -170,4 +170,8 @@
 	a {
 		color: var(--primary-l2);
 	}
+	a:hover {
+		text-decoration: underline;
+		cursor: pointer;
+	}
 </style>
