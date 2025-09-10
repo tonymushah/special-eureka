@@ -152,6 +152,7 @@
 			}}
 			oncontextmenu={(e) => {
 				e.preventDefault();
+				e.stopPropagation();
 				writeText(data.id).then(() => {
 					addToast({
 						data: {
