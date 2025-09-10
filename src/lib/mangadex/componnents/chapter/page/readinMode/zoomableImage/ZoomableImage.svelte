@@ -1,12 +1,11 @@
 <script lang="ts">
-	import isAltKeyPressed from "$lib/core/window-decoration/stores/isAltKeyPressed";
+	import { ImageFit } from "@mangadex/gql/graphql";
 	import panzoom, { type PanzoomObject } from "@panzoom/panzoom";
 	import { onDestroy, onMount } from "svelte";
-	import { resetZoomKey, zoomSpeedValue } from "./settings";
 	import { derived } from "svelte/store";
-	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
 	import { getCurrentChapterImageFit } from "../../contexts/imageFit";
-	import { ImageFit } from "@mangadex/gql/graphql";
+	import { addListenerToResetZoomEventTarget } from "../../contexts/resetZoomEventTarget";
+	import { resetZoomKey, zoomSpeedValue } from "./settings";
 
 	interface Props {
 		src: string | [string, string];
@@ -105,12 +104,10 @@
 			align-content: center;
 			div.double-image:not(.fitHeight, .fitWidth) {
 				display: grid;
-				height: 100%;
 				grid-template-rows: 2;
 				img {
 					grid-row: 1;
 					object-fit: contain;
-					width: 100%;
 				}
 			}
 			div.double-image.fitHeight {
@@ -142,10 +139,8 @@
 				}
 			}
 			div.single-image {
-				width: 100%;
 				img {
 					object-fit: contain;
-					width: 100%;
 				}
 			}
 			div.single-image.fitWidth {
