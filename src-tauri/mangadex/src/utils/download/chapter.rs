@@ -16,21 +16,26 @@ use mangadex_api_types_rust::RelationshipType;
 use tauri::{Manager, Runtime};
 use uuid::Uuid;
 
-use crate::utils::{
-    download::{cover::raw_cover_download, manga::raw_manga_download},
-    traits_utils::MangadexTauriManagerExt,
+use crate::{
+    store::{TauriManagerMangadexStoreExtractor, types::structs::force_443::ForcePort443Store},
+    utils::{
+        download::{cover::raw_cover_download, manga::raw_manga_download},
+        traits_utils::MangadexTauriManagerExt,
+    },
 };
 
 pub async fn raw_chapter_download(
     manager: &Addr<DownloadManager>,
     id: Uuid,
     quality: DownloadMode,
+    force_port_443: bool,
 ) -> crate::Result<ChapterObject> {
     let chapter_manager = GetManager::<ChapterDownloadManager>::get(manager).await?;
     let mut task = chapter_manager
         .new_task(
             ChapterDownloadMessage::new(id)
                 .mode(quality)
+                .force_port_443(force_port_443)
                 .state(DownloadMessageState::Downloading),
         )
         .await?;
@@ -52,7 +57,13 @@ where
         return Err(crate::Error::OfflineAppStateNotLoaded);
     };
     let dirs = manager.get_dir_options().await?;
-    let chapter = raw_chapter_download(&manager, id, quality).await?;
+    let chapter = raw_chapter_download(
+        &manager,
+        id,
+        quality,
+        *app.extract::<ForcePort443Store>().await.unwrap_or_default(),
+    )
+    .await?;
     if let Some(manga) = chapter
         .find_first_relationships(RelationshipType::Manga)
         .map(|d| d.id)

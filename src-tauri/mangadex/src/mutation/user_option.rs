@@ -19,6 +19,7 @@ use crate::{
                     ContentProfile,
                     profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
                 },
+                force_443::ForcePort443Store,
                 longstrip_image_width::LongstripImageWidthStore,
                 offline_config::OfflineConfigStore,
                 page_limit::{PAGE_LIMIT_DEFAULT, PageLimitStore},
@@ -406,5 +407,14 @@ impl UserOptionMutations {
         app.insert_and_save(&store).await?;
         watches.chapter_layout.send_data(store)?;
         Ok(store)
+    }
+    pub async fn set_force_port_443(&self, ctx: &Context<'_>, force: bool) -> Result<bool> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ForcePort443Store>().await?;
+        *store = force;
+        app.insert_and_save(&store).await?;
+        watches.force_port_443.send_data(*store)?;
+        Ok(*store)
     }
 }

@@ -38,7 +38,13 @@ use url::Url;
 use uuid::Uuid;
 
 use crate::{
-    app_state::inner::AppStateInner, store::types::enums::chapter_quality::DownloadMode as Mode,
+    app_state::inner::AppStateInner,
+    store::{
+        TauriManagerMangadexStoreExtractor,
+        types::{
+            enums::chapter_quality::DownloadMode as Mode, structs::force_443::ForcePort443Store,
+        },
+    },
     utils::traits_utils::MangadexTauriManagerExt,
 };
 
@@ -512,6 +518,13 @@ impl<R: Runtime> SpawnHandle<R> {
             .server()
             .id(self.chapter_id)
             .get()
+            .force_port_443(
+                *self
+                    .app_handle
+                    .extract::<ForcePort443Store>()
+                    .await
+                    .unwrap_or_default(),
+            )
             .send()
             .await
             .map_err(crate::Error::from)?;
