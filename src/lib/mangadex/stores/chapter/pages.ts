@@ -1,4 +1,6 @@
-import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+// TODO refactor double page and store it directly inside the class
+
+import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import {
 	DownloadMode,
@@ -198,13 +200,13 @@ export type IndexedDoublePageState = [IndexedPageState, IndexedPageState] | Inde
 
 export type PageStateInner =
 	| {
-			page: ChapterImage;
-			error?: never;
-	  }
+		page: ChapterImage;
+		error?: never;
+	}
 	| {
-			page?: never;
-			error: Error;
-	  };
+		page?: never;
+		error: Error;
+	};
 
 export type PageState = PageStateInner | null;
 
@@ -279,10 +281,13 @@ export default class ChapterPages {
 				return {
 					index,
 					img,
-					ratio: width && height ? width / height : undefined
+					ratio: (width && height) ? width / height : undefined
 				};
 			})
 			.forEach((maybeImg) => {
+				if (maybeImg.index == 0) {
+
+				}
 				if (maybeImg.ratio != undefined && maybeImg.ratio < 1) {
 					accumalator.push(maybeImg.index);
 				} else {
@@ -322,7 +327,7 @@ export default class ChapterPages {
 	public getDoublePageState(doublePageIndex: number): DoublePageState {
 		const pages = this.pagesAsDoublePageIndexes();
 		const current = pages.at(doublePageIndex);
-		if (current) {
+		if (current != undefined) {
 			if (isArray(current)) {
 				return [this.getPageState(current[0]), this.getPageState(current[1])];
 			} else {
