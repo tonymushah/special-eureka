@@ -10,6 +10,10 @@
 		isChapterDownloading
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
+	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
 	import {
 		CheckIcon,
@@ -151,6 +155,13 @@
 			});
 		}
 	});
+	setContextMenuContext(() => {
+		return chapterElementContextMenuItems({
+			id,
+			groups,
+			uploader
+		});
+	}, true);
 </script>
 
 <div
@@ -193,7 +204,12 @@
 			<div class="flag-icon">
 				<MangaDexFlagIcon bind:lang />
 			</div>
-			<a href={`/mangadex/chapter/${id}`}><h4>{chapterTitle}</h4></a>
+			<a
+				href={`/mangadex/chapter/${id}`}
+				oncontextmenu={registerContextMenuEvent({
+					preventDefault: true
+				})}><h4>{chapterTitle}</h4></a
+			>
 		</div>
 		<p>
 			<TimeAgo date={upload_date} />

@@ -5,6 +5,8 @@
 	import Content from "./Content.svelte";
 	import Image from "./Image.svelte";
 	import Layout from "./Layout.svelte";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 
 	interface Events {
 		onclick?: (
@@ -34,6 +36,7 @@
 		onclick
 	}: Props = $props();
 	let src = $derived($coverImage);
+	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout {onclick} --layout-width={withFull ? "100%" : "19em"} {mangaId}>

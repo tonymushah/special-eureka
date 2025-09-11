@@ -1,4 +1,11 @@
+use std::{
+    fs::{File, create_dir_all},
+    io::{self, BufWriter, Write},
+    path::Path,
+};
+
 use async_graphql::{Context, Object};
+use bytes::Buf;
 use eureka_mmanager::{
     download::cover::CoverDownloadMessage,
     prelude::{AsyncCancelable, DeleteDataAsyncTrait, GetCoverDownloadManager, TaskManagerAddr},
@@ -16,8 +23,9 @@ use crate::{
 use crate::{
     objects::cover::Cover,
     utils::{
-        download_state::DownloadState, get_mangadex_client_from_graphql_context_with_auth_refresh,
-        get_offline_app_state, get_watches_from_graphql_context, source::SendMultiSourceData,
+        download_state::DownloadState, get_mangadex_client_from_graphql_context,
+        get_mangadex_client_from_graphql_context_with_auth_refresh, get_offline_app_state,
+        get_watches_from_graphql_context, source::SendMultiSourceData,
         traits_utils::MangadexTauriManagerExt,
     },
 };
@@ -97,5 +105,33 @@ impl CoverMutations {
             .cancel()
             .await?;
         Ok(true)
+    }
+    pub async fn save_image(
+        &self,
+        ctx: &Context<'_>,
+        cover_id: Uuid,
+        export_dir: String,
+    ) -> Result<String, crate::error::ErrorWrapper> {
+        let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
+        let (file, bytes) = client
+            .download()
+            .cover()
+            .build()
+            .map_err(mangadex_api_types_rust::error::Error::BuilderError)?
+            .via_cover_id(cover_id)
+            .await?;
+        let bytes = bytes?;
+        create_dir_all(&export_dir)?;
+        let export_path = Path::new(&export_dir).join(file);
+        let mut file = File::create(&export_path)?;
+        {
+            let mut buf_writer = BufWriter::new(&mut file);
+            io::copy(&mut bytes.reader(), &mut buf_writer)?;
+            buf_writer.flush()?;
+        }
+        export_path
+            .to_str()
+            .map(String::from)
+            .ok_or(crate::error::ErrorWrapper::from(crate::Error::PathToStr))
     }
 }

@@ -3,6 +3,8 @@
 	import type { Readable } from "svelte/store";
 	import Skeleton from "@mangadex/componnents/theme/loader/Skeleton.svelte";
 	import Layout from "./Layout.svelte";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Events {
 		onreadClick?: (
@@ -36,6 +38,7 @@
 	}: Props = $props();
 	let isHover = $state(false);
 	let image = $derived($coverImage);
+	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout bind:isHover {mangaId}>

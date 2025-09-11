@@ -10,7 +10,7 @@
 		container: HTMLElement | undefined;
 		selectedMangas: string[];
 		selectedChapters: string[];
-		onEnd?: () => void;
+		onEnd?: (ev?: MouseEvent | TouchEvent) => void;
 		useDialog?: boolean;
 	}
 	let {
@@ -66,11 +66,13 @@
 							pushSelected(element);
 							element.removeAttribute("data-selecto-selected");
 						});
-						openSelectoDialog({
-							titles: selected_mangas,
-							chapters: selected_chapters
-						});
-						onEnd?.();
+						if (useDialog) {
+							openSelectoDialog({
+								titles: selected_mangas,
+								chapters: selected_chapters
+							});
+						}
+						onEnd?.(ev.event ?? undefined);
 					}
 				})
 				.on("move", (ev) => {
@@ -116,10 +118,13 @@
 				.forEach((d) => {
 					d.forEach(pushSelected);
 				});
-			openSelectoDialog({
-				titles: [...selected_mangas],
-				chapters: [...selected_chapters]
-			});
+			if (useDialog) {
+				openSelectoDialog({
+					titles: [...selected_mangas],
+					chapters: [...selected_chapters]
+				});
+			}
+
 			onEnd?.();
 		}
 	}}
@@ -129,6 +134,3 @@
 		}
 	}}
 />
-
-<style lang="scss">
-</style>

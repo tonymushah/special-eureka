@@ -1,4 +1,6 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+
 	interface Events {
 		onclick?: (
 			ev: MouseEvent & {
@@ -17,7 +19,14 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<article {onclick} class="layout manga-element" data-manga-id={mangaId}>
+<article
+	{onclick}
+	class="layout manga-element"
+	data-manga-id={mangaId}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
+>
 	{@render children?.()}
 </article>
 

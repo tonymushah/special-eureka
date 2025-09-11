@@ -6,6 +6,8 @@
 	import Content from "./Content.svelte";
 	import Layout from "./Layout.svelte";
 	import NoIndex from "./NoIndex.svelte";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 
 	type Author = {
 		id: string;
@@ -40,6 +42,7 @@
 		tags: Tag[];
 		contentRating?: ContentRating;
 		authors: Author[];
+		mangaId: string;
 	}
 
 	let {
@@ -53,7 +56,8 @@
 		authors,
 		onauthorClick,
 		onclick,
-		ontagClick
+		ontagClick,
+		mangaId
 	}: Props = $props();
 
 	let isCoverLoading = $state(true);
@@ -69,6 +73,17 @@
 		});
 		img.src = coverImage;
 	});
+	setContextMenuContext(() =>
+		mangaElementContextMenu({
+			id: mangaId,
+			coverArtId: mangaId,
+			tags: tags.map((tag) => ({
+				id: tag.id,
+				name: new Map([["id", tag.name]])
+			})),
+			authors
+		})
+	);
 </script>
 
 <Layout {coverImage}>

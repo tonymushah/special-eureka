@@ -648,6 +648,7 @@ type CoverMutations {
 	download(id: UUID!): DownloadState!
 	remove(id: UUID!): Boolean!
 	cancelDownload(id: UUID!): Boolean!
+	saveImage(coverId: UUID!, exportDir: String!): String!
 }
 
 type CoverQueries {

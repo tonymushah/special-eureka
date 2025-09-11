@@ -4,6 +4,8 @@
 	import Content from "./base2/Content.svelte";
 	import Image from "./base2/Image.svelte";
 	import Layout from "./base2/Layout.svelte";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Events {
 		onclick?: (
@@ -44,6 +46,16 @@
 		onclick,
 		ontagClick
 	}: Props = $props();
+	setContextMenuContext(() =>
+		mangaElementContextMenu({
+			id: mangaId,
+			coverArtId: mangaId,
+			tags: tags.map((tag) => ({
+				id: tag.id,
+				name: new Map([["id", tag.name]])
+			}))
+		})
+	);
 </script>
 
 <Layout {onclick} --max-height="11em" {mangaId}>

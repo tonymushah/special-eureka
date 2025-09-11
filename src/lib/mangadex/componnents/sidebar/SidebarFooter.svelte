@@ -1,34 +1,68 @@
 <script lang="ts">
-	import { graphql } from "@mangadex/gql/exports";
 	import { isLogged, userMe } from "@mangadex/utils/auth";
 	import { getContextClient } from "@urql/svelte";
 	import { onMount } from "svelte";
 	import { UserCheckIcon, UserIcon, UserXIcon } from "svelte-feather-icons";
 	import Menu from "./base/Menu.svelte";
 	import { userMeOnSidebarFooterQuery } from "./footer";
+	import { goto } from "$app/navigation";
+	import { addErrorToast } from "../theme/toast/Toaster.svelte";
+	import { route } from "$lib/ROUTES";
+	import { debounce } from "lodash";
+
 	const client = getContextClient();
 	let initial_user_name: string | undefined = $state(undefined);
 	let isRefreshing = $state(false);
-	async function loadUserMe() {
+
+	const loadUserMe = debounce(async function (): Promise<string> {
 		isRefreshing = true;
-		const me = await client.query(userMeOnSidebarFooterQuery, {}).toPromise();
-		if (me.error) {
-			console.error(me.error);
+		try {
+			const me = await client.query(userMeOnSidebarFooterQuery, {}).toPromise();
+			if (me.error) {
+				throw me.error;
+			}
+			initial_user_name = me.data?.user.me.attributes.username;
+
+			if (me.data == undefined) {
+				throw new Error("No data??");
+			}
+			return me.data.user.me.id;
+		} finally {
+			isRefreshing = false;
 		}
-		initial_user_name = me.data?.user.me.attributes.username;
-		isRefreshing = false;
-	}
+	});
+
 	onMount(async () => {
 		await loadUserMe();
 	});
 
-	let label = $derived($userMe?.name ?? "Login");
+	let label = $derived($userMe?.name ?? "Guest");
 </script>
 
 <Menu
 	{label}
 	onclick={async () => {
-		await loadUserMe();
+		try {
+			const id = await loadUserMe();
+			if (id) {
+				goto(
+					route("/mangadex/user/[id]", {
+						id: id
+					})
+				);
+			}
+		} catch (error) {
+			addErrorToast("Cannot load info", error);
+		}
+	}}
+	oncontextmenu={async (e) => {
+		e.preventDefault();
+		e.stopPropagation();
+		try {
+			await loadUserMe();
+		} catch (error) {
+			addErrorToast("Cannot load info", error);
+		}
 	}}
 >
 	{#snippet icon()}

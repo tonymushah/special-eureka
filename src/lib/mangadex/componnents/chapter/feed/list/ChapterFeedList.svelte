@@ -58,7 +58,7 @@
 			}
 		) => any;
 		oncomments?: (
-			ev: MouseEnvDiv & {
+			ev: Partial<MouseEnvDiv> & {
 				id: string;
 			}
 		) => any;

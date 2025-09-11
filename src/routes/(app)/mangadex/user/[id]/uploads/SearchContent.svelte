@@ -20,6 +20,8 @@
 	} from "./search";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ChapterSortSelector from "@mangadex/componnents/chapter/feed/list/sort/ChapterSortSelector.svelte";
+	import chapterThreadsFromChapterFeedQuery from "@mangadex/utils/threads/feed";
+	import { openUrl } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		userId: Readable<string>;
@@ -98,6 +100,7 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
+	const threads = chapterThreadsFromChapterFeedQuery(query);
 </script>
 
 <div class="result">
@@ -111,6 +114,12 @@
 					id
 				})
 			);
+		}}
+		oncomments={({ id }) => {
+			const url = $threads.get(id);
+			if (url) {
+				openUrl(url);
+			}
 		}}
 	>
 		{#snippet additionalContent()}

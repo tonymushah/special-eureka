@@ -10,43 +10,53 @@
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
 	import { isArray } from "lodash";
+	import { crossfade } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
 	interface Props {
 		list?: MediumMangaListElementProps[] | MediumMangaListElementProps[][];
 	}
 
 	let { list = [] }: Props = $props();
+	let realList = $derived.by(() => {
+		let map = new Map<string, MediumMangaListElementProps>();
+		list.forEach((mangas) => {
+			if (isArray(mangas)) {
+				mangas.forEach((manga) => {
+					map.set(manga.id, manga);
+				});
+			} else {
+				map.set(mangas.id, mangas);
+			}
+		});
+		return map.values().toArray();
+	});
+	const [send, receive] = crossfade({});
 </script>
 
 <section class="medium">
-	{#each list as listItem}
-		{#if isArray(listItem)}
-			{#each listItem as data}
-				<MangaElementBase1
-					{...data}
-					withFull
-					onclick={() => {
-						goto(
-							route("/mangadex/title/[id]", {
-								id: data.id
-							})
-						);
-					}}
-				/>
-			{/each}
-		{:else}
+	{#each realList as data (`medium-manga-element-${data.mangaId}`)}
+		<span
+			animate:flip
+			in:receive={{
+				key: `medium-manga-element-${data.mangaId}`
+			}}
+			out:receive={{
+				key: `medium-manga-element-${data.mangaId}`
+			}}
+		>
 			<MangaElementBase1
-				{...listItem}
+				{...data}
 				withFull
 				onclick={() => {
 					goto(
 						route("/mangadex/title/[id]", {
-							id: listItem.id
+							id: data.id
 						})
 					);
 				}}
-			/>
-		{/if}
+			/></span
+		>
 	{/each}
 </section>
 

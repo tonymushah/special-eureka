@@ -1,4 +1,6 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+
 	interface Events {
 		onclick?: (
 			ev: MouseEvent & {
@@ -22,6 +24,9 @@
 	}}
 	class="layout manga-element"
 	data-manga-id={mangaId}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
 >
 	{@render children?.()}
 </article>

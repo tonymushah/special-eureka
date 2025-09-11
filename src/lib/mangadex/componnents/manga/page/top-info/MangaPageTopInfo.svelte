@@ -24,6 +24,9 @@
 	import TopInfoCover from "./TopInfoCover.svelte";
 	import TopInfoLayout from "./TopInfoLayout.svelte";
 	import TopMangaStats from "./TopMangaStats.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
+	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 
 	type ClickEventHandler<A = {}> = (
 		ev: MouseEvent & {
@@ -122,7 +125,30 @@
 		</div>
 	{/snippet}
 	<div class="content">
-		<section class="top">
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<section
+			class="top"
+			oncontextmenu={registerContextMenuEvent({
+				preventDefault: true,
+				additionalMenus: () => [
+					ContextMenuItemProvider.menuItem({
+						text: "Copy title",
+						action() {
+							writeText(title);
+						}
+					}),
+					ContextMenuItemProvider.menuItem({
+						text: "Copy alt title",
+						action() {
+							if (altTitle) {
+								writeText(altTitle);
+							}
+						},
+						enabled: altTitle != undefined
+					})
+				]
+			})}
+		>
 			<h1>{title}</h1>
 			{#if altTitle}
 				<h2>{altTitle}</h2>

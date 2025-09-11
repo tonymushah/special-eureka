@@ -5,6 +5,8 @@
 	import CoverImage from "./inner/CoverImage.svelte";
 	import Layout from "./inner/Layout.svelte";
 	import LoaderImage from "./inner/LoaderImage.svelte";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 
 	type Group = {
 		id: string;
@@ -77,6 +79,7 @@
 	}: Props = $props();
 
 	let image_ = $derived($coverImage);
+	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout bind:haveBeenRead {mangaId}>

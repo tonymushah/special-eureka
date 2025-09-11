@@ -38,6 +38,7 @@
 		tags: Tag[];
 		contentRating?: ContentRating;
 		authors: Author[];
+		mangaId: string;
 	}
 
 	let {
@@ -51,7 +52,8 @@
 		authors,
 		onauthorClick,
 		onclick,
-		ontagClick
+		ontagClick,
+		mangaId
 	}: Props = $props();
 
 	const image = der(coverImage, (v) => v);
@@ -60,6 +62,7 @@
 
 {#if $image}
 	<MangaPopularElement
+		{mangaId}
 		{onauthorClick}
 		{onclick}
 		{ontagClick}
@@ -74,6 +77,7 @@
 	/>
 {:else}
 	<MangaPopularElementLoader
+		{mangaId}
 		{onauthorClick}
 		{onclick}
 		{ontagClick}

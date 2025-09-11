@@ -1,6 +1,8 @@
 <script lang="ts">
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import Content from "./base5/Content.svelte";
 	import Layout from "./base5/Layout.svelte";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Events {
 		onreadClick?: (
@@ -33,6 +35,7 @@
 		onreadClick
 	}: Props = $props();
 	let isHover = $state(false);
+	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout bind:isHover {mangaId}>

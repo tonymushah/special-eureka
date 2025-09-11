@@ -76,6 +76,7 @@
 		{#each popular_titles as { coverImage, coverImageAlt, title, tags, contentRating, authors, description, id }, index (id)}
 			<swiper-slide>
 				<MangaPopularElement
+					mangaId={id}
 					{index}
 					{coverImage}
 					{coverImageAlt}

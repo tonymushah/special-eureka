@@ -1,4 +1,5 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	import { getTopCoverContextStore } from "./context";
 	interface Props {
 		cover?: import("svelte").Snippet;
@@ -11,7 +12,13 @@
 	let coverImage = $derived($coverImageStore ?? "");
 </script>
 
-<article class="layout-image" style={`background-image: url(${coverImage});`}>
+<article
+	class="layout-image"
+	style={`background-image: url(${coverImage});`}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
+>
 	<div class="layout-color">
 		<div class="layout">
 			<div class="cover">

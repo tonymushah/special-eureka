@@ -12,6 +12,11 @@
 				currentTarget: EventTarget & HTMLAnchorElement;
 			}
 		) => any;
+		oncontextmenu?: (
+			ev: MouseEvent & {
+				currentTarget: EventTarget & HTMLAnchorElement;
+			}
+		) => any;
 	}
 	interface Props extends Events {
 		label: string;
@@ -19,12 +24,12 @@
 		icon?: Snippet;
 		suffixIcon?: Snippet;
 	}
-	let { label, href, icon, suffixIcon, onclick }: Props = $props();
+	let { label, href, icon, suffixIcon, onclick, oncontextmenu }: Props = $props();
 
 	let collapsed = $derived($isOpen);
 </script>
 
-<MenuLink {href} {onclick}>
+<MenuLink {href} {onclick} {oncontextmenu}>
 	<MenuBase {collapsed}>
 		<MenuIcons>
 			{#snippet _icon()}

@@ -98,13 +98,7 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
-	const oncomments = (
-		e: MouseEvent & {
-			currentTarget: HTMLDivElement & EventTarget;
-		} & {
-			id: string;
-		}
-	) => {
+	const oncomments = (e: { id: string }) => {
 		let threadUrl: string | undefined = undefined;
 		for (let index = 0; index < $feed.length; index++) {
 			const { chapters } = $feed[index];

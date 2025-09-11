@@ -38,7 +38,7 @@
 			}
 		) => any;
 		oncomments?: (
-			ev: MouseEnvDiv & {
+			ev: Partial<MouseEnvDiv> & {
 				id: string;
 			}
 		) => any;
@@ -85,6 +85,10 @@
 		removeMutation
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
+	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
 	import { derived } from "svelte/store";
@@ -133,13 +137,25 @@
 			return ($failed || $downloaded) && !$downloading;
 		}
 	);
+	setContextMenuContext(() => {
+		return chapterElementContextMenuItems({
+			id,
+			groups,
+			uploader,
+			openComments: oncomments
+				? () => {
+						oncomments({ id });
+					}
+				: undefined
+		});
+	}, true);
 </script>
 
 <article
 	class="border chapter-element"
-	oncontextmenu={(e) => {
-		e.preventDefault();
-	}}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
 	data-chapter-id={id}
 >
 	<Layout {haveBeenRead} {id}>

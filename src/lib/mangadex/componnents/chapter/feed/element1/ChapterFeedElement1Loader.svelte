@@ -3,6 +3,8 @@
 	import Content from "./inner/Content.svelte";
 	import Layout from "./inner/Layout.svelte";
 	import LoaderImage from "./inner/LoaderImage.svelte";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 
 	type Group = {
 		id: string;
@@ -68,6 +70,7 @@
 		onmangaClick,
 		onmangaKeyClick
 	}: Props = $props();
+	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout bind:haveBeenRead {mangaId}>

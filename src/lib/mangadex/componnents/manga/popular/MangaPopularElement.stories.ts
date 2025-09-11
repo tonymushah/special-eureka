@@ -5,11 +5,12 @@ import MangadexThemeProviderForStory from "@mangadex/componnents/theme/MangadexT
 import { ContentRating } from "@mangadex/gql/graphql";
 import { volume1 } from "@mangadex/test-data/images/uncategorized-1";
 import MangaPopularElement from "./MangaPopularElement.svelte";
+import { v4 } from "uuid";
 
 const meta = {
 	decorators: [() => MangadexThemeProviderForStory],
 	title: "MangaDex/manga/elements/PopularElement",
-	component: MangaPopularElement,
+	component: () => MangaPopularElement,
 	tags: ["autodocs"]
 } satisfies Meta<MangaPopularElement>;
 
@@ -189,6 +190,7 @@ export const Default: Story = {
 		authors: authors.map((a) => ({
 			id: a.id,
 			name: a.attributes.name
-		}))
+		})),
+		mangaId: v4()
 	}
 };

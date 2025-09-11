@@ -1,4 +1,6 @@
 <script lang="ts">
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -42,6 +44,9 @@
 		});
 	}}
 	class="cover-image"
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
 >
 	<img src={coverImage} alt={coverImageAlt} />
 </div>

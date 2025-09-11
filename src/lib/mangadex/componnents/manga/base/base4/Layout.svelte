@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 	interface Events {
 		onclick?: (
 			ev: MouseEvent & {
@@ -15,7 +16,15 @@
 	let { children, mangaId, onclick }: Props = $props();
 </script>
 
-<ButtonBase {onclick} isBase={false} noPadding --button-color={"var(--main-background)"}>
+<ButtonBase
+	{onclick}
+	isBase={false}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
+	noPadding
+	--button-color={"var(--main-background)"}
+>
 	<article class="layout manga-element" data-manga-id={mangaId}>
 		{@render children?.()}
 	</article>

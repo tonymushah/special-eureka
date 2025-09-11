@@ -16,6 +16,10 @@
 	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
+	import userElementContextMenu from "@mangadex/utils/context-menu/user";
+	import { flip } from "svelte/animate";
+	import { crossfade } from "svelte/transition";
 
 	const client = getContextClient();
 	interface Props {
@@ -120,22 +124,33 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
+	const [send, receive] = crossfade({});
 </script>
 
 <div class="result">
-	{#each $users as user}
-		<UserRolesColorProvider roles={user.roles}>
-			<UsersSimpleBase
-				name={user.name}
-				onclick={() => {
-					goto(
-						route("/mangadex/user/[id]", {
-							id: user.id
-						})
-					);
-				}}
-			/>
-		</UserRolesColorProvider>
+	{#each $users as user (user.id)}
+		<span animate:flip in:receive={{ key: user.id }} out:send={{ key: user.id }}>
+			<UserRolesColorProvider roles={user.roles}>
+				<UsersSimpleBase
+					name={user.name}
+					oncontextmenu={registerContextMenuEvent({
+						includeContext: false,
+						additionalMenus() {
+							return userElementContextMenu({ id: user.id, name: user.name });
+						},
+						preventDefault: true,
+						stopPropagation: true
+					})}
+					onclick={() => {
+						goto(
+							route("/mangadex/user/[id]", {
+								id: user.id
+							})
+						);
+					}}
+				/>
+			</UserRolesColorProvider>
+		</span>
 	{/each}
 </div>
 

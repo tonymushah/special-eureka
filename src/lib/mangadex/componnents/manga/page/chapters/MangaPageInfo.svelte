@@ -152,6 +152,7 @@
 			}}
 			oncontextmenu={(e) => {
 				e.preventDefault();
+				e.stopPropagation();
 				writeText(data.id).then(() => {
 					addToast({
 						data: {
@@ -169,5 +170,9 @@
 <style lang="scss">
 	a {
 		color: var(--primary-l2);
+	}
+	a:hover {
+		text-decoration: underline;
+		cursor: pointer;
 	}
 </style>

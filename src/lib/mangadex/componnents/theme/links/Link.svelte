@@ -4,7 +4,10 @@
 		ContextMenuItemProvider
 	} from "@special-eureka/core/commands/contextMenu";
 	import openNewWindow from "@special-eureka/core/commands/openNewWindow";
-	import { getContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
+	import registerContextMenuEvent, {
+		getContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
+	import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { onDestroy } from "svelte";
@@ -22,7 +25,6 @@
 	let { variant = "primary", href, ext_href = undefined, children, onclick }: Props = $props();
 	let primary = $derived(variant == "primary");
 	let base = $derived(variant == "base");
-	let context = getContextMenuContext();
 </script>
 
 <a
@@ -30,45 +32,37 @@
 	{onclick}
 	class:primary
 	class:base
-	oncontextmenu={async (e) => {
-		e.preventDefault();
-		await contextMenu(
-			[
-				...context(),
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true,
+		includeContext: false,
+		additionalMenus() {
+			const items = [
 				ContextMenuItemProvider.menuItem({
 					text: "Open",
-					action: () => {
-						if (onclick) {
-							onclick?.();
-						} else {
-							goto(href);
-						}
+					action() {
+						goto(href);
 					}
 				}),
 				ContextMenuItemProvider.menuItem({
 					text: "Open in a new window",
-					action: () => {
-						try {
-							const href_ = new URL(href);
-							openNewWindow(href_.toString());
-						} catch {
-							const current_url = new URL(location.href);
-							current_url.pathname = href;
-							openNewWindow(current_url.toString());
-						}
+					action() {
+						openNewWindow(currentLocationWithNewPath(href));
 					}
 				}),
 				ContextMenuItemProvider.menuItem({
-					text: "Open External Link",
-					action: () => {
-						if (ext_href) openUrl(ext_href);
-					},
-					enabled: !!ext_href
+					text: "Open external link",
+					enabled: ext_href != undefined,
+					action() {
+						if (ext_href) {
+							openUrl(ext_href);
+						}
+					}
 				})
-			],
-			e
-		);
-	}}
+			];
+
+			return items;
+		}
+	})}
 >
 	{@render children?.()}
 </a>

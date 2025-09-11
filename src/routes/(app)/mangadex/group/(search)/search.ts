@@ -13,6 +13,8 @@ export type ScanlationGroupListItemData = {
 		id: string;
 		name: string;
 	};
+	website?: string,
+	discord?: string
 };
 
 type ScanlationGroupSearchResultConstructorParams = {
@@ -83,7 +85,9 @@ export default async function executeSearchQuery(
 					id: e.id,
 					name: e.attributes.name,
 					members: e.relationships.members.length,
-					leader
+					leader,
+					discord: e.attributes.discord ?? undefined,
+					website: e.attributes.website ?? undefined
 				};
 			})
 		});

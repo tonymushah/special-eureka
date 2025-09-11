@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ButtonBase from "@mangadex/componnents/theme/buttons/base/ButtonBase.svelte";
+	import registerContextMenuEvent from "@special-eureka/core/utils/contextMenuContext";
 
 	interface Events {
 		onclick?: (
@@ -25,6 +26,9 @@
 	--button-color={"var(--accent-l3)"}
 	--button-hover={"var(--accent-l3-hover)"}
 	--button-active={"var(--accent-l-active)"}
+	oncontextmenu={registerContextMenuEvent({
+		preventDefault: true
+	})}
 >
 	<article class="layout manga-element" data-manga-id={mangaId}>
 		{@render children?.()}

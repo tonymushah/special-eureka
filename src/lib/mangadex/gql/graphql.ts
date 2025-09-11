@@ -836,6 +836,7 @@ export type CoverMutations = {
 	download: DownloadState;
 	edit: Cover;
 	remove: Scalars["Boolean"]["output"];
+	saveImage: Scalars["String"]["output"];
 	upload: Cover;
 };
 
@@ -857,6 +858,11 @@ export type CoverMutationsEditArgs = {
 
 export type CoverMutationsRemoveArgs = {
 	id: Scalars["UUID"]["input"];
+};
+
+export type CoverMutationsSaveImageArgs = {
+	coverId: Scalars["UUID"]["input"];
+	exportDir: Scalars["String"]["input"];
 };
 
 export type CoverMutationsUploadArgs = {
@@ -5148,6 +5154,33 @@ export type GroupPageQueryQuery = {
 	};
 };
 
+export type FollowScanlationGroupMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type FollowScanlationGroupMutationMutation = {
+	__typename?: "Mutation";
+	scanlationGroup: { __typename?: "ScanlationGroupMutation"; follow: boolean };
+};
+
+export type UnfollowScanlationGroupMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowScanlationGroupMutationMutation = {
+	__typename?: "Mutation";
+	scanlationGroup: { __typename?: "ScanlationGroupMutation"; unfollow: boolean };
+};
+
+export type IsFollowingScanlationGroupQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type IsFollowingScanlationGroupQueryQuery = {
+	__typename?: "Query";
+	follows: { __typename?: "FollowsQueries"; isFollowingGroup: boolean };
+};
+
 export type ScanlationUploadsFeedQueryVariables = Exact<{
 	group: Scalars["UUID"]["input"];
 	translatedLanguages?: Array<Language> | Language;
@@ -5239,7 +5272,12 @@ export type ScanalationGroupSearchQuery = {
 			data: Array<{
 				__typename?: "ScanlationGroup";
 				id: any;
-				attributes: { __typename?: "ScanlationGroupAttributes"; name: string };
+				attributes: {
+					__typename?: "ScanlationGroupAttributes";
+					name: string;
+					discord?: string | null;
+					website?: any | null;
+				};
 				relationships: {
 					__typename?: "ScanlationGroupRelationships";
 					leader?: {
@@ -5678,6 +5716,15 @@ export type ExportCustomListsToMalMutation = {
 	};
 };
 
+export type DeleteCustomListMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type DeleteCustomListMutationMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; delete: boolean };
+};
+
 export type CustomListChapterFeedQueryVariables = Exact<{
 	feedParam: CustomListMangaFeedParams;
 	mangaParam?: InputMaybe<MangaListParams>;
@@ -5747,6 +5794,63 @@ export type CustomListChapterFeedQuery = {
 				}>;
 			}>;
 		};
+	};
+};
+
+export type FollowCustomListMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type FollowCustomListMutationMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; follow: boolean };
+};
+
+export type UnfollowCustomListMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowCustomListMutationMutation = {
+	__typename?: "Mutation";
+	customList: { __typename?: "CustomListMutations"; unfollow: boolean };
+};
+
+export type IsFollowingCustomListQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type IsFollowingCustomListQueryQuery = {
+	__typename?: "Query";
+	follows: { __typename?: "FollowsQueries"; isFollowingCustomList: boolean };
+};
+
+export type GetCustomListVersion1QueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type GetCustomListVersion1Query = {
+	__typename?: "Query";
+	customList: {
+		__typename?: "CustomListQueries";
+		get: {
+			__typename?: "CustomList";
+			id: any;
+			attributes: { __typename?: "CustomListAttributes"; version: number };
+		};
+	};
+};
+
+export type UpdateCustomListVisibility1MutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+	visibility: CustomListVisibility;
+	version: Scalars["Int"]["input"];
+}>;
+
+export type UpdateCustomListVisibility1Mutation = {
+	__typename?: "Mutation";
+	customList: {
+		__typename?: "CustomListMutations";
+		update: { __typename?: "CustomList"; id: any };
 	};
 };
 
@@ -6089,6 +6193,33 @@ export type GetMangaHihiQuery = {
 	};
 };
 
+export type FollowTitleMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type FollowTitleMutationMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; follow: boolean };
+};
+
+export type UnfollowTitleMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowTitleMutationMutation = {
+	__typename?: "Mutation";
+	manga: { __typename?: "MangaMutations"; unfollow: boolean };
+};
+
+export type IsFollowingTitleQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type IsFollowingTitleQueryQuery = {
+	__typename?: "Query";
+	follows: { __typename?: "FollowsQueries"; isFollowingManga: boolean };
+};
+
 export type MangaStatisticsQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
 }>;
@@ -6385,6 +6516,33 @@ export type UserPageQueryQuery = {
 		__typename?: "ChapterQueries";
 		list: { __typename?: "ChapterResults"; total: number };
 	};
+};
+
+export type FollowUserMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type FollowUserMutationMutation = {
+	__typename?: "Mutation";
+	user: { __typename?: "UserMutations"; follow: boolean };
+};
+
+export type UnfollowUserMutationMutationVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type UnfollowUserMutationMutation = {
+	__typename?: "Mutation";
+	user: { __typename?: "UserMutations"; unfollow: boolean };
+};
+
+export type IsFollowingUserQueryQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type IsFollowingUserQueryQuery = {
+	__typename?: "Query";
+	follows: { __typename?: "FollowsQueries"; isFollowingUser: boolean };
 };
 
 export type UserCustomListsQueryVariables = Exact<{
@@ -14106,6 +14264,159 @@ export const GroupPageQueryDocument = {
 		}
 	]
 } as unknown as DocumentNode<GroupPageQueryQuery, GroupPageQueryQueryVariables>;
+export const FollowScanlationGroupMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followScanlationGroupMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "follow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	FollowScanlationGroupMutationMutation,
+	FollowScanlationGroupMutationMutationVariables
+>;
+export const UnfollowScanlationGroupMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowScanlationGroupMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "scanlationGroup" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnfollowScanlationGroupMutationMutation,
+	UnfollowScanlationGroupMutationMutationVariables
+>;
+export const IsFollowingScanlationGroupQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "isFollowingScanlationGroupQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "isFollowingGroup" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	IsFollowingScanlationGroupQueryQuery,
+	IsFollowingScanlationGroupQueryQueryVariables
+>;
 export const ScanlationUploadsFeedDocument = {
 	kind: "Document",
 	definitions: [
@@ -14675,6 +14986,20 @@ export const ScanalationGroupSearchDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "name"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "discord"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "website"
 																		}
 																	}
 																]
@@ -16852,6 +17177,57 @@ export const ExportCustomListsToMalDocument = {
 	ExportCustomListsToMalMutation,
 	ExportCustomListsToMalMutationVariables
 >;
+export const DeleteCustomListMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "deleteCustomListMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "delete" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	DeleteCustomListMutationMutation,
+	DeleteCustomListMutationMutationVariables
+>;
 export const CustomListChapterFeedDocument = {
 	kind: "Document",
 	definitions: [
@@ -17245,6 +17621,335 @@ export const CustomListChapterFeedDocument = {
 		}
 	]
 } as unknown as DocumentNode<CustomListChapterFeedQuery, CustomListChapterFeedQueryVariables>;
+export const FollowCustomListMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followCustomListMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "follow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	FollowCustomListMutationMutation,
+	FollowCustomListMutationMutationVariables
+>;
+export const UnfollowCustomListMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowCustomListMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UnfollowCustomListMutationMutation,
+	UnfollowCustomListMutationMutationVariables
+>;
+export const IsFollowingCustomListQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "isFollowingCustomListQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "isFollowingCustomList" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	IsFollowingCustomListQueryQuery,
+	IsFollowingCustomListQueryQueryVariables
+>;
+export const GetCustomListVersion1Document = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getCustomListVersion1" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "get" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "private" },
+											value: { kind: "BooleanValue", value: true }
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "attributes" },
+												selectionSet: {
+													kind: "SelectionSet",
+													selections: [
+														{
+															kind: "Field",
+															name: { kind: "Name", value: "version" }
+														}
+													]
+												}
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetCustomListVersion1Query, GetCustomListVersion1QueryVariables>;
+export const UpdateCustomListVisibility1Document = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "updateCustomListVisibility1" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "visibility" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "CustomListVisibility" }
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "version" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Int" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "customList" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "update" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "params" },
+											value: {
+												kind: "ObjectValue",
+												fields: [
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "listId" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "id" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "version" },
+														value: {
+															kind: "Variable",
+															name: { kind: "Name", value: "version" }
+														}
+													},
+													{
+														kind: "ObjectField",
+														name: { kind: "Name", value: "visibility" },
+														value: {
+															kind: "Variable",
+															name: {
+																kind: "Name",
+																value: "visibility"
+															}
+														}
+													}
+												]
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } }
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	UpdateCustomListVisibility1Mutation,
+	UpdateCustomListVisibility1MutationVariables
+>;
 export const RtlSidebarSubDocument = {
 	kind: "Document",
 	definitions: [
@@ -19156,6 +19861,150 @@ export const GetMangaHihiDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetMangaHihiQuery, GetMangaHihiQueryVariables>;
+export const FollowTitleMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followTitleMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "follow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowTitleMutationMutation, FollowTitleMutationMutationVariables>;
+export const UnfollowTitleMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowTitleMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowTitleMutationMutation, UnfollowTitleMutationMutationVariables>;
+export const IsFollowingTitleQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "isFollowingTitleQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "isFollowingManga" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<IsFollowingTitleQueryQuery, IsFollowingTitleQueryQueryVariables>;
 export const MangaStatisticsDocument = {
 	kind: "Document",
 	definitions: [
@@ -20800,6 +21649,150 @@ export const UserPageQueryDocument = {
 		}
 	]
 } as unknown as DocumentNode<UserPageQueryQuery, UserPageQueryQueryVariables>;
+export const FollowUserMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "followUserMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "user" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "follow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<FollowUserMutationMutation, FollowUserMutationMutationVariables>;
+export const UnfollowUserMutationDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "unfollowUserMutation" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "user" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "unfollow" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UnfollowUserMutationMutation, UnfollowUserMutationMutationVariables>;
+export const IsFollowingUserQueryDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "isFollowingUserQuery" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "follows" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "isFollowingUser" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<IsFollowingUserQueryQuery, IsFollowingUserQueryQueryVariables>;
 export const UserCustomListsDocument = {
 	kind: "Document",
 	definitions: [

@@ -11,6 +11,8 @@ const query = graphql(`
 					id
 					attributes {
 						name
+						discord
+						website
 					}
 					relationships {
 						leader {
