@@ -753,6 +753,11 @@ export type ContentProfileInput = {
 	translatedLanguages?: Array<Language>;
 };
 
+export enum ContentProfileWarningMode {
+	Always = "ALWAYS",
+	Never = "NEVER"
+}
+
 export enum ContentRating {
 	Erotica = "EROTICA",
 	Pornographic = "PORNOGRAPHIC",
@@ -3082,14 +3087,17 @@ export type Subscriptions = {
 	watchChapterQuality: DownloadMode;
 	watchChaptersTasksList: Array<Scalars["UUID"]["output"]>;
 	watchClientInfo?: Maybe<ClientInfo>;
+	watchContentProfileBlur: Scalars["Boolean"]["output"];
 	watchContentProfileDefault: ContentProfile;
 	watchContentProfileDefaultName?: Maybe<Scalars["String"]["output"]>;
+	watchContentProfileWarningMode: ContentProfileWarningMode;
 	watchContentProfiles: Array<ContentProfileEntry>;
 	watchCover: CoverAttributes;
 	watchCoverDownloadState: CoverDownloadState;
 	watchCoverTasksList: Array<Scalars["UUID"]["output"]>;
 	watchCustomList: CustomListAttributes;
 	watchDownloadState: DownloadState;
+	watchForcePort443: Scalars["Boolean"]["output"];
 	watchImageFit: ImageFit;
 	watchIsAppMounted: Scalars["Boolean"]["output"];
 	watchIsFollowingCustomList: Scalars["Boolean"]["output"];
@@ -3519,9 +3527,12 @@ export type UserOptionMutations = {
 	setChapterLayout: ChapterLayoutStore;
 	setChapterQuality: DownloadMode;
 	setContentProfile: ContentProfile;
+	setContentProfileBlur: Scalars["Boolean"]["output"];
+	setContentProfileWarningMode: ContentProfileWarningMode;
 	setContentProfiles: Scalars["Int"]["output"];
 	setDefaultContentProfileKey?: Maybe<Scalars["String"]["output"]>;
 	setDefaultThemeProfile?: Maybe<Scalars["String"]["output"]>;
+	setForcePort443: Scalars["Boolean"]["output"];
 	setImageFit: ImageFit;
 	setLongstripImageWidth: Scalars["Float"]["output"];
 	setMangaListStyle: MangaListStyle;
@@ -3568,6 +3579,14 @@ export type UserOptionMutationsSetContentProfileArgs = {
 	profile?: InputMaybe<ContentProfileInput>;
 };
 
+export type UserOptionMutationsSetContentProfileBlurArgs = {
+	blur: Scalars["Boolean"]["input"];
+};
+
+export type UserOptionMutationsSetContentProfileWarningModeArgs = {
+	mode: ContentProfileWarningMode;
+};
+
 export type UserOptionMutationsSetContentProfilesArgs = {
 	entries: Array<ContentProfileEntryInput>;
 };
@@ -3578,6 +3597,10 @@ export type UserOptionMutationsSetDefaultContentProfileKeyArgs = {
 
 export type UserOptionMutationsSetDefaultThemeProfileArgs = {
 	name?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type UserOptionMutationsSetForcePort443Args = {
+	force: Scalars["Boolean"]["input"];
 };
 
 export type UserOptionMutationsSetImageFitArgs = {
@@ -3637,6 +3660,8 @@ export type UserOptionQueries = {
 	__typename?: "UserOptionQueries";
 	getAuthDateTimeLimit?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
 	getChapterLanguages: Array<Language>;
+	getContentProfileBlur: Scalars["Boolean"]["output"];
+	getContentProfileWarningMode: ContentProfileWarningMode;
 	getDefaultContentProfile: ContentProfile;
 	getOfflineConfig: OfflineConfigObject;
 	getPageDirection: Direction;
