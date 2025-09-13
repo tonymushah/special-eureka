@@ -12,6 +12,9 @@
 	let { data, children }: Props = $props();
 	let hasConflict = $derived.by(() => {
 		const conflicts = data.conflicts;
+		if (conflicts == null) {
+			return false;
+		}
 		if (
 			conflicts.contentRating != undefined ||
 			conflicts.originalLanguage != undefined ||

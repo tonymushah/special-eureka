@@ -1,5 +1,6 @@
 import { allTagsQuery } from "@mangadex/gql-docs/allTags";
 import {
+	ContentProfileWarningMode,
 	ContentRating,
 	CoverImageQuality,
 	TagSearchMode,
@@ -17,6 +18,8 @@ import type { LayoutLoad } from "./$types";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
 import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
+import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
+import isInLibrary, { isInLibraryUnlessDropped } from "@mangadex/gql-docs/library/isIn";
 
 export const load: LayoutLoad = async function ({ params }) {
 	const client = await getClient();
@@ -72,7 +75,25 @@ export const load: LayoutLoad = async function ({ params }) {
 				id: t.id,
 				name: t.attributes.name.en
 			}));
-			const conflicts = (() => {
+			const conflicts = await (async () => {
+				const warningMode = await getContentProfileWarningMode(client);
+				switch (warningMode) {
+					case ContentProfileWarningMode.Never:
+						return null;
+						break;
+					case ContentProfileWarningMode.Autl:
+						if (await isInLibrary(id)) {
+							return null;
+						}
+						break;
+					case ContentProfileWarningMode.AutlNd:
+						if (await isInLibraryUnlessDropped(id)) {
+							return null
+						}
+						break;
+					default:
+						break;
+				}
 				const originalLanguage = data.attributes.originalLanguage;
 				const status = data.attributes.status;
 				const publicationDemographic =
@@ -81,7 +102,7 @@ export const load: LayoutLoad = async function ({ params }) {
 						: undefined;
 				const contentRating =
 					data.attributes.contentRating != null ||
-					data.attributes.contentRating != undefined
+						data.attributes.contentRating != undefined
 						? data.attributes.contentRating
 						: ContentRating.Safe;
 				const excludedTags = tags.filter((tag) =>
@@ -96,13 +117,13 @@ export const load: LayoutLoad = async function ({ params }) {
 							$profile.excludedOriginalLanguage.some(
 								(value) => originalLanguage == value
 							) == true) &&
-						$profile.originalLanguages.length != 0 &&
-						$profile.excludedOriginalLanguage.length != 0
+							$profile.originalLanguages.length != 0 &&
+							$profile.excludedOriginalLanguage.length != 0
 							? originalLanguage
 							: undefined,
 					status:
 						$profile.status.some((value) => value == status) == false &&
-						$profile.status.length != 0
+							$profile.status.length != 0
 							? status
 							: undefined,
 					publicationDemographic:
@@ -113,7 +134,7 @@ export const load: LayoutLoad = async function ({ params }) {
 							: undefined,
 					contentRating:
 						$profile.contentRating.some((value) => value == contentRating) == false &&
-						$profile.contentRating.length != 0
+							$profile.contentRating.length != 0
 							? contentRating
 							: undefined
 				};
