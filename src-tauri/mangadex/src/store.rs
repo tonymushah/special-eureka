@@ -12,6 +12,7 @@ use types::{
     },
     structs::{
         content::profiles::{ContentProfileDefaultKey, ContentProfiles},
+        content_blur::ContentProfileBlurStore,
         force_443::ForcePort443Store,
         longstrip_image_width::LongstripImageWidthStore,
         offline_config::OfflineConfigStore,
@@ -75,6 +76,7 @@ get_store_builder! {
     PageLimitStore,
     ChapterLayoutStore,
     ForcePort443Store,
+    ContentProfileBlurStore,
 }
 
 // [x] refactor into a macro!

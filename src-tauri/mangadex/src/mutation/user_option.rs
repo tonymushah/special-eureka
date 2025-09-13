@@ -19,6 +19,7 @@ use crate::{
                     ContentProfile,
                     profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
                 },
+                content_blur::ContentProfileBlurStore,
                 force_443::ForcePort443Store,
                 longstrip_image_width::LongstripImageWidthStore,
                 offline_config::OfflineConfigStore,
@@ -415,6 +416,15 @@ impl UserOptionMutations {
         *store = force;
         app.insert_and_save(&store).await?;
         watches.force_port_443.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_content_profile_blur(&self, ctx: &Context<'_>, blur: bool) -> Result<bool> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ContentProfileBlurStore>().await?;
+        *store = blur;
+        app.insert_and_save(&store).await?;
+        watches.content_profile_blur.send_data(*store)?;
         Ok(*store)
     }
 }

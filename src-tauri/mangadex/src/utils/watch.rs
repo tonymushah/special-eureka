@@ -17,6 +17,7 @@ pub mod chapter_layout;
 pub mod chapter_quality;
 pub mod client_info;
 pub mod content;
+pub mod content_blur;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
@@ -53,6 +54,7 @@ use self::{
     chapter_layout::ChapterLayoutWatch,
     chapter_quality::ChapterQualityWatch,
     content::{ContentProfilesWatch, key::ContentProfileDefaultKeyWatch},
+    content_blur::ContentProfileBlurWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
     download_state::DownloadStateWatch,
@@ -254,4 +256,5 @@ watches_implementation! {
     page_limit => PageLimitWatch,
     chapter_layout => ChapterLayoutWatch,
     force_port_443 => ForcePort443Watch,
+    content_profile_blur => ContentProfileBlurWatch,
 }

@@ -18,6 +18,7 @@ use crate::{
             chapter_layout::ChapterLayoutStore,
             client_info::ClientInfoStore,
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
+            content_blur::ContentProfileBlurStore,
             force_443::ForcePort443Store,
             longstrip_image_width::LongstripImageWidthStore,
             page_limit::PageLimitStore,
@@ -58,6 +59,7 @@ setup_watch! {
     page_limit <= PageLimitStore,
     chapter_layout <= ChapterLayoutStore,
     force_port_443 <= ForcePort443Store,
+    content_profile_blur <= ContentProfileBlurStore,
 }
 
 pub fn init_watches_states<R: Runtime>(
