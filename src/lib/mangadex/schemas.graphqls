@@ -566,6 +566,14 @@ input ContentProfileInput {
 enum ContentProfileWarningMode {
 	ALWAYS
 	NEVER
+	"""
+	Always unless the title is in the library
+	"""
+	AUTL
+	"""
+	Always unless the title is in the library and not dropped
+	"""
+	AUTL_ND
 }
 
 enum ContentRating {
