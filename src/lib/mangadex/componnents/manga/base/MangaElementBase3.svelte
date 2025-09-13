@@ -16,9 +16,10 @@
 		coverImageAlt: string;
 		title: string;
 		mangaId: string;
+		blur?: boolean;
 	}
 
-	let { coverImage, coverImageAlt, title, mangaId, onclick }: Props = $props();
+	let { coverImage, coverImageAlt, title, mangaId, onclick, blur }: Props = $props();
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
 			id: mangaId,
@@ -28,6 +29,6 @@
 </script>
 
 <Layout --element-w="10em" {onclick} --element-h="15em" {mangaId}>
-	<Image {coverImage} {coverImageAlt} />
+	<Image {coverImage} {coverImageAlt} {blur} />
 	<Content {title} />
 </Layout>

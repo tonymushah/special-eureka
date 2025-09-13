@@ -23,6 +23,7 @@
 		title: string;
 		description: string;
 		mangaId: string;
+		blur?: boolean;
 	}
 
 	let {
@@ -32,14 +33,15 @@
 		description,
 		mangaId,
 		onmoreInfoClick,
-		onreadClick
+		onreadClick,
+		blur
 	}: Props = $props();
 	let isHover = $state(false);
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout bind:isHover {mangaId}>
-	<img src={coverImage} alt={coverImageAlt} />
+	<img src={coverImage} alt={coverImageAlt} class:blur />
 	<Content {title} {description} {isHover} {onmoreInfoClick} {onreadClick} />
 </Layout>
 
@@ -56,5 +58,14 @@
 		height: var(--height);
 		object-fit: cover;
 		border-radius: 0.25rem;
+	}
+	img {
+		transition: filter 100ms ease-in-out;
+	}
+	img.blur {
+		filter: blur(10px);
+	}
+	img.blur:hover {
+		filter: blur(5px);
 	}
 </style>

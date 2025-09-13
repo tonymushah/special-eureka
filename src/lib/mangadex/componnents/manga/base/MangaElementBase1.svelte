@@ -21,6 +21,7 @@
 		description: string;
 		withFull?: boolean;
 		mangaId: string;
+		blur?: boolean;
 	}
 
 	let {
@@ -31,12 +32,13 @@
 		description,
 		withFull = false,
 		mangaId,
-		onclick
+		onclick,
+		blur
 	}: Props = $props();
 	setContextMenuContext(() => mangaElementContextMenu({ id: mangaId, coverArtId: mangaId }));
 </script>
 
 <Layout {onclick} --layout-width={withFull ? "100%" : "19em"} {mangaId}>
-	<Image {coverImage} {coverImageAlt} />
+	<Image {coverImage} {coverImageAlt} {blur} />
 	<Content {title} {status} {description} />
 </Layout>
