@@ -86,10 +86,18 @@ type Documents = {
 	"\n\tquery getChapterRelated($mangaId: UUID!, $langs: Language!, $groups: [UUID!]!) {\n\t\tmanga {\n\t\t\taggregate(\n\t\t\t\tparams: { groups: $groups, mangaId: $mangaId, translatedLanguage: [$langs] }\n\t\t\t) {\n\t\t\t\tdefault(isReversed: true) {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChapterRelatedDocument;
 	"\n\tquery chapterPageThread($id: UUID!) {\n\t\tstatistics {\n\t\t\tchapter {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterPageThreadDocument;
 	"\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChapterPageDataDocument;
+	"\n\tmutation setContentProfileBlur($blur: Boolean!) {\n\t\tuserOption {\n\t\t\tsetContentProfileBlur(blur: $blur)\n\t\t}\n\t}\n": typeof types.SetContentProfileBlurDocument;
+	"\n\tsubscription subContentProfileBlur {\n\t\twatchContentProfileBlur\n\t}\n": typeof types.SubContentProfileBlurDocument;
+	"\n\tquery getContentProfileBlur {\n\t\tuserOption {\n\t\t\tgetContentProfileBlur\n\t\t}\n\t}\n": typeof types.GetContentProfileBlurDocument;
+	"\n\tmutation setContentProfileWarningMode($mode: ContentProfileWarningMode!) {\n\t\tuserOption {\n\t\t\tsetContentProfileWarningMode(mode: $mode)\n\t\t}\n\t}\n": typeof types.SetContentProfileWarningModeDocument;
+	"\n\tquery getContentProfileWarningMode {\n\t\tuserOption {\n\t\t\tgetContentProfileWarningMode\n\t\t}\n\t}\n": typeof types.GetContentProfileWarningModeDocument;
+	"\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n": typeof types.SubContentProfileWarningModeDocument;
 	"\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n": typeof types.ListenToMangaTasksIDsDocument;
 	"\n\tsubscription listenToChapterTasksIDs {\n\t\twatchChaptersTasksList\n\t}\n": typeof types.ListenToChapterTasksIDsDocument;
 	"\n\tsubscription listenToCoverTasksIDs {\n\t\twatchCoverTasksList\n\t}\n": typeof types.ListenToCoverTasksIDsDocument;
 	"\n\tmutation exportIdsToTxt($uuids: [UUID!]!, $path: String!) {\n\t\texport {\n\t\t\tuuidsToAsTxt(file: $path, uuids: $uuids)\n\t\t}\n\t}\n": typeof types.ExportIdsToTxtDocument;
+	"\n\tmutation setForcePort443($force: Boolean!) {\n\t\tuserOption {\n\t\t\tsetForcePort443(force: $force)\n\t\t}\n\t}\n": typeof types.SetForcePort443Document;
+	"\n\tsubscription subForce443 {\n\t\twatchForcePort443\n\t}\n": typeof types.SubForce443Document;
 	"\n\tquery groupPageQuery($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tgetUnique(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\twebsite\n\t\t\t\t\ttwitter\n\t\t\t\t\tname\n\t\t\t\t\taltNames\n\t\t\t\t\tircServer\n\t\t\t\t\tircChannel\n\t\t\t\t\tcontactEmail\n\t\t\t\t\tmangaUpdates\n\t\t\t\t\tfocusedLanguages\n\t\t\t\t\tlocked\n\t\t\t\t\tofficial\n\t\t\t\t\tverified\n\t\t\t\t\texLicensed\n\t\t\t\t\tpublishDelay\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tdescription\n\t\t\t\t\tdiscord\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tleader {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tmembers {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { group: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t\tstatistics {\n\t\t\tgroup {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { groups: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GroupPageQueryDocument;
 	"\n\tmutation followScanlationGroupMutation($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n": typeof types.FollowScanlationGroupMutationDocument;
 	"\n\tmutation unfollowScanlationGroupMutation($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tunfollow(id: $id)\n\t\t}\n\t}\n": typeof types.UnfollowScanlationGroupMutationDocument;
@@ -101,6 +109,7 @@ type Documents = {
 	"\n\tmutation exportLibraryToCSV($options: ExportMDLibraryToCSVOptions!) {\n\t\tlibrary {\n\t\t\texportAsCsv(options: $options)\n\t\t}\n\t}\n": typeof types.ExportLibraryToCsvDocument;
 	"\n\tmutation exportLibraryToMyAnimeList($options: MdlibraryToMyAnimeListExportOption!) {\n\t\tlibrary {\n\t\t\texportAsMyAnimeList(options: $options)\n\t\t}\n\t}\n": typeof types.ExportLibraryToMyAnimeListDocument;
 	"\n\tquery currentUserLibraryUnfiltered($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tunfiltered(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserLibraryUnfilteredDocument;
+	"\n\tquery libraryTitleMap($status: ReadingStatus) {\n\t\tmanga {\n\t\t\tgetMangaStatus(status: $status) {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t}\n\t\t}\n\t}\n": typeof types.LibraryTitleMapDocument;
 	"\n\tquery currentUserLibraryOnHold($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tonHold(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserLibraryOnHoldDocument;
 	"\n\tquery currentUserLibraryPlanToRead($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tplanToRead(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserLibraryPlanToReadDocument;
 	"\n\tquery currentUserLibraryReReading($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\treReading(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.CurrentUserLibraryReReadingDocument;
@@ -336,6 +345,18 @@ const documents: Documents = {
 		types.ChapterPageThreadDocument,
 	"\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetChapterPageDataDocument,
+	"\n\tmutation setContentProfileBlur($blur: Boolean!) {\n\t\tuserOption {\n\t\t\tsetContentProfileBlur(blur: $blur)\n\t\t}\n\t}\n":
+		types.SetContentProfileBlurDocument,
+	"\n\tsubscription subContentProfileBlur {\n\t\twatchContentProfileBlur\n\t}\n":
+		types.SubContentProfileBlurDocument,
+	"\n\tquery getContentProfileBlur {\n\t\tuserOption {\n\t\t\tgetContentProfileBlur\n\t\t}\n\t}\n":
+		types.GetContentProfileBlurDocument,
+	"\n\tmutation setContentProfileWarningMode($mode: ContentProfileWarningMode!) {\n\t\tuserOption {\n\t\t\tsetContentProfileWarningMode(mode: $mode)\n\t\t}\n\t}\n":
+		types.SetContentProfileWarningModeDocument,
+	"\n\tquery getContentProfileWarningMode {\n\t\tuserOption {\n\t\t\tgetContentProfileWarningMode\n\t\t}\n\t}\n":
+		types.GetContentProfileWarningModeDocument,
+	"\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n":
+		types.SubContentProfileWarningModeDocument,
 	"\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n":
 		types.ListenToMangaTasksIDsDocument,
 	"\n\tsubscription listenToChapterTasksIDs {\n\t\twatchChaptersTasksList\n\t}\n":
@@ -344,6 +365,9 @@ const documents: Documents = {
 		types.ListenToCoverTasksIDsDocument,
 	"\n\tmutation exportIdsToTxt($uuids: [UUID!]!, $path: String!) {\n\t\texport {\n\t\t\tuuidsToAsTxt(file: $path, uuids: $uuids)\n\t\t}\n\t}\n":
 		types.ExportIdsToTxtDocument,
+	"\n\tmutation setForcePort443($force: Boolean!) {\n\t\tuserOption {\n\t\t\tsetForcePort443(force: $force)\n\t\t}\n\t}\n":
+		types.SetForcePort443Document,
+	"\n\tsubscription subForce443 {\n\t\twatchForcePort443\n\t}\n": types.SubForce443Document,
 	"\n\tquery groupPageQuery($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tgetUnique(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\twebsite\n\t\t\t\t\ttwitter\n\t\t\t\t\tname\n\t\t\t\t\taltNames\n\t\t\t\t\tircServer\n\t\t\t\t\tircChannel\n\t\t\t\t\tcontactEmail\n\t\t\t\t\tmangaUpdates\n\t\t\t\t\tfocusedLanguages\n\t\t\t\t\tlocked\n\t\t\t\t\tofficial\n\t\t\t\t\tverified\n\t\t\t\t\texLicensed\n\t\t\t\t\tpublishDelay\n\t\t\t\t\tcreatedAt\n\t\t\t\t\tdescription\n\t\t\t\t\tdiscord\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tleader {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tmembers {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tmanga {\n\t\t\tlist(params: { group: $id }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t\tstatistics {\n\t\t\tgroup {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tchapter {\n\t\t\tlist(params: { groups: [$id] }) {\n\t\t\t\ttotal\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GroupPageQueryDocument,
 	"\n\tmutation followScanlationGroupMutation($id: UUID!) {\n\t\tscanlationGroup {\n\t\t\tfollow(id: $id)\n\t\t}\n\t}\n":
@@ -366,6 +390,8 @@ const documents: Documents = {
 		types.ExportLibraryToMyAnimeListDocument,
 	"\n\tquery currentUserLibraryUnfiltered($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tunfiltered(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.CurrentUserLibraryUnfilteredDocument,
+	"\n\tquery libraryTitleMap($status: ReadingStatus) {\n\t\tmanga {\n\t\t\tgetMangaStatus(status: $status) {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t}\n\t\t}\n\t}\n":
+		types.LibraryTitleMapDocument,
 	"\n\tquery currentUserLibraryOnHold($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tonHold(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.CurrentUserLibraryOnHoldDocument,
 	"\n\tquery currentUserLibraryPlanToRead($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tplanToRead(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -995,6 +1021,42 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
+	source: "\n\tmutation setContentProfileBlur($blur: Boolean!) {\n\t\tuserOption {\n\t\t\tsetContentProfileBlur(blur: $blur)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation setContentProfileBlur($blur: Boolean!) {\n\t\tuserOption {\n\t\t\tsetContentProfileBlur(blur: $blur)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription subContentProfileBlur {\n\t\twatchContentProfileBlur\n\t}\n"
+): (typeof documents)["\n\tsubscription subContentProfileBlur {\n\t\twatchContentProfileBlur\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getContentProfileBlur {\n\t\tuserOption {\n\t\t\tgetContentProfileBlur\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getContentProfileBlur {\n\t\tuserOption {\n\t\t\tgetContentProfileBlur\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation setContentProfileWarningMode($mode: ContentProfileWarningMode!) {\n\t\tuserOption {\n\t\t\tsetContentProfileWarningMode(mode: $mode)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation setContentProfileWarningMode($mode: ContentProfileWarningMode!) {\n\t\tuserOption {\n\t\t\tsetContentProfileWarningMode(mode: $mode)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery getContentProfileWarningMode {\n\t\tuserOption {\n\t\t\tgetContentProfileWarningMode\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getContentProfileWarningMode {\n\t\tuserOption {\n\t\t\tgetContentProfileWarningMode\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n"
+): (typeof documents)["\n\tsubscription subContentProfileWarningMode {\n\t\twatchContentProfileWarningMode\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
 	source: "\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n"
 ): (typeof documents)["\n\tsubscription listenToMangaTasksIDs {\n\t\twatchMangaTasksList\n\t}\n"];
 /**
@@ -1015,6 +1077,18 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation exportIdsToTxt($uuids: [UUID!]!, $path: String!) {\n\t\texport {\n\t\t\tuuidsToAsTxt(file: $path, uuids: $uuids)\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation exportIdsToTxt($uuids: [UUID!]!, $path: String!) {\n\t\texport {\n\t\t\tuuidsToAsTxt(file: $path, uuids: $uuids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation setForcePort443($force: Boolean!) {\n\t\tuserOption {\n\t\t\tsetForcePort443(force: $force)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation setForcePort443($force: Boolean!) {\n\t\tuserOption {\n\t\t\tsetForcePort443(force: $force)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription subForce443 {\n\t\twatchForcePort443\n\t}\n"
+): (typeof documents)["\n\tsubscription subForce443 {\n\t\twatchForcePort443\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1081,6 +1155,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tquery currentUserLibraryUnfiltered($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tunfiltered(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tquery currentUserLibraryUnfiltered($param: UserLibrarySectionParam) {\n\t\tlibrary {\n\t\t\tunfiltered(param: $param) {\n\t\t\t\tlimit\n\t\t\t\toffset\n\t\t\t\ttotal\n\t\t\t\tdata {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tyear\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tstate\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery libraryTitleMap($status: ReadingStatus) {\n\t\tmanga {\n\t\t\tgetMangaStatus(status: $status) {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery libraryTitleMap($status: ReadingStatus) {\n\t\tmanga {\n\t\t\tgetMangaStatus(status: $status) {\n\t\t\t\tid\n\t\t\t\tstatus\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
