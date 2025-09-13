@@ -11,7 +11,7 @@ use crate::states::last_focused_window::LastFocusedWindow;
 type SetupResult = Result<(), Box<dyn std::error::Error>>;
 
 pub fn setup<R: Runtime>(app: &mut App<R>) -> SetupResult {
-    #[cfg(desktop)]
+    #[cfg(all(desktop, feature = "updater"))]
     app.handle()
         .plugin(tauri_plugin_updater::Builder::new().build())?;
     app.manage(LastFocusedWindow::<R>::default());
