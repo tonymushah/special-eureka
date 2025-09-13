@@ -2,6 +2,8 @@ import { ReadingStatus } from "@mangadex/gql/graphql";
 import getClient from "@mangadex/gql/urql/getClient";
 import type { Client } from "@urql/svelte";
 import { libraryTitleMapQuery } from ".";
+import { createQuery } from "@tanstack/svelte-query";
+import { mangadexQueryClient } from "@mangadex/index";
 
 export async function titleStatusMap(options?: TitleStatusMapOptions): Promise<Map<string, ReadingStatus>> {
 	const gqlClient = options?.client ?? await getClient();
@@ -25,6 +27,32 @@ export default async function isInLibrary(titleId: string, options?: TitleStatus
 		const status = await titleStatus(titleId, options);
 		return status != undefined
 	} catch {
+		return false;
+	}
+}
+
+export const titleStatusMapQuery = createQuery({
+	networkMode: "online",
+	queryKey: ["title", "status", "map", "query"],
+	async queryFn() {
+		return await titleStatusMap()
+	}
+}, mangadexQueryClient);
+
+export function isInLibrarySync(titleId: string, library: Map<string, ReadingStatus>): boolean {
+	const status = library.get(titleId);
+	return status != undefined
+}
+
+export function isInLibraryUnlessDroppedSync(titleId: string, library: Map<string, ReadingStatus>): boolean {
+	const status = library.get(titleId);
+	if (status != undefined) {
+		if (status != ReadingStatus.Dropped) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
 		return false;
 	}
 }
