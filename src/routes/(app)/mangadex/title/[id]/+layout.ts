@@ -1,12 +1,13 @@
+import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
 import { allTagsQuery } from "@mangadex/gql-docs/allTags";
+import isInLibrary, { isInLibraryUnlessDropped } from "@mangadex/gql-docs/library/isIn";
 import {
 	ContentProfileWarningMode,
 	ContentRating,
-	CoverImageQuality,
-	TagSearchMode,
-	type ContentProfile
+	CoverImageQuality
 } from "@mangadex/gql/graphql";
 import getClient from "@mangadex/gql/urql/getClient";
+import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
 import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
@@ -17,9 +18,7 @@ import { queryStore } from "@urql/svelte";
 import type { LayoutLoad } from "./$types";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
-import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
-import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
-import isInLibrary, { isInLibraryUnlessDropped } from "@mangadex/gql-docs/library/isIn";
+import getTitleConflicts from "@mangadex/utils/conflicts";
 
 export const load: LayoutLoad = async function ({ params }) {
 	const client = await getClient();
@@ -59,86 +58,13 @@ export const load: LayoutLoad = async function ({ params }) {
 			});
 		} else if (queryRes.data != undefined) {
 			const data = queryRes.data.manga.get;
-			const $profile = await client
-				.query(defaultProfileQuery, {})
-				.toPromise()
-				.then((res) => {
-					if (res.data) {
-						return res.data.userOption.getDefaultContentProfile;
-					}
-					if (res.error) {
-						throw res.error;
-					}
-					throw new Error("Can't do anything");
-				});
+
 			const tags = data.attributes.tags.map<Tag>((t) => ({
 				id: t.id,
 				name: t.attributes.name.en
 			}));
-			const conflicts = await (async () => {
-				const warningMode = await getContentProfileWarningMode(client);
-				switch (warningMode) {
-					case ContentProfileWarningMode.Never:
-						return null;
-						break;
-					case ContentProfileWarningMode.Autl:
-						if (await isInLibrary(id)) {
-							return null;
-						}
-						break;
-					case ContentProfileWarningMode.AutlNd:
-						if (await isInLibraryUnlessDropped(id)) {
-							return null
-						}
-						break;
-					default:
-						break;
-				}
-				const originalLanguage = data.attributes.originalLanguage;
-				const status = data.attributes.status;
-				const publicationDemographic =
-					data.attributes.publicationDemographic != null
-						? data.attributes.publicationDemographic
-						: undefined;
-				const contentRating =
-					data.attributes.contentRating != null ||
-						data.attributes.contentRating != undefined
-						? data.attributes.contentRating
-						: ContentRating.Safe;
-				const excludedTags = tags.filter((tag) =>
-					$profile.excludedTags.some((t) => t == tag.id)
-				);
+			const conflicts = await getTitleConflicts({ client, title: data, id });
 
-				return {
-					tags: excludedTags,
-					originalLanguage:
-						($profile.originalLanguages.some((value) => originalLanguage == value) ==
-							false ||
-							$profile.excludedOriginalLanguage.some(
-								(value) => originalLanguage == value
-							) == true) &&
-							$profile.originalLanguages.length != 0 &&
-							$profile.excludedOriginalLanguage.length != 0
-							? originalLanguage
-							: undefined,
-					status:
-						$profile.status.some((value) => value == status) == false &&
-							$profile.status.length != 0
-							? status
-							: undefined,
-					publicationDemographic:
-						$profile.publicationDemographic.some(
-							(value) => value == publicationDemographic
-						) == false && $profile.publicationDemographic.length != 0
-							? publicationDemographic
-							: undefined,
-					contentRating:
-						$profile.contentRating.some((value) => value == contentRating) == false &&
-							$profile.contentRating.length != 0
-							? contentRating
-							: undefined
-				};
-			})();
 			return {
 				queryResult: data,
 				layoutData: {

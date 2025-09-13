@@ -5056,7 +5056,20 @@ export type GetChapterPageDataQuery = {
 				manga: {
 					__typename?: "MangaObject";
 					id: any;
-					attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+					attributes: {
+						__typename?: "GraphQLMangaAttributes";
+						title: any;
+						status: MangaStatus;
+						state: MangaState;
+						originalLanguage: Language;
+						contentRating?: ContentRating | null;
+						publicationDemographic?: Demographic | null;
+						tags: Array<{
+							__typename?: "Tag";
+							id: any;
+							attributes: { __typename?: "TagAttributes"; name: any };
+						}>;
+					};
 				};
 				scanlationGroups: Array<{
 					__typename?: "ScanlationGroup";
@@ -13729,6 +13742,82 @@ export const GetChapterPageDataDocument = {
 																					name: {
 																						kind: "Name",
 																						value: "title"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "status"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "state"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "originalLanguage"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "tags"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "id"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "attributes"
+																									},
+																									selectionSet:
+																										{
+																											kind: "SelectionSet",
+																											selections:
+																												[
+																													{
+																														kind: "Field",
+																														name: {
+																															kind: "Name",
+																															value: "name"
+																														}
+																													}
+																												]
+																										}
+																								}
+																							]
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "contentRating"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "publicationDemographic"
 																					}
 																				}
 																			]

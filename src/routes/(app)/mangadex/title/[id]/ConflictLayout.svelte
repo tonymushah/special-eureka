@@ -1,22 +1,21 @@
 <script lang="ts">
-	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
-	import type { LayoutData } from "./$types";
-	import { ArrowLeftIcon } from "svelte-feather-icons";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
-	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-	import MangaStatus from "@mangadex/componnents/manga/page/top-info/MangaStatus.svelte";
-	import { lowerCase, startCase } from "lodash";
 	import ContentRatingTag from "@mangadex/componnents/content-rating/ContentRatingTag.svelte";
-
+	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
+	import MangaStatusComp from "@mangadex/componnents/manga/page/top-info/MangaStatus.svelte";
+	import TagComponnentsFlex from "@mangadex/componnents/tag/TagComponnentsFlex.svelte";
+	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
+	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
+	import type { ContentProfileConflicts } from "@mangadex/utils/conflicts";
+	import { lowerCase, startCase } from "lodash";
+	import { ArrowLeftIcon } from "svelte-feather-icons";
 	interface Props {
 		ingnoreConflict: boolean;
+		conflicts: ContentProfileConflicts;
 	}
 
-	let { conflicts, ingnoreConflict = $bindable() }: Pick<LayoutData, "conflicts"> & Props =
-		$props();
+	let { conflicts, ingnoreConflict = $bindable() }: Props = $props();
 </script>
 
 <div class="error">
@@ -49,7 +48,7 @@
 		{/if}
 		{#if conflicts.status}
 			<section>
-				<MangaStatus status={conflicts.status} />
+				<MangaStatusComp status={conflicts.status} />
 			</section>
 		{/if}
 		{#if conflicts.publicationDemographic}

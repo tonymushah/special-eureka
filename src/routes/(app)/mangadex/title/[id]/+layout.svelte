@@ -4,33 +4,18 @@
 	import ConflictLayout from "./ConflictLayout.svelte";
 	import NoConflictLayout from "./NoConflictLayout.svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { hasConflicts } from "@mangadex/utils/conflicts";
 
 	interface Props {
 		data: LayoutData;
 		children?: Snippet;
 	}
 	let { data, children }: Props = $props();
-	let hasConflict = $derived.by(() => {
-		const conflicts = data.conflicts;
-		if (conflicts == null) {
-			return false;
-		}
-		if (
-			conflicts.contentRating != undefined ||
-			conflicts.originalLanguage != undefined ||
-			conflicts.publicationDemographic != undefined ||
-			conflicts.status != undefined ||
-			conflicts.tags.length != 0
-		) {
-			return true;
-		} else {
-			return false;
-		}
-	});
+	let hasConflict = $derived.by(() => hasConflicts(data.conflicts));
 	let ingnoreConflict = $state(false);
 </script>
 
-{#if hasConflict && !ingnoreConflict}
+{#if hasConflict && !ingnoreConflict && data.conflicts}
 	<AppTitle title="Title {data.layoutData.id} - MangaDex" />
 	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
 {:else}
