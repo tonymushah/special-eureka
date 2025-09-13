@@ -10,6 +10,9 @@ use crate::{
             enums::{
                 chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
                 chapter_quality::{ChapterQualityStore, DownloadMode},
+                content_profile_warning::{
+                    ContentProfileWarningMode, ContentProfileWarningModeStore,
+                },
                 image_fit::{ImageFit, ImageFitStore},
                 pagination_style::{PaginationStyle, PaginationStyleStore},
             },
@@ -425,6 +428,19 @@ impl UserOptionMutations {
         *store = blur;
         app.insert_and_save(&store).await?;
         watches.content_profile_blur.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_content_profile_warning_mode(
+        &self,
+        ctx: &Context<'_>,
+        mode: ContentProfileWarningMode,
+    ) -> crate::Result<ContentProfileWarningMode, crate::error::ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ContentProfileWarningModeStore>().await?;
+        *store = mode;
+        app.insert_and_save(&store).await?;
+        watches.content_profile_warning.send_data(*store)?;
         Ok(*store)
     }
 }

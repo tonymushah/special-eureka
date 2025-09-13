@@ -5,9 +5,14 @@ use crate::{
     objects::offline_config::OfflineConfigObject,
     store::{
         TauriManagerMangadexStoreExtractor,
-        types::structs::{
-            content::ContentProfile, content_blur::ContentProfileBlurStore,
-            refresh_token::RefreshTokenStore,
+        types::{
+            enums::content_profile_warning::{
+                ContentProfileWarningMode, ContentProfileWarningModeStore,
+            },
+            structs::{
+                content::ContentProfile, content_blur::ContentProfileBlurStore,
+                refresh_token::RefreshTokenStore,
+            },
         },
     },
     subscription::user_option::UserOptionSubscriptions,
@@ -96,6 +101,16 @@ impl UserOptionQueries {
         let store = app.extract::<ContentProfileBlurStore>().await?;
         let watches = app.get_watches()?;
         let _ = watches.content_profile_blur.send(*store);
+        Ok(*store)
+    }
+    pub async fn get_content_profile_warning_mode(
+        &self,
+        ctx: &Context<'_>,
+    ) -> crate::Result<ContentProfileWarningMode, crate::error::ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let store = app.extract::<ContentProfileWarningModeStore>().await?;
+        let watches = app.get_watches()?;
+        let _ = watches.content_profile_warning.send(*store);
         Ok(*store)
     }
 }

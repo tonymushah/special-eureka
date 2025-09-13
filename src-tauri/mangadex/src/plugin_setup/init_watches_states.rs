@@ -7,6 +7,7 @@ use crate::{
         enums::{
             chapter_feed_style::ChapterFeedStyleStore,
             chapter_quality::ChapterQualityStore,
+            content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
             manga_list_style::MangaListStyleStore,
@@ -60,6 +61,7 @@ setup_watch! {
     chapter_layout <= ChapterLayoutStore,
     force_port_443 <= ForcePort443Store,
     content_profile_blur <= ContentProfileBlurStore,
+    content_profile_warning <= ContentProfileWarningModeStore,
 }
 
 pub fn init_watches_states<R: Runtime>(

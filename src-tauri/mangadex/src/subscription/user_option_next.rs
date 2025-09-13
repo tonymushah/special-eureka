@@ -2,8 +2,12 @@ use async_graphql::{Context, Subscription};
 use futures_util::Stream;
 
 use crate::{
+    store::types::enums::content_profile_warning::ContentProfileWarningMode,
     subscription::utils::WatchSubscriptionStream,
-    utils::watch::{content_blur::ContentProfileBlurWatch, force_443::ForcePort443Watch},
+    utils::watch::{
+        content_blur::ContentProfileBlurWatch,
+        content_profile_warning::ContentProfileWarningModeWatch, force_443::ForcePort443Watch,
+    },
 };
 
 #[derive(Debug, Default, Clone, Copy)]
@@ -27,6 +31,19 @@ impl UserOptionNextSubscriptions {
     ) -> crate::Result<impl Stream<Item = bool> + 'ctx, crate::error::ErrorWrapper> {
         WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
             ContentProfileBlurWatch,
+            tauri::Wry,
+        >(ctx)
+        .map_err(crate::error::ErrorWrapper::from)
+    }
+    pub async fn watch_content_profile_warning_mode<'ctx>(
+        &'ctx self,
+        ctx: &'ctx Context<'ctx>,
+    ) -> crate::Result<
+        impl Stream<Item = ContentProfileWarningMode> + 'ctx,
+        crate::error::ErrorWrapper,
+    > {
+        WatchSubscriptionStream::from_async_graphql_context_watch_as_ref::<
+            ContentProfileWarningModeWatch,
             tauri::Wry,
         >(ctx)
         .map_err(crate::error::ErrorWrapper::from)

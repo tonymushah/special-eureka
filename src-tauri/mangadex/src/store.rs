@@ -26,6 +26,7 @@ use self::{
     types::{
         DefaulStore,
         enums::{
+            content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             manga_list_style::MangaListStyleStore,
             reading_mode::ReadingModeStore,
@@ -77,6 +78,7 @@ get_store_builder! {
     ChapterLayoutStore,
     ForcePort443Store,
     ContentProfileBlurStore,
+    ContentProfileWarningModeStore,
 }
 
 // [x] refactor into a macro!
