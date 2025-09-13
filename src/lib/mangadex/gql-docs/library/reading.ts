@@ -23,6 +23,7 @@ const libraryReadingQuery = graphql(`
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {

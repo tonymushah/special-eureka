@@ -5,22 +5,63 @@
 
 	export type MangaListContentItemProps = LongMangaListItemProps &
 		CoverMangaListItemProps &
-		MediumMangaListElementProps;
+		MediumMangaListElementProps & {
+			publicationDemographic?: Demographic;
+		};
 </script>
 
 <script lang="ts">
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
-	import { MangaListStyle } from "@mangadex/gql/graphql";
+	import { Demographic, MangaListStyle } from "@mangadex/gql/graphql";
 	import { getMangaListStyleContext } from "./contexts/style";
 	import CoverMangaList from "./cover/CoverMangaList.svelte";
 	import LongMangaList from "./long/LongMangaList.svelte";
 	import MediumMangaList from "./medium/MediumMangaList.svelte";
+	import contentProfileWarningMode from "@mangadex/stores/contentProfileWarningMode";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import { titleStatusMapQuery } from "@mangadex/gql-docs/library/isIn";
+	import { isArray } from "lodash";
+	import contentProfileBlur from "@mangadex/stores/contentProfileBlur";
+	import { updateTitleBlur } from "@mangadex/utils/conflicts/mangaProps";
 
 	interface Props {
 		list?: MangaListContentItemProps[] | MangaListContentItemProps[][];
 	}
 
-	let { list }: Props = $props();
+	let { list: propsList }: Props = $props();
+	let list = $derived.by(() => {
+		if ($contentProfileBlur) {
+			let toRet: Map<string, MangaListContentItemProps> = new Map();
+			propsList?.map((maybe_obj) => {
+				if (isArray(maybe_obj)) {
+					maybe_obj.forEach((title) => {
+						toRet.set(
+							title.id,
+							updateTitleBlur({
+								title,
+								warningMode: $contentProfileWarningMode,
+								profile: $defaultContentProfile,
+								library: $titleStatusMapQuery.data ?? new Map()
+							})
+						);
+					});
+				} else {
+					toRet.set(
+						maybe_obj.id,
+						updateTitleBlur({
+							title: maybe_obj,
+							warningMode: $contentProfileWarningMode,
+							profile: $defaultContentProfile,
+							library: $titleStatusMapQuery.data ?? new Map()
+						})
+					);
+				}
+			});
+			return toRet.values().toArray();
+		} else {
+			return propsList;
+		}
+	});
 	const style = getMangaListStyleContext();
 	let container: HTMLElement | undefined = $state();
 	let selectedChapters: string[] = $state([]);

@@ -15,27 +15,7 @@ export type ContentProfileConflicts = {
 
 type GetTitleConflictsParams = {
 	client: Client;
-	title: {
-		__typename?: "MangaObject";
-		id: any;
-		attributes: {
-			__typename?: "GraphQLMangaAttributes";
-			title: any;
-			status: MangaStatus;
-			state: MangaState;
-			originalLanguage: Language;
-			contentRating?: ContentRating | null;
-			publicationDemographic?: Demographic | null;
-			tags: Array<{
-				__typename?: "Tag";
-				id: any;
-				attributes: {
-					__typename?: "TagAttributes";
-					name: any;
-				};
-			}>;
-		};
-	};
+	title: MaybeConflictedTitle;
 	id: string;
 };
 
@@ -130,28 +110,30 @@ export function hasConflicts(conflicts: ContentProfileConflicts | null): boolean
 	}
 }
 
-type GetTitleConflictsSyncParams = {
-	title: {
-		__typename?: "MangaObject";
-		id: any;
-		attributes: {
-			__typename?: "GraphQLMangaAttributes";
-			title: any;
-			status: MangaStatus;
-			state: MangaState;
-			originalLanguage: Language;
-			contentRating?: ContentRating | null;
-			publicationDemographic?: Demographic | null;
-			tags: Array<{
-				__typename?: "Tag";
-				id: any;
-				attributes: {
-					__typename?: "TagAttributes";
-					name: any;
-				};
-			}>;
-		};
+export type MaybeConflictedTitle = {
+	__typename?: "MangaObject";
+	id: any;
+	attributes: {
+		__typename?: "GraphQLMangaAttributes";
+		title: any;
+		status: MangaStatus;
+		state: MangaState;
+		originalLanguage: Language;
+		contentRating?: ContentRating | null;
+		publicationDemographic?: Demographic | null;
+		tags: Array<{
+			__typename?: "Tag";
+			id: any;
+			attributes: {
+				__typename?: "TagAttributes";
+				name: any;
+			};
+		}>;
 	};
+};
+
+type GetTitleConflictsSyncParams = {
+	title: MaybeConflictedTitle;
 	library: Map<string, ReadingStatus>,
 	profile: ContentProfile,
 	warningMode: ContentProfileWarningMode

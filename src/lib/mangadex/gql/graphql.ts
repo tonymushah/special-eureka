@@ -5424,6 +5424,7 @@ export type CurrentUserLibraryCompletedQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5472,6 +5473,7 @@ export type CurrentUserLibraryDroppedQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5538,6 +5540,7 @@ export type CurrentUserLibraryUnfilteredQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5602,6 +5605,7 @@ export type CurrentUserLibraryOnHoldQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5650,6 +5654,7 @@ export type CurrentUserLibraryPlanToReadQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5698,6 +5703,7 @@ export type CurrentUserLibraryReReadingQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5746,6 +5752,7 @@ export type CurrentUserLibraryReadingQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -6488,6 +6495,7 @@ export type RecentlyAddedPageQueryQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -6537,6 +6545,7 @@ export type DefaultMangaSearchQueryQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -6586,6 +6595,7 @@ export type OfflineMangaSearchQueryQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -15712,6 +15722,13 @@ export const CurrentUserLibraryCompletedDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -15950,6 +15967,13 @@ export const CurrentUserLibraryDroppedDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -16295,6 +16319,13 @@ export const CurrentUserLibraryUnfilteredDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -16589,6 +16620,13 @@ export const CurrentUserLibraryOnHoldDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -16824,6 +16862,13 @@ export const CurrentUserLibraryPlanToReadDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -17064,6 +17109,13 @@ export const CurrentUserLibraryReReadingDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -17302,6 +17354,13 @@ export const CurrentUserLibraryReadingDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -21376,6 +21435,13 @@ export const RecentlyAddedPageQueryDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -21634,6 +21700,13 @@ export const DefaultMangaSearchQueryDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -21891,6 +21964,13 @@ export const OfflineMangaSearchQueryDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
