@@ -42,13 +42,13 @@
 			when a title matches your global filters, unless the title is in your library and does not
 			have the dropped status.
 		</li>
-		<li>
-			<i
-				>Tony Mushah: I just copy-pasted what is said on MangaDex Settings page but it works
-				in the same way though.</i
-			>
-		</li>
 	</ul>
+	<p>
+		<i
+			>Tony Mushah: I just copy-pasted what is said on MangaDex Settings page but it works in
+			the same way though.</i
+		>
+	</p>
 </section>
 
 <style lang="scss">
