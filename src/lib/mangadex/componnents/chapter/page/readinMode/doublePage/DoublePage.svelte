@@ -25,7 +25,7 @@
 		[images, currentPageIndex, readingDirection],
 		([$imgs, $index, $direction]) => {
 			const doublePageMaybe = $imgs.getDoublePageState($index);
-			if (isArray(doublePageMaybe) && $readingDirection == Direction.Rtl) {
+			if (isArray(doublePageMaybe) && $direction == Direction.Rtl) {
 				return [doublePageMaybe[1], doublePageMaybe[0]] satisfies DoublePageState;
 			} else {
 				return doublePageMaybe satisfies DoublePageState;

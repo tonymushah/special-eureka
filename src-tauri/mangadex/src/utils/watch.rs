@@ -17,9 +17,12 @@ pub mod chapter_layout;
 pub mod chapter_quality;
 pub mod client_info;
 pub mod content;
+pub mod content_blur;
+pub mod content_profile_warning;
 pub mod cover;
 pub mod custom_list;
 pub mod download_state;
+pub mod force_443;
 pub mod image_fit;
 pub mod is_appstate_mounted;
 pub mod is_following;
@@ -52,9 +55,12 @@ use self::{
     chapter_layout::ChapterLayoutWatch,
     chapter_quality::ChapterQualityWatch,
     content::{ContentProfilesWatch, key::ContentProfileDefaultKeyWatch},
+    content_blur::ContentProfileBlurWatch,
+    content_profile_warning::ContentProfileWarningModeWatch,
     cover::CoverWatch,
     custom_list::CustomListWatch,
     download_state::DownloadStateWatch,
+    force_443::ForcePort443Watch,
     is_appstate_mounted::IsAppStateMountedWatch,
     is_following::IsFollowingWatch,
     is_logged::IsLoggedWatch,
@@ -251,4 +257,7 @@ watches_implementation! {
     chapter_quality => ChapterQualityWatch,
     page_limit => PageLimitWatch,
     chapter_layout => ChapterLayoutWatch,
+    force_port_443 => ForcePort443Watch,
+    content_profile_blur => ContentProfileBlurWatch,
+    content_profile_warning => ContentProfileWarningModeWatch,
 }

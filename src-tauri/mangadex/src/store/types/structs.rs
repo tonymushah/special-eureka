@@ -2,6 +2,8 @@ pub mod chapter_language;
 pub mod chapter_layout;
 pub mod client_info;
 pub mod content;
+pub mod content_blur;
+pub mod force_443;
 pub mod longstrip_image_width;
 pub mod offline_config;
 pub mod page_limit;

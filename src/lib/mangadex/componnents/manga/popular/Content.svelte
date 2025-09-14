@@ -88,7 +88,7 @@
 	</div>
 	<div class="authors">
 		{#if authors}
-			{#each authors as { id, name }}
+			{#each authors as { id, name } (id)}
 				<AuthorLink
 					{id}
 					{name}
@@ -147,5 +147,7 @@
 	.authors {
 		display: flex;
 		gap: 0.5rem;
+		flex-wrap: wrap;
+		z-index: 1;
 	}
 </style>

@@ -12,6 +12,8 @@ use types::{
     },
     structs::{
         content::profiles::{ContentProfileDefaultKey, ContentProfiles},
+        content_blur::ContentProfileBlurStore,
+        force_443::ForcePort443Store,
         longstrip_image_width::LongstripImageWidthStore,
         offline_config::OfflineConfigStore,
         theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
@@ -24,6 +26,7 @@ use self::{
     types::{
         DefaulStore,
         enums::{
+            content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             manga_list_style::MangaListStyleStore,
             reading_mode::ReadingModeStore,
@@ -73,6 +76,9 @@ get_store_builder! {
     ChapterQualityStore,
     PageLimitStore,
     ChapterLayoutStore,
+    ForcePort443Store,
+    ContentProfileBlurStore,
+    ContentProfileWarningModeStore,
 }
 
 // [x] refactor into a macro!

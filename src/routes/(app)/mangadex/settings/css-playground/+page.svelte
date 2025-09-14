@@ -3,10 +3,8 @@
 	import MakeANewList from "@mangadex/componnents/manga/add-to-list/MakeANewList.svelte";
 	import MangaDexTabs from "@mangadex/componnents/theme/tabs/MangaDexTabs.svelte";
 	import ToastForStories from "@mangadex/componnents/theme/toast/ToastForStories.svelte";
-	import { melt } from "@melt-ui/svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
-	import { cubicInOut } from "svelte/easing";
-	import { crossfade, fade, slide } from "svelte/transition";
+	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
 	const triggers = [
 		{

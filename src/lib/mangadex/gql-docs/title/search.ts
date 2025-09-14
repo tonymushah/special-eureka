@@ -23,6 +23,7 @@ export const defaultQuery = graphql(`
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {
@@ -62,6 +63,7 @@ export const offlineQuery = graphql(`
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {

@@ -22,6 +22,7 @@ pub mod tag;
 pub mod upload;
 pub mod user;
 pub mod user_option;
+pub mod user_option_next;
 pub mod utils;
 
 use async_graphql::MergedSubscription;
@@ -31,4 +32,5 @@ pub struct Subscriptions(
     legacy::LegacySubscriptions,
     chapter_layout::ChapterLayoutSubscription,
     chapter_pages::ChapterPagesSubscription,
+    user_option_next::UserOptionNextSubscriptions,
 );

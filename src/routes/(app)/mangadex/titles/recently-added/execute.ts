@@ -110,7 +110,8 @@ export default async function executeSearchQuery(
 								"en"
 							) ?? ""
 					})),
-					language: v.attributes.originalLanguage
+					language: v.attributes.originalLanguage,
+					publicationDemographic: v.attributes.publicationDemographic ?? undefined
 				};
 			}),
 			offset: data.offset,

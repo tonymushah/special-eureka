@@ -38,7 +38,13 @@ use url::Url;
 use uuid::Uuid;
 
 use crate::{
-    app_state::inner::AppStateInner, store::types::enums::chapter_quality::DownloadMode as Mode,
+    app_state::inner::AppStateInner,
+    store::{
+        TauriManagerMangadexStoreExtractor,
+        types::{
+            enums::chapter_quality::DownloadMode as Mode, structs::force_443::ForcePort443Store,
+        },
+    },
     utils::traits_utils::MangadexTauriManagerExt,
 };
 
@@ -258,7 +264,7 @@ impl<R: Runtime> SpawnHandle<R> {
             }
         }
     }
-    async fn get_offline_to_use_pages(&self) -> Result<Vec<(Url, PathBuf)>, FetchingError> {
+    async fn get_offline_to_use_pages(&self) -> Result<(Vec<(Url, PathBuf)>, Mode), FetchingError> {
         let d = self.app_handle.get_offline_app_state()?;
         let read = d.read().await;
         let state = read
@@ -323,12 +329,24 @@ impl<R: Runtime> SpawnHandle<R> {
             return Err(FetchingError::ChapterPagesDataNotFound);
         }
 
-        let to_use = match self.mode {
-            Mode::Normal => data,
-            Mode::DataSaver => data_saver,
+        let (to_use, to_use_mode) = match self.mode {
+            Mode::Normal => {
+                if !data.is_empty() {
+                    (data, Mode::Normal)
+                } else {
+                    (data_saver, Mode::DataSaver)
+                }
+            }
+            Mode::DataSaver => {
+                if !data_saver.is_empty() {
+                    (data_saver, Mode::DataSaver)
+                } else {
+                    (data, Mode::Normal)
+                }
+            }
         };
         let to_use = sort::sort_couple(to_use).map_err(crate::Error::from)?;
-        Ok(to_use)
+        Ok((to_use, to_use_mode))
     }
     async fn handle_offline_pages(
         &self,
@@ -337,13 +355,14 @@ impl<R: Runtime> SpawnHandle<R> {
         url: Url,
         path: PathBuf,
         to_use_len: u32,
+        mode: Mode,
     ) {
         let page = ChapterPage {
             index,
             pages: to_use_len,
             url,
             size: async {
-                let mut file = match self.mode {
+                let mut file = match mode {
                     Mode::DataSaver => state
                         .get_chapter_image_data_saver(self.chapter_id, path.clone())
                         .await
@@ -372,7 +391,7 @@ impl<R: Runtime> SpawnHandle<R> {
         }
     }
     async fn start_caching_offline(&self) -> Result<(), FetchingError> {
-        let to_use = self.get_offline_to_use_pages().await?;
+        let (to_use, mode) = self.get_offline_to_use_pages().await?;
         let to_use_len = to_use.len();
 
         let d = self.app_handle.get_offline_app_state()?;
@@ -382,7 +401,7 @@ impl<R: Runtime> SpawnHandle<R> {
             .ok_or(FetchingError::OfflineAppStateNotLoaded)?;
 
         for (index, (url, path)) in to_use.into_iter().enumerate() {
-            self.handle_offline_pages(state, index as u32, url, path, to_use_len as u32)
+            self.handle_offline_pages(state, index as u32, url, path, to_use_len as u32, mode)
                 .await;
         }
         Ok(())
@@ -499,6 +518,13 @@ impl<R: Runtime> SpawnHandle<R> {
             .server()
             .id(self.chapter_id)
             .get()
+            .force_port_443(
+                *self
+                    .app_handle
+                    .extract::<ForcePort443Store>()
+                    .await
+                    .unwrap_or_default(),
+            )
             .send()
             .await
             .map_err(crate::Error::from)?;
@@ -518,7 +544,7 @@ impl<R: Runtime> SpawnHandle<R> {
     }
     async fn refetch_page_offline(&self, page: u32) -> Result<(), FetchingError> {
         log::debug!("refetch offline");
-        let to_use = self.get_offline_to_use_pages().await?;
+        let (to_use, mode) = self.get_offline_to_use_pages().await?;
         let to_use_len = to_use.len();
 
         let d = self.app_handle.get_offline_app_state()?;
@@ -527,7 +553,7 @@ impl<R: Runtime> SpawnHandle<R> {
             .as_ref()
             .ok_or(FetchingError::OfflineAppStateNotLoaded)?;
         if let Some((page, (url, path))) = to_use.into_iter().enumerate().nth(page as usize) {
-            self.handle_offline_pages(state, page as u32, url, path, to_use_len as _)
+            self.handle_offline_pages(state, page as u32, url, path, to_use_len as _, mode)
                 .await;
         }
         Ok(())

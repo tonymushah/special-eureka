@@ -10,6 +10,9 @@ use crate::{
             enums::{
                 chapter_feed_style::{ChapterFeedStyle, ChapterFeedStyleStore},
                 chapter_quality::{ChapterQualityStore, DownloadMode},
+                content_profile_warning::{
+                    ContentProfileWarningMode, ContentProfileWarningModeStore,
+                },
                 image_fit::{ImageFit, ImageFitStore},
                 pagination_style::{PaginationStyle, PaginationStyleStore},
             },
@@ -19,6 +22,8 @@ use crate::{
                     ContentProfile,
                     profiles::{ContentProfileDefaultKey, ContentProfileEntry, ContentProfiles},
                 },
+                content_blur::ContentProfileBlurStore,
+                force_443::ForcePort443Store,
                 longstrip_image_width::LongstripImageWidthStore,
                 offline_config::OfflineConfigStore,
                 page_limit::{PAGE_LIMIT_DEFAULT, PageLimitStore},
@@ -406,5 +411,36 @@ impl UserOptionMutations {
         app.insert_and_save(&store).await?;
         watches.chapter_layout.send_data(store)?;
         Ok(store)
+    }
+    pub async fn set_force_port_443(&self, ctx: &Context<'_>, force: bool) -> Result<bool> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ForcePort443Store>().await?;
+        *store = force;
+        app.insert_and_save(&store).await?;
+        watches.force_port_443.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_content_profile_blur(&self, ctx: &Context<'_>, blur: bool) -> Result<bool> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ContentProfileBlurStore>().await?;
+        *store = blur;
+        app.insert_and_save(&store).await?;
+        watches.content_profile_blur.send_data(*store)?;
+        Ok(*store)
+    }
+    pub async fn set_content_profile_warning_mode(
+        &self,
+        ctx: &Context<'_>,
+        mode: ContentProfileWarningMode,
+    ) -> crate::Result<ContentProfileWarningMode, crate::error::ErrorWrapper> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+        let mut store = app.extract::<ContentProfileWarningModeStore>().await?;
+        *store = mode;
+        app.insert_and_save(&store).await?;
+        watches.content_profile_warning.send_data(*store)?;
+        Ok(*store)
     }
 }

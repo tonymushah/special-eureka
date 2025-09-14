@@ -23,6 +23,7 @@ const libraryOnHoldQuery = graphql(`
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {

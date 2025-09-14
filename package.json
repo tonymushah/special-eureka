@@ -22,7 +22,8 @@
     "cargo:clippy": "cargo clippy",
     "cargo:build": "cargo build",
     "storybook:dev": "storybook dev -p 9305 --no-open",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+	"build:no-bundle": "pnpm vite:build && cargo build -r --no-default-features -F custom-protocol"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.1",

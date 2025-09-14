@@ -18,9 +18,10 @@
 		coverImageAlt: string;
 		title: string;
 		mangaId: string;
+		blur?: boolean;
 	}
 
-	let { coverImage, coverImageAlt, title, mangaId, onclick }: Props = $props();
+	let { coverImage, coverImageAlt, title, mangaId, onclick, blur }: Props = $props();
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
 			id: mangaId,
@@ -31,7 +32,7 @@
 
 <Layout --element-w="10em" --element-h="15em" {onclick} {mangaId}>
 	{#if $coverImage}
-		<Image coverImage={$coverImage} {coverImageAlt} />
+		<Image coverImage={$coverImage} {coverImageAlt} {blur} />
 	{:else}
 		<Skeleton width={"var(--element-w)"} height={"var(--element-h)"} />
 	{/if}

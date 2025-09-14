@@ -41,7 +41,7 @@
 			in:receive={{
 				key: `medium-manga-element-${data.mangaId}`
 			}}
-			out:receive={{
+			out:send={{
 				key: `medium-manga-element-${data.mangaId}`
 			}}
 		>

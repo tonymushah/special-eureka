@@ -37,3 +37,9 @@ pub const CHAPTERS_QUALITY: &str = "chapters_quality";
 pub const PAGE_LIMIT: &str = "page_limit";
 
 pub const CHAPTER_LAYOUT: &str = "chapter_layout";
+
+pub const FORCE_443: &str = "force_443";
+
+pub const CONTENT_PROFILE_WARNING_MODE: &str = "content_profile_warning_mode";
+
+pub const CONTENT_PROFILE_BLUR: &str = "content_profile_blur";

@@ -13,7 +13,6 @@
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import type { Action } from "svelte/action";
 	import { onDestroy } from "svelte";
-	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Progress from "./progress/Progress.svelte";
 

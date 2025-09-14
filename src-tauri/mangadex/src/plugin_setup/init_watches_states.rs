@@ -7,6 +7,7 @@ use crate::{
         enums::{
             chapter_feed_style::ChapterFeedStyleStore,
             chapter_quality::ChapterQualityStore,
+            content_profile_warning::ContentProfileWarningModeStore,
             direction::{reading::ReadingDirectionStore, sidebar::SidebarDirectionStore},
             image_fit::ImageFitStore,
             manga_list_style::MangaListStyleStore,
@@ -18,6 +19,8 @@ use crate::{
             chapter_layout::ChapterLayoutStore,
             client_info::ClientInfoStore,
             content::profiles::{ContentProfileDefaultKey, ContentProfiles},
+            content_blur::ContentProfileBlurStore,
+            force_443::ForcePort443Store,
             longstrip_image_width::LongstripImageWidthStore,
             page_limit::PageLimitStore,
             theme::profiles::{ThemeProfileDefaultKey, ThemeProfiles},
@@ -56,6 +59,9 @@ setup_watch! {
     chapter_quality <= ChapterQualityStore,
     page_limit <= PageLimitStore,
     chapter_layout <= ChapterLayoutStore,
+    force_port_443 <= ForcePort443Store,
+    content_profile_blur <= ContentProfileBlurStore,
+    content_profile_warning <= ContentProfileWarningModeStore,
 }
 
 pub fn init_watches_states<R: Runtime>(

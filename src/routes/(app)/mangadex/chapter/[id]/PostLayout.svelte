@@ -183,7 +183,7 @@
 </script>
 
 <AppTitle
-	title={`${$currentPage} | ${data.data.attributes.chapter ?? "Oneshot"} - ${get_value_from_title_and_random_if_undefined(data.data.relationships.manga.attributes.title, "en") ?? "none"} - MangaDex`}
+	title={`${$currentPage + 1} | ${data.data.attributes.chapter ?? "Oneshot"} - ${get_value_from_title_and_random_if_undefined(data.data.relationships.manga.attributes.title, "en") ?? "none"} - MangaDex`}
 />
 
 {@render children?.()}

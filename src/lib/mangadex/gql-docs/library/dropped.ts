@@ -23,6 +23,7 @@ const libraryDroppedQuery = graphql(`
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {

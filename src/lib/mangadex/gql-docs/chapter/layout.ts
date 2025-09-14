@@ -19,6 +19,17 @@ const chapterLayoutPageQuery = graphql(`
 						id
 						attributes {
 							title
+							status
+							state
+							originalLanguage
+							tags {
+								id
+								attributes {
+									name
+								}
+							}
+							contentRating
+							publicationDemographic
 						}
 					}
 					scanlationGroups {

@@ -753,6 +753,15 @@ export type ContentProfileInput = {
 	translatedLanguages?: Array<Language>;
 };
 
+export enum ContentProfileWarningMode {
+	Always = "ALWAYS",
+	/** Always unless the title is in the library */
+	Autl = "AUTL",
+	/** Always unless the title is in the library and not dropped */
+	AutlNd = "AUTL_ND",
+	Never = "NEVER"
+}
+
 export enum ContentRating {
 	Erotica = "EROTICA",
 	Pornographic = "PORNOGRAPHIC",
@@ -3082,14 +3091,17 @@ export type Subscriptions = {
 	watchChapterQuality: DownloadMode;
 	watchChaptersTasksList: Array<Scalars["UUID"]["output"]>;
 	watchClientInfo?: Maybe<ClientInfo>;
+	watchContentProfileBlur: Scalars["Boolean"]["output"];
 	watchContentProfileDefault: ContentProfile;
 	watchContentProfileDefaultName?: Maybe<Scalars["String"]["output"]>;
+	watchContentProfileWarningMode: ContentProfileWarningMode;
 	watchContentProfiles: Array<ContentProfileEntry>;
 	watchCover: CoverAttributes;
 	watchCoverDownloadState: CoverDownloadState;
 	watchCoverTasksList: Array<Scalars["UUID"]["output"]>;
 	watchCustomList: CustomListAttributes;
 	watchDownloadState: DownloadState;
+	watchForcePort443: Scalars["Boolean"]["output"];
 	watchImageFit: ImageFit;
 	watchIsAppMounted: Scalars["Boolean"]["output"];
 	watchIsFollowingCustomList: Scalars["Boolean"]["output"];
@@ -3519,9 +3531,12 @@ export type UserOptionMutations = {
 	setChapterLayout: ChapterLayoutStore;
 	setChapterQuality: DownloadMode;
 	setContentProfile: ContentProfile;
+	setContentProfileBlur: Scalars["Boolean"]["output"];
+	setContentProfileWarningMode: ContentProfileWarningMode;
 	setContentProfiles: Scalars["Int"]["output"];
 	setDefaultContentProfileKey?: Maybe<Scalars["String"]["output"]>;
 	setDefaultThemeProfile?: Maybe<Scalars["String"]["output"]>;
+	setForcePort443: Scalars["Boolean"]["output"];
 	setImageFit: ImageFit;
 	setLongstripImageWidth: Scalars["Float"]["output"];
 	setMangaListStyle: MangaListStyle;
@@ -3568,6 +3583,14 @@ export type UserOptionMutationsSetContentProfileArgs = {
 	profile?: InputMaybe<ContentProfileInput>;
 };
 
+export type UserOptionMutationsSetContentProfileBlurArgs = {
+	blur: Scalars["Boolean"]["input"];
+};
+
+export type UserOptionMutationsSetContentProfileWarningModeArgs = {
+	mode: ContentProfileWarningMode;
+};
+
 export type UserOptionMutationsSetContentProfilesArgs = {
 	entries: Array<ContentProfileEntryInput>;
 };
@@ -3578,6 +3601,10 @@ export type UserOptionMutationsSetDefaultContentProfileKeyArgs = {
 
 export type UserOptionMutationsSetDefaultThemeProfileArgs = {
 	name?: InputMaybe<Scalars["String"]["input"]>;
+};
+
+export type UserOptionMutationsSetForcePort443Args = {
+	force: Scalars["Boolean"]["input"];
 };
 
 export type UserOptionMutationsSetImageFitArgs = {
@@ -3637,6 +3664,8 @@ export type UserOptionQueries = {
 	__typename?: "UserOptionQueries";
 	getAuthDateTimeLimit?: Maybe<Scalars["MangaDexDateTime"]["output"]>;
 	getChapterLanguages: Array<Language>;
+	getContentProfileBlur: Scalars["Boolean"]["output"];
+	getContentProfileWarningMode: ContentProfileWarningMode;
 	getDefaultContentProfile: ContentProfile;
 	getOfflineConfig: OfflineConfigObject;
 	getPageDirection: Direction;
@@ -5027,7 +5056,20 @@ export type GetChapterPageDataQuery = {
 				manga: {
 					__typename?: "MangaObject";
 					id: any;
-					attributes: { __typename?: "GraphQLMangaAttributes"; title: any };
+					attributes: {
+						__typename?: "GraphQLMangaAttributes";
+						title: any;
+						status: MangaStatus;
+						state: MangaState;
+						originalLanguage: Language;
+						contentRating?: ContentRating | null;
+						publicationDemographic?: Demographic | null;
+						tags: Array<{
+							__typename?: "Tag";
+							id: any;
+							attributes: { __typename?: "TagAttributes"; name: any };
+						}>;
+					};
 				};
 				scanlationGroups: Array<{
 					__typename?: "ScanlationGroup";
@@ -5046,6 +5088,58 @@ export type GetChapterPageDataQuery = {
 			};
 		};
 	};
+};
+
+export type SetContentProfileBlurMutationVariables = Exact<{
+	blur: Scalars["Boolean"]["input"];
+}>;
+
+export type SetContentProfileBlurMutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setContentProfileBlur: boolean };
+};
+
+export type SubContentProfileBlurSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type SubContentProfileBlurSubscription = {
+	__typename?: "Subscriptions";
+	watchContentProfileBlur: boolean;
+};
+
+export type GetContentProfileBlurQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetContentProfileBlurQuery = {
+	__typename?: "Query";
+	userOption: { __typename?: "UserOptionQueries"; getContentProfileBlur: boolean };
+};
+
+export type SetContentProfileWarningModeMutationVariables = Exact<{
+	mode: ContentProfileWarningMode;
+}>;
+
+export type SetContentProfileWarningModeMutation = {
+	__typename?: "Mutation";
+	userOption: {
+		__typename?: "UserOptionMutations";
+		setContentProfileWarningMode: ContentProfileWarningMode;
+	};
+};
+
+export type GetContentProfileWarningModeQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetContentProfileWarningModeQuery = {
+	__typename?: "Query";
+	userOption: {
+		__typename?: "UserOptionQueries";
+		getContentProfileWarningMode: ContentProfileWarningMode;
+	};
+};
+
+export type SubContentProfileWarningModeSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type SubContentProfileWarningModeSubscription = {
+	__typename?: "Subscriptions";
+	watchContentProfileWarningMode: ContentProfileWarningMode;
 };
 
 export type ListenToMangaTasksIDsSubscriptionVariables = Exact<{ [key: string]: never }>;
@@ -5078,6 +5172,19 @@ export type ExportIdsToTxtMutation = {
 	__typename?: "Mutation";
 	export: { __typename?: "ExportMutations"; uuidsToAsTxt: string };
 };
+
+export type SetForcePort443MutationVariables = Exact<{
+	force: Scalars["Boolean"]["input"];
+}>;
+
+export type SetForcePort443Mutation = {
+	__typename?: "Mutation";
+	userOption: { __typename?: "UserOptionMutations"; setForcePort443: boolean };
+};
+
+export type SubForce443SubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type SubForce443Subscription = { __typename?: "Subscriptions"; watchForcePort443: boolean };
 
 export type GroupPageQueryQueryVariables = Exact<{
 	id: Scalars["UUID"]["input"];
@@ -5317,6 +5424,7 @@ export type CurrentUserLibraryCompletedQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5365,6 +5473,7 @@ export type CurrentUserLibraryDroppedQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5431,6 +5540,7 @@ export type CurrentUserLibraryUnfilteredQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5451,6 +5561,22 @@ export type CurrentUserLibraryUnfilteredQuery = {
 				};
 			}>;
 		};
+	};
+};
+
+export type LibraryTitleMapQueryVariables = Exact<{
+	status?: InputMaybe<ReadingStatus>;
+}>;
+
+export type LibraryTitleMapQuery = {
+	__typename?: "Query";
+	manga: {
+		__typename?: "MangaQueries";
+		getMangaStatus: Array<{
+			__typename?: "MangaReadingStatusItem";
+			id: any;
+			status: ReadingStatus;
+		}>;
 	};
 };
 
@@ -5479,6 +5605,7 @@ export type CurrentUserLibraryOnHoldQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5527,6 +5654,7 @@ export type CurrentUserLibraryPlanToReadQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5575,6 +5703,7 @@ export type CurrentUserLibraryReReadingQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -5623,6 +5752,7 @@ export type CurrentUserLibraryReadingQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -6365,6 +6495,7 @@ export type RecentlyAddedPageQueryQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -6414,6 +6545,7 @@ export type DefaultMangaSearchQueryQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -6463,6 +6595,7 @@ export type OfflineMangaSearchQueryQuery = {
 					state: MangaState;
 					originalLanguage: Language;
 					contentRating?: ContentRating | null;
+					publicationDemographic?: Demographic | null;
 					tags: Array<{
 						__typename?: "Tag";
 						id: any;
@@ -13620,6 +13753,82 @@ export const GetChapterPageDataDocument = {
 																						kind: "Name",
 																						value: "title"
 																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "status"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "state"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "originalLanguage"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "tags"
+																					},
+																					selectionSet: {
+																						kind: "SelectionSet",
+																						selections:
+																							[
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "id"
+																									}
+																								},
+																								{
+																									kind: "Field",
+																									name: {
+																										kind: "Name",
+																										value: "attributes"
+																									},
+																									selectionSet:
+																										{
+																											kind: "SelectionSet",
+																											selections:
+																												[
+																													{
+																														kind: "Field",
+																														name: {
+																															kind: "Name",
+																															value: "name"
+																														}
+																													}
+																												]
+																										}
+																								}
+																							]
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "contentRating"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "publicationDemographic"
+																					}
 																				}
 																			]
 																		}
@@ -13721,6 +13930,208 @@ export const GetChapterPageDataDocument = {
 		}
 	]
 } as unknown as DocumentNode<GetChapterPageDataQuery, GetChapterPageDataQueryVariables>;
+export const SetContentProfileBlurDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setContentProfileBlur" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "blur" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setContentProfileBlur" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "blur" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "blur" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetContentProfileBlurMutation, SetContentProfileBlurMutationVariables>;
+export const SubContentProfileBlurDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "subContentProfileBlur" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{ kind: "Field", name: { kind: "Name", value: "watchContentProfileBlur" } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SubContentProfileBlurSubscription,
+	SubContentProfileBlurSubscriptionVariables
+>;
+export const GetContentProfileBlurDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getContentProfileBlur" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getContentProfileBlur" }
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<GetContentProfileBlurQuery, GetContentProfileBlurQueryVariables>;
+export const SetContentProfileWarningModeDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setContentProfileWarningMode" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "NamedType",
+							name: { kind: "Name", value: "ContentProfileWarningMode" }
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setContentProfileWarningMode" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SetContentProfileWarningModeMutation,
+	SetContentProfileWarningModeMutationVariables
+>;
+export const GetContentProfileWarningModeDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "getContentProfileWarningMode" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getContentProfileWarningMode" }
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	GetContentProfileWarningModeQuery,
+	GetContentProfileWarningModeQueryVariables
+>;
+export const SubContentProfileWarningModeDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "subContentProfileWarningMode" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchContentProfileWarningMode" }
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	SubContentProfileWarningModeSubscription,
+	SubContentProfileWarningModeSubscriptionVariables
+>;
 export const ListenToMangaTasksIDsDocument = {
 	kind: "Document",
 	definitions: [
@@ -13848,6 +14259,68 @@ export const ExportIdsToTxtDocument = {
 		}
 	]
 } as unknown as DocumentNode<ExportIdsToTxtMutation, ExportIdsToTxtMutationVariables>;
+export const SetForcePort443Document = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "setForcePort443" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "force" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "userOption" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "setForcePort443" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "force" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "force" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<SetForcePort443Mutation, SetForcePort443MutationVariables>;
+export const SubForce443Document = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "subForce443" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [{ kind: "Field", name: { kind: "Name", value: "watchForcePort443" } }]
+			}
+		}
+	]
+} as unknown as DocumentNode<SubForce443Subscription, SubForce443SubscriptionVariables>;
 export const GroupPageQueryDocument = {
 	kind: "Document",
 	definitions: [
@@ -15249,6 +15722,13 @@ export const CurrentUserLibraryCompletedDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -15487,6 +15967,13 @@ export const CurrentUserLibraryDroppedDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -15832,6 +16319,13 @@ export const CurrentUserLibraryUnfilteredDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -15911,6 +16405,61 @@ export const CurrentUserLibraryUnfilteredDocument = {
 	CurrentUserLibraryUnfilteredQuery,
 	CurrentUserLibraryUnfilteredQueryVariables
 >;
+export const LibraryTitleMapDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "libraryTitleMap" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "status" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "ReadingStatus" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "manga" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "getMangaStatus" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "status" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "status" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{ kind: "Field", name: { kind: "Name", value: "id" } },
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "status" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<LibraryTitleMapQuery, LibraryTitleMapQueryVariables>;
 export const CurrentUserLibraryOnHoldDocument = {
 	kind: "Document",
 	definitions: [
@@ -16070,6 +16619,13 @@ export const CurrentUserLibraryOnHoldDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -16306,6 +16862,13 @@ export const CurrentUserLibraryPlanToReadDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -16546,6 +17109,13 @@ export const CurrentUserLibraryReReadingDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -16784,6 +17354,13 @@ export const CurrentUserLibraryReadingDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]
@@ -20858,6 +21435,13 @@ export const RecentlyAddedPageQueryDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -21116,6 +21700,13 @@ export const DefaultMangaSearchQueryDocument = {
 																			kind: "Name",
 																			value: "contentRating"
 																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
+																		}
 																	}
 																]
 															}
@@ -21373,6 +21964,13 @@ export const OfflineMangaSearchQueryDocument = {
 																		name: {
 																			kind: "Name",
 																			value: "contentRating"
+																		}
+																	},
+																	{
+																		kind: "Field",
+																		name: {
+																			kind: "Name",
+																			value: "publicationDemographic"
 																		}
 																	}
 																]

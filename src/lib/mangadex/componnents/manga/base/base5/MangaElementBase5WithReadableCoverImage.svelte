@@ -25,6 +25,7 @@
 		title: string;
 		description: string;
 		mangaId: string;
+		blur?: boolean;
 	}
 
 	let {
@@ -34,7 +35,8 @@
 		description,
 		mangaId,
 		onmoreInfoClick,
-		onreadClick
+		onreadClick,
+		blur
 	}: Props = $props();
 	let isHover = $state(false);
 	let image = $derived($coverImage);
@@ -43,7 +45,7 @@
 
 <Layout bind:isHover {mangaId}>
 	{#if image}
-		<img src={image} alt={coverImageAlt} />
+		<img src={image} alt={coverImageAlt} class:blur />
 	{:else}
 		<Skeleton height={"var(--s-h)"} width={"var(--s-w)"} />
 	{/if}
@@ -65,5 +67,14 @@
 		height: var(--height);
 		object-fit: cover;
 		border-radius: 0.25rem;
+	}
+	img {
+		transition: filter 100ms ease-in-out;
+	}
+	img.blur {
+		filter: blur(10px);
+	}
+	img.blur:hover {
+		filter: blur(5px);
 	}
 </style>

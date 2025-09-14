@@ -31,6 +31,7 @@
 		contentRating?: ContentRating;
 		language?: Language | undefined;
 		mangaId: string;
+		blur?: boolean;
 	}
 
 	let {
@@ -44,7 +45,8 @@
 		language = undefined,
 		mangaId,
 		onclick,
-		ontagClick
+		ontagClick,
+		blur
 	}: Props = $props();
 	setContextMenuContext(() =>
 		mangaElementContextMenu({
@@ -59,6 +61,6 @@
 </script>
 
 <Layout {onclick} --max-height="11em" {mangaId}>
-	<Image {coverImage} {coverImageAlt} />
+	<Image {coverImage} {coverImageAlt} {blur} />
 	<Content {ontagClick} {title} {status} {description} {tags} {contentRating} {language} />
 </Layout>

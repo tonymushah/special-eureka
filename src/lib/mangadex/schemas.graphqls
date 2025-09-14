@@ -563,6 +563,19 @@ input ContentProfileInput {
 	excludedUploaders: [UUID!]! = []
 }
 
+enum ContentProfileWarningMode {
+	ALWAYS
+	NEVER
+	"""
+	Always unless the title is in the library
+	"""
+	AUTL
+	"""
+	Always unless the title is in the library and not dropped
+	"""
+	AUTL_ND
+}
+
 enum ContentRating {
 	EROTICA
 	PORNOGRAPHIC
@@ -2415,6 +2428,9 @@ type Subscriptions {
 	watchPageLimit: Int!
 	watchChapterLayout: ChapterLayoutStore!
 	getChapterPages(chapter: UUID!, mode: DownloadMode): ChapterPage!
+	watchForcePort443: Boolean!
+	watchContentProfileBlur: Boolean!
+	watchContentProfileWarningMode: ContentProfileWarningMode!
 }
 
 type Tag {
@@ -2691,6 +2707,9 @@ type UserOptionMutations {
 	setChapterQuality(quality: DownloadMode): DownloadMode!
 	setPageLimit(value: Int): Int
 	setChapterLayout(sidebar: SidebarMode, drawer: DrawerMode, progress: ProgressMode): ChapterLayoutStore!
+	setForcePort443(force: Boolean!): Boolean!
+	setContentProfileBlur(blur: Boolean!): Boolean!
+	setContentProfileWarningMode(mode: ContentProfileWarningMode!): ContentProfileWarningMode!
 }
 
 type UserOptionQueries {
@@ -2701,6 +2720,8 @@ type UserOptionQueries {
 	getDefaultContentProfile: ContentProfile!
 	getOfflineConfig: OfflineConfigObject!
 	getAuthDateTimeLimit: MangaDexDateTime
+	getContentProfileBlur: Boolean!
+	getContentProfileWarningMode: ContentProfileWarningMode!
 }
 
 type UserQueries {

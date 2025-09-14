@@ -1,8 +1,10 @@
 import { graphql } from "@mangadex/gql";
 import { DownloadMode } from "@mangadex/gql/graphql";
 import { client } from "@mangadex/gql/urql";
+import { createMutation } from "@tanstack/svelte-query";
 import { subscriptionStore } from "@urql/svelte";
 import { derived, get, type Writable } from "svelte/store";
+import { mangadexQueryClient } from "..";
 
 export const subscription = graphql(`
 	subscription chapterQualitySubscription {
@@ -28,24 +30,27 @@ const sub_quality_store = derived(
 	(sub) => sub.data?.watchChapterQuality ?? DownloadMode.Normal
 );
 
+export const chapterQualityMutation = createMutation({
+	mutationKey: ["chapter", "quality", "update"],
+	async mutationFn(quality: DownloadMode) {
+		const res = await client.mutation(mutation, {
+			quality
+		}).toPromise();
+		if (res.error) {
+			throw res.error
+		}
+	},
+	networkMode: "always"
+}, mangadexQueryClient);
+
 export const chapterQuality: Writable<DownloadMode> = {
 	subscribe: sub_quality_store.subscribe,
 	set(value) {
-		client
-			.mutation(mutation, {
-				quality: value
-			})
-			.toPromise()
-			.catch(console.error);
+		get(chapterQualityMutation).mutate(value)
 	},
 	update(updater) {
 		const value = get(sub_quality_store);
-		client
-			.mutation(mutation, {
-				quality: updater(value)
-			})
-			.toPromise()
-			.catch(console.error);
+		get(chapterQualityMutation).mutate(value)
 	}
 };
 
@@ -54,20 +59,10 @@ const is_data_saver_read = derived(sub_quality_store, (sub) => sub == DownloadMo
 export const isDataSaver: Writable<boolean> = {
 	subscribe: is_data_saver_read.subscribe,
 	set(value) {
-		client
-			.mutation(mutation, {
-				quality: value ? DownloadMode.DataSaver : DownloadMode.Normal
-			})
-			.toPromise()
-			.catch(console.error);
+		get(chapterQualityMutation).mutate(value ? DownloadMode.DataSaver : DownloadMode.Normal)
 	},
 	update(updater) {
 		const value = get(is_data_saver_read);
-		client
-			.mutation(mutation, {
-				quality: updater(value) ? DownloadMode.DataSaver : DownloadMode.Normal
-			})
-			.toPromise()
-			.catch(console.error);
+		get(chapterQualityMutation).mutate(updater(value) ? DownloadMode.DataSaver : DownloadMode.Normal)
 	}
 };

@@ -23,6 +23,7 @@ const libraryUnfilteredQuery = graphql(`
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {
@@ -40,3 +41,14 @@ const libraryUnfilteredQuery = graphql(`
 `);
 
 export default libraryUnfilteredQuery;
+
+export const libraryTitleMapQuery = graphql(`
+	query libraryTitleMap($status: ReadingStatus) {
+		manga {
+			getMangaStatus(status: $status) {
+				id
+				status
+			}
+		}
+	}
+`);

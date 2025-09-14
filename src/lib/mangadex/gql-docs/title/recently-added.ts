@@ -23,6 +23,7 @@ const query = graphql(/* GraphQL */ `
 							}
 						}
 						contentRating
+						publicationDemographic
 					}
 					relationships {
 						coverArt {

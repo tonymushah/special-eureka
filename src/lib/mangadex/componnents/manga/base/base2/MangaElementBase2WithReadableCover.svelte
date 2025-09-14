@@ -34,6 +34,7 @@
 		contentRating?: ContentRating;
 		language?: Language | undefined;
 		mangaId: string;
+		blur?: boolean;
 	}
 
 	let {
@@ -47,7 +48,8 @@
 		language = undefined,
 		mangaId,
 		ontagClick,
-		onclick
+		onclick,
+		blur
 	}: Props = $props();
 	let src = $derived($coverImage);
 	setContextMenuContext(() =>
@@ -64,7 +66,7 @@
 
 <Layout {onclick} --max-height="11em" {mangaId}>
 	{#if src}
-		<Image coverImage={src} {coverImageAlt} />
+		<Image coverImage={src} {coverImageAlt} {blur} />
 	{:else}
 		<Skeleton height="11em" width="7em" />
 	{/if}

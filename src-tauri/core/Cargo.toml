@@ -41,8 +41,9 @@ sys-locale = "0.3.2"
 thiserror.workspace = true
 tauri-plugin-single-instance.workspace = true
 
-[target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies]
-tauri-plugin-updater = "2"
+[target."cfg(not(any(target_os = \"android\", target_os = \"ios\")))".dependencies.tauri-plugin-updater]
+version = "2"
+optional = true
 
 [dependencies.mangadex]
 workspace = true
@@ -50,10 +51,11 @@ workspace = true
 [features]
 # by default Tauri runs in production mode
 # when `tauri dev` runs it is executed with `cargo run --no-default-features` if `devPath` is an URL
-default = ["custom-protocol"]
+default = ["custom-protocol", "updater"]
 # this feature is used used for production builds where `devPath` points to the filesystem
 # DO NOT remove this
 custom-protocol = ["tauri/custom-protocol"]
+updater = ["tauri-plugin-updater"]
 
 [[bin]]
 name = "special-eureka"

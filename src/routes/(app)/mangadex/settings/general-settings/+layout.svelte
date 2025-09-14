@@ -8,8 +8,14 @@
 	let { children }: Props = $props();
 </script>
 
-<h1>General Settings</h1>
+<h2>General Settings</h2>
 
 <AppTitle title="General Settings - MangaDex" />
 
 {@render children?.()}
+
+<style lang="scss">
+	h2 {
+		text-decoration: underline;
+	}
+</style>
