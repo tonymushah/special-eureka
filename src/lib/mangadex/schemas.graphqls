@@ -433,6 +433,11 @@ type ChapterQueries {
 	isDownloaded(id: UUID!): DownloadState!
 }
 
+type ChapterReadMarkerSubItem {
+	chapter: UUID!
+	read: Boolean!
+}
+
 type ChapterRelationships {
 	manga: MangaObject!
 	scanlationGroups: [ScanlationGroup!]!
@@ -2405,7 +2410,6 @@ type Subscriptions {
 	watchIsFollowingUser(userId: UUID!): Boolean!
 	watchIsFollowingCustomList(customListId: UUID!): Boolean!
 	watchMangaReadingState(mangaId: UUID!): ReadingStatus
-	watchReadMarker(chapterId: UUID!): Boolean!
 	watchImageFit: ImageFit!
 	watchLongstripImageWidth: Float!
 	watchMangaListStyle: MangaListStyle!
@@ -2431,6 +2435,8 @@ type Subscriptions {
 	watchForcePort443: Boolean!
 	watchContentProfileBlur: Boolean!
 	watchContentProfileWarningMode: ContentProfileWarningMode!
+	watchReadMarker(chapterId: UUID!): Boolean!
+	watchReadMarkers: ChapterReadMarkerSubItem!
 }
 
 type Tag {

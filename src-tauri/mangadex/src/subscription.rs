@@ -33,4 +33,5 @@ pub struct Subscriptions(
     chapter_layout::ChapterLayoutSubscription,
     chapter_pages::ChapterPagesSubscription,
     user_option_next::UserOptionNextSubscriptions,
+    read_marker::ChapterReadMarkerSubscriptions,
 );

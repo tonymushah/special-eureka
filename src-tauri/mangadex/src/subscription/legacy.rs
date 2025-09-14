@@ -34,7 +34,6 @@ use super::{
     manga::MangaSubscriptions,
     manga_reading_state::MangaReadingStatusSubscriptions,
     rating::RatingSubscriptions,
-    read_marker::ChapterReadMarkerSubscriptions,
     reading_state::ReadingStateSubscriptions,
     statistics::{StatisticsSubscriptions, manga::MangaStatisticsSubscriptions},
     tag::TagSubscriptions,
@@ -280,15 +279,6 @@ impl LegacySubscriptions {
     ) -> Result<impl Stream<Item = Option<ReadingStatus>> + 'ctx> {
         MangaReadingStatusSubscriptions
             .listen_by_id(ctx, manga_id)
-            .await
-    }
-    pub async fn watch_read_marker<'ctx>(
-        &'ctx self,
-        ctx: &'ctx Context<'ctx>,
-        chapter_id: Uuid,
-    ) -> Result<impl Stream<Item = bool> + 'ctx> {
-        ChapterReadMarkerSubscriptions
-            .listen_by_id(ctx, chapter_id)
             .await
     }
     pub async fn watch_image_fit<'ctx>(

@@ -578,6 +578,12 @@ export type ChapterQueriesPagesArgs = {
 	id: Scalars["UUID"]["input"];
 };
 
+export type ChapterReadMarkerSubItem = {
+	__typename?: "ChapterReadMarkerSubItem";
+	chapter: Scalars["UUID"]["output"];
+	read: Scalars["Boolean"]["output"];
+};
+
 export type ChapterRelationships = {
 	__typename?: "ChapterRelationships";
 	manga: MangaObject;
@@ -3121,6 +3127,7 @@ export type Subscriptions = {
 	watchPaginationStyle: PaginationStyle;
 	watchRating: RatingItemAttributes;
 	watchReadMarker: Scalars["Boolean"]["output"];
+	watchReadMarkers: ChapterReadMarkerSubItem;
 	watchReadingMode: ReadingMode;
 	watchReadingState: ReadingState;
 	watchSidebarDirection: Direction;
