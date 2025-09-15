@@ -7,29 +7,45 @@
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
 	import { onDestroy, onMount } from "svelte";
-	import { derived as der, writable } from "svelte/store";
+	import { derived as der, get, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
 	import { fetchChapters, fetchComments } from "./utils";
 	import { getChapterStoreContext } from "./utils/chapterStores";
 	import mangaAggregateQuery from "./utils/query";
+	import { mangadexQueryClient } from "@mangadex/index";
+	import { createQuery } from "@tanstack/svelte-query";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import { debounce } from "lodash";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
 	const __res = getTitleLayoutData();
 	const data = __res.queryResult;
-	const query = specialQueryStore({
-		query: mangaAggregateQuery,
-		client,
-		variable: {
-			id: data!.id
-		}
+	const query = createQuery({
+		queryKey: ["title", __res.layoutData.id, "aggregate"],
+		async queryFn() {
+			const res = await client.query(mangaAggregateQuery, {
+				id: __res.layoutData.id
+			});
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data;
+			} else {
+				throw new Error("no data??");
+			}
+		},
+		networkMode: "always"
 	});
 	let threadUrls = $state(new Map<string, string>());
 	let unlistens: UnlistenFn[] = [];
-	const isFetching = query.isFetching;
+	const isFetching = der(query, ($q) => $q.isFetching);
 
+	const isEmpty = der(query, (q) => {
+		q.data?.manga.aggregate.chunked.length == 0;
+	});
 	const aggregate = der(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
 			chapter: MangaAggregateData;
@@ -98,7 +114,6 @@
 				console.debug(e.keys());
 			})
 		);
-		await query.execute();
 	});
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
@@ -109,20 +124,25 @@
 	/// Test if this work
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
-			query.execute();
+			get(query).refetch();
 		})
 	);
+	function refetchTitleReadMarker() {
+		return mangadexQueryClient.refetchQueries({
+			queryKey: ["title", __res.layoutData.id, "read-markers", "page"]
+		});
+	}
 </script>
 
 <div class="aggregate">
 	<div class="top">
 		<div class="left">
 			<ButtonAccent
-				onclick={async () => {
-					if (!$isFetching) {
-						await query.execute();
-					}
-				}}
+				disabled={$isFetching}
+				onclick={debounce(async () => {
+					await $query.refetch();
+					await refetchTitleReadMarker();
+				})}
 			>
 				{#if $isFetching}
 					Loading...
@@ -133,45 +153,70 @@
 		</div>
 		<div class="right">
 			<ButtonAccent
-				onclick={async () => {
+				onclick={debounce(async () => {
 					isReversed.update((i) => !i);
-				}}
+				})}
+				disabled={$query.isLoading}
 			>
 				Reverse
 			</ButtonAccent>
 		</div>
 	</div>
-	<div class="content">
-		{#if selected}
-			{#key selected.id}
-				<div transition:fade>
-					<AggregateContent
-						volumes={selected.chapter}
-						oncomments={(detail) => {
-							console.log(`clicked ${detail.id}`);
-							const threadUrl = threadUrls.get(detail.id);
-							if (threadUrl) {
-								open(threadUrl);
-							}
+	{#if $query.isFetched}
+		{#if $isEmpty}
+			<div class="empty">
+				<h2>No chapters available</h2>
+			</div>
+		{:else}
+			<div class="content">
+				{#if selected}
+					{#key selected.id}
+						<div transition:fade>
+							<AggregateContent
+								volumes={selected.chapter}
+								oncomments={(detail) => {
+									console.log(`clicked ${detail.id}`);
+									const threadUrl = threadUrls.get(detail.id);
+									if (threadUrl) {
+										open(threadUrl);
+									}
+								}}
+							/>
+						</div>
+					{/key}
+				{/if}
+			</div>
+			<div class="bottom">
+				{#each $aggregate as _, i}
+					<button
+						class="selector"
+						onclick={() => {
+							selectedIndex = i;
 						}}
-					/>
-				</div>
-			{/key}
+						class:selected={i == selectedIndex}
+					>
+						{i + 1}
+					</button>
+				{/each}
+			</div>
 		{/if}
-	</div>
-	<div class="bottom">
-		{#each $aggregate as _, i}
-			<button
-				class="selector"
-				onclick={() => {
-					selectedIndex = i;
-				}}
-				class:selected={i == selectedIndex}
-			>
-				{i + 1}
-			</button>
-		{/each}
-	</div>
+	{:else if $query.isError}
+		<ErrorComponent
+			label="Cannot fetch chapter"
+			error={$query.error}
+			retry={() => {
+				$query.refetch().then(() => refetchTitleReadMarker());
+			}}
+		/>
+	{:else if $query.isPending}
+		<div class="empty">
+			<h2>Pending...</h2>
+		</div>
+	{:else if $query.isLoading}
+		<div class="empty">
+			<h2>Loading...</h2>
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -219,5 +264,14 @@
 		.selector.selected:active {
 			background-color: color-mix(in srgb, var(--primary) 80%, transparent 20%);
 		}
+	}
+	.empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 200px;
+		border: 3px solid var(--mid-tone);
+		border-radius: 6px;
 	}
 </style>
