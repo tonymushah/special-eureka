@@ -13,6 +13,7 @@
 	import ChapterFeedElement2 from "../element2/ChapterFeedElement2.svelte";
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
+	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -92,15 +93,6 @@
 			const chapterIds = new Set(
 				$list.flatMap((item) => item.chapters.map((c) => c.chapterId))
 			);
-			chapterIds.forEach((chapter) => {
-				update((ctx) => {
-					const state = ctx.markers.get(chapter);
-					if (state == undefined) {
-						ctx.markers.set(chapter, false);
-					}
-					return ctx;
-				});
-			});
 			const mangaIds = new Set($list.map((item) => item.mangaId));
 
 			const sub = client
@@ -123,16 +115,24 @@
 						const unread = chapterIds.difference(read);
 						unread.forEach((chapter) => {
 							update((ctx) => {
-								const state = ctx.markers.get(chapter);
-								if (state) {
-									ctx.markers.set(chapter, false);
-								}
+								ctx.markers.delete(chapter);
 								return ctx;
 							});
 						});
 					}
 				});
+			const anySub = listenToAnyChapterReadMarkers.subscribe((marker) => {
+				if (marker) {
+					if (chapterIds.has(marker.chapter)) {
+						update((ctx) => {
+							ctx.markers.set(marker.chapter, marker.read);
+							return ctx;
+						});
+					}
+				}
+			});
 			return () => {
+				anySub();
 				sub.unsubscribe();
 			};
 		},
