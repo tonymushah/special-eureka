@@ -37,6 +37,9 @@ impl UserRelationships {
             .filter(|rel| rel.type_ == RelationshipType::ScanlationGroup)
             .map(|rel| rel.id)
             .collect();
+        if group_ids.is_empty() {
+            return Ok(Default::default());
+        }
         let client = get_mangadex_client_from_graphql_context::<tauri::Wry>(ctx)?;
         let mut req = client.scanlation_group().get();
         req.group_ids(group_ids);
