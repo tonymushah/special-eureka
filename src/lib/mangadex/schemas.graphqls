@@ -2088,6 +2088,7 @@ type ReadMarkerQueries {
 	mangaReadMarkers(mangaIds: [UUID!]!): [UUID!]!
 	mangaReadMarkersGrouped(mangaIds: [UUID!]!): [MangaReadMarkerGroupedItems!]!
 	userHistory: [UserHistoryEntry!]!
+	chapterReadMarkers(chapters: [UUID!]!): [UUID!]!
 }
 
 enum ReadingMode {

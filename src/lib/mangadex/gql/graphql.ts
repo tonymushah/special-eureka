@@ -2749,10 +2749,15 @@ export type ReadMarkerMutationsReadMarkersBatchArgs = {
 
 export type ReadMarkerQueries = {
 	__typename?: "ReadMarkerQueries";
+	chapterReadMarkers: Array<Scalars["UUID"]["output"]>;
 	mangaReadMarkers: Array<Scalars["UUID"]["output"]>;
 	mangaReadMarkersByMangaId: Array<Scalars["UUID"]["output"]>;
 	mangaReadMarkersGrouped: Array<MangaReadMarkerGroupedItems>;
 	userHistory: Array<UserHistoryEntry>;
+};
+
+export type ReadMarkerQueriesChapterReadMarkersArgs = {
+	chapters: Array<Scalars["UUID"]["input"]>;
 };
 
 export type ReadMarkerQueriesMangaReadMarkersArgs = {
@@ -5988,6 +5993,76 @@ export type UpdateCustomListVisibility1Mutation = {
 	customList: {
 		__typename?: "CustomListMutations";
 		update: { __typename?: "CustomList"; id: any };
+	};
+};
+
+export type ListenToChapterReadMarkerSubscriptionVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type ListenToChapterReadMarkerSubscription = {
+	__typename?: "Subscriptions";
+	watchReadMarker: boolean;
+};
+
+export type ListenToAnyChapterReadMarkerSubscriptionVariables = Exact<{ [key: string]: never }>;
+
+export type ListenToAnyChapterReadMarkerSubscription = {
+	__typename?: "Subscriptions";
+	watchReadMarkers: { __typename?: "ChapterReadMarkerSubItem"; chapter: any; read: boolean };
+};
+
+export type MutateReadMarkersBatchMutationVariables = Exact<{
+	unreads: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	read: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	updateHistory?: InputMaybe<Scalars["Boolean"]["input"]>;
+}>;
+
+export type MutateReadMarkersBatchMutation = {
+	__typename?: "Mutation";
+	readMarker: { __typename?: "ReadMarkerMutations"; readMarkersBatch: boolean };
+};
+
+export type ChaptersReadMarkersQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type ChaptersReadMarkersQuery = {
+	__typename?: "Query";
+	readMarker: { __typename?: "ReadMarkerQueries"; chapterReadMarkers: Array<any> };
+};
+
+export type MangaReadMarkersQueryVariables = Exact<{
+	id: Scalars["UUID"]["input"];
+}>;
+
+export type MangaReadMarkersQuery = {
+	__typename?: "Query";
+	readMarker: { __typename?: "ReadMarkerQueries"; mangaReadMarkersByMangaId: Array<any> };
+};
+
+export type MangasReadMarkersQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type MangasReadMarkersQuery = {
+	__typename?: "Query";
+	readMarker: { __typename?: "ReadMarkerQueries"; mangaReadMarkers: Array<any> };
+};
+
+export type MangasReadMarkersGroupedQueryVariables = Exact<{
+	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+}>;
+
+export type MangasReadMarkersGroupedQuery = {
+	__typename?: "Query";
+	readMarker: {
+		__typename?: "ReadMarkerQueries";
+		mangaReadMarkersGrouped: Array<{
+			__typename?: "MangaReadMarkerGroupedItems";
+			mangaId: any;
+			chapters: Array<any>;
+		}>;
 	};
 };
 
@@ -18534,6 +18609,389 @@ export const UpdateCustomListVisibility1Document = {
 	UpdateCustomListVisibility1Mutation,
 	UpdateCustomListVisibility1MutationVariables
 >;
+export const ListenToChapterReadMarkerDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "listenToChapterReadMarker" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchReadMarker" },
+						arguments: [
+							{
+								kind: "Argument",
+								name: { kind: "Name", value: "chapterId" },
+								value: { kind: "Variable", name: { kind: "Name", value: "id" } }
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ListenToChapterReadMarkerSubscription,
+	ListenToChapterReadMarkerSubscriptionVariables
+>;
+export const ListenToAnyChapterReadMarkerDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "subscription",
+			name: { kind: "Name", value: "listenToAnyChapterReadMarker" },
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "watchReadMarkers" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{ kind: "Field", name: { kind: "Name", value: "chapter" } },
+								{ kind: "Field", name: { kind: "Name", value: "read" } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	ListenToAnyChapterReadMarkerSubscription,
+	ListenToAnyChapterReadMarkerSubscriptionVariables
+>;
+export const MutateReadMarkersBatchDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "mutateReadMarkersBatch" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "unreads" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "read" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "updateHistory" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "readMarker" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "readMarkersBatch" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "chapterIdsRead" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "read" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "chapterIdsUnread" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "unreads" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "updateHistory" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "updateHistory" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	MutateReadMarkersBatchMutation,
+	MutateReadMarkersBatchMutationVariables
+>;
+export const ChaptersReadMarkersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "chaptersReadMarkers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "readMarker" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "chapterReadMarkers" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "chapters" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<ChaptersReadMarkersQuery, ChaptersReadMarkersQueryVariables>;
+export const MangaReadMarkersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "mangaReadMarkers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "readMarker" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "mangaReadMarkersByMangaId" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaId" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "id" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<MangaReadMarkersQuery, MangaReadMarkersQueryVariables>;
+export const MangasReadMarkersDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "mangasReadMarkers" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "readMarker" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "mangaReadMarkers" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<MangasReadMarkersQuery, MangasReadMarkersQueryVariables>;
+export const MangasReadMarkersGroupedDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "query",
+			name: { kind: "Name", value: "mangasReadMarkersGrouped" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+					type: {
+						kind: "NonNullType",
+						type: {
+							kind: "ListType",
+							type: {
+								kind: "NonNullType",
+								type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+							}
+						}
+					}
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "readMarker" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "mangaReadMarkersGrouped" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mangaIds" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "ids" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "mangaId" }
+											},
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "chapters" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<MangasReadMarkersGroupedQuery, MangasReadMarkersGroupedQueryVariables>;
 export const RtlSidebarSubDocument = {
 	kind: "Document",
 	definitions: [

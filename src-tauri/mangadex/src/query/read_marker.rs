@@ -1,6 +1,19 @@
-use crate::{Result, error::Error};
+use std::collections::HashSet;
+
+use crate::{
+    Result,
+    error::Error,
+    objects::chapter::Chapter,
+    utils::{
+        source::SendMultiSourceData,
+        splittable_param::SendSplitted,
+        traits_utils::{MangadexAsyncGraphQLContextExt, MangadexTauriManagerExt},
+    },
+};
 use async_graphql::{Context, Object};
+use mangadex_api_input_types::chapter::list::ChapterListParams;
 use mangadex_api_schema_rust::v5::MangaReadMarkers;
+use mangadex_api_types_rust::RelationshipType;
 use uuid::Uuid;
 
 use crate::{
@@ -107,5 +120,47 @@ impl ReadMarkerQueries {
                 entry.into()
             })
             .collect())
+    }
+    pub async fn chapter_read_markers(
+        &self,
+        ctx: &Context<'_>,
+        #[graphql(validator(min_items = 1))] chapters: Vec<Uuid>,
+    ) -> Result<Vec<Uuid>> {
+        let manga_ids = {
+            let app = ctx.get_app_handle::<tauri::Wry>()?;
+            let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            let chapter_ids = chapters.clone();
+            let params = ChapterListParams {
+                chapter_ids,
+                ..Default::default()
+            };
+            let client = app.get_mangadex_client()?;
+            let chapters = params.send_splitted_default(&client).await?;
+            chapters
+                .data
+                .into_iter()
+                .inspect(|item| {
+                    let chapter: Chapter = item.clone().into();
+                    let _ = watches.chapter.send_online(chapter);
+                })
+                .flat_map(|d| {
+                    let manga = d.find_first_relationships(RelationshipType::Manga)?;
+                    Some(manga.id)
+                })
+                .collect::<HashSet<_>>()
+        };
+        let read_chapters = self
+            .manga_read_markers(ctx, manga_ids.into_iter().collect())
+            .await?;
+        {
+            let watches = get_watches_from_graphql_context::<tauri::Wry>(ctx)?;
+            for unread in chapters
+                .iter()
+                .filter(|chapter| !read_chapters.contains(*chapter))
+            {
+                let _ = watches.read_marker.send_data((*unread, false));
+            }
+        }
+        Ok(read_chapters)
     }
 }
