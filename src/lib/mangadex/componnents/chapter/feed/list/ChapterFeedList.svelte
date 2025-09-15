@@ -190,9 +190,4 @@
 		display: grid;
 		gap: 10px;
 	}
-	section {
-		--chapter-layout: var(--accent-l3);
-		--chapter-layout-hover: var(--accent-l3-hover);
-		--chapter-layout-active: var(--accent-l3-active);
-	}
 </style>
