@@ -1,12 +1,10 @@
 <script lang="ts">
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
-	import { onMount } from "svelte";
+	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
+	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
 	import type { Chapter } from "..";
 	import ChapterElement1 from "../../base/element1/ChapterElement1.svelte";
-	import { setContextMenuContext } from "@special-eureka/core/utils/contextMenuContext";
-	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
@@ -124,7 +122,7 @@
 		<hr />
 		<div class="bottom-body">
 			<div class="chapters">
-				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, comments }}
+				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, comments }}
 					<ChapterElement1
 						{ondownload}
 						{onread}
@@ -140,7 +138,6 @@
 						{groups}
 						{upload_date}
 						{uploader}
-						{haveBeenRead}
 						{comments}
 					/>
 				{/each}

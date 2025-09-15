@@ -170,7 +170,7 @@
 		<hr />
 		<div class="bottom-body">
 			<div class="chapters" class:isCollapsed>
-				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, haveBeenRead, comments }}
+				{#each chapters as { chapterId, title, lang, groups, uploader, upload_date, comments }}
 					<ChapterElement1
 						{ondownload}
 						{ondownloadKeyPress}
@@ -186,7 +186,6 @@
 						{groups}
 						{upload_date}
 						{uploader}
-						{haveBeenRead}
 						{comments}
 					/>
 				{/each}

@@ -4,12 +4,16 @@
 	 */
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 	import MidToneLine from "@mangadex/componnents/theme/lines/MidToneLine.svelte";
+	import { mangasReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { ChapterFeedStyle } from "@mangadex/gql/graphql";
-	import { type Writable } from "svelte/store";
+	import { client } from "@mangadex/gql/urql";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { derived, toStore, type Writable } from "svelte/store";
 	import type { ChapterFeedListItem } from ".";
 	import ChapterFeedElement2 from "../element2/ChapterFeedElement2.svelte";
 	import ChapterFeedElement3 from "../element3/ChapterFeedElement3.svelte";
 	import ChapterFeedListSelector from "./select/ChapterFeedListSelector.svelte";
+
 	type MouseEnvDiv = MouseEvent & {
 		currentTarget: HTMLDivElement & EventTarget;
 	};
@@ -81,6 +85,61 @@
 	let container: HTMLElement | undefined = $state();
 	let selectedMangas: string[] = $state([]);
 	let selectedChapters: string[] = $state([]);
+
+	const ctxMarkers = derived(
+		[toStore(() => list)],
+		([$list], set, update) => {
+			const chapterIds = new Set(
+				$list.flatMap((item) => item.chapters.map((c) => c.chapterId))
+			);
+			chapterIds.forEach((chapter) => {
+				update((ctx) => {
+					const state = ctx.markers.get(chapter);
+					if (state == undefined) {
+						ctx.markers.set(chapter, false);
+					}
+					return ctx;
+				});
+			});
+			const mangaIds = new Set($list.map((item) => item.mangaId));
+
+			const sub = client
+				.query(mangasReadMarkers, {
+					ids: new Array(mangaIds.values())
+				})
+				.subscribe((res) => {
+					const markersArray = res.data?.readMarker.mangaReadMarkers;
+					if (markersArray) {
+						const read = new Set<string>(markersArray);
+						read.forEach((chapter) => {
+							update((ctx) => {
+								const state = ctx.markers.get(chapter);
+								if (state) {
+									ctx.markers.set(chapter, true);
+								}
+								return ctx;
+							});
+						});
+						const unread = chapterIds.difference(read);
+						unread.forEach((chapter) => {
+							update((ctx) => {
+								const state = ctx.markers.get(chapter);
+								if (state) {
+									ctx.markers.set(chapter, false);
+								}
+								return ctx;
+							});
+						});
+					}
+				});
+			return () => {
+				sub.unsubscribe();
+			};
+		},
+		{ markers: new Map<string, boolean>() }
+	);
+
+	initContextReadChapterMarkers(derived(ctxMarkers, (ctx) => ctx.markers));
 </script>
 
 <ChapterFeedSelecto bind:container bind:selectedChapters bind:selectedMangas />

@@ -2,7 +2,7 @@
 	import { arrow, computePosition, flip, offset, shift } from "@floating-ui/dom";
 	import MangaDexFlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import TimeAgo from "@mangadex/componnents/TimeAgo.svelte";
-	import chapterDownloadState, {
+	import {
 		cancelDownloadMutation,
 		downloadMutation,
 		hasChapterDownloadingFailed,
@@ -129,10 +129,6 @@
 	}
 
 	/// TODO implement quality
-
-	const download_state = chapterDownloadState({
-		id
-	});
 
 	const isDownloading = isChapterDownloading({
 		id

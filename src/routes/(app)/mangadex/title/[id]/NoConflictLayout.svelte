@@ -38,7 +38,7 @@
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { debounce } from "lodash";
 	import { type Snippet } from "svelte";
-	import { derived as der } from "svelte/store";
+	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
 	import type { LayoutData } from "./$types";
 	import { setTitleLayoutData } from "./layout.context";
@@ -49,6 +49,11 @@
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
+	import { id } from "@mangadex/componnents/manga/page/top-info/stories/data/b4c93297-b32f-4f90-b619-55456a38b0aa";
+	import { client } from "@mangadex/gql/urql";
+	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -186,6 +191,41 @@
 				name: a.attributes.name
 			}))
 		})
+	);
+	initContextReadChapterMarkers(
+		derived(
+			[
+				createQuery(
+					derived(
+						toStore<string>(() => data.layoutData.id),
+						(id) =>
+							({
+								queryKey: ["title", id, "read-markers", "page"],
+								async queryFn() {
+									const res = await client
+										.query(mangaReadMarkers, {
+											id
+										})
+										.toPromise();
+									if (res.error) {
+										throw res.error;
+									} else {
+										return (
+											res.data?.readMarker.mangaReadMarkersByMangaId.map(
+												String
+											) ?? []
+										);
+									}
+								}
+							}) satisfies CreateQueryOptions
+					)
+				)
+			],
+			([$query], set) => {
+				set(new Map($query.data?.map((d) => [d, true]) ?? []));
+			},
+			new Map()
+		)
 	);
 </script>
 
