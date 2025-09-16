@@ -2,7 +2,7 @@
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { ContentRating } from "@mangadex/gql/graphql";
 	import { getMangaSearchContentRatingContextStoreWritable } from "../contexts/contentRating";
-	import { PlusIcon, MinusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon } from "svelte-feather-icons";
 
 	const selected = getMangaSearchContentRatingContextStoreWritable();
 	function toggleContentRating(rating: ContentRating) {
@@ -26,9 +26,7 @@
 			onclick={() => toggleContentRating(ContentRating.Safe)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(ContentRating.Safe)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(ContentRating.Safe)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -39,9 +37,7 @@
 			onclick={() => toggleContentRating(ContentRating.Suggestive)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(ContentRating.Suggestive)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(ContentRating.Suggestive)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -52,9 +48,7 @@
 			onclick={() => toggleContentRating(ContentRating.Erotica)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(ContentRating.Erotica)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(ContentRating.Erotica)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -65,9 +59,7 @@
 			onclick={() => toggleContentRating(ContentRating.Pornographic)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(ContentRating.Pornographic)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(ContentRating.Pornographic)}
 					<PlusIcon />
 				{/if}
 			</div>

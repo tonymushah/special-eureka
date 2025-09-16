@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { Demographic } from "@mangadex/gql/graphql";
-	import { PlusIcon, MinusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon } from "svelte-feather-icons";
 	import { getMangaSearchPublicationDemographicContextStoreWritable } from "../contexts/publicationDemographic";
 
 	const selected = getMangaSearchPublicationDemographicContextStoreWritable();
@@ -26,9 +26,7 @@
 			onclick={() => toggleDemographic(Demographic.None)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(Demographic.None)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(Demographic.None)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -39,9 +37,7 @@
 			onclick={() => toggleDemographic(Demographic.Josei)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(Demographic.Josei)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(Demographic.Josei)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -52,9 +48,7 @@
 			onclick={() => toggleDemographic(Demographic.Seinen)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(Demographic.Seinen)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(Demographic.Seinen)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -65,9 +59,7 @@
 			onclick={() => toggleDemographic(Demographic.Shoujo)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(Demographic.Shoujo)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(Demographic.Shoujo)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -78,9 +70,7 @@
 			onclick={() => toggleDemographic(Demographic.Shounen)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(Demographic.Shounen)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(Demographic.Shounen)}
 					<PlusIcon />
 				{/if}
 			</div>

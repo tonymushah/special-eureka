@@ -1,10 +1,8 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { TagGroup } from "@mangadex/gql/graphql";
 	import make_first_upper_case from "@mangadex/utils/make_first_upper_case";
-	import { MinusIcon, PlusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon } from "svelte-feather-icons";
 	import { bounceInOut } from "svelte/easing";
 	import { derived, readonly } from "svelte/store";
 	import { fade } from "svelte/transition";
@@ -14,6 +12,7 @@
 		TagOptionState,
 		toggleTagOption
 	} from "../../contexts/tags";
+	import { RiForbid2Line } from "svelte-remixicon";
 
 	interface Props {
 		title: string;
@@ -41,7 +40,11 @@
 					class:included={tag.state == TagOptionState.INCLUDE}
 					class:excluded={tag.state == TagOptionState.EXCLUDE}
 					onclick={() => toggle(tag.id)}
-					oncontextmenu={preventDefault(() => toggle(tag.id, true))}
+					oncontextmenu={(e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						toggle(tag.id, true);
+					}}
 				>
 					{#if tag.state != TagOptionState.NONE}
 						<div
@@ -52,7 +55,7 @@
 							}}
 						>
 							{#if tag.state == TagOptionState.EXCLUDE}
-								<MinusIcon />
+								<RiForbid2Line />
 							{:else if tag.state == TagOptionState.INCLUDE}
 								<PlusIcon />
 							{/if}

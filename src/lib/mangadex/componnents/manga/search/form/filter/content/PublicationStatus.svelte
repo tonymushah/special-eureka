@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import { MangaStatus } from "@mangadex/gql/graphql";
-	import { PlusIcon, MinusIcon } from "svelte-feather-icons";
+	import { CheckIcon as PlusIcon, MinusIcon } from "svelte-feather-icons";
 	import { getMangaSearchPublicationStatusContextStoreWritable } from "../contexts/publicationStatus";
 
 	const selected = getMangaSearchPublicationStatusContextStoreWritable();
@@ -26,9 +26,7 @@
 			onclick={() => toggleStatus(MangaStatus.Ongoing)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(MangaStatus.Ongoing)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(MangaStatus.Ongoing)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -39,9 +37,7 @@
 			onclick={() => toggleStatus(MangaStatus.Completed)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(MangaStatus.Completed)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(MangaStatus.Completed)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -52,9 +48,7 @@
 			onclick={() => toggleStatus(MangaStatus.Hiatus)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(MangaStatus.Hiatus)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(MangaStatus.Hiatus)}
 					<PlusIcon />
 				{/if}
 			</div>
@@ -65,9 +59,7 @@
 			onclick={() => toggleStatus(MangaStatus.Cancelled)}
 		>
 			<div class="icon">
-				{#if !$selected.includes(MangaStatus.Cancelled)}
-					<MinusIcon />
-				{:else}
+				{#if $selected.includes(MangaStatus.Cancelled)}
 					<PlusIcon />
 				{/if}
 			</div>
