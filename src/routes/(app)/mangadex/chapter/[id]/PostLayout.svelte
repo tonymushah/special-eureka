@@ -80,9 +80,12 @@
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { getContextClient } from "@urql/svelte";
-	import { derived, writable } from "svelte/store";
+	import { derived, get, writable } from "svelte/store";
 	import type { LayoutData } from "./$types";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
+	import { untrack } from "svelte";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	interface Props {
 		data: LayoutData;
@@ -92,7 +95,22 @@
 	let { data = $bindable(), children }: Props = $props();
 
 	const client = getContextClient();
-
+	$effect(() => {
+		if (untrack(() => $isLogged)) {
+			untrack(() => $readMarkers).mutate(
+				{
+					reads: [data.data.id],
+					unreads: [],
+					updateHistory: true
+				},
+				{
+					onError(error, variables, context) {
+						addErrorToast("Cannot mark chapter as read", error);
+					}
+				}
+			);
+		}
+	});
 	const related = initRelatedChapters(writable([]));
 	const lsImgWidth = initLongStripImagesWidthContext(longstripImageWidthWritable);
 	const pinnedDerived = derived(
