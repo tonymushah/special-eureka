@@ -1,11 +1,16 @@
 <script lang="ts">
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
+	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { isLogged } from "@mangadex/utils/auth";
+	import { createQuery } from "@tanstack/svelte-query";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
+	import { debounce } from "lodash";
 	import { onDestroy, onMount } from "svelte";
 	import { derived as der, get, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
@@ -14,10 +19,7 @@
 	import { fetchChapters, fetchComments } from "./utils";
 	import { getChapterStoreContext } from "./utils/chapterStores";
 	import mangaAggregateQuery from "./utils/query";
-	import { mangadexQueryClient } from "@mangadex/index";
-	import { createQuery } from "@tanstack/svelte-query";
-	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import { debounce } from "lodash";
+	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -132,6 +134,26 @@
 			queryKey: ["title", __res.layoutData.id, "read-markers", "page"]
 		});
 	}
+	const readMarkers = getContextReadChapterMarkers();
+	const unread = der([query, readMarkers], ([$query, $markers]) => {
+		let chapters = new Set(
+			$query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
+		);
+		let readChapters = new Set(
+			$markers
+				.entries()
+				.filter(([v]) => {
+					return v;
+				})
+				.map(([v, k]) => {
+					return k;
+				})
+		);
+		let unreadChapters = chapters.difference(readChapters);
+
+		return unreadChapters;
+	});
+	const hasUnread = der(unread, ($unread) => $unread.size > 0);
 </script>
 
 <div class="aggregate">
@@ -152,6 +174,34 @@
 			</ButtonAccent>
 		</div>
 		<div class="right">
+			{#if $isLogged}
+				<ButtonAccent
+					disabled={$query.isLoading || $readMarkersMutation.isPending}
+					onclick={() => {
+						$readMarkersMutation.mutate(
+							{
+								reads: $hasUnread ? $unread.values().toArray() : [],
+								unreads: $hasUnread
+									? []
+									: ($query.data?.manga.aggregate.chunked.flatMap(
+											(d) => d.ids as string[]
+										) ?? [])
+							},
+							{
+								onSuccess(data, variables, context) {
+									refetchTitleReadMarker();
+								}
+							}
+						);
+					}}
+				>
+					{#if $hasUnread}
+						Mark all chapter as read
+					{:else}
+						Mark all chapter as not read
+					{/if}
+				</ButtonAccent>
+			{/if}
 			<ButtonAccent
 				onclick={debounce(async () => {
 					isReversed.update((i) => !i);
