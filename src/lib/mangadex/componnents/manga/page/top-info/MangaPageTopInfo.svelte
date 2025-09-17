@@ -149,9 +149,9 @@
 				]
 			})}
 		>
-			<h1>{title}</h1>
+			<h1 class="title">{title}</h1>
 			{#if altTitle}
-				<h2>{altTitle}</h2>
+				<h2 class="alt-title">{altTitle}</h2>
 			{/if}
 		</section>
 		<section class="bottom">
@@ -208,21 +208,10 @@
 		gap: 16px;
 		h1 {
 			display: -webkit-box;
-			-webkit-line-clamp: 1;
-			line-clamp: 1;
 			-webkit-box-orient: vertical;
 			overflow: hidden;
-			font-size: 40px;
 			margin: 0px;
 			padding: 0px;
-		}
-		h2 {
-			display: -webkit-box;
-			-webkit-line-clamp: 2;
-			line-clamp: 2;
-			-webkit-box-orient: vertical;
-			overflow: hidden;
-			margin: 0px;
 		}
 	}
 	div.content {
@@ -235,6 +224,31 @@
 			flex-direction: column;
 			height: 60%;
 			gap: 10px;
+		}
+	}
+	@media (width >= 900px) {
+		h1 {
+			font-size: 40px;
+			-webkit-line-clamp: 1;
+			line-clamp: 1;
+		}
+		h2 {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			margin: 0px;
+		}
+	}
+	@media (width < 900px) {
+		h1.title {
+			font-size: 30px;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+		}
+		h2.alt-title {
+			display: none;
 		}
 	}
 </style>
