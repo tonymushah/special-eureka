@@ -9,9 +9,10 @@ import {
 } from "@mangadex/gql/graphql";
 import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
+import { sleep } from "@special-eureka/core/utils";
 import type { StoreOrVal } from "@tanstack/svelte-query";
 import type { Client, CombinedError, OperationResult } from "@urql/svelte";
-import { isArray, range } from "lodash";
+import { delay, isArray, range } from "lodash";
 import { get, readable, writable, type Readable, type Writable } from "svelte/store";
 
 export const subscription = graphql(`
@@ -442,9 +443,7 @@ export default class ChapterPages {
 				};
 				// TODO test if this `mode` store *actually* works
 				if (typeof mode == "object") {
-					let unsub: (() => void) | undefined = undefined;
 					let sub = mode.subscribe(($mode) => {
-						unsub?.();
 						let inner_sub = client
 							.subscription(subscription, {
 								chapter,
@@ -454,9 +453,10 @@ export default class ChapterPages {
 						unsub = () => {
 							inner_sub.unsubscribe();
 						};
+					}, () => {
+						unsub?.();
 					});
 					return () => {
-						unsub?.();
 						sub();
 					};
 				} else {
@@ -531,14 +531,15 @@ export default class ChapterPages {
 	public getIncompleteIndexes(): number[] {
 		return this.getImages().flatMap((value, index) => {
 			if (value == null) {
-				return [];
-			} else {
 				return [index];
+			} else {
+				return [];
 			}
 		});
 	}
 	public static async refetchIncompletes(pages: ChapterPagesStore) {
-		if (get(pages).pagesLen) {
+		console.debug("refetching imcompletes");
+		if (get(pages).pagesLen != undefined) {
 			const indexes = get(pages).getIncompleteIndexes();
 			await Promise.all(
 				indexes.map((index) => {
