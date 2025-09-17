@@ -1221,6 +1221,7 @@ type GraphQLMangaAttributes {
 	createdAt: MangaDexDateTime!
 	updatedAt: MangaDexDateTime
 	version: Int!
+	isLongstrip: Boolean!
 }
 
 input GroupSortOrder @oneOf {

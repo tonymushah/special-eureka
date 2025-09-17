@@ -1562,6 +1562,7 @@ export type GraphQlMangaAttributes = {
 	createdAt: Scalars["MangaDexDateTime"]["output"];
 	description: Scalars["JSONObject"]["output"];
 	isLocked: Scalars["Boolean"]["output"];
+	isLongstrip: Scalars["Boolean"]["output"];
 	lastChapter?: Maybe<Scalars["String"]["output"]>;
 	lastVolume?: Maybe<Scalars["String"]["output"]>;
 	latestUploadedChapter?: Maybe<Scalars["UUID"]["output"]>;
