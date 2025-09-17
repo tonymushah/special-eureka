@@ -154,7 +154,7 @@
 	const hasBeenRead = getContextReadChapterMarker(id);
 	const handleRead = debounce(() => {
 		if ($isLogged) {
-			if ($readMarkers.isIdle) {
+			if (!$readMarkers.isPending) {
 				if ($hasBeenRead) {
 					$readMarkers.mutate({
 						reads: [],

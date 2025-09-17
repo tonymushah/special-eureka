@@ -72,7 +72,7 @@
 		type RelatedChapter
 	} from "@mangadex/componnents/chapter/page/contexts/relatedChapters";
 	import { initLongStripImagesWidthContext } from "@mangadex/componnents/chapter/page/readinMode/longStrip/utils/context/longstrip_images_width";
-	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import imageFitWritable from "@mangadex/gql-docs/chapter/layout-query/imageFit";
 	import longstripImageWidthWritable from "@mangadex/gql-docs/chapter/layout-query/longstripImageWidth";
 	import readingDirectionWritable from "@mangadex/gql-docs/chapter/layout-query/pageDirection";
@@ -87,8 +87,10 @@
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { getContextClient } from "@urql/svelte";
 	import { untrack } from "svelte";
-	import { derived, toStore, writable } from "svelte/store";
+	import { derived, get, toStore, writable } from "svelte/store";
 	import type { LayoutData } from "./$types";
+	import { dev } from "$app/environment";
+	import { delay } from "lodash";
 
 	interface Props {
 		data: LayoutData;
@@ -99,19 +101,37 @@
 
 	const client = getContextClient();
 	$effect(() => {
-		if (untrack(() => $isLogged)) {
-			untrack(() => $readMarkers).mutate(
-				{
-					reads: [data.data.id],
-					unreads: [],
-					updateHistory: true
-				},
-				{
-					onError(error, variables, context) {
-						addErrorToast("Cannot mark chapter as read", error);
-					}
+		const id = data.data.id;
+		if (typeof id == "string") {
+			const timerId = delay(() => {
+				if (get(isLogged)) {
+					get(readMarkers).mutate(
+						{
+							reads: [data.data.id],
+							unreads: [],
+							// NOTE history is currently disabled
+							updateHistory: false
+						},
+						{
+							onSuccess(data, variables, context) {
+								if (dev) {
+									addToast({
+										data: {
+											title: "Marked chapter as read"
+										}
+									});
+								}
+							},
+							onError(error, variables, context) {
+								addErrorToast("Cannot mark chapter as read", error);
+							}
+						}
+					);
 				}
-			);
+			}, 200);
+			return () => {
+				clearTimeout(timerId);
+			};
 		}
 	});
 	const related = initRelatedChapters(writable([]));

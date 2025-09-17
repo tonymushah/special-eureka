@@ -1,6 +1,6 @@
 // TODO refactor double page and store it directly inside the class
 
-import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import {
 	DownloadMode,
@@ -9,10 +9,9 @@ import {
 } from "@mangadex/gql/graphql";
 import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
-import { sleep } from "@special-eureka/core/utils";
 import type { StoreOrVal } from "@tanstack/svelte-query";
-import type { Client, CombinedError, OperationResult } from "@urql/svelte";
-import { delay, isArray, range } from "lodash";
+import type { Client, OperationResult } from "@urql/svelte";
+import { isArray, range } from "lodash";
 import { get, readable, writable, type Readable, type Writable } from "svelte/store";
 
 export const subscription = graphql(`

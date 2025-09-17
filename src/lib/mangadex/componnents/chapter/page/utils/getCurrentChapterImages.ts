@@ -1,12 +1,15 @@
 import ChapterPages, { type ChapterPagesStore } from "@mangadex/stores/chapter/pages";
-import { derived, type Readable } from "svelte/store";
+import { derived, get, type Readable } from "svelte/store";
 import { getCurrentChapterData } from "../contexts/currentChapter";
 import { getContext, setContext } from "svelte";
+import { chapterQuality } from "@mangadex/stores/chapterQuality";
 
 const KEY = "CHAPTER-CURRENT-IMAGES";
 
 function init(): ChapterPagesStore {
-	return ChapterPages.initFromStore(derived(getCurrentChapterData(), (c) => c.id));
+	return ChapterPages.initFromStore(derived(getCurrentChapterData(), (c) => c.id), {
+		mode: get(chapterQuality)
+	});
 }
 
 function getFromContext(): ChapterPagesStore {
@@ -19,7 +22,7 @@ function getFromContext(): ChapterPagesStore {
 }
 
 export default function getCurrentChapterImages(noContext?: boolean): ChapterPagesStore {
-	if (noContext) {
+	if (noContext == true) {
 		return init();
 	} else {
 		return getFromContext();

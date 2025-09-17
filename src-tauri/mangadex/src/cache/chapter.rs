@@ -198,26 +198,27 @@ struct SpawnHandle<R: Runtime> {
 }
 
 fn get_urls(at_home: &AtHomeServer, mode: Mode) -> Vec<(Url, String)> {
-    at_home
-        .chapter
-        .data
-        .iter()
-        .flat_map(|file| -> Option<_> {
-            Some((
-                Url::parse(&format!(
-                    "{}{}/{}/{file}",
-                    at_home.base_url,
-                    match mode {
-                        Mode::DataSaver => "data-saver",
-                        Mode::Normal => "data",
-                    },
-                    at_home.chapter.hash
-                ))
-                .ok()?,
-                file.clone(),
+    match mode {
+        Mode::Normal => &at_home.chapter.data,
+        Mode::DataSaver => &at_home.chapter.data_saver,
+    }
+    .iter()
+    .flat_map(|file| -> Option<_> {
+        Some((
+            Url::parse(&format!(
+                "{}{}/{}/{file}",
+                at_home.base_url,
+                match mode {
+                    Mode::DataSaver => "data-saver",
+                    Mode::Normal => "data",
+                },
+                at_home.chapter.hash
             ))
-        })
-        .collect()
+            .ok()?,
+            file.clone(),
+        ))
+    })
+    .collect()
 }
 
 impl<R: Runtime> SpawnHandle<R> {

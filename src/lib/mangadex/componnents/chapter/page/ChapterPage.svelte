@@ -8,11 +8,11 @@
 	import ChapterPageHeader from "./top-info/ChapterPageHeader.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
 	import getCurrentChapterImages from "./utils/getCurrentChapterImages";
-	import { debounce, delay } from "lodash";
+	import { debounce, delay, noop } from "lodash";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import type { Action } from "svelte/action";
-	import { onDestroy } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Progress from "./progress/Progress.svelte";
 
@@ -44,6 +44,7 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
+	onMount(() => images.subscribe(noop));
 </script>
 
 <svelte:window onfocus={triggerFunc} />
