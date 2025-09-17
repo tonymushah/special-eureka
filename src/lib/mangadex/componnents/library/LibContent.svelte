@@ -27,7 +27,9 @@
 	}
 
 	let { executeSearchQuery, section }: Props = $props();
-	const params = writable<UserLibrarySectionParam>({});
+	const params = writable<UserLibrarySectionParam>({
+		hasAvailableChapters: true
+	});
 	const p_p_offline = derived([params, pageLimit], ([$params, $pageLimit]) => {
 		$params.limit = $pageLimit;
 		return $params;
