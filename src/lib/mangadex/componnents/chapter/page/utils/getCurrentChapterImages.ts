@@ -8,7 +8,7 @@ const KEY = "CHAPTER-CURRENT-IMAGES";
 
 function init(): ChapterPagesStore {
 	return ChapterPages.initFromStore(derived(getCurrentChapterData(), (c) => c.id), {
-		mode: get(chapterQuality)
+		mode: chapterQuality
 	});
 }
 
