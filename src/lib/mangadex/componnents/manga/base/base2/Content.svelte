@@ -140,7 +140,7 @@
 		grid-template-areas: "top" "bottom";
 		grid-template-rows: 30px auto;
 		flex-grow: 1;
-		align-items: center;
+		//align-items: center;
 		.top-body {
 			grid-area: top;
 		}
