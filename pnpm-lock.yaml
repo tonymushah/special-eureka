@@ -13,16 +13,16 @@ importers:
         version: 1.7.4
       '@fontsource-variable/josefin-sans':
         specifier: ^5.2.7
-        version: 5.2.7
+        version: 5.2.8
       '@fontsource-variable/noto-sans-jp':
         specifier: ^5.2.7
-        version: 5.2.7
+        version: 5.2.8
       '@fontsource/pacifico':
         specifier: ^5.2.6
-        version: 5.2.6
+        version: 5.2.7
       '@fontsource/poppins':
         specifier: ^5.2.6
-        version: 5.2.6
+        version: 5.2.7
       '@graphiql/toolkit':
         specifier: ~0.11.3
         version: 0.11.3(@types/node@24.3.1)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)
@@ -639,17 +639,17 @@ packages:
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
 
-  '@fontsource-variable/josefin-sans@5.2.7':
-    resolution: {integrity: sha512-ImlBTpfzeFoZRvhI5SE+wwxhmaiwRr7/uVC8M5lMlNSrSA7c6yoIILr7cnKO4sbK/PjOPO/A8aSFkX3M6NewZA==}
+  '@fontsource-variable/josefin-sans@5.2.8':
+    resolution: {integrity: sha512-xt8EGt2/66JJV/mmWU2NxafIwXmDNdd1yi/bVZyRRMCtygHXPCldJrrjjDgOCJPyXbE7NWkc3g+5iE8uJJGbFA==}
 
-  '@fontsource-variable/noto-sans-jp@5.2.7':
-    resolution: {integrity: sha512-0uZ8EKCNG3W49uDDiZdhMOXICJIm2dmmmI8JOjIuq3Kt/2ZUgzkgdnSKWYLe0Ahk9jQpLVMU23tEOaGfPH7xQg==}
+  '@fontsource-variable/noto-sans-jp@5.2.8':
+    resolution: {integrity: sha512-oGjExI1HZqwXlGU9Xf8EacsF5F4H7Lq9ZKGgoem3dvA+Jt3dloHHHVzPGSxRzbkmu0bZEJRDGyadgW7Rkaremg==}
 
-  '@fontsource/pacifico@5.2.6':
-    resolution: {integrity: sha512-fiFNIwcG96tXG+B3Bc3pbSzFooqYAXr2+GeiqkgufXrVE/WAlKx8DHHL/km8HRP1FzRJUp12ZJX7YPogbfU0Ng==}
+  '@fontsource/pacifico@5.2.7':
+    resolution: {integrity: sha512-L+YiZn3Lb8rVN15zcLlti62doVxQeFpS+dJmulKkFrUo3dZIAxZLHwXoKaaHm+VVcOTrT/mmKCZqGOIWVmFV2w==}
 
-  '@fontsource/poppins@5.2.6':
-    resolution: {integrity: sha512-NFr0121+vWCfzLDVvSZOzwAjRUaNj6QHA9gtUh/KHHoWf1Qn23EkwVFs63XZ6UtF5K1b3UNmCx77YEMGgV7BOQ==}
+  '@fontsource/poppins@5.2.7':
+    resolution: {integrity: sha512-6uQyPmseo4FgI97WIhA4yWRlNaoLk4vSDK/PyRwdqqZb5zAEuc+Kunt8JTMcsHYUEGYBtN15SNkMajMdqUSUmg==}
 
   '@graphiql/plugin-doc-explorer@0.4.1':
     resolution: {integrity: sha512-+ram1dDDGMqJn/f9n5I8E6grTvxcM9JZYt/HhtYLuCvkN8kERI6/E3zBHBshhIUnQZoXioZ03fAzXg7JOn0Kyg==}
@@ -4857,13 +4857,13 @@ snapshots:
 
   '@floating-ui/utils@0.2.10': {}
 
-  '@fontsource-variable/josefin-sans@5.2.7': {}
+  '@fontsource-variable/josefin-sans@5.2.8': {}
 
-  '@fontsource-variable/noto-sans-jp@5.2.7': {}
+  '@fontsource-variable/noto-sans-jp@5.2.8': {}
 
-  '@fontsource/pacifico@5.2.6': {}
+  '@fontsource/pacifico@5.2.7': {}
 
-  '@fontsource/poppins@5.2.6': {}
+  '@fontsource/poppins@5.2.7': {}
 
   '@graphiql/plugin-doc-explorer@0.4.1(@graphiql/react@0.37.1(@emotion/is-prop-valid@0.8.8)(@types/node@24.3.1)(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-compiler-runtime@19.1.0-rc.1(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)))(@types/react@19.1.12)(graphql@16.11.0)(react-compiler-runtime@19.1.0-rc.1(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))':
     dependencies:
