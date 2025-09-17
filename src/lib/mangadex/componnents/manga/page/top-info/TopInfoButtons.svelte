@@ -66,5 +66,7 @@
 	.button-group {
 		display: flex;
 		gap: 10px;
+		flex-direction: row;
+		flex-wrap: wrap;
 	}
 </style>
