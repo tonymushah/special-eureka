@@ -5,7 +5,7 @@
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
-	import { times } from "lodash";
+	import { range, times } from "lodash";
 	import { derived, get } from "svelte/store";
 	import { slide } from "svelte/transition";
 
@@ -24,7 +24,7 @@
 	const options = derived(
 		ChapterPages.initFromStore(derived(currentData, ($d) => $d.id)),
 		($images) =>
-			times($images.getImages().length).map<SelectOption<number>>((index) => ({
+			range(0, $images.getImages().length).map<SelectOption<number>>((index) => ({
 				value: index,
 				label: `${index + 1}`
 			}))
@@ -55,8 +55,8 @@
 </script>
 
 <div class="layout">
-	<div class="input" use:melt={$trigger}>
-		<ButtonAccent>
+	<div class="input">
+		<ButtonAccent meltElement={trigger}>
 			Page: {$selectedLabel}
 		</ButtonAccent>
 	</div>
@@ -112,6 +112,12 @@
 		}
 		li.isSelected {
 			background-color: var(--primary);
+		}
+		li.isSelected:hover {
+			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-hover) 30%);
+		}
+		li.isSelected:active {
+			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
 		}
 	}
 	.input {
