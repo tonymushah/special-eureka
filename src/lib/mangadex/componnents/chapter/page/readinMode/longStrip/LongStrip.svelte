@@ -110,21 +110,35 @@
 	};
 	const widthWritable = getLongStripImagesWidthContextWritable();
 	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
+	let isCtrlPressed = $state(false);
 </script>
+
+<svelte:window
+	onkeydown={(e) => {
+		if (e.ctrlKey) {
+			isCtrlPressed = true;
+		}
+	}}
+	onkeyup={(e) => {
+		if (e.ctrlKey) {
+			isCtrlPressed = false;
+		}
+	}}
+/>
 
 <div
 	class="longstrip"
 	class:innerOverflow
 	bind:this={longstrip_root}
-	onwheel={debounce<WheelEventHandler<HTMLDivElement>>((e) => {
-		if (e.ctrlKey) {
+	onwheel={(e) => {
+		if (isCtrlPressed) {
 			e.preventDefault();
 			e.stopPropagation();
 			let width = $imageWidth;
-			width += e.deltaY * (-0.001 * $zoomSpeedValue);
-			$imageWidth = Math.min(Math.max(0, width), 100);
+			width += e.deltaY * (-0.1 * $zoomSpeedValue);
+			$widthWritable = Math.min(Math.max(0, width), 100);
 		}
-	})}
+	}}
 >
 	{@render top?.()}
 	{#each $images as image, page}
