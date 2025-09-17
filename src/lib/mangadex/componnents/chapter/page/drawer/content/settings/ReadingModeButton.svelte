@@ -14,8 +14,10 @@
 		MoreHorizontalIcon,
 		MoreVerticalIcon
 	} from "svelte-feather-icons";
+	import { getCurrentChapterData } from "../../../contexts/currentChapter";
 
 	const mode = getCurrentChapterReadingModeWritable();
+	const currentData = getCurrentChapterData();
 	const label = derived(mode, ($mode) => {
 		switch ($mode) {
 			case ReadingMode.DoublePage:
@@ -51,30 +53,38 @@
 		class="outer"
 		oncontextmenu={(e) => {
 			e.preventDefault();
-			switch ($mode) {
-				case ReadingMode.SinglePage:
-					mode.set(ReadingMode.DoublePage);
-					break;
-				case ReadingMode.DoublePage:
-					mode.set(ReadingMode.LongStrip);
-					break;
-				case ReadingMode.LongStrip:
-					mode.set(ReadingMode.WideStrip);
-					break;
-				case ReadingMode.WideStrip:
-					mode.set(ReadingMode.SinglePage);
-					break;
-				default:
-					break;
+			if (!$currentData.isLongstrip) {
+				switch ($mode) {
+					case ReadingMode.SinglePage:
+						mode.set(ReadingMode.DoublePage);
+						break;
+					case ReadingMode.DoublePage:
+						mode.set(ReadingMode.LongStrip);
+						break;
+					case ReadingMode.LongStrip:
+						mode.set(ReadingMode.WideStrip);
+						break;
+					case ReadingMode.WideStrip:
+						mode.set(ReadingMode.SinglePage);
+						break;
+					default:
+						break;
+				}
 			}
 		}}
 		use:melt={$trigger}
 	>
-		<ButtonAccentOnlyLabel variant="3" icon={Icon} label={$label} oneLine />
+		<ButtonAccentOnlyLabel
+			variant="3"
+			icon={Icon}
+			disabled={$currentData.isLongstrip}
+			label={$label}
+			oneLine
+		/>
 	</div>
 </SettingsTransitComp>
 
-{#if $open}
+{#if $open && !$currentData.isLongstrip}
 	<div class="menu-outer" use:melt={$menu}>
 		<MangaDexVarThemeProvider>
 			<menu transition:slide={{ duration: 150, axis: "y" }}>

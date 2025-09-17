@@ -5077,6 +5077,7 @@ export type GetChapterPageDataQuery = {
 						originalLanguage: Language;
 						contentRating?: ContentRating | null;
 						publicationDemographic?: Demographic | null;
+						isLongstrip: boolean;
 						tags: Array<{
 							__typename?: "Tag";
 							id: any;
@@ -13911,6 +13912,13 @@ export const GetChapterPageDataDocument = {
 																					name: {
 																						kind: "Name",
 																						value: "publicationDemographic"
+																					}
+																				},
+																				{
+																					kind: "Field",
+																					name: {
+																						kind: "Name",
+																						value: "isLongstrip"
 																					}
 																				}
 																			]

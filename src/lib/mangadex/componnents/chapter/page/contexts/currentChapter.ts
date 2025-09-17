@@ -62,6 +62,7 @@ export class CurrentChapterData {
 	thread?: CurrentChapterThread;
 	canChangeGroups: boolean = false;
 	translatedLanguage: Language;
+	isLongstrip?: boolean;
 	constructor({
 		id,
 		uploader,

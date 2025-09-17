@@ -34,7 +34,7 @@
 					"en"
 				) ?? ""
 		});
-		return new CurrentChapterData({
+		const cdata = new CurrentChapterData({
 			id,
 			uploader,
 			title,
@@ -44,6 +44,9 @@
 			groups: scans_groups,
 			volume
 		});
+		cdata.isOneshot = chapterNumber == undefined && volume == undefined;
+		cdata.isLongstrip = data.relationships.manga.attributes.isLongstrip;
+		return cdata;
 	}
 </script>
 
@@ -76,16 +79,16 @@
 	import readingModeWritable from "@mangadex/gql-docs/chapter/layout-query/readingMode";
 	import relatedChaptersQuery from "@mangadex/gql-docs/chapter/layout-query/related";
 	import chapterPageThread from "@mangadex/gql-docs/chapter/layout-query/thread";
-	import { DrawerMode } from "@mangadex/gql/graphql";
+	import { DrawerMode, ReadingMode } from "@mangadex/gql/graphql";
 	import { drawerModeStore } from "@mangadex/stores/chapterLayout";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { getContextClient } from "@urql/svelte";
-	import { derived, get, writable } from "svelte/store";
-	import type { LayoutData } from "./$types";
-	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
-	import { untrack } from "svelte";
 	import { isLogged } from "@mangadex/utils/auth";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { getContextClient } from "@urql/svelte";
+	import { untrack } from "svelte";
+	import { derived, toStore, writable } from "svelte/store";
+	import type { LayoutData } from "./$types";
 
 	interface Props {
 		data: LayoutData;
@@ -135,7 +138,29 @@
 	const currentChapterData = initCurrentChapterData(
 		writable(layoutDataToCurrentChapterData(data))
 	);
-	initCurrentChapterReadingMode(readingModeWritable);
+
+	const dataStore = toStore(() => data);
+	const readingModeCur = derived([readingModeWritable, dataStore], ([inner, data]) => {
+		if (data.data.relationships.manga.attributes.isLongstrip) {
+			return ReadingMode.LongStrip;
+		} else {
+			return inner;
+		}
+	});
+	initCurrentChapterReadingMode({
+		subscribe: readingModeCur.subscribe,
+		set(value) {
+			if (!data.data.relationships.manga.attributes.isLongstrip) {
+				readingModeWritable.set(value);
+			}
+		},
+		update(updater) {
+			if (!data.data.relationships.manga.attributes.isLongstrip) {
+				readingModeWritable.update(updater);
+			}
+		}
+	});
+
 	initCurrentChapterDirection(readingDirectionWritable);
 	initCurrentChapterImageFit(imageFitWritable);
 	const currentPage = initChapterCurrentPageContext(writable(data.currentPage));
