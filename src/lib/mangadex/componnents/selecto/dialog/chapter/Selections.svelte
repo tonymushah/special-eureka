@@ -1,3 +1,5 @@
+<!-- TODO cache selections -->
+
 <script lang="ts">
 	import StatusBadgeOnlyLabel from "@mangadex/componnents/theme/tag/StatusBadgeOnlyLabel.svelte";
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";

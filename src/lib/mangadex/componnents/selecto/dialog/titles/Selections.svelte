@@ -1,3 +1,5 @@
+<!-- TODO add cache -->
+
 <script lang="ts">
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
