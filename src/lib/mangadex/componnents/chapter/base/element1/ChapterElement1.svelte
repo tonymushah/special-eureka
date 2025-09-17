@@ -231,7 +231,7 @@
 				<MangaDexFlagIcon bind:lang />
 			</div>
 			<div
-				class="buttons"
+				class="buttons icons"
 				role="button"
 				onclick={(e) => {
 					if (onread) {
@@ -258,10 +258,10 @@
 				}}
 				aria-disabled={$readMarkers.isPending}
 			>
-				{#if !$hasBeenRead}
+				{#if !$hasBeenRead && $isLogged}
 					<EyeIcon />
 				{:else if $readMarkers.isPending || !$isLogged}
-					<RiSearchEyeLine />
+					<RiSearchEyeLine size="25" />
 				{:else}
 					<EyeOffIcon />
 				{/if}
@@ -434,5 +434,10 @@
 	}
 	.chapter-element:global([data-selecto-selected]) {
 		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+	}
+	.icons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

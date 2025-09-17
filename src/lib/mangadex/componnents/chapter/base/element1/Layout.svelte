@@ -29,6 +29,7 @@
 	class="layout"
 	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
+	class:haveNotBeenRead={!haveBeenRead && $isLogged}
 	class:hasImages={$download_state_images.hasImages}
 	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
 >
@@ -67,15 +68,6 @@
 			var(--accent-l4) var(--status-right)
 		);
 	}
-	.layout.isNotLogged {
-		background-color: var(--accent-l1);
-	}
-	.layout.isNotLogged:hover {
-		background-color: var(--accent-l1-hover);
-	}
-	.layout.isNotLogged:active {
-		background-color: var(--accent-l1-active);
-	}
 	.layout.haveBeenRead {
 		background-color: var(--accent-l2);
 	}
@@ -96,6 +88,7 @@
 		transition: background-color 300ms ease-in-out;
 		border-radius: 0.15rem;
 		width: -webkit-fill-available;
+		overflow: hidden;
 		.state {
 			grid-area: state;
 		}
@@ -117,13 +110,22 @@
 			align-items: center;
 		}
 	}
+	.layout.isNotLogged {
+		background-color: var(--accent-l1);
+	}
+	.layout.isNotLogged:hover {
+		background-color: var(--accent-l1-hover);
+	}
+	.layout.isNotLogged:active {
+		background-color: var(--accent-l1-active);
+	}
 	.layout:hover {
 		background-color: var(--accent-l3-hover, transparent);
 	}
 	.layout:active {
 		background-color: var(--accent-l3-active, transparent);
 	}
-	.layout:not(.haveBeenRead .isNotLogged) {
+	.layout.haveNotBeenRead {
 		border-style: solid;
 		border-width: 0px 0px 0px 5px;
 		border-color: var(--indication-blue);

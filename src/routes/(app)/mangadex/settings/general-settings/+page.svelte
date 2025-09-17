@@ -4,6 +4,7 @@
 	import ForcePort443 from "./ForcePort443.svelte";
 	import IsDataSaver from "./IsDataSaver.svelte";
 	import PageLimit from "./PageLimit.svelte";
+	import ReadingModeSetting from "./ReadingModeSetting.svelte";
 </script>
 
 <div class="layout">
@@ -25,6 +26,10 @@
 	<hr />
 	<section>
 		<CoverBlur />
+	</section>
+	<hr />
+	<section>
+		<ReadingModeSetting />
 	</section>
 </div>
 
