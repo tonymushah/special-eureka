@@ -327,4 +327,9 @@
 		border: 3px solid var(--mid-tone);
 		border-radius: 6px;
 	}
+	.right {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
 </style>
