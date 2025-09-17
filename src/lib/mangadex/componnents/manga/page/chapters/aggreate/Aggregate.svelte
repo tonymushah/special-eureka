@@ -46,7 +46,7 @@
 	const isFetching = der(query, ($q) => $q.isFetching);
 
 	const isEmpty = der(query, (q) => {
-		q.data?.manga.aggregate.chunked.length == 0;
+		return (q.data?.manga.aggregate.chunked.flatMap((d) => d.ids).length ?? 0) == 0;
 	});
 	const aggregate = der(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
@@ -173,44 +173,46 @@
 				{/if}
 			</ButtonAccent>
 		</div>
-		<div class="right">
-			{#if $isLogged}
-				<ButtonAccent
-					disabled={$query.isLoading || $readMarkersMutation.isPending}
-					onclick={() => {
-						$readMarkersMutation.mutate(
-							{
-								reads: $hasUnread ? $unread.values().toArray() : [],
-								unreads: $hasUnread
-									? []
-									: ($query.data?.manga.aggregate.chunked.flatMap(
-											(d) => d.ids as string[]
-										) ?? [])
-							},
-							{
-								onSuccess(data, variables, context) {
-									refetchTitleReadMarker();
+		{#if !$isEmpty}
+			<div class="right">
+				{#if $isLogged}
+					<ButtonAccent
+						disabled={$query.isLoading || $readMarkersMutation.isPending}
+						onclick={() => {
+							$readMarkersMutation.mutate(
+								{
+									reads: $hasUnread ? $unread.values().toArray() : [],
+									unreads: $hasUnread
+										? []
+										: ($query.data?.manga.aggregate.chunked.flatMap(
+												(d) => d.ids as string[]
+											) ?? [])
+								},
+								{
+									onSuccess(data, variables, context) {
+										refetchTitleReadMarker();
+									}
 								}
-							}
-						);
-					}}
+							);
+						}}
+					>
+						{#if $hasUnread}
+							Mark all chapter as read
+						{:else}
+							Mark all chapter as not read
+						{/if}
+					</ButtonAccent>
+				{/if}
+				<ButtonAccent
+					onclick={debounce(async () => {
+						isReversed.update((i) => !i);
+					})}
+					disabled={$query.isLoading}
 				>
-					{#if $hasUnread}
-						Mark all chapter as read
-					{:else}
-						Mark all chapter as not read
-					{/if}
+					Reverse
 				</ButtonAccent>
-			{/if}
-			<ButtonAccent
-				onclick={debounce(async () => {
-					isReversed.update((i) => !i);
-				})}
-				disabled={$query.isLoading}
-			>
-				Reverse
-			</ButtonAccent>
-		</div>
+			</div>
+		{/if}
 	</div>
 	{#if $query.isFetched}
 		{#if $isEmpty}
@@ -277,6 +279,7 @@
 	.top {
 		display: flex;
 		justify-content: space-between;
+		padding-bottom: 2px;
 	}
 	.bottom {
 		display: flex;
