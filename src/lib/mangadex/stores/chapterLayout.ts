@@ -62,7 +62,7 @@ const readSidebarModeStore = derived(subStore, (d) => d?.sidebar ?? SidebarMode.
 
 const readDrawerMode = derived(subStore, (d) => d?.drawer ?? DrawerMode.Unpinned);
 
-const readProgressMode = derived(subStore, (d) => d?.progress ?? ProgressMode.Default);
+const readProgressMode = derived(subStore, (d) => d?.progress ?? ProgressMode.Default, ProgressMode.Hidden);
 
 export const sidebarModeStore: Writable<SidebarMode> = {
 	subscribe(run, invalidate) {
