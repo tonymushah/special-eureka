@@ -84,7 +84,6 @@ async function getMangaToReadChapter(manga_id: string): Promise<Chapter[]> {
 				client
 			}),
 			groups,
-			haveBeenRead: false,
 			comments: 0
 		} satisfies Chapter;
 	});

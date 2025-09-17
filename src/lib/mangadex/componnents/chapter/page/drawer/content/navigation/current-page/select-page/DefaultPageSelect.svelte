@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { getCurrentChapterData } from "@mangadex/componnents/chapter/page/contexts/currentChapter";
 	import { getChapterCurrentPageContext } from "@mangadex/componnents/chapter/page/contexts/currentPage";
+	import getCurrentChapterImages from "@mangadex/componnents/chapter/page/utils/getCurrentChapterImages";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
-	import ChapterPages from "@mangadex/stores/chapter/pages";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
-	import { times } from "lodash";
+	import { range } from "lodash";
 	import { derived, get } from "svelte/store";
 	import { slide } from "svelte/transition";
 
@@ -19,15 +18,13 @@
 			label: `${$page + 1}`
 		} as SelectOption<number>;
 	});
-	const currentData = getCurrentChapterData();
+	//const currentData = getCurrentChapterData();
 
-	const options = derived(
-		ChapterPages.initFromStore(derived(currentData, ($d) => $d.id)),
-		($images) =>
-			times($images.getImages().length).map<SelectOption<number>>((index) => ({
-				value: index,
-				label: `${index + 1}`
-			}))
+	const options = derived(getCurrentChapterImages(), ($images) =>
+		range(0, $images.getImages().length).map<SelectOption<number>>((index) => ({
+			value: index,
+			label: `${index + 1}`
+		}))
 	);
 	const {
 		elements: { trigger, menu, option },
@@ -52,11 +49,12 @@
 			}
 		}
 	});
+	//onMount(() => options.subscribe(noop));
 </script>
 
 <div class="layout">
-	<div class="input" use:melt={$trigger}>
-		<ButtonAccent>
+	<div class="input">
+		<ButtonAccent meltElement={trigger}>
 			Page: {$selectedLabel}
 		</ButtonAccent>
 	</div>
@@ -112,6 +110,12 @@
 		}
 		li.isSelected {
 			background-color: var(--primary);
+		}
+		li.isSelected:hover {
+			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-hover) 30%);
+		}
+		li.isSelected:active {
+			background-color: color-mix(in srgb, var(--primary) 70%, var(--accent-active) 30%);
 		}
 	}
 	.input {

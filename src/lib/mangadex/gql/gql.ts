@@ -85,7 +85,7 @@ type Documents = {
 	"\n\tmutation updateChapterReadingMode($mode: ReadingMode!) {\n\t\tuserOption {\n\t\t\tsetReadingMode(mode: $mode)\n\t\t}\n\t}\n": typeof types.UpdateChapterReadingModeDocument;
 	"\n\tquery getChapterRelated($mangaId: UUID!, $langs: Language!, $groups: [UUID!]!) {\n\t\tmanga {\n\t\t\taggregate(\n\t\t\t\tparams: { groups: $groups, mangaId: $mangaId, translatedLanguage: [$langs] }\n\t\t\t) {\n\t\t\t\tdefault(isReversed: true) {\n\t\t\t\t\tvolumes {\n\t\t\t\t\t\tvolume\n\t\t\t\t\t\tchapters {\n\t\t\t\t\t\t\tchapter\n\t\t\t\t\t\t\tids\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChapterRelatedDocument;
 	"\n\tquery chapterPageThread($id: UUID!) {\n\t\tstatistics {\n\t\t\tchapter {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ChapterPageThreadDocument;
-	"\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChapterPageDataDocument;
+	"\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t\tisLongstrip\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetChapterPageDataDocument;
 	"\n\tmutation setContentProfileBlur($blur: Boolean!) {\n\t\tuserOption {\n\t\t\tsetContentProfileBlur(blur: $blur)\n\t\t}\n\t}\n": typeof types.SetContentProfileBlurDocument;
 	"\n\tsubscription subContentProfileBlur {\n\t\twatchContentProfileBlur\n\t}\n": typeof types.SubContentProfileBlurDocument;
 	"\n\tquery getContentProfileBlur {\n\t\tuserOption {\n\t\t\tgetContentProfileBlur\n\t\t}\n\t}\n": typeof types.GetContentProfileBlurDocument;
@@ -125,6 +125,13 @@ type Documents = {
 	"\n\tquery isFollowingCustomListQuery($id: UUID!) {\n\t\tfollows{\n\t\t\tisFollowingCustomList(id: $id)\n\t\t}\n\t}\n": typeof types.IsFollowingCustomListQueryDocument;
 	"\n\tquery getCustomListVersion1($id: UUID!) {\n\t\tcustomList{\n\t\t\tget(id: $id, private: true) {\n\t\t\t\tid\n\t\t\t\tattributes{\n\t\t\t\t\tversion\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.GetCustomListVersion1Document;
 	"\n\tmutation updateCustomListVisibility1 ($id: UUID!, $visibility: CustomListVisibility!, $version: Int!) {\n\t\tcustomList {\n\t\t\tupdate(params:  {\n\t\t\t   listId: $id,\n\t\t\t   version: $version,\n\t\t\t   visibility: $visibility\n\t\t\t}) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n": typeof types.UpdateCustomListVisibility1Document;
+	"\n\tsubscription listenToChapterReadMarker($id: UUID!) {\n\t\twatchReadMarker(chapterId: $id)\n\t}\n": typeof types.ListenToChapterReadMarkerDocument;
+	"\n\tsubscription listenToAnyChapterReadMarker {\n\t\twatchReadMarkers {\n\t\t\tchapter\n\t\t\tread\n\t\t}\n\t}\n": typeof types.ListenToAnyChapterReadMarkerDocument;
+	"\n\tmutation mutateReadMarkersBatch($unreads: [UUID!]!, $read: [UUID!]!, $updateHistory: Boolean) {\n\t\treadMarker {\n\t\t\treadMarkersBatch(chapterIdsRead: $read, chapterIdsUnread: $unreads, updateHistory: $updateHistory)\n\t\t}\n\t}\n": typeof types.MutateReadMarkersBatchDocument;
+	"\n\tquery chaptersReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tchapterReadMarkers(chapters: $ids)\n\t\t}\n\t}\n": typeof types.ChaptersReadMarkersDocument;
+	"\n\tquery mangaReadMarkers($id: UUID!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersByMangaId(mangaId: $id)\n\t\t}\n\t}\n": typeof types.MangaReadMarkersDocument;
+	"\n\tquery mangasReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkers(mangaIds: $ids)\n\t\t}\n\t}\n": typeof types.MangasReadMarkersDocument;
+	"\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n": typeof types.MangasReadMarkersGroupedDocument;
 	"\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n": typeof types.RtlSidebarSubDocument;
 	"\n\tquery tagPopulatTitlesQuery($id: UUID!, $params: TagPopularList) {\n\t\ttag {\n\t\t\tpage(id: $id) {\n\t\t\t\tpopularInfSection(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\toffset\n\t\t\t\t\ttotal\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tyear\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.TagPopulatTitlesQueryDocument;
 	"\n\tquery tagRecentlyPopularQuery($id: UUID!) {\n\t\ttag {\n\t\t\tpage(id: $id) {\n\t\t\t\trecentlyAdded {\n\t\t\t\t\tid\n\t\t\t\t\tattributes {\n\t\t\t\t\t\ttitle\n\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\tstatus\n\t\t\t\t\t\tdescription\n\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\tyear\n\t\t\t\t\t\taltTitles\n\t\t\t\t\t}\n\t\t\t\t\trelationships {\n\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tauthorArtists {\n\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n": typeof types.TagRecentlyPopularQueryDocument;
@@ -343,7 +350,7 @@ const documents: Documents = {
 		types.GetChapterRelatedDocument,
 	"\n\tquery chapterPageThread($id: UUID!) {\n\t\tstatistics {\n\t\t\tchapter {\n\t\t\t\tget(id: $id) {\n\t\t\t\t\tcomments {\n\t\t\t\t\t\trepliesCount\n\t\t\t\t\t\tthreadUrl\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.ChapterPageThreadDocument,
-	"\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
+	"\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t\tisLongstrip\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
 		types.GetChapterPageDataDocument,
 	"\n\tmutation setContentProfileBlur($blur: Boolean!) {\n\t\tuserOption {\n\t\t\tsetContentProfileBlur(blur: $blur)\n\t\t}\n\t}\n":
 		types.SetContentProfileBlurDocument,
@@ -422,6 +429,20 @@ const documents: Documents = {
 		types.GetCustomListVersion1Document,
 	"\n\tmutation updateCustomListVisibility1 ($id: UUID!, $visibility: CustomListVisibility!, $version: Int!) {\n\t\tcustomList {\n\t\t\tupdate(params:  {\n\t\t\t   listId: $id,\n\t\t\t   version: $version,\n\t\t\t   visibility: $visibility\n\t\t\t}) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n":
 		types.UpdateCustomListVisibility1Document,
+	"\n\tsubscription listenToChapterReadMarker($id: UUID!) {\n\t\twatchReadMarker(chapterId: $id)\n\t}\n":
+		types.ListenToChapterReadMarkerDocument,
+	"\n\tsubscription listenToAnyChapterReadMarker {\n\t\twatchReadMarkers {\n\t\t\tchapter\n\t\t\tread\n\t\t}\n\t}\n":
+		types.ListenToAnyChapterReadMarkerDocument,
+	"\n\tmutation mutateReadMarkersBatch($unreads: [UUID!]!, $read: [UUID!]!, $updateHistory: Boolean) {\n\t\treadMarker {\n\t\t\treadMarkersBatch(chapterIdsRead: $read, chapterIdsUnread: $unreads, updateHistory: $updateHistory)\n\t\t}\n\t}\n":
+		types.MutateReadMarkersBatchDocument,
+	"\n\tquery chaptersReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tchapterReadMarkers(chapters: $ids)\n\t\t}\n\t}\n":
+		types.ChaptersReadMarkersDocument,
+	"\n\tquery mangaReadMarkers($id: UUID!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersByMangaId(mangaId: $id)\n\t\t}\n\t}\n":
+		types.MangaReadMarkersDocument,
+	"\n\tquery mangasReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkers(mangaIds: $ids)\n\t\t}\n\t}\n":
+		types.MangasReadMarkersDocument,
+	"\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n":
+		types.MangasReadMarkersGroupedDocument,
 	"\n\tsubscription rtlSidebarSub {\n\t\twatchSidebarDirection\n\t}\n":
 		types.RtlSidebarSubDocument,
 	"\n\tquery tagPopulatTitlesQuery($id: UUID!, $params: TagPopularList) {\n\t\ttag {\n\t\t\tpage(id: $id) {\n\t\t\t\tpopularInfSection(params: $params) {\n\t\t\t\t\tlimit\n\t\t\t\t\toffset\n\t\t\t\t\ttotal\n\t\t\t\t\tdata {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\tyear\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t}\n\t\t\t\t\t\trelationships {\n\t\t\t\t\t\t\tcoverArt {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tdescription\n\t\t\t\t\t\t\t\t\tfileName\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n":
@@ -1015,8 +1036,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-	source: "\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
-): (typeof documents)["\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
+	source: "\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t\tisLongstrip\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery getChapterPageData($id: UUID!) {\n\t\tchapter {\n\t\t\tget(id: $id) {\n\t\t\t\tid\n\t\t\t\tattributes {\n\t\t\t\t\ttitle\n\t\t\t\t\tvolume\n\t\t\t\t\tchapter\n\t\t\t\t\tpages\n\t\t\t\t\ttranslatedLanguage\n\t\t\t\t\texternalUrl\n\t\t\t\t\treadableAt\n\t\t\t\t}\n\t\t\t\trelationships {\n\t\t\t\t\tmanga {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\ttitle\n\t\t\t\t\t\t\tstatus\n\t\t\t\t\t\t\tstate\n\t\t\t\t\t\t\toriginalLanguage\n\t\t\t\t\t\t\ttags {\n\t\t\t\t\t\t\t\tid\n\t\t\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\t\t\tname\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tcontentRating\n\t\t\t\t\t\t\tpublicationDemographic\n\t\t\t\t\t\t\tisLongstrip\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tscanlationGroups {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tname\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tuser {\n\t\t\t\t\t\tid\n\t\t\t\t\t\tattributes {\n\t\t\t\t\t\t\tusername\n\t\t\t\t\t\t\troles\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -1251,6 +1272,48 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation updateCustomListVisibility1 ($id: UUID!, $visibility: CustomListVisibility!, $version: Int!) {\n\t\tcustomList {\n\t\t\tupdate(params:  {\n\t\t\t   listId: $id,\n\t\t\t   version: $version,\n\t\t\t   visibility: $visibility\n\t\t\t}) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation updateCustomListVisibility1 ($id: UUID!, $visibility: CustomListVisibility!, $version: Int!) {\n\t\tcustomList {\n\t\t\tupdate(params:  {\n\t\t\t   listId: $id,\n\t\t\t   version: $version,\n\t\t\t   visibility: $visibility\n\t\t\t}) {\n\t\t\t\tid\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription listenToChapterReadMarker($id: UUID!) {\n\t\twatchReadMarker(chapterId: $id)\n\t}\n"
+): (typeof documents)["\n\tsubscription listenToChapterReadMarker($id: UUID!) {\n\t\twatchReadMarker(chapterId: $id)\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tsubscription listenToAnyChapterReadMarker {\n\t\twatchReadMarkers {\n\t\t\tchapter\n\t\t\tread\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tsubscription listenToAnyChapterReadMarker {\n\t\twatchReadMarkers {\n\t\t\tchapter\n\t\t\tread\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation mutateReadMarkersBatch($unreads: [UUID!]!, $read: [UUID!]!, $updateHistory: Boolean) {\n\t\treadMarker {\n\t\t\treadMarkersBatch(chapterIdsRead: $read, chapterIdsUnread: $unreads, updateHistory: $updateHistory)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation mutateReadMarkersBatch($unreads: [UUID!]!, $read: [UUID!]!, $updateHistory: Boolean) {\n\t\treadMarker {\n\t\t\treadMarkersBatch(chapterIdsRead: $read, chapterIdsUnread: $unreads, updateHistory: $updateHistory)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery chaptersReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tchapterReadMarkers(chapters: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery chaptersReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tchapterReadMarkers(chapters: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangaReadMarkers($id: UUID!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersByMangaId(mangaId: $id)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangaReadMarkers($id: UUID!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersByMangaId(mangaId: $id)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangasReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkers(mangaIds: $ids)\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangasReadMarkers($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkers(mangaIds: $ids)\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tquery mangasReadMarkersGrouped($ids: [UUID!]!) {\n\t\treadMarker {\n\t\t\tmangaReadMarkersGrouped(mangaIds: $ids) {\n\t\t\t\tmangaId\n\t\t\t\tchapters\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

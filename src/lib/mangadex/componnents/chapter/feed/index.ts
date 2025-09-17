@@ -18,7 +18,6 @@ export type Chapter = {
 	groups: Group[];
 	uploader: Uploader;
 	upload_date: Date;
-	haveBeenRead: boolean;
 	download_state: Readable<ChapterDownloadState>;
 	comments: number;
 	threadUrl?: string;

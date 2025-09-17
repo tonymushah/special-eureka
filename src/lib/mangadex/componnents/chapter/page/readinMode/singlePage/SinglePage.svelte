@@ -122,6 +122,12 @@
 			</div>
 		{/if}
 	</div>
+{:else}
+	<div class="error">
+		<div class="_inner">
+			<p>Loadign...</p>
+		</div>
+	</div>
 {/if}
 
 <style lang="scss">
@@ -135,5 +141,15 @@
 		justify-content: center;
 		height: 100%;
 		width: 100%;
+	}
+	._inner {
+		border: 3px dashed var(--mid-tone);
+		opacity: 0.9;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+		flex-direction: column;
+		width: 75%;
+		height: 75%;
 	}
 </style>

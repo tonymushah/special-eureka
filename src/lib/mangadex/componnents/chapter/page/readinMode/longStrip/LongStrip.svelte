@@ -1,12 +1,18 @@
 <script lang="ts">
 	import { derived, writable, type Readable } from "svelte/store";
-	import { getLongStripImagesWidthContext } from "./utils/context/longstrip_images_width";
+	import {
+		getLongStripImagesWidthContext,
+		getLongStripImagesWidthContextWritable
+	} from "./utils/context/longstrip_images_width";
 	import { onMount } from "svelte";
 	import { getChapterCurrentPageContext } from "../../contexts/currentPage";
 	import type { Action } from "svelte/action";
 	import getCurrentChapterImages from "../../utils/getCurrentChapterImages";
 	import DangerButtonOnlyLabel from "@mangadex/componnents/theme/buttons/DangerButtonOnlyLabel.svelte";
 	import ChapterPages from "@mangadex/stores/chapter/pages";
+	import { zoomSpeedValue } from "../zoomableImage/settings";
+	import { debounce } from "lodash";
+	import type { WheelEventHandler } from "svelte/elements";
 
 	interface Props {
 		innerOverflow?: boolean;
@@ -102,10 +108,38 @@
 			}
 		};
 	};
+	const widthWritable = getLongStripImagesWidthContextWritable();
 	//onMount(() => currentChapter.subscribe(([p]) => console.debug(p)));
+	let isCtrlPressed = $state(false);
 </script>
 
-<div class="longstrip" class:innerOverflow bind:this={longstrip_root}>
+<svelte:window
+	onkeydown={(e) => {
+		if (e.ctrlKey) {
+			isCtrlPressed = true;
+		}
+	}}
+	onkeyup={(e) => {
+		if (e.ctrlKey) {
+			isCtrlPressed = false;
+		}
+	}}
+/>
+
+<div
+	class="longstrip"
+	class:innerOverflow
+	bind:this={longstrip_root}
+	onwheel={(e) => {
+		if (isCtrlPressed) {
+			e.preventDefault();
+			e.stopPropagation();
+			let width = $imageWidth;
+			width += e.deltaY * (-0.1 * $zoomSpeedValue);
+			$widthWritable = Math.min(Math.max(0, width), 100);
+		}
+	}}
+>
 	{@render top?.()}
 	{#each $images as image, page}
 		<div data-page={page} use:mount class="image">

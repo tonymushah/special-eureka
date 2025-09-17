@@ -433,6 +433,11 @@ type ChapterQueries {
 	isDownloaded(id: UUID!): DownloadState!
 }
 
+type ChapterReadMarkerSubItem {
+	chapter: UUID!
+	read: Boolean!
+}
+
 type ChapterRelationships {
 	manga: MangaObject!
 	scanlationGroups: [ScanlationGroup!]!
@@ -1216,6 +1221,7 @@ type GraphQLMangaAttributes {
 	createdAt: MangaDexDateTime!
 	updatedAt: MangaDexDateTime
 	version: Int!
+	isLongstrip: Boolean!
 }
 
 input GroupSortOrder @oneOf {
@@ -2083,6 +2089,7 @@ type ReadMarkerQueries {
 	mangaReadMarkers(mangaIds: [UUID!]!): [UUID!]!
 	mangaReadMarkersGrouped(mangaIds: [UUID!]!): [MangaReadMarkerGroupedItems!]!
 	userHistory: [UserHistoryEntry!]!
+	chapterReadMarkers(chapters: [UUID!]!): [UUID!]!
 }
 
 enum ReadingMode {
@@ -2405,7 +2412,6 @@ type Subscriptions {
 	watchIsFollowingUser(userId: UUID!): Boolean!
 	watchIsFollowingCustomList(customListId: UUID!): Boolean!
 	watchMangaReadingState(mangaId: UUID!): ReadingStatus
-	watchReadMarker(chapterId: UUID!): Boolean!
 	watchImageFit: ImageFit!
 	watchLongstripImageWidth: Float!
 	watchMangaListStyle: MangaListStyle!
@@ -2431,6 +2437,8 @@ type Subscriptions {
 	watchForcePort443: Boolean!
 	watchContentProfileBlur: Boolean!
 	watchContentProfileWarningMode: ContentProfileWarningMode!
+	watchReadMarker(chapterId: UUID!): Boolean!
+	watchReadMarkers: ChapterReadMarkerSubItem!
 }
 
 type Tag {

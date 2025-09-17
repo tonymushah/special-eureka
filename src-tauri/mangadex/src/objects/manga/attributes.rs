@@ -7,6 +7,7 @@ use mangadex_api_schema_rust::{
 };
 use mangadex_api_types_rust::{
     ContentRating, Demographic, Language, MangaDexDateTime, MangaState, MangaStatus,
+    Tag as BuiltInTag,
 };
 use uuid::Uuid;
 
@@ -102,5 +103,10 @@ impl GraphQLMangaAttributes {
     }
     pub async fn version(&self) -> u32 {
         self.version
+    }
+    pub async fn is_longstrip(&self) -> bool {
+        self.tags
+            .iter()
+            .any(|tag| tag.id == Into::<Uuid>::into(BuiltInTag::LongStrip))
     }
 }

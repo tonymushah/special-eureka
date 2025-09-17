@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { chapterDownloadStateImages } from "@mangadex/download/chapter";
+	import { isLogged } from "@mangadex/utils/auth";
 	import type { Snippet } from "svelte";
 
 	interface Props {
@@ -26,7 +27,9 @@
 
 <div
 	class="layout"
+	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
+	class:haveNotBeenRead={!haveBeenRead && $isLogged}
 	class:hasImages={$download_state_images.hasImages}
 	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
 >
@@ -61,12 +64,21 @@
 	.layout.hasImages {
 		background: linear-gradient(
 			90deg,
-			color-mix(in srgb, var(--primary) 50%, var(--chapter-layout) 50%) var(--status-left),
-			var(--chapter-layout) var(--status-right)
+			color-mix(in srgb, var(--primary) 50%, var(--accent-l4) 50%) var(--status-left),
+			var(--accent-l4) var(--status-right)
 		);
 	}
+	.layout.haveBeenRead {
+		background-color: var(--accent-l2);
+	}
+	.layout.haveBeenRead:hover {
+		background-color: var(--accent-l2-hover);
+	}
+	.layout.haveBeenRead:active {
+		background-color: var(--accent-l2-active);
+	}
 	.layout {
-		background-color: var(--chapter-layout, transparent);
+		background-color: var(--accent-l3, transparent);
 		display: grid;
 		grid-template-areas: "state flag-reading-state title-groups date-uploader reading-number-comments";
 		grid-template-columns: 25px 25px auto 125px 100px;
@@ -76,6 +88,7 @@
 		transition: background-color 300ms ease-in-out;
 		border-radius: 0.15rem;
 		width: -webkit-fill-available;
+		overflow: hidden;
 		.state {
 			grid-area: state;
 		}
@@ -97,17 +110,27 @@
 			align-items: center;
 		}
 	}
+	.layout.isNotLogged {
+		background-color: var(--accent-l1);
+	}
+	.layout.isNotLogged:hover {
+		background-color: var(--accent-l1-hover);
+	}
+	.layout.isNotLogged:active {
+		background-color: var(--accent-l1-active);
+	}
 	.layout:hover {
-		background-color: var(--chapter-layout-hover, transparent);
+		background-color: var(--accent-l3-hover, transparent);
 	}
 	.layout:active {
-		background-color: var(--chapter-layout-active, transparent);
+		background-color: var(--accent-l3-active, transparent);
 	}
-	.layout:not(.haveBeenRead) {
+	.layout.haveNotBeenRead {
 		border-style: solid;
 		border-width: 0px 0px 0px 5px;
 		border-color: var(--indication-blue);
 	}
+
 	.layout > div {
 		display: flex;
 		flex-direction: column;

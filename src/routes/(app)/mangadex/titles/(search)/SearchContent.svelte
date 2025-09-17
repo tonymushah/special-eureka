@@ -1,6 +1,8 @@
 <script lang="ts">
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import MangaList from "@mangadex/componnents/manga/list/MangaList.svelte";
 	import type { MangaListContentItemProps } from "@mangadex/componnents/manga/list/MangaListContent.svelte";
+	import SortSelector from "@mangadex/componnents/manga/list/sortSelector/SortSelector.svelte";
 	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
@@ -11,8 +13,6 @@
 	import { onDestroy } from "svelte";
 	import { derived, get, writable, type Readable, type Writable } from "svelte/store";
 	import executeSearchQuery from "./search";
-	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import SortSelector from "@mangadex/componnents/manga/list/sortSelector/SortSelector.svelte";
 
 	const client = getContextClient();
 	const debounce_wait = 450;

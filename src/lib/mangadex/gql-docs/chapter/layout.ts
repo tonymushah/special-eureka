@@ -30,6 +30,7 @@ const chapterLayoutPageQuery = graphql(`
 							}
 							contentRating
 							publicationDemographic
+							isLongstrip
 						}
 					}
 					scanlationGroups {

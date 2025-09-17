@@ -204,11 +204,9 @@
 		gap: 6px;
 	}
 	.layout {
-		display: flex;
-		flex-direction: row-reverse;
+		display: grid;
+		grid-template-columns: 170px calc(100% - 170px);
 		width: 100%;
-		gap: 2px;
-		height: -webkit-fill-available;
 		.content {
 			width: 100%;
 		}

@@ -141,4 +141,12 @@
 			}
 		}
 	}
+	@media (width < 900px) {
+		h3 {
+			margin: 0px;
+		}
+		h4 {
+			margin: 0px;
+		}
+	}
 </style>

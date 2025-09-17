@@ -64,7 +64,6 @@
 		groups?: Group[];
 		uploader: Uploader;
 		upload_date: Date;
-		haveBeenRead?: boolean;
 		comments?: number | undefined;
 	}
 </script>
@@ -94,6 +93,10 @@
 	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
+	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
+	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
+	import { RiSearchEyeLine } from "svelte-remixicon";
+	import { isLogged } from "@mangadex/utils/auth";
 
 	let {
 		id,
@@ -102,7 +105,6 @@
 		groups = [],
 		uploader,
 		upload_date,
-		haveBeenRead = true,
 		comments = undefined,
 		oncomments,
 		oncommentsKeyPress,
@@ -149,6 +151,24 @@
 				: undefined
 		});
 	}, true);
+	const hasBeenRead = getContextReadChapterMarker(id);
+	const handleRead = debounce(() => {
+		if ($isLogged) {
+			if (!$readMarkers.isPending) {
+				if ($hasBeenRead) {
+					$readMarkers.mutate({
+						reads: [],
+						unreads: [id]
+					});
+				} else {
+					$readMarkers.mutate({
+						reads: [id],
+						unreads: []
+					});
+				}
+			}
+		}
+	});
 </script>
 
 <article
@@ -158,7 +178,7 @@
 	})}
 	data-chapter-id={id}
 >
-	<Layout {haveBeenRead} {id}>
+	<Layout haveBeenRead={$hasBeenRead} {id}>
 		{#snippet state()}
 			<div
 				class="buttons"
@@ -211,24 +231,37 @@
 				<MangaDexFlagIcon bind:lang />
 			</div>
 			<div
-				class="buttons"
+				class="buttons icons"
 				role="button"
 				onclick={(e) => {
-					onread?.({
-						...e,
-						id
-					});
+					if (onread) {
+						onread?.({
+							...e,
+							id
+						});
+					} else {
+						handleRead();
+					}
 				}}
 				tabindex={1}
 				onkeypress={(e) => {
-					onreadKeyPress?.({
-						...e,
-						id
-					});
+					if (onreadKeyPress) {
+						onreadKeyPress?.({
+							...e,
+							id
+						});
+					} else {
+						if (e.key == "Enter") {
+							handleRead();
+						}
+					}
 				}}
+				aria-disabled={$readMarkers.isPending}
 			>
-				{#if !haveBeenRead}
+				{#if !$hasBeenRead && $isLogged}
 					<EyeIcon />
+				{:else if $readMarkers.isPending || !$isLogged}
+					<RiSearchEyeLine size="25" />
 				{:else}
 					<EyeOffIcon />
 				{/if}
@@ -401,5 +434,10 @@
 	}
 	.chapter-element:global([data-selecto-selected]) {
 		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+	}
+	.icons {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

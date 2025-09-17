@@ -1,35 +1,53 @@
 <script lang="ts">
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
+	import { mangadexQueryClient } from "@mangadex/index";
 	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import specialQueryStore from "@mangadex/utils/gql-stores/specialQueryStore";
+	import { getContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
+	import { isLogged } from "@mangadex/utils/auth";
+	import { createQuery } from "@tanstack/svelte-query";
 	import type { UnlistenFn } from "@tauri-apps/api/event";
 	import { openUrl as open } from "@tauri-apps/plugin-opener";
 	import { getContextClient } from "@urql/svelte";
+	import { debounce } from "lodash";
 	import { onDestroy, onMount } from "svelte";
-	import { derived as der, writable } from "svelte/store";
+	import { derived as der, get, writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
 	import { fetchChapters, fetchComments } from "./utils";
 	import { getChapterStoreContext } from "./utils/chapterStores";
 	import mangaAggregateQuery from "./utils/query";
+	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
 	const __res = getTitleLayoutData();
 	const data = __res.queryResult;
-	const query = specialQueryStore({
-		query: mangaAggregateQuery,
-		client,
-		variable: {
-			id: data!.id
-		}
+	const query = createQuery({
+		queryKey: ["title", __res.layoutData.id, "aggregate"],
+		async queryFn() {
+			const res = await client.query(mangaAggregateQuery, {
+				id: __res.layoutData.id
+			});
+			if (res.error) {
+				throw res.error;
+			} else if (res.data) {
+				return res.data;
+			} else {
+				throw new Error("no data??");
+			}
+		},
+		networkMode: "always"
 	});
 	let threadUrls = $state(new Map<string, string>());
 	let unlistens: UnlistenFn[] = [];
-	const isFetching = query.isFetching;
+	const isFetching = der(query, ($q) => $q.isFetching);
 
+	const isEmpty = der(query, (q) => {
+		return (q.data?.manga.aggregate.chunked.flatMap((d) => d.ids).length ?? 0) == 0;
+	});
 	const aggregate = der(query, (q) => {
 		const res = q?.data?.manga.aggregate.chunked.map<{
 			chapter: MangaAggregateData;
@@ -98,7 +116,6 @@
 				console.debug(e.keys());
 			})
 		);
-		await query.execute();
 	});
 	onDestroy(() => {
 		unlistens.forEach((u) => u());
@@ -109,20 +126,45 @@
 	/// Test if this work
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
-			query.execute();
+			get(query).refetch();
 		})
 	);
+	function refetchTitleReadMarker() {
+		return mangadexQueryClient.refetchQueries({
+			queryKey: ["title", __res.layoutData.id, "read-markers", "page"]
+		});
+	}
+	const readMarkers = getContextReadChapterMarkers();
+	const unread = der([query, readMarkers], ([$query, $markers]) => {
+		let chapters = new Set(
+			$query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
+		);
+		let readChapters = new Set(
+			$markers
+				.entries()
+				.filter(([v]) => {
+					return v;
+				})
+				.map(([v, k]) => {
+					return k;
+				})
+		);
+		let unreadChapters = chapters.difference(readChapters);
+
+		return unreadChapters;
+	});
+	const hasUnread = der(unread, ($unread) => $unread.size > 0);
 </script>
 
 <div class="aggregate">
 	<div class="top">
 		<div class="left">
 			<ButtonAccent
-				onclick={async () => {
-					if (!$isFetching) {
-						await query.execute();
-					}
-				}}
+				disabled={$isFetching}
+				onclick={debounce(async () => {
+					await $query.refetch();
+					await refetchTitleReadMarker();
+				})}
 			>
 				{#if $isFetching}
 					Loading...
@@ -131,47 +173,102 @@
 				{/if}
 			</ButtonAccent>
 		</div>
-		<div class="right">
-			<ButtonAccent
-				onclick={async () => {
-					isReversed.update((i) => !i);
-				}}
-			>
-				Reverse
-			</ButtonAccent>
-		</div>
-	</div>
-	<div class="content">
-		{#if selected}
-			{#key selected.id}
-				<div transition:fade>
-					<AggregateContent
-						volumes={selected.chapter}
-						oncomments={(detail) => {
-							console.log(`clicked ${detail.id}`);
-							const threadUrl = threadUrls.get(detail.id);
-							if (threadUrl) {
-								open(threadUrl);
-							}
+		{#if !$isEmpty}
+			<div class="right">
+				{#if $isLogged}
+					<ButtonAccent
+						disabled={$query.isLoading || $readMarkersMutation.isPending}
+						onclick={() => {
+							$readMarkersMutation.mutate(
+								{
+									reads: $hasUnread ? $unread.values().toArray() : [],
+									unreads: $hasUnread
+										? []
+										: ($query.data?.manga.aggregate.chunked.flatMap(
+												(d) => d.ids as string[]
+											) ?? [])
+								},
+								{
+									onSuccess(data, variables, context) {
+										refetchTitleReadMarker();
+									}
+								}
+							);
 						}}
-					/>
-				</div>
-			{/key}
+					>
+						{#if $hasUnread}
+							Mark all chapter as read
+						{:else}
+							Mark all chapter as not read
+						{/if}
+					</ButtonAccent>
+				{/if}
+				<ButtonAccent
+					onclick={debounce(async () => {
+						isReversed.update((i) => !i);
+					})}
+					disabled={$query.isLoading}
+				>
+					Reverse
+				</ButtonAccent>
+			</div>
 		{/if}
 	</div>
-	<div class="bottom">
-		{#each $aggregate as _, i}
-			<button
-				class="selector"
-				onclick={() => {
-					selectedIndex = i;
-				}}
-				class:selected={i == selectedIndex}
-			>
-				{i + 1}
-			</button>
-		{/each}
-	</div>
+	{#if $query.isFetched}
+		{#if $isEmpty}
+			<div class="empty">
+				<h2>No chapters available</h2>
+			</div>
+		{:else}
+			<div class="content">
+				{#if selected}
+					{#key selected.id}
+						<div transition:fade>
+							<AggregateContent
+								volumes={selected.chapter}
+								oncomments={(detail) => {
+									console.log(`clicked ${detail.id}`);
+									const threadUrl = threadUrls.get(detail.id);
+									if (threadUrl) {
+										open(threadUrl);
+									}
+								}}
+							/>
+						</div>
+					{/key}
+				{/if}
+			</div>
+			<div class="bottom">
+				{#each $aggregate as _, i}
+					<button
+						class="selector"
+						onclick={() => {
+							selectedIndex = i;
+						}}
+						class:selected={i == selectedIndex}
+					>
+						{i + 1}
+					</button>
+				{/each}
+			</div>
+		{/if}
+	{:else if $query.isError}
+		<ErrorComponent
+			label="Cannot fetch chapter"
+			error={$query.error}
+			retry={() => {
+				$query.refetch().then(() => refetchTitleReadMarker());
+			}}
+		/>
+	{:else if $query.isPending}
+		<div class="empty">
+			<h2>Pending...</h2>
+		</div>
+	{:else if $query.isLoading}
+		<div class="empty">
+			<h2>Loading...</h2>
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -182,6 +279,7 @@
 	.top {
 		display: flex;
 		justify-content: space-between;
+		padding-bottom: 2px;
 	}
 	.bottom {
 		display: flex;
@@ -219,5 +317,19 @@
 		.selector.selected:active {
 			background-color: color-mix(in srgb, var(--primary) 80%, transparent 20%);
 		}
+	}
+	.empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		height: 200px;
+		border: 3px solid var(--mid-tone);
+		border-radius: 6px;
+	}
+	.right {
+		display: flex;
+		align-items: center;
+		gap: 6px;
 	}
 </style>

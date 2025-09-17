@@ -23,6 +23,8 @@
 		downloadMutationQuery,
 		removeMutation
 	} from "@mangadex/download/manga";
+	import { anyChapterSub, mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
+	import { client } from "@mangadex/gql/urql";
 	import manga_following_status, {
 		get_manga_following_status,
 		set_manga_following_status
@@ -35,20 +37,23 @@
 		get_manga_reading_status,
 		set_manga_reading_status
 	} from "@mangadex/stores/manga/manga_reading_status";
-	import { openUrl as open } from "@tauri-apps/plugin-opener";
-	import { debounce } from "lodash";
-	import { type Snippet } from "svelte";
-	import { derived as der } from "svelte/store";
-	import { v4 } from "uuid";
-	import type { LayoutData } from "./$types";
-	import { setTitleLayoutData } from "./layout.context";
-	import registerContextMenuEvent, {
-		setContextMenuContext
-	} from "@special-eureka/core/utils/contextMenuContext";
+	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
 	import { ContextMenuItemProvider } from "@special-eureka/core/commands/contextMenu";
+	import registerContextMenuEvent, {
+		setContextMenuContext
+	} from "@special-eureka/core/utils/contextMenuContext";
+	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
+	import { openUrl as open } from "@tauri-apps/plugin-opener";
+	import { debounce } from "lodash";
+	import { type Snippet } from "svelte";
+	import { derived as der, derived, toStore } from "svelte/store";
+	import { v4 } from "uuid";
+	import type { LayoutData } from "./$types";
+	import { setTitleLayoutData } from "./layout.context";
+	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;
@@ -186,6 +191,52 @@
 				name: a.attributes.name
 			}))
 		})
+	);
+	initContextReadChapterMarkers(
+		derived(
+			[
+				createQuery(
+					derived(
+						toStore<string>(() => data.layoutData.id),
+						(id) =>
+							({
+								queryKey: ["title", id, "read-markers", "page"],
+								async queryFn() {
+									const res = await client
+										.query(mangaReadMarkers, {
+											id
+										})
+										.toPromise();
+									if (res.error) {
+										throw res.error;
+									} else {
+										return (
+											res.data?.readMarker.mangaReadMarkersByMangaId.map(
+												String
+											) ?? []
+										);
+									}
+								}
+							}) satisfies CreateQueryOptions
+					)
+				)
+			],
+			([$query], set, update) => {
+				set(new Map($query.data?.map((d) => [d, true]) ?? []) as Map<string, boolean>);
+				return listenToAnyChapterReadMarkers.subscribe((a) => {
+					if (a != undefined) {
+						update((markers: Map<string, boolean>) => {
+							const state = markers.get(a.chapter);
+							if (state != undefined) {
+								markers.set(a.chapter, a.read);
+							}
+							return markers;
+						});
+					}
+				});
+			},
+			new Map()
+		)
 	);
 </script>
 

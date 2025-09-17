@@ -159,7 +159,6 @@ export default async function executeSearchQuery(
 								name: user.attributes.username,
 								roles: user.attributes.roles
 							},
-							haveBeenRead: false,
 							groups: scanGroups.map((group) => ({
 								id: group.id,
 								name: group.attributes.name

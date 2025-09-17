@@ -50,7 +50,6 @@
 		display: grid;
 		margin: var(--manga-page-layout-margin);
 		padding: var(--manga-page-layout-padding);
-		grid-template-columns: repeat(4, 1fr);
 		gap: 10px;
 		backdrop-filter: blur(5px);
 		-webkit-backdrop-filter: blur(5px);
@@ -65,6 +64,16 @@
 		.content {
 			grid-column: 2 / -1;
 			grid-row: 1;
+		}
+	}
+	@media (width >= 900px) {
+		.layout {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+	@media (width < 900px) {
+		.layout {
+			grid-template-columns: 35% auto;
 		}
 	}
 </style>
