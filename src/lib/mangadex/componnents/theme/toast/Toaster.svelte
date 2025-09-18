@@ -52,7 +52,7 @@
 	import { createToaster, melt } from "@melt-ui/svelte";
 	import MangaDexVarThemeProvider from "../MangaDexVarThemeProvider.svelte";
 	import { isSidebarRtl } from "@mangadex/componnents/sidebar/states/isRtl";
-	import { decoHStore } from "$routes/+layout.svelte";
+	import { decoHStore } from "$routes/MainLayout.svelte";
 	import { XIcon } from "svelte-feather-icons";
 	import { flip } from "svelte/animate";
 	import { fly } from "svelte/transition";
@@ -74,8 +74,7 @@
 						<div>
 							<h3 use:melt={$title(id)}>
 								{data.title}
-								<span data-toast-variant={data.variant ?? "accent"} class="status"
-								></span>
+								<span data-toast-variant={data.variant ?? "accent"} class="status"></span>
 							</h3>
 							<div use:melt={$description(id)} class="description">
 								{data.description}
