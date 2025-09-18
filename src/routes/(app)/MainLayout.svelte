@@ -43,6 +43,27 @@
 	});
 </script>
 
+<svelte:window
+	onkeydown={(e) => {
+		if (e.altKey) {
+			console.debug(e.key);
+			if (e.key == "ArrowLeft") {
+				e.preventDefault();
+				history.back();
+				console.log("back");
+			} else if (e.key == "ArrowRight") {
+				e.preventDefault();
+				history.forward();
+				console.log("forward");
+			} else if (e.key == "r" || e.key == "R") {
+				e.preventDefault();
+				location.reload();
+				console.log("reload");
+			}
+		}
+	}}
+/>
+
 <div
 	class="outer rem0asd"
 	class:defaultDecoration={$isDefaultDecoration}
