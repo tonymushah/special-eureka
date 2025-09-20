@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
 	import themes, { singleUpdateMutation } from "@mangadex/content-profile/graphql/profiles";
 	import { derived } from "svelte/store";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
