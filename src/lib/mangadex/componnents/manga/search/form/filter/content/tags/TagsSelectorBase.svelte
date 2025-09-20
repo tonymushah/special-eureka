@@ -51,11 +51,11 @@
 							class="icon"
 							transition:fade={{
 								easing: bounceInOut,
-								duration: 400
+								duration: 100
 							}}
 						>
 							{#if tag.state == TagOptionState.EXCLUDE}
-								<RiForbid2Line />
+								<RiForbid2Line size="24" />
 							{:else if tag.state == TagOptionState.INCLUDE}
 								<PlusIcon />
 							{/if}
