@@ -20,6 +20,7 @@
 	import { getChapterStoreContext } from "./utils/chapterStores";
 	import mangaAggregateQuery from "./utils/query";
 	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
+	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -136,9 +137,7 @@
 	}
 	const readMarkers = getContextReadChapterMarkers();
 	const unread = der([query, readMarkers], ([$query, $markers]) => {
-		let chapters = new Set(
-			$query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
-		);
+		let chapters = new Set($query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
 		let readChapters = new Set(
 			$markers
 				.entries()
@@ -154,7 +153,12 @@
 		return unreadChapters;
 	});
 	const hasUnread = der(unread, ($unread) => $unread.size > 0);
+	let selecto_container: HTMLElement | undefined = $state(undefined);
+	let selectedMangas: string[] = $state([]);
+	let selectedChapters: string[] = $state([]);
 </script>
+
+<ChapterFeedSelecto bind:container={selecto_container} bind:selectedMangas bind:selectedChapters />
 
 <div class="aggregate">
 	<div class="top">
@@ -184,12 +188,10 @@
 									reads: $hasUnread ? $unread.values().toArray() : [],
 									unreads: $hasUnread
 										? []
-										: ($query.data?.manga.aggregate.chunked.flatMap(
-												(d) => d.ids as string[]
-											) ?? [])
+										: ($query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
 								},
 								{
-									onSuccess(data, variables, context) {
+									onSuccess() {
 										refetchTitleReadMarker();
 									}
 								}
@@ -223,7 +225,7 @@
 			<div class="content">
 				{#if selected}
 					{#key selected.id}
-						<div transition:fade>
+						<div transition:fade bind:this={selecto_container}>
 							<AggregateContent
 								volumes={selected.chapter}
 								oncomments={(detail) => {
