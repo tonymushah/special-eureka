@@ -9,7 +9,7 @@
 	import { getRelatedTitlesStoreContext, type RelatedTitle } from "./utils/relatedTitleStore";
 	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import loadash from "lodash";
+	import loadash, { startCase } from "lodash";
 	import { createQuery } from "@tanstack/svelte-query";
 	import { get } from "svelte/store";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
@@ -50,8 +50,7 @@
 				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
-					""
+					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? ""
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;
@@ -87,17 +86,15 @@
 			if (title.length > 0) {
 				res.push({
 					title: loadash.camelCase(k),
-					titles: title.map(
-						({ id, coverArt, coverArtAlt, title, description, status }) => ({
-							id,
-							coverImage: coverArt,
-							coverImageAlt: coverArtAlt,
-							title,
-							description,
-							status,
-							mangaId: id
-						})
-					)
+					titles: title.map(({ id, coverArt, coverArtAlt, title, description, status }) => ({
+						id,
+						coverImage: coverArt,
+						coverImageAlt: coverArtAlt,
+						title,
+						description,
+						status,
+						mangaId: id
+					}))
 				});
 			}
 		});
@@ -119,7 +116,7 @@
 	{/if}
 	{#each categories as category}
 		<CategorizedTitles
-			title={category.title}
+			title={startCase(category.title)}
 			titles={category.titles}
 			ontitles={({ id }) => {
 				goto(
