@@ -4,8 +4,13 @@
 	import { fonts, setDefault } from "$lib/core/window-decoration/WindowDecoration.svelte";
 	import { onMount } from "svelte";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import { dev } from "$app/environment";
+	import { goto } from "$app/navigation";
 	onMount(() => {
 		setDefault();
+		if (!dev) {
+			goto(route("/dashboard"));
+		}
 	});
 </script>
 
@@ -14,17 +19,21 @@
 <main class:isDefaultDecoration={$isDefaultDecoration}>
 	<div class="top" style="--fonts: {$fonts}">
 		<h1>Welcome to Special Eureka</h1>
-		<div class="alert">
-			<h2>If you see this page, means that you're in a prerealease version</h2>
-			<p>
-				A lot of thing can be improved, so please be patient and wait for the stable
-				realease
-			</p>
-		</div>
-		<div class="links">
-			<p><a href={route("/mangadex")}>Mangadex Home</a></p>
-			<p><a href={route("/grid-test")}>Grid test</a></p>
-		</div>
+		{#if dev}
+			<div class="alert">
+				<h2>If you see this page, means that you're in a prerealease version</h2>
+				<p>A lot of thing can be improved, so please be patient and wait for the stable realease</p>
+			</div>
+			<div class="links">
+				<p><a href={route("/mangadex")}>Mangadex Home</a></p>
+				<p><a href={route("/dashboard")}>Dashboard</a></p>
+				<p><a href={route("/grid-test")}>Grid test</a></p>
+			</div>
+		{:else}
+			<div class="loadign">
+				<h2>Loading...</h2>
+			</div>
+		{/if}
 	</div>
 </main>
 
@@ -49,6 +58,14 @@
 				margin: 5px 0px;
 			}
 		}
+	}
+	.loadign {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 200px;
+		height: 150px;
+		border: 3px dashed black;
 	}
 	main {
 		height: -webkit-fill-available;

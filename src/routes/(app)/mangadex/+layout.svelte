@@ -45,4 +45,14 @@
 			display: flex;
 		}
 	}
+	@media (prefers-color-scheme: light) {
+		.loading {
+			background-color: white;
+		}
+	}
+	@media (prefers-color-scheme: dark) {
+		.loading {
+			background-color: black;
+		}
+	}
 </style>
