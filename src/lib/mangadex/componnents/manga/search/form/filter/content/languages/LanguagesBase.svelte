@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { preventDefault } from "svelte/legacy";
-
 	import FlagIcon from "@mangadex/componnents/FlagIcon.svelte";
 	import Title from "@mangadex/componnents/theme/texts/title/Title.svelte";
 	import type { Language } from "@mangadex/gql/graphql";
 	import { createSelect, melt, type SelectOption } from "@melt-ui/svelte";
 	import { derived as der, get, type Writable } from "svelte/store";
 	import LanguagesBaseMenu from "./LanguagesBaseMenu.svelte";
+	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 
 	interface Props {
 		title: string;
@@ -24,8 +23,9 @@
 			| "left"
 			| "left-start"
 			| "left-end";
+		portal?: PortalConfig | null;
 	}
-	let { title, selecteds, placement = "top" }: Props = $props();
+	let { title, selecteds, placement = "top", portal }: Props = $props();
 	const selecteds_options = der(selecteds, ($s) => {
 		return $s.map<SelectOption<Language>>((ss) => ({
 			value: ss
@@ -43,7 +43,7 @@
 			sameWidth: true
 			// strategy: "fixed"
 		},
-		portal: "dialog",
+		portal,
 		multiple: true,
 		selected: {
 			subscribe(run, invalidate) {
@@ -72,9 +72,10 @@
 	<div class="content">
 		<button
 			use:melt={$trigger}
-			oncontextmenu={preventDefault(() => {
+			oncontextmenu={(e) => {
+				e.preventDefault();
 				selecteds.set([]);
-			})}
+			}}
 			aria-label={title}
 		>
 			{#if $selected}
@@ -92,6 +93,7 @@
 	</div>
 </section>
 
+<!-- @ts-ignore -->
 <LanguagesBaseMenu {open} {menu} {option} {isSelected} />
 
 <style lang="scss">
