@@ -94,6 +94,7 @@ enum Instructions {
     RefetchPage(u32),
     ResendPage(u32),
     ResendAll,
+    RefetchIncompletes,
 }
 
 /// Any error that could happen during the fetching process
@@ -262,8 +263,38 @@ impl<R: Runtime> SpawnHandle<R> {
                         }
                     }
                 }
+                Instructions::RefetchIncompletes => {
+                    if let Err(err) = self.refetch_incompletes().await {
+                        self.send_message(Err(err));
+                    }
+                }
             }
         }
+    }
+    async fn refetch_incompletes(&mut self) -> Result<(), FetchingError> {
+        self.pages.clear_poison();
+
+        let Some(pages_len) = self
+            .pages
+            .read()
+            .ok()
+            .and_then(|pages_read| pages_read.values().next().map(|p| p.pages))
+        else {
+            return self.start_caching().await;
+        };
+        for page_num in 0..pages_len {
+            let maybe_in = if let Ok(page_read) = self.pages.read() {
+                Some(!page_read.contains_key(&page_num))
+            } else {
+                None
+            };
+            if !maybe_in.unwrap_or_default() {
+                if let Err(err) = self.refetch_page(page_num).await {
+                    self.send_message(Err(err));
+                }
+            }
+        }
+        Ok(())
     }
     async fn get_offline_to_use_pages(&self) -> Result<(Vec<(Url, PathBuf)>, Mode), FetchingError> {
         let d = self.app_handle.get_offline_app_state()?;
@@ -653,6 +684,9 @@ impl ChapterPagesHandle {
     }
     pub fn refetch_page(&self, page: u32) {
         self.send_instruction(Instructions::RefetchPage(page));
+    }
+    pub fn refetch_incompletes(&self) {
+        self.send_instruction(Instructions::RefetchIncompletes);
     }
     pub fn get_file_path<P: AsRef<Path>>(&self, path: &P) -> PathBuf {
         self._temp_dir.path().join(path)
