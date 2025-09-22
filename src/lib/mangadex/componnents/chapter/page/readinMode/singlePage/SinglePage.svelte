@@ -101,7 +101,7 @@
 
 -->
 
-{#if current_page}
+{#if current_page != null && current_page != undefined}
 	<div class="single-page">
 		{#if current_page.page}
 			{@const page = current_page.page}

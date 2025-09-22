@@ -18,6 +18,9 @@
 		<h3>Loading...</h3>
 	</div>
 {:else if !$isDataEmpty}
+	<article class="covers">
+		<CoverContents covers={$coversData} />
+	</article>
 	{#if $isLoading}
 		<div
 			class="init-loading"
@@ -28,9 +31,6 @@
 			<h3>Loading...</h3>
 		</div>
 	{/if}
-	<article class="covers">
-		<CoverContents covers={$coversData} />
-	</article>
 {/if}
 
 <style lang="scss">

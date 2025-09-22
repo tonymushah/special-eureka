@@ -11,6 +11,9 @@
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
+	import HasNext from "@mangadex/componnents/search/content/HasNext.svelte";
+	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 
 	const d = getTitleLayoutData();
 	const data = d.layoutData;
@@ -65,7 +68,7 @@
 		networkMode: "always",
 		getNextPageParam(lastPage) {
 			const nextPageOffset = lastPage.offset + lastPage.limit;
-			if (nextPageOffset >= lastPage.total) {
+			if (nextPageOffset <= lastPage.total) {
 				return {
 					limit: lastPage.limit,
 					offset: nextPageOffset
@@ -115,7 +118,7 @@
 
 <CoverContents
 	{isDataEmpty}
-	isLoading={der(query, ($query) => $query.isFetching)}
+	isLoading={der(query, ($query) => $query.isLoading)}
 	isInitialLoading={der(query, ($query) => $query.isLoading)}
 	{coversData}
 />
@@ -128,4 +131,20 @@
 		error={$query.error}
 	/>
 {/if}
-<div bind:this={interObsEl}></div>
+<div bind:this={interObsEl} class="observer-trigger">
+	{#if $query.isFetching}
+		<Fetching />
+	{:else if $query.hasNextPage}
+		<HasNext />
+	{:else}
+		<NothingToShow />
+	{/if}
+</div>
+
+<style lang="scss">
+	.observer-trigger {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+</style>

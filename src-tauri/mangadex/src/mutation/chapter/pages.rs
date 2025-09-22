@@ -78,4 +78,17 @@ impl ChapterPagesStoreMutation {
             Ok(false)
         }
     }
+    pub async fn refetch_incompletes(&self, ctx: &Context<'_>) -> crate::Result<bool> {
+        let app = ctx.get_app_handle::<tauri::Wry>()?;
+        let store = app.get_chapter_pages_store();
+        if let Ok(store_read) = store.read() {
+            let Some(handle) = store_read.get_handle_maybe_not_loaded(self.id, self.mode) else {
+                return Ok(false);
+            };
+            handle.refetch_incompletes();
+            Ok(true)
+        } else {
+            Ok(false)
+        }
+    }
 }

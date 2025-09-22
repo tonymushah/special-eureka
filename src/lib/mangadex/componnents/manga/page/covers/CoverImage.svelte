@@ -169,6 +169,8 @@
 			justify-content: center;
 			background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--accent) 100%);
 			transition: opacity 200ms ease-in-out;
+			border-radius: 6px;
+			overflow: hidden;
 			h4 {
 				color: var(--text-color);
 			}
@@ -183,7 +185,6 @@
 		}
 		img {
 			border-radius: 0.25em;
-			image-rendering: optimizeSpeed;
 		}
 	}
 	/*

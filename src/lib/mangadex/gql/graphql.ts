@@ -1,7 +1,7 @@
 /* eslint-disable */
 import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -531,6 +531,7 @@ export type ChapterPages = {
 export type ChapterPagesStoreMutation = {
 	__typename?: "ChapterPagesStoreMutation";
 	fetchMetadata: Scalars["Boolean"]["output"];
+	refetchIncompletes: Scalars["Boolean"]["output"];
 	refetchPage: Scalars["Boolean"]["output"];
 	resendAll: Scalars["Boolean"]["output"];
 	resendPage: Scalars["Boolean"]["output"];
@@ -6996,6 +6997,19 @@ export type ResendChapterPagesMutation = {
 	chapter: {
 		__typename?: "ChapterMutations";
 		pagesCache: { __typename?: "ChapterPagesStoreMutation"; resendAll: boolean };
+	};
+};
+
+export type RefetchIncompletesPagesMutationVariables = Exact<{
+	chapter: Scalars["UUID"]["input"];
+	mode?: InputMaybe<DownloadMode>;
+}>;
+
+export type RefetchIncompletesPagesMutation = {
+	__typename?: "Mutation";
+	chapter: {
+		__typename?: "ChapterMutations";
+		pagesCache: { __typename?: "ChapterPagesStoreMutation"; refetchIncompletes: boolean };
 	};
 };
 
@@ -24137,6 +24151,79 @@ export const ResendChapterPagesDocument = {
 		}
 	]
 } as unknown as DocumentNode<ResendChapterPagesMutation, ResendChapterPagesMutationVariables>;
+export const RefetchIncompletesPagesDocument = {
+	kind: "Document",
+	definitions: [
+		{
+			kind: "OperationDefinition",
+			operation: "mutation",
+			name: { kind: "Name", value: "refetchIncompletesPages" },
+			variableDefinitions: [
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "chapter" } },
+					type: {
+						kind: "NonNullType",
+						type: { kind: "NamedType", name: { kind: "Name", value: "UUID" } }
+					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "mode" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "DownloadMode" } }
+				}
+			],
+			selectionSet: {
+				kind: "SelectionSet",
+				selections: [
+					{
+						kind: "Field",
+						name: { kind: "Name", value: "chapter" },
+						selectionSet: {
+							kind: "SelectionSet",
+							selections: [
+								{
+									kind: "Field",
+									name: { kind: "Name", value: "pagesCache" },
+									arguments: [
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "id" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "chapter" }
+											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "mode" },
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "mode" }
+											}
+										}
+									],
+									selectionSet: {
+										kind: "SelectionSet",
+										selections: [
+											{
+												kind: "Field",
+												name: { kind: "Name", value: "refetchIncompletes" }
+											}
+										]
+									}
+								}
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<
+	RefetchIncompletesPagesMutation,
+	RefetchIncompletesPagesMutationVariables
+>;
 export const ChapterFeedStyleSubDocument = {
 	kind: "Document",
 	definitions: [

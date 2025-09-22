@@ -84,7 +84,9 @@
 			return [];
 		}
 		return Array.from(
-			new Set(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).values()
+			new Map(
+				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [d.id, d])
+			).values()
 		);
 	});
 	const isFetching = derived(infiniteQuery, (result) => result.isFetching);

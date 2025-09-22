@@ -48,7 +48,7 @@
 					}
 				},
 				initialPageParam: {
-					userId,
+					userId: $userId,
 					limit: $limit
 				} satisfies UserCustomListParams
 			} satisfies CreateInfiniteQueryOptions<

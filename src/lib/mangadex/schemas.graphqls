@@ -423,6 +423,7 @@ type ChapterPagesStoreMutation {
 	refetchPage(page: Int!): Boolean!
 	resendPage(page: Int!): Boolean!
 	resendAll: Boolean!
+	refetchIncompletes: Boolean!
 }
 
 type ChapterQueries {

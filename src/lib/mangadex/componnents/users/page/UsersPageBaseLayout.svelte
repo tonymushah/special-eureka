@@ -4,12 +4,13 @@
 		left?: import("svelte").Snippet;
 		right?: import("svelte").Snippet;
 		bottom?: import("svelte").Snippet;
+		notAlterImage?: boolean;
 	}
 
-	let { profileBanner = $bindable(), left, right, bottom }: Props = $props();
+	let { profileBanner = $bindable(), left, right, bottom, notAlterImage }: Props = $props();
 </script>
 
-<section style="background-image: url({profileBanner});">
+<section style="background-image: url({profileBanner});" class:alterImage={!notAlterImage}>
 	<div class="gradient">
 		<div class="backdrop-filter">
 			<div class="top">
@@ -31,8 +32,9 @@
 	section {
 		background-repeat: no-repeat;
 		background-size: cover;
-		background-position: 0px -200px;
 		color: var(--text-color);
+	}
+	section.alterImage {
 		background-position: center;
 	}
 	.gradient {

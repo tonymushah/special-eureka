@@ -16,10 +16,10 @@ pub enum ContentProfileWarningMode {
     #[default]
     Always,
     Never,
-	/// Always unless the title is in the library
-	Autl,
-	/// Always unless the title is in the library and not dropped
-	AutlNd
+    /// Always unless the title is in the library
+    Autl,
+    /// Always unless the title is in the library and not dropped
+    AutlNd,
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

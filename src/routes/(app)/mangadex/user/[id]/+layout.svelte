@@ -1,7 +1,6 @@
 <script lang="ts">
 	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
 	import type { LayoutData } from "./$types";
-	import UserRolesComp from "@mangadex/componnents/user/UserRolesComp.svelte";
 	import UserRoleBadge from "@mangadex/componnents/user/UserRoleBadge.svelte";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import PrimaryButton from "@mangadex/componnents/theme/buttons/PrimaryButton.svelte";
@@ -9,6 +8,8 @@
 	import { ExternalLinkIcon, FlagIcon, BookmarkIcon } from "svelte-feather-icons";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import NavTab from "./NavTab.svelte";
+	import dexChanReading from "@mangadex/assets/artworks/dex-chan-reading.png";
+	import dexChanXIndex from "@mangadex/assets/artworks/dex-and-index.png";
 
 	interface Props {
 		data: LayoutData;
@@ -18,10 +19,15 @@
 	let { data, children }: Props = $props();
 </script>
 
-<UsersPageBase title={data.username}>
+<UsersPageBase
+	title={data.username}
+	profilePicture={dexChanReading}
+	profileBanner={dexChanXIndex}
+	notAlterImage
+>
 	{#snippet _left()}
 		<div class="buttons">
-			<PrimaryButton isBase>
+			<PrimaryButton isBase disabled>
 				<p><BookmarkIcon />Follow</p>
 			</PrimaryButton>
 			<ButtonAccent

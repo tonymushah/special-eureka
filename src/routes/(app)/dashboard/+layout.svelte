@@ -201,7 +201,7 @@
 	}
 	main {
 		height: -webkit-fill-available;
-		overflow: scroll;
+		overflow-y: scroll;
 		font-family: var(--fonts);
 		background-color: var(--main-background);
 		color: var(--color);

@@ -165,6 +165,7 @@ type Documents = {
 	"\n\tmutation refetchChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RefetchChapterPageDocument;
 	"\n\tmutation resendChapterPage($chapter: UUID!, $mode: DownloadMode, $page: Int!) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendPage(page: $page)\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ResendChapterPageDocument;
 	"\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n": typeof types.ResendChapterPagesDocument;
+	"\n\tmutation refetchIncompletesPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchIncompletes\n\t\t\t}\n\t\t}\n\t}\n": typeof types.RefetchIncompletesPagesDocument;
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n": typeof types.ChapterFeedStyleSubDocument;
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n": typeof types.UpdateChapterFeedStyleDocument;
 	"\n\tsubscription chapterLayoutSubscription {\n\t\twatchChapterLayout {\n\t\t\tdrawer\n\t\t\tsidebar\n\t\t\tprogress\n\t\t}\n\t}\n": typeof types.ChapterLayoutSubscriptionDocument;
@@ -508,6 +509,8 @@ const documents: Documents = {
 		types.ResendChapterPageDocument,
 	"\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n":
 		types.ResendChapterPagesDocument,
+	"\n\tmutation refetchIncompletesPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchIncompletes\n\t\t\t}\n\t\t}\n\t}\n":
+		types.RefetchIncompletesPagesDocument,
 	"\n\tsubscription chapterFeedStyleSub {\n\t\twatchChapterFeedStyle\n\t}\n":
 		types.ChapterFeedStyleSubDocument,
 	"\n\tmutation updateChapterFeedStyle($style: ChapterFeedStyle!) {\n\t\tuserOption {\n\t\t\tsetChapterFeedStyle(style: $style)\n\t\t}\n\t}\n":
@@ -1512,6 +1515,12 @@ export function graphql(
 export function graphql(
 	source: "\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n"
 ): (typeof documents)["\n\tmutation resendChapterPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\tresendAll\n\t\t\t}\n\t\t}\n\t}\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+	source: "\n\tmutation refetchIncompletesPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchIncompletes\n\t\t\t}\n\t\t}\n\t}\n"
+): (typeof documents)["\n\tmutation refetchIncompletesPages($chapter: UUID!, $mode: DownloadMode) {\n\t\tchapter {\n\t\t\tpagesCache(id: $chapter, mode: $mode) {\n\t\t\t\trefetchIncompletes\n\t\t\t}\n\t\t}\n\t}\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
