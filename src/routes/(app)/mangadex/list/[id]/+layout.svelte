@@ -40,9 +40,7 @@
 	<div class="top-layout">
 		<h1>{data.attributes.name}</h1>
 		<p>
-			Visibility: {data.attributes.visibility == CustomListVisibility.Public
-				? "Public"
-				: "Private"}
+			Visibility: {data.attributes.visibility == CustomListVisibility.Public ? "Public" : "Private"}
 		</p>
 		{#if data.isMine}
 			{#if isPrivate}

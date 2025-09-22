@@ -17,6 +17,7 @@
 		topRight?: Snippet;
 		_left?: Snippet;
 		_right?: Snippet;
+		notAlterImage?: boolean;
 	}
 	let {
 		profilePicture = dev ? profilePictureDev : profilePictureProd,
@@ -25,12 +26,13 @@
 		description = "",
 		topRight,
 		_left,
-		_right
+		_right,
+		notAlterImage
 	}: Props = $props();
 	let profilePictureAlt = $derived(`profile-picture-${kebabCase(title)}`);
 </script>
 
-<UsersPageBaseLayout {profileBanner}>
+<UsersPageBaseLayout {profileBanner} {notAlterImage}>
 	{#snippet left()}
 		<article>
 			<div class="cover">
