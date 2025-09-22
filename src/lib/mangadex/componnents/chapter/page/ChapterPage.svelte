@@ -15,6 +15,7 @@
 	import { onDestroy, onMount } from "svelte";
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
 	import Progress from "./progress/Progress.svelte";
+	import { getCurrentChapterData } from "./contexts/currentChapter";
 
 	const isFixed = isDrawerFixed();
 	const shouldShowHeader = derived(isFixed, (fixed) => {
@@ -44,7 +45,17 @@
 	onDestroy(() => {
 		observer.disconnect();
 	});
-	onMount(() => images.subscribe(noop));
+	const data = getCurrentChapterData();
+	onMount(() => {
+		return data.subscribe((d) => {
+			console.log(`changing data ${d.id}`);
+			images.resendAll();
+		});
+	});
+	onMount(() => {
+		let sub = images.subscribe(noop);
+		return sub;
+	});
 </script>
 
 <svelte:window onfocus={triggerFunc} />

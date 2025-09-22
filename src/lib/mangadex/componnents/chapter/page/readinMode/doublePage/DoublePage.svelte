@@ -85,6 +85,9 @@
 			onprevious?.();
 		}
 	}
+	onMount(() => {
+		return currentPage.subscribe(console.debug);
+	});
 </script>
 
 <svelte:window
@@ -132,16 +135,13 @@
 	}}
 />
 
-{#if $currentPage}
+{#if $currentPage != null && $currentPage != undefined}
 	<div class="double-page">
 		{#if isArray($currentPage)}
 			{@const p1 = $currentPage[0]}
 			{@const p2 = $currentPage[1]}
 			{#if p1?.page && p2?.page}
-				<ZoomableImage
-					src={[p1.page.value, p2.page.value]}
-					alt={[p1.page.value, p2.page.value]}
-				/>
+				<ZoomableImage src={[p1.page.value, p2.page.value]} alt={[p1.page.value, p2.page.value]} />
 			{:else}
 				<div class="disabled-zoom">
 					{#if p1?.page}
@@ -157,14 +157,10 @@
 										if (isArray(pageIndex)) {
 											ChapterPages.removePageError(
 												images,
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]
 											);
 											images.refetchChapterPage(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 0 : 1
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 0 : 1]
 											);
 										} else if (typeof pageIndex == "number") {
 											ChapterPages.removePageError(images, pageIndex);
@@ -193,14 +189,10 @@
 										if (isArray(pageIndex)) {
 											ChapterPages.removePageError(
 												images,
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]
 											);
 											images.refetchChapterPage(
-												pageIndex[
-													$readingDirection == Direction.Ltr ? 1 : 0
-												]
+												pageIndex[$readingDirection == Direction.Ltr ? 1 : 0]
 											);
 										} else if (typeof pageIndex == "number") {
 											ChapterPages.removePageError(images, pageIndex);
