@@ -9,7 +9,7 @@
 	const authors = getMangaSearchAuthorsOptionsWritable();
 	const artists = getMangaSearchArtistsOptionsWritable();
 	interface Props {
-		portal?: PortalConfig;
+		portal?: PortalConfig | null;
 	}
 	let { portal }: Props = $props();
 </script>

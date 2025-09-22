@@ -1,12 +1,10 @@
 <script lang="ts">
 	import FormInput from "@mangadex/componnents/theme/form/input/FormInput.svelte";
-	import MangaDexVarThemeProvider from "@mangadex/componnents/theme/MangaDexVarThemeProvider.svelte";
 	import { createCombobox, createTagsInput, melt, type Tag } from "@melt-ui/svelte";
 	import { debounce, type DebouncedFunc } from "lodash";
 	import { onDestroy } from "svelte";
 	import { XIcon } from "svelte-feather-icons";
 	import { get, writable, type Writable } from "svelte/store";
-	import { slide } from "svelte/transition";
 	import {
 		getMangaSearchAuthorSearchFetcher,
 		type AuthorSearchFetcherResultData
@@ -17,12 +15,12 @@
 
 	interface Props {
 		store: Writable<Tag[]>;
-		portal?: PortalConfig;
+		portal?: PortalConfig | null;
 	}
 
 	let { store, portal = "dialog" }: Props = $props();
 	const {
-		elements: { input, menu, option, label },
+		elements: { input, menu, option },
 		states: { open, inputValue, touchedInput },
 		helpers: { isSelected }
 	} = createCombobox<string, true>({

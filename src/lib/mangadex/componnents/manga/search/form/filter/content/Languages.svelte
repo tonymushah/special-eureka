@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { PortalConfig } from "@melt-ui/svelte/internal/actions";
 	import {
 		getMangaSearchAvailableTranslatedLanguageContextWritableStore,
 		getMangaSearchExcludedOriginalLanguageContextWritableStore,
@@ -23,6 +24,7 @@
 			| "left"
 			| "left-start"
 			| "left-end";
+		portal?: PortalConfig | null;
 	}
 
 	const original = getMangaSearchOriginalLanguageContextWritableStore();
@@ -33,12 +35,18 @@
 		originalTitle = "Original Language",
 		excludedTitle = "Excluded Original Language",
 		availableTranslatedTitle = "Available Translated Language",
-		placement
+		placement,
+		portal
 	}: Props = $props();
 </script>
 
-<LanguagesBase selecteds={original} title={originalTitle} {placement} />
+<LanguagesBase selecteds={original} title={originalTitle} {placement} {portal} />
 
-<LanguagesBase selecteds={excludedOriginal} title={excludedTitle} {placement} />
+<LanguagesBase selecteds={excludedOriginal} title={excludedTitle} {placement} {portal} />
 
-<LanguagesBase selecteds={availableTranslation} title={availableTranslatedTitle} {placement} />
+<LanguagesBase
+	selecteds={availableTranslation}
+	title={availableTranslatedTitle}
+	{placement}
+	{portal}
+/>

@@ -61,36 +61,33 @@
 		}
 	);
 
-	const tagsStore = derived(
-		[includedTags, excludedTags, tags],
-		([$includes, $excludes, $tags]) => {
-			const tagMap: TagOptions = new Map(
-				$tags.map((tag) => [
-					tag.id,
-					{
-						state: TagOptionState.NONE,
-						name: tag.name,
-						group: tag.group
-					} satisfies TagOptionsValue
-				])
-			);
-			$includes.forEach((id) => {
-				const inner = tagMap.get(id);
-				if (inner) {
-					inner.state = TagOptionState.INCLUDE;
-					tagMap.set(id, inner);
-				}
-			});
-			$excludes.forEach((id) => {
-				const inner = tagMap.get(id);
-				if (inner) {
-					inner.state = TagOptionState.EXCLUDE;
-					tagMap.set(id, inner);
-				}
-			});
-			return tagMap;
-		}
-	);
+	const tagsStore = derived([includedTags, excludedTags, tags], ([$includes, $excludes, $tags]) => {
+		const tagMap: TagOptions = new Map(
+			$tags.map((tag) => [
+				tag.id,
+				{
+					state: TagOptionState.NONE,
+					name: tag.name,
+					group: tag.group
+				} satisfies TagOptionsValue
+			])
+		);
+		$includes.forEach((id) => {
+			const inner = tagMap.get(id);
+			if (inner) {
+				inner.state = TagOptionState.INCLUDE;
+				tagMap.set(id, inner);
+			}
+		});
+		$excludes.forEach((id) => {
+			const inner = tagMap.get(id);
+			if (inner) {
+				inner.state = TagOptionState.EXCLUDE;
+				tagMap.set(id, inner);
+			}
+		});
+		return tagMap;
+	});
 	function updateFromTagStore(value: TagOptions) {
 		defaultContentProfile.update(($profile) => {
 			$profile.includedTags = Array.from(value.entries())
@@ -197,7 +194,7 @@
 </script>
 
 <div class="flexed languages">
-	<Languages availableTranslatedTitle="Translation Languages" placement="bottom" />
+	<Languages availableTranslatedTitle="Translation Languages" placement="bottom" portal={null} />
 </div>
 
 <ContentRating />

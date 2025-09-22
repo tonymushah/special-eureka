@@ -43,7 +43,7 @@
 		</div>
 	</div>
 	<main>
-		<MangaSearchFilterDialogContent />
+		<MangaSearchFilterDialogContent portal="null" />
 	</main>
 	{#if requireValidation}
 		<footer>
