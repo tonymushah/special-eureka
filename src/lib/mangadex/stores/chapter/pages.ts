@@ -83,6 +83,32 @@ export const resendAllMutation = graphql(`
 	}
 `);
 
+export const refetchIncompletesMutation = graphql(`
+	mutation refetchIncompletesPages($chapter: UUID!, $mode: DownloadMode) {
+		chapter {
+			pagesCache(id: $chapter, mode: $mode) {
+				refetchIncompletes
+			}
+		}
+	}
+`);
+
+export async function refetchIncompletePages(
+	chapter: string,
+	options?: { client?: Client; mode?: DownloadMode }
+) {
+	const client = options?.client ?? mangadexClient;
+	const res = await client
+		.mutation(refetchIncompletesMutation, {
+			chapter,
+			mode: options?.mode
+		})
+		.toPromise();
+	if (res.error) {
+		throw res.error;
+	}
+}
+
 export async function startCaching(
 	chapter: string,
 	options?: { client?: Client; mode?: DownloadMode }
@@ -173,6 +199,7 @@ export type ChapterPagesStore = Writable<ChapterPages> & {
 	resendAll: () => Promise<void>;
 	refetchChapterPage: (page: number) => Promise<void>;
 	resendChapterPage: (page: number) => Promise<void>;
+	refetchIncompletes: () => Promise<void>;
 };
 
 export type ChapterImage = {
@@ -200,13 +227,13 @@ export type IndexedDoublePageState = [IndexedPageState, IndexedPageState] | Inde
 
 export type PageStateInner =
 	| {
-		page: ChapterImage;
-		error?: never;
-	}
+			page: ChapterImage;
+			error?: never;
+	  }
 	| {
-		page?: never;
-		error: Error;
-	};
+			page?: never;
+			error: Error;
+	  };
 
 export type PageState = PageStateInner | null;
 
@@ -216,6 +243,10 @@ export default class ChapterPages {
 	private pages: Map<number, ChapterImage>;
 	private pagesError: Map<number, Error>;
 	private pages_len?: number;
+	private chapter_id?: string;
+	get id(): string | undefined {
+		return this.chapter_id;
+	}
 	private constructor() {
 		this.pages = new Map();
 		this.pagesError = new Map();
@@ -281,7 +312,7 @@ export default class ChapterPages {
 				return {
 					index,
 					img,
-					ratio: (width && height) ? width / height : undefined
+					ratio: width && height ? width / height : undefined
 				};
 			})
 			.forEach((maybeImg) => {
@@ -439,25 +470,28 @@ export default class ChapterPages {
 				};
 				// TODO test if this `mode` store *actually* works
 				if (typeof mode == "object") {
-					let sub = mode.subscribe(($mode) => {
-						let inner_sub = client
-							.subscription(subscription, {
-								chapter,
-								mode: $mode
-							})
-							.subscribe((d) => sub_func(d));
-						unsub = () => {
-							inner_sub.unsubscribe();
-						};
-					}, () => {
-						unsub?.();
-					});
+					const sub = mode.subscribe(
+						($mode) => {
+							const inner_sub = client
+								.subscription(subscription, {
+									chapter,
+									mode: $mode
+								})
+								.subscribe((d) => sub_func(d));
+							unsub = () => {
+								inner_sub.unsubscribe();
+							};
+						},
+						() => {
+							unsub?.();
+						}
+					);
 					return () => {
 						sub();
 					};
 				} else {
 					// NOTE this one doesn't need test. It should work fine.
-					let inner_sub = client
+					const inner_sub = client
 						.subscription(subscription, {
 							chapter,
 							mode
@@ -515,6 +549,12 @@ export default class ChapterPages {
 					client,
 					mode: getMode()
 				});
+			},
+			async refetchIncompletes() {
+				await refetchIncompletePages(get(chapterId), {
+					client,
+					mode: getMode()
+				});
 			}
 		};
 	}
@@ -534,16 +574,6 @@ export default class ChapterPages {
 		});
 	}
 	public static async refetchIncompletes(pages: ChapterPagesStore) {
-		console.debug("refetching imcompletes");
-		if (get(pages).pagesLen != undefined) {
-			const indexes = get(pages).getIncompleteIndexes();
-			await Promise.all(
-				indexes.map((index) => {
-					return pages.refetchChapterPage(index);
-				})
-			);
-		} else {
-			await pages.startCaching();
-		}
+		await pages.refetchIncompletes();
 	}
 }
