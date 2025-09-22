@@ -68,7 +68,7 @@ export default async function executeSearchQuery(
 		return new CurrentUserCustomListSearchResult({
 			client,
 			params,
-			offset: data.limit,
+			offset: data.offset,
 			total: data.total,
 			limit: data.limit,
 			data: data.data.map<CurrentUserCustomListItemData>((e) => {

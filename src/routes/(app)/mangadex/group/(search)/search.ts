@@ -1,9 +1,9 @@
-import type { Client } from "@urql/svelte";
-import { query } from "./query";
-import type { AuthorListParams, ScanlationGroupListParams } from "@mangadex/gql/graphql";
+import type { ScanlationGroupListParams } from "@mangadex/gql/graphql";
 import AbstractSearchResult, {
 	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
+import type { Client } from "@urql/svelte";
+import { query } from "./query";
 
 export type ScanlationGroupListItemData = {
 	id: string;
@@ -13,8 +13,8 @@ export type ScanlationGroupListItemData = {
 		id: string;
 		name: string;
 	};
-	website?: string,
-	discord?: string
+	website?: string;
+	discord?: string;
 };
 
 type ScanlationGroupSearchResultConstructorParams = {
@@ -73,14 +73,12 @@ export default async function executeSearchQuery(
 		return new ScanlationGroupSearchResult({
 			client,
 			params,
-			offset: data.limit,
+			offset: data.offset,
 			total: data.total,
 			limit: data.limit,
 			data: data.data.map<ScanlationGroupListItemData>((e) => {
 				const eleader = e.relationships.leader;
-				const leader = eleader
-					? { id: eleader.id, name: eleader.attributes.username }
-					: undefined;
+				const leader = eleader ? { id: eleader.id, name: eleader.attributes.username } : undefined;
 				return {
 					id: e.id,
 					name: e.attributes.name,

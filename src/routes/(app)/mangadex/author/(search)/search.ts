@@ -1,9 +1,9 @@
-import type { Client } from "@urql/svelte";
-import { query } from "./query";
 import type { AuthorListParams } from "@mangadex/gql/graphql";
 import AbstractSearchResult, {
 	type PaginationData
 } from "@mangadex/utils/searchResult/AbstractSearchResult";
+import type { Client } from "@urql/svelte";
+import { query } from "./query";
 
 export type AuthorListItemData = {
 	id: string;
@@ -68,7 +68,7 @@ export default async function executeSearchQuery(
 		return new AuthorSearchResult({
 			client,
 			params,
-			offset: data.limit,
+			offset: data.offset,
 			total: data.total,
 			limit: data.limit,
 			data: data.data.map<AuthorListItemData>((e) => ({

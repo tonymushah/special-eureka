@@ -42,11 +42,11 @@
 	const infiniteQuery = createInfiniteQuery(
 		derived(params, ($params) => {
 			return {
-				queryKey: ["author-search", $params],
+				queryKey: ["user-search", $params],
 				initialPageParam: $params,
-				getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+				getNextPageParam(lastPage, allPages, lastPageParam) {
 					const next_offset = lastPage.limit + lastPage.offset;
-					if (next_offset > lastPage.total) {
+					if (next_offset >= lastPage.total) {
 						return null;
 					} else {
 						return {
@@ -63,7 +63,7 @@
 						...res.paginationData
 					};
 				},
-				getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
+				getPreviousPageParam(firstPage, allPages, firstPageParam) {
 					const next_offset = firstPage.limit - firstPage.offset;
 					if (next_offset < 0) {
 						return null;
@@ -89,7 +89,9 @@
 			return [];
 		}
 		return Array.from(
-			new Set(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).values()
+			new Map(
+				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [d.id, d])
+			).values()
 		);
 	});
 	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
