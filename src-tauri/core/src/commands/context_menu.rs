@@ -22,7 +22,7 @@ pub enum ContextMenuItem {
         text: String,
         #[serde(default)]
         items: Vec<ContextMenuItem>,
-		enabled: Option<bool>
+        enabled: Option<bool>,
     },
     Seperator,
 }
@@ -74,11 +74,15 @@ impl ContextMenuItem {
                 callbacks.insert(item.id().clone(), *action);
                 Ok(Box::new(item))
             }
-            ContextMenuItem::Submenu { text, items, enabled } => {
+            ContextMenuItem::Submenu {
+                text,
+                items,
+                enabled,
+            } => {
                 let mut builder = SubmenuBuilder::new(manager, text);
-				if let Some(enabled) = enabled {
-					builder = builder.enabled(*enabled);
-				}
+                if let Some(enabled) = enabled {
+                    builder = builder.enabled(*enabled);
+                }
                 for item in items {
                     match item {
                         Self::Seperator => {
