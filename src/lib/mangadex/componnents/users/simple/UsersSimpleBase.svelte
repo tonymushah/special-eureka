@@ -2,7 +2,9 @@
 	import { emptyMeltElement, melt, type AnyMeltElement } from "@melt-ui/svelte";
 	import { camelCase } from "lodash";
 	import BeeDexRaw from "@mangadex/assets/Bee Dex Raw.jpg";
+	import MangaDexUserSvg from "@mangadex/assets/artworks/user.png";
 	import type { HTMLButtonAttributes } from "svelte/elements";
+	import { dev } from "$app/environment";
 
 	interface Props extends HTMLButtonAttributes {
 		profilePicture?: string;
@@ -12,7 +14,7 @@
 	}
 
 	let {
-		profilePicture = BeeDexRaw,
+		profilePicture = dev ? BeeDexRaw : MangaDexUserSvg,
 		name,
 		element = emptyMeltElement,
 		_this = $bindable(undefined),

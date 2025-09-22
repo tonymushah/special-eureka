@@ -2,9 +2,12 @@
 	import { kebabCase } from "lodash";
 	import UsersPageBaseLayout from "./UsersPageBaseLayout.svelte";
 	import Markdown from "@mangadex/componnents/markdown/Markdown.svelte";
-	import profilePictureDef from "./images/story-profile-picture.jpg";
-	import profileBannerDef from "./images/story-profile-banner.jpg";
+	import profilePictureDev from "./images/story-profile-picture.jpg";
+	import profileBannerDev from "./images/story-profile-banner.jpg";
+	import profilePictureProd from "@mangadex/assets/artworks/user.png";
+	import profileBannerProd from "@mangadex/assets/artworks/baked-banana-dex-chan.png";
 	import type { Snippet } from "svelte";
+	import { dev } from "$app/environment";
 
 	interface Props {
 		profilePicture?: string;
@@ -16,8 +19,8 @@
 		_right?: Snippet;
 	}
 	let {
-		profilePicture = profilePictureDef,
-		profileBanner = profileBannerDef,
+		profilePicture = dev ? profilePictureDev : profilePictureProd,
+		profileBanner = !dev ? profileBannerDev : profileBannerProd,
 		title,
 		description = "",
 		topRight,
