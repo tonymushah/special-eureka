@@ -284,7 +284,7 @@ impl<R: Runtime> SpawnHandle<R> {
         };
         for page_num in 0..pages_len {
             let maybe_in = if let Ok(page_read) = self.pages.read() {
-                Some(!page_read.contains_key(&page_num))
+                Some(page_read.contains_key(&page_num))
             } else {
                 None
             };
