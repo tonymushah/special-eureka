@@ -285,9 +285,6 @@ export default class ChapterPages {
 				};
 			})
 			.forEach((maybeImg) => {
-				if (maybeImg.index == 0) {
-
-				}
 				if (maybeImg.ratio != undefined && maybeImg.ratio < 1) {
 					accumalator.push(maybeImg.index);
 				} else {
