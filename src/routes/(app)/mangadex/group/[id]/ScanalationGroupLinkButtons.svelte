@@ -1,12 +1,10 @@
 <script lang="ts">
 	import {
-		BoxIcon,
 		CopyIcon,
 		ExternalLinkIcon,
 		GlobeIcon,
 		MailIcon,
-		TwitterIcon,
-		YoutubeIcon
+		TwitterIcon
 	} from "svelte-feather-icons";
 	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
@@ -130,7 +128,7 @@
 	<ButtonAccent
 		variant="3"
 		onclick={() => {
-			if (discord) shellOpen(discord);
+			if (discord) shellOpen(`https://discord.gg/${discord}`);
 		}}
 		isBase
 	>
