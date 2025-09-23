@@ -131,12 +131,13 @@
 				);
 			}}
 		>
-			Chapters
+			Titles
 		</button>
 		<button
-			class:active={route("/mangadex/list/[id]/feed", {
-				id: isPrivate ? `private:${data.id}` : data.id
-			})}
+			class:active={$path ==
+				route("/mangadex/list/[id]/feed", {
+					id: isPrivate ? `private:${data.id}` : data.id
+				})}
 			onclick={() => {
 				goto(
 					route("/mangadex/list/[id]/feed", {
