@@ -76,9 +76,9 @@ export function offlinePresenceQueryKey(id: string) {
 	return ["cover", id, "offline-presence"];
 }
 
-export const invalidateCoverOfflinePresence = debounce(async (id: string) => {
+export const invalidateCoverOfflinePresence = (async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
-	await mangadexQueryClient.invalidateQueries({
+	await mangadexQueryClient.refetchQueries({
 		queryKey
 	});
 });
