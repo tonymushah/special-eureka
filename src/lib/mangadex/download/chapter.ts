@@ -94,13 +94,13 @@ export function offlinePresenceQueryKey(id: string) {
 	return ["chapter", id, "offline-presence"];
 }
 
-export const invalidateChapterOfflinePresence = debounce(async (id: string) => {
+export const invalidateChapterOfflinePresence = async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
-	await mangadexQueryClient.invalidateQueries({
+	await mangadexQueryClient.refetchQueries({
 		queryKey,
 		exact: true
 	});
-});
+};
 
 function subOpChapter(id: string, deferred: boolean = false) {
 	return readable<ChapterSubOpType | undefined>(undefined, (set) => {
