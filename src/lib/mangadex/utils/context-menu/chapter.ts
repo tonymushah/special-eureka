@@ -1,8 +1,17 @@
 import { goto } from "$app/navigation";
 import { route } from "$lib/ROUTES";
-import { cancelDownloadMutation, downloadMutation, isChapterDownloaded, isChapterDownloading, removeMutation } from "@mangadex/download/chapter";
+import {
+	cancelDownloadMutation,
+	downloadMutation,
+	isChapterDownloaded,
+	isChapterDownloading,
+	removeMutation
+} from "@mangadex/download/chapter";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
-import { ContextMenuItemProvider, type ContextMenuItem } from "@special-eureka/core/commands/contextMenu";
+import {
+	ContextMenuItemProvider,
+	type ContextMenuItem
+} from "@special-eureka/core/commands/contextMenu";
 import openNewWindow from "@special-eureka/core/commands/openNewWindow";
 import { currentLocationWithNewPath } from "@special-eureka/core/utils/url";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
@@ -10,13 +19,18 @@ import { openUrl } from "@tauri-apps/plugin-opener";
 import { get } from "svelte/store";
 
 type ChapterElemetContextMenuItems = {
-	id: string,
-	groups?: { id: string, name: string }[],
-	uploader: { id: string, name: string },
+	id: string;
+	groups?: { id: string; name: string }[];
+	uploader: { id: string; name: string };
 	openComments?: () => any;
-}
+};
 
-export default function chapterElementContextMenuItems({ id, groups = [], uploader, openComments }: ChapterElemetContextMenuItems): ContextMenuItem[] {
+export default function chapterElementContextMenuItems({
+	id,
+	groups = [],
+	uploader,
+	openComments
+}: ChapterElemetContextMenuItems): ContextMenuItem[] {
 	const items = [
 		ContextMenuItemProvider.menuItem({
 			text: "Open chapter",
@@ -26,7 +40,12 @@ export default function chapterElementContextMenuItems({ id, groups = [], upload
 						id
 					})
 				);
-			}
+			},
+			enabled:
+				location.pathname !=
+				route("/mangadex/chapter/[id]", {
+					id
+				})
 		}),
 		ContextMenuItemProvider.menuItem({
 			text: "Open chapter in a new window",
@@ -175,12 +194,14 @@ export default function chapterElementContextMenuItems({ id, groups = [], upload
 	);
 	items.push(ContextMenuItemProvider.seperator());
 	if (openComments) {
-		items.push(ContextMenuItemProvider.menuItem({
-			text: "Open forums comments",
-			action() {
-				openComments()
-			},
-		}))
+		items.push(
+			ContextMenuItemProvider.menuItem({
+				text: "Open forums comments",
+				action() {
+					openComments();
+				}
+			})
+		);
 	}
 	items.push(
 		ContextMenuItemProvider.menuItem({
