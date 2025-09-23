@@ -133,4 +133,7 @@
 			canSelect = false;
 		}
 	}}
+	onfocusout={(e) => {
+		canSelect = false;
+	}}
 />
