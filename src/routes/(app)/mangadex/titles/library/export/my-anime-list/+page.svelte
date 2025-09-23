@@ -16,10 +16,11 @@
 	import { isLogged } from "@mangadex/utils/auth";
 	import defaultReadingStatusPriorities from "@mangadex/utils/readingStatusPriorities";
 	import { createProgress, melt } from "@melt-ui/svelte";
+	import { isLinuxStore } from "@special-eureka/core/commands/isLinux";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import { save } from "@tauri-apps/plugin-dialog";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
-	import { ExternalLinkIcon, RotateCwIcon, SaveIcon } from "svelte-feather-icons";
+	import { RotateCwIcon, SaveIcon } from "svelte-feather-icons";
 	import { writable } from "svelte/store";
 	import { slide } from "svelte/transition";
 	import { v4 } from "uuid";
@@ -58,10 +59,10 @@
 				await $exportLibraryToMyAnimeList.mutateAsync(
 					{ ...options, exportPath },
 					{
-						onSettled(data, error, variables, context) {
+						onSettled(data, error, variables) {
 							console.debug(variables);
 						},
-						onSuccess(data, variables, context) {
+						onSuccess(data) {
 							addToast({
 								data: {
 									title: "Library exported",
@@ -72,11 +73,8 @@
 								revealItemInDir(data);
 							}
 						},
-						onError(error, variables, context) {
-							addErrorToast(
-								"Cannot export library as a My Anime List XML Import file",
-								error
-							);
+						onError(error) {
+							addErrorToast("Cannot export library as a My Anime List XML Import file", error);
 						}
 					}
 				);
@@ -187,7 +185,7 @@
 	</section>
 	<section class="input-row">
 		<Title underline type={4}>Reading Status Priorities</Title>
-		<section class="priorities">
+		<section class="priorities" class:isNotLinux={!$isLinuxStore}>
 			<div class="priority">
 				<label for={reading_id}>Reading: </label>
 				<select
@@ -345,7 +343,7 @@
 		<ButtonAccent
 			isBase
 			variant="3"
-			onclick={(e) => {
+			onclick={() => {
 				options = defaultOptions();
 			}}
 			disabled={$exportLibraryToMyAnimeList.isPending}
@@ -360,13 +358,13 @@
 	</section>
 	<section class="notes">
 		<p>
-			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API,
-			it is <b>recommended to not open MangaDex on your browser </b>
+			<u>Note:</u> Since exporting your library sends a lot of requests to the MangaDex API, it is
+			<b>recommended to not open MangaDex on your browser </b>
 			<i>or any similar activities that might send unecessary requests to the API </i>
 			because it might blow your
 			<i>IP rate-limit</i>
-			and also check if <b>your internet connection is smooth enough</b> for this operation.
-			(also check if you have enough RAM too.
+			and also check if <b>your internet connection is smooth enough</b> for this operation. (also
+			check if you have enough RAM too.
 			<code>`The bigger the library, the more it needs RAM`</code>)
 		</p>
 	</section>
@@ -396,8 +394,13 @@
 			justify-content: center;
 			select {
 				font-family: var(--fonts);
-				background-color: var(--accent-l1);
 			}
+		}
+	}
+	.priorities.isNotLinux {
+		select {
+			background-color: var(--accent-l1);
+			color: var(--text-color);
 		}
 	}
 	.checkboxes {
