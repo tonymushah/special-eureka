@@ -88,6 +88,9 @@ impl ChapterListQueries {
     ) -> Self {
         Self(feeder.feed(params))
     }
+    pub fn no_feed(params: ChapterListParams) -> Self {
+        Self(params)
+    }
 }
 
 impl ChapterListQueries {

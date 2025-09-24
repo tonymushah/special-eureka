@@ -9478,6 +9478,11 @@ export const GetMangaAggregateChapterDocument = {
 													}
 												]
 											}
+										},
+										{
+											kind: "Argument",
+											name: { kind: "Name", value: "feedContent" },
+											value: { kind: "BooleanValue", value: false }
 										}
 									],
 									selectionSet: {
