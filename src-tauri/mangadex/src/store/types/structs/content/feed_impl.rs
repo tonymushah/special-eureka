@@ -175,6 +175,9 @@ impl Feedable for FollowedMangaFeedParams {
         if self.translated_language.is_empty() {
             self.translated_language = content_profile.translated_languages.clone();
         }
+        if self.content_rating.is_empty() {
+            self.content_rating = content_profile.content_rating.clone();
+        }
         self
     }
 }

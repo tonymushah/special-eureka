@@ -11,15 +11,20 @@
 	import chapterFeedStyle from "@mangadex/stores/chapterFeedStyle";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import type AbstractSearchResult from "@mangadex/utils/searchResult/AbstractSearchResult";
-	import { createInfiniteQuery, type CreateInfiniteQueryOptions } from "@tanstack/svelte-query";
+	import {
+		createInfiniteQuery,
+		getQueryClientContext,
+		type CreateInfiniteQueryOptions
+	} from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
-	import { onDestroy } from "svelte";
+	import { onDestroy, onMount } from "svelte";
 	import { derived, get, writable } from "svelte/store";
 	import executeSearchQuery, { type UserMangaFeedChapterParams as Params } from "./search";
 	import MangaFeedSortOrderSelection from "@mangadex/componnents/manga/feed/sort/MangaFeedSortOrderSelection.svelte";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 
 	const client = getContextClient();
 	const order = writable<MangaFeedSortOrder | undefined>({
@@ -28,20 +33,14 @@
 	const query = createInfiniteQuery(
 		derived([pageLimit, order], ([$limit, $order]) => {
 			return {
-				queryKey: [
-					"user-logged",
-					"manga",
-					"feed",
-					`limit:${$limit}`,
-					`${JSON.stringify($order)}`
-				],
+				queryKey: ["user-logged", "manga", "feed", `limit:${$limit}`, `${JSON.stringify($order)}`],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},
 				getNextPageParam(lastPage, _allPages, lastPageParam) {
 					let limit = lastPage.paginationData.limit;
 					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset > lastPage.paginationData.total) {
+					if (next_offset >= lastPage.paginationData.total) {
 						return null;
 					} else {
 						return {
@@ -71,6 +70,14 @@
 	const fetchNext = debounce(() => {
 		return get(query).fetchNextPage();
 	}, debounce_wait);
+	const queryClient = getQueryClientContext();
+	$effect(() =>
+		defaultContentProfile.subscribe(() => {
+			queryClient.resetQueries({
+				queryKey: ["user-logged", "manga", "feed"]
+			});
+		})
+	);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
@@ -151,7 +158,14 @@
 	/>
 {/if}
 
-<div class="observer-trigger" bind:this={to_obserce_bind}>
+<!-- svelte-ignore  a11y_no_static_element_interactions-->
+<div
+	class="observer-trigger"
+	onmouseenter={() => {
+		$query.fetchNextPage();
+	}}
+	bind:this={to_obserce_bind}
+>
 	{#if $isFetching}
 		<Fetching />
 	{:else if $hasNext}
