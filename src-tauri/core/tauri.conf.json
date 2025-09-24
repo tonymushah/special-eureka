@@ -85,7 +85,6 @@
 				"title": "Special Eureka",
 				"width": 800,
 				"minWidth": 500,
-				"theme": "Light",
 				"label": "main",
 				"url": "index.html",
 				"decorations": false,
