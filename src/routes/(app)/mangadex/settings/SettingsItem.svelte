@@ -48,7 +48,7 @@
 	h2 {
 		text-align: center;
 		display: -webkit-box;
-		text-wrap: nowrap;
+		text-wrap: wrap;
 		text-overflow: ellipsis;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
