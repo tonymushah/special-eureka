@@ -66,6 +66,7 @@
 		width: 200px;
 		height: 150px;
 		border: 3px dashed black;
+		align-self: center;
 	}
 	main {
 		height: -webkit-fill-available;

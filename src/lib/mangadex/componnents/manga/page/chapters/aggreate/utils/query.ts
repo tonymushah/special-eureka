@@ -26,7 +26,7 @@ export default mangaAggregateQuery;
 export const getMangaAggregateChapterQuery = graphql(`
 	query getMangaAggregateChapter($ids: [UUID!]!) {
 		chapter {
-			list(params: { chapterIds: $ids, includeExternalUrl: EXCLUDE }) {
+			list(params: { chapterIds: $ids, includeExternalUrl: EXCLUDE }, feedContent: false) {
 				data {
 					id
 					attributes {

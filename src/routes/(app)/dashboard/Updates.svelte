@@ -140,4 +140,7 @@
 		justify-content: center;
 		padding-top: 4px;
 	}
+	.no-updates {
+		text-align: center;
+	}
 </style>

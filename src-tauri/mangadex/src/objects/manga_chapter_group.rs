@@ -100,9 +100,13 @@ pub async fn group_results(
     log::debug!("{:#?}", manga_list_params.manga_ids);
     manga_list_params.offset = Some(0_u32);
     manga_list_params.limit = Some(manga_list_params.manga_ids.len().try_into()?);
-    let mangas = MangaListQueries::new(manga_list_params, ctx.get_app_handle::<tauri::Wry>()?)
-        .list(ctx)
-        .await?;
+    let mangas = MangaListQueries::new_with_exclude_feed(
+        manga_list_params,
+        true,
+        ctx.get_app_handle::<tauri::Wry>()?,
+    )
+    .list(ctx)
+    .await?;
     Ok(MangaChapterGroup {
         data: manga_ids_chapter_group
             .into_iter()

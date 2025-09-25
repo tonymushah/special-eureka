@@ -39,13 +39,13 @@ impl ChapterQueries {
         offline_params: Option<GetAllChapterParams>,
         feed_content: Option<bool>,
     ) -> Result<ChapterResults> {
-        let feed_content = feed_content.unwrap_or_default();
+        let feed_content = feed_content.unwrap_or(true);
         let mut params = params.unwrap_or_default();
         if feed_content {
             params = feed_from_gql_ctx::<tauri::Wry, _>(ctx, params);
         }
         params.includes = <ChapterResults as ExtractReferenceExpansionFromContext>::exctract(ctx);
-        ChapterListQueries::new(params, ctx.get_app_handle::<tauri::Wry>()?)
+        ChapterListQueries::no_feed(params)
             .default(ctx, offline_params)
             .await
     }
