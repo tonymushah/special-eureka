@@ -16,7 +16,7 @@ importers:
         version: 5.2.8
       '@fontsource-variable/noto-sans-jp':
         specifier: ^5.2.8
-        version: 5.2.8
+        version: 5.2.9
       '@fontsource/pacifico':
         specifier: ^5.2.7
         version: 5.2.7
@@ -642,8 +642,8 @@ packages:
   '@fontsource-variable/josefin-sans@5.2.8':
     resolution: {integrity: sha512-xt8EGt2/66JJV/mmWU2NxafIwXmDNdd1yi/bVZyRRMCtygHXPCldJrrjjDgOCJPyXbE7NWkc3g+5iE8uJJGbFA==}
 
-  '@fontsource-variable/noto-sans-jp@5.2.8':
-    resolution: {integrity: sha512-oGjExI1HZqwXlGU9Xf8EacsF5F4H7Lq9ZKGgoem3dvA+Jt3dloHHHVzPGSxRzbkmu0bZEJRDGyadgW7Rkaremg==}
+  '@fontsource-variable/noto-sans-jp@5.2.9':
+    resolution: {integrity: sha512-osPL5f7dvGDjuMuFwDTGPLG37030D8X5zk+3BWea6txAVDFeE/ZIrKW0DY0uSDfRn9+NiKbiFn/2QvZveKXTog==}
 
   '@fontsource/pacifico@5.2.7':
     resolution: {integrity: sha512-L+YiZn3Lb8rVN15zcLlti62doVxQeFpS+dJmulKkFrUo3dZIAxZLHwXoKaaHm+VVcOTrT/mmKCZqGOIWVmFV2w==}
@@ -4868,7 +4868,7 @@ snapshots:
 
   '@fontsource-variable/josefin-sans@5.2.8': {}
 
-  '@fontsource-variable/noto-sans-jp@5.2.8': {}
+  '@fontsource-variable/noto-sans-jp@5.2.9': {}
 
   '@fontsource/pacifico@5.2.7': {}
 
