@@ -47,6 +47,8 @@ pub fn get_builder() -> Builder<Wry> {
                     log::error!("{err}");
                 }
             }
+            println!("{:#?}", _args);
+            println!("{_cmd}");
         }))
         .setup(setup::setup)
 }
