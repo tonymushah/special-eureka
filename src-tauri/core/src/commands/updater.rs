@@ -25,10 +25,10 @@ impl From<tauri_plugin_updater::Update> for Update {
 }
 
 #[tauri::command]
-pub async fn check_for_updates<R: Runtime>(app: AppHandle<R>) -> tauri::Result<Option<Update>> {
+pub async fn check_for_updates<R: Runtime>(_app: AppHandle<R>) -> tauri::Result<Option<Update>> {
     #[cfg(feature = "updater")]
     {
-        let update = app
+        let update = _app
             .updater()
             .map_err(anyhow::Error::from)?
             .check()
@@ -55,12 +55,12 @@ pub enum UpdatePayload {
 const UPDATE_PAYLOAD_EVENT_KEY: &str = "special-eureka://update-state";
 
 #[tauri::command]
-pub async fn download_and_install_updates<R: Runtime>(app: AppHandle<R>) -> tauri::Result<()> {
+pub async fn download_and_install_updates<R: Runtime>(_app: AppHandle<R>) -> tauri::Result<()> {
     #[cfg(feature = "updater")]
     {
         use tauri::Emitter;
 
-        let Some(update) = app
+        let Some(update) = _app
             .updater()
             .map_err(anyhow::Error::from)?
             .check()
@@ -70,12 +70,12 @@ pub async fn download_and_install_updates<R: Runtime>(app: AppHandle<R>) -> taur
             return Ok(());
         };
         let mut downloaded = 0;
-        let _ = app.emit(UPDATE_PAYLOAD_EVENT_KEY, UpdatePayload::Starting);
+        let _ = _app.emit(UPDATE_PAYLOAD_EVENT_KEY, UpdatePayload::Starting);
         update
             .download_and_install(
                 |chunck_length, content_lenght| {
                     downloaded += chunck_length;
-                    let _ = app.emit(
+                    let _ = _app.emit(
                         UPDATE_PAYLOAD_EVENT_KEY,
                         UpdatePayload::Downloading {
                             downloaded,
@@ -84,12 +84,12 @@ pub async fn download_and_install_updates<R: Runtime>(app: AppHandle<R>) -> taur
                     );
                 },
                 || {
-                    let _ = app.emit(UPDATE_PAYLOAD_EVENT_KEY, UpdatePayload::Finished);
+                    let _ = _app.emit(UPDATE_PAYLOAD_EVENT_KEY, UpdatePayload::Finished);
                 },
             )
             .await
             .map_err(anyhow::Error::from)?;
-        app.restart();
+        _app.restart();
     }
     #[cfg(not(feature = "updater"))]
     {
