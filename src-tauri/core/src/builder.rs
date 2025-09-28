@@ -3,6 +3,8 @@ pub mod setup;
 
 use tauri::{Builder, Wry};
 
+use crate::commands::open_new_window::open_new_window_sync_from_app;
+
 pub fn get_builder() -> Builder<Wry> {
     let builder = tauri::Builder::default();
     /*builder = builder
@@ -39,6 +41,14 @@ pub fn get_builder() -> Builder<Wry> {
         .plugin(tauri_plugin_deep_link::init())
         .plugin(tauri_plugin_dialog::init())
         // TODO Implement cli function
-        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cmd| {}))
+        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cmd| {
+            if _args.len() == 1 {
+                if let Err(err) = open_new_window_sync_from_app(_app, None) {
+                    log::error!("{err}");
+                }
+            }
+            println!("{:#?}", _args);
+            println!("{_cmd}");
+        }))
         .setup(setup::setup)
 }
