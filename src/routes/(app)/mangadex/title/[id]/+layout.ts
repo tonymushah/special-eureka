@@ -48,10 +48,7 @@ export const load: LayoutLoad = async function ({ params }) {
 			{
 				id
 			},
-			{
-				optimistic: true
-			}
-		);
+		).toPromise();
 		if (queryRes.error) {
 			error(500, {
 				message: queryRes.error.message
