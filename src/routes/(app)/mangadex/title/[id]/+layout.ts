@@ -23,7 +23,7 @@ import getTitleConflicts from "@mangadex/utils/conflicts";
 export const load: LayoutLoad = async function ({ params }) {
 	const client = await getClient();
 
-	const tags = await client.query(allTagsQuery, {}).then((res) => {
+	const tags = await client.query(allTagsQuery, {}).toPromise().then((res) => {
 		if (res.data) {
 			return new Map(
 				res.data.tag.list.data.map((tag) => [
