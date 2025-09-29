@@ -1,25 +1,50 @@
 <script lang="ts">
-	import { type Snippet } from "svelte";
-	import type { LayoutData } from "./$types";
-	import ConflictLayout from "./ConflictLayout.svelte";
-	import NoConflictLayout from "./NoConflictLayout.svelte";
+	import { createQuery } from "@tanstack/svelte-query";
+	import type { LayoutProps } from "./$types";
+	import { getContextClient } from "@urql/svelte";
+	import { load } from "./layout.context";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
-	import { hasConflicts } from "@mangadex/utils/conflicts";
+	import AfterLoadingLayout from "./AfterLoadingLayout.svelte";
+	import PageError from "@mangadex/componnents/PageError.svelte";
 
-	interface Props {
-		data: LayoutData;
-		children?: Snippet;
-	}
-	let { data, children }: Props = $props();
-	let hasConflict = $derived.by(() => hasConflicts(data.conflicts));
-	let ingnoreConflict = $state(false);
+	let { data, children }: LayoutProps = $props();
+	const client = getContextClient();
+	const query = createQuery({
+		queryKey: ["title", data.id, "load-data"],
+		async queryFn() {
+			return await load(data.id, client);
+		},
+		networkMode: "always"
+	});
 </script>
 
-{#if hasConflict && !ingnoreConflict && data.conflicts}
-	<AppTitle title="Title {data.layoutData.id} - MangaDex" />
-	<ConflictLayout conflicts={data.conflicts} bind:ingnoreConflict />
-{:else}
-	<NoConflictLayout {data}>
-		{@render children?.()}
-	</NoConflictLayout>
+{#if $query.isLoading}
+	<AppTitle title="Loading title... | Special Eureka" />
+	<div class="loading">
+		<h1>Loading...</h1>
+	</div>
+{:else if $query.isSuccess}
+	<AfterLoadingLayout data={$query.data}>
+		{@render children()}
+	</AfterLoadingLayout>
+{:else if $query.isError}
+	<AppTitle title="Error on loading title" />
+	<PageError
+		retry={() => {
+			$query.refetch();
+		}}
+		message={$query.error.message}
+	/>
 {/if}
+
+<style lang="scss">
+	.loading {
+		display: flex;
+		height: -webkit-fill-available;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		background-color: color-mix(in srgb, var(--accent) 20%, transparent 50%);
+	}
+</style>
