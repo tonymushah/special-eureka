@@ -6,6 +6,7 @@
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import AfterLoadingLayout from "./AfterLoadingLayout.svelte";
 	import PageError from "@mangadex/componnents/PageError.svelte";
+	import LoadingPage from "@mangadex/componnents/pages/LoadingPage.svelte";
 
 	let { data, children }: LayoutProps = $props();
 	const client = getContextClient();
@@ -20,9 +21,7 @@
 
 {#if $query.isLoading}
 	<AppTitle title="Loading title... | Special Eureka" />
-	<div class="loading">
-		<h1>Loading...</h1>
-	</div>
+	<LoadingPage />
 {:else if $query.isSuccess}
 	<AfterLoadingLayout data={$query.data}>
 		{@render children()}
@@ -36,15 +35,3 @@
 		message={$query.error.message}
 	/>
 {/if}
-
-<style lang="scss">
-	.loading {
-		display: flex;
-		height: -webkit-fill-available;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column;
-		flex-wrap: nowrap;
-		background-color: color-mix(in srgb, var(--accent) 20%, transparent 50%);
-	}
-</style>

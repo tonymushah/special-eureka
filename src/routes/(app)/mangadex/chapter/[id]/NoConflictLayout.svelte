@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { LayoutData } from "./$types";
+	import type { LayoutData } from "./layout.context";
 	import PostLayout from "./PostLayout.svelte";
 	import { navigating } from "$app/state";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
