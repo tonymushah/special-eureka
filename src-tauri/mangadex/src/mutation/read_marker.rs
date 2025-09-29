@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use crate::{
     Result,
     objects::chapter::Chapter,
+    store::types::structs::content::ContentFeeder,
     utils::{
         source::SendMultiSourceData,
         splittable_param::SendSplitted,
@@ -49,6 +50,7 @@ impl ReadMarkerMutations {
         chapter_ids_read: Vec<Uuid>,
         chapter_ids_unread: Vec<Uuid>,
         update_history: Option<bool>,
+        feed_content: Option<bool>,
     ) -> Result<bool> {
         let manga_chapter_ids: HashMap<Uuid, Vec<Uuid>> = {
             let app = ctx.get_app_handle::<tauri::Wry>()?;
@@ -60,10 +62,13 @@ impl ReadMarkerMutations {
                 v.dedup();
                 v
             };
-            let params = ChapterListParams {
+            let mut params = ChapterListParams {
                 chapter_ids,
                 ..Default::default()
             };
+            if feed_content.unwrap_or(true) {
+                params = app.feed(params);
+            }
             let client = app.get_mangadex_client()?;
             let chapters = params.send_splitted_default(&client).await?;
             chapters
