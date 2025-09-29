@@ -2082,7 +2082,7 @@ type RatingQueries {
 
 type ReadMarkerMutations {
 	mangaReadMarkersBatch(params: MarkChapterBatchParam!): Boolean!
-	readMarkersBatch(chapterIdsRead: [UUID!]!, chapterIdsUnread: [UUID!]!, updateHistory: Boolean): Boolean!
+	readMarkersBatch(chapterIdsRead: [UUID!]!, chapterIdsUnread: [UUID!]!, updateHistory: Boolean, feedContent: Boolean): Boolean!
 }
 
 type ReadMarkerQueries {

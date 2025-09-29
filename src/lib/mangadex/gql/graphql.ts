@@ -2746,6 +2746,7 @@ export type ReadMarkerMutationsMangaReadMarkersBatchArgs = {
 export type ReadMarkerMutationsReadMarkersBatchArgs = {
 	chapterIdsRead: Array<Scalars["UUID"]["input"]>;
 	chapterIdsUnread: Array<Scalars["UUID"]["input"]>;
+	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
 	updateHistory?: InputMaybe<Scalars["Boolean"]["input"]>;
 };
 
