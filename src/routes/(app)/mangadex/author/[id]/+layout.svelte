@@ -1,92 +1,37 @@
 <script lang="ts">
-	import UsersPageBase from "@mangadex/componnents/users/page/UsersPageBase.svelte";
-	import type { LayoutData } from "./$types";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import { writeText } from "@tauri-apps/plugin-clipboard-manager";
-	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
-	import { ExternalLinkIcon } from "svelte-feather-icons";
-	import AuthorLinkButtons from "./AuthorLinkButtons.svelte";
+	import { createQuery } from "@tanstack/svelte-query";
+	import type { LayoutProps } from "./$types";
+	import { getContextClient } from "@urql/svelte";
+	import { load } from "./layout.context";
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
+	import AfterLoadingLayout from "./AfterLoadingLayout.svelte";
+	import PageError from "@mangadex/componnents/PageError.svelte";
 
-	interface Props {
-		data: LayoutData;
-		children?: import("svelte").Snippet;
-	}
-
-	let { data, children }: Props = $props();
-	let description = $derived(get_value_from_title_and_random_if_undefined(data.biography, "en"));
+	let { data, children }: LayoutProps = $props();
+	const client = getContextClient();
+	const query = createQuery({
+		queryKey: ["author", data.id, "load"],
+		async queryFn() {
+			return await load({
+				id: data.id,
+				client
+			});
+		}
+	});
 </script>
 
-<AppTitle title={data.name} />
-
-<UsersPageBase title={data.name} {description}>
-	{#snippet _left()}
-		<div class="buttons">
-			<ButtonAccent
-				isBase
-				onclick={() => {
-					shellOpen(`https://mangadex.org/author/${data.id}`);
-				}}
-			>
-				<p><ExternalLinkIcon /> Open in browser</p>
-			</ButtonAccent>
-			<AuthorLinkButtons links={data.links} />
-		</div>
-	{/snippet}
-	{#snippet topRight()}
-		<div>
-			<p>
-				Author ID: <span
-					onkeydown={() => {}}
-					role="button"
-					tabindex={0}
-					onclick={() => {
-						writeText(data.id);
-					}}
-					class="copiable">{data.id}</span
-				>
-			</p>
-			<section class="uploads">
-				<p>
-					{data.titles}
-					<span>
-						work{#if data.titles > 1}s{/if}
-					</span>
-				</p>
-			</section>
-		</div>
-	{/snippet}
-
-	{#snippet _right()}
-		<div>
-			<section class="content">
-				{@render children?.()}
-			</section>
-		</div>
-	{/snippet}
-</UsersPageBase>
-
-<style lang="scss">
-	.buttons {
-		display: grid;
-		gap: 10px;
-		margin: 10px;
-		p {
-			display: flex;
-			gap: 8px;
-			margin: 0px;
-			font-weight: 700;
-			font-size: 1.125em;
-			align-items: center;
-			justify-content: center;
-		}
-	}
-	.copiable:hover {
-		text-decoration: underline;
-		cursor: pointer;
-	}
-	.content {
-		margin-top: 8px;
-	}
-</style>
+{#if $query.isLoading}
+	<AppTitle title="Loading author" />
+{:else if $query.isSuccess}
+	<AfterLoadingLayout data={$query.data}>
+		{@render children()}
+	</AfterLoadingLayout>
+{:else if $query.isError}
+	<AppTitle title="Error on loading error" />
+	<PageError
+		message={$query.error.message}
+		retry={() => {
+			$query.refetch();
+		}}
+	/>
+{/if}

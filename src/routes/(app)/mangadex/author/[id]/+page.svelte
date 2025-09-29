@@ -1,7 +1,7 @@
 <script lang="ts">
 	import SearchContent from "@mangadex/routes/titles/(search)/SearchContent.svelte";
 	import type { PageData } from "./$types";
-	import { derived, readable, writable } from "svelte/store";
+	import { derived, readable, toStore, writable } from "svelte/store";
 	import type { MangaListParams } from "@mangadex/gql/graphql";
 	import pageLimit from "@mangadex/stores/page-limit";
 	interface Props {
@@ -9,10 +9,7 @@
 	}
 
 	let { data }: Props = $props();
-	const authorId = writable<string>(data.id);
-	$effect(() => {
-		authorId.set(data.id);
-	});
+	const authorId = toStore(() => data.id);
 	const offlineStore = readable(false);
 
 	const listParams = derived([authorId, pageLimit], ([$id, $limit]) => {
