@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { computePosition, flip } from "@floating-ui/dom";
+	import { autoUpdate, computePosition, flip } from "@floating-ui/dom";
 	import type { TopMangaStatsInner } from "..";
 	import DistributionItem from "./DistributionItem.svelte";
 
@@ -18,6 +18,7 @@
 			const { x: _x, y: _y } = await computePosition(target, info, {
 				middleware: [flip()],
 				placement: "bottom"
+				//strategy: "fixed"
 			});
 			Object.assign(info.style, {
 				top: `${_y}px`,
@@ -26,10 +27,15 @@
 		}
 	}
 	$effect(() => {
-		if (isOpen) {
-			open().catch(() => {
-				isOpen = false;
+		if (isOpen && target && info) {
+			const cleanup = autoUpdate(target, info, () => {
+				open().catch(() => {
+					isOpen = false;
+				});
 			});
+			return () => {
+				return cleanup();
+			};
 		}
 	});
 	function getTotal(inner: TopMangaStatsInner) {
@@ -48,6 +54,16 @@
 	}
 	let total = $derived(getTotal(inner));
 </script>
+
+<svelte:window
+	onclick={(e) => {
+		if (target) {
+			if (e.target instanceof Node && !target.contains(e.target)) {
+				isOpen = false;
+			}
+		}
+	}}
+/>
 
 <div class="distribution-info" class:isOpen bind:this={info}>
 	<DistributionItem {total} distribution={10} value={inner[10]} />
@@ -78,5 +94,6 @@
 	}
 	.distribution-info.isOpen {
 		display: flex;
+		transform: translateY(-3px);
 	}
 </style>
