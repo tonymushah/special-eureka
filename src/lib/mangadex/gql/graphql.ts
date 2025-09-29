@@ -4164,6 +4164,7 @@ export type MangaAggregateQuery = {
 
 export type GetMangaAggregateChapterQueryVariables = Exact<{
 	ids: Array<Scalars["UUID"]["input"]> | Scalars["UUID"]["input"];
+	feedContent?: InputMaybe<Scalars["Boolean"]["input"]>;
 }>;
 
 export type GetMangaAggregateChapterQuery = {
@@ -9436,6 +9437,11 @@ export const GetMangaAggregateChapterDocument = {
 							}
 						}
 					}
+				},
+				{
+					kind: "VariableDefinition",
+					variable: { kind: "Variable", name: { kind: "Name", value: "feedContent" } },
+					type: { kind: "NamedType", name: { kind: "Name", value: "Boolean" } }
 				}
 			],
 			selectionSet: {
@@ -9482,7 +9488,10 @@ export const GetMangaAggregateChapterDocument = {
 										{
 											kind: "Argument",
 											name: { kind: "Name", value: "feedContent" },
-											value: { kind: "BooleanValue", value: true }
+											value: {
+												kind: "Variable",
+												name: { kind: "Name", value: "feedContent" }
+											}
 										}
 									],
 									selectionSet: {

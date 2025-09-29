@@ -35,7 +35,13 @@
 	const query = createInfiniteQuery(
 		derived([userId, pageLimit, order], ([$userId, $limit, $order]) => {
 			return {
-				queryKey: ["user", $userId, "uploads", `limit:${$limit}`, `${$order}`],
+				queryKey: [
+					"user",
+					$userId,
+					"uploads",
+					`limit:${$limit}`,
+					`${JSON.stringify($order)}`
+				],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},

@@ -11,6 +11,8 @@ import { queryStore } from "@urql/svelte";
 import { getContext, setContext } from "svelte";
 import query from "./(layout)/query";
 import statsQuery from "./(layout)/statsQuery";
+import { isDataSaver } from "@mangadex/stores/chapterQuality";
+import { get } from "svelte/store";
 
 const contextKey = "title-layout-data";
 
@@ -53,7 +55,7 @@ export async function load(id: string, client: Client) {
 					manga_id: id,
 					filename: data.relationships.coverArt.attributes.fileName,
 					client,
-					mode: CoverImageQuality.V512
+					mode: get(isDataSaver) ? CoverImageQuality.V512 : undefined
 				}),
 				coverImageAlt: `${data.relationships.coverArt.id}/${data.relationships.coverArt.attributes.fileName}`,
 				description: get_value_from_title_and_random_if_undefined(

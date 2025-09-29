@@ -49,7 +49,7 @@ const updateCustomListVisibilityMutation = createMutation(
 				.mutation(updateVisibility, {
 					id,
 					visibility,
-					version: res_ver.data.customList.get.attributes.version + 1
+					version: res_ver.data.customList.get.attributes.version
 				})
 				.toPromise();
 			if (res.error) {

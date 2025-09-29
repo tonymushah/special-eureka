@@ -45,7 +45,7 @@
 						"feed",
 						`limit:${$limit}`,
 						`private:${$isPrivate}`,
-						`${$order}`
+						`${JSON.stringify($order)}`
 					],
 					async queryFn({ pageParam }) {
 						return await executeSearchQuery(client, pageParam, $isPrivate);

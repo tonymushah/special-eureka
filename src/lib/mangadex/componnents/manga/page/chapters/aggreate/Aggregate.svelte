@@ -93,7 +93,7 @@
 				// [x] Flatten the result data and fetch the data in one go.
 				const ids: string[] = e?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
 				if (ids.length > 0)
-					fetchChapters(ids)
+					fetchChapters(ids, __res.conflicts == null)
 						.then(async (cs) => {
 							if (cs) chaptersStore.addByBatch(cs);
 							const comments = await fetchComments(ids);
