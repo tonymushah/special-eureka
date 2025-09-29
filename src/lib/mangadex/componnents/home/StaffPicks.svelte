@@ -10,6 +10,7 @@
 	import type { StaffPicksTitle } from "./staff-picks";
 	import Inner from "./staff-picks/Inner.svelte";
 	import query from "./staff-picks/query";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 	const client = getContextClient();
 	const query_store = specialQueryStore({
 		client,
@@ -60,8 +61,8 @@
 		await query_store.execute();
 	}, 300);
 	const isFetching = query_store.isFetching;
-	onMount(async () => {
-		await execute();
+	onMount(() => {
+		return defaultContentProfile.subscribe(() => execute());
 	});
 	const error = der(query_store, ($d) => $d?.error);
 </script>

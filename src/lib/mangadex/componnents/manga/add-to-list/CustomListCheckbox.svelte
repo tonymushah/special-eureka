@@ -58,5 +58,7 @@
 		justify-items: center;
 		background-color: var(--accent-l1);
 		color: var(--text-color);
+		border: 2px solid var(--mid-tone);
+		border-radius: 0.25em;
 	}
 </style>
