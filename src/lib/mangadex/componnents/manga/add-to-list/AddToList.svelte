@@ -4,7 +4,6 @@
 	import { addErrorToast, addToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { readonly, writable } from "svelte/store";
 	import Lists from "./Lists.svelte";
-	import { add } from "lodash";
 
 	const currentMangaId = writable<string | null>(null);
 
