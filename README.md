@@ -1,13 +1,12 @@
 # Special Eureka
 
 [![build-test](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/build.yaml)
-[![Dev Builds](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml/badge.svg)](https://github.com/tonymushah/special-eureka/actions/workflows/dev-build.yaml)
 
 A desktop manga reader which support for :
 
-- the [Mangadex](https://mangadex.org) website. [Code source](https://github.com/tonymushah/special-eureka/tree/master/src/mangadex)
+- the [Mangadex](https://mangadex.org) website.
 
-It's build in [Tauri](https://tauri.app) and [React](https://react.dev)
+It's build in [Tauri](https://tauri.app) and [Svelte](https://svelte.dev)
 
 ## Features
 
@@ -19,7 +18,10 @@ It's build in [Tauri](https://tauri.app) and [React](https://react.dev)
 - Single Page, Double Page, WideStrip, LongStrip Reading Mode
 - RTL Support for Chapter Reading
 - Zoom for Chapter Reading (Single Page and Double Page Only)
-- Light and dark theme
+- Custom themes
+- Content Profiles
+- Authentification
+- Export MD library or MDList to CSV or MyAnimeList XML.
 
 ## Why I Created this project??
 
@@ -37,7 +39,7 @@ There was two solutions :
 
 I decided to take the second solution.
 
-There is some great alternatives like : [mangadesk](https://github.com/darylhjd/mangadesk) and [Mangal](https://github.com/metafates/mangal) for Terminal, or [Tachiyomi](https://tachiyomi.org/) for Mobile, etc,... (i recommend visiting [wotaku](https://wotaku.moe/) if you want to know more about those).
+There is some great alternatives like : [mangadesk](https://github.com/darylhjd/mangadesk) and [Mangal](https://github.com/metafates/mangal) for Terminal, or [Mihon](https://mihon.app/) for Mobile, etc,... (i recommend visiting [wotaku](https://wotaku.moe/) if you want to know more about those).
 
 But they don't satisfy my own need, like :
 
@@ -58,9 +60,22 @@ So with those goals in mind, i decided to create my own manga reader app for Des
 Now, i wanted to use [Tauri](https://tauri.app) for fun, just to see of how can it go and such.
 But even if the Tauri ecosystem is still growing, it has so many great features that make me fall off.
 
-### Why use React??
+### Why did the v0.1.x latest version from 2023?
 
-It was a mistake at first, but React is amazing. I know that there is good alternative like Solid, Vue, Svelte, and such,... but I'm still learning while building project.
+I wasn't satisfied with the tech stack...
+It was buggy, wonky and didn't statisfy my long term developpement goals.
+So I spend the last two years rewriting the entire stack from scratch.
+It was difficult but it was worth it.
+
+### Why use Svelte??
+
+The old React stack was buggy and wonky...
+It is still kind of it right now, but the Svelte stack allow more control over the code.
+
+### Is there going to be a mobile version of this??
+
+I don't (or never even) plan on releasing a mobile version this app.
+I want to focus on the desktop experience first.
 
 ## Bug reporting
 
@@ -74,7 +89,7 @@ If you want to give some feedback, please put them to :
 
 ## Using the source directly
 
-Before we start, make sure you have meet the [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) and done the [Tauri Quick Start With Vite](https://tauri.app/v1/guides/getting-started/setup/vite).
+Before we start, make sure you have meet the [Tauri Prerequisites](https://tauri.app/start/prerequisites/) and done the [Tauri Quick Start With Vite](https://tauri.app/start/frontend/vite/).
 
 And, this project also use [pnpm](https://pnpm.io) as a package manager, so make sure you have installed it.
 
@@ -100,9 +115,20 @@ Last, but at least :
 pnpm dev
 ```
 
-The build might take a long time, like 30 minutes so i recommend doing else instead.
+The build might take a long time, like 30 minutes so i recommend doing something else in the meantime.
+
+__Note:__ The CSS might not load proprely in Linux. If this happens, retry the command. If it still persist, edit the css a little bit.
+
+### Building a standlone binary
+
+There might be some edge cases where you want a portable release. _We are working on [it](https://github.com/tonymushah/special-eureka/issues/926)_.
+
+In the meantime, you can build a standlone binary by running:
+
+```bash
+pnpm build:no-bundle
+```
 
 ## License
 
 GPL-3.0 license
-
