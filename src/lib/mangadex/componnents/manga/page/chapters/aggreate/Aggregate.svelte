@@ -334,6 +334,9 @@
 		border: 3px solid var(--mid-tone);
 		border-radius: 6px;
 	}
+	.content {
+		padding-top: 12px;
+	}
 	.right {
 		display: flex;
 		align-items: center;
