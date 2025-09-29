@@ -90,6 +90,8 @@
 	import { delay } from "lodash";
 	import { derived, get, toStore, writable } from "svelte/store";
 	import type { LayoutData } from "./layout.context";
+	import { addListenerToChapterThreadEventTarget } from "@mangadex/componnents/chapter/page/contexts/previousNextEventTarget";
+	import { openUrl } from "@tauri-apps/plugin-opener";
 
 	interface Props {
 		data: LayoutData;
@@ -242,6 +244,18 @@
 				addErrorToast("Cannot fetch chapter comments data", e);
 			});
 	});
+	$effect(() =>
+		addListenerToChapterThreadEventTarget(() => {
+			const threadUrl = $currentChapterData.thread?.threadUrl;
+			if (threadUrl) {
+				openUrl(threadUrl).catch((e) => {
+					addErrorToast("Error on opening url", e);
+				});
+			} else {
+				addErrorToast("This chapter has no forum thread", null);
+			}
+		})
+	);
 </script>
 
 <AppTitle
