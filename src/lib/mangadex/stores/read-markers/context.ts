@@ -4,7 +4,9 @@ import chapterReadState from "../read-markers";
 
 const KEY = "READ-MARKERS-CONTEXT";
 
-export function initContextReadChapterMarkers(markers: Readable<Map<string, boolean>>): Readable<Map<string, boolean>> {
+export function initContextReadChapterMarkers(
+	markers: Readable<Map<string, boolean>>
+): Readable<Map<string, boolean>> {
 	return setContext(KEY, markers);
 }
 
@@ -22,6 +24,6 @@ export function getContextReadChapterMarker(chapter: string): Readable<boolean> 
 		return markers.get(chapter);
 	});
 	return derived([context, chapterReadState(chapter)], ([$context, $watch]) => {
-		return $context ?? $watch
+		return $context ?? $watch;
 	});
 }

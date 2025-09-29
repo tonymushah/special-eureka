@@ -9,6 +9,5 @@ export const load: LayoutLoad = async ({ params, url }) => {
 		id,
 		isEnd,
 		startPage: isEnd ? undefined : Math.abs(Number(startPage))
-	}
+	};
 };
-

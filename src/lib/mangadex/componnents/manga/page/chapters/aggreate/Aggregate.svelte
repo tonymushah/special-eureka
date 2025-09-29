@@ -137,7 +137,9 @@
 	}
 	const readMarkers = getContextReadChapterMarkers();
 	const unread = der([query, readMarkers], ([$query, $markers]) => {
-		let chapters = new Set($query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
+		let chapters = new Set(
+			$query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
+		);
 		let readChapters = new Set(
 			$markers
 				.entries()
@@ -188,7 +190,9 @@
 									reads: $hasUnread ? $unread.values().toArray() : [],
 									unreads: $hasUnread
 										? []
-										: ($query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
+										: ($query.data?.manga.aggregate.chunked.flatMap(
+												(d) => d.ids as string[]
+											) ?? [])
 								},
 								{
 									onSuccess() {

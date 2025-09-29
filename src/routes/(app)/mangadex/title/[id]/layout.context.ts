@@ -1,6 +1,4 @@
-import {
-	CoverImageQuality
-} from "@mangadex/gql/graphql";
+import { CoverImageQuality } from "@mangadex/gql/graphql";
 import getTitleConflicts from "@mangadex/utils/conflicts";
 import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
 import get_value_and_random_if_undefined from "@mangadex/utils/lang/get_value_and_random_if_undefined";
@@ -17,12 +15,11 @@ import statsQuery from "./(layout)/statsQuery";
 const contextKey = "title-layout-data";
 
 export async function load(id: string, client: Client) {
-	const queryRes = await client.query(
-		query,
-		{
+	const queryRes = await client
+		.query(query, {
 			id
-		},
-	).toPromise();
+		})
+		.toPromise();
 	if (queryRes.error) {
 		throw queryRes.error;
 	} else if (queryRes.data != undefined) {
@@ -38,10 +35,7 @@ export async function load(id: string, client: Client) {
 			queryResult: data,
 			layoutData: {
 				id: data.id,
-				title: get_value_from_title_and_random_if_undefined(
-					data.attributes.title,
-					"en"
-				),
+				title: get_value_from_title_and_random_if_undefined(data.attributes.title, "en"),
 				altTitle: get_value_and_random_if_undefined(
 					manga_altTitle_to_lang_map(data.attributes.altTitles),
 					"en"

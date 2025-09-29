@@ -27,17 +27,14 @@ export type LayoutLoadReturnData = {
 	links: AuthorLinks;
 };
 
-export async function load({ id, client }: {
-	id: string,
-	client: Client
-}) {
+export async function load({ id, client }: { id: string; client: Client }) {
 	const res = await client
 		.query(query, {
 			id
 		})
 		.toPromise();
 	if (res.error) {
-		throw res.error
+		throw res.error;
 	}
 	if (res.data) {
 		const data = res.data;
@@ -65,7 +62,7 @@ export async function load({ id, client }: {
 			}
 		} satisfies LayoutLoadReturnData;
 	}
-	throw new Error("Cannot find author/artist")
+	throw new Error("Cannot find author/artist");
 }
 
 export type LayoutData = Awaited<ReturnType<typeof load>>;

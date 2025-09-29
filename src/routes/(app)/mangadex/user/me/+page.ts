@@ -10,10 +10,13 @@ export const load: PageLoad = async () => {
 	if (res.error) {
 		throw res.error;
 	} else if (res.data) {
-		redirect(300, route("/mangadex/user/[id]", {
-			id: res.data.user.me.id
-		}))
+		redirect(
+			300,
+			route("/mangadex/user/[id]", {
+				id: res.data.user.me.id
+			})
+		);
 	} else {
 		throw new Error("no data???");
 	}
-}
+};

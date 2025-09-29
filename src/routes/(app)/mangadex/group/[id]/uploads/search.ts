@@ -145,7 +145,7 @@ export default async function executeSearchQuery(
 								};
 							} else {
 								return {
-									comments: 0,
+									comments: 0
 								};
 							}
 						})();

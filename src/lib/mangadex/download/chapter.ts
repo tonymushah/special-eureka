@@ -8,15 +8,9 @@ import type {
 import { client } from "@mangadex/gql/urql";
 import { isMounted } from "@mangadex/stores/offlineIsMounted";
 import { createMutation, createQuery } from "@tanstack/svelte-query";
-import {
-	type OperationResult
-} from "@urql/svelte";
+import { type OperationResult } from "@urql/svelte";
 import { debounce } from "lodash";
-import {
-	derived,
-	readable,
-	type Readable
-} from "svelte/store";
+import { derived, readable, type Readable } from "svelte/store";
 import { mangadexQueryClient } from "..";
 
 const download_mutation = graphql(`
@@ -140,7 +134,7 @@ export const removeMutation = createMutation(
 				.toPromise();
 		},
 		onSettled(data, error, variables, context) {
-			invalidateChapterOfflinePresence(variables)
+			invalidateChapterOfflinePresence(variables);
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -155,28 +149,31 @@ export const removeMutation = createMutation(
 	mangadexQueryClient
 );
 
-export const cancelDownloadMutation = createMutation({
-	mutationKey: ["chapter", "download", "cancel"],
-	async mutationFn(id: string) {
-		return await client
-			.mutation(canceled_download_mutation, {
-				id
-			})
-			.toPromise();
+export const cancelDownloadMutation = createMutation(
+	{
+		mutationKey: ["chapter", "download", "cancel"],
+		async mutationFn(id: string) {
+			return await client
+				.mutation(canceled_download_mutation, {
+					id
+				})
+				.toPromise();
+		},
+		onSettled(data, error, variables, context) {
+			invalidateChapterOfflinePresence(variables);
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					title: "Cancelled chapter download",
+					description: variables
+				}
+			});
+		},
+		networkMode: "always"
 	},
-	onSettled(data, error, variables, context) {
-		invalidateChapterOfflinePresence(variables)
-	},
-	onSuccess(data, variables, context) {
-		addToast({
-			data: {
-				title: "Cancelled chapter download",
-				description: variables
-			}
-		});
-	},
-	networkMode: "always"
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
 export const downloadMutation = createMutation(
 	{
@@ -191,7 +188,7 @@ export const downloadMutation = createMutation(
 			return res;
 		},
 		onSettled(data, error, variables, context) {
-			invalidateChapterOfflinePresence(variables.id)
+			invalidateChapterOfflinePresence(variables.id);
 		},
 		onError(error, variables, context) {
 			addErrorToast("Error on downloading title", error);
@@ -205,8 +202,14 @@ type ChapterSubOpType = OperationResult<
 	ChapterDownloadStateSubscriptionVariables
 >;
 
-export function chapterDownloadStateRaw({ id, deferred }: { id: string, deferred?: boolean }): Readable<ChapterSubOpType | undefined> {
-	return subOpChapter(id, deferred)
+export function chapterDownloadStateRaw({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<ChapterSubOpType | undefined> {
+	return subOpChapter(id, deferred);
 }
 
 export function isChapterPresentRaw(id: string) {
@@ -226,66 +229,79 @@ export function isChapterPresentRaw(id: string) {
 	);
 }
 
-export default function chapterDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<ChapterDownloadState> {
-	return derived([isChapterPresentRaw(id), chapterDownloadStateRaw({ id, deferred }), removeMutation], ([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
-		const res = (() => {
-			if ($removeMutation.isPending) {
-				return ChapterDownloadState.Removing;
-			}
-			if ($isChapterPresentRaw?.data) {
-				const data = $rawState?.data?.watchChapterDownloadState;
-				if (data?.downloading) {
-					const downloading = data.downloading;
-					if (downloading.fetchingImage) {
-						return ChapterDownloadState.FetchingImages;
-					} else if (downloading.isFetchingAtHomeData) {
-						return ChapterDownloadState.FetchingAtHomeData;
-					} else if (downloading.isFetchingData) {
-						return ChapterDownloadState.FetchingData;
-					} else {
-						return ChapterDownloadState.Preloading;
-					}
-				} else if (data?.error) {
-					return ChapterDownloadState.Error;
-				} else if (data?.isCanceled) {
-					return ChapterDownloadState.Canceled;
-				} else if (data?.isOfflineAppStateNotLoaded) {
-					return ChapterDownloadState.OfflineAppStateNotLoaded;
+export default function chapterDownloadState({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<ChapterDownloadState> {
+	return derived(
+		[isChapterPresentRaw(id), chapterDownloadStateRaw({ id, deferred }), removeMutation],
+		([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
+			const res = (() => {
+				if ($removeMutation.isPending) {
+					return ChapterDownloadState.Removing;
 				}
-			} else if ($rawState?.error) {
-				return ChapterDownloadState.Error;
-			}
-			const isPresentData = $isChapterPresentRaw.data?.data?.downloadState.chapter;
-			if (isPresentData?.hasFailed) {
-				return ChapterDownloadState.Error;
-			} else if (isPresentData?.isDownloaded) {
-				return ChapterDownloadState.Done;
+				if ($isChapterPresentRaw?.data) {
+					const data = $rawState?.data?.watchChapterDownloadState;
+					if (data?.downloading) {
+						const downloading = data.downloading;
+						if (downloading.fetchingImage) {
+							return ChapterDownloadState.FetchingImages;
+						} else if (downloading.isFetchingAtHomeData) {
+							return ChapterDownloadState.FetchingAtHomeData;
+						} else if (downloading.isFetchingData) {
+							return ChapterDownloadState.FetchingData;
+						} else {
+							return ChapterDownloadState.Preloading;
+						}
+					} else if (data?.error) {
+						return ChapterDownloadState.Error;
+					} else if (data?.isCanceled) {
+						return ChapterDownloadState.Canceled;
+					} else if (data?.isOfflineAppStateNotLoaded) {
+						return ChapterDownloadState.OfflineAppStateNotLoaded;
+					}
+				} else if ($rawState?.error) {
+					return ChapterDownloadState.Error;
+				}
+				const isPresentData = $isChapterPresentRaw.data?.data?.downloadState.chapter;
+				if (isPresentData?.hasFailed) {
+					return ChapterDownloadState.Error;
+				} else if (isPresentData?.isDownloaded) {
+					return ChapterDownloadState.Done;
+				} else {
+					return ChapterDownloadState.Pending;
+				}
+			})();
+			set(res);
+		},
+		ChapterDownloadState.Pending as ChapterDownloadState
+	);
+}
+
+export function isChapterDownloading(param: { id: string; deferred?: boolean }): Readable<boolean> {
+	return derived(
+		chapterDownloadStateRaw(param),
+		(result) => {
+			if (result?.data?.watchChapterDownloadState.downloading) {
+				return true;
 			} else {
-				return ChapterDownloadState.Pending;
+				return false;
 			}
-		})();
-		set(res);
-	}, ChapterDownloadState.Pending as ChapterDownloadState);
+		},
+		false
+	);
 }
 
-export function isChapterDownloading(param: { id: string, deferred?: boolean }): Readable<boolean> {
-	return derived(chapterDownloadStateRaw(param), (result) => {
-		if (result?.data?.watchChapterDownloadState.downloading) {
-			return true
-		} else {
-			return false;
-		}
-	}, false);
-}
-
-export function chapterDowloadingImageState(param: { id: string, deferred?: boolean }) {
+export function chapterDowloadingImageState(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadStateRaw(param), (result) => {
 		return result?.data?.watchChapterDownloadState.downloading?.fetchingImage;
 	});
-
 }
 
-export function chapterDownloadingError(param: { id: string, deferred?: boolean }) {
+export function chapterDownloadingError(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadStateRaw(param), (result) => {
 		if (result?.error) {
 			return result?.error;
@@ -295,7 +311,7 @@ export function chapterDownloadingError(param: { id: string, deferred?: boolean 
 	});
 }
 
-export function hasChapterDownloadingFailed(param: { id: string, deferred?: boolean }) {
+export function hasChapterDownloadingFailed(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadState(param), (result) => {
 		switch (result) {
 			case ChapterDownloadState.Error:
@@ -308,7 +324,7 @@ export function hasChapterDownloadingFailed(param: { id: string, deferred?: bool
 	});
 }
 
-export function chapterDownloadStateImages(param: { id: string, deferred?: boolean }) {
+export function chapterDownloadStateImages(param: { id: string; deferred?: boolean }) {
 	return derived(
 		[chapterDowloadingImageState(param), isChapterDownloading(param)],
 		([_state, $is_downloading]) => {
@@ -332,7 +348,7 @@ export function chapterDownloadStateImages(param: { id: string, deferred?: boole
 	);
 }
 
-export function isChapterDownloaded(param: { id: string, deferred?: boolean }) {
+export function isChapterDownloaded(param: { id: string; deferred?: boolean }) {
 	return derived(chapterDownloadState(param), (result) => {
 		switch (result) {
 			case ChapterDownloadState.Done:

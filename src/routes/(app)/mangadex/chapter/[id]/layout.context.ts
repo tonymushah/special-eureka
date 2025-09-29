@@ -8,10 +8,10 @@ export async function load({
 	isEnd,
 	startPage
 }: {
-	id: string,
-	client: Client,
-	isEnd?: boolean,
-	startPage?: number
+	id: string;
+	client: Client;
+	isEnd?: boolean;
+	startPage?: number;
 }) {
 	const result = await client
 		.query(query, {
@@ -32,10 +32,10 @@ export async function load({
 			conflicts
 		};
 	} else if (result.error != undefined) {
-		throw result.error
+		throw result.error;
 	} else {
 		throw new Error("Title not found");
 	}
 }
 
-export type LayoutData = Awaited<ReturnType<typeof load>>
+export type LayoutData = Awaited<ReturnType<typeof load>>;

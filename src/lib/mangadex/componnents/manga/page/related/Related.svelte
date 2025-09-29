@@ -50,7 +50,8 @@
 				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? ""
+					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
+					""
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;
@@ -86,15 +87,17 @@
 			if (title.length > 0) {
 				res.push({
 					title: loadash.camelCase(k),
-					titles: title.map(({ id, coverArt, coverArtAlt, title, description, status }) => ({
-						id,
-						coverImage: coverArt,
-						coverImageAlt: coverArtAlt,
-						title,
-						description,
-						status,
-						mangaId: id
-					}))
+					titles: title.map(
+						({ id, coverArt, coverArtAlt, title, description, status }) => ({
+							id,
+							coverImage: coverArt,
+							coverImageAlt: coverArtAlt,
+							title,
+							description,
+							status,
+							mangaId: id
+						})
+					)
 				});
 			}
 		});

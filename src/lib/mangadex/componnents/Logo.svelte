@@ -8,7 +8,12 @@
 		height?: string;
 		allowRandom?: boolean;
 	}
-	let { colorBase = "#ff6740", width = "40", height = "34", allowRandom = true }: Props = $props();
+	let {
+		colorBase = "#ff6740",
+		width = "40",
+		height = "34",
+		allowRandom = true
+	}: Props = $props();
 	const random_value = random(0, 100, false);
 	const isPng = random_value == 50;
 </script>

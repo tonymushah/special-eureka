@@ -10,22 +10,29 @@ const sub_read = readable(false, (set) => {
 		if (blur) {
 			set(blur);
 		}
-	})
-	return () => { sub.unsubscribe() }
+	});
+	return () => {
+		sub.unsubscribe();
+	};
 });
 
-export const forcePort443Mutation = createMutation({
-	mutationKey: ["force-port-443", "update"],
-	async mutationFn(force: boolean) {
-		const res = await client.mutation(gql_mutation, {
-			force
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
+export const forcePort443Mutation = createMutation(
+	{
+		mutationKey: ["force-port-443", "update"],
+		async mutationFn(force: boolean) {
+			const res = await client
+				.mutation(gql_mutation, {
+					force
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			}
+		},
+		networkMode: "always"
 	},
-	networkMode: "always"
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
 const forcePort443: Writable<boolean> = {
 	subscribe(run, invalidate) {
@@ -37,7 +44,7 @@ const forcePort443: Writable<boolean> = {
 	update(updater) {
 		const value = get(sub_read);
 		get(forcePort443Mutation).mutate(updater(value));
-	},
-}
+	}
+};
 
 export default forcePort443;

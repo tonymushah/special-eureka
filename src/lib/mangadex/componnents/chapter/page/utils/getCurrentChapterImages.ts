@@ -7,9 +7,12 @@ import { chapterQuality } from "@mangadex/stores/chapterQuality";
 const KEY = "CHAPTER-CURRENT-IMAGES";
 
 function init(): ChapterPagesStore {
-	return ChapterPages.initFromStore(derived(getCurrentChapterData(), (c) => c.id), {
-		mode: chapterQuality
-	});
+	return ChapterPages.initFromStore(
+		derived(getCurrentChapterData(), (c) => c.id),
+		{
+			mode: chapterQuality
+		}
+	);
 }
 
 function getFromContext(): ChapterPagesStore {
