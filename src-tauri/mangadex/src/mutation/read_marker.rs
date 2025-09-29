@@ -69,7 +69,7 @@ impl ReadMarkerMutations {
             if feed_content.unwrap_or(true) {
                 params = app.feed(params);
             } else {
-				params.content_rating = crate::constants::ALL_CONTENT_RATING;
+				params.content_rating = crate::constants::ALL_CONTENT_RATING.into();
 			}
             let client = app.get_mangadex_client()?;
             let chapters = params.send_splitted_default(&client).await?;
