@@ -63,9 +63,6 @@
 	}
 	.inner:global([data-selecting]) {
 		user-select: none;
-		:global(*) {
-			user-select: none;
-		}
 	}
 
 	.inner {

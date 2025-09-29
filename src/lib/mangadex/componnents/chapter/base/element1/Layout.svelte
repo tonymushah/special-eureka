@@ -11,7 +11,6 @@
 		dateUploader?: Snippet;
 		readingNumberComments?: Snippet;
 		id: string;
-		selected?: boolean;
 	}
 	let {
 		haveBeenRead = $bindable(),
@@ -20,20 +19,19 @@
 		titleGroups,
 		dateUploader,
 		readingNumberComments,
-		id,
-		selected
+		id
 	}: Props = $props();
 
 	const download_state_images = chapterDownloadStateImages({ id });
 </script>
 
 <div
-	class="layout"
+	class="layout chapter-element"
 	class:isNotLogged={!$isLogged}
 	class:haveBeenRead
 	class:haveNotBeenRead={!haveBeenRead && $isLogged}
 	class:hasImages={$download_state_images.hasImages}
-	class:selected
+	data-chapter-id={id}
 	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
 >
 	<div class="state">
@@ -144,7 +142,11 @@
 		align-items: center;
 		justify-content: center;
 	}
-	.layout.selected {
-		background-color: transparent;
+	.chapter-element:global([data-selecto-selected]) {
+		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		user-select: none;
 	}
 </style>

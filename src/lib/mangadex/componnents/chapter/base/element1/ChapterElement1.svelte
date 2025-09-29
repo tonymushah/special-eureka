@@ -172,34 +172,21 @@
 		}
 	});
 	let isSeleted = $state(false);
-	const observer = new MutationObserver((es, o) => {
-		for (const e of es) {
-			if (e.type == "attributes") {
-				if (e.attributeName == "data-selecto-selected") {
-					if (e.target instanceof Element) {
-						isSeleted = e.target.hasAttribute("data-selecto-selected");
-					}
-				}
-			}
-		}
-	});
-	onDestroy(() => {
-		observer.disconnect();
-	});
-	const isSeletedTarget: Action = (node) => {
-		observer.observe(node);
-	};
 </script>
 
 <article
-	class="border chapter-element"
+	class="border"
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}
-	data-chapter-id={id}
-	use:isSeletedTarget
+	onmouseenter={({ currentTarget: article }) => {
+		isSeleted = article?.hasAttribute("data-selecto-selected") ?? false;
+	}}
+	onmouseleave={({ currentTarget: article }) => {
+		isSeleted = article?.hasAttribute("data-selecto-selected") ?? false;
+	}}
 >
-	<Layout haveBeenRead={$hasBeenRead} {id} selected={isSeleted}>
+	<Layout haveBeenRead={$hasBeenRead} {id}>
 		{#snippet state()}
 			<div
 				class="buttons"
@@ -453,9 +440,7 @@
 	.comments:hover {
 		color: var(--primary);
 	}
-	.chapter-element:global([data-selecto-selected]) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
-	}
+
 	.icons {
 		display: flex;
 		align-items: center;

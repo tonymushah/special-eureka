@@ -1,3 +1,5 @@
+import { dev } from "$app/environment";
+
 export default function chapterTitle({
 	chapter,
 	title
@@ -5,7 +7,8 @@ export default function chapterTitle({
 	chapter: string | null | undefined;
 	title: string | null | undefined;
 }): string | undefined {
-	console.log(`${chapter} - ${title}`);
+	if (dev)
+		console.debug(`${chapter} - ${title}`);
 	if (typeof chapter == "string" && typeof title == "string") {
 		if (title.length == 0 || title == null) {
 			return `Chap. ${chapter}`;
