@@ -97,6 +97,8 @@
 	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
 	import { RiSearchEyeLine } from "svelte-remixicon";
 	import { isLogged } from "@mangadex/utils/auth";
+	import type { Action } from "svelte/action";
+	import { onDestroy } from "svelte";
 
 	let {
 		id,
@@ -169,6 +171,24 @@
 			}
 		}
 	});
+	let isSeleted = $state(false);
+	const observer = new MutationObserver((es, o) => {
+		for (const e of es) {
+			if (e.type == "attributes") {
+				if (e.attributeName == "data-selecto-selected") {
+					if (e.target instanceof Element) {
+						isSeleted = e.target.hasAttribute("data-selecto-selected");
+					}
+				}
+			}
+		}
+	});
+	onDestroy(() => {
+		observer.disconnect();
+	});
+	const isSeletedTarget: Action = (node) => {
+		observer.observe(node);
+	};
 </script>
 
 <article
@@ -177,8 +197,9 @@
 		preventDefault: true
 	})}
 	data-chapter-id={id}
+	use:isSeletedTarget
 >
-	<Layout haveBeenRead={$hasBeenRead} {id}>
+	<Layout haveBeenRead={$hasBeenRead} {id} selected={isSeleted}>
 		{#snippet state()}
 			<div
 				class="buttons"

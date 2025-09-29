@@ -3,6 +3,7 @@
 	import DangerBadgeOnlyLabel from "../theme/tag/DangerBadgeOnlyLabel.svelte";
 	import { lowerCase, startCase } from "lodash";
 	import StatusBadgeOnlyLabel from "../theme/tag/StatusBadgeOnlyLabel.svelte";
+	import AccentBadgeOnlyLabel from "../theme/tag/AccentBadgeOnlyLabel.svelte";
 
 	interface Props {
 		contentRating?: ContentRating;
@@ -14,4 +15,6 @@
 	<DangerBadgeOnlyLabel label={startCase(lowerCase(contentRating))} />
 {:else if ContentRating.Suggestive == contentRating}
 	<StatusBadgeOnlyLabel color="green" label={startCase(lowerCase(contentRating))} />
+{:else}
+	<AccentBadgeOnlyLabel label={"Safe"} />
 {/if}

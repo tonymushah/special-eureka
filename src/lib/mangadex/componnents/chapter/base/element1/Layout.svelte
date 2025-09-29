@@ -11,6 +11,7 @@
 		dateUploader?: Snippet;
 		readingNumberComments?: Snippet;
 		id: string;
+		selected?: boolean;
 	}
 	let {
 		haveBeenRead = $bindable(),
@@ -19,7 +20,8 @@
 		titleGroups,
 		dateUploader,
 		readingNumberComments,
-		id
+		id,
+		selected
 	}: Props = $props();
 
 	const download_state_images = chapterDownloadStateImages({ id });
@@ -31,6 +33,7 @@
 	class:haveBeenRead
 	class:haveNotBeenRead={!haveBeenRead && $isLogged}
 	class:hasImages={$download_state_images.hasImages}
+	class:selected
 	style="--status-left: {$download_state_images.left}; --status-right: {$download_state_images.right};"
 >
 	<div class="state">
@@ -140,5 +143,8 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+	.layout.selected {
+		background-color: transparent;
 	}
 </style>
