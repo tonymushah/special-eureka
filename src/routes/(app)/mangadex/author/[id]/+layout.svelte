@@ -6,6 +6,7 @@
 	import AppTitle from "@special-eureka/core/components/AppTitle.svelte";
 	import AfterLoadingLayout from "./AfterLoadingLayout.svelte";
 	import PageError from "@mangadex/componnents/PageError.svelte";
+	import LoadingPage from "@mangadex/componnents/pages/LoadingPage.svelte";
 
 	let { data, children }: LayoutProps = $props();
 	const client = getContextClient();
@@ -22,6 +23,7 @@
 
 {#if $query.isLoading}
 	<AppTitle title="Loading author" />
+	<LoadingPage />
 {:else if $query.isSuccess}
 	<AfterLoadingLayout data={$query.data}>
 		{@render children()}
