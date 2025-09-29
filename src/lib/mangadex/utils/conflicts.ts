@@ -42,12 +42,16 @@ export default async function getTitleConflicts({ client, title, id }: GetTitleC
 			return null;
 			break;
 		case ContentProfileWarningMode.Autl:
-			if (await isInLibrary(id)) {
+			if (await isInLibrary(id, {
+				client
+			})) {
 				return null;
 			}
 			break;
 		case ContentProfileWarningMode.AutlNd:
-			if (await isInLibraryUnlessDropped(id)) {
+			if (await isInLibraryUnlessDropped(id, {
+				client
+			})) {
 				return null;
 			}
 			break;
