@@ -84,21 +84,19 @@
 		removeMutation
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
+	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
+	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
+	import { isLogged } from "@mangadex/utils/auth";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
+	import { RiSearchEyeLine } from "svelte-remixicon";
 	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
-	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
-	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
-	import { RiSearchEyeLine } from "svelte-remixicon";
-	import { isLogged } from "@mangadex/utils/auth";
-	import type { Action } from "svelte/action";
-	import { onDestroy } from "svelte";
 
 	let {
 		id,
@@ -171,7 +169,6 @@
 			}
 		}
 	});
-	let isSeleted = $state(false);
 </script>
 
 <article
@@ -179,12 +176,6 @@
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}
-	onmouseenter={({ currentTarget: article }) => {
-		isSeleted = article?.hasAttribute("data-selecto-selected") ?? false;
-	}}
-	onmouseleave={({ currentTarget: article }) => {
-		isSeleted = article?.hasAttribute("data-selecto-selected") ?? false;
-	}}
 >
 	<Layout haveBeenRead={$hasBeenRead} {id}>
 		{#snippet state()}
