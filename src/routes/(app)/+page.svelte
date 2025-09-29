@@ -22,7 +22,10 @@
 		{#if dev}
 			<div class="alert">
 				<h2>If you see this page, means that you're in a prerealease version</h2>
-				<p>A lot of thing can be improved, so please be patient and wait for the stable realease</p>
+				<p>
+					A lot of thing can be improved, so please be patient and wait for the stable
+					realease
+				</p>
 			</div>
 			<div class="links">
 				<p><a href={route("/mangadex")}>Mangadex Home</a></p>
