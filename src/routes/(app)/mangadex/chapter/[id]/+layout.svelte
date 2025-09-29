@@ -14,7 +14,7 @@
 	const query = createQuery(
 		derived([toStore(() => data)], ([data]) => {
 			return {
-				queryKey: ["title", data.id, "load", JSON.stringify(data)],
+				queryKey: ["chapter", data.id, "load", JSON.stringify(data)],
 				networkMode: "always",
 				async queryFn() {
 					return load({
