@@ -76,12 +76,12 @@ export function offlinePresenceQueryKey(id: string) {
 	return ["cover", id, "offline-presence"];
 }
 
-export const invalidateCoverOfflinePresence = (async (id: string) => {
+export const invalidateCoverOfflinePresence = async (id: string) => {
 	const queryKey = offlinePresenceQueryKey(id);
 	await mangadexQueryClient.refetchQueries({
 		queryKey
 	});
-});
+};
 
 const downloadStateQuery = (id: string, _client?: QueryClient) => {
 	const client = _client ?? mangadexQueryClient;
@@ -142,7 +142,7 @@ export const removeMutation = createMutation(
 			return res;
 		},
 		onSettled(data, error, variables, context) {
-			invalidateCoverOfflinePresence(variables)
+			invalidateCoverOfflinePresence(variables);
 		},
 		onSuccess(data, variables, context) {
 			addToast({
@@ -165,32 +165,35 @@ const remove = debounce(async (id: string, _client?: QueryClient) => {
 	return await get(removeMutation).mutateAsync(id);
 });
 
-export const cancelDonwloadMutation = createMutation({
-	mutationKey: ["cover", "download", "cancel"],
-	async mutationFn(id: string) {
-		const res = await gqlClient
-			.mutation(cancelDonwloadMuation, {
-				id
-			})
-			.toPromise();
-		return res;
+export const cancelDonwloadMutation = createMutation(
+	{
+		mutationKey: ["cover", "download", "cancel"],
+		async mutationFn(id: string) {
+			const res = await gqlClient
+				.mutation(cancelDonwloadMuation, {
+					id
+				})
+				.toPromise();
+			return res;
+		},
+		onSettled(data, error, variables, context) {
+			invalidateCoverOfflinePresence(variables);
+		},
+		onSuccess(data, variables, context) {
+			addToast({
+				data: {
+					title: `Removed cover`,
+					description: variables
+				}
+			});
+		},
+		onError(error, variables, context) {
+			addErrorToast(`Cannot remove cover ${variables}`, error);
+		},
+		networkMode: "always"
 	},
-	onSettled(data, error, variables, context) {
-		invalidateCoverOfflinePresence(variables)
-	},
-	onSuccess(data, variables, context) {
-		addToast({
-			data: {
-				title: `Removed cover`,
-				description: variables
-			}
-		});
-	},
-	onError(error, variables, context) {
-		addErrorToast(`Cannot remove cover ${variables}`, error);
-	},
-	networkMode: "always"
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
 export enum CoverDownloadState {
 	Pending,
@@ -240,7 +243,13 @@ type CoverSubOpType = OperationResult<
 	CoverDownloadSubSubscriptionVariables
 >;
 
-export default function coverDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<CoverDownloadState> {
+export default function coverDownloadState({
+	id,
+	deferred
+}: {
+	id: string;
+	deferred?: boolean;
+}): Readable<CoverDownloadState> {
 	return derived([downloadStateQuery(id), subOPCover(id, deferred)], ([$query, $state], set) => {
 		const res = (() => {
 			if ($state?.data) {
@@ -285,10 +294,10 @@ export default function coverDownloadState({ id, deferred }: { id: string, defer
 				return CoverDownloadState.Pending;
 			}
 		})();
-	})
+	});
 }
 
-export function isCoverDownloading(param: { id: string, deferred?: boolean }) {
+export function isCoverDownloading(param: { id: string; deferred?: boolean }) {
 	return derived(coverDownloadState(param), (result) => {
 		switch (result) {
 			case CoverDownloadState.FetchingData:
@@ -304,7 +313,7 @@ export function isCoverDownloading(param: { id: string, deferred?: boolean }) {
 	});
 }
 
-export function coverDownloadingError({ id, deferred }: { id: string, deferred?: boolean }) {
+export function coverDownloadingError({ id, deferred }: { id: string; deferred?: boolean }) {
 	return derived(subOPCover(id, deferred), (result) => {
 		if (result?.error) {
 			return result?.error;
@@ -314,7 +323,7 @@ export function coverDownloadingError({ id, deferred }: { id: string, deferred?:
 	});
 }
 
-export function hasCoverDownloadingFailed(param: { id: string, deferred?: boolean }) {
+export function hasCoverDownloadingFailed(param: { id: string; deferred?: boolean }) {
 	return derived(coverDownloadState(param), (result) => {
 		switch (result) {
 			case CoverDownloadState.Error:
@@ -327,7 +336,7 @@ export function hasCoverDownloadingFailed(param: { id: string, deferred?: boolea
 	});
 }
 
-export function isCoverDownloaded(param: { id: string, deferred?: boolean }) {
+export function isCoverDownloaded(param: { id: string; deferred?: boolean }) {
 	return derived(coverDownloadState(param), (result) => {
 		switch (result) {
 			case CoverDownloadState.Done:
@@ -339,7 +348,7 @@ export function isCoverDownloaded(param: { id: string, deferred?: boolean }) {
 	});
 }
 
-export class CoverDownload { }
+export class CoverDownload {}
 /*
 export class CoverDownload {
 	private coverId: string;

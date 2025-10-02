@@ -84,19 +84,19 @@
 		removeMutation
 	} from "@mangadex/download/chapter";
 	import type { Language, UserRole } from "@mangadex/gql/graphql";
+	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
+	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
+	import { isLogged } from "@mangadex/utils/auth";
 	import chapterElementContextMenuItems from "@mangadex/utils/context-menu/chapter";
 	import registerContextMenuEvent, {
 		setContextMenuContext
 	} from "@special-eureka/core/utils/contextMenuContext";
 	import { debounce } from "lodash";
 	import { EyeIcon, EyeOffIcon, MessageSquareIcon, UsersIcon } from "svelte-feather-icons";
+	import { RiSearchEyeLine } from "svelte-remixicon";
 	import { derived } from "svelte/store";
 	import DownloadStateComp from "./DownloadStateComp.svelte";
 	import Layout from "./Layout.svelte";
-	import { getContextReadChapterMarker } from "@mangadex/stores/read-markers/context";
-	import { readMarkers } from "@mangadex/stores/read-markers/mutations";
-	import { RiSearchEyeLine } from "svelte-remixicon";
-	import { isLogged } from "@mangadex/utils/auth";
 
 	let {
 		id,
@@ -172,11 +172,10 @@
 </script>
 
 <article
-	class="border chapter-element"
+	class="border"
 	oncontextmenu={registerContextMenuEvent({
 		preventDefault: true
 	})}
-	data-chapter-id={id}
 >
 	<Layout haveBeenRead={$hasBeenRead} {id}>
 		{#snippet state()}
@@ -432,9 +431,7 @@
 	.comments:hover {
 		color: var(--primary);
 	}
-	.chapter-element:global([data-selecto-selected]) {
-		background-color: color-mix(in srgb, var(--primary) 50%, transparent 50%);
-	}
+
 	.icons {
 		display: flex;
 		align-items: center;

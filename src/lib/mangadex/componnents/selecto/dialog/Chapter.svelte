@@ -8,6 +8,7 @@
 	import exportIdsToTxt from "@mangadex/gql-docs/export/ids";
 	import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 	import { revealItemInDir } from "@tauri-apps/plugin-opener";
+	import { isMounted } from "@mangadex/stores/offlineIsMounted";
 
 	interface Props {
 		chapters: string[];
@@ -34,14 +35,18 @@
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Download"
-			disabled={$multiChapterDownload.isPending && $removeMultipleChapterMutation.isPending}
+			disabled={($multiChapterDownload.isPending &&
+				$removeMultipleChapterMutation.isPending) ||
+				!$isMounted}
 			onclick={() => {
 				$multiChapterDownload.mutate(chapters);
 			}}
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={$multiChapterDownload.isPending && $removeMultipleChapterMutation.isPending}
+			disabled={($multiChapterDownload.isPending &&
+				$removeMultipleChapterMutation.isPending) ||
+				!$isMounted}
 			label="Remove them locally"
 			onclick={() => {
 				$removeMultipleChapterMutation.mutate(chapters);

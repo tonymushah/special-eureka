@@ -39,76 +39,80 @@
 <div class="layout">
 	<div class="top-layout">
 		<h1>{data.attributes.name}</h1>
-		<p>
-			Visibility: {data.attributes.visibility == CustomListVisibility.Public ? "Public" : "Private"}
-		</p>
-		{#if data.isMine}
-			{#if isPrivate}
-				<DangerButtonOnlyLabel
-					label="Make Public"
-					onclick={() => {
-						$updateCustomListVisibilityMutation.mutate(
-							{
-								id: data.id,
-								visibility: CustomListVisibility.Public
-							},
-							{
-								onSuccess() {
-									invalidate(
-										route("/mangadex/list/[id]", {
-											id: data.id
-										})
-									);
-									addToast({
-										data: {
-											title: "Sucefully made custom list public",
-											description: data.attributes.name,
-											variant: "yellow"
-										}
-									});
+		<div class="visibility">
+			<p>
+				Visibility: {data.attributes.visibility == CustomListVisibility.Public
+					? "Public"
+					: "Private"}
+			</p>
+			{#if data.isMine}
+				{#if isPrivate}
+					<DangerButtonOnlyLabel
+						label="Make Public"
+						onclick={() => {
+							$updateCustomListVisibilityMutation.mutate(
+								{
+									id: data.id,
+									visibility: CustomListVisibility.Public
 								},
-								onError(error, variables, context) {
-									addErrorToast("Cannot update visibility", error);
+								{
+									onSuccess() {
+										addToast({
+											data: {
+												title: "Sucefully made custom list public",
+												description: data.attributes.name,
+												variant: "yellow"
+											}
+										});
+										goto(
+											route("/mangadex/list/[id]", {
+												id: data.id
+											})
+										);
+									},
+									onError(error, variables, context) {
+										addErrorToast("Cannot update visibility", error);
+									}
 								}
-							}
-						);
-					}}
-					disabled={$updateCustomListVisibilityMutation.isPending}
-				/>
-			{:else}
-				<ButtonAccentOnlyLabel
-					label="Make Private"
-					onclick={() => {
-						$updateCustomListVisibilityMutation.mutate(
-							{
-								id: data.id,
-								visibility: CustomListVisibility.Private
-							},
-							{
-								onSuccess() {
-									invalidate(
-										route("/mangadex/list/[id]", {
-											id: data.id
-										})
-									);
-									addToast({
-										data: {
-											title: "Sucefully made custom list private",
-											description: data.attributes.name,
-											variant: "yellow"
-										}
-									});
+							);
+						}}
+						disabled={$updateCustomListVisibilityMutation.isPending}
+					/>
+				{:else}
+					<ButtonAccentOnlyLabel
+						label="Make Private"
+						onclick={() => {
+							$updateCustomListVisibilityMutation.mutate(
+								{
+									id: data.id,
+									visibility: CustomListVisibility.Private
 								},
-								onError(error, variables, context) {
-									addErrorToast("Cannot update visibility", error);
+								{
+									onSuccess() {
+										addToast({
+											data: {
+												title: "Sucefully made custom list private",
+												description: data.attributes.name,
+												variant: "yellow"
+											}
+										});
+										goto(
+											route("/mangadex/list/[id]", {
+												id: `private:${data.id}`
+											})
+										);
+									},
+									onError(error, variables, context) {
+										addErrorToast("Cannot update visibility", error);
+									}
 								}
-							}
-						);
-					}}
-					disabled={$updateCustomListVisibilityMutation.isPending}
-				/>
+							);
+						}}
+						disabled={$updateCustomListVisibilityMutation.isPending}
+					/>
+				{/if}
 			{/if}
-		{/if}
+		</div>
 		<p>
 			Created by <UserLink
 				name={user.attributes.username}
@@ -189,5 +193,10 @@
 	}
 	.layout {
 		margin: 0px 10px;
+	}
+	.visibility {
+		display: flex;
+		align-items: center;
+		gap: 2px;
 	}
 </style>

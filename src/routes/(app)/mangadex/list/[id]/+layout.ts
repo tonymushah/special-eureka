@@ -17,7 +17,10 @@ export const load: LayoutLoad = async (load_params) => {
 	} else if (res.data) {
 		const me = await client.query(userMeOnSidebarFooterQuery, {}).toPromise();
 
-		return { ...res.data.customList.get, isMine: me.data?.user.me.id == res.data.customList.get.relationships.user.id };
+		return {
+			...res.data.customList.get,
+			isMine: me.data?.user.me.id == res.data.customList.get.relationships.user.id
+		};
 	} else {
 		throw new Error("unreachable...");
 	}

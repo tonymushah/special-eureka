@@ -214,8 +214,12 @@
 			padding: 0px;
 		}
 	}
+	.stats {
+		position: relative;
+		z-index: 100;
+	}
 	div.content {
-		height: 100%;
+		max-height: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;

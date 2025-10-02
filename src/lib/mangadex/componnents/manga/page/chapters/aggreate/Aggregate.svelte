@@ -21,6 +21,7 @@
 	import mangaAggregateQuery from "./utils/query";
 	import { readMarkers as readMarkersMutation } from "@mangadex/stores/read-markers/mutations";
 	import ChapterFeedSelecto from "@mangadex/componnents/selecto/ChapterFeedSelecto.svelte";
+	import { hasConflicts } from "@mangadex/utils/conflicts";
 
 	const chaptersStore = getChapterStoreContext();
 	const client = getContextClient();
@@ -93,7 +94,7 @@
 				// [x] Flatten the result data and fetch the data in one go.
 				const ids: string[] = e?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
 				if (ids.length > 0)
-					fetchChapters(ids)
+					fetchChapters(ids, !hasConflicts(__res.conflicts))
 						.then(async (cs) => {
 							if (cs) chaptersStore.addByBatch(cs);
 							const comments = await fetchComments(ids);
@@ -137,7 +138,9 @@
 	}
 	const readMarkers = getContextReadChapterMarkers();
 	const unread = der([query, readMarkers], ([$query, $markers]) => {
-		let chapters = new Set($query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[]));
+		let chapters = new Set(
+			$query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
+		);
 		let readChapters = new Set(
 			$markers
 				.entries()
@@ -188,7 +191,9 @@
 									reads: $hasUnread ? $unread.values().toArray() : [],
 									unreads: $hasUnread
 										? []
-										: ($query.data?.manga.aggregate.chunked.flatMap((d) => d.ids as string[]) ?? [])
+										: ($query.data?.manga.aggregate.chunked.flatMap(
+												(d) => d.ids as string[]
+											) ?? [])
 								},
 								{
 									onSuccess() {
@@ -328,6 +333,9 @@
 		height: 200px;
 		border: 3px solid var(--mid-tone);
 		border-radius: 6px;
+	}
+	.content {
+		padding-top: 12px;
 	}
 	.right {
 		display: flex;

@@ -152,10 +152,13 @@ impl MangaDexActixArbiterHandleExt for ArbiterHandle {
         T: Send + 'static,
     {
         let (rx, tx) = oneshot::<T>();
+		#[cfg(debug_assertions)]
         log::debug!("Spawning...");
         self.spawn_fn(move || {
+			#[cfg(debug_assertions)]
             log::debug!("executing task...");
             let res = task();
+			#[cfg(debug_assertions)]
             log::debug!("executed!");
             let _ = rx.send(res);
         });
@@ -168,10 +171,13 @@ impl MangaDexActixArbiterHandleExt for ArbiterHandle {
         F::Output: Send + 'static,
     {
         let (rx, tx) = oneshot::<F::Output>();
+		#[cfg(debug_assertions)]
         log::debug!("Spawning...");
         self.spawn(async move {
+			#[cfg(debug_assertions)]
             log::debug!("executing task...");
             let res = task.await;
+			#[cfg(debug_assertions)]
             log::debug!("executed!");
             let _ = rx.send(res);
         });

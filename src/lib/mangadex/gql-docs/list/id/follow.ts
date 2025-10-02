@@ -23,59 +23,81 @@ export const unfollowCustomListGQLMutation = graphql(`
 
 export const isFollowingCustomListQuery = graphql(`
 	query isFollowingCustomListQuery($id: UUID!) {
-		follows{
+		follows {
 			isFollowingCustomList(id: $id)
 		}
 	}
 `);
 
-export const followCustomListMutation = createMutation({
-	mutationKey: ["custom-list", "follow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(followCustomListGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	}
-}, mangadexQueryClient);
-
-export const unfollowCustomListMutation = createMutation({
-	mutationKey: ["custom-list", "unfollow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(unfollowCustomListGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	}
-}, mangadexQueryClient);
-
-export default function isFollowingCustomList(id: string, options?: {
-	onSettled?: (error: Error | null, variables: string) => void;
-	onError?: (error: Error, variables: string) => void;
-	onSucess?: (variables: string) => void;
-	toast?: boolean
-}): Writable<boolean> {
-	const toast = options?.toast ?? true;
-	const query = createQuery({
-		queryKey: ["custom-list", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingCustomListQuery, {
-				id
-			}).toPromise();
+export const followCustomListMutation = createMutation(
+	{
+		mutationKey: ["custom-list", "follow"],
+		async mutationFn(id: string) {
+			const res = await client
+				.mutation(followCustomListGQLMutation, {
+					id
+				})
+				.toPromise();
 			if (res.error) {
 				throw res.error;
-			} else {
-				return res.data?.follows.isFollowingCustomList ?? false
 			}
 		}
-	}, mangadexQueryClient);
-	const queryDerived = derived(query, ($query) => {
-		return $query.data ?? false
-	}, false);
+	},
+	mangadexQueryClient
+);
+
+export const unfollowCustomListMutation = createMutation(
+	{
+		mutationKey: ["custom-list", "unfollow"],
+		async mutationFn(id: string) {
+			const res = await client
+				.mutation(unfollowCustomListGQLMutation, {
+					id
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			}
+		}
+	},
+	mangadexQueryClient
+);
+
+export default function isFollowingCustomList(
+	id: string,
+	options?: {
+		onSettled?: (error: Error | null, variables: string) => void;
+		onError?: (error: Error, variables: string) => void;
+		onSucess?: (variables: string) => void;
+		toast?: boolean;
+	}
+): Writable<boolean> {
+	const toast = options?.toast ?? true;
+	const query = createQuery(
+		{
+			queryKey: ["custom-list", id, "is-following"],
+			async queryFn() {
+				const res = await client
+					.query(isFollowingCustomListQuery, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				} else {
+					return res.data?.follows.isFollowingCustomList ?? false;
+				}
+			}
+		},
+		mangadexQueryClient
+	);
+	const queryDerived = derived(
+		query,
+		($query) => {
+			return $query.data ?? false;
+		},
+		false
+	);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
@@ -84,11 +106,24 @@ export default function isFollowingCustomList(id: string, options?: {
 		update(updater) {
 			const value = updater(get(queryDerived));
 			setFollowingStatus(value, id, toast, query, options);
-		},
-	}
+		}
+	};
 }
 
-function setFollowingStatus(value: boolean, id: string, toast: boolean, query: CreateQueryResult, options: { onSettled?: (error: Error | null, variables: string) => void; onError?: (error: Error, variables: string) => void; onSucess?: (variables: string) => void; toast?: boolean; } | undefined) {
+function setFollowingStatus(
+	value: boolean,
+	id: string,
+	toast: boolean,
+	query: CreateQueryResult,
+	options:
+		| {
+				onSettled?: (error: Error | null, variables: string) => void;
+				onError?: (error: Error, variables: string) => void;
+				onSucess?: (variables: string) => void;
+				toast?: boolean;
+		  }
+		| undefined
+) {
 	if (value) {
 		get(followCustomListMutation).mutate(id, {
 			onError(error, variables, context) {
@@ -112,7 +147,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 			onSettled(data, error, variables, context) {
 				get(query).refetch();
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	} else {
 		get(unfollowCustomListMutation).mutate(id, {
@@ -137,7 +172,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 			onSettled(data, error, variables, context) {
 				get(query).refetch();
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	}
 }

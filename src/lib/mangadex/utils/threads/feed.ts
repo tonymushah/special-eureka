@@ -3,7 +3,9 @@ import { derived, type Readable } from "svelte/store";
 import type AbstractSearchResult from "../searchResult/AbstractSearchResult";
 import type { ChapterFeedListItemExt } from "@mangadex/routes/list/[id]/feed/search";
 
-export default function chapterThreadsFromChapterFeedQuery(query: CreateInfiniteQueryResult<InfiniteData<AbstractSearchResult<ChapterFeedListItemExt>>>): Readable<Map<string, string | undefined>> {
+export default function chapterThreadsFromChapterFeedQuery(
+	query: CreateInfiniteQueryResult<InfiniteData<AbstractSearchResult<ChapterFeedListItemExt>>>
+): Readable<Map<string, string | undefined>> {
 	return derived(query, (query) => {
 		return new Map(
 			query.data?.pages.flatMap((d) =>
@@ -14,5 +16,5 @@ export default function chapterThreadsFromChapterFeedQuery(query: CreateInfinite
 				)
 			) ?? []
 		);
-	})
+	});
 }

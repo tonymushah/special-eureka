@@ -264,7 +264,7 @@ export default function mangaElementContextMenu({
 		items.push(
 			ContextMenuItemProvider.menuItem({
 				text: "Save title cover image",
-				action() {},
+				action() { },
 				enabled: false
 			})
 		);
@@ -338,7 +338,7 @@ export default function mangaElementContextMenu({
 										openNewWindow(
 											currentLocationWithNewPath(
 												route("/mangadex/author/[id]", {
-													id
+													id: author.id
 												})
 											)
 										);
@@ -380,7 +380,7 @@ export default function mangaElementContextMenu({
 										openNewWindow(
 											currentLocationWithNewPath(
 												route("/mangadex/author/[id]", {
-													id
+													id: author.id
 												})
 											)
 										);

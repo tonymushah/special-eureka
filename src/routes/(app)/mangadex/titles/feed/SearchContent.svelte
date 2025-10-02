@@ -33,7 +33,13 @@
 	const query = createInfiniteQuery(
 		derived([pageLimit, order], ([$limit, $order]) => {
 			return {
-				queryKey: ["user-logged", "manga", "feed", `limit:${$limit}`, `${JSON.stringify($order)}`],
+				queryKey: [
+					"user-logged",
+					"manga",
+					"feed",
+					`limit:${$limit}`,
+					`${JSON.stringify($order)}`
+				],
 				async queryFn({ pageParam }) {
 					return await executeSearchQuery(client, pageParam);
 				},

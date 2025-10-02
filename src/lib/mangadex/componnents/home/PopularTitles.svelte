@@ -12,6 +12,7 @@
 	import TopTitle from "./utils/TopTitle.svelte";
 	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { popular_title_query } from "./popular-titles";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 
 	const client = getContextClient();
 
@@ -22,8 +23,10 @@
 	});
 	const _isFetching = popular_titles_query.isFetching;
 
-	onMount(async () => {
-		await popular_titles_query.execute();
+	onMount(() => {
+		return defaultContentProfile.subscribe(() => {
+			popular_titles_query.execute();
+		});
 	});
 	let fetching = $derived($_isFetching);
 

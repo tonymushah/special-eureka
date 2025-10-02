@@ -3,8 +3,8 @@
 declare global {
 	namespace App {
 		interface Error {
-			message: string,
-			title?: string
+			message: string;
+			title?: string;
 		}
 		// interface Locals {}
 		// interface PageData {}
@@ -13,4 +13,4 @@ declare global {
 	}
 }
 
-export { };
+export {};

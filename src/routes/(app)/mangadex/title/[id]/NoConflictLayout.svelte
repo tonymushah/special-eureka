@@ -23,7 +23,7 @@
 		downloadMutationQuery,
 		removeMutation
 	} from "@mangadex/download/manga";
-	import { anyChapterSub, mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
+	import { mangaReadMarkers } from "@mangadex/gql-docs/read-markers/chapters";
 	import { client } from "@mangadex/gql/urql";
 	import manga_following_status, {
 		get_manga_following_status,
@@ -37,6 +37,7 @@
 		get_manga_reading_status,
 		set_manga_reading_status
 	} from "@mangadex/stores/manga/manga_reading_status";
+	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
 	import { initContextReadChapterMarkers } from "@mangadex/stores/read-markers/context";
 	import mangaElementContextMenu from "@mangadex/utils/context-menu/manga";
 	import manga_title_to_lang_map from "@mangadex/utils/lang/record-to-map/manga-title-to-lang-map";
@@ -51,9 +52,8 @@
 	import { type Snippet } from "svelte";
 	import { derived as der, derived, toStore } from "svelte/store";
 	import { v4 } from "uuid";
-	import type { LayoutData } from "./$types";
+	import type { LayoutData } from "./layout.context";
 	import { setTitleLayoutData } from "./layout.context";
-	import { listenToAnyChapterReadMarkers } from "@mangadex/stores/read-markers";
 
 	type TopMangaStatisticsStoreData = TopMangaStatistics & {
 		threadUrl?: string;

@@ -1,6 +1,19 @@
 import { query as defaultProfileQuery } from "@mangadex/content-profile/graphql/defaultProfile/query";
-import isInLibrary, { isInLibrarySync, isInLibraryUnlessDropped, isInLibraryUnlessDroppedSync } from "@mangadex/gql-docs/library/isIn";
-import { ContentProfileWarningMode, ContentRating, Demographic, Language, MangaState, MangaStatus, ReadingStatus, type ContentProfile } from "@mangadex/gql/graphql";
+import isInLibrary, {
+	isInLibrarySync,
+	isInLibraryUnlessDropped,
+	isInLibraryUnlessDroppedSync
+} from "@mangadex/gql-docs/library/isIn";
+import {
+	ContentProfileWarningMode,
+	ContentRating,
+	Demographic,
+	Language,
+	MangaState,
+	MangaStatus,
+	ReadingStatus,
+	type ContentProfile
+} from "@mangadex/gql/graphql";
 import getContentProfileWarningMode from "@mangadex/utils/contentProfileWarningMode";
 import type { Tag } from "@mangadex/utils/types/Tag";
 import type { Client } from "@urql/svelte";
@@ -11,7 +24,7 @@ export type ContentProfileConflicts = {
 	status: MangaStatus | undefined;
 	publicationDemographic: Demographic | undefined;
 	contentRating: ContentRating | undefined;
-}
+};
 
 type GetTitleConflictsParams = {
 	client: Client;
@@ -19,7 +32,11 @@ type GetTitleConflictsParams = {
 	id: string;
 };
 
-export default async function getTitleConflicts({ client, title, id }: GetTitleConflictsParams): Promise<ContentProfileConflicts | null> {
+export default async function getTitleConflicts({
+	client,
+	title,
+	id
+}: GetTitleConflictsParams): Promise<ContentProfileConflicts | null> {
 	const $profile = await client
 		.query(defaultProfileQuery, {})
 		.toPromise()
@@ -42,12 +59,20 @@ export default async function getTitleConflicts({ client, title, id }: GetTitleC
 			return null;
 			break;
 		case ContentProfileWarningMode.Autl:
-			if (await isInLibrary(id)) {
+			if (
+				await isInLibrary(id, {
+					client
+				})
+			) {
 				return null;
 			}
 			break;
 		case ContentProfileWarningMode.AutlNd:
-			if (await isInLibraryUnlessDropped(id)) {
+			if (
+				await isInLibraryUnlessDropped(id, {
+					client
+				})
+			) {
 				return null;
 			}
 			break;
@@ -56,40 +81,40 @@ export default async function getTitleConflicts({ client, title, id }: GetTitleC
 	}
 	const originalLanguage = title.attributes.originalLanguage;
 	const status = title.attributes.status;
-	const publicationDemographic = title.attributes.publicationDemographic != null
-		? title.attributes.publicationDemographic
-		: undefined;
-	const contentRating = title.attributes.contentRating != null ||
-		title.attributes.contentRating != undefined
-		? title.attributes.contentRating
-		: ContentRating.Safe;
-	const excludedTags = tags.filter((tag) => $profile.excludedTags.some((t) => t == tag.id)
-	);
+	const publicationDemographic =
+		title.attributes.publicationDemographic != null
+			? title.attributes.publicationDemographic
+			: undefined;
+	const contentRating =
+		title.attributes.contentRating != null || title.attributes.contentRating != undefined
+			? title.attributes.contentRating
+			: ContentRating.Safe;
+	const excludedTags = tags.filter((tag) => $profile.excludedTags.some((t) => t == tag.id));
 
 	return {
 		tags: excludedTags,
-		originalLanguage: ($profile.originalLanguages.some((value) => originalLanguage == value) ==
-			false ||
-			$profile.excludedOriginalLanguage.some(
-				(value) => originalLanguage == value
-			) == true) &&
+		originalLanguage:
+			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
+					true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
-			? originalLanguage
-			: undefined,
-		status: $profile.status.some((value) => value == status) == false &&
-			$profile.status.length != 0
-			? status
-			: undefined,
-		publicationDemographic: $profile.publicationDemographic.some(
-			(value) => value == publicationDemographic
-		) == false && $profile.publicationDemographic.length != 0
-			? publicationDemographic
-			: undefined,
-		contentRating: $profile.contentRating.some((value) => value == contentRating) == false &&
+				? originalLanguage
+				: undefined,
+		status:
+			$profile.status.some((value) => value == status) == false && $profile.status.length != 0
+				? status
+				: undefined,
+		publicationDemographic:
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
+				false && $profile.publicationDemographic.length != 0
+				? publicationDemographic
+				: undefined,
+		contentRating:
+			$profile.contentRating.some((value) => value == contentRating) == false &&
 			$profile.contentRating.length != 0
-			? contentRating
-			: undefined
+				? contentRating
+				: undefined
 	};
 }
 
@@ -134,12 +159,17 @@ export type MaybeConflictedTitle = {
 
 type GetTitleConflictsSyncParams = {
 	title: MaybeConflictedTitle;
-	library: Map<string, ReadingStatus>,
-	profile: ContentProfile,
-	warningMode: ContentProfileWarningMode
+	library: Map<string, ReadingStatus>;
+	profile: ContentProfile;
+	warningMode: ContentProfileWarningMode;
 };
 
-export function getTitleConflictsSync({ title, library, profile: $profile, warningMode }: GetTitleConflictsSyncParams): ContentProfileConflicts | null {
+export function getTitleConflictsSync({
+	title,
+	library,
+	profile: $profile,
+	warningMode
+}: GetTitleConflictsSyncParams): ContentProfileConflicts | null {
 	const tags = title.attributes.tags.map<Tag>((t) => ({
 		id: t.id,
 		name: t.attributes.name.en
@@ -163,39 +193,39 @@ export function getTitleConflictsSync({ title, library, profile: $profile, warni
 	}
 	const originalLanguage = title.attributes.originalLanguage;
 	const status = title.attributes.status;
-	const publicationDemographic = title.attributes.publicationDemographic != null
-		? title.attributes.publicationDemographic
-		: undefined;
-	const contentRating = title.attributes.contentRating != null ||
-		title.attributes.contentRating != undefined
-		? title.attributes.contentRating
-		: ContentRating.Safe;
-	const excludedTags = tags.filter((tag) => $profile.excludedTags.some((t) => t == tag.id)
-	);
+	const publicationDemographic =
+		title.attributes.publicationDemographic != null
+			? title.attributes.publicationDemographic
+			: undefined;
+	const contentRating =
+		title.attributes.contentRating != null || title.attributes.contentRating != undefined
+			? title.attributes.contentRating
+			: ContentRating.Safe;
+	const excludedTags = tags.filter((tag) => $profile.excludedTags.some((t) => t == tag.id));
 
 	return {
 		tags: excludedTags,
-		originalLanguage: ($profile.originalLanguages.some((value) => originalLanguage == value) ==
-			false ||
-			$profile.excludedOriginalLanguage.some(
-				(value) => originalLanguage == value
-			) == true) &&
+		originalLanguage:
+			($profile.originalLanguages.some((value) => originalLanguage == value) == false ||
+				$profile.excludedOriginalLanguage.some((value) => originalLanguage == value) ==
+					true) &&
 			$profile.originalLanguages.length != 0 &&
 			$profile.excludedOriginalLanguage.length != 0
-			? originalLanguage
-			: undefined,
-		status: $profile.status.some((value) => value == status) == false &&
-			$profile.status.length != 0
-			? status
-			: undefined,
-		publicationDemographic: $profile.publicationDemographic.some(
-			(value) => value == publicationDemographic
-		) == false && $profile.publicationDemographic.length != 0
-			? publicationDemographic
-			: undefined,
-		contentRating: $profile.contentRating.some((value) => value == contentRating) == false &&
+				? originalLanguage
+				: undefined,
+		status:
+			$profile.status.some((value) => value == status) == false && $profile.status.length != 0
+				? status
+				: undefined,
+		publicationDemographic:
+			$profile.publicationDemographic.some((value) => value == publicationDemographic) ==
+				false && $profile.publicationDemographic.length != 0
+				? publicationDemographic
+				: undefined,
+		contentRating:
+			$profile.contentRating.some((value) => value == contentRating) == false &&
 			$profile.contentRating.length != 0
-			? contentRating
-			: undefined
+				? contentRating
+				: undefined
 	};
 }

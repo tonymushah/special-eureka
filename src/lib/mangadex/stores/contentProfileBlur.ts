@@ -10,22 +10,29 @@ const sub_read = readable(true, (set) => {
 		if (blur) {
 			set(blur);
 		}
-	})
-	return () => { sub.unsubscribe() }
+	});
+	return () => {
+		sub.unsubscribe();
+	};
 });
 
-export const contentProfileBlurMutation = createMutation({
-	mutationKey: ["content-profile", "blur", "update"],
-	async mutationFn(blur: boolean) {
-		const res = await client.mutation(gql_mutation, {
-			blur
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
+export const contentProfileBlurMutation = createMutation(
+	{
+		mutationKey: ["content-profile", "blur", "update"],
+		async mutationFn(blur: boolean) {
+			const res = await client
+				.mutation(gql_mutation, {
+					blur
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			}
+		},
+		networkMode: "always"
 	},
-	networkMode: "always"
-}, mangadexQueryClient);
+	mangadexQueryClient
+);
 
 const contentProfileBlur: Writable<boolean> = {
 	subscribe(run, invalidate) {
@@ -37,7 +44,7 @@ const contentProfileBlur: Writable<boolean> = {
 	update(updater) {
 		const value = get(sub_read);
 		get(contentProfileBlurMutation).mutate(updater(value));
-	},
-}
+	}
+};
 
 export default contentProfileBlur;

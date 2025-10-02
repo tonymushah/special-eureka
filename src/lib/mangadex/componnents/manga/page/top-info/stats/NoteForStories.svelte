@@ -11,7 +11,7 @@
 </script>
 
 <div class="center">
-	<Note bind:average bind:inner />
+	<Note {average} bind:inner />
 </div>
 
 <style lang="scss">

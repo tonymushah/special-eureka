@@ -23,59 +23,81 @@ export const unfollowUserGQLMutation = graphql(`
 
 export const isFollowingUserQuery = graphql(`
 	query isFollowingUserQuery($id: UUID!) {
-		follows{
+		follows {
 			isFollowingUser(id: $id)
 		}
 	}
 `);
 
-export const followUserMutation = createMutation({
-	mutationKey: ["user", "follow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(followUserGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	}
-}, mangadexQueryClient);
-
-export const unfollowUserMutation = createMutation({
-	mutationKey: ["user", "unfollow"],
-	async mutationFn(id: string) {
-		const res = await client.mutation(unfollowUserGQLMutation, {
-			id
-		}).toPromise();
-		if (res.error) {
-			throw res.error;
-		}
-	}
-}, mangadexQueryClient);
-
-export default function isFollowingUser(id: string, options?: {
-	onSettled?: (error: Error | null, variables: string) => void;
-	onError?: (error: Error, variables: string) => void;
-	onSucess?: (variables: string) => void;
-	toast?: boolean
-}): Writable<boolean> {
-	const toast = options?.toast ?? true;
-	const query = createQuery({
-		queryKey: ["user", id, "is-following"],
-		async queryFn() {
-			const res = await client.query(isFollowingUserQuery, {
-				id
-			}).toPromise();
+export const followUserMutation = createMutation(
+	{
+		mutationKey: ["user", "follow"],
+		async mutationFn(id: string) {
+			const res = await client
+				.mutation(followUserGQLMutation, {
+					id
+				})
+				.toPromise();
 			if (res.error) {
 				throw res.error;
-			} else {
-				return res.data?.follows.isFollowingUser ?? false
 			}
 		}
-	}, mangadexQueryClient);
-	const queryDerived = derived(query, ($query) => {
-		return $query.data ?? false
-	}, false);
+	},
+	mangadexQueryClient
+);
+
+export const unfollowUserMutation = createMutation(
+	{
+		mutationKey: ["user", "unfollow"],
+		async mutationFn(id: string) {
+			const res = await client
+				.mutation(unfollowUserGQLMutation, {
+					id
+				})
+				.toPromise();
+			if (res.error) {
+				throw res.error;
+			}
+		}
+	},
+	mangadexQueryClient
+);
+
+export default function isFollowingUser(
+	id: string,
+	options?: {
+		onSettled?: (error: Error | null, variables: string) => void;
+		onError?: (error: Error, variables: string) => void;
+		onSucess?: (variables: string) => void;
+		toast?: boolean;
+	}
+): Writable<boolean> {
+	const toast = options?.toast ?? true;
+	const query = createQuery(
+		{
+			queryKey: ["user", id, "is-following"],
+			async queryFn() {
+				const res = await client
+					.query(isFollowingUserQuery, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				} else {
+					return res.data?.follows.isFollowingUser ?? false;
+				}
+			}
+		},
+		mangadexQueryClient
+	);
+	const queryDerived = derived(
+		query,
+		($query) => {
+			return $query.data ?? false;
+		},
+		false
+	);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
@@ -84,11 +106,24 @@ export default function isFollowingUser(id: string, options?: {
 		update(updater) {
 			const value = updater(get(queryDerived));
 			setFollowingStatus(value, id, toast, query, options);
-		},
-	}
+		}
+	};
 }
 
-function setFollowingStatus(value: boolean, id: string, toast: boolean, query: CreateQueryResult, options: { onSettled?: (error: Error | null, variables: string) => void; onError?: (error: Error, variables: string) => void; onSucess?: (variables: string) => void; toast?: boolean; } | undefined) {
+function setFollowingStatus(
+	value: boolean,
+	id: string,
+	toast: boolean,
+	query: CreateQueryResult,
+	options:
+		| {
+				onSettled?: (error: Error | null, variables: string) => void;
+				onError?: (error: Error, variables: string) => void;
+				onSucess?: (variables: string) => void;
+				toast?: boolean;
+		  }
+		| undefined
+) {
 	if (value) {
 		get(followUserMutation).mutate(id, {
 			onError(error, variables, context) {
@@ -110,9 +145,9 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				get(query).refetch()
+				get(query).refetch();
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	} else {
 		get(unfollowUserMutation).mutate(id, {
@@ -135,9 +170,9 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				get(query).refetch()
+				get(query).refetch();
 				options?.onSettled?.(error, variables);
-			},
+			}
 		});
 	}
 }

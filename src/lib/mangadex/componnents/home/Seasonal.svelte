@@ -7,6 +7,7 @@
 	import HomeErrorComponnent from "./utils/HomeErrorComponnent.svelte";
 	import PopularTitleSpinner from "./utils/PopularTitleSpinner.svelte";
 	import Content from "./seasonal/Content.svelte";
+	import defaultContentProfile from "@mangadex/content-profile/graphql/defaultProfile";
 
 	const client = getContextClient();
 	const query_store = specialQueryStore({
@@ -18,8 +19,8 @@
 	let data = $derived($query_store?.data);
 	const isFetching = query_store.isFetching;
 	let fetching = $derived($isFetching);
-	onMount(async () => {
-		await query_store.execute();
+	onMount(() => {
+		return defaultContentProfile.subscribe(() => query_store.execute());
 	});
 </script>
 

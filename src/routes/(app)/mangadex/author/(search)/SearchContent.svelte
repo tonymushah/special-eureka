@@ -85,7 +85,10 @@
 		}
 		return Array.from(
 			new Map(
-				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [d.id, d])
+				(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).map((d) => [
+					d.id,
+					d
+				])
 			).values()
 		);
 	});

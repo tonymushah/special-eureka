@@ -240,6 +240,7 @@ async fn export_core<R: Runtime>(options: ExportCoreOptions<'_, R>) -> crate::Re
                     if !read_chapters.is_empty() {
                         let read_chapters = ChapterListParams {
                             chapter_ids: read_chapters,
+                            content_rating: crate::constants::ALL_CONTENT_RATING.into(),
                             ..Default::default()
                         }
                         .send_splitted_default(&client)

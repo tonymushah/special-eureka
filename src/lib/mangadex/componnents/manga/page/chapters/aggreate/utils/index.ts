@@ -4,16 +4,21 @@ import type { ComponentProps } from "svelte";
 import chapterTitle from "@mangadex/utils/chapter/title";
 import getChapterDownloadState from "@mangadex/componnents/home/latest-updates/getChapterDownloadState";
 import ChapterElement1 from "@mangadex/componnents/chapter/base/element1/ChapterElement1.svelte";
+import { mangadexQueryClient } from "@mangadex/index";
+import { dev } from "$app/environment";
 
-export async function fetchChapters(ids: string[]) {
+export async function fetchChapters(ids: string[], feedContent?: boolean) {
 	const result = await client
 		.query(getMangaAggregateChapterQuery, {
-			ids
+			ids,
+			feedContent
 		})
 		.toPromise();
 	if (result.error) {
 		throw result.error;
 	}
+	if (dev)
+		mangadexQueryClient.setQueryData(["getMangaAggregateChapterQuery", ...ids, `feedContent:${feedContent}`], () => result);
 	const chapters = result.data?.chapter.list.data.map<ComponentProps<typeof ChapterElement1>>(
 		(c) => {
 			const title = chapterTitle({

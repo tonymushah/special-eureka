@@ -6,9 +6,10 @@
 	let isTitleHovered = $state(false);
 	interface Props {
 		message?: string | undefined;
+		retry?: () => void;
 	}
 
-	let { message = undefined }: Props = $props();
+	let { message = undefined, retry }: Props = $props();
 </script>
 
 <div class="error">
@@ -46,12 +47,20 @@
 		<ButtonAccent
 			isBase
 			onclick={() => {
-				location.reload();
+				if (retry) {
+					retry();
+				} else {
+					location.reload();
+				}
 			}}
 		>
 			<h3>
 				<RefreshCcwIcon />
-				Refresh
+				{#if retry}
+					Retry
+				{:else}
+					Refresh
+				{/if}
 			</h3>
 		</ButtonAccent>
 	</div>
