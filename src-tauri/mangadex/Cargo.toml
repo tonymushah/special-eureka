@@ -25,7 +25,7 @@ mangadex-api = { version = "3.4", default-features = false, features = [
 	"serialize",
 	"utils",
 ] }
-mangadex-api-schema-rust = { version = "0.10", default-features = false, features = [
+mangadex-api-schema-rust = { version = "1.0", default-features = false, features = [
 	"serialize",
 ] }
 mangadex-api-types-rust = { version = "0.10", default-features = false, features = [
