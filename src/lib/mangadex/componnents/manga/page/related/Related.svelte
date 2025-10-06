@@ -1,21 +1,20 @@
 <!-- [x] use tanstack query for fetching -->
 <script lang="ts">
-	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
-	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
-	import { onMount, type ComponentProps } from "svelte";
-	import CategorizedTitles from "./CategorizedTitles.svelte";
-	import { getContextClient } from "@urql/svelte";
-	import getRelatedTitlesDataQuery from "./utils/query";
-	import { getRelatedTitlesStoreContext, type RelatedTitle } from "./utils/relatedTitleStore";
-	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
-	import loadash, { startCase } from "lodash";
-	import { createQuery } from "@tanstack/svelte-query";
-	import { get } from "svelte/store";
-	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
-	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
 	import { goto } from "$app/navigation";
 	import { route } from "$lib/ROUTES";
+	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
+	import Fetching from "@mangadex/componnents/search/content/Fetching.svelte";
+	import { CoverImageQuality, type MangaRelation } from "@mangadex/gql/graphql";
+	import { getTitleLayoutData } from "@mangadex/routes/title/[id]/layout.context";
+	import get_cover_art from "@mangadex/utils/cover-art/get_cover_art";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
+	import { createQuery } from "@tanstack/svelte-query";
+	import { getContextClient } from "@urql/svelte";
+	import loadash, { startCase } from "lodash";
+	import { onMount, type ComponentProps } from "svelte";
+	import CategorizedTitles from "./CategorizedTitles.svelte";
+	import getRelatedTitlesDataQuery from "./utils/query";
+	import { getRelatedTitlesStoreContext, type RelatedTitle } from "./utils/relatedTitleStore";
 
 	const client = getContextClient();
 	const store = getRelatedTitlesStoreContext();
@@ -23,8 +22,8 @@
 	const manga_id = getTitleLayoutData().layoutData.id;
 	const relatedTitles = new Map<MangaRelation, string[]>();
 	let categories: ComponentProps<typeof CategorizedTitles>[] = $state([]);
-	let error: Error | undefined = $state();
-	const query = createQuery({
+
+	let query = createQuery(() => ({
 		queryKey: ["manga", manga_id, "fetch-ids"],
 		enabled: false,
 		async queryFn() {
@@ -50,19 +49,18 @@
 				title: get_value_from_title_and_random_if_undefined(t.attributes.title, "en") ?? "",
 				status: t.attributes.status,
 				description:
-					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ?? ""
+					get_value_from_title_and_random_if_undefined(t.attributes.description, "en") ??
+					""
 			}));
 			if (ts) store.addTitles(ts);
 			return ts;
 		}
+	}));
+	let error: Error | undefined = $derived.by(() => {
+		if (query.error != null) {
+			return query.error;
+		}
 	});
-	onMount(
-		query.subscribe((q) => {
-			if (q.error != null) {
-				error = q.error;
-			}
-		})
-	);
 	onMount(async () => {
 		titles?.forEach(({ id, related }) => {
 			const ids = relatedTitles.get(related);
@@ -72,7 +70,7 @@
 				relatedTitles.set(related, [id]);
 			}
 		});
-		await get(query).refetch();
+		await query.refetch();
 	});
 	$effect(() => {
 		const data = $store;
@@ -86,15 +84,17 @@
 			if (title.length > 0) {
 				res.push({
 					title: loadash.camelCase(k),
-					titles: title.map(({ id, coverArt, coverArtAlt, title, description, status }) => ({
-						id,
-						coverImage: coverArt,
-						coverImageAlt: coverArtAlt,
-						title,
-						description,
-						status,
-						mangaId: id
-					}))
+					titles: title.map(
+						({ id, coverArt, coverArtAlt, title, description, status }) => ({
+							id,
+							coverImage: coverArt,
+							coverImageAlt: coverArtAlt,
+							title,
+							description,
+							status,
+							mangaId: id
+						})
+					)
 				});
 			}
 		});
@@ -110,7 +110,7 @@
 			{error}
 			label="Error when fetching related titles"
 			retry={() => {
-				get(query).refetch();
+				query.refetch();
 			}}
 		/>
 	{/if}
@@ -129,7 +129,7 @@
 	{:else}
 		<div class="404-not-found">Nothing was found... I guess</div>
 	{/each}
-	{#if $query.isFetching}
+	{#if query.isFetching}
 		<div class="fetching">
 			<Fetching />
 		</div>

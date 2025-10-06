@@ -53,7 +53,7 @@
 	});
 
 	const client = getContextClient();
-	const query = createQuery({
+	let query = createQuery(() => ({
 		queryKey: ["tag", id, "recently-added", "titles"],
 		async queryFn() {
 			const res = await client
@@ -70,11 +70,11 @@
 			}
 		},
 		networkMode: "online"
-	});
+	}));
 	$effect(() =>
 		defaultContentProfile.subscribe(
 			debounce(() => {
-				$query.refetch();
+				query.refetch();
 			})
 		)
 	);
@@ -82,18 +82,18 @@
 
 <section>
 	<h3>Recently Added</h3>
-	{#if $query.isLoading}
+	{#if query.isLoading}
 		<div class="loading">
 			<h4>
 				LoAdInG...
-				{#if $query.isPaused}
+				{#if query.isPaused}
 					<i>(paused)</i>
 				{/if}
 			</h4>
 		</div>
-	{:else if $query.isSuccess}
+	{:else if query.isSuccess}
 		<swiper-container bind:this={swiper_container} init="false">
-			{#each $query.data as title (title.id)}
+			{#each query.data as title (title.id)}
 				<swiper-slide>
 					<MangaElementBase4WithReadableCoverImage
 						title={get_value_from_title_and_random_if_undefined(
@@ -113,12 +113,12 @@
 				</swiper-slide>
 			{/each}
 		</swiper-container>
-	{:else if $query.isError}
+	{:else if query.isError}
 		<ErrorComponent
 			label={`Cannot fetch ${id} recently added`}
-			error={$query.error}
+			error={query.error}
 			retry={() => {
-				$query.refetch();
+				query.refetch();
 			}}
 		/>
 	{/if}

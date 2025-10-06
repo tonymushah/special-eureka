@@ -7,7 +7,7 @@
 	import { createMutation, createQuery } from "@tanstack/svelte-query";
 	import Markdown from "svelte-exmarkdown";
 
-	const query = createQuery({
+	let query = createQuery(() => ({
 		queryKey: ["updates"],
 		async queryFn() {
 			try {
@@ -20,8 +20,8 @@
 				}
 			}
 		}
-	});
-	const updateMutation = createMutation({
+	}));
+	let updateMutation = createMutation(() => ({
 		mutationKey: ["update"],
 		async mutationFn() {
 			try {
@@ -34,15 +34,15 @@
 				}
 			}
 		}
-	});
+	}));
 </script>
 
 {#snippet updateButton()}
 	<button
 		class="update-button"
-		disabled={$updateMutation.isPending}
+		disabled={updateMutation.isPending}
 		onclick={() => {
-			$updateMutation.mutate();
+			updateMutation.mutate();
 		}}
 	>
 		Update
@@ -52,30 +52,30 @@
 <h2>Updates</h2>
 
 <section>
-	{#if $query.isLoading}
+	{#if query.isLoading}
 		<p class="loading">Loading...</p>
-	{:else if $query.isError}
+	{:else if query.isError}
 		<h3
 			class="error"
 			onclick={() => {
-				$query.refetch();
+				query.refetch();
 			}}
 		>
-			{$query.error.message}
+			{query.error.message}
 		</h3>
-	{:else if $query.isFetched}
-		{#if $query.data}
+	{:else if query.isFetched}
+		{#if query.data}
 			<div>
-				<h4>New version: {$query.data.version}</h4>
-				{#if $query.data.publish_date}
-					<p>Publish date: {$query.data.publish_date}</p>
+				<h4>New version: {query.data.version}</h4>
+				{#if query.data.publish_date}
+					<p>Publish date: {query.data.publish_date}</p>
 				{/if}
-				{#if $query.data.description}
-					<Markdown md={$query.data.description} />
+				{#if query.data.description}
+					<Markdown md={query.data.description} />
 				{/if}
-				{#if $updateMutation.isError}
+				{#if updateMutation.isError}
 					<div class="mutate-error">
-						{$updateMutation.error}
+						{updateMutation.error}
 					</div>
 				{/if}
 				<div class="update-button-container">
@@ -86,7 +86,7 @@
 			<h3 class="no-updates">No updates</h3>
 		{/if}
 	{/if}
-	{#if dev && ($query.data == undefined || $query.data == null)}
+	{#if dev && (query.data == undefined || query.data == null)}
 		<div class="update-button-container">
 			{@render updateButton()}
 		</div>

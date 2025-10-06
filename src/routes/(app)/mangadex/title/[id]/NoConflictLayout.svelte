@@ -192,35 +192,27 @@
 			}))
 		})
 	);
+	const chapterReadMarkers = createQuery(() => {
+		const id = data.layoutData.id;
+		return {
+			queryKey: ["title", id, "read-markers", "page"],
+			async queryFn() {
+				const res = await client
+					.query(mangaReadMarkers, {
+						id
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				} else {
+					return res.data?.readMarker.mangaReadMarkersByMangaId.map(String) ?? [];
+				}
+			}
+		} satisfies CreateQueryOptions;
+	});
 	initContextReadChapterMarkers(
 		derived(
-			[
-				createQuery(
-					derived(
-						toStore<string>(() => data.layoutData.id),
-						(id) =>
-							({
-								queryKey: ["title", id, "read-markers", "page"],
-								async queryFn() {
-									const res = await client
-										.query(mangaReadMarkers, {
-											id
-										})
-										.toPromise();
-									if (res.error) {
-										throw res.error;
-									} else {
-										return (
-											res.data?.readMarker.mangaReadMarkersByMangaId.map(
-												String
-											) ?? []
-										);
-									}
-								}
-							}) satisfies CreateQueryOptions
-					)
-				)
-			],
+			[toStore(() => chapterReadMarkers)],
 			([$query], set, update) => {
 				set(new Map($query.data?.map((d) => [d, true]) ?? []) as Map<string, boolean>);
 				return listenToAnyChapterReadMarkers.subscribe((a) => {
@@ -261,13 +253,13 @@
 	contentRating={layoutData.contentRating ?? undefined}
 	downloadState={_state}
 	ondownload={async () => {
-		await $downloadMutationQuery.mutateAsync(data.layoutData.id);
+		await downloadMutationQuery.mutateAsync(data.layoutData.id);
 	}}
 	ondelete={async () => {
-		await $removeMutation.mutateAsync(data.layoutData.id);
+		await removeMutation.mutateAsync(data.layoutData.id);
 	}}
 	ondownloading={async () => {
-		await $cancelMutation.mutateAsync(data.layoutData.id);
+		await cancelMutation.mutateAsync(data.layoutData.id);
 	}}
 	{reading_status}
 	{isFollowing}

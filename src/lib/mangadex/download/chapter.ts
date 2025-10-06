@@ -11,10 +11,10 @@ import { createMutation, createQuery } from "@tanstack/svelte-query";
 import {
 	type OperationResult
 } from "@urql/svelte";
-import { debounce } from "lodash";
 import {
 	derived,
 	readable,
+	toStore,
 	type Readable
 } from "svelte/store";
 import { mangadexQueryClient } from "..";
@@ -129,7 +129,7 @@ function subOpChapter(id: string, deferred: boolean = false) {
 	});
 }
 
-export const removeMutation = createMutation(
+export const removeMutation = createMutation(() => (
 	{
 		mutationKey: ["chapter-removing"],
 		async mutationFn(id: string) {
@@ -151,11 +151,11 @@ export const removeMutation = createMutation(
 			});
 		},
 		networkMode: "always"
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
-export const cancelDownloadMutation = createMutation({
+export const cancelDownloadMutation = createMutation(() => ({
 	mutationKey: ["chapter", "download", "cancel"],
 	async mutationFn(id: string) {
 		return await client
@@ -176,12 +176,17 @@ export const cancelDownloadMutation = createMutation({
 		});
 	},
 	networkMode: "always"
-}, mangadexQueryClient);
+}), () => mangadexQueryClient);
+
+type DownloadMutationVariable = {
+	id: string;
+	quality?: DownloadMode;
+};
 
 export const downloadMutation = createMutation(
-	{
+	() => ({
 		mutationKey: ["chapter", "download"],
-		async mutationFn({ id, quality }: { id: string; quality?: DownloadMode }) {
+		async mutationFn({ id, quality }: DownloadMutationVariable) {
 			const res = await client
 				.mutation(download_mutation, {
 					id,
@@ -196,8 +201,8 @@ export const downloadMutation = createMutation(
 		onError(error, variables, context) {
 			addErrorToast("Error on downloading title", error);
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 type ChapterSubOpType = OperationResult<
@@ -211,7 +216,7 @@ export function chapterDownloadStateRaw({ id, deferred }: { id: string, deferred
 
 export function isChapterPresentRaw(id: string) {
 	const queryKey = offlinePresenceQueryKey(id);
-	return createQuery(
+	return createQuery(() => (
 		{
 			queryKey,
 			async queryFn() {
@@ -221,13 +226,14 @@ export function isChapterPresentRaw(id: string) {
 					})
 					.toPromise();
 			}
-		},
-		mangadexQueryClient
+		}),
+		() => mangadexQueryClient
 	);
 }
 
 export default function chapterDownloadState({ id, deferred }: { id: string, deferred?: boolean }): Readable<ChapterDownloadState> {
-	return derived([isChapterPresentRaw(id), chapterDownloadStateRaw({ id, deferred }), removeMutation], ([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
+	const isPresentRaw = isChapterPresentRaw(id);
+	return derived([toStore(() => isPresentRaw), chapterDownloadStateRaw({ id, deferred }), toStore(() => removeMutation)], ([$isChapterPresentRaw, $rawState, $removeMutation], set, update) => {
 		const res = (() => {
 			if ($removeMutation.isPending) {
 				return ChapterDownloadState.Removing;

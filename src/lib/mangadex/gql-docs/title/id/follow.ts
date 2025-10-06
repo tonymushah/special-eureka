@@ -3,7 +3,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, type Writable, get } from "svelte/store";
+import { derived, type Writable, get, toStore } from "svelte/store";
 
 export const followTitleGQLMutation = graphql(`
 	mutation followTitleMutation($id: UUID!) {
@@ -29,7 +29,7 @@ export const isFollowingTitleQuery = graphql(`
 	}
 `);
 
-export const followTitleMutation = createMutation({
+export const followTitleMutation = createMutation(() => ({
 	mutationKey: ["custom-list", "follow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(followTitleGQLMutation, {
@@ -39,9 +39,9 @@ export const followTitleMutation = createMutation({
 			throw res.error;
 		}
 	}
-}, mangadexQueryClient);
+}), () => mangadexQueryClient);
 
-export const unfollowTitleMutation = createMutation({
+export const unfollowTitleMutation = createMutation(() => ({
 	mutationKey: ["title", "unfollow"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(unfollowTitleGQLMutation, {
@@ -51,7 +51,7 @@ export const unfollowTitleMutation = createMutation({
 			throw res.error;
 		}
 	}
-}, mangadexQueryClient);
+}), () => mangadexQueryClient);
 
 export default function isFollowingTitle(id: string, options?: {
 	onSettled?: (error: Error | null, variables: string) => void;
@@ -60,7 +60,7 @@ export default function isFollowingTitle(id: string, options?: {
 	toast?: boolean
 }): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = createQuery({
+	const query = createQuery(() => ({
 		queryKey: ["title", id, "is-following"],
 		async queryFn() {
 			const res = await client.query(isFollowingTitleQuery, {
@@ -72,8 +72,8 @@ export default function isFollowingTitle(id: string, options?: {
 				return res.data?.follows.isFollowingManga ?? false
 			}
 		}
-	}, mangadexQueryClient);
-	const queryDerived = derived(query, ($query) => {
+	}), () => mangadexQueryClient);
+	const queryDerived = derived(toStore(() => query), ($query) => {
 		return $query.data ?? false
 	}, false);
 	return {
@@ -90,7 +90,7 @@ export default function isFollowingTitle(id: string, options?: {
 
 function setFollowingStatus(value: boolean, id: string, toast: boolean, query: CreateQueryResult, options: { onSettled?: (error: Error | null, variables: string) => void; onError?: (error: Error, variables: string) => void; onSucess?: (variables: string) => void; toast?: boolean; } | undefined) {
 	if (value) {
-		get(followTitleMutation).mutate(id, {
+		followTitleMutation.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change title following status", error);
@@ -110,12 +110,12 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				get(query).refetch();
+				query.refetch();
 				options?.onSettled?.(error, variables);
 			},
 		});
 	} else {
-		get(unfollowTitleMutation).mutate(id, {
+		unfollowTitleMutation.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change title following status", error);
@@ -135,7 +135,7 @@ function setFollowingStatus(value: boolean, id: string, toast: boolean, query: C
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				get(query).refetch();
+				query.refetch();
 				options?.onSettled?.(error, variables);
 			},
 		});
