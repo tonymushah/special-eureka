@@ -12,7 +12,7 @@ export const deleteCustomListGQLMutation = graphql(`
 `);
 
 
-const deleteCustomListMutation = createMutation({
+const deleteCustomListMutation = createMutation(() => ({
 	mutationKey: ["custom-list", "delete"],
 	async mutationFn(id: string) {
 		const res = await client.mutation(deleteCustomListGQLMutation, {
@@ -22,6 +22,6 @@ const deleteCustomListMutation = createMutation({
 			throw res.error;
 		}
 	}
-}, mangadexQueryClient);
+}), () => mangadexQueryClient);
 
 export default deleteCustomListMutation;

@@ -12,7 +12,7 @@ const exportLibraryToMyAnimeListMutation = graphql(`
 	}
 `);
 
-export const exportLibraryToMyAnimeList = createMutation(
+export const exportLibraryToMyAnimeList = createMutation(() => (
 	{
 		mutationKey: ["mangadex", "export", "library", "MyAnimeList"],
 		async mutationFn(options: MdlibraryToMyAnimeListExportOption): Promise<string> {
@@ -29,8 +29,8 @@ export const exportLibraryToMyAnimeList = createMutation(
 				throw new Error("No data??");
 			}
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 export default exportLibraryToMyAnimeListMutation;

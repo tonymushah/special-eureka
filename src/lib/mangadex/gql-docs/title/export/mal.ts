@@ -14,7 +14,7 @@ const export_mutation = graphql(`
 	}
 `);
 
-const exportTitlesToMAL = createMutation(
+const exportTitlesToMAL = createMutation(() => (
 	{
 		mutationKey: ["export", "titles", "to", "MAL"],
 		async mutationFn(options: MdidsToMyAnimeListExportOption): Promise<string> {
@@ -31,8 +31,8 @@ const exportTitlesToMAL = createMutation(
 				throw new Error("No data??");
 			}
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 export default exportTitlesToMAL;

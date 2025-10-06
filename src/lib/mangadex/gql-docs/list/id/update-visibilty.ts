@@ -31,7 +31,7 @@ const updateVisibility = graphql(`
 	}
 `);
 
-const updateCustomListVisibilityMutation = createMutation({
+const updateCustomListVisibilityMutation = createMutation(() => ({
 	mutationKey: ["custom-list", "update", "visibilty"],
 	async mutationFn({ id, visibility }: { id: string, visibility: CustomListVisibility }) {
 		const res_ver = await client.query(getListVersionMutation, {
@@ -51,6 +51,6 @@ const updateCustomListVisibilityMutation = createMutation({
 			throw res.error;
 		}
 	}
-}, mangadexQueryClient);
+}), () => mangadexQueryClient);
 
 export default updateCustomListVisibilityMutation;

@@ -10,7 +10,7 @@ const mutation = createMutation<
 		customListIds: string[];
 		titles: string[];
 	}
->(
+>(() => (
 	{
 		mutationKey: ["add", "to", "list", "batch"],
 		async mutationFn({ customListIds, titles }) {
@@ -30,8 +30,8 @@ const mutation = createMutation<
 				}
 			}
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 export default mutation;

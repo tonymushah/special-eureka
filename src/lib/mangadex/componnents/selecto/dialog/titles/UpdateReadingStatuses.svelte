@@ -22,7 +22,7 @@
 	const selectedIsFollowing: Writable<boolean> = writable(true);
 	const client = getContextClient();
 
-	const mutation = createMutation<
+	let mutation = createMutation<
 		[PromiseSettledResult<void>, PromiseSettledResult<void>],
 		Error,
 		{
@@ -30,7 +30,7 @@
 			status: ReadingStatus | null;
 			isFollowing: boolean;
 		}
-	>({
+	>(() => ({
 		mutationKey: ["update", "reading-status", "following-status", "titles"],
 		async mutationFn({ titles, status, isFollowing }) {
 			return await Promise.allSettled([
@@ -68,7 +68,7 @@
 							})
 			]);
 		}
-	});
+	}));
 </script>
 
 <div class="update-reading-status">
@@ -80,7 +80,7 @@
 	<div class="bottom">
 		<PrimaryButtonOnlyLabel
 			onclick={() => {
-				$mutation
+				mutation
 					.mutateAsync({
 						titles,
 						status: $selectedStatus ?? null,
@@ -127,7 +127,7 @@
 			}}
 			variant="2"
 			label="Set Reading Status"
-			disabled={$mutation.isPending}
+			disabled={mutation.isPending}
 		/>
 	</div>
 </div>
