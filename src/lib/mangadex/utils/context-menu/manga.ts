@@ -222,7 +222,7 @@ export default function mangaElementContextMenu({
 			ContextMenuItemProvider.menuItem({
 				text: "Cancel title download",
 				action() {
-					get(cancelMutation).mutateAsync(id);
+					cancelMutation.mutateAsync(id);
 				}
 			})
 		);
@@ -231,7 +231,7 @@ export default function mangaElementContextMenu({
 			ContextMenuItemProvider.menuItem({
 				text: isDownloaded ? "Re-download" : "Download",
 				action() {
-					get(downloadMutationQuery).mutateAsync(id, {
+					downloadMutationQuery.mutateAsync(id, {
 						onError(error, variables, context) {
 							addErrorToast("Cannot download title", error);
 						},
@@ -253,7 +253,7 @@ export default function mangaElementContextMenu({
 				ContextMenuItemProvider.menuItem({
 					text: "Remove title locally",
 					action() {
-						get(removeMutation).mutateAsync(id);
+						(removeMutation).mutateAsync(id);
 					}
 				})
 			);

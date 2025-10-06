@@ -84,10 +84,10 @@
 		/>
 		<ButtonAccentOnlyLabel
 			variant="3"
-			disabled={$titlesDownload.isPending || !$isMounted}
+			disabled={titlesDownload.isPending || !$isMounted}
 			label="Download"
 			onclick={() => {
-				$titlesDownload
+				titlesDownload
 					.mutateAsync(titles)
 					.then(() => {
 						addToast({
@@ -119,9 +119,9 @@
 		<ButtonAccentOnlyLabel
 			variant="3"
 			label="Export ids to txt"
-			disabled={$exportIdsToTxt.isPending}
+			disabled={exportIdsToTxt.isPending}
 			onclick={() => {
-				$exportIdsToTxt.mutateAsync(
+				exportIdsToTxt.mutateAsync(
 					{
 						uuids: titles
 					},

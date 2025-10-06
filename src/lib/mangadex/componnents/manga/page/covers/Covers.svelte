@@ -7,7 +7,7 @@
 	import CoverContents from "./CoverContents__.svelte";
 	import { getCoversImageStoreContext } from "./utils/coverImageStoreContext";
 	import getMangaCoversQuery from "./utils/query";
-	import { get, derived as der } from "svelte/store";
+	import { get, derived as der, toStore } from "svelte/store";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import pageLimit from "@mangadex/stores/page-limit";
 	import ErrorComponent from "@mangadex/componnents/ErrorComponent.svelte";
@@ -16,12 +16,12 @@
 	import NothingToShow from "@mangadex/componnents/search/content/NothingToShow.svelte";
 
 	const d = getTitleLayoutData();
-	const data = d.layoutData;
-	const id = data!.id;
+	let data = $derived(d.layoutData);
+	let id = $derived(data!.id);
 	const client = getContextClient();
 	const imagesStore = getCoversImageStoreContext();
 
-	const query = createInfiniteQuery({
+	let query = createInfiniteQuery(() => ({
 		queryKey: ["title", id, "covers"],
 		async queryFn({ pageParam }) {
 			const res = await client
@@ -78,11 +78,11 @@
 				return null;
 			}
 		}
-	});
+	}));
 	const interObs = new IntersectionObserver(async (o) => {
 		o.forEach((_o) => {
 			if (_o.isIntersecting) {
-				$query.fetchNextPage();
+				query.fetchNextPage();
 			}
 		});
 	});
@@ -92,11 +92,9 @@
 			interObs.observe(interObsEl);
 		}
 	});
-	const coversData = der(query, ($query) =>
-		new Set($query.data?.pages.flatMap((c) => c.list)).values().toArray()
-	);
-	const querySub = coversData.subscribe(($covers) => {
-		const set = $covers.map((c) => {
+	let coversData = $derived(new Set(query.data?.pages.flatMap((c) => c.list)).values().toArray());
+	const querySub = $effect.root(() => {
+		const set = coversData.map((c) => {
 			return {
 				id: c.id,
 				image: get_cover_art({
@@ -110,7 +108,7 @@
 		imagesStore.setByBatch(set);
 	});
 
-	const isDataEmpty = der(coversData, ($covers) => $covers.length == 0);
+	let isDataEmpty = $derived(coversData.length == 0);
 	onDestroy(() => {
 		querySub();
 		interObs.disconnect();
@@ -118,24 +116,24 @@
 </script>
 
 <CoverContents
-	{isDataEmpty}
-	isLoading={der(query, ($query) => $query.isLoading)}
-	isInitialLoading={der(query, ($query) => $query.isLoading)}
-	{coversData}
+	isDataEmpty={toStore(() => isDataEmpty)}
+	isLoading={toStore(() => query.isLoading)}
+	isInitialLoading={toStore(() => query.isLoading)}
+	coversData={toStore(() => coversData)}
 />
-{#if $query.isError}
+{#if query.isError}
 	<ErrorComponent
 		label={"Error on fetching title covers"}
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
-		error={$query.error}
+		error={query.error}
 	/>
 {/if}
 <div bind:this={interObsEl} class="observer-trigger">
-	{#if $query.isFetching}
+	{#if query.isFetching}
 		<Fetching />
-	{:else if $query.hasNextPage}
+	{:else if query.hasNextPage}
 		<HasNext />
 	{:else}
 		<NothingToShow />

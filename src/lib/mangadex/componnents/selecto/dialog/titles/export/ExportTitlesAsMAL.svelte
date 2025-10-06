@@ -55,7 +55,7 @@
 		});
 		try {
 			if (typeof exportPath == "string") {
-				await $exportTitlesToMAL.mutateAsync(
+				await exportTitlesToMAL.mutateAsync(
 					{ ...options, exportPath, ids: titles },
 					{
 						onSettled(data, error, variables, context) {
@@ -113,7 +113,7 @@
 
 <div class="export-layout">
 	<Title>Export as MyAnimeList</Title>
-	{#if $exportTitlesToMAL.error && !$exportTitlesToMAL.isPending}
+	{#if exportTitlesToMAL.error && !exportTitlesToMAL.isPending}
 		<div
 			transition:slide={{
 				axis: "y"
@@ -121,13 +121,13 @@
 		>
 			<ErrorComponent
 				label="Cannot export library"
-				error={$exportTitlesToMAL.error}
+				error={exportTitlesToMAL.error}
 				close={() => {
-					$exportTitlesToMAL.reset();
+					exportTitlesToMAL.reset();
 				}}
 			/>
 		</div>
-	{:else if $exportTitlesToMAL.isPending && $exportTaskEvent}
+	{:else if exportTitlesToMAL.isPending && $exportTaskEvent}
 		{@const c_state = $exportTaskEvent.state}
 		<div
 			transition:slide={{
@@ -167,7 +167,7 @@
 		<FormInput
 			inputProps={{
 				id: user_id_input_id,
-				disabled: $exportTitlesToMAL.isPending,
+				disabled: exportTitlesToMAL.isPending,
 				required: true
 			}}
 			bind:value={options.userId}
@@ -178,7 +178,7 @@
 		<FormInput
 			inputProps={{
 				id: user_name_input_id,
-				disabled: $exportTitlesToMAL.isPending,
+				disabled: exportTitlesToMAL.isPending,
 				required: true
 			}}
 			bind:value={options.userName}
@@ -191,7 +191,7 @@
 				<label for={reading_id}>Reading: </label>
 				<select
 					bind:value={options.priorities.reading}
-					disabled={$exportTitlesToMAL.isPending}
+					disabled={exportTitlesToMAL.isPending}
 					id={reading_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -203,7 +203,7 @@
 				<label for={on_hold_id}>On-Hold: </label>
 				<select
 					bind:value={options.priorities.onHold}
-					disabled={$exportTitlesToMAL.isPending}
+					disabled={exportTitlesToMAL.isPending}
 					id={on_hold_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -215,7 +215,7 @@
 				<label for={planToRead_id}>Plan to Read: </label>
 				<select
 					bind:value={options.priorities.planToRead}
-					disabled={$exportTitlesToMAL.isPending}
+					disabled={exportTitlesToMAL.isPending}
 					id={planToRead_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -227,7 +227,7 @@
 				<label for={completed_id}>Completed: </label>
 				<select
 					bind:value={options.priorities.completed}
-					disabled={$exportTitlesToMAL.isPending}
+					disabled={exportTitlesToMAL.isPending}
 					id={completed_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -239,7 +239,7 @@
 				<label for={reReading_id}>Re-Reading: </label>
 				<select
 					bind:value={options.priorities.reReading}
-					disabled={$exportTitlesToMAL.isPending}
+					disabled={exportTitlesToMAL.isPending}
 					id={reReading_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -251,7 +251,7 @@
 				<label for={dropped_id}>Dropped: </label>
 				<select
 					bind:value={options.priorities.dropped}
-					disabled={$exportTitlesToMAL.isPending}
+					disabled={exportTitlesToMAL.isPending}
 					id={dropped_id}
 				>
 					<option value={MaltitlePriority.Low}>Low</option>
@@ -267,7 +267,7 @@
 				id="include-score"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportTitlesToMAL.isPending}
+				disabled={exportTitlesToMAL.isPending}
 				bind:checked={options.includeScore}
 			/>
 			<label for="include-score">Include score</label>
@@ -277,7 +277,7 @@
 				id="include-read-volumes"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportTitlesToMAL.isPending}
+				disabled={exportTitlesToMAL.isPending}
 				bind:checked={options.includeReadVolumes}
 			/>
 			<label for="include-read-volumes">Include read volumes</label>
@@ -287,7 +287,7 @@
 				id="include-read-chapters"
 				type="checkbox"
 				class="checkbox"
-				disabled={$exportTitlesToMAL.isPending}
+				disabled={exportTitlesToMAL.isPending}
 				bind:checked={options.includeReadChapters}
 			/>
 			<label for="include-read-chapters">Include read chapters</label>
@@ -298,7 +298,7 @@
 				type="checkbox"
 				class="checkbox"
 				bind:checked={revealAfterFinish}
-				disabled={$exportTitlesToMAL.isPending}
+				disabled={exportTitlesToMAL.isPending}
 				defaultChecked
 			/>
 			<label for="reveal-after-finishi">Reveal File After Finish</label>
@@ -307,7 +307,7 @@
 	<section class="actions" class:isLtr={!$isSidebarRtl}>
 		<PrimaryButton
 			isBase
-			disabled={$exportTitlesToMAL.isPending || !$isLogged}
+			disabled={exportTitlesToMAL.isPending || !$isLogged}
 			onclick={(e) => {
 				submitExport();
 			}}
@@ -325,7 +325,7 @@
 			onclick={(e) => {
 				options = defaultOptions();
 			}}
-			disabled={$exportTitlesToMAL.isPending}
+			disabled={exportTitlesToMAL.isPending}
 		>
 			<div class="button-content">
 				<div class="icon">

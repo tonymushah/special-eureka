@@ -1,9 +1,9 @@
 import { ReadingStatus } from "@mangadex/gql/graphql";
 import getClient from "@mangadex/gql/urql/getClient";
+import { mangadexQueryClient } from "@mangadex/index";
+import { createQuery } from "@tanstack/svelte-query";
 import type { Client } from "@urql/svelte";
 import { libraryTitleMapQuery } from ".";
-import { createQuery } from "@tanstack/svelte-query";
-import { mangadexQueryClient } from "@mangadex/index";
 
 export async function titleStatusMap(
 	options?: TitleStatusMapOptions
@@ -39,16 +39,13 @@ export default async function isInLibrary(
 	}
 }
 
-export const titleStatusMapQuery = createQuery(
-	{
-		networkMode: "online",
-		queryKey: ["title", "status", "map", "query"],
-		async queryFn() {
-			return await titleStatusMap();
-		}
-	},
-	mangadexQueryClient
-);
+export const titleStatusMapQuery = createQuery(() => ({
+	networkMode: "online",
+	queryKey: ["title", "status", "map", "query"],
+	async queryFn() {
+		return await titleStatusMap()
+	}
+}), () => mangadexQueryClient);
 
 export function isInLibrarySync(titleId: string, library: Map<string, ReadingStatus>): boolean {
 	const status = library.get(titleId);

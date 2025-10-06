@@ -3,7 +3,7 @@ import { graphql } from "@mangadex/gql/gql";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createMutation, createQuery, type CreateQueryResult } from "@tanstack/svelte-query";
-import { derived, type Writable, get } from "svelte/store";
+import { derived, get, toStore, type Writable } from "svelte/store";
 
 export const followUserGQLMutation = graphql(`
 	mutation followUserMutation($id: UUID!) {
@@ -29,75 +29,51 @@ export const isFollowingUserQuery = graphql(`
 	}
 `);
 
-export const followUserMutation = createMutation(
-	{
-		mutationKey: ["user", "follow"],
-		async mutationFn(id: string) {
-			const res = await client
-				.mutation(followUserGQLMutation, {
-					id
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
+export const followUserMutation = createMutation(() => ({
+	mutationKey: ["user", "follow"],
+	async mutationFn(id: string) {
+		const res = await client.mutation(followUserGQLMutation, {
+			id
+		}).toPromise();
+		if (res.error) {
+			throw res.error;
 		}
-	},
-	mangadexQueryClient
-);
-
-export const unfollowUserMutation = createMutation(
-	{
-		mutationKey: ["user", "unfollow"],
-		async mutationFn(id: string) {
-			const res = await client
-				.mutation(unfollowUserGQLMutation, {
-					id
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-		}
-	},
-	mangadexQueryClient
-);
-
-export default function isFollowingUser(
-	id: string,
-	options?: {
-		onSettled?: (error: Error | null, variables: string) => void;
-		onError?: (error: Error, variables: string) => void;
-		onSucess?: (variables: string) => void;
-		toast?: boolean;
 	}
-): Writable<boolean> {
+}), () => mangadexQueryClient);
+
+export const unfollowUserMutation = createMutation(() => ({
+	mutationKey: ["user", "unfollow"],
+	async mutationFn(id: string) {
+		const res = await client.mutation(unfollowUserGQLMutation, {
+			id
+		}).toPromise();
+		if (res.error) {
+			throw res.error;
+		}
+	}
+}), () => mangadexQueryClient);
+
+export default function isFollowingUser(id: string, options?: {
+	onSettled?: (error: Error | null, variables: string) => void;
+	onError?: (error: Error, variables: string) => void;
+	onSucess?: (variables: string) => void;
+	toast?: boolean
+}): Writable<boolean> {
 	const toast = options?.toast ?? true;
-	const query = createQuery(
-		{
-			queryKey: ["user", id, "is-following"],
-			async queryFn() {
-				const res = await client
-					.query(isFollowingUserQuery, {
-						id
-					})
-					.toPromise();
-				if (res.error) {
-					throw res.error;
-				} else {
-					return res.data?.follows.isFollowingUser ?? false;
-				}
+	const query = createQuery(() => ({
+		queryKey: ["user", id, "is-following"],
+		async queryFn() {
+			const res = await client.query(isFollowingUserQuery, {
+				id
+			}).toPromise();
+			if (res.error) {
+				throw res.error;
 			}
-		},
-		mangadexQueryClient
-	);
-	const queryDerived = derived(
-		query,
-		($query) => {
-			return $query.data ?? false;
-		},
-		false
-	);
+		}
+	}), () => mangadexQueryClient);
+	const queryDerived = derived(toStore(() => query), ($query) => {
+		return $query.data ?? false
+	}, false);
 	return {
 		subscribe: queryDerived.subscribe,
 		set(value) {
@@ -117,15 +93,15 @@ function setFollowingStatus(
 	query: CreateQueryResult,
 	options:
 		| {
-				onSettled?: (error: Error | null, variables: string) => void;
-				onError?: (error: Error, variables: string) => void;
-				onSucess?: (variables: string) => void;
-				toast?: boolean;
-		  }
+			onSettled?: (error: Error | null, variables: string) => void;
+			onError?: (error: Error, variables: string) => void;
+			onSucess?: (variables: string) => void;
+			toast?: boolean;
+		}
 		| undefined
 ) {
 	if (value) {
-		get(followUserMutation).mutate(id, {
+		followUserMutation.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change user following status", error);
@@ -145,12 +121,12 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				get(query).refetch();
+				query.refetch()
 				options?.onSettled?.(error, variables);
 			}
 		});
 	} else {
-		get(unfollowUserMutation).mutate(id, {
+		unfollowUserMutation.mutate(id, {
 			onError(error, variables, context) {
 				if (toast) {
 					addErrorToast("Cannot change user following status", error);
@@ -170,7 +146,7 @@ function setFollowingStatus(
 				options?.onSucess?.(variables);
 			},
 			onSettled(data, error, variables, context) {
-				get(query).refetch();
+				query.refetch()
 				options?.onSettled?.(error, variables);
 			}
 		});

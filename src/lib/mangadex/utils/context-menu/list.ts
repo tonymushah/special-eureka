@@ -88,7 +88,7 @@ export default function customListElementContextMenu({
 					]
 				});
 				if (exportPath) {
-					get(exportCustomListsToCSV).mutateAsync(
+					exportCustomListsToCSV.mutateAsync(
 						{
 							ids: [id],
 							exportPath,
@@ -120,7 +120,7 @@ export default function customListElementContextMenu({
 					addErrorToast("Invalid input", undefined);
 				}
 			},
-			enabled: !get(exportCustomListsToCSV).isPending
+			enabled: !exportCustomListsToCSV.isPending
 		})
 	);
 	if (isMine) {
@@ -131,7 +131,7 @@ export default function customListElementContextMenu({
 					ContextMenuItemProvider.menuItem({
 						text: "Public",
 						action() {
-							get(updateCustomListVisibilityMutation).mutate(
+							updateCustomListVisibilityMutation.mutate(
 								{ id, visibility: CustomListVisibility.Public },
 								{
 									onSuccess() {
@@ -153,7 +153,7 @@ export default function customListElementContextMenu({
 					ContextMenuItemProvider.menuItem({
 						text: "Private",
 						action() {
-							get(updateCustomListVisibilityMutation).mutate(
+							updateCustomListVisibilityMutation.mutate(
 								{ id, visibility: CustomListVisibility.Private },
 								{
 									onSuccess() {
@@ -178,7 +178,7 @@ export default function customListElementContextMenu({
 			ContextMenuItemProvider.menuItem({
 				text: "Delete",
 				action() {
-					get(deleteCustomListMutation).mutate(id, {
+					(deleteCustomListMutation).mutate(id, {
 						onError(error, variables, context) {
 							addErrorToast("Cannot delete custom list", error);
 						},

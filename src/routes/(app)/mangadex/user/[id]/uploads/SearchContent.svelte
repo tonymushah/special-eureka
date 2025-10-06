@@ -32,57 +32,50 @@
 	const order = writable<ChapterSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
-	const query = createInfiniteQuery(
-		derived([userId, pageLimit, order], ([$userId, $limit, $order]) => {
-			return {
-				queryKey: [
-					"user",
-					$userId,
-					"uploads",
-					`limit:${$limit}`,
-					`${JSON.stringify($order)}`
-				],
-				async queryFn({ pageParam }) {
-					return await executeSearchQuery(client, pageParam);
-				},
-				getNextPageParam(lastPage, _allPages, lastPageParam) {
-					let limit = lastPage.paginationData.limit;
-					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset > lastPage.paginationData.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							offset: next_offset,
-							limit
-						};
-					}
-				},
-				initialPageParam: {
-					user: $userId,
-					limit: $limit,
-					order: $order
-				} satisfies UserUploadsFeedChapterParams
-			} satisfies CreateInfiniteQueryOptions<
-				AbstractSearchResult<ChapterFeedListItemExt>,
-				Error,
-				AbstractSearchResult<ChapterFeedListItemExt>,
-				readonly string[],
-				UserUploadsFeedChapterParams
-			>;
-		})
-	);
-	const hasNext = derived(query, ($query) => $query.hasNextPage);
-	const isFetching = derived(query, ($query) => $query.isLoading);
-	const feed = derived(query, ($query) => $query.data?.pages.flatMap((e) => e.data) ?? []);
+	const queryOptions = derived([userId, pageLimit, order], ([$userId, $limit, $order]) => {
+		return {
+			queryKey: ["user", $userId, "uploads", `limit:${$limit}`, `${$order}`],
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset > lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
+				}
+			},
+			initialPageParam: {
+				user: $userId,
+				limit: $limit,
+				order: $order
+			} satisfies UserUploadsFeedChapterParams
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			Error,
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			readonly string[],
+			UserUploadsFeedChapterParams
+		>;
+	});
+	let query = createInfiniteQuery(() => $queryOptions);
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isLoading);
+	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -111,7 +104,7 @@
 
 <div class="result">
 	<ChapterFeedList
-		list={$feed}
+		list={feed}
 		style={chapterFeedStyle}
 		onmangaClick={(e) => {
 			const id = e.id;
@@ -140,9 +133,9 @@
 </div>
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

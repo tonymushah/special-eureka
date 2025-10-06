@@ -1,29 +1,22 @@
 import { mutateReadMarkersBatch } from "@mangadex/gql-docs/read-markers/chapters";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
-import { createMutation } from "@tanstack/svelte-query";
+import { createMutation, type MutationFunction } from "@tanstack/svelte-query";
 
-export const readMarkers = createMutation(
-	{
-		mutationKey: ["readmarkers", "update"],
-		async mutationFn({
-			reads,
-			unreads,
+export const readMarkers = createMutation(() => ({
+	mutationKey: ["readmarkers", "update"],
+	mutationFn: (async ({ reads, unreads, updateHistory }) => {
+		const res = await client.mutation(mutateReadMarkersBatch, {
+			read: reads,
+			unreads: unreads,
 			updateHistory
-		}: {
-			reads: string[];
-			unreads: string[];
-			updateHistory?: boolean;
-		}) {
-			const res = await client.mutation(mutateReadMarkersBatch, {
-				read: reads,
-				unreads: unreads,
-				updateHistory
-			});
-			if (res.error) {
-				throw res.error;
-			}
+		});
+		if (res.error) {
+			throw res.error;
 		}
-	},
-	mangadexQueryClient
-);
+	}) satisfies MutationFunction<unknown, {
+		reads: string[],
+		unreads: string[],
+		updateHistory?: boolean
+	}>
+}), () => mangadexQueryClient);

@@ -17,20 +17,18 @@
 	let { children }: Props = $props();
 
 	const size = getCurrentUserLibrarySize();
-	$effect.pre(() =>
-		size.subscribe((d) => {
-			if (d.error != null && d.error != undefined) {
-				addErrorToast("Cannot fetch library sizes", d.error);
-			}
-		})
-	);
-	const unfiltered = der(size, (size) => size.data?.unfiltered);
-	const completed = der(size, (size) => size.data?.completed);
-	const dropped = der(size, (size) => size.data?.dropped);
-	const onHold = der(size, (size) => size.data?.onHold);
-	const planToRead = der(size, (size) => size.data?.planToRead);
-	const reReading = der(size, (size) => size.data?.reReading);
-	const reading = der(size, (size) => size.data?.reading);
+	$effect.pre(() => {
+		if (size.error != null && size.error != undefined) {
+			addErrorToast("Cannot fetch library sizes", size.error);
+		}
+	});
+	let unfiltered = $derived(size.data?.unfiltered);
+	let completed = $derived(size.data?.completed);
+	let dropped = $derived(size.data?.dropped);
+	let onHold = $derived(size.data?.onHold);
+	let planToRead = $derived(size.data?.planToRead);
+	let reReading = $derived(size.data?.reReading);
+	let reading = $derived(size.data?.reading);
 </script>
 
 <div class="top-layout">
@@ -49,8 +47,8 @@
 				>
 					<span class="tab-section-text">
 						All
-						{#if $unfiltered}
-							({$unfiltered})
+						{#if unfiltered}
+							({unfiltered})
 						{/if}
 					</span>
 				</ButtonAccent>
@@ -65,8 +63,8 @@
 				>
 					<span class="tab-section-text">
 						Reading
-						{#if $reading}
-							({$reading})
+						{#if reading}
+							({reading})
 						{/if}
 					</span>
 				</ButtonAccent>
@@ -81,8 +79,8 @@
 				>
 					<span class="tab-section-text">
 						Plan to Read
-						{#if $planToRead}
-							({$planToRead})
+						{#if planToRead}
+							({planToRead})
 						{/if}
 					</span>
 				</ButtonAccent>
@@ -97,8 +95,8 @@
 				>
 					<span class="tab-section-text">
 						On hold
-						{#if $onHold}
-							({$onHold})
+						{#if onHold}
+							({onHold})
 						{/if}
 					</span>
 				</ButtonAccent>
@@ -113,8 +111,8 @@
 				>
 					<span class="tab-section-text">
 						Completed
-						{#if $completed}
-							({$completed})
+						{#if completed}
+							({completed})
 						{/if}
 					</span>
 				</ButtonAccent>
@@ -129,8 +127,8 @@
 				>
 					<span class="tab-section-text">
 						Re-Reading
-						{#if $reReading}
-							({$reReading})
+						{#if reReading}
+							({reReading})
 						{/if}
 					</span>
 				</ButtonAccent>
@@ -145,8 +143,8 @@
 				>
 					<span class="tab-section-text">
 						Dropped
-						{#if $dropped}
-							({$dropped})
+						{#if dropped}
+							({dropped})
 						{/if}
 					</span>
 				</ButtonAccent>

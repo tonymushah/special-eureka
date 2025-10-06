@@ -6,7 +6,7 @@
 	import { onMount, type Snippet } from "svelte";
 	import { GithubIcon } from "svelte-feather-icons";
 	import haikeiREd from "@special-eureka/dashboard/haikei/animated-1.svg";
-	import { QueryClientProvider } from "@tanstack/svelte-query";
+	import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
 	interface Props {
@@ -81,7 +81,7 @@
 	});
 </script>
 
-<QueryClientProvider>
+<QueryClientProvider client={new QueryClient()}>
 	<SvelteQueryDevtools />
 	<main
 		class:light={$tauriTheme == "light"}

@@ -31,83 +31,79 @@
 		limit: number;
 		total: number;
 	}
-	const infiniteQuery = createInfiniteQuery(
-		derived(p_p_offline, ([$params, isOffline]) => {
-			return {
-				queryKey: ["manga-search", $params, isOffline],
-				initialPageParam: [$params, isOffline],
-				getNextPageParam(
-					lastPage,
-					allPages,
-					[lastPageParam, lastPageOffline],
-					allPageParams
-				) {
-					const next_offset = lastPage.limit + lastPage.offset;
-					if (next_offset > lastPage.total) {
-						return null;
-					} else {
-						return [
-							{
-								...lastPageParam,
-								limit: lastPage.limit,
-								offset: next_offset
-							},
-							lastPageOffline
-						];
-					}
-				},
-				async queryFn({ pageParam: [p, offline] }) {
-					const res = await executeSearchQuery(client, p, offline, excludeContentProfile);
-					return {
-						data: res.data,
-						...res.paginationData
-					};
-				},
-				getPreviousPageParam(
-					firstPage,
-					allPages,
-					[firstPageParam, firstPageOffline],
-					allPageParams
-				) {
-					const next_offset = firstPage.limit - firstPage.offset;
-					if (next_offset < 0) {
-						return null;
-					} else {
-						return [
-							{
-								...firstPageParam,
-								limit: firstPage.limit,
-								offset: next_offset
-							},
-							firstPageOffline
-						];
-					}
+	const infiniteQueryOptions = derived(p_p_offline, ([$params, isOffline]) => {
+		return {
+			queryKey: ["manga-search", $params, isOffline],
+			initialPageParam: [$params, isOffline],
+			getNextPageParam(lastPage, allPages, [lastPageParam, lastPageOffline], allPageParams) {
+				const next_offset = lastPage.limit + lastPage.offset;
+				if (next_offset > lastPage.total) {
+					return null;
+				} else {
+					return [
+						{
+							...lastPageParam,
+							limit: lastPage.limit,
+							offset: next_offset
+						},
+						lastPageOffline
+					];
 				}
-			} satisfies CreateInfiniteQueryOptions<
-				InfiniteQueryData,
-				Error,
-				InfiniteQueryData,
-				[string, MangaListParams, boolean],
-				[MangaListParams, boolean]
-			>;
-		})
-	);
-	const titles = derived(infiniteQuery, (result) => {
+			},
+			async queryFn({ pageParam: [p, offline] }) {
+				const res = await executeSearchQuery(client, p, offline, excludeContentProfile);
+				return {
+					data: res.data,
+					...res.paginationData
+				};
+			},
+			getPreviousPageParam(
+				firstPage,
+				allPages,
+				[firstPageParam, firstPageOffline],
+				allPageParams
+			) {
+				const next_offset = firstPage.limit - firstPage.offset;
+				if (next_offset < 0) {
+					return null;
+				} else {
+					return [
+						{
+							...firstPageParam,
+							limit: firstPage.limit,
+							offset: next_offset
+						},
+						firstPageOffline
+					];
+				}
+			}
+		} satisfies CreateInfiniteQueryOptions<
+			InfiniteQueryData,
+			Error,
+			InfiniteQueryData,
+			[string, MangaListParams, boolean],
+			[MangaListParams, boolean]
+		>;
+	});
+	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
+	let titles = $derived.by(() => {
+		const result = infiniteQuery;
 		if (result.isLoading) {
 			return [];
 		}
 		return result.data?.pages.map((d) => d.data) ?? [];
 	});
-	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
-	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);
+	let isFetching = $derived(infiniteQuery.isFetching);
+	let hasNext = $derived(infiniteQuery.hasNextPage);
 	/// TODO implement this
-	const pages = derived(infiniteQuery, (result) => {
-		const initalPage = result.data?.pages[0];
+	let pages = $derived.by(() => {
+		const initalPage = infiniteQuery.data?.pages[0];
 		if (initalPage) {
 			return Math.floor(initalPage.total / initalPage.limit);
 		}
 	});
-	const currentPage = derived(infiniteQuery, (result) => {
+	let currentPage = $derived.by(() => {
+		const result = infiniteQuery;
 		const current = last(result.data?.pages);
 		const initalPage = result.data?.pages[0];
 		if (current && initalPage) {
@@ -117,12 +113,12 @@
 		}
 	});
 	const fetchNext = debounce(async function () {
-		const inf = get(infiniteQuery);
+		const inf = infiniteQuery;
 		return await inf.fetchNextPage();
 	});
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -168,7 +164,7 @@
 	};
 </script>
 
-<MangaList list={$titles}>
+<MangaList list={titles}>
 	{#snippet additionalContent()}
 		<div class="additional-content">
 			<section>
@@ -179,18 +175,18 @@
 	{/snippet}
 </MangaList>
 
-{#if $infiniteQuery.error}
+{#if infiniteQuery.error}
 	<ErrorComponent
 		label="Error on loading titles"
-		error={$infiniteQuery.error}
-		retry={() => $infiniteQuery.refetch()}
+		error={infiniteQuery.error}
+		retry={() => infiniteQuery.refetch()}
 	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

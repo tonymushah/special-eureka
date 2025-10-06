@@ -9,7 +9,7 @@
 	<h3>Content warning preference in titles:</h3>
 	<select
 		bind:value={$contentProfileWarningMode}
-		disabled={$contentProfileWarningModeMutation.isPending}
+		disabled={contentProfileWarningModeMutation.isPending}
 	>
 		<option value={ContentProfileWarningMode.Always}>Always</option>
 		<option value={ContentProfileWarningMode.Never}>Never</option>

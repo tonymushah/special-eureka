@@ -50,7 +50,7 @@
 					<DangerButtonOnlyLabel
 						label="Make Public"
 						onclick={() => {
-							$updateCustomListVisibilityMutation.mutate(
+							updateCustomListVisibilityMutation.mutate(
 								{
 									id: data.id,
 									visibility: CustomListVisibility.Public
@@ -76,13 +76,13 @@
 								}
 							);
 						}}
-						disabled={$updateCustomListVisibilityMutation.isPending}
+						disabled={updateCustomListVisibilityMutation.isPending}
 					/>
 				{:else}
 					<ButtonAccentOnlyLabel
 						label="Make Private"
 						onclick={() => {
-							$updateCustomListVisibilityMutation.mutate(
+							updateCustomListVisibilityMutation.mutate(
 								{
 									id: data.id,
 									visibility: CustomListVisibility.Private
@@ -108,7 +108,7 @@
 								}
 							);
 						}}
-						disabled={$updateCustomListVisibilityMutation.isPending}
+						disabled={updateCustomListVisibilityMutation.isPending}
 					/>
 				{/if}
 			{/if}

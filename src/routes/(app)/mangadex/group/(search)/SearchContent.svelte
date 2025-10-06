@@ -40,52 +40,51 @@
 		limit: number;
 		total: number;
 	}
-	const infiniteQuery = createInfiniteQuery(
-		derived(params, ($params) => {
-			return {
-				queryKey: ["scanalation-group-search", $params],
-				initialPageParam: $params,
-				getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-					const next_offset = lastPage.limit + lastPage.offset;
-					if (next_offset > lastPage.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							limit: lastPage.limit,
-							offset: next_offset
-						};
-					}
-				},
-				async queryFn({ pageParam }) {
-					const res = await executeSearchQuery(client, pageParam);
+	let infiniteQuery = createInfiniteQuery(() => {
+		return {
+			queryKey: ["scanalation-group-search", $params],
+			initialPageParam: $params,
+			getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+				const next_offset = lastPage.limit + lastPage.offset;
+				if (next_offset > lastPage.total) {
+					return null;
+				} else {
 					return {
-						data: res.data,
-						...res.paginationData
+						...lastPageParam,
+						limit: lastPage.limit,
+						offset: next_offset
 					};
-				},
-				getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
-					const next_offset = firstPage.limit - firstPage.offset;
-					if (next_offset < 0) {
-						return null;
-					} else {
-						return {
-							...firstPageParam,
-							limit: firstPage.limit,
-							offset: next_offset
-						};
-					}
 				}
-			} satisfies CreateInfiniteQueryOptions<
-				InfiniteQueryData,
-				Error,
-				InfiniteQueryData,
-				[string, ScanlationGroupListParams],
-				ScanlationGroupListParams
-			>;
-		})
-	);
-	const scanGroups = derived(infiniteQuery, (result) => {
+			},
+			async queryFn({ pageParam }) {
+				const res = await executeSearchQuery(client, pageParam);
+				return {
+					data: res.data,
+					...res.paginationData
+				};
+			},
+			getPreviousPageParam(firstPage, allPages, firstPageParam, allPageParams) {
+				const next_offset = firstPage.limit - firstPage.offset;
+				if (next_offset < 0) {
+					return null;
+				} else {
+					return {
+						...firstPageParam,
+						limit: firstPage.limit,
+						offset: next_offset
+					};
+				}
+			}
+		} satisfies CreateInfiniteQueryOptions<
+			InfiniteQueryData,
+			Error,
+			InfiniteQueryData,
+			[string, ScanlationGroupListParams],
+			ScanlationGroupListParams
+		>;
+	});
+	let scanGroups = $derived.by(() => {
+		const result = infiniteQuery;
 		if (result.isLoading) {
 			return [];
 		}
@@ -93,15 +92,15 @@
 			new Set(result.data?.pages.map((d) => d.data).flatMap((i) => i) ?? []).values()
 		);
 	});
-	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
-	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);
-	const fetchNext = debounce(async function () {
-		const inf = get(infiniteQuery);
+	let isFetching = $derived(infiniteQuery.isFetching);
+	let hasNext = $derived(infiniteQuery.hasNextPage);
+	let fetchNext = debounce(async function () {
+		const inf = infiniteQuery;
 		return await inf.fetchNextPage();
 	});
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -129,7 +128,7 @@
 </script>
 
 <div class="result">
-	{#each $scanGroups as group (group.id)}
+	{#each scanGroups as group (group.id)}
 		<span
 			animate:flip
 			in:receive={{
@@ -176,12 +175,12 @@
 	{/each}
 </div>
 
-{#if $infiniteQuery.error}
+{#if infiniteQuery.error}
 	<ErrorComponent
 		label="Error on loading title"
-		error={$infiniteQuery.error}
+		error={infiniteQuery.error}
 		retry={() => {
-			$infiniteQuery.refetch();
+			infiniteQuery.refetch();
 		}}
 	/>
 {/if}
@@ -189,7 +188,7 @@
 <div class="observer-trigger" bind:this={to_obserce_bind}>
 	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

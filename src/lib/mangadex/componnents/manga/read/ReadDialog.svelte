@@ -9,7 +9,7 @@
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { openUrl } from "@tauri-apps/plugin-opener";
 	import { debounce } from "lodash";
-	import { derived as der, writable } from "svelte/store";
+	import { writable } from "svelte/store";
 	import { fetchComments } from "../page/chapters/aggreate/utils";
 	import chapterStores from "../page/chapters/aggreate/utils/chapterStores";
 	import getMangaToReadChapter from "./getMangaToReadChapter";
@@ -32,52 +32,49 @@
 	});
 	const chapter_store = chapterStores();
 	let threadUrls = $state(new Map<string, string>());
-	const query = createQuery(
-		der(currentMangaId, (manga_id) => {
-			return {
-				queryKey: manga_id ? ["manga", manga_id, "read"] : ["manga", "noop", "read"],
-				async queryFn() {
-					if (!manga_id) {
-						throw new Error("no manga id");
-					} else {
-						return await getMangaToReadChapter(manga_id);
-					}
+	let query = createQuery(() => {
+		const manga_id = $currentMangaId;
+		return {
+			queryKey: manga_id ? ["manga", manga_id, "read"] : ["manga", "noop", "read"],
+			async queryFn() {
+				if (!manga_id) {
+					throw new Error("no manga id");
+				} else {
+					return await getMangaToReadChapter(manga_id);
 				}
-			} satisfies CreateQueryOptions<Chapter[]>;
-		})
-	);
-	$effect(() =>
-		query.subscribe(
-			(res) => {
-				if (res.data) {
-					if (res.data.length == 1) {
-						readChapter(res.data[0].chapterId);
-					}
-					chapter_store.addByBatch(
-						res.data.map((d) => ({
-							id: d.chapterId,
-							...d
-						}))
-					);
-					fetchComments(res.data.map((d) => d.chapterId)).then((coms) => {
-						coms.forEach((e) => {
-							threadUrls.set(e.id, e.stats.threadUrl);
-						});
-						chapter_store.setComments(
-							coms.map((com) => ({
-								id: com.id,
-								comments: com.stats.comments
-							}))
-						);
-					});
-				}
-			},
-			() => {
-				chapter_store.clear();
-				threadUrls.clear();
 			}
-		)
-	);
+		} satisfies CreateQueryOptions<Chapter[]>;
+	});
+	$effect(() => {
+		const res = query;
+		if (res.data) {
+			if (res.data.length == 1) {
+				readChapter(res.data[0].chapterId);
+			}
+			chapter_store.addByBatch(
+				res.data.map((d) => ({
+					id: d.chapterId,
+					...d
+				}))
+			);
+			fetchComments(res.data.map((d) => d.chapterId)).then((coms) => {
+				coms.forEach((e) => {
+					threadUrls.set(e.id, e.stats.threadUrl);
+				});
+				chapter_store.setComments(
+					coms.map((com) => ({
+						id: com.id,
+						comments: com.stats.comments
+					}))
+				);
+			});
+		}
+
+		return () => {
+			chapter_store.clear();
+			threadUrls.clear();
+		};
+	});
 	function readChapter(id: string) {
 		dialog?.close();
 		unsetManga();
@@ -89,14 +86,14 @@
 
 <dialog bind:this={dialog}>
 	<div class="container">
-		{#if $query.isFetching}
+		{#if query.isFetching}
 			<Fetching />
-		{:else if $query.error}
+		{:else if query.error}
 			<ErrorComponent
-				error={$query.error}
+				error={query.error}
 				label="Error on finding the first chapters"
 				retry={() => {
-					$query.refetch();
+					query.refetch();
 				}}
 			/>
 		{:else}

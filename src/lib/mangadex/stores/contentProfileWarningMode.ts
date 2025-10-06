@@ -17,35 +17,30 @@ const sub_read = readable(ContentProfileWarningMode.Always, (set) => {
 	};
 });
 
-export const contentProfileWarningModeMutation = createMutation(
-	{
-		mutationKey: ["content-profile", "warning-mode", "update"],
-		async mutationFn(mode: ContentProfileWarningMode) {
-			const res = await client
-				.mutation(gql_mutation, {
-					mode
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-		},
-		networkMode: "always"
+export const contentProfileWarningModeMutation = createMutation(() => ({
+	mutationKey: ["content-profile", "warning-mode", "update"],
+	async mutationFn(mode: ContentProfileWarningMode) {
+		const res = await client.mutation(gql_mutation, {
+			mode
+		}).toPromise();
+		if (res.error) {
+			throw res.error;
+		}
 	},
-	mangadexQueryClient
-);
+	networkMode: "always"
+}), () => mangadexQueryClient);
 
 const contentProfileWarningMode: Writable<ContentProfileWarningMode> = {
 	subscribe(run, invalidate) {
 		return sub_read.subscribe(run, invalidate);
 	},
 	set(value) {
-		get(contentProfileWarningModeMutation).mutate(value);
+		contentProfileWarningModeMutation.mutate(value);
 	},
 	update(updater) {
 		const value = get(sub_read);
-		get(contentProfileWarningModeMutation).mutate(updater(value));
-	}
-};
+		contentProfileWarningModeMutation.mutate(updater(value));
+	},
+}
 
 export default contentProfileWarningMode;

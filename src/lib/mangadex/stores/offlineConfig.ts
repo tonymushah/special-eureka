@@ -31,7 +31,7 @@ const mutation = graphql(`
 	}
 `);
 
-export const queryStore = createQuery(
+export const queryStore = createQuery(() => (
 	{
 		queryKey: ["offline", "config"],
 		async queryFn() {
@@ -42,8 +42,8 @@ export const queryStore = createQuery(
 			}
 			throw new Error("No data or error");
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 async function updateCfg(cfg: OfflineConfigInput) {
@@ -57,13 +57,13 @@ async function updateCfg(cfg: OfflineConfigInput) {
 	throw new Error("No data or error");
 }
 
-export const mutationStore = createMutation(
+export const mutationStore = createMutation(() => (
 	{
 		mutationKey: ["offline", "config", "mutation"],
 		onSettled(data, error, variables, context) {
-			get(queryStore).refetch();
+			queryStore.refetch();
 		},
 		mutationFn: updateCfg
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );

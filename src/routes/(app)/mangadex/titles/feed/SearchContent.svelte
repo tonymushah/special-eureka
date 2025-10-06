@@ -30,51 +30,50 @@
 	const order = writable<MangaFeedSortOrder | undefined>({
 		readableAt: OrderDirection.Descending
 	});
-	const query = createInfiniteQuery(
-		derived([pageLimit, order], ([$limit, $order]) => {
-			return {
-				queryKey: [
-					"user-logged",
-					"manga",
-					"feed",
-					`limit:${$limit}`,
-					`${JSON.stringify($order)}`
-				],
-				async queryFn({ pageParam }) {
-					return await executeSearchQuery(client, pageParam);
-				},
-				getNextPageParam(lastPage, _allPages, lastPageParam) {
-					let limit = lastPage.paginationData.limit;
-					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset >= lastPage.paginationData.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							offset: next_offset,
-							limit
-						};
-					}
-				},
-				initialPageParam: {
-					limit: $limit,
-					order: $order
-				} satisfies Params
-			} satisfies CreateInfiniteQueryOptions<
-				AbstractSearchResult<ChapterFeedListItemExt>,
-				Error,
-				AbstractSearchResult<ChapterFeedListItemExt>,
-				readonly string[],
-				Params
-			>;
-		})
-	);
-	const hasNext = derived(query, ($query) => $query.hasNextPage);
-	const isFetching = derived(query, ($query) => $query.isFetching);
-	const feed = derived(query, ($query) => $query.data?.pages.flatMap((e) => e.data) ?? []);
+	const queryOptions = derived([pageLimit, order], ([$limit, $order]) => {
+		return {
+			queryKey: [
+				"user-logged",
+				"manga",
+				"feed",
+				`limit:${$limit}`,
+				`${JSON.stringify($order)}`
+			],
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset >= lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
+				}
+			},
+			initialPageParam: {
+				limit: $limit,
+				order: $order
+			} satisfies Params
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			Error,
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			readonly string[],
+			Params
+		>;
+	});
+	let query = createInfiniteQuery(() => $queryOptions);
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isFetching);
+	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 	const queryClient = getQueryClientContext();
 	$effect(() =>
@@ -87,7 +86,7 @@
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -113,8 +112,8 @@
 	});
 	const oncomments = (e: { id: string }) => {
 		let threadUrl: string | undefined = undefined;
-		for (let index = 0; index < $feed.length; index++) {
-			const { chapters } = $feed[index];
+		for (let index = 0; index < feed.length; index++) {
+			const { chapters } = feed[index];
 			for (let index = 0; index < chapters.length; index++) {
 				const chapter = chapters[index];
 				if (chapter.chapterId == e.id) {
@@ -133,7 +132,7 @@
 
 <div class="result">
 	<ChapterFeedList
-		list={$feed}
+		list={feed}
 		style={chapterFeedStyle}
 		onmangaClick={(e) => {
 			const id = e.id;
@@ -156,11 +155,11 @@
 	</ChapterFeedList>
 </div>
 
-{#if $query.error}
+{#if query.error}
 	<ErrorComponent
-		error={$query.error}
+		error={query.error}
 		label="Error on loading some pages"
-		retry={() => $query.refetch()}
+		retry={() => query.refetch()}
 	/>
 {/if}
 
@@ -168,13 +167,13 @@
 <div
 	class="observer-trigger"
 	onmouseenter={() => {
-		$query.fetchNextPage();
+		query.fetchNextPage();
 	}}
 	bind:this={to_obserce_bind}
 >
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

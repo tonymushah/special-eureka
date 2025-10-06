@@ -31,33 +31,26 @@ const updateVisibility = graphql(`
 	}
 `);
 
-const updateCustomListVisibilityMutation = createMutation(
-	{
-		mutationKey: ["custom-list", "update", "visibilty"],
-		async mutationFn({ id, visibility }: { id: string; visibility: CustomListVisibility }) {
-			const res_ver = await client
-				.query(getListVersionMutation, {
-					id
-				})
-				.toPromise();
-			if (res_ver.error) {
-				throw res_ver.error;
-			} else if (res_ver.data == null) {
-				throw new Error(`Cannot fetch ${id} custom-list version`);
-			}
-			const res = await client
-				.mutation(updateVisibility, {
-					id,
-					visibility,
-					version: res_ver.data.customList.get.attributes.version
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
+const updateCustomListVisibilityMutation = createMutation(() => ({
+	mutationKey: ["custom-list", "update", "visibilty"],
+	async mutationFn({ id, visibility }: { id: string, visibility: CustomListVisibility }) {
+		const res_ver = await client.query(getListVersionMutation, {
+			id
+		}).toPromise();
+		if (res_ver.error) {
+			throw res_ver.error;
+		} else if (res_ver.data == null) {
+			throw new Error(`Cannot fetch ${id} custom-list version`);
 		}
-	},
-	mangadexQueryClient
-);
+		const res = await client.mutation(updateVisibility, {
+			id,
+			visibility,
+			version: res_ver.data.customList.get.attributes.version + 1
+		}).toPromise();
+		if (res.error) {
+			throw res.error;
+		}
+	}
+}), () => mangadexQueryClient);
 
 export default updateCustomListVisibilityMutation;

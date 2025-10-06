@@ -106,7 +106,7 @@
 		if (typeof id == "string") {
 			const timerId = delay(() => {
 				if (get(isLogged)) {
-					get(readMarkers).mutate(
+					readMarkers.mutate(
 						{
 							reads: [data.data.id],
 							unreads: [],

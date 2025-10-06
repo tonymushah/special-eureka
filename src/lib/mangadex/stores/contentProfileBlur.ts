@@ -16,35 +16,30 @@ const sub_read = readable(true, (set) => {
 	};
 });
 
-export const contentProfileBlurMutation = createMutation(
-	{
-		mutationKey: ["content-profile", "blur", "update"],
-		async mutationFn(blur: boolean) {
-			const res = await client
-				.mutation(gql_mutation, {
-					blur
-				})
-				.toPromise();
-			if (res.error) {
-				throw res.error;
-			}
-		},
-		networkMode: "always"
+export const contentProfileBlurMutation = createMutation(() => ({
+	mutationKey: ["content-profile", "blur", "update"],
+	async mutationFn(blur: boolean) {
+		const res = await client.mutation(gql_mutation, {
+			blur
+		}).toPromise();
+		if (res.error) {
+			throw res.error;
+		}
 	},
-	mangadexQueryClient
-);
+	networkMode: "always"
+}), () => mangadexQueryClient);
 
 const contentProfileBlur: Writable<boolean> = {
 	subscribe(run, invalidate) {
 		return sub_read.subscribe(run, invalidate);
 	},
 	set(value) {
-		get(contentProfileBlurMutation).mutate(value);
+		contentProfileBlurMutation.mutate(value);
 	},
 	update(updater) {
 		const value = get(sub_read);
-		get(contentProfileBlurMutation).mutate(updater(value));
-	}
-};
+		contentProfileBlurMutation.mutate(updater(value));
+	},
+}
 
 export default contentProfileBlur;

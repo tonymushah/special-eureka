@@ -2,17 +2,15 @@
 
 <script lang="ts">
 	import StatusBadgeOnlyLabel from "@mangadex/componnents/theme/tag/StatusBadgeOnlyLabel.svelte";
+	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 	import { createQuery, type CreateQueryOptions } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
-	import { toStore, derived as der } from "svelte/store";
 	import { query } from "./selections";
-	import get_value_from_title_and_random_if_undefined from "@mangadex/utils/lang/get_value_from_title_and_random_if_undefined";
 
 	interface Props {
 		chapters: string[];
 	}
 	let { chapters = $bindable([]) }: Props = $props();
-	const chaps = toStore(() => chapters);
 	type SelectedData = {
 		title: {
 			id: string;
@@ -27,57 +25,53 @@
 		}[];
 	};
 	const client = getContextClient();
-	const selectedChapter = createQuery(
-		der([chaps], ([chapters]) => {
-			return {
-				queryKey: ["get", "chapter", "data", ...chapters],
-				async queryFn(): Promise<SelectedData[]> {
-					const res = await client
-						.query(query, {
-							ids: chapters
-						})
-						.toPromise();
-					if (res.error) {
-						throw res.error;
-					} else if (res.data) {
-						return res.data.chapter.listWithGroupByManga.data.map<SelectedData>(
-							(data) => {
+	let selectedChapter = createQuery(() => {
+		return {
+			queryKey: ["get", "chapter", "data", ...chapters],
+			async queryFn(): Promise<SelectedData[]> {
+				const res = await client
+					.query(query, {
+						ids: chapters
+					})
+					.toPromise();
+				if (res.error) {
+					throw res.error;
+				} else if (res.data) {
+					return res.data.chapter.listWithGroupByManga.data.map<SelectedData>((data) => {
+						return {
+							title: {
+								id: data.manga.id,
+								title:
+									get_value_from_title_and_random_if_undefined(
+										data.manga.attributes.title,
+										"en"
+									) ?? data.manga.id
+							},
+							chapters: data.chapters.map((data) => {
 								return {
-									title: {
-										id: data.manga.id,
-										title:
-											get_value_from_title_and_random_if_undefined(
-												data.manga.attributes.title,
-												"en"
-											) ?? data.manga.id
-									},
-									chapters: data.chapters.map((data) => {
-										return {
-											id: data.id,
-											title: data.attributes.title ?? undefined,
-											volume: data.attributes.volume ?? undefined,
-											chapter: data.attributes.chapter ?? undefined,
-											isOneshot: data.attributes.title == "Oneshot"
-										};
-									})
+									id: data.id,
+									title: data.attributes.title ?? undefined,
+									volume: data.attributes.volume ?? undefined,
+									chapter: data.attributes.chapter ?? undefined,
+									isOneshot: data.attributes.title == "Oneshot"
 								};
-							}
-						);
-					} else {
-						throw new Error("No Data?");
-					}
+							})
+						};
+					});
+				} else {
+					throw new Error("No Data?");
 				}
-			} satisfies CreateQueryOptions<SelectedData[]>;
-		})
-	);
-	let hasData = $derived($selectedChapter.data?.length != 0);
+			}
+		} satisfies CreateQueryOptions<SelectedData[]>;
+	});
+	let hasData = $derived(selectedChapter.data?.length != 0);
 </script>
 
 <p>Click on the badge to remove it from the selection</p>
 
 <div class:hasData class="chapter-selected">
-	{#if $selectedChapter.data}
-		{#each $selectedChapter.data as section}
+	{#if selectedChapter.data}
+		{#each selectedChapter.data as section}
 			<article>
 				<h4>{section.title.title}</h4>
 				<div class="chapaters">

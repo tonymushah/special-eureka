@@ -8,7 +8,7 @@
 	<input
 		type="checkbox"
 		bind:checked={$contentProfileBlur}
-		disabled={$contentProfileBlurMutation.isPending}
+		disabled={contentProfileBlurMutation.isPending}
 		class="checkbox"
 	/>
 	<h3>Blur unmatched title cover</h3>

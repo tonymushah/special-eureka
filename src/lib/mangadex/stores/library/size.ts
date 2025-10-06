@@ -1,11 +1,10 @@
-import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import librarySizeQuery from "@mangadex/gql-docs/library/sizes";
 import { client } from "@mangadex/gql/urql";
 import { mangadexQueryClient } from "@mangadex/index";
 import { createQuery } from "@tanstack/svelte-query";
 
 export default function getCurrentUserLibrarySize() {
-	return createQuery(
+	return createQuery(() => (
 		{
 			queryKey: ["current", "user", "library", "size"],
 			async queryFn() {
@@ -18,7 +17,7 @@ export default function getCurrentUserLibrarySize() {
 					throw new Error("no results??");
 				}
 			}
-		},
-		mangadexQueryClient
+		}),
+		() => mangadexQueryClient
 	);
 }

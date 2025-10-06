@@ -21,7 +21,7 @@
 		isPrivate = true;
 	}
 	const client = getContextClient();
-	const mutation = createMutation<
+	let mutation = createMutation<
 		string,
 		Error,
 		{
@@ -30,7 +30,7 @@
 			name: string;
 		},
 		string
-	>({
+	>(() => ({
 		mutationKey: ["custom", "list", "create"],
 		async mutationFn({ manga_id, isPrivate, name }) {
 			const res = await client
@@ -50,7 +50,7 @@
 				throw new Error("no data??");
 			}
 		}
-	});
+	}));
 </script>
 
 <div class="make-list">
@@ -60,7 +60,7 @@
 			inputProps={{
 				type: "text",
 				placeholder: "Make a new customList",
-				disabled: $mutation.isPending
+				disabled: mutation.isPending
 			}}
 			widthFull
 		/>
@@ -68,7 +68,7 @@
 
 	{#if isPrivate}
 		<ButtonAccentOnlyLabel
-			disabled={$mutation.isPending}
+			disabled={mutation.isPending}
 			label="Private"
 			type="button"
 			onclick={() => {
@@ -77,7 +77,7 @@
 		/>
 	{:else}
 		<DangerButtonOnlyLabel
-			disabled={$mutation.isPending}
+			disabled={mutation.isPending}
 			label="Public"
 			type="button"
 			onclick={() => {
@@ -87,10 +87,10 @@
 	{/if}
 	<PrimaryButtonOnlyLabel
 		label="Create"
-		disabled={$mutation.isPending}
+		disabled={mutation.isPending}
 		onclick={() => {
 			if (custom_list_name) {
-				$mutation
+				mutation
 					.mutateAsync({
 						manga_id: mangaId,
 						isPrivate,

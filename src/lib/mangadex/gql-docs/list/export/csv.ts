@@ -14,7 +14,7 @@ const export_mutation = graphql(`
 	}
 `);
 
-const exportCustomListsToCSV = createMutation(
+const exportCustomListsToCSV = createMutation(() => (
 	{
 		mutationKey: ["export", "custom-lists", "to", "CSV"],
 		async mutationFn(options: ExportCustomListsToCsvOptions): Promise<string> {
@@ -31,8 +31,8 @@ const exportCustomListsToCSV = createMutation(
 				throw new Error("No data??");
 			}
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 export default exportCustomListsToCSV;

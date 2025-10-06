@@ -13,7 +13,7 @@
 	}
 	let { id }: Props = $props();
 
-	const topTen = createQuery({
+	let topTen = createQuery(() => ({
 		queryKey: ["tag-page", id, "top-ten"],
 		async queryFn() {
 			const res = await client
@@ -29,12 +29,12 @@
 				throw new Error("no data??");
 			}
 		}
-	});
+	}));
 
 	$effect(() =>
 		defaultContentProfile.subscribe(
 			debounce(() => {
-				$topTen.refetch();
+				topTen.refetch();
 			})
 		)
 	);
@@ -43,7 +43,7 @@
 <section>
 	<h3>Somewhat relevant this week <i>idk...</i></h3>
 
-	{#if $topTen.data}
+	{#if topTen.data}
 		<swiper-container
 			slides-per-view={2}
 			space-between={10}
@@ -54,7 +54,7 @@
 			}}
 			mousewheel
 		>
-			{#each $topTen.data as title}
+			{#each topTen.data as title}
 				{@const _title = manga_title_to_lang_map(title.attributes.title)}
 				<TopTenElement
 					mangaId={title.id}
@@ -70,16 +70,16 @@
 				/>
 			{/each}
 		</swiper-container>
-	{:else if $topTen.isLoading}
+	{:else if topTen.isLoading}
 		<section class="loading">
 			<p>Loading...</p>
 		</section>
-	{:else if $topTen.isError}
+	{:else if topTen.isError}
 		<ErrorComponent
 			label="Error on loading treding..."
-			error={$topTen.error}
+			error={topTen.error}
 			retry={() => {
-				$topTen.refetch();
+				topTen.refetch();
 			}}
 		/>
 	{/if}

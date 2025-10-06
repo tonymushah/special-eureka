@@ -22,10 +22,10 @@
 	<div class="bottom">
 		<PrimaryButtonOnlyLabel
 			label="Add"
-			disabled={$mutation.isPending}
+			disabled={mutation.isPending}
 			isBase
 			onclick={() => {
-				$mutation
+				mutation
 					.mutateAsync({
 						customListIds: new Set(selectedLists).values().toArray(),
 						titles: new Set(titles).values().toArray()

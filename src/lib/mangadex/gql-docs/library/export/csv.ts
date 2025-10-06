@@ -12,7 +12,7 @@ const exportLibraryToCSVMutation = graphql(`
 	}
 `);
 
-export const exportLibraryToCSV = createMutation(
+export const exportLibraryToCSV = createMutation(() => (
 	{
 		mutationKey: ["mangadex", "export", "library", "CSV"],
 		async mutationFn(options: ExportMdLibraryToCsvOptions): Promise<string> {
@@ -29,8 +29,8 @@ export const exportLibraryToCSV = createMutation(
 				throw new Error("No data??");
 			}
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
 export default exportLibraryToCSVMutation;

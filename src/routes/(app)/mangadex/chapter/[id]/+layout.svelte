@@ -11,36 +11,34 @@
 
 	let { data, children }: LayoutProps = $props();
 	const client = getContextClient();
-	const query = createQuery(
-		derived([toStore(() => data)], ([data]) => {
-			return {
-				queryKey: ["chapter", data.id, "load", JSON.stringify(data)],
-				networkMode: "always",
-				async queryFn() {
-					return load({
-						id: data.id,
-						isEnd: data.isEnd,
-						client,
-						startPage: data.startPage
-					});
-				}
-			} satisfies CreateQueryOptions;
-		})
-	);
+	let query = createQuery(() => {
+		return {
+			queryKey: ["chapter", data.id, "load", JSON.stringify(data)],
+			networkMode: "always",
+			async queryFn() {
+				return load({
+					id: data.id,
+					isEnd: data.isEnd,
+					client,
+					startPage: data.startPage
+				});
+			}
+		} satisfies CreateQueryOptions;
+	});
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
 	<AppTitle title="Loading chapter... | MangaDex" />
 	<LoadingPage />
-{:else if $query.isSuccess}
-	<AfterLoadingLayout data={$query.data}>
+{:else if query.isSuccess}
+	<AfterLoadingLayout data={query.data}>
 		{@render children()}
 	</AfterLoadingLayout>
-{:else if $query.isError}
+{:else if query.isError}
 	<PageError
-		message={$query.error.message}
+		message={query.error.message}
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 {/if}

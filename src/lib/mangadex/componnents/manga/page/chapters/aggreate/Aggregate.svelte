@@ -12,7 +12,7 @@
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
 	import { onDestroy, onMount } from "svelte";
-	import { derived as der, get, writable } from "svelte/store";
+	import { writable } from "svelte/store";
 	import { fade } from "svelte/transition";
 	import type { MangaAggregateData, Volume } from "./AggregateContent.svelte";
 	import AggregateContent from "./AggregateContent.svelte";
@@ -27,7 +27,7 @@
 	const client = getContextClient();
 	const __res = getTitleLayoutData();
 	const data = __res.queryResult;
-	const query = createQuery({
+	let query = createQuery(() => ({
 		queryKey: ["title", __res.layoutData.id, "aggregate"],
 		async queryFn() {
 			const res = await client.query(mangaAggregateQuery, {
@@ -42,16 +42,16 @@
 			}
 		},
 		networkMode: "always"
-	});
+	}));
 	let threadUrls = $state(new Map<string, string>());
 	let unlistens: UnlistenFn[] = [];
-	const isFetching = der(query, ($q) => $q.isFetching);
+	let isFetching = $derived(query.isFetching);
 
-	const isEmpty = der(query, (q) => {
-		return (q.data?.manga.aggregate.chunked.flatMap((d) => d.ids).length ?? 0) == 0;
-	});
-	const aggregate = der(query, (q) => {
-		const res = q?.data?.manga.aggregate.chunked.map<{
+	let isEmpty = $derived(
+		(query.data?.manga.aggregate.chunked.flatMap((d) => d.ids).length ?? 0) == 0
+	);
+	let aggregate = $derived.by(() => {
+		const res = query?.data?.manga.aggregate.chunked.map<{
 			chapter: MangaAggregateData;
 			id: string;
 		}>((v, i) => {
@@ -77,8 +77,8 @@
 			return [];
 		}
 	});
-	const aggregateReverse = der(aggregate, (a) => {
-		return a.toReversed().map<{ chapter: MangaAggregateData; id: string }>((vs) => ({
+	const aggregateReverse = $derived.by(() => {
+		return aggregate.toReversed().map<{ chapter: MangaAggregateData; id: string }>((vs) => ({
 			id: vs.id,
 			chapter: vs.chapter.toReversed().map((cs) => ({
 				volume: cs.volume,
@@ -90,9 +90,9 @@
 	let selectedIndex = $state(0);
 	onMount(async () => {
 		unlistens.push(
-			query.subscribe((e) => {
-				// [x] Flatten the result data and fetch the data in one go.
-				const ids: string[] = e?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
+			$effect.root(() => {
+				const ids: string[] =
+					query?.data?.manga.aggregate.chunked.flatMap((d) => d.ids) ?? [];
 				if (ids.length > 0)
 					fetchChapters(ids, !hasConflicts(__res.conflicts))
 						.then(async (cs) => {
@@ -123,12 +123,12 @@
 		unlistens.forEach((u) => u());
 	});
 	let selected = $derived(
-		$isReversed ? $aggregateReverse[selectedIndex] : $aggregate[selectedIndex]
+		$isReversed ? aggregateReverse[selectedIndex] : aggregate[selectedIndex]
 	);
 	/// Test if this work
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
-			get(query).refetch();
+			query.refetch();
 		})
 	);
 	function refetchTitleReadMarker() {
@@ -137,12 +137,13 @@
 		});
 	}
 	const readMarkers = getContextReadChapterMarkers();
-	const unread = der([query, readMarkers], ([$query, $markers]) => {
+	let unread = $derived.by(() => {
+		const markers = $readMarkers;
 		let chapters = new Set(
-			$query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
+			query.data?.manga.aggregate.chunked.flatMap((t) => t.ids as string[])
 		);
 		let readChapters = new Set(
-			$markers
+			markers
 				.entries()
 				.filter(([v]) => {
 					return v;
@@ -155,7 +156,7 @@
 
 		return unreadChapters;
 	});
-	const hasUnread = der(unread, ($unread) => $unread.size > 0);
+	let hasUnread = $derived.by(() => unread.size > 0);
 	let selecto_container: HTMLElement | undefined = $state(undefined);
 	let selectedMangas: string[] = $state([]);
 	let selectedChapters: string[] = $state([]);
@@ -167,31 +168,31 @@
 	<div class="top">
 		<div class="left">
 			<ButtonAccent
-				disabled={$isFetching}
+				disabled={isFetching}
 				onclick={debounce(async () => {
-					await $query.refetch();
+					await query.refetch();
 					await refetchTitleReadMarker();
 				})}
 			>
-				{#if $isFetching}
+				{#if isFetching}
 					Loading...
 				{:else}
 					Refresh
 				{/if}
 			</ButtonAccent>
 		</div>
-		{#if !$isEmpty}
+		{#if !isEmpty}
 			<div class="right">
 				{#if $isLogged}
 					<ButtonAccent
-						disabled={$query.isLoading || $readMarkersMutation.isPending}
+						disabled={query.isLoading || readMarkersMutation.isPending}
 						onclick={() => {
-							$readMarkersMutation.mutate(
+							readMarkersMutation.mutate(
 								{
-									reads: $hasUnread ? $unread.values().toArray() : [],
-									unreads: $hasUnread
+									reads: hasUnread ? unread.values().toArray() : [],
+									unreads: hasUnread
 										? []
-										: ($query.data?.manga.aggregate.chunked.flatMap(
+										: (query.data?.manga.aggregate.chunked.flatMap(
 												(d) => d.ids as string[]
 											) ?? [])
 								},
@@ -203,7 +204,7 @@
 							);
 						}}
 					>
-						{#if $hasUnread}
+						{#if hasUnread}
 							Mark all chapter as read
 						{:else}
 							Mark all chapter as not read
@@ -214,15 +215,15 @@
 					onclick={debounce(async () => {
 						isReversed.update((i) => !i);
 					})}
-					disabled={$query.isLoading}
+					disabled={query.isLoading}
 				>
 					Reverse
 				</ButtonAccent>
 			</div>
 		{/if}
 	</div>
-	{#if $query.isFetched}
-		{#if $isEmpty}
+	{#if query.isFetched}
+		{#if isEmpty}
 			<div class="empty">
 				<h2>No chapters available</h2>
 			</div>
@@ -246,7 +247,7 @@
 				{/if}
 			</div>
 			<div class="bottom">
-				{#each $aggregate as _, i}
+				{#each aggregate as _, i}
 					<button
 						class="selector"
 						onclick={() => {
@@ -259,19 +260,19 @@
 				{/each}
 			</div>
 		{/if}
-	{:else if $query.isError}
+	{:else if query.isError}
 		<ErrorComponent
 			label="Cannot fetch chapter"
-			error={$query.error}
+			error={query.error}
 			retry={() => {
-				$query.refetch().then(() => refetchTitleReadMarker());
+				query.refetch().then(() => refetchTitleReadMarker());
 			}}
 		/>
-	{:else if $query.isPending}
+	{:else if query.isPending}
 		<div class="empty">
 			<h2>Pending...</h2>
 		</div>
-	{:else if $query.isLoading}
+	{:else if query.isLoading}
 		<div class="empty">
 			<h2>Loading...</h2>
 		</div>

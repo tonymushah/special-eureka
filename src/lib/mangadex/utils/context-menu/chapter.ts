@@ -74,7 +74,7 @@ export default function chapterElementContextMenuItems({
 			ContextMenuItemProvider.menuItem({
 				text: "Cancel download",
 				action() {
-					get(cancelDownloadMutation).mutateAsync(id);
+					cancelDownloadMutation.mutateAsync(id);
 				}
 			})
 		);
@@ -83,7 +83,7 @@ export default function chapterElementContextMenuItems({
 			ContextMenuItemProvider.menuItem({
 				text: isDownloaded ? "Re-download" : "Download",
 				action() {
-					get(downloadMutation).mutateAsync({
+					downloadMutation.mutateAsync({
 						id
 					});
 				},
@@ -95,7 +95,7 @@ export default function chapterElementContextMenuItems({
 				ContextMenuItemProvider.menuItem({
 					text: "Remove chapter locally",
 					action() {
-						get(removeMutation).mutateAsync(id);
+						removeMutation.mutateAsync(id);
 					}
 				})
 			);

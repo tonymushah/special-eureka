@@ -40,13 +40,13 @@
 		<DangerButtonOnlyLabel
 			label="Delete"
 			onclick={() => {
-				$removeMutation.mutateAsync(id);
+				removeMutation.mutateAsync(id);
 			}}
 		/>
 		<PrimaryButtonOnlyLabel
 			label="Re-Download"
 			onclick={() => {
-				$downloadMutation.mutateAsync({
+				downloadMutation.mutateAsync({
 					id
 				});
 			}}
@@ -56,14 +56,14 @@
 			label="Cancel"
 			variant="5"
 			onclick={() => {
-				$cancelDownloadMutation.mutateAsync(id);
+				cancelDownloadMutation.mutateAsync(id);
 			}}
 		/>
 	{:else}
 		<PrimaryButtonOnlyLabel
 			label="Download"
 			onclick={() => {
-				$downloadMutation.mutateAsync({
+				downloadMutation.mutateAsync({
 					id
 				});
 			}}

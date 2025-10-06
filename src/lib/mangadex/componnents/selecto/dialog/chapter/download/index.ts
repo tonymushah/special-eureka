@@ -23,7 +23,7 @@ const multiChapterCancelDownloadBase = graphql(`
 	}
 `);
 
-export const multiChapterDownload = createMutation<void, Error, string[]>(
+export const multiChapterDownload = createMutation<void, Error, string[]>(() => (
 	{
 		mutationKey: ["multi", "download", "chapters"],
 		async mutationFn(ids) {
@@ -53,11 +53,11 @@ export const multiChapterDownload = createMutation<void, Error, string[]>(
 		onError(error, variables, context) {
 			addErrorToast("Error on downloading chapters", error);
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );
 
-export const multiCancelChapterDownload = createMutation<void, Error, string[]>(
+export const multiCancelChapterDownload = createMutation<void, Error, string[]>(() => (
 	{
 		mutationKey: ["multi", "cancel", "download", "chapters"],
 		async mutationFn(ids) {
@@ -85,6 +85,6 @@ export const multiCancelChapterDownload = createMutation<void, Error, string[]>(
 		onError(error, variables, context) {
 			addErrorToast("Error on cancelling", error);
 		}
-	},
-	mangadexQueryClient
+	}),
+	() => mangadexQueryClient
 );

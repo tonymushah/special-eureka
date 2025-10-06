@@ -144,9 +144,9 @@
 
 	const handle_download_event = debounce(async function () {
 		if ($isDownloading) {
-			await $cancelDownloadMutation.mutateAsync(id);
+			await cancelDownloadMutation.mutateAsync(id);
 		} else {
-			await $downloadMutation.mutateAsync({
+			await downloadMutation.mutateAsync({
 				id
 			});
 		}
