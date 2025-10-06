@@ -20,7 +20,7 @@ reqwest.workspace = true
 log.workspace = true
 once_cell = "1"
 serde_json.workspace = true
-mangadex-api = { version = "3.4", default-features = false, features = [
+mangadex-api = { version = "4.0", default-features = false, features = [
 	"rw-multi-thread",
 	"serialize",
 	"utils",
