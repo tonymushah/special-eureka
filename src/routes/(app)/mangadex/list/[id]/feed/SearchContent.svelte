@@ -34,61 +34,58 @@
 		readableAt: OrderDirection.Descending
 	});
 	const client = getContextClient();
-	const query = createInfiniteQuery(
-		derived(
-			[customListId, pageLimit, isPrivate, order],
-			([$customListId, $limit, $isPrivate, $order]) => {
-				return {
-					queryKey: [
-						"customList",
-						$customListId,
-						"feed",
-						`limit:${$limit}`,
-						`private:${$isPrivate}`,
-						`${$order}`
-					],
-					async queryFn({ pageParam }) {
-						return await executeSearchQuery(client, pageParam, $isPrivate);
-					},
-					getNextPageParam(lastPage, _allPages, lastPageParam) {
-						let limit = lastPage.paginationData.limit;
-						let next_offset = limit + lastPage.paginationData.offset;
-						if (next_offset > lastPage.paginationData.total) {
-							return null;
-						} else {
-							return {
-								...lastPageParam,
-								offset: next_offset,
-								limit
-							};
-						}
-					},
-					initialPageParam: {
-						listId: $customListId,
-						limit: $limit,
-						order: $order
-					} satisfies CustomListFeedChapterParams
-				} satisfies CreateInfiniteQueryOptions<
-					AbstractSearchResult<ChapterFeedListItemExt>,
-					Error,
-					AbstractSearchResult<ChapterFeedListItemExt>,
-					readonly string[],
-					CustomListFeedChapterParams
-				>;
-			}
-		)
-	);
-	const hasNext = derived(query, ($query) => $query.hasNextPage);
-	const isFetching = derived(query, ($query) => $query.isLoading);
-	const feed = derived(query, ($query) => $query.data?.pages.flatMap((e) => e.data) ?? []);
+	const queryParams = derived([customListId, pageLimit, isPrivate, order], (d) => d);
+	let query = createInfiniteQuery(() => {
+		const [_customListId, _limit, _isPrivate, _order] = $queryParams;
+		return {
+			queryKey: [
+				"customList",
+				_customListId,
+				"feed",
+				`limit:${_limit}`,
+				`private:${_isPrivate}`,
+				`${_order}`
+			],
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam, _isPrivate);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset > lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
+				}
+			},
+			initialPageParam: {
+				listId: _customListId,
+				limit: _limit,
+				order: _order
+			} satisfies CustomListFeedChapterParams
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			Error,
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			readonly string[],
+			CustomListFeedChapterParams
+		>;
+	});
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isLoading);
+	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -117,7 +114,7 @@
 
 <div class="result">
 	<ChapterFeedList
-		list={$feed}
+		list={feed}
 		style={chapterFeedStyle}
 		onmangaClick={(e) => {
 			const id = e.id;
@@ -145,20 +142,20 @@
 	</ChapterFeedList>
 </div>
 
-{#if $query.error}
+{#if query.error}
 	<ErrorComponent
 		label="Error on loading title"
-		error={$query.error}
+		error={query.error}
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

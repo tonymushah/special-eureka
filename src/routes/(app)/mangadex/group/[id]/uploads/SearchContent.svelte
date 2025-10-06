@@ -33,51 +33,49 @@
 	});
 	let { groupId }: Props = $props();
 	const client = getContextClient();
-	const query = createInfiniteQuery(
-		derived([groupId, pageLimit, sort], ([$groupId, $limit, $sort]) => {
-			return {
-				queryKey: ["group", $groupId, "uploads", `limit:${$limit}`, `${$sort}`],
-				async queryFn({ pageParam }) {
-					return await executeSearchQuery(client, pageParam);
-				},
-				getNextPageParam(lastPage, _allPages, lastPageParam) {
-					let limit = lastPage.paginationData.limit;
-					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset > lastPage.paginationData.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							offset: next_offset,
-							limit
-						};
-					}
-				},
-				initialPageParam: {
-					group: $groupId,
-					limit: $limit,
-					order: $sort
-				} satisfies Params
-			} satisfies CreateInfiniteQueryOptions<
-				AbstractSearchResult<ChapterFeedListItemExt>,
-				Error,
-				AbstractSearchResult<ChapterFeedListItemExt>,
-				readonly string[],
-				Params
-			>;
-		})
-	);
-	const hasNext = derived(query, ($query) => $query.hasNextPage);
-	const isFetching = derived(query, ($query) => $query.isLoading);
-	const feed = derived(query, ($query) => $query.data?.pages.flatMap((e) => e.data) ?? []);
+	let query = createInfiniteQuery(() => {
+		return {
+			queryKey: ["group", $groupId, "uploads", `limit:${$pageLimit}`, `${$sort}`],
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset > lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
+				}
+			},
+			initialPageParam: {
+				group: $groupId,
+				limit: $pageLimit,
+				order: $sort
+			} satisfies Params
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			Error,
+			AbstractSearchResult<ChapterFeedListItemExt>,
+			readonly string[],
+			Params
+		>;
+	});
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isLoading);
+	let feed = $derived(query.data?.pages.flatMap((e) => e.data) ?? []);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -106,7 +104,7 @@
 
 <div class="result">
 	<ChapterFeedList
-		list={$feed}
+		list={feed}
 		style={chapterFeedStyle}
 		onmangaClick={(e) => {
 			const id = e.id;
@@ -134,20 +132,20 @@
 	</ChapterFeedList>
 </div>
 
-{#if $query.error}
+{#if query.isError}
 	<ErrorComponent
-		error={$query.error}
+		error={query.error}
 		label="Error on loading some pages"
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

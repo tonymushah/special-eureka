@@ -1,5 +1,6 @@
 // TODO refactor double page and store it directly inside the class
 
+import type { StoreOrVal } from "$lib";
 import { addErrorToast } from "@mangadex/componnents/theme/toast/Toaster.svelte";
 import { graphql } from "@mangadex/gql";
 import {
@@ -9,7 +10,6 @@ import {
 } from "@mangadex/gql/graphql";
 import { client as mangadexClient } from "@mangadex/gql/urql";
 import getImageSize from "@mangadex/utils/img/getSize";
-import type { StoreOrVal } from "@tanstack/svelte-query";
 import type { Client, OperationResult } from "@urql/svelte";
 import { isArray, range } from "lodash";
 import { get, readable, writable, type Readable, type Writable } from "svelte/store";
@@ -227,13 +227,13 @@ export type IndexedDoublePageState = [IndexedPageState, IndexedPageState] | Inde
 
 export type PageStateInner =
 	| {
-			page: ChapterImage;
-			error?: never;
-	  }
+		page: ChapterImage;
+		error?: never;
+	}
 	| {
-			page?: never;
-			error: Error;
-	  };
+		page?: never;
+		error: Error;
+	};
 
 export type PageState = PageStateInner | null;
 

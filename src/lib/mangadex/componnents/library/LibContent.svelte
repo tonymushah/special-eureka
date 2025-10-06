@@ -40,76 +40,78 @@
 		limit: number;
 		total: number;
 	}
-	const infiniteQuery = createInfiniteQuery(
-		derived(p_p_offline, ($params) => {
-			return {
-				queryKey: ["user", "library", section, $params],
-				initialPageParam: [$params],
-				getNextPageParam(lastPage, allPages, [lastPageParam], allPageParams) {
-					const next_offset = lastPage.limit + lastPage.offset;
-					if (next_offset > lastPage.total) {
-						return null;
-					} else {
-						return [
-							{
-								...lastPageParam,
-								limit: lastPage.limit,
-								offset: next_offset
-							}
-						];
-					}
-				},
-				async queryFn({ pageParam: [p] }) {
-					const res = await executeSearchQuery(client, p);
-					return {
-						data: res.data,
-						...res.paginationData
-					};
-				},
-				getPreviousPageParam(firstPage, allPages, [firstPageParam], allPageParams) {
-					const next_offset = firstPage.limit - firstPage.offset;
-					if (next_offset < 0) {
-						return null;
-					} else {
-						return [
-							{
-								...firstPageParam,
-								limit: firstPage.limit,
-								offset: next_offset
-							}
-						];
-					}
+	const infiniteQueryOptions = derived(p_p_offline, ($params) => {
+		return {
+			queryKey: ["user", "library", section, $params],
+			initialPageParam: [$params],
+			getNextPageParam(lastPage, allPages, [lastPageParam], allPageParams) {
+				const next_offset = lastPage.limit + lastPage.offset;
+				if (next_offset > lastPage.total) {
+					return null;
+				} else {
+					return [
+						{
+							...lastPageParam,
+							limit: lastPage.limit,
+							offset: next_offset
+						}
+					];
 				}
-			} satisfies CreateInfiniteQueryOptions<
-				InfiniteQueryData,
-				Error,
-				InfiniteQueryData,
-				[string, string, string, UserLibrarySectionParam],
-				[UserLibrarySectionParam]
-			>;
-		})
-	);
+			},
+			async queryFn({ pageParam: [p] }) {
+				const res = await executeSearchQuery(client, p);
+				return {
+					data: res.data,
+					...res.paginationData
+				};
+			},
+			getPreviousPageParam(firstPage, allPages, [firstPageParam], allPageParams) {
+				const next_offset = firstPage.limit - firstPage.offset;
+				if (next_offset < 0) {
+					return null;
+				} else {
+					return [
+						{
+							...firstPageParam,
+							limit: firstPage.limit,
+							offset: next_offset
+						}
+					];
+				}
+			}
+		} satisfies CreateInfiniteQueryOptions<
+			InfiniteQueryData,
+			Error,
+			InfiniteQueryData,
+			[string, string, string, UserLibrarySectionParam],
+			[UserLibrarySectionParam]
+		>;
+	});
+	let infiniteQuery = createInfiniteQuery(() => $infiniteQueryOptions);
 	onMount(() =>
 		defaultContentProfile.subscribe(() => {
-			get(infiniteQuery).refetch();
+			infiniteQuery.refetch();
 		})
 	);
-	const titles = derived(infiniteQuery, (result) => {
+	let titles = $derived.by(() => {
+		const result = infiniteQuery;
 		if (result.isLoading) {
 			return [];
 		}
 		return result.data?.pages.map((d) => d.data) ?? [];
 	});
-	const isFetching = derived(infiniteQuery, (result) => result.isFetching);
-	const hasNext = derived(infiniteQuery, (result) => result.hasNextPage);
+	let isFetching = $derived(infiniteQuery.isFetching);
+	let hasNext = $derived(infiniteQuery.hasNextPage);
 	/// TODO implement this
-	const pages = derived(infiniteQuery, (result) => {
+	let pages = $derived.by(() => {
+		const result = infiniteQuery;
 		const initalPage = result.data?.pages[0];
 		if (initalPage) {
 			return Math.floor(initalPage.total / initalPage.limit);
 		}
 	});
-	const currentPage = derived(infiniteQuery, (result) => {
+	let currentPage = $derived.by(() => {
+		const result = infiniteQuery;
 		const current = last(result.data?.pages);
 		const initalPage = result.data?.pages[0];
 		if (current && initalPage) {
@@ -119,12 +121,12 @@
 		}
 	});
 	const fetchNext = debounce(async function () {
-		const inf = get(infiniteQuery);
+		const inf = infiniteQuery;
 		return await inf.fetchNextPage();
 	}, debounce_wait);
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -150,7 +152,7 @@
 	});
 </script>
 
-<MangaList list={$titles}>
+<MangaList list={titles}>
 	{#snippet additionalContent()}
 		<div class="additional-content">
 			<LibContentFilter {params} />
@@ -158,11 +160,11 @@
 	{/snippet}
 </MangaList>
 
-{#if $infiniteQuery.error}
+{#if infiniteQuery.isError}
 	<ErrorComponent
 		label="Error on loading title"
-		error={$infiniteQuery.error}
-		retry={() => $infiniteQuery.refetch()}
+		error={infiniteQuery.error}
+		retry={() => infiniteQuery.refetch()}
 	/>
 {/if}
 
@@ -171,14 +173,14 @@
 	class="observer-trigger"
 	bind:this={to_obserce_bind}
 	onmouseenter={() => {
-		if (!$isFetching && $hasNext) {
+		if (!isFetching && hasNext) {
 			fetchNext();
 		}
 	}}
 >
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

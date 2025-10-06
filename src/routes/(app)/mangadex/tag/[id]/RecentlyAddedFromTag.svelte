@@ -9,7 +9,6 @@
 	import { createQuery } from "@tanstack/svelte-query";
 	import { getContextClient } from "@urql/svelte";
 	import { debounce } from "lodash";
-	import { onMount } from "svelte";
 	import type { SwiperContainer } from "swiper/element";
 	import type { SwiperOptions } from "swiper/types";
 

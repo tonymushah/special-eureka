@@ -25,39 +25,38 @@
 		mangaId: string;
 	}
 	let { mutate = $bindable(), isMutating = $bindable(), mangaId }: Props = $props();
-	const query = createInfiniteQuery(
-		der(pageLimit, (limit) => {
-			return {
-				queryKey: ["current", "user", "custom-list", "for-add-to-list", `limit:${limit}`],
-				initialPageParam: {
-					offset: 0,
-					limit
-				} satisfies CurrentLoggedLists,
-				async queryFn({ pageParam }) {
-					return await executeSearchQuery(client, pageParam);
-				},
-				getNextPageParam(lastPage, _allPages, lastPageParam) {
-					let limit = lastPage.paginationData.limit;
-					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset > lastPage.paginationData.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							offset: next_offset,
-							limit
-						};
-					}
+	const queryOptions = der(pageLimit, (limit) => {
+		return {
+			queryKey: ["current", "user", "custom-list", "for-add-to-list", `limit:${limit}`],
+			initialPageParam: {
+				offset: 0,
+				limit
+			} satisfies CurrentLoggedLists,
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset > lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
 				}
-			} satisfies CreateInfiniteQueryOptions<
-				AbstractSearchResult<CurrentUserCustomListItemData>,
-				Error,
-				AbstractSearchResult<CurrentUserCustomListItemData>,
-				readonly string[],
-				CurrentLoggedLists
-			>;
-		})
-	);
+			}
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<CurrentUserCustomListItemData>,
+			Error,
+			AbstractSearchResult<CurrentUserCustomListItemData>,
+			readonly string[],
+			CurrentLoggedLists
+		>;
+	});
+	let query = createInfiniteQuery(() => $queryOptions);
 
 	let selectedListMap = $state(new Map<string, ActionMode>());
 	$effect.pre(() => {
@@ -91,16 +90,16 @@
 			}
 		};
 	});
-	const hasNext = der(query, ($query) => $query.hasNextPage);
-	const isFetching = der(query, ($query) => $query.isLoading);
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isLoading);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -126,8 +125,8 @@
 
 <div class="list-w-make">
 	<div class="lists">
-		{#if $query.data}
-			{#each $query.data.pages as pages}
+		{#if query.data}
+			{#each query.data.pages as pages}
 				{#each pages.data as customList (customList.id)}
 					{@const isSelected = customList.titles.includes(mangaId)}
 					<div>
@@ -160,9 +159,9 @@
 			{/each}
 		{/if}
 		<div class="observer-trigger" bind:this={to_obserce_bind}>
-			{#if $isFetching}
+			{#if isFetching}
 				<Fetching />
-			{:else if $hasNext}
+			{:else if hasNext}
 				<HasNext />
 			{:else}
 				<NothingToShow />
@@ -173,7 +172,7 @@
 	<MakeANewList
 		{mangaId}
 		onMakeSuccess={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 </div>

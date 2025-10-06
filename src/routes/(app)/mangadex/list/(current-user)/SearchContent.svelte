@@ -21,52 +21,47 @@
 	import { flip } from "svelte/animate";
 
 	const client = getContextClient();
-	const query = createInfiniteQuery(
-		derived([pageLimit], ([$limit]) => {
-			return {
-				queryKey: ["user", "current", "custom-lists", `limit:${$limit}`],
-				async queryFn({ pageParam }) {
-					return await executeSearchQuery(client, pageParam);
-				},
-				getNextPageParam(lastPage, _allPages, lastPageParam) {
-					let limit = lastPage.paginationData.limit;
-					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset > lastPage.paginationData.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							offset: next_offset,
-							limit
-						};
-					}
-				},
-				initialPageParam: {
-					limit: $limit
-				} satisfies CurrentLoggedLists
-			} satisfies CreateInfiniteQueryOptions<
-				AbstractSearchResult<CurrentUserCustomListItemData>,
-				Error,
-				AbstractSearchResult<CurrentUserCustomListItemData>,
-				readonly string[],
-				CurrentLoggedLists
-			>;
-		})
-	);
-	const hasNext = derived(query, ($query) => $query.hasNextPage);
-	const isFetching = derived(query, ($query) => $query.isLoading);
-	const lists = derived(
-		query,
-		($query) => new Set($query.data?.pages.flatMap((e) => e.data)) ?? new Set()
-	);
+	let query = createInfiniteQuery(() => {
+		return {
+			queryKey: ["user", "current", "custom-lists", `limit:${$pageLimit}`],
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset > lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
+				}
+			},
+			initialPageParam: {
+				limit: $pageLimit
+			} satisfies CurrentLoggedLists
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<CurrentUserCustomListItemData>,
+			Error,
+			AbstractSearchResult<CurrentUserCustomListItemData>,
+			readonly string[],
+			CurrentLoggedLists
+		>;
+	});
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isLoading);
+	let lists = $derived(new Set(query.data?.pages.flatMap((e) => e.data)) ?? new Set());
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -92,7 +87,7 @@
 </script>
 
 <div class="result">
-	{#each $lists as list (list.id)}
+	{#each lists as list (list.id)}
 		{@const isPrivate = list.visibility == CustomListVisibility.Private}
 		{@const isPublic = list.visibility == CustomListVisibility.Public}
 		<span
@@ -126,7 +121,7 @@
 							name: list.name,
 							isMine: true,
 							onVisibilityChange() {
-								$query.refetch();
+								query.refetch();
 							}
 						});
 					}
@@ -150,20 +145,20 @@
 	{/each}
 </div>
 
-{#if $query.error}
+{#if query.error}
 	<ErrorComponent
 		label="Error on fetching"
-		error={$query.error}
+		error={query.error}
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 {/if}
 
 <div class="observer-trigger" bind:this={to_obserce_bind}>
-	{#if $isFetching}
+	{#if isFetching}
 		<Fetching />
-	{:else if $hasNext}
+	{:else if hasNext}
 		<HasNext />
 	{:else}
 		<NothingToShow />

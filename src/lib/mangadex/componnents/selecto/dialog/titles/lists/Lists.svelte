@@ -24,57 +24,56 @@
 	}
 
 	let { selectedLists = $bindable() }: Props = $props();
-	const query = createInfiniteQuery(
-		der(pageLimit, (limit) => {
-			return {
-				queryKey: [
-					"current",
-					"user",
-					"custom-list",
-					"for-add-to-list",
-					"batch",
-					`limit:${limit}`
-				],
-				initialPageParam: {
-					offset: 0,
-					limit
-				} satisfies CurrentLoggedLists,
-				async queryFn({ pageParam }) {
-					return await executeSearchQuery(client, pageParam);
-				},
-				getNextPageParam(lastPage, _allPages, lastPageParam) {
-					let limit = lastPage.paginationData.limit;
-					let next_offset = limit + lastPage.paginationData.offset;
-					if (next_offset > lastPage.paginationData.total) {
-						return null;
-					} else {
-						return {
-							...lastPageParam,
-							offset: next_offset,
-							limit
-						};
-					}
+	const queryOptions = der(pageLimit, (limit) => {
+		return {
+			queryKey: [
+				"current",
+				"user",
+				"custom-list",
+				"for-add-to-list",
+				"batch",
+				`limit:${limit}`
+			],
+			initialPageParam: {
+				offset: 0,
+				limit
+			} satisfies CurrentLoggedLists,
+			async queryFn({ pageParam }) {
+				return await executeSearchQuery(client, pageParam);
+			},
+			getNextPageParam(lastPage, _allPages, lastPageParam) {
+				let limit = lastPage.paginationData.limit;
+				let next_offset = limit + lastPage.paginationData.offset;
+				if (next_offset > lastPage.paginationData.total) {
+					return null;
+				} else {
+					return {
+						...lastPageParam,
+						offset: next_offset,
+						limit
+					};
 				}
-			} satisfies CreateInfiniteQueryOptions<
-				AbstractSearchResult<CurrentUserCustomListItemData>,
-				Error,
-				AbstractSearchResult<CurrentUserCustomListItemData>,
-				readonly string[],
-				CurrentLoggedLists
-			>;
-		})
-	);
+			}
+		} satisfies CreateInfiniteQueryOptions<
+			AbstractSearchResult<CurrentUserCustomListItemData>,
+			Error,
+			AbstractSearchResult<CurrentUserCustomListItemData>,
+			readonly string[],
+			CurrentLoggedLists
+		>;
+	});
+	let query = createInfiniteQuery(() => $queryOptions);
 
-	const hasNext = der(query, ($query) => $query.hasNextPage);
-	const isFetching = der(query, ($query) => $query.isLoading);
+	let hasNext = $derived(query.hasNextPage);
+	let isFetching = $derived(query.isLoading);
 	const debounce_wait = 450;
 	const fetchNext = debounce(() => {
-		return get(query).fetchNextPage();
+		return query.fetchNextPage();
 	}, debounce_wait);
 
 	const observer = new IntersectionObserver(
 		(entries) => {
-			if (!$isFetching && $hasNext) {
+			if (!isFetching && hasNext) {
 				entries.forEach((entry) => {
 					if (entry.isIntersecting) {
 						fetchNext();
@@ -96,22 +95,22 @@
 			observer.observe(to_obserce_bind);
 		}
 	});
-	const pages = der(query, ($query) => new Set($query.data?.pages.flatMap((a) => a.data)));
+	let pages = $derived(new Set(query.data?.pages.flatMap((a) => a.data)));
 </script>
 
 <div class="list-w-make">
-	{#if $query.error && !$query.isFetched}
+	{#if query.error && !query.isFetched}
 		<ErrorComponent
 			label="Error"
-			error={$query.error}
+			error={query.error}
 			retry={() => {
-				$query.refetch();
+				query.refetch();
 			}}
 		/>
 	{/if}
 	<div class="lists">
-		{#if $query.data}
-			{#each $pages as customList (customList.id)}
+		{#if query.data}
+			{#each pages as customList (customList.id)}
 				<article>
 					<input
 						class="checkbox"
@@ -135,9 +134,9 @@
 			{/each}
 		{/if}
 		<div class="observer-trigger" bind:this={to_obserce_bind}>
-			{#if $isFetching}
+			{#if isFetching}
 				<Fetching />
-			{:else if $hasNext}
+			{:else if hasNext}
 				<HasNext />
 			{:else}
 				<NothingToShow />
@@ -147,7 +146,7 @@
 
 	<MakeEmptyList
 		onMakeSuccess={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 </div>
