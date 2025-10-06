@@ -64,7 +64,7 @@
 		mutate = async (manga_id: string) => {
 			isMutating = true;
 			try {
-				await $mutationQueryMutation.mutateAsync(
+				await mutationQueryMutation.mutateAsync(
 					{
 						selectedListMap,
 						title: manga_id,
@@ -72,7 +72,7 @@
 					},
 					{
 						onSettled() {
-							$query.refetch();
+							query.refetch();
 						}
 					}
 				);

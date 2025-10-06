@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ButtonAccent from "@mangadex/componnents/theme/buttons/ButtonAccent.svelte";
-	import type { AuthorLinks } from "./proxy+layout";
 	import { getFaviconSrc } from "@mangadex/utils/favicons/getFaviconSrc";
 	import { getContextClient } from "@urql/svelte";
 	import { readable } from "svelte/store";
@@ -13,6 +12,7 @@
 	} from "svelte-feather-icons";
 	import { openUrl as shellOpen } from "@tauri-apps/plugin-opener";
 	import { RiTumblrLine, RiWeiboLine } from "svelte-remixicon";
+	import type { AuthorLinks } from "./layout.context";
 
 	const client = getContextClient();
 	interface Props {

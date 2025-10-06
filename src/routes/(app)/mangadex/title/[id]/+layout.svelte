@@ -10,28 +10,28 @@
 
 	let { data, children }: LayoutProps = $props();
 	const client = getContextClient();
-	const query = createQuery({
+	let query = createQuery(() => ({
 		queryKey: ["title", data.id, "load-data"],
 		async queryFn() {
 			return await load(data.id, client);
 		},
 		networkMode: "always"
-	});
+	}));
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
 	<AppTitle title="Loading title... | Special Eureka" />
 	<LoadingPage />
-{:else if $query.isSuccess}
-	<AfterLoadingLayout data={$query.data}>
+{:else if query.isSuccess}
+	<AfterLoadingLayout data={query.data}>
 		{@render children()}
 	</AfterLoadingLayout>
-{:else if $query.isError}
+{:else if query.isError}
 	<AppTitle title="Error on loading title" />
 	<PageError
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
-		message={$query.error.message}
+		message={query.error.message}
 	/>
 {/if}

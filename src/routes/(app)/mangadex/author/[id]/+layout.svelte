@@ -10,7 +10,7 @@
 
 	let { data, children }: LayoutProps = $props();
 	const client = getContextClient();
-	const query = createQuery({
+	let query = createQuery(() => ({
 		queryKey: ["author", data.id, "load"],
 		async queryFn() {
 			return await load({
@@ -18,22 +18,22 @@
 				client
 			});
 		}
-	});
+	}));
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
 	<AppTitle title="Loading author" />
 	<LoadingPage />
-{:else if $query.isSuccess}
-	<AfterLoadingLayout data={$query.data}>
+{:else if query.isSuccess}
+	<AfterLoadingLayout data={query.data}>
 		{@render children()}
 	</AfterLoadingLayout>
-{:else if $query.isError}
+{:else if query.isError}
 	<AppTitle title="Error on loading error" />
 	<PageError
-		message={$query.error.message}
+		message={query.error.message}
 		retry={() => {
-			$query.refetch();
+			query.refetch();
 		}}
 	/>
 {/if}

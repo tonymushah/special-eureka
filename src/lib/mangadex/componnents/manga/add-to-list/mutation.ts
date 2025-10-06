@@ -4,7 +4,7 @@ import type { Client } from "@urql/svelte";
 import { mutation } from "./query";
 import { ActionMode } from ".";
 
-export const mutationQueryMutation = createMutation({
+export const mutationQueryMutation = createMutation(() => ({
 	mutationKey: ["title", "add-to-list"],
 	async mutationFn({
 		title,
@@ -38,4 +38,4 @@ export const mutationQueryMutation = createMutation({
 			throw res.error;
 		}
 	}
-}, mangadexQueryClient);
+}), () => mangadexQueryClient);
