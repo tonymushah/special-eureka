@@ -41,7 +41,7 @@
 								title,
 								warningMode: $contentProfileWarningMode,
 								profile: $defaultContentProfile,
-								library: $titleStatusMapQuery.data ?? new Map()
+								library: titleStatusMapQuery.data ?? new Map()
 							})
 						);
 					});
@@ -52,7 +52,7 @@
 							title: maybe_obj,
 							warningMode: $contentProfileWarningMode,
 							profile: $defaultContentProfile,
-							library: $titleStatusMapQuery.data ?? new Map()
+							library: titleStatusMapQuery.data ?? new Map()
 						})
 					);
 				}
